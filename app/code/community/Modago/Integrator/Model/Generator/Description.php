@@ -13,6 +13,8 @@ class Modago_Integrator_Model_Generator_Description
 	protected $_getListLastPage;
 
 	protected $_categories = array();
+	protected $_attributeSets = array();
+	protected $_attributesForConfigurable = array();
 
 	protected $_valuesToInsertDirectly = array(
 		'name',
@@ -23,18 +25,30 @@ class Modago_Integrator_Model_Generator_Description
 		'weight',
 		'sku'
 	);
+	protected $_valuesToInsertRaw = array(
+		'visibility',
+		'sku',
+		'weight'
+	);
 	protected $_defaultValues = array(
 		'stockItem' => 0,
 	);
 	protected $_valuesToSkip = array(
 		'entity_id',
 		'entity_type_id',
-		'attribute_set_id',
-		'type_id',
 		'has_options',
 		'required_options',
 		'created_at',
-		'updated_at'
+		'updated_at',
+		'url_key',
+		'image',
+		'small_image',
+		'thumbnail',
+		'options_container',
+		'page_layout',
+		'msrp_enabled',
+		'msrp_display_actual_price_type',
+		'custom_layout_update'
 	);
 	protected $_keysThatHaveOtherNames = array(
 		'short_description' => 'shortDescription',
@@ -48,7 +62,7 @@ class Modago_Integrator_Model_Generator_Description
 	protected $_productTable;
 	protected $_mediaGalleryBackend;
 	protected $_collection;
-	protected $_store;
+	protected $_integrationStore;
 
 	protected $_header;
 	protected $_footer;
@@ -153,26 +167,29 @@ class Modago_Integrator_Model_Generator_Description
 				//set default values
 				$data[$key] = $this->_defaultValues;
 				foreach ($product->getData() as $dataKey => $value) {
-					if (in_array($dataKey, $this->_valuesToInsertDirectly)) {
-						$keyToInsert = isset($keysThatHaveOtherNames[$dataKey]) ? $keysThatHaveOtherNames[$dataKey] : $dataKey;
+					if(in_array($dataKey, $this->_valuesToSkip)) { //skip is most important
+						continue;
+					}
+					if (in_array($dataKey, $this->_valuesToInsertDirectly)) { //insert directly overrides 'is_configurable'
+						$keyToInsert = isset($this->_keysThatHaveOtherNames[$dataKey]) ? $this->_keysThatHaveOtherNames[$dataKey] : $dataKey;
 						if (in_array($dataKey, $this->_cdataKeys)) {
 							$dataValue = "<![CDATA[$value]]>";
 						} else {
 							$dataValue = $this->getAttributeText($product, $dataKey);
 						}
 						$data[$key][$keyToInsert] = $dataValue;
-					} elseif (!in_array($dataKey, $this->_valuesToSkip)) {
+					} else {
 						switch ($dataKey) {
 							case "status":
 								$data[$key]['status'] = $value == "1" ? 1 : 0;
 								break;
 
 							case "tax_class_id":
-								$store = $this->getStore();
+								$store = $this->getIntegrationStore();
 								$request = Mage::getSingleton('tax/calculation')->getRateRequest(null, null, null, $store);
 								$percent = Mage::getSingleton('tax/calculation')->getRate($request->setProductClassId($value));
 								$data[$key]['vat'] = $percent;
-								unset($store,$request,$percent);
+								unset($store, $request, $percent);
 								break;
 
 							case "stock_item":
@@ -183,6 +200,24 @@ class Modago_Integrator_Model_Generator_Description
 								$data[$key]['brand'] = $this->getAttributeText($product, $dataKey);
 								break;
 
+							case "attribute_set_id":
+								$attributeSetId = $product->getAttributeSetId();
+								/** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSetModel */
+								$attributeSetModel = Mage::getModel("eav/entity_attribute_set");
+								$attributeSetModel->load($attributeSetId);
+								if (is_object($attributeSetModel) && $attributeSetModel->getId()) {
+									if (!isset($this->_attributeSets[$attributeSetId])) {
+										$this->_attributeSets[$attributeSetId] = "<![CDATA[" . $attributeSetModel->getAttributeSetName() . "]]>";
+									}
+									$data[$key]['attribute_set'] = $this->_attributeSets[$attributeSetId];
+								}
+								unset($attributeSetId, $attributeSetModel);
+								break;
+
+							case 'type_id':
+								$data[$key]['type'] = $value;
+								break;
+
 							default:
 								if ($value !== "" && !is_null($value)) {
 									$data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
@@ -190,36 +225,28 @@ class Modago_Integrator_Model_Generator_Description
 						}
 					}
 				}
-				//categories
+
+				//categories start
 				$categoriesIds = $product->getCategoryIds();
 				foreach ($categoriesIds as $categoryId) {
-					if (!isset($this->_categories[$categoryId])) {
-						$category = Mage::getModel('catalog/category')->load($categoryId);
-						if ($category) {
-							$this->_categories[$categoryId] = $category->getData('name');
-						} else {
-							$this->_categories[$categoryId] = false;
-						}
-						unset($category);
-					}
-					if ($this->_categories[$categoryId]) {
-						$data[$key]['categories'][] = "<![CDATA[{$this->_categories[$categoryId]}]]>";
-					}
+					$data[$key]['categories'][] = "<![CDATA[".$this->getCategoryName($categoryId)."]]>";
 				}
 				unset($categoriesIds);
+				//categories end
 
 
 				if ($product->getTypeId() == "configurable") {
-					//sizes
+					//simples start todo: key should be named like this?
 					/** @var Mage_Catalog_Model_Product_Type_Configurable $conf */
 					$conf = Mage::getModel('catalog/product_type_configurable')->setProduct($product);
-					$sizes = $conf->getUsedProductCollection();
-					foreach ($sizes as $size) {
-						$data[$key]['sizes'][] = $size->getSku();
+					$simples = $conf->getUsedProductCollection();
+					foreach ($simples as $simple) {
+						$data[$key]['simples'][] = $simple->getSku();
 					}
 					unset($conf,$sizes);
+					//simples end
 				} else {
-					//parentSKU
+					//parentSKU start
 					$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
 					if ($parentIds && is_array($parentIds) && count($parentIds)) {
 
@@ -232,12 +259,23 @@ class Modago_Integrator_Model_Generator_Description
 						if (is_array($parentResult) && count($parentResult) && isset($parentResult[0]['sku']) && $parentResult[0]['sku']) {
 							$data[$key]['parentSKU'] = $parentResult[0]['sku'];
 						}
+
+						//options start
+						$parentModel = Mage::getModel('catalog/product')->loadByAttribute('sku',$parentResult[0]['sku']);
+						$attributes = $parentModel->getTypeInstance(true)->getSetAttributes($parentModel);
+						foreach ($attributes as $attribute) {
+							if ($parentModel->getTypeInstance(true)->canUseAttribute($attribute, $parentModel)) {
+								$dataKey = $attribute->getAttributeCode();
+								$data[$key]['options'][$dataKey] = $this->getAttributeText($product,$dataKey);
+							}
+						}
 						unset($readConnection,$query,$parentResult);
 					}
 					unset($parentIds);
+					//parentSKU end
 				}
 
-				//images
+				//images start
 				$lowestPosition = false;
 				$lowestPositionKey = -1;
 				$galleryCollection = $this->getGalleryImages($product);
@@ -259,18 +297,21 @@ class Modago_Integrator_Model_Generator_Description
 
 				$this->clearMediaGallery($product);
 				unset($lowestPosition,$lowestPositionKey,$galleryCollection);
+				//images end
 
-				//cross_selling
+				//cross_selling start
 				/** @var Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Link_Product_Collection $crossSellingCollection */
 				$crossSellingCollection = $product->getCrossSellProductCollection();
 				if($crossSellingCollection instanceof Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Link_Product_Collection) {
-					$crossSellingCollection->addStoreFilter($this->getStore());
+					$crossSellingCollection->addStoreFilter($this->getIntegrationStore());
 					foreach ($crossSellingCollection as $crossProduct) {
 						$data[$key]['cross_selling'][] = $crossProduct->getSku();
 					}
 				}
-				unset($crossSellingCollection,$product);
+				unset($crossSellingCollection);
+				//cross_selling end
 
+				unset($product);
 				ksort($data[$key]);
 				$key++;
 			}
@@ -293,7 +334,9 @@ class Modago_Integrator_Model_Generator_Description
 	{
 		if ($product instanceof Mage_Catalog_Model_Product) {
 			$attributeValue = $product->getData($attributeCode);
-			if (is_numeric($attributeValue)) {
+			if(in_array($attributeCode,$this->_valuesToInsertRaw)) {
+				return $attributeValue;
+			} elseif (is_numeric($attributeValue)) {
 				$attribute = $product->getResource()->getAttribute($attributeCode);
 				if ($attribute) {
 					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
@@ -305,6 +348,27 @@ class Modago_Integrator_Model_Generator_Description
 			return "<![CDATA[$attributeValue]]>";
 		}
 		return '';
+	}
+
+	protected function getAttributeIsConfigurable($attributeCode) {
+		//if(!isset($this->_attributesForConfigurable[$attributeCode])) {
+			/** @var Mage_Eav_Model_Entity_Attribute $attributeModel */
+			$attribute = Mage::getModel('eav/entity_attribute')->loadByCode("catalog_product", $attributeCode);
+			if($attribute instanceof Mage_Eav_Model_Entity_Attribute && $attribute->getId()) {
+				$allow = $attribute->getIsGlobal() == Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
+					&& $attribute->getIsVisible()
+					&& $attribute->getIsConfigurable()
+					&& $attribute->usesSource()
+					&& $attribute->getIsUserDefined()
+					&& strpos($attribute->getApplyTo(),'configurable') === false;
+				return $allow;
+			} else {
+				return false;
+			}
+			//$this->_attributesForConfigurable[$attributeCode] = $returnVal;
+		//}
+		//unset($attribute,$allow);
+		//return $this->_attributesForConfigurable[$attributeCode];
 	}
 
 	/**
@@ -319,21 +383,24 @@ class Modago_Integrator_Model_Generator_Description
 		foreach ($item as $key => $val) {
 			$xml .= "<$key>";
 			switch ($key) {
-				case "sizes":
+				case "simples":
 					foreach ($val as $size) {
-						$xml .= "<size>$size</size>";
+						$xml .= "<sku>$size</sku>";
 					}
 					break;
+
 				case "categories":
 					foreach ($val as $category) {
 						$xml .= "<category>$category</category>";
 					}
 					break;
+
 				case "attributes":
 					foreach ($val as $attributeName => $attributeValue) {
 						$xml .= "<$attributeName>$attributeValue</$attributeName>";
 					}
 					break;
+
 				case "images":
 					foreach ($val as $image) {
 						$xml .= "<img";
@@ -346,11 +413,19 @@ class Modago_Integrator_Model_Generator_Description
 						$xml .= ">{$image['value']}</img>";
 					}
 					break;
+
 				case "cross_selling":
 					foreach ($val as $cross_product_sku) {
 						$xml .= "<sku>$cross_product_sku</sku>";
 					}
 					break;
+
+				case "options":
+					foreach ($val as $attributeName => $attributeValue) {
+						$xml .= "<$attributeName>$attributeValue</$attributeName>";
+					}
+					break;
+
 				default:
 					$xml .= $val;
 			}
@@ -410,6 +485,9 @@ class Modago_Integrator_Model_Generator_Description
 		return $product->getMediaGalleryImages();
 	}
 
+	/**
+	 * @param Mage_Catalog_Model_Product $product
+	 */
 	protected function clearMediaGallery(&$product) {
 		$product->unsData('media_gallery');
 	}
@@ -420,6 +498,7 @@ class Modago_Integrator_Model_Generator_Description
 	protected function getCollection() {
 		if(!$this->_collection) {
 			$this->_collection = Mage::getResourceModel('catalog/product_collection')
+				->setStore($this->getIntegrationStore())
 				->addAttributeToSelect("*")
 				->setPageSize($this->_getListBatch);
 		}
@@ -438,10 +517,25 @@ class Modago_Integrator_Model_Generator_Description
 		}
 	}
 
-	protected function getStore() {
-		if(!$this->_store) {
-			$this->_store = Mage::app()->getStore('default');
+	protected function getCategoryName($categoryId) {
+		if (!isset($this->_categories[$categoryId])) {
+			$category = Mage::getModel('catalog/category')->load($categoryId);
+			if ($category) {
+				$this->_categories[$categoryId] = $category->getData('name');
+			} else {
+				$this->_categories[$categoryId] = false;
+			}
+			unset($category);
 		}
-		return $this->_store;
+		return $this->_categories[$categoryId];
+	}
+
+
+	protected function getIntegrationStore()
+	{
+		if(!$this->_integrationStore) {
+			$this->_integrationStore = $this->getHelper()->getIntegrationStore();
+		}
+		return $this->_integrationStore;
 	}
 }
