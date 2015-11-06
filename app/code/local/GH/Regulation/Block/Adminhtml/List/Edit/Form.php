@@ -54,7 +54,9 @@ class GH_Regulation_Block_Adminhtml_List_Edit_Form extends Mage_Adminhtml_Block_
             "maxlength" => 32,
             'class' => "form-control",
             'format' => 'yyyy-MM-dd',
-            'note' => $helper->__('Allowed format: yyyy-mm-dd'),
+            'image'		=> $this->getSkinUrl('images/grid-cal.gif'),
+            'time'		=> false,
+            'after_element_html' => Mage::helper('ghregulation')->__('<small>Date format (YYYY-MM-DD)</small>'),
         ));
 
         $form->setValues($model->getData());
