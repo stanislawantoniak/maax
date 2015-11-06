@@ -228,6 +228,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $rma->register();
             $track = Mage::getModel('urma/rma_track');
             $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+	        $track->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT);
             $rma->addTrack($track);
             $rma->setCurrentTrack($track);
             
