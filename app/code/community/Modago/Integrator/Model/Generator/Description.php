@@ -313,7 +313,6 @@ class Modago_Integrator_Model_Generator_Description
 
 				unset($product);
 				ksort($data[$key]);
-				print_r($key.": ".(memory_get_usage(1)/1024/1024)."\n");
 				$key++;
 			}
 			unset($key);
