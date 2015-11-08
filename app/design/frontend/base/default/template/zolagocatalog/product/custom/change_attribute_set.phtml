@@ -2,6 +2,8 @@
 
 <?php
 $_helper = Mage::helper("zolagocatalog");
+
+$attributeSets = $this->getVendorAttributeSets();
 ?>
 
 
@@ -20,7 +22,16 @@ $_helper = Mage::helper("zolagocatalog");
                     <?php echo $_helper->__("Bla bla bla ..."); ?>
                 </p>
 
-                <p>Some text in the modal.</p>
+
+                <p>
+                    <?php if (!empty($attributeSets)): ?>
+                        <select class="form-control">
+                            <?php foreach ($attributeSets as $attributeSetId => $attributeSetName): ?>
+                                <option value="<?php echo $attributeSetId; ?>"><?php echo $attributeSetName; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php endif; ?>
+                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
