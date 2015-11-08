@@ -5,6 +5,9 @@
  */
 class Zolago_Catalog_Block_Vendor_Product_ChangeAttributeSet extends Mage_Core_Block_Template
 {
+    /**
+     * @return array
+     */
     public function getVendorAttributeSets()
     {
         $vendorAttributeSets = array();
@@ -13,6 +16,9 @@ class Zolago_Catalog_Block_Vendor_Product_ChangeAttributeSet extends Mage_Core_B
         $collection = Mage::getResourceModel('eav/entity_attribute_set_collection');
         $collection->addFieldToFilter("use_to_create_product", 1);
         $collection->addFieldToFilter("entity_type_id", $entityTypeId);
+        //TODO uncomment after test
+        $collection->addFieldToFilter("main_table.attribute_set_id", array("neq" => $this->getAttributeSetId()));
+        $collection->setOrder('sort_order', 'ASC');
         $collection->getSelect()
             ->joinInner(
                 array('vendor_attribute_set' => Mage::getSingleton('core/resource')->getTableName(
@@ -25,12 +31,13 @@ class Zolago_Catalog_Block_Vendor_Product_ChangeAttributeSet extends Mage_Core_B
         foreach ($collection as $collectionItem) {
             $vendorAttributeSets[$collectionItem->getAttributeSetId()] = $collectionItem->getAttributeSetName();
         }
+        asort($vendorAttributeSets);
         return $vendorAttributeSets;
     }
 
     public function getAttributeSetId()
     {
-        return $this->getParentBlock()->getAttributeSetId();
+        return Mage::app()->getRequest()->getParam("attribute_set_id", 0);
     }
 
     public function getChangeUrl()
@@ -41,5 +48,13 @@ class Zolago_Catalog_Block_Vendor_Product_ChangeAttributeSet extends Mage_Core_B
     public function getVendor()
     {
         return Mage::getModel("udropship/session")->getVendor();
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionUrl()
+    {
+        return $this->getUrl("*/*/changeAttributeSet", array("_secure" => true));
     }
 }

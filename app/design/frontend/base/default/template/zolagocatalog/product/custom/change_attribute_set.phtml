@@ -12,35 +12,36 @@ $attributeSets = $this->getVendorAttributeSets();
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><?php echo $_helper->__("Change Attribute Set"); ?></h4>
-            </div>
-            <div class="modal-body">
-                <p class="alert alert-info">
-                    <strong><?php echo $_helper->__("Information"); ?>:</strong>
-                    <?php echo $_helper->__("Bla bla bla ..."); ?>
-                </p>
-
-
-                <p>
-                    <?php if (!empty($attributeSets)): ?>
-                        <select class="form-control">
-                            <?php foreach ($attributeSets as $attributeSetId => $attributeSetName): ?>
-                                <option value="<?php echo $attributeSetId; ?>"><?php echo $attributeSetName; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php endif; ?>
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    <?php echo $_helper->__("Cancel"); ?>
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    <?php echo $_helper->__("Process"); ?>
-                </button>
-            </div>
+            <form action="<?php echo $this->getActionUrl(); ?>" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><?php echo $_helper->__("Change Attribute Set"); ?></h4>
+                </div>
+                <div class="modal-body">
+                    <p class="alert alert-info">
+                        <strong><?php echo $_helper->__("Information"); ?>:</strong>
+                        <?php echo $_helper->__("Bla bla bla ..."); ?>
+                    </p>
+                    <p>
+                        <?php if (!empty($attributeSets)): ?>
+                            <select class="form-control" name="attribute_set">
+                                <?php foreach ($attributeSets as $attributeSetId => $attributeSetName): ?>
+                                    <option
+                                        value="<?php echo $attributeSetId; ?>"><?php echo $attributeSetName; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <?php echo $_helper->__("Cancel"); ?>
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <?php echo $_helper->__("Process"); ?>
+                    </button>
+                </div>
+            </form>
         </div>
 
     </div>

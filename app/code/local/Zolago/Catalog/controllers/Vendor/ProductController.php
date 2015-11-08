@@ -124,6 +124,30 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_prepareRestResponse();
 	}
 
+
+	public function changeAttributeSetAction()
+	{
+		$request = $this->getRequest();
+
+		$productIds = $request->getParam("product_ids");
+		$attributeSetId = (int)$request->getParam("attribute_set_id");
+
+		Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+		try {
+			foreach ($productIds as $productId) {
+				$product = Mage::getSingleton('catalog/product')
+					->unsetData()
+					->load($productId)
+					->setAttributeSetId($attributeSetId)
+					->setIsMassupdate(true)
+					->save();
+			}
+		} catch (Exception $e) {
+			$this->_getSession()->addException($e, $e->getMessage());
+		}
+	}
+
     /**
      * re-generate short url for products 
      *
