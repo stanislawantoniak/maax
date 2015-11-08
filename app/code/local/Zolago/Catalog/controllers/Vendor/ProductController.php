@@ -142,6 +142,18 @@ class Zolago_Catalog_Vendor_ProductController
 					->setAttributeSetId($attributeSetId)
 					->setIsMassupdate(true)
 					->save();
+				if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE){
+					$childProducts = Mage::getModel('catalog/product_type_configurable')
+						->getUsedProducts(null,$product);
+					foreach($childProducts as $childProduct){
+						$_product = Mage::getSingleton('catalog/product')
+							->unsetData()
+							->load($childProduct->getId())
+							->setAttributeSetId($attributeSetId)
+							->setIsMassupdate(true)
+							->save();
+					}
+				}
 			}
 		} catch (Exception $e) {
 			$this->_getSession()->addException($e, $e->getMessage());
