@@ -839,14 +839,14 @@ define([
                         noty({
                             text: data.content.message,
                             type: "success",
-                            timeout: 10000
+                            //timeout: 10000
                         });
                     }
                     if (data.status == 0) {
                         noty({
                             text: data.content,
                             type: "error",
-                            timeout: 10000
+                            //timeout: 10000
                         });
                     }
                 }).always(function () {
