@@ -135,11 +135,24 @@ class Zolago_Catalog_Vendor_ProductController
             $helper = Mage::helper("zolagocatalog");
             $request = $this->getRequest();
 
-            // Products Ids
-            $productIds = array_unique(
-                explode(",", $this->getRequest()->getPost("product_ids", ""))
-            );
-            $attributeSetId = (int)$request->getParam("attribute_set_id");
+            $global = (int)$request->getParam("global");
+            $attributeSetId = (int)$request->getParam("attribute_set");
+            $attributeSetCurrentId = (int)$request->getParam("attribute_set_current");
+
+
+            if ($global == 1) {
+                $collection = Mage::getModel("catalog/product")->getCollection();
+                $collection->addFieldToFilter("attribute_set_id", $attributeSetCurrentId);
+                $collection->setStoreId($this->_getStoreId());
+                $collection->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE), "inner");
+                $collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId(), "inner");
+                $productIds = $collection->getAllIds();
+            } else {
+                // Products Ids
+                $productIds = array_unique(
+                    explode(",", $this->getRequest()->getPost("product_ids", ""))
+                );
+            }
 
             Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
@@ -157,11 +170,13 @@ class Zolago_Catalog_Vendor_ProductController
                         $productIdsConfigurable[$productId] = $productId;
                     }
                 }
+
                 //2. Process simple products as child of configurable
                 if (!empty($productIdsConfigurable)) {
                     $children = Mage::getResourceModel('catalog/product')
-                        ->getRelatedProductsNotVisible($productIdsConfigurable);
-                    if (!empty($list)) {
+                        ->getRelatedProducts($productIdsConfigurable);
+
+                    if (!empty($children)) {
                         foreach ($children as $child) {
                             Mage::getSingleton('catalog/product')
                                 ->unsetData()

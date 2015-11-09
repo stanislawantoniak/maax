@@ -809,7 +809,6 @@ define([
         getFormActionUrl: function () {
             return this.getModal().find("form:eq(0)").prop("action");
         },
-
         attachSubmitButton: function () {
             var self = this;
             // Main logic for submit
@@ -821,11 +820,18 @@ define([
 
                 var ids = window.grid.getSelectedIds().join(",");
                 var attribute_set = self.getModal().find("[name=attribute_set] option:selected").val();
+                var attribute_set_current = window.grid.baseQuery["attribute_set_id"];
+                var global = window.grid.getCheckAll() ? 1 : 0;
 
                 jQuery.ajax({
                     cache: false,
                     url: window.attributeSet.getFormActionUrl(),
-                    data: {"product_ids": ids, "attribute_set_id": attribute_set},
+                    data: {
+                        product_ids: ids,
+                        attribute_set: attribute_set,
+                        attribute_set_current: attribute_set_current,
+                        global: global
+                    },
                     method: "POST",
                 }).done(function (data, textStatus, jqXHR) {
                     if (data.status == 1) {

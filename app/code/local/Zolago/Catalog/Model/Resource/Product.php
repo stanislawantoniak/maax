@@ -391,34 +391,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
      * @param array $ids configurable product ids
      * @return array
      */
-    public function getRelatedProducts($ids)
-    {
-        $readConnection = $this->_getReadAdapter();
-        $select = $readConnection->select();
-        $select->from(
-            array('product_relation' => $this->getTable("catalog/product_relation")),
-            array(
-                "parent_id" => "product_relation.parent_id",
-                "product_id" => "product_relation.child_id"
-            )
-        );
-        $select->join(
-            array('products' => $this->getTable("catalog/product")),
-            'product_relation.child_id=products.entity_id',
-            array()
-        );
-        $select->where("parent_id in (?)", $ids);
-        $select->where("products.status <>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
-        $list = $readConnection->fetchAll($select);
-        return $list;
-    }
-    /**
-     * get child products (not visible individually) for configurable products
-     *
-     * @param array $ids configurable product ids
-     * @return array
-     */
-    public function getRelatedProductsNotVisible($ids) {
+    public function getRelatedProducts($ids) {
         $readConnection = $this->_getReadAdapter();
         $select = $readConnection->select();
         $select->from (
