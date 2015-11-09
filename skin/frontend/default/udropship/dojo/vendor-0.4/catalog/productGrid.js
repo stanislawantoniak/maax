@@ -809,22 +809,25 @@ define([
         getFormActionUrl: function () {
             return this.getModal().find("form:eq(0)").prop("action");
         },
-        attachSubmitButton: function () {
 
+        attachSubmitButton: function () {
+            var self = this;
             // Main logic for submit
             this.getForm().submit(function (event) {
                 // Stop form from submitting normally
                 event.preventDefault();
+                self.getModal().modal('hide');
+                misc.startLoading();
 
                 var ids = window.grid.getSelectedIds();
-                var attribute_set = jQuery("[name=attribute_set] option:selected").val();
+                var attribute_set = self.getModal().find("[name=attribute_set] option:selected").val();
 
                 jQuery.ajax({
                     cache: false,
                     url: window.attributeSet.getFormActionUrl(),
                     data: {"product_ids": ids, "attribute_set_id": attribute_set}
                 }).success(function (data, textStatus, jqXHR) {
-
+                    misc.stopLoading();
                 });
 
             });
@@ -1011,7 +1014,7 @@ define([
             },
 
             closeModal: function () {
-                this.getModal().find(".modal-header button.close").click();
+                this.getModal().modal('hide');
             },
 
             openModal: function () {

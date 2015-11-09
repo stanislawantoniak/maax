@@ -15,7 +15,7 @@ $attributeSets = $this->getVendorAttributeSets();
             <form action="<?php echo $this->getActionUrl(); ?>" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"><?php echo $_helper->__("Change Attribute Set"); ?></h4>
+                    <h4 class="modal-title"><?php echo $_helper->__("Move products to other category"); ?></h4>
                 </div>
                 <div class="modal-body">
                     <p class="alert alert-info">
@@ -30,6 +30,8 @@ $attributeSets = $this->getVendorAttributeSets();
                                         value="<?php echo $attributeSetId; ?>"><?php echo $attributeSetName; ?></option>
                                 <?php endforeach; ?>
                             </select>
+                        <?php else: ?>
+<!--                            No attribute sets for vendor-->
                         <?php endif; ?>
                     </p>
                 </div>

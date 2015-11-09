@@ -14,13 +14,15 @@ class Zolago_Catalog_Block_Vendor_Product_ChangeAttributeSet extends Mage_Core_B
 
         $entityTypeId = Mage::getModel('eav/entity')->setType('catalog_product')->getTypeId();
         $collection = Mage::getResourceModel('eav/entity_attribute_set_collection');
-        $collection->addFieldToFilter("use_to_create_product", 1);
+
         $collection->addFieldToFilter("entity_type_id", $entityTypeId);
         //TODO uncomment after test
-        $collection->addFieldToFilter("main_table.attribute_set_id", array("neq" => $this->getAttributeSetId()));
-        $collection->setOrder('sort_order', 'ASC');
+        //$collection->addFieldToFilter("use_to_create_product", 1);
+        //$collection->addFieldToFilter("main_table.attribute_set_id", array("neq" => $this->getAttributeSetId()));
+
+        $collection->setOrder('attribute_set_name', 'ASC');
         $collection->getSelect()
-            ->joinInner(
+            ->join(
                 array('vendor_attribute_set' => Mage::getSingleton('core/resource')->getTableName(
                     "zolagosizetable/vendor_attribute_set"
                 )),
