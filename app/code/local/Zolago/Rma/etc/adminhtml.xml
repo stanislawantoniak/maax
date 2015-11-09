@@ -2,27 +2,24 @@
 
 <config>
 	<menu>
-        <sales>
+        <vendors>
             <children>
-                <udropship>
-                    <children>
                         <urma translate="title" module="urma">
                             <title>Returns</title>
-                            <sort_order>500</sort_order>
+                            <sort_order>110</sort_order>
+                      		<action>urmaadmin/rma</action>
+                        </urma>
+                        <vendor_general_config>
                             <children>
-                            	<list translate="title" module="urma">
-                            		<title>List</title>
-                            		<action>urmaadmin/rma</action>
-                            	</list>
                             	<reasons translate="title" module="urma">
-                            		<title>Reasons</title>
+                            		<title>RMA Reasons</title>
                             		<action>adminhtml/return</action>
+                            		<sort_order>140</sort_order>
                             	</reasons>
                             </children>
-                        </urma>
-                    </children>
-                </udropship>
+                        </vendor_general_config>
             </children>
-        </sales>
+            
+        </vendors>
     </menu>
 </config>

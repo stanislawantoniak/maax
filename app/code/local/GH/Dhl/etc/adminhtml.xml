@@ -12,11 +12,15 @@
     <menu>
         <vendors>
             <children>
-                <ghdhl>
-                    <title>GH Dhl Accounts</title>
-                    <sort_order>100</sort_order>
-                    <action>adminhtml/dhl/index</action>
-                </ghdhl>
+                <vendor_general_config>
+                    <children> 
+                        <ghdhl>
+                            <title>GH Dhl Accounts</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/dhl/index</action>
+                        </ghdhl>
+                    </children>
+                </vendor_general_config>
             </children>
         </vendors>
     </menu>

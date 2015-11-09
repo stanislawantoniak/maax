@@ -3,32 +3,30 @@
     <menu>
         <vendors>
             <children>
-                <ghstatements>
-                    <title>Statements</title>
-                    <sort_order>110</sort_order>
-                    <children>
-                        <ghstatements_calendar>
-                            <title>Statements calendar</title>
-                            <sort_order>1</sort_order>
-                            <action>adminhtml/statements/calendar</action>
-                        </ghstatements_calendar>
                         <ghstatements_vendor>
                             <title>Vendor Statements</title>
-                            <sort_order>2</sort_order>
+                            <sort_order>120</sort_order>
                             <action>adminhtml/vendor_statements/index</action>
                         </ghstatements_vendor>
                         <ghstatements_balance>
                             <title>Vendors balances</title>
-                            <sort_order>3</sort_order>
+                            <sort_order>125</sort_order>
                             <action>adminhtml/vendor_balance/index</action>
                         </ghstatements_balance>
+                <vendor_general_config>
+                <children>
                         <ghstatements_general_settings translate="title" module="ghstatements">
-                            <title>General settings</title>
-                            <sort_order>100</sort_order>
+                            <title>Statements configuration</title>
+                            <sort_order>60</sort_order>
                             <action>adminhtml/system_config/edit/section/ghstatements</action>
                         </ghstatements_general_settings>
+                        <ghstatements_calendar>
+                            <title>Statements calendar</title>
+                            <sort_order>70</sort_order>
+                            <action>adminhtml/statements/calendar</action>
+                        </ghstatements_calendar>
                     </children>
-                </ghstatements>
+                </vendor_general_config>
             </children>
         </vendors>
     </menu>
