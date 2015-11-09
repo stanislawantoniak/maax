@@ -61,7 +61,7 @@
                                 <sort_order>80</sort_order>
                                 <action>udpayoutadmin/payout</action>
                             </payouts>
-                <vendor_general_config module="zolagodropship">
+                <vendor_general_config module="zolagodropship" translate="title">
                     <title>General Config</title>
                     <sort_order>150</sort_order>
                     <children>
