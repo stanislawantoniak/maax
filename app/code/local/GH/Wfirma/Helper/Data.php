@@ -138,7 +138,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 			'contractors' => array(
 				'contractor' => array(
 					//dane firmy
-					'name'          => $vendor->getData('vendor_name'), //nazwa długa
+					'name'          => $vendor->getData('company_name'), //nazwa długa
 					//'altname'       => 'TestContr', //nazwa skrócona
 					'nip'           => $vendor->getData('tax_no'),
 
