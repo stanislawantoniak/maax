@@ -189,7 +189,14 @@ class Zolago_Catalog_Vendor_ProductController
                         }
                     }
                 }
-
+                foreach ($productIds as $productId) {
+                    Mage::getModel("zolagomapper/queue_product")
+                        ->push(
+                            array(
+                                "product_id" => $productId,
+                                "website_id" => 0)
+                        );
+                }
 
                 $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
                 $attributeSetModel->load($attributeSetId);
