@@ -17,8 +17,8 @@ class Zolago_Catalog_Block_Vendor_Product_ChangeAttributeSet extends Mage_Core_B
 
         $collection->addFieldToFilter("entity_type_id", $entityTypeId);
         //TODO uncomment after test
-        //$collection->addFieldToFilter("use_to_create_product", 1);
-        //$collection->addFieldToFilter("main_table.attribute_set_id", array("neq" => $this->getAttributeSetId()));
+        $collection->addFieldToFilter("use_to_create_product", 1);
+        $collection->addFieldToFilter("main_table.attribute_set_id", array("neq" => $this->getAttributeSetId()));
 
         $collection->setOrder('attribute_set_name', 'ASC');
         $collection->getSelect()
