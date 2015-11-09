@@ -23,13 +23,14 @@ class GH_Statements_Model_Observer
         if ($forceCustomDate) {
             $yesterday = $forceCustomDate;
         }
-        
+
         // Collection of active vendors who have statement calendar
         /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
-        $VendorsSollection = Mage::getResourceModel('udropship/vendor_collection');
-        $VendorsSollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
-        $VendorsSollection->addFieldToFilter('statements_calendar', array('neq' => null));
-        foreach($VendorsSollection as $vendor) {
+        $vendorsCollection = Mage::getResourceModel('udropship/vendor_collection');
+        $vendorsCollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+        $vendorsCollection->addFieldToFilter('statements_calendar', array('neq' => null));
+
+        foreach($vendorsCollection as $vendor) {
             /** @var Zolago_Dropship_Model_Vendor $vendor */
             $calendarId = (int)$vendor->getStatementsCalendar();
             
@@ -57,6 +58,8 @@ class GH_Statements_Model_Observer
                     $statementTotals->lastBalance = self::processStatementLastBalance($statement);
 
                     self::populateStatement($statement, $statementTotals);
+
+
                 } catch(Mage_Core_Exception $e) {
                     Mage::log($e->getMessage(), null, 'ghstatements_cron_exception.log');
                     $alreadyExists[] = $e->getMessage();
@@ -889,4 +892,5 @@ class GH_Statements_Model_Observer
     public static function getTax() {
         return Mage::helper('ghstatements')->getTax();
     }
+
 }
