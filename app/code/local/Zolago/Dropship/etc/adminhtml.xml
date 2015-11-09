@@ -83,6 +83,10 @@
                         
                     </children>
                 </vendor_general_config>                                           
+                <vendor_integration_config module="zolagodropship" translate="title">
+                    <title>Integration config</title>
+                    <sort_order>160</sort_order>                    
+                </vendor_integration_config>
             </children>
         </vendors>
     </menu>

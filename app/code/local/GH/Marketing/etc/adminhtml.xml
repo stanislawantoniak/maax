@@ -14,7 +14,7 @@
             <children>
                 <ghmarketing>
                     <title>GH Marketing</title>
-                    <sort_order>25</sort_order>
+                    <sort_order>115</sort_order>
                     <action>adminhtml/marketing_cost/index</action>
                 </ghmarketing>
             </children>
