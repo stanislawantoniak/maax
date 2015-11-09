@@ -164,6 +164,7 @@ class Zolago_Catalog_Vendor_ProductController
                         ->unsetData()
                         ->load($productId)
                         ->setAttributeSetId($attributeSetId)
+                        ->setDescriptionStatus(1)
                         ->setIsMassupdate(true)
                         ->save();
                     if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
@@ -182,6 +183,7 @@ class Zolago_Catalog_Vendor_ProductController
                                 ->unsetData()
                                 ->load($child["product_id"])
                                 ->setAttributeSetId($attributeSetId)
+                                ->setDescriptionStatus(1)
                                 ->setIsMassupdate(true)
                                 ->save();
                         }
