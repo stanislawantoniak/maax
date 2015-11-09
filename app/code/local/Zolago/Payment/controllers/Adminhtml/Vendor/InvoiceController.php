@@ -62,6 +62,9 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
         try {
             if ($this->getRequest()->isPost()) {
                 $model->load($modelId);
+	            if(isset($data['note']) && $data['note']) {
+		            $data['note'] = substr($data['note'], 0, GH_Wfirma_Model_Client::NOTE_FIELD_LENGTH);
+	            }
                 $model->addData($data);
                 $validErrors = $model->validate();
 

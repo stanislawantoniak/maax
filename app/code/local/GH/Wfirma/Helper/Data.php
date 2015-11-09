@@ -82,6 +82,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 							//'paymentdate'       => '2015-10-29',
 							'price_type'        => 'brutto', //or 'netto' - all goods prices calculations are based on this field
 							'id_external'       => $invoice->getData('vendor_invoice_id'),
+							'description'       => $invoice->getData('note'),
 
 							'invoicecontents'   => $invoiceContents
 						)

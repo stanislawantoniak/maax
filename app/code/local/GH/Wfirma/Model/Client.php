@@ -39,6 +39,9 @@ class GH_Wfirma_Model_Client {
 	//Próba wywołania zakresu do którego nie ma się dostępu (tylko przy autoryzacji przez OAuth).
 	const RESULT_STATUS_CODE_DENIED_SCOPE_REQUESTED = 'DENIED SCOPE REQUESTED';
 
+	//limit po stronie wFirma to 512 znaków, ale każdy znak nowej linii zamieniany jest na <br/> co zmniejsza limit, więc ustawiam go na trochę niższy
+	const NOTE_FIELD_LENGTH = 450;
+
 
 
 	private $_inputFormat                   = 'json'; //other options: xml (default) and php (serialized php array),
