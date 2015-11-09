@@ -144,6 +144,8 @@ class Zolago_Catalog_Vendor_ProductController
             Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
             try {
+                //1. Process products
+                $productIdsConfigurable = array();
                 foreach ($productIds as $productId) {
                     $product = Mage::getSingleton('catalog/product')
                         ->unsetData()
@@ -152,12 +154,18 @@ class Zolago_Catalog_Vendor_ProductController
                         ->setIsMassupdate(true)
                         ->save();
                     if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-                        $childProducts = Mage::getModel('catalog/product_type_configurable')
-                            ->getUsedProducts(null, $product);
-                        foreach ($childProducts as $childProduct) {
+                        $productIdsConfigurable[$productId] = $productId;
+                    }
+                }
+                //2. Process simple products as child of configurable
+                if (!empty($productIdsConfigurable)) {
+                    $children = Mage::getResourceModel('catalog/product')
+                        ->getRelatedProductsNotVisible($productIdsConfigurable);
+                    if (!empty($list)) {
+                        foreach ($children as $child) {
                             Mage::getSingleton('catalog/product')
                                 ->unsetData()
-                                ->load($childProduct->getId())
+                                ->load($child["product_id"])
                                 ->setAttributeSetId($attributeSetId)
                                 ->setIsMassupdate(true)
                                 ->save();
@@ -165,9 +173,10 @@ class Zolago_Catalog_Vendor_ProductController
                     }
                 }
 
+
                 $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
                 $attributeSetModel->load($attributeSetId);
-                $attributeSetName  = $attributeSetModel->getAttributeSetName();
+                $attributeSetName = $attributeSetModel->getAttributeSetName();
 
                 $productIdsCount = count($productIds);
                 $response = array(
