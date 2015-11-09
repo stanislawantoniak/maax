@@ -161,7 +161,7 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             } elseif(!$model->getData('wfirma_invoice_id')) {
                 Mage::throwException("Invoice has not been generated");
             } else {
-                $wfirmaHlp->getClient()->downloadInvoice($model->getData('wfirma_invoice_id'));
+                $wfirmaHlp->getClient()->downloadInvoice($model);
             }
 
         } catch(GH_Wfirma_Exception $e) {

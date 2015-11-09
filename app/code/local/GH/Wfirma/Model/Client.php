@@ -301,7 +301,15 @@ class GH_Wfirma_Model_Client {
 	const INVOICE_DOWNLOAD_TYPE_INVOICE = 'invoice'; //wydruk oryginału
 	const INVOICE_DOWNLOAD_TYPE_COPY = 'invoicecopy'; //wydruk kopii
 
-	public function downloadInvoice($invoiceId,$type=self::INVOICE_DOWNLOAD_TYPE_ALL,$address=0,$leaflet=0,$duplicate=0) {
+	/**
+	 * @param Zolago_Payment_Model_Vendor_Invoice $invoiceModel
+	 * @param string $type
+	 * @param int $address
+	 * @param int $leaflet
+	 * @param int $duplicate
+	 * @throws Zend_Controller_Response_Exception
+	 */
+	public function downloadInvoice($invoiceModel,$type=self::INVOICE_DOWNLOAD_TYPE_INVOICE,$address=0,$leaflet=0,$duplicate=0) {
 		$post = array(
 			'invoices' => array(
 				'parameters' => array(
@@ -337,7 +345,8 @@ class GH_Wfirma_Model_Client {
 			)
 		);
 
-		$file = $this->doRequest("invoices/download/$invoiceId",$post);
+		$file = $this->doRequest("invoices/download/{$invoiceModel->getData('wfirma_invoice_id')}",$post);
+		$filename = "faktura_".preg_replace("/[^a-z0-9\._-]+/i","-",$invoiceModel->getWfirmaInvoiceNumber()).'.pdf';
 
 		Mage::app()->getResponse()
 			->setHttpResponseCode(200)
@@ -345,7 +354,7 @@ class GH_Wfirma_Model_Client {
 			->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
 			->setHeader ('Content-type', 'application/force-download', true )
 			->setHeader('Content-Length', strlen($file)) //size in bytes
-			->setHeader('Content-Disposition', 'inline;' . '; filename=faktura_'.$invoiceId.'.pdf');
+			->setHeader('Content-Disposition', 'inline;' . '; filename='.$filename);
 		Mage::app()->getResponse()->clearBody();
 		Mage::app()->getResponse()->sendHeaders();
 

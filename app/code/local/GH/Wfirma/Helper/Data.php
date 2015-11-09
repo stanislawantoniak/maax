@@ -16,7 +16,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 		if($this->updateContractor($vendor)) {
 			$invoiceContents = array();
 
-			if($invoice->getData('commission_brutto')) {
+			if(floatval($invoice->getData('commission_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -29,7 +29,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				);
 			}
 
-			if($invoice->getData('transport_brutto')) {
+			if(floatval($invoice->getData('transport_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -42,7 +42,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				);
 			}
 
-			if($invoice->getData('marketing_brutto')) {
+			if(floatval($invoice->getData('marketing_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -55,7 +55,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				);
 			}
 
-			if($invoice->getData('other_brutto')) {
+			if(floatval($invoice->getData('other_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
