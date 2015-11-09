@@ -237,3 +237,5 @@
 "Waiting for acceptation by admin","Czeka na akceptację admina"
 "Accepted","Zatwierdzony"
 "%s: Product description already accepted", "%s: Opis produktu już zatwierdzony"
+"Move to other category","Przenieś do innej kategorię"
+"You are about to move products to other category. Keep in mind that you should fill all the missing products attributes in new category.","W ten sposób przeniesiesz zaznaczone produkty do innej kategorii. Pamiętaj, żeby po przeniesieniu uzupełnić cechy produktów w nowej kategorii. Jeśli na liście nie znajdziesz kategorii, w których produkty powinny się znaleźć skontaktuj się z administracją galerii Modago."
