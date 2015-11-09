@@ -4,6 +4,10 @@
         <GH_Marketing>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Zolago_Common/>
+                <Zolago_Dropship/>
+            </depends>
         </GH_Marketing>
     </modules>
 </config>

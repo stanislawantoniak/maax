@@ -4,6 +4,10 @@
         <Zolago_Banner>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Zolago_Common/>
+                <Zolago_Dropship/>
+            </depends>
         </Zolago_Banner>
     </modules>
 </config>

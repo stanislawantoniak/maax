@@ -6,6 +6,7 @@
             <codePool>local</codePool>
             <depends>
             	<Unirgy_Dropship/>
+            	<Zolago_Common/>
             </depends>
         </Zolago_Dropship>
     </modules>
