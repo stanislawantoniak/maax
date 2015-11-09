@@ -828,21 +828,23 @@ define([
                     data: {"product_ids": ids, "attribute_set_id": attribute_set},
                     method: "POST",
                 }).done(function (data, textStatus, jqXHR) {
-                    misc.stopLoading();
-                    if(data.status == 1){
+                    if (data.status == 1) {
+                        window.grid.refresh();
                         noty({
                             text: data.content.message,
                             type: "success",
                             timeout: 10000
                         });
                     }
-                    if(data.status == 0){
+                    if (data.status == 0) {
                         noty({
                             text: data.content,
                             type: "error",
                             timeout: 10000
                         });
                     }
+                }).always(function () {
+                    misc.stopLoading();
                 });
 
             });
