@@ -76,7 +76,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 								'id'=>  $vendor->getData('wfirma_contractor_id')
 							),
 							'type'              => $client::INVOICE_TYPE_NORMAL, //fvat
-							'payment_method'    => $client::INVOICE_PAYMENT_METHOD_TRANSFER, //przelew
+							'payment_method'    => $client::INVOICE_PAYMENT_METHOD_COMPENSATION, //kompensata
 							'date'              => $invoice->getData('date'),
 							'disposaldate'      => $invoice->getData('sale_date'),
 							//'paymentdate'       => '2015-10-29',
@@ -167,7 +167,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 
 					//płatności
 					//'payment_days'  => 7, //domyślny termin płatności
-					'payment_method'=> GH_Wfirma_Model_Client::INVOICE_PAYMENT_METHOD_TRANSFER, //domyślna metoda płatności
+					'payment_method'=> GH_Wfirma_Model_Client::INVOICE_PAYMENT_METHOD_COMPENSATION, //domyślna metoda płatności - kompensata
 
 					//W przypadku wartości 1 i włączonych automatycznych powiadomieniach o niezapłaconych fakturach,
 					//kontrahent otrzyma monit w przypadku braku zapłaty za fakturę.

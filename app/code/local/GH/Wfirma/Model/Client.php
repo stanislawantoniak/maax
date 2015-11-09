@@ -187,7 +187,7 @@ class GH_Wfirma_Model_Client {
 	//invoice payment methods
 	const INVOICE_PAYMENT_METHOD_CASH = 'cash'; //gotówka
 	const INVOICE_PAYMENT_METHOD_TRANSFER = 'transfer'; //przelew
-	const INVOICE_PAYMENT_METHOD_COMPENSATION = 'compensation'; //kompensacja (?)
+	const INVOICE_PAYMENT_METHOD_COMPENSATION = 'compensation'; //kompensata
 	const INVOICE_PAYMENT_METHOD_COD = 'cod'; //pobranie
 	const INVOICE_PAYMENT_METHOD_PAYMENT_CARD = 'payment_card'; //karta
 
