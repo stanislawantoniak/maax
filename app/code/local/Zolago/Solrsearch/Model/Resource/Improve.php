@@ -339,6 +339,10 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 $_helper->loadCustomData($vendor,'root_category');
                 foreach ($vendor->getRootCategory() as $categoryId) {
                     // set vendors to categories
+                    if (!$categoryId) {
+                        // no root category - overriding by gallery root category
+                        $categoryId = Mage::app()->getStore()->getRootCategoryId();
+                    }
                     if ($categoryId) {
                         if (!$this->_checkIsActive($categoryId)) {
                             continue;
