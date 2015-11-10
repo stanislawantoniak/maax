@@ -24,7 +24,7 @@ $hlp = Mage::helper('ghregulation');
                                         <?php echo $key; ?>
                                 </div>
                                 <div class="widget-content">                                    
-                                    <?php $actual = array_pop($document); ?>
+                                    <?php $actual = array_shift($document); ?>
                                     <div class="dd">
                                     <ol class="dd-list">
                                     <li class="dd-item"><div class="dd-handle" style="cursor:default;height:40px; padding-top:9px"><?php echo $hlp->__('is valid from').' '.$actual['date']; ?>:

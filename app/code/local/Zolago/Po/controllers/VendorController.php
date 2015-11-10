@@ -1319,6 +1319,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
 
             $manager->setNumber($number);
+
+	        //add track type to request
+	        $r->setParam('track_type',GH_Statements_Model_Track::TRACK_TYPE_ORDER);
+
             $manager->processSaveTracking($r->getParams());
             $session->addSuccess($this->__('Tracking ID has been added'));
             $highlight['tracking'] = true;

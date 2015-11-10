@@ -45,7 +45,8 @@ $_images = $this->getGalleryImages();
 						<?php if (isset($_dimensions[$k]) && is_array($_dimensions[$k]) && isset($_dimensions[$k][0], $_dimensions[$k][1])): ?>
 							<div class="lightbox-gallery-item">
 								<div class="lightbox-gallery-image"
-								     style="background-image: url('<?php echo $_image->getUrl(); ?>');"
+								     data-background="<?php echo $_image->getUrl(); ?>"
+								     style="background-image: url('<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>'); background-size: initial;"
 								     data-max-width="<?php echo $_dimensions[$k][0]; ?>"
 								     data-max-height="<?php echo $_dimensions[$k][1]; ?>"
 								     data-ratio="<?php echo number_format((float)($_dimensions[$k][1] / $_dimensions[$k][0]), 2, '.', ''); ?>">

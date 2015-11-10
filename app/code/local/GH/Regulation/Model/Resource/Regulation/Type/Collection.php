@@ -20,4 +20,20 @@ class GH_Regulation_Model_Resource_Regulation_Type_Collection extends Mage_Core_
             );
         return $this;
     }
+
+    /**
+     * Retrieve option hash
+     *
+     * @param string $withEmptyText
+     * @return array
+     */
+    public function toOptionHash($withEmptyText = '')
+    {
+        $arr =  array();
+        if (!empty($withEmptyText)) {
+            $arr[''] = $withEmptyText;
+        }
+        $arr += parent::_toOptionHash('regulation_type_id', 'name');
+        return $arr;
+    }
 }

@@ -201,3 +201,4 @@
 "RMA number: %s, order number: %s", "Reklamacja nr: %s, Zamówienie nr: %s"
 "Refund is not possible because order was sent using COD and client didn't receive the package.","Nie można utworzyć zwrotu, ponieważ zamówienie zostało wysłane za pobraniem, a klient nie odebrał przesyłki"
 "Refund disabled","Zwrot zablokowany"
+"RMA Reasons","Przyczyny zgłoszeń RMA"

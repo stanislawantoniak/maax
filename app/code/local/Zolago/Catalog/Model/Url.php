@@ -5,6 +5,71 @@
  */
 class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
     /**
+     * Refresh product rewrite urls for one store or all stores
+     * Called as a reaction on product change that affects rewrites
+     * Only root category
+     *
+     * @param int $productId
+     * @param int|null $storeId
+     * @return Mage_Catalog_Model_Url
+     */
+    public function refreshProductRewrite($productId, $storeId = null)
+    {
+        if (is_null($storeId)) {
+            foreach ($this->getStores() as $store) {
+                $this->refreshProductRewrite($productId, $store->getId());
+            }
+            return $this;
+        }
+
+        $product = $this->getResource()->getProduct($productId, $storeId);
+        if ($product) {
+            $useCategoriesInUrl = Mage::getStoreConfig('catalog/seo/product_use_categories');
+            $enableOptimisation = Mage::getStoreConfigFlag('dev/index/enable');
+
+            $store = $this->getStores($storeId);
+            $storeRootCategoryId = $store->getRootCategoryId();
+
+
+
+            if($useCategoriesInUrl!="0"||!$enableOptimisation) {
+                // List of categories the product is assigned to, filtered by being within the store's categories root
+                $categories = $this->getResource()->getCategories($product->getCategoryIds(), $storeId);
+                $this->_rewrites = $this->getResource()->prepareRewrites($storeId, '', $productId);
+
+                // Add rewrites for all needed categories
+                // If product is assigned to any of store's categories -
+                // we also should use store root category to create root product url rewrite
+                if (!isset($categories[$storeRootCategoryId])) {
+                    $categories[$storeRootCategoryId] = $this->getResource()->getCategory($storeRootCategoryId, $storeId);
+                }
+
+                // Create product url rewrites
+                foreach ($categories as $category) {
+                    $this->_refreshProductRewrite($product, $category);
+                }
+
+                // Remove all other product rewrites created earlier for this store - they're invalid now
+                $excludeCategoryIds = array_keys($categories);
+                $this->getResource()->clearProductRewrites($productId, $storeId, $excludeCategoryIds);
+                unset($categories);
+            
+            } else {
+                $rootCategory = $this->getResource()->getCategory($storeRootCategoryId, $storeId);
+                $this->_refreshProductRewrite($product, $rootCategory);
+
+                $this->getResource()->clearProductRewrites($productId, $storeId, array($storeRootCategoryId));
+            }
+            unset($product);
+        } else {
+            // Product doesn't belong to this store - clear all its url rewrites including root one
+            $this->getResource()->clearProductRewrites($productId, $storeId, array());
+        }
+
+        return $this;
+    }
+
+    /**
      * Get unique category request path
      *
      * @param Varien_Object $category
@@ -37,7 +102,7 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
             $parentPath = '';
         }
         $parentPath = Mage::helper('catalog/category')->getCategoryUrlPath($parentPath,
-            true, $category->getStoreId());
+                      true, $category->getStoreId());
         $enabled = Mage::getStoreConfig('activo_categoryurlseo/global/enabled');
 
         if ($enabled) {
@@ -53,8 +118,8 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
         }
 
         return $this->getUnusedPath($category->getStoreId(), $requestPath,
-            $this->generatePath('id', null, $category)
-        );
+                                    $this->generatePath('id', null, $category)
+                                   );
     }
 
     public function refreshProductRewrites($storeId)
@@ -100,7 +165,6 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
 
 
             foreach ($products as $product) {
-
                 if($enableOptimisation&&$excludeProductsDisabled&&$product->getData("status")==2)
                 {
                     continue;

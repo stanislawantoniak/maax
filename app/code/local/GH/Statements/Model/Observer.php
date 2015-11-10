@@ -457,51 +457,51 @@ class GH_Statements_Model_Observer
 					    'track_type'        => $orderTrack->getTrackType()
 				    );
 
-                    $nettoTotal += $orderTrack->getChargeTotal();
-                    $bruttoTotal += $chargeTotal;
-                }
-            }
-            //orders tracking end
+				    $nettoTotal += $orderTrack->getChargeTotal();
+				    $bruttoTotal += $chargeTotal;
+			    }
+		    }
+		    //orders tracking end
 
-            //rmas tracking start
-            /** @var Zolago_Rma_Model_Rma_Track $rmasTracks */
-            $rmasTracks = Mage::getModel('urma/rma_track');
+		    //rmas tracking start
+		    /** @var Zolago_Rma_Model_Rma_Track $rmasTracks */
+		    $rmasTracks = Mage::getModel('urma/rma_track');
 
-            $rmasTracksCollection = $rmasTracks->getCollection();
-            $rmasTracksCollection
-            ->addFieldToFilter('main_table.statement_id', array('null' => true))
-            ->addFieldToFilter('main_table.gallery_shipping_source', 1)
-            ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
-            ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
-            ->addFieldToFilter('main_table.udropship_status',array('in'=>array(
-                                   Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
-                                   Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
-                                   Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
-                               )))
-            ->getSelect()
-            ->join(
-                'urma_rma',
-                'main_table.parent_id = urma_rma.entity_id',
-                array('udropship_vendor')
-            )
-            ->where('urma_rma.udropship_vendor = '.$statement->getVendorId());
+		    $rmasTracksCollection = $rmasTracks->getCollection();
+		    $rmasTracksCollection
+			    ->addFieldToFilter('main_table.statement_id', array('null' => true))
+			    ->addFieldToFilter('main_table.gallery_shipping_source', 1)
+                ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
+                ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
+			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(
+				    Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
+				    Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+				    Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
+			    )))
+			    ->getSelect()
+			        ->join(
+				        'urma_rma',
+				        'main_table.parent_id = urma_rma.entity_id',
+				        array('udropship_vendor')
+			        )
+			        ->where('urma_rma.udropship_vendor = '.$statement->getVendorId());
 
-            $rmasTracksToUpdate = array();
-            if($rmasTracksCollection->getSize()) {
-                foreach($rmasTracksCollection as $rmaTrack) {
-                    /** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
+		    $rmasTracksToUpdate = array();
+			if($rmasTracksCollection->getSize()) {
+				foreach($rmasTracksCollection as $rmaTrack) {
+					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
 
-                    /** @var Zolago_Rma_Model_Rma $rma */
-                    $rma = Mage::getModel("zolagorma/rma")->load($rmaTrack->getParentId());
+					/** @var Zolago_Rma_Model_Rma $rma */
+					$rma = Mage::getModel("zolagorma/rma")->load($rmaTrack->getParentId());
 
-                    if($rma && $rma->getId()) {
-                        $rmasTracksToUpdate[] = $rmaTrack->getId();
+					if($rma && $rma->getId()) {
+						$rmasTracksToUpdate[] = $rmaTrack->getId();
 
-                        $chargeTotal = $rmaTrack->getChargeTotal() * $tax;
+						$chargeTotal = $rmaTrack->getChargeTotal() * $tax;
                         $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
-                        /** @var Zolago_Po_Model_Po $po */
-                        $po = $rma->getPo();
+						/** @var Zolago_Po_Model_Po $po */
+						$po = $rma->getPo();
 
 						//prepare array to insert into gh_statements_track
 						$trackStatements[] = array(
@@ -521,30 +521,30 @@ class GH_Statements_Model_Observer
 							'track_type'        => $rmaTrack->getTrackType()
 						);
 
-                        $nettoTotal += $rmaTrack->getChargeTotal();
-                        $bruttoTotal += $chargeTotal;
-                    }
-                }
-            }
-            //rmas tracking end
+						$nettoTotal += $rmaTrack->getChargeTotal();
+						$bruttoTotal += $chargeTotal;
+					}
+				}
+			}
+		    //rmas tracking end
 
-            if(count($trackStatements)) {
-                /** @var GH_Statements_Model_Track $trackStatement */
-                $trackStatement = Mage::getModel("ghstatements/track");
+		    if(count($trackStatements)) {
+			    /** @var GH_Statements_Model_Track $trackStatement */
+			    $trackStatement = Mage::getModel("ghstatements/track");
 
-                /** @var GH_Statements_Model_Resource_Track $trackStatementResource */
-                $trackStatementResource = $trackStatement->getResource();
-                $trackStatementResource->appendTracks($trackStatements);
-            }
+			    /** @var GH_Statements_Model_Resource_Track $trackStatementResource */
+			    $trackStatementResource = $trackStatement->getResource();
+			    $trackStatementResource->appendTracks($trackStatements);
+		    }
 
-            if(count($ordersShipmentsIdsToUpdate)) {
-                foreach($ordersShipmentsIdsToUpdate as $shipmentId) {
-                    /** @var Mage_Sales_Model_Order_Shipment $currentShipment */
-                    $currentShipment = $ordersShipmentsObjects[$shipmentId];
-                    $currentShipment->setStatementId($statement->getId());
-                    $currentShipment->save();
-                }
-            }
+		    if(count($ordersShipmentsIdsToUpdate)) {
+			    foreach($ordersShipmentsIdsToUpdate as $shipmentId) {
+				    /** @var Mage_Sales_Model_Order_Shipment $currentShipment */
+				    $currentShipment = $ordersShipmentsObjects[$shipmentId];
+				    $currentShipment->setStatementId($statement->getId());
+				    $currentShipment->save();
+			    }
+		    }
 
 
 			//set tracking statement_id
@@ -568,11 +568,11 @@ class GH_Statements_Model_Observer
 			}
 			//--set tracking statement_id
 
-            $trackStatementTotals->netto = $nettoTotal;
-            $trackStatementTotals->brutto = $bruttoTotal;
+		    $trackStatementTotals->netto = $nettoTotal;
+		    $trackStatementTotals->brutto = $bruttoTotal;
 
-            return $trackStatementTotals;
-        }
+		    return $trackStatementTotals;
+	    }
     }
 
     /**

@@ -2,8 +2,8 @@
 <config>
     <tabs>
         <ghapi translate="label" module="ghapi">
-            <label>GH API</label>
-            <sort_order>100</sort_order>
+            <label>Vendor Integration</label>
+            <sort_order>300</sort_order>
         </ghapi>
     </tabs>
     <sections>

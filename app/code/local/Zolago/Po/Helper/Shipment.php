@@ -163,6 +163,11 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 	            ->setTitle($title);
 	            
 	        if(!is_null($requestData)) {
+		        $trackType = isset($requestData['track_type']) ? $requestData['track_type'] : false;
+		        if($trackType !== false) {
+			        $track->setTrackType($trackType);
+		        }
+
 		        switch($title) {
 			        case 'DHL':
 						/** @var Orba_Shipping_Helper_Carrier_Dhl $_dhlHlp */

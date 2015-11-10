@@ -25,26 +25,28 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Track
 
     protected function _prepareColumns()
     {
+	    $helper = Mage::helper('ghstatements');
+
         $this->addColumn('id', array(
-            'header' => Mage::helper('ghstatements')->__('ID'),
+            'header' => $helper->__('ID'),
             'sortable' => true,
             'width' => '60',
             'index' => 'id'
         ));
         $this->addColumn('po_increment_id', array(
-            'header' => Mage::helper('ghstatements')->__('Order number'),
+            'header' => $helper->__('Order number'),
             'sortable' => true,
             'width' => '60',
             'index' => 'po_increment_id'
         ));
         $this->addColumn('rma_increment_id', array(
-            'header' => Mage::helper('ghstatements')->__('RMA number'),
+            'header' => $helper->__('RMA number'),
             'sortable' => true,
             'width' => '60',
             'index' => 'rma_increment_id'
         ));
         $this->addColumn('shipped_date', array(
-            'header' => Mage::helper('ghstatements')->__('Shipping Date'),
+            'header' => $helper->__('Shipping Date'),
             'sortable' => true,
             'width' => '60',
             'index' => 'shipped_date',
@@ -53,20 +55,31 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Track
 
 
         $this->addColumn('charge_subtotal', array(
-            'header' => Mage::helper('ghstatements')->__('Total netto shipment charge'),
+            'header' => $helper->__('Total netto shipment charge'),
             'index' => 'charge_subtotal',
             'type'  => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base'),
         ));
         $this->addColumn('charge_total', array(
-            'header' => Mage::helper('ghstatements')->__('Total brutto shipment charge'),
+            'header' => $helper->__('Total brutto shipment charge'),
             'index' => 'charge_total',
             'type'  => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base'),
         ));
-
+	    $this->addColumn('track_type', array(
+		    'header' => $helper->__('Track type'),
+		    'sortable' => true,
+		    'index' => 'track_type',
+		    'type' => 'options',
+		    'options' => array(
+			    GH_Statements_Model_Track::TRACK_TYPE_ORDER => $helper->__("Order shipment"),
+			    GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT => $helper->__("Items return"),
+			    GH_Statements_Model_Track::TRACK_TYPE_RMA_VENDOR => $helper->__("RMA shipment"),
+			    GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED => $helper->__("Undelivered order")
+		    )
+	    ));
     }
 
     public function getGridUrl()
