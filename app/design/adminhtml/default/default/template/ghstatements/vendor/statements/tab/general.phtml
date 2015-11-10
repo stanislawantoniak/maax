@@ -62,7 +62,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="rma_value">
                                 <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('rma_value')); ?>
+                                    ->formatPrice(-$statement->getData('refund_value')); ?>
                             </span>
                         </td>
                     </tr>
@@ -72,7 +72,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                         <td class="value">
                             <span id="order_commission_value">
-                                <?php echo Mage::helper('core')->formatPrice($statement->getData('order_commission_value')); ?>
+                                <?php echo Mage::helper('core')->formatPrice(-($statement->getData('order_commission_value') - $statement->getData('rma_value'))); ?>
                             </span>
                         </td>
                     </tr>                                                            
@@ -107,7 +107,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="tracking_charge_total">
                                 <?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('tracking_charge_total')); ?>
+                                        ->formatPrice(-$statement->getData('tracking_charge_total')); ?>
                             </span>
                         </td>
                     </tr>
@@ -136,7 +136,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="marketing_value">
                                 <?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('marketing_value')); ?>
+                                        ->formatPrice(-$statement->getData('marketing_value')); ?>
                             </span>
                         </td>
                     </tr>
@@ -190,7 +190,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="last_statement_balance">
                                 <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('last_statement_balance')); ?>
+                                    ->formatPrice(-$statement->getData('last_statement_balance')); ?>
                             </span>
                         </td>
                     </tr>
