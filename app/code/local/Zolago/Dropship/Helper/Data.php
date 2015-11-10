@@ -497,4 +497,16 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 
 		return $vendorRootCategoryId;
 	}
+
+    public function addAdminhtmlVersion($module='Unirgy_Dropship')
+    {
+        $layout = Mage::app()->getLayout();
+        $version = (string)Mage::getConfig()->getNode("modules/{$module}/version");
+
+        $layout->getBlock('before_body_end')->append($layout->createBlock('core/text')->setText('
+            <script type="text/javascript">var legality = $$(".legality")[0]; legality == undefined ? "" : legality.insert({after:"'.$module.' ver. '.$version.', "});</script>
+        '));
+
+        return $this;
+    }
 }

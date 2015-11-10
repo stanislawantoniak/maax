@@ -8,7 +8,6 @@
         <reference name="head">
             <action method="setCanLoadExtJs"><flag>1</flag></action>
             <action method="setCanLoadRulesJs"><flag>1</flag></action>
-            <action method="addJs"><script>jquery/jquery-1.7.2.min.js</script></action>
         </reference>
     </udropshipadmin_adminhtml_vendor_edit>
     <udropshipadmin_adminhtml_vendor_new>
