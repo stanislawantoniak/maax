@@ -1,12 +1,5 @@
 <config>
     <menu>
-        <sales>
-            <children>
-                <udropship>
-                    <disabled>1</disabled>
-                </udropship>
-            </children>
-        </sales>
         <vendors translate="title" module="zolagodropship">        
             <title>Vendors</title>
             <sort_order>32</sort_order>
