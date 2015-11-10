@@ -5,7 +5,7 @@ class Zolago_Holidays_Block_Adminhtml_Holidays extends Mage_Adminhtml_Block_Widg
      	$this->_controller = 'adminhtml_holidays';
      	$this->_blockGroup = 'zolagoholidays';
      	$this->_headerText = $this->__('Holidays management');
-     	$this->_addButtonLabel = 'Add a holiday';
+     	$this->_addButtonLabel = Mage::helper('zolagoholidays')->__('Add a holiday');
 		
      	parent::__construct();
 	}

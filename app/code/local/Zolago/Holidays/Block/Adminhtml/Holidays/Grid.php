@@ -67,8 +67,8 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid extends Mage_Adminhtml_Block
            	'sortable' => false,
            	'type'     => 'options',
            	'options'  => array(
-				'1' => "Yes",
-				'0' => "No"
+				'1' => Mage::helper('zolagocommon')->__("Yes"),
+				'0' => Mage::helper('zolagocommon')->__("No")
 			)
        	));
 		$this->addColumn('exclude_from_pickup', array(
@@ -78,8 +78,8 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid extends Mage_Adminhtml_Block
            	'sortable' => false,
            	'type'     => 'options',
            	'options'  => array(
-				'1' => "Yes",
-				'0' => "No"
+				'1' => Mage::helper('zolagocommon')->__("Yes"),
+				'0' => Mage::helper('zolagocommon')->__("No")
 			)
        	));
 		
