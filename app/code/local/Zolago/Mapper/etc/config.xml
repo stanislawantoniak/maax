@@ -131,8 +131,8 @@
         <jobs>
             <zolagomapper_process_product_queue>
                 <schedule>
-                    <!-- Run every 15 minutes -->
-                    <cron_expr>*/15 * * * *</cron_expr>
+                    <!-- Run every 2 minutes -->
+                    <cron_expr>*/2 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagomapper/observer::processProductQueue</model>

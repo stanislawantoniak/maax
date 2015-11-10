@@ -62,6 +62,7 @@
 "Invoice has been generated successfully","Faktura została pomyślnie wygenerowana"
 "Generate invoice in wFirma system?","Czy wygenerować fakturę w systemie wFirma?"
 "Edit %s Payment","Edycja płatności %s"
-"Cannot delete. Invoice already generated in wFirma system","Nie można usunąć faktury, ponieważ jest już wygenerowana w systemie wFirma"
+"Can't delete. Invoice already generated in  wFirma system","Nie można usunąć faktury, ponieważ jest już wygenerowana w systemie wFirma"
 "Characters left: ","Pozostało znaków: "
 "Note","Uwagi"
+"Can't delete. Invoice in statement","Nie można usunąć faktury uwzględnionej w rozliczeniu"
