@@ -32,7 +32,6 @@
 					$sendEmail = false;
 					switch ($paymentMethod) {
 						case Zolago_Dotpay_Model_Client::PAYMENT_METHOD: //'dotpay'
-
 							if ($dotpay->makeRefund($order, $transaction)) {
 								$sendEmail=true;
 								$success++;
