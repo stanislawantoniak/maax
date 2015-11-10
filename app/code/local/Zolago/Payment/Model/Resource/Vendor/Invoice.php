@@ -19,6 +19,11 @@ class Zolago_Payment_Model_Resource_Vendor_Invoice extends Mage_Core_Model_Resou
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
+        $wfirmaInvoiceNumber = $object->getWfirmaInvoiceNumber();
+
+        if(empty($wfirmaInvoiceNumber))
+            return parent::_afterSave($object);
+
 
         $isInvoiceCorrection = $object->getData("is_invoice_correction");
 
@@ -51,6 +56,11 @@ class Zolago_Payment_Model_Resource_Vendor_Invoice extends Mage_Core_Model_Resou
      */
     protected function _afterDelete(Mage_Core_Model_Abstract $object)
     {
+        $wfirmaInvoiceNumber = $object->getWfirmaInvoiceNumber();
+
+        if(empty($wfirmaInvoiceNumber))
+            return parent::_afterDelete($object);
+
         $isInvoiceCorrection = $object->getData("is_invoice_correction");
 
         //faktury wg daty sprzedaży (a nie daty wystawienia)
