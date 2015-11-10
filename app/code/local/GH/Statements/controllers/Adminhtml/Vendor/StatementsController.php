@@ -49,6 +49,8 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
             $model->load($id);
             if (!$model->getId()) {
                 throw new Mage_Core_Exception(Mage::helper('ghstatements')->__("Statement not found"));
+            } elseif($model->getVendorInvoiceId()) {
+	            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__("Cannot delete statement because invoice for this statement has been already generated."));
             }
             $model->delete();
             $this->_getSession()->addSuccess(Mage::helper('ghstatements')->__("Statement deleted"));
