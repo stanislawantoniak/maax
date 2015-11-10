@@ -807,7 +807,10 @@ define([
             return this.getModal().find("form").first();
         },
         getFormActionUrl: function () {
-            return this.getModal().find("form:eq(0)").prop("action");
+            return this.getModal().find("form").prop("action");
+        },
+        closeModal: function () {
+            this.getModal().modal('hide');
         },
         attachSubmitButton: function () {
             var self = this;
@@ -820,38 +823,41 @@ define([
 
                 var ids = window.grid.getSelectedIds().join(",");
                 var attribute_set = self.getModal().find("[name=attribute_set] option:selected").val();
-                var attribute_set_current = window.grid.baseQuery["attribute_set_id"];
-                var global = window.grid.getCheckAll() ? 1 : 0;
 
-                jQuery.ajax({
-                    cache: false,
-                    url: window.attributeSet.getFormActionUrl(),
-                    data: {
-                        product_ids: ids,
-                        attribute_set: attribute_set,
-                        attribute_set_current: attribute_set_current,
-                        global: global
-                    },
-                    method: "POST",
-                }).done(function (data, textStatus, jqXHR) {
-                    if (data.status == 1) {
-                        window.grid.refresh();
-                        noty({
-                            text: data.content.message,
-                            type: "success",
-                            //timeout: 10000
-                        });
-                    }
-                    if (data.status == 0) {
-                        noty({
-                            text: data.content,
-                            type: "error",
-                            //timeout: 10000
-                        });
-                    }
-                }).always(function () {
-                    misc.stopLoading();
-                });
+                window.attributeSet._attributeSet.send({attribute_set_move_to: attribute_set})
+                    .always(function () {
+                        misc.stopLoading();
+                    })
+                ;
+                //jQuery.ajax({
+                //    cache: false,
+                //    url: window.attributeSet.getFormActionUrl(),
+                //    data: {
+                //        product_ids: ids,
+                //        attribute_set: attribute_set,
+                //        attribute_set_current: attribute_set_current,
+                //        global: global
+                //    },
+                //    method: "POST",
+                //}).done(function (data, textStatus, jqXHR) {
+                //    if (data.status == 1) {
+                //        window.grid.refresh();
+                //        noty({
+                //            text: data.content.message,
+                //            type: "success",
+                //            //timeout: 10000
+                //        });
+                //    }
+                //    if (data.status == 0) {
+                //        noty({
+                //            text: data.content,
+                //            type: "error",
+                //            //timeout: 10000
+                //        });
+                //    }
+                //}).always(function () {
+                //    misc.stopLoading();
+                //});
 
             });
         }

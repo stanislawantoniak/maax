@@ -127,106 +127,107 @@ class Zolago_Catalog_Vendor_ProductController
         $this->_prepareRestResponse();
     }
 
-
-    public function changeAttributeSetAction()
+    /**
+     * Set attribute set mass actions
+     */
+    public function massAttributeSetAction()
     {
 
-        if ($this->getRequest()->isPost()) {
-            $helper = Mage::helper("zolagocatalog");
-            $request = $this->getRequest();
+        $request = $this->getRequest();
 
-            $global = (int)$request->getParam("global");
-            $attributeSetId = (int)$request->getParam("attribute_set");
-            $attributeSetCurrentId = (int)$request->getParam("attribute_set_current");
+        $productIds = $request->getParam("product_ids");
+        $attributeSetId = $request->getParam("attribute_set_id");
+        $attributeSetMoveToId = $request->getParam("attribute_set_move_to");
 
 
-            if ($global == 1) {
-                $collection = Mage::getModel("catalog/product")->getCollection();
-                $collection->addFieldToFilter("attribute_set_id", $attributeSetCurrentId);
-                $collection->setStoreId($this->_getStoreId());
-                $collection->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE), "inner");
-                $collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId(), "inner");
-                $productIds = $collection->getAllIds();
-            } else {
-                // Products Ids
-                $productIds = array_unique(
-                    explode(",", $this->getRequest()->getPost("product_ids", ""))
-                );
-            }
-
-            Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-
-            try {
-                //1. Process products
-                $productIdsConfigurable = array();
-                foreach ($productIds as $productId) {
-                    $product = Mage::getSingleton('catalog/product')
-                        ->unsetData()
-                        ->load($productId)
-                        ->setAttributeSetId($attributeSetId)
-                        ->setDescriptionStatus(1)
-                        ->setIsMassupdate(true)
-                        ->save();
-                    if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-                        $productIdsConfigurable[$productId] = $productId;
-                    }
-                }
-
-                //2. Process simple products as child of configurable
-                if (!empty($productIdsConfigurable)) {
-                    $children = Mage::getResourceModel('catalog/product')
-                        ->getRelatedProducts($productIdsConfigurable);
-
-                    if (!empty($children)) {
-                        foreach ($children as $child) {
-                            Mage::getSingleton('catalog/product')
-                                ->unsetData()
-                                ->load($child["product_id"])
-                                ->setAttributeSetId($attributeSetId)
-                                ->setDescriptionStatus(1)
-                                ->setIsMassupdate(true)
-                                ->save();
-                        }
-                    }
-                }
-
-                Mage::getModel("zolagomapper/queue_product")
-                    ->pushProductToMapperQueue($productIds);
-
-                $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
-                $attributeSetModel->load($attributeSetId);
-                $attributeSetName = $attributeSetModel->getAttributeSetName();
-
-                $productIdsCount = count($productIds);
-                $response = array(
-                    "status" => 1,
-                    "content" => array(
-                        "changed_ids" => $productIds,
-                        "count" => $productIdsCount,
-                        "message" => $helper->__("<b>%s</b> product(s) moved to category <b>%s</b>", $productIdsCount, $attributeSetName)
-                    )
-                );
-            } catch (GH_Common_Exception $e) {
-                $response = array(
-                    "status" => 0,
-                    "content" => $e->getMessage()
-                );
-            } catch (Exception $e) {
-                $response = array(
-                    "status" => 0,
-                    "content" => $helper->__("Some error occurred. Contact administrator.")
-                );
-                Mage::logException($e);
-            }
+        if (is_string($productIds)) {
+            $productIds = explode(",", $productIds);
+        }
+        $restQuery = $this->_getRestQuery();
+        if (is_array($productIds) && count($productIds)) {
+            $ids = array_unique($productIds);
         } else {
+            $collection = $this->_getCollection();
+            foreach ($restQuery as $key => $value) {
+                $collection->addAttributeToFilter($key, $value);
+            }
+            $ids = $collection->getAllIds();
+        }
+
+        try {
+            array_walk($ids, function ($value) {
+                return (int)$value;
+            });
+
+            $helper = Mage::helper("zolagocatalog");
+            Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+            //1. Process products
+            $productIdsConfigurable = array();
+
+            foreach ($ids as $productId) {
+                $product = Mage::getSingleton('catalog/product')
+                    ->unsetData()
+                    ->load($productId)
+                    ->setAttributeSetId($attributeSetMoveToId)
+                    //->setDescriptionStatus(1)
+                    ->setIsMassupdate(true)
+                    ->save();
+                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+                    $productIdsConfigurable[$productId] = $productId;
+                }
+            }
+
+            //2. Process simple products as child of configurable
+            if (!empty($productIdsConfigurable)) {
+                $children = Mage::getResourceModel('catalog/product')
+                    ->getRelatedProducts($productIdsConfigurable);
+
+                if (!empty($children)) {
+                    foreach ($children as $child) {
+                        Mage::getSingleton('catalog/product')
+                            ->unsetData()
+                            ->load($child["product_id"])
+                            ->setAttributeSetId($attributeSetMoveToId)
+                            ->setDescriptionStatus(1)
+                            ->setIsMassupdate(true)
+                            ->save();
+                    }
+                }
+            }
+
+            Mage::getModel("zolagomapper/queue_product")
+                ->pushProductToMapperQueue($ids);
+
+            $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
+            $attributeSetModel->load($attributeSetId);
+            $attributeSetName = $attributeSetModel->getAttributeSetName();
+
+            $productIdsCount = count($ids);
+            $response = array(
+                "status" => 1,
+                "changed_ids" => $ids,
+                "count" => $productIdsCount,
+                "message" => $helper->__("<b>%s</b> product(s) moved to category <b>%s</b>", $productIdsCount, $attributeSetName)
+            );
+
+
+        } catch (GH_Common_Exception $e) {
             $response = array(
                 "status" => 0,
-                "content" => Mage::helper("zolagocatalog")->__("Wrong HTTP method")
+                "message" => $e->getMessage()
             );
+        } catch (Exception $e) {
+            $response = array(
+                "status" => 0,
+                "message" => $helper->__("Some error occurred. Contact administrator.")
+            );
+            Mage::logException($e);
         }
-        // Send response
-        $this->getResponse()->setBody(Zend_Json::encode($response))->setHeader('content-type', 'application/json');
+
+        $this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
+        $this->_prepareRestResponse();
     }
+
 
     /**
      * re-generate short url for products
