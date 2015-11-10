@@ -811,7 +811,9 @@ class GH_Statements_Model_Observer
         ->addFieldToFilter('statement_id',array('null' => true))
         ->addFieldToFilter('date',array('lteq' => $yesterday))
         ->addFieldToFilter('vendor_id',$statement->getVendorId())
+        ->addFieldToFilter('wfirma_invoice_id',array('neq' => '0'))
         ->addFieldToFilter('is_invoice_correction',1);
+        
         
         if($collection->getSize()) {
 
