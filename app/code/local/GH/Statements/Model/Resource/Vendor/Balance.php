@@ -28,7 +28,6 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $balancePerMonth = $paymentFromClient - $paymentReturnToClient - $vendorPaymentCost - $vendorInvoiceCost;
 
         $object->setData("balance_per_month", $balancePerMonth);
-        $object->setData("balance_due", 0);
 
         return parent::_beforeSave($object);
     }
@@ -39,7 +38,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
      */
     public function _afterSave(Mage_Core_Model_Abstract $object)
     {
-        $this->recalculateBalanceCumulative();
+        $this->_recalculateBalanceCumulative();
         return parent::_afterSave($object);
     }
 
@@ -47,14 +46,16 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
     /**
      * balance_cumulative
      */
-    public function recalculateBalanceCumulative()
+    protected function _recalculateBalanceCumulative()
     {
-        $balances = Mage::getModel("ghstatements/vendor_balance")->getCollection();
+        $balances = Mage::getModel("ghstatements/vendor_balance")
+            ->getCollection()
+            ->setOrder("date", Varien_Data_Collection_Db::SORT_ORDER_ASC);
 
         $balancesByVendor = array();
         foreach ($balances as $balance) {
             $balancesByVendor[$balance->getVendorId()][$balance->getDate()] = $balance->getData();
-            arsort($balancesByVendor[$balance->getVendorId()]);
+            //arsort($balancesByVendor[$balance->getVendorId()]);
         }
 
         foreach ($balancesByVendor as $vendor => $data) {
@@ -89,4 +90,6 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         }
 
     }
+
+
 }
