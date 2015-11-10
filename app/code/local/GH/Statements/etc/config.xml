@@ -25,18 +25,18 @@
                     <calendar_item>
                         <table>gh_statements_calendar_item</table>
                     </calendar_item>
-                    <statement>
-                        <table>gh_statements</table>
-                    </statement>
-                    <order>
-                        <table>gh_statements_orders</table>
-                    </order>
-                    <refund>
-                        <table>gh_statements_refunds</table>
-                    </refund>
-                    <track>
-                        <table>gh_statements_tracks</table>
-                    </track>
+	                <statement>
+		                <table>gh_statements</table>
+	                </statement>
+	                <order>
+		                <table>gh_statements_orders</table>
+	                </order>
+	                <refund>
+		                <table>gh_statements_refunds</table>
+	                </refund>
+	                <track>
+		                <table>gh_statements_tracks</table>
+	                </track>
                     <rma>
                         <table>gh_statements_rma</table>
                     </rma>
