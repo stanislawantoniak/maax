@@ -86,7 +86,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>                                        
-                    <?php if ($statement->getData('commission_correction') > 0) : ?>
+                    <?php if ($statement->getData('commission_correction') != 0) : ?>
                     <tr>
                         <td class="label"><label
                                 for="commission_correction"><b><?php echo $_helper->__("Order: Commission correction"); ?></b></label>
@@ -111,7 +111,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>
-                    <?php if ($statement->getData('delivery_correction')>0) :?>
+                    <?php if ($statement->getData('delivery_correction')!=0) :?>
                     <tr>                    
                         <td class="label">
                             <label for="delivery_correction">
@@ -141,7 +141,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                     </tr>
                     <?php endif; ?>
-                    <?php if ($statement->getData('marketing_correction') > 0) : ?>
+                    <?php if ($statement->getData('marketing_correction') != 0) : ?>
                     <tr>
                         <td class="label">
                             <label for="marketing_correction">
