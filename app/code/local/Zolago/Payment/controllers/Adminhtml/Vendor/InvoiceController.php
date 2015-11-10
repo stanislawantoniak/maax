@@ -102,10 +102,10 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
 	            Mage::throwException($this->_getHelper()->__("Vendor Invoice not found"));
             }
 	        if($model->getData('wfirma_invoice_id')) {
-		        Mage::throwException($this->_getHelper()->__("Cannot delete. Invoice already generated in  wFirma system"));
+		        Mage::throwException($this->_getHelper()->__("Can't delete. Invoice already generated in  wFirma system"));
 	        }
             if ($model->getStatementId()) {
-	            Mage::throwException($this->_getHelper()->__("Cant delete. Invoice in statement"));
+	            Mage::throwException($this->_getHelper()->__("Can't delete. Invoice in statement"));
             }
             $model->delete();
             $this->_getSession()->addSuccess($this->_getHelper()->__("Vendor Invoice Deleted"));
