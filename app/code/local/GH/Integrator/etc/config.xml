@@ -44,7 +44,7 @@
                 <use>standard</use>
                 <args>
                     <module>GH_Integrator</module>
-                    <frontName>ghintegrator</frontName>
+                    <frontName>ghapi</frontName>
                 </args>
             </ghintegrator>
         </routers>

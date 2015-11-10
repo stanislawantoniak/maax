@@ -18,6 +18,7 @@
  * @version $Id: ProductController.php 642 2011-03-14 17:21:28Z weller $
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License, version 2
  */
+
 class Flagbit_ChangeAttributeSet_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller_Action
 {
 	

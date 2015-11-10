@@ -2,7 +2,7 @@
 
 class Modago_Integrator_Model_Client
 {
-    const MODAGO_INTEGRATOR_URL = "http://modago.pl/ghintegrator/communication";
+    const MODAGO_INTEGRATOR_URL = "http://modago.pl/ghapi/communication";
 
     public function getResponse()
     {
