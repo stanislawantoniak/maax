@@ -190,7 +190,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="last_statement_balance">
                                 <?php echo Mage::helper('core')
-                                    ->formatPrice(-$statement->getData('last_statement_balance')); ?>
+                                    ->formatPrice($statement->getData('last_statement_balance')); ?>
                             </span>
                         </td>
                     </tr>
@@ -203,7 +203,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="payment_value">
                                 <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('payment_value')); ?>
+                                    ->formatPrice(-$statement->getData('payment_value')); ?>
                             </span>
                         </td>
                     </tr>
