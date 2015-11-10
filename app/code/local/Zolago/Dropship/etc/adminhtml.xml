@@ -1,5 +1,12 @@
 <config>
     <menu>
+        <sales>
+            <children>
+                <udropship>
+                    <disabled>1</disabled>
+                </udropship>
+            </children>
+        </sales>
         <vendors translate="title" module="zolagodropship">        
             <title>Vendors</title>
             <sort_order>32</sort_order>
@@ -14,14 +21,9 @@
                                 <sort_order>20</sort_order>
                                 <action>umicrositeadmin/adminhtml_registration</action>
                             </vendor_registration>
-                            <udpo translate="title" module="udpo">
-                                <title>Purchase Orders</title>
-                                <action>udpoadmin/po</action>
-                                <sort_order>60</sort_order>
-                            </udpo>
                             <review module="udratings">
                                 <title>Reviews and Ratings</title>
-                                <sort_order>70</sort_order>
+                                <sort_order>30</sort_order>
                                 <children>
                                     <review_pending module="udratings">
                                         <title>Pending Reviews</title>
@@ -42,7 +44,7 @@
                             </review>
                             <udqa module="udqa">
                                 <title>Vendor Questions</title>
-                                <sort_order>70</sort_order>
+                                <sort_order>40</sort_order>
                                 <children>
                                     <question_pending module="udqa">
                                         <title>Pending Questions/Answers</title>
@@ -56,11 +58,17 @@
                                     </question_all>
                                 </children>
                             </udqa>
-                            <payouts module="udpayout">
-                                <title>Payouts</title>
-                                <sort_order>80</sort_order>
-                                <action>udpayoutadmin/payout</action>
-                            </payouts>
+                            <sales_management module="zolagodropship" translate="title">
+                                <title>Sales management</title>
+                                <sort_order>50</sort_order>
+                                <children>
+                                    <udpo translate="title" module="udpo">
+                                        <title>Purchase Orders</title>
+                                        <action>udpoadmin/po</action>
+                                        <sort_order>10</sort_order>
+                                    </udpo>                                    
+                                </children>
+                            </sales_management>
                 <vendor_general_config module="zolagodropship" translate="title">
                     <title>General Config</title>
                     <sort_order>150</sort_order>
