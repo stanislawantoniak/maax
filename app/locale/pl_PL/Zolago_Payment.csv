@@ -65,4 +65,4 @@
 "Can't delete. Invoice already generated in  wFirma system","Nie można usunąć faktury, ponieważ jest już wygenerowana w systemie wFirma"
 "Characters left: ","Pozostało znaków: "
 "Note","Uwagi"
-"Can't delete. Invoice in statement","Nie można usunąć faktury wliczonej w rozliczenie"
+"Can't delete. Invoice in statement","Nie można usunąć faktury uwzględnionej w rozliczeniu"
