@@ -81,7 +81,7 @@ class GH_Statements_Model_Observer
         $collection->addFieldToFilter('id',array('neq'=>$statement->getId()));
         $collection->getSelect()->order('id DESC');
         if ($item = $collection->getFirstItem()) {
-            $balance = $item->getData('to_pay') - $item->getData('payment_value');            
+            $balance = $item->getData('to_pay') - $item->getData('payment_value')+$item->getData('last_statement_balance');            
         }
         $lastBalance = new StdClass();
         $lastBalance->balance = $balance;
