@@ -110,6 +110,8 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
             return $this;
         }
 
+        // Clean all data from previous loaded instance
+        $this->unsetData();
         // Load origin
         parent::load($id, $field);
 
