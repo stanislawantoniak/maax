@@ -97,6 +97,21 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
                 'class' => 'fieldset-wide'
             )
         );
+
+	    $fieldsetNote = $form->addFieldset('edit_form_note',array(
+		    'legend' => $hlp->__('Note'),
+		    'class' => 'fieldset-wide'
+	    ));
+
+	    $fieldsetNote->addField('note','textarea', array(
+		    'label' => $hlp->__('Note'),
+		    'name' => 'note',
+		    'after_element_html' => '<div>'.$hlp->__("Characters left: ").'<span id="invoice_note_number">'.GH_Wfirma_Model_Client::NOTE_FIELD_LENGTH.'</span></div>',
+		    'onkeyup' => 'javascript: var charactersLeft = '.GH_Wfirma_Model_Client::NOTE_FIELD_LENGTH.' - this.value.length;'.
+			    'document.getElementById(\'invoice_note_number\').innerHTML = charactersLeft > 0 ? charactersLeft : 0;'.
+			    'if(charactersLeft < 0) this.value = this.value.substring(0,'.GH_Wfirma_Model_Client::NOTE_FIELD_LENGTH.');'
+	    ));
+
         $costFields = array(
             //1. commission
             //"commission_netto" => $hlp->__('Commission netto'),
