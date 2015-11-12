@@ -159,6 +159,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                 )
             ),
             'format'    => 'Y-MM-dd',
+            'sortable'  => false,
         ));
         // Rozliczenia płatnośći za zamówienia
         $this->addColumn('payment_settlement_for_orders', array(
@@ -179,7 +180,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                 ),
             ),
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'sortable' => false,
+            
         ));
         // Prowizja Modago
         $this->addColumn('gallery-commission', array(
@@ -207,7 +210,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                 ),
             ),
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'sortable'  => false,
         ));
         // Koszty kurierów
         $this->addColumn('currier-costs', array(
@@ -228,7 +232,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                     'css_class' => 'row-2'),
             ),
             'currency_code' => $currency,
-            'headings_css_class' => ''
+            'headings_css_class' => '',
+            'sortable'  => false,
+            
         ));
         if ($this->getVendor()->getData('marketing_charges_enabled')) {
             // Koszty działań marketingowych
@@ -262,7 +268,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => '',
-            'column_css_class' => 'important-cell'
+            'column_css_class' => 'important-cell',
+            'sortable'  => false,
+            
         ));
         // [B] Saldo poprzedniego rozliczenia
         $this->addColumn('last_statement_balance', array(
@@ -272,7 +280,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => '',
-            'column_css_class' => 'important-cell'
+            'column_css_class' => 'important-cell',
+            'sortable'  => false,
+            
         ));
         // [C] Wypłaty do sprzedawcy
         $this->addColumn('payment_value', array(
@@ -282,7 +292,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => '',
-            'column_css_class' => 'important-cell'
+            'column_css_class' => 'important-cell',
+            'sortable'  => false,
+            
         ));
         // Bieżące saldo rozliczenia [B]+[A]-[C]:
         $this->addColumn('current_balance_of_the_settlement', array(
@@ -292,7 +304,9 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'type'          => 'currency',
             'currency_code' => $currency,
             'headings_css_class' => '',
-            'column_css_class' => 'important-cell'
+            'column_css_class' => 'important-cell',
+            'sortable'  => false,
+            
         ));
 //        // Download statement
 ////        $this->addColumn("actions", array(

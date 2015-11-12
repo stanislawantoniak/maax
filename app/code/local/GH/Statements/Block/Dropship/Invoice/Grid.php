@@ -104,7 +104,7 @@ class GH_Statements_Block_Dropship_Invoice_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Specyfikacja
         $this->addColumn('specification', array(
-            'header'    => $helper->__("Specification"), //TODO: "specification","Specyfikacja"
+            'header'    => $helper->__("Get invoice"), //TODO: "Get invoice","Pobierz fakturę"
             'renderer'  => Mage::getConfig()->getBlockClassName("ghstatements/dropship_invoice_grid_column_renderer_specification"),
             'sortable'  => false,
         ));

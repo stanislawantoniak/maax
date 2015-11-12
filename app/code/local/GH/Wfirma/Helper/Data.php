@@ -239,15 +239,37 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
     /**
-     * Get url for download invoice for specific vendor
-     * If vendor have no right for invoice empty string returned
+     * Get url for download invoice
      *
-     * @param Zolago_Dropship_Model_Vendor $vendor
      * @param int $id
      * @return string
      */
-    public function getVendorInvoiceUrl($vendor, $id) {
+    public function getVendorInvoiceUrl($id) {
+        return Mage::getUrl('*/*/download',array('id' => $id));
+    }
+    
+    /**
+     * dowload pdf document from wfirma
+     *
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @param int $id
+     */
 
-        return Mage::getBaseUrl() .'-'. $vendor->getId() . '-'.$id;// TODO: u know
+    public function getVendorInvoice($vendor, $id) {
+            
+            /** @var Zolago_Payment_Model_Vendor_Invoice $model */
+            $model = Mage::getModel("zolagopayment/vendor_invoice")->load($id);
+            if ($vendor && $vendor->getId()) {
+                if ($vendor->getId() != $model->getVendorId()) {
+                    Mage::throwException('Vendor not allowed to get this invoice');
+                }
+            }
+            if (!$model->getId()) {
+                Mage::throwException("Vendor Invoice not found");
+            } elseif(!$model->getData('wfirma_invoice_id')) {
+                Mage::throwException("Invoice has not been generated");
+            } else {
+                $this->getClient()->downloadInvoice($model->getData('wfirma_invoice_id'));
+            }
     }
 }

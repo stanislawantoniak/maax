@@ -36,6 +36,34 @@ class GH_Statements_Dropship_StatementsController extends Zolago_Dropship_Contro
         $this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'statements-invoices');
         /** @see app/design/frontend/base/default/template/ghstatements/dropship/invoices.phtml */
     }
+
+    /**
+     * download pdf invoice from wfirma
+     */
+
+    public function downloadAction() {
+        $id = $this->getRequest()->get('id');
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        if ((!$vendor) || (!$vendor->getId())) {
+            Mage::throwException('Vendor not logged');
+        }
+        $hlp = Mage::helper('zolagopayment');
+        try {
+            Mage::helper('ghwfirma')->getVendorInvoice($vendor,$id);
+        } catch(GH_Wfirma_Exception $e) {
+            $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
+            return $this->_redirectReferer();
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($hlp->__($e->getMessage()));
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
+            Mage::logException($e);
+        }
+        return true;
+
+    }
+
 }
 
 

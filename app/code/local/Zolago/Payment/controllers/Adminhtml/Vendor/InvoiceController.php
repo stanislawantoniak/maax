@@ -151,16 +151,7 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
         /** @var GH_Wfirma_Helper_Data $wfirmaHlp */
         $wfirmaHlp = Mage::helper('ghwfirma');
         try {
-            /** @var Zolago_Payment_Model_Vendor_Invoice $model */
-            $model = Mage::getModel("zolagopayment/vendor_invoice")->load($id);
-            if (!$model->getId()) {
-                Mage::throwException("Vendor Invoice not found");
-            } elseif(!$model->getData('wfirma_invoice_id')) {
-                Mage::throwException("Invoice has not been generated");
-            } else {
-                $wfirmaHlp->getClient()->downloadInvoice($model->getData('wfirma_invoice_id'));
-            }
-
+            $wfirmaHlp->getVendorInvoice(null,$id);
         } catch(GH_Wfirma_Exception $e) {
             $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
             return $this->_redirectReferer();
