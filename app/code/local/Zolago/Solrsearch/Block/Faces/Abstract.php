@@ -280,7 +280,8 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
             } else {
                 $label = $option['label']; // other filters
             }
-            // Option not in available result colleciotn
+            $label = trim($label);
+            // Option not in available result collection
             if(!isset($label) ||
                     !isset($allItems[$label])) {
                 continue;

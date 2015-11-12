@@ -473,19 +473,20 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 
 		$attributeVal = $this->getAttributeValue($attributeObj, $item);
 
+		$attributeVal = trim($attributeVal);
 		//Generate sort attribute
 		if ($attributeObj->getUsedForSortBy() && !empty($attributeVal)) {
 			if ($origValue!==null) {
 				$addData['sort_'.$attributeCode.'_'.$origBackendType] = $origValue;
 				//$docData[$attributeKey] = $sortValue;
-				$addData[$attributeKey] = $attributeVal;
+				$addData[$attributeKey] = trim($attributeVal);
 			}
 		}
 		
 		//Generate product search weight value
 		if ($attributeCode==$this->getWeightAttributeCode()) {
 			if (!empty($attributeVal) && is_numeric($attributeVal)) {
-				$addData['product_search_weight_int'] = $attributeVal;
+				$addData['product_search_weight_int'] = trim($attributeVal);
 			}
 		}
 		
