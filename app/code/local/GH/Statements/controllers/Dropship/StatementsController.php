@@ -32,7 +32,8 @@ class GH_Statements_Dropship_StatementsController extends Zolago_Dropship_Contro
      * Faktury / Invoices
      */
     public function invoicesAction() {
-        $this->_renderPage(null, 'statements-invoices');
+        Mage::register('as_frontend', true);// Tell block class to use regular URL's
+        $this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'statements-invoices');
         /** @see app/design/frontend/base/default/template/ghstatements/dropship/invoices.phtml */
     }
 }

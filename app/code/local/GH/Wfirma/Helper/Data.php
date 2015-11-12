@@ -237,4 +237,17 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return $this->_tax;
 	}
+
+    /**
+     * Get url for download invoice for specific vendor
+     * If vendor have no right for invoice empty string returned
+     *
+     * @param Zolago_Dropship_Model_Vendor $vendor
+     * @param int $id
+     * @return string
+     */
+    public function getVendorInvoiceUrl($vendor, $id) {
+
+        return Mage::getBaseUrl() .'-'. $vendor->getId() . '-'.$id;// TODO: u know
+    }
 }
