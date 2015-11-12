@@ -173,7 +173,6 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
 		if($this->getRequest()->isPost() && $this->_validateFormKey()) {
 			$statementsIds = $this->getRequest()->getParam('vendor_statements');
 			if(is_array($statementsIds) && count($statementsIds)) {
-				Mage::log(3,null,'massinvoices.log');
 				$invoiceModels = array();
 				$statementModels = array();
 				$updatedStatements = 0;
@@ -181,7 +180,6 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
 				$month = false;
 				try {
 					foreach ($statementsIds as $statementId) {
-						Mage::log(4,null,'massinvoices.log');
 						/** @var Gh_Statements_Model_Statement $statementModel */
 						$statementModel = Mage::getModel('ghstatements/statement');
 						$statementModel->load($statementId);
@@ -203,8 +201,7 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
 							$vid = $statementModel->getVendorId();
 							if(!isset($invoiceModels[$vid])) {
 								$invoiceModels[$vid] = Mage::getModel('zolagopayment/vendor_invoice')
-									->setData('vendor_id',$vid)
-									->setData('statement_id',$statementModel->getId());
+									->setData('vendor_id',$vid);
 							}
 
 							//costs adding start
@@ -249,12 +246,15 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
 					$invoiceIds = array();
 					if (count($invoiceModels)) {
 						foreach ($invoiceModels as $invoice) {
-							$invoice->save();
-							$invoiceIds[$invoice->getData('vendor_id')] = $invoice->getId();
+						    if ($invoice->checkNotEmpty()) {
+    							$invoice->save();
+	    						$invoiceIds[$invoice->getData('vendor_id')] = $invoice->getId();
+                            }
 						}
 						foreach($statementModels as $statement) {
-							if(isset($invoiceIds[$statement->getVendorId()])) {
+							if(isset($invoiceIds[$statement->getVendorId()])) {							    
 								$statement->setVendorInvoiceId($invoiceIds[$statement->getVendorId()]);
+								$statement->save();
 								$updatedStatements++;
 							} else {
 								$skippedStatements++;
