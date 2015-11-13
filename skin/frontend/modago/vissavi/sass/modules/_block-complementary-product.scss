@@ -11,9 +11,9 @@
 		//display: inline-block;
 		.item {
 			margin:0 20px;
-			//border:1px solid #f5f6f6;
-			background: #fff;
-			color: #515151;
+			//border:1px solid $color_f5f6f6;
+			background: $color_fff;
+			color: $color_515151;
 			@media (max-width: $screen-xs-max) {
 				margin:0 5px;
 			}
@@ -25,14 +25,14 @@
 			  	height:auto;
 			}
 			.price {
-				color:#000;
+				color:$color_000;
 				font-size: 20px;
 				margin-bottom:18px;
 				font-family:$fontRegular;
 				padding:0 0;
 				position:relative;
 				.label {
-					color:#000;
+					color:$color_000;
 					padding-right: 2px;
 					font-family:$fontRegular;
 					font-weight: normal;
@@ -43,7 +43,7 @@
 					}
 				}
 				.old {
-					color:#000;
+					color:$color_000;
 					text-decoration:line-through;
 					font-size:15px;
 					margin-right:10px;
@@ -54,7 +54,7 @@
 					top:3px;
 					font-size:11px;
 					font-family:$fontBlack;
-					color:#000;
+					color:$color_000;
 					padding-right:30px;
 					/*&:before {
 						content: ' ';
@@ -92,16 +92,16 @@
 						display: block;
 						margin: 0 auto;
 						margin-top: 5px;
-						color:#000;
+						color:$color_000;
 					}
 					&.body-caption {
-						color: #8b8b8b;
+						color: $color_8b8b8b;
 						padding: 5px 0px;
 						display: block;
 						margin: 0 auto;
 					}
 					&.seemore-caption {
-						color: #484848;
+						color: $color_484848;
 						text-transform: uppercase;
 						padding: 5px 0px;
 						display: block;

@@ -1,7 +1,7 @@
 .tableWrapper {
         border-top: 1px solid $bc-secondary;
         .table-header-group {
-        	border-bottom: 1px solid #ebeaed;
+        	border-bottom: 1px solid $color_ebeaed;
         	@media (max-width: $screen-xs-max) {
         		border:none;
         		text-transform: uppercase;
@@ -67,7 +67,7 @@
 						text-align: left;
 					}
 					figure {
-						border:1px solid #f1f1f1;
+						border:1px solid $color_f1f1f1;
 					}
 					.description_checked_product {
 						.product_name {
@@ -91,7 +91,7 @@
 						font-family: $fontRegular;
 						span {
 							font-size: 11px;
-							color:#565655;
+							color:$color_565655;
 							text-decoration:line-through;
 						}
 					}
@@ -125,7 +125,7 @@
 				.table-row {
 					.table-cell {
 						&.td {
-							border-top: 1px solid #ebeaed;
+							border-top: 1px solid $color_ebeaed;
 						}
 						&.cell-01 {
 							p {
@@ -161,7 +161,7 @@
 }
 
 .bubble {
-		background:#e5e5e5;
+		background:$color_e5e5e5;
 		@include border-radius(5px);
 		text-align: center;
 		&:before {
@@ -218,14 +218,14 @@
 					background:$allMap repeat-x;
 				    @include sprite($allMap, bg-form-text-coupon);	
 					line-height: image-height(sprite-file($allMap, bg-form-text-coupon))+2;
-					border:1px solid #d6d6d6;
+					border:1px solid $color_d6d6d6;
 					font-size: 12px;
 				}
 				input[type="submit"] {
 					background:$color_000;
 					line-height: 22px;
 					border:none;
-					color:#fff;
+					color:$color_fff;
 					font-size: 12px;
 					text-align: center;
 					text-transform: uppercase;
@@ -250,8 +250,8 @@
 				    @include sprite($bgMap, bg-coupon);
 					line-height: image-height(sprite-file($bgMap, bg-coupon));
 					box-shadow:0 0 9px rgba(1,1,1, 0.21);
-					border-left: 1px solid #ededed;
-					border-right: 1px solid #ededed;
+					border-left: 1px solid $color_ededed;
+					border-right: 1px solid $color_ededed;
 					i {
 						cursor:pointer;
 					}
@@ -319,7 +319,7 @@
 .table-cart {
 	.colgroup-01 {
 		figure {
-			border:1px solid #f1f1f1;
+			border:1px solid $color_f1f1f1;
 		}
 		.description_checked_product {
 			.product_name {
@@ -354,7 +354,7 @@
 				.stara_cena {
 					vertical-align: middle;
 					font-size: 11px;
-					color: #565655;
+					color: $color_565655;
 					text-decoration: line-through;
 				}
 			}

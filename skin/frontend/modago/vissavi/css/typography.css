@@ -1686,7 +1686,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 1, ../sass/_typo.scss */
 body {
   color: #1e1e1e;
-  background: #F2F1F0; }
+  background: #f2f1f0; }
 
 /* line 5, ../sass/_typo.scss */
 ::-webkit-input-placeholder {
@@ -1793,7 +1793,7 @@ a.simple:link:hover, a.simple:visited:hover {
   /*&:before {
   	content: ' ';
   	height:1px;
-  	background:#000;
+  	background:$color_000;
   	width:100%;
   	display:block;
   	position:absolute;
@@ -1829,7 +1829,7 @@ a.simpleChild:link:hover, a.simpleChild:visited:hover {
   /*&:before {
   	content: ' ';
   	height:1px;
-  	background:#000;
+  	background:$color_000;
   	width:100%;
   	display:block;
   	position:absolute;
@@ -1861,7 +1861,7 @@ a.simpleChild:link.external:after, a.simpleChild:visited.external:after {
 
 /* line 169, ../sass/_typo.scss */
 a.underline {
-  color: #5A5A5A;
+  color: #5a5a5a;
   position: relative;
   text-decoration: underline;
   outline: none; }
@@ -1963,7 +1963,7 @@ article header h1.padding-left-60, article header h2.padding-left-60, article he
   font-weight: 300; }
 /* line 269, ../sass/_typo.scss */
 .title-section.transparent h2 {
-  background: #F2F1F0;
+  background: #f2f1f0;
   margin: 0 auto 20px; }
 
 /* line 279, ../sass/_typo.scss */

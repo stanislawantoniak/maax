@@ -85,7 +85,7 @@
 		input[type="text"]:focus,
 		input[type="email"]:focus,
 		input[type="password"]:focus {
-			background:#fff;
+			background:$color_fff;
 		}
 		label[for="pass"] {
 			position: relative;
@@ -126,7 +126,7 @@
 			}
 			.badge {
 				border-radius: 0;
-				background: #5e5e5e;
+				background: $color_5e5e5e;
 				font-weight: normal;
 				margin-left:4px;
 				cursor:pointer;

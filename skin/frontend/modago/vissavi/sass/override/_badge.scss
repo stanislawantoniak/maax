@@ -2,9 +2,9 @@
 	a {
 		position:relative;
 		.badge {
-		    background:#fe002b;
+		    background:$color_fe002b;
 		    @include border-radius(3px);
-		    color: #fff;
+		    color: $color_fff;
 		    font-size: 11px;
 		    text-align: center;
 		    font-style: normal;

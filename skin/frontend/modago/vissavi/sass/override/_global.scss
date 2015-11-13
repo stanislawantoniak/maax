@@ -23,7 +23,7 @@ body {
 	right:0px;
 	top:0px;
 	z-index: 9000;
-	background:#fff;
+	background:$color_fff;
 	padding:50px;
 	text-align: center;
 	color:red;
@@ -44,7 +44,7 @@ body {
     right: -16px;
     z-index: 900;
     opacity: 1;
-    color: #fff;
+    color: $color_fff;
     text-shadow: none;
 }
 }

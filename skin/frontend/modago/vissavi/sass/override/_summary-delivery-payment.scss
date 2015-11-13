@@ -1,7 +1,7 @@
 #checkout {
 	.panel {
 		&.panel-custom {
-			background: #fff;
+			background: $color_fff;
 			border-radius: 0px;
 			border-color: $bc-primary;
 			.panel-heading {
@@ -24,16 +24,16 @@
 	#checkout {
 		.panel {
 			&.panel-custom {
-				border-color: #bfbfbf;
+				border-color: $color_bfbfbf;
 				.panel-heading {
-					border-color: #dddddd;
+					border-color: $color_dddddd;
 				}
 				.panel-footer {
-					border-color: #dddddd;
+					border-color: $color_dddddd;
 				}
 				.block_info_order {
 					.block {
-						border-color: #dddddd;
+						border-color: $color_dddddd;
 					}
 				}
 			}

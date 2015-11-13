@@ -1,8 +1,8 @@
 .helpful-vote {
 	.main {
-		border: 1px solid #EBEBEB;
+		border: 1px solid $color_ebebeb;
 		.bg-w {
-			background: none repeat scroll 0% 0% #FFF;
+			background: none repeat scroll 0% 0% $color_fff;
 		}
 	}
 	header {
@@ -10,7 +10,7 @@
 			font-weight: 300;
 			font-style: normal;
 			font-size: 35px;
-			color: #1E1E1E;
+			color: $color_1e1e1e;
 			@media (max-width: $screen-xs-max) {font-size: 25px;}
 			@media (max-width: 360px) {font-size: 20px;}
 			@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {font-size: 30px;}
@@ -67,7 +67,7 @@
 				border-radius: 50%;
 				box-shadow: none;
 				text-shadow:none;
-				color:#333;
+				color:$color_333;
 			}
 		}
 		.popover {

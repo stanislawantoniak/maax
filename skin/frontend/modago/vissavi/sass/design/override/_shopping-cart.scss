@@ -3,7 +3,7 @@
 		.panel {
 			&.panel-default {
 				@include border-radius(1px);
-				border-color:#bfbfbf;
+				border-color:$color_bfbfbf;
 			}
 			.panel-heading {
 				background:transparent;

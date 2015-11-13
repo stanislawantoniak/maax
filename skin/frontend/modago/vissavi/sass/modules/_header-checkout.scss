@@ -51,7 +51,7 @@
 			width:64%;
 			min-width: 95px;
 			height:3px;
-			background:#6c6c6c;
+			background:$color_6c6c6c;
 			float: right;
 			margin-right: 110px;
 			@media (max-width: $screen-xs-max) {
@@ -71,7 +71,7 @@
 					content:' ';
 					display:block;
 					height:3px;
-					background:#6FFFCF;
+					background:$color_6fffcf;
 					margin:0;
 					position:relative;
 					top: 0;
@@ -96,7 +96,7 @@
 				}
 			}
 			li {
-				color:#7c7c7c;
+				color:$color_7c7c7c;
 				display: inline-block;
 				text-transform: uppercase;
 				font-size: 13px;
@@ -105,7 +105,7 @@
 				top:-5px;
 				white-space: nowrap;
 				display:block;
-				background: #6c6c6c;
+				background: $color_6c6c6c;
 				@include border-radius(50px);
 				width:12px;
 				height:12px;
@@ -210,8 +210,8 @@
 					margin-right: 0px;
 				}
 				&.current-checkout {
-					color:#fff;
-					background: #6FFFCF;
+					color:$color_fff;
+					background: $color_6fffcf;
 					
 				}
 			}

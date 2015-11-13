@@ -18,7 +18,7 @@ body{
             }
 			.panel-header{
 				height: 50px;
-				border-bottom: 1px solid #ebebeb;
+				border-bottom: 1px solid $color_ebebeb;
 				margin-bottom: 15px;
 				@media (max-width: $screen-xs-max) {
 					height: auto;
@@ -139,7 +139,7 @@ body{
     }
 
     .panel-header {
-        border-bottom: 1px solid #ebebeb;
+        border-bottom: 1px solid $color_ebebeb;
     }
 	
 	&.order-view-multi{

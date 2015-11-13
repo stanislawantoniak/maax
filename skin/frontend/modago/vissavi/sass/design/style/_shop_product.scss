@@ -11,9 +11,9 @@
 	.short-description {
 		margin-bottom: 6px;
 		a {
-			color :#959595;
+			color :$color_959595;
 			span {
-				color :#1dd8a0;
+				color :$color_1dd8a0;
 			}
 		}
 	}
@@ -55,7 +55,7 @@
 			line-height: 47px;
 			text-transform: uppercase;
 			font-size: 12px;
-			color:#020202;
+			color:$color_020202;
             font-family: $fontBlack;
             @media (min-width: 768px) and (max-width: 814px) {
 				line-height: 29px;
@@ -69,15 +69,15 @@
 				cursor:pointer;
 				img {
 					@include border-radius(3px);
-					border:1px solid #fff;
+					border:1px solid $color_fff;
 				}
 				&:hover {
 					&+img {
-						border-color:#999;
+						border-color:$color_999;
 					}
 				}
 				img:hover {
-					border-color:#999;
+					border-color:$color_999;
 				}
 				[type="radio"]:checked {
 					&+img {
@@ -100,33 +100,33 @@
 		.form-group {
 			label {
 				span {
-					background:#fff;
+					background:$color_fff;
 					border:1px solid $gray;
 					text-align:center;
 					line-height: 39px;
-					color:#858585;
+					color:$color_858585;
 					font-size:14px;
 					font-family:$fontRegular;
 					font-weight: normal;
 				}
 			[type="radio"]:hover {
 				&+span {
-					border-color:#999;
-					background:#999;
-					color:#fff;
+					border-color:$color_999;
+					background:$color_999;
+					color:$color_fff;
 				}
 			}	
 			span:hover {
-					border-color:#999;
-					background:#999;
-					color:#fff;
+					border-color:$color_999;
+					background:$color_999;
+					color:$color_fff;
 				}
 			[type="radio"]:checked,
 			[type="radio"]:hover:checked {
 				&+span {
 					border-color:$color_000;
 					background:$color_000;
-					color:#fff;
+					color:$color_fff;
 				}
 			}
 			
@@ -144,7 +144,7 @@
 		font-size: 12px;
 		color:$color_000;
 		.addLike {
-			border:2px solid #a6a6a6;
+			border:2px solid $color_a6a6a6;
 			@include border-radius(5px);
 			line-height: 1.2;
 			font-size: 11px;
@@ -164,7 +164,7 @@
 			background:#fff url('../images/svg/like.svg') 8px 5px no-repeat;
 			background-size: 22px 22px;
 			span {
-				color:#dcdcdc;
+				color:$color_dcdcdc;
 			}
 			&:hover {
 				text-decoration: none;

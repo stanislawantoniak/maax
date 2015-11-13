@@ -2,17 +2,17 @@
   .selectboxit {
     background-image: none;
     border-radius: 0;
-    background-color: #fff;
-    border-color: #ccc;
+    background-color: $color_fff;
+    border-color: $color_ccc;
 
     &:hover {
       border-color: $gray-dark;
-      background-color: #fff;
+      background-color: $color_fff;
 
     }
     &:focus {
       border-color: $gray-dark;
-      background-color: #fff;
+      background-color: $color_fff;
       box-shadow: none;
 
     }
@@ -43,7 +43,7 @@
   .selectboxit-list {
     max-height: 200px;
     border-radius: 0;
-    background-color: #fff;
+    background-color: $color_fff;
     border-color: $gray;
     z-index: 100;
     box-shadow: none;
@@ -59,14 +59,14 @@
     .selectboxit-focus {
       .selectboxit-option-anchor {
         color: $gray-darker;
-        background: #f2f1f0;
+        background: $color_f2f1f0;
         background-image: none;
         background-repeat: repeat-x;
       }
     }
     .selectboxit-disabled {
       .selectboxit-option-anchor {
-        color: #999999;
+        color: $color_999999;
       }
     }
   }
@@ -175,14 +175,14 @@
   &.has-error {
     .selectboxit-container {
       .selectboxit {
-        border-color: #a94442;
+        border-color: $color_a94442;
       }
     }
   }
   &.has-success {
     .selectboxit-container {
       .selectboxit {
-        border-color: #3c763d;
+        border-color: $color_3c763d;
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
       }
     }

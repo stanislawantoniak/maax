@@ -18,35 +18,35 @@
           text-align:center;
           line-height: 38px;
           font-size:14px;
-          color:#313131;
+          color:$color_313131;
           display:block;
           position:absolute;
           top:0px;
           left:0px;
-          background:#fff;
+          background:$color_fff;
           
         }
         &:hover {
           span {
-             background-color:#999;
-            border-color:#999;
-            color:#fff;
+             background-color:$color_999;
+            border-color:$color_999;
+            color:$color_fff;
           }
            
           }
         input[type=checkbox]:hover + span  {
-            background-color:#999;
-            border-color:#999;
-            color:#fff;
+            background-color:$color_999;
+            border-color:$color_999;
+            color:$color_fff;
         }
         input[type=checkbox]:checked {
           outline:none!important;
         }
          input[type=checkbox]:checked + span,
          input.checked + span  {
-            background:#000;
-            border-color:#000;
-            color:#fff;
+            background:$color_000;
+            border-color:$color_000;
+            color:$color_fff;
 
         }
       }
@@ -58,7 +58,7 @@
         float:left;
         height:23px;
         width:122px;
-        border:1px solid #d6d6d6;
+        border:1px solid $color_d6d6d6;
         float:left;
         &:focus {
           outline:none;
@@ -89,7 +89,7 @@
           i {
             position:static;
             margin: 4px 0 0 4px;
-            color:#000;
+            color:$color_000;
           }
         }
       }    
@@ -183,7 +183,7 @@
           height:33px;
           padding:3px;
           position:absolute;
-          background:#fff;
+          background:$color_fff;
           top:0px;
           left:0px;
           @include border-radius(5px);
@@ -196,15 +196,15 @@
           
         }
         [type="checkbox"]:hover + span {
-          background:#999;
+          background:$color_999;
           cursor:pointer;
         }
         [type="checkbox"]:checked + span,
         span.checked {
-          background:#000;
+          background:$color_000;
         }
         &:hover span {
-          background:#999;
+          background:$color_999;
           cursor:pointer;
         }
       }
@@ -224,7 +224,7 @@
       margin-bottom: 5px;
     }
     &.lastChecked {
-      border-bottom: 1px solid #d0cfcf;
+      border-bottom: 1px solid $color_d0cfcf;
       margin-bottom:5px;
     }
   }
@@ -244,5 +244,5 @@
 }
 
 span.checked {
-          background:#000;
+          background:$color_000;
         }

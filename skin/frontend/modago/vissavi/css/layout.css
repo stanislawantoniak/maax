@@ -497,7 +497,7 @@ body.sb-open > header .header_top {
 @media screen and (min-width: 992px) {
   /* line 161, ../sass/layout/dimensions/_header.scss */
   .user-navigation li a:hover, .user-navigation li.open {
-    background-color: #2A2A2A; } }
+    background-color: #2a2a2a; } }
 /* line 165, ../sass/layout/dimensions/_header.scss */
 .user-navigation li#link_search.not-open, .user-navigation li#link_search.not-open:hover {
   background-color: transparent !important; }
@@ -514,7 +514,7 @@ body.sb-open > header .header_top {
     width: 60px; }
   /* line 180, ../sass/layout/dimensions/_header.scss */
   .user-navigation li:hover, .user-navigation li#link_search.open {
-    background-color: #2A2A2A; }
+    background-color: #2a2a2a; }
   /* line 183, ../sass/layout/dimensions/_header.scss */
   .user-navigation li#link_search.open {
     height: 57px !important; } }
@@ -1726,7 +1726,7 @@ html.sb-site-lock.sb-active:not(.sb-static) {
   position: relative;
   z-index: 1;
   /* Site sits above Slidebars */
-  background: #F2F1F0; }
+  background: #f2f1f0; }
 
 /* line 39, ../sass/layout/modules/_sliding-menu.scss */
 #sb-site.open {
@@ -3205,7 +3205,7 @@ html.noscroll body {
 /* line 244, ../sass/layout/modules/_gallery_product.scss */
 #product-gallery #productGalleryThumbMedia .rwd-item, #product-gallery #productGalleryThumbMediaOpen .rwd-item {
   padding: 5px 0px;
-  color: #FFF;
+  color: #fff;
   width: 67px !important;
   float: none; }
 /* line 255, ../sass/layout/modules/_gallery_product.scss */
@@ -3366,8 +3366,8 @@ html.noscroll body {
 #lightbox #lightbox-inner #lightbox-header {
   position: fixed;
   width: 100%;
-  border: 10px solid #FFF;
-  background-color: #FFF;
+  border: 10px solid #fff;
+  background-color: #fff;
   box-sizing: border-box;
   z-index: 100; }
 /* line 414, ../sass/layout/modules/_gallery_product.scss */
@@ -3420,7 +3420,7 @@ html.noscroll body {
 /* line 458, ../sass/layout/modules/_gallery_product.scss */
 #lightbox #lightbox-inner #lightbox-gallery #lightbox-gallery-thumbs #lightbox-gallery-thumbs-images::after {
   content: '';
-  background: #FFF;
+  background: #fff;
   right: 0;
   top: 0;
   width: 25px;
@@ -5982,7 +5982,7 @@ ul.form-list {
   border: 1px solid #bfbfbf; }
 /* line 20, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table thead tr th, .rma .rma-po-list table.po-list-table tbody tr td {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   vertical-align: top; }
 /* line 25, ../sass/layout/modules/_rma-po-list.scss */
@@ -6176,7 +6176,7 @@ div.steps.step-3 p#overview-message {
   border: 1px solid #bfbfbf; }
 /* line 19, ../sass/layout/modules/_rma-list.scss */
 .rma .rma-table thead tr th, .rma .rma-table tbody tr td {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   vertical-align: top; }
 /* line 24, ../sass/layout/modules/_rma-list.scss */
@@ -7024,7 +7024,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   border-top: 1px solid #000000; }
 /* line 168, ../sass/layout/style/_header.scss */
 #vendor-nobanners h2 {
-  background-color: #F2F1F0; }
+  background-color: #f2f1f0; }
 
 /* line 5, ../sass/layout/style/_sidebar.scss */
 .sidebar h3:before {
@@ -10738,7 +10738,7 @@ body.checkout-guest-index .social-register {
     height: 150px; } }
 /* line 47, ../sass/layout/style/_help.scss */
 #help-content .row .help-tile .help-tile-container:hover {
-  border-color: #C2C2C2; }
+  border-color: #c2c2c2; }
 /* line 50, ../sass/layout/style/_help.scss */
 #help-content .row .help-tile .help-tile-container.help-tile-container-promo {
   background-image: url("../images/help/promolabels.png");

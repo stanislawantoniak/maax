@@ -12,7 +12,7 @@
 .customNavigation {
 	a {
 		font-size: 30px;
-		color:#ccc;
+		color:$color_ccc;
 		cursor:pointer;
 		&:hover {
 			color:#808080
@@ -25,7 +25,7 @@
 			.rwd-prev,
 			.rwd-next {
 				font-size: 30px;
-				color:#ccc;
+				color:$color_ccc;
 				cursor:pointer;
 				
 				&:hover {
@@ -41,7 +41,7 @@
 			.rwd-prev,
 			.rwd-next {
 				font-size: 30px;
-				color:#ccc;
+				color:$color_ccc;
 				cursor:pointer;
 				&:hover {
 					color:#808080
@@ -63,7 +63,7 @@
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
 	border-radius: 20px;
-	background: #869791;
+	background: $color_869791;
 }
 
 /* If PaginationNumbers is true */
@@ -81,8 +81,8 @@
 }
 
 #rwd-banners .item{
-  background: #fff;
-  color: #FFF;
+  background: $color_fff;
+  color: $color_fff;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;

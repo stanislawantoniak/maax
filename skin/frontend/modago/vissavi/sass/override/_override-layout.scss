@@ -102,7 +102,7 @@
 			padding: 8px 0;
 			vertical-align: top;
 			img {
-				border: 1px solid #adadad;
+				border: 1px solid $color_adadad;
 			}
 			&+td {
 				padding-left: 5px;
@@ -138,7 +138,7 @@
 
 
 .descripionProduct-box-bundle {
-  border:1px solid #d9d9d9;
+  border:1px solid $color_d9d9d9;
   padding:9px 9px 0px;
   text-align:center;
   margin-bottom: 10px;
@@ -148,7 +148,7 @@
   }
   .seller-label {
     font-size: 18px;
-    color:#1d1e1c;
+    color:$color_1d1e1c;
     text-transform: uppercase;
     margin-top: 9px;
     margin-bottom: 13px;
@@ -179,7 +179,7 @@
   }
   .seller {
     font-size: 12px;
-    color:#000;
+    color:$color_000;
     margin-bottom: 17px;
     a {
       @extend .seller;
@@ -195,7 +195,7 @@
   }
   .block {
     padding:12px 0;
-    border-top:1px solid #ebeaed;
+    border-top:1px solid $color_ebeaed;
 
   }
   .seller-box-description  {
@@ -208,7 +208,7 @@
   }
   h3 {
     font-size: 11px;
-    color:#000;
+    color:$color_000;
     text-transform: uppercase;
     margin:0px;
     display:block;
@@ -217,7 +217,7 @@
     position:relative;
     a {
       font-size: 11px;
-      color:#000;
+      color:$color_000;
       text-decoration: none;
       display:block;
 
@@ -237,7 +237,7 @@
         }
         &+span {
           font-size: 11px;
-          color:#646464;
+          color:$color_646464;
           font-family: $fontRegular;
           line-height: 13px;
           float: left;
@@ -251,7 +251,7 @@
 
 
 #seller-box-bundle {
-  border:1px solid #d9d9d9;
+  border:1px solid $color_d9d9d9;
   padding:9px 9px 0px;
   text-align:center;
   margin-bottom: 10px;
@@ -261,7 +261,7 @@
   }
   .seller-label {
     font-size: 18px;
-    color:#1d1e1c;
+    color:$color_1d1e1c;
     text-transform: uppercase;
     margin-top: 3px;
     margin-bottom: 0px;
@@ -300,7 +300,7 @@
   }
   .seller {
     font-size: 12px;
-    color:#000;
+    color:$color_000;
     margin-bottom: 15px;
 
     @media (max-width: $screen-xs-max) {
@@ -329,7 +329,7 @@
   }
   .block {
     padding:12px 0;
-    border-top:1px solid #ebeaed;
+    border-top:1px solid $color_ebeaed;
 
   }
   .seller-box-description  {
@@ -342,7 +342,7 @@
   }
   h3 {
     font-size: 11px;
-    color:#000;
+    color:$color_000;
     text-transform: uppercase;
     margin:0px;
     display:block;
@@ -351,7 +351,7 @@
     position:relative;
     a {
       font-size: 11px;
-      color:#000;
+      color:$color_000;
       text-decoration: none;
       display:block;
 
@@ -368,7 +368,7 @@
         &+span {
           float:none;
           font-size: 11px;
-          color:#646464;
+          color:$color_646464;
           font-family: 'OpenSansRegular';
           line-height: 13px;
           float: left;
@@ -403,12 +403,12 @@
   }
   .short-description {
     font-size: 12px;
-    color: #383838;
+    color: $color_383838;
     margin-bottom: 6px;
     a {
-      color :#959595;
+      color :$color_959595;
       span {
-        color :#1dd8a0;
+        color :$color_1dd8a0;
         margin-left:30px;
       }
     }
@@ -426,7 +426,7 @@
     .price-label,
     .old-price {
       font-size: 24px;
-      color:#000;
+      color:$color_000;
       font-family: $fontLight;
     }
     .old-price {
@@ -434,7 +434,7 @@
     }
     .price {
       font-size: 36px;
-      color:#000;
+      color:$color_000;
       font-family: $fontBlack;
       @media (min-width: 768px) and (max-width: 819px) {
         margin-bottom: 0px;
@@ -478,7 +478,7 @@
       float: left;
       text-transform: uppercase;
       font-size: 11px;
-      color:#020202;
+      color:$color_020202;
       font-weight: normal;
       @media (min-width: 768px) and (max-width: 814px) {
         float:none;
@@ -511,19 +511,19 @@
           width:100%;
           height:auto;
           @include border-radius(3px);
-          border:1px solid #fff;
+          border:1px solid $color_fff;
         }
         &:hover {
           &+img {
-            border-color:#999;
+            border-color:$color_999;
           }
         }
         img:hover {
-          border-color:#999;
+          border-color:$color_999;
         }
         [type="radio"]:checked {
           &+img {
-            border-color:#000;
+            border-color:$color_000;
           }
         }
       }
@@ -597,11 +597,11 @@
           width:41px;
           height:41px;
           display:block;
-          background:#fff;
+          background:$color_fff;
           border:1px solid $gray;
           text-align:center;
           line-height: 39px;
-          color:#858585;
+          color:$color_858585;
           font-size:14px;
           font-family:$fontRegular;
           font-weight: normal;
@@ -611,22 +611,22 @@
         }
         [type="radio"]:hover {
           &+span {
-            border-color:#999;
-            background:#999;
-            color:#fff;
+            border-color:$color_999;
+            background:$color_999;
+            color:$color_fff;
           }
         }
         span:hover {
-          border-color:#999;
-          background:#999;
-          color:#fff;
+          border-color:$color_999;
+          background:$color_999;
+          color:$color_fff;
         }
         [type="radio"]:checked,
         [type="radio"]:hover:checked {
           &+span {
-            border-color:#000;
-            background:#000;
-            color:#fff;
+            border-color:$color_000;
+            background:$color_000;
+            color:$color_fff;
           }
         }
 
@@ -681,7 +681,7 @@
   .action-box-bundle {
     margin-bottom:20px;
     font-size: 11px;
-    color:#000;
+    color:$color_000;
     @media screen and (-webkit-min-device-pixel-ratio:0) {
       margin-top:4.5px;
     }
@@ -720,7 +720,7 @@
       width:149px;
       height:42px;
       display:block;
-      border:2px solid #a6a6a6;
+      border:2px solid $color_a6a6a6;
       @include border-radius(5px);
       line-height: 1.2;
       padding: 7px 0 0 43px;
@@ -754,7 +754,7 @@
 		    white-space: nowrap !important;
 	    }
       span {
-        color:#dcdcdc;
+        color:$color_dcdcdc;
       }
       &:hover {
         text-decoration: none;
@@ -816,7 +816,7 @@ form {
   .has-feedback {
     i {
       position:absolute;
-      color:#ec695d;
+      color:$color_ec695d;
       position:absolute;
       top:0!important;
       right:-11px!important;
@@ -836,7 +836,7 @@ form {
   .has-success {
     i.fa {
       right:-5%;
-      color:#2ecc71;
+      color:$color_2ecc71;
     }
   }
 
@@ -845,7 +845,7 @@ form {
       .form-control:focus{
         -webkit-box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
         box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
-        border: 1px solid #bcbcbc;
+        border: 1px solid $color_bcbcbc;
       }
       i{display: none;}
     }
@@ -867,7 +867,7 @@ form {
     margin-bottom:5px;
     label.error,
     span.error {
-      color:#e84c3d;
+      color:$color_e84c3d;
       font-size: 12px;
       font-weight: normal;
       line-height: 1.0!important;
@@ -890,7 +890,7 @@ form {
     [type="email"],
     [type="password"],
     textarea{
-      border-color : #ec695d;
+      border-color : $color_ec695d;
     }
   }
   .form-group {
@@ -900,7 +900,7 @@ form {
     [type="email"],
     [type="password"],
     [type="tel"] {
-      border: 1px solid #bcbcbc;
+      border: 1px solid $color_bcbcbc;
       border-radius:1px;
       box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
       color:$gray-darker;
@@ -926,12 +926,12 @@ form {
 
 
     input:disabled {
-      border-color:#d9d9d9;
+      border-color:$color_d9d9d9;
       color:gray;
       box-shadow: none;
     }
     textarea, textarea.form-control {
-      border: 1px solid #bcbcbc;
+      border: 1px solid $color_bcbcbc;
       border-radius:1px;
       min-height: 132px;
       box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
@@ -998,12 +998,12 @@ form {
     input[type=checkbox].css-checkbox:disabled + label.css-label,
     input[type=radio].css-radio:disabled + label.css-label {
       background-position: 0 -82px;
-      color:#bcbcbc;
+      color:$color_bcbcbc;
     }
     input[type=checkbox].css-checkbox:checked:disabled + label.css-label,
     input[type=radio].css-radio:checked:disabled + label.css-label {
       background-position: 0 -110px;
-      color:#bcbcbc;
+      color:$color_bcbcbc;
     }
 
 
@@ -1013,7 +1013,7 @@ form {
     }
 
     .topHint {
-      background:#f0f0f0;
+      background:$color_f0f0f0;
       height:29px;
       line-height: 29px;
       display:inline-block;
@@ -1032,7 +1032,7 @@ form {
         position: absolute;
         pointer-events: none;
         border-color: rgba(240, 240, 240, 0);
-        border-right-color: #f0f0f0;
+        border-right-color: $color_f0f0f0;
         border-width: 5px;
         margin-top: -5px;
       }
@@ -1080,7 +1080,7 @@ form {
             margin-right: 5px;
           }
           .suffix {
-            color:#b0b0b0;
+            color:$color_b0b0b0;
             font-size:12px;
           }
 	      a {
@@ -1102,7 +1102,7 @@ form {
         input[type=radio].css-radio + label.css-label:hover {
           //background-position: 0 -50px;
           //@include sprite($btnCheck, hover);
-          color:#999999;
+          color:$color_999999;
         }
         input[type=checkbox].css-checkbox:checked + label.css-label,
         input[type=radio].css-radio:checked + label.css-label {
@@ -1135,7 +1135,7 @@ form {
 
 .gh-cookiebar {
   #cookie-bar {
-    background:#000000; height:auto; line-height:24px; color:#ffffff; text-align:center; padding:3px 0;
+    background:$color_000000; height:auto; line-height:24px; color:$color_ffffff; text-align:center; padding:3px 0;
     z-index: 9999;
     width: 100%;
     &.fixed {
@@ -1143,23 +1143,23 @@ form {
       &.bottom {bottom:0; top:auto;}
     }
     a {
-      color:#c6a662; text-decoration:none;
+      color:$color_c6a662; text-decoration:none;
       border-radius: 0;
       padding: 0;
       margin: 0;
       &:hover {
-        color: #b08944;
+        color: $color_b08944;
       }
     }
     p {margin:0; padding:10px; font-size: 12px;}
     .cb-enable {
       padding: 5px 20px;
-      color: #fff;
+      color: $color_fff;
       font-weight: bold;
       font-family: latoregular, sans-serif;
       text-align: center;
       border-radius: 5px;
-      background: #c6a662;
+      background: $color_c6a662;
       vertical-align: middle;
       border: none;
       margin: 0 10px;
@@ -1182,15 +1182,15 @@ form {
       /* IE6-8 fallback on horizontal gradient */
       white-space: nowrap;
       &:hover {
-        color: #fff;
-        background:#b08944;
+        color: $color_fff;
+        background:$color_b08944;
       }
     }
 
-    .cb-disable {background:#c6a662;}
-    .cb-disable:hover {background:#b08944;}
-    .cb-policy {background:#c6a662;}
-    .cb-policy:hover {background:#b08944;}
+    .cb-disable {background:$color_c6a662;}
+    .cb-disable:hover {background:$color_b08944;}
+    .cb-policy {background:$color_c6a662;}
+    .cb-policy:hover {background:$color_b08944;}
   }
 }
 

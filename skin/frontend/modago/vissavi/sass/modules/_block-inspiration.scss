@@ -22,16 +22,16 @@
 						display: block;
 						margin: 0 auto;
 						margin-top: 5px;
-						color:#000;
+						color:$color_000;
 					}
 					&.body-caption {
-						color: #8b8b8b;
+						color: $color_8b8b8b;
 						padding: 5px 0px;
 						display: block;
 						margin: 0 auto;
 					}
 					&.seemore-caption {
-						color: #484848;
+						color: $color_484848;
 						text-transform: uppercase;
 						padding: 5px 0px;
 						display: block;
@@ -52,9 +52,9 @@
 	}
 
 	#rwd-inspiration .item{
-	  background: #fff;
+	  background: $color_fff;
 	  margin: 5px;
-	  color: #515151;
+	  color: $color_515151;
 	  text-align: center;
 	    img {
 		  	width:100%;

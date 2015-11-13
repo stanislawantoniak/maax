@@ -61,7 +61,7 @@
 	.carousel-navigation-modd {
 	    height: 379px;
 	    width: 77px;
-	    background: #fff;
+	    background: $color_fff;
 	    margin-left: -2px;
 	    ul {
 	    	width: 70px;
@@ -71,7 +71,7 @@
 		    cursor: pointer;
 			position:relative;
 			margin: 3px 5px!important;
-			border:1px solid #f0f0f0;
+			border:1px solid $color_f0f0f0;
 
 		    &.active {
 		    	.shadow {
@@ -80,9 +80,9 @@
 		    		position:absolute;
 		    		left:0px;
 		    		top:0px;
-		    		-moz-box-shadow:    inset 0 0 0 3px #e5621b;
-		    		-webkit-box-shadow: inset 0 0 0 3px #e5621b;
-		    		box-shadow:         inset 0 0 0 3px #e5621b;
+		    		-moz-box-shadow:    inset 0 0 0 3px $color_e5621b;
+		    		-webkit-box-shadow: inset 0 0 0 3px $color_e5621b;
+		    		box-shadow:         inset 0 0 0 3px $color_e5621b;
 		    	}
 		    	img {
 				   
@@ -131,7 +131,7 @@
 	    	display:inline-block;
 			width:15px;
 			height:75px;
-			background:#fff;
+			background:$color_fff;
 			position:absolute;
 			left:50%;
 			margin-left: -(image-width(sprite-file($arrowMap, arrow_top_j)) / 2) ;

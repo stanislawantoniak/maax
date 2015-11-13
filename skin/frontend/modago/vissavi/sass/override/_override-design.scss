@@ -41,7 +41,7 @@ body.mypromotions-index-index {
 }
 
 ul.messages >li ul>li>span {
-    background-color: #deeaca;
+    background-color: $color_deeaca;
     margin-left: 20px;
     height: 100%;
     display: block;
@@ -51,7 +51,7 @@ ul.messages >li ul>li>span {
 }
 
 ul.messages >li.error-msg ul>li>span {
-    background-color: #f2e6e6;
+    background-color: $color_f2e6e6;
 }
 
 ul.messages ul>li>span>i {

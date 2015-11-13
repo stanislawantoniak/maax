@@ -16,9 +16,9 @@
 			font-size: 15px;
 		}
 		table.po-list-table {
-			border: 1px solid #bfbfbf;
+			border: 1px solid $color_bfbfbf;
 			thead tr th, tbody tr td {
-				background-color: #FFFFFF;
+				background-color: $color_ffffff;
 				border: none;
 				vertical-align: top;
 			}
@@ -26,7 +26,7 @@
 				text-transform: uppercase;
 			}
 			tbody tr td {
-				border-top: 1px solid #ebebeb;
+				border-top: 1px solid $color_ebebeb;
 				&:last-child {
 					text-align: right;
 					padding-right: 20px;
@@ -58,7 +58,7 @@
 							padding-left: 5px;
 							padding-right: 5px;
 							img {
-								border: 1px solid #cccccc;
+								border: 1px solid $color_cccccc;
 							}
 						}
 					}
@@ -79,12 +79,12 @@
 	}
 	.po-list-table-mobile {
 		width: 100%;
-		border: 1px solid #bfbfbf;
+		border: 1px solid $color_bfbfbf;
 		tr:first-child td {
 			border-top: none;
 		}
 		td {
-			border-top: 1px solid #ebebeb;
+			border-top: 1px solid $color_ebebeb;
 			padding: 15px 10px;
 			table {
 				width: 100%;

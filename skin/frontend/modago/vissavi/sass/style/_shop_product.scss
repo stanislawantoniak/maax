@@ -17,12 +17,12 @@
 	}
 	.short-description {
 		font-size: 11px;
-		color: #383838;
+		color: $color_383838;
 		margin-bottom: 6px;
 		a {
-			color :#959595;
+			color :$color_959595;
 			span {
-				color :#1dd8a0;
+				color :$color_1dd8a0;
 				margin-left:30px;
 			}
 		}
@@ -39,7 +39,7 @@
 		.price-label,
 		.old-price {
 			font-size: 24px;
-			color:#000;
+			color:$color_000;
 			font-family: $fontLight;
 		}
 		.old-price {
@@ -47,7 +47,7 @@
 		}
 		.price {
 			font-size: 36px;
-			color:#000;
+			color:$color_000;
 			font-family: $fontBlack;
 			@media (min-width: 768px) and (max-width: 819px) {
 				margin-bottom: 0px;
@@ -89,7 +89,7 @@
 			float: left;
 			text-transform: uppercase;
 			font-size: 11px;
-			color:#020202;
+			color:$color_020202;
             font-weight: normal;
             @media (min-width: 768px) and (max-width: 814px) {
 				float:none;
@@ -122,19 +122,19 @@
 					width:100%;
 					height:auto;
 					@include border-radius(3px);
-					border:1px solid #fff;
+					border:1px solid $color_fff;
 				}
 				&:hover {
 					&+img {
-						border-color:#999;
+						border-color:$color_999;
 					}
 				}
 				img:hover {
-					border-color:#999;
+					border-color:$color_999;
 				}
 				[type="radio"]:checked {
 					&+img {
-						border-color:#000;
+						border-color:$color_000;
 					}
 				}
 			}
@@ -206,11 +206,11 @@
 					width:31px;
 					height:31px;
 					display:block;
-					background:#fff;
+					background:$color_fff;
 					border:1px solid $gray;
 					text-align:center;
 					line-height: 29px;
-					color:#858585;
+					color:$color_858585;
 					font-size:12px;
 					font-family:$fontRegular;
 					font-weight: normal;
@@ -220,22 +220,22 @@
 				}
 			[type="radio"]:hover {
 				&+span {
-					border-color:#999;
-					background:#999;
-					color:#fff;
+					border-color:$color_999;
+					background:$color_999;
+					color:$color_fff;
 				}
 			}	
 			span:hover {
-					border-color:#999;
-					background:#999;
-					color:#fff;
+					border-color:$color_999;
+					background:$color_999;
+					color:$color_fff;
 				}
 			[type="radio"]:checked,
 			[type="radio"]:hover:checked {
 				&+span {
-					border-color:#000;
-					background:#000;
-					color:#fff;
+					border-color:$color_000;
+					background:$color_000;
+					color:$color_fff;
 				}
 			}
 			
@@ -290,7 +290,7 @@
 	.action-box-bundle {
 		margin-bottom:20px;
 		font-size: 11px;
-		color:#000;
+		color:$color_000;
 		@media screen and (-webkit-min-device-pixel-ratio:0) {
 			   margin-top:4.5px;
 			}
@@ -326,7 +326,7 @@
 			width:149px;
 			height:42px;
 			display:block;
-			border:2px solid #a6a6a6;
+			border:2px solid $color_a6a6a6;
 			@include border-radius(5px);
 			line-height: 1.2;
 			padding: 7px 0 0 43px;
@@ -350,7 +350,7 @@
 			color:$gray-dark;
 			background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
 			span {
-				color:#dcdcdc;
+				color:$color_dcdcdc;
 			}
 			&:hover {
 				text-decoration: none;

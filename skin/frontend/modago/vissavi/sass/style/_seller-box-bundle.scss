@@ -2,7 +2,7 @@
 
 #seller-box-bundle,
 .descripionProduct-box-bundle {
-	border:1px solid #d9d9d9;
+	border:1px solid $color_d9d9d9;
 	padding:9px 9px 0px;
 	text-align:center;
 	margin-bottom: 10px;
@@ -12,7 +12,7 @@
 	}
 	.seller-label {
 		font-size: 18px;
-		color:#1d1e1c;
+		color:$color_1d1e1c;
 		text-transform: uppercase;
 		margin-top: 9px;
 		margin-bottom: 13px;
@@ -43,7 +43,7 @@
 	}
 	.seller {
 		font-size: 12px;
-		color:#000;
+		color:$color_000;
 		margin-bottom: 17px;
 		a {
 			@extend .seller;
@@ -59,7 +59,7 @@
 	}
 	.block {
 		padding:12px 0;
-		border-top:1px solid #ebeaed;
+		border-top:1px solid $color_ebeaed;
 		
 	}
 	.seller-box-description  {
@@ -72,7 +72,7 @@
 	}
 	h3 {
 		font-size: 11px;
-		color:#000;
+		color:$color_000;
 		text-transform: uppercase;
 		margin:0px;
 		display:block;
@@ -81,7 +81,7 @@
 		position:relative;
 		a {
 			font-size: 11px;
-			color:#000;
+			color:$color_000;
 			text-decoration: none;
 			display:block;
 			
@@ -98,7 +98,7 @@
 					&+span {
 						float:none;
 						font-size: 11px;
-						color:#646464;
+						color:$color_646464;
 						font-family: $fontRegular;
 						line-height: 13px;
 						float: left;
@@ -111,7 +111,7 @@
 .descripionProduct-box-bundle {
 	.descripionProduct-label {
 		font-size: 18px;
-		color:#1d1e1c;
+		color:$color_1d1e1c;
 		text-transform: uppercase;
 		margin-top: 9px;
 		display:block;

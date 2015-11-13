@@ -1,7 +1,7 @@
 #note_product {
 	
 	#statystyki_opinii {
-		border-bottom: 1px solid #f2f1f0;
+		border-bottom: 1px solid $color_f2f1f0;
 		padding-bottom: 15px;
 	}
 	dl.raty_note {
@@ -28,7 +28,7 @@
 				float:left;
 				line-height: 26px;
 				font-size: 11px;
-				color:#959595;
+				color:$color_959595;
 				font-family: $fontLight;
 				font-weight: normal;
 			}

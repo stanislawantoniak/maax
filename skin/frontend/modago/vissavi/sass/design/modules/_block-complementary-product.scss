@@ -1,8 +1,8 @@
 .block-complementary-product {
 	.rwdCarousel {
 		.item {
-			background: #fff;
-			color: #515151;
+			background: $color_fff;
+			color: $color_515151;
 			.img_product {
 
 			}
@@ -61,10 +61,10 @@
 						color:$color_000;
 					}
 					&.body-caption {
-						color: #8b8b8b;
+						color: $color_8b8b8b;
 					}
 					&.seemore-caption {
-						color: #484848;
+						color: $color_484848;
 						text-transform: uppercase;
 						font-size: 11px;
 					}

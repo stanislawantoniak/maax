@@ -2,10 +2,10 @@
 	margin-bottom: 15px;
 	//margin-top: -30px;
 	.main {
-		border: 1px solid #EBEBEB;
+		border: 1px solid $color_ebebeb;
 		padding:30px;
 		.bg-w {
-			background: none repeat scroll 0% 0% #FFF;
+			background: none repeat scroll 0% 0% $color_fff;
 		}
 	}
 	header {
@@ -13,7 +13,7 @@
 			font-weight: 300;
 			font-style: normal;
 			font-size: 35px;
-			color: #1E1E1E;
+			color: $color_1e1e1e;
 			margin: 0px;
 			padding:0px;
 
@@ -156,7 +156,7 @@
 				border-radius: 50%;
 				box-shadow: none;
 				text-shadow:none;
-				color:#333;
+				color:$color_333;
 			}
 		}
 		.popover {
@@ -243,7 +243,7 @@
     @media (max-width: $screen-xs-max) {
     	padding-bottom: 15px;
     }
-    //border-top: 1px solid #DEDCE1;
+    //border-top: 1px solid $color_dedce1;
     margin-top: 2px;
     h1 {
         font-size: 36px;

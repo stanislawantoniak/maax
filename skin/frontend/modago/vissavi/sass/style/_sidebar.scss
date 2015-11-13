@@ -1,13 +1,13 @@
 .sidebar {
-  border-left:1px solid #ebebeb;
-  border-right:1px solid #ebebeb;
-  background:#fff;
+  border-left:1px solid $color_ebebeb;
+  border-right:1px solid $color_ebebeb;
+  background:$color_fff;
   border-top: 3px solid $color-accent;
   font-family: $fontRegular;
   font-size: 12px;
 
   .section {
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid $color_d2d2d2;
     text-align:center;
   }
   h3 {
@@ -65,7 +65,7 @@
        margin-right:20px;
        
        .label {
-           color:#000;
+           color:$color_000;
            display:block;
            font-size: 12px;
            float:left;
@@ -73,13 +73,13 @@
            padding:0px 20px 0 6px;
            min-width: 60px;
            text-align: left;
-           color:#000;
+           color:$color_000;
            display:inline-block;
            font-size: 12px;
            float:left;
            height:21px;
            line-height:20px;
-           border:1px solid #ededed;
+           border:1px solid $color_ededed;
            margin:0px 15px 7px 0;
            
            position:relative;
@@ -90,7 +90,7 @@
                position:absolute;
                right:5px;
                top:4px;
-               color:#949494;
+               color:$color_949494;
                font-size: 11px;
                margin-left:5px;
            }
@@ -123,7 +123,7 @@
       height:17px;
       width:85px;
       padding-left: 0;
-      color:#fff;
+      color:$color_fff;
       text-transform: uppercase;
       text-align: center;
       &+.suffix {
@@ -133,7 +133,7 @@
         top:0px;
         background-color:transparent !important;
         width:auto;
-        color: #b0b0b0;
+        color: $color_b0b0b0;
         font-size: 12px;
         text-align: left;
       }
@@ -143,25 +143,25 @@
     
     label[for="filter_recommended_products_news"], .new {
       >span {
-        background:#7fce25;
+        background:$color_7fce25;
       }
     }
 
     label[for="filter_recommended_products_sale"], .sale {
       >span {
-        background:#de0e59;
+        background:$color_de0e59;
       }
     }
 
     label[for="filter_recommended_products_bestseler"], .bestseller {
       >span {
-        background:#3ca89b;
+        background:$color_3ca89b;
       }
     }
 
     label[for="filter_recommended_products_propotion"], .promotion {
       >span {
-        background:#ec4920;
+        background:$color_ec4920;
       }
     }
     .form-group {
@@ -197,7 +197,7 @@
         height:31px;
         label {
           img {
-            border:3px solid #fff;
+            border:3px solid $color_fff;
           }
         }
         
@@ -205,7 +205,7 @@
           outline:none!important;
           &+label{
             img {
-              border:3px solid #000;
+              border:3px solid $color_000;
               @include border-radius(5px);
             }
           }
@@ -225,7 +225,7 @@
         display: inline;
         font-size: 12px;
         .suffix {
-          color: #b0b0b0;
+          color: $color_b0b0b0;
           font-size: 12px; }
 
       }
@@ -239,12 +239,12 @@
       &:hover {
         td {
         label { 
-          color:#000;
+          color:$color_000;
           .suffix {
-            color: #b0b0b0;
+            color: $color_b0b0b0;
           }
           img {
-            border:3px solid #999;
+            border:3px solid $color_999;
             @include border-radius(5px);
           }
         }
@@ -256,12 +256,12 @@
         td {
           label {
             span {
-              color:#000;
+              color:$color_000;
               text-decoration: underline;
               &+span {
                 text-decoration: none;
                 &.suffix {
-                  color: #b0b0b0;
+                  color: $color_b0b0b0;
                 }
               }
             }
@@ -320,7 +320,7 @@
                   margin-right: 5px;
                 }
                 .suffix {
-                  color:#b0b0b0;
+                  color:$color_b0b0b0;
                   font-size:12px;
                 }
             }
@@ -354,14 +354,14 @@
 
 .longListWrapper .scrollable {
   max-height:151px;
-  border:1px solid #d0cfcf;
+  border:1px solid $color_d0cfcf;
   @include border-radius(1px);
   margin-bottom: 10px;
 
   /*.manufacturerListChecked {
     min-height:25px;
     width:100%;
-    border-bottom:1px solid #d0cfcf;
+    border-bottom:1px solid $color_d0cfcf;
     padding: 10px 5px 0px 10px;
   }*/
 }
@@ -412,9 +412,9 @@
 #sidebar {
   .list-group {
     border-radius: 0;
-    border-color:#ebebeb;
+    border-color:$color_ebebeb;
     li {
-      border-color:#ebebeb;
+      border-color:$color_ebebeb;
       &:first-child {
         border-radius:0;
       }

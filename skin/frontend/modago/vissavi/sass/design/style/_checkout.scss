@@ -208,7 +208,7 @@
     .checkout-warning:not(:empty) {
       font-size: 11px;
       max-width: 450px;
-      background: #F2F1F0;
+      background: $color_F2F1F0;
       padding: 5px 10px;
       position: relative;
       top: 5px;
@@ -238,7 +238,7 @@
         cursor: pointer;
         .payment-provider-logo-wrapper {
           border: 1px solid $bc-primary;
-          background: #fff;
+          background: $color_fff;
           line-height: 80px;
           display: inline-block;
           width: 100%;
@@ -257,11 +257,11 @@
           }
         }
         img {
-          background: #fff;
+          background: $color_fff;
         }
         &:hover {
           .payment-provider-logo-wrapper {
-            border-color: #9F9F9F; //$bc-secondary;
+            border-color: $color_9F9F9F; //$bc-secondary;
           }
 		  span {
 			text-decoration:underline;
@@ -270,7 +270,7 @@
       }
       input[type=radio]:checked + label {
         .payment-provider-logo-wrapper {
-          border-color: #9F9F9F; //$bc-secondary;
+          border-color: $color_9F9F9F; //$bc-secondary;
         }
         span {
           text-decoration: underline
@@ -294,7 +294,7 @@
 	}
 		.panel-body {
 			.panel {
-				background:#fff;
+				background:$color_fff;
 				&.payment-selected {
 					border-color :$bc-secondary;
 				}

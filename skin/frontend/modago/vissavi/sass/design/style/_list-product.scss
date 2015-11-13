@@ -1,8 +1,8 @@
 #items-product {
 	.item {
         .box_listing_product {
-		border:1px solid #ebebeb;
-		background: #fff;
+		border:1px solid $color_ebebeb;
+		background: $color_fff;
 /*		//height:550px;
         @include transition-property(box-shadow);
         @include transition-duration(0.1s);
@@ -10,18 +10,18 @@
         //@include transition-delay(0.2s);
         &:hover,
         &.hover {
-            box-shadow: 0 0 3px 2px #bcbaba;
+            box-shadow: 0 0 3px 2px $color_bcbaba;
             }*/
         }
 	}
 }
 .box_listing_product {
-    background:#fff;
+    background:$color_fff;
     .name_product {
         font-size: 12px;
     }
     .price {
-        color:#fd002a;
+        color:$color_fd002a;
         font-size: 20px;
         font-family:$fontRegular;
         .old {
@@ -40,7 +40,7 @@
 		        margin-right: 3px;
 	        }
             .toolLike {
-                background: #fff;
+                background: $color_fff;
                 text-align: center;
                 background-clip: padding-box;
                 box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);
@@ -54,14 +54,14 @@
                     border-top: 10px solid rgba(0, 0, 0, 0.5);
                 }
                 &:after{
-                    border-top: 10px solid #fff;
+                    border-top: 10px solid $color_fff;
                 }
             }   
         }
     }
     .promotion {
-            background:#aefbe1;
-            border:2px solid #ffd9fc;
+            background:$color_aefbe1;
+            border:2px solid $color_ffd9fc;
             font-size:14px;
             text-align:center;
             color:$gray-dark;
@@ -95,16 +95,16 @@
       text-align:center;
       line-height: 38px;
       font-size: 12px;
-      color:#fff;
+      color:$color_fff;
       outline:none;
       
     }
     &:hover {
-          color:#fff;
+          color:$color_fff;
       }  
     &:hover,
     &.hover {
-        background: #b08944; /* Old browsers */
+        background: $color_b08944; /* Old browsers */
         /* IE9 SVG, needs conditional override of 'filter' to 'none' */
         background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYjA4OTQ0IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzcwNWUyOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
         background: -moz-linear-gradient(-80deg,  #b08944 0%, #705e29 100%); /* FF3.6+ */
@@ -119,7 +119,7 @@
     &:active,
     &:focus,
     &.active {
-        background: #6d5920; /* Old browsers */
+        background: $color_6d5920; /* Old browsers */
         background: -moz-linear-gradient(-80deg,  #6d5920 0%, #af8438 100%); /* FF3.6+ */
         background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#6d5920), color-stop(100%,#af8438)); /* Chrome,Safari4+ */
         background: -webkit-linear-gradient(-80deg,  #6d5920 0%,#af8438 100%); /* Chrome10+,Safari5.1+ */

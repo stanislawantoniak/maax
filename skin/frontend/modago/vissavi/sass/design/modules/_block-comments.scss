@@ -12,7 +12,7 @@
 			.comment_rating {
 			}
 			h3, h5 {
-				color:#242424;
+				color:$color_242424;
 				font-size: 14px;
 				font-family: $fontBlack;
 				font-weight: normal;
@@ -25,7 +25,7 @@
 				color:$color_000;
 			}
 			.meta-label {
-				color:#948551;
+				color:$color_948551;
 			}
 		}
 	}
@@ -37,28 +37,28 @@
 			>span {
 				border:none;
 				line-height: 27px;
-				color:#222222;
+				color:$color_222222;
 				&:hover {
 					background:none;
-					color:#1dd8a0;
+					color:$color_1dd8a0;
 					border:none;
 				}
 			}
 		&:before {
-			background:#222222;
+			background:$color_222222;
 		}
 			&:first-child {
 				font-size: 12px;
-				color:#7c7c7c;
+				color:$color_7c7c7c;
 				span {
 					font-size: 12px;
-					color:#7c7c7c;
+					color:$color_7c7c7c;
 				}
 			}
 
 		&.current {
 			span {
-				color:#1dd8a0;
+				color:$color_1dd8a0;
 			}
 		}
 	}		

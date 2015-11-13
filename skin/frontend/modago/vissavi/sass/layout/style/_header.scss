@@ -141,7 +141,7 @@
         float: left;
         padding: 20px 0 0 15px;
         a {
-          color: #000000;
+          color: $color_000000;
           text-transform: uppercase;
           cursor: pointer;
         }
@@ -162,10 +162,10 @@
     top: 17px;
     left: 0px;
     right: 0px;
-    border-bottom: 1px solid #000000;
-    border-top: 1px solid #000000;
+    border-bottom: 1px solid $color_000000;
+    border-top: 1px solid $color_000000;
   }
   h2 {
-    background-color: #F2F1F0;
+    background-color: $color_f2f1f0;
   }
 }

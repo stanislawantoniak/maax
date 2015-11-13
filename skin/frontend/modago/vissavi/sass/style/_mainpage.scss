@@ -1,5 +1,5 @@
 .nav a {
-    color: #ffffff;
+    color: $color_ffffff;
 }
 
 /*popular shops*/
@@ -18,7 +18,7 @@
                     font-size: 11px;
                     text-align: center;
                 }
-                >span.pop-shop-img-wr {background: #ffffff;
+                >span.pop-shop-img-wr {background: $color_ffffff;
                     text-align: center;
                     img {
                         vertical-align: middle;
@@ -32,7 +32,7 @@
 
 .pop-shop-seemore {
     font-size: 12px;
-    background-color: #000000;
+    background-color: $color_000000;
     background-image:none;
     text-align: center;
     color: #ffffff !important;
@@ -59,8 +59,8 @@
     margin-bottom: 5px;
     text-transform: uppercase;
     overflow:hidden;
-    border-top:1px solid #dedce1;
-    border-bottom:1px solid #dedce1;
+    border-top:1px solid $color_dedce1;
+    border-bottom:1px solid $color_dedce1;
     a {
         font-size: 18px;
     }

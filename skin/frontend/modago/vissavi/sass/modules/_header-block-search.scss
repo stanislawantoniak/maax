@@ -12,7 +12,7 @@
                 height: 26px;
                 width: 119px;
                 padding-left: 15px;
-                color: #000;
+                color: $color_000;
                 //line-height: 26px;
                 font-size: 12px;
                 float: left;
@@ -32,8 +32,8 @@
                 display: block;
                 height: 13px;
                 width: 0px;
-                border-right:1px solid #a4a4a4;
-                border-left:1px solid #e3e3e3;
+                border-right:1px solid $color_a4a4a4;
+                border-left:1px solid $color_e3e3e3;
                 position: absolute;
                 left: 0px;
                 top: 50%;
@@ -52,14 +52,14 @@
 //        	background:url('../images/bg-search.png') 0 0 repeat-x;
 //        	border:none;
 //        	font-size: 12px;
-//        	color:#888888;
+//        	color:$color_888888;
 //        }
 
 //        .sbSelector {
 //        	height:26px;
 //            width: 105px;
 //        	line-height:26px;
-//        	color:#000;
+//        	color:$color_000;
 //        	padding-left: 10px;
 //        	display: inline-block;
 //        	text-decoration: none;
@@ -71,7 +71,7 @@
 
 //        .sbOptionsWrapper {
 //        	width:100%;
-//        	background:#fff;
+//        	background:$color_fff;
 //        	border:none;
 //        	left:0px;
 //        	padding-top:6px;
@@ -84,11 +84,11 @@
 //        			padding: 9px 5px 9px 15px;
 //        			height:auto;
 //        			line-height:auto;
-//        			color:#000;
+//        			color:$color_000;
 //        			border:none;
 //        			&:hover {
 //        				margin:0px;
-//        				background:#f2f1f0;
+//        				background:$color_f2f1f0;
 //        			}
 //        		}
 //

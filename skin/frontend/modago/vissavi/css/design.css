@@ -450,7 +450,7 @@ section.section .main {
   -webkit-border-radius: 0px;
   border-radius: 0px;
   box-shadow: none;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   padding: 0 10px; }
 /* line 16, ../sass/design/modules/_header-block-search.scss */
@@ -1178,7 +1178,7 @@ span.checked {
 /* line 83, ../sass/design/modules/_rwdCarousel.scss */
 #rwd-banners .item {
   background: #fff;
-  color: #FFF;
+  color: #fff;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -1218,7 +1218,7 @@ span.checked {
 #lp-banners {
   display: block;
   position: relative;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   vertical-align: top;
   float: none; }
 /* line 8, ../sass/design/modules/_block-lp-banners.scss */
@@ -1418,14 +1418,14 @@ body.lightbox {
 
 /* line 210, ../sass/design/modules/_gallery_product.scss */
 #lightbox #productGalleryBigMediaOpen .item {
-  color: #FFF;
+  color: #fff;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   text-align: center; }
 /* line 224, ../sass/design/modules/_gallery_product.scss */
 #lightbox #productGalleryThumbMedia .rwd-item, #lightbox #productGalleryThumbMediaOpen .rwd-item {
-  color: #FFF;
+  color: #fff;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -2934,7 +2934,7 @@ x-axis
   background: #6c6c6c; }
 /* line 11, ../sass/design/modules/_header-checkout.scss */
 .checkout #step ol.step_02:before, .checkout #step ol.step_03:before, .checkout #step ol.step_04:before {
-  background: #6FFFCF; }
+  background: #6fffcf; }
 /* line 15, ../sass/design/modules/_header-checkout.scss */
 .checkout #step ol li {
   color: #7c7c7c;
@@ -2965,7 +2965,7 @@ x-axis
 /* line 49, ../sass/design/modules/_header-checkout.scss */
 .checkout #step ol li.current-checkout {
   color: #fff;
-  background: #6FFFCF; }
+  background: #6fffcf; }
 
 /* line 3, ../sass/design/modules/_summary-delivery-payment.scss */
 #checkout .sidebar-deliverypayment dl {
@@ -3107,16 +3107,16 @@ x-axis
 
 /* line 2, ../sass/design/modules/_helpful-vote.scss */
 .helpful-vote .main {
-  border: 1px solid #EBEBEB; }
+  border: 1px solid #ebebeb; }
 /* line 4, ../sass/design/modules/_helpful-vote.scss */
 .helpful-vote .main .bg-w {
-  background: none repeat scroll 0% 0% #FFF; }
+  background: none repeat scroll 0% 0% #fff; }
 /* line 9, ../sass/design/modules/_helpful-vote.scss */
 .helpful-vote header h2 {
   font-weight: 300;
   font-style: normal;
   font-size: 35px;
-  color: #1E1E1E; }
+  color: #1e1e1e; }
 @media (max-width: 767px) {
   /* line 9, ../sass/design/modules/_helpful-vote.scss */
   .helpful-vote header h2 {
@@ -3519,7 +3519,7 @@ body[class*=vendor] #header {
   padding-bottom: 0px; }
 /* line 326, ../sass/design/modules/_rma.scss */
 #step-2 .panel-footer {
-  background-color: #FEFEFE;
+  background-color: #fefefe;
   padding: 5px;
   padding-left: 15px;
   padding-right: 15px; }
@@ -3549,7 +3549,7 @@ body[class*=vendor] #header {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 1px solid #ccc; }
 /* line 371, ../sass/design/modules/_rma.scss */
 #step-2 #pickup-date-form .label-1 {
@@ -3714,7 +3714,7 @@ body[class*=vendor] #header {
   margin-bottom: 10px; }
 /* line 553, ../sass/design/modules/_rma.scss */
 #step-2 #pickup-date-form-panel .choose-time {
-  background-color: #FFFFFF; }
+  background-color: #ffffff; }
 /* line 559, ../sass/design/modules/_rma.scss */
 #step-2 .legend {
   font-size: 15px;
@@ -3831,7 +3831,7 @@ body[class*=vendor] #header {
  */
 /* line 667, ../sass/design/modules/_rma.scss */
 .noUi-background {
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: inset 0 1px 1px #f0f0f0; }
 
 /* line 671, ../sass/design/modules/_rma.scss */
@@ -3848,12 +3848,12 @@ body[class*=vendor] #header {
 /* line 680, ../sass/design/modules/_rma.scss */
 .noUi-target {
   border-radius: 4px;
-  border: 1px solid #D3D3D3;
-  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB; }
+  border: 1px solid #d3d3d3;
+  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #bbb; }
 
 /* line 685, ../sass/design/modules/_rma.scss */
 .noUi-target.noUi-connect {
-  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45), 0 3px 6px -5px #BBB; }
+  box-shadow: inset 0 0 3px rgba(51, 51, 51, 0.45), 0 3px 6px -5px #bbb; }
 
 /* Handles and cursors;
  */
@@ -3867,15 +3867,15 @@ body[class*=vendor] #header {
 
 /* line 697, ../sass/design/modules/_rma.scss */
 .noUi-handle {
-  border: 1px solid #D9D9D9;
+  border: 1px solid #d9d9d9;
   border-radius: 3px;
-  background: #FFF;
+  background: #fff;
   cursor: default;
-  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB; }
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #bbb; }
 
 /* line 706, ../sass/design/modules/_rma.scss */
 .noUi-active {
-  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #BBB; }
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #bbb; }
 
 /* Handle stripes;
  */
@@ -3886,7 +3886,7 @@ body[class*=vendor] #header {
   position: absolute;
   height: 14px;
   width: 1px;
-  background: #E8E7E6;
+  background: #e8e7e6;
   left: 14px;
   top: 6px; }
 
@@ -3909,7 +3909,7 @@ body[class*=vendor] #header {
  */
 /* line 741, ../sass/design/modules/_rma.scss */
 [disabled].noUi-connect, [disabled] .noUi-connect {
-  background: #B8B8B8; }
+  background: #b8b8b8; }
 
 /* line 745, ../sass/design/modules/_rma.scss */
 [disabled] .noUi-handle {
@@ -3924,7 +3924,7 @@ body[class*=vendor] #header {
 
 /* line 765, ../sass/design/modules/_rma.scss */
 .sales-po-newrma .panel .panel-body .current-rma-address, .sales-po-newrma .panel .panel-body .current-rma-date, .sales-po-newrma .panel .panel-body .top-panel, .sales-rma-courier .panel .panel-body .current-rma-address, .sales-rma-courier .panel .panel-body .current-rma-date, .sales-rma-courier .panel .panel-body .top-panel {
-  background: none repeat scroll 0 0 #fcfcfc;
+  background: none repeat scroll 0 0 #FCFCFC;
   border-bottom: 1px solid #eeedf0;
   margin: -15px -15px 0;
   padding: 15px; }
@@ -3974,7 +3974,7 @@ body[class*=vendor] #header {
   display: inline-block;
   padding: 0 24px;
   background-color: white;
-  border: 1px solid #AFAFAF;
+  border: 1px solid #afafaf;
   text-align: center;
   font-size: 25px;
   color: #333333;
@@ -3985,12 +3985,12 @@ body[class*=vendor] #header {
   border-color: #333333; }
 /* line 35, ../sass/design/modules/_listing_pagination.scss */
 .pagination-line .listing-pagination .pages a.page-disabled {
-  color: #C4C4C4;
-  border-color: #E8E8E8; }
+  color: #c4c4c4;
+  border-color: #e8e8e8; }
 /* line 38, ../sass/design/modules/_listing_pagination.scss */
 .pagination-line .listing-pagination .pages a.page-disabled:hover {
-  color: #C4C4C4;
-  border-color: #E8E8E8; }
+  color: #c4c4c4;
+  border-color: #e8e8e8; }
 /* line 46, ../sass/design/modules/_listing_pagination.scss */
 .pagination-line.pagination-bottom {
   text-align: center;
@@ -4068,7 +4068,7 @@ b, strong {
   position: absolute;
   top: 6px;
   left: 8px;
-  color: #FFFFFF; }
+  color: #ffffff; }
 
 /* line 1, ../sass/design/override/_breadcrumb.scss */
 .brandshop-breadcrumps, ol.breadcrumb {
@@ -4152,7 +4152,7 @@ ol.breadcrumb li:not(:first-child):before {
   text-transform: uppercase; }
 /* line 20, ../sass/design/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading h4.panel-title:before {
-  background: none repeat scroll 0% 0% #6FFFCF; }
+  background: none repeat scroll 0% 0% #6fffcf; }
 /* line 28, ../sass/design/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading + .panel-collapse .panel-body {
   font-size: 13px;
@@ -4165,7 +4165,7 @@ ol.breadcrumb li:not(:first-child):before {
 #seller-box-bundle #accordion .panel-default > .panel-heading + .panel-collapse .panel-body .view-store {
   font-size: 11px;
   padding: 3px 10px;
-  color: #FFF; }
+  color: #fff; }
 /* line 44, ../sass/design/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default.last > .panel-heading {
   border-bottom: none; }
@@ -4265,12 +4265,12 @@ div.noscroll {
 
 /* line 10, ../sass/design/style/_global.scss */
 .bg-w {
-  background: #fff000;
+  background: #000fff;
   border-top: 1px solid #ebebeb;
   border-bottom: 1px solid #ebebeb; }
 /* line 14, ../sass/design/style/_global.scss */
 .bg-w#complementary_product, .bg-w#description_product, .bg-w#note_product {
-  border-top: 1px solid #D9D9D9; }
+  border-top: 1px solid #d9d9d9; }
 /* line 19, ../sass/design/style/_global.scss */
 .bg-w.wrapp-section {
   border-top: none; }
@@ -4808,7 +4808,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
           //@include transition-delay(0.2s);
           &:hover,
           &.hover {
-              box-shadow: 0 0 3px 2px #bcbaba;
+              box-shadow: 0 0 3px 2px $color_bcbaba;
               }*/ }
 
 /* line 18, ../sass/design/style/_list-product.scss */
@@ -6374,7 +6374,7 @@ i.flag.hit, i.flag.bestseller {
   padding: 15px 10px;
   font-weight: normal;
   font-family: "latoblack";
-  background: #fcfcfc;
+  background: #FCFCFC;
   letter-spacing: -0.5px; }
 /* line 23, ../sass/design/style/_table.scss */
 .data-table.table-top td, .data-table.table-top th {
@@ -6535,8 +6535,8 @@ i.flag.hit, i.flag.bestseller {
   height: 50px;
   position: fixed;
   right: -50px;
-  background-color: #2E2E2E;
-  color: #FFF;
+  background-color: #2e2e2e;
+  color: #fff;
   font-size: 30px;
   font-weight: 700;
   text-align: center;
@@ -7172,7 +7172,7 @@ body.mypromotions-index-index #content {
 #mypromotions-register-modal #mypromotions-register .mypromotions-register-header .mypromotions-register-header-title .mypromotions-register-bold {
   font-size: 40px;
   letter-spacing: 0;
-  color: #907C3D; }
+  color: #907c3d; }
 /* line 613, ../sass/design/style/_mypromotions.scss */
 #mypromotions-register-modal #mypromotions-register .mypromotions-register-header .mypromotions-register-header-subtitle {
   font-family: latolight, sans-serif;

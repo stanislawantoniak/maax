@@ -113,7 +113,7 @@
 
     @media (max-width: $screen-xs-max){
       width: 100%;
-      border-bottom: solid 2px #F2F1F0;
+      border-bottom: solid 2px $color_F2F1F0;
     }
   }
 
@@ -127,7 +127,7 @@
         position: absolute;
         height: auto;
         top: 0;
-        border-right: solid 2px #F2F1F0;
+        border-right: solid 2px $color_F2F1F0;
         left: -20px;
         bottom: 15px;
       }
@@ -229,7 +229,7 @@
     #category-header-left {
       @media (max-width: $screen-sm-to-smmd-max){
         width: 100%;
-        border-bottom: solid 2px #F2F1F0;
+        border-bottom: solid 2px $color_F2F1F0;
       }
     }
     #category-header-right {
@@ -240,7 +240,7 @@
           position: absolute;
           height: auto;
           top: 0;
-          border-right: solid 2px #F2F1F0;
+          border-right: solid 2px $color_F2F1F0;
           left: -20px;
           bottom: 15px;
         }

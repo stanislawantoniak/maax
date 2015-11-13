@@ -4,11 +4,11 @@
 
 	position: relative;
 	.boxesSlide {
-		background-color: #FFF;
+		background-color: $color_fff;
 		display: inline-block;
 		vertical-align: top;
 		float: none;
-		border: 1px solid #dbdbdb;
+		border: 1px solid $color_dbdbdb;
 		margin: 0 5px 2px 0;
 		&.mobile {
 			margin-bottom: 10px;
@@ -23,7 +23,7 @@
 			background-repeat: no-repeat;
 			background-size: contain;
 			background-position: center center;
-			background-color: #FFFFFF;
+			background-color: $color_ffffff;
 		}
 	}
 	&.boxesSliderHasArrows {

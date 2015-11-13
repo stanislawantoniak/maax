@@ -13,7 +13,7 @@
 			display:inline-block;
 			float:left;
 			line-height: 27px;
-			color:#000;
+			color:$color_000;
 			@media (max-width: $screen-xs-max) {
 				margin-right: 20px
 			}
@@ -26,7 +26,7 @@
 				font-size: 12px!important;
 				font-family: $fontRegular;
 				font-weight: normal;
-				color:#000;
+				color:$color_000;
 				padding:0px;
 				margin: 0px;
 			}

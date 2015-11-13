@@ -167,8 +167,8 @@ section.bottom {
 	}
 }
 .inspiration-strips {
-	border-bottom: 1px solid #000000;
-	border-top: 1px solid #000000;
+	border-bottom: 1px solid $color_000000;
+	border-top: 1px solid $color_000000;
 	height: 5px;
 	position: absolute;
 	z-index: 10;
@@ -260,13 +260,13 @@ section {
 		.typo-main {
 			padding: 20px 45px 30px;
 			font-size: 12px;
-			color: #000;
+			color: $color_000;
 			line-height: 1.5;
 		}
 		.main {
 			padding: 20px 35px 30px;
 			font-size: 12px;
-			color: #000;
+			color: $color_000;
 			line-height: 1.5;
 			@media (max-width: $screen-xs-max) {
 				//display:none;
@@ -300,7 +300,7 @@ section {
 #content-main {
 	> .main {
 		padding:15px;
-		border: solid 1px #ebebeb;
+		border: solid 1px $color_ebebeb;
 	}
 }
 
@@ -356,7 +356,7 @@ section {
 	#content-main {
 		> .main {
 			padding:0 28px 0 26px;
-			border: solid 1px #ebebeb;
+			border: solid 1px $color_ebebeb;
 			@media (max-width: $screen-xs-max) { 
 				padding:0 4px 0 4px;
 				margin: 10px -10px;
@@ -367,7 +367,7 @@ section {
 	#sidebar-secondary {
 		> .main {
 			padding:0 15px;
-			border: solid 1px #ebebeb;
+			border: solid 1px $color_ebebeb;
 			@media (max-width: $screen-xs-max) { 
 				padding:0 4px 0 4px;
 				margin: 10px -10px;

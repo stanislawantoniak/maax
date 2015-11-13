@@ -1,13 +1,13 @@
 .sidebar {
-	border-left:1px solid #ebebeb;
-	border-right:1px solid #ebebeb;
-	background:#fff;
+	border-left:1px solid $color_ebebeb;
+	border-right:1px solid $color_ebebeb;
+	background:$color_fff;
 	border-top: 3px solid $color-accent;
 	font-family: $fontRegular;
 	font-size: 12px;
 
 	.section {
-		border-bottom: 1px solid #d2d2d2;
+		border-bottom: 1px solid $color_d2d2d2;
 		text-align:center;
 		-webkit-backface-visibility: hidden;
 	}
@@ -82,11 +82,11 @@
 			font-size: 12px;
 			float:left;
 			line-height:20px;
-			border:1px solid #ededed;
+			border:1px solid $color_ededed;
 			font-weight: normal;
 		}
 		.fa {
-			color:#949494;
+			color:$color_949494;
 			font-size: 11px;
 		}
 		&:hover {
@@ -109,13 +109,13 @@
   #filter_recommended_products, #filter_product_flag_facet, #filter_flags_facet {
     label {
       span,a {
-      color:#fff;
+      color:$color_fff;
       text-transform: uppercase;
       text-align: center;
       &+.suffix {
         font-weight: normal;
         background-color:transparent !important;
-        color: #b0b0b0;
+        color: $color_b0b0b0;
         font-size: 12px;
         text-align: left;
       }
@@ -125,25 +125,25 @@
 
 		label[for="filter_recommended_products_news"], .new {
 			>span {
-				background:#7fce25;
+				background:$color_7fce25;
 			}
 		}
 
 		label[for="filter_recommended_products_sale"], .sale {
 			>span {
-				background:#de0e59;
+				background:$color_de0e59;
 			}
 		}
 
 		label[for="filter_recommended_products_bestseler"], .bestseller {
 			>span {
-				background:#3ca89b;
+				background:$color_3ca89b;
 			}
 		}
 
 		label[for="filter_recommended_products_propotion"], .promotion {
 			>span {
-				background:#ec4920;
+				background:$color_ec4920;
 			}
 		}
 	}
@@ -188,7 +188,7 @@
 				cursor:pointer;
 				font-size: 13px;
 				.suffix {
-					color: #b0b0b0;
+					color: $color_b0b0b0;
 					font-size: 12px; }
 
 			}
@@ -199,10 +199,10 @@
 					label { 
 						color:$color_000;
 						.suffix {
-							color: #b0b0b0;
+							color: $color_b0b0b0;
 						}
 						img {
-							border:3px solid #999;
+							border:3px solid $color_999;
 							@include border-radius(5px);
 							margin:0px;
 							width:31px;
@@ -223,7 +223,7 @@
 							&+span {
 								text-decoration: none;
 								&.suffix {
-									color: #b0b0b0;
+									color: $color_b0b0b0;
 								}
 							}
 						}
@@ -250,7 +250,7 @@
                 color:$gray-darker;
                 letter-spacing: -.5px;
                 .suffix {
-					color:#b0b0b0;
+					color:$color_b0b0b0;
 					font-size:12px;
                 }
             }
@@ -283,7 +283,7 @@
 }
 
 .longListChecked,.longListWrapper{
-	border:1px solid #d0cfcf;
+	border:1px solid $color_d0cfcf;
 	@include border-radius(1px);
 }
 
@@ -312,7 +312,7 @@
 	}
 	.no-result{
 		padding: 10px;
-		color: #aaa;
+		color: $color_aaa;
 		font-style: italic;
 	}
 }
@@ -321,9 +321,9 @@
 #sidebar {
 	.list-group {
 		border-radius: 0;
-		border-color:#ebebeb;
+		border-color:$color_ebebeb;
 		li {
-			border-color:#ebebeb;
+			border-color:$color_ebebeb;
 			&:first-child {
 				border-radius:0;
 			}

@@ -1,13 +1,13 @@
 /* FOOTER */
  #footer {
-    background-color: #000000;
+    background-color: $color_000000;
 }
 .footer-black {
-    background-color: #000000;
-    color:#ffffff;
+    background-color: $color_000000;
+    color:$color_ffffff;
    a:link,
    a:visited {
-     color:#ffffff;
+     color:$color_ffffff;
      text-transform: uppercase;
    }
    .footer-logo {
@@ -75,15 +75,15 @@
 
 
 .footer-gray-wr {
-    background-color: #2e2e2e;
-    border-top: 1px solid #242424;
+    background-color: $color_2e2e2e;
+    border-top: 1px solid $color_242424;
     line-height: 36px;
     a {
-        color:#828282;
+        color:$color_828282;
     }
 }
 .footer-gray-wr>div>div>div {
-    color: #828282;
+    color: $color_828282;
     font-size: 13px;
 }
 
@@ -112,8 +112,8 @@
             &.footer-black {
 
                     min-height: 117px;
-                    background-color: #000000;
-                    color:#ffffff;
+                    background-color: $color_000000;
+                    color:$color_ffffff;
                     
                 position:relative;
             }

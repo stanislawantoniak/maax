@@ -95,7 +95,7 @@
 				background: none;
 				border-bottom: none;
 				text-transform: uppercase;
-				color:#000;
+				color:$color_000;
 				padding-top: 25px;
 			}
 		.panel-footer {
@@ -361,7 +361,7 @@
 			legend {
 				font-size: 14px;
 				font-weight: bold;
-				color:#000;
+				color:$color_000;
 				padding-bottom: 15px;
 				margin-bottom: 15px;
 				border-color:$gray-lighter;
@@ -587,7 +587,7 @@
 						border:1px solid $bc-primary;
 						margin-bottom: 5px;
 						padding:5px;
-						background: #fff;
+						background: $color_fff;
 						width: 100%;
 						height: auto;
 					}
@@ -597,7 +597,7 @@
 					}
 					&:hover {
 						img {
-							border-color: #9F9F9F;//$bc-secondary;
+							border-color: $color_9f9f9f;//$bc-secondary;
 						}
 						span {
 							//text-decoration: underline
@@ -606,7 +606,7 @@
 				}
 				input[type=radio]:checked + label {
 					img {
-						border-color: #9F9F9F;// $bc-secondary;
+						border-color: $color_9f9f9f;// $bc-secondary;
 					}
 					span {
 						text-decoration: underline
@@ -736,7 +736,7 @@
 			.panel {
 				display:none;
 				margin-bottom:15px;
-				background:#fff;
+				background:$color_fff;
 				&.selected {
 					border-color :$bc-secondary;
 					.selected_bank {

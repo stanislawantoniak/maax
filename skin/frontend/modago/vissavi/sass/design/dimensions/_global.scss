@@ -1,6 +1,6 @@
 .inspiration-strips {
-	border-bottom: 1px solid #000000;
-	border-top: 1px solid #000000;
+	border-bottom: 1px solid $color_000000;
+	border-top: 1px solid $color_000000;
 }
 section {
 	&.section {
@@ -30,18 +30,18 @@ section {
 }
 #content-main {
 	> .main {
-		border: solid 1px #ebebeb;
+		border: solid 1px $color_ebebeb;
 	}
 }
 .node-type-shopping-cart {
 	#content-main {
 		> .main {
-			border: solid 1px #ebebeb;
+			border: solid 1px $color_ebebeb;
 		}
 	}
 	#sidebar-secondary {
 		> .main {
-			border: solid 1px #ebebeb;
+			border: solid 1px $color_ebebeb;
 		}
 	}
 }

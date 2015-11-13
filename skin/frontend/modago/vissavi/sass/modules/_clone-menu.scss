@@ -2,12 +2,12 @@
 /* CLONE MENU */
 
 #clone_submenu {
-    background: #f8f7f5;
-    box-shadow: 0 2px 0 #ebebeb;
+    background: $color_f8f7f5;
+    box-shadow: 0 2px 0 $color_ebebeb;
     .view-all-category {
         font-size: 14px;
         text-transform: lowercase;
-        color:#7b6c35;
+        color:$color_7b6c35;
         text-decoration: underline;
         font-style: italic;
         float:right;
@@ -22,31 +22,31 @@
         background:transparent;
         list-style: none;
             a {
-                color:#656565;
+                color:$color_656565;
                 text-transform: uppercase;
             }
 
             dl {
                 //float:left;
                 dt {
-                    color:#000;
+                    color:$color_000;
                   a:link,
                   a:visited {
                     font-size:14px;
                     font-weight: 900;
-                    color:#000;
+                    color:$color_000;
                   }
                   a:hover {
                       text-decoration: underline;
                   }
                 }
                 dd {
-                    color:#000;
+                    color:$color_000;
                     a:link,
                     a:visited {
                     font-size:12px;
                     font-weight: 400;
-                    color:#000;
+                    color:$color_000;
                   }
                   a:hover {
                     text-decoration: underline;
@@ -116,10 +116,10 @@
         }
         a.closeSubMenu:link,
         a.closeSubMenu:visited { 
-//            background:#fff;
+//            background:$color_fff;
 //            @include border-radius(3px);
 //            padding:3px 10px;
-//            color:#000;
+//            color:$color_000;
             float:right;
             margin-right: 15px;
             border-radius:0;

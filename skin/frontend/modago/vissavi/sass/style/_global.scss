@@ -20,9 +20,9 @@ div.noscroll {
 }
 }
 .bg-w {
-	background:#fff;
-	border-top: 1px solid #ebebeb;
-	border-bottom: 1px solid #ebebeb;
+	background:$color_fff;
+	border-top: 1px solid $color_ebebeb;
+	border-bottom: 1px solid $color_ebebeb;
 	&#complementary_product,
 	&#description_product,
 	&#note_product {
@@ -33,7 +33,7 @@ div.noscroll {
 	}
 }
 .border-gray-1x {
-border: 1px solid #dbdbdb;
+border: 1px solid $color_dbdbdb;
 border-radius: 2px;
 }
 
@@ -48,7 +48,7 @@ border-radius: 2px;
 .lh-45 {line-height: 48px;}
 .clr {clear: both}
 .talcen {text-align: center;}
-.border1px-rd2-img-gray {border: 1px solid #dbdbdb;border-radius: 2px;}
+.border1px-rd2-img-gray {border: 1px solid $color_dbdbdb;border-radius: 2px;}
 
 
 #content {
@@ -85,7 +85,6 @@ border-radius: 2px;
 		}
 		//padding-top: 2px;
 		.overlay-color {
-			//border-top:1px solid #CFCDD2;
 		}
 	}
 	.blockCarouselTop {

@@ -7,8 +7,8 @@
           text-align:center;
           line-height: 38px;
           font-size:12px;
-          color:#313131;
-          background:#fff;
+          color:$color_313131;
+          background:$color_fff;
           font-weight: normal;
           a {
             margin-left: 2px;
@@ -16,16 +16,16 @@
         }
         &:hover {
           span {
-            background-color:#999;
-            border-color:#999;
-            color:#fff;
+            background-color:$color_999;
+            border-color:$color_999;
+            color:$color_fff;
           }
            
           }
         input[type=checkbox]:hover + span  {
-            background-color:#999;
-            border-color:#999;
-            color:#fff;
+            background-color:$color_999;
+            border-color:$color_999;
+            color:$color_fff;
         }
         input[type=checkbox]:checked {
           outline:none!important;
@@ -35,7 +35,7 @@
             background:$color_000;
             border-color:$color_000;
 			a:link, a:visited {
-				color:#fff;
+				color:$color_fff;
 			}
         }
       }
@@ -43,7 +43,7 @@
 .filter-longlist {
 
       input[type="text"] {
-        border:1px solid #d6d6d6;
+        border:1px solid $color_d6d6d6;
         &:focus {
           outline:none;
         }
@@ -93,7 +93,7 @@
       }
       label {
         > span {
-          background:#fff;
+          background:$color_fff;
           @include border-radius(5px);
           span {
             border:1px solid $gray;
@@ -101,7 +101,7 @@
           
         }
         [type="checkbox"]:hover + span {
-          background:#999;
+          background:$color_999;
           cursor:pointer;
         }
         [type="checkbox"]:checked + span,
@@ -109,7 +109,7 @@
           background:$color_000;
         }
         &:hover span {
-          background:#999;
+          background:$color_999;
           cursor:pointer;
         }
       }
@@ -120,7 +120,7 @@
   li {
     
     &.lastChecked {
-      border-bottom: 1px solid #d0cfcf;
+      border-bottom: 1px solid $color_d0cfcf;
      
     }
   }

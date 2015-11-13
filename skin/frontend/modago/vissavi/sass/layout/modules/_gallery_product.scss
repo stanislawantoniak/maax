@@ -243,7 +243,7 @@
         }
         .rwd-item{
             padding: 5px 0px;
-            color: #FFF;
+            color: $color_fff;
             width: 67px!important;
             float: none;
         }
@@ -407,8 +407,8 @@
 		#lightbox-header {
 			position: fixed;
 			width: 100%;
-			border: 10px solid #FFF;
-			background-color: #FFF;
+			border: 10px solid $color_fff;
+			background-color: $color_fff;
 			box-sizing: border-box;
 			z-index: 100;
 			img {
@@ -457,7 +457,7 @@
 					position: relative;
 					&::after {
 						content: '';
-						background: #FFF;
+						background: $color_fff;
 						right: 0;
 						top: 0;
 						width: 25px;

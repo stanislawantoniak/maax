@@ -7,14 +7,14 @@
 			> .panel-heading {
 				background:none;
 				border-radius: 0;
-				border-top:1px solid #d9d9d9;
-				border-bottom:1px solid #d9d9d9;
+				border-top:1px solid $color_d9d9d9;
+				border-bottom:1px solid $color_d9d9d9;
 				padding: 14px 15px 12px 15px;
 				h4 {
 					padding:0px;
 					&.panel-title {
 						font-size: 11px;
-						color:#000;
+						color:$color_000;
 						position:relative;
 						font-weight: normal;
 						 font-family: $fontRegular;
@@ -32,7 +32,7 @@
 					    display: block;
 					    width: 18px;
 					    height: 18px;
-					    background: none repeat scroll 0% 0% #6FFFCF;
+					    background: none repeat scroll 0% 0% $color_6fffcf;
 					    position: absolute;
 					    left: -9px;
 						top: -4px;
@@ -48,7 +48,7 @@
 					.panel-body {
 						border:none;
 						font-size: 11px;
-						color:#000;
+						color:$color_000;
 						text-align: left;
 						padding-left: 40px;
 						padding-right: 40px;
@@ -58,11 +58,11 @@
 							list-style: none;
 						}
 						.view-store {
-							//background: none repeat scroll 0% 0% #313131;
-							//border: 1px solid #C5C5C5;
+							//background: none repeat scroll 0% 0% $color_313131;
+							//border: 1px solid $color_c5c5c5;
 							font-size: 11px;
 							padding: 3px 10px;
-							color: #FFF;
+							color: $color_fff;
 							display: inline-block;
 							float: right;
 							margin-right: 2px;

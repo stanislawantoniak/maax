@@ -36,11 +36,11 @@
 			}
 		}
 		.view-store {
-			background:#313131;
-			border:1px solid #c5c5c5;
+			background:$color_313131;
+			border:1px solid $color_c5c5c5;
 			font-size: 11px;
 			padding: 3px 10px;
-			color:#fff;
+			color:$color_fff;
 			display:inline-block;
 			&:hover {
 				text-decoration: underline;
@@ -62,7 +62,7 @@
 						right: 5px;
 						top: 47px;
 						font-size: 23px;
-						color:#000;
+						color:$color_000;
 						text-transform: uppercase;
 						margin-top:-14px;
 						padding: auto;

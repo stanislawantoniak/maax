@@ -23,21 +23,21 @@
 				display: inline-block;
 				padding: 0 24px;
 				background-color: white;
-				border: 1px solid #AFAFAF;
+				border: 1px solid $color_afafaf;
 				text-align: center;
 				font-size: 25px;
-				color: #333333;
+				color: $color_333333;
 				height: 30px;
 				line-height: 29px;
 				&:hover {
-					border-color: #333333;
+					border-color: $color_333333;
 				}
 				&.page-disabled {
-					color: #C4C4C4;
-					border-color: #E8E8E8;
+					color: $color_c4c4c4;
+					border-color: $color_e8e8e8;
 					&:hover {
-						color: #C4C4C4;
-						border-color: #E8E8E8;
+						color: $color_c4c4c4;
+						border-color: $color_e8e8e8;
 					}
 				}
 			}
@@ -58,7 +58,7 @@
 				background-color: black;
 				color: white;
 				&:hover {
-					background: #b08944;
+					background: $color_b08944;
 					/* Old browsers */
 					/* IE9 SVG, needs conditional override of 'filter' to 'none' */
 					background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYjA4OTQ0IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzcwNWUyOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);

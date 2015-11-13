@@ -4,7 +4,7 @@ b, strong {
 }
 
 .browsehappy {
-	background:#fff;
+	background:$color_fff;
 	text-align: center;
 	color:red;
 }
@@ -12,7 +12,7 @@ b, strong {
 .modal-content {
 	button.close {
 		opacity: 1;
-		color: #fff;
+		color: $color_fff;
 		text-shadow: none;
 		height: 39px;
 		width: 39px;
@@ -28,7 +28,7 @@ b, strong {
 			position: absolute;
 			top: 6px;
 			left: 8px;
-			color: #FFFFFF;
+			color: $color_ffffff;
 		}
 	}
 }

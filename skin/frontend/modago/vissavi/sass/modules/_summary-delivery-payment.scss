@@ -135,7 +135,7 @@
 				
 
 				.stara_cena {
-					color:#757575;
+					color:$color_757575;
 					@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max){
 						display:block;
 						text-align: right;
@@ -192,7 +192,7 @@
 				font-size: 13px;
 				.stara_cena {
 					font-size: 11px;
-					color:#757575;
+					color:$color_757575;
 				}
 			}
 			.ilosc {
@@ -210,7 +210,7 @@
 		&.panel-custom {
 			&#sumary_total_amount {
 				text-align: right;
-				background:#f8f8f7;
+				background:$color_f8f8f7;
 				.lb {
 					//width:59px;
 					text-align:right;

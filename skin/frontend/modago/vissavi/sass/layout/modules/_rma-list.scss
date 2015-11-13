@@ -15,9 +15,9 @@
 		}
 	}
 	.rma-table {
-		border: 1px solid #bfbfbf;
+		border: 1px solid $color_bfbfbf;
 		thead tr th, tbody tr td {
-			background-color: #FFFFFF;
+			background-color: $color_ffffff;
 			border: none;
 			vertical-align: top;
 		}
@@ -26,7 +26,7 @@
 			text-transform: uppercase;
 		}
 		tbody tr td {
-			border-top: 1px solid #ebebeb;
+			border-top: 1px solid $color_ebebeb;
 			&:nth-child(4) {
 				padding: 0;
 				max-width: 240px;
@@ -83,7 +83,7 @@
 						padding-left: 5px;
 						padding-right: 5px;
 						img {
-							border: 1px solid #cccccc;
+							border: 1px solid $color_cccccc;
 						}
 						width: 42px;
 					}

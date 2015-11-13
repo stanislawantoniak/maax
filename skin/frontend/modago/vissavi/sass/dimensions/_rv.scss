@@ -43,13 +43,13 @@
 	}
 	.item {
 		margin:0 20px;
-		background: #fff;
-		color: #515151;
+		background: $color_fff;
+		color: $color_515151;
 		@media (max-width: $screen-xs-max) {
 			margin:0 5px;
 		}
 		img {
-			border:1px solid #f5f6f6;
+			border:1px solid $color_f5f6f6;
 		}
 		a {
 			&:hover {

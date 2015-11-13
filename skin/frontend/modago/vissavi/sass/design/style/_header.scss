@@ -1,7 +1,7 @@
 @import "../../other/variable";
 .header_top {
-    background-color: #000000;
-	border-bottom: 3px solid #C6A662;
+    background-color: $color_000000;
+	border-bottom: 3px solid $color_C6A662;
 }
 
 /* USER MENU */
@@ -11,7 +11,7 @@
                 text-align: center;
                 text-transform:uppercase; 
                 font-size: 9px;
-                color:#fff;
+                color:$color_fff;
                 text-decoration: none;
             &:hover {
                 background: none;
@@ -27,15 +27,15 @@
 /* HEADER BOTTOM */
 .header_bottom {
 //    background:#fff url('../images/bg-menu.png') 0 0 repeat-x;
-  background: #fff;
-    border-bottom:1px solid #dddce1;
+  background: $color_fff;
+    border-bottom:1px solid $color_dddce1;
      #nav_desc {
         &.navigation > li > a:hover,
         &.navigation > li > a.active,
         &.navigation > li > a.forceActive {
             background:none;
             &:before {
-                background:#73f2ba;
+                background:$color_73f2ba;
             }
         }
     }
@@ -91,7 +91,7 @@
         > li {
             > a:link,
             > a:visited {
-            border-top:1px solid #dedce1;
+            border-top:1px solid $color_dedce1;
             position:relative;
             line-height: 29px;
 
@@ -103,14 +103,14 @@
             }
             ul {
                 &.open {
-                    border-top:1px solid #dedce1;
+                    border-top:1px solid $color_dedce1;
                   padding-left:0px !important;
                 }
             }
             li {
 
                 a {
-                   border-top:1px solid #f7f6f7;  
+                   border-top:1px solid $color_f7f6f7;  
                    line-height: 26px;
                 }
                
@@ -173,7 +173,7 @@
         > li {
             > a:link,
             > a:visited {
-            border-top:1px solid #dedce1;
+            border-top:1px solid $color_dedce1;
             line-height: 29px;
             }
             &:first-child {
@@ -183,14 +183,14 @@
             }
             ul {
                 &.open {
-                    border-top:1px solid #dedce1;
+                    border-top:1px solid $color_dedce1;
                     padding-left: 0px;
                 }
             }
             li {
 
                 a {
-                   border-top:1px solid #f7f6f7; 
+                   border-top:1px solid $color_f7f6f7; 
                    line-height: 26px;
 
                 }

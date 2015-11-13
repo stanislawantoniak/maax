@@ -2,7 +2,7 @@
 	position:absolute;
 	width:100%;
 	height:100%;
-	background:#fff;
+	background:$color_fff;
 	top:0px;
 	left:0px;
 	z-index: 2000;
@@ -88,7 +88,7 @@
 		.carousel-navigation {
 		    height: 369px;
 		    width: 77px;
-		    background: #fff;
+		    background: $color_fff;
 		    margin-left: 0;
 		    ul {
 		    	width: 70px;
@@ -99,7 +99,7 @@
 			    cursor: pointer;
 				position:relative;
 				margin: 2px 5px!important;
-				border:1px solid #f0f0f0;
+				border:1px solid $color_f0f0f0;
 
 			    &.active {
 
@@ -109,17 +109,17 @@
 			    		position:absolute;
 			    		left:0px;
 			    		top:0px;
-			    		-moz-box-shadow:    inset 0 0 0 3px #e5621b;
-			    		-webkit-box-shadow: inset 0 0 0 3px #e5621b;
-			    		box-shadow:         inset 0 0 0 3px #e5621b;
+			    		-moz-box-shadow:    inset 0 0 0 3px $color_e5621b;
+			    		-webkit-box-shadow: inset 0 0 0 3px $color_e5621b;
+			    		box-shadow:         inset 0 0 0 3px $color_e5621b;
 			    	}
 			    	img {
-					   border:1px solid #999;
+					   border:1px solid $color_999;
 					}
 			    }
 			    &:hover {
 			    	img {
-			    		border:1px solid #999;
+			    		border:1px solid $color_999;
 			    	}
 			    }
 			}

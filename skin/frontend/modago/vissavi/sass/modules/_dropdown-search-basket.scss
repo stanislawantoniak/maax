@@ -10,12 +10,12 @@
     min-width: 160px;
     max-width: 370px;
     list-style: none;
-    background: #FFF;
+    background: $color_fff;
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
     padding: 4px 0;
     margin: 0;
-    background: #2a2a2a;
-    color:#fff;
+    background: $color_2a2a2a;
+    color:$color_fff;
 }
 
 
@@ -29,7 +29,7 @@
     }
     .searchDropdown {
         width: 320px;
-        background: #2a2a2a;
+        background: $color_2a2a2a;
         @include border-radius(0px);
         top: 54px;
         padding: 20px;
@@ -42,13 +42,13 @@
             input[type="text"] {
                 height: 26px;
                 width: 100%  !important;
-                color: #7f7f7f;
-                background-color:#fff;
+                color: $color_7f7f7f;
+                background-color:$color_fff;
                 line-height: 26px;
                 font-size: 12px;
                 float: none;
-                border:1px solid #e2e1e1;
-                border-right:1px solid #e2e1e1;
+                border:1px solid $color_e2e1e1;
+                border-right:1px solid $color_e2e1e1;
                  @include border-radius(0px);
                 box-shadow: none;
                 margin-bottom: 15px;
@@ -57,12 +57,12 @@
             select {
              height: 34px;
             width: 100%;
-            color: #7f7f7f;
+            color: $color_7f7f7f;
             line-height: 34px;
             font-size: 12px;
             float: none;
-            border:1px solid #e2e1e1;
-            border-right:1px solid #e2e1e1;
+            border:1px solid $color_e2e1e1;
+            border-right:1px solid $color_e2e1e1;
              @include border-radius(0px);
               margin-bottom: 15px;
          }
@@ -92,7 +92,7 @@
     top:56px !important;
     right:5px !important;
     left:auto !important;
-	a{color: #fff; }
+	a{color: $color_fff; }
     @include max-screen($screen-sm-max) {
         top:40px !important;
     }
@@ -119,7 +119,7 @@
                 padding: 8px 0;
                 vertical-align: top;
                 img {
-                    border: 1px solid #adadad;
+                    border: 1px solid $color_adadad;
                 }
                 &+td {
                     padding-left: 5px;
@@ -137,7 +137,7 @@
         padding: 25px 15px;
         margin: 25px 0 0 0;
         font-size: 11px;
-        border-top:1px solid #949494;
+        border-top:1px solid $color_949494;
             ul {
                 float:left;
             }
@@ -161,7 +161,7 @@
             padding: 8px 0;
             vertical-align: top;
             img {
-                border: 1px solid #adadad;
+                border: 1px solid $color_adadad;
             }
             &+td {
                 padding-left: 5px;

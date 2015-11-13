@@ -85,7 +85,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
     margin-top: 5px; } }
 /* line 68, ../sass/slick/_topslider.scss */
 #topSlider .slick-track {
-  background-color: #FFFFFF; }
+  background-color: #ffffff; }
 /* line 71, ../sass/slick/_topslider.scss */
 #topSlider ul.slick-dots {
   position: absolute;
@@ -106,7 +106,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   font-size: 0;
   width: 10px;
   height: 10px;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   border-radius: 8px;
   background-color: transparent;
   padding: 0;
@@ -116,7 +116,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   left: 0; }
 /* line 97, ../sass/slick/_topslider.scss */
 #topSlider ul.slick-dots li.slick-active button {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   width: 12px;
   height: 12px;
   margin: -1px; }
@@ -131,7 +131,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   position: relative; }
 /* line 6, ../sass/slick/_boxesslider.scss */
 #boxesSlider .boxesSlide {
-  background-color: #FFF;
+  background-color: #fff;
   display: inline-block;
   vertical-align: top;
   float: none;
@@ -151,7 +151,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
-  background-color: #FFFFFF; }
+  background-color: #ffffff; }
 /* line 29, ../sass/slick/_boxesslider.scss */
 #boxesSlider.boxesSliderHasArrows {
   padding-left: 40px;

@@ -1,6 +1,6 @@
 #topSlider {
 	display: none;
-	border: 1px solid #dbdbdb;
+	border: 1px solid $color_dbdbdb;
 	&.slick-initialized {
 		display: block;
 	}
@@ -66,7 +66,7 @@
 		}
 	}
 	.slick-track {
-		background-color: #FFFFFF;
+		background-color: $color_ffffff;
 	}
 	ul.slick-dots {
 		position: absolute;
@@ -85,7 +85,7 @@
 				font-size: 0;
 				width: 10px;
 				height: 10px;
-				border: 1px solid #FFFFFF;
+				border: 1px solid $color_ffffff;
 				border-radius: 8px;
 				background-color: transparent;
 				padding: 0;
@@ -95,7 +95,7 @@
 				left: 0;
 			}
 			&.slick-active button {
-				background-color: #FFFFFF;
+				background-color: $color_ffffff;
 				width: 12px;
 				height: 12px;
 				margin: -1px;

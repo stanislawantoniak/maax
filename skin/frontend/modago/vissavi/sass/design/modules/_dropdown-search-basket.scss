@@ -2,8 +2,8 @@
 .dropdown .dropdown-panel {
 	list-style: none;
 	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-	background: #2a2a2a;
-	color: #fff;
+	background: $color_2a2a2a;
+	color: $color_fff;
 }
 
 #dropdown-basket {
@@ -13,7 +13,7 @@
 		td {
 			vertical-align: top;
 			img {
-				border: 1px solid #adadad;
+				border: 1px solid $color_adadad;
 			}
 
 			p {
@@ -25,7 +25,7 @@
 	.summary_basket {
 		display: none;
 		font-size: 11px;
-		border-top: 1px solid #949494;
+		border-top: 1px solid $color_949494;
 		ul, li {
 			@include no-bullet;
 		}

@@ -194,7 +194,7 @@
 .rma-cancel{
 	text-align: right;
 	a{
-		color: #bbb;
+		color: $color_bbb;
 		text-decoration: underline;
 	}
 }
@@ -324,7 +324,7 @@
 		padding-bottom: 0px;
 	}
 	.panel-footer {
-		background-color: #FEFEFE;
+		background-color: $color_fefefe;
 		padding: 5px;
 		padding-left: 15px;
 		padding-right: 15px;
@@ -335,8 +335,8 @@
 		padding-right: 3px;
 		-webkit-box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
 		box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
-		border: 1px solid #bcbcbc;
-		color: #000000;
+		border: 1px solid $color_bcbcbc;
+		color: $color_000000;
 	}
 
 	#pickup-date-form {
@@ -359,12 +359,12 @@
 			padding: 15px 0px;
 			font-size: 12px;
 			line-height: 20px;
-			color: #333;
+			color: $color_333;
 			text-align: center;
 			vertical-align: middle;
 			cursor: pointer;
-			background-color: #FFFFFF;
-			border: 1px solid #ccc;
+			background-color: $color_ffffff;
+			border: 1px solid $color_ccc;
 
 		}
 
@@ -537,7 +537,7 @@
 	}
 
 	#wrapper-choosen-pickup-time {
-		background-color: #f5f5f5;
+		background-color: $color_f5f5f5;
 		padding: 7px;
 		line-height: 25px;
 
@@ -551,7 +551,7 @@
 	#pickup-date-form-panel {
 
 		.choose-time {
-			background-color: #FFFFFF;
+			background-color: $color_ffffff;
 
 		}
 	}
@@ -665,8 +665,8 @@
 /* Styling;
  */
 .noUi-background {
-	background: #FFFFFF;
-	box-shadow: inset 0 1px 1px #f0f0f0;
+	background: $color_ffffff;
+	box-shadow: inset 0 1px 1px $color_f0f0f0;
 }
 .noUi-connect {
 	background: $color-accent;
@@ -679,11 +679,11 @@
 }
 .noUi-target {
 	border-radius: 4px;
-	border: 1px solid #D3D3D3;
-	box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+	border: 1px solid $color_d3d3d3;
+	box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px $color_bbb;
 }
 .noUi-target.noUi-connect {
-	box-shadow: inset 0 0 3px rgba(51,51,51,0.45), 0 3px 6px -5px #BBB;
+	box-shadow: inset 0 0 3px rgba(51,51,51,0.45), 0 3px 6px -5px $color_bbb;
 }
 
 /* Handles and cursors;
@@ -695,18 +695,18 @@
 	cursor: n-resize;
 }
 .noUi-handle {
-	border: 1px solid #D9D9D9;
+	border: 1px solid $color_d9d9d9;
 	border-radius: 3px;
-	background: #FFF;
+	background: $color_fff;
 	cursor: default;
 	box-shadow: inset 0 0 1px #FFF,
 		inset 0 1px 7px #EBEBEB,
-		0 3px 6px -3px #BBB;
+		0 3px 6px -3px $color_bbb;
 }
 .noUi-active {
 	box-shadow: inset 0 0 1px #FFF,
 		inset 0 1px 7px #DDD,
-		0 3px 6px -3px #BBB;
+		0 3px 6px -3px $color_bbb;
 }
 
 /* Handle stripes;
@@ -718,7 +718,7 @@
 	position: absolute;
 	height: 14px;
 	width: 1px;
-	background: #E8E7E6;
+	background: $color_e8e7e6;
 	left: 14px;
 	top: 6px;
 }
@@ -740,7 +740,7 @@
  */
 [disabled].noUi-connect,
 [disabled] .noUi-connect {
-	background: #B8B8B8;
+	background: $color_b8b8b8;
 }
 [disabled] .noUi-handle {
 	cursor: not-allowed;
@@ -763,7 +763,7 @@
   .panel {
     .panel-body {
       .current-rma-address, .current-rma-date, .top-panel {
-        background: none repeat scroll 0 0 #fcfcfc;
+        background: none repeat scroll 0 0 $panel-top;
         border-bottom: 1px solid $gray-lighter;
         margin: -15px -15px 0;
         padding: 15px;

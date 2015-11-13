@@ -12,7 +12,7 @@
 			float:left;
         }
         .table-header-group {
-        	border-bottom: 1px solid #ebeaed;
+        	border-bottom: 1px solid $color_ebeaed;
         	@media (max-width: $screen-xs-max) {
         		border:none;
         		margin-bottom: -5px;
@@ -88,7 +88,7 @@
     }
 
 .node-type-shopping-cart {
-	color:#000;
+	color:$color_000;
 	#content-main {
 		section {
 			> header {
@@ -180,7 +180,7 @@
 					figure {
 						float:left;
 						width:55px;
-						border:1px solid #f1f1f1;
+						border:1px solid $color_f1f1f1;
 						margin-right: 3.168567807351077%;
 						@media (max-width: $screen-xs-max) {
 							margin-right:12px;
@@ -193,7 +193,7 @@
 						min-height: 69px;
 						.product_name {
 							font-size: 16px;
-							color:#000;
+							color:$color_000;
 							margin-bottom: 5px;
 						}
 						.product_size {
@@ -221,7 +221,7 @@
 						position:relative;
 						span {
 							font-size: 11px;
-							color:#565655;
+							color:$color_565655;
 							text-decoration:line-through;
 							margin-right: 10px;
 		                	@media (max-width: $screen-xs-max) {
@@ -270,7 +270,7 @@
 					.table-cell {
 						display:block;
 						&.td {
-							border-top: 1px solid #ebeaed;
+							border-top: 1px solid $color_ebeaed;
 						}
 						&.cell-01 {
 							width:31.93916349809886%;
@@ -347,7 +347,7 @@
 
 }
 .bubble {
-		background:#e5e5e5;
+		background:$color_e5e5e5;
 		@include border-radius(5px);
 		width:187px;
 		text-align: center;
@@ -495,7 +495,7 @@
 					height: image-height(sprite-file($formMap, bg-form-text-coupon))+2;
 					line-height: image-height(sprite-file($formMap, bg-form-text-coupon))+2;
 					max-width: image-width(sprite-file($formMap, bg-form-text-coupon));
-					border:1px solid #d6d6d6;
+					border:1px solid $color_d6d6d6;
 					padding:0px 7px;
 					font-size: 12px;
 					width:56.38629283489097%;
@@ -505,12 +505,12 @@
 				}
 				input[type="submit"] {
 					@include inline-block;
-					background:#000;
+					background:$color_000;
 					line-height: 22px;
 					height: 22px;
 					width:72px;
 					border:none;
-					color:#fff;
+					color:$color_fff;
 					font-size: 12px;
 					text-align: center;
 					text-transform: uppercase;
@@ -538,8 +538,8 @@
 					box-shadow:0 0 9px rgba(1,1,1, 0.21);
 					padding-right: 20px;
 					position:relative;
-					border-left: 1px solid #ededed;
-					border-right: 1px solid #ededed;
+					border-left: 1px solid $color_ededed;
+					border-right: 1px solid $color_ededed;
 					width:195px;
 					display:block;
 					i {
@@ -554,7 +554,7 @@
 		}
 		#sum_price {
 			text-transform: uppercase;
-			color:#000;
+			color:$color_000;
 			margin-bottom: 13px;
 			.val_value_sum_price {
 				@include inline-block;
@@ -695,7 +695,7 @@
 		figure {
 			float:left;
 			width:55px;
-			border:1px solid #f1f1f1;
+			border:1px solid $color_f1f1f1;
 			margin-right: 3.168567807351077%;
 			@media (max-width: $screen-xs-max) {
 				margin-right:12px;
@@ -710,7 +710,7 @@
 			margin-left: 64px;
 			.product_name {
 				font-size: 16px;
-				color:#000;
+				color:$color_000;
 				margin-bottom: 5px;
 				@media(min-width: 1100px) {
 					padding-right: 25px;
@@ -788,7 +788,7 @@
 					margin-left: 0px !important;
 					width: 80px !important;
 					font-size: 11px;
-					color: #565655;
+					color: $color_565655;
 					text-decoration: line-through;
 					margin-right: 10px;
 				}

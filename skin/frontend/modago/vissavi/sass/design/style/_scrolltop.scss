@@ -3,8 +3,8 @@
 	height: 50px;
 	position: fixed;
 	right: -50px;
-	background-color: #2E2E2E;
-	color: #FFF;
+	background-color: $color_2e2e2e;
+	color: $color_fff;
 	font-size: 30px;
 	font-weight: 700;
 	text-align: center;
@@ -17,6 +17,6 @@
 		opacity: 1;
 	}
 	&.hover {
-		background-color: #999999;
+		background-color: $color_999999;
 	}
 }

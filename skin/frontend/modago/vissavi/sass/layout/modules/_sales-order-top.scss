@@ -32,7 +32,7 @@
 	}
 	.sales-order-shipment,.sales-order-info {
 		padding: 15px 10px 25px 20px;
-		border: solid 1px #ebebeb;
+		border: solid 1px $color_ebebeb;
 		@media (max-width: 400px) {
 			padding-left: 10px;
 		}

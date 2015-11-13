@@ -1,11 +1,11 @@
 #seller-box-bundle,
 .descripionProduct-box-bundle {
-	border:1px solid #d9d9d9;
+	border:1px solid $color_d9d9d9;
 	padding:9px 9px 0px;
 	text-align:center;
 	.seller-label {
 		font-size: 18px;
-		color:#1d1e1c;
+		color:$color_1d1e1c;
 		text-transform: uppercase;
 		@media (max-width: $screen-xs-max) {
 			text-align: left;
@@ -22,7 +22,7 @@
 		}
 	}
 	.block {
-		border-top:1px solid #ebeaed;
+		border-top:1px solid $color_ebeaed;
 	}
 	.seller-box-description  {
 		&.block {
@@ -46,7 +46,7 @@
 				span.note {
 					&+span {
 						font-size: 11px;
-						color:#646464;
+						color:$color_646464;
 						font-family: $fontRegular;
 						line-height: 13px;
 					}	
@@ -60,7 +60,7 @@
 .descripionProduct-box-bundle {
 	.descripionProduct-label {
 		font-size: 18px;
-		color:#1d1e1c;
+		color:$color_1d1e1c;
 		text-transform: uppercase;
 	}
 }

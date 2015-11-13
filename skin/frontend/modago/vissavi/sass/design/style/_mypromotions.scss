@@ -31,13 +31,13 @@
 }
 
 #promo_list {
-  background-color: #F2F1F0;
+  background-color: $color_F2F1F0;
   margin: 0 -15px;
   .promo_item {
     .promo_item_box {
       cursor: pointer;
-      border: 1px solid #ebebeb;
-      background: #fff;
+      border: 1px solid $color_ebebeb;
+      background: $color_fff;
       padding: 0 0 0 0;
 
       @include transition-property(box-shadow);
@@ -46,7 +46,7 @@
       //@include transition-delay(0.2s);
       &:hover,
       &.hover {
-        box-shadow: 0 0 3px 2px #bcbaba;
+        box-shadow: 0 0 3px 2px $color_bcbaba;
       }
     }
     padding: 10px 4px 0 4px;
@@ -63,7 +63,7 @@
       }
     }
     .promo_info {
-      border: 1px solid #ebebeb;
+      border: 1px solid $color_ebebeb;
       &:hover {
         .promo_see_more {
           text-decoration: underline;
@@ -73,7 +73,7 @@
         display: block;
         height: 52px;
         margin: 0 auto;
-        border: 1px solid #ebebeb;
+        border: 1px solid $color_ebebeb;
         width: 128px;
         vertical-align: middle;
         .promo_logo_img {
@@ -118,7 +118,7 @@
         padding-bottom: 18px;
         //padding-top: 18px;
         a {
-          color: #484848;
+          color: $color_484848;
           font-size: 12px;
           cursor: pointer;
         }
@@ -204,7 +204,7 @@ body.mypromotions-index-index #content {
         padding-left: 0;
 
         img {
-          border: 1px solid #ebebeb;
+          border: 1px solid $color_ebebeb;
           padding: 10px 12px;
           max-height: 51px;
           @media(max-width: 360px) {
@@ -280,15 +280,15 @@ body.mypromotions-index-index #content {
           }
           .button {
             padding: 5px 22px;
-            color: #4f4f4f;
+            color: $color_4f4f4f;
             font-weight: normal;
             font-size: 12px;
             font-family: latoregular, sans-serif;
             min-width: 92px;
             text-align: center;
-            background: #fff;
-            border: 1px solid #ebebeb;
-            box-shadow: inset 1px 1px 0 0 #e6e6e6;
+            background: $color_fff;
+            border: 1px solid $color_ebebeb;
+            box-shadow: inset 1px 1px 0 0 $color_e6e6e6;
             border-radius: 3px;
             cursor: pointer;
             width: 180px;
@@ -332,7 +332,7 @@ body.mypromotions-index-index #content {
       }
       .promo-text {
         @media(min-width: $screen-xs) {
-          border: 1px solid #ebebeb;
+          border: 1px solid $color_ebebeb;
           padding: 10px;
         }
         p {
@@ -607,7 +607,7 @@ body.mypromotions-index-index #content {
 				.mypromotions-register-bold {
 					font-size: 40px;
 					letter-spacing: 0;
-					color: #907C3D;
+					color: $color_907c3d;
 				}
 			}
 			.mypromotions-register-header-subtitle {

@@ -3,18 +3,18 @@
 //@import "other/variable";
 /*footer*/
  #footer {
-    background-color: #000000;
+    background-color: $color_000000;
 }
 .footer-black {
     min-height: 100px;
     padding-top: 27px;
-    background-color: #000000;
-    color:#ffffff;
+    background-color: $color_000000;
+    color:$color_ffffff;
     padding-bottom: 10px;
     overflow: hidden;
    a:link,
    a:visited {
-     color:#ffffff;
+     color:$color_ffffff;
      text-transform: uppercase;
    }
    .footer-logo {
@@ -129,16 +129,16 @@
 
 
 .footer-gray-wr {
-    background-color: #2e2e2e;
-    border-top: 1px solid #242424;
+    background-color: $color_2e2e2e;
+    border-top: 1px solid $color_242424;
     line-height: 32px;
     padding:10px 0 ;
     a {
-        color:#828282;
+        color:$color_828282;
     }
 }
 .footer-gray-wr>div>div>div {
-    color: #828282;
+    color: $color_828282;
     font-size: 11px;
    
     
@@ -182,8 +182,8 @@
 
                     min-height: 117px;
                     padding-top: 10px;
-                    background-color: #000000;
-                    color:#ffffff;
+                    background-color: $color_000000;
+                    color:$color_ffffff;
                     
                 position:relative;
             }

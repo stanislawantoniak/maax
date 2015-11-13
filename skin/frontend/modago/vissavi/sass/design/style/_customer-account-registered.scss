@@ -32,7 +32,7 @@
 	input[type="text"]:focus,
 	input[type="email"]:focus,
 	input[type="password"]:focus {
-		background:#fff;
+		background:$color_fff;
 	}
 	#connect {
 		@media (max-width: $screen-xs-max) {
@@ -81,12 +81,12 @@
 /*******************************************************************************/
 
 .my-account{
-	color: #333;
+	color: $color_333;
 	
 	.page-title{
 		margin-bottom: 8px;
 		h1{
-			color: #333;
+			color: $color_333;
 			background: $body-bg;
 			padding: 20px 30px !important;
 			text-transform: uppercase;

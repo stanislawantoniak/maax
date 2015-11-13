@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 	td,th{
 		border: 1px #d7d7d7 solid;
-		color: #333;
+		color: $color_333;
 	}
 	td{
 		&.top{vertical-align: top;}
@@ -16,7 +16,7 @@
 		padding: 15px 10px;
 		font-weight: normal;
 		font-family: "latoblack";
-		background: #fcfcfc;
+		background: $panel-top;
 		letter-spacing: -0.5px;
 	}
 	&.table-top{

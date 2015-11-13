@@ -1,6 +1,6 @@
 div.steps.step-3 {
 	.rma-summary-container {
-		border: 1px solid #bfbfbf;
+		border: 1px solid $color_bfbfbf;
 		padding: 12px 10px;
 		table#review-items {
 			td {
@@ -11,7 +11,7 @@ div.steps.step-3 {
 				width: 60px;
 				padding: 0 15px 20px 0;
 				img {
-					border: 1px solid #cccccc;
+					border: 1px solid $color_cccccc;
 				}
 			}
 			.summary-item-desc {

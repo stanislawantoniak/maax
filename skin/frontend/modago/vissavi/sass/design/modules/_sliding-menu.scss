@@ -4,7 +4,7 @@
  */
 
 #sb-site, .sb-site {
-	background: #F2F1F0;
+	background: $color_F2F1F0;
 	overflow-x: hidden;
 }
 /* ---------------
@@ -12,13 +12,13 @@
  */
 
 .sb-slidebar {
-	background-color: #2d2d2d; /* Default Slidebars background colour, overwrite this with your own css. */
+	background-color: $color_2d2d2d; /* Default Slidebars background colour, overwrite this with your own css. */
 	> header {
-		background:#2d2d2d;
+		background:$color_2d2d2d;
 		
 		a, a:visited {
 			line-height: 57px;
-			color:#fff;
+			color:$color_fff;
 			font-size: 14px;
 			text-decoration: underline;
 		}
@@ -29,19 +29,19 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 background: $color_000;
 }
 .sb-menu li a {
-color: #f2f2f2;
+color: $color_f2f2f2;
 	&:hover {
 		text-decoration: underline;
 	}
 }
 .sb-menu  li ul {
-	background: #2d2d2d;
+	background: $color_2d2d2d;
 	list-style: none;
 }
 .sb-menu  li li {
 	}
 .sb-menu  li ul ul {
-	background: #555556;
+	background: $color_555556;
 }
 .sb-menu > li > a {
 	text-transform: uppercase;
@@ -87,7 +87,7 @@ color: #f2f2f2;
  */
 
 #fb-site, .fb-site {
-	background: #F2F1F0;
+	background: $color_F2F1F0;
 }
 
 /* ---------------
@@ -99,7 +99,7 @@ color: #f2f2f2;
 		
 		a, a:visited {
 			line-height: 53px;
-			color:#fff;
+			color:$color_fff;
 			font-size: 14px;
 			text-transform: uppercase;
 			@include max-screen($screen-sm-max) {
@@ -117,13 +117,13 @@ color: #f2f2f2;
 		}
 	}
 .fb-slidebar {
-	background-color: #fff; /* Default Slidebars background colour, overwrite this with your own css. */
+	background-color: $color_fff; /* Default Slidebars background colour, overwrite this with your own css. */
 	
 	> header {
-		background:#2d2d2d;
+		background:$color_2d2d2d;
 		a, a:visited {
 			line-height: 53px;
-			color:#fff;
+			color:$color_fff;
 			font-size: 14px;
 			text-transform: uppercase;
 			i {

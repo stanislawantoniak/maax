@@ -24,7 +24,7 @@
   .header_bottom {
     @media (max-width: $screen-xs-max) {
       background: none; 
-      background-color: #ffffff; 
+      background-color: $color_ffffff; 
       margin-bottom: 10px;
     }
     #navCategory {
@@ -34,7 +34,7 @@
           > a:link,
           > a:visited {
             border-top: none;
-            border-top:1px solid #dedce1;
+            border-top:1px solid $color_dedce1;
           }
         }
         > li:first-child {
@@ -401,7 +401,7 @@ section {
 	#sidebar-secondary {
 		> .main {
 			padding:0 15px;
-			border: solid 1px #ebebeb;
+			border: solid 1px $color_ebebeb;
 			@media (max-width: $screen-xs-max) { 
 				padding:0 4px 0 4px;
 				margin: 10px -10px;

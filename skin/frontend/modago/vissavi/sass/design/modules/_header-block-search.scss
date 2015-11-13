@@ -7,15 +7,15 @@
                 font-size: 12px;
                 @include border-radius(0px);
                 box-shadow: none;
-            	background-color: #FFFFFF;
+            	background-color: $color_ffffff;
             	border:none;
 	            padding: 0 10px;
             }
         }
         .select-box {
             &:before {
-                border-right:1px solid #a4a4a4;
-                border-left:1px solid #e3e3e3;
+                border-right:1px solid $color_a4a4a4;
+                border-left:1px solid $color_e3e3e3;
             }
         }
 

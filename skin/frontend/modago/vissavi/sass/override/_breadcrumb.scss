@@ -27,11 +27,11 @@ ol.breadcrumb {
 			display: inline-block;
 			text-align: right;
 			margin-right: 5px;
-			color:#000;
+			color:$color_000;
 		}
 		a:link,
 		a:visited {
-			color:#000;
+			color:$color_000;
 			font-family: $fontRegular;
 			font-size: 11px;			
 		}
@@ -39,7 +39,7 @@ ol.breadcrumb {
 			text-decoration: underline;
 		}
 		&.active {
-			color:#000;
+			color:$color_000;
 			
 		}
 	}
