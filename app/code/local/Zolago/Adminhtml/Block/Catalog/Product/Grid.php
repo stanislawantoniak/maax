@@ -70,8 +70,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
                 'left',
                 $store->getId()
             );
-        }
-        else {
+        } else {
             $collection->addAttributeToSelect('price');
             $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
             $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
@@ -138,33 +137,34 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
         // Vendor
         $this->addColumnAfter('udropship_vendor',
             array(
-                'header'=> $helper->__('Vendor'),
+                'header' => $helper->__('Vendor'),
                 'index' => 'udropship_vendor',
-                'type'  => 'options',
-                'options' => $this->_getAttributeOptions('udropship_vendor')
+                'type' => 'options',
+                'options' => $this->_getAttributeOptions('udropship_vendor'),
+                'renderer' => Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_vendorName"),
             ), 'status');
         // Branshop attribute
         $this->addColumnAfter('brandshop',
             array(
-                'header'=> $helper->__('Brandshop'),
+                'header' => $helper->__('Brandshop'),
                 'index' => 'brandshop',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $this->_getAttributeOptions('brandshop')
             ), 'udropship_vendor');
         // Color attribute
         $this->addColumnAfter('color',
             array(
-                'header'=> $helper->__('Color'),
+                'header' => $helper->__('Color'),
                 'index' => 'color',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $this->_getAttributeOptions('color')
             ), 'brandshop');
         // Description status attribute
         $this->addColumnAfter('description_status',
             array(
-                'header'=> $helper->__('Description status'),
+                'header' => $helper->__('Description status'),
                 'index' => 'description_status',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $this->_getAttributeOptions('description_status')
             ), 'color');
 
@@ -175,7 +175,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
     {
         $attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attribute_code);
         $options = array();
-        foreach( $attribute->getSource()->getAllOptions(false, true) as $option ) {
+        foreach ($attribute->getSource()->getAllOptions(false, true) as $option) {
             $options[$option['value']] = $option['label'];
         }
         return $options;
