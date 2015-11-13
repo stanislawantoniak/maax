@@ -149,3 +149,6 @@
 "Generate invoices","Wygeneruj faktury"
 "All selected statements have to be from the same month!","Wszystkie wybrane rozliczenia powinny być z tego samego miesiąca!"
 "Cannot delete statement because invoice for this statement has been already generated.","Nie można usunąć rozliczenia, ponieważ została już wygenerowana do niego faktura."
+"Order: Commission correction","Inne korekty prowizji Modago"
+"Marketing: Correction","Korekty działań marketingowych"
+"Tracking: correction","Korekty kosztów kurierów"
