@@ -353,7 +353,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		
 		$select->where("index.vendor_id=?", $vendor->getId());
-		$select->where("attribute_set.use_to_create_product=?", 1);
+
 		$select->distinct(true);
 		$select->order("attribute_set_name");
 
