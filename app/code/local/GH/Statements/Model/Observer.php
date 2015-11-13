@@ -81,7 +81,7 @@ class GH_Statements_Model_Observer
         $collection->addFieldToFilter('id',array('neq'=>$statement->getId()));
         $collection->getSelect()->order('id DESC');
         if ($item = $collection->getFirstItem()) {
-            $balance = $item->getData('to_pay') - $item->getData('payment_value');            
+            $balance = $item->getData('to_pay') - $item->getData('payment_value')+$item->getData('last_statement_balance');            
         }
         $lastBalance = new StdClass();
         $lastBalance->balance = $balance;
@@ -147,7 +147,7 @@ class GH_Statements_Model_Observer
         if (!empty($statementTotals->rma)) {
             $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
             $data["rma_value"]                  = $statementTotals->rma->amount;
-            $data['to_pay']                     -= $statementTotals->rma->amount;
+            $data['to_pay']                     += $statementTotals->rma->amount;
             $data['total_commission']     -= $statementTotals->rma->commissionAmount;
         }
         // Refund
@@ -811,7 +811,9 @@ class GH_Statements_Model_Observer
         ->addFieldToFilter('statement_id',array('null' => true))
         ->addFieldToFilter('date',array('lteq' => $yesterday))
         ->addFieldToFilter('vendor_id',$statement->getVendorId())
+        ->addFieldToFilter('wfirma_invoice_id',array('neq' => '0'))
         ->addFieldToFilter('is_invoice_correction',1);
+        
         
         if($collection->getSize()) {
 

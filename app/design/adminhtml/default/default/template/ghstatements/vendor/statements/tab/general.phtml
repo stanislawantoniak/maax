@@ -62,7 +62,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="rma_value">
                                 <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('rma_value')); ?>
+                                    ->formatPrice(-$statement->getData('refund_value')); ?>
                             </span>
                         </td>
                     </tr>
@@ -72,7 +72,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                         <td class="value">
                             <span id="order_commission_value">
-                                <?php echo Mage::helper('core')->formatPrice($statement->getData('order_commission_value')); ?>
+                                <?php echo Mage::helper('core')->formatPrice(-($statement->getData('order_commission_value') - $statement->getData('rma_value'))); ?>
                             </span>
                         </td>
                     </tr>                                                            
@@ -86,7 +86,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                             </span>
                         </td>
                     </tr>                                        
-                    <?php if ($statement->getData('commission_correction') > 0) : ?>
+                    <?php if ($statement->getData('commission_correction') != 0) : ?>
                     <tr>
                         <td class="label"><label
                                 for="commission_correction"><b><?php echo $_helper->__("Order: Commission correction"); ?></b></label>
@@ -107,11 +107,11 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="tracking_charge_total">
                                 <?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('tracking_charge_total')); ?>
+                                        ->formatPrice(-$statement->getData('tracking_charge_total')); ?>
                             </span>
                         </td>
                     </tr>
-                    <?php if ($statement->getData('delivery_correction')>0) :?>
+                    <?php if ($statement->getData('delivery_correction')!=0) :?>
                     <tr>                    
                         <td class="label">
                             <label for="delivery_correction">
@@ -136,12 +136,12 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="marketing_value">
                                 <?php echo Mage::helper('core')
-                                        ->formatPrice($statement->getData('marketing_value')); ?>
+                                        ->formatPrice(-$statement->getData('marketing_value')); ?>
                             </span>
                         </td>
                     </tr>
                     <?php endif; ?>
-                    <?php if ($statement->getData('marketing_correction') > 0) : ?>
+                    <?php if ($statement->getData('marketing_correction') != 0) : ?>
                     <tr>
                         <td class="label">
                             <label for="marketing_correction">
@@ -203,7 +203,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         <td class="value">
                             <span id="payment_value">
                                 <?php echo Mage::helper('core')
-                                    ->formatPrice($statement->getData('payment_value')); ?>
+                                    ->formatPrice(-$statement->getData('payment_value')); ?>
                             </span>
                         </td>
                     </tr>
