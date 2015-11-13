@@ -257,7 +257,8 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                     ),
                 ),
                 'currency_code' => $currency,
-                'headings_css_class' => ''
+                'headings_css_class' => '',
+                'sortable'  => false,
             ));
         }
         // [A] Do wypłaty
