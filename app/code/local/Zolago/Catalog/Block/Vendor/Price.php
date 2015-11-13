@@ -47,21 +47,17 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		$bool = Mage::getSingleton("eav/entity_attribute_source_boolean");
 		/* @var $bool Mage_Eav_Model_Entity_Attribute_Source_Boolean */
 
-        $descriptionStatusSrc = Mage::getSingleton("zolagocatalog/product_source_description");
+		$descriptionStatusSrc = Mage::getSingleton("zolagocatalog/product_source_description");
 
-		$x = array_merge(
-			array(array("value" => 0, "label" => "Standard")),
-			$campaign->toOptionArray()
-		);
-		$source=array(
-			"converter_price_type"	=> $priceTypes,
-			"converter_msrp_type"	=> $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
-			"campaign_regular_id"	=> $this->_clearEmpty($x),
-			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
-			"description_status"	=> $this->_clearEmpty($descriptionStatusSrc->getAllOptions(false,false,true)),
-			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),
-			"product_flag"			=> $this->_clearEmpty($flags->getSource()->getAllOptions(false)),
-			"bool"					=> $this->_clearEmpty($bool->getAllOptions())
+		$source = array(
+			"converter_price_type" => $priceTypes,
+			"converter_msrp_type" => $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
+			"campaign_regular_id" => $this->_clearEmpty($campaign->toOptionArray()),
+			"status" => $this->_clearEmpty($status->getSource()->getAllOptions(false)),
+			"description_status" => $this->_clearEmpty($descriptionStatusSrc->getAllOptions(false, false, true)),
+			"type_id" => $this->_clearEmpty($typeModel::getAllOptions()),
+			"product_flag" => $this->_clearEmpty($flags->getSource()->getAllOptions(false)),
+			"bool" => $this->_clearEmpty($bool->getAllOptions())
 		);
 		
 		
