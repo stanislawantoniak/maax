@@ -49,10 +49,14 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 
         $descriptionStatusSrc = Mage::getSingleton("zolagocatalog/product_source_description");
 
+		$x = array_merge(
+			array(array("value" => 0, "label" => "Standard")),
+			$campaign->toOptionArray()
+		);
 		$source=array(
 			"converter_price_type"	=> $priceTypes,
 			"converter_msrp_type"	=> $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
-			"campaign_regular_id"	=> $this->_clearEmpty($campaign->toOptionArray()),
+			"campaign_regular_id"	=> $this->_clearEmpty($x),
 			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
 			"description_status"	=> $this->_clearEmpty($descriptionStatusSrc->getAllOptions(false,false,true)),
 			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),

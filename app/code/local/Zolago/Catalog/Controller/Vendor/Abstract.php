@@ -157,13 +157,21 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		
 		$collection = $this->_getCollection();
 
-		if($productId){
+		if ($productId) {
 			$collection->addIdFilter($productId);
-		}else{
-
+		} else {
 			// Make filters
-			foreach($this->_getRestQuery() as $key=>$value){
-				$collection->addAttributeToFilter($key, $value);
+			foreach ($this->_getRestQuery() as $key => $value) {
+				if ($key = Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE) {
+					$x = array_values($value)[0];
+					if (str_replace("%","",$x) == 0) {
+						$collection->addAttributeToFilter($key, array("null" => true));
+					} else {
+						$collection->addAttributeToFilter($key, $value);
+					}
+				} else {
+					$collection->addAttributeToFilter($key, $value);
+				}
 			}
 		}
 		

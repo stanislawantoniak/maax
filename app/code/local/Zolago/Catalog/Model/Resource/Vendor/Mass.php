@@ -353,9 +353,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		
 		$select->where("index.vendor_id=?", $vendor->getId());
+
 		$select->distinct(true);
 		$select->order("attribute_set_name");
-		
+
 		return  $this->getReadConnection()->fetchPairs($select);
 	}
 
