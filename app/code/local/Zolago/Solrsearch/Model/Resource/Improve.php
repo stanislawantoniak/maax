@@ -329,7 +329,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
      * @param array $related
      * @return array
      */
-    protected function _checkAssignedVendorsFromCategory($related,$vendorCheck) {
+    protected function _checkAssignedVendorsFromCategory($related,$vendorCheck,$storeId) {
         if (empty($this->_vendors)) {
             $_helper = Mage::helper('udropship');
             $collection = Mage::getModel('udropship/vendor')->getCollection()
@@ -339,6 +339,10 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 $_helper->loadCustomData($vendor,'root_category');
                 foreach ($vendor->getRootCategory() as $categoryId) {
                     // set vendors to categories
+                    if (!$categoryId) {
+                        // no root category - overriding by gallery root category
+                        $categoryId = Mage::app()->getStore($storeId)->getRootCategoryId();
+                    }
                     if ($categoryId) {
                         if (!$this->_checkIsActive($categoryId)) {
                             continue;
@@ -499,7 +503,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 // check if related category is visible in gallery
                 if (!$this->_checkIsVisible($related)) {
                     // find vendors in which related category is visible
-                    if (!$vendors = $this->_checkAssignedVendorsFromCategory($related,$vendorCheck)) {
+                    if (!$vendors = $this->_checkAssignedVendorsFromCategory($related,$vendorCheck,$storeId)) {
                         // no vendors, category is invisible
                         continue;
                     }
