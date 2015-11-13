@@ -92,7 +92,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
             'catalog_product/udropship_vendor',
             'entity_id',
             null,
-            'left',
+            'inner',
             $_store
         );
         // Branshop attribute
@@ -101,7 +101,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
             'catalog_product/brandshop',
             'entity_id',
             null,
-            'left',
+            'inner',
             $_store
         );
         // Color attribute
@@ -110,7 +110,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
             'catalog_product/color',
             'entity_id',
             null,
-            'left',
+            'inner',
             $_store
         );
         // Description status attribute
@@ -119,7 +119,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
             'catalog_product/description_status',
             'entity_id',
             null,
-            'left',
+            'inner',
             $_store
         );
 
