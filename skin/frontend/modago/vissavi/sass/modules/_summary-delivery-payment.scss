@@ -1,0 +1,274 @@
+.node-type-summary-delivery-payment {
+	.open {
+		&:hover {
+			@media (max-width: $screen-xs-max) {
+				cursor:pointer;
+			}
+		}
+	}
+}
+
+#checkout {
+	.panel {
+		&.panel-custom {
+			dl {
+				margin-bottom: 0px;
+			}
+
+			.panel-body {
+
+			}
+			#sumary_single_shop {
+				text-align: right;
+				padding-top: 15px;
+				@media (max-width: 429px) {
+					float:right;
+					width:100%;
+				}
+				@media (max-width: 360px) {
+					font-size: 12px;
+					padding-top: 15px;
+					
+				}
+				dd {
+					&:first-child {
+						margin-bottom: 5px;
+					}	
+				}
+				.lb {
+					//width:59px;
+					text-align:right;
+					display:inline-block;
+					text-align:right;
+					&+span {
+						text-align: right;
+						
+						display: inline-block;
+						font-weight: bold;
+						width: 43.333%;
+						@media (min-width: $screen-md-min) {
+							width: 33.333%;
+						}
+					}
+				}
+			}
+			#info_delivery,
+			.info_delivery{
+				@media (max-width: 429px) {
+					display:none;
+				}
+				dl {
+					margin-top: 23px;
+					dd {
+						font-size: 12px;
+						//text-transform: uppercase;
+					}
+				}
+				.uppercase {
+
+				}
+			}
+		}
+	}
+}
+.table-summary-product {
+	.table-group {
+		.zdjecie,
+		.nazwa_rozmiar {
+			
+			min-height:54px;
+			position:relative;
+		}
+		.zdjecie {
+			
+			img {
+				border:1px solid $bc-primary;
+			}
+		}
+		.nazwa_rozmiar {
+			@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+				
+			}
+			@media(max-width: $screen-xs-max) {
+				
+
+			}
+			dt {
+				font-weight: normal;
+			}
+			.nazwa_produktu {
+				@media(max-width: 479px) {
+					font-size: 12px;
+				}
+			}
+			.rozmiar_produktu {
+
+				@media(max-width: 479px) {
+					font-size: 9px;
+					position:absolute;
+					bottom:0px;
+					left:0px;
+				}
+				@media(min-width: 480px) {
+					font-size: 10px;
+					
+				}
+			}
+		}
+
+		.ilosc_cena {
+			min-height:54px;
+			text-align: right;
+			.ilosc_produktu {
+				text-align: right;
+				vertical-align: top;
+				font-size: 12px;
+				
+				.lb {
+					
+				}
+			}
+			.cena_produktu {
+				position:relative;
+				
+				
+				
+
+				.stara_cena {
+					color:#757575;
+					@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max){
+						display:block;
+						text-align: right;
+					}
+					@media(max-width: $screen-xs-max) {
+						font-size: 10px;
+						position:absolute;
+						top:4px;
+						left:0px;
+						}
+					
+				}
+				.cena_zakupu {
+					white-space: nowrap;
+					@media(max-width: $screen-xs-max) {
+						font-size: 12px;
+						}
+					
+				}
+
+			}	
+		}
+	}
+}
+
+
+
+
+.table-summary-product {
+	.table-group {
+		.zdjecie {
+			
+			img {
+				
+			}
+		}
+		.nazwa_rozmiar {
+			.rozmiar_produktu {
+				font-size: 11px;
+			}
+		}
+		.tabcol-1 {
+			
+		}
+		.tabcol-2 {	
+			.cena,
+			.losc,
+			.wartosc{
+				text-align: right;
+				
+				font-size: 12px;
+			}
+			.cena {	
+				font-size: 13px;
+				.stara_cena {
+					font-size: 11px;
+					color:#757575;
+				}
+			}
+			.ilosc {
+				text-align: center;
+			}
+			.wartosc{
+				font-size: 13px;
+			}
+		}
+	}
+	
+}
+#checkout {
+	.panel {
+		&.panel-custom {
+			&#sumary_total_amount {
+				text-align: right;
+				background:#f8f8f7;
+				.lb {
+					//width:59px;
+					text-align:right;
+					display:inline-block;
+					text-align:right;
+					&+span {
+						text-align: right;
+						
+						display: inline-block;
+						font-weight: bold;
+						width: 24.333%;
+						@media (min-width: $screen-md-min) {
+							width: 33.333%;
+						}
+						@media (max-width: 360px) {
+							width: 33.333%;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#checkout {
+	section {
+		header {
+			h2 {
+				&.number_order {
+					font-weight: 300;
+				}
+				.date-order {
+					text-transform: none;
+					font-size: 13px;
+					&.pull-right {
+						@media (max-width: 639px) {
+							float:none!important;
+							display:block;
+							padding: 3px 0;
+						}
+					}
+					
+				}
+			}
+		}
+	}
+}
+
+
+#order-show-products {
+	.panel_action {
+		margin-bottom: 0px;
+	}
+}
+
+.text-potwierdzenie {
+	@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+		
+	}
+}

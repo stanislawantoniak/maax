@@ -1,0 +1,529 @@
+#product-shop {
+	h1 {
+		font-family:$fontLight;
+		text-transform:uppercase;
+		font-size:34px;
+		padding-bottom:15px;
+		padding-top: 0px;
+		margin-bottom:15px;
+		margin-top: 0;
+		border-bottom: 1px solid $gray-lighter;
+		@media (max-width: $screen-xs-max) { 
+			//margin-left: -4%;
+			//padding-left: 4%;
+			font-size:22px;
+			margin-top:15px;
+		}
+	}
+	.short-description {
+		font-size: 11px;
+		color: #383838;
+		margin-bottom: 6px;
+		a {
+			color :#959595;
+			span {
+				color :#1dd8a0;
+				margin-left:30px;
+			}
+		}
+		@media (max-width: 1199px) {
+			display:none;
+		}
+	}
+	.price-box-bundle {
+		position:relative;
+		margin-bottom: 16px;
+		@media (min-width: 768px) and (max-width: 819px) {
+			margin-bottom: 0px;
+		}
+		.price-label,
+		.old-price {
+			font-size: 24px;
+			color:#000;
+			font-family: $fontLight;
+		}
+		.old-price {
+			text-decoration: line-through;
+		}
+		.price {
+			font-size: 36px;
+			color:#000;
+			font-family: $fontBlack;
+			@media (min-width: 768px) and (max-width: 819px) {
+				margin-bottom: 0px;
+			}
+			@media (min-width: 481px) and (max-width: $screen-xs-max) {
+				display:inline-block;
+				margin:0px;
+				padding:0px;
+				line-height: 1.0;
+			}
+			@media (max-width: 480px) {
+				display:block;
+				margin:0px;
+				padding:0px;
+				line-height: 1.0;
+				display:block;
+			}
+		}
+		ul {
+			@include no-bullet;
+			@include reset-m;
+			position:absolute;
+			right:0px;
+			top:10px;
+			li {
+				font-size: 12px;	
+				color:$gray-dark;
+				line-height: 1.5;
+			}
+		}
+	}
+	.color-box-bundle,
+	.size-box-bundle {
+		.color-label,
+		.size-label {
+			line-height: 47px;
+			width: 135px;
+			display: inline-block;
+			float: left;
+			text-transform: uppercase;
+			font-size: 11px;
+			color:#020202;
+            font-weight: normal;
+            @media (min-width: 768px) and (max-width: 814px) {
+				float:none;
+            	display:block;
+				width:100%;
+				line-height: 29px;
+			}
+            @media (max-width: $screen-xs-max) {
+            	float:none;
+            	display:block;
+            	line-height: 29px;
+            }
+		}
+		.form-group {
+			display: inline-block;
+			label {
+				position: relative;
+				width:43px;
+				height: 43px;
+				display:inline-block;
+				margin-right:8px;
+				cursor:pointer;
+				&:first-child {
+					margin-left:-2px;
+				}
+				img {
+					position:absolute;
+					top:0px;
+					left:0px;
+					width:100%;
+					height:auto;
+					@include border-radius(3px);
+					border:1px solid #fff;
+				}
+				&:hover {
+					&+img {
+						border-color:#999;
+					}
+				}
+				img:hover {
+					border-color:#999;
+				}
+				[type="radio"]:checked {
+					&+img {
+						border-color:#000;
+					}
+				}
+			}
+		}
+		
+	}
+	.color-box-bundle  {
+		.color-label {
+			line-height: 57px;
+		}
+		.form-group {
+			label {
+				height:54px;
+			}
+		}
+	}
+	.color {
+		.form-group {
+			input[type="radio"] {
+				margin-left: 50%;
+				margin-top: 50%;
+				float: left;
+			}
+		}
+		
+	}
+
+	.size {
+		position:relative;
+	}
+	.size {
+		.form-group {
+			input[type="radio"] {
+				margin-left: 30%;
+				margin-top: 30%;
+				float: left;
+			}
+		}
+	}
+	.size-box-bundle {
+		margin-bottom:20px;
+		@media (min-width: 992px) and (max-width: 1197px){
+			margin-bottom:0px;
+		}
+
+		@media (min-width: 768px) and (max-width: 991px) {
+			margin-bottom:0px;
+		}
+		.size-label { 
+			line-height: 29px;
+			@media (min-width: 768px) and (max-width: 814px) {
+							display:block;
+							width:100%;
+						}
+			@media (max-width: $screen-xs-max) {
+				float:none; 
+				display:block;
+				float:none;
+			}
+		}
+		.form-group {
+			margin-bottom: 5px;
+			margin-left: 2px;
+			label {
+				width:31px;
+				height:31px;
+				position: relative;
+				span {
+					width:31px;
+					height:31px;
+					display:block;
+					background:#fff;
+					border:1px solid $gray;
+					text-align:center;
+					line-height: 29px;
+					color:#858585;
+					font-size:12px;
+					font-family:$fontRegular;
+					font-weight: normal;
+					position:absolute;
+					top:0px;
+					left:0px;
+				}
+			[type="radio"]:hover {
+				&+span {
+					border-color:#999;
+					background:#999;
+					color:#fff;
+				}
+			}	
+			span:hover {
+					border-color:#999;
+					background:#999;
+					color:#fff;
+				}
+			[type="radio"]:checked,
+			[type="radio"]:hover:checked {
+				&+span {
+					border-color:#000;
+					background:#000;
+					color:#fff;
+				}
+			}
+			
+			}
+		}
+		.view-sizing {
+			display:block;
+			font-size: 11px;
+			float: right;
+			position: absolute;
+			bottom: -10px;
+			left: 0px;
+			white-space: nowrap;
+			@media (max-width: 814px) {
+				
+			}
+			@media (max-width: $screen-xs-max) {
+				margin-left:0px;
+
+			}
+			.linkToModal {
+				text-align: right;
+				top:-24px;
+				position:relative;
+				padding-left:100px;
+			}
+			&.hidden-xs {
+				@media (max-width: 814px) {
+					display:none!important;
+				}
+				@media (min-width: 815px) {
+					display:inline-block!important;
+				}
+			}
+			&.visible-xs {
+				@media  (max-width: 814px) {
+					display:inline-block!important;
+					//float:right;
+					position: static;
+					//top: -23px;
+					//right: 11px;
+					//left: auto;
+				}
+			}
+			
+			
+		}
+		.size-box {
+			margin-bottom: 25px;
+		}
+	}
+	.action-box-bundle {
+		margin-bottom:20px;
+		font-size: 11px;
+		color:#000;
+		@media screen and (-webkit-min-device-pixel-ratio:0) {
+			   margin-top:4.5px;
+			}
+		
+		@media (max-width: 360px) {
+			font-size: 9px;
+		}
+		.col-xs-6.text-right {
+			margin-top: 16px;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+			    margin-top: 15px;
+			}
+			@media (max-width: 320px) {
+				margin-top: 15px;
+			}
+		}
+		.addLike-box {
+			@media (max-width: 360px) {
+			margin-top: 1px;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+					margin-top: 2px;
+				}
+			}
+
+		}
+        .addedLike-box {
+            @media (max-width: 810px) {
+//                margin-top: -7px;
+            }
+            margin-top: 7px !important;
+        }
+		.addLike {
+			width:149px;
+			height:42px;
+			display:block;
+			border:2px solid #a6a6a6;
+			@include border-radius(5px);
+			line-height: 1.2;
+			padding: 7px 0 0 43px;
+			font-size: 11px;
+			color:$gray-dark;
+			text-transform: uppercase;
+			font-family: $fontRegular;
+			background:#fff url('../images/heart.png') 8px 11px no-repeat;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+				   height:42px;
+				}
+			&:hover {
+				text-decoration: none;
+				background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
+			}
+		}
+		.likeAdded {
+			display:block;
+			height:43px;
+			padding: 7px 0 0 43px;
+			color:$gray-dark;
+			background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
+			span {
+				color:#dcdcdc;
+			}
+			&:hover {
+				text-decoration: none;
+				background:#fff url('../images/heart.png') 8px 11px no-repeat;
+				span {
+					color:$gray-dark;
+				}
+			}
+		}
+		.addBasket {
+			
+			width: 100%; 
+			max-width:165px;
+			overflow:hidden;
+			@media (min-width: $screen-lg-min) {
+				max-width:190px;
+			}
+			@media (max-width: 320px) {
+				font-size: 11px;
+				font-weight: normal;
+			}
+		}
+	}
+}
+
+#share {
+	margin-top: -10px;
+}
+
+#product-shop  {
+	.color-box-bundle {
+		.form-group {
+			label {
+				&:first-child {
+					margin-left:0px;
+				}
+			}
+		}
+	}
+}
+#wrapper-rwd-color {
+	width:300px;
+	float:left;
+	overflow:hidden;
+	position:relative;
+	z-index: 1;
+}
+#rwd-color {
+	width: 300px;
+	padding: 0 10px 0 20px;
+	.rwd-prev,
+	.rwd-next {
+		background:$arrowMap;
+		text-indent: -999em;
+		position:absolute;
+		top: 19px;
+	}
+	.rwd-prev {
+		@include sprite($arrowMap, arrow-rwd-slider-prev-mobile);
+		@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile);
+		left:0;
+		&.disabled {
+			visibility:hidden;
+		}
+	}
+	.rwd-next {
+		@include sprite($arrowMap, arrow-rwd-slider-next-mobile);
+		@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile);
+		right:0;
+		&.disabled {
+			visibility:hidden;
+		}
+	}
+}
+#product-shop  {
+	.size-box-bundle {
+		.listSelect {
+			.view-sizing {
+				&.visible-xs {
+					top: 5px;
+				}
+				&.hidden-xs {
+					top: 19px;
+				}
+			}
+		}
+	}
+}
+
+.zoom_plus,
+.zoom_minus {
+	display:block;
+	width:41px;
+	height:41px;
+	position:absolute;
+	top:0px;
+	right:15px;
+	margin-left:-45px;
+	z-index: 900;
+	span {
+		background:url('../images/sprites/btz-zoom.png') no-repeat;
+		display:block;
+		width:41px;
+		height:41px;
+	}
+	&.full {
+		right:20px!important;
+		left:auto!important;
+		margin-left: -15px;
+		
+	}
+	&.disabled {
+		cursor:default;
+		opacity:0.3
+	}
+	&:hover {
+		text-decoration: none;
+	}
+}
+.zoom_plus {
+ top:15px;
+	span {
+		top: 5px;
+		left: 1px;
+		
+		background-position: top right;
+		
+	} 
+}
+.zoom_minus {
+	top:62px;
+ 	span {
+ 		top: 6px;
+ 		left: -1px;
+ 		background-position: bottom left;
+ 	}
+}
+
+
+	i.flag {
+		background:$flagMap;
+		display:inline-block;
+		position: absolute;
+		z-index: 1000;
+		top: 10px;
+		right: 15px;
+		z-index: 800;
+		
+		&.sale {
+			@include sprite($flagMap, sale);
+			@include sprite-dimensions($flagMap, sale);
+		}
+		&.percent,
+		&.promotion  {
+			@include sprite($flagMap, percent);
+			@include sprite-dimensions($flagMap, percent);
+		}
+		&.new {
+			@include sprite($flagMap, new);
+			@include sprite-dimensions($flagMap, new);
+		}
+		&.hit,
+		&.bestseller  {
+			@include sprite($flagMap, hit);
+			@include sprite-dimensions($flagMap, hit);
+		}
+		
+		
+	}
+
+	#galeria-lightbox {
+		i.flag {
+			left: 15px;
+			right:auto;
+		}
+	}

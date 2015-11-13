@@ -1,0 +1,156 @@
+
+/* CLONE MENU */
+
+#clone_submenu {
+    background: #f8f7f5;
+    box-shadow: 0 2px 0 #ebebeb;
+    .view-all-category {
+        font-size: 14px;
+        text-transform: lowercase;
+        color:#7b6c35;
+        text-decoration: underline;
+        font-style: italic;
+        float:right;
+        margin-right:50px!important;
+        i {
+            margin-left:5px;
+        }
+    }
+    ul {
+        box-shadow:none; 
+        border: none;
+        background:transparent;
+        list-style: none;
+            a {
+                color:#656565;
+                text-transform: uppercase;
+            }
+
+            dl {
+                //float:left;
+                dt {
+                    color:#000;
+                  a:link,
+                  a:visited {
+                    font-size:14px;
+                    font-weight: 900;
+                    color:#000;
+                  }
+                  a:hover {
+                      text-decoration: underline;
+                  }
+                }
+                dd {
+                    color:#000;
+                    a:link,
+                    a:visited {
+                    font-size:12px;
+                    font-weight: 400;
+                    color:#000;
+                  }
+                  a:hover {
+                    text-decoration: underline;
+                  }
+                  a {
+                    &[data-description="ReadMore"] {
+                        font-style:italic;
+                        text-transform:lowercase;
+                        font-size:12px;
+                        text-decoration:underline;
+                        i {
+                            margin-left:5px;
+                        }
+                    }
+                  }
+                }
+           
+
+        }
+    //END UL
+    }
+// END CLONE MENU
+} 
+
+/* CLONE MENU */
+
+#clone_submenu {
+    .col-left {
+        width:78.2312925170068%;
+        float:left;
+           @include max-screen($screen-md-max) {
+                 width:72.231293%;
+            }
+            @include max-screen($screen-sm-max) {
+                 width:65.231293%;
+            }
+    }
+    .col-righ {
+        width:22.02380952380952%;
+        float:left;
+        img {
+            width:100%;
+            height:auto;        }
+    }
+    ul {
+        position:relative !important;
+        margin: 0px;
+        padding:47px 0;
+            > li {
+                > a {
+                   padding:6px 15px; 
+                }
+            }
+            dl {
+                width:175px;
+                @include max-screen($screen-sm-max) {
+                      width:155px;
+                }
+                dt {
+                    margin-bottom:10px;
+                }
+                dd {
+                    margin-bottom:10px;
+                }
+           
+
+        }
+        a.closeSubMenu:link,
+        a.closeSubMenu:visited { 
+//            background:#fff;
+//            @include border-radius(3px);
+//            padding:3px 10px;
+//            color:#000;
+            float:right;
+            margin-right: 15px;
+            border-radius:0;
+            cursor: pointer;
+            font-style: normal;
+            overflow:hidden;
+            outline:none;
+            text-align:center;
+            border:none;
+            background:url('../images/sprites/sprite_clear.png') no-repeat 0 -1px !important;
+            display:inline-block;
+            width:93px;
+            height:26px;
+            line-height: 25px;
+            color:$gray-dark !important;
+            text-transform: uppercase;
+            font-size:12px;
+            
+            &:hover {
+                background-position:0 -30px !important;
+                color:#fff !important;
+                outline:none !important;
+            }
+            &:active {
+                background-position:0 -58px !important;
+                outline:none;
+                color:#c6a662 !important;
+            }
+            
+        }
+    //END UL
+    }
+// END CLONE MENU
+} 

@@ -1,0 +1,272 @@
+.helpful-vote {
+	margin-bottom: 15px;
+	.main {
+		padding:30px;
+	}
+	header {
+		h2 {
+			margin: 0px;
+			padding:0px;
+		}
+		margin-bottom: 15px;
+	}
+	p {
+		margin-bottom: 15px;
+	}
+	p:last-child {
+		margin-bottom: 0px;
+	}
+}
+
+.block_info_order {
+	>.col-sm-6 {
+		padding-left: 0px;
+		padding-right: 0px;
+		&+.col-sm-6 {
+			@media (min-width: $screen-sm-min) {
+				padding-right: 0px;
+			}
+		}
+	}
+	>.col-md-6 {
+		@media (max-width: $screen-xs-max) {
+		padding-left: 0px;
+		padding-right: 0px;
+		}
+		&+.col-md-6 {
+			@media (min-width: $screen-sm-min) {
+				padding-right: 0px;
+			}
+		}
+	}
+	.block {
+		
+		padding:15px;
+		margin-bottom: 15px;
+		position:relative;
+		@media (min-width: $screen-sm-min) {
+			margin:0 0px 15px -15px;
+			min-height:136px;
+		}
+		&+.block {
+			
+			@media (min-width: $screen-sm-min) {
+				margin:0 -15px 15px -5px;
+			}
+		}
+		h4 {
+			margin-top: 0px!important;
+
+		}
+		.fa {
+			position:absolute;
+			right:15px;
+			top:15px;
+		}
+		
+		.col-xs-6 {
+			@media (max-width: 480px) {
+				width:100%!important;
+				margin-bottom: 15px;
+			}
+		}
+	}
+	.delivery-helpful-vote {
+		dd {
+			margin-bottom: 15px;
+			&+dd {
+				margin-bottom: 0px;
+			}
+		}
+	}
+}
+
+
+#checkout {
+	 .panel {
+	 	&.panel-custom {
+	 		#sumary_single_shop {
+	 			&.pull-right {
+	 				.lb {
+						width:auto;
+		 			}
+	 			}
+	 			
+	 		}
+	 	}
+	 }
+}
+
+.summary-order {
+	margin-bottom: 15px;
+	dl {
+		margin-bottom: 17px;
+	}
+	.col-sm-6,
+	.col-sm-7 {
+		margin-left: -15px;
+		padding-right: 0px;
+		margin-bottom: 10px;
+	}
+		.block {
+			padding:15px;
+		}
+	}
+
+
+#bank_transfer_details {
+	margin-bottom: 0;
+	tr {
+		th {
+			padding:4px 8px;
+		}
+		td{
+			padding:4px 8px;
+		}
+	}
+}
+
+
+
+#checkout {
+	.summary-order {
+		form {
+			
+			.panel-body {
+				padding: 27.5px 15px;
+			}
+			.form-group {
+				margin-bottom: 0px;
+				&.form-radio {
+				label {
+					span {
+						top: -6px;
+						@media (max-width: 767px) {
+							width: 70%;
+							display: inline-block;
+						}
+						@media (max-width: 480px) {
+							width: 60%;
+							display: inline-block;
+							top: -10px;
+						}
+						@media (max-width: 400px) {
+							width: 90%;
+							display: inline-block;
+							top: -10px;
+						}
+						+img {
+							position:relative;
+							top:-3px;
+							@media (max-width: 400px){
+								display:none;
+							}
+						}
+					}
+					&[for='default_pay_1'] {
+						@media (max-width: 480px) {
+							top: -6px;
+						}
+					}
+				}
+			}
+			}
+		}
+	}
+}
+
+#breadcrumbs_checkout_helpful_votes {
+    padding-bottom: 25px;
+    @media (max-width: $screen-xs-max) {
+    	padding-bottom: 15px;
+    }
+    //border-top: 1px solid #DEDCE1;
+    margin-top: 2px;
+    h1 {
+        padding-bottom: 0px;
+        padding-top: 12px;
+    }
+    .breadcrumb {
+    margin-bottom: 0px;
+	}
+}
+
+
+#summary-order-group { 
+	.panel-body {
+		.block_info_order {
+			>.col-md-6 {
+				+.col-md-6 {
+					@media (max-width: $screen-xs-max) {
+					display:none;
+					}
+				}
+			}
+		}
+	}
+	.block_info_order {
+		+.table-summary-product {
+			@media (max-width: $screen-xs-max) {
+			display:none;
+			}
+		}
+	}
+	.panel-footer {
+		@media (max-width: $screen-xs-max) {
+		display:none;
+		}
+	}
+}
+
+.open-details-order-info {
+	&.current {
+		display:inline-block;
+		margin-bottom: 15px;
+	}
+	
+}
+
+.acknowledgements {
+	.block {
+		height:auto;
+		@media(min-width: 768px) {
+			height:176px;
+		}
+		@media(min-width: 792px) {
+			height:155px;
+		}
+		@media(min-width: 930px) {
+			height:140px;
+		}
+		@media(min-width: 980px) {
+			height:140px;
+		}
+		@media(min-width: 992px) {
+			height: 153px;
+		}
+		@media(min-width: 1024px) {
+			height:157px;
+		}
+		@media(min-width: 1200px) {
+			height:110px;
+		}
+		&.date-traditional-transfer {
+			height:auto;
+		}
+	}
+	.block_info_order {
+		> .col-sm-5 {
+			@media (max-width: $screen-xs-max) {
+				padding-right: 0px;
+				padding-left: 0px;
+			}
+		}
+	}
+	.adres_dostawy {
+		padding-right: 0px;
+		@media (max-width: $screen-xs-max) {
+			padding-right: 0px;
+			padding-left: 0px;
+		}
+	}
+}

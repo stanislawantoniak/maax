@@ -1,0 +1,602 @@
+#product-gallery {
+    .connected-carousels {
+        .stage {
+            width: 319px;
+            margin: 0;
+            position: relative;
+            float:left;
+            @media (min-width: 768px) and (max-width: 931px) {
+                margin-left: 5px;
+            }
+            @media (max-width: 360px) {
+                width:360px;
+                margin-left:-15px;
+                margin-right:-15px;
+            }
+            @media (max-width: 320px) {
+                width:320px;
+                margin-left:-15px;
+                margin-right:-15px;
+            }
+            ul {
+                margin:0px;
+                padding:0px;
+                li {
+
+                    > div {
+                        img {
+                            width:100%;
+                            height:auto;
+                            @media (max-width: 360px) {
+                                width:360px;
+                            }
+                            @media (max-width: 320px) {
+                                width:320px;
+                            }
+                        }
+                        position:relative;
+                        .view_lupa {
+                            position:absolute;
+                            top:88%;
+                            right:10px;
+                            z-index: 900;
+                            @media (max-width: 361px) {
+                                display:none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .navigation {
+            width:78px;
+            margin: 15px 24px 10px 0;
+            position: relative;
+            padding:0 0;
+            float:left;
+            @media (max-width: 931px) {
+                display:none;
+            }
+            ul {
+                li {
+                    width:67px;
+                }
+            }
+        }
+        .carousel {
+            overflow: hidden;
+            position: relative;
+            ul {
+                width: 20000em;
+                position: relative;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                li {
+                    float: left;
+                    margin: 0;
+                }
+            }
+        }
+        .carousel-navigation {
+            height: 369px;
+            width: 77px;
+            margin-left: 0;
+            ul {
+                width: 70px;
+                height:2000em;
+                margin-top:-1px;
+            }
+            li {
+                cursor: pointer;
+                position:relative;
+                margin: 2px 5px!important;
+                &.active {
+                    .shadow {
+                        width:99px;
+                        height:75px;
+                        position:absolute;
+                        left:0px;
+                        top:0px;
+                    }
+                }
+            }
+        }
+    }
+    /** Stage carousel controls **/
+
+    .connected-carousels {
+        .prev-stage,
+        .next-stage {
+            position: absolute;
+            top:160px;
+            width: 50px;
+            height:50px;
+            span {
+                display: block;
+                top:41%;
+                z-index: 900;
+            }
+
+
+            @media (min-width: 932px){
+                display:none;
+            }
+        }
+        .prev-stage {
+
+            left: 1px;
+            @media (min-width: 361px) and (max-width:767px) {
+                left: -33px;
+            }
+            span {
+                @include sprite-dimensions($allMap, arrow-stage-prev);
+                float: left;
+                margin: 18px 0 0 18px;
+                &:hover {
+                }
+            }
+
+        }
+        .next-stage {
+            right: 1px;
+            @media (min-width: 361px) and (max-width:767px) {
+                right: -33px;
+            }
+            span {
+                @include sprite-dimensions($allMap, arrow-stage-next);
+                float: right;
+                margin: 18px 18px 0 0;
+            }
+        }
+    }
+}
+/** Navigation carousel controls **/
+
+.connected-carousels {
+    .prev-navigation,
+    .next-navigation {
+        display:inline-block;
+        width:15px;
+        height:75px;
+        position:absolute;
+        left:50%;
+        margin-left: -(image-width(sprite-file($allMap, arrow_top_j)) / 2) ;
+        z-index: 999;
+        &.inactive {
+            visibility:hidden;
+        }
+    }
+    .prev-navigation {
+        top:-15px;
+        @include sprite-dimensions($allMap, arrow_top_j);
+    }
+    .next-navigation {
+        bottom:-15px;
+        @include sprite-dimensions($allMap, arrow_bottom_j);
+    }
+}
+
+// PAGINATION
+.pagination {
+    position: absolute;
+    bottom: -5px;
+    margin-bottom: 0px;
+    width:100%;
+}
+.jcarousel-pagination {
+
+    display:inline-block;
+    padding: 3px 15px;
+
+    a {
+        @include inline-block;
+        width:13px;
+        height:13px;
+        margin: 0 3px;
+        outline: none!important;
+    }
+}
+#product-gallery {
+    #productGalleryBigMedia, #productGalleryBigMediaOpen {
+        float: left;
+        width: 319px;
+        @media (max-width: 360px) {
+            width:360px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        @media (max-width: 320px) {
+            width:320px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        .item{
+            padding:0px;
+            height: auto;
+        }
+    }
+
+    #wrapper-productGalleryThumbMedia, #wrapper-productGalleryThumbMediaOpen {
+        float: left;
+        width: 80px;
+        margin-left: 7px;
+        margin-right: 10px;
+        position: relative;
+        @media (max-width: 931px) {
+            display:none;
+        }
+    }
+    .auto-height{
+      .rwd-wrapper-outer {
+        height: auto!important;
+      }
+    }
+    #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
+        width: 80px;
+        margin-top: 10.5px;
+        .rwd-wrapper-outer {
+            height: 379px;
+        }
+        .rwd-wrapper  {
+            width: 72px!important;
+        }
+        .rwd-item{
+            padding: 5px 0px;
+            color: #FFF;
+            width: 67px!important;
+            float: none;
+        }
+    }
+
+
+    .item {
+
+        > div {
+            img {
+                width:100%;
+                height:auto;
+                @media (max-width: 360px) {
+                    width:360px;
+                }
+                @media (max-width: 320px) {
+                    width:320px;
+                }
+            }
+            position:relative;
+            .view_lupa {
+                position:absolute;
+//                top:88%;
+                bottom: 2%;
+                right:10px;
+                z-index: 900;
+                @media (max-width: 767px) {
+                    display:none;
+                }
+            }
+        }
+    }
+    .rwd-controls {
+        .rwd-buttons {
+            .rwd-prev,
+            .rwd-next {
+                position: absolute;
+                top:50%;
+                width: 50px;
+                height:50px;
+                margin-top: -25px;
+                &:before {
+                    content: ' ';
+                    display: block;
+                    top:41%;
+                    z-index: 900;
+                }
+                @media (min-width: 932px){
+                    display:none;
+                }
+            }
+            .rwd-prev {
+                left:0px;
+                &:before {
+                    @include sprite-dimensions($allMap, arrow-stage-prev);
+                    margin: 18px 0 0 18px;
+                }
+                @media (min-width: 361px) and (max-width:767px) {
+                    left: -33px;
+                }
+            }
+            .rwd-next {
+                right:0px;
+                &:before {
+                    @include sprite-dimensions($allMap, arrow-stage-next);
+                    margin: 18px 0 0 18px;
+                }
+                @media (min-width: 361px) and (max-width:767px) {
+                    right: -37px;
+                }
+            }
+            .rwd-prev,
+            .rwd-next {
+                &.disabled {
+                    visibility:hidden;
+                }
+            }
+        }
+    }
+    .up,
+    .down {
+        display:inline-block;
+        width:15px;
+        height:75px;
+        position:absolute;
+        left:35px;
+        margin-left: -(image-width(sprite-file($allMap, arrow_top_j)) / 2) ;
+        z-index: 999;
+        outline:none;
+        overflow:hidden;
+        &.inactive {
+            visibility:hidden;
+        }
+        &.disabled {
+            visibility:hidden;
+        }
+    }
+    .up {
+        top:0px;
+        @include sprite-dimensions($allMap, arrow_top_j);
+    }
+    .down {
+        top: 395px;
+        @include sprite-dimensions($allMap, arrow_bottom_j);
+    }
+	.rwd-pagination {
+		position: absolute;
+		bottom: 30px;
+		margin-bottom: 0px;
+		width:auto;
+		display:inline-block;
+		padding: 3px 15px;
+		left: 0px;
+		right: 0px;
+		margin: 0 50px;
+		@media (min-width: 932px){
+			display:none;
+		}
+	}
+	.rwd-page {
+		span {
+			@include inline-block;
+			width:13px;
+			height:13px;
+			margin: 0 3px;
+			outline: none!important;
+		}
+	}
+	.followUs {
+		margin-left: 97px;
+		margin-right: 16px;
+		ul {
+			li:last-child {
+				margin-right: 0px;
+			}
+		}
+		@media(max-width: 932px) {
+			margin-left: 0px;
+			margin-right:0px;
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////
+#lightbox {
+    width: 100%;
+    height:100%;
+	top: 0;
+    left: 0;
+    overflow:hidden;
+    position: fixed;
+    display: none;
+    z-index: 900;
+	@media(max-width: $screen-xs-max) {
+		display: none !important;
+	}
+	#lightbox-inner {
+		overflow: auto;
+		width: 100%;
+		height: 100%;
+		#lightbox-header {
+			position: fixed;
+			width: 100%;
+			border: 10px solid #FFF;
+			background-color: #FFF;
+			box-sizing: border-box;
+			z-index: 100;
+			img {
+				width: 117px;
+				height: 29px;
+			}
+		}
+		#lightbox-gallery {
+			padding-top: 49px;
+			overflow: hidden;
+			position: relative;
+			height: 100%;
+			#lightbox-gallery-thumbs {
+				width: 137px;
+				height: 100%;
+				padding: 84px 35px 35px;
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 50;
+				@media(max-width: $screen-sm-max) {
+					display: none;
+				}
+				#lightbox-gallery-thumbs-up, #lightbox-gallery-thumbs-down {
+					width: 100%;
+					height: 35px;
+					position: absolute;
+					background: white;
+					left: 0;
+					cursor: pointer;
+					font-size: 24px;
+					text-align: center;
+					z-index: 20;
+					display: none;
+				}
+				#lightbox-gallery-thumbs-up {
+					top: 49px;
+				}
+				#lightbox-gallery-thumbs-down {
+					bottom: 0;
+				}
+				#lightbox-gallery-thumbs-images {
+					overflow-y: auto;
+					height: 100%;
+					margin-right: -25px;
+					position: relative;
+					&::after {
+						content: '';
+						background: #FFF;
+						right: 0;
+						top: 0;
+						width: 25px;
+						height: 100%;
+					}
+					.lightbox-gallery-thumb {
+						margin-bottom: 10px;
+						img {
+							border: 1px solid $gray-lighter;
+							cursor: pointer;
+							&:hover {
+								border-color: $gray-dark;
+							}
+						}
+						&.lighbox-gallery-thumb-active img {
+							border-color: $gray-dark;
+						}
+						&:last-child {
+							margin-bottom: 0;
+						}
+					}
+				}
+			}
+			#lightbox-gallery-images {
+				width: 100%;
+				height: 100%;
+				padding: 0 0 0 137px;
+				position: relative;
+				@media(max-width: $screen-sm-max) {
+					padding: 0;
+				}
+				.slick-prev,.slick-next {
+					display: none;
+					@media(max-width: $screen-sm-max) {
+						display: block;
+						position: absolute;
+						width: 50px;
+						height: 50px;
+						background: rgba(0,0,0,.1);
+						top: 50%;
+						margin-top: -25px;
+						cursor: pointer;
+						&:hover {
+							background: rgba(0,0,0,.4);
+							&::before {
+								color: rgba(0,0,0,.7);
+							}
+						}
+						&::before {
+							font-family: FontAwesome;
+							font-size: 38px;
+							color: rgba(0,0,0,.5)
+						}
+					}
+				}
+				.slick-prev {
+					left: 10px;
+					&::before {
+						content: "\f053";
+						margin-left:12px;
+					}
+				}
+				.slick-next {
+					right: 10px;
+					&::before {
+						content: "\f054";
+						margin-left: 13px;
+					}
+				}
+				&.lightbox-gallery-has-flag {
+					&::before {
+						content: '';
+						background: $allMap;
+						position: absolute;
+						top: 2%;
+						left: 150px;
+						z-index: 10;
+						@media(max-width: $screen-sm-max) {
+							left: 2%;
+						}
+					}
+					&.lightbox-gallery-flag-sale::before {
+						@include sprite($allMap, sale);
+						@include sprite-dimensions($allMap, sale);
+					}
+					&.lightbox-gallery-flag-percent::before,
+					&.lightbox-gallery-flag-promotion::before {
+						@include sprite($allMap, percent);
+						@include sprite-dimensions($allMap, percent);
+					}
+					&.lightbox-gallery-flag-new::before {
+						@include sprite($allMap, new);
+						@include sprite-dimensions($allMap, new);
+					}
+					&.lightbox-gallery-flag-hit::before,
+					&.lightbox-gallery-flag-bestseller::before {
+						@include sprite($allMap, hit);
+						@include sprite-dimensions($allMap, hit);
+					}
+				}
+				.slick-list,.slick-track {
+					height: 100%;
+				}
+				.lightbox-gallery-item {
+					position: relative;
+					overflow: auto;
+					&.lightbox-gallery-item-resizing {
+						opacity: 0;
+					}
+					&.lightbox-gallery-item-zoom {} //class for js
+					&.lightbox-gallery-item-can-zoom {
+						cursor: pointer;
+						&::before {
+							content: '';
+							position: absolute;
+							top: 2%;
+							right: 2%;
+							background: $allMap;
+							@include sprite($allMap, view_lupa_plus);
+							@include sprite-dimensions($allMap, view_lupa_plus);
+						}
+						&.lightbox-gallery-item-zoom::before {
+							@include sprite($allMap, view_lupa_minus);
+						}
+					}
+					.lightbox-gallery-image {
+						width: 100%;
+						height: 100%;
+						text-align: center;
+						overflow: hidden;
+						background-position: center center;
+						background-repeat: no-repeat;
+						&.lightbox-gallery-image-big {
+							background-size: contain;
+						}
+						transition: height .3s ease;
+					}
+				}
+			}
+		}
+	}
+}
