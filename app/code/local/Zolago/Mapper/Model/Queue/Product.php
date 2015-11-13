@@ -44,8 +44,7 @@ class Zolago_Mapper_Model_Queue_Product extends Zolago_Common_Model_Queue_Abstra
      */
     public function pushProductToMapperQueue($productIds)
     {
-        foreach ($productIds as $productId) {
-            Mage::getModel("zolagomapper/queue_product")->push(array("product_id" => $productId));
-        }
+        Mage::getResourceModel("zolagomapper/queue_product")
+            ->pushProductToMapperQueue($productIds);
     }
 }
