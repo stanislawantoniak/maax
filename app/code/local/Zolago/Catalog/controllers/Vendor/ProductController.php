@@ -199,7 +199,7 @@ class Zolago_Catalog_Vendor_ProductController
                 ->pushProductToMapperQueue($ids);
 
             $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
-            $attributeSetModel->load($attributeSetId);
+            $attributeSetModel->load($attributeSetMoveToId);
             $attributeSetName = $attributeSetModel->getAttributeSetName();
 
             $productIdsCount = count($ids);
