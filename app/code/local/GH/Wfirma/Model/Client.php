@@ -39,6 +39,9 @@ class GH_Wfirma_Model_Client {
 	//Próba wywołania zakresu do którego nie ma się dostępu (tylko przy autoryzacji przez OAuth).
 	const RESULT_STATUS_CODE_DENIED_SCOPE_REQUESTED = 'DENIED SCOPE REQUESTED';
 
+	//limit po stronie wFirma to 512 znaków, ale każdy znak nowej linii zamieniany jest na <br/> co zmniejsza limit, więc ustawiam go na trochę niższy
+	const NOTE_FIELD_LENGTH = 450;
+
 
 
 	private $_inputFormat                   = 'json'; //other options: xml (default) and php (serialized php array),
@@ -187,7 +190,7 @@ class GH_Wfirma_Model_Client {
 	//invoice payment methods
 	const INVOICE_PAYMENT_METHOD_CASH = 'cash'; //gotówka
 	const INVOICE_PAYMENT_METHOD_TRANSFER = 'transfer'; //przelew
-	const INVOICE_PAYMENT_METHOD_COMPENSATION = 'compensation'; //kompensacja (?)
+	const INVOICE_PAYMENT_METHOD_COMPENSATION = 'compensation'; //kompensata
 	const INVOICE_PAYMENT_METHOD_COD = 'cod'; //pobranie
 	const INVOICE_PAYMENT_METHOD_PAYMENT_CARD = 'payment_card'; //karta
 
@@ -301,7 +304,15 @@ class GH_Wfirma_Model_Client {
 	const INVOICE_DOWNLOAD_TYPE_INVOICE = 'invoice'; //wydruk oryginału
 	const INVOICE_DOWNLOAD_TYPE_COPY = 'invoicecopy'; //wydruk kopii
 
-	public function downloadInvoice($invoiceId,$type=self::INVOICE_DOWNLOAD_TYPE_ALL,$address=0,$leaflet=0,$duplicate=0) {
+	/**
+	 * @param Zolago_Payment_Model_Vendor_Invoice $invoiceModel
+	 * @param string $type
+	 * @param int $address
+	 * @param int $leaflet
+	 * @param int $duplicate
+	 * @throws Zend_Controller_Response_Exception
+	 */
+	public function downloadInvoice($invoiceModel,$type=self::INVOICE_DOWNLOAD_TYPE_INVOICE,$address=0,$leaflet=0,$duplicate=0) {
 		$post = array(
 			'invoices' => array(
 				'parameters' => array(
@@ -337,7 +348,8 @@ class GH_Wfirma_Model_Client {
 			)
 		);
 
-		$file = $this->doRequest("invoices/download/$invoiceId",$post);
+		$file = $this->doRequest("invoices/download/{$invoiceModel->getData('wfirma_invoice_id')}",$post);
+		$filename = "faktura_".preg_replace("/[^a-z0-9\._-]+/i","-",$invoiceModel->getWfirmaInvoiceNumber()).'.pdf';
 
 		Mage::app()->getResponse()
 			->setHttpResponseCode(200)
@@ -345,7 +357,7 @@ class GH_Wfirma_Model_Client {
 			->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
 			->setHeader ('Content-type', 'application/force-download', true )
 			->setHeader('Content-Length', strlen($file)) //size in bytes
-			->setHeader('Content-Disposition', 'inline;' . '; filename=faktura_'.$invoiceId.'.pdf');
+			->setHeader('Content-Disposition', 'inline;' . '; filename='.$filename);
 		Mage::app()->getResponse()->clearBody();
 		Mage::app()->getResponse()->sendHeaders();
 
@@ -354,62 +366,62 @@ class GH_Wfirma_Model_Client {
 	}
 
 	public function addContractor($post) {
-		$postExample = array(
-			'contractors' => array(
-				'contractor' => array(
-					//dane firmy
-					'name'          => 'Testowy Contractor', //nazwa długa
-					'altname'       => 'TestContr', //nazwa skrócona
-					'nip'           => 1691732219,
-
-					//adres główny
-					'street'        => 'Plac Defilad 1',
-					'zip'           => '00-901',
-					'city'          => 'Warszawa',
-					'country'       => 'PL', //dwuliterowy kod kraju (http://www.finanse.mf.gov.pl/documents/766655/1198699/KodyKrajow_v3-0.xsd)
-
-					//dane kontaktowe
-					'phone'         => 123123123,
-					'skype'         => 'skypelogin',
-					'fax'           => 123123123,
-					'email'         => 'adam.wilk+wfirma@convertica.pl', //potrzebny do mailowych powiadomien o fakturach
-					'url'           => 'http://www.google.pl',
-					'description'   => 'jakiś tam opis firmy',
-
-					//inne
-					'buyer'         => 1, //Wartość 1 dla oznaczenia, że kontrahent jest nabywcą
-					'seller'        => 0, //Wartość 1 dla oznaczenia, że kontrahent jest dostawcą
-					'account_number'=> '02297745003044811546527422',
-
-					//Domyślna wartość rabatu w procentach, która będzie stosowana dla kontrahenta. Dla rabatu 50% należy wprowadzić wartość 50.
-					//Nie obowiązuje przy produktach oznaczonych jako 'nierabatowalne' ;)
-					'discount_percent'=> 0,
-
-					//płatności
-					'payment_days'  => 7, //domyślny termin płatności
-					'payment_method'=> self::INVOICE_PAYMENT_METHOD_TRANSFER, //domyślna metoda płatności
-
-					//W przypadku wartości 1 i włączonych automatycznych powiadomieniach o niezapłaconych fakturach,
-					//kontrahent otrzyma monit w przypadku braku zapłaty za fakturę.
-					'remind'        => 1,
-
-					//Wartość hasha zabezpieczającego panel klienta (dostępnego przez odsyłacz http://wfirma.pl/invoice_externals/find/HASH).
-					//nie ustawiałem tego - system sam generuje ten hash
-					//'hash'          => 'iisdfiuashdfiuahsiduhfiasudhf',
-
-					//inny adres kontaktowy
-					'different_contact_address' => 0, //czy adres kontaktowy różni się od adresu głównego. 1 - TAK, 0 - NIE
-					/* jezeli 1 wyzej to:
-					'contact_name' => 'Testowy Contractor Kontakt',
-					'contact_street' => 'Plac Defilad 2',
-					'contact_zip' => '00-901',
-					'contact_city' => 'Warszawa',
-					'contact_country' => 'PL', //dwuliterowy kod kraju (http://www.finanse.mf.gov.pl/documents/766655/1198699/KodyKrajow_v3-0.xsd)
-					'contact_person' => 'Osoba kontaktowa'
-					*/
-				)
-			)
-		);
+//		$postExample = array(
+//			'contractors' => array(
+//				'contractor' => array(
+//					//dane firmy
+//					'name'          => 'Testowy Contractor', //nazwa długa
+//					'altname'       => 'TestContr', //nazwa skrócona
+//					'nip'           => 1691732219,
+//
+//					//adres główny
+//					'street'        => 'Plac Defilad 1',
+//					'zip'           => '00-901',
+//					'city'          => 'Warszawa',
+//					'country'       => 'PL', //dwuliterowy kod kraju (http://www.finanse.mf.gov.pl/documents/766655/1198699/KodyKrajow_v3-0.xsd)
+//
+//					//dane kontaktowe
+//					'phone'         => 123123123,
+//					'skype'         => 'skypelogin',
+//					'fax'           => 123123123,
+//					'email'         => 'adam.wilk+wfirma@convertica.pl', //potrzebny do mailowych powiadomien o fakturach
+//					'url'           => 'http://www.google.pl',
+//					'description'   => 'jakiś tam opis firmy',
+//
+//					//inne
+//					'buyer'         => 1, //Wartość 1 dla oznaczenia, że kontrahent jest nabywcą
+//					'seller'        => 0, //Wartość 1 dla oznaczenia, że kontrahent jest dostawcą
+//					'account_number'=> '02297745003044811546527422',
+//
+//					//Domyślna wartość rabatu w procentach, która będzie stosowana dla kontrahenta. Dla rabatu 50% należy wprowadzić wartość 50.
+//					//Nie obowiązuje przy produktach oznaczonych jako 'nierabatowalne' ;)
+//					'discount_percent'=> 0,
+//
+//					//płatności
+//					'payment_days'  => 7, //domyślny termin płatności
+//					'payment_method'=> self::INVOICE_PAYMENT_METHOD_TRANSFER, //domyślna metoda płatności
+//
+//					//W przypadku wartości 1 i włączonych automatycznych powiadomieniach o niezapłaconych fakturach,
+//					//kontrahent otrzyma monit w przypadku braku zapłaty za fakturę.
+//					'remind'        => 1,
+//
+//					//Wartość hasha zabezpieczającego panel klienta (dostępnego przez odsyłacz http://wfirma.pl/invoice_externals/find/HASH).
+//					//nie ustawiałem tego - system sam generuje ten hash
+//					//'hash'          => 'iisdfiuashdfiuahsiduhfiasudhf',
+//
+//					//inny adres kontaktowy
+//					'different_contact_address' => 0, //czy adres kontaktowy różni się od adresu głównego. 1 - TAK, 0 - NIE
+//					/* jezeli 1 wyzej to:
+//					'contact_name' => 'Testowy Contractor Kontakt',
+//					'contact_street' => 'Plac Defilad 2',
+//					'contact_zip' => '00-901',
+//					'contact_city' => 'Warszawa',
+//					'contact_country' => 'PL', //dwuliterowy kod kraju (http://www.finanse.mf.gov.pl/documents/766655/1198699/KodyKrajow_v3-0.xsd)
+//					'contact_person' => 'Osoba kontaktowa'
+//					*/
+//				)
+//			)
+//		);
 
 		return $this->doRequest('contractors/add',$post);
 	}

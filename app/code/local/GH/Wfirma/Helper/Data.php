@@ -16,7 +16,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 		if($this->updateContractor($vendor)) {
 			$invoiceContents = array();
 
-			if($invoice->getData('commission_brutto')) {
+			if(floatval($invoice->getData('commission_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -29,7 +29,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				);
 			}
 
-			if($invoice->getData('transport_brutto')) {
+			if(floatval($invoice->getData('transport_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -42,7 +42,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				);
 			}
 
-			if($invoice->getData('marketing_brutto')) {
+			if(floatval($invoice->getData('marketing_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -55,7 +55,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				);
 			}
 
-			if($invoice->getData('other_brutto')) {
+			if(floatval($invoice->getData('other_brutto'))) {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
@@ -76,12 +76,13 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 								'id'=>  $vendor->getData('wfirma_contractor_id')
 							),
 							'type'              => $client::INVOICE_TYPE_NORMAL, //fvat
-							'payment_method'    => $client::INVOICE_PAYMENT_METHOD_TRANSFER, //przelew
+							'payment_method'    => $client::INVOICE_PAYMENT_METHOD_COMPENSATION, //kompensata
 							'date'              => $invoice->getData('date'),
 							'disposaldate'      => $invoice->getData('sale_date'),
 							//'paymentdate'       => '2015-10-29',
 							'price_type'        => 'brutto', //or 'netto' - all goods prices calculations are based on this field
 							'id_external'       => $invoice->getData('vendor_invoice_id'),
+							'description'       => $invoice->getData('note'),
 
 							'invoicecontents'   => $invoiceContents
 						)
@@ -138,7 +139,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 			'contractors' => array(
 				'contractor' => array(
 					//dane firmy
-					'name'          => $vendor->getData('vendor_name'), //nazwa długa
+					'name'          => $vendor->getData('company_name'), //nazwa długa
 					//'altname'       => 'TestContr', //nazwa skrócona
 					'nip'           => $vendor->getData('tax_no'),
 
@@ -167,7 +168,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 
 					//płatności
 					//'payment_days'  => 7, //domyślny termin płatności
-					'payment_method'=> GH_Wfirma_Model_Client::INVOICE_PAYMENT_METHOD_TRANSFER, //domyślna metoda płatności
+					'payment_method'=> GH_Wfirma_Model_Client::INVOICE_PAYMENT_METHOD_COMPENSATION, //domyślna metoda płatności - kompensata
 
 					//W przypadku wartości 1 i włączonych automatycznych powiadomieniach o niezapłaconych fakturach,
 					//kontrahent otrzyma monit w przypadku braku zapłaty za fakturę.

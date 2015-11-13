@@ -81,5 +81,23 @@ class Zolago_Payment_Model_Vendor_Invoice extends Mage_Core_Model_Abstract
     {
         return Mage::getSingleton("zolagopayment/vendor_invoice_validator");
     }
+    
+    /**
+     * check if invoice is not empty 
+     *
+     * @return false
+     */
+     public function checkNotEmpty() {
+         $data = $this->getData();
+         if (empty($data['transport_brutto'])
+            && empty($data['marketing_brutto'])
+            && empty($data['commission_brutto']) 
+            && empty($data['other_brutto'])) 
+        { 
+            return false;
+        }
+        return true;
+
+     }
 
 }

@@ -229,6 +229,20 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Grid extends Mage_Adminhtm
         return parent::_prepareColumns();
     }
 
+	protected function _prepareMassaction()
+	{
+		$this->setMassactionIdField('id');
+		$this->getMassactionBlock()->setFormFieldName('vendor_statements');
+
+		$this->getMassactionBlock()->addItem('invoices', array(
+			'label'=> Mage::helper("ghstatements")->__('Generate invoices'),
+			'url'  => $this->getUrl('*/*/massInvoice'),
+			'confirm' => Mage::helper("ghstatements")->__('Do you want to generate invoices for selected statements?')
+		));
+
+		return $this;
+	}
+
 
     public function getRowUrl($row)
     {

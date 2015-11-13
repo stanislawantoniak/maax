@@ -49,6 +49,8 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
             $model->load($id);
             if (!$model->getId()) {
                 throw new Mage_Core_Exception(Mage::helper('ghstatements')->__("Statement not found"));
+            } elseif($model->getVendorInvoiceId()) {
+	            throw new Mage_Core_Exception(Mage::helper('ghstatements')->__("Cannot delete statement because invoice for this statement has been already generated."));
             }
             $model->delete();
             $this->_getSession()->addSuccess(Mage::helper('ghstatements')->__("Statement deleted"));
@@ -166,4 +168,113 @@ class GH_Statements_Adminhtml_Vendor_StatementsController extends Mage_Adminhtml
             return $this->_redirectReferer();
         }
     }
+
+	public function massInvoiceAction() {
+		if($this->getRequest()->isPost() && $this->_validateFormKey()) {
+			$statementsIds = $this->getRequest()->getParam('vendor_statements');
+			if(is_array($statementsIds) && count($statementsIds)) {
+				$invoiceModels = array();
+				$statementModels = array();
+				$updatedStatements = 0;
+				$skippedStatements = 0;
+				$month = false;
+				try {
+					foreach ($statementsIds as $statementId) {
+						/** @var Gh_Statements_Model_Statement $statementModel */
+						$statementModel = Mage::getModel('ghstatements/statement');
+						$statementModel->load($statementId);
+						if ($statementModel->getId()) {
+							if(!$statementModel->getVendorInvoiceId()) {
+								$statementModels[] = $statementModel;
+							} else {
+								$skippedStatements++;
+								continue;
+							}
+
+							$thisMonth = date('m',strtotime($statementModel->getEventDate()));
+							if(!$month) {
+								$month = $thisMonth;
+							} elseif($month != $thisMonth) {
+								Mage::throwException(Mage::helper("ghstatements")->__("All selected statements have to be from the same month!"));
+							}
+
+							$vid = $statementModel->getVendorId();
+							if(!isset($invoiceModels[$vid])) {
+								$invoiceModels[$vid] = Mage::getModel('zolagopayment/vendor_invoice')
+									->setData('vendor_id',$vid);
+							}
+
+							//costs adding start
+							$commissionBrutto = floatval($invoiceModels[$vid]->getData('commission_brutto'));
+							$transportBrutto = floatval($invoiceModels[$vid]->getData('transport_brutto'));
+							$marketingBrutto = floatval($invoiceModels[$vid]->getData('marketing_brutto'));
+							//$otherBrutto = floatval($invoiceModels[$vid]->getData('other_brutto')); //will be used somewhere in the future ;)
+
+							$invoiceModels[$vid]
+								->setData(
+									'commission_brutto',
+									$commissionBrutto + floatval($statementModel->getData('total_commission'))
+								)
+								->setData(
+									'transport_brutto',
+									$transportBrutto + floatval($statementModel->getData('tracking_charge_total')) + floatval($statementModel->getData('delivery_correction'))
+								)
+								->setData(
+									'marketing_brutto',
+									$marketingBrutto + floatval($statementModel->getData('marketing_value')) + floatval($statementModel->getData('marketing_correction'))
+								)
+
+								/*->setData(
+									'other_brutto',
+									$otherBrutto + //whatever
+								)*/;
+							//costs adding end
+
+							//dates calculation start
+							$time = strtotime($statementModel->getEventDate());
+							$dateToInsert = date("Y-m-t", $time);
+							if(!$invoiceModels[$vid]->getData('date') || strtotime($invoiceModels[$vid]->getData('date')) < strtotime($dateToInsert)) {
+								$invoiceModels[$vid]->setData('date',$dateToInsert)->setData('sale_date',$dateToInsert);
+							}
+							//dates calculation end
+
+						} else {
+							$this->_getSession()->addError(Mage::helper("ghstatements")->__("Some error occurred!"));
+							return $this->_redirectReferer();
+						}
+					}
+					$invoiceIds = array();
+					if (count($invoiceModels)) {
+						foreach ($invoiceModels as $invoice) {
+						    if ($invoice->checkNotEmpty()) {
+    							$invoice->save();
+	    						$invoiceIds[$invoice->getData('vendor_id')] = $invoice->getId();
+                            }
+						}
+						foreach($statementModels as $statement) {
+							if(isset($invoiceIds[$statement->getVendorId()])) {							    
+								$statement->setVendorInvoiceId($invoiceIds[$statement->getVendorId()]);
+								$statement->save();
+								$updatedStatements++;
+							} else {
+								$skippedStatements++;
+							}
+						}
+						if($updatedStatements) {
+							$this->_getSession()->addSuccess(Mage::helper("ghstatements")->__("Invoices have been generated for %s statements",$updatedStatements));
+						}
+						if($skippedStatements) {
+							$this->_getSession()->addNotice(Mage::helper("ghstatements")->__("%s statements have been skipped during invoice generation",$updatedStatements));
+						}
+					}
+				} catch (Mage_Core_Exception $e) {
+					$this->_getSession()->addError($e->getMessage());
+				} catch (Exception $e) {
+					$this->_getSession()->addError(Mage::helper("ghstatements")->__("Some error occurred!"));
+					Mage::logException($e);
+				}
+			}
+		}
+		return $this->_redirectReferer();
+	}
 }

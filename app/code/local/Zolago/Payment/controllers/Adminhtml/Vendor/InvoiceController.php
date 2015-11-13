@@ -5,6 +5,8 @@
  */
 class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_Controller_Action
 {
+	protected $_helper;
+
     /**
      * Vendor Invoice Grid
      */
@@ -60,6 +62,9 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
         try {
             if ($this->getRequest()->isPost()) {
                 $model->load($modelId);
+	            if(isset($data['note']) && $data['note']) {
+		            $data['note'] = substr($data['note'], 0, GH_Wfirma_Model_Client::NOTE_FIELD_LENGTH);
+	            }
                 $model->addData($data);
                 $validErrors = $model->validate();
 
@@ -94,18 +99,21 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
         try {
             $model = Mage::getModel("zolagopayment/vendor_invoice")->load($id);
             if (!$model->getId()) {
-                throw new Mage_Core_Exception(Mage::helper('zolagopayment')->__("Vendor Invoice not found"));
+	            Mage::throwException($this->_getHelper()->__("Vendor Invoice not found"));
             }
+	        if($model->getData('wfirma_invoice_id')) {
+		        Mage::throwException($this->_getHelper()->__("Can't delete. Invoice already generated in  wFirma system"));
+	        }
             if ($model->getStatementId()) {
-                throw new Mage_Core_Exception(Mage::helper('zolagopayment')->__("Cant delete. Invoice in statement"));
+	            Mage::throwException($this->_getHelper()->__("Can't delete. Invoice in statement"));
             }
             $model->delete();
-            $this->_getSession()->addSuccess(Mage::helper('zolagopayment')->__("Vendor Invoice Deleted"));
+            $this->_getSession()->addSuccess($this->_getHelper()->__("Vendor Invoice Deleted"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
+            $this->_getSession()->addError($this->_getHelper()->__("Some error occurred!"));
             Mage::logException($e);
         }
         return $this->_redirect("*/*");
@@ -137,7 +145,7 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             $this->_getSession()->addError($hlp->__($e->getMessage()));
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
+            $this->_getSession()->addError($this->_getHelper()->__("Some error occurred!"));
             Mage::logException($e);
         }
         return $this->_redirect("*/*");
@@ -146,8 +154,6 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
     public function downloadAction()
     {
         $id = $this->getRequest()->getParam("id");
-        /** @var Zolago_Payment_Helper_Data $hlp */
-        $hlp = Mage::helper('zolagopayment');
         /** @var GH_Wfirma_Helper_Data $wfirmaHlp */
         $wfirmaHlp = Mage::helper('ghwfirma');
         try {
@@ -158,14 +164,14 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             } elseif(!$model->getData('wfirma_invoice_id')) {
                 Mage::throwException("Invoice has not been generated");
             } else {
-                $wfirmaHlp->getClient()->downloadInvoice($model->getData('wfirma_invoice_id'));
+                $wfirmaHlp->getClient()->downloadInvoice($model);
             }
 
         } catch(GH_Wfirma_Exception $e) {
             $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
             return $this->_redirectReferer();
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($hlp->__($e->getMessage()));
+            $this->_getSession()->addError($this->_getHelper()->__($e->getMessage()));
             return $this->_redirectReferer();
         } catch (Exception $e) {
             $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
@@ -193,4 +199,14 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
         Mage::register('zolagopayment_current_invoice', $model);
         return $model;
     }
+
+	/**
+	 * @return Zolago_Payment_Helper_Data
+	 */
+	protected function _getHelper() {
+		if(!$this->_helper) {
+			$this->_helper = Mage::helper('zolagopayment');
+		}
+		return $this->_helper;
+	}
 }
