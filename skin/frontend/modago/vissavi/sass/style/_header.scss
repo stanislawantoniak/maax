@@ -29,7 +29,7 @@
             &.open {
                 background: none !important;
 	                > a {
-	                    background: #2a2a2a !important; 
+	                    background: $color_2a2a2a !important; 
 	                }
                 }
             }
@@ -41,7 +41,7 @@
         }
 /* HEADER BOTTOM */
 .header_bottom {
-    background:#fff url('../images/bg-menu.png') 0 0 repeat-x;
+    background:$color_fff url('../images/bg-menu.png') 0 0 repeat-x;
     border-bottom:1px solid $color_dddce1;
      #nav_desc {
         &.navigation > li > a:hover,

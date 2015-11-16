@@ -11,7 +11,7 @@ ul.messages ul {
 }
 ul.messages >li.success-msg ul {
 	>li {
-		background: #73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
+		background: $color_73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
 		margin-top: 10px;
 	}
 	li:last-child {
@@ -22,7 +22,7 @@ ul.messages >li.success-msg ul {
 }
 ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul {
 	>li {
-		background: #e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
+		background: $color_e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
 		margin-top: 10px;
 	}
 	>li:last-child {

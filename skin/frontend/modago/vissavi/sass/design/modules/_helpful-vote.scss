@@ -41,7 +41,7 @@
 		.popover-dismiss {
 			&.badge {
 				border:1px solid $bc-secondary;
-				background:#fff!important;
+				background:$color_fff!important;
 				border-radius: 50%;
 				box-shadow: none;
 				text-shadow:none;
@@ -63,7 +63,7 @@
 	.popover-dismiss {
 			&.badge {
 				border:1px solid $bc-secondary;
-				background:#fff!important;
+				background:$color_fff!important;
 				border-radius: 50%;
 				box-shadow: none;
 				text-shadow:none;

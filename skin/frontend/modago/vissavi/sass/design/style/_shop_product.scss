@@ -151,24 +151,24 @@
 			color:$gray-dark;
 			text-transform: uppercase;
 			font-family: $fontRegular;
-			background:#fff url('../images/svg/unlike.svg') 8px 8px no-repeat;
+			background:$color_fff url('../images/svg/unlike.svg') 8px 8px no-repeat;
 			background-size: 22px 22px;
 			&:hover {
 				text-decoration: none;
-				background:#fff url('../images/svg/like.svg') 8px 8px no-repeat;
+				background:$color_fff url('../images/svg/like.svg') 8px 8px no-repeat;
 				background-size: 22px 22px;
 			}
 		}
 		.likeAdded {
 			color:$gray-dark;
-			background:#fff url('../images/svg/like.svg') 8px 5px no-repeat;
+			background:$color_fff url('../images/svg/like.svg') 8px 5px no-repeat;
 			background-size: 22px 22px;
 			span {
 				color:$color_dcdcdc;
 			}
 			&:hover {
 				text-decoration: none;
-				/*background:#fff url('../images/heart.png') 8px 11px no-repeat;*/
+				/*background:$color_fff url('../images/heart.png') 8px 11px no-repeat;*/
 				span {
 					color:$gray-dark;
 				}

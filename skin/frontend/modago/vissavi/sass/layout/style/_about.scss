@@ -1,7 +1,7 @@
 #about {
 	padding: 20px 350px 30px 70px;
 	@media(min-width: $screen-md-min) {
-		background: #fff url('../images/about/lady.jpg') no-repeat right top;
+		background: $color_fff url('../images/about/lady.jpg') no-repeat right top;
 	}
 	@media(max-width: $screen-md-max) {
 		padding-left: 40px;

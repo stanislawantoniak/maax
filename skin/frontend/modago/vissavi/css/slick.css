@@ -11,7 +11,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 1, ../sass/slick/_topslider.scss */
 #topSlider {
   display: none;
-  border: 1px solid #dbdbdb; }
+  border: 1px solid #9fce25; }
 /* line 4, ../sass/slick/_topslider.scss */
 #topSlider.slick-initialized {
   display: block; }
@@ -38,7 +38,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   font-weight: bold;
   font-size: 13px;
   text-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
-  color: #4f4f4f;
+  color: #fddbdb;
   text-align: center; }
 @media screen and (max-width: 1199px) {
   /* line 20, ../sass/slick/_topslider.scss */
@@ -60,7 +60,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   display: block; }
 /* line 43, ../sass/slick/_topslider.scss */
 #topSlider .slick-slide .topSlideCaptions a span i {
-  color: #6fffcf; }
+  color: #f8e6e6; }
 /* line 46, ../sass/slick/_topslider.scss */
 #topSlider .slick-slide .topSlideCaptions a span + span, #topSlider .slick-slide .topSlideCaptions a span + a span {
   margin-top: 20px; }
@@ -85,14 +85,14 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
     margin-top: 5px; } }
 /* line 68, ../sass/slick/_topslider.scss */
 #topSlider .slick-track {
-  background-color: #ffffff; }
+  background-color: #200; }
 /* line 71, ../sass/slick/_topslider.scss */
 #topSlider ul.slick-dots {
   position: absolute;
   right: 0;
   bottom: 0;
   list-style: none;
-  background: #1e1e1e;
+  background: #ffdce1;
   padding: 5px 20px;
   margin: 0; }
 /* line 79, ../sass/slick/_topslider.scss */
@@ -106,7 +106,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   font-size: 0;
   width: 10px;
   height: 10px;
-  border: 1px solid #ffffff;
+  border: 1px solid #200;
   border-radius: 8px;
   background-color: transparent;
   padding: 0;
@@ -116,7 +116,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   left: 0; }
 /* line 97, ../sass/slick/_topslider.scss */
 #topSlider ul.slick-dots li.slick-active button {
-  background-color: #ffffff;
+  background-color: #200;
   width: 12px;
   height: 12px;
   margin: -1px; }
@@ -131,11 +131,11 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   position: relative; }
 /* line 6, ../sass/slick/_boxesslider.scss */
 #boxesSlider .boxesSlide {
-  background-color: #fff;
+  background-color: #533;
   display: inline-block;
   vertical-align: top;
   float: none;
-  border: 1px solid #dbdbdb;
+  border: 1px solid #9fce25;
   margin: 0 5px 2px 0; }
 /* line 13, ../sass/slick/_boxesslider.scss */
 #boxesSlider .boxesSlide.mobile {
@@ -151,7 +151,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
-  background-color: #ffffff; }
+  background-color: #200; }
 /* line 29, ../sass/slick/_boxesslider.scss */
 #boxesSlider.boxesSliderHasArrows {
   padding-left: 40px;
@@ -159,7 +159,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 32, ../sass/slick/_boxesslider.scss */
 #boxesSlider.boxesSliderHasArrows .boxesArrow {
   display: block;
-  color: #999;
+  color: #ceadad;
   font-size: 30px;
   font-weight: 700;
   position: absolute;

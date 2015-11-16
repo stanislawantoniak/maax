@@ -70,7 +70,7 @@
 		margin-top:-10px;
 		cursor:pointer;
 		&:hover {
-			color:#808080
+			color:$color_808080;
 		}
 		&.prev {
 			left:0px;
@@ -95,7 +95,7 @@
 					visibility:hidden;
 				}
 				&:hover {
-					color:#808080
+					color:$color_808080;
 				}
 			}
 			.rwd-prev {
@@ -122,7 +122,7 @@
 					visibility:hidden;
 				}
 				&:hover {
-					color:#808080
+					color:$color_808080;
 				}
 			}
 			.rwd-prev {

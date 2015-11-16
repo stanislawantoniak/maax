@@ -84,13 +84,13 @@
             
             &:hover {
                 background-position:0 -30px !important;
-                color:#fff !important;
+                color:$color_fff !important;
                 outline:none !important;
             }
             &:active {
                 background-position:0 -58px !important;
                 outline:none;
-                color:#c6a662 !important;
+                color:$color_c6a662 !important;
             }
             
         }
