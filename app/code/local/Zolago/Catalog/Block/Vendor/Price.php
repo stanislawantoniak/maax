@@ -11,8 +11,6 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		$campaign =  Mage::getResourceModel("zolagocampaign/campaign_collection");
 		/* @var $campaign Zolago_Campaign_Model_Resource_Campaign_Collection */
 		$campaign->addVendorFilter($this->getVendor());
-        $campaign->addFieldToFilter("status", array("neq" => Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE));
-        $campaign->addFieldToFilter("type", array("neq" => Zolago_Campaign_Model_Campaign_Type::TYPE_INFO));
 		
 		$priceType = Mage::getSingleton('eav/config')->getAttribute(
 			Mage_Catalog_Model_Product::ENTITY,
