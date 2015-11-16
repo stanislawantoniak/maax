@@ -160,13 +160,13 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		if($productId){
 			$collection->addIdFilter($productId);
 		}else{
-            //Mage::log($this->_getRestQuery());
+
 			// Make filters
 			foreach($this->_getRestQuery() as $key=>$value){
 				$collection->addAttributeToFilter($key, $value);
 			}
 		}
-            //Mage::log($collection->getSelect()->__toString());
+
 		// Make order and limit
 		$out = $collection->prepareRestResponse(
 				$this->_getRestSort(), 
