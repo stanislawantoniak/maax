@@ -117,6 +117,11 @@
 		    </courier>
             <vendor>
                 <fieldsets>
+                    <websites_allowed>
+                        <legend>websites_allowed</legend>
+                        <position>80</position>
+                        <hidden>true</hidden>
+                    </websites_allowed>
                     <vendor_preferences>
                         <legend>Addresses</legend>
                         <position>80</position>
@@ -155,6 +160,13 @@
                     </rma_executive_data>
                 </fieldsets>
                 <fields>
+                    <websites_allowed>
+                        <label>websites_allowed</label>
+                        <fieldset>websites_allowed</fieldset>
+                        <type>multiselect</type>
+                        <source_model>core/website</source_model>
+                        <position>1</position>
+                    </websites_allowed>
                     <!--Company registration data-->
                     <company_name>
                         <label>Company name</label>
