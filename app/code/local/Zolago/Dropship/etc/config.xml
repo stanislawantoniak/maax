@@ -118,7 +118,7 @@
             <vendor>
                 <fieldsets>
                     <websites_allowed>
-                        <legend>websites_allowed</legend>
+                        <legend>Websites allowed</legend>
                         <position>80</position>
                         <hidden>true</hidden>
                     </websites_allowed>
@@ -161,7 +161,7 @@
                 </fieldsets>
                 <fields>
                     <websites_allowed>
-                        <label>websites_allowed</label>
+                        <label>Websites allowed</label>
                         <fieldset>websites_allowed</fieldset>
                         <type>multiselect</type>
                         <source_model>core/website</source_model>
