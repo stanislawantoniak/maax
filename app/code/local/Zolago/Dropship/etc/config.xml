@@ -161,7 +161,7 @@
                 </fieldsets>
                 <fields>
                     <websites_allowed>
-                        <label>Websites allowed</label>
+                        <label>Websites</label>
                         <fieldset>websites_allowed</fieldset>
                         <type>multiselect</type>
                         <source_model>core/website</source_model>

@@ -43,7 +43,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Websites extends Zolago_Dr
 
         $fieldset->addField('websites_allowed', 'multiselect', array(
             'name' => 'websites_allowed',
-            'label' => $hlp->__('Websites allowed'),
+            'label' => $hlp->__('Websites'),
             "values" => $websites
         ));
 
