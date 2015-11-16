@@ -7,7 +7,10 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_VendorName
     public function render(Varien_Object $row)
     {
         $options = $this->getColumn()->getData('options');
-        return $options[(int)$row->getData("udropship_vendor")];
+        if (isset($options[(int)$row->getData("udropship_vendor")])) {
+            return $options[(int)$row->getData("udropship_vendor")];
+        }
+        return '';
     }
 
 }
