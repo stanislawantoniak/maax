@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-
 <config>
-	<menu>
+    <menu>
         <vendors>
             <children>
                 <sales_management>
@@ -9,22 +8,50 @@
                         <urma translate="title" module="urma">
                             <title>Returns</title>
                             <sort_order>20</sort_order>
-                      		<action>urmaadmin/rma</action>
+                            <action>urmaadmin/rma</action>
                         </urma>
                     </children>
                 </sales_management>
-                        
-                        <vendor_general_config>
-                            <children>
-                            	<reasons translate="title" module="urma">
-                            		<title>RMA Reasons</title>
-                            		<action>adminhtml/return</action>
-                            		<sort_order>140</sort_order>
-                            	</reasons>
-                            </children>
-                        </vendor_general_config>
+                <vendor_general_config>
+                    <children>
+                        <reasons translate="title" module="urma">
+                            <title>RMA Reasons</title>
+                            <action>adminhtml/return</action>
+                            <sort_order>140</sort_order>
+                        </reasons>
+                    </children>
+                </vendor_general_config>
             </children>
-            
         </vendors>
     </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <!-- Adding new acl path START -->
+                            <sales_management>
+                                <children>
+                                    <urma translate="title" module="urma">
+                                        <title>Returns</title>
+                                        <sort_order>20</sort_order>
+                                    </urma>
+                                </children>
+                            </sales_management>
+                            <vendor_general_config>
+                                <children>
+                                    <reasons translate="title" module="urma">
+                                        <title>RMA Reasons</title>
+                                        <sort_order>140</sort_order>
+                                    </reasons>
+                                </children>
+                            </vendor_general_config>
+                            <!-- Adding new acl path END -->
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
 </config>

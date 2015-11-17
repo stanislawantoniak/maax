@@ -165,4 +165,13 @@ class GH_Statements_Adminhtml_StatementsController extends Mage_Adminhtml_Contro
 
     }
 
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/ghstatements_vendor');
+    }
+
 }
