@@ -22,7 +22,7 @@
 			a {
 				display: inline-block;
 				padding: 0 24px;
-				background-color: white;
+				background-color: $color_ffffff;
 				border: 1px solid $color_afafaf;
 				text-align: center;
 				font-size: 25px;
@@ -55,8 +55,8 @@
 		.pages {
 			a {
 				border: none;
-				background-color: black;
-				color: white;
+				background-color: $color_000000;
+				color: $color_ffffff;
 				&:hover {
 					background: $color_b08944;
 					/* Old browsers */
@@ -79,11 +79,11 @@
 				}
 				&.page-disabled {
 					opacity: .15;
-					color: white;
-					background: black;
+					color: $color_ffffff;
+					background: $color_000000;
 					&:hover {
-						background: black;
-						color: white;
+						background: $color_000000;
+						color: $color_ffffff;
 						border-color: inherit;
 					}
 				}

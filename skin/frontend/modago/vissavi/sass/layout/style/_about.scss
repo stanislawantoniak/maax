@@ -165,7 +165,7 @@
 	margin-top: 15px;
 	padding: 20px 70px 30px 70px;
 	@media(min-width: $screen-md-min) {
-		background: white url('../images/help/promolabels.png') no-repeat;
+		background: $color-ffffff url('../images/help/promolabels.png') no-repeat;
 		background-size: 360px auto;
 		background-position: 95% 0;
 	}
