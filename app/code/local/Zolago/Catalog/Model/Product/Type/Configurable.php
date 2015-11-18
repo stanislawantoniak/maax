@@ -77,8 +77,6 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
     }
 
 
-
-
     /**
      * Get relation size-price for store
      * @param $store
@@ -91,17 +89,30 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
         $sizePriceRelations = array();
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
 
-        $attributeSize = Mage::getResourceModel('catalog/product')
-            ->getAttribute('size');
-        $attributeSizeId = $attributeSize->getAttributeId();
-
-        $attributePrice = Mage::getResourceModel('catalog/product')
-            ->getAttribute('price');
-        $attributePriceId = $attributePrice->getAttributeId();
-
-        $attributeVendorSku = Mage::getResourceModel('catalog/product')
-            ->getAttribute('skuv');
-        $attributeVendorSkuId = $attributeVendorSku->getAttributeId();
+        $collection->joinAttribute(
+            'price',
+            'catalog_product/price',
+            'entity_id',
+            null,
+            'left',
+            $store
+        );
+        $collection->joinAttribute(
+            'size',
+            'catalog_product/size',
+            'entity_id',
+            null,
+            'left',
+            $store
+        );
+        $collection->joinAttribute(
+            'skuv',
+            'catalog_product/skuv',
+            'entity_id',
+            null,
+            'inner',
+            Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+        );
 
         $collection->getSelect()
             ->joinInner(
@@ -109,33 +120,10 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "e.entity_id = link_table.product_id",
                 array("link_table.parent_id")
             )
-            ->joinInner(
-                array("at_size" => 'catalog_product_entity_int'),
-                "e.entity_id = at_size.entity_id",
-                array("size" => "at_size.value")
-            )
-            ->joinInner(
-                array("at_price" => 'catalog_product_entity_decimal'),
-                "e.entity_id = at_price.entity_id",
-                array("price" => "at_price.value")
-            )
-            ->joinInner(
-                array("at_sku_vendor" => 'catalog_product_entity_varchar'),
-                "e.entity_id = at_sku_vendor.entity_id",
-                array("skuv" => "at_sku_vendor.value")
-            )
-            ->where("at_size.attribute_id=?", $attributeSizeId)
-            ->where("at_price.attribute_id=?", $attributePriceId)
-            ->where("at_sku_vendor.attribute_id=?", $attributeVendorSkuId)
-
-            ->where("at_size.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
-            ->where("at_sku_vendor.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
-            ->where("at_price.store_id=?", $store)
-
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
-            ->where("at_size.value IS NOT NULL");
-
+            //->where("at_size.value IS NOT NULL")
+        ;
         foreach ($collection as $product) {
             $sizePriceRelations[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
