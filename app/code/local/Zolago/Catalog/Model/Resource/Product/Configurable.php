@@ -408,18 +408,20 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 $dataToUpdate[$websiteId] = array();
             }
 
-            $firstStore = array_values($stores[$websiteId])[0];
+            try {
+                $firstStore = array_values($stores[$websiteId])[0];
+                $childProductsByAttribute = $configModel->getUsedSizePriceRelations($firstStore, $parentIds);
+                foreach ($parentIds as $parentId) {
 
-            $childProductsByAttribute = $configModel->getUsedSizePriceRelations($firstStore, $parentIds);
+                    $superAttributeId = isset($superAttributes[$parentId]) ? $superAttributes[$parentId]['super_attribute'] : false;
+                    $priceSizeRelation = isset($childProductsByAttribute[$parentId]) ? $childProductsByAttribute[$parentId] : false;
 
-            foreach ($parentIds as $parentId) {
-
-                $superAttributeId = isset($superAttributes[$parentId]) ? $superAttributes[$parentId]['super_attribute'] : false;
-                $priceSizeRelation = isset($childProductsByAttribute[$parentId]) ? $childProductsByAttribute[$parentId] : false;
-
-                if ($superAttributeId && $priceSizeRelation) {
-                    $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId],$this->collectConfigurableProductOptions($parentId, $superAttributeId, $priceSizeRelation, $websiteId));
+                    if ($superAttributeId && $priceSizeRelation) {
+                        $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductOptions($parentId, $superAttributeId, $priceSizeRelation, $websiteId));
+                    }
                 }
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
             }
         }
 
@@ -488,15 +490,20 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             if (!isset($dataToUpdate[$websiteId])) {
                 $dataToUpdate[$websiteId] = array();
             }
-            $firstStore = array_values($stores[$websiteId])[0];
-            $childProductsMSRP = $configModel->getMSRPForChildren($firstStore, $parentIds);
 
-            foreach ($parentIds as $parentId) {
-                $msrpRelation = isset($childProductsMSRP[$parentId]) ? $childProductsMSRP[$parentId] : false;
+            try {
+                $firstStore = array_values($stores[$websiteId])[0];
+                $childProductsMSRP = $configModel->getMSRPForChildren($firstStore, $parentIds);
 
-                if ($msrpRelation) {
-                    $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductMSRP($parentId, $msrpRelation, $websiteId));
+                foreach ($parentIds as $parentId) {
+                    $msrpRelation = isset($childProductsMSRP[$parentId]) ? $childProductsMSRP[$parentId] : false;
+
+                    if ($msrpRelation) {
+                        $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductMSRP($parentId, $msrpRelation, $websiteId));
+                    }
                 }
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
             }
         }
 
@@ -630,7 +637,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function _insertProductOptions(array $insert)
     {
-        Mage::log($insert, null, "_insertProductOptions.log");
+        //Mage::log($insert, null, "_insertProductOptions.log");
         if (empty($insert)) {
             return;
         }
@@ -650,7 +657,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         } catch (Exception $e) {
             Mage::logException($e);
-            Mage::log($e->getMessage(), null, "_insertProductOptions.log");
+            //Mage::log($e->getMessage(), null, "_insertProductOptions.log");
         }
     }
 
