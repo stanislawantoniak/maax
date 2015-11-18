@@ -9,8 +9,7 @@
         <models>
             <review_mysql4>
                 <rewrite>
-                    <review_product_collection>Zolago_DropshipVendorRatings_Model_Resource_Review_Product_Collection
-                    </review_product_collection>
+                    <review_product_collection>Zolago_DropshipVendorRatings_Model_Resource_Review_Product_Collection</review_product_collection>
                 </rewrite>
             </review_mysql4>
         </models>
@@ -20,9 +19,7 @@
             <udratingsadmin>
                 <args>
                     <modules>
-                        <Zolago_DropshipVendorRatings before="Unirgy_DropshipVendorRatings_Adminhtml">
-                            Zolago_DropshipVendorRatings_Adminhtml
-                        </Zolago_DropshipVendorRatings>
+                        <Zolago_DropshipVendorRatings before="Unirgy_DropshipVendorRatings_Adminhtml">Zolago_DropshipVendorRatings_Adminhtml</Zolago_DropshipVendorRatings>
                     </modules>
                 </args>
             </udratingsadmin>

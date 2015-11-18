@@ -88,8 +88,7 @@
             <umicrosite>
                 <args>
                     <modules>
-                        <Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite
-                        </Zolago_DropshipMicrosite>
+                        <Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
                     </modules>
                 </args>
             </umicrosite>
@@ -109,8 +108,7 @@
             <umicrositeadmin>
                 <args>
                     <modules>
-                        <Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite
-                        </Zolago_DropshipMicrosite>
+                        <Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
                     </modules>
                 </args>
             </umicrositeadmin>

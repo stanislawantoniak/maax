@@ -76,9 +76,7 @@
             <udqa>
                 <args>
                     <modules>
-                        <Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">
-                            Zolago_DropshipVendorAskQuestion
-                        </Zolago_DropshipVendorAskQuestion>
+                        <Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">Zolago_DropshipVendorAskQuestion</Zolago_DropshipVendorAskQuestion>
                     </modules>
                 </args>
             </udqa>
@@ -115,8 +113,7 @@
         <udqa>
             <general>
                 <send_vendor_agent_notifications>1</send_vendor_agent_notifications>
-                <customer_new_question_confirmation>udqa_general_customer_new_question_confirmation
-                </customer_new_question_confirmation>
+                <customer_new_question_confirmation>udqa_general_customer_new_question_confirmation</customer_new_question_confirmation>
             </general>
         </udqa>
     </default>
@@ -125,9 +122,7 @@
             <udqaadmin>
                 <args>
                     <modules>
-                        <Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">
-                            Zolago_DropshipVendorAskQuestion_Adminhtml
-                        </Zolago_DropshipVendorAskQuestion>
+                        <Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">Zolago_DropshipVendorAskQuestion_Adminhtml</Zolago_DropshipVendorAskQuestion>
                     </modules>
                 </args>
             </udqaadmin>

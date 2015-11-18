@@ -21,8 +21,7 @@
                 <rewrite>
                     <vendor_po_info>Zolago_Po_Block_Vendor_Po_Info</vendor_po_info>
                     <adminhtml_po_grid>Zolago_Po_Block_Adminhtml_Po_Grid</adminhtml_po_grid>
-                    <adminhtml_salesOrderViewTab_udpos>Zolago_Po_Block_Adminhtml_SalesOrderViewTab_Udpos
-                    </adminhtml_salesOrderViewTab_udpos>
+                    <adminhtml_salesOrderViewTab_udpos>Zolago_Po_Block_Adminhtml_SalesOrderViewTab_Udpos</adminhtml_salesOrderViewTab_udpos>
                 </rewrite>
             </udpo>
         </blocks>
