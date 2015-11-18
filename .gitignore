@@ -57,4 +57,17 @@ skin/frontend/modago/vissavi/images/sprites/check_filter-*
 skin/frontend/modago/vissavi/images/sprites/bg-*
 skin/frontend/modago/vissavi/images/sprites/checkbox-*
 skin/frontend/modago/vissavi/images/sprites/radio-*
+skin/frontend/modago/convertica/css/bootstrap.css
+skin/frontend/modago/convertica/css/layout.css
+skin/frontend/modago/convertica/css/design.css
+skin/frontend/modago/convertica/css/typography.css
+skin/frontend/modago/convertica/css/stylesheet.css
+skin/frontend/modago/convertica/css/slick.css
+skin/frontend/modago/convertica/css/gh.css
+skin/frontend/modago/convertica/images/sprites/select-*
+skin/frontend/modago/convertica/images/sprites/all-*
+skin/frontend/modago/convertica/images/sprites/check_filter-*
+skin/frontend/modago/convertica/images/sprites/bg-*
+skin/frontend/modago/convertica/images/sprites/checkbox-*
+skin/frontend/modago/convertica/images/sprites/radio-*
 lib/mPDF/ttfontdata

@@ -1,0 +1,143 @@
+/** Stage container **/
+#product_gallery {
+	&.modal {
+		h2 {
+			&.title_section {
+				margin-left:-15px!important;
+			}
+		}
+	}
+}
+.connected-carousels-modd {
+	
+	.stage {
+	    width: 500px;
+	    margin: 0;
+	    position: relative;
+	    float:left;
+
+	    ul {
+	    	margin:0px;
+	    	padding:0px;
+	    	li {
+	    		width: 500px;
+	    		> div {
+	    			position:relative;
+	    			
+	    		}
+	    		img {
+	    			width:100%;height:auto;
+	    		}
+	    	}
+	    }
+	}
+	.navigation {
+	    width:77px;
+	    margin: 15px 23px 10px 20px;
+	    position: relative;
+	    padding:0 0;
+	    float:left;
+	    ul {
+	    	li {
+
+	    	}
+	    }
+	}
+	.carousel {
+	    overflow: hidden;
+	    position: relative;
+	    ul {
+	        width: 20000em;
+	        position: relative;
+	        margin: 0;
+	        padding: 0;
+	        li {
+	            float: left;
+	            margin: 0;
+	        }
+	    }
+	}
+	.carousel-navigation-modd {
+	    height: 379px;
+	    width: 77px;
+	    margin-left: -2px;
+	    ul {
+	    	width: 70px;
+	    	height:2000em;
+	    }
+		li {
+		    cursor: pointer;
+			position:relative;
+			margin: 3px 5px!important;
+
+		    &.active {
+		    	.shadow {
+		    		width:99px;
+		    		height:75px;
+		    		position:absolute;
+		    		left:0px;
+		    		top:0px;
+		    	}
+		    	img {
+				   
+				}
+		    }
+		}
+	}
+}
+
+
+/** Stage carousel controls **/
+
+.connected-carousels-modd {
+	.prev-stage-modd,
+			.next-stage-modd {
+			    display: block;
+			    position: absolute;
+			    top: 50%;
+			    z-index: 900;
+			}
+			.prev-stage-modd {
+		    	left: 0;
+			    @include sprite-dimensions($allMap, arrow-complementary-left);
+			    
+			}
+			.next-stage-modd {
+			    right: 0;
+			    @include sprite-dimensions($allMap, arrow-complementary-right);
+			    
+			}
+}
+
+
+/** Navigation carousel controls **/
+
+.connected-carousels-modd {
+	.prev-navigation-modd,
+	.next-navigation-modd {
+	    	display:inline-block;
+			width:15px;
+			height:75px;
+			position:absolute;
+			left:50%;
+			margin-left: -(image-width(sprite-file($allMap, arrow_top_j)) / 2) ;
+			z-index: 999;
+			&.inactive {
+				visibility:hidden;
+			}
+	}
+	.prev-navigation-modd {
+	    top:-15px; 
+	    @include sprite-dimensions($allMap, arrow_top_j);
+	}
+	.next-navigation-modd {
+	    bottom:-15px; 
+	    @include sprite-dimensions($allMap, arrow_bottom_j);
+	}
+}
+
+#product_gallery {
+	.modal-content {
+		padding:15px;
+	}
+}
