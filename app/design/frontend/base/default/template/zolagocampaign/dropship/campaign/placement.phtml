@@ -1,9 +1,8 @@
 <?php /*@var $this Zolago_Campaign_Block_Vendor_Campaign_Placement */ ?>
 
 <?php $_helper = Mage::helper("zolagocampaign"); ?>
-<?php
-$categoriesList = $this->getVendorCategoriesList();
-?>
+<?php $categoriesList = $this->getVendorCategoriesList(); ?>
+
 <div class="placements-categories">
     <div class="container">
         <div class="page-heading row">
@@ -14,19 +13,39 @@ $categoriesList = $this->getVendorCategoriesList();
             </div>
         </div>
         <div class="actions row">
-            <div class="col-md-4">
-            <?php if (!empty($categoriesList)): ?>
-                <div class="list-group">
-                    <?php foreach ($categoriesList as $category): ?>
-                        <a class="list-group-item" href="<?php echo $category['edit_url']; ?>">
-                            <?php echo $category['name']; ?>
-                            <span class="align-right">
-                                <?php echo $_helper->__('edit'); ?>&nbsp;<i class="icon-angle-right"></i>
-                            </span>
-                        </a>
+            <div class="col-md-12">
+                <?php if (!empty($categoriesList)): ?>
+                    <?php foreach ($categoriesList as $websiteId => $categoriesListPerWebsite): ?>
+
+                        <div class="col-md-6">
+                            <div class="widget box">
+                                <div class="widget-header">
+                                    <h4><i class="icon-reorder"></i> <?php echo $categoriesListPerWebsite["website"]; ?>
+                                    </h4>
+                                </div>
+                                <div class="widget-content">
+                                    <div class="dd">
+                                        <ol class="dd-list">
+                                            <?php foreach ($categoriesListPerWebsite["categories"] as $category): ?>
+                                                <li class="dd-item">
+                                                    <a
+                                                        style="display:block;cursor:pointer; text-decoration: none;"
+                                                        class="dd-handle" href="<?php echo $category['edit_url']; ?>">
+                                                        <?php echo $category['name']; ?>
+                                                        <span class="align-right">
+                                                        <?php echo $_helper->__('edit'); ?>&nbsp;
+                                                        <i class="icon-angle-right"></i>
+                                                    </span>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
