@@ -138,7 +138,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
      * @param $observer Varien_Event_Observer
      *
      * @return Zolago_Dropship_Model_Observer
-     */	
+     */
 	public function addOrbaShippingData(Varien_Event_Observer $observer)
 	{
         $time = Mage::getModel('core/date')->timestamp();
@@ -186,7 +186,20 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
 
         if (!Mage::app()->getRequest()->getParam('id', 0))
             return;
+        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+            $websitesBlock = Mage::app()
+                ->getLayout()
+                ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_websites', 'vendor.websites.form')
+                ->setVendorId($v)
+                ->toHtml();
 
+            $block->addTab('websites_allowed_section', array(
+                'label' => Mage::helper('zolagodropship')->__('Websites allowed'),
+                'after' => 'form_section',
+                'content' => $websitesBlock
+            ));
+            $block->addTabToSection('websites_allowed_section','vendor_rights',10);
+        }
         //Couriers
         if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
             $courierBlock = Mage::app()
@@ -208,38 +221,41 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
                                'after'     => 'form_section',
                                'url'	=> $block->getUrl('udropshipadmin/adminhtml_vendor/brandshopSettings',array('_current' => true)),
                            ));
-            $block->addTabToSection('brandshop_section','vendor_rights',20);                        
+            $block->addTabToSection('brandshop_section','vendor_rights',20);
+
+
+
         }
     }
     protected function _overrideConfigData() {
     	$vendor = Mage::registry('vendor_data');
     	$hlp = Mage::helper('udropship');
-		
+
 		$children = Mage::getConfig()->getNode('global/udropship/vendor/fields')->children();
-		
+
         foreach ($children as $code=>$node) {
-            
+
 			$note = $hlp->__((string)$node->note);
-			
+
 			if($code == 'max_shipping_days'){
-				
+
 				$maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days');
-				
+
 				Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', $note . sprintf(" (Default value is: %u )", $maxShippingDays));
 
 			}
 			elseif($code == 'max_shipping_time'){
-				
+
 				$maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time');
-				
+
 				Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', $note . sprintf(" (Default value is: %s)", str_replace(',', ':', $maxShippingTime)));
-				
+
 			}
 		}
 
     }
     protected function _addFieldsToFieldset($keys,$fieldset) {
-        $helper = Mage::helper('zolagodropship/tabs');        
+        $helper = Mage::helper('zolagodropship/tabs');
         foreach ($keys as $key) {
             $helper->addKeyToFieldset($key,$fieldset);
         }
@@ -250,7 +266,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $fieldset = $form->getElement('vendor_form');
 
         $this->_overrideConfigData();
-        
+
         $keys = array (
 	        'integrator_enabled',
 	        'integrator_secret',
@@ -276,7 +292,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'url_key',
             'logo',
 	        'legal_entity'
-        );        
+        );
         $this->_addFieldsToFieldset($keys,$fieldset);
 
         $fieldset->removeField('carrier_code');
