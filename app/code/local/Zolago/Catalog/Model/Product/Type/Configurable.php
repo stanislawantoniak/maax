@@ -122,8 +122,9 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             )
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
-            //->where("at_size.value IS NOT NULL")
+            ->where("at_size.value IS NOT NULL")
         ;
+//        Mage::log($collection->getSelect()->__toString(), null, "111.log");
         foreach ($collection as $product) {
             $sizePriceRelations[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
