@@ -115,6 +115,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
                         //Mage::log("STORE {$store}:     SKU {$vendorSku}: price typu {$priceType} {$newPrice}, margin {$margin}", null, "priceType.log");
                         $newPriceWithMargin = $newPrice + $newPrice * ($margin / 100);
+                        $newPriceWithMargin = round($newPriceWithMargin, 2);
 
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price with margin $priceType: {$newPriceWithMargin}");
                         $productAction->updateAttributesNoIndex(array($productId), array('price' => $newPriceWithMargin), $store);
