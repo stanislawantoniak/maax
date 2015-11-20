@@ -107,7 +107,32 @@
   }
 }
 
-
+#seller-box-bundle {
+  .vendor-menu-mobile-content {
+    img {
+      max-width: 100%;
+      padding: 0 0 20px 0;
+    }
+    ul {
+      display: block;
+      padding-left: 25px;
+      li {
+        list-style: initial;
+        margin-left: 20px;
+        display: list-item;
+        height: auto;
+      }
+    }
+    a {
+      color: #40a0ff;
+      text-decoration: underline;
+      display: inline;
+      text-transform: none;
+      font-size: 12px;
+      padding-left: 0 !important;
+    }
+  }
+}
 
 #seller-box-bundle {
   border:1px solid #d9d9d9;
