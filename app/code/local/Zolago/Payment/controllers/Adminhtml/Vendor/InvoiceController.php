@@ -200,4 +200,13 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
 		}
 		return $this->_helper;
 	}
+
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_invoice');
+    }
 }

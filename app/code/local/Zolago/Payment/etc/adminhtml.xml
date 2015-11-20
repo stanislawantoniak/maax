@@ -34,11 +34,11 @@
                         <children>
                             <vendor_invoice>
                                 <title>Vendor Invoices</title>
-                                <sort_order>46</sort_order>
+                                <sort_order>130</sort_order>
                             </vendor_invoice>
                             <vendor_payment>
                                 <title>Vendor Payments</title>
-                                <sort_order>45</sort_order>
+                                <sort_order>140</sort_order>
                             </vendor_payment>
                         </children>
                     </vendors>

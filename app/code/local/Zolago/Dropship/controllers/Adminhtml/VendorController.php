@@ -264,4 +264,14 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $this->_saveParams($dhl, $vendor_id, 'ghdhl/dhl_vendor', 'dhl_id');
     }
 
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return
+            Mage::getSingleton('admin/session')->isAllowed('sales/udropship/vendor') ||
+            Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor');
+    }
 }

@@ -127,4 +127,13 @@ class Zolago_Payment_Adminhtml_Vendor_PaymentController extends Mage_Adminhtml_C
         Mage::register('zolagopayment_current_payment', $model);
         return $model;
     }
+
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_payment');
+    }
 }
