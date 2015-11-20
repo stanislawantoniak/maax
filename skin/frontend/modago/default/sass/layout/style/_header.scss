@@ -169,3 +169,21 @@
     background-color: #F2F1F0;
   }
 }
+
+#seller_description {
+  img {
+    max-width: 60%;
+    float: left;
+    padding: 0 15px 20px 0;
+  }
+
+  .modal-content {
+    ul {
+      margin-left: 10px;
+      li {
+        list-style: initial;
+        margin-left: 10px;
+      }
+    }
+  }
+}
