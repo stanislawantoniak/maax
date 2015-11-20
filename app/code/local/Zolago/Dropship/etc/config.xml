@@ -57,9 +57,13 @@
 				<rewrite>
 					<data>Zolago_Dropship_Helper_Data</data>
 					<item>Zolago_Dropship_Helper_Item</item>
-					<catalog>Zolago_Dropship_Helper_Catalog</catalog>					
 				</rewrite>
 			</udropship>
+			<udprod>
+			    <rewrite>
+					<udcatalog>Zolago_Dropship_Helper_Catalog</udcatalog>					
+			    </rewrite>
+			</udprod>
 		</helpers>
 		<blocks>
 			<zolagodropship>
