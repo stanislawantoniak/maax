@@ -46,4 +46,12 @@ class GH_Statements_Adminhtml_Vendor_BalanceController extends Mage_Adminhtml_Co
         return $this->_redirect("*/*");
     }
 
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/ghstatements_balance');
+    }
 }

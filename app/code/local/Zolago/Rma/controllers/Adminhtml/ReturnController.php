@@ -129,4 +129,12 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
         return $this->_redirect("*/*");
     }
 
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_general_config/reasons');
+    }
 }

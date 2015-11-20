@@ -74,10 +74,9 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogProductConfigurableModel->getConfigurableSimpleRelation($listUpdatedProducts);
 
-        if (empty($configurableSimpleRelation)) {
-            //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");
+        if (empty($configurableSimpleRelation))
             return;
-        }
+
         $configurableProducts = array_keys($configurableSimpleRelation);
 
 
@@ -91,7 +90,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //2. reindex products
         //to avoid long queries make number of queries
-//        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
         $numberQ = 100;
         if (count($productsIdsPullToSolr) > $numberQ) {
             $productsToReindexC = array_chunk($productsIdsPullToSolr, $numberQ);

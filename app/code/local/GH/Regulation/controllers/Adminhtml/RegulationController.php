@@ -342,4 +342,13 @@ class GH_Regulation_Adminhtml_RegulationController extends Mage_Adminhtml_Contro
         $this->getResponse()->sendHeaders();
         readfile($filepath);
     }
+
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_general_config/ghregulation');
+    }
 }
