@@ -1,0 +1,48 @@
+#checkout {
+	.panel {
+		&.panel-custom {
+			background: $color_fff;
+			border-radius: 0px;
+			border-color: $bc-primary;
+			.panel-heading {
+				border-bottom: 1px solid $bc-primary;
+				text-transform: none;
+				strong {
+					text-transform: uppercase;
+				}
+			}
+			.panel-footer {
+				border-top: 1px solid $bc-primary;
+			}
+		}
+	}
+}
+
+.node-type-summary-checkout {
+	#checkout {
+		.panel {
+			&.panel-custom {
+				border-color: $color_bfbfbf;
+				.panel-heading {
+					border-color: $color_dddddd;
+				}
+				.panel-footer {
+					border-color: $color_dddddd;
+				}
+				.block_info_order {
+					.block {
+						border-color: $color_dddddd;
+					}
+				}
+			}
+		}
+	}
+	&.node-type-summary-checkout {
+		#change_payment {
+			legend {
+				border:none;
+				font-size: 14px;
+			}
+		}
+	}
+}
