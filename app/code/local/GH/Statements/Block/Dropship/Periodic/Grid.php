@@ -309,20 +309,20 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             'sortable'  => false,
             
         ));
-//        // Download statement
-////        $this->addColumn("actions", array(
-////            'header'    => $helper->__('Action'),
-////            'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
-////            'width'     => '100px',
-////            'type'      => 'action',
-////            'index'		=> 'id',
-////            'link_action'=> "*/*/download",
-////            'link_param' => 'id',
-////            'link_label' => $helper->__('Download settlement'),
-////            'link_target'=>'_self',
-////            'filter'    => false,
-////            'sortable'  => false
-////        ));
+        //Download statement
+        $this->addColumn("actions", array(
+            'header'    => $helper->__('Action'),
+            'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
+            'width'     => '25px',
+            'type'      => 'action',
+            'index'		=> 'id',
+            'link_action'=> "*/*/downloadStatement",
+            'link_param' => 'id',
+            'link_label' => $helper->__('Download'),
+            'link_target'=>'_self',
+            'filter'    => false,
+            'sortable'  => false
+        ));
 
         return parent::_prepareColumns();
     }
