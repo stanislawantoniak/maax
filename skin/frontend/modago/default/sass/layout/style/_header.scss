@@ -187,3 +187,23 @@
     }
   }
 }
+
+.top_bottom {
+  #shop_nav_mobile {
+    li.vendor-info-mobile {
+      img {
+        max-width: 100%;
+        padding: 0 0 20px 0;
+      }
+      ul {
+        display: initial !important;
+        li {
+          list-style: initial;
+          margin-left: 10px;
+          display: list-item;
+          height: auto;
+        }
+      }
+    }
+  }
+}
