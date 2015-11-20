@@ -26,7 +26,7 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
 <li>
     <a href="#"><?php echo $this->__($marketingInformation->store_information_title); ?><i class="fa fa-chevron-down"></i></a>
     <ul>
-        <li style="height: inherit; padding: 8px 20px 8px 10px;">
+        <li class="vendor-info-mobile" style="height: inherit; padding: 8px 20px 8px 10px;">
             <div>
                 <?php if (!empty($marketingInformation->store_information)): ?>
                     <?php echo $marketingInformation->store_information; ?>
