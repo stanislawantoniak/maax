@@ -23,6 +23,9 @@
 	@media (max-width: $screen-xs-max) {
 		padding-top:0px;
 		}
+	.register-column .main header {
+		height: 50px;
+	}
 	.main {
 		padding:30px 30px;
 			@media (max-width: $screen-xs-max) {
