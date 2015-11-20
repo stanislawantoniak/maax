@@ -313,7 +313,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         $this->addColumn("actions", array(
             'header'    => $helper->__('Action'),
             'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
-            'width'     => '25px',
+            'width'     => '3%',
             'type'      => 'action',
             'index'		=> 'id',
             'link_action'=> "*/*/downloadStatement",

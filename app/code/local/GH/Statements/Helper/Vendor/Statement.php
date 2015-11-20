@@ -23,7 +23,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	}
 
 	protected function getStatementPdf(GH_Statements_Model_Statement $statement) {
-		if(!$statement->getStatementPdf() || !is_file($statement->getStatementPdf())) {
+		if(!$statement->getStatementPdf() || !is_file(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf())) {
 			$this->generateStatementPdf($statement);
 		}
 		return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
@@ -301,20 +301,19 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					//fill 4th page end
 				}
 			}
-
-			$page3data["body"] = isset($page3body) ? $page3body : array();
-			$page4data["body"] = isset($page4body) ? $page4body : array();
-
-			/** @var GH_Statements_Model_Vendor_Pdf $pdfModel */
-			$pdfModel = Mage::getModel('ghstatements/vendor_pdf');
-			$pdfModel->generatePage1Html($page1data);
-			$pdfModel->generatePage2Html($page2data);
-			$pdfModel->generatePage3Html($page3data);
-			$pdfModel->generatePage4Html($page4data);
-			$pdfModel->setVariables($statement);
-
-			$pdfModel->getPdfFile($statement);
-
 		}
+
+		$page3data["body"] = isset($page3body) ? $page3body : array();
+		$page4data["body"] = isset($page4body) ? $page4body : array();
+
+		/** @var GH_Statements_Model_Vendor_Pdf $pdfModel */
+		$pdfModel = Mage::getModel('ghstatements/vendor_pdf');
+		$pdfModel->generatePage1Html($page1data);
+		$pdfModel->generatePage2Html($page2data);
+		$pdfModel->generatePage3Html($page3data);
+		$pdfModel->generatePage4Html($page4data);
+		$pdfModel->setVariables($statement);
+
+		$pdfModel->getPdfFile($statement);
 	}
 }
