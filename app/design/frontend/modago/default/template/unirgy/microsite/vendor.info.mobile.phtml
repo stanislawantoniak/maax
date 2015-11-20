@@ -25,8 +25,8 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
 <?php if (!empty($marketingInformation->store_information_title)): ?>
 <li>
     <a href="#"><?php echo $this->__($marketingInformation->store_information_title); ?><i class="fa fa-chevron-down"></i></a>
-    <ul>
-        <li class="vendor-info-mobile" style="height: inherit; padding: 8px 20px 8px 10px;">
+    <ul class="vendor-menu-mobile-content">
+        <li style="height: inherit; padding: 8px 20px 8px 10px;">
             <div>
                 <?php if (!empty($marketingInformation->store_information)): ?>
                     <?php echo $marketingInformation->store_information; ?>
@@ -51,7 +51,7 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
 <?php if ($deliveryReturnsInfo): ?>
 <li>
     <a href="#"><?php echo $this->__("DELIVERY & RETURNS"); ?><i class="fa fa-chevron-down"></i></a>
-    <ul>
+    <ul class="vendor-menu-mobile-content">
         <li style="height: inherit; padding: 8px 20px 8px 10px;">
             <div>
                 <div id="termsDeliveryInformation"><?php echo $marketingInformation->delivery_information; ?></div>

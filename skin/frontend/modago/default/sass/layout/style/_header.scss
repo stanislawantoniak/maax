@@ -188,22 +188,105 @@
   }
 }
 
-.top_bottom {
-  #shop_nav_mobile {
-    li.vendor-info-mobile {
-      img {
-        max-width: 100%;
-        padding: 0 0 20px 0;
-      }
-      ul {
-        display: initial !important;
-        li {
-          list-style: initial;
-          margin-left: 20px;
-          display: list-item;
-          height: auto;
-        }
+
+
+
+#terms_delivery {
+  #termsDeliveryInformation, #termsReturnInformation {
+    .delivery-table {
+      padding-bottom: 10px;
+      div.row {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        border: 1px solid $color-gray3;
       }
     }
+
+    ul {
+      margin-left: 10px;
+      li {
+        list-style: initial;
+        margin-left: 10px;
+        display: list-item;
+      }
+    }
+    a {
+      color: #40a0ff;
+      text-decoration: underline;
+    }
+
   }
+}
+
+
+#shop_nav_mobile {
+  #termsDeliveryInformation, #termsReturnInformation {
+    .delivery-table {
+      //padding-bottom: 20px;
+      div.row {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        border: 1px solid $color-gray3;
+      }
+      max-width: 450px;
+    }
+  }
+}
+
+.top_bottom {
+  #shop_nav_mobile {
+    ul.vendor-menu-mobile-content {
+      li {
+        img {
+          max-width: 100%;
+          padding: 0 0 20px 0;
+        }
+        ul {
+          display: block;
+          padding-left: 25px;
+          li {
+            list-style: initial;
+            //margin-left: 20px;
+            display: list-item;
+            height: auto;
+          }
+        }
+      }
+
+
+      a {
+        color: #40a0ff;
+        text-decoration: underline;
+        display: inline;
+        text-transform: none;
+        font-size: 12px;
+        padding-left: 0 !important;
+      }
+    }
+
+  }
+}
+
+#terms_delivery {
+  h4 {
+    padding: 10px 0 !important;
+  }
+  h4:first-child {
+    padding-top: 0px !important;
+  }
+}
+
+#shop_nav_mobile {
+  .vendor-menu-mobile-content {
+    h4 {
+      padding: 15px 0 10px 0 !important;
+    }
+    //h4:first-child {
+    //  padding-top: 0px !important;
+    //}
+  }
+}
+
+.no-padding {
+  padding: 0;
 }
