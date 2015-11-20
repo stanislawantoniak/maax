@@ -1,0 +1,99 @@
+#header {
+    [role="search"] {
+        margin:0px;
+        margin-top: 13px;
+        padding: 0;
+        width: 282px;
+        border-bottom:none;
+        .form-group {
+            float: left;
+            width:119px ;
+            input[type="text"] {
+                height: 26px;
+                width: 119px;
+                padding-left: 15px;
+                color: $color_000;
+                //line-height: 26px;
+                font-size: 12px;
+                float: left;
+                border-right:none;
+                 @include border-radius(0px);
+                box-shadow: none;
+            	background:url('../images/bg-search.png') 0 0 repeat-x;
+            	border:none;
+            }
+        }
+        .select-box {
+            float: left;
+            width:134px;
+            position:relative;
+            &:before {
+                content: ' ';
+                display: block;
+                height: 13px;
+                width: 0px;
+                border-right:1px solid $color_a4a4a4;
+                border-left:1px solid $color_e3e3e3;
+                position: absolute;
+                left: 0px;
+                top: 50%;
+                margin-top: -6px;
+                z-index: 1;
+            }
+        }
+
+        input[type="image"] {
+            float:left;
+        }
+        
+//        .sbHolder {
+//        	height:26px;
+//        	width:100%;
+//        	background:url('../images/bg-search.png') 0 0 repeat-x;
+//        	border:none;
+//        	font-size: 12px;
+//        	color:$color_888888;
+//        }
+
+//        .sbSelector {
+//        	height:26px;
+//            width: 105px;
+//        	line-height:26px;
+//        	color:$color_000;
+//        	padding-left: 10px;
+//        	display: inline-block;
+//        	text-decoration: none;
+//        }
+
+//        .sbToggle {
+//        	background-position: 0 -69px;
+//        }
+
+//        .sbOptionsWrapper {
+//        	width:100%;
+//        	background:$color_fff;
+//        	border:none;
+//        	left:0px;
+//        	padding-top:6px;
+//        	@include box-shadow(rgba(1,1,1,.12) 0 3px 5px);
+//        	li {
+//        		padding:0;
+//        		height:auto;
+//        		border:none;
+//        		a {
+//        			padding: 9px 5px 9px 15px;
+//        			height:auto;
+//        			line-height:auto;
+//        			color:$color_000;
+//        			border:none;
+//        			&:hover {
+//        				margin:0px;
+//        				background:$color_f2f1f0;
+//        			}
+//        		}
+//
+//        	}
+//        }
+
+    }
+}

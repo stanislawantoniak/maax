@@ -26,7 +26,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
     protected function _execute()
     {
         $recalculateConfigurableIds = array();
-        //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Start process queue");
+
         $collection = $this->_collection;
 
         foreach ($collection as $colItem) {
@@ -36,7 +36,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         unset($productId);
 
         $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
-        $skuvs = $queueModel->getVendorSkuAssoc($ids);        
+        $skuvs = $queueModel->getVendorSkuAssoc($ids);
 
         $priceTypeValues = $queueModel->getPriceTypeValues($ids);
         //reformat
@@ -70,7 +70,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         try {
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
-            Mage::throwException("Converter is unavailable");
+            Mage::throwException($e);
             //Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
             return;
         }
@@ -111,10 +111,11 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                     if (!empty($newPrice)) {
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
-                        $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$parentId])) ? $priceMarginValuesByStore[$store][$parentId] : 0;
+                        $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$parentId])) ? (float)str_replace(",", ".", $priceMarginValuesByStore[$store][$parentId]) : 0;
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
-
-                        $newPriceWithMargin = $newPrice + $newPrice * ((int)$margin / 100);
+                        //Mage::log("STORE {$store}:     SKU {$vendorSku}: price typu {$priceType} {$newPrice}, margin {$margin}", null, "priceType.log");
+                        $newPriceWithMargin = $newPrice + $newPrice * ($margin / 100);
+                        $newPriceWithMargin = round($newPriceWithMargin, 2);
 
                         //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price with margin $priceType: {$newPriceWithMargin}");
                         $productAction->updateAttributesNoIndex(array($productId), array('price' => $newPriceWithMargin), $store);
