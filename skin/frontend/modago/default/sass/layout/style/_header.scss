@@ -188,33 +188,27 @@
   }
 }
 
-
-
-
 #terms_delivery {
-  #termsDeliveryInformation, #termsReturnInformation {
-    .delivery-table {
-      padding-bottom: 10px;
-      div.row {
-        padding-top: 18px;
-        padding-bottom: 18px;
-        border: 1px solid $color-gray3;
-      }
+  .delivery-table {
+    padding-bottom: 10px;
+    div.row {
+      padding-top: 18px;
+      padding-bottom: 18px;
+      border: 1px solid $color-gray3;
     }
+  }
 
-    ul {
+  ul {
+    margin-left: 10px;
+    li {
+      list-style: initial;
       margin-left: 10px;
-      li {
-        list-style: initial;
-        margin-left: 10px;
-        display: list-item;
-      }
+      display: list-item;
     }
-    a {
-      color: #40a0ff;
-      text-decoration: underline;
-    }
-
+  }
+  a {
+    color: $brand-primary;
+    text-decoration: underline;
   }
 }
 
@@ -255,7 +249,7 @@
 
 
       a {
-        color: #40a0ff;
+        color: $brand-primary;
         text-decoration: underline;
         display: inline;
         text-transform: none;
