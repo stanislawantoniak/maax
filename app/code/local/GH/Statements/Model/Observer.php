@@ -439,6 +439,8 @@ class GH_Statements_Model_Observer
                     $chargeTotal = $orderTrack->getChargeTotal() * $tax;
                     $chargeTotal = round($chargeTotal, 2, PHP_ROUND_HALF_UP);
 
+	                $po = Mage::getModel("udropship/po")->load($shipment->getUdpoId());
+
 				    //prepare array to insert into gh_statements_track
 				    $trackStatements[] = array(
 					    'statement_id'      => $statement->getId(),
@@ -454,7 +456,9 @@ class GH_Statements_Model_Observer
 					    'charge_cod'        => $orderTrack->getChargeCod(),
 					    'charge_subtotal'   => $orderTrack->getChargeTotal(),
 					    'charge_total'      => $chargeTotal,
-					    'track_type'        => $orderTrack->getTrackType()
+					    'track_type'        => $orderTrack->getTrackType(),
+					    'title'             => $orderTrack->getTitle(),
+					    'customer_id'       => $po->getCustomerId()
 				    );
 
 				    $nettoTotal += $orderTrack->getChargeTotal();
@@ -518,7 +522,9 @@ class GH_Statements_Model_Observer
 							'charge_cod'        => $rmaTrack->getChargeCod(),
 							'charge_subtotal'   => $rmaTrack->getChargeTotal(),
 							'charge_total'      => $chargeTotal,
-							'track_type'        => $rmaTrack->getTrackType()
+							'track_type'        => $rmaTrack->getTrackType(),
+							'title'             => $rmaTrack->getTitle(),
+							'customer_id'       => $po->getCustomerId()
 						);
 
 						$nettoTotal += $rmaTrack->getChargeTotal();

@@ -147,4 +147,13 @@ class Zolago_Holidays_Adminhtml_HolidaysController extends Mage_Adminhtml_Contro
 	    ); 
 			 
 	}
+
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_general_config/holiday');
+    }
 }

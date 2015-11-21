@@ -57,9 +57,13 @@
 				<rewrite>
 					<data>Zolago_Dropship_Helper_Data</data>
 					<item>Zolago_Dropship_Helper_Item</item>
-					<catalog>Zolago_Dropship_Helper_Catalog</catalog>					
 				</rewrite>
 			</udropship>
+			<udprod>
+			    <rewrite>
+					<udcatalog>Zolago_Dropship_Helper_Catalog</udcatalog>					
+			    </rewrite>
+			</udprod>
 		</helpers>
 		<blocks>
 			<zolagodropship>
@@ -117,6 +121,11 @@
 		    </courier>
             <vendor>
                 <fieldsets>
+                    <websites_allowed>
+                        <legend>Websites allowed</legend>
+                        <position>80</position>
+                        <hidden>true</hidden>
+                    </websites_allowed>
                     <vendor_preferences>
                         <legend>Addresses</legend>
                         <position>80</position>
@@ -155,6 +164,13 @@
                     </rma_executive_data>
                 </fieldsets>
                 <fields>
+                    <websites_allowed>
+                        <label>Websites</label>
+                        <fieldset>websites_allowed</fieldset>
+                        <type>multiselect</type>
+                        <source_model>core/website</source_model>
+                        <position>1</position>
+                    </websites_allowed>
                     <!--Company registration data-->
                     <company_name>
                         <label>Company name</label>

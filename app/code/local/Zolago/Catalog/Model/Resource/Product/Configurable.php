@@ -22,7 +22,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function getConfigurableMinPrice($configurableProductsIds, $storeId = 0)
     {
-//        Zend_Debug::dump($configurableProductsIds);
         if (empty($configurableProductsIds)) {
             return array();
         }
@@ -64,9 +63,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         //$select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
-        //echo $select;
+
         $result = $adapter->fetchAssoc($select);
-//        Zend_Debug::dump($result);
         return $result;
     }
 
@@ -75,9 +73,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     public function getConfigurableSimpleRelation($listUpdatedProducts)
     {
 
-        if (empty($listUpdatedProducts)) {
+        if (empty($listUpdatedProducts))
             return array();
-        }
+
         $listUpdatedProducts = implode(',', $listUpdatedProducts);
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
@@ -90,7 +88,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 )
             )
             ->where("product_relation.child_id IN({$listUpdatedProducts})");
-        //echo $select;
+
         $result = $adapter->fetchAssoc($select);
 
 
@@ -378,7 +376,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     public function recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts)
     {
 
-
         if (empty($recoverOptionsProducts)) {
             return;
         }
@@ -387,7 +384,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
         $zolagocatalogHelper = Mage::helper('zolagocatalog');
         $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
-
 
         $parentIds = array();
         /* @var $configResourceModel   Zolago_Catalog_Model_Resource_Product_Configurable */
@@ -411,17 +407,21 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             if(!isset($dataToUpdate[$websiteId])){
                 $dataToUpdate[$websiteId] = array();
             }
-            $firstStore = array_shift($stores[$websiteId]);
-            $childProductsByAttribute = $configModel->getUsedSizePriceRelations($firstStore, $parentIds);
 
-            foreach ($parentIds as $parentId) {
+            try {
+                $firstStore = array_values($stores[$websiteId])[0];
+                $childProductsByAttribute = $configModel->getUsedSizePriceRelations($firstStore, $parentIds);
+                foreach ($parentIds as $parentId) {
 
-                $superAttributeId = isset($superAttributes[$parentId]) ? $superAttributes[$parentId]['super_attribute'] : false;
-                $priceSizeRelation = isset($childProductsByAttribute[$parentId]) ? $childProductsByAttribute[$parentId] : false;
+                    $superAttributeId = isset($superAttributes[$parentId]) ? $superAttributes[$parentId]['super_attribute'] : false;
+                    $priceSizeRelation = isset($childProductsByAttribute[$parentId]) ? $childProductsByAttribute[$parentId] : false;
 
-                if ($superAttributeId && $priceSizeRelation) {
-                    $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId],$this->collectConfigurableProductOptions($parentId, $superAttributeId, $priceSizeRelation, $websiteId));
+                    if ($superAttributeId && $priceSizeRelation) {
+                        $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductOptions($parentId, $superAttributeId, $priceSizeRelation, $websiteId));
+                    }
                 }
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
             }
         }
 
@@ -473,7 +473,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         /* @var $configResourceModel   Zolago_Catalog_Model_Resource_Product_Configurable */
         $configResourceModel = Mage::getResourceModel('zolagocatalog/product_configurable');
         foreach ($recoverMSRP as $websiteId => $parentIdsPerWebsite) {
-            $parentIds = array_merge($parentIdsPerWebsite, $parentIdsPerWebsite);
+            $parentIds = array_merge($parentIds, $parentIdsPerWebsite);
         }
 
         /* @var $configModel  Zolago_Catalog_Model_Product_Type_Configurable */
@@ -490,15 +490,20 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             if (!isset($dataToUpdate[$websiteId])) {
                 $dataToUpdate[$websiteId] = array();
             }
-            $firstStore = array_shift($stores[$websiteId]);
-            $childProductsMSRP = $configModel->getMSRPForChildren($firstStore, $parentIds);
 
-            foreach ($parentIds as $parentId) {
-                $msrpRelation = isset($childProductsMSRP[$parentId]) ? $childProductsMSRP[$parentId] : false;
+            try {
+                $firstStore = array_values($stores[$websiteId])[0];
+                $childProductsMSRP = $configModel->getMSRPForChildren($firstStore, $parentIds);
 
-                if ($msrpRelation) {
-                    $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductMSRP($parentId, $msrpRelation, $websiteId));
+                foreach ($parentIds as $parentId) {
+                    $msrpRelation = isset($childProductsMSRP[$parentId]) ? $childProductsMSRP[$parentId] : false;
+
+                    if ($msrpRelation) {
+                        $dataToUpdate[$websiteId] = array_merge_recursive($dataToUpdate[$websiteId], $this->collectConfigurableProductMSRP($parentId, $msrpRelation, $websiteId));
+                    }
                 }
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
             }
         }
 
@@ -632,7 +637,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function _insertProductOptions(array $insert)
     {
-        Mage::log($insert, null, "_insertProductOptions.log");
+        //Mage::log($insert, null, "_insertProductOptions.log");
         if (empty($insert)) {
             return;
         }
@@ -652,7 +657,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         } catch (Exception $e) {
             Mage::logException($e);
-            Mage::log($e->getMessage(), null, "_insertProductOptions.log");
+            //Mage::log($e->getMessage(), null, "_insertProductOptions.log");
         }
     }
 

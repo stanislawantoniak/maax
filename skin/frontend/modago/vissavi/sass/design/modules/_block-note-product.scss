@@ -1,0 +1,58 @@
+#note_product {
+	
+	#statystyki_opinii {
+		border-bottom: 1px solid $color_f2f1f0;
+	}
+	dl.raty_note {
+
+		dt {
+			line-height: 22px;
+			
+			.suffix {
+				line-height: 26px;
+				font-size: 11px;
+				color:$color_959595;
+				font-family: $fontLight;
+				font-weight: normal;
+			}
+		}
+		dd {
+			
+			.suffix {
+				line-height: 26px;
+			}
+		}
+	}
+	.rating_note {
+		 
+		dt {
+			text-align: left;
+			white-space:nowrap;
+			@media (max-width: $screen-xs-max) {
+				text-align: left;
+			}
+		}
+		dd {
+			white-space:nowrap;
+		}
+		.prefix {
+			line-height: 13px;
+		}
+		.suffix {
+			line-height: 13px
+		}
+	}
+	.rating {
+		background:$gray-light;
+		> span {
+			background:$color-accent;
+		}
+	}
+
+	.add_opinion {
+		@media (min-width: 931px) { 
+			text-align: right;
+		} 
+	}
+
+}
