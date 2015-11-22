@@ -104,7 +104,22 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 					$rootCatId = $currentCategory->getId();
 				}
 
-			} else {
+            }
+            if ($this->getSWVendorId()) {
+                $vendorId = $this->getSWVendorId();
+
+                $rootCatId = 0;
+                if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
+                    $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+                } else {
+                    //get current category
+                    $currentCategory = Mage::registry('current_category');
+                    if (!empty($currentCategory) && $currentCategory->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
+                        $rootCatId = $currentCategory->getId();
+                    }
+                }
+            }
+            else {
                 $vendorId = Mage::helper('udropship')->getLocalVendorId();
 
                 $rootCatId = 0;
@@ -171,5 +186,19 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
     public function getImageResizeUrl($type, $path) {
         return Mage::getBaseUrl('media')  . $this->getImageResizePath($type) . $path;
+    }
+
+    /**
+     * @return bool|int
+     * @throws Mage_Core_Exception
+     */
+    public function getSWVendorId()
+    {
+        //TODO define SW owner
+        if (Mage::app()->getWebsite()->getWebsiteId() == 1) {
+            return false;
+        } else {
+            return 10;
+        }
     }
 }
