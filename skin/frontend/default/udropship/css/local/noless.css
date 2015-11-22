@@ -144,7 +144,9 @@
 #basicModal .row, #editModal .row {
     margin: 10px auto;
 }
-.placements-categories .actions .list-group .list-group-item .align-right {
+.placements-categories .actions .list-group .list-group-item .align-right,
+.placements-categories .actions .dd-item .align-right
+{
     float: right;
     padding-left: 10px;
     padding-right: 0;
