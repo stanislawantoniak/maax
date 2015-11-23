@@ -440,7 +440,6 @@
 				</block>
 				<block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
 				<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
-<!--				<block type="zolagomodago/home_vendor" name="zolago_modago_home_popularvendors" template="home/popularvendors.phtml"/> -->
 				<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
 			</block>
 		</reference>
@@ -453,27 +452,6 @@
 			</action>
 		</reference>
 	</zolagomodago_index_index>
-
-    <zolagomodago_brands_index>
-        <reference name="root">
-            <action method="setTemplate">
-                <template>page/1column.phtml</template>
-            </action>
-            <action method="addBodyClass">
-                <value>lower-breadcrumbs</value>
-            </action>
-        </reference>
-        <reference name="head">
-            <action method="setTitle" translate="title">
-                <title>Shops</title>
-            </action>
-        </reference>
-        <reference name="content">
-            <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="brands/vendors.phtml" />
-            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-        </reference>
-    </zolagomodago_brands_index>
-
 	<solrbridge_solrsearch_category_view>
 		<remove name="mana.catalog.leftnav"/>
 		<remove name="solrsearch_category_view"/>
@@ -558,7 +536,7 @@
 	            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        
+<!--            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        -->
         </reference>
 
 	</solrbridge_solrsearch_category_view>
@@ -638,7 +616,7 @@
                 </block>
             </block>
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        
+    <!--            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        -->
         </reference>
     </solrsearch_index_index>
 
@@ -652,6 +630,7 @@
 	</_udprod_product_configurable>
 
 	<catalog_product_view>
+	<!--
 		<reference name="root">
 			<action method="setTemplate">
 				<template>page/1column.phtml</template>
@@ -670,7 +649,6 @@
             </action>
 			<block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
 		</reference>
-
 		<reference name="product.info">
 			<action method="setTemplate">
 				<template>catalog/product/view.phtml</template>
@@ -692,9 +670,8 @@
 			</block>
 
 			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>        		
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>     
 		</reference>
-
 		<reference name="product.info.addto">
 			<action method="setTemplate">
 				<template>zolagowishlist/catalog/product/view/addto.phtml</template>
@@ -720,6 +697,8 @@
 				</action>
 			</block>
 		</reference>
+
+-->
 
 	</catalog_product_view>
 
