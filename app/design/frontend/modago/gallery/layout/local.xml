@@ -6,6 +6,7 @@
 				<reference name="vendor.banner">
 					 <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/> 
 				</reference>
+				<block type="zolagomodago/home_vendor" name="zolago_modago_home_popularvendors" template="home/popularvendors.phtml"/>				
             </reference>
         </reference>
     </zolagomodago_index_index>
