@@ -1,0 +1,16 @@
+.sidebar {
+	.nav-pills {
+		li {
+			a:link,
+			a:visited {
+				background:none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+		}
+		&.nav-stacked {
+			text-align: left;
+		}
+	}
+}
