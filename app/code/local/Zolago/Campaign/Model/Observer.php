@@ -87,7 +87,7 @@ class Zolago_Campaign_Model_Observer
 
         //Reformat by product_id
         $productIdsToUpdate = array();
-        foreach($campaignInfoData as $campaignInfoData){
+        foreach ($campaignInfoData as $campaignInfoData) {
             $productIdsToUpdate[] = $campaignInfoData["product_id"];
             unset($campaignInfoData);
         }
@@ -97,7 +97,7 @@ class Zolago_Campaign_Model_Observer
 
         //Reformat by product_id
         $reformattedData = array();
-        foreach($campaignInfo as $campaignInfoData){
+        foreach ($campaignInfo as $campaignInfoData) {
             $reformattedData[$campaignInfoData["website_id"]][$campaignInfoData["product_id"]][] = $campaignInfoData["campaign_id"];
             $websitesToUpdateInfo[$campaignInfoData["website_id"]] = $campaignInfoData["website_id"];
         }
@@ -170,17 +170,17 @@ class Zolago_Campaign_Model_Observer
         //Mage::log($salesPromoProductsData, null, "set_log_1.log");
         foreach ($salesPromoProductsData as $websiteId => $salesPromoProductsDataH) {
             $productIdsSPUpdated = $modelCampaign->setProductOptionsByCampaign($salesPromoProductsDataH, $websiteId);
-            if(!empty($productIdsSPUpdated)){
+            if (!empty($productIdsSPUpdated)) {
                 $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
             }
         }
-        if(empty($productsIdsPullToSolr)){
+        if (empty($productsIdsPullToSolr)) {
             return;
         }
 //
 //        //3. reindex
 
-         //Better performance
+        //Better performance
         $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
         /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
         $indexer->reindexEntities($productsIdsPullToSolr);
@@ -234,7 +234,8 @@ class Zolago_Campaign_Model_Observer
      *
      * @param Aoe_Scheduler_Model_Schedule $object
      */
-    public static function attachProductsToCampaignBySalesRule($object) {
+    public static function attachProductsToCampaignBySalesRule($object)
+    {
         try {
             $startTime = self::getMicrotime();
 
@@ -251,7 +252,7 @@ class Zolago_Campaign_Model_Observer
             /** @var Mage_SalesRule_Model_Rule $rule */
             foreach ($rulesColl as $rule) {
                 $tmp = unserialize($rule->getConditionsSerialized()); // Only variables should be passed by reference
-                $con = empty($tmp['conditions'])? $tmp:$helper->cleanConditions($tmp);  // clean if conditions exists
+                $con = empty($tmp['conditions']) ? $tmp : $helper->cleanConditions($tmp);  // clean if conditions exists
                 $rule->setConditionsSerialized(serialize($con));
             }
 
@@ -269,7 +270,7 @@ class Zolago_Campaign_Model_Observer
             /** @var Mage_SalesRule_Model_Rule $rule */
             foreach ($rulesColl as $rule) {
                 $time = self::getMicrotime();
-                Mage::log("Start processing rule ".$rule->getId(), null, 'mylog.log');
+                Mage::log("Start processing rule " . $rule->getId(), null, 'mylog.log');
 
                 $productIds = array();
                 $campaignId = $rule->getCampaignId();
@@ -309,21 +310,23 @@ class Zolago_Campaign_Model_Observer
                 unset($productIds);
                 Mage::log("time: " . self::_formatTime(self::getMicrotime() - $time), null, 'mylog.log');
             }
-            
+
             $campaignResource->saveProductsFromMemory(); // assign to campaign
             Mage::log("SUM TIME: " . self::_formatTime(self::getMicrotime() - $startTime), null, 'mylog.log');
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             Mage::logException($e);
         }
     }
 
-    public static function _formatTime($t) {
-        return round($t,4) . "s";
+    public static function _formatTime($t)
+    {
+        return round($t, 4) . "s";
     }
 
-    public static function getMicrotime(){
-        list($usec, $sec) = explode(" ",microtime());
+    public static function getMicrotime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
 
@@ -334,7 +337,8 @@ class Zolago_Campaign_Model_Observer
      *
      * @param Varien_Event_Observer $observer
      */
-    public function addFieldsToAdminStoreEdit($observer) {
+    public function addFieldsToAdminStoreEdit($observer)
+    {
         /** @var Zolago_Campaign_Helper_Data $hlp */
         $hlp = Mage::helper('zolagocampaign');
         /** @var Mage_Adminhtml_Block_System_Store_Edit_Form $block */
@@ -349,12 +353,33 @@ class Zolago_Campaign_Model_Observer
             }
 
             $fieldset->addField('website_have_specific_domain', 'select', array(
-                'name'      => 'website[have_specific_domain]',
-                'label'     => $hlp->__('Have specific domain'),
-                'note'      => $hlp->__('YES if website have specified domain, otherwise NO'),
-                'value'     => $websiteModel->getHaveSpecificDomain(),
-                'options'   => Mage::getSingleton('ghapi/source')->setPath('yesno')->toOptionHash(),
+                'name' => 'website[have_specific_domain]',
+                'label' => $hlp->__('Have specific domain'),
+                'note' => $hlp->__('YES if website have specified domain, otherwise NO'),
+                'value' => $websiteModel->getHaveSpecificDomain(),
+                'options' => Mage::getSingleton('ghapi/source')->setPath('yesno')->toOptionHash(),
             ));
+
+
+            $vendors = Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash();
+            asort($vendors);
+            $vendors = array("" => $hlp->__(' -- Select Vendor Store Owner -- ')) + $vendors;
+
+            $fieldset->addField('website_vendor_id', 'select', array(
+                'name' => 'website[vendor_id]',
+                'label' => $hlp->__('Own Store for vendor:'),
+                'required' => true,
+                'note' => $hlp->__('Website is Own Store for vendor'),
+                'value' => $websiteModel->getVendorId(),
+                'options' => $vendors,
+            ));
+
+            $block->setChild('form_after', $block->getLayout()->createBlock('adminhtml/widget_form_element_dependence')
+                ->addFieldMap("website_have_specific_domain", "website_have_specific_domain")
+                ->addFieldMap("website_vendor_id", "website_vendor_id")
+                ->addFieldDependence("website_vendor_id", "website_have_specific_domain", "1")
+
+            );
         }
     }
 }
