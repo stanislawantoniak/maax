@@ -24,6 +24,13 @@
 				</Zolago_Modago>
 			</modules>
 		</translate>	
+		<layout>
+		    <updates>
+		        <zolagomodago>
+		            <file>zolagomodago.xml</file>
+		        </zolagomodago>
+		    </updates>
+		</layout>
 	</frontend>
     <global>
         <blocks>
