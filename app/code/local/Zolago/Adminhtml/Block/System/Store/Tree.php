@@ -15,12 +15,13 @@ class Zolago_Adminhtml_Block_System_Store_Tree extends Mage_Adminhtml_Block_Syst
     public function renderWebsite(Mage_Core_Model_Website $website)
     {
         $vendorOwner = "";
-        if ($website->getVendorId()) {
-            $vendor = Mage::getModel("udropship/vendor")->load($website->getVendorId());
+        if ($vendorId = $website->getVendorId()) {
+            $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
             $vendorName = $this->escapeHtml($vendor->getVendorName());
 
             $label = $this->__('Vendor Owner');
-            $vendorOwner = "<br>{$label}: <span style='background-color:#ff0000;color:#ffffff;font-weight: bold;'>{$vendorName}</span>";
+            $vendorLink = Mage::helper("adminhtml")->getUrl("udropshipadmin/adminhtml_vendor/edit", array("id" => $vendorId));
+            $vendorOwner = "<br>{$label}: <a href='{$vendorLink}' target='_blank' style='background-color:#ff0000;color:#ffffff;font-weight: bold;'>{$vendorName}</a>";
         }
 
         return $this->_createCellTemplate()
