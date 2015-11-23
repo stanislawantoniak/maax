@@ -104,8 +104,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 					$rootCatId = $currentCategory->getId();
 				}
 
-            }
-            if ($this->getSWVendorId()) {
+            }elseif ($this->getSWVendorId()) {
                 $vendorId = $this->getSWVendorId();
 
                 $rootCatId = 0;
@@ -189,16 +188,18 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     }
 
     /**
+     * Get website vendor owner
      * @return bool|int
      * @throws Mage_Core_Exception
      */
     public function getSWVendorId()
     {
-        //TODO define SW owner
-        if (Mage::app()->getWebsite()->getWebsiteId() == 1) {
-            return false;
-        } else {
-            return 10;
-        }
+        /* @var $collection Mage_Core_Model_Mysql4_Website_Collection */
+        $collection = Mage::getModel("core/website")->getCollection();
+        $collection->addFieldToFilter("have_specific_domain", 1);
+        $collection->addFieldToFilter("website_id", Mage::app()->getWebsite()->getWebsiteId());
+        $website = $collection->getFirstItem();
+
+        return $website->getVendorId();
     }
 }
