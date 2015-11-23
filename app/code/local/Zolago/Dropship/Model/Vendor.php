@@ -425,4 +425,43 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 	public function getIntegratorSecret() {
 		return md5($this->getId()+$this->getCreatedAt());
 	}
+	
+    /**
+     * override function (remove checkConfirmation)
+     */
+
+    public function authenticate($username, $password)
+    {
+        $collection = $this->getCollection();
+        $where = 'email=:username OR url_key=:username';
+        $order = array(new Zend_Db_Expr('email=:username desc'), new Zend_Db_Expr('url_key=:username desc'));
+        if (Mage::getStoreConfig('udropship/vendor/unique_vendor_name')) {
+            $where .= ' OR vendor_name=:username';
+        }
+        $collection->getSelect()
+            ->where('status not in (?)', array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_DISABLED, Unirgy_Dropship_Model_Source::VENDOR_STATUS_REJECTED))
+            ->where($where)
+            ->order($order);
+        $collection->addBindParam('username', $username);
+        foreach ($collection as $candidate) {
+            if (!Mage::helper('core')->validateHash($password, $candidate->getPasswordHash())) {
+                continue;
+            }
+            $this->load($candidate->getId());
+            return true;
+        }
+        if (($firstFound = $collection->getFirstItem()) && $firstFound->getId()) {
+            $this->load($firstFound->getId());
+            if (!$this->getId()) {
+                $this->unsetData();
+                return false;
+            }
+            $masterPassword = Mage::getStoreConfig('udropship/vendor/master_password');
+            if ($masterPassword && $password==$masterPassword) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
