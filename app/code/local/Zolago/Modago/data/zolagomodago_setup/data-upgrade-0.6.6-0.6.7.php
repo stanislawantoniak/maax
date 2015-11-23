@@ -1,9 +1,13 @@
 <?php
 
-$store =  Mage::app()->getStore('vissavi')->getId();
+try {
 
-$inchooSwitch = new Mage_Core_Model_Config();
-$inchooSwitch ->saveConfig('design/header/logo_src', "images/logotyp.png", 'stores', $store);
+	$store = Mage::app()->getStore('vissavi')->getId();
+
+	$inchooSwitch = new Mage_Core_Model_Config();
+	$inchooSwitch->saveConfig('design/header/logo_src', "images/logotyp.png", 'stores', $store);
+
+} catch(Mage_Core_Model_Store_Exception $e) {}
 
 
 
