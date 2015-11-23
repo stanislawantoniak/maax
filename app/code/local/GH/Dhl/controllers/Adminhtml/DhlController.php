@@ -135,4 +135,12 @@ class GH_Dhl_Adminhtml_DhlController extends Mage_Adminhtml_Controller_Action
         $this->getResponse()->setBody($block->toHtml());
     }
 
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_general_config/ghdhl');
+    }
 }

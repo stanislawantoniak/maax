@@ -249,18 +249,12 @@ define([
 						field: "campaign_regular_id",
 						className: "filterable column-medium align-center text-overflow",
 						formatter: function(value, item){
-
-							if(value == null){
-								return "Standard";
-							}
-
 							for(var i=0; i<campainRegularIdOptions.length; i++){
 								if(campainRegularIdOptions[i].value+'' == value+''){
 									return campainRegularIdOptions[i].label;
 								}
 							}
-
-
+							return "Standard";
 						}
 					}
 				]

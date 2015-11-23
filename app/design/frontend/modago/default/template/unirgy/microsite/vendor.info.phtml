@@ -53,8 +53,12 @@ $marketingInformation = $this->getMarketingInfo();
                 <h2 class="title_section"><?php echo $this->__("DELIVERY & RETURNS"); ?></h2>
             </div>
             <div class="modal-body" style="color: #000000;">
-                <div id="termsDeliveryInformation"><?php echo $marketingInformation->delivery_information; ?></div>
-                <div id="termsReturnInformation"><?php echo $marketingInformation->return_information; ?></div>
+                <div id="termsDeliveryInformation">
+                    <?php echo $marketingInformation->delivery_information; ?>
+                </div>
+                <div id="termsReturnInformation">
+                    <?php echo $marketingInformation->return_information; ?>
+                </div>
             </div>
         </div>
     </div>

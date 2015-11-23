@@ -6,7 +6,7 @@ class Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect ext
     {
         $this->setElement($element);
         $value = $element->getValue();
-        $cHlp = Mage::helper('udropship/catalog');
+        $cHlp = Mage::helper('zolagodropship/catalog');
         $cOpts = $cHlp->getCategoryValuesExtended();
         if (!$value && $cHlp->getStoreRootCategory()) {
             $value = $cHlp->getStoreRootCategory()->getId();

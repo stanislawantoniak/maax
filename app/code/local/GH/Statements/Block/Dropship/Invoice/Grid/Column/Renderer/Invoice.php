@@ -1,6 +1,6 @@
 <?php
 
-class GH_Statements_Block_Dropship_Invoice_Grid_Column_Renderer_Specification
+class GH_Statements_Block_Dropship_Invoice_Grid_Column_Renderer_Invoice
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
 
@@ -11,12 +11,5 @@ class GH_Statements_Block_Dropship_Invoice_Grid_Column_Renderer_Specification
         $href = $helper->getVendorInvoiceUrl($row->getData('vendor_invoice_id'));
         $fileName = Mage::helper('ghcommon')->cleanFileName($row->getData("wfirma_invoice_number"),'-').'.pdf';
         return  "<a href='{$href}'><i class='icon-file-text-alt'></i> {$fileName}</a>";
-    }
-
-    /**
-     * @return Zolago_Dropship_Model_Vendor
-     */
-    public function getVendor() {
-        return Mage::getSingleton('udropship/session')->getVendor();
     }
 }

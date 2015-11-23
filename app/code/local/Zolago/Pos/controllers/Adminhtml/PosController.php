@@ -115,4 +115,13 @@ class Zolago_Pos_Adminhtml_PosController extends Mage_Adminhtml_Controller_Actio
         $this->loadLayout();
         $this->renderLayout();
     }
+
+    /**
+    * Acl check for this controller
+    *
+    * @return bool
+    */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_general_config/zolagopos');
+    }
 }

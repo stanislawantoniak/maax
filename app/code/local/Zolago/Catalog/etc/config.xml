@@ -54,8 +54,7 @@
                     <product>Zolago_Catalog_Model_Product</product>
                     <url>Zolago_Catalog_Model_Url</url>
                     <category>Zolago_Catalog_Model_Category</category>
-                    <product_type_configurable>Zolago_Catalog_Model_Product_Type_Configurable
-                    </product_type_configurable>
+                    <product_type_configurable>Zolago_Catalog_Model_Product_Type_Configurable</product_type_configurable>
                 </rewrite>
 			</catalog>
             <catalog_resource>
