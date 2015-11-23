@@ -87,7 +87,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <dl>
+                            <dl class="vendor-menu-mobile-content">
                                 <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
                             </dl>
                         </div>
@@ -118,7 +118,9 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>
+                            <div class="vendor-menu-mobile-content">
+                                <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
