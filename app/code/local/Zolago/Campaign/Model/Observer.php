@@ -326,4 +326,35 @@ class Zolago_Campaign_Model_Observer
         list($usec, $sec) = explode(" ",microtime());
         return ((float)$usec + (float)$sec);
     }
+
+    /**
+     * Add flag 'have_specific_domain' into Admin Website Information edit form
+     * Event: adminhtml_store_edit_form_prepare_form
+     * @see Mage_Adminhtml_Block_System_Store_Edit_Form::_prepareForm()
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function addFieldsToAdminStoreEdit($observer) {
+        /** @var Zolago_Campaign_Helper_Data $hlp */
+        $hlp = Mage::helper('zolagocampaign');
+        /** @var Mage_Adminhtml_Block_System_Store_Edit_Form $block */
+        $block = $observer->getData('block');
+        $form = $block->getForm();
+        $fieldset = $form->getElements()->searchById('website_fieldset');
+
+        if (Mage::registry('store_type') == 'website') {
+            $websiteModel = Mage::registry('store_data');
+            if ($postData = Mage::registry('store_post_data')) {
+                $websiteModel->setData($postData['website']);
+            }
+
+            $fieldset->addField('website_have_specific_domain', 'select', array(
+                'name'      => 'website[have_specific_domain]',
+                'label'     => $hlp->__('Have specific domain'),
+                'note'      => $hlp->__('YES if website have specified domain, otherwise NO'),
+                'value'     => $websiteModel->getHaveSpecificDomain(),
+                'options'   => Mage::getSingleton('ghapi/source')->setPath('yesno')->toOptionHash(),
+            ));
+        }
+    }
 }
