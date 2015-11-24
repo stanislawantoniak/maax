@@ -80,7 +80,7 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 <?php endif; ?>
 
 <?php // INSPIRATIONS + BOXES START ?>
-
+<?php if($_boxes->count() || $_inspirations->count()): ?>
 <section id="bottom" class="bg-w">
     <div class="container-fluid">
 	    <?php // BOXES START ?>
@@ -174,3 +174,4 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
         <?php // INSPIRATIONS END ?>
     </div>
 </section>
+<?php endif; // END OF THE SECTION ?>
