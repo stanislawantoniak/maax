@@ -217,6 +217,16 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             );
         }
 
+        //Website permissions
+        if (!$isLocalVendor)
+            $websiteOptions = $this->getWebsitesAccordingToPermissions($websiteOptions);
+
+        $websiteOptions[] = array(
+            "label" => $helper->__("--Select--"),
+            "value" => ""
+        );
+
+
         $general->addField("website_ids", "select", array(
             "name" => "website_ids",
             "required" => true,
@@ -292,17 +302,40 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $this->setForm($form);
     }
 
-    public function getWebsites() {
+    public function getWebsitesAccordingToPermissions($websiteOptions){
+        $websitesAllowed = $_vendor = $this->getVendor()->getWebsitesAllowed();
+        if(empty($websitesAllowed))
+            return array();
+
+
+        foreach ($websiteOptions as $key => $websiteOption) {
+            if (!in_array($websiteOption["value"], $websitesAllowed)) {
+                unset($websiteOptions[$key]);
+            }
+        }
+        return $websiteOptions;
+    }
+
+    /**
+     * Generate websites lists allowed for vendor
+     * @return array
+     */
+    public function getWebsites()
+    {
         $websiteOptions = array();
         $isLocalVendor = Mage::helper("zolagodropship")->isLocalVendor();
         $vendorPart = $isLocalVendor ? "" : $this->getVendor()->getUrlKey() . "/";
 
         foreach (Mage::app()->getWebsites() as $websiteId => $website) {
             /** @var Mage_Core_Model_Website $website */
+            $url = $website->getConfig("web/unsecure/base_url");
+            if (!$website->getHaveSpecificDomain()) {
+                $url = $website->getConfig("web/unsecure/base_url") . $vendorPart;
+            }
             $websiteOptions[] = array(
                 "label" => $website->getName(),
                 "value" => $website->getId(),
-                "url" => $website->getConfig("web/unsecure/base_url") . $vendorPart
+                "url" => $url
             );
         }
         return $websiteOptions;
