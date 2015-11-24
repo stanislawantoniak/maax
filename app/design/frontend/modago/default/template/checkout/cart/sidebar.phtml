@@ -10,7 +10,7 @@
 
 <?php
     $_totals = $this->getQuote()->getData();
-    $_totalWithShipment = isset($_totals['grand_total'])? $_total['grand_total']:0; // $this->getQuote()->getGrandTotal()+ $this->getShippingTotal();
+    $_totalWithShipment = isset($_totals['grand_total'])? $_totals['grand_total']:0; // $this->getQuote()->getGrandTotal()+ $this->getShippingTotal();
     $_hasCoupon = (bool) $this->getQuote()->getCouponCode();
     $_couponLabel = '';
     $_couponDescription = '';
