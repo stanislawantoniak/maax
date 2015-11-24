@@ -218,14 +218,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         }
 
         //Website permissions
-        if (!$isLocalVendor) {
-            $websitesAllowed = $_vendor = $this->getVendor()->getWebsitesAllowed();
-            foreach ($websiteOptions as $key => $websiteOption) {
-                if (!in_array($websiteOption["value"], $websitesAllowed)) {
-                    unset($websiteOptions[$key]);
-                }
-            }
-        }
+        if (!$isLocalVendor)
+            $websiteOptions = $this->getWebsitesAccordingToPermissions($websiteOptions);
+
+        $websiteOptions[] = array(
+            "label" => $helper->__("--Select--"),
+            "value" => ""
+        );
 
 
         $general->addField("website_ids", "select", array(
@@ -301,6 +300,20 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
         $form->setValues($values);
         $this->setForm($form);
+    }
+
+    public function getWebsitesAccordingToPermissions($websiteOptions){
+        $websitesAllowed = $_vendor = $this->getVendor()->getWebsitesAllowed();
+        if(empty($websitesAllowed))
+            return array();
+
+
+        foreach ($websiteOptions as $key => $websiteOption) {
+            if (!in_array($websiteOption["value"], $websitesAllowed)) {
+                unset($websiteOptions[$key]);
+            }
+        }
+        return $websiteOptions;
     }
 
     /**

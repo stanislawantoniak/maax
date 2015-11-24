@@ -170,6 +170,7 @@
                         <type>multiselect</type>
                         <source_model>core/website</source_model>
                         <position>1</position>
+                        <default>1</default>
                     </websites_allowed>
                     <!--Company registration data-->
                     <company_name>
