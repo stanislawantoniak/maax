@@ -44,6 +44,10 @@
         return $coll;
     }
 
+    /**
+     * Get websites used in campaigns
+     * @return array
+     */
     public function getCampaignWebsites()
     {
         $campaignWebsites = array();
