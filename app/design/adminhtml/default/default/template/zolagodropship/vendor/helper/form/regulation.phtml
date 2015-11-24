@@ -1,22 +1,8 @@
 <?php
 /** @var $this Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Regulation */
-
-$_element = $this->getElement();
-
-$_htmlId = $_element->getHtmlId();
-$_htmlClass = $_element->getClass();
-$_htmlName = $_element->getName();
-$_readonly = $_element->getReadonly();
-$_value = $_element->getValue();
-
+$_value = $this->getValue();
 $_hlp = Mage::helper("ghregulation");
 ?>
-
-<input id="<?php echo $_htmlId; ?>"
-       name="<?php echo $_htmlName; ?>"
-       value='<?php echo $_value; ?>'
-       class="<?php echo $_htmlClass; ?>"
-       type="hidden"/>
 
 <?php if (!empty($_value)): ?>
     <?php $_valueDecoded = json_decode($_value); ?>

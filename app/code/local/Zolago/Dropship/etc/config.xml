@@ -836,32 +836,12 @@
                     </last_integration>
 
                     <!--Regulation-->
-                    <regulation_accepted>
-                        <label>Regulation: Is Regulations Accepted</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>vendor_info</fieldset>
-                        <position>0</position>
-                    </regulation_accepted>
-                    <regulation_confirm_request_sent_date>
-                        <label>Regulation: Confirmation Request Sent (Date)</label>
-                        <type>label</type>
-                        <fieldset>vendor_form</fieldset>
-                        <position>0</position>
-                    </regulation_confirm_request_sent_date>
-                    <regulation_accept_document_date translate="label">
-                        <label>Regulation: Document Accepted (Date)</label>
-                        <type>label</type>
-                        <fieldset>vendor_form</fieldset>
-                        <position>0</position>
-                    </regulation_accept_document_date>
-                    <regulation_accept_document_data translate="label">
-                        <label>Regulation: Document Accepted Details</label>
-                        <type>hidden</type>
-                        <fieldset>vendor_form</fieldset>
-                        <frontend_model>zolagodropship/adminhtml_vendor_helper_form_regulation</frontend_model>
-                        <position>0</position>
-                    </regulation_accept_document_data>
+	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
+	                <regulation_accept_text_top/>
+	                <regulation_proxy_assignment_url/>
+	                <regulation_proxy_assignment_url_text/>
+	                <regulation_proxy_assignment_override/>
+	                <regulation_accept_text_agreement/>
                     <!--Regulation-->
 				</fields>
 			</vendor>
