@@ -71,7 +71,6 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
 		));
 		$settingsFieldset->addField("regulation_confirm_request_sent_date","label",array(
 			"label" => $hlp->__("Confirmation request send date"),
-			"name" => "regulation_confirm_request_sent_date"
 		));
 		$settingsFieldset->addField("regulation_accept_document_date","label",array(
 			"label" => $hlp->__("Acceptation date")
