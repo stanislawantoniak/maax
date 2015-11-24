@@ -40,7 +40,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
 
     protected function _prepareForm() {
         $form = new Varien_Data_Form();
-	    $hlp = $this->getHelper();
+	    $hlp = $this->_getHelper();
         $this->setForm($form);
         $vendorId = $this->getRequest()->get('id');
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
@@ -121,7 +121,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
 	/**
 	 * @return GH_Regulation_Helper_Data
 	 */
-	public function getHelper() {
+	public function _getHelper() {
 		return Mage::helper('ghregulation');
 	}
 
