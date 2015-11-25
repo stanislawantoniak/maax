@@ -1,7 +1,23 @@
 @import "compass";
 @import "other/variable";
+@import "awesome/variables";
 @import "../vendor/bootstrap/mixins";
 @import "other/media-queries";
 @import "other/responsive-utilities";
 
 @import "gh/checkout/sidebar";
+@import "gh/checkout/shopping-cart";
+@import "gh/checkout/checkout";
+@import "gh/checkout/header";
+
+@import "gh/header/header";
+@import "gh/header/badge";
+@import "gh/header/search";
+
+@import "gh/general/dropdowns";
+
+@import "gh/typography/buttons";
+@import "gh/typography/headers";
+@import "gh/typography/other";
+
+@import "gh/footer/footer";

@@ -1,0 +1,17 @@
+.user-navigation {
+	a {
+		.badge {
+		    background:$colorHeaderBadgeBackground;
+		    @include border-radius(3px);
+		    color: $colorHeaderBadge;
+		    font-size: 11px;
+		    text-align: center;
+		    font-style: normal;
+		   @include max-screen($screen-sm-max) {
+		        @include border-radius(2px);
+		        font-size: 10px;
+		        font-style: normal;
+		   }
+		}
+	}
+}

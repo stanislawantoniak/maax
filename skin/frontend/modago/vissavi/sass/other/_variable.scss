@@ -1,7 +1,6 @@
 @import "../vendor/bootstrap/variables";
 @import "media-queries";
 
-
 // NEW BREAKPOINT 
 
 //@screen-sxs:                 480px;
@@ -44,7 +43,7 @@ $icon-font-svg-id:        "glyphicons_halflingsregular" ;
 
 $panel-bottom: $color_fefefe;
 $panel-top: $color_fcfcfc;
-$body-bg:               $color_fff;
+$body-bg: $color_fff;
 $color-gold: $color_ff0000;
 $color-gray1: $color_b99;
 $color-gray2: $color_ffebeb;
@@ -108,34 +107,149 @@ $validation-error: $color_e84c3d;
     textarea {
         margin:0px;
         padding:0px;
-        background:0px;
+        background:transparent;
         border:none;
     }
 }
 
+@mixin linearGradient($startColor,$stopColor) {
+	background: $startColor !important;
+	background: -moz-linear-gradient(-80deg,  $startColor 0%, $stopColor 100%)!important;
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,$startColor), color-stop(100%,$stopColor))!important;
+	background: -webkit-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: -o-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: -ms-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: linear-gradient(135deg,  $startColor 0%,$stopColor 100%)!important;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 )!important;
+}
+
 // FONT
-$fontLight: latolight, sans-serif;
-$fontRegular: latoregular, sans-serif;
-$fontBlack: latoblack, sans-serif;
+$fontLight: RobotoLight, sans-serif;
+$fontRegular: Roboto, sans-serif;
+$fontBlack: RobotoBold, sans-serif;
+
+/* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
+
 // SPRITES MAP 
 $allMap: sprite-map("sprites/all/*.png", $layout: smart, $spacing:50px);
-
-/*$icoMapDesktop: sprite-map("desktop/ico/*.png");
-$icoMapMobile: sprite-map("mobile/ico/*.png");
-$bulletMap: sprite-map("sprites/bullet/*.png");
-$arrowMap: sprite-map("sprites/arrow/*.png");
-$socialMap: sprite-map("sprites/social/*.png"); 
-$followUsMap: sprite-map("sprites/follow_us/*.png"); 
-$formIcoMap: sprite-map("sprites/form_feedback/*.png");
-$formMap: sprite-map("sprites/form/*.png");
-$btnSocialMap: sprite-map("sprites/btn-social/*.png");
-$flagMap: sprite-map("sprites/flags/*.png");*/
-//////////////////////////////////////////////
- 
 
 // Dodatkowe sprites
 $btnCheck: sprite-map("sprites/check_filter/*.png", $spacing:200px);
 $checkboxMap: sprite-map("sprites/checkbox/*.png", $spacing:200px);
 $radioMap: sprite-map("sprites/radio/*.png", $spacing:200px);
 $selectMap: sprite-map("sprites/select/*.png");
-$bgMap: sprite-map("sprites/bg/*.png"); 
+$bgMap: sprite-map("sprites/bg/*.png");
+
+/**
+
+
+
+ NEW GLOBAL VARS
+
+
+
+ **/
+
+$colorFont:                             #000;
+$colorLink:                             #000;
+$colorLinkHover:                        #000;
+$colorLinkActive:                       #000;
+
+//icon colors
+$colorIcon:                             #787878;
+$colorIconHover:                        #FFF;
+$colorIconHoverBackground:              #787878;
+
+//icon texts colors
+$colorIconText:                         $colorIcon;
+$colorIconTextHover:                    $colorIconHover;
+
+//backgrounds colors
+$colorBackgroundBlocks:                 #FFF;
+$colorBackgroundSite:                   #F2F1F0;
+$colorBackgroundContent:                #FFF;
+
+//accents colors
+$colorAccentBlocks:                     #EBEBEB;
+$colorAccentSite:                       #CD0027;
+
+//buttons
+$colorBtnPrimary:                       #FFF;
+
+$colorBtnPrimaryBackgroundStart:        #d20005;
+$colorBtnPrimaryBackgroundEnd:          #b40005;
+
+$colorBtnPrimaryBackgroundStartHover:   #de0005;
+$colorBtnPrimaryBackgroundEndHover:     #c00005;
+
+$colorBtnPrimaryBackgroundStartActive:  #b40005;
+$colorBtnPrimaryBackgroundEndActive:    #d20005;
+
+$colorBtnPrimaryBackgroundDisabled:     #C5C5C5;
+
+@mixin primaryButtonGradient { //covers normal + hover + active
+	@include linearGradient($colorBtnPrimaryBackgroundStart,$colorBtnPrimaryBackgroundEnd);
+	&:hover,&.hover {
+		@include linearGradient($colorBtnPrimaryBackgroundStartHover,$colorBtnPrimaryBackgroundEndHover);
+	}
+	&:active,&:focus,&.active {
+		@include linearGradient($colorBtnPrimaryBackgroundStartActive,$colorBtnPrimaryBackgroundEndActive);
+	}
+	&.disabled {
+		background: $colorBtnPrimaryBackgroundDisabled;
+	}
+}
+
+/* HEADER VARIABLES */
+$colorIconHeader:                       $colorIcon;
+$colorIconHoverHeader:                  $colorIconHover;
+$colorIconHoverBackgroundHeader:        $colorIconHoverBackground;
+
+$colorHeaderBadge:                      #FFF;
+$colorHeaderBadgeBackground:            #00c10e;
+
+$colorIconTextHeader:                   $colorIconText;
+$colorIconTextHoverHeader:              $colorIconTextHover;
+
+$colorBackgroundBlocksHeader:           $colorBackgroundBlocks;
+$colorBackgroundContentHeader:          $colorBackgroundContent;
+$colorAccentBlocksHeader:               $colorAccentBlocks;
+
+$colorHeaderSearch:                     $colorFont;
+$colorHeaderSearchBackground:           $colorBackgroundBlocksHeader;
+$colorHeaderSearchBorder:               $colorIconHeader;
+
+/* CHECKOUT HEADER VARIABLES */
+$colorHeaderCheckoutSteps:              $colorIconHeader;
+$colorHeaderCheckoutStepsActive:        $colorAccentSite;
+$colorHeaderCheckoutStepsText:          $colorIconHeader;
+$colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
+
+/* TOP MENU VARIABLES */
+$colorAccentSiteMenuTop:                $colorAccentSite;
+$colorAccentBlocksMenuTop:              $colorAccentBlocks;
+$colorBackgroundBlocksMenuTop:          $colorBackgroundBlocks;
+
+
+/* DROPDOWN VARIABLES */
+$colorBackgroundDropdown:               $colorIconHoverBackgroundHeader;
+$colorDropdown:                         $colorIconTextHoverHeader;
+$colorAccentDropdown:                   $colorAccentBlocks;
+
+/* CART DROPDOWN VARIABLES */
+$colorBackgroundDropdownCart:           $colorBackgroundDropdown;
+$colorDropdownCart:                     $colorDropdown;
+$colorAccentDropdownCart:               $colorAccentDropdown;
+
+/* SEARCH DROPDOWN VARIABLES */
+$colorBackgroundDropdownSearch:         $colorBackgroundDropdown;
+$colorDropdownSearch:                   $colorDropdown;
+$colorAccentDropdownSearch:             $colorAccentDropdown;
+
+/* FOOTER VARIABLES */
+$colorBackgroundBlocksFooter:           $colorBackgroundBlocks;
+$colorFontFooter:                       $colorFont;
+$colorLinkFooter:                       $colorLink;
+
+/* CART VARIABLES */
+$colorAccentBlocksCart:                 $colorAccentBlocks;
