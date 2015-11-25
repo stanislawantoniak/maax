@@ -20,6 +20,7 @@
 #terms_delivery, //warunki dostawy i zwrotu
 #trigger_conditions_shipping //shopping cart popup
 {
+
   .delivery-table {
     padding-bottom: 10px;
     div.row {
@@ -117,6 +118,17 @@
         border: 1px solid $gray-lighter;
       }
       max-width: 450px;
+    }
+  }
+}
+
+#terms_delivery {
+  .title_section_with_logo {
+    .title_section_title_wrapper {
+      padding-top: 10px;
+    }
+    .title_section_logo_wrapper img {
+      max-width: 100%;
     }
   }
 }
