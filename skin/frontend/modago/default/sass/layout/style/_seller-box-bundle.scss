@@ -239,7 +239,14 @@
     }
   }
 
+  //MODAL CONTENT
   .vendor-menu-mobile-content {
+    h4 {
+      padding: 10px 0 !important;
+    }
+    h4:first-child {
+      padding-top: 0px !important;
+    }
     img {
       max-width: 100%;
       padding: 0 0 20px 0;
@@ -273,6 +280,8 @@
       max-width: 450px;
     }
   }
+  //--MODAL CONTENT
+
 }
 
 .descripionProduct-box-bundle {
