@@ -22,7 +22,7 @@
   }
 
   .label-bold {
-    font-family: latoblack;
+    font-family: $fontBlack;
     font-size: 13px;
   }
   .form-group {
@@ -61,7 +61,7 @@
     width: 90%;
   }
   label {
-    font-family: latoblack;
+    font-family: $fontBlack;
     font-weight: normal !important;
   }
 }

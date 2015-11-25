@@ -20,7 +20,6 @@
 #terms_delivery, //warunki dostawy i zwrotu
 #trigger_conditions_shipping //shopping cart popup
 {
-
   .delivery-table {
     padding-bottom: 10px;
     div.row {
@@ -50,7 +49,7 @@
   }
 }
 
-#shop_nav_mobile, //vendor page
+.top_bottom #shop_nav_mobile, //vendor page
 #seller-box-bundle //product page
 {
 
@@ -104,9 +103,9 @@
     a {
       color: $brand-primary;
       text-decoration: underline;
-      display: inline;
+      display: inline !important;
       text-transform: none;
-      font-size: 12px;
+      font-size: 12px !important;
       padding-left: 0 !important;
     }
 
@@ -121,7 +120,6 @@
     }
   }
 }
-
 .title_section_with_logo {
   .title_section_title_wrapper {
     padding-top: 10px;
@@ -138,8 +136,6 @@
     }
   }
 }
-
-
 .no-padding {
   padding: 0;
 }

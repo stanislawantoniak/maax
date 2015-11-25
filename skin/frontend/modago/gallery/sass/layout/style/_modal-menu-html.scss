@@ -49,7 +49,7 @@
   }
 }
 
-#shop_nav_mobile, //vendor page
+.top_bottom #shop_nav_mobile, //vendor page
 #seller-box-bundle //product page
 {
 
@@ -103,9 +103,9 @@
     a {
       color: $brand-primary;
       text-decoration: underline;
-      display: inline;
+      display: inline !important;
       text-transform: none;
-      font-size: 12px;
+      font-size: 12px !important;
       padding-left: 0 !important;
     }
 

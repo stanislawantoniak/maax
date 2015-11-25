@@ -1,0 +1,34 @@
+#header {
+    [role="search"] {
+        border-bottom:none;
+        .form-group {
+            input[type="text"] {
+                color: $colorHeaderSearch;
+                font-size: 12px;
+                @include border-radius(0px);
+                box-shadow: none;
+            	background-color: $colorHeaderSearchBackground;
+            	border-top: 1px solid $colorHeaderSearchBorder;
+	            border-bottom: 1px solid $colorHeaderSearchBorder;
+	            border-left: 1px solid $colorHeaderSearchBorder;
+	            border-right: none;
+	            padding: 0 10px;
+            }
+        }
+        .select-box {
+			.selectboxit.form-control.select-styled {
+				border-top: 1px solid $colorHeaderSearchBorder;
+				border-bottom: 1px solid $colorHeaderSearchBorder;
+			}
+            &:before {
+                border-left:1px solid $colorHeaderSearchBorder;
+            }
+        }
+	    .form-control.select-styled.search-context {
+		    border-top: 1px solid $colorHeaderSearchBorder;
+		    border-bottom: 1px solid $colorHeaderSearchBorder;
+		    border-right: none;
+		    border-left: none;
+	    }
+    }
+}
