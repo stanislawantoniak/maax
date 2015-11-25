@@ -109,7 +109,7 @@ class Modago_Integrator_Model_Generator_Price
         $helper = $this->getHelper();
         try {
             $helper->createFile($this->_getPath().'.tmp');
-            $helper->log('Create tmp file');                        
+            $helper->log(sprintf('Create tmp file: %s.tmp',$this->_getPath()));
             $helper->addToFile($this->_getHeader());
             $helper->log('Save data begin');            
             $list = $this->_prepareList();
