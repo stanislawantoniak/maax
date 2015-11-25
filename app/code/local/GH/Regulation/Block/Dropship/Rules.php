@@ -12,10 +12,14 @@ class GH_Regulation_Block_Dropship_Rules
      * @return array
      */
      public function getDocumentList() {
-        $vendor =  Mage::getSingleton('udropship/session')->getVendor();
+        $vendor = $this->getVendor();
         $documents =  Mage::helper('ghregulation')->getVendorDocuments($vendor);
         ksort($documents);
         return $documents;
      }
+
+	public function getVendor() {
+		return Mage::getSingleton('udropship/session')->getVendor();
+	}
     
 }

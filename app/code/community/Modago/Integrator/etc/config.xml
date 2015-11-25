@@ -50,6 +50,20 @@
             </resources>
         </acl>
     </adminhtml>
+    <frontend>
+        <secure_url>
+            <zintegration>/zintegration</zintegration>
+        </secure_url>
+        <routers>
+            <zintegration>
+                <use>standard</use>
+                <args>
+                    <module>Modago_Integrator</module>
+                    <frontName>zintegration</frontName>
+                </args>
+            </zintegration>
+        </routers>
+    </frontend>
     <default>
         <modagointegrator>
             <authentication>

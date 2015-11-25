@@ -9,18 +9,21 @@ abstract class Modago_Integrator_Model_Generator
 
 	protected $_helper;
 	protected $_externalId;
-    protected $_fileName;
     protected $_status;
+    protected $_extension = '.xml';
 
 	const DIRECTORY = 'modagointegrator';
 
+	static public function getDir() {
+	    return Mage::getBaseDir('var') . DS . self::DIRECTORY . DS ;
+	}
     /**
      * Returns local path to generated file
      *
      * @return string
      */
     protected function _getPath() {
-        return Mage::getBaseDir('var') . DS . self::DIRECTORY . DS . $this->_getFileName();
+         return Mage::getBaseDir('var') . DS . self::DIRECTORY . DS . $this->_getFileName();
     }
 
     /**
@@ -29,10 +32,8 @@ abstract class Modago_Integrator_Model_Generator
      * @return string
      */
     protected function _getFileName() {
-        if (!$this->_fileName) {
-            $this->_fileName = $this->getFileNamePrefix().'_'.$this->getExternalId().".xml";
-        }
-        return $this->_fileName;
+        return $this->getFileNamePrefix().'_'.$this->getExternalId().$this->_extension;
+        
     }
     
     /**
@@ -62,27 +63,64 @@ abstract class Modago_Integrator_Model_Generator
      */
     public function generate() {
         $this->_status = false;
-        $this->_fileName = null;
         $helper = $this->getHelper();
         try {
-            $helper->createFile($this->_getPath());
+            $helper->createFile($this->_getPath().'.tmp');
+            $helper->log('Create tmp file');
             $helper->addToFile($this->_getHeader());
+            $helper->log('Save data begin');
             while ($list = $this->_prepareList()) {
                 foreach ($list as $item) {
                     $block = $this->_prepareXmlBlock($item);
                     $helper->addToFile($block);
                 }
             } 
+            $helper->log('Save data end');
             $helper->addToFile($this->_getFooter());
-            $helper->closeFile();
-            $this->_status = true;
+            $helper->closeFile();            
+            $helper->log('Close file');
+            $this->_status = rename($this->_getPath().'.tmp',$this->_getPath());
+            $helper->log(sprintf('Generate file: %s',($this->_status)? 'success':'fail'));            
         } catch (Modago_Integrator_Exception $ex) {
             Mage::logException($ex);
+            $helper->log($ex->getMessage());
             $helper->closeFile();
         }
         return $this->_status;
     }
     
+        
+    /**
+     * get data from generated files
+     */
+
+    public function getFile() {
+        $path = $this->_getPath();
+        $extensions = array(	
+            '.gz',
+            '.bz2',
+            '',
+        );
+        foreach ($extensions as $ext) {
+            $filename = trim($path.$ext);
+            if (file_exists($filename)) {
+                return $filename;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * try compress file
+     */
+     public function compress() {
+         $helper = $this->getHelper();
+         $path = $this->_getPath();
+         if ($extension = $helper->compress($path)) {
+             @unlink($path);
+         }
+         $this->_extension .= $extension; // extension of compressed file
+     }
     
     /**
      * Uploading file
