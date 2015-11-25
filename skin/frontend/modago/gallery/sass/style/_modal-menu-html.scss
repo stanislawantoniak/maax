@@ -25,7 +25,7 @@
     div.row {
       padding-top: 18px;
       padding-bottom: 18px;
-      border: 1px solid $gray-lighter;
+      border: 1px solid $color-gray3;
     }
   }
   h4 {
@@ -52,7 +52,16 @@
 #shop_nav_mobile, //vendor page
 #seller-box-bundle //product page
 {
-
+  #termsDeliveryInformation, #termsReturnInformation {
+    .delivery-table {
+      div.row {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        border: 1px solid $color-gray3;
+      }
+      max-width: 450px;
+    }
+  }
 
   .vendor-menu-mobile-content {
     li {
@@ -62,7 +71,7 @@
       }
       ul {
         display: block;
-        padding-left: 10px !important;
+        padding-left: 10px;
         margin-bottom: 10px;
         li {
           list-style: initial;
@@ -91,7 +100,7 @@
     }
     ul {
       display: block;
-      padding-left: 10px !important;
+      padding-left: 25px !important;
       margin-bottom: 10px !important;
       li {
         list-style: initial;
@@ -114,7 +123,7 @@
       div.row {
         padding-top: 18px;
         padding-bottom: 18px;
-        border: 1px solid $gray-lighter;
+        border: 1px solid $color-gray3;
       }
       max-width: 450px;
     }
