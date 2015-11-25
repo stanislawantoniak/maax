@@ -171,13 +171,13 @@
 }
 
 #seller_description {
-  img {
-    max-width: 60%;
-    float: left;
-    padding: 0 15px 20px 0;
-  }
-
   .modal-content {
+    img {
+      max-width: 60%;
+      float: left;
+      padding: 0 15px 20px 0;
+    }
+
     ul {
       margin-left: 10px;
       li {
