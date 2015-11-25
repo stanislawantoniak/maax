@@ -122,16 +122,23 @@
   }
 }
 
-#terms_delivery {
+.title_section_with_logo {
+  .title_section_title_wrapper {
+    padding-top: 10px;
+  }
+  .title_section_logo_wrapper img {
+    max-width: 100%;
+  }
+}
+
+#trigger_conditions_shipping {
   .title_section_with_logo {
     .title_section_title_wrapper {
-      padding-top: 10px;
-    }
-    .title_section_logo_wrapper img {
-      max-width: 100%;
+      padding-top: 0px !important;
     }
   }
 }
+
 
 .no-padding {
   padding: 0;
