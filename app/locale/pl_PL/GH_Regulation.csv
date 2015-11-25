@@ -39,12 +39,12 @@
 "Are you sure?", "Czy jesteś pewien?"
 "Document kind &quot;%s&quot; was deleted.", "Rodzaj dokumentu &quot;%s&quot; został usunięty."
 "Edit document kind", "Edycja rodzaju dokumentu"
-"Accept regulations","Akceptuję regulamin Modago"
+"Accept regulations","Akceptuję powyższe dokumenty"
 "Accept regulation","Akceptacja regulaminu"
 "I %s declare:","Ja %s oświadczam, że:"
 "I am authorized to represent single %s","Jestem upoważniony do jednoosobowego reprezentowania %s"
 "I am authorized to represent company single","Jestem upoważniony do jednoosobowego reprezentowania firmy"
-"I have full powers to accept the regulations MODAGO.","Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO."
+"I have full powers to accept the regulations MODAGO","Posiadam pełnomocnictwo do zaakceptowania regulaminów MODAGO"
 "Upload a scan of regulations","Załącz skan pełnomocnictwa"
 "Download the regulations to become familiar with their content:","Pobierz regulaminy aby zapoznać się z ich treścią:"
 "I %s %s  declare","Ja %s %s  oświadczam, że:"
@@ -70,3 +70,16 @@
 "Type name", "Nazwa typu"
 "Active from", "Obowiązuje od"
 "Actions", "Akcje"
+"Are regulations accepted","Regulaminy zaakceptowane"
+"Confirmation request send date","Data wysłania prośby o akceptację"
+"Acceptation date","Data akceptacji",
+"Acceptation details","Szczegóły akceptacji",
+"Overrides part of vendor_regulations_accept cms block","Nadpisuje część bloku cms o identyfikatorze: vendor_regulations_accept",
+"Accept page top text","Tekst na górze strony akceptacji",
+"Proxy assignment url","Link do pełnomocnictwa",
+"Proxy assignment url text","Tekst linku do pełnomocnictwa",
+"Agreement text","Treść zgody"
+"Overrides default agreement text (next to checkbox)","Nadpisuje domyślną treść zgody na akceptację regulaminu (tekst obok checkboxa)"
+"I have full powers to accept the %s regulations","Posiadam pełnomocnictwo do zaakceptowania regulaminów %s"
+"Replaces %value% in this text: ","Zamienia %value% w tym tekście: "
+"Proxy assignment text override","Nadpisanie nazwy w pełnomocnictwie"

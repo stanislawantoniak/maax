@@ -8,9 +8,15 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getSingleton('zolagobanner/banner_type')->toOptionHash();
     }
-    public function getVendor(){
+
+    /**
+     * @return Zolago_Dropship_Model_Vendor
+     */
+    public function getVendor()
+    {
         return Mage::getSingleton('udropship/session')->getVendor();
     }
+
     /**
      * @return array
      */
@@ -25,42 +31,63 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         return $vendorsList;
     }
 
-
+    /**
+     * @return array
+     * @throws Mage_Core_Exception
+     */
     public function getVendorCategoriesList()
     {
+        $websitesAllowed = $this->getVendor()->getWebsitesAllowed();
+
         $categories = array();
-        //1. Get vendor root category
-        // /udropshipadmin/adminhtml_vendor/edit/ -> Preferences -> Root categories -> Category ID
-        $rootCatID = Mage::app()->getStore()->getRootCategoryId();
+        if (empty($websitesAllowed)) {
+            return $categories;
+        }
+        foreach ($websitesAllowed as $websiteId) {
+            $website = Mage::getModel("core/website")->load($websiteId);
+            $categories[$websiteId]["website"] = $website->getName();
+            $defaultStoreId = $website->getDefaultStore()->getId();
 
-        $customVendorVars = Mage::helper('core')->jsonDecode($this->getVendor()->getCustomVarsCombined());
+            //1. Get vendor root category
+            // /udropshipadmin/adminhtml_vendor/edit/ -> Preferences -> Root categories -> Category ID
+            $rootCatID = Mage::app()->getStore($defaultStoreId)->getRootCategoryId();
 
-        $vendorRootCategory = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category']) && (int)reset($customVendorVars['root_category']) > 0) ?
-            (int)reset($customVendorVars['root_category']) :
-            $rootCatID;
+            $customVendorVars = Mage::helper('core')->jsonDecode($this->getVendor()->getCustomVarsCombined());
 
-        if ($vendorRootCategory > 0) {
-            //get all display_mode = page
-            $cats = $this->getAllChildren($vendorRootCategory);
+            $vendorRootCategory = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category']) && (int)reset($customVendorVars['root_category']) > 0) ?
+                (int)reset($customVendorVars['root_category']) :
+                $rootCatID;
 
-            $catList = $this->getCategoriesDisplayModePage($cats);
-            $cats = $vendorRootCategory . "," . trim($catList, ",");
+            if ($vendorRootCategory > 0) {
+                //get all display_mode = page
+                $cats = $this->getAllChildren($vendorRootCategory);
 
-            $collection = Mage::getModel("catalog/category")->getCollection()
-                ->addFieldToFilter('entity_id', array('in' => explode(",", $cats)))
-                ->addAttributeToSelect('name')
-                ->addAttributeToSort('level', 'ASC');
+                $catList = $this->getCategoriesDisplayModePage($cats);
+                $cats = $vendorRootCategory . "," . trim($catList, ",");
 
-            foreach ($collection as $collectionItem) {
-                $path = $collectionItem->getPath();
+                $collection = Mage::getModel("catalog/category")->getCollection()
+                    ->addFieldToFilter('entity_id', array('in' => explode(",", $cats)))
+                    ->addAttributeToSelect('name')
+                    ->addAttributeToSort('level', 'ASC');
 
-                if (in_array($vendorRootCategory, explode("/", $path))) {
-                    $categories[] = array(
-                        'id' => $collectionItem->getId(),
-                        'name' => $collectionItem->getName(),
-                        'edit_url' => '/campaign/placement_category/index/category/' . $collectionItem->getId());
+                foreach ($collection as $collectionItem) {
+                    $path = $collectionItem->getPath();
+
+                    if (in_array($vendorRootCategory, explode("/", $path))) {
+                        $categories[$websiteId]["categories"][] = array(
+                            'id' => $collectionItem->getId(),
+                            'name' => $collectionItem->getName(),
+                            'edit_url' => Mage::getUrl("campaign/placement_category/",
+                                array(
+                                    "category" => $collectionItem->getId(),
+                                    "_secure" => true
+                                )
+
+                            )
+                        );
+                    }
+
                 }
-
             }
         }
 
@@ -185,7 +212,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         $html .= '<ul>';
 
         foreach ($allCats as $category) {
-            $html .= '<li id="'.$category->getId().'" data-name="' . $category->getName() . '" data-url="'.$category->getUrl().'">' . $category->getName() . "";
+            $html .= '<li id="' . $category->getId() . '" data-name="' . $category->getName() . '" data-url="' . $category->getUrl() . '">' . $category->getName() . "";
             $subcats = $category->getChildren();
             if ($subcats != '') {
                 $html .= $this->getTreeCategories($category->getId());
@@ -203,21 +230,22 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $html;
     }
-    
-    
+
+
     /**
      * return campaign ids from request
      *
      * @return array
      */
-    public function getCampaignIdsFromUrl() {
+    public function getCampaignIdsFromUrl()
+    {
         if (is_null($this->_campaignIds)) {
             $params = Mage::app()->getRequest()->getParams();
             $this->_campaignIds = $this->parseCampaignIds($params);
         }
         return $this->_campaignIds;
     }
-    
+
     /**
      * parse campaign ids from url params
      *
@@ -225,7 +253,8 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
      * @return array
      */
 
-    public function parseCampaignIds($params) {
+    public function parseCampaignIds($params)
+    {
         $id = array();
         if (!empty($params['fq'])) {
             if (!empty($params['fq']['campaign_regular_id'])) {
@@ -234,7 +263,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
                 } else {
                     $id[] = $params['fq']['campaign_regular_id'];
                 }
-            } 
+            }
             if (!empty($params['fq']['campaign_info_id'])) {
                 if (is_array($params['fq']['campaign_info_id'])) {
                     $id += $params['fq']['campaign_info_id'];

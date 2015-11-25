@@ -82,6 +82,37 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label_wrapper_class" => "col-md-3",
             "wrapper_class" => "col-md-6"
         ));
+
+        // Websites
+        $websiteOptions = array();
+        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
+            $websiteOptions[] = array(
+                "label" => $website->getName(),
+                "value" => $website->getId()
+            );
+        }
+
+        //Website permissions
+        if (!$isLocalVendor)
+            $websiteOptions = $this->getWebsitesAccordingToPermissions($websiteOptions);
+
+        $websiteOptions[] = array(
+            "label" => $helper->__("--Select--"),
+            "value" => ""
+        );
+
+
+        $general->addField("website_ids", "select", array(
+            "name" => "website_ids",
+            "required" => true,
+            "class" => "form-control",
+            "label" => $helper->__('Websites'),
+            "values" => $websiteOptions,
+            "label_wrapper_class" => "col-md-3",
+            "wrapper_class" => "col-md-3"
+        ));
+
+
         $general->addField("type", "select", array(
             "name" => "type",
             "required" => true,
@@ -208,24 +239,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         ));
 
 
-        // Websites
-        $websiteOptions = array();
-        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
-            $websiteOptions[] = array(
-                "label" => $website->getName(),
-                "value" => $website->getId()
-            );
-        }
 
-        $general->addField("website_ids", "select", array(
-            "name" => "website_ids",
-            "required" => true,
-            "class" => "form-control",
-            "label" => $helper->__('Websites'),
-            "values" => $websiteOptions,
-            "label_wrapper_class" => "col-md-3",
-            "wrapper_class" => "col-md-3"
-        ));
 
         // Prices definition
         $priceSourceCode = Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_DISCOUNT_PRICE_SOURCE_CODE;
@@ -292,17 +306,40 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $this->setForm($form);
     }
 
-    public function getWebsites() {
+    public function getWebsitesAccordingToPermissions($websiteOptions){
+        $websitesAllowed = $_vendor = $this->getVendor()->getWebsitesAllowed();
+        if(empty($websitesAllowed))
+            return array();
+
+
+        foreach ($websiteOptions as $key => $websiteOption) {
+            if (!in_array($websiteOption["value"], $websitesAllowed)) {
+                unset($websiteOptions[$key]);
+            }
+        }
+        return $websiteOptions;
+    }
+
+    /**
+     * Generate websites lists allowed for vendor
+     * @return array
+     */
+    public function getWebsites()
+    {
         $websiteOptions = array();
         $isLocalVendor = Mage::helper("zolagodropship")->isLocalVendor();
         $vendorPart = $isLocalVendor ? "" : $this->getVendor()->getUrlKey() . "/";
 
         foreach (Mage::app()->getWebsites() as $websiteId => $website) {
             /** @var Mage_Core_Model_Website $website */
+            $url = $website->getConfig("web/unsecure/base_url");
+            if (!$website->getHaveSpecificDomain()) {
+                $url = $website->getConfig("web/unsecure/base_url") . $vendorPart;
+            }
             $websiteOptions[] = array(
                 "label" => $website->getName(),
                 "value" => $website->getId(),
-                "url" => $website->getConfig("web/unsecure/base_url") . $vendorPart
+                "url" => $url
             );
         }
         return $websiteOptions;

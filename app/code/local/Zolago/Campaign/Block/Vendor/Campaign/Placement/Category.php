@@ -17,30 +17,45 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
     }
 
 
+    /**
+     * @return string
+     */
+    public function getCampaigns()
+    {
+        $result = array();
+
+        $categoryId = Mage::app()->getRequest()->getParam("category", 0);
+        if (empty($categoryId))
+            return json_encode($result, JSON_HEX_APOS);
 
 
-    public function getCampaigns(){
+        $category = Mage::getModel("catalog/category")->load($categoryId);
+
+        $categoryRoot = explode("/", $category->getPath())[1];
+
+        $coreStoreGroup = Mage::getModel("core/store_group")->getCollection();
+        $coreStoreGroup->addFieldToFilter("root_category_id", $categoryRoot);
+        $websiteId = $coreStoreGroup->getFirstItem()->getWebsiteId();
+
+
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = $vendor->getId();
 
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
-        $campaignBank = $campaign->getCampaigns();
-        $result = array();
+        $campaignBank = $campaign->getCampaigns($websiteId);
 
         $campaigns = array();
-
-
         //reformat result
         if ($vendorId == Mage::helper('udropship')->getLocalVendorId()) {
             //prepare campaigns group by type and vendor
-            foreach($campaignBank as $campaign){
+            foreach ($campaignBank as $campaign) {
                 $campaigns[$campaign["banner_type"]][$campaign['vendor_id']][$campaign['campaign_id']] = array(
                     'campaign_id' => $campaign['campaign_id'],
                     'vendor_id' => $campaign['vendor_id'],
                     'name' => $campaign['name'],
-                    'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
-                    'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
+                    'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s", strtotime($campaign['date_from'])) : '',
+                    'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s", strtotime($campaign['date_to'])) : ''
                 );
             }
             $vendorsList = Mage::helper('zolagocampaign')->getAllVendorsList();
@@ -55,13 +70,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
             }
         } else {
             //prepare campaigns group by type
-            foreach($campaignBank as $campaign){
+            foreach ($campaignBank as $campaign) {
                 $campaigns[$campaign["banner_type"]][$campaign['campaign_id']] = array(
                     'campaign_id' => $campaign['campaign_id'],
                     'vendor_id' => $campaign['vendor_id'],
                     'name' => $campaign['name'],
-                    'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
-                    'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
+                    'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s", strtotime($campaign['date_from'])) : '',
+                    'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s", strtotime($campaign['date_to'])) : ''
                 );
             }
 
@@ -71,7 +86,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 }
             }
         }
-        return $result;
+
+        return json_encode($result, JSON_HEX_APOS);
     }
 
     /**
@@ -87,7 +103,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
         $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
-        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(),  FALSE, false);
+        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(), FALSE, false);
 
         $placementsByType = array();
         if (!empty($placements)) {
@@ -109,15 +125,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 //preview image
                 $placement['preview_image'] = $bannersConfiguration->no_image;
 
-                if($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
+                if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
                     $placementImage = unserialize($placement['banner_image']);
 
-                    if(!empty($placementImage)){
+                    if (!empty($placementImage)) {
                         $firstImage = reset($placementImage);
-                        $placement['preview_image'] = Mage::getBaseUrl('media').$firstImage['path'];
+                        $placement['preview_image'] = Mage::getBaseUrl('media') . $firstImage['path'];
                     }
                 }
-                if($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML) {
                     $placement['preview_image'] = $bannersConfiguration->image_html;
                 }
                 $status = array();
@@ -189,15 +205,24 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
     public function getCategoryName()
     {
-        $categoryName = '';
+        $categoryName = Mage::helper('zolagocampaign')->__('Vendor landing page');
+
         $category = $this->getRequest()->getParam('category', null);
-        if (!empty($category)) {
-            $categoryModel = Mage::getModel('catalog/category');
-            $categoryObj = $categoryModel->load($category);
-            $categoryName = $categoryObj->getName();
-        } else {
-            $categoryName = Mage::helper('zolagocampaign') -> __('Vendor landing page');
+        if (empty($category)) {
+            return $categoryName;
         }
+        $categoryModel = Mage::getModel('catalog/category');
+        $categoryObj = $categoryModel->load($category);
+        $categoryName = $categoryObj->getName();
+
         return $categoryName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSaveUrl()
+    {
+        return Mage::getUrl("campaign/placement_category/save", array("_secure" => true));
     }
 }
