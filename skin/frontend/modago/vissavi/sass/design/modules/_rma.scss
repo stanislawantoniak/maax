@@ -66,7 +66,7 @@
 	}
 	.step-1{
 		h5{
-			font-family: "latoblack";
+			font-family: $fontBlack;
 			border-bottom: $color_ebebeb 1px solid;
 			padding: 12px 12px 11px 10px;
 		}
@@ -491,7 +491,7 @@
 		input[type=radio]:checked + label{
 			outline: 0;
 			background-color: $color-accent;
-			font-family: latoblack;
+			font-family: $fontBlack;
 		}
 		.rma-dayname {
 			text-transform: uppercase;
@@ -529,7 +529,7 @@
 		}
 	}
 	#pickup-time-from, #pickup-time-to {
-		font-family: latoblack;
+		font-family: $fontBlack;
 		font-size: 14px;
 	}
 	#pickup-time-from {
@@ -784,7 +784,7 @@
 }
 
 .sales-rma-view .title-section .headerTop h2 {
-	font-family: latoregular, sans-serif;
+	font-family: $fontRegular;
 	font-weight: bold;
 	margin: 0 -15px 15px;
 }
