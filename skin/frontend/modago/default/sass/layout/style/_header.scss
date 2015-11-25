@@ -170,6 +170,8 @@
   }
 }
 
+
+//MODAL CONTENT
 #seller_description {
   img {
     max-width: 60%;
@@ -188,7 +190,7 @@
   }
 }
 
-#terms_delivery {
+#terms_delivery, #trigger_conditions_shipping {
   .delivery-table {
     padding-bottom: 10px;
     div.row {
@@ -197,9 +199,15 @@
       border: 1px solid $color-gray3;
     }
   }
-
+  h4 {
+    padding: 10px 0 !important;
+  }
+  h4:first-child {
+    padding-top: 0px !important;
+  }
   ul {
     margin-left: 10px;
+    margin-bottom: 10px;
     li {
       list-style: initial;
       margin-left: 10px;
@@ -212,11 +220,9 @@
   }
 }
 
-
 #shop_nav_mobile {
   #termsDeliveryInformation, #termsReturnInformation {
     .delivery-table {
-      //padding-bottom: 20px;
       div.row {
         padding-top: 18px;
         padding-bottom: 18px;
@@ -225,62 +231,42 @@
       max-width: 450px;
     }
   }
-}
 
-.top_bottom {
-  #shop_nav_mobile {
-    ul.vendor-menu-mobile-content {
-      li {
-        img {
-          max-width: 100%;
-          padding: 0 0 20px 0;
-        }
-        ul {
-          display: block;
-          padding-left: 25px;
-          li {
-            list-style: initial;
-            //margin-left: 20px;
-            display: list-item;
-            height: auto;
-          }
-        }
-      }
-
-
-      a {
-        color: $brand-primary;
-        text-decoration: underline;
-        display: inline;
-        text-transform: none;
-        font-size: 12px;
-        padding-left: 0 !important;
-      }
-    }
-
-  }
-}
-
-#terms_delivery {
-  h4 {
-    padding: 10px 0 !important;
-  }
-  h4:first-child {
-    padding-top: 0px !important;
-  }
-}
-
-#shop_nav_mobile {
   .vendor-menu-mobile-content {
-    h4 {
-      padding: 15px 0 10px 0 !important;
+    li {
+      img {
+        max-width: 100%;
+        padding: 0 0 20px 0;
+      }
+      ul {
+        display: block;
+        padding-left: 25px;
+        li {
+          list-style: initial;
+          //margin-left: 20px;
+          display: list-item;
+          height: auto;
+        }
+      }
+      h4 {
+        padding: 10px 0 !important;
+      }
+      h4:first-child {
+        padding-top: 0px !important;
+      }
     }
-    //h4:first-child {
-    //  padding-top: 0px !important;
-    //}
+
+    a {
+      color: $brand-primary;
+      text-decoration: underline;
+      display: inline;
+      text-transform: none;
+      font-size: 12px;
+      padding-left: 0 !important;
+    }
   }
 }
-
 .no-padding {
   padding: 0;
 }
+//--MODAL CONTENT
