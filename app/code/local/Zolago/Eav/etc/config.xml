@@ -40,6 +40,11 @@
             <zolagoeav>
                 <class>Zolago_Eav_Model</class>
             </zolagoeav>
+            <eav_resource>
+                <rewrite>
+                    <entity_attribute_option_collection>Zolago_Eav_Model_Resource_Entity_Attribute_Option_Collection</entity_attribute_option_collection>
+                </rewrite>
+            </eav_resource>
         </models>		
         <resources>
             <zolagoeav_setup>
