@@ -884,9 +884,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
     /**
      * Get campaigns with banners
+     *
+     * @param $websiteId
      * @return array
+     * @throws Mage_Core_Exception
      */
-    public function getCampaigns()
+    public function getCampaigns($websiteId)
     {
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendor = $vendor->getId();
@@ -905,13 +908,20 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             )
         );
         $select->join(
-            array('banner' => 'zolago_banner'),
+            array('banner' => $this->getTable("zolagobanner/banner")),
             'banner.campaign_id = campaign.campaign_id',
             array("banner.type as banner_type")
+        );
+        $select->join(
+            array('campaign_website' => $this->getTable("zolagocampaign/campaign_website")),
+            'campaign_website.campaign_id = campaign.campaign_id',
+            array("campaign_website.website_id as campaign_website")
         );
         if($vendor !== Mage::helper('udropship')->getLocalVendorId()){
             $select->where('campaign.vendor_id=?', $vendor);
         }
+
+        $select->where('campaign_website.website_id=?', $websiteId);
 
         $select->order("campaign.date_from DESC");
         $select->order('campaign.date_to ASC');
@@ -1263,5 +1273,40 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      
          
      }
+
+
+    /**
+     * Get websites used in campaigns
+     * @return array
+     */
+    public function getCampaignWebsites()
+    {
+        $campaignWebsites = array();
+
+
+        $websiteNames = array();
+        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
+            $websiteNames[$website->getId()] = $website->getName();
+        }
+
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        $collection = Mage::getResourceModel("zolagocampaign/campaign_collection");
+        $collection->getSelect()
+            ->join(
+                array('campaign_website' => Mage::getSingleton('core/resource')->getTableName(
+                    "zolagocampaign/campaign_website"
+                )),
+                'campaign_website.campaign_id = main_table.campaign_id',
+                array("website_id" => "campaign_website.website_id")
+            );
+        $collection->addVendorFilter($vendor);
+        foreach ($collection as $collectionItem) {
+            $campaignWebsites[$collectionItem->getWebsiteId()] = $websiteNames[$collectionItem->getWebsiteId()];
+        }
+
+
+        return $campaignWebsites;
+    }
 }
 

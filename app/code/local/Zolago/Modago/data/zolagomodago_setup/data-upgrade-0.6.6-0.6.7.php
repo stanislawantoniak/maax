@@ -1,56 +1,55 @@
 <?php
-
-try {
-
-	$store = Mage::app()->getStore('vissavi')->getId();
-
-	$inchooSwitch = new Mage_Core_Model_Config();
-	$inchooSwitch->saveConfig('design/header/logo_src', "images/logotyp.png", 'stores', $store);
-
-} catch(Mage_Core_Model_Store_Exception $e) {}
-
-
-
-/*
 $cmsNavigationBlocks = array(
     array(
-        'title'         => 'Rejestracja prawy blok',
-        'identifier'    => 'customer-register-right',
+        'title'         => 'Pasek korzyści',
+        'identifier'    => 'benefits-strip-modago',
         'content'       => <<<EOD
-<div class="sidebar-second col-lg-3 col-md-4 col-sm-4 col-xs-12 col-lg-push-9 col-md-push-8 col-sm-push-8 hidden-xs">
-    <div class="main bg-w">
-        <div class="checkout-sidebar-second-list-title">
-            Załóż konto aby&nbsp;mieć:
+<div class="benefits">
+    <div class="benefit-item">
+        <a href="{{config path=" web/secure/base_url"}}informacje-o-modago">
+        <div class="benefit-text"
+             style="background-image: url('/skin/frontend/modago/default/images/svg/benefits_transport.svg')">
+            <h3>Darmowa dostawa</h3>
+
+            <p>na&nbsp;99% produktów</p>
         </div>
-        <ul class="checkout-sidebar-second-ul">
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-promos">
-                <div class="checkout-sidebar-second-li-strong">
-                    Dodatkowe
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    rabaty i promocje
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-simple">
-                <div class="checkout-sidebar-second-li-strong">
-                    Uproszczony proces
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    składania zamówień
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-status">
-                <div class="checkout-sidebar-second-li-strong">
-                    Stały wzgląd w status
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    zamówienia czy zwrotu
-                </div>
-            </li>
-        </ul>
+        </a>
+    </div>
+    <div class="benefit-item">
+        <a href="{{config path=" web/secure/base_url"}}informacje-o-modago">
+        <div class="benefit-text"
+             style="background-image: url('/skin/frontend/modago/default/images/svg/benefits_return.svg')">
+            <h3>Darmowy zwrot</h3>
+
+            <p>w&nbsp;ciągu 30&nbsp;dni</p>
+        </div>
+        </a>
+    </div>
+    <div class="benefit-item">
+        <a href="{{config path=" web/secure/base_url"}}informacje-o-modago">
+        <div class="benefit-text"
+             style="background-image: url('/skin/frontend/modago/default/images/svg/benefits_shops.svg')">
+            <h3>Wiele sklepów</h3>
+
+            <p>jeden koszyk</p>
+        </div>
+        </a>
+    </div>
+    <div class="benefit-item">
+        <a href="{{config path=" web/secure/base_url"}}mypromotions">
+        <div class="benefit-text"
+             style="background-image: url('/skin/frontend/modago/default/images/svg/benefits_discounts.svg')">
+            <h3>Specjalne rabaty</h3>
+
+            <p>
+                <a href="{{config path=" web/secure/base_url"}}mypromotions">dowiedz&nbsp;się więcej&nbsp;>></a>
+            </p>
+        </div>
+        </a>
     </div>
 </div>
 EOD
+
     ,
         'is_active'     => 1,
         'stores'        => 0
@@ -65,4 +64,3 @@ foreach ($cmsNavigationBlocks as $data) {
     }
     $block->setData($data)->save();
 }
-*/

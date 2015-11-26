@@ -144,7 +144,9 @@
 #basicModal .row, #editModal .row {
     margin: 10px auto;
 }
-.placements-categories .actions .list-group .list-group-item .align-right {
+.placements-categories .actions .list-group .list-group-item .align-right,
+.placements-categories .actions .dd-item .align-right
+{
     float: right;
     padding-left: 10px;
     padding-right: 0;
@@ -585,4 +587,11 @@
 .regulation-docs-list li {
     list-style: none;
 	margin-bottom: 5px;
+}
+
+@media (max-width: 767px) {
+	.udropship-vendor-accept a.navbar-brand {
+		display: block !important;
+		padding: 0 0 0 10px;
+	}
 }

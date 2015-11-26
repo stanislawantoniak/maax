@@ -343,7 +343,15 @@ class Modago_Integrator_Model_Generator_Description
 				if ($attribute) {
 					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
 					if ($attributeText) {
-						return "<![CDATA[$attributeText]]>";
+					    if (is_array($attributeText)) {
+					        $return = "";				        
+            				foreach($attributeText as $attrVal) {
+			            		$return .= "<value><![CDATA[".$attrVal."]]></value>";
+            				}
+            				return $return;
+                        } else {
+    						return "<![CDATA[$attributeText]]>";
+                        }
 					}
 				}
 			} elseif(is_array($attributeValue)) {
@@ -512,7 +520,15 @@ class Modago_Integrator_Model_Generator_Description
 		if (!isset($this->_categories[$categoryId])) {
 			$category = Mage::getModel('catalog/category')->load($categoryId);
 			if ($category) {
-				$this->_categories[$categoryId] = $category->getData('name');
+			    $path = $category->getPath();
+			    $list = explode('/',$path);
+			    $cid = array_pop($list); // actual category
+    	        $name = $category->getData('name');
+			    if (count($list)) {
+			        $cid = array_pop($list);
+			        $name = $this->getCategoryName($cid).' / '.$name;
+			    }
+				$this->_categories[$categoryId] = $name;
 			} else {
 				$this->_categories[$categoryId] = false;
 			}

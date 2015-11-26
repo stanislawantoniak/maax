@@ -9,3 +9,7 @@
 "Price","Cena"
 "Stock","Stan magazynowy"
 "GH Integrator Log","Log integratora"
+"Modago Integrator","Modago Integrator"
+"Is integrator enabled","Czy integrator jest włączony"
+"Secret key","Sekretny klucz"
+"Last integration","Data ostatniej integracji"
