@@ -588,3 +588,10 @@
     list-style: none;
 	margin-bottom: 5px;
 }
+
+@media (max-width: 767px) {
+	.udropship-vendor-accept a.navbar-brand {
+		display: block !important;
+		padding: 0 0 0 10px;
+	}
+}
