@@ -180,16 +180,16 @@ $colorAccentSite:                       #CD0027;
 //buttons
 $colorBtnPrimary:                       #FFF;
 
-$colorBtnPrimaryBgStart:        #d20005;
-$colorBtnPrimaryBgEnd:          #b40005;
+$colorBtnPrimaryBgStart:                #d20005;
+$colorBtnPrimaryBgEnd:                  #b40005;
 
-$colorBtnPrimaryBgStartHover:   #de0005;
-$colorBtnPrimaryBgEndHover:     #c00005;
+$colorBtnPrimaryBgStartHover:           #de0005;
+$colorBtnPrimaryBgEndHover:             #c00005;
 
-$colorBtnPrimaryBgStartActive:  #b40005;
-$colorBtnPrimaryBgEndActive:    #d20005;
+$colorBtnPrimaryBgStartActive:          #b40005;
+$colorBtnPrimaryBgEndActive:            #d20005;
 
-$colorBtnPrimaryBgDisabled:     #C5C5C5;
+$colorBtnPrimaryBgDisabled:             #C5C5C5;
 
 @mixin primaryButtonGradient { //covers normal + hover + active + .disabled
 	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
@@ -281,3 +281,10 @@ $colorFaqLabelBorder:                   #DDD;
 $colorFaqAnswer:                        $colorFont;
 $colorFaqAnswerBg:                      transparent;
 $borderRadiusFaq:                       0;
+
+/* COOKIE BAR VARIABLES */
+$colorCookieBarBg:                      #CDCDCD;
+$colorCookieBar:                        #5f5f5f;
+$colorCookieBarLink:                    #CD0027;
+$colorCookieBarLinkHover:               #e60028;
+$colorCookieBarLinkActive:              #b40026;
