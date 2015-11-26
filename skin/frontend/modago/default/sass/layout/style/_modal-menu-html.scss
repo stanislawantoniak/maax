@@ -59,23 +59,29 @@
       padding-top: 15px !important;
     }
   }
-
+  @media (max-width: $screen-sm) {
+    .delivery-table {
+      max-width: 450px;
+    }
+  }
   .modal-dialog {
     .panel-heading {
       padding: 0 10px 0 25px;
 
-      h2 {
-        height: 18px;
-        font-size: 18px;
-        font-family: latoregular, sans-serif;
-        line-height: 18px;
-        text-transform: uppercase;
-        text-align: left;
-      }
+    h2 {
+      height: 18px;
+      font-size: 18px;
+      font-family: latoregular, sans-serif;
+      line-height: 18px;
+      text-transform: uppercase;
+      text-align: left;
     }
     .panel-body {
       padding-top: 12px !important;
     }
+  }
+  .panel-body {
+    padding-top: 12px;
   }
 
 }
@@ -170,6 +176,9 @@
 
     }
   }
+  .title_section_logo_wrapper img {
+    max-width: 100%;
+  }
 }
 
 #trigger_conditions_shipping {
@@ -182,5 +191,4 @@
 .no-padding {
   padding: 0;
 }
-
 //MODAL AND MOBILE MENU CONTENT
