@@ -21,6 +21,7 @@ class Zolago_Adminhtml_Block_System_Store_Tree extends Mage_Adminhtml_Block_Syst
 
             $vendorName = $this->escapeHtml($vendor->getVendorName());
 
+
             $label = $this->__('Vendor Owner');
             $vendorLink = Mage::helper("adminhtml")->getUrl("udropshipadmin/adminhtml_vendor/edit", array("id" => $vendorId));
             $vendorOwner = "<br>{$label}: <a href='{$vendorLink}' target='_blank' style='background-color:#ff0000;color:#ffffff;font-weight: bold;'>{$vendorName}</a>";
