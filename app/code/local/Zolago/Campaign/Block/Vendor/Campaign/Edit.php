@@ -100,7 +100,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label" => $helper->__("--Select--"),
             "value" => ""
         );
-
+        asort($websiteOptions);
 
         $general->addField("website_ids", "select", array(
             "name" => "website_ids",
