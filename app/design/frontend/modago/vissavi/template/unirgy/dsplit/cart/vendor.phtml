@@ -101,11 +101,13 @@ $vendorDeliveryInfo = $_v->getTermsDeliveryInformation();
         <div class="conditions_shipping panel panel-default">
             <div class="panel-heading">
                 <h2>
-                    <?php echo $_helper ->__('Shipping rules and cost'); ?>: <?php echo $_v->getVendorName() ?>
+                    <?php echo $_helper ->__('Shipping rules and cost'); ?>
                 </h2>
             </div>
             <div class="panel-body">
-                <?php echo $vendorDeliveryInfo; ?>
+	            <p>
+                    <?php echo $vendorDeliveryInfo; ?>
+	            </p>
             </div>
         </div>
         <?php endif; ?>
