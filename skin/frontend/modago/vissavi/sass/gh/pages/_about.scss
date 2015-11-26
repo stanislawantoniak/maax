@@ -1,10 +1,11 @@
 #about {
-	padding: 20px 350px 30px 70px;
+	padding: 20px 70px 30px 70px;
 	@media(min-width: $screen-md-min) {
 		background: $color_fff url('../images/about/lady.jpg') no-repeat right top;
 	}
 	@media(max-width: $screen-md-max) {
 		padding-left: 40px;
+		padding-right: 40px;
 	}
 	@media(max-width: $screen-sm-max) {
 		padding: 30px;
@@ -61,7 +62,7 @@
 			left: -70px;
 			width: 18px;
 			height: 18px;
-			background-color: $color-accent;
+			background-color: $colorAccentSite;
 			display: block;
 			position: absolute;
 			@media(max-width: $screen-sm-max) {
@@ -131,12 +132,6 @@
 	.about-footer {
 		text-align: center;
 		margin-top: 80px;
-		@media(min-width: $screen-lg-min) {
-			margin-right: -280px;
-		}
-		@media(min-width: $screen-md-min) {
-			margin-right: -310px;
-		}
 		@media(max-width: 479px) {
 			margin-top: 40px;
 		}
@@ -230,7 +225,7 @@
 			left: -70px;
 			width: 18px;
 			height: 18px;
-			background-color: $color-accent;
+			background-color: $colorAccentSite;
 			display: block;
 			position: absolute;
 			@media(max-width: $screen-sm-max) {

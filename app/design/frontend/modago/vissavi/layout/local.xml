@@ -16,4 +16,12 @@
 			<remove name="product.vendor.info"/>
 		</reference>
 	</catalog_product_view>
+	<faq_index_index>
+		<reference name="head">
+			<action method="removeItem">
+				<type>skin_css</type>
+				<stylesheet>css/inic/faq/faq.css</stylesheet>
+			</action>
+		</reference>
+	</faq_index_index>
 </layout>
