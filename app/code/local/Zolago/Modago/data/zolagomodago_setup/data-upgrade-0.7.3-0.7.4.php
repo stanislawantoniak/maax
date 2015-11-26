@@ -100,24 +100,23 @@ EOD
 	<div class="page-title">
 		<h1>REGULAMIN</h1>
 	</div>
-</div>
-
-<div class="col-sm-12">
-	<p style="margin-bottom: 0; line-height: 110%">
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam interdum luctus purus, vel rhoncus libero faucibus vel. Duis a mauris sit amet est iaculis fermentum. Nulla a massa vel erat fermentum tincidunt in vel dui. Donec condimentum tincidunt faucibus. Nulla facilisi. In luctus mollis orci, sed tristique orci. Duis consectetur, ex sit amet semper efficitur, nulla purus mollis neque, non imperdiet mi velit sit amet nibh.
-	</p>
-	<p style="margin-bottom: 0; line-height: 110%">
-		Duis eu ultricies purus, at fermentum lacus. Ut ac neque porta, elementum nulla vel, tristique ex. Maecenas gravida facilisis molestie. Quisque rhoncus leo ac nibh pharetra faucibus. Aliquam erat volutpat. Suspendisse elementum massa non vulputate ornare. Nulla viverra nisl sed sapien maximus sagittis. Ut vitae mauris at quam aliquam ornare sit amet at dolor. In urna dolor, sagittis vitae rhoncus et, cursus sollicitudin elit. Praesent commodo suscipit libero, a dignissim sem bibendum pellentesque. Ut cursus ex ut elit ornare auctor. Nullam faucibus pharetra massa, sit amet mollis diam congue in. Mauris lobortis justo et tellus tristique, a pharetra sem blandit. Fusce id volutpat urna, eu vehicula nulla. Suspendisse potenti. Vestibulum vitae erat venenatis, lacinia magna quis, porttitor leo.
-	</p>
-	<p style="margin-bottom: 0; line-height: 110%">
-		Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum vitae volutpat lectus. Donec auctor, est non pharetra semper, sem diam ultrices lacus, vel hendrerit dolor velit ut est. Nam vehicula, magna at imperdiet porta, mauris leo viverra nisi, non vehicula augue nulla sed justo. Etiam ut aliquet nunc, non consectetur turpis. Integer sollicitudin mollis consectetur. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent rhoncus neque vitae augue suscipit lobortis. Sed sit amet commodo velit, a maximus dolor.
-	</p>
-	<p style="margin-bottom: 0; line-height: 110%">
-		Cras vulputate auctor diam, nec fringilla orci. Nulla nec risus sed erat fermentum commodo ac in eros. Aenean ut placerat nunc, eu tempor nisl. Etiam eleifend cursus accumsan. In efficitur nulla ac fermentum aliquam. Praesent vestibulum aliquet nulla id auctor. Quisque nunc turpis, blandit placerat tristique quis, porttitor et dolor.
-	</p>
-	<p style="margin-bottom: 0; line-height: 110%">
-		Nulla placerat nibh convallis, consequat ex vel, maximus velit. Integer ac massa suscipit, hendrerit est vitae, egestas eros. Curabitur vel lacinia turpis. Nullam fermentum nunc vehicula felis aliquam, id semper libero tempus. Integer non orci cursus, dictum mauris luctus, condimentum neque. Nulla gravida sapien lorem, sit amet posuere mi venenatis at. Maecenas condimentum dolor sit amet vehicula lobortis. Donec cursus lectus non lacus hendrerit blandit. Sed viverra nisl lorem. Maecenas iaculis dictum nisl, a egestas ipsum suscipit nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas ornare metus venenatis massa commodo, eget mattis enim imperdiet. Duis ut sagittis velit.
-	</p>
+	<div class="col-sm-12">
+		<p style="margin-bottom: 0; line-height: 110%">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam interdum luctus purus, vel rhoncus libero faucibus vel. Duis a mauris sit amet est iaculis fermentum. Nulla a massa vel erat fermentum tincidunt in vel dui. Donec condimentum tincidunt faucibus. Nulla facilisi. In luctus mollis orci, sed tristique orci. Duis consectetur, ex sit amet semper efficitur, nulla purus mollis neque, non imperdiet mi velit sit amet nibh.
+		</p>
+		<p style="margin-bottom: 0; line-height: 110%">
+			Duis eu ultricies purus, at fermentum lacus. Ut ac neque porta, elementum nulla vel, tristique ex. Maecenas gravida facilisis molestie. Quisque rhoncus leo ac nibh pharetra faucibus. Aliquam erat volutpat. Suspendisse elementum massa non vulputate ornare. Nulla viverra nisl sed sapien maximus sagittis. Ut vitae mauris at quam aliquam ornare sit amet at dolor. In urna dolor, sagittis vitae rhoncus et, cursus sollicitudin elit. Praesent commodo suscipit libero, a dignissim sem bibendum pellentesque. Ut cursus ex ut elit ornare auctor. Nullam faucibus pharetra massa, sit amet mollis diam congue in. Mauris lobortis justo et tellus tristique, a pharetra sem blandit. Fusce id volutpat urna, eu vehicula nulla. Suspendisse potenti. Vestibulum vitae erat venenatis, lacinia magna quis, porttitor leo.
+		</p>
+		<p style="margin-bottom: 0; line-height: 110%">
+			Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum vitae volutpat lectus. Donec auctor, est non pharetra semper, sem diam ultrices lacus, vel hendrerit dolor velit ut est. Nam vehicula, magna at imperdiet porta, mauris leo viverra nisi, non vehicula augue nulla sed justo. Etiam ut aliquet nunc, non consectetur turpis. Integer sollicitudin mollis consectetur. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent rhoncus neque vitae augue suscipit lobortis. Sed sit amet commodo velit, a maximus dolor.
+		</p>
+		<p style="margin-bottom: 0; line-height: 110%">
+			Cras vulputate auctor diam, nec fringilla orci. Nulla nec risus sed erat fermentum commodo ac in eros. Aenean ut placerat nunc, eu tempor nisl. Etiam eleifend cursus accumsan. In efficitur nulla ac fermentum aliquam. Praesent vestibulum aliquet nulla id auctor. Quisque nunc turpis, blandit placerat tristique quis, porttitor et dolor.
+		</p>
+		<p style="margin-bottom: 0; line-height: 110%">
+			Nulla placerat nibh convallis, consequat ex vel, maximus velit. Integer ac massa suscipit, hendrerit est vitae, egestas eros. Curabitur vel lacinia turpis. Nullam fermentum nunc vehicula felis aliquam, id semper libero tempus. Integer non orci cursus, dictum mauris luctus, condimentum neque. Nulla gravida sapien lorem, sit amet posuere mi venenatis at. Maecenas condimentum dolor sit amet vehicula lobortis. Donec cursus lectus non lacus hendrerit blandit. Sed viverra nisl lorem. Maecenas iaculis dictum nisl, a egestas ipsum suscipit nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas ornare metus venenatis massa commodo, eget mattis enim imperdiet. Duis ut sagittis velit.
+		</p>
+	</div>
 </div>
 EOD
 	,
