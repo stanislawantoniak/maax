@@ -36,6 +36,9 @@
   }
   h4:first-child {
     padding-top: 0px !important;
+    @media (max-width: $screen-xs-max) {
+      margin-top: 15px;
+    }
   }
   ul {
     margin-left: 10px;
@@ -79,9 +82,6 @@
       }
       h4:first-child {
         padding-top: 0px !important;
-        @media (max-width: $screen-xs-max) {
-          margin-top: 15px;
-        }
       }
     }
 
@@ -90,9 +90,6 @@
     }
     h4:first-child {
       padding-top: 0px !important;
-      @media (max-width: $screen-xs-max) {
-        margin-top: 15px;
-      }
     }
     img {
       max-width: 100%;
