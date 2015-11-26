@@ -59,7 +59,11 @@
       padding-top: 15px !important;
     }
   }
-
+  @media (max-width: $screen-sm) {
+    .delivery-table {
+      max-width: 450px;
+    }
+  }
   .modal-dialog {
     .panel-heading {
       padding: 0 10px 0 25px;
