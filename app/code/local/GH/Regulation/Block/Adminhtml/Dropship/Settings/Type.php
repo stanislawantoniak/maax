@@ -40,7 +40,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
 
     protected function _prepareForm() {
         $form = new Varien_Data_Form();
-	    $hlp = $this->getHelper();
+	    $hlp = $this->_getHelper();
         $this->setForm($form);
         $vendorId = $this->getRequest()->get('id');
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
@@ -71,7 +71,9 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
 		));
 		$settingsFieldset->addField("regulation_confirm_request_sent_date","label",array(
 			"label" => $hlp->__("Confirmation request send date"),
-			"name" => "regulation_confirm_request_sent_date"
+		));
+		$settingsFieldset->addField("confirmation","label",array(
+			"label" => $hlp->__("Confirmation token"),
 		));
 		$settingsFieldset->addField("regulation_accept_document_date","label",array(
 			"label" => $hlp->__("Acceptation date")
@@ -122,7 +124,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Settings_Type extends
 	/**
 	 * @return GH_Regulation_Helper_Data
 	 */
-	public function getHelper() {
+	public function _getHelper() {
 		return Mage::helper('ghregulation');
 	}
 
