@@ -50,7 +50,7 @@ class Unirgy_DropshipVendorProduct_Block_Adminhtml_CatalogProductHelperFormGalle
         $iiAttrs = array();
         $p = $this->getProduct();
         foreach ($p->getTypeInstance()->getConfigurableAttributesAsArray($p) as $cfgAttr) {
-            if ($cfgAttr['identify_image']) {
+            if (!empty($cfgAttr['identify_image'])) {
                 $iiAttrs[] = $cfgAttr;
             }
         }
