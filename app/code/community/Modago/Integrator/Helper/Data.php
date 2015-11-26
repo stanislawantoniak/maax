@@ -227,10 +227,6 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
     public function log($message) {
         if (!$this->_logFile) {
             $path = $this->getPathLogFile();
-            if (file_exists($path)) {
-                // clear old log file
-                @unlink($path);
-            }
             $this->_logFile = $path;
         }
         file_put_contents($this->_logFile,date('Y-m-d H:i:s').' : '.$message.PHP_EOL,FILE_APPEND);
