@@ -59,6 +59,18 @@
       padding-top: 15px !important;
     }
   }
+  .panel-heading {
+    padding-left: 25px;
+
+    h2 {
+      height: 18px;
+      font-size: 18px;
+      font-family: latoregular, sans-serif;
+      line-height: 18px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+  }
 
 }
 
@@ -164,4 +176,5 @@
 .no-padding {
   padding: 0;
 }
+
 //MODAL AND MOBILE MENU CONTENT
