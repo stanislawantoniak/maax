@@ -343,7 +343,15 @@ class Modago_Integrator_Model_Generator_Description
 				if ($attribute) {
 					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
 					if ($attributeText) {
-						return "<![CDATA[$attributeText]]>";
+					    if (is_array($attributeText)) {
+					        $return = "";				        
+            				foreach($attributeText as $attrVal) {
+			            		$return .= "<value><![CDATA[".$attrVal."]]></value>";
+            				}
+            				return $return;
+                        } else {
+    						return "<![CDATA[$attributeText]]>";
+                        }
 					}
 				}
 			} elseif(is_array($attributeValue)) {
