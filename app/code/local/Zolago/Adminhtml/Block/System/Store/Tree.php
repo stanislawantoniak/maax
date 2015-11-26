@@ -15,8 +15,10 @@ class Zolago_Adminhtml_Block_System_Store_Tree extends Mage_Adminhtml_Block_Syst
     public function renderWebsite(Mage_Core_Model_Website $website)
     {
         $vendorOwner = "";
-        if ($vendorId = $website->getVendorId()) {
+        if ($website->getVendorId() && $website->getHaveSpecificDomain()) {
+            $vendorId = $website->getVendorId();
             $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+
             $vendorName = $this->escapeHtml($vendor->getVendorName());
 
             $label = $this->__('Vendor Owner');
