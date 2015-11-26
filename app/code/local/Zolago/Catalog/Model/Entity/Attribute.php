@@ -12,7 +12,7 @@ class Zolago_Catalog_Model_Entity_Attribute extends Mage_Catalog_Model_Entity_At
      * @return string
      */
     public function getStoreLabel($storeId = null) {
-        /** @var Zolago_Catalog_Model_Entity_Attribute $model */
+        /** @var Zolago_Catalog_Model_Resource_Eav_Attribute $model */
         $model = Mage::getResourceModel('zolagocatalog/eav_attribute');
         return $model->getStoreLabel($storeId);
     }
