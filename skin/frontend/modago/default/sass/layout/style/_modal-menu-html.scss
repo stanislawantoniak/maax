@@ -59,20 +59,23 @@
       padding-top: 15px !important;
     }
   }
-  .panel-heading {
-    padding: 0 10px 0 25px;
 
-    h2 {
-      height: 18px;
-      font-size: 18px;
-      font-family: latoregular, sans-serif;
-      line-height: 18px;
-      text-transform: uppercase;
-      text-align: left;
+  .modal-dialog {
+    .panel-heading {
+      padding: 0 10px 0 25px;
+
+      h2 {
+        height: 18px;
+        font-size: 18px;
+        font-family: latoregular, sans-serif;
+        line-height: 18px;
+        text-transform: uppercase;
+        text-align: left;
+      }
     }
-  }
-  .panel-body {
-    padding-top: 12px !important;
+    .panel-body {
+      padding-top: 12px !important;
+    }
   }
 
 }
