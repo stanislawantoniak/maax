@@ -183,7 +183,7 @@ EOD
 				</a>
 			</div>
 			<div class="col-xs-6 help-tile">
-				<a href="{{store url='help/contact/vendor'}}" class="help-tile-container">
+				<a href="{{store url='contact'}}" class="help-tile-container">
 					<div class="help-tile-content help-tile-contact">
 						<div class="help-tile-title">
 							KONTAKT
