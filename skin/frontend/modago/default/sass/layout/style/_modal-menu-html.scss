@@ -131,12 +131,13 @@
 .title_section_with_logo {
   .title_section_title_wrapper {
     padding-top: 10px;
-  }
-  .title_section_logo_wrapper img {
-    max-width: 80%;
     position: absolute;
     left: 80%;
     top: 0px;
+  }
+  .title_section_logo_wrapper img {
+    max-width: 80%;
+
   }
 }
 
