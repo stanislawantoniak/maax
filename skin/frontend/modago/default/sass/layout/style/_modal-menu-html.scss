@@ -35,7 +35,6 @@
     padding: 10px 0 !important;
   }
   h4:first-child {
-    padding-top: 0px !important;
     @media (max-width: 330px) {
       margin-top: 15px !important;
     }
@@ -135,6 +134,9 @@
   }
   .title_section_logo_wrapper img {
     max-width: 80%;
+    position: absolute;
+    left: 80%;
+    top: 0px;
   }
 }
 
