@@ -37,7 +37,7 @@
   h4:first-child {
     padding-top: 0px !important;
     @media (max-width: $screen-xs-max) {
-      margin-top: 15px;
+      margin-top: 15px !important;
     }
   }
   ul {
