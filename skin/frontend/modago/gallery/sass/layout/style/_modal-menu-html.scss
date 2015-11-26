@@ -36,9 +36,6 @@
   }
   h4:first-child {
     padding-top: 0px !important;
-    //@media (max-width: 330px) {
-    //  margin-top: 15px !important;
-    //}
   }
   ul {
     margin-left: 10px;
@@ -52,6 +49,13 @@
   a {
     color: $brand-primary;
     text-decoration: underline;
+  }
+}
+
+#trigger_conditions_shipping //shopping cart popup
+{
+  h4:first-child {
+    padding-top: 15px !important;
   }
 }
 
