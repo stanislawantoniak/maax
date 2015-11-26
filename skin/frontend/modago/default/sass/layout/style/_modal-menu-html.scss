@@ -52,6 +52,28 @@
   }
 }
 
+#trigger_conditions_shipping //shopping cart popup
+{
+  @media (min-width: $screen-md) {
+    h4:first-child {
+      padding-top: 15px !important;
+    }
+  }
+  .panel-heading {
+    padding: 0 10px 0 25px;
+
+    h2 {
+      height: 18px;
+      font-size: 18px;
+      font-family: latoregular, sans-serif;
+      line-height: 18px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+  }
+
+}
+
 .top_bottom #shop_nav_mobile, //vendor page
 #seller-box-bundle //product page
 {
