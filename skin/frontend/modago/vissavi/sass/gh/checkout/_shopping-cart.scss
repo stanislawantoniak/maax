@@ -1258,3 +1258,21 @@
 		}
 	}
 }
+
+.node-type-shopping-cart {
+	#content-main {
+		.panel {
+			.panel-heading {
+				padding:14.86px 0 0 29.41px;
+				position:relative;
+				margin-bottom: 13px;
+				@media (max-width: $screen-xs-max) {
+					padding:14.86px 0 0px 29.41px;
+				}
+			}
+			.panel-body {
+				padding:0 0 15px 0;
+			}
+		}
+	}
+}

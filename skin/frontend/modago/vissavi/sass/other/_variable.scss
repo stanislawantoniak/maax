@@ -149,6 +149,10 @@ $bgMap: sprite-map("sprites/bg/*.png");
 
 
  **/
+$colorSiteBackground:                   #F2F1F0;
+
+$colorSiteOverlay:                      #FFF;
+$opacitySiteOverlay:                    .75;
 
 $colorFont:                             #000;
 $colorLink:                             #000;
@@ -176,47 +180,47 @@ $colorAccentSite:                       #CD0027;
 //buttons
 $colorBtnPrimary:                       #FFF;
 
-$colorBtnPrimaryBackgroundStart:        #d20005;
-$colorBtnPrimaryBackgroundEnd:          #b40005;
+$colorBtnPrimaryBgStart:        #d20005;
+$colorBtnPrimaryBgEnd:          #b40005;
 
-$colorBtnPrimaryBackgroundStartHover:   #de0005;
-$colorBtnPrimaryBackgroundEndHover:     #c00005;
+$colorBtnPrimaryBgStartHover:   #de0005;
+$colorBtnPrimaryBgEndHover:     #c00005;
 
-$colorBtnPrimaryBackgroundStartActive:  #b40005;
-$colorBtnPrimaryBackgroundEndActive:    #d20005;
+$colorBtnPrimaryBgStartActive:  #b40005;
+$colorBtnPrimaryBgEndActive:    #d20005;
 
-$colorBtnPrimaryBackgroundDisabled:     #C5C5C5;
+$colorBtnPrimaryBgDisabled:     #C5C5C5;
 
-@mixin primaryButtonGradient { //covers normal + hover + active
-	@include linearGradient($colorBtnPrimaryBackgroundStart,$colorBtnPrimaryBackgroundEnd);
+@mixin primaryButtonGradient { //covers normal + hover + active + .disabled
+	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
 	&:hover,&.hover {
-		@include linearGradient($colorBtnPrimaryBackgroundStartHover,$colorBtnPrimaryBackgroundEndHover);
+		@include linearGradient($colorBtnPrimaryBgStartHover,$colorBtnPrimaryBgEndHover);
 	}
 	&:active,&:focus,&.active {
-		@include linearGradient($colorBtnPrimaryBackgroundStartActive,$colorBtnPrimaryBackgroundEndActive);
+		@include linearGradient($colorBtnPrimaryBgStartActive,$colorBtnPrimaryBgEndActive);
 	}
 	&.disabled {
-		background: $colorBtnPrimaryBackgroundDisabled;
+		background: $colorBtnPrimaryBgDisabled;
 	}
 }
 
 /* HEADER VARIABLES */
 $colorIconHeader:                       $colorIcon;
 $colorIconHoverHeader:                  $colorIconHover;
-$colorIconHoverBackgroundHeader:        $colorIconHoverBackground;
+$colorIconHoverBgHeader:                $colorIconHoverBackground;
 
 $colorHeaderBadge:                      #FFF;
-$colorHeaderBadgeBackground:            #00c10e;
+$colorHeaderBadgeBg:                    #00c10e;
 
 $colorIconTextHeader:                   $colorIconText;
 $colorIconTextHoverHeader:              $colorIconTextHover;
 
-$colorBackgroundBlocksHeader:           $colorBackgroundBlocks;
-$colorBackgroundContentHeader:          $colorBackgroundContent;
+$colorBgBlocksHeader:                   $colorBackgroundBlocks;
+$colorBgContentHeader:                  $colorBackgroundContent;
 $colorAccentBlocksHeader:               $colorAccentBlocks;
 
 $colorHeaderSearch:                     $colorFont;
-$colorHeaderSearchBackground:           $colorBackgroundBlocksHeader;
+$colorHeaderSearchBg:                   $colorBgBlocksHeader;
 $colorHeaderSearchBorder:               $colorIconHeader;
 
 /* CHECKOUT HEADER VARIABLES */
@@ -228,28 +232,44 @@ $colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
 /* TOP MENU VARIABLES */
 $colorAccentSiteMenuTop:                $colorAccentSite;
 $colorAccentBlocksMenuTop:              $colorAccentBlocks;
-$colorBackgroundBlocksMenuTop:          $colorBackgroundBlocks;
+$colorBgBlocksMenuTop:                  $colorBackgroundBlocks;
 
 
 /* DROPDOWN VARIABLES */
-$colorBackgroundDropdown:               $colorIconHoverBackgroundHeader;
+$colorBgDropdown:                       $colorIconHoverBgHeader;
 $colorDropdown:                         $colorIconTextHoverHeader;
 $colorAccentDropdown:                   $colorAccentBlocks;
 
 /* CART DROPDOWN VARIABLES */
-$colorBackgroundDropdownCart:           $colorBackgroundDropdown;
+$colorBgDropdownCart:                   $colorBgDropdown;
 $colorDropdownCart:                     $colorDropdown;
 $colorAccentDropdownCart:               $colorAccentDropdown;
 
 /* SEARCH DROPDOWN VARIABLES */
-$colorBackgroundDropdownSearch:         $colorBackgroundDropdown;
+$colorBgDropdownSearch:                 $colorBgDropdown;
 $colorDropdownSearch:                   $colorDropdown;
 $colorAccentDropdownSearch:             $colorAccentDropdown;
 
 /* FOOTER VARIABLES */
-$colorBackgroundBlocksFooter:           $colorBackgroundBlocks;
+$colorBgBlocksFooter:                   $colorBackgroundBlocks;
 $colorFontFooter:                       $colorFont;
 $colorLinkFooter:                       $colorLink;
 
 /* CART VARIABLES */
 $colorAccentBlocksCart:                 $colorAccentBlocks;
+
+/* HAMBURGER MENU VARIABLES */
+$colorHamburgerBg:                      #E8E8E8;
+$colorHamburgerBgHeader:                $colorHamburgerBg;
+$colorHamburgerBgSeparator:             $colorHamburgerBg;
+$colorHamburgerBgItem:                  #cdcdcd;
+$colorHamburgerBgItem2:                 #c3c3c3;
+$colorHamburgerBgItem3:                 #b9b9b9;
+$colorHamburgerTextHeader:              #5f5f5f;
+$colorHamburgerText:                    $colorHamburgerTextHeader;
+$colorHamburgerText2:                   $colorHamburgerTextHeader;
+$colorHamburgerText3:                   $colorHamburgerTextHeader;
+$colorHamburgerBorder:                  $colorHamburgerBg;
+$colorHamburgerBorder2:                 $colorHamburgerBg;
+$colorHamburgerBorder3:                 $colorHamburgerBg;
+$colorHamburgerIcon:                    $colorAccentSite;

@@ -1,10 +1,141 @@
+
+/* ----------
+ * 002 - Site
+ */
+
+#sb-site, .sb-site {
+	overflow-x: hidden;
+}
+/* ---------------
+ * 003 - Slidebars
+ */
+
+.sb-slidebar {
+	background-color: $colorHamburgerBg;
+	> header {
+		background:$colorHamburgerBg;
+		
+		a, a:visited {
+			line-height: 57px;
+			color:$colorHamburgerText;
+			font-size: 14px;
+			text-decoration: underline;
+		}
+	}
+}
+.sb-menu > li {
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+background: $colorHamburgerBgItem;
+}
+.sb-menu li a {
+color: $colorHamburgerText;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+.sb-menu  li ul {
+	color: $colorHamburgerText2;
+	background: $colorHamburgerBgItem2;
+	list-style: none;
+}
+.sb-menu  li li {
+	}
+.sb-menu  li ul ul {
+	color: $colorHamburgerText3;
+	background: $colorHamburgerBgItem3;
+}
+.sb-menu > li > a {
+	text-transform: uppercase;
+}
+.sb-menu > li > ul > li > a {
+	text-transform: uppercase;
+	border-top: 1px solid $colorHamburgerBorder2;
+}
+.sb-menu > li > ul > li:first-child > a {
+	border-top:none;
+}
+.sb-menu > li > ul > li > ul > li > a {
+	border-top: 1px solid $colorHamburgerBorder3;
+}
+.sb-menu > li > ul > li > ul > li:first-child > a {
+	border-top: none;
+}
+.sb-menu li a.sb-submenu-active + ul{
+	display: block;
+}
+
+
+.sb-menu  li a.sb-toggle-submenu {
+	background: url('../images/arrow-menu-sliding-wite.png') 90% 50% no-repeat;
+}
+.sb-menu  li a.sb-submenu-active {
+	background: url('../images/arrow-menu-sliding-active.png') 90% 50% no-repeat;
+}
+
+.sb-menu  li ul a.sb-toggle-submenu {
+	background: url('../images/arrow-menu-sliding-wite.png') 90% 50% no-repeat;
+}
+.sb-menu  li ul a.sb-submenu-active {
+	background: url('../images/arrow-menu-sliding-active.png') 90% 50% no-repeat;
+}
+.sb-menu > li.separator,
+.sb-menu li.separator {
+	background: $colorHamburgerBgSeparator;
+}
+
+/* ---------------
+ * 003 - Slidebars
+ */
+.fb-slidebar-header {
+
+		background:$colorHamburgerBgHeader;
+		
+		a, a:visited {
+			line-height: 53px;
+			color:$colorHamburgerTextHeader;
+			font-size: 14px;
+			text-transform: uppercase;
+			@include max-screen($screen-sm-max) {
+			      height:41px;
+			      line-height: 41px;
+			   }
+			i {
+				font-size: 20px;
+				float: left;
+				line-height: 53px;
+				@include max-screen($screen-sm-max) {
+			      line-height: 41px;
+			   }
+			}
+		}
+	}
+.fb-slidebar {
+	background-color: $colorHamburgerBg;
+	
+	> header {
+		background:$colorHamburgerBgHeader;
+		a, a:visited {
+			line-height: 53px;
+			color:$colorHamburgerTextHeader;
+			font-size: 14px;
+			text-transform: uppercase;
+			i {
+				font-size: 20px;
+				float: left;
+				line-height: 53px;
+			}
+		}
+	}
+	
+}
+
 html, body, #sb-site, .sb-site, .sb-slidebar, #fb-site, .fb-site, .fb-slidebar {
 	/* Set box model to prevent any user added margins or paddings from altering the widths or heights. */
 	margin: 0;
 	padding: 0;
 	-webkit-box-sizing: border-box;
-	   -moz-box-sizing: border-box;
-	        box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html, body {
@@ -37,19 +168,19 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 }
 
 #sb-site.open {
-	
-	-webkit-transform:translate(242px); 
-	-moz-transform:translate(242px); 
+
+	-webkit-transform:translate(242px);
+	-moz-transform:translate(242px);
 	-o-transform:translate(242px);
-	transform:translate(242px); 
+	transform:translate(242px);
 }
 .sb-open {
 	#sb-site.open {
-		
-		-webkit-transform:translate(288px); 
-		-moz-transform:translate(288px); 
+
+		-webkit-transform:translate(288px);
+		-moz-transform:translate(288px);
 		-o-transform:translate(288px);
-		transform:translate(288px); 
+		transform:translate(288px);
 	}
 }
 
@@ -64,15 +195,15 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 	top: 0;
 	z-index: 0; /* Slidebars sit behind sb-site. */
 	display: none; /* Initially hide the Slidebars. Changed from visibility to display to allow -webkit-overflow-scrolling. */
-	background-color: $color_2d2d2d; /* Default Slidebars background colour, overwrite this with your own css. */
+	background-color: $colorHamburgerBg; /* Default Slidebars background colour, overwrite this with your own css. */
 	-webkit-transform: translate(0px); /* Fixes issues with translated and z-indexed elements on iOS 7. */
 	-webkit-overflow-scrolling: touch; /* Adds smooth native scrolling for iOS & Android devices. */
 	&.open {
 		display: block;
-		-webkit-transform:translate(288px); 
-		-moz-transform:translate(288px); 
+		-webkit-transform:translate(288px);
+		-moz-transform:translate(288px);
 		-o-transform:translate(288px);
-		transform:translate(288px); 
+		transform:translate(288px);
 	}
 	> header {
 		position:relative;
@@ -99,6 +230,9 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 		width: 20px;
 		height: 20px;
 		margin: 0 12px;
+		g path, path {
+			fill: $colorHamburgerIcon;
+		}
 	}
 	.sb-slidebar-inner > nav > ul.sb-menu > li > a.sb-toggle-submenu {
 		background-image: none;
@@ -128,27 +262,27 @@ html.sb-static .sb-slidebar,
 }
 
 /* Slidebar widths for browsers/devices that don't support media queries. */
-	.sb-slidebar {
-		width: 288px;
-	}
-	
-	.sb-width-thin {
-		width: 288px;;
-	}
-	
-	.sb-width-wide {
-		width: 288px;;
-	}
+.sb-slidebar {
+	width: 288px;
+}
+
+.sb-width-thin {
+	width: 288px;;
+}
+
+.sb-width-wide {
+	width: 288px;;
+}
 
 @media (max-width: 480px) { /* Slidebar widths on extra small screens. */
 	.sb-slidebar {
 		width: 288px;;
 	}
-	
+
 	.sb-width-thin {
 		width: 288px;;
 	}
-	
+
 	.sb-width-wide {
 		width: 288px;;
 	}
@@ -158,11 +292,11 @@ html.sb-static .sb-slidebar,
 	.sb-slidebar {
 		width: 288px;;
 	}
-	
+
 	.sb-width-thin {
 		width: 288px;;
 	}
-	
+
 	.sb-width-wide {
 		width: 288px;;
 	}
@@ -172,11 +306,11 @@ html.sb-static .sb-slidebar,
 	.sb-slidebar {
 		width: 288px;;
 	}
-	
+
 	.sb-width-thin {
 		width: 288px;;
 	}
-	
+
 	.sb-width-wide {
 		width: 288px;;
 	}
@@ -186,11 +320,11 @@ html.sb-static .sb-slidebar,
 	.sb-slidebar {
 		width: 288px;;
 	}
-	
+
 	.sb-width-thin {
 		width: 288px;;
 	}
-	
+
 	.sb-width-wide {
 		width: 288px;;
 	}
@@ -200,35 +334,18 @@ html.sb-static .sb-slidebar,
 	.sb-slidebar {
 		width: 288px;;
 	}
-	
+
 	.sb-width-thin {
 		width: 288px;;
 	}
-	
+
 	.sb-width-wide {
 		width: 288px;;
 	}
 }
-/*
-*//* ---------------
- * 004 - Animation
- *//*
 
-.sb-slide, #sb-site, .sb-site, .sb-slidebar {
-	-webkit-transition: -webkit-transform 400ms ease;
-	   -moz-transition: -moz-transform 400ms ease;
-	     -o-transition: -o-transform 400ms ease;
-	        transition: transform 400ms ease;
-	-webkit-transition-property: -webkit-transform, left, right; *//* Add left/right for Android < 4.4. *//*
-	-webkit-backface-visibility: hidden; *//* Prevents flickering. This is non essential, and you may remove it if your having problems with fixed background images in Chrome. *//*
-}*/
-
-/* --------------------
- * 005 - Helper Classes
- */
- 
-.sb-hide { 
-	display: none; /* Optionally applied to control classes when Slidebars is disabled over a certain width. */
+.sb-hide {
+	display: none;
 }
 
 
@@ -238,15 +355,15 @@ html.sb-static .sb-slidebar,
 	margin-bottom: 12px;
 }
 .sb-menu  li {
-width: 100%;
-padding: 0;
-margin: 0;
+	width: 100%;
+	padding: 0;
+	margin: 0;
 
 }
 .sb-menu li a {
-width: 100%;
-padding: 16px 0px 16px 0;
-display: inline-block;
+	width: 100%;
+	padding: 16px 0px 16px 0;
+	display: inline-block;
 }
 .sb-menu  li ul {
 	margin: 0px;
@@ -254,7 +371,7 @@ display: inline-block;
 	display: none;
 }
 .sb-menu  li li {
-	}
+}
 .sb-menu > li > ul > li > a {
 	padding-left: 36px;
 }

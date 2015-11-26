@@ -1,7 +1,7 @@
 .user-navigation {
 	a {
 		.badge {
-		    background:$colorHeaderBadgeBackground;
+		    background:$colorHeaderBadgeBg;
 		    @include border-radius(3px);
 		    color: $colorHeaderBadge;
 		    font-size: 11px;

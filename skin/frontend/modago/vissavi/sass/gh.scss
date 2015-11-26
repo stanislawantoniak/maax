@@ -5,6 +5,10 @@
 @import "other/media-queries";
 @import "other/responsive-utilities";
 
+@import "gh/general/global";
+@import "gh/general/dropdowns";
+@import "gh/general/menu-hamburger";
+
 @import "gh/checkout/sidebar";
 @import "gh/checkout/shopping-cart";
 @import "gh/checkout/checkout";
@@ -13,8 +17,6 @@
 @import "gh/header/header";
 @import "gh/header/badge";
 @import "gh/header/search";
-
-@import "gh/general/dropdowns";
 
 @import "gh/typography/buttons";
 @import "gh/typography/headers";

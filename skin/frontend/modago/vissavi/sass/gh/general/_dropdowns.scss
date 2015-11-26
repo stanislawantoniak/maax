@@ -5,7 +5,7 @@
 }
 
 #dropdown-basket {
-	background: $colorBackgroundDropdownCart;
+	background: $colorBgDropdownCart;
 	color: $colorDropdownCart;
 	/* PANEL KOSZYKA */
 	table {
@@ -58,7 +58,7 @@
 
 
 #dropdown-search { /* PANEL WYSZUKIWANIA */
-	background: $colorBackgroundDropdownSearch;
+	background: $colorBgDropdownSearch;
 	color: $colorDropdownSearch;
 	padding:0px;
 	top:56px !important;
