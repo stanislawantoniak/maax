@@ -54,8 +54,8 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 
             $customVendorVars = Mage::helper('core')->jsonDecode($this->getVendor()->getCustomVarsCombined());
 
-            $vendorRootCategory = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category']) && (int)reset($customVendorVars['root_category']) > 0) ?
-                (int)reset($customVendorVars['root_category']) :
+            $vendorRootCategory = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category'][$websiteId]) > 0) ?
+                (int)$customVendorVars['root_category'][$websiteId] :
                 $rootCatID;
 
             if ($vendorRootCategory > 0) {
