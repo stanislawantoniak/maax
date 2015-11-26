@@ -27,6 +27,9 @@
       padding-bottom: 18px;
       border: 1px solid $gray-lighter;
     }
+    div.row:not(:last-child) {
+      border-bottom: none;
+    }
   }
   h4 {
     padding: 10px 0 !important;
@@ -116,6 +119,9 @@
         padding-bottom: 18px;
         border: 1px solid $gray-lighter;
       }
+      div.row:not(:last-child) {
+        border-bottom: none;
+      }
       max-width: 450px;
     }
   }
@@ -133,6 +139,9 @@
   .title_section_with_logo {
     .title_section_title_wrapper {
       padding-top: 0px !important;
+    }
+    @media (max-width: $screen-xs-max) {
+      padding-bottom:15px;
     }
   }
 }
