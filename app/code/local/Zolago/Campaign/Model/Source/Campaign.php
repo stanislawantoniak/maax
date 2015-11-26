@@ -50,31 +50,8 @@
      */
     public function getCampaignWebsites()
     {
-        $campaignWebsites = array();
-
-
-        $websiteNames = array();
-        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
-            $websiteNames[$website->getId()] = $website->getName();
-        }
-
-        $vendor = Mage::getSingleton('udropship/session')->getVendor();
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
-        $collection = Mage::getResourceModel("zolagocampaign/campaign_collection");
-        $collection->getSelect()
-            ->join(
-                array('campaign_website' => Mage::getSingleton('core/resource')->getTableName(
-                    "zolagocampaign/campaign_website"
-                )),
-                'campaign_website.campaign_id = main_table.campaign_id',
-                array("website_id" => "campaign_website.website_id")
-            );
-        $collection->addVendorFilter($vendor);
-        foreach ($collection as $collectionItem) {
-            $campaignWebsites[$collectionItem->getWebsiteId()] = $websiteNames[$collectionItem->getWebsiteId()];
-        }
-
-
+        $campaignWebsites = Mage::getResourceModel("zolagocampaign/campaign")
+            ->getCampaignWebsites();
         return $campaignWebsites;
     }
 }
