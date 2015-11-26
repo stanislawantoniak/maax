@@ -54,9 +54,12 @@
 
 #trigger_conditions_shipping //shopping cart popup
 {
-  h4:first-child {
-    padding-top: 15px !important;
+  @media (min-width: $screen-md) {
+    h4:first-child {
+      padding-top: 15px !important;
+    }
   }
+
 }
 
 .top_bottom #shop_nav_mobile, //vendor page
