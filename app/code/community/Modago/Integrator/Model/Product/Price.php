@@ -72,6 +72,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $collection->addAttributeToSelect("price");
         $collection->addAttributeToSelect("special_price");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
 
         $prices = array();
         $specialPrices = array();
@@ -117,6 +118,8 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $collection->addAttributeToSelect("special_price");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
         $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+
         foreach ($collection as $collectionItem) {
             $sku = $collectionItem->getSku();
             //do not override price if already got from configurable
