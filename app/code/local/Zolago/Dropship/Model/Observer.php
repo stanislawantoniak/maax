@@ -268,10 +268,6 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $this->_overrideConfigData();
 
         $keys = array (
-            "regulation_confirm_request_sent_date",
-            'regulation_accepted',
-            'regulation_accept_document_date',
-            'regulation_accept_document_data',
             'new_order_notifications',
             'notify_by_udpo_status',
             'vendor_type',
