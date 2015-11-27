@@ -823,28 +823,17 @@
                         <position>700</position>
                     </custom_design>
 
-	                <!-- Modago Integrator -->
-	                <integrator_enabled>
-		                <label>Is Modago Integrator enabled</label>
-		                <type>select</type>
-		                <source>yesno</source>
-		                <fieldset>vendor_info</fieldset>
-		                <position>0</position>
-	                </integrator_enabled>
-	                <integrator_secret translate="label">
-		                <label>Modago Integrator Secret</label>
-		                <type>hidden</type>
-		                <fieldset>vendor_form</fieldset>
-		                <frontend_model>zolagodropship/adminhtml_vendor_helper_form_integrator</frontend_model>
-		                <position>0</position>
-	                </integrator_secret>
-	                <last_integration>
-		                <label>Modago Integrator last integration</label>
-		                <type>label</type>
-		                <fieldset>vendor_form</fieldset>
-		                <position>0</position>
-	                </last_integration>
-
+                    <!-- Modago Integrator -->
+                    <!-- @see app/code/local/GH/Api/Block/Adminhtml/Dropship/Settings/Ghapi/Form.php -->
+                    <integrator_enabled>
+                        <fieldset>modago_integrator</fieldset>
+                    </integrator_enabled>
+                    <integrator_secret translate="label">
+                        <fieldset>modago_integrator</fieldset>
+                    </integrator_secret>
+                    <last_integration>
+                        <fieldset>modago_integrator</fieldset>
+                    </last_integration>
 
                     <!--Regulation-->
                     <regulation_accepted>
