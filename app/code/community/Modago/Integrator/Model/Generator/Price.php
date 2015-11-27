@@ -108,8 +108,10 @@ class Modago_Integrator_Model_Generator_Price
         $this->_fileName = null;
         $helper = $this->getHelper();
         try {
-            $helper->createFile($this->_getPath());
+            $helper->createFile($this->_getPath().'.tmp');
+            $helper->log(sprintf('Create tmp file: %s.tmp',$this->_getPath()));
             $helper->addToFile($this->_getHeader());
+            $helper->log('Save data begin');            
             $list = $this->_prepareList();
 
             foreach ($list as $type => $items) {
@@ -120,13 +122,16 @@ class Modago_Integrator_Model_Generator_Price
                 }
                 $helper->addToFile($this->_getSectionFooter());
             }
-
+            $helper->log('Save data end');            
             $helper->addToFile($this->_getFooter());
             $helper->closeFile();
-            $this->_status = true;
+            $helper->log('Close file');
+            $this->_status = rename($this->_getPath().'.tmp',$this->_getPath());
+            $helper->log(sprintf('Generate file: %s',($this->_status)? 'success':'fail'));
         } catch (Modago_Integrator_Exception $ex) {
             Mage::logException($ex);
             $helper->closeFile();
+            $helper->log($ex->getMessage());            
         }
         return $this->_status;
     }
