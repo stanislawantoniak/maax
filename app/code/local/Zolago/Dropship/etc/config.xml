@@ -57,9 +57,13 @@
 				<rewrite>
 					<data>Zolago_Dropship_Helper_Data</data>
 					<item>Zolago_Dropship_Helper_Item</item>
-					<catalog>Zolago_Dropship_Helper_Catalog</catalog>					
 				</rewrite>
 			</udropship>
+			<udprod>
+			    <rewrite>
+					<udcatalog>Zolago_Dropship_Helper_Catalog</udcatalog>					
+			    </rewrite>
+			</udprod>
 		</helpers>
 		<blocks>
 			<zolagodropship>
@@ -117,6 +121,11 @@
 		    </courier>
             <vendor>
                 <fieldsets>
+                    <websites_allowed>
+                        <legend>Websites allowed</legend>
+                        <position>80</position>
+                        <hidden>true</hidden>
+                    </websites_allowed>
                     <vendor_preferences>
                         <legend>Addresses</legend>
                         <position>80</position>
@@ -155,6 +164,13 @@
                     </rma_executive_data>
                 </fieldsets>
                 <fields>
+                    <websites_allowed>
+                        <label>Websites</label>
+                        <fieldset>websites_allowed</fieldset>
+                        <type>multiselect</type>
+                        <source_model>core/website</source_model>
+                        <position>1</position>
+                    </websites_allowed>
                     <!--Company registration data-->
                     <company_name>
                         <label>Company name</label>
@@ -807,56 +823,25 @@
                         <position>700</position>
                     </custom_design>
 
-	                <!-- Modago Integrator -->
-	                <integrator_enabled>
-		                <label>Is Modago Integrator enabled</label>
-		                <type>select</type>
-		                <source>yesno</source>
-		                <fieldset>vendor_info</fieldset>
-		                <position>0</position>
-	                </integrator_enabled>
-	                <integrator_secret translate="label">
-		                <label>Modago Integrator Secret</label>
-		                <type>hidden</type>
-		                <fieldset>vendor_form</fieldset>
-		                <frontend_model>zolagodropship/adminhtml_vendor_helper_form_integrator</frontend_model>
-		                <position>0</position>
-	                </integrator_secret>
-	                <last_integration>
-		                <label>Modago Integrator last integration</label>
-		                <type>label</type>
-		                <fieldset>vendor_form</fieldset>
-		                <position>0</position>
-	                </last_integration>
-
+                    <!-- Modago Integrator -->
+                    <!-- @see app/code/local/GH/Api/Block/Adminhtml/Dropship/Settings/Ghapi/Form.php -->
+                    <integrator_enabled>
+                        <fieldset>modago_integrator</fieldset>
+                    </integrator_enabled>
+                    <integrator_secret translate="label">
+                        <fieldset>modago_integrator</fieldset>
+                    </integrator_secret>
+                    <last_integration>
+                        <fieldset>modago_integrator</fieldset>
+                    </last_integration>
 
                     <!--Regulation-->
-                    <regulation_accepted>
-                        <label>Regulation: Is Regulations Accepted</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>vendor_info</fieldset>
-                        <position>0</position>
-                    </regulation_accepted>
-                    <regulation_confirm_request_sent_date>
-                        <label>Regulation: Confirmation Request Sent (Date)</label>
-                        <type>label</type>
-                        <fieldset>vendor_form</fieldset>
-                        <position>0</position>
-                    </regulation_confirm_request_sent_date>
-                    <regulation_accept_document_date translate="label">
-                        <label>Regulation: Document Accepted (Date)</label>
-                        <type>label</type>
-                        <fieldset>vendor_form</fieldset>
-                        <position>0</position>
-                    </regulation_accept_document_date>
-                    <regulation_accept_document_data translate="label">
-                        <label>Regulation: Document Accepted Details</label>
-                        <type>hidden</type>
-                        <fieldset>vendor_form</fieldset>
-                        <frontend_model>zolagodropship/adminhtml_vendor_helper_form_regulation</frontend_model>
-                        <position>0</position>
-                    </regulation_accept_document_data>
+	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
+	                <regulation_accept_text_top/>
+	                <regulation_proxy_assignment_url/>
+	                <regulation_proxy_assignment_url_text/>
+	                <regulation_proxy_assignment_override/>
+	                <regulation_accept_text_agreement/>
                     <!--Regulation-->
 				</fields>
 			</vendor>

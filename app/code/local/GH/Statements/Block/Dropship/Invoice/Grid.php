@@ -44,31 +44,31 @@ class GH_Statements_Block_Dropship_Invoice_Grid extends Mage_Adminhtml_Block_Wid
 
         // Data sprzedaży
         $this->addColumn('sale_date', array(
-            "width"     => "14%",
-            'header'    => $helper->__("Sale date"), // TODO: "Sale date","Data sprzedaży"
+            "width"     => "12%",
+            'header'    => $helper->__("Sale date"),
             'index'     => 'sale_date',
             'type'      => 'date',
             'format'    => 'Y-MM-dd',
         ));
         // Data wystawienia
         $this->addColumn('date', array(
-            "width"     => "14%",
-            'header'    => $helper->__("Invoice date"), // TODO: "Invoice date","Data wystawienia"
+            "width"     => "12%",
+            'header'    => $helper->__("Invoice date"),
             'index'     => 'date',
             'type'      => 'date',
             'format'    => 'Y-MM-dd',
         ));
         // Numer faktury
         $this->addColumn('wfirma_invoice_number', array(
-            "width"     => "14%",
-            'header'    => $helper->__("Invoice number"), // TODO: "Invoice number","Numer faktury"
+            "width"     => "12%",
+            'header'    => $helper->__("Invoice number"),
             'index'     => 'wfirma_invoice_number',
             'sortable'  => false,
         ));
         // Prowizja od sprzedaży
         $this->addColumn('commission_brutto', array(
-            "width"         => "14%",
-            'header'        => $helper->__("Sale commision"), //TODO: "Sale commision","Prowizja od sprzedaży"
+            "width"         => "12%",
+            'header'        => $helper->__("Sale commision"),
             'index'         => 'commission_brutto',
             'type'          => 'currency',
             'currency_code' => $currency,
@@ -76,8 +76,8 @@ class GH_Statements_Block_Dropship_Invoice_Grid extends Mage_Adminhtml_Block_Wid
         ));
         // Usługi transportowe
         $this->addColumn('transport_brutto', array(
-            "width"         => "14%",
-            'header'        => $helper->__("Transport services"), //TODO: "Transport services","Usługi transportowe"
+            "width"         => "12%",
+            'header'        => $helper->__("Transport services"),
             'index'         => 'transport_brutto',
             'type'          => 'currency',
             'currency_code' => $currency,
@@ -86,8 +86,8 @@ class GH_Statements_Block_Dropship_Invoice_Grid extends Mage_Adminhtml_Block_Wid
         // Usługi marketingowe
         if ($this->getVendor()->getData('marketing_charges_enabled')) {
             $this->addColumn('marketing_brutto', array(
-                "width"         => "14%",
-                'header'        => $helper->__("Marketing services"), //TODO: "Marketing services","Usługi marketingowe"
+                "width"         => "12%",
+                'header'        => $helper->__("Marketing services"),
                 'index'         => 'marketing_brutto',
                 'type'          => 'currency',
                 'currency_code' => $currency,
@@ -96,16 +96,17 @@ class GH_Statements_Block_Dropship_Invoice_Grid extends Mage_Adminhtml_Block_Wid
         }
         // Razem brutto
         $this->addColumn('sum_brutto', array(
-            'header'        => $helper->__("Total gross"), //TODO: "Total gross","Razem brutto"
+            "width"         => "12%",
+            'header'        => $helper->__("Total gross"),
             'index'         => 'sum_brutto',
             'type'          => 'currency',
             'currency_code' => $currency,
             'sortable'      => false,
         ));
-        // Specyfikacja
-        $this->addColumn('specification', array(
-            'header'    => $helper->__("Get invoice"), //TODO: "Get invoice","Pobierz fakturę"
-            'renderer'  => Mage::getConfig()->getBlockClassName("ghstatements/dropship_invoice_grid_column_renderer_specification"),
+        // Pobierz fakture
+        $this->addColumn('get_invoice', array(
+            'header'    => $helper->__("Get invoice"),
+            'renderer'  => Mage::getConfig()->getBlockClassName("ghstatements/dropship_invoice_grid_column_renderer_invoice"),
             'sortable'  => false,
         ));
 

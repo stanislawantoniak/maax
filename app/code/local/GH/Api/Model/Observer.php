@@ -28,7 +28,7 @@ class GH_Api_Model_Observer
                 ->toHtml();
 
                 $block->addTab('ghapi_settings', array(
-                    'label'     => Mage::helper('ghapi')->__('GH API Settings'),
+                    'label'     => Mage::helper('ghapi')->__('Integration settings'),
                     'after'     => 'sizetable_attributeset',
                     'content'	=> $ghApiBlock
                 ));

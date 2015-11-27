@@ -1,0 +1,39 @@
+#header {
+    [role="search"] {
+        margin:0px;
+        margin-top: 13px;
+        padding: 0;
+        width: 282px;
+        .form-group {
+            float: left;
+            width:119px ;
+            input[type="text"] {
+                height: 26px;
+                width: 119px;
+                padding-left: 15px;
+                float: left;
+            }
+        }
+        .select-box {
+            float: left;
+            width:134px;
+            position:relative;
+            &:before {
+                content: ' ';
+                display: block;
+                height: 13px;
+                width: 0px;
+                position: absolute;
+                left: 0px;
+                top: 50%;
+                margin-top: -6px;
+                z-index: 1;
+            }
+        }
+
+        input[type="image"] {
+            float:left;
+        }
+
+    }
+}

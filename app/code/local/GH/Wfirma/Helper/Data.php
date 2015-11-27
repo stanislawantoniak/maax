@@ -255,7 +255,6 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
      * @param Zolago_Dropship_Model_Vendor $vendor
      * @param int $id
      */
-
     public function getVendorInvoice($vendor, $id) {
             
             /** @var Zolago_Payment_Model_Vendor_Invoice $model */

@@ -43,21 +43,29 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
             return $value;
         }
         switch ($key) {
-        case "is_new":
-        case "is_bestseller":
-            return $value==1 ? array("eq"=>$value) : array(array("null"=>true), array("eq"=>$value));
-            break;
-        case "product_flags":
-        case "is_in_stock":
-            return array("eq"=>$value);
-            break;
-        case "converter_price_type":
-        case "converter_msrp_type":
-            return $value!=0 ? array("eq"=>$value) : array("null"=>true);
-            break;
-        case "msrp":
-            return $value==1 ? array("notnull"=>true) : array(array("null"=>true));
-            break;
+            case "is_new":
+            case "is_bestseller":
+                return $value == 1 ? array("eq" => $value) : array(array("null" => true), array("eq" => $value));
+                break;
+            case "product_flags":
+            case "is_in_stock":
+                return array("eq" => $value);
+                break;
+            case "campaign_regular_id":
+                return $value != 0 ? array("eq" => $value) : array(
+                    array(
+                        array("null" => true),
+                        array("eq" => 0)
+                    )
+                );
+                break;
+            case "converter_price_type":
+            case "converter_msrp_type":
+                return $value != 0 ? array("eq" => $value) : array("null" => true);
+                break;
+            case "msrp":
+                return $value == 1 ? array("notnull" => true) : array(array("null" => true));
+                break;
         }
         return array("like"=>'%'.$value.'%');
     }

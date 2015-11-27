@@ -3,13 +3,13 @@
         <vendors>
             <children>
                 <vendor_integration_config>
-                <children>
-                <ghintegrator_log>
-                    <title>GH Integrator Log</title>
-                    <sort_order>200</sort_order>
-                    <action>adminhtml/ghintegrator_log/index</action>
-                </ghintegrator_log>
-                </children>
+                    <children>
+                        <ghintegrator_log>
+                            <title>GH Integrator Log</title>
+                            <sort_order>200</sort_order>
+                            <action>adminhtml/ghintegrator_log/index</action>
+                        </ghintegrator_log>
+                    </children>
                 </vendor_integration_config>
             </children>
         </vendors>
@@ -20,10 +20,14 @@
                 <children>
                     <vendors>
                         <children>
-                            <ghintegrator_log>
-                                <title>GH Integrator Log</title>
-                                <sort_order>200</sort_order>
-                            </ghintegrator_log>
+                            <vendor_integration_config>
+                                <children>
+                                    <ghintegrator_log>
+                                        <title>GH Integrator Log</title>
+                                        <sort_order>200</sort_order>
+                                    </ghintegrator_log>
+                                </children>
+                            </vendor_integration_config>
                         </children>
                     </vendors>
                 </children>

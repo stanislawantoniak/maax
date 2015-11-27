@@ -252,23 +252,25 @@ class Modago_Integrator_Model_Generator_Description
 
 						$readConnection = $this->getResource()->getConnection('core_read');
 						$query = "SELECT {$this->getProductTable()}.sku AS sku FROM {$this->getProductTable()}" .
-							" WHERE entity_id IN (" . implode(",", $parentIds) . ") ORDER BY sku ASC LIMIT 1";
+							" WHERE entity_id IN (" . implode(",", $parentIds) . ") AND type_id = 'configurable' ORDER BY sku ASC LIMIT 1";
 
 						$parentResult = $readConnection->fetchAll($query);
 
 						if (is_array($parentResult) && count($parentResult) && isset($parentResult[0]['sku']) && $parentResult[0]['sku']) {
 							$data[$key]['parentSKU'] = $parentResult[0]['sku'];
-						}
 
-						//options start
-						$parentModel = Mage::getModel('catalog/product')->loadByAttribute('sku',$parentResult[0]['sku']);
-						$attributes = $parentModel->getTypeInstance(true)->getSetAttributes($parentModel);
-						foreach ($attributes as $attribute) {
-							if ($parentModel->getTypeInstance(true)->canUseAttribute($attribute, $parentModel)) {
-								$dataKey = $attribute->getAttributeCode();
-								$data[$key]['options'][$dataKey] = $this->getAttributeText($product,$dataKey);
+							//options start
+							$parentModel = Mage::getModel('catalog/product')->loadByAttribute('sku',$parentResult[0]['sku']);
+							$attributes = $parentModel->getTypeInstance(true)->getSetAttributes($parentModel);
+							foreach ($attributes as $attribute) {
+								if ($parentModel->getTypeInstance(true)->canUseAttribute($attribute, $parentModel)) {
+									$dataKey = $attribute->getAttributeCode();
+									$data[$key]['options'][$dataKey] = $this->getAttributeText($product,$dataKey);
+								}
 							}
 						}
+
+
 						unset($readConnection,$query,$parentResult);
 					}
 					unset($parentIds);
@@ -330,10 +332,10 @@ class Modago_Integrator_Model_Generator_Description
 	 * @param string $attributeCode
 	 * @returns string
 	 */
-	protected function getAttributeText($product, $attributeCode)
+	protected function getAttributeText($product, $attributeCode, $attributeValue=false)
 	{
 		if ($product instanceof Mage_Catalog_Model_Product) {
-			$attributeValue = $product->getData($attributeCode);
+			$attributeValue = $attributeValue !== false ? $attributeValue : $product->getData($attributeCode);
 			if(in_array($attributeCode,$this->_valuesToInsertRaw)) {
 				return $attributeValue;
 			} elseif (is_numeric($attributeValue)) {
@@ -341,34 +343,27 @@ class Modago_Integrator_Model_Generator_Description
 				if ($attribute) {
 					$attributeText = $attribute->getSource()->getOptionText($attributeValue);
 					if ($attributeText) {
-						return "<![CDATA[$attributeText]]>";
+					    if (is_array($attributeText)) {
+					        $return = "";				        
+            				foreach($attributeText as $attrVal) {
+			            		$return .= "<value><![CDATA[".$attrVal."]]></value>";
+            				}
+            				return $return;
+                        } else {
+    						return "<![CDATA[$attributeText]]>";
+                        }
 					}
 				}
+			} elseif(is_array($attributeValue)) {
+				$return = "";
+				foreach($attributeValue as $attrVal) {
+					$return .= "<value><![CDATA[".$this->getAttributeText($product,$attributeCode,$attrVal)."]]></value>";
+				}
+				return $return;
 			}
 			return "<![CDATA[$attributeValue]]>";
 		}
 		return '';
-	}
-
-	protected function getAttributeIsConfigurable($attributeCode) {
-		//if(!isset($this->_attributesForConfigurable[$attributeCode])) {
-			/** @var Mage_Eav_Model_Entity_Attribute $attributeModel */
-			$attribute = Mage::getModel('eav/entity_attribute')->loadByCode("catalog_product", $attributeCode);
-			if($attribute instanceof Mage_Eav_Model_Entity_Attribute && $attribute->getId()) {
-				$allow = $attribute->getIsGlobal() == Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
-					&& $attribute->getIsVisible()
-					&& $attribute->getIsConfigurable()
-					&& $attribute->usesSource()
-					&& $attribute->getIsUserDefined()
-					&& strpos($attribute->getApplyTo(),'configurable') === false;
-				return $allow;
-			} else {
-				return false;
-			}
-			//$this->_attributesForConfigurable[$attributeCode] = $returnVal;
-		//}
-		//unset($attribute,$allow);
-		//return $this->_attributesForConfigurable[$attributeCode];
 	}
 
 	/**
@@ -500,6 +495,10 @@ class Modago_Integrator_Model_Generator_Description
 			$this->_collection = Mage::getResourceModel('catalog/product_collection')
 				->setStore($this->getIntegrationStore())
 				->addAttributeToSelect("*")
+				->addAttributeToFilter(
+					'status',
+					array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+				)
 				->setPageSize($this->_getListBatch);
 		}
 		return $this->_collection;
@@ -521,7 +520,15 @@ class Modago_Integrator_Model_Generator_Description
 		if (!isset($this->_categories[$categoryId])) {
 			$category = Mage::getModel('catalog/category')->load($categoryId);
 			if ($category) {
-				$this->_categories[$categoryId] = $category->getData('name');
+			    $path = $category->getPath();
+			    $list = explode('/',$path);
+			    $cid = array_pop($list); // actual category
+    	        $name = $category->getData('name');
+			    if (count($list)) {
+			        $cid = array_pop($list);
+			        $name = $this->getCategoryName($cid).' / '.$name;
+			    }
+				$this->_categories[$categoryId] = $name;
 			} else {
 				$this->_categories[$categoryId] = false;
 			}
@@ -534,7 +541,7 @@ class Modago_Integrator_Model_Generator_Description
 	protected function getIntegrationStore()
 	{
 		if(!$this->_integrationStore) {
-			$this->_integrationStore = $this->getHelper()->getIntegrationStore();
+			$this->_integrationStore = Mage::app()->getStore($this->getHelper()->getIntegrationStore());
 		}
 		return $this->_integrationStore;
 	}

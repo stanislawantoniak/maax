@@ -122,8 +122,6 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
     public function generateAction()
     {
         $id = $this->getRequest()->getParam("id");
-        /** @var Zolago_Payment_Helper_Data $hlp */
-        $hlp = Mage::helper('zolagopayment');
         /** @var GH_Wfirma_Helper_Data $wfirmaHlp */
         $wfirmaHlp = Mage::helper('ghwfirma');
         try {
@@ -136,13 +134,13 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             } else {
                 $wfirmaHlp->generateInvoice($model);
             }
-            $this->_getSession()->addSuccess(Mage::helper('zolagopayment')->__("Invoice has been generated successfully"));
+            $this->_getSession()->addSuccess($this->_getHelper()->__("Invoice has been generated successfully"));
 
         } catch(GH_Wfirma_Exception $e) {
             $this->_getSession()->addError($wfirmaHlp->__($e->getMessage()));
             return $this->_redirectReferer();
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($hlp->__($e->getMessage()));
+            $this->_getSession()->addError($this->_getHelper()->__($e->getMessage()));
             return $this->_redirectReferer();
         } catch (Exception $e) {
             $this->_getSession()->addError($this->_getHelper()->__("Some error occurred!"));
@@ -165,7 +163,7 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
             $this->_getSession()->addError($this->_getHelper()->__($e->getMessage()));
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addError(Mage::helper('zolagopayment')->__("Some error occurred!"));
+            $this->_getSession()->addError($this->_getHelper()->__("Some error occurred!"));
             Mage::logException($e);
         }
         return true;
@@ -200,4 +198,13 @@ class Zolago_Payment_Adminhtml_Vendor_InvoiceController extends Mage_Adminhtml_C
 		}
 		return $this->_helper;
 	}
+
+    /**
+     * Acl check for this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_invoice');
+    }
 }
