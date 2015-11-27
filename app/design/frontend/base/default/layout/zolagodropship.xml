@@ -185,6 +185,10 @@
 				<type>skin_js</type>
 				<name>js/plugins/uniform/jquery.uniform.min.js</name>
 			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>plugins/bootstrap-switch/bootstrap-switch.js</name>
+			</action>
             <action method="addItem">
                 <type>skin_js</type>
                 <name>js/cssbs.js</name>

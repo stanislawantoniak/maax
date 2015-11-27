@@ -30,6 +30,19 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'email',
         ));
 
+        //Map settings
+        $maps = $form->addFieldset('maps', array('legend' => $helper->__('Map settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_maps');
+        $builder->setFieldset($maps);
+        $builder->prepareForm(array(
+            "show_on_map",
+            "map_name",
+            "map_phone",
+            "map_latitude",
+            "map_longitude",
+            "map_time_opened"
+        ));
+        //--Map settings
 
         $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
         $builder = Mage::getModel('zolagopos/form_fieldset_address'); 
@@ -43,6 +56,9 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'street',
             'postcode'
         ));
+
+
+
         $stock = $form->addFieldset('stock', array('legend'=>$helper->__('Stock settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_stock'); 
         $builder->setFieldset($stock);
