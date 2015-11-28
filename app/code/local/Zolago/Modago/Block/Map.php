@@ -27,10 +27,14 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             $collection->addShowOnMapFilter();
             $collection->addVendorFilter($vendorId);
 
-            if(!empty($filterValue)){
-                $collection->addFieldToFilter("postcode",$filterValue);
-            }
+            if (!empty($filterValue)) {
+                $collection
+                    ->getSelect()
+                    ->where('(postcode=?', $filterValue)
+                    ->orWhere("map_name LIKE  ?)", '%' . $filterValue . '%');
 
+            }
+            Mage::log((string)$collection->getSelect(), null, "map.log");
             $this->setData("pos_map_collection", $collection);
         }
         return $this->getData("pos_map_collection");
