@@ -166,7 +166,10 @@ function initialize() {
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    infowindow = new google.maps.InfoWindow({pixelOffset: new google.maps.Size(0, 5), buttons: {close: {show: 0}}});
+    infowindow = new google.maps.InfoWindow({
+        pixelOffset: new google.maps.Size(0, 5),
+        buttons: {close: {show: 0}}
+    });
     var refresh = document.getElementById('refresh');
     google.maps.event.addDomListener(refresh, 'click', refreshMap);
 
