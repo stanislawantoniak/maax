@@ -1,25 +1,15 @@
 <style type="text/css">
-
-
     #map-container {
         padding: 6px;
-        border-width: 1px;
-        border-style: solid;
-        border-color: #ccc #ccc #999 #ccc;
+        border: 1px solid #ccc;
         -webkit-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
         -moz-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
         box-shadow: rgba(64, 64, 64, 0.1) 0 2px 5px;
-
     }
 
     #map {
         width: 100%;
         height: 450px;
-    }
-
-    #actions {
-        list-style: none;
-        padding: 0;
     }
 
     #inline-actions {
@@ -47,8 +37,6 @@
     }
 </style>
 <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
-<script type="text/javascript" src="/js/gmaps/gmaps.js"></script>
-<script type="text/javascript" src="/js/gmaps/markerclusterer.js"></script>
 <script src="/media/maps/data-small.json" type="text/javascript"></script>
 <script>
     var styles = [[{
@@ -113,7 +101,8 @@
         height: 44,
         anchorIcon: [44, 25],
         textSize: 12
-    }]];
+    }
+    ]];
 
     var markerClusterer = null;
     var map = null;
@@ -121,15 +110,13 @@
         'chco=FFFFFF,008CFF,000000&ext=.png';
     google.maps.event.addDomListener(window, 'load', initialize);
 
-    var gmarkers = [];
+
     var markers = [];
 
     function refreshMap() {
         if (markerClusterer) {
             markerClusterer.clearMarkers();
         }
-
-        //var markers = [];
 
         var markerImage = new google.maps.MarkerImage(imageUrl,
             new google.maps.Size(24, 32));
@@ -225,21 +212,7 @@
      * Function to filter markers by category
      */
     jQuery(document).ready(function(){
-        filterMarkers = function (id) {
-            console.log(id);
 
-            for (i = 0; i < markers.length; i++) {
-                marker = markers[i];
-                // If is same category or category not picked
-                if (marker.id == id) {
-                    marker.setVisible(true);
-                }
-                // Categories don't match
-                else {
-                    marker.setVisible(false);
-                }
-            }
-        }
 
     })
 
@@ -249,16 +222,11 @@
 <div class="container-fluid">
     <div class="col-md-12">
         <div class="container-fluid">
-            <div class="col-md-7" id="#map-container ">
+            <div class="col-md-7" id="#map-container">
                 <div id="map"></div>
             </div>
             <div class="col-md-5">
-                <select id="type" onchange="filterMarkers(this.value);">
-                    <option value="">Please select category</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+
                 <div id="inline-actions" class="hidden">
       <span>Max zoom level:</span>
         <select id="zoom">

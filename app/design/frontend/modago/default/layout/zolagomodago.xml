@@ -439,12 +439,12 @@
       <action method="setTitle" translate="title">
         <title>Stores Map</title>
       </action>
-      <!--<action method="addJs">-->
-        <!--<name>gmaps/gmaps.js</name>-->
-      <!--</action>-->
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
     </reference>
     <reference name="content">
-      <block type="zolagomodago/brands_vendor" name="zolago_modago_brands_vendors" template="stores/map.phtml" />
+      <block type="zolagomodago/map" name="zolago_modago_map" template="stores/map.phtml"/>
     </reference>
   </zolagomodago_map_index>
   <solrbridge_solrsearch_category_view>
