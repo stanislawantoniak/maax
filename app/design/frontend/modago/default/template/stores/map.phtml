@@ -128,8 +128,7 @@ $map = $this->getMapData(); ?>
 
 
     function refreshMap(filtredData) {
-        console.log(filtredData);
-        console.log("------");
+
         var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
             'chco=FFFFFF,008CFF,000000&ext=.png';
         var data = (typeof filtredData == "undefined") ? '<?php echo $map; ?>' : filtredData;
@@ -139,8 +138,7 @@ $map = $this->getMapData(); ?>
         }
 
         data = jQuery.parseJSON(data);
-        console.log(data);
-        console.log("------------------------");
+
 
         var markerImage = new google.maps.MarkerImage(imageUrl,
             new google.maps.Size(24, 32));
@@ -210,9 +208,7 @@ $map = $this->getMapData(); ?>
             type: "POST",
             data: {filter: q},
             success: function(data) {
-                console.log(data);
                 refreshMap(data);
-
             },
             error: function(response) {
                 console.log(response);
