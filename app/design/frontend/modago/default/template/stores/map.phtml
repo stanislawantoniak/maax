@@ -136,7 +136,7 @@ $map = $this->getMapData(); ?>
         //setMarkers
         for (var i = 0; i < data.poses.length; i++) {
             var pos = data.poses[i];
-            console.log(pos);
+
             var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
             var marker = new google.maps.Marker({
                 position: posLatLng,
@@ -156,22 +156,14 @@ $map = $this->getMapData(); ?>
         }
         //--setMarkers
 
-        //var zoom = parseInt(document.getElementById('zoom').value, 10);
-        var size = parseInt(document.getElementById('size').value, 10);
-        var style = parseInt(document.getElementById('style').value, 10);
-        zoom = zoom == -1 ? null : zoom;
-        size = size == -1 ? null : size;
-        style = style == -1 ? null : style;
-
         markerClusterer = new MarkerClusterer(map, markers, {
-            maxZoom: zoom,
-            gridSize: size,
-            styles: styles[style]
+            maxZoom: 6,
+            gridSize: 7,
+            //styles: styles[0]
         });
     }
 
     function formatInfoWindowContent(data) {
-        console.log(data.time_opened);
         var contentString =
             '<div class="marker-window">' +
             '<div class="info_window_text">' +
@@ -239,37 +231,8 @@ $map = $this->getMapData(); ?>
 
                 <div id="inline-actions" class="hidden">
                     <span>Max zoom level:</span>
-                    <select id="zoom">
-                        <option value="-1">Default</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                    </select>
-                    <br/>
-                    <span class="item">Cluster size:</span>
-                    <select id="size">
-                        <option value="-1">Default</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
-                        <option value="70">70</option>
-                        <option value="80">80</option>
-                    </select>
-                    <br/>
-                    <span class="item">Cluster style:</span>
-                    <select id="style">
-                        <option value="-1">Default</option>
-                        <option value="0">People</option>
-                        <option value="1">Conversation</option>
-                        <option value="2">Heart</option>
-                    </select>
-                    <br/>
+
+
                     <input id="refresh" type="button" value="Refresh Map" class="item"/>
                     <a href="#" id="clear">Clear</a>
                 </div>
