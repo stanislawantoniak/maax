@@ -136,10 +136,10 @@
             var latLng = new google.maps.LatLng(data.poses[i].latitude,
                 data.poses[i].longitude);
 
-//            var contentString = formatInfoWindowContent(data.poses[i]);
-//            infowindow = new google.maps.InfoWindow({
-//                content: contentString
-//            });
+            var contentString = formatInfoWindowContent(data.poses[i]);
+            infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
 
             var marker = new google.maps.Marker({
                 position: latLng,
@@ -147,12 +147,12 @@
                 id: data.poses[i].id
             });
 
-//            console.log(contentString);
-//            console.log(marker);
-//            google.maps.event.addListener(marker, 'click', function() {
-//                infowindow.setContent(contentString);
-//                infowindow.open(map,this);
-//            });
+            console.log(contentString);
+            console.log(marker);
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.setContent(contentString);
+                infowindow.open(map,this);
+            });
             markers.push(marker);
         }
 
