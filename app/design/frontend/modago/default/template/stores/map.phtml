@@ -42,31 +42,38 @@ $map = $this->getMapData(); ?>
         font-style: normal;
         margin: 6px 0;
     }
+
+    .search-by-map input[type=text] {
+        float: left;
+        width: 75%;
+        margin-right: 10px;
+    }
 </style>
 <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
 <!--<script src="/media/maps/data-small.json" type="text/javascript"></script>-->
 <script>
-    var data = '<?php echo $map; ?>';
 
-    var styles = [[{
-        url: '/media/cluster_icons/people35.png',
-        width: 35,
-        height: 35,
-        textColor: '#ff00ff',
-        textSize: 10
-    }, {
-        url: '/media/cluster_icons/people45.png',
-        width: 45,
-        height: 45,
-        textColor: '#ff0000',
-        textSize: 11
-    }, {
-        url: '/media/cluster_icons/people55.png',
-        width: 55,
-        height: 55,
-        textColor: '#ffffff',
-        textSize: 12
-    }], [{
+    var styles = [[
+        {
+            url: '/media/cluster_icons/people35.png',
+            width: 35,
+            height: 35,
+            textColor: '#FFFFFF',
+            textSize: 10
+        },
+        {
+            url: '/media/cluster_icons/people45.png',
+            width: 45,
+            height: 45,
+            textColor: '#ff0000',
+            textSize: 11
+        }, {
+            url: '/media/cluster_icons/people55.png',
+            width: 55,
+            height: 55,
+            textColor: '#ffffff',
+            textSize: 12
+        }], [{
         url: '/media/cluster_icons/conv30.png',
         width: 30,
         height: 27,
@@ -115,20 +122,25 @@ $map = $this->getMapData(); ?>
 
     var markerClusterer = null;
     var map = null;
-    var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
-        'chco=FFFFFF,008CFF,000000&ext=.png';
+    var infowindow = null;
+
     google.maps.event.addDomListener(window, 'load', initialize);
 
 
-    var markers = [];
-    var infowindow = null;
-
-
-    function refreshMap() {
+    function refreshMap(filtredData) {
+        console.log(filtredData);
+        console.log("------");
+        var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
+            'chco=FFFFFF,008CFF,000000&ext=.png';
+        var data = (typeof filtredData == "undefined") ? '<?php echo $map; ?>' : filtredData;
+        var markers = [];
         if (markerClusterer) {
             markerClusterer.clearMarkers();
         }
+
         data = jQuery.parseJSON(data);
+        console.log(data);
+        console.log("------------------------");
 
         var markerImage = new google.maps.MarkerImage(imageUrl,
             new google.maps.Size(24, 32));
@@ -148,7 +160,6 @@ $map = $this->getMapData(); ?>
             var contentString = " ";
 
             google.maps.event.addListener(marker, "click", function () {
-                //alert(this.html);
                 infowindow.setContent(this.html);
                 infowindow.open(map, this);
             });
@@ -163,13 +174,13 @@ $map = $this->getMapData(); ?>
         });
     }
 
-    function formatInfoWindowContent(data) {
+    function formatInfoWindowContent(info) {
         var contentString =
             '<div class="marker-window">' +
             '<div class="info_window_text">' +
-            '<p class="iw_header"><i class="shop_name bold">' + data.name + '</i></p>' +
-            '<div class="marker-info-tel"><b>Tel: </b>' + data.phone + '</div>' +
-            '<div class="additional-store-information">' + data.time_opened + '</div>' +
+            '<p class="iw_header"><i class="shop_name bold">' + info.name + '</i></p>' +
+            '<div class="marker-info-tel"><b>Tel: </b>' + info.phone + '</div>' +
+            '<div class="additional-store-information">' + info.time_opened + '</div>' +
             '</div>' +
             '</div>';
         return contentString;
@@ -190,6 +201,26 @@ $map = $this->getMapData(); ?>
         google.maps.event.addDomListener(clear, 'click', clearClusters);
 
         refreshMap();
+    }
+
+    function searchOnMap(event) {
+        var q = jQuery(".search-by-map input[type=text][name=search_by_map]").val();
+        jQuery.ajax({
+            url: '<?php echo Mage::getUrl("modago/map/getMapData")?>',
+            type: "POST",
+            data: {filter: q},
+            success: function(data) {
+                console.log(data);
+                refreshMap(data);
+
+            },
+            error: function(response) {
+                console.log(response);
+            },
+
+        })
+
+
     }
 
     function clearClusters(e) {
@@ -228,7 +259,20 @@ $map = $this->getMapData(); ?>
                 <div id="map"></div>
             </div>
             <div class="col-md-5">
+                <div class="col-md-12">
+                    <div class="search-by-map">
 
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="search_by_map" placeholder="Szukaj..." value="">
+                            <button class="button button-primary button-search"
+                                    onclick="searchOnMap(this);return false;">
+                                Szukaj
+                            </button>
+                        </div>
+
+
+                    </div>
+                </div>
                 <div id="inline-actions" class="hidden">
                     <span>Max zoom level:</span>
 

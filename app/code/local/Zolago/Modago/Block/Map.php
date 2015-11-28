@@ -14,9 +14,10 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
 
     /**
      * @param $vendorId
+     * @param string $filterValue
      * @return Zolago_Pos_Model_Resource_Pos_Collection
      */
-    public function getPosMapCollection($vendorId)
+    public function getPosMapCollection($vendorId, $filterValue = "")
     {
         if (!$this->hasData("pos_map_collection")) {
 
@@ -26,16 +27,21 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             $collection->addShowOnMapFilter();
             $collection->addVendorFilter($vendorId);
 
+            if(!empty($filterValue)){
+                $collection->addFieldToFilter("postcode",$filterValue);
+            }
+
             $this->setData("pos_map_collection", $collection);
         }
         return $this->getData("pos_map_collection");
     }
 
     /**
-     * @return array
+     * @param string $filterValue
+     * @return string
      * @throws Mage_Core_Exception
      */
-    public function getMapData()
+    public function getMapData($filterValue = "")
     {
         $maps = array();
         $website = Mage::app()->getWebsite();
@@ -43,7 +49,8 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             $vendorId = $website->getVendorId();
 
             if ($vendorId) {
-                $posMaps = $this->getPosMapCollection($vendorId);
+
+                $posMaps = $this->getPosMapCollection($vendorId, $filterValue);
 
                 $maps["poses"] = array();
                 foreach ($posMaps as $posMap) {
