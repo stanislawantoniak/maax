@@ -1,5 +1,6 @@
 <?php /* @var $this Zolago_Modago_Block_Map */ ?>
-<?php ob_start(); $map = $this->getMapData();   ?>
+<?php ob_start();
+$map = $this->getMapData(); ?>
 
 <style type="text/css">
     #map-container {
@@ -22,15 +23,19 @@
     .item {
         margin-left: 20px;
     }
+
     .marker-window {
         max-width: 170px;
-        text-align: center;   }
+        text-align: center;
+    }
+
     .info_window_text .iw_header {
         width: 100%;
         margin: 0;
         line-height: 1.2;
         text-transform: capitalize;
     }
+
     .info_window_text .iw_header .shop_name {
         display: block;
         text-transform: capitalize;
@@ -42,8 +47,6 @@
 <!--<script src="/media/maps/data-small.json" type="text/javascript"></script>-->
 <script>
     var data = '<?php echo $map; ?>';
-
-    console.log(data);
 
     var styles = [[{
         url: '/media/cluster_icons/people35.png',
@@ -117,7 +120,6 @@
     google.maps.event.addDomListener(window, 'load', initialize);
 
 
-
     var markers = [];
     var infowindow = null;
 
@@ -131,38 +133,35 @@
         var markerImage = new google.maps.MarkerImage(imageUrl,
             new google.maps.Size(24, 32));
 
-        for (var i = 0; i < data.poses.length; ++i) {
-
-            var latLng = new google.maps.LatLng(data.poses[i].latitude,
-                data.poses[i].longitude);
-
-            var contentString = formatInfoWindowContent(data.poses[i]);
-            infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
+        //setMarkers
+        for (var i = 0; i < data.poses.length; i++) {
+            var pos = data.poses[i];
+            console.log(pos);
+            var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
             var marker = new google.maps.Marker({
-                position: latLng,
+                position: posLatLng,
+                map: map,
                 icon: markerImage,
-                id: data.poses[i].id
+                html: formatInfoWindowContent(pos)
             });
 
-            console.log(contentString);
-            console.log(marker);
-            google.maps.event.addListener(marker, 'click', function() {
-                infowindow.setContent(contentString);
-                infowindow.open(map,this);
+            var contentString = " ";
+
+            google.maps.event.addListener(marker, "click", function () {
+                //alert(this.html);
+                infowindow.setContent(this.html);
+                infowindow.open(map, this);
             });
             markers.push(marker);
         }
-
+        //--setMarkers
 
         //var zoom = parseInt(document.getElementById('zoom').value, 10);
         var size = parseInt(document.getElementById('size').value, 10);
         var style = parseInt(document.getElementById('style').value, 10);
         zoom = zoom == -1 ? null : zoom;
         size = size == -1 ? null : size;
-        style = style == -1 ? null: style;
+        style = style == -1 ? null : style;
 
         markerClusterer = new MarkerClusterer(map, markers, {
             maxZoom: zoom,
@@ -207,22 +206,22 @@
         markerClusterer.clearMarkers();
     }
 
-//    jQuery(document).ready(function(){
-//        map = new GMaps({
-//            div: '#map',
-//            //lat: 52.4934482,
-//            //lng: 18.8979594,
-//            center: new google.maps.LatLng(52.4934482, 18.8979594),
-//            zoom: 6,
-//            click: function(e) {
-//                alert('You clicked in this marker');
-//            }
-//        });
-//    });
+    //    jQuery(document).ready(function(){
+    //        map = new GMaps({
+    //            div: '#map',
+    //            //lat: 52.4934482,
+    //            //lng: 18.8979594,
+    //            center: new google.maps.LatLng(52.4934482, 18.8979594),
+    //            zoom: 6,
+    //            click: function(e) {
+    //                alert('You clicked in this marker');
+    //            }
+    //        });
+    //    });
     /**
      * Function to filter markers by category
      */
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function () {
 
 
     })
@@ -239,38 +238,38 @@
             <div class="col-md-5">
 
                 <div id="inline-actions" class="hidden">
-      <span>Max zoom level:</span>
-        <select id="zoom">
-            <option value="-1">Default</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-        </select>
-<br />
-      <span class="item">Cluster size:</span>
-        <select id="size">
-            <option value="-1">Default</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="40">40</option>
-            <option value="50">50</option>
-            <option value="70">70</option>
-            <option value="80">80</option>
-        </select>
-                    <br />
-      <span class="item">Cluster style:</span>
-        <select id="style">
-            <option value="-1">Default</option>
-            <option value="0">People</option>
-            <option value="1">Conversation</option>
-            <option value="2">Heart</option>
-        </select>
-                    <br />
+                    <span>Max zoom level:</span>
+                    <select id="zoom">
+                        <option value="-1">Default</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                    </select>
+                    <br/>
+                    <span class="item">Cluster size:</span>
+                    <select id="size">
+                        <option value="-1">Default</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                        <option value="70">70</option>
+                        <option value="80">80</option>
+                    </select>
+                    <br/>
+                    <span class="item">Cluster style:</span>
+                    <select id="style">
+                        <option value="-1">Default</option>
+                        <option value="0">People</option>
+                        <option value="1">Conversation</option>
+                        <option value="2">Heart</option>
+                    </select>
+                    <br/>
                     <input id="refresh" type="button" value="Refresh Map" class="item"/>
                     <a href="#" id="clear">Clear</a>
                 </div>
