@@ -28,6 +28,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             $collection->addVendorFilter($vendorId);
 
             if (!empty($filterValue)) {
+                $filterValue = trim($filterValue);
                 $collection
                     ->getSelect()
                     ->where('(postcode=?', $filterValue)

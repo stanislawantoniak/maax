@@ -49,11 +49,11 @@ $map = $this->getMapData(); ?>
         margin-right: 10px;
     }
 </style>
-<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=FALSE"></script>
 <!--<script src="/media/maps/data-small.json" type="text/javascript"></script>-->
 <script>
 
-    var styles = [[
+    var clusterStyles = [[
         {
             url: '/media/cluster_icons/people35.png',
             width: 35,
@@ -141,7 +141,7 @@ $map = $this->getMapData(); ?>
 
 
         var markerImage = new google.maps.MarkerImage(imageUrl,
-            new google.maps.Size(24, 32));
+            new google.maps.Size(40,40));
 
         //setMarkers
         for (var i = 0; i < data.poses.length; i++) {
@@ -168,7 +168,7 @@ $map = $this->getMapData(); ?>
         markerClusterer = new MarkerClusterer(map, markers, {
             maxZoom: 6,
             gridSize: 7,
-            //styles: styles[0]
+            //styles: clusterStyles[0]
         });
     }
 
@@ -186,12 +186,39 @@ $map = $this->getMapData(); ?>
 
 
     function initialize() {
-        map = new google.maps.Map(document.getElementById('map'), {
+
+        var mapOptions = {
             zoom: 6,
             center: new google.maps.LatLng(52.4934482, 18.8979594),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        infowindow = new google.maps.InfoWindow();
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            panControl: true,
+            panControlOptions: {
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.LARGE,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            scaleControl: true,
+            streetViewControl: false
+        };
+
+        if (window.innerWidth < 762) {
+            mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
+            mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
+            mapOptions.panControl = false;
+        };
+
+
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        infowindow = new google.maps.InfoWindow({pixelOffset: new google.maps.Size(0, 5), buttons:{close:{show:0}}});
         var refresh = document.getElementById('refresh');
         google.maps.event.addDomListener(refresh, 'click', refreshMap);
 
@@ -225,18 +252,6 @@ $map = $this->getMapData(); ?>
         markerClusterer.clearMarkers();
     }
 
-    //    jQuery(document).ready(function(){
-    //        map = new GMaps({
-    //            div: '#map',
-    //            //lat: 52.4934482,
-    //            //lng: 18.8979594,
-    //            center: new google.maps.LatLng(52.4934482, 18.8979594),
-    //            zoom: 6,
-    //            click: function(e) {
-    //                alert('You clicked in this marker');
-    //            }
-    //        });
-    //    });
     /**
      * Function to filter markers by category
      */
