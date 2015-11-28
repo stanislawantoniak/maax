@@ -92,20 +92,26 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      * @return string
      * @throws Mage_Core_Exception
      */
-    public function getWebsiteUrl($customVendorUrlPart = "") {
+    public function getWebsiteUrl($customVendorUrlPart = "")
+    {
         $websiteIds = $this->getAllowedWebsites();
         if (empty($websiteIds)) {
-//            throw new Mage_Core_Exception("Invalid campaign. No information about allowed websites");
             return null;
         } else {
             /** @var Mage_Core_Model_Website $website */
-            $website = Mage::app()->getWebsite($websiteIds[0]); // Currently campaign can by assigned to one website
+            // Currently campaign can by assigned to one website
+            $website = Mage::app()->getWebsite($websiteIds[0]);
         }
         $websiteUrl = $website->getConfig("web/unsecure/base_url");
 
         $localVendorId = Mage::helper('udropship')->getLocalVendorId();
         $vendorUrlPart = $customVendorUrlPart;
-        if ($localVendorId != $this->getVendorId() && empty($customVendorUrlPart)) {
+
+        if (
+            $localVendorId != $this->getVendorId()  //NOT local vendor
+            && empty($customVendorUrlPart)
+            && !$website->getHaveSpecificDomain()   //NOT Sklep Wlasny
+        ) {
             $vendorUrlPart = $this->getVendor()->getUrlKey() . "/";
         }
         return $websiteUrl . $vendorUrlPart;
