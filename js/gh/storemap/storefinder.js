@@ -1,70 +1,3 @@
-var clusterStyles = [[
-    {
-        url: '/media/cluster_icons/people35.png',
-        width: 35,
-        height: 35,
-        textColor: '#FFFFFF',
-        textSize: 10
-    },
-    {
-        url: '/media/cluster_icons/people45.png',
-        width: 45,
-        height: 45,
-        textColor: '#ff0000',
-        textSize: 11
-    }, {
-        url: '/media/cluster_icons/people55.png',
-        width: 55,
-        height: 55,
-        textColor: '#ffffff',
-        textSize: 12
-    }], [{
-    url: '/media/cluster_icons/conv30.png',
-    width: 30,
-    height: 27,
-    anchorText: [-3, 0],
-    anchorIcon: [27, 28],
-    textColor: '#ff00ff',
-    textSize: 10
-}, {
-    url: '/media/cluster_icons/conv40.png',
-    width: 40,
-    height: 36,
-    anchorText: [-4, 0],
-    anchorIcon: [36, 37],
-    textColor: '#ff0000',
-    textSize: 11
-}, {
-    url: '/media/cluster_icons/conv50.png',
-    width: 50,
-    height: 45,
-    anchorText: [-5, 0],
-    anchorIcon: [45, 46],
-    textColor: '#0000ff',
-    textSize: 12
-}], [{
-    url: '/media/cluster_icons/heart30.png',
-    width: 30,
-    height: 26,
-    anchorIcon: [26, 15],
-    textColor: '#ff00ff',
-    textSize: 10
-}, {
-    url: '/media/cluster_icons/heart40.png',
-    width: 40,
-    height: 35,
-    anchorIcon: [35, 20],
-    textColor: '#ff0000',
-    textSize: 11
-}, {
-    url: '/media/cluster_icons/heart50.png',
-    width: 50,
-    height: 44,
-    anchorIcon: [44, 25],
-    textSize: 12
-}
-]];
-
 var markerClusterer = null;
 var map = null;
 var infowindow = null;
@@ -114,8 +47,7 @@ function refreshMap(filtredData) {
 
     markerClusterer = new MarkerClusterer(map, markers, {
         maxZoom: 6,
-        gridSize: 7,
-        //styles: clusterStyles[0]
+        gridSize: 7
     });
 }
 
