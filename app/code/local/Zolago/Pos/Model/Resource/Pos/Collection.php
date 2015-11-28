@@ -23,6 +23,14 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 		$this->addFieldToFilter("is_active", 1);
 		return $this;
 	}
+
+    /**
+     * @return Zolago_Pos_Model_Resource_Pos_Collection
+     */
+    public function addShowOnMapFilter() {
+        $this->addFieldToFilter("show_on_map", 1);
+        return $this;
+    }
 	
     //{{{ 
     /**
