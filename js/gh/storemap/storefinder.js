@@ -179,7 +179,7 @@ function initialize() {
     refreshMap();
 }
 
-function searchOnMap(event) {
+function searchOnMap() {
     var form = jQuery("#search_by_map_form");
     var q = form.find("input[type=text][name=search_by_map]").val();
     jQuery.ajax({
