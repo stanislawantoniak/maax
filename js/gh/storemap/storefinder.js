@@ -92,7 +92,7 @@ function formatInfoWindowContent(info) {
         '</div>';
     return contentString;
 }
-function buildStoresList(data){
+function buildStoresList(data) {
 
     console.log(data);
     data = jQuery.parseJSON(data);
@@ -102,16 +102,16 @@ function buildStoresList(data){
     var list = "";
     var pos, posId;
 
-    if(data.poses.length > 0){
+    if (data.poses.length > 0) {
         list += "<p>Kliknij nazwę, aby dowiedzieć się więcej</p>";
         list += "<ul>";
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];
             posId = pos.id;
             list += "<li>" +
-                "<a href='' data-markernumber='"+posId+"' onclick='showMarkerWindow(this);return false;'>" +
-                "<div><b>"+pos.name+"</b></div>" +
-                "<div>"+pos.phone+"</div>" +
+                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
+                "<div><b>" + pos.name + "</b></div>" +
+                "<div>" + pos.phone + "</div>" +
                 "</a>" +
                 "</li>";
         }
@@ -120,12 +120,10 @@ function buildStoresList(data){
     searchByMapList.html(list);
 }
 
-function showMarkerWindow(link){
+function showMarkerWindow(link) {
     var markernumber = jQuery(link).data("markernumber");
-
-    jQuery(gmarkers).each(function(i, item){
-        console.log(item.id);
-        if(markernumber == item.id){
+    jQuery(gmarkers).each(function (i, item) {
+        if (markernumber == item.id) {
             google.maps.event.trigger(gmarkers[i], "click");
             return false;
         }
@@ -178,7 +176,6 @@ function initialize() {
 
     refreshMap();
 }
-
 
 
 function searchOnMap() {
