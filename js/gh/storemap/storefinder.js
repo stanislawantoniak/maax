@@ -113,36 +113,6 @@ function buildStoresList(data) {
                 "</a>" +
                 "</li>";
         }
-        for (var i = 0; i < data.poses.length; i++) {
-            pos = data.poses[i];
-            posId = pos.id;
-            list += "<li>" +
-                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
-                "<div><b>" + pos.name + "</b></div>" +
-                "<div>Tel: " + pos.phone + "</div>" +
-                "</a>" +
-                "</li>";
-        }
-        for (var i = 0; i < data.poses.length; i++) {
-            pos = data.poses[i];
-            posId = pos.id;
-            list += "<li>" +
-                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
-                "<div><b>" + pos.name + "</b></div>" +
-                "<div>Tel: " + pos.phone + "</div>" +
-                "</a>" +
-                "</li>";
-        }
-        for (var i = 0; i < data.poses.length; i++) {
-            pos = data.poses[i];
-            posId = pos.id;
-            list += "<li>" +
-                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
-                "<div><b>" + pos.name + "</b></div>" +
-                "<div>Tel: " + pos.phone + "</div>" +
-                "</a>" +
-                "</li>";
-        }
         list += "</ul>";
     }
     searchByMapList.html(list);
