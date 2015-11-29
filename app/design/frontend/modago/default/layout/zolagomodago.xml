@@ -435,6 +435,23 @@
         <value>lower-breadcrumbs</value>
       </action>
     </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>storesmap</crumbName>
+        <crumbInfo>
+          <label>Map</label>
+          <title>Map</title>
+        </crumbInfo>
+      </action>
+    </reference>
     <reference name="head">
       <action method="setTitle" translate="title">
         <title>Stores Map</title>
