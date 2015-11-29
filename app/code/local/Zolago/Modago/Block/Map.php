@@ -26,6 +26,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             $collection->addActiveFilter();
             $collection->addShowOnMapFilter();
             $collection->addVendorFilter($vendorId);
+            $collection->setOrder("map_name", "ASC");
 
             if (!empty($filterValue)) {
                 $filterValue = trim($filterValue);
@@ -35,7 +36,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                     ->orWhere("map_name LIKE  ?)", '%' . $filterValue . '%');
 
             }
-            Mage::log((string)$collection->getSelect(), null, "map.log");
+            //Mage::log((string)$collection->getSelect(), null, "map.log");
             $this->setData("pos_map_collection", $collection);
         }
         return $this->getData("pos_map_collection");
