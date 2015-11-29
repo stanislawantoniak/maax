@@ -93,10 +93,8 @@ function formatInfoWindowContent(info) {
     return contentString;
 }
 function buildStoresList(data) {
-
-    console.log(data);
     data = jQuery.parseJSON(data);
-    console.log(data);
+
     var searchByMapList = jQuery(".search-by-map-list");
 
     var list = "";
@@ -105,6 +103,36 @@ function buildStoresList(data) {
     if (data.poses.length > 0) {
         list += "<p>Kliknij nazwę, aby dowiedzieć się więcej</p>";
         list += "<ul>";
+        for (var i = 0; i < data.poses.length; i++) {
+            pos = data.poses[i];
+            posId = pos.id;
+            list += "<li>" +
+                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
+                "<div><b>" + pos.name + "</b></div>" +
+                "<div>Tel: " + pos.phone + "</div>" +
+                "</a>" +
+                "</li>";
+        }
+        for (var i = 0; i < data.poses.length; i++) {
+            pos = data.poses[i];
+            posId = pos.id;
+            list += "<li>" +
+                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
+                "<div><b>" + pos.name + "</b></div>" +
+                "<div>Tel: " + pos.phone + "</div>" +
+                "</a>" +
+                "</li>";
+        }
+        for (var i = 0; i < data.poses.length; i++) {
+            pos = data.poses[i];
+            posId = pos.id;
+            list += "<li>" +
+                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
+                "<div><b>" + pos.name + "</b></div>" +
+                "<div>Tel: " + pos.phone + "</div>" +
+                "</a>" +
+                "</li>";
+        }
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];
             posId = pos.id;
@@ -171,8 +199,8 @@ function initialize() {
     });
 
 
-    var clear = document.getElementById('clear');
-    google.maps.event.addDomListener(clear, 'click', clearClusters);
+    //var clear = document.getElementById('clear');
+    //google.maps.event.addDomListener(clear, 'click', clearClusters);
 
     refreshMap();
 }
@@ -181,6 +209,16 @@ function initialize() {
 function searchOnMap() {
     var form = jQuery("#search_by_map_form");
     var q = form.find("input[type=text][name=search_by_map]").val();
+    _makeMapRequest(q);
+}
+function clearSearchOnMap() {
+    var form = jQuery("#search_by_map_form");
+    form.find("input[type=text][name=search_by_map]").val("");
+    _makeMapRequest("")
+}
+
+function _makeMapRequest(q) {
+    var form = jQuery("#search_by_map_form");
     jQuery.ajax({
         url: form.attr("action"),
         type: "POST",
@@ -192,23 +230,11 @@ function searchOnMap() {
         },
         error: function (response) {
             console.log(response);
-        },
-
-    })
-
-
+        }
+    });
 }
-
 function clearClusters(e) {
     e.preventDefault();
     e.stopPropagation();
     markerClusterer.clearMarkers();
 }
-
-/**
- * Function to filter markers by category
- */
-jQuery(document).ready(function () {
-
-
-})
