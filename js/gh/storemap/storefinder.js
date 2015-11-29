@@ -1,3 +1,29 @@
+var clusterStyles = [
+    {
+        textColor: 'white',
+        url: '/js/gh/storemap/cluster_icons/circle1.png',
+        textSize: 14,
+        backgroundPosition: '1px 0px',
+        height: 40,
+        width: 40
+    },
+    {
+        textColor: 'white',
+        url: '/js/gh/storemap/cluster_icons/circle2.png',
+        textSize: 18,
+        backgroundPosition: '1px 0px',
+        height: 60,
+        width: 60
+    },
+    {
+        textColor: 'white',
+        url: '/js/gh/storemap/cluster_icons/circle2.png',
+        textSize: 18,
+        backgroundPosition: '1px 0px',
+        height: 60,
+        width: 60
+    }
+];
 var markerClusterer = null;
 var map = null;
 var infowindow = null;
@@ -7,8 +33,8 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 function refreshMap(filtredData) {
 
-    var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
-
+    //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
+    var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
     if (typeof filtredData !== "undefined")
         data = filtredData;
 
@@ -47,7 +73,8 @@ function refreshMap(filtredData) {
 
     markerClusterer = new MarkerClusterer(map, markers, {
         maxZoom: 6,
-        gridSize: 7
+        gridSize: 7,
+        styles: clusterStyles
     });
 }
 
