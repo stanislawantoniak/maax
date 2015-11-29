@@ -70,6 +70,7 @@ function refreshMap(filtredData) {
         });
         markers.push(marker);
         gmarkers.push(marker);
+
     }
     //--setMarkers
 
@@ -120,7 +121,6 @@ function buildStoresList(data){
 }
 
 function showMarkerWindow(link){
-    console.log(link);
     var markernumber = jQuery(link).data("markernumber");
 
     jQuery(gmarkers).each(function(i, item){
@@ -130,7 +130,6 @@ function showMarkerWindow(link){
             return false;
         }
     });
-    //
 
 }
 
@@ -190,6 +189,7 @@ function searchOnMap() {
         type: "POST",
         data: {filter: q},
         success: function (data) {
+            gmarkers = [];  //to collect only filtred markers (used in showMarkerWindow)
             refreshMap(data);
             buildStoresList(data);
         },
