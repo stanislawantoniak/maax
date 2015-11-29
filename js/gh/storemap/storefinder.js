@@ -29,7 +29,7 @@ var map = null;
 var infowindow = null;
 
 google.maps.event.addDomListener(window, 'load', initialize);
-
+var gmarkers = [];
 
 function refreshMap(filtredData) {
 
@@ -55,6 +55,7 @@ function refreshMap(filtredData) {
 
         var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
         var marker = new google.maps.Marker({
+            id: pos.id,
             position: posLatLng,
             map: map,
             icon: markerImage,
@@ -68,6 +69,7 @@ function refreshMap(filtredData) {
             infowindow.open(map, this);
         });
         markers.push(marker);
+        gmarkers.push(marker);
     }
     //--setMarkers
 
@@ -89,7 +91,48 @@ function formatInfoWindowContent(info) {
         '</div>';
     return contentString;
 }
+function buildStoresList(data){
 
+    console.log(data);
+    data = jQuery.parseJSON(data);
+    console.log(data);
+    var searchByMapList = jQuery(".search-by-map-list");
+
+    var list = "";
+    var pos, posId;
+
+    if(data.poses.length > 0){
+        list += "<p>Kliknij nazwę, aby dowiedzieć się więcej</p>";
+        list += "<ul>";
+        for (var i = 0; i < data.poses.length; i++) {
+            pos = data.poses[i];
+            posId = pos.id;
+            list += "<li>" +
+                "<a href='' data-markernumber='"+posId+"' onclick='showMarkerWindow(this);return false;'>" +
+                "<div><b>"+pos.name+"</b></div>" +
+                "<div>"+pos.phone+"</div>" +
+                "</a>" +
+                "</li>";
+        }
+        list += "</ul>";
+    }
+    searchByMapList.html(list);
+}
+
+function showMarkerWindow(link){
+    console.log(link);
+    var markernumber = jQuery(link).data("markernumber");
+
+    jQuery(gmarkers).each(function(i, item){
+        console.log(item.id);
+        if(markernumber == item.id){
+            google.maps.event.trigger(gmarkers[i], "click");
+            return false;
+        }
+    });
+    //
+
+}
 
 function initialize() {
 
@@ -129,14 +172,15 @@ function initialize() {
         pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
-    var refresh = document.getElementById('refresh');
-    google.maps.event.addDomListener(refresh, 'click', refreshMap);
+
 
     var clear = document.getElementById('clear');
     google.maps.event.addDomListener(clear, 'click', clearClusters);
 
     refreshMap();
 }
+
+
 
 function searchOnMap() {
     var form = jQuery("#search_by_map_form");
@@ -147,6 +191,7 @@ function searchOnMap() {
         data: {filter: q},
         success: function (data) {
             refreshMap(data);
+            buildStoresList(data);
         },
         error: function (response) {
             console.log(response);

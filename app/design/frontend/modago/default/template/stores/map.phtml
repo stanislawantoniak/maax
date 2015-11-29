@@ -49,14 +49,16 @@
     }
 
     .search-by-map input[type=text] {
-        float: left;
-        width: 75%;
+        /*float: left;*/
+        /*width: 75%;*/
         margin-right: 5px;
+        margin-bottom: 10px;
         border: 1px solid #787878;
         padding: 0 10px;
     }
     .search-by-map .button.button-primary {
         padding: 7px 15px;
+
     }
 </style>
 
@@ -69,26 +71,28 @@
                     <div class="container-fluid">
                         <div class="col-md-12">
                             <div class="container-fluid">
-                                <div class="col-md-7" id="#map-container">
+                                <div class="col-md-8" id="#map-container">
                                     <div id="map"></div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <div class="col-md-12">
-                                        <div class="search-by-map">
-
+                                        <div class="search-by-map col-md-12">
                                             <div class="form-group">
                                                 <form id="search_by_map_form" action="<?php echo Mage::getUrl("modago/map/getMapData")?>">
-                                                    <input type="text" class="form-control" name="search_by_map" placeholder="Szukaj..." value="">
-                                                    <button class="button button-primary button-search"
+                                                    <input type="text" class="form-control" name="search_by_map" placeholder="<?php echo $_helper->__("Enter city or zip"); ?>" value="">
+                                                    <button class="button button-primary button-search pull-right"
                                                             onclick="searchOnMap();return false;">
                                                         <?php echo $_helper->__("Search"); ?>
                                                     </button>
                                                 </form>
                                             </div>
                                         </div>
+                                        <div class="search-by-map-list col-md-12">
+
+
+                                        </div>
                                     </div>
                                     <div id="inline-actions" class="hidden">
-                                        <input id="refresh" type="button" value="Refresh Map" class="item"/>
                                         <a href="#" id="clear">Clear</a>
                                     </div>
                                 </div>
