@@ -111,7 +111,7 @@ function buildStoresList(data) {
             list += "<li>" +
                 "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
                 "<div><b>" + pos.name + "</b></div>" +
-                "<div>" + pos.phone + "</div>" +
+                "<div>Tel: " + pos.phone + "</div>" +
                 "</a>" +
                 "</li>";
         }
