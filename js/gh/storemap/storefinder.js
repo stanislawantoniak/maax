@@ -101,7 +101,7 @@ function buildStoresList(data) {
     var pos, posId;
 
     if (data.poses.length > 0) {
-        list += "<p>Kliknij nazwę, aby dowiedzieć się więcej</p>";
+        list += "<p>"+clickToSeeMore+"</p>";
         list += "<ul>";
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];

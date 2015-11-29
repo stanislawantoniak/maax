@@ -4,7 +4,10 @@
 <?php $_helper = Mage::helper("zolagomodago"); ?>
 
 <script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=FALSE"></script>
-<script type="text/javascript">var data = '<?php echo $map; ?>';</script>
+<script type="text/javascript">
+    var data = '<?php echo $map; ?>';
+    var clickToSeeMore = '<?php echo $_helper->__("Click the name to see more info")?>';
+</script>
 <script type="text/javascript" src="<?php echo Mage::getBaseUrl(); ?>js/gh/storemap/storefinder.js"></script>
 
 <style type="text/css">
@@ -61,13 +64,34 @@
     }
 
     .search-by-map-list {
-        max-height: 350px;
+        max-height: 335px;
         overflow-y: auto;
     }
 
     .search-by-map-list ul {
         list-style-image: url("http://chart.apis.google.com/chart?cht=mm&chs=15x15&chco=ffffff,000000,000000&ext=.png");
         padding-left: 5px;
+    }
+    .search-by-map h4 {
+        padding-left: 10px;
+        padding-top: 2px;
+        padding-bottom: 10px;
+        font-weight: bold;
+        font-family: Roboto, sans-serif;
+        display: block;
+        overflow: hidden;
+        font-size: 15px;
+        text-transform: uppercase;
+    }
+    .search-by-map h4:before {
+        content: ' ';
+        display: block;
+        width: 18px;
+        height: 18px;
+        background: #CD0027;
+        position: absolute;
+        left: 0px;
+        top: 0px;
     }
     .no-padding {
         padding: 0;
@@ -87,8 +111,9 @@
                                     <div id="map"></div>
                                 </div>
                                 <div class="col-sm-4 col-md-4 no-padding">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 no-padding">
                                         <div class="search-by-map col-md-12">
+                                            <h4><?php echo $_helper->__("Find your store")?></h4>
                                             <div class="form-group">
                                                 <form id="search_by_map_form"
                                                       action="<?php echo Mage::getUrl("modago/map/getMapData") ?>">
