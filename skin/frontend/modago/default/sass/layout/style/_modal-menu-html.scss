@@ -58,6 +58,10 @@
     h4:first-child {
       padding-top: 15px !important;
     }
+
+    .delivery-table {
+      max-width: 600px;
+    }
   }
   @media (max-width: $screen-sm) {
     .delivery-table {
@@ -169,6 +173,9 @@
 
     }
   }
+  .title_section_logo_wrapper img {
+    max-width: 100%;
+  }
 }
 
 #trigger_conditions_shipping {
@@ -178,5 +185,4 @@
 .no-padding {
   padding: 0;
 }
-
 //MODAL AND MOBILE MENU CONTENT
