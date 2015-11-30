@@ -29,6 +29,12 @@ var map = null;
 var infowindow = null;
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+var defaultCenterLang = 52.4934482;
+var defaultCenterLat = 18.8979594;
+var defaultCenterLangMobile = 51.7934482;
+var defaultCenterLatMobile = 18.8979594;
+
 var gmarkers = [];
 
 function refreshMap(filtredData) {
@@ -80,13 +86,14 @@ function refreshMap(filtredData) {
 
         //Show all stores case
         if (typeof filtredData !== "undefined"){
-
             if (window.innerWidth < 768) {
                 map.setZoom(5);
+                map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
             } else {
                 map.setZoom(6);
+                map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
             }
-            map.setCenter(new google.maps.LatLng(52.4934482, 18.8979594));
+
 
         }
 
@@ -96,11 +103,16 @@ function refreshMap(filtredData) {
     }
     //--setMarkers
 
-    markerClusterer = new MarkerClusterer(map, markers, {
+    var markerClusterOptions = {
         maxZoom: 6,
         gridSize: 7,
         styles: clusterStyles
-    });
+    };
+    if (window.innerWidth < 768) {
+        markerClusterOptions.maxZoom = 8;
+        markerClusterOptions.gridSize = 20;
+    }
+    markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
 function smoothZoom (map, max, cnt) {
@@ -167,7 +179,7 @@ function initialize() {
 
     var mapOptions = {
         zoom: 6,
-        center: new google.maps.LatLng(52.4934482, 18.8979594),
+        center: new google.maps.LatLng(defaultCenterLang, defaultCenterLat),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: false,
         mapTypeControlOptions: {
@@ -189,6 +201,7 @@ function initialize() {
 
     if (window.innerWidth < 768) {
         mapOptions.zoom = 5;
+        mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
         mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
         mapOptions.panControl = false;
