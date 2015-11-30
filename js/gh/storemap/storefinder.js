@@ -66,8 +66,17 @@ function refreshMap(filtredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
+            map.setZoom(12);
+            map.setCenter(marker.getPosition());
             infowindow.open(map, this);
         });
+
+        //Show all stores case
+        if (typeof filtredData !== "undefined"){
+            map.setZoom(6);
+            map.setCenter(new google.maps.LatLng(52.4934482, 18.8979594));
+        }
+
         markers.push(marker);
         gmarkers.push(marker);
 
@@ -101,7 +110,7 @@ function buildStoresList(data) {
     var pos, posId;
 
     if (data.poses.length > 0) {
-        list += "<p>"+clickToSeeMore+"</p>";
+        list += "<p>" + clickToSeeMore + "</p>";
         list += "<ul>";
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];
@@ -168,10 +177,6 @@ function initialize() {
         buttons: {close: {show: 0}}
     });
 
-
-    //var clear = document.getElementById('clear');
-    //google.maps.event.addDomListener(clear, 'click', clearClusters);
-
     refreshMap();
 }
 
@@ -208,3 +213,13 @@ function clearClusters(e) {
     e.stopPropagation();
     markerClusterer.clearMarkers();
 }
+
+
+jQuery(document).ready(function () {
+    jQuery("#search_by_map_form").submit(function () {
+        if(jQuery(this).valid()){
+            searchOnMap();
+        }
+        return false;
+    });
+});

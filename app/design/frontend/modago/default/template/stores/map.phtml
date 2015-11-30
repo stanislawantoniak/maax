@@ -72,6 +72,7 @@
         list-style-image: url("http://chart.apis.google.com/chart?cht=mm&chs=15x15&chco=ffffff,000000,000000&ext=.png");
         padding-left: 5px;
     }
+
     .search-by-map h4 {
         padding-left: 10px;
         padding-top: 2px;
@@ -83,6 +84,7 @@
         font-size: 15px;
         text-transform: uppercase;
     }
+
     .search-by-map h4:before {
         content: ' ';
         display: block;
@@ -93,6 +95,15 @@
         left: 0px;
         top: 0px;
     }
+
+    #search_by_map_form label.error {
+        padding: 0 !important;
+    }
+
+    #search_by_map_form input.error {
+        padding-top: 0 !important;
+    }
+
     .no-padding {
         padding: 0;
     }
@@ -113,15 +124,18 @@
                                 <div class="col-sm-4 col-md-4 no-padding">
                                     <div class="col-md-12 no-padding">
                                         <div class="search-by-map col-md-12">
-                                            <h4><?php echo $_helper->__("Find your store")?></h4>
+                                            <h4><?php echo $_helper->__("Find your store") ?></h4>
+
                                             <div class="form-group">
                                                 <form id="search_by_map_form"
                                                       action="<?php echo Mage::getUrl("modago/map/getMapData") ?>">
                                                     <input type="text" class="form-control" name="search_by_map"
+                                                           required
                                                            placeholder="<?php echo $_helper->__("Enter city or zip"); ?>"
                                                            value="">
                                                     <button class="button button-primary button-search pull-right"
-                                                            onclick="searchOnMap();return false;">
+                                                            type="submit"
+                                                        >
                                                         <?php echo $_helper->__("Search"); ?>
                                                     </button>
                                                 </form>
@@ -144,3 +158,21 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery("#search_by_map_form").validate({
+            rules: {
+                search_by_map: {
+                    required: true,
+                    minlength: 3
+                }
+            },
+            messages: {
+                search_by_map: {
+                    required: '<?php echo Mage::helper("zolagocommon")->__("This field is required."); ?>',
+                    minlength: '<?php echo Mage::helper("zolagocommon")->__("Please enter at least {0} characters"); ?>'
+                }
+            }
+        })
+    });
+</script>
