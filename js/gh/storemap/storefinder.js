@@ -85,7 +85,7 @@ function refreshMap(filtredData) {
         });
 
         //Show all stores case
-        if (typeof filtredData !== "undefined"){
+        if (typeof filtredData !== "undefined") {
             if (window.innerWidth < 768) {
                 map.setZoom(5);
                 map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
@@ -115,16 +115,18 @@ function refreshMap(filtredData) {
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
-function smoothZoom (map, max, cnt) {
+function smoothZoom(map, max, cnt) {
     if (cnt >= max) {
         return;
     }
     else {
-        y = google.maps.event.addListener(map, 'zoom_changed', function(event){
+        y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
             google.maps.event.removeListener(y);
             self.smoothZoom(map, max, cnt + 1);
         });
-        setTimeout(function(){map.setZoom(cnt)}, 80);
+        setTimeout(function () {
+            map.setZoom(cnt)
+        }, 80);
     }
 }
 function formatInfoWindowContent(info) {
@@ -138,8 +140,10 @@ function formatInfoWindowContent(info) {
         '</div>';
     return contentString;
 }
-function buildStoresList(data) {
-    data = jQuery.parseJSON(data);
+function buildStoresList(filtredData) {
+
+    if (typeof filtredData !== "undefined")
+        data = jQuery.parseJSON(filtredData);
 
     var searchByMapList = jQuery(".search-by-map-list");
 
@@ -216,6 +220,7 @@ function initialize() {
     });
 
     refreshMap();
+    buildStoresList();
 }
 
 
@@ -255,7 +260,7 @@ function clearClusters(e) {
 
 jQuery(document).ready(function () {
     jQuery("#search_by_map_form").submit(function () {
-        if(jQuery(this).valid()){
+        if (jQuery(this).valid()) {
             searchOnMap();
         }
         return false;
