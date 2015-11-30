@@ -152,7 +152,7 @@ function buildStoresList(filtredData) {
 
     if (data.poses.length > 0) {
         list += "<p>" + clickToSeeMore + "</p>";
-        list += "<ul>";
+        list += "<ul class='search-by-map-list-html'>";
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];
             posId = pos.id;
