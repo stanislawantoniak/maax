@@ -447,8 +447,8 @@
       <action method="addCrumb">
         <crumbName>storesmap</crumbName>
         <crumbInfo>
-          <label>Map</label>
-          <title>Map</title>
+          <label>Stores map</label>
+          <title>Stores map</title>
         </crumbInfo>
       </action>
     </reference>
