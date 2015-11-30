@@ -454,7 +454,7 @@
     </reference>
     <reference name="head">
       <action method="setTitle" translate="title">
-        <title>Stores Map</title>
+        <title>Stores map</title>
       </action>
       <action method="addJs">
         <name>gmaps/markerclusterer.js</name>
