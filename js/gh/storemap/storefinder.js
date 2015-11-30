@@ -67,14 +67,27 @@ function refreshMap(filtredData) {
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
             map.setCenter(this.getPosition()); // set map center to marker position
-            smoothZoom(map, 12, map.getZoom()); // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+
+            // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            if (window.innerWidth < 768) {
+                smoothZoom(map, 5, map.getZoom());
+            } else {
+                smoothZoom(map, 11, map.getZoom());
+            }
             infowindow.open(map, this);
+
         });
 
         //Show all stores case
         if (typeof filtredData !== "undefined"){
-            map.setZoom(6);
+
+            if (window.innerWidth < 768) {
+                map.setZoom(5);
+            } else {
+                map.setZoom(6);
+            }
             map.setCenter(new google.maps.LatLng(52.4934482, 18.8979594));
+
         }
 
         markers.push(marker);
@@ -174,12 +187,12 @@ function initialize() {
         streetViewControl: false
     };
 
-    if (window.innerWidth < 762) {
+    if (window.innerWidth < 768) {
+        mapOptions.zoom = 5;
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
         mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
         mapOptions.panControl = false;
     }
-    ;
 
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
