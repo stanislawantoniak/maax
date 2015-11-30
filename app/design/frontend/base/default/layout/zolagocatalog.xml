@@ -44,6 +44,7 @@
 		</reference>
 	</dgrid04>
 
+	<!--
 	<catalog_product_view>
 		<reference name="product.info">
 			<block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
@@ -51,7 +52,7 @@
 			<block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
 		</reference>
 	</catalog_product_view>
-	
+	-->
 	<udprod_vendor_price_index>
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />

@@ -1,7 +1,6 @@
 @import "../vendor/bootstrap/variables";
 @import "media-queries";
 
-
 // NEW BREAKPOINT 
 
 //@screen-sxs:                 480px;
@@ -44,7 +43,7 @@ $icon-font-svg-id:        "glyphicons_halflingsregular" ;
 
 $panel-bottom: $color_fefefe;
 $panel-top: $color_fcfcfc;
-$body-bg:               $color_ffff00;
+$body-bg: $color_fff;
 $color-gold: $color_ff0000;
 $color-gray1: $color_b99;
 $color-gray2: $color_ffebeb;
@@ -52,7 +51,7 @@ $color-gray3: $color_ffeded;
 $color-gray4: $color_b69494;
 $bc-primary : $gray-lighter;
 $color-black: $color_220000;
-$bc-secondary : $color_fbd9d9;
+$bc-secondary : #d9d9d9;
 
 
 
@@ -108,34 +107,193 @@ $validation-error: $color_e84c3d;
     textarea {
         margin:0px;
         padding:0px;
-        background:0px;
+        background:transparent;
         border:none;
     }
 }
 
+@mixin linearGradient($startColor,$stopColor) {
+	background: $startColor !important;
+	background: -moz-linear-gradient(-80deg,  $startColor 0%, $stopColor 100%)!important;
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,$startColor), color-stop(100%,$stopColor))!important;
+	background: -webkit-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: -o-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: -ms-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: linear-gradient(135deg,  $startColor 0%,$stopColor 100%)!important;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 )!important;
+}
+
 // FONT
-$fontLight: latolight, sans-serif;
-$fontRegular: latoregular, sans-serif;
-$fontBlack: latoblack, sans-serif;
+$fontLight: RobotoLight, sans-serif;
+$fontRegular: Roboto, sans-serif;
+$fontBlack: RobotoBold, sans-serif;
+
+/* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
+
 // SPRITES MAP 
 $allMap: sprite-map("sprites/all/*.png", $layout: smart, $spacing:50px);
-
-/*$icoMapDesktop: sprite-map("desktop/ico/*.png");
-$icoMapMobile: sprite-map("mobile/ico/*.png");
-$bulletMap: sprite-map("sprites/bullet/*.png");
-$arrowMap: sprite-map("sprites/arrow/*.png");
-$socialMap: sprite-map("sprites/social/*.png"); 
-$followUsMap: sprite-map("sprites/follow_us/*.png"); 
-$formIcoMap: sprite-map("sprites/form_feedback/*.png");
-$formMap: sprite-map("sprites/form/*.png");
-$btnSocialMap: sprite-map("sprites/btn-social/*.png");
-$flagMap: sprite-map("sprites/flags/*.png");*/
-//////////////////////////////////////////////
- 
 
 // Dodatkowe sprites
 $btnCheck: sprite-map("sprites/check_filter/*.png", $spacing:200px);
 $checkboxMap: sprite-map("sprites/checkbox/*.png", $spacing:200px);
 $radioMap: sprite-map("sprites/radio/*.png", $spacing:200px);
 $selectMap: sprite-map("sprites/select/*.png");
-$bgMap: sprite-map("sprites/bg/*.png"); 
+$bgMap: sprite-map("sprites/bg/*.png");
+
+/**
+
+
+
+ NEW GLOBAL VARS
+
+
+
+ **/
+$colorSiteBackground:                   #F2F1F0;
+
+$colorSiteOverlay:                      #FFF;
+$opacitySiteOverlay:                    .75;
+
+$colorFont:                             #000;
+$colorLink:                             #000;
+$colorLinkHover:                        #000;
+$colorLinkActive:                       #000;
+
+//icon colors
+$colorIcon:                             #787878;
+$colorIconHover:                        #FFF;
+$colorIconHoverBackground:              #787878;
+
+//icon texts colors
+$colorIconText:                         $colorIcon;
+$colorIconTextHover:                    $colorIconHover;
+
+//backgrounds colors
+$colorBackgroundBlocks:                 #FFF;
+$colorBackgroundSite:                   #F2F1F0;
+$colorBackgroundContent:                #FFF;
+
+//accents colors
+$colorAccentBlocks:                     #EBEBEB;
+$colorAccentSite:                       #CD0027;
+
+//buttons
+$colorBtnPrimary:                       #FFF;
+
+$colorBtnPrimaryBgStart:                #d20005;
+$colorBtnPrimaryBgEnd:                  #b40005;
+
+$colorBtnPrimaryBgStartHover:           #de0005;
+$colorBtnPrimaryBgEndHover:             #c00005;
+
+$colorBtnPrimaryBgStartActive:          #b40005;
+$colorBtnPrimaryBgEndActive:            #d20005;
+
+$colorBtnPrimaryBgDisabled:             #C5C5C5;
+
+@mixin primaryButtonGradient { //covers normal + hover + active + .disabled
+	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
+	&:hover,&.hover {
+		@include linearGradient($colorBtnPrimaryBgStartHover,$colorBtnPrimaryBgEndHover);
+	}
+	&:active,&:focus,&.active {
+		@include linearGradient($colorBtnPrimaryBgStartActive,$colorBtnPrimaryBgEndActive);
+	}
+	&.disabled {
+		background: $colorBtnPrimaryBgDisabled;
+	}
+}
+
+/* HEADER VARIABLES */
+$colorIconHeader:                       $colorIcon;
+$colorIconHoverHeader:                  $colorIconHover;
+$colorIconHoverBgHeader:                $colorIconHoverBackground;
+
+$colorHeaderBadge:                      #FFF;
+$colorHeaderBadgeBg:                    #00c10e;
+
+$colorIconTextHeader:                   $colorIconText;
+$colorIconTextHoverHeader:              $colorIconTextHover;
+
+$colorBgBlocksHeader:                   $colorBackgroundBlocks;
+$colorBgContentHeader:                  $colorBackgroundContent;
+$colorAccentBlocksHeader:               $colorAccentBlocks;
+
+$colorHeaderSearch:                     $colorFont;
+$colorHeaderSearchBg:                   $colorBgBlocksHeader;
+$colorHeaderSearchBorder:               $colorIconHeader;
+
+/* CHECKOUT HEADER VARIABLES */
+$colorHeaderCheckoutSteps:              $colorIconHeader;
+$colorHeaderCheckoutStepsActive:        $colorAccentSite;
+$colorHeaderCheckoutStepsText:          $colorIconHeader;
+$colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
+
+/* TOP MENU VARIABLES */
+$colorAccentSiteMenuTop:                $colorAccentSite;
+$colorAccentBlocksMenuTop:              $colorAccentBlocks;
+$colorBgBlocksMenuTop:                  $colorBackgroundBlocks;
+
+
+/* DROPDOWN VARIABLES */
+$colorBgDropdown:                       $colorIconHoverBgHeader;
+$colorDropdown:                         $colorIconTextHoverHeader;
+$colorAccentDropdown:                   $colorAccentBlocks;
+
+/* CART DROPDOWN VARIABLES */
+$colorBgDropdownCart:                   $colorBgDropdown;
+$colorDropdownCart:                     $colorDropdown;
+$colorAccentDropdownCart:               $colorAccentDropdown;
+
+/* SEARCH DROPDOWN VARIABLES */
+$colorBgDropdownSearch:                 $colorBgDropdown;
+$colorDropdownSearch:                   $colorDropdown;
+$colorAccentDropdownSearch:             $colorAccentDropdown;
+
+/* FOOTER VARIABLES */
+$colorBgBlocksFooter:                   $colorBackgroundBlocks;
+$colorFontFooter:                       $colorFont;
+$colorLinkFooter:                       $colorLink;
+
+/* CART VARIABLES */
+$colorAccentBlocksCart:                 $colorAccentBlocks;
+
+/* HAMBURGER MENU VARIABLES */
+$colorHamburgerBg:                      #E8E8E8;
+$colorHamburgerBgHeader:                $colorHamburgerBg;
+$colorHamburgerBgSeparator:             $colorHamburgerBg;
+$colorHamburgerBgItem:                  #cdcdcd;
+$colorHamburgerBgItem2:                 #c3c3c3;
+$colorHamburgerBgItem3:                 #b9b9b9;
+$colorHamburgerTextHeader:              #5f5f5f;
+$colorHamburgerText:                    $colorHamburgerTextHeader;
+$colorHamburgerText2:                   $colorHamburgerTextHeader;
+$colorHamburgerText3:                   $colorHamburgerTextHeader;
+$colorHamburgerBorder:                  $colorHamburgerBg;
+$colorHamburgerBorder2:                 $colorHamburgerBg;
+$colorHamburgerBorder3:                 $colorHamburgerBg;
+$colorHamburgerIcon:                    $colorAccentSite;
+
+/* FAQ VARIABLES */
+$colorFaqLabel:                         $colorFont;
+$colorFaqLabelBg:                       #F5F5F5;
+$colorFaqLabelBorder:                   #DDD;
+$colorFaqAnswer:                        $colorFont;
+$colorFaqAnswerBg:                      transparent;
+$borderRadiusFaq:                       0;
+
+/* COOKIE BAR VARIABLES */
+$colorCookieBarBg:                      #CDCDCD;
+$colorCookieBar:                        #5f5f5f;
+$colorCookieBarLink:                    #CD0027;
+$colorCookieBarLinkHover:               #e60028;
+$colorCookieBarLinkActive:              #b40026;
+
+/* PRODUCT VARIABLES */
+$colorAccentProduct:                    $colorAccentSite;
+$colorProductAccordionBorder:           #d9d9d9;
+$colorProductAccordion:                 #000;
+
+/* MY ACCOUNT VARIABLES */
+$colorAccentSidebarAccount:             $colorAccentSite;
+$colorBorderSidebarAccount:             #ebebeb;
