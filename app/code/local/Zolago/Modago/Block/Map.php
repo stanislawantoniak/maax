@@ -17,7 +17,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
      * @param string $filterValue
      * @return Zolago_Pos_Model_Resource_Pos_Collection
      */
-    public function getPosMapCollection($vendorId, $filterValue = "")
+    public function getPosMapCollection($vendorId, $filterValue = 0)
     {
         if (!$this->hasData("pos_map_collection")) {
 
@@ -26,17 +26,14 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             $collection->addActiveFilter();
             $collection->addShowOnMapFilter();
             $collection->addVendorFilter($vendorId);
+
             $collection->setOrder("map_name", "ASC");
 
-            if (!empty($filterValue)) {
-                $filterValue = trim($filterValue);
-                $collection
-                    ->getSelect()
-                    ->where('(postcode=?', $filterValue)
-                    ->orWhere("map_name LIKE  ?)", '%' . $filterValue . '%');
 
+            if (!empty($filterValue)) {
+                $collection->addFieldToFilter("main_table.pos_id",$filterValue);
             }
-            //Mage::log((string)$collection->getSelect(), null, "map.log");
+
             $this->setData("pos_map_collection", $collection);
         }
         return $this->getData("pos_map_collection");
@@ -47,7 +44,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
      * @return string
      * @throws Mage_Core_Exception
      */
-    public function getMapData($filterValue = "")
+    public function getMapData($filterValue = 0)
     {
         $maps = array();
         $website = Mage::app()->getWebsite();
@@ -75,6 +72,29 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
         }
 
         return json_encode($maps, JSON_HEX_APOS);
+    }
+
+    /**
+     * @param string $filterValue
+     * @return array
+     * @throws Mage_Core_Exception
+     */
+    public function getMapDataSelector($filterValue = "")
+    {
+        $maps = array();
+        $website = Mage::app()->getWebsite();
+        if ($website->getHaveSpecificDomain()) {
+            $vendorId = $website->getVendorId();
+
+            if ($vendorId) {
+
+                $posMaps = $this->getPosMapCollection($vendorId, $filterValue);
+                foreach ($posMaps as $posMap) {
+                    $maps[$posMap->getId()] = $posMap->getMapName() . "<i> ".$posMap->getPostcode()."</i>";
+                }
+            }
+        }
+        return $maps;
     }
 
     /**

@@ -226,12 +226,12 @@ function initialize() {
 
 function searchOnMap() {
     var form = jQuery("#search_by_map_form");
-    var q = form.find("input[type=text][name=search_by_map]").val();
+    var q = form.find("select[name=search_by_map] option:selected").val();
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
-    form.find("input[type=text][name=search_by_map]").val("");
+    form.find("select[name=search_by_map]").val("");
     _makeMapRequest("")
 }
 

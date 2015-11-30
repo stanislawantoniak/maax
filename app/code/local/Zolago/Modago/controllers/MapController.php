@@ -12,7 +12,7 @@ class Zolago_Modago_MapController extends Unirgy_DropshipMicrosite_IndexControll
 
     public function getMapDataAction()
     {
-        $filter = $this->getRequest()->getParam("filter", "");
+        $filter = $this->getRequest()->getParam("filter", 0);
         Mage::log($filter, null, "map.log");
 
         $block = new Zolago_Modago_Block_Map();
