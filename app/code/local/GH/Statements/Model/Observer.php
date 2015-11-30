@@ -548,6 +548,7 @@ class GH_Statements_Model_Observer
 				    /** @var Mage_Sales_Model_Order_Shipment $currentShipment */
 				    $currentShipment = $ordersShipmentsObjects[$shipmentId];
 				    $currentShipment->setStatementId($statement->getId());
+				    $currentShipment->setDontDispatchSaveBefore(true);
 				    $currentShipment->save();
 			    }
 		    }
@@ -569,6 +570,7 @@ class GH_Statements_Model_Observer
 					/** @var Zolago_Rma_Model_Rma_Track $rmaTrack */
 					$rmaTrack->setStatementId($statement->getId());
 					$rmaTrack->setWebApi(true);
+					$rmaTrack->setDontDispatchSaveBefore(true);
 					$rmaTrack->save();
 				}
 			}

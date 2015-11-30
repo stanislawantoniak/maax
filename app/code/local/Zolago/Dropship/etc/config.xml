@@ -869,8 +869,20 @@
 						<class>zolagodropship/observer</class>
 						<method>addOrbaShippingData</method>
 					</add_orba_shipping_data>
+					<add_undelivered_track_data>
+						<class>zolagodropship/observer</class>
+						<method>addUndeliveredTrackData</method>
+					</add_undelivered_track_data>
 				</observers>				
 			</sales_order_shipment_track_save_before>
+			<urma_rma_track_save_before>
+				<observers>
+					<add_undelivered_track_data>
+						<class>zolagodropship/observer</class>
+						<method>addUndeliveredTrackData</method>
+					</add_undelivered_track_data>
+				</observers>
+			</urma_rma_track_save_before>
 		</events>		
 	</global>
 	<frontend>
