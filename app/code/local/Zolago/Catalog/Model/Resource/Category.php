@@ -2,6 +2,7 @@
 
 class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource_Category
 {
+    protected $_relatedCategoryAttributeId;
     const CACHE_NAME = 'RESOURCE_CATEGORY';
 
     /**
@@ -116,6 +117,32 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
 
         return $data;
     }
+    
+    /**
+     * get related ids of category list
+     *
+     * @param array $ids
+     * @return array
+     */
+
+    public function getRelatedIds($ids) {
+        $attributeId = $this->_getRelatedCategoryAttributeId();
+
+		$adapter = $this->getReadConnection();
+		$select = $adapter->select();
+		
+		$select->from (
+		    array('attribute' => $this->getTable('catalog_category_entity_int')),
+		    array('attribute.value')
+        )
+        ->where('attribute.value IS NOT NULL')
+        ->where('attribute.value > 0')
+        ->where('attribute.attribute_id = ?',$attributeId)
+        ->where('entity_id IN (?)',$ids)
+        ->distinct();
+        
+        return $adapter->fetchCol($select);
+    }
 
     /**
      * Get "is_active" attribute identifier
@@ -152,4 +179,36 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
 
         return $this->_isActiveAttributeId;
     }
+    
+    /**
+     * Get 'related_category' attribute identifier
+     *
+     * @return int
+     */
+    protected function _getRelatedCategoryAttributeId() {
+        $cacheKey = $this->getCacheKeyPrefix("_getRelatedCategoryAttributeId");
+
+        if ($cacheData = $this->_loadFromCache($cacheKey)) {
+            return $this->_relatedCategoryAttributeId = $cacheData;
+        }
+
+        if ($this->_relatedCategoryAttributeId === null) {
+            $bind = array(
+                'catalog_category' => Mage_Catalog_Model_Category::ENTITY,
+                'related_category'        => 'related_category',
+            );
+            $select = $this->_getReadAdapter()->select()
+                ->from(array('a'=>$this->getTable('eav/attribute')), array('attribute_id'))
+                ->join(array('t'=>$this->getTable('eav/entity_type')), 'a.entity_type_id = t.entity_type_id')
+                ->where('entity_type_code = :catalog_category')
+                ->where('attribute_code = :related_category');
+
+            $this->_relatedCategoryAttributeId = $this->_getReadAdapter()->fetchOne($select, $bind);
+
+            $this->_saveInCache($cacheKey, $this->_relatedCategoryAttributeId);
+        }
+
+        return $this->_relatedCategoryAttributeId;
+    }
+
 }

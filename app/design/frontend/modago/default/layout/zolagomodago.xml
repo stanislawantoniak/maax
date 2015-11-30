@@ -426,6 +426,44 @@
       </action>
     </reference>
   </zolagomodago_index_index>
+  <zolagomodago_map_index>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>storesmap</crumbName>
+        <crumbInfo>
+          <label>Map</label>
+          <title>Map</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="setTitle" translate="title">
+        <title>Stores Map</title>
+      </action>
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/map" name="zolago_modago_map" template="stores/map.phtml"/>
+    </reference>
+  </zolagomodago_map_index>
   <solrbridge_solrsearch_category_view>
     <remove name="mana.catalog.leftnav"/>
     <remove name="solrsearch_category_view"/>

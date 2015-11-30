@@ -16,13 +16,13 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		$pos = $this->_registerModel();
 		$vendor = $this->_getSession()->getVendor();
 
-		// Existing pos - has venor rights?
+		// Existing pos - has vendor rights?
 		if ($pos->getId() && !$pos->isAssignedToVendor($vendor)) {
-			$this->_getSession()->addError(Mage::helper('zolagopos')->__("You cannot edit this POS"));
+			$this->_getSession()->addError(Mage::helper('zolagopos')->__("You can not edit this POS"));
 			return $this->_redirect("*/*");
 			// POS id specified, but post dons't exists
 		} elseif (!$pos->getId() && $this->getRequest()->getParam("pos_id", null) !== null) {
-			$this->_getSession()->addError(Mage::helper('zolagopos')->__("POS dosn't exists"));
+			$this->_getSession()->addError(Mage::helper('zolagopos')->__("POS doesn't exists"));
 			return $this->_redirect("*/*");
 		}
 
@@ -62,7 +62,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		$pos = $this->_registerModel();
 		$vendor = $this->_getSession()->getVendor();
 
-		// Has premission?
+		// Has permission?
 		if ($pos->getId() && !$pos->isAssignedToVendor($vendor)) {
 			$this->_getSession()->addError($helper->__("You cannot edit this POS"));
 			return $this->_redirectReferer();
@@ -71,6 +71,8 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		// Try save
 		$this->_getSession()->setFormData(null);
 		$data = $this->getRequest()->getParams();
+		$data["show_on_map"] = $this->getRequest()->getParam("show_on_map",0);
+
 		$modelId = $this->getRequest()->getParam("pos_id");
 
 		try {

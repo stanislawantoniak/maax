@@ -124,8 +124,8 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
                 mkdir($folder,0700,true);
             } catch(Exception $e) {
                 Mage::logException($e);
-                $this->throwException('Could not create a folder '.$folder);
-                $this->log('Could not create a folder '.$folder);
+	            $this->log('Could not create a folder '.$folder);
+	            $this->throwException('Could not create a folder '.$folder);
             }
         }
         return fopen($path,'w');
@@ -134,8 +134,9 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
     public function createFile($path) {
         $this->_file = $this->_prepareFile($path);
         if($this->_file === false) {
-            $this->throwException('Cannot create file '.$path);
-            $this->_file = null;
+	        $this->log('Cannot create file '.$path);
+	        $this->throwException('Cannot create file '.$path);
+	        $this->_file = null;
         } else {
             $this->_path = $path;
             $this->addToFile('<?xml version="1.0" encoding="UTF-8"?>');
@@ -145,11 +146,13 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function addToFile($data) {
         if(is_null($this->_file) || is_null($this->_path)) {
+            $this->log('You have to create file first!');
             $this->throwException('You have to create file first!');
         }
 
         $written = fwrite($this->_file,$data);
         if($written === false) {
+	        $this->log('Could not write to file '.$this->_path);
             $this->throwException('Could not write to file '.$this->_path);
         }
         return $this;
@@ -166,6 +169,7 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * @param string|null $field
      * @return array (
      *    'secret'        => 'string',
      *    'external_id'    => 'string'
@@ -239,6 +243,7 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
      * @return Modago_Integrator_Model_Generator|null
      */
     public function createGenerator($type) {
+	    $model = null;
         switch($type) {
         case self::FILE_DESCRIPTIONS:
             $model = Mage::getModel('modagointegrator/generator_description');
@@ -250,6 +255,7 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
             $model = Mage::getModel('modagointegrator/generator_stock');
             break;
         default:
+			$this->log(sprintf('Wrong generate file type: %s',$type));
             $this->throwException(sprintf('Wrong generate file type: %s',$type));
         }
         return $model;
