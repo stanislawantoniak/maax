@@ -66,8 +66,8 @@ function refreshMap(filtredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
-            map.setZoom(12);
-            map.setCenter(marker.getPosition());
+            map.setCenter(this.getPosition()); // set map center to marker position
+            smoothZoom(map, 12, map.getZoom()); // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             infowindow.open(map, this);
         });
 
@@ -89,7 +89,19 @@ function refreshMap(filtredData) {
         styles: clusterStyles
     });
 }
-
+// the smooth zoom function
+function smoothZoom (map, max, cnt) {
+    if (cnt >= max) {
+        return;
+    }
+    else {
+        y = google.maps.event.addListener(map, 'zoom_changed', function(event){
+            google.maps.event.removeListener(y);
+            self.smoothZoom(map, max, cnt + 1);
+        });
+        setTimeout(function(){map.setZoom(cnt)}, 80);
+    }
+}
 function formatInfoWindowContent(info) {
     var contentString =
         '<div class="marker-window">' +
