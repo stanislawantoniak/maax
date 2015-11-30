@@ -14,16 +14,16 @@ $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
         <div class="<?php echo $wC;  ?>" id="<?php echo $element->getName(); ?>">
             <a href="<?php echo $this->getElement()->getData('url'); ?>"><?php echo $this->getElement()->getData('inside'); ?></a>
         </div>
+
     <?php else: ?>
-        <label class="<?php echo $LwC;  ?> control-label"><?php echo $element->getLabelHtml();?></label>
-        <div class="<?php echo $wC;  ?>">
-            <?php if ($inputGroupAddon):?>
-                <div class="input-group">
-                    <span class="input-group-addon"><?php echo $inputGroupAddon; ?></span>
-            <?php endif;?>
-            <?php echo $element->getElementHtml(); ?></div>
-            <?php if ($inputGroupAddon): // Shame fix ?>
-                </div>
-            <?php endif;?>
+        <label class="<?php echo $LwC; ?> control-label"><?php echo $element->getLabelHtml(); ?></label>
+        <div class="<?php echo $wC; ?> input-group">
+            <?php if (!empty($inputGroupAddon)): ?>
+                <span class="input-group-addon">
+                    <?php echo $inputGroupAddon; ?>
+                </span>
+            <?php endif; ?>
+            <?php echo $element->getElementHtml(); ?>
+        </div>
     <?php endif;?>
 </div>
