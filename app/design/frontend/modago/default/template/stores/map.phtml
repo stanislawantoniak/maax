@@ -31,6 +31,7 @@
             margin: 10px auto;
         }
     }
+
     #inline-actions {
         padding-top: 10px;
     }
@@ -80,11 +81,17 @@
         list-style-image: url("http://chart.apis.google.com/chart?cht=mm&chs=15x15&chco=ffffff,000000,000000&ext=.png");
         padding-left: 5px;
     }
-    .search-by-map-list ul li{
+
+    .search-by-map-list ul.search-by-map-list-html li {
         padding: 5px 7px;
     }
-    .search-by-map-list ul li:hover {
+
+    .search-by-map-list ul.search-by-map-list-html li:hover {
         background-color: #EBEBEB;
+    }
+
+    .search-by-map-list ul.search-by-map-list-html li a {
+        display: block;
     }
 
     .search-by-map h4 {
@@ -109,7 +116,12 @@
         left: 0px;
         top: 0px;
     }
-
+    a.stores-map-show-all {
+        color:#CD0027 !important;
+    }
+    a.stores-map-show-all:hover {
+        text-decoration: underline;
+    }
     #search_by_map_form label.error {
         padding: 0 !important;
     }
@@ -131,38 +143,38 @@
 
                     <div class="container-fluid no-padding">
                         <div class="col-md-12 no-padding">
-                                <div class="col-md-8" id="#map-container">
-                                    <div id="map"></div>
-                                </div>
-                                <div class="col-md-4 no-padding">
-                                    <div class="col-md-12 no-padding">
-                                        <div class="search-by-map col-md-12">
-                                            <h4><?php echo $_helper->__("Find your store") ?></h4>
+                            <div class="col-md-8" id="#map-container">
+                                <div id="map"></div>
+                            </div>
+                            <div class="col-md-4 no-padding">
+                                <div class="col-md-12 no-padding">
+                                    <div class="search-by-map col-md-12">
+                                        <h4><?php echo $_helper->__("Find your store") ?></h4>
 
-                                            <div class="form-group">
-                                                <form id="search_by_map_form"
-                                                      action="<?php echo Mage::getUrl("modago/map/getMapData") ?>">
-                                                    <input type="text" class="form-control" name="search_by_map"
-                                                           autocomplete="off"
-                                                           required
-                                                           placeholder="<?php echo $_helper->__("Enter city or zip"); ?>"
-                                                           value="">
-                                                    <button class="button button-primary button-search pull-right"
-                                                            type="submit"
-                                                        >
-                                                        <?php echo $_helper->__("Search"); ?>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                            <div class="form-group">
-                                                <a href="" onclick="clearSearchOnMap();return false;">
-                                                    <?php echo $_helper->__("Show all stores"); ?>
-                                                </a>
-                                            </div>
+                                        <div class="form-group">
+                                            <form id="search_by_map_form"
+                                                  action="<?php echo Mage::getUrl("modago/map/getMapData") ?>">
+                                                <input type="text" class="form-control" name="search_by_map"
+                                                       autocomplete="off"
+                                                       required
+                                                       placeholder="<?php echo $_helper->__("Enter city or zip"); ?>"
+                                                       value="">
+                                                <button class="button button-primary button-search pull-right"
+                                                        type="submit"
+                                                    >
+                                                    <?php echo $_helper->__("Search"); ?>
+                                                </button>
+                                            </form>
                                         </div>
-                                        <div class="search-by-map-list col-md-12"></div>
+                                        <div class="form-group">
+                                            <a href="" class="stores-map-show-all" onclick="clearSearchOnMap();return false;">
+                                                <?php echo $_helper->__("Show all stores"); ?>
+                                            </a>
+                                        </div>
                                     </div>
+                                    <div class="search-by-map-list col-md-12"></div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
