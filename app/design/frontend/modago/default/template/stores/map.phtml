@@ -116,7 +116,12 @@
         left: 0px;
         top: 0px;
     }
-
+    a.stores-map-show-all {
+        color:#CD0027 !important;
+    }
+    a.stores-map-show-all:hover {
+        text-decoration: underline;
+    }
     #search_by_map_form label.error {
         padding: 0 !important;
     }
@@ -162,7 +167,7 @@
                                             </form>
                                         </div>
                                         <div class="form-group">
-                                            <a href="" onclick="clearSearchOnMap();return false;">
+                                            <a href="" class="stores-map-show-all" onclick="clearSearchOnMap();return false;">
                                                 <?php echo $_helper->__("Show all stores"); ?>
                                             </a>
                                         </div>
