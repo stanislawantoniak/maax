@@ -447,14 +447,14 @@
       <action method="addCrumb">
         <crumbName>storesmap</crumbName>
         <crumbInfo>
-          <label>Map</label>
-          <title>Map</title>
+          <label>Stores map</label>
+          <title>Stores map</title>
         </crumbInfo>
       </action>
     </reference>
     <reference name="head">
       <action method="setTitle" translate="title">
-        <title>Stores Map</title>
+        <title>Stores map</title>
       </action>
       <action method="addJs">
         <name>gmaps/markerclusterer.js</name>
