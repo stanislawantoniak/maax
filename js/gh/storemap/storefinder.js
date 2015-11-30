@@ -215,7 +215,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     infowindow = new google.maps.InfoWindow({
-        pixelOffset: new google.maps.Size(0, 5),
+        //pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
 
