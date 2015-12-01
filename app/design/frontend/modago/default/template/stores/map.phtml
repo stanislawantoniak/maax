@@ -22,7 +22,10 @@
                     <div class="container-fluid no-padding">
                         <div class="col-md-12 no-padding">
                             <?php if (!empty($map)): ?>
-                                <div class="col-md-5 no-padding">
+                                <div id="map-container" class="col-md-7 col-sm-12">
+                                    <div id="map"></div>
+                                </div>
+                                <div id="map-list-container" class="col-md-5 col-sm-12">
                                     <div class="col-md-12 no-padding">
                                         <div class="search-by-map col-md-12">
                                             <h3><?php echo $_helper->__("Find your store") ?></h3>
@@ -52,9 +55,6 @@
                                         </div>
                                         <div class="search-by-map-list col-md-12"></div>
                                     </div>
-                                </div>
-                                <div class="col-md-7" id="map-container">
-                                    <div id="map"></div>
                                 </div>
                             <?php else: ?>
                                 <p><?php echo $_helper->__("There are no stores to show on the map"); ?></p>
