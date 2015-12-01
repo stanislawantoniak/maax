@@ -5,6 +5,9 @@
     -webkit-box-shadow: $bc-secondary 0 2px 5px;
     -moz-box-shadow: $bc-secondary 0 2px 5px;
     box-shadow: $bc-secondary 0 2px 5px;
+    @media (min-width: $screen-sm) {
+      float: right;
+    }
   }
 
   #map {
@@ -22,7 +25,6 @@
       height: 300px;
       margin: 10px auto;
     }
-
   }
   /*col-sm*/
   @media (max-width: $screen-sm) {
