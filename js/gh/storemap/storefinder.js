@@ -230,7 +230,7 @@ function searchOnMap(q) {
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
     form.find("select[name=search_by_map]").val(0).select2();
-    _makeMapRequest("")
+    _makeMapRequest(0)
 }
 
 function _makeMapRequest(q) {
