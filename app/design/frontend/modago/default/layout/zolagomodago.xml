@@ -1574,6 +1574,7 @@
     </reference>
   </sales_rma_courier>
   <sales_rma_history>
+    <label>Customer Rma History</label>
     <reference name="breadcrumbs">
       <action method="addCrumb">
         <crumbName>rma</crumbName>
@@ -1585,6 +1586,10 @@
     </reference>
     <reference name="content">
       <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+    <update handle="customer_account"/>
+    <reference name="my.account.wrapper">
+      <block type="zolagorma/list" as="list" name="sales.rma.list"/>
     </reference>
   </sales_rma_history>
   <sales_po_rmalist>
