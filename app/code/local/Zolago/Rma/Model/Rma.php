@@ -333,6 +333,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
      * @return string
      */
      public function getCustomerPdf() {
+	     /** @var Zolago_Rma_Helper_Data $helper */
          $helper = Mage::helper('zolagorma');
          return $helper->getStaticCustomerPdf();
      }
