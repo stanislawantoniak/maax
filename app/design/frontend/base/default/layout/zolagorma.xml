@@ -1,12 +1,5 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <sales_rma_history>
-        <label>Customer Rma History</label>
-        <update handle="customer_account"/>
-        <reference name="my.account.wrapper">
-             <block type="zolagorma/list" as="list" name="sales.rma.list"/>
-        </reference>
-    </sales_rma_history>	
     <sales_po_rmalist>
         <label>Customer Po History for RMA</label>
         <update handle="customer_account"/>
