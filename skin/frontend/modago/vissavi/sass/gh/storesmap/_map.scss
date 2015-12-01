@@ -92,7 +92,7 @@
         .right-column {
           padding-right: 0;
           .buttons {
-            a {
+            .row {
               &:not(:first-child) {
                 margin-top: 5px;
               }
