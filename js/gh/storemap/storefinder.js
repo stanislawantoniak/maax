@@ -224,14 +224,12 @@ function initialize() {
 }
 
 
-function searchOnMap() {
-    var form = jQuery("#search_by_map_form");
-    var q = form.find("select[name=search_by_map] option:selected").val();
+function searchOnMap(q) {
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
-    form.find("select[name=search_by_map]").val("");
+    form.find("select[name=search_by_map]").val(0).select2();
     _makeMapRequest("")
 }
 
@@ -259,10 +257,10 @@ function clearClusters(e) {
 
 
 jQuery(document).ready(function () {
-    jQuery("#search_by_map_form").submit(function () {
-        if (jQuery(this).valid()) {
-            searchOnMap();
-        }
-        return false;
-    });
+
+    jQuery("[name=search_by_map]").select2()
+        .on("select2-selecting", function (e) {
+            searchOnMap(e.val)
+        })
+    ;
 });
