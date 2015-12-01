@@ -160,9 +160,9 @@ function buildStoresList(filteredData) {
             pos = data.poses[i];
             posId = pos.id;
             list += "<li>" +
-                "<div class='col-md-12 store-info-item'>" +
+                "<div class='col-md-12 col-sm-12 store-info-item'>" +
 
-                "<div class='col-md-7 left-column'>" +
+                "<div class='col-md-7 col-sm-7 left-column'>" +
                 "<p><b>" + pos.name + "</b></p>" +
                 "<p>" + pos.street + "</p>" +
                 "<p>" + pos.postcode + " "+pos.city+"</p>" +
@@ -170,7 +170,7 @@ function buildStoresList(filteredData) {
                 "<div>" + pos.time_opened + "</div>" +
                 "</div>" +
 
-                "<div class='col-md-5 right-column'>" +
+                "<div class='col-md-5 col-sm-5 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> "+showOnMapLink+"</a></div>" +
                 "<div class='row'><a class='button button-third large' href='"+generateDirectionLink(pos)+"' target='_blank'><i class='fa fa-compass'></i> "+defineTheRoute+"</a></div>" +

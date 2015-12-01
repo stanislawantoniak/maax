@@ -17,6 +17,16 @@
 
   .select2-container {
     width: 100%;
+    @media (max-width: $screen-md) {
+      width: 60%;
+    }
+    @media (max-width: $screen-sm) {
+      width: 75%;
+    }
+    @media (max-width: $screen-xs) {
+      width: 100%;
+    }
+
   }
   /*col-md*/
   @media (max-width: $screen-md) {
@@ -62,10 +72,15 @@
     margin: 6px 0;
   }
 
-  .search-by-map .button.button-primary {
-    padding: 7px 15px;
-    margin-top: 10px;
+  .search-by-map {
+    h4 {
+      text-transform: uppercase;
+    }
+    .button.button-primary {
+      padding: 7px 15px;
+      margin-top: 10px;
 
+    }
   }
 
   .search-by-map-list {
