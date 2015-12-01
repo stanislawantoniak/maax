@@ -304,10 +304,11 @@ $colorBackgroundBlocksAccount:          $colorBackgroundBlocks;
 /* RMA VARIABLES */
 $colorRma:                              $colorFont;
 $colorBorderRma:                        #bfbfbf;
+$colorBackgroundRma:                    $colorBackgroundBlocksAccount;
 $colorAccentRma:                        $colorAccentSite;
 $colorRmaCancel:                        #BBB;
 $colorRmaFooter:                        #fefefe;
-$colorBackgroundRmaPoList:              $colorBackgroundBlocksAccount;
+$colorBackgroundRmaPoList:              $colorBackgroundRma;
 $colorBorderRmaPoList:                  $colorBorderRma;
 $colorBorderRmaPoListImage:             #cccccc;
 $colorRmaCarrier:                       $colorFont;
