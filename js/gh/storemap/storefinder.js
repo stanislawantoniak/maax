@@ -260,6 +260,9 @@ jQuery(document).ready(function () {
 
     jQuery("[name=search_by_map]").select2()
         .on("select2-selecting", function (e) {
-            searchOnMap(e.val)
+            searchOnMap(e.val);
+        })
+        .on("select2-opening", function(e) {
+            e.stopPropagation();
         });
 });
