@@ -149,9 +149,9 @@
                                                         <option value="<?php echo $id; ?>"><?php echo $item; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                                <button class="button button-primary button-search pull-right" type="submit">
-                                                    <?php echo $_helper->__("Search"); ?>
-                                                </button>
+<!--                                                <button class="button button-primary button-search pull-right" type="submit">-->
+<!--                                                    --><?php //echo $_helper->__("Search"); ?>
+<!--                                                </button>-->
                                             </form>
                                         </div>
                                         <div class="form-group">
@@ -171,20 +171,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-//        jQuery("#search_by_map_form").validate({
-//            rules: {
-//                search_by_map: {
-//                    required: true
-//                }
-//            },
-//            messages: {
-//                search_by_map: {
-//                    required: '<?php //echo Mage::helper("zolagocommon")->__("This field is required."); ?>//'
-//                }
-//            }
-//        });
-        jQuery("[name=search_by_map]").select2({});
-    });
-</script>
