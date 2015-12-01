@@ -1,0 +1,120 @@
+.stores-map {
+  #map-container {
+    padding: 0;
+    border: 1px solid $bc-secondary;
+    -webkit-box-shadow: $bc-secondary 0 2px 5px;
+    -moz-box-shadow: $bc-secondary 0 2px 5px;
+    box-shadow: $bc-secondary 0 2px 5px;
+  }
+
+  #map {
+    width: 100%;
+    height: 450px;
+  }
+
+  .select2-container {
+    width: 100%;
+  }
+  /*col-md*/
+  @media (max-width: $screen-md) {
+    #map {
+      width: 85%;
+      height: 300px;
+      margin: 10px auto;
+    }
+
+  }
+  /*col-sm*/
+  @media (max-width: $screen-sm) {
+    #map {
+      width: 85%;
+      height: 200px;
+      margin: 10px auto;
+    }
+  }
+
+  #inline-actions {
+    padding-top: 10px;
+  }
+
+  .item {
+    margin-left: 20px;
+  }
+
+  .marker-window {
+    max-width: 170px;
+    /*text-align: center;*/
+  }
+
+  .info_window_text .iw_header {
+    width: 100%;
+    margin: 0;
+    line-height: 1.2;
+    text-transform: capitalize;
+  }
+
+  .info_window_text .iw_header .shop_name {
+    display: block;
+    text-transform: capitalize;
+    font-style: normal;
+    margin: 6px 0;
+  }
+
+  .search-by-map .button.button-primary {
+    padding: 7px 15px;
+    margin-top: 10px;
+
+  }
+
+  .search-by-map-list {
+    //max-height: 335px;
+    //overflow-y: auto;
+  }
+
+  .search-by-map-list ul {
+    padding-left: 5px;
+    list-style: none;
+  }
+
+  .search-by-map-list {
+    padding-top: 20px;
+    ul.search-by-map-list-html {
+      .store-info-item {
+        border-top: 1px solid $bc-secondary;
+        padding: 20px 5px;
+        .left-column {
+          padding-left: 0;
+          p {
+            padding: 0 0 10px 0;
+            margin: 0;
+          }
+        }
+        .right-column {
+          padding-right: 0;
+          .buttons {
+            a {
+              &:not(:first-child) {
+                margin-top: 5px;
+              }
+            }
+
+          }
+
+        }
+      }
+    }
+  }
+
+  a.stores-map-show-all {
+    color: $link-color !important;
+    top: 10px;
+    position: relative;
+  }
+  a.stores-map-show-all:hover {
+    text-decoration: underline;
+  }
+
+  .no-padding {
+    padding: 0;
+  }
+}

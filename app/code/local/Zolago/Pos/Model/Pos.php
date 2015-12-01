@@ -3,6 +3,10 @@
 /**
  * Class Zolago_Pos_Model_Pos
  *
+ * @method string getCity()
+ * @method string getStreet()
+ * @method string getPostcode()
+ *
  * @method int getShowOnMap()
  * @method string getMapName()
  * @method string getMapLatitude()
