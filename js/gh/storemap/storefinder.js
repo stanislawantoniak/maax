@@ -37,12 +37,12 @@ var defaultCenterLatMobile = 18.8979594;
 
 var gmarkers = [];
 
-function refreshMap(filtredData) {
+function refreshMap(filteredData) {
 
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
-    if (typeof filtredData !== "undefined")
-        data = filtredData;
+    if (typeof filteredData !== "undefined")
+        data = filteredData;
 
     var markers = [];
     if (markerClusterer) {
@@ -85,7 +85,7 @@ function refreshMap(filtredData) {
         });
 
         //Show all stores case
-        if (typeof filtredData !== "undefined") {
+        if (typeof filteredData !== "undefined") {
             if (window.innerWidth < 768) {
                 map.setZoom(5);
                 map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
@@ -140,10 +140,10 @@ function formatInfoWindowContent(info) {
         '</div>';
     return contentString;
 }
-function buildStoresList(filtredData) {
+function buildStoresList(filteredData) {
 
-    if (typeof filtredData !== "undefined")
-        data = jQuery.parseJSON(filtredData);
+    if (typeof filteredData !== "undefined")
+        data = jQuery.parseJSON(filteredData);
 
     var searchByMapList = jQuery(".search-by-map-list");
 
@@ -240,7 +240,7 @@ function _makeMapRequest(q) {
         type: "POST",
         data: {filter: q},
         success: function (data) {
-            gmarkers = [];  //to collect only filtred markers (used in showMarkerWindow)
+            gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             refreshMap(data);
             buildStoresList(data);
         },

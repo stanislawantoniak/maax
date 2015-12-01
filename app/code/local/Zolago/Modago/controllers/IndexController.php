@@ -11,8 +11,14 @@ class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexContro
     {
 
         if (Mage::app()->getRequest()->getRouteName() == self::ROUTE_STORE_MAPS) {
-            $this->_forward('index', "map", "modago");
-            return;
+            $website = Mage::app()->getWebsite();
+            if ($website->getHaveSpecificDomain() && $website->getVendorId()) {
+                $this->_forward('index', "map", "modago");
+                return;
+            } else {
+                $this->_forward('defaultNoRoute');
+                return;
+            }
         }
 
         $rootId = Mage::app()->getStore()->getRootCategoryId();
