@@ -261,6 +261,5 @@ jQuery(document).ready(function () {
     jQuery("[name=search_by_map]").select2()
         .on("select2-selecting", function (e) {
             searchOnMap(e.val)
-        })
-    ;
+        });
 });
