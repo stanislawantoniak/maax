@@ -13,7 +13,7 @@ $_images = $this->getGalleryImages();
 	<div id="lightbox" style="z-index: 1050">
 		<div id="lightbox-inner">
 			<div id="lightbox-header" class="clearfix">
-				<img src="<?php echo $this->getSkinUrl(Mage::getStoreConfig('design/header/logo_src')); ?>" alt="<?php echo Mage::getStoreConfig('design/header/logo_alt'); ?>"
+				<img src="<?php echo $this->getSkinUrl('images/logo_header_lightbox.png'); ?>" alt="<?php echo $this->getLogoAlt(); ?>"
 				     class="pull-left">
 				<button id="lightbox-close" class="button button-third pull-right"><?php echo $this->__("Close"); ?></button>
 			</div>
