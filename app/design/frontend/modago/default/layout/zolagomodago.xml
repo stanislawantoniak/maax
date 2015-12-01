@@ -456,8 +456,19 @@
       <action method="setTitle" translate="title">
         <title>Stores map</title>
       </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/default/udropship/css/melon/plugins/select2.css</stylesheet>
+      </action>
       <action method="addJs">
         <name>gmaps/markerclusterer.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>../../../frontend/default/udropship/js/plugins/select2/select2.min.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>../../../frontend/default/udropship/js/plugins/select2/select2_locale_pl.js</name>
       </action>
     </reference>
     <reference name="content">

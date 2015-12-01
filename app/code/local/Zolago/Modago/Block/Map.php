@@ -46,32 +46,33 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
      */
     public function getMapData($filterValue = 0)
     {
+        $result = "";
         $maps = array();
         $website = Mage::app()->getWebsite();
         if ($website->getHaveSpecificDomain()) {
             $vendorId = $website->getVendorId();
 
             if ($vendorId) {
-
                 $posMaps = $this->getPosMapCollection($vendorId, $filterValue);
 
-                $maps["poses"] = array();
-                foreach ($posMaps as $posMap) {
-                    $maps["poses"][] = array(
-                        "id" => $posMap->getId(),
-                        "name" => $posMap->getMapName(),
-                        "latitude" => $posMap->getMapLatitude(),
-                        "longitude" => $posMap->getMapLongitude(),
-                        "phone" => $posMap->getMapPhone(),
-                        "time_opened" => $this->clearNewLines($posMap->getMapTimeOpened())
-                    );
+                if($posMaps->count()){
+                    $maps["poses"] = array();
+                    foreach ($posMaps as $posMap) {
+                        $maps["poses"][] = array(
+                            "id" => $posMap->getId(),
+                            "name" => $posMap->getMapName(),
+                            "latitude" => $posMap->getMapLatitude(),
+                            "longitude" => $posMap->getMapLongitude(),
+                            "phone" => $posMap->getMapPhone(),
+                            "time_opened" => $this->clearNewLines($posMap->getMapTimeOpened())
+                        );
+                    }
+                    $result = json_encode($maps, JSON_HEX_APOS);
                 }
-
             }
-
         }
 
-        return json_encode($maps, JSON_HEX_APOS);
+        return $result;
     }
 
     /**
