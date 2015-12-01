@@ -15,13 +15,20 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         $vendorCategories = Mage::helper('zolagocampaign')
             ->getVendorCategoriesList();
 
+
         if (!empty($vendorCategories)) {
             $vendorCats = array();
-            foreach ($vendorCategories as $vendorCategory) {
-                $vendorCats[$vendorCategory['id']] = $vendorCategory['id'];
-            }
-            if (in_array($category, $vendorCats)) {
-                $noAccess = false;
+            foreach ($vendorCategories as $websiteId => $vendorCategoriesPerWebsite) {
+                if (!isset($vendorCategoriesPerWebsite["categories"]))
+                    continue;
+
+                foreach ($vendorCategoriesPerWebsite["categories"] as $websiteId => $vendorCategory) {
+                    if (isset($vendorCategory['id']))
+                        $vendorCats[$vendorCategory['id']] = $vendorCategory['id'];
+                }
+                if (in_array($category, $vendorCats)) {
+                    $noAccess = false;
+                }
             }
         }
 
@@ -36,8 +43,8 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
      * Add new placement to SLOT
      * @return Mage_Core_Controller_Varien_Action
      */
-    public function saveNewAction() {
-        $helper = Mage::helper('zolagocampaign');
+    public function saveNewAction()
+    {
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
@@ -62,6 +69,10 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             Mage::logException($e);
         }
     }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
     public function saveAction()
     {
         $helper = Mage::helper('zolagocampaign');
@@ -74,7 +85,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         $categoryId = (int)$data['category'];
         $campaign = Mage::getResourceModel('zolagocampaign/campaign');
         //remove items
-        if(isset($data['remove'])){
+        if (isset($data['remove'])) {
             try {
                 /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
                 $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
