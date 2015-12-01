@@ -58,9 +58,13 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                 if($posMaps->count()){
                     $maps["poses"] = array();
                     foreach ($posMaps as $posMap) {
+                        /* @var $posMap Zolago_Pos_Model_Pos */
                         $maps["poses"][] = array(
                             "id" => $posMap->getId(),
                             "name" => $posMap->getMapName(),
+                            "city" => $posMap->getCity(),
+                            "street" => $posMap->getStreet(),
+                            "postcode" => $posMap->getPostcode(),
                             "latitude" => $posMap->getMapLatitude(),
                             "longitude" => $posMap->getMapLongitude(),
                             "phone" => $posMap->getMapPhone(),

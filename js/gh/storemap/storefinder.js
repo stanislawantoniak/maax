@@ -140,6 +140,10 @@ function formatInfoWindowContent(info) {
         '</div>';
     return contentString;
 }
+
+function generateDirectionLink(pos) {
+    return "https://maps.google.com/?daddr=" + pos.latitude + "," + pos.longitude;
+}
 function buildStoresList(filteredData) {
 
     if (typeof filteredData !== "undefined")
@@ -151,16 +155,30 @@ function buildStoresList(filteredData) {
     var pos, posId;
 
     if (data.poses.length > 0) {
-        list += "<p>" + clickToSeeMore + "</p>";
         list += "<ul class='search-by-map-list-html'>";
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];
             posId = pos.id;
             list += "<li>" +
-                "<a href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'>" +
-                "<div><b>" + pos.name + "</b></div>" +
-                "<div>Tel: " + pos.phone + "</div>" +
-                "</a>" +
+                "<div class='col-md-12 store-info-item'>" +
+
+                "<div class='col-md-7 left-column'>" +
+                "<p><b>" + pos.name + "</b></p>" +
+                "<p>" + pos.street + "</p>" +
+                "<p>" + pos.postcode + " "+pos.city+"</p>" +
+                "<p>Tel: " + pos.phone + "</p>" +
+                "<div>" + pos.time_opened + "</div>" +
+                "</div>" +
+
+                "<div class='col-md-5 right-column'>" +
+                "<div class='buttons'>" +
+                "<div class='row'><a class='button button-third large' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> "+showOnMapLink+"</a></div>" +
+                "<div class='row'><a class='button button-third large' href='"+generateDirectionLink(pos)+"' target='_blank'><i class='fa fa-compass'></i> "+defineTheRoute+"</a></div>" +
+                "<div class='row visible-xs'><a class='button button-third large' href='tel:"+pos.phone+"' ' onclick='return false;'><i class='fa fa-phone'></i> "+selectNumber+"</a></div>" +
+                "</div>" +
+                "</div>" +
+
+                "</div>" +
                 "</li>";
         }
         list += "</ul>";

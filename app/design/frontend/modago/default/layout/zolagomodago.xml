@@ -459,6 +459,9 @@
       <action method="addCss">
         <stylesheet>../../../frontend/default/udropship/css/melon/plugins/select2.css</stylesheet>
       </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css</stylesheet>
+      </action>
       <action method="addJs">
         <name>gmaps/markerclusterer.js</name>
       </action>
