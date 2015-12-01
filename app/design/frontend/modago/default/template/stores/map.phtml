@@ -27,14 +27,24 @@
         height: 450px;
     }
 
-    @media (max-width: 991px) {
+    .select2-container {
+        width: 100%;
+    }
+    /*col-md*/
+    @media (max-width: 992px) {
+        #map {
+            width: 85%;
+            height: 300px;
+            margin: 10px auto;
+        }
+
+    }
+    /*col-sm*/
+    @media (max-width: 768px) {
         #map {
             width: 85%;
             height: 200px;
             margin: 10px auto;
-        }
-        .select2-container {
-            width: 100%;
         }
     }
 
