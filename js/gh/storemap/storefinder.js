@@ -149,12 +149,20 @@ function calculateTheNearestStores(position,minDistance, fallback) {
             closestStores.push(data[i]);
             if(fallback && closestStores.length >= 3){
                 //minDistance = dist;
-                return closestStores;
+                //return closestStores;
+                break;
             }
 
         }
     }
+    //sort
+    console.log(closestStores);
+    SortByDistance(closestStores);
+    console.log(closestStores);
     return closestStores;
+}
+function SortByDistance(a, b){
+        return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
 }
 //--GEO
 
