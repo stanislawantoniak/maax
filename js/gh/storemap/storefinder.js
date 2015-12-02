@@ -174,7 +174,7 @@ function buildStoresList(filteredData) {
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> "+showOnMapLink+"</a></div>" +
                 "<div class='row'><a class='button button-third large' href='"+generateDirectionLink(pos)+"' target='_blank'><i class='fa fa-compass'></i> "+defineTheRoute+"</a></div>" +
-                "<div class='row visible-xs'><a class='button button-third large' href='tel:555-555-5555' ' onclick='return false;'><i class='fa fa-phone'></i> "+selectNumber+"</a></div>" +
+                "<div class='row visible-xs'><a class='button button-third large' href='tel:+48222222222' ' onclick='return false;'><i class='fa fa-phone'></i> "+selectNumber+"</a></div>" +
                 "</div>" +
                 "</div>" +
 
