@@ -291,7 +291,6 @@ function filterStoresList(enteredText) {
 jQuery(document).ready(function () {
 
     jQuery("input[name=search_by_map]").keydown(function(e){
-        var enteredText = jQuery(this).val();
-        filterStoresList(enteredText)
+        filterStoresList(jQuery(this).val())
     });
 });
