@@ -1,31 +1,38 @@
 <?php
-/** @var Unirgy_DropshipVendorAskQuestion_Block_Product_Question $this */
-
-if(!$this->isGallery()) {
-	$product = $this->getProduct();
-	$vendors = $product ? $product->getUdropshipVendor() : $this->getVendorsList();
+/** @var Zolago_DropshipVendorAskQuestion_Block_Product_Question $this */
+$own_store = false;
+if($this->isOwnStore()) {
+    $own_store = true;
+    $vendors = $this->getOwnStoreVendorId();
 } else {
-	$vendors = $this->getLocalVendorId();
+    if (!$this->isGallery()) {
+        $product = $this->getProduct();
+        $vendors = $product ? $product->getUdropshipVendor() : $this->getVendorsList();
+    } else {
+        $vendors = $this->getLocalVendorId();
+    }
 }
 
 $session = Mage::getSingleton('customer/session');
 
 $_helper = Mage::helper('zolagoudqa');
 
-    $dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
+$dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
 
-    $visibility = isset($dataPopulate['visibility']) ? $dataPopulate['visibility'] : false ;
-    $vendor_id = isset($dataPopulate['vendor_id']) ? $dataPopulate['vendor_id'] : false;
-    $customer_name = isset($dataPopulate['customer_name']) ? $dataPopulate['customer_name'] : false;
-    $customer_email = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
-    $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question_text'] : false;
-	
-	// if no data to populate fill with query vendor param
-	if($vendor_id===false){
-		$vendor_id = (int)$this->getRequest()->getParam("vendor");
-	}
+$visibility = isset($dataPopulate['visibility']) ? $dataPopulate['visibility'] : false ;
 
+// if no data to populate fill with query vendor param
+if($this->getRequest()->getParam("vendor")){
+	$vendors = (int)$this->getRequest()->getParam("vendor");
+}
 
+if(!isset($vendors)) {
+	$vendors = isset($dataPopulate['vendor_id']) ? $dataPopulate['vendor_id'] : false;
+}
+
+$customer_name = isset($dataPopulate['customer_name']) ? $dataPopulate['customer_name'] : false;
+$customer_email = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
+$question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question_text'] : false;
 ?>
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
 	<?php if(isset($product)): ?>
@@ -37,9 +44,11 @@ $_helper = Mage::helper('zolagoudqa');
     <div class="row">
         <fieldset class="fieldset col-xs-11">
             <ul class="form-list">
-				<?php if(!is_array($vendors)): ?>
+                <?php if($own_store): ?>
+                    <input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
+				<?php elseif(isset($vendors) && !is_array($vendors)): ?>
 					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
-				<?php else: ?>
+				<?php elseif(isset($vendors) && is_array($vendors)): ?>
 					<li class="wide" id="brandshop_select">
 						<div class="form-group select-box-it-select-container">
                             <select name="question[brandshop_id]" id="brandshop_id" class="form-control required-entry select-box-it-select" required>
@@ -108,10 +117,9 @@ $_helper = Mage::helper('zolagoudqa');
 </script>
 <script>
     jQuery(document).ready(function() {
-        var brandselectid = '#brandshop_id';
-        var brandselect =  jQuery(brandselectid),
+        var brandselectid = '#brandshop_id',
+            brandselect =  jQuery(brandselectid),
             questionform =  jQuery("#question-form");
-
 
         brandselect.selectBoxIt({
             autoWidth: false
@@ -124,7 +132,7 @@ $_helper = Mage::helper('zolagoudqa');
         });
 
         function getVendors(value) {
-            jQuery(".ajax_content").remove(); 
+            jQuery(".ajax_content").remove();
             if (value) {
                 jQuery.ajax({
                     url: "/orbacommon/ajax_vendor/can_ask",
@@ -132,7 +140,7 @@ $_helper = Mage::helper('zolagoudqa');
                         "brandshop_id":value,
                     },
                     success: function(data) {
-                        jQuery("#brandshop_select").after(data);                        
+                        jQuery("#brandshop_select").after(data);
                         var vidselect = jQuery("#vendor_id");
                         vidselect.selectBoxIt({
                             autoWidth: false
@@ -140,7 +148,7 @@ $_helper = Mage::helper('zolagoudqa');
                         vidselect.on("change",function() {
                             questionform.validate(validationOptions).element("#vendor_id");
                         });
-                        
+
                     },
                     error: function(response) {
                         alert(response);

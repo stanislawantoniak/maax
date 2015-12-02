@@ -154,6 +154,8 @@ $colorSiteBackground:                   #F2F1F0;
 $colorSiteOverlay:                      #FFF;
 $opacitySiteOverlay:                    .75;
 
+$colorShadow:                           #bbb;
+
 $colorFont:                             #000;
 $colorLink:                             #000;
 $colorLinkHover:                        #000;
@@ -300,3 +302,29 @@ $colorProductAccordion:                 #000;
 /* MY ACCOUNT VARIABLES */
 $colorAccentSidebarAccount:             $colorAccentSite;
 $colorBorderSidebarAccount:             #ebebeb;
+$colorBackgroundBlocksAccount:          $colorBackgroundBlocks;
+
+/* RMA VARIABLES */
+$colorRma:                              $colorFont;
+$colorBorderRma:                        #bfbfbf;
+$colorBackgroundRma:                    $colorBackgroundBlocksAccount;
+$colorAccentRma:                        $colorAccentSite;
+$colorRmaCancel:                        #BBB;
+$colorRmaFooter:                        #fefefe;
+$colorBackgroundRmaPoList:              $colorBackgroundRma;
+$colorBorderRmaPoList:                  $colorBorderRma;
+$colorBorderRmaPoListImage:             #cccccc;
+$colorRmaCarrier:                       $colorFont;
+$colorRmaCarrierActive:                 #fff;
+$colorBackgroundRmaCarrier:             #fff;
+$colorBorderRmaCarrier:                 #ccc;
+$colorBackgroundRmaCarrierChosen:       #f5f5f5;
+$colorBackgroundRmaCarrierTime:         #fff;
+$colorShadowRma:                        $colorShadow;
+$colorShadowRma2:                       #f0f0f0;
+$colorShadowRma3:                       rgba(51,51,51,0.45);
+$colorBorderCarrierTimePicker:          $colorBorderRma;
+$colorBackgroundCarrierTimePicker:      #fff;
+$colorBackgroundCarrierTimePickerPseudo:#e8e7e6;
+$colorBackgroundCarrierTimePickerDisabled:#b8b8b8;
+$colorAccentCarrierTimePicker:          $colorAccentRma;
