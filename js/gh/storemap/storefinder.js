@@ -91,6 +91,7 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 console.log("I'm tracking you!");
+                gmarkers = [];
                 showPosition(position);
             },
             function (error) {
