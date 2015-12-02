@@ -84,20 +84,26 @@ function initialize() {
     });
     data = jQuery.parseJSON(data);
 
-    refreshMap();
-    buildStoresList();
 
-    navigator.geolocation.getCurrentPosition(
-        function (position) {
-            console.log("I'm tracking you!");
-            showPosition(position);
-        },
-        function (error) {
-            if (error.code == error.PERMISSION_DENIED)
-                console.log("You denied me :-(");
-            refreshMap();
-            buildStoresList();
-        });
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                console.log("I'm tracking you!");
+                showPosition(position);
+            },
+            function (error) {
+                if (error.code == error.PERMISSION_DENIED)
+                    console.log("You denied me :-(");
+                refreshMap();
+                buildStoresList();
+            });
+    } else {
+        console.log(" Your browser don't support GEO location!");
+        refreshMap();
+        buildStoresList();
+    }
+
 
 
 }
