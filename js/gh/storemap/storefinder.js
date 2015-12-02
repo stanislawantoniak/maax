@@ -195,7 +195,7 @@ function refreshMap(filteredData) {
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 //map.setCenter(this.getPosition());
-                smoothZoom(map, 6, map.getZoom());
+                smoothZoom(map, 11, map.getZoom());
             }
 
             infowindow.open(map, this);
