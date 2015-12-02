@@ -84,15 +84,15 @@ function initialize() {
     });
     data = jQuery.parseJSON(data);
 
-    refreshMap();
-    buildStoresList();
-    gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
+
+
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 console.log("I'm tracking you!");
                 refreshMap();
                 buildStoresList();
+                gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
                 showPosition(position);
             },
             function (error) {
