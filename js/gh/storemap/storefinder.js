@@ -247,7 +247,7 @@ function searchOnMap(q) {
 }
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
-    form.find("select[name=search_by_map]").val("");
+    form.find("[name=search_by_map]").val("");
     _makeMapRequest(0)
 }
 
