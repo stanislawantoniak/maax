@@ -71,13 +71,6 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
 
         $this->_redirectReferer();
 
-
-
-		// Force redirection if flag setted
-		if($this->getRequest()->getParam("redirect_referer")){
-			$this->_redirectReferer();
-		}
-
 		return $this;
     }
 }
