@@ -157,12 +157,13 @@ function calculateTheNearestStores(position,minDistance, fallback) {
     }
     //sort
     console.log(closestStores);
-    closestStores = closestStores.sort(function (a, b) {
+    function sortByDirection(a, b) {
         console.log(a.distance);
         console.log(b.distance);
         console.log("---------");
         return ((a.distance < b.distance) ? -1 : ((a.distance < b.distance) ? 1 : 0));;
-    });
+    }
+    closestStores.sort(sortByDirection);
     console.log(closestStores);
     return closestStores;
 }
