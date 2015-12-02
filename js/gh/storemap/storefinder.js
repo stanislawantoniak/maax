@@ -92,7 +92,7 @@ function initialize() {
                 console.log("I'm tracking you!");
                 refreshMap();
                 buildStoresList();
-                gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
+
                 showPosition(position);
             },
             function (error) {
