@@ -98,13 +98,13 @@ function initialize() {
 //GEO
 function showPosition(position) {
     //console.log("IN showPosition");
-    console.log(position.coords);
+    //console.log(position.coords);
     //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
     //Try to find in 30 km
-    var closestStores = calculateTheNearestStores(position, minDist);
+    var closestStores = calculateTheNearestStores(position, minDist, false);
     //Try to find in 100 km
     if (closestStores.length <= 0) {
-        closestStores = calculateTheNearestStores(position, minDistFallBack);
+        closestStores = calculateTheNearestStores(position, minDistFallBack, true);
     }
     if (closestStores.length <= 0) {
         closestStores = data;
@@ -115,7 +115,7 @@ function showPosition(position) {
 
 }
 
-function calculateTheNearestStores(position,minDistance) {
+function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
     //console.log(data);
@@ -128,7 +128,11 @@ function calculateTheNearestStores(position,minDistance) {
         if (dist < minDistance) {
             data[i].distance = dist;
             closestStores.push(data[i]);
-            //minDistance = dist;
+            if(fallback && closestStores.length >= 3){
+                //minDistance = dist;
+                return closestStores;
+            }
+
         }
     }
     return closestStores;
