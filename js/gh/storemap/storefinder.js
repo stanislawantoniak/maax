@@ -91,19 +91,18 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 console.log("I'm tracking you!");
-
                 showPosition(position);
             },
             function (error) {
                 if (error.code == error.PERMISSION_DENIED)
                     console.log("You denied me :-(");
-                //refreshMap();
-                //buildStoresList();
+                refreshMap();
+                buildStoresList();
             });
     } else {
         console.log(" Your browser don't support GEO location!");
-        //refreshMap();
-        //buildStoresList();
+        refreshMap();
+        buildStoresList();
     }
 
 
