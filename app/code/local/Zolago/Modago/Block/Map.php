@@ -48,7 +48,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
      */
     public function getMapData($filterValue = "")
     {
-        Mage::log($filterValue, null, "map.log");
+
         $result = "";
         $maps = array();
         $website = Mage::app()->getWebsite();
@@ -57,9 +57,8 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
 
             if ($vendorId) {
                 $posMaps = $this->getPosMapCollection($vendorId,$filterValue);
-                Mage::log($posMaps->getData(), null, "map.log");
+                //Mage::log($posMaps->getData(), null, "map.log");
                 if($posMaps->count()){
-
                     foreach ($posMaps as $posMap) {
                         /* @var $posMap Zolago_Pos_Model_Pos */
                         $maps[] = array(
@@ -74,12 +73,13 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                             "time_opened" => $this->clearNewLines($posMap->getMapTimeOpened())
                         );
                     }
-                    $result = json_encode($maps, JSON_HEX_APOS);
+                    //$result = json_encode($maps, JSON_HEX_APOS);
+                    $result = $maps;
                 }
             }
         }
-
-        return $result;
+        //Mage::log($result, null, "map.log");
+        return json_encode($result, JSON_HEX_APOS);
     }
 
 

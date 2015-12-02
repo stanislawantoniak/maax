@@ -109,7 +109,7 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = data;
     }
-    console.log(closestStores);
+
     refreshMap(closestStores);
     buildStoresList(closestStores);
 
@@ -353,7 +353,7 @@ function Haversine(lat1, lon1, lat2, lon2) {
 //--GEO helpers
 
 function filterStoresList(enteredText) {
-    console.log("FILTER");
+
     var posCity;
     var posPostcode;
 
@@ -373,25 +373,10 @@ function filterStoresList(enteredText) {
 }
 
 jQuery(document).ready(function () {
-    //jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
-    //    e.preventDefault;
-    //    console.log(e);
-    //    if (e.which == 13) {
-    //        //submit form on enter
-    //        searchOnMap();
-    //    }
-    //    filterStoresList(jQuery(this).val());
-    //    return false;
-    //});
-    jQuery("input[name=search_by_map]").on("keyup", function (e) {
+    jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault;
-        console.log(e);
-        //if (e.which == 13) {
-        //    //submit form on enter
-        //    searchOnMap();
-        //}
-        filterStoresList(jQuery(this).val());
-        return false;
+        searchOnMap(jQuery(this).val());
+        //filterStoresList(jQuery(this).val());
     });
 
     jQuery("#search_by_map_form").submit(function(){
