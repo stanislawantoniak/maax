@@ -71,8 +71,8 @@ function initialize() {
     if (window.innerWidth < 768) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
-        //mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
-        //mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
+        mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
+        mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
         //mapOptions.panControl = false;
     }
 
