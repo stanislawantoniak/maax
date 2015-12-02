@@ -49,8 +49,13 @@
     padding-top: 10px;
   }
   .button-third {
+    min-width: 160px;
     @media (max-width: $screen-xs) {
       padding: 3px 5px;
+      min-width: 130px;
+    }
+    @media (max-width: 350px) {
+      min-width: 125px;
     }
   }
   .item {
@@ -59,7 +64,6 @@
 
   .marker-window {
     max-width: 170px;
-    /*text-align: center;*/
   }
 
   .info_window_text .iw_header {
@@ -85,11 +89,6 @@
       margin-top: 10px;
 
     }
-  }
-
-  .search-by-map-list {
-    //max-height: 335px;
-    //overflow-y: auto;
   }
 
   .search-by-map-list ul {
@@ -128,10 +127,10 @@
 
   a.stores-map-show-all {
     color: $link-color !important;
-    top: 10px;
+    top: 5px;
     position: relative;
-  }
-  a.stores-map-show-all:hover {
+    font-size: $font-size-normal-link;
+    font-family: $font-family-sans-serif;
     text-decoration: underline;
   }
 
