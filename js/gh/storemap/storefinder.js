@@ -73,7 +73,7 @@ function initialize() {
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
         mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
-        //mapOptions.panControl = false;
+        mapOptions.panControl = false;
     }
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
