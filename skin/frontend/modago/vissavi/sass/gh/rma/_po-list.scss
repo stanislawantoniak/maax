@@ -16,9 +16,9 @@
 			font-size: 15px;
 		}
 		table.po-list-table {
-			border: 1px solid $color_bfbfbf;
+			border: 1px solid $colorBorderRmaPoList;
 			thead tr th, tbody tr td {
-				background-color: $color_ffffff;
+				background-color: $colorBackgroundRmaPoList;
 				border: none;
 				vertical-align: top;
 			}
@@ -26,7 +26,7 @@
 				text-transform: uppercase;
 			}
 			tbody tr td {
-				border-top: 1px solid $color_ebebeb;
+				border-top: 1px solid $colorBorderRmaPoList;
 				&:last-child {
 					text-align: right;
 					padding-right: 20px;
@@ -36,9 +36,6 @@
 					padding-left: 15px;
 				}
 				&:nth-child(3) {
-					text-transform: uppercase;
-				}
-				&:nth-child(4) {
 					padding: 0;
 					width: 330px;
 				}
@@ -58,7 +55,7 @@
 							padding-left: 5px;
 							padding-right: 5px;
 							img {
-								border: 1px solid $color_cccccc;
+								border: 1px solid $colorBorderRmaPoListImage;
 							}
 						}
 					}
@@ -79,12 +76,12 @@
 	}
 	.po-list-table-mobile {
 		width: 100%;
-		border: 1px solid $color_bfbfbf;
+		border: 1px solid $colorBorderRmaPoList;
 		tr:first-child td {
 			border-top: none;
 		}
 		td {
-			border-top: 1px solid $color_ebebeb;
+			border-top: 1px solid $colorBorderRmaPoList;
 			padding: 15px 10px;
 			table {
 				width: 100%;
