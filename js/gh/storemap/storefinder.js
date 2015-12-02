@@ -109,7 +109,7 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = data;
     }
-    console.log(closestStores);
+
     refreshMap(closestStores);
     buildStoresList(closestStores);
 
@@ -216,7 +216,7 @@ function smoothZoom(map, max, cnt) {
     else {
         y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
             google.maps.event.removeListener(y);
-            self.smoothZoom(map, max, cnt + 1);
+            smoothZoom(map, max, cnt + 1);
         });
         setTimeout(function () {
             map.setZoom(cnt)
