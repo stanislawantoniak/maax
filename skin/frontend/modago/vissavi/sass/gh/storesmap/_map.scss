@@ -5,8 +5,8 @@
     -webkit-box-shadow: $bc-secondary 0 2px 5px;
     -moz-box-shadow: $bc-secondary 0 2px 5px;
     box-shadow: $bc-secondary 0 2px 5px;
-    @media (min-width: $screen-sm) {
-      float: right;
+    @media (max-width: $screen-xs) {
+      clear: both;
     }
   }
 
