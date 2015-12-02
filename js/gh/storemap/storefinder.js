@@ -157,7 +157,9 @@ function calculateTheNearestStores(position,minDistance, fallback) {
     }
     //sort
     console.log(typeof closestStores);
-
+    masterList = masterList.sort(function (a, b) {
+        return a.distance.localeCompare( b.distance );
+    });
     return closestStores;
 }
 
