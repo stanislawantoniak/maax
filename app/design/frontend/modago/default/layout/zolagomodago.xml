@@ -1702,6 +1702,45 @@
       <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
     </reference>
   </help_contact_gallery>
+  <help_contact_index>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Help</crumbName>
+        <crumbInfo>
+          <label>Help</label>
+          <title>Help</title>
+          <link>/help</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Contact</crumbName>
+        <crumbInfo>
+          <label>Contact</label>
+          <title>Contact</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="core/template" name="contact.gallery" template="help/contact.phtml"/>
+      <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
+    </reference>
+  </help_contact_index>
   <newsletter_manage_index>
     <reference name="breadcrumbs">
       <action method="addCrumb">
