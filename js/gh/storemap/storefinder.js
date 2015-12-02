@@ -129,7 +129,7 @@ function showPosition(position) {
         closestStores = data;
         refreshMap(closestStores);
         buildStoresList(closestStores);
-        return;x
+        return;
     }
 
 
