@@ -64,4 +64,12 @@ class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_Dro
 	{
 		return in_array('help_contact_gallery', $this->getLayout()->getUpdate()->getHandles());
 	}
+
+	public function isOwnStore() {
+		return Mage::app()->getWebsite()->getHaveSpecificDomain() ? true : false;
+	}
+
+	public function getOwnStoreVendorId() {
+		return Mage::app()->getWebsite()->getVendorId();
+	}
 }
