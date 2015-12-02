@@ -82,6 +82,7 @@ function initialize() {
         //pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
+    console.log(data);
     data = jQuery.parseJSON(data);
 
     if (navigator.geolocation  && navigator.geolocation.getCurrentPosition(showPosition)) {
@@ -141,7 +142,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
 
 
 function refreshMap(filteredData) {
-
+console.log(filteredData);
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
     if (typeof filteredData !== "undefined")
@@ -353,7 +354,7 @@ function Haversine(lat1, lon1, lat2, lon2) {
 //--GEO helpers
 
 function filterStoresList(enteredText) {
-    console.log("FILTER");
+
     var posCity;
     var posPostcode;
 
@@ -373,25 +374,10 @@ function filterStoresList(enteredText) {
 }
 
 jQuery(document).ready(function () {
-    //jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
-    //    e.preventDefault;
-    //    console.log(e);
-    //    if (e.which == 13) {
-    //        //submit form on enter
-    //        searchOnMap();
-    //    }
-    //    filterStoresList(jQuery(this).val());
-    //    return false;
-    //});
-    jQuery("input[name=search_by_map]").on("keyup", function (e) {
+    jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault;
-        console.log(e);
-        //if (e.which == 13) {
-        //    //submit form on enter
-        //    searchOnMap();
-        //}
-        filterStoresList(jQuery(this).val());
-        return false;
+        searchOnMap(jQuery(this).val());
+        //filterStoresList(jQuery(this).val());
     });
 
     jQuery("#search_by_map_form").submit(function(){
