@@ -65,8 +65,8 @@ function initialize() {
     };
 
     if (window.innerWidth < 768) {
-        mapOptions.zoom = 5;
-        mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
+        //mapOptions.zoom = 5;
+        //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
         mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
         mapOptions.panControl = false;
@@ -96,7 +96,6 @@ function showPosition(position) {
     //console.log("IN showPosition");
     //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
     // find the closest location to the user's location
-
     var mindist = 30; //km
     var pos;
     //console.log(data);
