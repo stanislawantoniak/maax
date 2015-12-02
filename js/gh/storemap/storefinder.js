@@ -87,7 +87,7 @@ function initialize() {
     refreshMap();
     buildStoresList();
 
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
         function (position) {
             console.log("I'm tracking you!");
             showPosition(position);
@@ -114,10 +114,9 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = data;
     }
+
     refreshMap(closestStores);
     buildStoresList(closestStores);
-    return closestStores;
-
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
@@ -146,7 +145,6 @@ function calculateTheNearestStores(position,minDistance, fallback) {
 
 
 function refreshMap(filteredData) {
-    //console.log(filteredData);
 
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
@@ -164,7 +162,6 @@ function refreshMap(filteredData) {
     //setMarkers
     for (var i = 0; i < data.length; i++) {
         var pos = data[i];
-        //console.log(pos);
 
         var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
         var marker = new google.maps.Marker({
@@ -178,7 +175,6 @@ function refreshMap(filteredData) {
         var contentString = " ";
 
         google.maps.event.addListener(marker, "click", function () {
-            console.log(this.getPosition());
             infowindow.setContent(this.html);
             map.setCenter(this.getPosition()); // set map center to marker position
 
@@ -224,7 +220,7 @@ function smoothZoom(map, max, cnt) {
     else {
         y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
             google.maps.event.removeListener(y);
-            self.smoothZoom(map, max, cnt + 1);
+            smoothZoom(map, max, cnt + 1);
         });
         setTimeout(function () {
             map.setZoom(cnt)
