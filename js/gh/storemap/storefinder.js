@@ -36,7 +36,7 @@ var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
 var minDist = 30; //km
-var minDistFallBack = 200; //km
+var minDistFallBack = 100; //km
 var closestStores = [];
 
 var gmarkers = [];
@@ -71,9 +71,9 @@ function initialize() {
     if (window.innerWidth < 768) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
-        mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
-        mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
-        mapOptions.panControl = false;
+        //mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
+        //mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
+        //mapOptions.panControl = false;
     }
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -90,6 +90,7 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 console.log("I'm tracking you!");
+
                 showPosition(position);
             },
             function (error) {
@@ -116,19 +117,25 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
+        refreshMap(closestStores);
+        buildStoresList(closestStores);
+        return;
     }
     if (closestStores.length <= 0) {
+
         closestStores = data;
+        refreshMap(closestStores);
+        buildStoresList(closestStores);
+        return;
     }
 
-    refreshMap(closestStores);
-    buildStoresList(closestStores);
+
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-    //console.log(data);
+    //console.log(minDistance);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
@@ -182,10 +189,16 @@ function refreshMap(filteredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
-            map.setCenter(this.getPosition()); // set map center to marker position
+            //$screen-sm:                  768px
+            if (window.innerWidth >= 768) {
+                map.setCenter(this.getPosition()); // set map center to marker position
+                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            } else {
+                map.setCenter(this.getPosition());
+                //smoothZoom(map, 11, map.getZoom());
+                map.setZoom(8);
+            }
 
-            // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-            smoothZoom(map, 10, map.getZoom());
             infowindow.open(map, this);
 
         });
@@ -213,8 +226,8 @@ function refreshMap(filteredData) {
         styles: clusterStyles
     };
     if (window.innerWidth < 768) {
-        markerClusterOptions.maxZoom = 8;
-        markerClusterOptions.gridSize = 20;
+        //markerClusterOptions.maxZoom = 8;
+        //markerClusterOptions.gridSize = 20;
     }
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
