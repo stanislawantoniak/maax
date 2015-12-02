@@ -189,10 +189,11 @@ function refreshMap(filteredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
-            //map.setCenter(this.getPosition()); // set map center to marker position
+            if (window.innerWidth >= 768) {
+                map.setCenter(this.getPosition()); // set map center to marker position
+                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            }
 
-            // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-            //smoothZoom(map, 10, map.getZoom());
             infowindow.open(map, this);
 
         });
