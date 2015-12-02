@@ -24,6 +24,9 @@ var clusterStyles = [
         width: 60
     }
 ];
+
+data = jQuery.parseJSON(data);
+
 var markerClusterer = null;
 var map = null;
 var infowindow = null;
@@ -35,88 +38,7 @@ var defaultCenterLat = 18.8979594;
 var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
-var closestStores = [];
-
 var gmarkers = [];
-
-
-function initialize() {
-
-    var mapOptions = {
-        zoom: 6,
-        center: new google.maps.LatLng(defaultCenterLang, defaultCenterLat),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControl: false,
-        mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.TOP_RIGHT
-        },
-        panControl: true,
-        panControlOptions: {
-            position: google.maps.ControlPosition.TOP_RIGHT
-        },
-        zoomControl: true,
-        zoomControlOptions: {
-            style: google.maps.ZoomControlStyle.LARGE,
-            position: google.maps.ControlPosition.TOP_RIGHT
-        },
-        scaleControl: true,
-        streetViewControl: false
-    };
-
-    if (window.innerWidth < 768) {
-        mapOptions.zoom = 5;
-        mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
-        mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
-        mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
-        mapOptions.panControl = false;
-    }
-
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    infowindow = new google.maps.InfoWindow({
-        //pixelOffset: new google.maps.Size(0, 5),
-        buttons: {close: {show: 0}}
-    });
-    data = jQuery.parseJSON(data);
-
-    if (navigator.geolocation && navigator.geolocation.getCurrentPosition(showPosition)) {
-
-    }
-    else {
-        console.log("Geolocation is not supported for this browser OR Location not shared");
-        refreshMap();
-        buildStoresList();
-    }
-
-}
-
-//GEO
-function showPosition(position) {
-    console.log("IN showPosition");
-    console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
-    // find the closest location to the user's location
-
-    var mindist = 200; //km
-    var pos;
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        pos = data[i];
-        // get the distance between user's location and this point
-        var dist = Haversine(data[i].latitude, data[i].longitude, position.coords.latitude, position.coords.longitude);
-        //console.log(dist);
-        // check if this is the shortest distance so far
-        if (dist < mindist) {
-            closestStores.push(data[i]);
-            mindist = dist;
-        }
-    }
-    console.log(closestStores);
-    refreshMap(closestStores);
-    buildStoresList(closestStores);
-}
-//--GEO
-
 
 function refreshMap(filteredData) {
 
@@ -129,6 +51,9 @@ function refreshMap(filteredData) {
     if (markerClusterer) {
         markerClusterer.clearMarkers();
     }
+
+
+
 
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(40, 40));
@@ -167,6 +92,8 @@ function refreshMap(filteredData) {
                 map.setZoom(6);
                 map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
             }
+
+
         }
 
         markers.push(marker);
@@ -219,7 +146,7 @@ function generateDirectionLink(pos) {
 function buildStoresList(filteredData) {
 
     if (typeof filteredData !== "undefined")
-        data = filteredData;
+        data = jQuery.parseJSON(filteredData);
 
     var searchByMapList = jQuery(".search-by-map-list");
 
@@ -231,22 +158,22 @@ function buildStoresList(filteredData) {
         for (var i = 0; i < data.length; i++) {
             pos = data[i];
             posId = pos.id;
-            list += "<li data-id='" + posId + "'>" +
+            list += "<li data-id='"+posId+"'>" +
                 "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
 
                 "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
                 "<p><b>" + pos.name + "</b></p>" +
                 "<p>" + pos.street + "</p>" +
-                "<p>" + pos.postcode + " " + pos.city + "</p>" +
+                "<p>" + pos.postcode + " "+pos.city+"</p>" +
                 "<p>Tel: " + pos.phone + "</p>" +
                 "<div>" + pos.time_opened + "</div>" +
                 "</div>" +
 
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>" +
-                "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> "+showOnMapLink+"</a></div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='"+generateDirectionLink(pos)+"' target='_blank'><i class='fa fa-compass'></i> "+defineTheRoute+"</a></div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='tel:"+pos.phone+"'><i class='fa fa-phone'></i> "+selectNumber+"</a></div>" +
                 "</div>" +
                 "</div>" +
 
@@ -269,6 +196,114 @@ function showMarkerWindow(link) {
 
 }
 
+function initialize() {
+
+    var mapOptions = {
+        zoom: 6,
+        center: new google.maps.LatLng(defaultCenterLang, defaultCenterLat),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        panControl: true,
+        panControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        scaleControl: true,
+        streetViewControl: false
+    };
+
+    if (window.innerWidth < 768) {
+        mapOptions.zoom = 5;
+        mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
+        mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
+        mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
+        mapOptions.panControl = false;
+    }
+
+
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    infowindow = new google.maps.InfoWindow({
+        //pixelOffset: new google.maps.Size(0, 5),
+        buttons: {close: {show: 0}}
+    });
+
+    //getLocation();
+    refreshMap();
+    buildStoresList();
+
+}
+//function getLocation() {
+//    if (navigator.geolocation) {
+//        navigator.geolocation.getCurrentPosition(showPosition);
+//    }
+//    else {
+//        console.log("Geolocation is not supported for this browser.")
+//    }
+//}
+//function showPosition(position) {
+//    console.log(position);
+//    // find the closest location to the user's location
+//    var closest = [];
+//    var mindist = 200; //km
+//    var pos;
+//    console.log(data);
+//    for (var i = 0; i < data.length; i++) {
+//        pos = data[i];
+//        // get the distance between user's location and this point
+//        var dist = Haversine( data[i].latitude, data[i].longitude, position.coords.latitude, position.coords.longitude );
+//        console.log(dist);
+//        // check if this is the shortest distance so far
+//        if ( dist < mindist )
+//        {
+//            closest.push(data[i]);
+//            mindist = dist;
+//        }
+//    }
+//    console.log(closest);
+//
+//}
+//
+//
+//// Convert Degress to Radians
+//function Deg2Rad( deg ) {
+//    return deg * Math.PI / 180;
+//}
+//
+//// Get Distance between two lat/lng points using the Haversine function
+//// First published by Roger Sinnott in Sky & Telescope magazine in 1984 (“Virtues of the Haversine”)
+////
+//function Haversine( lat1, lon1, lat2, lon2 )
+//{
+//    var R = 6372.8; // Earth Radius in Kilometers
+//
+//    var dLat = Deg2Rad(lat2-lat1);
+//    var dLon = Deg2Rad(lon2-lon1);
+//
+//    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+//        Math.cos(Deg2Rad(lat1)) * Math.cos(Deg2Rad(lat2)) *
+//        Math.sin(dLon/2) * Math.sin(dLon/2);
+//    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+//    var d = R * c;
+//
+//    // Return Distance in Kilometers
+//    return d;
+//}
+//
+//function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+//    infoWindow.setPosition(pos);
+//    infoWindow.setContent(browserHasGeolocation ?
+//        'Error: The Geolocation service failed.' :
+//        'Error: Your browser doesn\'t support geolocation.');
+//}
 
 function searchOnMap(q) {
     _makeMapRequest(q);
@@ -287,7 +322,6 @@ function _makeMapRequest(q) {
         data: {filter: q},
         success: function (data) {
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
-            data = jQuery.parseJSON(data);
             refreshMap(data);
             buildStoresList(data);
         },
@@ -301,32 +335,6 @@ function clearClusters(e) {
     e.stopPropagation();
     markerClusterer.clearMarkers();
 }
-
-//GEO helpers
-// Convert Degress to Radians
-function Deg2Rad(deg) {
-    return deg * Math.PI / 180;
-}
-
-// Get Distance between two lat/lng points using the Haversine function
-// First published by Roger Sinnott in Sky & Telescope magazine in 1984 (“Virtues of the Haversine”)
-//
-function Haversine(lat1, lon1, lat2, lon2) {
-    var R = 6372.8; // Earth Radius in Kilometers
-
-    var dLat = Deg2Rad(lat2 - lat1);
-    var dLon = Deg2Rad(lon2 - lon1);
-
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(Deg2Rad(lat1)) * Math.cos(Deg2Rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-
-    // Return Distance in Kilometers
-    return d;
-}
-//--GEO helpers
 
 function filterStoresList(enteredText) {
     var posCity;
@@ -348,7 +356,7 @@ function filterStoresList(enteredText) {
 }
 
 jQuery(document).ready(function () {
-    jQuery(document).on("keyup", "input[name=search_by_map]", function () {
+    jQuery(document).on("keyup","input[name=search_by_map]", function() {
         filterStoresList(jQuery(this).val());
     });
 });
