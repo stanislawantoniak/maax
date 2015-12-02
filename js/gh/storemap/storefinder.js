@@ -35,9 +35,13 @@ var defaultCenterLat = 18.8979594;
 var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
+var minDist = 30; //km
+var minDistFallBack = 200; //km
 var closestStores = [];
 
 var gmarkers = [];
+
+
 
 
 function initialize() {
@@ -80,7 +84,7 @@ function initialize() {
     });
     data = jQuery.parseJSON(data);
 
-    if (navigator.geolocation && navigator.geolocation.getCurrentPosition(showPosition)) {
+    if (navigator.geolocation  && navigator.geolocation.getCurrentPosition(showPosition)) {
 
     }
     else {
@@ -94,9 +98,25 @@ function initialize() {
 //GEO
 function showPosition(position) {
     //console.log("IN showPosition");
+    console.log(position.coords);
     //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
+    //Try to find in 30 km
+    var closestStores = calculateTheNearestStores(position, minDist);
+    //Try to find in 100 km
+    if (closestStores.length <= 0) {
+        closestStores = calculateTheNearestStores(position, minDistFallBack);
+    }
+    if (closestStores.length <= 0) {
+        closestStores = data;
+    }
+    console.log(closestStores);
+    refreshMap(closestStores);
+    buildStoresList(closestStores);
+
+}
+
+function calculateTheNearestStores(position,minDistance) {
     // find the closest location to the user's location
-    var mindist = 30; //km
     var pos;
     //console.log(data);
     for (var i = 0; i < data.length; i++) {
@@ -105,14 +125,13 @@ function showPosition(position) {
         var dist = Haversine(data[i].latitude, data[i].longitude, position.coords.latitude, position.coords.longitude);
         //console.log(dist);
         // check if this is the shortest distance so far
-        if (dist < mindist) {
+        if (dist < minDistance) {
+            data[i].distance = dist;
             closestStores.push(data[i]);
-            mindist = dist;
+            //minDistance = dist;
         }
     }
-    //console.log(closestStores);
-    refreshMap(closestStores);
-    buildStoresList(closestStores);
+    return closestStores;
 }
 //--GEO
 
