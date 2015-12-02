@@ -183,28 +183,30 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     public function getAdvertiseSection() {
         $groupOne = array();
 
-        if($this->isModuleActive('zolagocampaign') && $this->isAllowed("zolagocampaign/vendor")) {
-            $groupOne[] = array(
-                              "active" => $this->isActive("zolagocampaign"),
-                              "icon"	 => "icon-star",
-                              "label"	 => $this->__('Campaigns'),
-                              "url"	 => $this->getUrl('zolagocampaign/vendor/index')
-                          );
-            $groupOne[] = array(
-                              "active" => $this->isActive("zolagocampaign_placement"),
-                              "icon"	 => "icon-th",
-                              "label"	 => $this->__('Manage placements'),
-                              "url"	 => $this->getUrl('zolagocampaign/placement/index')
-                          );
-
-
+        if($this->isModuleActive('zolagocampaign')) {
+            if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_CAMPAIGN_VENDOR)) {
+                $groupOne[] = array(
+                    "active" => $this->isActive("zolagocampaign"),
+                    "icon"   => "icon-star",
+                    "label"  => $this->__('Campaigns'),
+                    "url"    => $this->getUrl('zolagocampaign/vendor/index')
+                );
+            }
+            if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_CAMPAIGN_PLACEMENT)) {
+                $groupOne[] = array(
+                    "active" => $this->isActive("zolagocampaign_placement"),
+                    "icon"   => "icon-th",
+                    "label"  => $this->__('Manage placements'),
+                    "url"    => $this->getUrl('zolagocampaign/placement/index')
+                );
+            }
         }
         $grouped = $this->_processGroups($groupOne);
 
         if(count($grouped)) {
             return array(
                        "label"		=> $this->__("Ads. & promotion"),
-                       "active"	=> $this->isActive(array("zolagocampaign", "zolagocampaign_placement")),
+                       "active"     => $this->isActive(array("zolagocampaign", "zolagocampaign_placement")),
                        "icon"		=> "icon-bullhorn",
                        "url"		=> "#",
                        "children"	=> $grouped
