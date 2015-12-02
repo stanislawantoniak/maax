@@ -35,7 +35,7 @@ var defaultCenterLat = 18.8979594;
 var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
-var minDist = 30; //km
+var minDist = 400; //km
 var minDistFallBack = 100; //km
 var closestStores = [];
 
@@ -115,6 +115,7 @@ function showPosition(position) {
 
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
+    console.log(closestStores);
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
