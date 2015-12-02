@@ -73,7 +73,6 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                             "time_opened" => $this->clearNewLines($posMap->getMapTimeOpened())
                         );
                     }
-                    //$result = json_encode($maps, JSON_HEX_APOS);
                     $result = $maps;
                 }
             }
