@@ -225,10 +225,7 @@ function refreshMap(filteredData) {
         gridSize: 7,
         styles: clusterStyles
     };
-    if (window.innerWidth < 768) {
-        //markerClusterOptions.maxZoom = 8;
-        //markerClusterOptions.gridSize = 20;
-    }
+
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
