@@ -90,8 +90,6 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 console.log("I'm tracking you!");
-                refreshMap();
-                buildStoresList();
 
                 showPosition(position);
             },
