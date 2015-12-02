@@ -48,7 +48,11 @@
   #inline-actions {
     padding-top: 10px;
   }
-
+  .button-third {
+    @media (max-width: $screen-xs) {
+      padding: 3px 5px;
+    }
+  }
   .item {
     margin-left: 20px;
   }
