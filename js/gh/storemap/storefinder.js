@@ -93,13 +93,13 @@ function initialize() {
 
 //GEO
 function showPosition(position) {
-    console.log("IN showPosition");
-    console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
+    //console.log("IN showPosition");
+    //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
     // find the closest location to the user's location
 
     var mindist = 30; //km
     var pos;
-    console.log(data);
+    //console.log(data);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
@@ -111,7 +111,7 @@ function showPosition(position) {
             mindist = dist;
         }
     }
-    console.log(closestStores);
+    //console.log(closestStores);
     refreshMap(closestStores);
     buildStoresList(closestStores);
 }
