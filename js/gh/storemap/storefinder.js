@@ -75,11 +75,7 @@ function refreshMap(filteredData) {
             map.setCenter(this.getPosition()); // set map center to marker position
 
             // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-            if (window.innerWidth < 768) {
-                smoothZoom(map, 5, map.getZoom());
-            } else {
-                smoothZoom(map, 11, map.getZoom());
-            }
+            smoothZoom(map, 10, map.getZoom());
             infowindow.open(map, this);
 
         });
