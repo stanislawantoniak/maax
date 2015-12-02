@@ -117,18 +117,17 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-
         refreshMap(closestStores);
         buildStoresList(closestStores);
         return;
     }
-    //if (closestStores.length <= 0) {
-    //
-    //    closestStores = data;
-    //    refreshMap(closestStores);
-    //    buildStoresList(closestStores);
-    //    return;
-    //}
+    if (closestStores.length <= 0) {
+
+        closestStores = data;
+        refreshMap(closestStores);
+        buildStoresList(closestStores);
+        return;
+    }
 
 
 }
@@ -136,7 +135,7 @@ function showPosition(position) {
 function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-    //console.log(data);
+    console.log(minDistance);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
