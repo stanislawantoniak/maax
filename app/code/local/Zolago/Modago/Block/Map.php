@@ -79,28 +79,6 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
         return $result;
     }
 
-    /**
-     * @param string $filterValue
-     * @return array
-     * @throws Mage_Core_Exception
-     */
-    public function getMapDataSelector($filterValue = "")
-    {
-        $maps = array();
-        $website = Mage::app()->getWebsite();
-        if ($website->getHaveSpecificDomain()) {
-            $vendorId = $website->getVendorId();
-
-            if ($vendorId) {
-
-                $posMaps = $this->getPosMapCollection($vendorId, $filterValue);
-                foreach ($posMaps as $posMap) {
-                    $maps[$posMap->getId()] = $posMap->getMapName() . "<i> ".$posMap->getPostcode()."</i>";
-                }
-            }
-        }
-        return $maps;
-    }
 
     /**
      * Clear text fields (another way it will break markers on the map)

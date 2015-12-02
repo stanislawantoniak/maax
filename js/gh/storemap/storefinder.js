@@ -75,11 +75,7 @@ function refreshMap(filteredData) {
             map.setCenter(this.getPosition()); // set map center to marker position
 
             // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-            if (window.innerWidth < 768) {
-                smoothZoom(map, 5, map.getZoom());
-            } else {
-                smoothZoom(map, 11, map.getZoom());
-            }
+            smoothZoom(map, 10, map.getZoom());
             infowindow.open(map, this);
 
         });
@@ -162,7 +158,7 @@ function buildStoresList(filteredData) {
             list += "<li data-id='"+posId+"'>" +
                 "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
 
-                "<div class='col-md-7 col-sm-7 col-xs-7 left-column'>" +
+                "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
                 "<p><b>" + pos.name + "</b></p>" +
                 "<p>" + pos.street + "</p>" +
                 "<p>" + pos.postcode + " "+pos.city+"</p>" +
@@ -170,11 +166,11 @@ function buildStoresList(filteredData) {
                 "<div>" + pos.time_opened + "</div>" +
                 "</div>" +
 
-                "<div class='col-md-5 col-sm-5 col-xs-5 right-column'>" +
+                "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>" +
-                "<div class='row'><a class='button button-third large' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> "+showOnMapLink+"</a></div>" +
-                "<div class='row'><a class='button button-third large' href='"+generateDirectionLink(pos)+"' target='_blank'><i class='fa fa-compass'></i> "+defineTheRoute+"</a></div>" +
-                "<div class='row'><a class='button button-third large' href='tel:"+pos.phone+"'><i class='fa fa-phone'></i> "+selectNumber+"</a></div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> "+showOnMapLink+"</a></div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='"+generateDirectionLink(pos)+"' target='_blank'><i class='fa fa-compass'></i> "+defineTheRoute+"</a></div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='tel:"+pos.phone+"'><i class='fa fa-phone'></i> "+selectNumber+"</a></div>" +
                 "</div>" +
                 "</div>" +
 
@@ -294,8 +290,7 @@ function filterStoresList(enteredText) {
 
 jQuery(document).ready(function () {
 
-    jQuery("input[name=search_by_map]").keyup(function(e){
-        var enteredText = jQuery(this).val();
-        filterStoresList(enteredText)
+    jQuery("input[name=search_by_map]").keydown(function(e){
+        filterStoresList(jQuery(this).val())
     });
 });
