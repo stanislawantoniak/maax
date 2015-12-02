@@ -14,6 +14,13 @@
                     <frontName>modago</frontName>
                 </args>
             </zolagomodago>
+            <zolagomodago_storesmap>
+                <use>standard</use>
+                <args>
+                    <module>Zolago_Modago</module>
+                    <frontName>storesmap</frontName>
+                </args>
+            </zolagomodago_storesmap>
 		</routers>
 		<translate>
 			<modules>

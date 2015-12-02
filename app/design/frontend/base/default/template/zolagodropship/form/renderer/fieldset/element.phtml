@@ -7,6 +7,9 @@ $LwC = !empty($labelWrapperClass) ? $labelWrapperClass : "col-md-2";
 $inputGroupAddon = $this->getElement()->getData("input_group_addon");
 $wrapperClass = $this->getElement()->getData("wrapper_class");
 $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
+
+$usePlugin = $this->getElement()->getData("use_plugin");
+
 ?>
 
 <div class="form-group <?php echo $formGroupWrapperClass; ?>"<?php echo ($element->getType()=="hidden" ? " style=\"display:none;\"" : "") ?> >

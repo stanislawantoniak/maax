@@ -153,8 +153,8 @@
 		&.active {
 			@media(min-width:1024px){
 				background: $color_fff;
-				border-color:$color_c9ac6d;
-				color:$color_c9ac6d;
+				border-color: $colorBtnThirdBorderActive;
+				color: $colorBtnThirdColorActive;
 			}
 		}
 	}

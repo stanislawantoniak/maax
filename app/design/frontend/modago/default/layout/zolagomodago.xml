@@ -426,6 +426,58 @@
       </action>
     </reference>
   </zolagomodago_index_index>
+  <zolagomodago_map_index>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>storesmap</crumbName>
+        <crumbInfo>
+          <label>Stores map</label>
+          <title>Stores map</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="setTitle" translate="title">
+        <title>Stores map</title>
+      </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/default/udropship/css/melon/plugins/select2.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css</stylesheet>
+      </action>
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>../../../frontend/default/udropship/js/plugins/select2/select2.min.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>../../../frontend/default/udropship/js/plugins/select2/select2_locale_pl.js</name>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/map" name="zolago_modago_map" template="stores/map.phtml"/>
+    </reference>
+  </zolagomodago_map_index>
   <solrbridge_solrsearch_category_view>
     <remove name="mana.catalog.leftnav"/>
     <remove name="solrsearch_category_view"/>
