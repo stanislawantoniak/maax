@@ -117,8 +117,6 @@ function showPosition(position) {
 
     refreshMap(closestStores);
     buildStoresList(closestStores);
-    return closestStores;
-
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
