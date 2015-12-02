@@ -56,6 +56,11 @@ class Orba_Common_Model_Ajax_Cart extends Mage_Core_Model_Abstract {
         }
         $cart->addProduct($product, $params);
         $cart->save(); 
+        $helper = Mage::helper('zolagocheckout');
+        $helper->fixCartShippingRates();  
+                   
+        $cart->save();  
+                               
         Mage::getSingleton('checkout/session')->setCartWasUpdated(true);
     }
     

@@ -61,13 +61,12 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
         sort($sortedData);
 
         $oneDay = 24 * 60 * 60;
-        $from = strtotime(date("Y-m-d", strtotime($this->getVendor()->getRegulationAcceptDocumentDate()) - $oneDay));
         /** @var GH_Statements_Model_Statement $statement */
         foreach ($sortedData as $statement) {
-            $to = strtotime(date("Y-m-d", strtotime($statement->getEventDate())));
-            $statement->setData('statement_period_from', date("Y-m-d", $from+$oneDay));
-            $statement->setData('statement_period_to', date("Y-m-d", $to-$oneDay));
-            $from = $to-$oneDay;
+            $eventDate = strtotime(date("Y-m-d", strtotime($statement->getEventDate())));
+            $statement->setData('event_date',date("Y-m-d",$eventDate+$oneDay));
+            $statement->setData('statement_period_from',$statement->getDateFrom());
+            $statement->setData('statement_period_to',date("Y-m-d",$eventDate));
         }
         return $this;
     }

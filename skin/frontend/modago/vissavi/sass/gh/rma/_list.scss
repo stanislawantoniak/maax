@@ -15,9 +15,9 @@
 		}
 	}
 	.rma-table {
-		border: 1px solid $color_bfbfbf;
+		border: 1px solid $colorBorderRma;
 		thead tr th, tbody tr td {
-			background-color: $color_ffffff;
+			background-color: $colorBackgroundRma;
 			border: none;
 			vertical-align: top;
 		}
@@ -26,16 +26,13 @@
 			text-transform: uppercase;
 		}
 		tbody tr td {
-			border-top: 1px solid $color_ebebeb;
-			&:nth-child(4) {
+			border-top: 1px solid $colorBorderRma;
+			&:nth-child(3) {
 				padding: 0;
-				max-width: 240px;
+				max-width: 350px;
 			}
 			&:nth-child(2) {
 				white-space: nowrap;
-			}
-			&:nth-child(3) {
-				text-transform: uppercase;
 			}
 			&:last-child {
 				a {
@@ -46,22 +43,22 @@
 		}
 		tbody tr td,thead tr th {
 			@media(max-width: 480px) {
-				&:nth-child(2), &:nth-child(3), &:nth-child(4) {
+				&:nth-child(2), &:nth-child(3) {
 					display: none;
 				}
 			}
 			@media(min-width: 481px) and (max-width: 620px) {
-				&:nth-child(2), &:nth-child(4) {
+				&:nth-child(2), &:nth-child(3) {
 					display: none;
 				}
 			}
 			@media(min-width: 621px) and (max-width: 768px) {
-				&:nth-child(4) {
+				&:nth-child(3) {
 					display: none;
 				}
 			}
             @media(min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-                &:nth-child(4) {
+                &:nth-child(3) {
                     display: none;
                 }
             }
