@@ -35,9 +35,13 @@ var defaultCenterLat = 18.8979594;
 var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
+var minDist = 30; //km
+var minDistFallBack = 200; //km
 var closestStores = [];
 
 var gmarkers = [];
+
+
 
 
 function initialize() {
@@ -65,8 +69,8 @@ function initialize() {
     };
 
     if (window.innerWidth < 768) {
-        mapOptions.zoom = 5;
-        mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
+        //mapOptions.zoom = 5;
+        //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
         mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
         mapOptions.panControl = false;
@@ -80,7 +84,7 @@ function initialize() {
     });
     data = jQuery.parseJSON(data);
 
-    if (navigator.geolocation && navigator.geolocation.getCurrentPosition(showPosition)) {
+    if (navigator.geolocation  && navigator.geolocation.getCurrentPosition(showPosition)) {
 
     }
     else {
@@ -93,27 +97,45 @@ function initialize() {
 
 //GEO
 function showPosition(position) {
-    console.log("IN showPosition");
-    console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
-    // find the closest location to the user's location
+    //console.log("IN showPosition");
+    //console.log(position.coords);
+    //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
+    //Try to find in 30 km
+    var closestStores = calculateTheNearestStores(position, minDist, false);
+    //Try to find in 100 km
+    if (closestStores.length <= 0) {
+        closestStores = calculateTheNearestStores(position, minDistFallBack, true);
+    }
+    if (closestStores.length <= 0) {
+        closestStores = data;
+    }
 
-    var mindist = 200; //km
+    refreshMap(closestStores);
+    buildStoresList(closestStores);
+
+}
+
+function calculateTheNearestStores(position,minDistance, fallback) {
+    // find the closest location to the user's location
     var pos;
-    console.log(data);
+    //console.log(data);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
         var dist = Haversine(data[i].latitude, data[i].longitude, position.coords.latitude, position.coords.longitude);
         //console.log(dist);
         // check if this is the shortest distance so far
-        if (dist < mindist) {
+        if (dist < minDistance) {
+            data[i].distance = dist;
             closestStores.push(data[i]);
-            mindist = dist;
+            if(fallback && closestStores.length >= 3){
+                //minDistance = dist;
+                return closestStores;
+            }
+
         }
     }
-    console.log(closestStores);
-    refreshMap(closestStores);
-    buildStoresList(closestStores);
+    return closestStores;
 }
 //--GEO
 
@@ -271,6 +293,8 @@ function showMarkerWindow(link) {
 
 
 function searchOnMap(q) {
+    var form = jQuery("#search_by_map_form");
+    var q = form.find("[name=search_by_map]").val();
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
@@ -282,7 +306,7 @@ function clearSearchOnMap() {
 function _makeMapRequest(q) {
     var form = jQuery("#search_by_map_form");
     jQuery.ajax({
-        url: searchOnMapUrl,
+        url: form.attr("action"),
         type: "POST",
         data: {filter: q},
         success: function (data) {
@@ -329,6 +353,7 @@ function Haversine(lat1, lon1, lat2, lon2) {
 //--GEO helpers
 
 function filterStoresList(enteredText) {
+
     var posCity;
     var posPostcode;
 
@@ -348,7 +373,14 @@ function filterStoresList(enteredText) {
 }
 
 jQuery(document).ready(function () {
-    jQuery(document).on("keyup", "input[name=search_by_map]", function () {
-        filterStoresList(jQuery(this).val());
+    jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
+        e.preventDefault;
+        searchOnMap(jQuery(this).val());
+        //filterStoresList(jQuery(this).val());
     });
+
+    jQuery("#search_by_map_form").submit(function(){
+        searchOnMap();
+        return false;
+    })
 });
