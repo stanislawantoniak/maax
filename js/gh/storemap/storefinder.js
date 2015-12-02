@@ -98,13 +98,13 @@ function initialize() {
 //GEO
 function showPosition(position) {
     //console.log("IN showPosition");
-    console.log(position.coords);
+    //console.log(position.coords);
     //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
     //Try to find in 30 km
-    var closestStores = calculateTheNearestStores(position, minDist);
+    var closestStores = calculateTheNearestStores(position, minDist, false);
     //Try to find in 100 km
     if (closestStores.length <= 0) {
-        closestStores = calculateTheNearestStores(position, minDistFallBack);
+        closestStores = calculateTheNearestStores(position, minDistFallBack, true);
     }
     if (closestStores.length <= 0) {
         closestStores = data;
@@ -115,7 +115,7 @@ function showPosition(position) {
 
 }
 
-function calculateTheNearestStores(position,minDistance) {
+function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
     //console.log(data);
@@ -128,7 +128,11 @@ function calculateTheNearestStores(position,minDistance) {
         if (dist < minDistance) {
             data[i].distance = dist;
             closestStores.push(data[i]);
-            //minDistance = dist;
+            if(fallback && closestStores.length >= 3){
+                //minDistance = dist;
+                return closestStores;
+            }
+
         }
     }
     return closestStores;
@@ -289,6 +293,8 @@ function showMarkerWindow(link) {
 
 
 function searchOnMap(q) {
+    var form = jQuery("#search_by_map_form");
+    var q = form.find("[name=search_by_map]").val();
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
@@ -300,7 +306,7 @@ function clearSearchOnMap() {
 function _makeMapRequest(q) {
     var form = jQuery("#search_by_map_form");
     jQuery.ajax({
-        url: searchOnMapUrl,
+        url: form.attr("action"),
         type: "POST",
         data: {filter: q},
         success: function (data) {
@@ -347,6 +353,7 @@ function Haversine(lat1, lon1, lat2, lon2) {
 //--GEO helpers
 
 function filterStoresList(enteredText) {
+    console.log("FILTER");
     var posCity;
     var posPostcode;
 
@@ -366,7 +373,29 @@ function filterStoresList(enteredText) {
 }
 
 jQuery(document).ready(function () {
-    jQuery(document).on("keyup", "input[name=search_by_map]", function () {
+    //jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
+    //    e.preventDefault;
+    //    console.log(e);
+    //    if (e.which == 13) {
+    //        //submit form on enter
+    //        searchOnMap();
+    //    }
+    //    filterStoresList(jQuery(this).val());
+    //    return false;
+    //});
+    jQuery("input[name=search_by_map]").on("keyup", function (e) {
+        e.preventDefault;
+        console.log(e);
+        //if (e.which == 13) {
+        //    //submit form on enter
+        //    searchOnMap();
+        //}
         filterStoresList(jQuery(this).val());
+        return false;
     });
+
+    jQuery("#search_by_map_form").submit(function(){
+        searchOnMap();
+        return false;
+    })
 });
