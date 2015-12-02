@@ -135,7 +135,7 @@ function showPosition(position) {
 function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-    console.log(minDistance);
+    //console.log(minDistance);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
