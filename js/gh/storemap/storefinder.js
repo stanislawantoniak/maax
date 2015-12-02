@@ -82,7 +82,7 @@ function initialize() {
         //pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
-    console.log(data);
+    //console.log(data);
     data = jQuery.parseJSON(data);
 
     if (navigator.geolocation  && navigator.geolocation.getCurrentPosition(showPosition)) {
@@ -142,7 +142,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
 
 
 function refreshMap(filteredData) {
-console.log(filteredData);
+    //console.log(filteredData);
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
     if (typeof filteredData !== "undefined")
