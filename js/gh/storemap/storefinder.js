@@ -85,7 +85,8 @@ function initialize() {
     data = jQuery.parseJSON(data);
 
 
-
+    refreshMap();
+    buildStoresList();
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
