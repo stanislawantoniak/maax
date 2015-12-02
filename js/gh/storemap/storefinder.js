@@ -97,7 +97,7 @@ function showPosition(position) {
     console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
     // find the closest location to the user's location
 
-    var mindist = 200; //km
+    var mindist = 30; //km
     var pos;
     console.log(data);
     for (var i = 0; i < data.length; i++) {
