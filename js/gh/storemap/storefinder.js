@@ -196,6 +196,7 @@ function refreshMap(filteredData) {
             } else {
                 map.setCenter(this.getPosition());
                 //smoothZoom(map, 11, map.getZoom());
+                map.setZoom(6);
             }
 
             infowindow.open(map, this);
