@@ -226,8 +226,8 @@ function refreshMap(filteredData) {
         styles: clusterStyles
     };
     if (window.innerWidth < 768) {
-        markerClusterOptions.maxZoom = 8;
-        //markerClusterOptions.gridSize = 20;
+        //markerClusterOptions.maxZoom = 8;
+        markerClusterOptions.gridSize = 20;
     }
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
