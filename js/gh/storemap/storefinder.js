@@ -84,22 +84,27 @@ function initialize() {
     });
     data = jQuery.parseJSON(data);
 
-    if (navigator.geolocation  && navigator.geolocation.getCurrentPosition(showPosition)) {
+    refreshMap();
+    buildStoresList();
 
-    }
-    else {
-        console.log("Geolocation is not supported for this browser OR Location not shared");
-        refreshMap();
-        buildStoresList();
-    }
+    navigator.geolocation.watchPosition(
+        function (position) {
+            console.log("I'm tracking you!");
+            showPosition(position);
+        },
+        function (error) {
+            if (error.code == error.PERMISSION_DENIED)
+                console.log("You denied me :-(");
+            refreshMap();
+            buildStoresList();
+        });
+
 
 }
 
 //GEO
 function showPosition(position) {
-    //console.log("IN showPosition");
-    //console.log(position.coords);
-    //console.log("Current position: lat " + position.coords.latitude + " long " + position.coords.longitude);
+
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
     //Try to find in 100 km
@@ -109,9 +114,9 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = data;
     }
-
     refreshMap(closestStores);
     buildStoresList(closestStores);
+    return closestStores;
 
 }
 
@@ -141,6 +146,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
 
 
 function refreshMap(filteredData) {
+    //console.log(filteredData);
 
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
@@ -158,6 +164,7 @@ function refreshMap(filteredData) {
     //setMarkers
     for (var i = 0; i < data.length; i++) {
         var pos = data[i];
+        //console.log(pos);
 
         var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
         var marker = new google.maps.Marker({
@@ -171,6 +178,7 @@ function refreshMap(filteredData) {
         var contentString = " ";
 
         google.maps.event.addListener(marker, "click", function () {
+            console.log(this.getPosition());
             infowindow.setContent(this.html);
             map.setCenter(this.getPosition()); // set map center to marker position
 
