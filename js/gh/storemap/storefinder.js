@@ -290,7 +290,11 @@ function filterStoresList(enteredText) {
 
 jQuery(document).ready(function () {
 
-    jQuery("input[name=search_by_map]").keydown(function(e){
-        filterStoresList(jQuery(this).val())
+    //jQuery("input[name=search_by_map]").keydown(function(e){
+    //    filterStoresList(jQuery(this).val())
+    //});
+
+    jQuery(document).on("keyup","input[name=search_by_map]", function() {
+        filterStoresList(jQuery(this).val());
     });
 });
