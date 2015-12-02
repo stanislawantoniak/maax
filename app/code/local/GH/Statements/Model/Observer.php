@@ -73,18 +73,25 @@ class GH_Statements_Model_Observer
             }
         }
     }
+    
+    /**
+     * calculating date from and last balance
+     */
 
     public static function processStatementLastBalance($statement) {
         $balance = 0;
+        $dateFrom = 0;
         $collection = Mage::getModel('ghstatements/statement')->getCollection();
         $collection->addFieldToFilter('vendor_id',$statement->getVendorId());
         $collection->addFieldToFilter('id',array('neq'=>$statement->getId()));
         $collection->getSelect()->order('id DESC');
         if ($item = $collection->getFirstItem()) {
             $balance = $item->getData('to_pay') - $item->getData('payment_value')+$item->getData('last_statement_balance');            
+            $dateFrom = strtotime($item->getData('event_date'))+24*3600; // next day
         }
         $lastBalance = new StdClass();
         $lastBalance->balance = $balance;
+        $lastBalance->dateFrom = $dateFrom;
         return $lastBalance;
     }
     /**
@@ -181,6 +188,9 @@ class GH_Statements_Model_Observer
         }
         if(!empty($statementTotals->lastBalance)) {
             $data["last_statement_balance"]              = $statementTotals->lastBalance->balance;
+            if ($statementTotals->lastBalance->dateFrom) {
+                $data["date_from"]              = date("Y-m-d",$statementTotals->lastBalance->dateFrom);
+            }
         }
         $data['total_commission_netto'] = round($data['total_commission']/self::getTax(),2,PHP_ROUND_HALF_UP);
         if (!empty($data)) {
