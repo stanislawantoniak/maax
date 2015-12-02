@@ -162,6 +162,8 @@ function calculateTheNearestStores(position,minDistance, fallback) {
     return closestStores;
 }
 function SortByDistance(a, b){
+    console.log(a);
+    console.log(ab);
         return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
 }
 //--GEO
