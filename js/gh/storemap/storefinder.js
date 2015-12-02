@@ -189,7 +189,8 @@ function refreshMap(filteredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
-            if (window.innerWidth >= 768) {
+            //$screen-xs:                  480px
+            if (window.innerWidth >= 480) {
                 map.setCenter(this.getPosition()); // set map center to marker position
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             }
@@ -200,13 +201,13 @@ function refreshMap(filteredData) {
 
         //Show all stores case
         if (typeof filteredData !== "undefined") {
-            //if (window.innerWidth < 768) {
+            if (window.innerWidth < 480) {
                 map.setZoom(5);
                 map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
-            //} else {
-            //    map.setZoom(6);
-            //    map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
-            //}
+            } else {
+                map.setZoom(6);
+                map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
+            }
         }
 
         markers.push(marker);
