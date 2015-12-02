@@ -158,7 +158,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
     //sort
     console.log(closestStores);
     closestStores = closestStores.sort(function (a, b) {
-        return a.distance.localeCompare( b.distance );
+        return a.val.localeCompare( b.distance );
     });
     console.log(closestStores);
     return closestStores;
