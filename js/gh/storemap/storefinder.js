@@ -118,11 +118,13 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
+        gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
         refreshMap(closestStores);
         buildStoresList(closestStores);
         return;
     }
     if (closestStores.length <= 0) {
+        gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
         closestStores = data;
         refreshMap(closestStores);
         buildStoresList(closestStores);
