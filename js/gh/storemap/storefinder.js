@@ -71,9 +71,9 @@ function initialize() {
     if (window.innerWidth < 768) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
-        mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
-        mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
-        mapOptions.panControl = false;
+        //mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
+        //mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
+        //mapOptions.panControl = false;
     }
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -126,7 +126,7 @@ function showPosition(position) {
         closestStores = data;
         refreshMap(closestStores);
         buildStoresList(closestStores);
-        return;
+        return;x
     }
 
 
@@ -199,13 +199,13 @@ function refreshMap(filteredData) {
 
         //Show all stores case
         if (typeof filteredData !== "undefined") {
-            if (window.innerWidth < 768) {
+            //if (window.innerWidth < 768) {
                 map.setZoom(5);
                 map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
-            } else {
-                map.setZoom(6);
-                map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
-            }
+            //} else {
+            //    map.setZoom(6);
+            //    map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
+            //}
         }
 
         markers.push(marker);
@@ -220,8 +220,8 @@ function refreshMap(filteredData) {
         styles: clusterStyles
     };
     if (window.innerWidth < 768) {
-        markerClusterOptions.maxZoom = 8;
-        markerClusterOptions.gridSize = 20;
+        //markerClusterOptions.maxZoom = 8;
+        //markerClusterOptions.gridSize = 20;
     }
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
