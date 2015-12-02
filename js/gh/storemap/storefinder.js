@@ -161,7 +161,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
         console.log(a.distance);
         console.log(b.distance);
         console.log("---------");
-        return return ((a.distance > b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));;
+        return ((a.distance > b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));;
     });
     console.log(closestStores);
     return closestStores;
