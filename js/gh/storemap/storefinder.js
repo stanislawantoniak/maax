@@ -99,6 +99,7 @@ function initialize() {
                 buildStoresList();
             });
     } else {
+        console.log(" Your browser don't support GEO location!");
         refreshMap();
         buildStoresList();
     }
