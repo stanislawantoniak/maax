@@ -293,6 +293,8 @@ function showMarkerWindow(link) {
 
 
 function searchOnMap(q) {
+    var form = jQuery("#search_by_map_form");
+    var q = form.find("[name=search_by_map]").val();
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
@@ -304,7 +306,7 @@ function clearSearchOnMap() {
 function _makeMapRequest(q) {
     var form = jQuery("#search_by_map_form");
     jQuery.ajax({
-        url: searchOnMapUrl,
+        url: form.attr("action"),
         type: "POST",
         data: {filter: q},
         success: function (data) {
@@ -351,6 +353,7 @@ function Haversine(lat1, lon1, lat2, lon2) {
 //--GEO helpers
 
 function filterStoresList(enteredText) {
+    console.log("FILTER");
     var posCity;
     var posPostcode;
 
@@ -370,7 +373,29 @@ function filterStoresList(enteredText) {
 }
 
 jQuery(document).ready(function () {
-    jQuery(document).on("keyup", "input[name=search_by_map]", function () {
+    //jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
+    //    e.preventDefault;
+    //    console.log(e);
+    //    if (e.which == 13) {
+    //        //submit form on enter
+    //        searchOnMap();
+    //    }
+    //    filterStoresList(jQuery(this).val());
+    //    return false;
+    //});
+    jQuery("input[name=search_by_map]").on("keyup", function (e) {
+        e.preventDefault;
+        console.log(e);
+        //if (e.which == 13) {
+        //    //submit form on enter
+        //    searchOnMap();
+        //}
         filterStoresList(jQuery(this).val());
+        return false;
     });
+
+    jQuery("#search_by_map_form").submit(function(){
+        searchOnMap();
+        return false;
+    })
 });
