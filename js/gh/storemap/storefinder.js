@@ -71,9 +71,9 @@ function initialize() {
     if (window.innerWidth < 768) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
-        //mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
-        //mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
-        //mapOptions.panControl = false;
+        mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
+        mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
+        mapOptions.panControl = false;
     }
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -225,10 +225,7 @@ function refreshMap(filteredData) {
         gridSize: 7,
         styles: clusterStyles
     };
-    if (window.innerWidth < 768) {
-        //markerClusterOptions.maxZoom = 8;
-        //markerClusterOptions.gridSize = 20;
-    }
+
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
