@@ -159,7 +159,7 @@ function buildStoresList(filteredData) {
         for (var i = 0; i < data.poses.length; i++) {
             pos = data.poses[i];
             posId = pos.id;
-            list += "<li>" +
+            list += "<li data-id='"+posId+"'>" +
                 "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
 
                 "<div class='col-md-7 col-sm-7 col-xs-7 left-column'>" +
@@ -247,14 +247,14 @@ function searchOnMap(q) {
 }
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
-    form.find("select[name=search_by_map]").val(0).select2();
+    form.find("select[name=search_by_map]").val("");
     _makeMapRequest(0)
 }
 
 function _makeMapRequest(q) {
     var form = jQuery("#search_by_map_form");
     jQuery.ajax({
-        url: form.attr("action"),
+        url: searchOnMapUrl,
         type: "POST",
         data: {filter: q},
         success: function (data) {
@@ -273,11 +273,29 @@ function clearClusters(e) {
     markerClusterer.clearMarkers();
 }
 
+function filterStoresList(enteredText) {
+    var posCity;
+    var posPostcode;
+
+    jQuery(data.poses).each(function (i, pos) {
+        posCity = pos.city;
+        posPostcode = pos.postcode;
+
+        if (
+            (posCity.search(new RegExp(enteredText, "i")) > -1) ||
+            posPostcode.search(new RegExp(enteredText, "i")) > -1
+        ) {
+            jQuery(".search-by-map-list-html li[data-id=" + pos.id + "]").show();
+        } else {
+            jQuery(".search-by-map-list-html li[data-id=" + pos.id + "]").hide();
+        }
+    });
+}
 
 jQuery(document).ready(function () {
 
-    jQuery("[name=search_by_map]").select2()
-        .on("select2-selecting", function (e) {
-            searchOnMap(e.val);
-        });
+    jQuery("input[name=search_by_map]").keyup(function(e){
+        var enteredText = jQuery(this).val();
+        filterStoresList(enteredText)
+    });
 });

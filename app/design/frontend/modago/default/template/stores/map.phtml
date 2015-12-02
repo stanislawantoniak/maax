@@ -9,6 +9,7 @@
         var showOnMapLink = '<?php echo $_helper->__("Show on map")?>';
         var defineTheRoute = '<?php echo $_helper->__("Define the route")?>';
         var selectNumber = '<?php echo $_helper->__("Select phone")?>';
+        var searchOnMapUrl = '<?php echo Mage::getUrl("modago/map/getMapData") ?>';
     </script>
     <script type="text/javascript" src="<?php echo Mage::getBaseUrl(); ?>js/gh/storemap/storefinder.js"></script>
 <?php endif; ?>
@@ -29,15 +30,16 @@
 
                                             <div class="form-group">
                                                 <form id="search_by_map_form"
-                                                      action="<?php echo Mage::getUrl("modago/map/getMapData") ?>">
-                                                    <select name="search_by_map" class="col-md-12">
-                                                        <option
-                                                            value="0"><?php echo $_helper->__("Enter city or zip"); ?></option>
-                                                        <?php foreach ($this->getMapDataSelector() as $id => $item) : ?>
-                                                            <option
-                                                                value="<?php echo $id; ?>"><?php echo $item; ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
+                                                      action="<?php //echo Mage::getUrl("modago/map/getMapData") ?>">
+                                                    <input type="text" autocomplete="off" name="search_by_map" placeholder="<?php echo $_helper->__("Enter city or zip"); ?>" class="col-md-12" />
+<!--                                                    <select name="search_by_map" class="col-md-12">-->
+<!--                                                        <option-->
+<!--                                                            value="0">--><?php //echo $_helper->__("Enter city or zip"); ?><!--</option>-->
+<!--                                                        --><?php //foreach ($this->getMapDataSelector() as $id => $item) : ?>
+<!--                                                            <option-->
+<!--                                                                value="--><?php //echo $id; ?><!--">--><?php //echo $item; ?><!--</option>-->
+<!--                                                        --><?php //endforeach; ?>
+<!--                                                    </select>-->
                                                 </form>
                                             </div>
                                             <div class="form-group">
