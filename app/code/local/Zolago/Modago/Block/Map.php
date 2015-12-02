@@ -32,7 +32,8 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                 $collection
                     ->getSelect()
                     ->where('(postcode=?', $filterValue)
-                    ->orWhere("map_name LIKE  ?)", '%' . $filterValue . '%');
+                    ->orWhere("map_name LIKE  ?", '%' . $filterValue . '%')
+                    ->orWhere("city LIKE  ?)", '%' . $filterValue . '%');
 
             }
 
