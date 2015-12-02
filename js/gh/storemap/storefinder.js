@@ -35,7 +35,7 @@ var defaultCenterLat = 18.8979594;
 var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
-var minDist = 300; //km
+var minDist = 30; //km
 var minDistFallBack = 100; //km
 var closestStores = [];
 
