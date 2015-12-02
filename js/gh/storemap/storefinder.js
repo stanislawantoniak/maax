@@ -124,13 +124,13 @@ function showPosition(position) {
         buildStoresList(closestStores);
         return;
     }
-    if (closestStores.length <= 0) {
-
-        closestStores = data;
-        refreshMap(closestStores);
-        buildStoresList(closestStores);
-        return;
-    }
+    //if (closestStores.length <= 0) {
+    //
+    //    closestStores = data;
+    //    refreshMap(closestStores);
+    //    buildStoresList(closestStores);
+    //    return;
+    //}
 
 
 }
