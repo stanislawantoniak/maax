@@ -87,7 +87,7 @@ function initialize() {
     refreshMap();
     buildStoresList();
 
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
         function (position) {
             console.log("I'm tracking you!");
             showPosition(position);
