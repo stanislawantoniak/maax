@@ -382,9 +382,9 @@ jQuery(document).ready(function () {
         enteredSearchValue = jQuery(this).val();
         searchOnMap(enteredSearchValue);
         if (enteredSearchValue.length > 0) {
-            showAllLink.show();
+            showAllLink.removeClass("hidden");
         } else {
-            showAllLink.hide();
+            showAllLink.addClass("hidden");
         }
     });
 
