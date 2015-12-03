@@ -374,19 +374,19 @@ function Haversine(lat1, lon1, lat2, lon2) {
 //--GEO helpers
 
 
-
 jQuery(document).ready(function () {
+    var showAllLink = jQuery("a.stores-map-show-all");
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault;
         searchOnMap(jQuery(this).val());
-        if(jQuery("input[name=search_by_map]").val().length >0){
-            jQuery("stores-map-show-all").hide();
+        if (jQuery("input[name=search_by_map]").val().length > 0) {
+            showAllLink.hide();
         } else {
-            jQuery("stores-map-show-all").show();
+            showAllLink.show();
         }
     });
 
-    jQuery("#search_by_map_form").submit(function(){
+    jQuery("#search_by_map_form").submit(function () {
         searchOnMap();
         return false;
     })
