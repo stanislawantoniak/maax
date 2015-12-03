@@ -373,31 +373,17 @@ function Haversine(lat1, lon1, lat2, lon2) {
 }
 //--GEO helpers
 
-function filterStoresList(enteredText) {
 
-    var posCity;
-    var posPostcode;
-
-    jQuery(data).each(function (i, pos) {
-        posCity = pos.city;
-        posPostcode = pos.postcode;
-
-        if (
-            (posCity.search(new RegExp(enteredText, "i")) > -1) ||
-            posPostcode.search(new RegExp(enteredText, "i")) > -1
-        ) {
-            jQuery(".search-by-map-list-html li[data-id=" + pos.id + "]").show();
-        } else {
-            jQuery(".search-by-map-list-html li[data-id=" + pos.id + "]").hide();
-        }
-    });
-}
 
 jQuery(document).ready(function () {
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault;
         searchOnMap(jQuery(this).val());
-        //filterStoresList(jQuery(this).val());
+        if(jQuery("input[name=search_by_map]").val().length >0){
+            jQuery("stores-map-show-all").hide();
+        } else {
+            jQuery("stores-map-show-all").show();
+        }
     });
 
     jQuery("#search_by_map_form").submit(function(){
