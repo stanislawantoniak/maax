@@ -36,7 +36,7 @@ var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
 var minDist = 30; //km
-var minDistFallBack = 200; //km
+var minDistFallBack = 100; //km
 var closestStores = [];
 
 var gmarkers = [];
@@ -84,20 +84,30 @@ function initialize() {
     });
     data = jQuery.parseJSON(data);
 
+
+    //I will show all the stores on the map first
     refreshMap();
     buildStoresList();
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                //If you allow to see your location, I will show you all nearest stores
+                //console.log("I'm tracking you!");
+                gmarkers = [];
+                showPosition(position);
+            },
+            function (error) {
+                //If you deny to see your location, I will show you all the stores
+                if (error.code == error.PERMISSION_DENIED){
+                    //console.log("You denied me :-(");
+                }
 
-    navigator.geolocation.watchPosition(
-        function (position) {
-            console.log("I'm tracking you!");
-            showPosition(position);
-        },
-        function (error) {
-            if (error.code == error.PERMISSION_DENIED)
-                console.log("You denied me :-(");
-            refreshMap();
-            buildStoresList();
-        });
+            });
+    } else {
+        //Your browser doesn't support GEO location, I will show you all the stores
+        //console.log(" Your browser doesn't support GEO location!");
+    }
+
 
 
 }
@@ -110,20 +120,19 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    }
+    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
     if (closestStores.length <= 0) {
         closestStores = data;
-    }
+    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
+
     refreshMap(closestStores);
     buildStoresList(closestStores);
-    return closestStores;
-
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-    //console.log(data);
+    //console.log(minDistance);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
@@ -134,19 +143,24 @@ function calculateTheNearestStores(position,minDistance, fallback) {
             data[i].distance = dist;
             closestStores.push(data[i]);
             if(fallback && closestStores.length >= 3){
-                //minDistance = dist;
-                return closestStores;
+                break;
             }
 
         }
     }
+    //sort by distance
+    function sortByDirection(a, b) {
+        return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
+    }
+    closestStores.sort(sortByDirection);
+
     return closestStores;
 }
+
 //--GEO
 
 
 function refreshMap(filteredData) {
-    //console.log(filteredData);
 
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
@@ -164,7 +178,6 @@ function refreshMap(filteredData) {
     //setMarkers
     for (var i = 0; i < data.length; i++) {
         var pos = data[i];
-        //console.log(pos);
 
         var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
         var marker = new google.maps.Marker({
@@ -178,12 +191,22 @@ function refreshMap(filteredData) {
         var contentString = " ";
 
         google.maps.event.addListener(marker, "click", function () {
-            console.log(this.getPosition());
             infowindow.setContent(this.html);
-            map.setCenter(this.getPosition()); // set map center to marker position
+            //$screen-sm: 768px
+            if (window.innerWidth >= 768) {
+                map.setCenter(this.getPosition()); // set map center to marker position
+                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            } else {
+                map.setCenter(this.getPosition());
+                map.setZoom(9);
+            }
+            //$screen-md: 992px
+            if (window.innerWidth <= 992) {
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#map-container").offset().top
+                }, 1000);
+            }
 
-            // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-            smoothZoom(map, 10, map.getZoom());
             infowindow.open(map, this);
 
         });
@@ -210,10 +233,7 @@ function refreshMap(filteredData) {
         gridSize: 7,
         styles: clusterStyles
     };
-    if (window.innerWidth < 768) {
-        markerClusterOptions.maxZoom = 8;
-        markerClusterOptions.gridSize = 20;
-    }
+
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
@@ -224,7 +244,7 @@ function smoothZoom(map, max, cnt) {
     else {
         y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
             google.maps.event.removeListener(y);
-            self.smoothZoom(map, max, cnt + 1);
+            smoothZoom(map, max, cnt + 1);
         });
         setTimeout(function () {
             map.setZoom(cnt)
@@ -251,7 +271,7 @@ function buildStoresList(filteredData) {
     if (typeof filteredData !== "undefined")
         data = filteredData;
 
-    var searchByMapList = jQuery(".search-by-map-list");
+    var searchByMapList = jQuery(".search-by-map-list-container");
 
     var list = "";
     var pos, posId;
@@ -267,17 +287,24 @@ function buildStoresList(filteredData) {
                 "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
                 "<p><b>" + pos.name + "</b></p>" +
                 "<p>" + pos.street + "</p>" +
-                "<p>" + pos.postcode + " " + pos.city + "</p>" +
-                "<p>Tel: " + pos.phone + "</p>" +
-                "<div>" + pos.time_opened + "</div>" +
+                "<p>" + pos.postcode + " " + pos.city + "</p>";
+            if(pos.phone.length > 0){
+                list +="<p>Tel: " + pos.phone + "</p>";
+            }
+
+            list +="<div>" + pos.time_opened + "</div>" +
                 "</div>" +
 
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>" +
-                "</div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
+
+            if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
+                list += "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>";
+            }
+
+            list +="</div>" +
                 "</div>" +
 
                 "</div>" +
@@ -360,35 +387,35 @@ function Haversine(lat1, lon1, lat2, lon2) {
 }
 //--GEO helpers
 
-function filterStoresList(enteredText) {
-
-    var posCity;
-    var posPostcode;
-
-    jQuery(data).each(function (i, pos) {
-        posCity = pos.city;
-        posPostcode = pos.postcode;
-
-        if (
-            (posCity.search(new RegExp(enteredText, "i")) > -1) ||
-            posPostcode.search(new RegExp(enteredText, "i")) > -1
-        ) {
-            jQuery(".search-by-map-list-html li[data-id=" + pos.id + "]").show();
-        } else {
-            jQuery(".search-by-map-list-html li[data-id=" + pos.id + "]").hide();
-        }
-    });
+function showLabel(label){
+    jQuery(label).removeClass("hidden");
+}
+function hideLabel(label){
+    jQuery(label).addClass("hidden");
 }
 
 jQuery(document).ready(function () {
+    var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
-        e.preventDefault;
-        searchOnMap(jQuery(this).val());
-        //filterStoresList(jQuery(this).val());
+        e.preventDefault();
+        //console.log("KEYUP");
+        enteredSearchValue = jQuery.trim(jQuery(this).val());
+        if (enteredSearchValue.length > 0) {
+            //console.log("KEYUP NOT EMPTY");
+            hideLabel(".the-nearest-stores");
+            searchOnMap(enteredSearchValue);
+            showLabel("a.stores-map-show-all");
+        } else {
+            hideLabel("a.stores-map-show-all");
+        }
     });
 
-    jQuery("#search_by_map_form").submit(function(){
-        searchOnMap();
-        return false;
+    jQuery("#search_by_map_form").submit(function (e) {
+        e.preventDefault();
+        if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
+            //console.log("SUBMIT");
+            hideLabel(".the-nearest-stores");
+            searchOnMap();
+        }
     })
 });

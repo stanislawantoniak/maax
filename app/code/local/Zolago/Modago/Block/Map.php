@@ -31,8 +31,9 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
             if (!empty($filterValue)) {
                 $collection
                     ->getSelect()
-                    ->where('(postcode=?', $filterValue)
-                    ->orWhere("map_name LIKE  ?)", '%' . $filterValue . '%');
+                    ->where('(postcode LIKE ?', '%' . $filterValue . '%')
+                    ->orWhere("map_name LIKE  ?", '%' . $filterValue . '%')
+                    ->orWhere("city LIKE  ?)", '%' . $filterValue . '%');
 
             }
 
@@ -73,12 +74,11 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                             "time_opened" => $this->clearNewLines($posMap->getMapTimeOpened())
                         );
                     }
-                    //$result = json_encode($maps, JSON_HEX_APOS);
                     $result = $maps;
                 }
             }
         }
-        //Mage::log($result, null, "map.log");
+
         return json_encode($result, JSON_HEX_APOS);
     }
 
