@@ -197,6 +197,8 @@ function refreshMap(filteredData) {
             } else {
                 map.setCenter(this.getPosition());
                 map.setZoom(8);
+            }
+            if (window.innerWidth <= 991) {
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#map-container").offset().top
                 }, 2000);
