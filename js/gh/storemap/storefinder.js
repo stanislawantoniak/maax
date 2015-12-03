@@ -204,7 +204,7 @@ function refreshMap(filteredData) {
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
-                map.setZoom(9);
+                map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
             }
             //$screen-md: 992px
             if (window.innerWidth <= 992) {
