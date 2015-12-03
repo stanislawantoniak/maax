@@ -376,10 +376,12 @@ function Haversine(lat1, lon1, lat2, lon2) {
 
 jQuery(document).ready(function () {
     var showAllLink = jQuery("a.stores-map-show-all");
+    var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault;
-        searchOnMap(jQuery(this).val());
-        if (jQuery("input[name=search_by_map]").val().length > 0) {
+        enteredSearchValue = jQuery(this).val();
+        searchOnMap(enteredSearchValue);
+        if (enteredSearchValue.length > 0) {
             showAllLink.hide();
         } else {
             showAllLink.show();
