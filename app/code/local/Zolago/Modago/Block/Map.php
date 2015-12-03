@@ -78,7 +78,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                 }
             }
         }
-        //Mage::log($result, null, "map.log");
+
         return json_encode($result, JSON_HEX_APOS);
     }
 
