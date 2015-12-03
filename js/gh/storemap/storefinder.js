@@ -131,7 +131,7 @@ function showPosition(position) {
     }
 
     refreshMap(closestStores);
-    buildStoresList(closestStores);
+    buildStoresList(closestStores,position);
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
@@ -268,10 +268,15 @@ function formatInfoWindowContent(info) {
     return contentString;
 }
 
-function generateDirectionLink(pos) {
-    return "https://maps.google.com/?daddr=" + pos.latitude + "," + pos.longitude;
+function generateDirectionLink(pos, position) {
+    var directionLink = "https://maps.google.com/?daddr=" + pos.latitude + "," + pos.longitude;
+
+    if (position)
+        directionLink += "&saddr=" + position.coords.latitude + "," + position.coords.longitude;
+
+    return directionLink;
 }
-function buildStoresList(filteredData) {
+function buildStoresList(filteredData, position) {
 
     if (typeof filteredData !== "undefined")
         data = filteredData;
@@ -303,7 +308,7 @@ function buildStoresList(filteredData) {
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
+                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos,position) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
 
             if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
                 list += "<div class='row'>" +
