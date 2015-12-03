@@ -281,7 +281,7 @@ function generateDirectionLink(pos, position) {
         position =  window.geoposition;
 
 
-    if (position)
+    if (typeof position !== "undefined")
         directionLink += "&saddr=" + position.coords.latitude + "," + position.coords.longitude;
 
     return directionLink;
