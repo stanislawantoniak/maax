@@ -42,6 +42,16 @@ var closestStores = [];
 var gmarkers = [];
 
 
+var smallScreen = 768;
+var middleScreen = 992;
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successFunction);
+}
+// Get the latitude and the longitude;
+function successFunction(position) {
+    window.geoposition = position;
+}
 
 
 function initialize() {
@@ -68,7 +78,7 @@ function initialize() {
         streetViewControl: false
     };
 
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < smallScreen) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
@@ -91,21 +101,17 @@ function initialize() {
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
-                //If you allow to see your location, I will show you all nearest stores
-                //console.log("I'm tracking you!");
+                //If you allow to see your location, you will see all the nearest stores
                 gmarkers = [];
                 showPosition(position);
             },
             function (error) {
-                //If you deny to see your location, I will show you all the stores
-                if (error.code == error.PERMISSION_DENIED){
-                    //console.log("You denied me :-(");
-                }
+                //If you deny to see your location, you will see all the stores
+                if (error.code == error.PERMISSION_DENIED){}
 
             });
     } else {
-        //Your browser doesn't support GEO location, I will show you all the stores
-        //console.log(" Your browser doesn't support GEO location!");
+        //Your browser doesn't support GEO location, you will see all the stores
     }
 
 
@@ -120,13 +126,19 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
+    } else {
+        showLabel(".the-nearest-stores");
+        showLabel("a.stores-map-show-all");
+    }
     if (closestStores.length <= 0) {
         closestStores = data;
-    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
+    } else {
+        showLabel(".the-nearest-stores");
+        showLabel("a.stores-map-show-all");
+    }
 
     refreshMap(closestStores);
-    buildStoresList(closestStores);
+    buildStoresList(closestStores,position);
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
@@ -193,15 +205,15 @@ function refreshMap(filteredData) {
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
             //$screen-sm: 768px
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= smallScreen) {
                 map.setCenter(this.getPosition()); // set map center to marker position
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
-                map.setZoom(9);
+                map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
             }
             //$screen-md: 992px
-            if (window.innerWidth <= 992) {
+            if (window.innerWidth <= middleScreen) {
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#map-container").offset().top
                 }, 1000);
@@ -213,7 +225,7 @@ function refreshMap(filteredData) {
 
         //Show all stores case
         if (typeof filteredData !== "undefined") {
-            if (window.innerWidth < 768) {
+            if (window.innerWidth < smallScreen) {
                 map.setZoom(5);
                 map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
             } else {
@@ -263,11 +275,20 @@ function formatInfoWindowContent(info) {
     return contentString;
 }
 
-function generateDirectionLink(pos) {
-    return "https://maps.google.com/?daddr=" + pos.latitude + "," + pos.longitude;
-}
-function buildStoresList(filteredData) {
+function generateDirectionLink(pos, position) {
+    var directionLink = "https://maps.google.com/?daddr=" + pos.latitude + "," + pos.longitude;
+    if(typeof position == "undefined")
+        position =  window.geoposition;
 
+
+    if (typeof position !== "undefined")
+        directionLink += "&saddr=" + position.coords.latitude + "," + position.coords.longitude;
+
+    return directionLink;
+}
+
+
+function buildStoresList(filteredData,position) {
     if (typeof filteredData !== "undefined")
         data = filteredData;
 
@@ -298,10 +319,12 @@ function buildStoresList(filteredData) {
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
+                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos,position) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
 
             if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
-                list += "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>";
+                list += "<div class='row'>" +
+                    "<a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a>" +
+                    "</div>";
             }
 
             list +="</div>" +
@@ -335,6 +358,8 @@ function searchOnMap(q) {
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
     form.find("[name=search_by_map]").val("");
+    hideLabel("a.stores-map-show-all");
+    hideLabel(".the-nearest-stores");
     _makeMapRequest(0)
 }
 
@@ -398,10 +423,10 @@ jQuery(document).ready(function () {
     var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault();
-        //console.log("KEYUP");
+
         enteredSearchValue = jQuery.trim(jQuery(this).val());
+
         if (enteredSearchValue.length > 0) {
-            //console.log("KEYUP NOT EMPTY");
             hideLabel(".the-nearest-stores");
             searchOnMap(enteredSearchValue);
             showLabel("a.stores-map-show-all");
