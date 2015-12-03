@@ -26,14 +26,25 @@ class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template
     
     /**
      * prepare javascript
+     * Usages: for highlighted navigation desktop element in cms block (navigation-main-desktop)
+     * put in anchor element property data-catids
+     * for example data-catids="mypromotions"
+     * if url look like: http://www.example.com/mypromotions
      */
-
     protected function getJavascript() {
         $request = Mage::app()->getRequest();
         $module  = $request->getModuleName();
         $name    = $request->getControllerName();
         $action  = $request->getActionName();
-        $script = "<script>Mall.Navigation.currentCategoryId.push('".(Mage::registry('current_category') ? Mage::registry('current_category')->getId() : $module."/".$name."/".$action)."');</script>";
+        if (Mage::registry('current_category')) {
+            $script = "<script>Mall.Navigation.currentCategoryId.push('".Mage::registry('current_category')->getId()."');</script>";
+        } else {
+            $script  = "<script>";
+            $script .= "Mall.Navigation.currentCategoryId.push('".$module."/".$name."/".$action."');\n";// mypromotions/index/index
+            $script .= "Mall.Navigation.currentCategoryId.push('".$module."/".$name."');\n";// mypromotions/index
+            $script .= "Mall.Navigation.currentCategoryId.push('".$module."');\n";// mypromotions <- easiest for write in cms block
+            $script .= "</script>";
+        }
 
         return $script;
     }
