@@ -103,12 +103,7 @@ function initialize() {
                 if (error.code == error.PERMISSION_DENIED){}
 
             });
-    } else {
-        //Your browser doesn't support GEO location, I will show you all the stores
     }
-
-
-
 }
 
 //GEO
