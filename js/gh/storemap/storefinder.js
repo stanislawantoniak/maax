@@ -201,7 +201,7 @@ function refreshMap(filteredData) {
             if (window.innerWidth <= 991) {
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#map-container").offset().top
-                }, 2000);
+                }, 1000);
             }
 
             infowindow.open(map, this);
