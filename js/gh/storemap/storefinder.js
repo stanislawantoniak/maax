@@ -382,6 +382,12 @@ function Haversine(lat1, lon1, lat2, lon2) {
 }
 //--GEO helpers
 
+function showShowAllLink(){
+    jQuery("a.stores-map-show-all").removeClass("hidden");
+}
+function hideShowAllLink(){
+    jQuery("a.stores-map-show-all").addClass("hidden");
+}
 
 jQuery(document).ready(function () {
     var showAllLink = jQuery("a.stores-map-show-all");
@@ -391,9 +397,9 @@ jQuery(document).ready(function () {
         enteredSearchValue = jQuery(this).val();
         searchOnMap(enteredSearchValue);
         if (enteredSearchValue.length > 0) {
-            showAllLink.removeClass("hidden");
+            showShowAllLink();
         } else {
-            showAllLink.addClass("hidden");
+            hideShowAllLink();
         }
     });
 
