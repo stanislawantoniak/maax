@@ -92,18 +92,20 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 //If you allow to see your location, I will show you all nearest stores
-                console.log("I'm tracking you!");
+                //console.log("I'm tracking you!");
                 gmarkers = [];
                 showPosition(position);
             },
             function (error) {
                 //If you deny to see your location, I will show you all the stores
-                if (error.code == error.PERMISSION_DENIED)
-                    console.log("You denied me :-(");
+                if (error.code == error.PERMISSION_DENIED){
+                    //console.log("You denied me :-(");
+                }
+
             });
     } else {
         //Your browser doesn't support GEO location, I will show you all the stores
-        console.log(" Your browser doesn't support GEO location!");
+        //console.log(" Your browser doesn't support GEO location!");
     }
 
 
@@ -396,10 +398,10 @@ jQuery(document).ready(function () {
     var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault();
-        console.log("KEYUP");
+        //console.log("KEYUP");
         enteredSearchValue = jQuery.trim(jQuery(this).val());
         if (enteredSearchValue.length > 0) {
-            console.log("KEYUP NOT EMPTY");
+            //console.log("KEYUP NOT EMPTY");
             hideLabel(".the-nearest-stores");
             searchOnMap(enteredSearchValue);
             showLabel("a.stores-map-show-all");
@@ -411,7 +413,7 @@ jQuery(document).ready(function () {
     jQuery("#search_by_map_form").submit(function (e) {
         e.preventDefault();
         if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
-            console.log("SUBMIT");
+            //console.log("SUBMIT");
             hideLabel(".the-nearest-stores");
             searchOnMap();
         }
