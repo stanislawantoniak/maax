@@ -54,6 +54,7 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 				<div class="table-row clearfix panel-header vendor-header">
 					<?php $_v = $_item->getVendor(); ?>
 						<div class="panel-heading pull-left col-sm-6 col-xs-12">
+							<?php printf($this->__('Shipment %d of %d'), ($total++), count($_items)); ?>
 							<a class="small underline visible-xs contact-vendor" href="#"
 							   data-order-id="<?php echo $_item->getId();?>" data-vendor-id="<?php echo $_v->getId();?>"
 							   data-vendor-name="<?php echo $this->escapeHtml($_v->getVendorName());?>"
