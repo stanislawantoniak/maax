@@ -85,13 +85,13 @@ function initialize() {
     data = jQuery.parseJSON(data);
 
 
-    refreshMap();
-    buildStoresList();
+    //refreshMap();
+    //buildStoresList();
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 console.log("I'm tracking you!");
-                gmarkers = [];
+                //gmarkers = [];
                 showPosition(position);
             },
             function (error) {
