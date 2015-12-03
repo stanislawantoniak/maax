@@ -142,8 +142,6 @@ function calculateTheNearestStores(position,minDistance, fallback) {
             data[i].distance = dist;
             closestStores.push(data[i]);
             if(fallback && closestStores.length >= 3){
-                //minDistance = dist;
-                //return closestStores;
                 break;
             }
 
