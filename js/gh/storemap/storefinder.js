@@ -294,7 +294,7 @@ function buildStoresList(filteredData) {
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
                 "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
-            console.log(Mall.getIsBrowserMobile());
+
             if(Mall.getIsBrowserMobile()){
                 list += "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>";
             }
