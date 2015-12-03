@@ -1476,6 +1476,7 @@
   <!-- Rma																 -->
   <!-- ################################################################### -->
   <sales_po_newrma>
+    <label>Customer My Account Order RMA View</label>
     <reference name="head">
       <action method="addItem">
         <type>skin_js</type>
@@ -1493,6 +1494,22 @@
         <type>skin_js</type>
         <script>js/mall/customer/AddressBook/Layout.js</script>
       </action>
+      <action method="addItem">
+        <type>js_css</type>
+        <name>calendar/calendar-win2k-1.css</name>
+        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
+      </action>
+      <action method="addItem">
+        <type>js</type>
+        <name>calendar/calendar.js</name>
+        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
+      </action>
+      <action method="addItem">
+        <type>js</type>
+        <name>calendar/calendar-setup.js</name>
+        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
+      </action>
+      <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
     </reference>
     <reference name="breadcrumbs">
       <action method="addCrumb">
@@ -1513,7 +1530,18 @@
         </block>
         <block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
       </block>
+      <block type="zolagopo/info" as="info" name="sales.po.info">
+        <action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
+        <action method="addLink" translate="label" module="sales"><name>invoice</name><path>*/*/invoice</path><label>Invoices</label></action>
+        <action method="addLink" translate="label" module="sales"><name>shipment</name><path>*/*/shipment</path><label>Shipments</label></action>
+        <action method="addLink" translate="label" module="sales"><name>creditmemo</name><path>*/*/creditmemo</path><label>Refunds</label></action>
+        <action method="addLink" translate="label" module="urma"><name>rma</name><path>*/*/rma</path><label>RMA</label></action>
+        <action method="setInRma">
+          <status>1</status>
+        </action>
+      </block>
     </reference>
+    <update handle="customer_account"/>
   </sales_po_newrma>
   <sales_rma_view>
     <update handle="customer_account"/>
@@ -1726,6 +1754,45 @@
       <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
     </reference>
   </help_contact_gallery>
+  <help_contact_index>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Help</crumbName>
+        <crumbInfo>
+          <label>Help</label>
+          <title>Help</title>
+          <link>/help</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Contact</crumbName>
+        <crumbInfo>
+          <label>Contact</label>
+          <title>Contact</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="core/template" name="contact.gallery" template="help/contact.phtml"/>
+      <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
+    </reference>
+  </help_contact_index>
   <newsletter_manage_index>
     <reference name="breadcrumbs">
       <action method="addCrumb">

@@ -1,22 +1,5 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<!-- forntend -->
-	<customer_account>
-		<reference name="customer_account_navigation">
-			 <action method="addLink" translate="label" module="zolagorma">
-				 <name>rma</name>
-				 <path>sales/rma/history</path>
-				 <label>Rma History</label>
-			 </action>
-			 <!-- 
-			 <action method="addLink" translate="label" module="zolagopo">
-				 <name>orders</name>
-				 <path>sales/po/history</path>
-				 <label>Purchase Order History</label>
-			 </action>
-			 -->
-		</reference>
-	</customer_account>
 	<sales_po_view>
 		<label>Customer My Account Order RMA View</label>
         <update handle="customer_account"/>

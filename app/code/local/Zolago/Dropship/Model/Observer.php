@@ -316,4 +316,23 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $this->_addFieldsToFieldset($keys,$fieldset);
 
     }
+
+    public function addUndeliveredTrackData(Varien_Event_Observer $observer) {
+        //rma_rma_track_save_before && sales_order_shipment_track_save_before
+        $track = $observer->getEvent()->getTrack();
+        if( $track->getId() &&
+            $track->getData('udropship_status') == Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED &&
+            $track->getOrigData('udropship_status') != Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED &&
+            $track->getData('track_type') != GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED) {
+
+            $number = $track->getData('track_number').Zolago_Dropship_Model_Source::TRACK_UNDELIVERED_SUFFIX;
+            $newTrack = clone($track);
+            $newTrack
+                ->setId(null)
+                ->setWebApi(true)
+                ->setTrackNumber($number)
+                ->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED)
+                ->save();
+        }
+    }
 }
