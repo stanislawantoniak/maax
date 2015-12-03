@@ -293,9 +293,12 @@ function buildStoresList(filteredData) {
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>" +
-                "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>" +
-                "</div>" +
+                "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
+            if(Mall.getIsBrowserMobile){
+                list += "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>";
+            }
+
+            list +="</div>" +
                 "</div>" +
 
                 "</div>" +
