@@ -382,6 +382,12 @@ function Haversine(lat1, lon1, lat2, lon2) {
 }
 //--GEO helpers
 
+function showLabel(label){
+    jQuery(label).removeClass("hidden");
+}
+function hideLabel(label){
+    jQuery(label).addClass("hidden");
+}
 
 jQuery(document).ready(function () {
     var showAllLink = jQuery("a.stores-map-show-all");
