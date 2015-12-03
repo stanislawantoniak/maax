@@ -121,7 +121,6 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
     } else {
-
         showLabel(".the-nearest-stores");
         showLabel("a.stores-map-show-all");
     }
@@ -342,6 +341,8 @@ function searchOnMap(q) {
 function clearSearchOnMap() {
     var form = jQuery("#search_by_map_form");
     form.find("[name=search_by_map]").val("");
+    hideLabel("a.stores-map-show-all");
+    hideLabel(".the-nearest-stores");
     _makeMapRequest(0)
 }
 
