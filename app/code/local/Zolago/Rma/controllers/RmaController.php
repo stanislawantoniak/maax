@@ -31,6 +31,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		}
 		
 		$customer = $session->getCustomer();
+		 /** @var Zolago_Rma_Helper_Data $helperRma */
 		$helperRma = Mage::helper('zolagorma');
 		$helperTrack = Mage::helper('zolagorma/tracking');
 		$helperDhl = Mage::helper('orbashipping/carrier_dhl');

@@ -216,7 +216,6 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	/**
 	 * Details action (JSON)
 	 */
-	
 	public function detailAction() {
 		$ids = $this->getRequest()->getParam("ids", array());
 		
