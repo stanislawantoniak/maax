@@ -439,7 +439,7 @@ jQuery(document).ready(function () {
         e.preventDefault();
         console.log(jQuery("input[name=search_by_map]").val());
         if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
-            console.log("SUBMIT");
+
             hideLabel(".the-nearest-stores");
             searchOnMap();
         }
