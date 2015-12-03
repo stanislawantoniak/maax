@@ -116,23 +116,16 @@ function showPosition(position) {
 
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
-    console.log(closestStores);
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-        refreshMap(closestStores);
-        buildStoresList(closestStores);
-        return;
     }
     if (closestStores.length <= 0) {
-
         closestStores = data;
-        refreshMap(closestStores);
-        buildStoresList(closestStores);
-        return;
     }
 
-
+    refreshMap(closestStores);
+    buildStoresList(closestStores);
 }
 
 function calculateTheNearestStores(position,minDistance, fallback) {
