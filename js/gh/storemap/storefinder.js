@@ -118,10 +118,10 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    }
+    } else {showLabel(".the-nearest-stores");}
     if (closestStores.length <= 0) {
         closestStores = data;
-    }
+    } else {showLabel(".the-nearest-stores");}
 
     refreshMap(closestStores);
     buildStoresList(closestStores);
@@ -269,7 +269,7 @@ function buildStoresList(filteredData) {
     if (typeof filteredData !== "undefined")
         data = filteredData;
 
-    var searchByMapList = jQuery(".search-by-map-list");
+    var searchByMapList = jQuery(".search-by-map-list-container");
 
     var list = "";
     var pos, posId;
@@ -382,28 +382,24 @@ function Haversine(lat1, lon1, lat2, lon2) {
 }
 //--GEO helpers
 
-function showShowAllLink(){
-    jQuery("a.stores-map-show-all").removeClass("hidden");
-}
-function hideShowAllLink(){
-    jQuery("a.stores-map-show-all").addClass("hidden");
-}
 
 jQuery(document).ready(function () {
     var showAllLink = jQuery("a.stores-map-show-all");
     var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault;
+        hideLabel(".the-nearest-stores");
         enteredSearchValue = jQuery(this).val();
         searchOnMap(enteredSearchValue);
         if (enteredSearchValue.length > 0) {
-            showShowAllLink();
+            showLabel("a.stores-map-show-all");
         } else {
-            hideShowAllLink();
+            hideLabel("a.stores-map-show-all");
         }
     });
 
     jQuery("#search_by_map_form").submit(function () {
+        hideLabel(".the-nearest-stores");
         searchOnMap();
         return false;
     })

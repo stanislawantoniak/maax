@@ -1,9 +1,12 @@
 <?php /* @var $this Zolago_Modago_Block_Map */ ?>
-<?php $map = $this->getMapData(); ?>
+<?php
+$map = $this->getMapData();
+$decodedJSON = json_decode($map, true);
+?>
 
 <?php $_helper = Mage::helper("zolagomodago"); ?>
 <script type="text/javascript" src="//maps.google.com/maps/api/js"></script>
-<?php if(!empty($map)): ?>
+<?php if(!empty($decodedJSON)): ?>
     <script type="text/javascript">
         var data = '<?php echo $map; ?>';
         var showOnMapLink = '<?php echo $_helper->__("Show on map")?>';
@@ -21,7 +24,7 @@
 
                     <div class="container-fluid no-padding">
                         <div class="col-md-12 no-padding">
-                            <?php if (!empty($map)): ?>
+                            <?php if (!empty($decodedJSON)): ?>
                                 <div id="map-list-container" class="col-md-5 col-sm-12">
                                     <div class="col-md-12 no-padding">
                                         <div class="search-by-map col-md-12 col-sm-10 col-xs-12">
@@ -42,7 +45,12 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="search-by-map-list col-md-12 col-sm-12 col-xs-12"></div>
+                                        <div class="search-by-map-list col-md-12 col-sm-12 col-xs-12">
+                                            <h4 class="the-nearest-stores hidden">
+                                                <?php echo $_helper->__("The nearest stores"); ?>
+                                            </h4>
+                                            <div class="search-by-map-list-container"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="map-container" class="col-md-7 col-sm-12 col-xs-12">
