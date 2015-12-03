@@ -85,23 +85,26 @@ function initialize() {
     data = jQuery.parseJSON(data);
 
 
+    //I will show all the stores on the map first
     refreshMap();
     buildStoresList();
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
+                //If you allow to see your location, I will show you all nearest stores
                 console.log("I'm tracking you!");
-
                 gmarkers = [];
                 showPosition(position);
             },
             function (error) {
+                //If you deny to see your location, I will show you all the stores
                 if (error.code == error.PERMISSION_DENIED)
                     console.log("You denied me :-(");
                 refreshMap();
                 buildStoresList();
             });
     } else {
+        //Your browser doesn't support GEO location, I will show you all the stores
         console.log(" Your browser doesn't support GEO location!");
         refreshMap();
         buildStoresList();
