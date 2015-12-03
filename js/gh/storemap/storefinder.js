@@ -118,10 +118,10 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    } else {showLabel(".the-nearest-stores");}
+    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
     if (closestStores.length <= 0) {
         closestStores = data;
-    } else {showLabel(".the-nearest-stores");}
+    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
 
     refreshMap(closestStores);
     buildStoresList(closestStores);
