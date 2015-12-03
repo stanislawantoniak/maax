@@ -100,14 +100,14 @@ function initialize() {
                 //If you deny to see your location, I will show you all the stores
                 if (error.code == error.PERMISSION_DENIED)
                     console.log("You denied me :-(");
-                refreshMap();
-                buildStoresList();
+                //refreshMap();
+                //buildStoresList();
             });
     } else {
         //Your browser doesn't support GEO location, I will show you all the stores
         console.log(" Your browser doesn't support GEO location!");
-        refreshMap();
-        buildStoresList();
+        //refreshMap();
+        //buildStoresList();
     }
 
 
