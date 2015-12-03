@@ -285,9 +285,12 @@ function buildStoresList(filteredData) {
                 "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
                 "<p><b>" + pos.name + "</b></p>" +
                 "<p>" + pos.street + "</p>" +
-                "<p>" + pos.postcode + " " + pos.city + "</p>" +
-                "<p>Tel: " + pos.phone + "</p>" +
-                "<div>" + pos.time_opened + "</div>" +
+                "<p>" + pos.postcode + " " + pos.city + "</p>";
+            if(pos.phone.length > 0){
+                list +="<p>Tel: " + pos.phone + "</p>";
+            }
+
+            list +="<div>" + pos.time_opened + "</div>" +
                 "</div>" +
 
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
@@ -295,7 +298,7 @@ function buildStoresList(filteredData) {
                 "<div class='row'><a class='button button-third large pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + showOnMapLink + "</a></div>" +
                 "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
 
-            if(Mall.getIsBrowserMobile()){
+            if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
                 list += "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>";
             }
 
@@ -390,23 +393,27 @@ function hideLabel(label){
 }
 
 jQuery(document).ready(function () {
-    var showAllLink = jQuery("a.stores-map-show-all");
     var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
-        e.preventDefault;
-        hideLabel(".the-nearest-stores");
-        enteredSearchValue = jQuery(this).val();
-        searchOnMap(enteredSearchValue);
+        e.preventDefault();
+        console.log("KEYUP");
+        enteredSearchValue = jQuery.trim(jQuery(this).val());
         if (enteredSearchValue.length > 0) {
+            console.log("KEYUP NOT EMPTY");
+            hideLabel(".the-nearest-stores");
+            searchOnMap(enteredSearchValue);
             showLabel("a.stores-map-show-all");
         } else {
             hideLabel("a.stores-map-show-all");
         }
     });
 
-    jQuery("#search_by_map_form").submit(function () {
-        hideLabel(".the-nearest-stores");
-        searchOnMap();
-        return false;
+    jQuery("#search_by_map_form").submit(function (e) {
+        e.preventDefault();
+        if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
+            console.log("SUBMIT");
+            hideLabel(".the-nearest-stores");
+            searchOnMap();
+        }
     })
 });
