@@ -426,12 +426,15 @@ jQuery(document).ready(function () {
 
         enteredSearchValue = jQuery.trim(jQuery(this).val());
 
-        if (enteredSearchValue.length >= 0 && e.which !== 13) {
+        if(enteredSearchValue.length > 0){
             hideLabel(".the-nearest-stores");
-            searchOnMap(enteredSearchValue);
             showLabel("a.stores-map-show-all");
-        } else {
+        }
+        else {
             hideLabel("a.stores-map-show-all");
+        }
+        if (enteredSearchValue.length >= 0 && e.which !== 13) {
+            searchOnMap(enteredSearchValue);
         }
     });
 
