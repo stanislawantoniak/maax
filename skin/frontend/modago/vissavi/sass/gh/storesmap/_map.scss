@@ -13,37 +13,19 @@
   #map {
     width: 100%;
     height: 450px;
-  }
 
-  .select2-container {
-    width: 100%;
     @media (max-width: $screen-md) {
-      width: 60%;
+      width: 85%;
+      height: 400px;
+      margin: 10px auto;
     }
     @media (max-width: $screen-sm) {
-      width: 75%;
-    }
-    @media (max-width: $screen-xs) {
-      width: 100%;
-    }
-
-  }
-  /*col-md*/
-  @media (max-width: $screen-md) {
-    #map {
       width: 85%;
       height: 300px;
       margin: 10px auto;
     }
   }
-  /*col-sm*/
-  @media (max-width: $screen-sm) {
-    #map {
-      width: 85%;
-      height: 200px;
-      margin: 10px auto;
-    }
-  }
+
 
   #inline-actions {
     padding-top: 10px;
