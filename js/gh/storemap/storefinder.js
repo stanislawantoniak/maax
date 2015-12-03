@@ -92,8 +92,8 @@ function initialize() {
                 console.log("I'm tracking you!");
                 refreshMap();
                 buildStoresList();
-                //gmarkers = [];
-                //showPosition(position);
+                gmarkers = [];
+                showPosition(position);
             },
             function (error) {
                 if (error.code == error.PERMISSION_DENIED)
