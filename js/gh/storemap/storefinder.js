@@ -120,10 +120,17 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
+    } else {
+
+        showLabel(".the-nearest-stores");
+        showLabel("a.stores-map-show-all");
+    }
     if (closestStores.length <= 0) {
         closestStores = data;
-    } else {showLabel(".the-nearest-stores");showLabel("a.stores-map-show-all");}
+    } else {
+        showLabel(".the-nearest-stores");
+        showLabel("a.stores-map-show-all");
+    }
 
     refreshMap(closestStores);
     buildStoresList(closestStores);
@@ -398,8 +405,9 @@ jQuery(document).ready(function () {
     var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault();
-        //console.log("KEYUP");
+        console.log("KEYUP");
         enteredSearchValue = jQuery.trim(jQuery(this).val());
+        console.log(enteredSearchValue);
         if (enteredSearchValue.length > 0) {
             //console.log("KEYUP NOT EMPTY");
             hideLabel(".the-nearest-stores");
@@ -413,7 +421,7 @@ jQuery(document).ready(function () {
     jQuery("#search_by_map_form").submit(function (e) {
         e.preventDefault();
         if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
-            //console.log("SUBMIT");
+            console.log("SUBMIT");
             hideLabel(".the-nearest-stores");
             searchOnMap();
         }
