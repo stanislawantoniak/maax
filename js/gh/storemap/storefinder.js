@@ -196,8 +196,10 @@ function refreshMap(filteredData) {
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
-                //smoothZoom(map, 11, map.getZoom());
                 map.setZoom(8);
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#map-container").offset().top
+                }, 2000);
             }
 
             infowindow.open(map, this);
