@@ -36,7 +36,7 @@ var defaultCenterLangMobile = 51.7934482;
 var defaultCenterLatMobile = 18.8979594;
 
 var minDist = 30; //km
-var minDistFallBack = 200; //km
+var minDistFallBack = 100; //km
 var closestStores = [];
 
 var gmarkers = [];
@@ -85,23 +85,25 @@ function initialize() {
     data = jQuery.parseJSON(data);
 
 
-
+    //I will show all the stores on the map first
+    refreshMap();
+    buildStoresList();
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
+                //If you allow to see your location, I will show you all nearest stores
                 console.log("I'm tracking you!");
+                gmarkers = [];
                 showPosition(position);
             },
             function (error) {
+                //If you deny to see your location, I will show you all the stores
                 if (error.code == error.PERMISSION_DENIED)
                     console.log("You denied me :-(");
-                refreshMap();
-                buildStoresList();
             });
     } else {
-        console.log(" Your browser don't support GEO location!");
-        refreshMap();
-        buildStoresList();
+        //Your browser doesn't support GEO location, I will show you all the stores
+        console.log(" Your browser doesn't support GEO location!");
     }
 
 
@@ -128,7 +130,7 @@ function showPosition(position) {
 function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-    //console.log(data);
+    //console.log(minDistance);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
@@ -139,14 +141,20 @@ function calculateTheNearestStores(position,minDistance, fallback) {
             data[i].distance = dist;
             closestStores.push(data[i]);
             if(fallback && closestStores.length >= 3){
-                //minDistance = dist;
-                return closestStores;
+                break;
             }
 
         }
     }
+    //sort by distance
+    function sortByDirection(a, b) {
+        return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
+    }
+    closestStores.sort(sortByDirection);
+
     return closestStores;
 }
+
 //--GEO
 
 
@@ -182,10 +190,16 @@ function refreshMap(filteredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
-            map.setCenter(this.getPosition()); // set map center to marker position
+            //$screen-sm:                  768px
+            if (window.innerWidth >= 768) {
+                map.setCenter(this.getPosition()); // set map center to marker position
+                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            } else {
+                map.setCenter(this.getPosition());
+                //smoothZoom(map, 11, map.getZoom());
+                map.setZoom(8);
+            }
 
-            // call smoothZoom, parameters map, final zoomLevel, and starting zoom level
-            smoothZoom(map, 10, map.getZoom());
             infowindow.open(map, this);
 
         });
@@ -212,10 +226,7 @@ function refreshMap(filteredData) {
         gridSize: 7,
         styles: clusterStyles
     };
-    if (window.innerWidth < 768) {
-        markerClusterOptions.maxZoom = 8;
-        markerClusterOptions.gridSize = 20;
-    }
+
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
