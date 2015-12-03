@@ -94,16 +94,21 @@ function initialize() {
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             function (position) {
-                //If you allow to see your location, I will show you all nearest stores
+                //If you allow to see your location, you will see all the nearest stores
                 gmarkers = [];
                 showPosition(position);
             },
             function (error) {
-                //If you deny to see your location, I will show you all the stores
+                //If you deny to see your location, you will see all the stores
                 if (error.code == error.PERMISSION_DENIED){}
 
             });
+    } else {
+        //Your browser doesn't support GEO location, you will see all the stores
     }
+
+
+
 }
 
 //GEO
