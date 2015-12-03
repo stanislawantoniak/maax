@@ -45,6 +45,13 @@ var gmarkers = [];
 var smallScreen = 768;
 var middleScreen = 992;
 
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successFunction);
+}
+// Get the latitude and the longitude;
+function successFunction(position) {
+    window.geoposition = position;
+}
 
 
 function initialize() {
@@ -270,14 +277,18 @@ function formatInfoWindowContent(info) {
 
 function generateDirectionLink(pos, position) {
     var directionLink = "https://maps.google.com/?daddr=" + pos.latitude + "," + pos.longitude;
+    if(typeof position == "undefined")
+        position =  window.geoposition;
+
 
     if (position)
         directionLink += "&saddr=" + position.coords.latitude + "," + position.coords.longitude;
 
     return directionLink;
 }
-function buildStoresList(filteredData, position) {
 
+
+function buildStoresList(filteredData,position) {
     if (typeof filteredData !== "undefined")
         data = filteredData;
 
