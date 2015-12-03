@@ -191,12 +191,19 @@ function refreshMap(filteredData) {
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
             //$screen-sm: 768px
-            if (window.innerWidth >= 768) {
-                map.setCenter(this.getPosition()); // set map center to marker position
-                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            //if (window.innerWidth >= 768) {
+            //    map.setCenter(this.getPosition()); // set map center to marker position
+            //    smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+            //} else {
+            //    map.setCenter(this.getPosition());
+            //    map.setZoom(9);
+            //}
+            if (window.innerWidth < 768) {
+                map.setZoom(5);
+                map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
             } else {
-                map.setCenter(this.getPosition());
-                map.setZoom(9);
+                map.setZoom(6);
+                map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
             }
             //$screen-md: 992px
             if (window.innerWidth <= 992) {
