@@ -121,7 +121,6 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
     } else {
-
         showLabel(".the-nearest-stores");
         showLabel("a.stores-map-show-all");
     }
