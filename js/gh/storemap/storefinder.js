@@ -190,14 +190,19 @@ function refreshMap(filteredData) {
 
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
-            //$screen-sm:                  768px
+            //$screen-sm: 768px
             if (window.innerWidth >= 768) {
                 map.setCenter(this.getPosition()); // set map center to marker position
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
-                //smoothZoom(map, 11, map.getZoom());
-                map.setZoom(8);
+                map.setZoom(9);
+            }
+            //$screen-md: 992px
+            if (window.innerWidth <= 992) {
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#map-container").offset().top
+                }, 1000);
             }
 
             infowindow.open(map, this);
