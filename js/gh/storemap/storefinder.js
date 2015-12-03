@@ -130,7 +130,7 @@ function showPosition(position) {
 function calculateTheNearestStores(position,minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-    //console.log(data);
+    //console.log(minDistance);
     for (var i = 0; i < data.length; i++) {
         pos = data[i];
         // get the distance between user's location and this point
@@ -146,6 +146,12 @@ function calculateTheNearestStores(position,minDistance, fallback) {
 
         }
     }
+    //sort by distance
+    function sortByDirection(a, b) {
+        return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
+    }
+    closestStores.sort(sortByDirection);
+
     return closestStores;
 }
 
