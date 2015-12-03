@@ -42,6 +42,9 @@ var closestStores = [];
 var gmarkers = [];
 
 
+var smallScreen = 768;
+var middleScreen = 992;
+
 
 
 function initialize() {
@@ -68,7 +71,7 @@ function initialize() {
         streetViewControl: false
     };
 
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < smallScreen) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
@@ -92,20 +95,16 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 //If you allow to see your location, I will show you all nearest stores
-                //console.log("I'm tracking you!");
                 gmarkers = [];
                 showPosition(position);
             },
             function (error) {
                 //If you deny to see your location, I will show you all the stores
-                if (error.code == error.PERMISSION_DENIED){
-                    //console.log("You denied me :-(");
-                }
+                if (error.code == error.PERMISSION_DENIED){}
 
             });
     } else {
         //Your browser doesn't support GEO location, I will show you all the stores
-        //console.log(" Your browser doesn't support GEO location!");
     }
 
 
@@ -199,7 +198,7 @@ function refreshMap(filteredData) {
         google.maps.event.addListener(marker, "click", function () {
             infowindow.setContent(this.html);
             //$screen-sm: 768px
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= smallScreen) {
                 map.setCenter(this.getPosition()); // set map center to marker position
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
@@ -207,7 +206,7 @@ function refreshMap(filteredData) {
                 map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
             }
             //$screen-md: 992px
-            if (window.innerWidth <= 992) {
+            if (window.innerWidth <= middleScreen) {
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#map-container").offset().top
                 }, 1000);
@@ -219,7 +218,7 @@ function refreshMap(filteredData) {
 
         //Show all stores case
         if (typeof filteredData !== "undefined") {
-            if (window.innerWidth < 768) {
+            if (window.innerWidth < smallScreen) {
                 map.setZoom(5);
                 map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
             } else {
@@ -307,7 +306,9 @@ function buildStoresList(filteredData) {
                 "<div class='row'><a class='button button-third large pull-right' href='" + generateDirectionLink(pos) + "' target='_blank'><i class='fa fa-compass'></i> " + defineTheRoute + "</a></div>";
 
             if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
-                list += "<div class='row'><a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a></div>";
+                list += "<div class='row'>" +
+                    "<a class='button button-third large pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + selectNumber + "</a>" +
+                    "</div>";
             }
 
             list +="</div>" +
@@ -406,11 +407,10 @@ jQuery(document).ready(function () {
     var enteredSearchValue;
     jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
         e.preventDefault();
-        //console.log("KEYUP");
+
         enteredSearchValue = jQuery.trim(jQuery(this).val());
-        //console.log(enteredSearchValue);
+
         if (enteredSearchValue.length > 0) {
-            //console.log("KEYUP NOT EMPTY");
             hideLabel(".the-nearest-stores");
             searchOnMap(enteredSearchValue);
             showLabel("a.stores-map-show-all");
