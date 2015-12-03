@@ -119,7 +119,8 @@ function showPosition(position) {
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    } else {
+    }
+    if (closestStores.length <= 0) {
         closestStores = data;
     }
 
