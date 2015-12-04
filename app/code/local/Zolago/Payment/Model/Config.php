@@ -68,6 +68,9 @@ class Zolago_Payment_Model_Config extends Varien_Simplexml_Config
 		$website = Mage::app()->getWebsite($website)->getCode();
 		$path = "$type/$provider/$website";
 		$data = $this->getXpath($path);
+        Mage::log($type, null, "getProviderConfig.log");
+        Mage::log($provider, null, "getProviderConfig.log");
+        Mage::log($website, null, "getProviderConfig.log");
 		return (is_array($data) && isset($data[0])) ? $data[0]->asArray() : null;
 	}
 }
