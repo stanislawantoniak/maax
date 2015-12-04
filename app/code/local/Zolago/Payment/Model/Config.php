@@ -66,12 +66,12 @@ class Zolago_Payment_Model_Config extends Varien_Simplexml_Config
 			$provider = $provider->getCode();
 		}
 		$website = Mage::app()->getWebsite($website)->getCode();
-		$path = "$type/$provider/convertica_website";
+		$path = "$type/$provider/$website";
 		$data = $this->getXpath($path);
         Mage::log($type, null, "getProviderConfig.log");
         Mage::log($provider, null, "getProviderConfig.log");
         Mage::log($website, null, "getProviderConfig.log");
-        Mage::log($data, null, "getProviderConfig.log");
+        Mage::log($this->getXpath("$type/$provider"), null, "getProviderConfig.log");
         Mage::log("------------------------------", null, "getProviderConfig.log");
 		return (is_array($data) && isset($data[0])) ? $data[0]->asArray() : null;
 	}
