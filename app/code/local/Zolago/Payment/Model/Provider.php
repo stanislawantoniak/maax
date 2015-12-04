@@ -14,11 +14,13 @@ class Zolago_Payment_Model_Provider extends Mage_Core_Model_Abstract{
 			$website = Mage::app()->getWebsite()->getCode();
 		}
 		Mage::log($website, null, "providers.log");
-		return (bool) Mage::getSingleton('zolagopayment/config')->getProviderConfig(
-			$website, 
-			$this, 
+		$isValid = (bool) Mage::getSingleton('zolagopayment/config')->getProviderConfig(
+			$website,
+			$this,
 			$this->getType()
 		);
+		Mage::log((int)$isValid, null, "providers.log");
+		return $isValid;
 	}
     
 }
