@@ -1,5 +1,25 @@
 <?php
 
+/**
+ * Mamy 3 strumienie pieniężne:
+ * 1.   Płatności za zamówienia
+ * 1.1      (-) Wysyłka zamówienia (brutto)
+ * 1.2      (+) Zwrot gotówki w RMA (cała wartość)
+ * 2.   Prowizje Modago
+ * 2.1      Wysyłka zamówienia:
+ *          (+) Prowizja [*]
+ *          (-) Rabat finansowany przez Modago [#]
+ * 2.2      Terminalny (pozytywny) status RMA (zwrot liczony procentowo*)
+ *          (-) Prowizja [*]
+ *          (+) Rabat finansowany przez Modago [#]
+ * 3.   Koszty transportu, marketingu
+ *
+ * NOTE *:
+ * Prowizna od zwrotów powinna być liczona proporcjonalnie do kwoty zwrotu,
+ * tylko dla nieodebranych przesyłek COD powinna być wyliczana od całości zamówienia
+ *
+ * Class GH_Statements_Model_Observer
+ */
 class GH_Statements_Model_Observer
 {
 
