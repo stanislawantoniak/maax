@@ -1,5 +1,8 @@
 <?php /* @var $this Zolago_Payment_Block_Form*/  ?>
-<?php $_providers = $this->getProviderCollection();?>
+<?php $_providers = $this->getProviderCollection();
+
+Mage::log($_providers->count(), null, "providers_1.log");
+?>
 <?php $_i = 0;?>
 <?php if ($_providers->count()):?>
 <div class="selected_bank">
