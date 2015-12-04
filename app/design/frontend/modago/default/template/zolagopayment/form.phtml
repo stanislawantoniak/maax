@@ -11,7 +11,10 @@ Mage::log($_providers->count(), null, "providers_1.log");
         class="col-xs-12 col-sm-12 col-md-12 col-lg-12 "
         >
         <?php $i=1;?>
-		<?php foreach($_providers as $_provider): ?>
+		<?php foreach($_providers as $_provider):
+            Mage::log($_provider->getData(), null, "providers_1.log");
+            Mage::log((int)$_provider->isValid(), null, "providers_1.log");
+            ?>
         <?php if (!$_provider->isValid()): continue; endif; ?>
 
         <?php $_code = $_provider->getCode(); ?>
