@@ -25,6 +25,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>1</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </mt><!--Płacę z Inteligo-->
                 <inteligo>
                     <base>
@@ -35,6 +43,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>2</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </inteligo>
                 <!--mBank multiTransfer-->
                 <mbmt>
@@ -46,6 +62,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>3</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </mbmt>
                 <!--Płacę z iPKO-->
                 <ipko>
@@ -57,6 +81,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>4</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </ipko>
                 <!--Przelew 24 Bank Zachodni WBK-->
                 <bzwbk>
@@ -68,6 +100,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>6</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </bzwbk>
                 <!--ING klienci korporacyjni-->
                 <!--<ingc>-->
@@ -139,6 +179,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>18</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </bph>
                 <!--Moje rachunki-->
                 <!--<mr>-->
@@ -239,6 +287,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>36</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </pekao>
                 <!--Płać z ING-->
                 <ing>
@@ -250,6 +306,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>38</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </ing>
                 <!--Bank Spółdzielczy-->
                 <!--<bs>-->
@@ -271,6 +335,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>44</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </mb>
                 <!--Alior bank-->
                 <ab>
@@ -282,6 +354,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>45</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </ab>
                 <!--City handlowy-->
                 <ch>
@@ -293,6 +373,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>46</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </ch>
                 <!--Raiffeisen polbank-->
                 <!--<rpb>-->
@@ -314,6 +402,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>48</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </r>
                 <!--Meritum bank-->
                 <m>
@@ -325,6 +421,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>49</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </m>
                 <!--Toyota bank-->
                 <tb>
@@ -336,6 +440,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>50</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </tb>
                 <!--BOŚ bank-->
                 <bos>
@@ -347,6 +459,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>51</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </bos>
                 <!--SkyCash-->
                 <!--<sc>-->
@@ -378,6 +498,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>56</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </eb>
                 <!--Getinbank-->
                 <!--<gb>-->
@@ -399,6 +527,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>58</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </db>
                 <!--T-Mobile bank-->
                 <tmb>
@@ -410,6 +546,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>60</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </tmb>
                 <!--Bank Pocztowy-->
                 <!--<bp>-->
@@ -441,6 +585,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>63</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </iko>
                 <!--PeoPay-->
                 <peopay>
@@ -452,6 +604,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>64</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </peopay>
                 <!--Idea-->
                 <idea>
@@ -463,6 +623,14 @@
                             <is_gateway>1</is_gateway>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>65</channel>
+                            <type>4</type>
+                            <is_gateway>1</is_gateway>
+                        </additional_information>
+                    </convertica_website>
                 </idea>
                 <!--mBank mRaty-->
                 <!--<mbmr>-->
@@ -518,6 +686,14 @@
                             <is_cc>1</is_cc>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>246</channel>
+                            <type>4</type>
+                            <is_cc>1</is_cc>
+                        </additional_information>
+                    </convertica_website>
                 </visa>
                 <!-- MasterCard -->
                 <mc>
@@ -529,6 +705,14 @@
                             <is_cc>1</is_cc>
                         </additional_information>
                     </base>
+                    <convertica_website>
+                        <method>dotpay</method>
+                        <additional_information>
+                            <channel>246</channel>
+                            <type>4</type>
+                            <is_cc>1</is_cc>
+                        </additional_information>
+                    </convertica_website>
                 </mc>
 			</cc>
 		</zolagopayment>
