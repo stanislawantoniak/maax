@@ -7,7 +7,7 @@
  *
  */
 class Zolago_Catalog_Model_Observer
-{	
+{
 	/**
 	 * Handle default category on product page
 	 * @area: frontend
@@ -17,7 +17,7 @@ class Zolago_Catalog_Model_Observer
 	public function productInit(Varien_Event_Observer $observer) {
 		$product = $observer->getEvent()->getProduct();
 		/* @var $product Mage_Catalog_Model_Products */
-		
+
 		// No category id
 		//if(!$product->getCategory()){
 			$rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
@@ -27,10 +27,10 @@ class Zolago_Catalog_Model_Observer
 				$product->setCategory($category);
                 Mage::unregister('current_category');
                 Mage::register('current_category', $category);
-			}	
+			}
 		//}
 	}
-	
+
     public function addColumnWidthField(Varien_Event_Observer $observer)
     {
         $fieldset = $observer->getForm()->getElement('front_fieldset');
@@ -121,5 +121,27 @@ class Zolago_Catalog_Model_Observer
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);
         }
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     * @throws Exception
+     */
+    public function catalogProductDeleteAfter(Varien_Event_Observer $observer)
+    {
+        try {
+            $product = $observer->getEvent()->getProduct();
+            $productId = $product->getId();
+
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $tableName = $resource->getTableName('catalog_category_product');
+            $query = "DELETE FROM {$tableName} WHERE product_id = " . (int)$productId;
+            $writeConnection->query($query);
+        } catch (Mage_Adminhtml_Exception $e) {
+            Mage::logException($e);
+        }
+        return $this;
     }
 }
