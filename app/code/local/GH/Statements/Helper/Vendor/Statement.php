@@ -36,10 +36,9 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		return number_format(Mage::app()->getLocale()->getNumber($value), 2);
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
-		$_helper = Mage::helper("ghstatements");
 		$page1data = array(
 			"name" => $statement->getName(),
-			"balance_title" => $_helper->__("Balance"),
+			"balance_title" => $this->__("Balance"),
 			"statement" => array(
 				$this->__("Payments for fulfilled orders") => $this->formatQuota($statement->getOrderValue()),
 				$this->__("Payment refunds for returned orders") => $this->formatQuota($statement->getRefundValue()),
@@ -54,7 +53,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			),
 
 			"saldo" => array(
-				$this->__("Previous statement saldo") => $this->formatQuota($statement->getLastStatementBalance()),
+				$this->__("Previous statement balance") => $this->formatQuota($statement->getLastStatementBalance()),
 				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
 				$this->__("Current statement saldo") =>
 					$this->formatQuota(floatval($statement->getLastStatementBalance())
