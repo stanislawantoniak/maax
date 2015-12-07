@@ -6,7 +6,9 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	 * @throws Zend_Controller_Response_Exception
 	 */
 	public function downloadStatementPdf(GH_Statements_Model_Statement $statement) {
-		$filename = preg_replace("/[^a-z0-9\._-]+/i","-",trim($statement->getName())).'.pdf';
+		$vendor = Mage::getModel("udropship/vendor")->load($statement->getVendorId());
+		$pdfName = "Statement-" . $vendor->getVendorName() . '-' . $statement->getEventDate();
+		$filename = preg_replace("/[^a-z0-9\._-]+/i", "-", trim($pdfName)) . '.pdf';
 		$file = file_get_contents($this->getStatementPdf($statement)); //todo:check path
 
 		Mage::app()->getResponse()
