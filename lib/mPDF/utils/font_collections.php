@@ -34,7 +34,7 @@ else { $ttfdir = _MPDF_TTFONTPATH; }
 
 $mqr=ini_get("magic_quotes_runtime");
 if ($mqr) { set_magic_quotes_runtime(0); }
-if (!class_exists('TTFontFile_Analysis', false)) { include(_MPDF_PATH . 'classes/ttfontsuni_analysis.php'); }
+if (!class_exists('TTFontFile_Analysis', false)) { include(_MPDF_PATH .'classes/ttfontsuni_analysis.php'); }
 $ttf = new TTFontFile_Analysis();
 
 $ff = scandir($ttfdir);
