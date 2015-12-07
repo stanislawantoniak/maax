@@ -426,19 +426,23 @@ jQuery(document).ready(function () {
 
         enteredSearchValue = jQuery.trim(jQuery(this).val());
 
-        if (enteredSearchValue.length > 0) {
+        if(enteredSearchValue.length > 0){
             hideLabel(".the-nearest-stores");
-            searchOnMap(enteredSearchValue);
             showLabel("a.stores-map-show-all");
-        } else {
+        }
+        else {
             hideLabel("a.stores-map-show-all");
+        }
+        if (enteredSearchValue.length >= 0 && e.which !== 13) {
+            searchOnMap(enteredSearchValue);
         }
     });
 
     jQuery("#search_by_map_form").submit(function (e) {
         e.preventDefault();
+        console.log(jQuery("input[name=search_by_map]").val());
         if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
-            //console.log("SUBMIT");
+
             hideLabel(".the-nearest-stores");
             searchOnMap();
         }
