@@ -46,16 +46,16 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 				$this->__("Discounts covered by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
 				$this->__("Other manual commission credit/debet notes") => $this->formatQuota($statement->getCommissionCorrection()),
 				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
-				$this->__("Manual carrier fees credit/debet notes") => $this->formatQuota($statement->getDeliveryCorrection()),
+				$this->__("Manual carrier fees credit/debit notes") => $this->formatQuota($statement->getDeliveryCorrection()),
 				$this->__("Marketing costs") => $this->formatQuota($statement->getMarketingValue()),
-				$this->__("Manual marketing fees credit/debet notes") => $this->formatQuota($statement->getMarketingCorrection()),
+				$this->__("Manual marketing fees credit/debit notes") => $this->formatQuota($statement->getMarketingCorrection()),
 				$this->__("To pay") => $this->formatQuota($statement->getToPay()),
 			),
 
 			"saldo" => array(
 				$this->__("Previous statement balance") => $this->formatQuota($statement->getLastStatementBalance()),
 				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
-				$this->__("Current statement saldo") =>
+				$this->__("Current statement balance") =>
 					$this->formatQuota(floatval($statement->getLastStatementBalance())
 					+ floatval($statement->getToPay())
 					- floatval($statement->getPaymentValue()))
