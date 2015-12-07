@@ -35,6 +35,7 @@ $data = $this->getPageData();
 		vertical-align: top;
 	}
 	table tr td:last-child {
+		display: inline-block;
 		text-align: right;
 	}
 	table tr:nth-child(odd) td {
@@ -42,6 +43,7 @@ $data = $this->getPageData();
 	}
 </style>
 <div>
+	<h3><?php $data["title"]; ?></h3>
 	<table cellspacing="0" border="1">
 		<thead>
 		<tr>

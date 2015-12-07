@@ -38,13 +38,13 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
 		$page1data = array(
 			"name" => $statement->getName(),
-			"balance_title" => $this->__("Balance"),
+			"title" => $this->__("Balance"),
 			"statement" => array(
 				$this->__("Payments for fulfilled orders") => $this->formatQuota($statement->getOrderValue()),
 				$this->__("Payment refunds for returned orders") => $this->formatQuota($statement->getRefundValue()),
 				$this->__("Modago commission") => $this->formatQuota(floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue())),
 				$this->__("Discounts covered by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
-				$this->__("Other manual commission credit/debet notes") => $this->formatQuota($statement->getCommissionCorrection()),
+				$this->__("Other manual commission credit/debit notes") => $this->formatQuota($statement->getCommissionCorrection()),
 				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
 				$this->__("Manual carrier fees credit/debit notes") => $this->formatQuota($statement->getDeliveryCorrection()),
 				$this->__("Marketing costs") => $this->formatQuota($statement->getMarketingValue()),
@@ -63,6 +63,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page2data = array(
+			"title" => $this->__("Tracking"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("RMA No."),
