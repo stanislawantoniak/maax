@@ -38,22 +38,24 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
 		$page1data = array(
 			"name" => $statement->getName(),
+			"title" => $this->__("Balance"),
 			"statement" => array(
-				$this->__("Payments for realised orders") => $this->formatQuota($statement->getOrderValue()),
-				$this->__("Payments correction for returned orders") => $this->formatQuota($statement->getRefundValue()),
+				$this->__("Payments for fulfilled orders") => $this->formatQuota($statement->getOrderValue()),
+				$this->__("Payment refunds for returned orders") => $this->formatQuota($statement->getRefundValue()),
 				$this->__("Modago commission") => $this->formatQuota(floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue())),
-				$this->__("Modago commission corrections for discounts funded by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
-				$this->__("Other Modago commission corrections") => $this->formatQuota($statement->getCommissionCorrection()),
+				$this->__("Discounts covered by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
+				$this->__("Other manual commission credit/debit notes") => $this->formatQuota($statement->getCommissionCorrection()),
 				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
-				$this->__("Carrier costs corrections") => $this->formatQuota($statement->getDeliveryCorrection()),
+				$this->__("Manual carrier fees credit/debit notes") => $this->formatQuota($statement->getDeliveryCorrection()),
 				$this->__("Marketing costs") => $this->formatQuota($statement->getMarketingValue()),
-				$this->__("Marketing costs corrections") => $this->formatQuota($statement->getMarketingCorrection()),
+				$this->__("Manual marketing fees credit/debit notes") => $this->formatQuota($statement->getMarketingCorrection()),
 				$this->__("To pay") => $this->formatQuota($statement->getToPay()),
 			),
+
 			"saldo" => array(
-				$this->__("Previous statement saldo") => $this->formatQuota($statement->getLastStatementBalance()),
+				$this->__("Previous statement balance") => $this->formatQuota($statement->getLastStatementBalance()),
 				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
-				$this->__("Current statement saldo") =>
+				$this->__("Current statement balance") =>
 					$this->formatQuota(floatval($statement->getLastStatementBalance())
 					+ floatval($statement->getToPay())
 					- floatval($statement->getPaymentValue()))
@@ -61,6 +63,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page2data = array(
+			"title" => $this->__("Tracking"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("RMA No."),
