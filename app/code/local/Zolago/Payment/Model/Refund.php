@@ -40,7 +40,7 @@ class Zolago_Payment_Model_Refund extends Zolago_Payment_Model_Allocation
 	                'rma_id'
                 )
             )
-            ->group(array('transaction_id','rma_id'))
+            ->group(array('transaction_id'))
             ->having('max_allocation_amount>0')
             ->having("created_at_hours_past >= {$configValue}");
         return $collection;
