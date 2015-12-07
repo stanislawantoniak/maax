@@ -44,7 +44,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 				$this->__("Payment refunds for returned orders") => $this->formatQuota($statement->getRefundValue()),
 				$this->__("Modago commission") => $this->formatQuota(floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue())),
 				$this->__("Discounts covered by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
-				$this->__("Other manual commision credit/debet notes") => $this->formatQuota($statement->getCommissionCorrection()),
+				$this->__("Other manual commission credit/debet notes") => $this->formatQuota($statement->getCommissionCorrection()),
 				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
 				$this->__("Manual carrier fees credit/debet notes") => $this->formatQuota($statement->getDeliveryCorrection()),
 				$this->__("Marketing costs") => $this->formatQuota($statement->getMarketingValue()),
