@@ -191,7 +191,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$pos[$poId] = Mage::getModel("udropship/po")->load($poId);
 
 					//fill 3rd page start
-					$currentFinalPrice = $this->formatQuota(floatval($order->getFinalPrice()) + floatval($order->getShippingCost()));
+					$currentFinalPrice = floatval($order->getFinalPrice()) + floatval($order->getShippingCost());
 					if(!isset($page3body[$poIncrementId])) {
 						$page3body[$poIncrementId] = array(
 							$poIncrementId,
@@ -201,18 +201,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$order->getShippedDate(),
 							"",//todo: realization time
 							$this->__($order->getPaymentMethod()),
-							$currentFinalPrice,
-							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0.00
+							$this->formatQuota($currentFinalPrice),
+							$order->getPaymentChannelOwner() ? $this->formatQuota($currentFinalPrice) : 0.00
 						);
 					} else {
-						$page3body[$poIncrementId][7] += $currentFinalPrice;
+						$page3body[$poIncrementId][7] += $this->formatQuota($currentFinalPrice);
 						if($order->getPaymentChannelOwner()) {
-							$page3body[$poIncrementId][8] += $currentFinalPrice;
+							$page3body[$poIncrementId][8] += $this->formatQuota($currentFinalPrice);
 						}
 					}
-					$page3data["footer"][7] += $currentFinalPrice;
+					$page3data["footer"][7] += $this->formatQuota($currentFinalPrice);
 					if($order->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
+						$page3data["footer"][8] += $this->formatQuota($currentFinalPrice);
 					}
 					//fill 3rd page end
 
@@ -256,7 +256,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$rmas[$rmaId] = Mage::getModel("urma/rma")->load($rmaId);
 
 					//fill 3rd page start
-					$currentFinalPrice = -$this->formatQuota(floatval($rma->getApprovedRefundAmount()));
+					$currentFinalPrice = -floatval($rma->getApprovedRefundAmount());
 					if(!isset($page3body[$rmaIncrementId])) {
 						$page3body[$rmaIncrementId] = array(
 							$rma->getPoIncrementId(),
@@ -266,19 +266,19 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$rma->getCarrierDate(), //todo: which date should be here?
 							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
-							$currentFinalPrice,
-							$rma->getPaymentChannelOwner() ? $currentFinalPrice : 0.00
+							$this->formatQuota($currentFinalPrice),
+							$rma->getPaymentChannelOwner() ? $this->formatQuota($currentFinalPrice) : 0.00
 						);
 					} else {
-						$page3body[$rmaIncrementId][7] += $currentFinalPrice;
+						$page3body[$rmaIncrementId][7] += $this->formatQuota($currentFinalPrice);
 						if($rma->getPaymentChannelOwner()) {
-							$page3body[$rmaIncrementId][8] += $currentFinalPrice;
+							$page3body[$rmaIncrementId][8] += $this->formatQuota($currentFinalPrice);
 						}
 					}
 
-					$page3data["footer"][7] += $currentFinalPrice;
+					$page3data["footer"][7] += $this->formatQuota($currentFinalPrice);
 					if($rma->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
+						$page3data["footer"][8] += $this->formatQuota($currentFinalPrice);
 					}
 					//fill 3rd page end
 
