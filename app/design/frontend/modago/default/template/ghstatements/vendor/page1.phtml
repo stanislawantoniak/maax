@@ -3,8 +3,27 @@
 $data = $this->getPageData();
 ?>
 <style>
-	table tr:nth-child(even) td {
-		background-color: #92abff;
+	table {
+        color: #555555;
+        font-size: 13px;
+        line-height: 1.428571429;
+		border-color: #808080;
+        border-collapse: collapse;
+        border-spacing: 0;
+		width: 100%;
+	}
+    table tr {
+        outline: none;
+    }
+    table tr td {
+        background-color: #ffffff;
+        border: 1px solid #dddddd;
+        padding: 8px;
+        line-height: 1.428571429;
+        vertical-align: top;
+    }
+    table tr:nth-child(odd) td {
+        background-color: #f9f9f9;
 	}
 </style>
 <div>
