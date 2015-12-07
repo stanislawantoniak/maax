@@ -9,7 +9,7 @@
         >
         <?php $i=1;?>
 		<?php foreach($_providers as $_provider): ?>
-        <?php if (!$_provider->isValid()): continue; endif; ?>
+        <?php //if (!$_provider->isValid()): continue; endif; ?>
 
         <?php $_code = $_provider->getCode(); ?>
         <?php $_providerServiceLogoUrl = $this->getProviderServiceLogo($_provider); ?>
