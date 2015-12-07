@@ -159,23 +159,23 @@ class GH_Statements_Model_Observer
     public static function populateStatement(GH_Statements_Model_Statement $statement, $statementTotals)
     {
         $data = array(
-            'to_pay' => 0,
-            'total_commission' => 0,
+            'to_pay' => 0,           // Do wypłaty dla Vendora
+            'total_commission' => 0, // Suma prowizji
         );
         // Order
         if (!empty($statementTotals->order)) {
-            $data["order_commission_value"]     = $statementTotals->order->commissionAmount;
-            $data["total_commission"]     += $statementTotals->order->commissionAmount;
-            $data["to_pay"] += $statementTotals->order->amount;
-            $data["gallery_discount_value"]		= $statementTotals->order->discountValue;
-            $data['order_value']		 		= $statementTotals->order->galleryPayment;
+            $data["order_commission_value"]     = $statementTotals->order->commissionAmount; // Suma prowizji z zamówień
+            $data["total_commission"]          += $statementTotals->order->commissionAmount; // Suma prowizji
+            $data["to_pay"]                    += $statementTotals->order->amount;           // Do wypłaty dla Vendora
+            $data["gallery_discount_value"]     = $statementTotals->order->discountValue;  // Suma zniżek finansowanych przez Modago
+            $data['order_value']                = $statementTotals->order->galleryPayment;   // Suma zamówień w kanale płatności Modago
         }
         // Rma
         if (!empty($statementTotals->rma)) {
-            $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;
-            $data["rma_value"]                  = $statementTotals->rma->amount;
-            $data['to_pay']                     += $statementTotals->rma->amount;
-            $data['total_commission']     -= $statementTotals->rma->commissionAmount;
+            $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount; // Suma prowizji z RMA
+            $data["rma_value"]                  = $statementTotals->rma->amount;           // Suma zwrotów RMA
+            $data['to_pay']                    += $statementTotals->rma->amount;           // Do wypłaty dla Vendora
+            $data['total_commission']          -= $statementTotals->rma->commissionAmount; // Suma prowizji
         }
         // Refund
         if (!empty($statementTotals->refund)) {
@@ -186,7 +186,7 @@ class GH_Statements_Model_Observer
         if (!empty($statementTotals->track)) {
             $data["tracking_charge_subtotal"]   = $statementTotals->track->netto;
             $data["tracking_charge_total"]      = $statementTotals->track->brutto;
-            $data['to_pay']                     -= $statementTotals->track->brutto;
+            $data['to_pay']                    -= $statementTotals->track->brutto;
         }
         // Marketing
         if(!empty($statementTotals->marketing)) {
@@ -239,9 +239,9 @@ class GH_Statements_Model_Observer
                                           Zolago_Po_Model_Source::UDPO_STATUS_RETURNED    // Zwrocono
                                       )));
 
-        $commissionAmount = 0;
-        $amount = 0;
-        $discountValue = 0;
+        $commissionAmount  = 0; // suma prowizji z zamówień
+        $amount            = 0; // suma wartości zamówień
+        $discountValue     = 0; // suma zniżek finansowanych przez Modago
         $orderGalleryValue = 0; // wartość zamówień w kanale płatności modago
 
         $dateModel = Mage::getModel('core/date');
@@ -345,7 +345,7 @@ class GH_Statements_Model_Observer
         $orderStatementTotals->amount = $amount;
         $orderStatementTotals->discountValue = $discountValue;
         $orderStatementTotals->galleryPayment = $orderGalleryValue;
-        
+
 
         return $orderStatementTotals;
     }
