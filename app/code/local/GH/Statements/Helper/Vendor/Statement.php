@@ -51,7 +51,6 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 				$this->__("Manual marketing fees credit/debit notes") => $this->formatQuota($statement->getMarketingCorrection()),
 				$this->__("To pay") => $this->formatQuota($statement->getToPay()),
 			),
-
 			"saldo" => array(
 				$this->__("Previous statement balance") => $this->formatQuota($statement->getLastStatementBalance()),
 				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
@@ -87,6 +86,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page3data = array(
+			"title" => $this->__("Orders"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("Order/RMA Date"),
@@ -107,6 +107,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page4data = array(
+			"title" => $this->__("Commission"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("RMA No."),
