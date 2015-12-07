@@ -31,28 +31,32 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
 	}
 
+	protected function formatQuota($value)
+	{
+		return number_format(Mage::app()->getLocale()->getNumber($value), 2);
+	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
 		$page1data = array(
 			"name" => $statement->getName(),
 			"statement" => array(
-				$this->__("Payments for realised orders") => $statement->getOrderValue(),
-				$this->__("Payments correction for returned orders") => $statement->getRefundValue(),
-				$this->__("Modago commission") => floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue()),
-				$this->__("Modago commission corrections for discounts funded by Modago") => $statement->getGalleryDiscountValue(),
-				$this->__("Other Modago commission corrections") => $statement->getCommissionCorrection(),
-				$this->__("Carrier costs") => $statement->getTrackingChargeTotal(),
-				$this->__("Carrier costs corrections") => $statement->getDeliveryCorrection(),
-				$this->__("Marketing costs") => $statement->getMarketingValue(),
-				$this->__("Marketing costs corrections") => $statement->getMarketingCorrection(),
-				$this->__("To pay") => $statement->getToPay(),
+				$this->__("Payments for realised orders") => $this->formatQuota($statement->getOrderValue()),
+				$this->__("Payments correction for returned orders") => $this->formatQuota($statement->getRefundValue()),
+				$this->__("Modago commission") => $this->formatQuota(floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue())),
+				$this->__("Modago commission corrections for discounts funded by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
+				$this->__("Other Modago commission corrections") => $this->formatQuota($statement->getCommissionCorrection()),
+				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
+				$this->__("Carrier costs corrections") => $this->formatQuota($statement->getDeliveryCorrection()),
+				$this->__("Marketing costs") => $this->formatQuota($statement->getMarketingValue()),
+				$this->__("Marketing costs corrections") => $this->formatQuota($statement->getMarketingCorrection()),
+				$this->__("To pay") => $this->formatQuota($statement->getToPay()),
 			),
 			"saldo" => array(
-				$this->__("Previous statement saldo") => $statement->getLastStatementBalance(),
-				$this->__("Vendor payouts") => $statement->getPaymentValue(),
+				$this->__("Previous statement saldo") => $this->formatQuota($statement->getLastStatementBalance()),
+				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
 				$this->__("Current statement saldo") =>
-					floatval($statement->getLastStatementBalance())
+					$this->formatQuota(floatval($statement->getLastStatementBalance())
 					+ floatval($statement->getToPay())
-					- floatval($statement->getPaymentValue())
+					- floatval($statement->getPaymentValue()))
 			)
 		);
 
@@ -152,11 +156,11 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$track->getTitle(),
 					$track->getCustomerId(),
 					$track->getTrackNumber(),
-					$track->getChargeShipment(),
-					floatval($track->getChargeInsurance()) + floatval($track->getChargeCod()),
-					$track->getChargeFuel(),
-					$track->getChargeSubtotal(),
-					$track->getChargeTotal()
+					$this->formatQuota($track->getChargeShipment()),
+					$this->formatQuota(floatval($track->getChargeInsurance()) + floatval($track->getChargeCod())),
+					$this->formatQuota($track->getChargeFuel()),
+					$this->formatQuota($track->getChargeSubtotal()),
+					$this->formatQuota($track->getChargeTotal())
 				);
 			}
 		}
@@ -187,7 +191,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$pos[$poId] = Mage::getModel("udropship/po")->load($poId);
 
 					//fill 3rd page start
-					$currentFinalPrice = floatval($order->getFinalPrice()) + floatval($order->getShippingCost());
+					$currentFinalPrice = $this->formatQuota(floatval($order->getFinalPrice()) + floatval($order->getShippingCost()));
 					if(!isset($page3body[$poIncrementId])) {
 						$page3body[$poIncrementId] = array(
 							$poIncrementId,
@@ -214,7 +218,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 
 					//fill 4th page start
 					$orderId = $order->getId();
-					Mage::log($order->getData());
+
 					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$order->getSku());
 					$page4body[$orderId] = array(
 						$poIncrementId,
@@ -224,17 +228,17 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$product->getName(),
 						$order->getSku(),
 						$order->getPrice(),
-						$order->getDiscountAmount(),
-						$order->getGalleryDiscountValue(),
-						$order->getFinalPrice(),
+						$this->formatQuota($order->getDiscountAmount()),
+						$this->formatQuota($order->getGalleryDiscountValue()),
+						$this->formatQuota($order->getFinalPrice()),
 						$order->getCommissionPercent(),
-						$order->getCommissionValue()
+						$this->formatQuota($order->getCommissionValue())
 					);
-					$page4data["footer"][6] += floatval($order->getPrice());
-					$page4data["footer"][7] += floatval($order->getDiscountAmount());
-					$page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
-					$page4data["footer"][9] += floatval($order->getFinalPrice());
-					$page4data["footer"][11] += floatval($order->getCommissionValue());
+					$page4data["footer"][6] += $this->formatQuota(floatval($order->getPrice()));
+					$page4data["footer"][7] += $this->formatQuota(floatval($order->getDiscountAmount()));
+					$page4data["footer"][8] += $this->formatQuota(floatval($order->getGalleryDiscountValue()));
+					$page4data["footer"][9] += $this->formatQuota(floatval($order->getFinalPrice()));
+					$page4data["footer"][11] += $this->formatQuota(floatval($order->getCommissionValue()));
 					//fill 4th page end
 				}
 			}
@@ -252,7 +256,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$rmas[$rmaId] = Mage::getModel("urma/rma")->load($rmaId);
 
 					//fill 3rd page start
-					$currentFinalPrice = -floatval($rma->getApprovedRefundAmount());
+					$currentFinalPrice = -$this->formatQuota(floatval($rma->getApprovedRefundAmount()));
 					if(!isset($page3body[$rmaIncrementId])) {
 						$page3body[$rmaIncrementId] = array(
 							$rma->getPoIncrementId(),
@@ -288,18 +292,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->__("Return"),
 						$product->getName(),
 						$rma->getSku(),
-						-$rma->getPrice(),
-						$rma->getDiscountAmount(),
-						-$rma->getGalleryDiscountValue(),
-						-$rma->getApprovedRefundAmount(),
+						-$this->formatQuota($rma->getPrice()),
+						$this->formatQuota($rma->getDiscountAmount()),
+						-$this->formatQuota($rma->getGalleryDiscountValue()),
+						-$this->formatQuota($rma->getApprovedRefundAmount()),
 						$rma->getCommissionPercent(),
-						-$rma->getCommissionValue()
+						-$this->formatQuota($rma->getCommissionValue())
 					);
-					$page4data["footer"][6] += floatval(-$rma->getPrice());
-					$page4data["footer"][7] += floatval($order->getDiscountAmount());
-					$page4data["footer"][8] += floatval(-$rma->getGalleryDiscountValue());
-					$page4data["footer"][9] += floatval(-$rma->getApprovedRefundAmount());
-					$page4data["footer"][11] += floatval(-$rma->getCommissionValue());
+					$page4data["footer"][6] += $this->formatQuota(floatval(-$rma->getPrice()));
+					$page4data["footer"][7] += $this->formatQuota(floatval($order->getDiscountAmount()));
+					$page4data["footer"][8] += $this->formatQuota(floatval(-$rma->getGalleryDiscountValue()));
+					$page4data["footer"][9] += $this->formatQuota(floatval(-$rma->getApprovedRefundAmount()));
+					$page4data["footer"][11] += $this->formatQuota(floatval(-$rma->getCommissionValue()));
 					//fill 4th page end
 				}
 			}
