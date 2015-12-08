@@ -178,6 +178,8 @@ $colorBackgroundContent:                #FFF;
 //accents colors
 $colorAccentBlocks:                     #EBEBEB;
 $colorAccentSite:                       #CD0027;
+$colorAccentTitle:                      transparent;
+$colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
 
 //buttons
 $colorBtnPrimary:                       #FFF;
@@ -328,3 +330,8 @@ $colorBackgroundCarrierTimePicker:      #fff;
 $colorBackgroundCarrierTimePickerPseudo:#e8e7e6;
 $colorBackgroundCarrierTimePickerDisabled:#b8b8b8;
 $colorAccentCarrierTimePicker:          $colorAccentRma;
+
+/* SIDEBAR COLORS */
+$colorBorderSidebar:                    #ebebeb;
+$colorBackgroundSidebar:                $colorBackgroundBlocks;
+$colorBorderSidebarSection:             #d2d2d2;

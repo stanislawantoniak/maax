@@ -16,8 +16,8 @@
           height:38px;
           display:block;
           position:absolute;
-          top:0px;
-          left:0px;
+          top:0;
+          left:0;
           
         }
       }
@@ -30,7 +30,6 @@
         float:left !important;
         height:23px !important;
         width:122px !important;
-        float:left !important;
       }
       input[type="image"] {
         height:23px;
@@ -46,11 +45,11 @@
       .filterLongListSearch {
         &+label {
           position:absolute;
-          right:0px;
-          top:0px;
+          right:0;
+          top:0;
           display:inline-block;
-          padding:0px;
-          margin:0px;
+          padding:0;
+          margin:0;
           height:23px;
           width:23px;
           i {
@@ -62,7 +61,7 @@
     }
 #filter_price {
       &> .form-checkbox {
-        margin-left: 0px;
+        margin-left: 0;
       }
       .form-horizontal {
         &+.form-horizontal {  
@@ -71,8 +70,8 @@
         input {
           margin:0 5px;
           &[type="text"], &[type="tel"] {
-            padding:0px;
-            margin:0px 5px;
+            padding:0;
+            margin:0 5px;
             height:22px;
             width:38px;
           }
@@ -112,12 +111,12 @@
           left:-3px;
           .btn {
             position:relative;
-            top:0px;
+            top:0;
             &.black {
               width:35px!important;
               height:22px!important;
               min-width: 35px;
-              padding:0px;
+              padding:0;
             }
             
           }
@@ -161,8 +160,8 @@
           height:33px;
           padding:3px;
           position:absolute;
-          top:0px;
-          left:0px;
+          top:0;
+          left:0;
           span {
             display:inline-block;
             width:27px;
@@ -179,7 +178,7 @@
     }
 
 .longListItems, .longListChecked {
-  margin:0px !important;
+  margin:0 !important;
   padding:5px 0 0 0;
   //max-height:126px;
   //overflow-y:auto;
@@ -234,7 +233,7 @@
     overflow-y: auto;
     width: 240px;
     display: block;
-    margin-top: 0px;
+    margin-top: 0;
     .solr_search_facets {
       width: 240px;
     }
@@ -464,15 +463,14 @@ span.checked {
 }
 
 .sidebar {
-	border-left:1px solid $color_ebebeb;
-	border-right:1px solid $color_ebebeb;
-	background:$color_fff;
-	border-top: 3px solid $colorAccentSite;
+	border: 1px solid $colorBorderSidebar;
+	border-bottom: none;
+	background: $colorBackgroundSidebar;
 	font-family: $fontRegular;
 	font-size: 12px;
 
 	.section {
-		border-bottom: 1px solid $color_d2d2d2;
+		border-bottom: 1px solid $colorBorderSidebarSection;
 		text-align:center;
 		-webkit-backface-visibility: hidden;
 	}
@@ -485,7 +483,7 @@ span.checked {
 		cursor:pointer;
 		white-space:nowrap;
 		&:before {
-			background:$colorAccentSite;
+			background:$colorAccentTitle;
 		}
 	}
 	.no-pointer {
@@ -631,7 +629,7 @@ span.checked {
 						img {
 							border:3px solid $color_000;
 							@include border-radius(5px);
-							margin:0px;
+							margin:0;
 							width:31px;
 							height:31px;
 						}
@@ -659,7 +657,7 @@ span.checked {
 						img {
 							border:3px solid $color_999;
 							@include border-radius(5px);
-							margin:0px;
+							margin:0;
 							width:31px;
 							height:31px;
 						}
@@ -837,12 +835,12 @@ span.checked {
 	dd {
 		margin-right:20px;
 		.label {
-			padding:0px 20px 0 6px;
+			padding:0 20px 0 6px;
 			min-width: 60px;
 			display:inline-block;
 			float:left;
 			height:21px;
-			margin:0px 15px 7px 0;
+			margin:0 15px 7px 0;
 			position:relative;
 		}
 		.fa {
@@ -874,7 +872,7 @@ span.checked {
 				&+.suffix {
 					position:absolute;
 					left:115px;
-					top:0px;
+					top:0;
 					width:auto;
 				}
 			}
@@ -895,7 +893,7 @@ span.checked {
 	table {
 
 		td {
-			margin:0px;
+			margin:0;
 			padding:5px 0;
 			> div {
 				position:relative;
@@ -920,7 +918,7 @@ span.checked {
 			}
 			img {
 				position:absolute;
-				left:0px;
+				left:0;
 				top:-4px;
 				width:31px;
 				height:31px;
