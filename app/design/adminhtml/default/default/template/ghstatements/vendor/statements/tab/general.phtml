@@ -232,10 +232,7 @@ $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
                         </td>
                         <td class="value">
                             <span id="actual_balance">
-                                <?php echo $cHlp
-                                    ->formatPrice($statement->getData('last_statement_balance') +
-                                        $statement->getData('to_pay') -
-                                        $statement->getData('payment_value')); ?>
+                                <?php echo $cHlp->formatPrice($statement->getData('actual_balance')); ?>
                             </span>
                             <p class="note"><span><?php echo $_helper->__("Last statement balance + payout value - sum of payments to vendor"); ?></span></p>
                         </td>
