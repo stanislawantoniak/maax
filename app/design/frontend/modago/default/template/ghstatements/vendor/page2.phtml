@@ -2,53 +2,13 @@
 /** @var GH_Statements_Block_Vendor_Page2 $this */
 $data = $this->getPageData();
 ?>
-<style>
-	h1 {
-		margin: 0 0 10px; 0;
-		color: #555555;
-		font-weight: 400;
-		font-size: 30px;
-	}
-	h3 {
-		margin: 0 0 10px; 0;
-		color: #555555;
-		font-weight: 400;
-		font-size: 20px;
-	}
-	table {
-		color: #555555;
-		font-size: 13px;
-		line-height: 1.428571429;
-		border-color: #808080;
-		border-collapse: collapse;
-		border-spacing: 0;
-		width: 100%;
-	}
-	table tr {
-		outline: none;
-	}
-	table tr td {
-		background-color: #ffffff;
-		border: 1px solid #dddddd;
-		padding: 8px;
-		line-height: 1.428571429;
-		vertical-align: top;
-	}
-	table tr td:last-child {
-		display: inline-block;
-		text-align: right;
-	}
-	table tr:nth-child(odd) td {
-		background-color: #f9f9f9;
-	}
-</style>
 <div>
 	<h3><?php echo $data["title"]; ?></h3>
 	<table cellspacing="0" border="1">
 		<thead>
 			<tr>
 			<?php foreach($data['header'] as $value): ?>
-				<td><?php echo $value; ?></td>
+				<th><?php echo $value; ?></th>
 			<?php endforeach; ?>
 			</tr>
 		</thead>
