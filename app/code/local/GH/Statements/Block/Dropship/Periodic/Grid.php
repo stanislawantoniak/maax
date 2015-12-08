@@ -120,7 +120,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             // Korekta za zwrócone zamówienia
             $statement->setData('rma_value', sprintf("%.4f", -1 * $statement->getData('rma_value')));
             // Korekta o rabaty finansowane przez Modago
-            $statement->setData('gallery_discount_value', sprintf("%.4f", -1 * $statement->getData('gallery_discount_value')));
+//            $statement->setData('gallery_discount_value', sprintf("%.4f", -1 * $statement->getData('gallery_discount_value')));
         }
         return $this;
     }

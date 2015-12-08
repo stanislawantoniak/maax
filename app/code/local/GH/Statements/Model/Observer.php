@@ -168,18 +168,17 @@ class GH_Statements_Model_Observer
             $data["order_commission_value"]       = $statementTotals->order->commissionAmount;     // Suma prowizji z zamówień
             $data["total_commission"]            += $statementTotals->order->commissionAmount;     // Suma prowizji
             $data["to_pay"]                      += $statementTotals->order->amount;               // Do wypłaty dla Vendora
-            $data["gallery_discount_value"]      -= $statementTotals->order->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
-            $data["order_gallery_discount_value"] = $statementTotals->order->galleryDiscountValue; // Suma zniżek finansowanych przez Modago w zamowieniach // TODO
+            $data["gallery_discount_value"]       = $statementTotals->order->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
             $data['order_value']                  = $statementTotals->order->galleryPayment;       // Suma zamówień w kanale płatności Modago
         }
         // Rma
         if (!empty($statementTotals->rma)) {
             $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount; // Suma prowizji z RMA ( równoważne order_commission_value )
             $data["rma_value"]                  = $statementTotals->rma->amount;           // Suma zwrotów z RMA
-            $data['to_pay']                    += $statementTotals->rma->amount;           // Do wypłaty dla Vendora
             $data['total_commission']          -= $statementTotals->rma->amount;           // Suma prowizji
-            $data["gallery_discount_value"]    += $statementTotals->rma->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
-            $data["rma_gallery_discount_value"] = $statementTotals->rma->galleryDiscountValue; // Suma zniżek finansowanych przez Modago w RMA // TODO
+            $data["gallery_discount_value"]    -= $statementTotals->rma->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
+            $data["to_pay"]                    -= $data["total_commission"];
+            $data["to_pay"]                    += $data["gallery_discount_value"];
         }
         // Refund
         if (!empty($statementTotals->refund)) {
