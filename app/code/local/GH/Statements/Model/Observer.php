@@ -161,7 +161,8 @@ class GH_Statements_Model_Observer
         $data = array(
             'to_pay'                 => 0, // Do wypłaty dla Vendora
             'total_commission'       => 0, // Suma prowizji
-            'gallery_discount_value' => 0  // Suma zniżek finansowanych przez Modago
+            'gallery_discount_value' => 0, // Suma zniżek finansowanych przez Modago
+            'actual_balance'         => 0  // Bieżące saldo rozliczenia
         );
         // Order
         if (!empty($statementTotals->order)) {
@@ -169,6 +170,7 @@ class GH_Statements_Model_Observer
             $data["total_commission"]            += $statementTotals->order->commissionAmount;     // Suma prowizji
             $data["to_pay"]                      += $statementTotals->order->galleryPayment;       // Do wypłaty dla Vendora
             $data["gallery_discount_value"]       = $statementTotals->order->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
+            $data["order_gallery_discount_value"] = $statementTotals->order->galleryDiscountValue;
             $data['order_value']                  = $statementTotals->order->galleryPayment;       // Suma zamówień w kanale płatności Modago
         }
         // Rma
@@ -177,8 +179,8 @@ class GH_Statements_Model_Observer
             $data["rma_value"]                  = $statementTotals->rma->amount;           // Suma zwrotów z RMA
             $data['total_commission']          -= $statementTotals->rma->amount;           // Suma prowizji
             $data["gallery_discount_value"]    -= $statementTotals->rma->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
+            $data["rma_gallery_discount_value"] = $statementTotals->rma->galleryDiscountValue;
             $data["to_pay"]                    -= $data["total_commission"];
-            $data["to_pay"]                    += $data["gallery_discount_value"];
         }
         // Refund
         if (!empty($statementTotals->refund)) {
@@ -208,9 +210,12 @@ class GH_Statements_Model_Observer
         // Payment
         if(!empty($statementTotals->payment)) {
             $data["payment_value"]              = $statementTotals->payment->amount;
+            $data["actual_balance"]            -= $statementTotals->payment->amount;
         }
         if(!empty($statementTotals->lastBalance)) {
-            $data["last_statement_balance"]              = $statementTotals->lastBalance->balance;
+            $data["last_statement_balance"]     = $statementTotals->lastBalance->balance;
+            $data["actual_balance"]            += $statementTotals->lastBalance->balance;
+            $data["actual_balance"]            += $data['to_pay'];
             if ($statementTotals->lastBalance->dateFrom) {
                 $data["date_from"]              = date("Y-m-d",$statementTotals->lastBalance->dateFrom);
             }
@@ -653,6 +658,7 @@ class GH_Statements_Model_Observer
         $pos = array();
 
         $galleryDiscountValue = 0;
+        $galleryCommissionValue = 0;
         foreach ($rmaItemsColl as $rmaItem) {
             /** @var Zolago_Rma_Model_Rma_Item $rmaItem */
             if (!$rmaItem->getProductId()) {
@@ -721,15 +727,22 @@ class GH_Statements_Model_Observer
                  * (floatval($data["commission_percent"]) / 100)) * self::getTax(); // Prowizja Modago
             $data["commission_value"]       = round($data["commission_value"], 2, PHP_ROUND_HALF_UP);
 
+            $fraction = $data["approved_refund_amount"] / $data["final_price"]; // Procentowy udział
+            $data['commission_return']      = round($data["commission_value"] * $fraction, 2, PHP_ROUND_HALF_UP);
+            $data['discount_return']        = round($data["gallery_discount_value"] * $fraction, 2, PHP_ROUND_HALF_UP);
+
+            // Korekta o rabaty finansowane przez Modago (procentowo)
+            $galleryDiscountValue          += $data["discount_return"];
+            $galleryCommissionValue        += $data["commission_return"];
+
             // (<Prowizja Modago> - <Zniżka finansowana przez Modago>) * procentowy zwrot z calosci
-            $data["value"]                  = ($data["commission_value"] - $data["gallery_discount_value"]) * ($data["approved_refund_amount"] / $data["final_price"]);
+            $data["value"]                  = ($data["commission_value"] - $data["gallery_discount_value"]) * $fraction;
             $data["value"]                  = round($data['value'], 2, PHP_ROUND_HALF_UP);
 
             $commissionAmount              += $data["commission_value"];
             $amount                        += $data["value"];
 
-            // Korekta o rabaty finansowane przez Modago (procentowo)
-            $galleryDiscountValue          += round(($data["approved_refund_amount"] / $data["final_price"]) * $data["gallery_discount_value"], 2, PHP_ROUND_HALF_UP);
+
 
 
             // Save
@@ -748,6 +761,7 @@ class GH_Statements_Model_Observer
         $rmaStatementTotals->commissionAmount = $commissionAmount;
         $rmaStatementTotals->amount = $amount;
         $rmaStatementTotals->galleryDiscountValue = $galleryDiscountValue;
+        $rmaStatementTotals->galleryCommissionValue = $galleryCommissionValue;
         return $rmaStatementTotals;
     }
 
