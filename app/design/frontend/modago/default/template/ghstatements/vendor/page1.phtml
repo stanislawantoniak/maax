@@ -3,6 +3,9 @@
 $data = $this->getPageData();
 ?>
 <style>
+    body {
+        font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
     h1 {
         margin: 0 0 10px; 0;
         color: #555555;
@@ -26,6 +29,14 @@ $data = $this->getPageData();
 	}
     table tr {
         outline: none;
+    }
+    table thead tr th {
+        text-align:left;
+        font-weight:bold;
+        border-style:solid;
+        border-width: 1px;
+        border-color: #dddddd;
+        
     }
     table tr td {
         background-color: #ffffff;
