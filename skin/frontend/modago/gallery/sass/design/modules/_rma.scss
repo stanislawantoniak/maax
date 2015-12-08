@@ -788,3 +788,88 @@
 	font-weight: bold;
 	margin: 0 -15px 15px;
 }
+
+#rma-page {
+	.rma-page-header {
+		margin-bottom: 20px;
+		.rma-page-header1 {
+			font-size: 27px;
+		}
+		.rma-page-header2 {
+			font-size: 37px;
+			strong {
+				font-size: 42px;
+			}
+		}
+		@media(max-width: $screen-sm-max) {
+			.rma-page-header1 {
+				font-size: 20px;
+			}
+			.rma-page-header2 {
+				font-size: 30px;
+				strong {
+					font-size: 32px;
+				}
+			}
+		}
+	}
+	.rma-page-footer {
+		margin-top: 30px;
+		text-align: center;
+		a.button {
+			white-space: normal;
+			margin-bottom: 30px;
+			text-decoration: none;
+		}
+		a {
+			text-decoration: underline;
+		}
+	}
+	.benefits {
+		.benefit-item {
+			.benefit-text {
+				margin-left: 5%;
+			}
+			&:first-child {
+				.benefit-text {
+					margin-left: 0;
+				}
+			}
+			@media(max-width: $screen-sm-max) {
+				&:nth-child(3) {
+					.benefit-text {
+						margin-left: 0;
+					}
+				}
+			}
+		}
+		@media(max-width: 500px) {
+			padding: 0;
+		}
+		@media(max-width: 359px) {
+			.benefit-text {
+				background: none !important;
+				padding: 15px 5px 15px 10px !important;
+			}
+		}
+	}
+
+}
+
+.sales-rma-history {
+	#rma-page {
+		.benefits {
+			.benefit-item {
+				@media(max-width: $screen-sm-max) {
+					width: 50%;
+					border:none !important;
+					.benefit-text {
+						h3 {
+							width: auto !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}
