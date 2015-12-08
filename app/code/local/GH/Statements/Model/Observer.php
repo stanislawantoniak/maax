@@ -748,7 +748,7 @@ class GH_Statements_Model_Observer
 
         $rmaStatementTotals->commissionAmount = $commissionAmount;
         $rmaStatementTotals->amount = $amount;
-        $rmaStatementTotals->galleryDiscountValue = $amount;
+        $rmaStatementTotals->galleryDiscountValue = $galleryDiscountValue;
         return $rmaStatementTotals;
     }
 
