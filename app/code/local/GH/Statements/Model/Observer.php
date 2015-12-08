@@ -167,7 +167,7 @@ class GH_Statements_Model_Observer
         if (!empty($statementTotals->order)) {
             $data["order_commission_value"]       = $statementTotals->order->commissionAmount;     // Suma prowizji z zamówień
             $data["total_commission"]            += $statementTotals->order->commissionAmount;     // Suma prowizji
-            $data["to_pay"]                      += $statementTotals->order->amount;               // Do wypłaty dla Vendora
+            $data["to_pay"]                      += $statementTotals->order->galleryPayment;       // Do wypłaty dla Vendora
             $data["gallery_discount_value"]       = $statementTotals->order->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
             $data['order_value']                  = $statementTotals->order->galleryPayment;       // Suma zamówień w kanale płatności Modago
         }
