@@ -117,6 +117,14 @@
             </zolagocatalog_read>
         </resources>
         <events>
+            <catalog_product_delete_after>
+                <observers>
+                    <zolagocatalog_category>
+                        <class>zolagocatalog/observer</class>
+                        <method>catalogProductDeleteAfter</method>
+                    </zolagocatalog_category>
+                </observers>
+            </catalog_product_delete_after>
             <catalog_product_attribute_update_after>
                 <observers>
                     <zolago_catalog_converter_mass>
