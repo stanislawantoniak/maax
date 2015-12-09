@@ -297,12 +297,12 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->__("Return"),
 						$product->getName(),
 						$rma->getSku(),
-						-$this->formatQuota($rma->getPrice()),
+						$this->formatQuota(floatval(-$rma->getPrice())),
 						$this->formatQuota($rma->getDiscountAmount()),
-						-$this->formatQuota($rma->getGalleryDiscountValue()),
-						-$this->formatQuota($rma->getApprovedRefundAmount()),
+						$this->formatQuota(floatval(-$rma->getGalleryDiscountValue())),
+						$this->formatQuota(floatval(-$rma->getApprovedRefundAmount())),
 						round($rma->getCommissionPercent(),2),
-						-$this->formatQuota($rma->getCommissionValue())
+						$this->formatQuota(floatval(-$rma->getCommissionValue()))
 					);
 					$page4data["footer"][6] += floatval(-$rma->getPrice());
 					$page4data["footer"][7] += floatval($order->getDiscountAmount());
