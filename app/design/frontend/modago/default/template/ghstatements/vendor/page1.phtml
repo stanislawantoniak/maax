@@ -56,6 +56,9 @@ $data = $this->getPageData();
         vertical-align: top;
         text-align:left;
     }
+    table tr td.bold {
+        font-weight:bold;
+    }
     table tr td.right {
         text-align: right;
     }
@@ -63,14 +66,15 @@ $data = $this->getPageData();
         background-color: #f9f9f9;
 	}
 </style>
+<?php $toPayText = Mage::helper('ghstatements')->__('To pay'); ?>
 <div>
 	<h1><?php echo $data['name']; ?></h1>
-	<table cellspacing="0" border="1">
+	<table cellspacing="0" border="1" class="statement">
 		<tbody>
 		<?php foreach($data['statement'] as $title=>$value): ?>
 			<tr>
-				<td><?php echo $title; ?></td>
-				<td class="right"><?php echo $value;?></td>
+				<td <?php if ($title == $toPayText) echo "class='bold'";?>><?php echo $title; ?></td>
+				<td class="right<?php if ($title == $toPayText) echo " bold";?>"><?php echo $value;?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
