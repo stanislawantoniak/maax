@@ -39,18 +39,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		$page1data = array(
 			"name" => $statement->getName(),
 			"title" => $this->__("Balance"),
-			"statement" => array(
-				$this->__("Payments for fulfilled orders") => $this->formatQuota($statement->getOrderValue()),
-				$this->__("Payment refunds for returned orders") => $this->formatQuota($statement->getRefundValue()),
-				$this->__("Modago commission") => $this->formatQuota($statement->getTotalCommission()),
-				$this->__("Discounts covered by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
-				$this->__("Other manual commission credit/debit notes") => $this->formatQuota($statement->getCommissionCorrection()),
-				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
-				$this->__("Manual carrier fees credit/debit notes") => $this->formatQuota($statement->getDeliveryCorrection()),
-				$this->__("Marketing costs") => $this->formatQuota($statement->getMarketingValue()),
-				$this->__("Manual marketing fees credit/debit notes") => $this->formatQuota($statement->getMarketingCorrection()),
-				$this->__("To pay") => $this->formatQuota($statement->getToPay()),
-			),
+			"statement" => array(),
 			"saldo" => array(
 				$this->__("Previous statement balance") => $this->formatQuota($statement->getLastStatementBalance()),
 				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
@@ -58,6 +47,24 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			)
 		);
 
+		$page1data['statement'][$this->__("Payments for fulfilled orders")] = $this->formatQuota($statement->getOrderValue());
+		$page1data['statement'][$this->__("Payment refunds for returned orders")] = $this->formatQuota($statement->getRefundValue());
+		$page1data['statement'][$this->__("Modago commission")] = $this->formatQuota($statement->getTotalCommission());
+		$page1data['statement'][$this->__("Discounts covered by Modago")] = $this->formatQuota($statement->getGalleryDiscountValue());
+		if ($statement->getCommissionCorrection() != 0) {
+    		$page1data['statement'][$this->__("Other manual commission credit/debit notes")] = $this->formatQuota($statement->getCommissionCorrection());
+        }
+		$page1data['statement'][$this->__("Carrier costs")] = $this->formatQuota($statement->getTrackingChargeTotal());
+		if ($statement->getDeliveryCorrection()!= 0) {
+    		$page1data['statement'][$this->__("Manual carrier fees credit/debit notes")] = $this->formatQuota($statement->getDeliveryCorrection());
+        }
+        if ($statement->getMarketingValue() != 0) {
+    		$page1data['statement'][$this->__("Marketing costs")] = $this->formatQuota($statement->getMarketingValue());
+        }
+        if ($statement->getMarketingCorrection() != 0) {
+    		$page1data['statement'][$this->__("Manual marketing fees credit/debit notes")] = $this->formatQuota($statement->getMarketingCorrection());
+        }
+		$page1data['statement'][$this->__("To pay")] = $this->formatQuota($statement->getToPay());
 		$page2data = array(
 			"title" => $this->__("Tracking"),
 			"header" => array(
