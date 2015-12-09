@@ -5,27 +5,19 @@ section.cms-section {
 	background: $colorBackgroundCms;
 	border-top: 1px solid $colorBorderCms;
 	border-bottom: 1px solid $colorBorderCms;
-	h2 {
-		margin: 0 -35px 20px;
-		padding: 0 35px;
-		position: relative;
-		display: block;
-		height: 18px;
-		overflow: hidden;
-		font-size: 18px;
-		font-family: $fontRegular;
-		line-height: 18px;
-		text-transform: uppercase;
-		text-align: left;
-		&:before {
-			content: ' ';
+	.title-section {
+		h2 {
+			margin: 20px 0;
+			padding: 0;
+			position: relative;
 			display: block;
-			width: 18px;
-			height: 18px;
-			background: $colorAccentCms;
-			position: absolute;
-			left: 0;
-			top: 0;
+			overflow: hidden;
+			font-size: 28px;
+			font-family: $fontBlack;
+			text-align: left;
+			&:first-child {
+				margin-top: 0;
+			}
 		}
 	}
 	ul,ol {
