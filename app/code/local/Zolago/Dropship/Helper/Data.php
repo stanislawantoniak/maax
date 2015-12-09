@@ -11,8 +11,9 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	 */
 	public function getAllowedStores($vendor)
 	{
+		Mage::log($vendor->getData());
 		$allowed = array();
-		$limitedWebsites = $vendor->getLimitWebsites();
+		$limitedWebsites = $vendor->getWebsitesAllowed();
 
 		if (!is_array($limitedWebsites)) {
 			$realWebsites = array();
