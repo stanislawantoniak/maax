@@ -207,7 +207,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							"",//todo: realization time
 							$this->__($order->getPaymentMethod()),
 							$currentFinalPrice,
-							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0;
+							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0,
 						);
 					} else {
 						$page3body[$poIncrementId][7] += $currentFinalPrice;
@@ -239,7 +239,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						round($order->getCommissionPercent(),2),
 						$this->formatQuota($order->getCommissionValue())
 					);
-					$page4data["footer"][6] += floatval($order->getPrice();
+					$page4data["footer"][6] += floatval($order->getPrice());
 					$page4data["footer"][7] += floatval($order->getDiscountAmount());
 					$page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
 					$page4data["footer"][9] += floatval($order->getFinalPrice());
@@ -316,8 +316,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 
 		// format quota for specific fields in pagedata
 		// page 2
-    	$page2data["footer"][10] $this->formatQuota($page2data["footer"][10]);
-    	$page2data["footer"][11] $this->formatQuota($page2data["footer"][11]);
+    	$page2data["footer"][10] = $this->formatQuota($page2data["footer"][10]);
+    	$page2data["footer"][11] = $this->formatQuota($page2data["footer"][11]);
     	// page 3
     	foreach ($page3body as $key=>$row) {
             $page3body[$key][7] = $this->formatQuota($page3body[$key][7]);    	    
