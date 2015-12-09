@@ -46,9 +46,9 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	    if ($statement->getDateFrom()) {
 	        $periodText = sprintf('%s - %s',date("Y-m-d",strtotime($statement->getDateFrom())),date('Y-m-d',strtotime($statement->getEventDate())));	        
 	    } else {
-	        $periodText = sprintf('to %s',$statement->getEventDate());
+	        $periodText = $this->__('to %s',$statement->getEventDate());
 	    }
-	    $nameText = sprintf("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
+	    $nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
 		$page1data = array(
 		    "header" => $headerText,
 			"name" => $nameText, // $statement->getName(),
