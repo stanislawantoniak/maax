@@ -115,7 +115,7 @@
 "Are you sure?","Jesteś pewny?"
 "Statement date","Rozliczenie na dzień"
 "Statement period","Okres rozliczenia"
-"Customer payments balance","Rozliczenia płatności za zamówienia"
+"Customer payments balance","Rozliczenia płatnośći za zamówienia"
 "Modago commission","Prowizja Modago"
 "Carrier costs","Koszty kurierów"
 "Marketing costs","Koszty działań marketingowych"
@@ -172,3 +172,4 @@
 "Sum of discounts financed by Modago","Suma zniżek finansowanych przez Modago"
 "Sum of payments to vendor","Suma wypłat do sprzedawcy"
 "Last statement balance + payout value - sum of payments to vendor","Saldo poprzedniego rozliczenia + wartość do wypłaty - suma wypłat do sprzedawcy"
+"Download","Pobierz"
