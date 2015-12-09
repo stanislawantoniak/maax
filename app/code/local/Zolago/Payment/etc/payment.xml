@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <config>
   <global>
     <zolagopayment>
@@ -30,6 +30,7 @@
         <!--mTransfer-->
         <mt>
           <method>dotpay</method>
+          <deny>1</deny>
           <additional_information>
             <channel>1</channel>
             <type>4</type>
@@ -38,7 +39,7 @@
           <websites>
             <vissavi_website>
               <method>dotpay</method>
-              <deny>1</deny>
+              <deny>0</deny>
               <additional_information>
                 <key>someData</key>
               </additional_information>
