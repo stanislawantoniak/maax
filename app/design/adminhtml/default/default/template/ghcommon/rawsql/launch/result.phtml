@@ -21,7 +21,7 @@
 <?php foreach ($result as $key => $row) : ?>
 <tr>
     <?php foreach ($row as $val) : ?>
-        <td><?php echo $val; ?></td>
+        <td><?php echo htmlentities($val); ?></td>
     <?php endforeach; ?>
 </tr>
 <?php endforeach; ?>
