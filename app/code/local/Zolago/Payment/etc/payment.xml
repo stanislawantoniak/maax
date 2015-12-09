@@ -30,21 +30,11 @@
         <!--mTransfer-->
         <mt>
           <method>dotpay</method>
-          <deny>1</deny>
           <additional_information>
             <channel>1</channel>
             <type>4</type>
             <is_gateway>1</is_gateway>
           </additional_information>
-          <websites>
-            <vissavi_website>
-              <method>dotpay</method>
-              <deny>0</deny>
-              <additional_information>
-                <key>someData</key>
-              </additional_information>
-            </vissavi_website>
-          </websites>
         </mt>
         <!--Płacę z Inteligo-->
         <inteligo>
