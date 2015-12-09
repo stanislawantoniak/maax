@@ -91,7 +91,7 @@
         //padding: 0;
         text-align: center;
         text-transform: uppercase;
-        font-family: latolight, sans-serif;
+        font-family: $fontLight;
         padding: 15px 30px;
         font-size: 20px;
         height: 62px;
@@ -221,7 +221,7 @@ body.mypromotions-index-index #content {
         }
       }
       .promo-label {
-        font-family: latoblack, sans-serif;
+        font-family: $fontBlack, sans-serif;
         font-size: 19px;
         text-transform: uppercase;
         padding-left: 0;
@@ -241,7 +241,7 @@ body.mypromotions-index-index #content {
       }
       .promo-name {
         text-transform: uppercase;
-        font-family: latolight, sans-serif;
+        font-family: $fontLight;
         font-size: 19px;
         margin-top: 11px;
         margin-bottom: 12px;
@@ -264,7 +264,7 @@ body.mypromotions-index-index #content {
             width: 40%;
           }
           span {
-            font-family: latoblack, sans-serif;
+            font-family: $fontBlack, sans-serif;
             font-size: 17px;
             @media(max-width: 340px) {
               font-size: 13px;
@@ -283,7 +283,7 @@ body.mypromotions-index-index #content {
             color: $color_4f4f4f;
             font-weight: normal;
             font-size: 12px;
-            font-family: latoregular, sans-serif;
+            font-family: $fontRegular;
             min-width: 92px;
             text-align: center;
             background: $color_fff;

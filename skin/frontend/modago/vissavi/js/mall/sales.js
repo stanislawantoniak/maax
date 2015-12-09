@@ -111,9 +111,7 @@
 				"shipment_id": this._currentShipment
 			};
 			this._currentPopup.find('.title_section').text(
-					Mall.translate.__("Contact Vendor") + 
-					" " + 
-					this._currentVendorName
+					Mall.translate.__("Ask question about order")
 			);
 			var content = jQuery(this._getTemplate(obj));
 			this._prepareValidation(content);

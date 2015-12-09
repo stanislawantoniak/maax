@@ -103,4 +103,34 @@ jQuery(function($){
 		document.observe("dom:loaded", function() {
 			posControl.init();
 		});
+
+		jQuery(document).ready(function () {
+
+
+			var showPosOnMap = jQuery('#show_on_map');
+			if (showPosOnMap.val() == 1) {
+				jQuery('#show_on_map').bootstrapSwitch('state', true);
+				jQuery(".map-fields").show();
+			} else {
+				jQuery('#show_on_map').bootstrapSwitch('state', false);
+				jQuery(".map-fields").hide();
+			}
+
+			showPosOnMap.on('switchChange.bootstrapSwitch', function () {
+				var showOnMapFields = jQuery(this).bootstrapSwitch('state');
+
+				if (showOnMapFields) {
+					jQuery(".map-fields").slideDown();
+					jQuery('#show_on_map').val(1);
+				} else {
+					jQuery(".map-fields").slideUp();
+					jQuery('#show_on_map').val(0);
+				}
+				event.preventDefault();
+			});
+
+			// Trick for htmlspecialchars_decode
+			var mapTimeOpened = jQuery('<textarea>').html(jQuery('#map_time_opened').text()).text();
+			jQuery('#map_time_opened').text(mapTimeOpened);
+		});
 </script>

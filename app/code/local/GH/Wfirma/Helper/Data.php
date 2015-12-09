@@ -59,7 +59,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
-							'id'    => $client->getItemIdCommission()
+							'id'    => $client->getItemIdOther()
 						),
 						'price' => $invoice->getData('other_brutto'),
 						'vat'   => $this->getTax(), //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie

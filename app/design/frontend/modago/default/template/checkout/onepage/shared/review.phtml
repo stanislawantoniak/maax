@@ -66,9 +66,11 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 									<span class="total_discount" data-price="<?php echo ($_totalDiscount->getValue() * -1);?>"><?php echo Mage::helper('core')->formatPrice($_totalDiscount->getValue()); ?></span>
 								</dd>
 								<?php endif;?>
-								<dt style="font-weight: normal; font-family: latoblack">
-									<span class="lb"><?php echo $this->__('To pay'); ?>:</span> 
-									<span class="total_value"></span>
+								<dt>
+									<strong>
+										<span class="lb"><?php echo $this->__('To pay'); ?>:</span>
+										<span class="total_value"></span>
+									</strong>
 								</dt>
 							</dl>
 						</div>
