@@ -36,8 +36,19 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
+	    $headerText = '';
+	    $eventDate = date('Y-m-d',strtotime($statement->getEventDate() + 3600*24));
+	    $vendor = Mage::getModel('udropship/vendor')->load($statement->getVendorId());
+	    $vendorData = sprintf('%s, %s (NIP:%s)',$vendor->getVendorName(),$vendor->getBillingAddress(),$vendor->getTaxNo());
+	    if ($statement->getDateFrom()) {
+	        $periodText = sprintf('%s - %s',$statement->getDateFrom(),$statement->getEventDate());	        
+	    } else {
+	        $periodText = sprintf('to %s',$statement->getEventDate());
+	    }
+	    $nameText = sprintf("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
 		$page1data = array(
-			"name" => $statement->getName(),
+		    "header" => $headerText,
+			"name" => $nameText, // $statement->getName(),
 			"title" => $this->__("Balance"),
 			"statement" => array(),
 			"saldo" => array(

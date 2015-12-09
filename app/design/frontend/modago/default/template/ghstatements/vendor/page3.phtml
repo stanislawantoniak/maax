@@ -4,7 +4,7 @@ $data = $this->getPageData();
 ?>
 <div>
 	<h3><?php echo $data["title"]; ?></h3>
-	<table cellspacing="0" border="1">
+	<table cellspacing="0" border="1" repeat_header="1">
 		<thead>
 		<tr>
 			<?php foreach($data['header'] as $value): ?>
