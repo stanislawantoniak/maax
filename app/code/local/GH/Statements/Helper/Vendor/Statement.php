@@ -90,7 +90,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 				$this->__("RMA No."),
 				$this->__("Operation type"),
 				$this->__("Operation date"),
-				$this->__("Order/RMA Realization time"),
+//				$this->__("Order/RMA Realization time"),
 				$this->__("Payment method"),
 				$this->__("Sale value (PLN)"),
 				$this->__("To pay (PLN)")
@@ -98,8 +98,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			"body" => array(),
 			"footer" => array(
 				0 => $this->__("Total"),
-				7 => 0.00,
-				8 => 0.00
+				6 => 0.00,
+				7 => 0.00
 			)
 		);
 
@@ -201,20 +201,20 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							"",
 							$this->__("Order shipment"),
 							$order->getShippedDate(),
-							"",//todo: realization time
+//							"",//todo: realization time
 							$this->__($order->getPaymentMethod()),
 							$currentFinalPrice,
 							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0,
 						);
 					} else {
-						$page3body[$poIncrementId][7] += $currentFinalPrice;
+						$page3body[$poIncrementId][6] += $currentFinalPrice;
 						if($order->getPaymentChannelOwner()) {
-							$page3body[$poIncrementId][8] += $currentFinalPrice;
+							$page3body[$poIncrementId][7] += $currentFinalPrice;
 						}
 					}
-					$page3data["footer"][7] += $currentFinalPrice;
+					$page3data["footer"][6] += $currentFinalPrice;
 					if($order->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
+						$page3data["footer"][7] += $currentFinalPrice;
 					}
 					//fill 3rd page end
 
