@@ -42,7 +42,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			"statement" => array(
 				$this->__("Payments for fulfilled orders") => $this->formatQuota($statement->getOrderValue()),
 				$this->__("Payment refunds for returned orders") => $this->formatQuota($statement->getRefundValue()),
-				$this->__("Modago commission") => $this->formatQuota(floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue())),
+				$this->__("Modago commission") => $this->formatQuota($statement->getTotalCommission()),
 				$this->__("Discounts covered by Modago") => $this->formatQuota($statement->getGalleryDiscountValue()),
 				$this->__("Other manual commission credit/debit notes") => $this->formatQuota($statement->getCommissionCorrection()),
 				$this->__("Carrier costs") => $this->formatQuota($statement->getTrackingChargeTotal()),
@@ -54,10 +54,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			"saldo" => array(
 				$this->__("Previous statement balance") => $this->formatQuota($statement->getLastStatementBalance()),
 				$this->__("Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
-				$this->__("Current statement balance") =>
-					$this->formatQuota(floatval($statement->getLastStatementBalance())
-					+ floatval($statement->getToPay())
-					- floatval($statement->getPaymentValue()))
+				$this->__("Current statement balance") => $this->formatQuota($statement->getActualBalance())
 			)
 		);
 
