@@ -273,21 +273,21 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$rmaIncrementId,
 							$this->__("Order shipment"),
 							$rma->getCarrierDate(), //todo: which date should be here?
-							"",//todo: realization time
+//							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
 							$this->formatQuota($currentFinalPrice),
 							$rma->getPaymentChannelOwner() ? $currentFinalPrice : 0
 						);
 					} else {
-						$page3body[$rmaIncrementId][7] += $currentFinalPrice;
+						$page3body[$rmaIncrementId][6] += $currentFinalPrice;
 						if($rma->getPaymentChannelOwner()) {
-							$page3body[$rmaIncrementId][8] += $currentFinalPrice;
+							$page3body[$rmaIncrementId][7] += $currentFinalPrice;
 						}
 					}
 
-					$page3data["footer"][7] += $currentFinalPrice;
+					$page3data["footer"][6] += $currentFinalPrice;
 					if($rma->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
+						$page3data["footer"][7] += $currentFinalPrice;
 					}
 					//fill 3rd page end
 
@@ -324,11 +324,11 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
     	$page2data["footer"][11] = $this->formatQuota($page2data["footer"][11]);
     	// page 3
     	foreach ($page3body as $key=>$row) {
-            $page3body[$key][7] = $this->formatQuota($page3body[$key][7]);    	    
-            $page3body[$key][8] = $this->formatQuota($page3body[$key][8]);    	    
+            $page3body[$key][6] = $this->formatQuota($page3body[$key][6]);
+            $page3body[$key][7] = $this->formatQuota($page3body[$key][7]);
     	}
+    	$page3data['footer'][6] = $this->formatQuota($page3data['footer'][6]);
     	$page3data['footer'][7] = $this->formatQuota($page3data['footer'][7]);
-    	$page3data['footer'][8] = $this->formatQuota($page3data['footer'][8]);
     	// page 4
     	$page4data['footer'][6] = $this->formatQuota($page4data['footer'][6]);
     	$page4data['footer'][7] = $this->formatQuota($page4data['footer'][7]);
