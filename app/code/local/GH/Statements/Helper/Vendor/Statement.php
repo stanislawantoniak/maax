@@ -272,7 +272,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							date("Y-m-d", strtotime($rmaModel->getCreatedAt())),
 							$rmaIncrementId,
 							$this->__("Order return payment"),
-							$rma->getCarrierDate(), //todo: which date should be here?
+							$rma->getEventDate(),
 //							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
 							$this->formatQuota($currentFinalPrice),
