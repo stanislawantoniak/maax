@@ -203,3 +203,7 @@
 "Sum of discounts financed by Modago","Suma zniżek finansowanych przez Modago"
 "Sum of payments to vendor","Suma wypłat do sprzedawcy"
 "Last statement balance + payout value - sum of payments to vendor","Saldo poprzedniego rozliczenia + wartość do wypłaty - suma wypłat do sprzedawcy"
+"MODAGO financial statement on %s for period %s <br/>issued for %s","Rozliczenie usług serwisu MODAGO z dnia %s za okres %s <br/>dla %s"
+"to %s","do %s"
+"Orders shipped and returns for the accounting period","Zamówienia wysłane oraz zwroty w okresie rozliczeniowym"
+"Commissions Modago for orders shipped and returned during the accounting period","Prowizje Modago za zamówienia wysłane i zwrócone w okresie rozliczeniowym"
