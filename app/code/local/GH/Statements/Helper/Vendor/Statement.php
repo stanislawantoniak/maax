@@ -36,12 +36,15 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
-	    $headerText = '';
-	    $eventDate = date('Y-m-d',strtotime($statement->getEventDate() + 3600*24));
+	    $headerText = sprintf('%s, %s',
+	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
+	        Mage::getStoreConfig('general/store_information/address',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
+	        
+	    $eventDate = date('Y-m-d',strtotime($statement->getEventDate()) + 3600*24);
 	    $vendor = Mage::getModel('udropship/vendor')->load($statement->getVendorId());
-	    $vendorData = sprintf('%s, %s (NIP:%s)',$vendor->getVendorName(),$vendor->getBillingAddress(),$vendor->getTaxNo());
+	    $vendorData = sprintf('%s, %s (NIP:%s)',$vendor->getCompanyName(),$vendor->getBillingAddress(),$vendor->getTaxNo());
 	    if ($statement->getDateFrom()) {
-	        $periodText = sprintf('%s - %s',$statement->getDateFrom(),$statement->getEventDate());	        
+	        $periodText = sprintf('%s - %s',date("Y-m-d",strtotime($statement->getDateFrom())),date('Y-m-d',strtotime($statement->getEventDate())));	        
 	    } else {
 	        $periodText = sprintf('to %s',$statement->getEventDate());
 	    }
@@ -101,7 +104,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page3data = array(
-			"title" => $this->__("Orders"),
+			"title" => $this->__("Orders shipped and returns for the accounting period"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("Order/RMA Date"),
@@ -122,7 +125,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page4data = array(
-			"title" => $this->__("Commission"),
+			"title" => $this->__("Commissions Modago for orders shipped and returned during the accounting period"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("RMA No."),
