@@ -33,7 +33,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 
 	protected function formatQuota($value)
 	{
-		return number_format(Mage::app()->getLocale()->getNumber($value), 2);
+		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
 		$page1data = array(
@@ -178,9 +178,10 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		$rmaCollection = $rmaModel->getCollection();
 		$rmaCollection->addFieldToFilter("statement_id",$statement->getId());
 
+		$page3body = array();
+		$page4body = array();
 		if($orderCollection->getSize() || $rmaCollection->getSize()) {
 
-			$page3body = array();
 
 			if($orderCollection->getSize()) {
 				$pos = array();
@@ -202,18 +203,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$order->getShippedDate(),
 							"",//todo: realization time
 							$this->__($order->getPaymentMethod()),
-							$this->formatQuota($currentFinalPrice),
-							$order->getPaymentChannelOwner() ? $this->formatQuota($currentFinalPrice) : 0.00
+							$currentFinalPrice,
+							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0,
 						);
 					} else {
-						$page3body[$poIncrementId][7] += $this->formatQuota($currentFinalPrice);
+						$page3body[$poIncrementId][7] += $currentFinalPrice;
 						if($order->getPaymentChannelOwner()) {
-							$page3body[$poIncrementId][8] += $this->formatQuota($currentFinalPrice);
+							$page3body[$poIncrementId][8] += $currentFinalPrice;
 						}
 					}
-					$page3data["footer"][7] += $this->formatQuota($currentFinalPrice);
+					$page3data["footer"][7] += $currentFinalPrice;
 					if($order->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $this->formatQuota($currentFinalPrice);
+						$page3data["footer"][8] += $currentFinalPrice;
 					}
 					//fill 3rd page end
 
@@ -228,18 +229,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->__("Sell"),
 						$product->getName(),
 						$order->getSku(),
-						$order->getPrice(),
+						$this->formatQuota($order->getPrice()),
 						$this->formatQuota($order->getDiscountAmount()),
 						$this->formatQuota($order->getGalleryDiscountValue()),
 						$this->formatQuota($order->getFinalPrice()),
-						$order->getCommissionPercent(),
+						round($order->getCommissionPercent(),2),
 						$this->formatQuota($order->getCommissionValue())
 					);
-					$page4data["footer"][6] += $this->formatQuota(floatval($order->getPrice()));
-					$page4data["footer"][7] += $this->formatQuota(floatval($order->getDiscountAmount()));
-					$page4data["footer"][8] += $this->formatQuota(floatval($order->getGalleryDiscountValue()));
-					$page4data["footer"][9] += $this->formatQuota(floatval($order->getFinalPrice()));
-					$page4data["footer"][11] += $this->formatQuota(floatval($order->getCommissionValue()));
+					$page4data["footer"][6] += floatval($order->getPrice());
+					$page4data["footer"][7] += floatval($order->getDiscountAmount());
+					$page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
+					$page4data["footer"][9] += floatval($order->getFinalPrice());
+					$page4data["footer"][11] +=floatval($order->getCommissionValue());
 					//fill 4th page end
 				}
 			}
@@ -268,18 +269,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
 							$this->formatQuota($currentFinalPrice),
-							$rma->getPaymentChannelOwner() ? $this->formatQuota($currentFinalPrice) : 0.00
+							$rma->getPaymentChannelOwner() ? $currentFinalPrice : 0
 						);
 					} else {
-						$page3body[$rmaIncrementId][7] += $this->formatQuota($currentFinalPrice);
+						$page3body[$rmaIncrementId][7] += $currentFinalPrice;
 						if($rma->getPaymentChannelOwner()) {
-							$page3body[$rmaIncrementId][8] += $this->formatQuota($currentFinalPrice);
+							$page3body[$rmaIncrementId][8] += $currentFinalPrice;
 						}
 					}
 
-					$page3data["footer"][7] += $this->formatQuota($currentFinalPrice);
+					$page3data["footer"][7] += $currentFinalPrice;
 					if($rma->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $this->formatQuota($currentFinalPrice);
+						$page3data["footer"][8] += $currentFinalPrice;
 					}
 					//fill 3rd page end
 
@@ -293,26 +294,46 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->__("Return"),
 						$product->getName(),
 						$rma->getSku(),
-						-$this->formatQuota($rma->getPrice()),
+						$this->formatQuota(floatval(-$rma->getPrice())),
 						$this->formatQuota($rma->getDiscountAmount()),
-						-$this->formatQuota($rma->getGalleryDiscountValue()),
-						-$this->formatQuota($rma->getApprovedRefundAmount()),
-						$rma->getCommissionPercent(),
-						-$this->formatQuota($rma->getCommissionValue())
+						$this->formatQuota(floatval(-$rma->getGalleryDiscountValue())),
+						$this->formatQuota(floatval(-$rma->getApprovedRefundAmount())),
+						round($rma->getCommissionPercent(),2),
+						$this->formatQuota(floatval(-$rma->getCommissionValue()))
 					);
-					$page4data["footer"][6] += $this->formatQuota(floatval(-$rma->getPrice()));
-					$page4data["footer"][7] += $this->formatQuota(floatval($order->getDiscountAmount()));
-					$page4data["footer"][8] += $this->formatQuota(floatval(-$rma->getGalleryDiscountValue()));
-					$page4data["footer"][9] += $this->formatQuota(floatval(-$rma->getApprovedRefundAmount()));
-					$page4data["footer"][11] += $this->formatQuota(floatval(-$rma->getCommissionValue()));
+					$page4data["footer"][6] += floatval(-$rma->getPrice());
+					$page4data["footer"][7] += floatval($order->getDiscountAmount());
+					$page4data["footer"][8] += floatval(-$rma->getGalleryDiscountValue());
+					$page4data["footer"][9] += floatval(-$rma->getApprovedRefundAmount());
+					$page4data["footer"][11] +=floatval(-$rma->getCommissionValue());
 					//fill 4th page end
 				}
 			}
 		}
 
-		$page3data["body"] = isset($page3body) ? $page3body : array();
-		$page4data["body"] = isset($page4body) ? $page4body : array();
-
+		// format quota for specific fields in pagedata
+		// page 2
+    	$page2data["footer"][10] = $this->formatQuota($page2data["footer"][10]);
+    	$page2data["footer"][11] = $this->formatQuota($page2data["footer"][11]);
+    	// page 3
+    	foreach ($page3body as $key=>$row) {
+            $page3body[$key][7] = $this->formatQuota($page3body[$key][7]);    	    
+            $page3body[$key][8] = $this->formatQuota($page3body[$key][8]);    	    
+    	}
+    	$page3data['footer'][7] = $this->formatQuota($page3data['footer'][7]);
+    	$page3data['footer'][8] = $this->formatQuota($page3data['footer'][8]);
+    	// page 4
+    	$page4data['footer'][6] = $this->formatQuota($page4data['footer'][6]);
+    	$page4data['footer'][7] = $this->formatQuota($page4data['footer'][7]);
+    	$page4data['footer'][8] = $this->formatQuota($page4data['footer'][8]);
+    	$page4data['footer'][9] = $this->formatQuota($page4data['footer'][9]);
+    	$page4data['footer'][11] = $this->formatQuota($page4data['footer'][11]);
+    	
+		$page3data["body"] = $page3body;
+		$page4data["body"] = $page4body;
+		
+    	
+		
 		/** @var GH_Statements_Model_Vendor_Pdf $pdfModel */
 		$pdfModel = Mage::getModel('ghstatements/vendor_pdf');
 		$pdfModel->generatePage1Html($page1data);

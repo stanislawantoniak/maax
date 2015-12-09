@@ -15,8 +15,8 @@ $data = $this->getPageData();
 		<tbody>
 		<?php foreach($data['body'] as $values): ?>
 			<tr>
-				<?php foreach($values as $val): ?>
-					<td><?php echo $val;?></td>
+				<?php foreach($values as $key => $val): ?>
+					<td <?php if ($key>6) echo "class='right'";?>><?php echo $val;?></td>
 				<?php endforeach; ?>
 			</tr>
 		<?php endforeach; ?>
