@@ -175,12 +175,13 @@ class GH_Statements_Model_Observer
         }
         // Rma
         if (!empty($statementTotals->rma)) {
-            $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount; // Suma prowizji z RMA ( równoważne order_commission_value )
-            $data["rma_value"]                  = $statementTotals->rma->amount;           // Suma zwrotów z RMA
-            $data['total_commission']          -= $statementTotals->rma->amount;           // Suma prowizji
-            $data["gallery_discount_value"]    -= $statementTotals->rma->galleryDiscountValue; // Suma zniżek finansowanych przez Modago
+            $data["rma_commission_value"]       = $statementTotals->rma->commissionAmount;          // Suma prowizji z RMA ( równoważne order_commission_value )
+            $data["rma_value"]                  = $statementTotals->rma->galleryCommissionValue;    // Suma zwrotów z RMA
+            $data['total_commission']          -= $statementTotals->rma->galleryCommissionValue;    // Suma prowizji
+            $data["gallery_discount_value"]    -= $statementTotals->rma->galleryDiscountValue;      // Suma zniżek finansowanych przez Modago
             $data["rma_gallery_discount_value"] = $statementTotals->rma->galleryDiscountValue;
             $data["to_pay"]                    -= $data["total_commission"];
+            $data["to_pay"]                    += $data["gallery_discount_value"];
         }
         // Refund
         if (!empty($statementTotals->refund)) {
