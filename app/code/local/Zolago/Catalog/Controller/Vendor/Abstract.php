@@ -310,7 +310,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 			}
 		}
 		
-		throw new Mage_Core_Exception("Unknow store");
+		throw new Mage_Core_Exception("Unknown store");
 	}
 	
 	/**
