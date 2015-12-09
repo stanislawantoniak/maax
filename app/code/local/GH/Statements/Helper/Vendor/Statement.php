@@ -155,7 +155,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$packageTypes[$track->getTrackType()],
 					$track->getShippedDate(),
 					$track->getTitle(),
-					$track->getCustomerId(),
+					$track->getShippingSourceAccount(),
 					$track->getTrackNumber(),
 					$this->formatQuota($track->getChargeShipment()),
 					$this->formatQuota(floatval($track->getChargeInsurance()) + floatval($track->getChargeCod())),
