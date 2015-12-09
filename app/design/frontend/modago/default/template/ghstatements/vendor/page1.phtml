@@ -54,10 +54,9 @@ $data = $this->getPageData();
         padding: 8px;
         line-height: 1.428571429;
         vertical-align: top;
-        text-align:right;
+        text-align:left;
     }
-    table tr td:last-child {
-        display: inline-block;
+    table tr td.right {
         text-align: right;
     }
     table tr:nth-child(odd) td {
@@ -71,7 +70,7 @@ $data = $this->getPageData();
 		<?php foreach($data['statement'] as $title=>$value): ?>
 			<tr>
 				<td><?php echo $title; ?></td>
-				<td><?php echo $value;?></td>
+				<td class="right"><?php echo $value;?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
@@ -83,7 +82,7 @@ $data = $this->getPageData();
 		<?php foreach($data['saldo'] as $title=>$value): ?>
 			<tr>
 				<td><?php echo $title; ?></td>
-				<td><?php echo $value;?></td>
+				<td class="right"><?php echo $value;?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
