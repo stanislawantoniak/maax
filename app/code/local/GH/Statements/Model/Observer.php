@@ -497,7 +497,9 @@ class GH_Statements_Model_Observer
 					    'charge_total'      => $chargeTotal,
 					    'track_type'        => $orderTrack->getTrackType(),
 					    'title'             => $orderTrack->getTitle(),
-					    'customer_id'       => $po->getCustomerId()
+					    'customer_id'       => $po->getCustomerId(),
+					    'sales_track_id'    => $orderTrack->getEntityId(),
+                        'shipping_source_account' => $orderTrack->getShippingSourceAccount(),
 				    );
 
 				    $nettoTotal += $orderTrack->getChargeTotal();
@@ -563,7 +565,9 @@ class GH_Statements_Model_Observer
 							'charge_total'      => $chargeTotal,
 							'track_type'        => $rmaTrack->getTrackType(),
 							'title'             => $rmaTrack->getTitle(),
-							'customer_id'       => $po->getCustomerId()
+							'customer_id'       => $po->getCustomerId(),
+                            'rma_track_id'      => $rmaTrack->getEntityId(),
+                            'shipping_source_account' => $rmaTrack->getShippingSourceAccount()
 						);
 
 						$nettoTotal += $rmaTrack->getChargeTotal();
