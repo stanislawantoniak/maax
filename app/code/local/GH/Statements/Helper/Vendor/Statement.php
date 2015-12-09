@@ -258,7 +258,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					/** @var GH_Statements_Model_Rma $rma */
 					$rmaId = $rma->getRmaId();
 					$poId = $rma->getPoId();
-					$rmaIncrementId = $rma->getIncrementId();
+					$rmaIncrementId = $rma->getRmaIncrementId();
 					/** @var Zolago_Rma_Model_Rma $rmaModel */
 					$rmaModel = isset($rmas[$rmaId]) ?
 						$rmas[$rmaId] :
@@ -271,7 +271,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$rma->getPoIncrementId(),
 							date("Y-m-d", strtotime($rmaModel->getCreatedAt())),
 							$rmaIncrementId,
-							$this->__("Order shipment"),
+							$this->__("Order return payment"),
 							$rma->getCarrierDate(), //todo: which date should be here?
 //							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
