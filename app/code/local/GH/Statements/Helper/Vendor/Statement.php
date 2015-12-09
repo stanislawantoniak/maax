@@ -28,7 +28,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		if(!$statement->getStatementPdf() || !is_file(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf())) {
 			$this->generateStatementPdf($statement);
 		}
-		return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
+		return Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
 	}
 
 	protected function formatQuota($value)
@@ -272,7 +272,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					/** @var GH_Statements_Model_Rma $rma */
 					$rmaId = $rma->getRmaId();
 					$poId = $rma->getPoId();
-					$rmaIncrementId = $rma->getIncrementId();
+					$rmaIncrementId = $rma->getRmaIncrementId();
 					/** @var Zolago_Rma_Model_Rma $rmaModel */
 					$rmaModel = isset($rmas[$rmaId]) ?
 						$rmas[$rmaId] :
@@ -285,8 +285,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$rma->getPoIncrementId(),
 							date("Y-m-d", strtotime($rmaModel->getCreatedAt())),
 							$rmaIncrementId,
-							$this->__("Order shipment"),
-							$rma->getCarrierDate(), //todo: which date should be here?
+							$this->__("Order return payment"),
+							$rma->getEventDate(),
 //							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
 							$this->formatQuota($currentFinalPrice),
