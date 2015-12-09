@@ -17,7 +17,7 @@ class Zolago_Catalog_Model_Observer
 	public function productInit(Varien_Event_Observer $observer) {
 		$product = $observer->getEvent()->getProduct();
 		/* @var $product Mage_Catalog_Model_Products */
-
+		
 		// No category id
 		//if(!$product->getCategory()){
 			$rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
@@ -27,10 +27,10 @@ class Zolago_Catalog_Model_Observer
 				$product->setCategory($category);
                 Mage::unregister('current_category');
                 Mage::register('current_category', $category);
-			}
+			}	
 		//}
 	}
-
+	
     public function addColumnWidthField(Varien_Event_Observer $observer)
     {
         $fieldset = $observer->getForm()->getElement('front_fieldset');
@@ -143,5 +143,38 @@ class Zolago_Catalog_Model_Observer
             Mage::logException($e);
         }
         return $this;
+    }
+
+    /**
+     * Add 'attribute_base_store' into Admin Store View Information edit form
+     * If attribute_base_store will be specified labels will be taken if not present.
+     * If you do not specify a store view then the default (Admin) labels will be used
+     * Event: adminhtml_store_edit_form_prepare_form
+     * @see Mage_Adminhtml_Block_System_Store_Edit_Form::_prepareForm()
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function addFieldsToAdminStoreViewEdit($observer) {
+        /** @var Zolago_Catalog_Helper_Data $hlp */
+        $hlp = Mage::helper('zolagocatalog');
+        /** @var Mage_Adminhtml_Block_System_Store_Edit_Form $block */
+        $block = $observer->getData('block');
+        $form = $block->getForm();
+        $fieldset = $form->getElements()->searchById('store_fieldset');
+
+        if (Mage::registry('store_type') == 'store') {
+            $storeModel = Mage::registry('store_data');
+            if ($postData = Mage::registry('store_post_data')) {
+                $storeModel->setData($postData['store']);
+            }
+
+            $fieldset->addField('store_attribute_base_store', 'select', array(
+                'name'      => 'store[attribute_base_store]',
+                'label'     => $hlp->__('Use attributes labels from'),
+                'values'    => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(true, false),
+                'value'     => $storeModel->getAttributeBaseStore(),
+                'note'      => $hlp->__('From this store view labels will be taken if not present. If you do not specify a store view then the default (Admin) labels will be used')
+            ));
+        }
     }
 }

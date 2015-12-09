@@ -170,6 +170,7 @@
                         <type>multiselect</type>
                         <source_model>core/website</source_model>
                         <position>1</position>
+                        <default>1</default>
                     </websites_allowed>
                     <!--Company registration data-->
                     <company_name>
@@ -869,8 +870,20 @@
 						<class>zolagodropship/observer</class>
 						<method>addOrbaShippingData</method>
 					</add_orba_shipping_data>
+					<add_undelivered_track_data>
+						<class>zolagodropship/observer</class>
+						<method>addUndeliveredTrackData</method>
+					</add_undelivered_track_data>
 				</observers>				
 			</sales_order_shipment_track_save_before>
+			<urma_rma_track_save_before>
+				<observers>
+					<add_undelivered_track_data>
+						<class>zolagodropship/observer</class>
+						<method>addUndeliveredTrackData</method>
+					</add_undelivered_track_data>
+				</observers>
+			</urma_rma_track_save_before>
 		</events>		
 	</global>
 	<frontend>

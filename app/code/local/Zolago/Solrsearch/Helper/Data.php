@@ -424,6 +424,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		} else {
 			// Categories are only shown for global context and not for vendor context
 			$allCats = Mage::getModel('catalog/category')->getCollection()
+					->addFieldToFilter('path', array('like' => '%/'.Mage::app()->getStore()->getRootCategoryId().'/%'))
 					->addAttributeToSelect('*')
 					->addAttributeToFilter('is_active', '1')
 					->addAttributeToFilter(self::ZOLAGO_USE_IN_SEARCH_CONTEXT, array('eq' => 1))

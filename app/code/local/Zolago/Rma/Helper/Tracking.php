@@ -28,6 +28,7 @@ class Zolago_Rma_Helper_Tracking extends Orba_Shipping_Helper_Carrier_Tracking {
      * @param string $shipmentIdMessage
      * @param array $carrierMessage
      * @param string $status
+     * @return bool
      */
     public function addComment($track,$shipmentIdMessage,$carrierMessage,$status) {
         $comment = $this->__($this->_helper->getHeader()) . PHP_EOL;

@@ -6,6 +6,7 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
     const VENDOR_TYPE_STANDARD = 1;
 
     const TRACK_STATUS_UNDELIVERED = 'U';
+	const TRACK_UNDELIVERED_SUFFIX = '_UNDELIVERED';
 
 	public function toOptionHash($selector=false){
 	    switch ($this->getPath()) {
@@ -34,7 +35,7 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 			$out = $this->getVendors();
 			$out = array_reverse($out, true);
 			$out[""] = "";
-			return array_reverse($out, true);;
+			return array_reverse($out, true);
     }
     
     /**
