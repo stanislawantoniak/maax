@@ -24,7 +24,7 @@ $data = $this->getPageData();
 		<tfoot>
 		<tr>
 			<?php for($i = 0;$i<count($data['header']);$i++): ?>
-				<td><?php echo isset($data['footer'][$i]) ? $data['footer'][$i] : "";?></td>
+				<th><?php echo isset($data['footer'][$i]) ? $data['footer'][$i] : "";?></th>
 			<?php endfor;?>
 		</tr>
 		</tfoot>
