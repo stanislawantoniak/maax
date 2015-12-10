@@ -13,11 +13,14 @@ class GH_Statements_Model_Vendor_Pdf extends Zolago_Pdf_Model_Pdf {
 	const VENDOR_PDF_PAGE3_BLOCK = 'ghstatements/vendor_page3';
 	const VENDOR_PDF_PAGE4_TEMPLATE = 'ghstatements/vendor/page4.phtml';
 	const VENDOR_PDF_PAGE4_BLOCK = 'ghstatements/vendor_page4';
+	const VENDOR_PDF_FOOTER_TEMPLATE = 'ghstatements/vendor/footer.phtml';
+	const VENDOR_PDF_FOOTER_BLOCK = 'ghstatements/vendor_footer';
 
 	protected $page1Html;
 	protected $page2Html;
 	protected $page3Html;
 	protected $page4Html;
+	protected $footer;
 
 	protected $statementId;
 
@@ -29,7 +32,7 @@ class GH_Statements_Model_Vendor_Pdf extends Zolago_Pdf_Model_Pdf {
     }
 
 	public function getPdfFile(&$statement) {
-	    $this->setFooter('{PAGENO}');
+	    $this->setHtmlFooter($this->footer);
 		@$this->WriteHTML($this->page1Html);
 		$this->AddPage();
 		@$this->WriteHTML($this->page2Html);
@@ -47,7 +50,14 @@ class GH_Statements_Model_Vendor_Pdf extends Zolago_Pdf_Model_Pdf {
 
 		return $statement->getStatementPdf();
 	}
-
+	public function generateFooter($data) {
+		$this->footer = Mage::app()->getLayout()
+			->createBlock(self::VENDOR_PDF_FOOTER_BLOCK)
+			->setTemplate(self::VENDOR_PDF_FOOTER_TEMPLATE)
+			->setData('page_data',$data)
+			->toHtml();
+		return $this->page1Html;
+	}
 	public function generatePage1Html($data) {
 		$this->page1Html = Mage::app()->getLayout()
 			->createBlock(self::VENDOR_PDF_PAGE1_BLOCK)

@@ -37,7 +37,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
 
-	    $headerText = sprintf('%s, %s',
+	    $headerText = sprintf('%s<br/>%s',
 	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
 	        Mage::getStoreConfig('general/store_information/address',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
 	        
@@ -50,6 +50,9 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	        $periodText = $this->__('to %s',$statement->getEventDate());
 	    }
 	    $nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
+	    $footerData = array (
+    	    'name' => $this->__("MODAGO financial statement on %s",$eventDate),
+        );
 	    $lastStatementData = empty($statement->getDateFrom())? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
 		$page1data = array(
 		    "header" => $headerText,
@@ -375,6 +378,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		$pdfModel->generatePage2Html($page2data);
 		$pdfModel->generatePage3Html($page3data);
 		$pdfModel->generatePage4Html($page4data);
+		$pdfModel->generateFooter($footerData);
 		$pdfModel->setVariables($statement);
 
 		$pdfModel->getPdfFile($statement);

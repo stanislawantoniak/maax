@@ -27,6 +27,17 @@ $data = $this->getPageData();
         border-spacing: 0;
 		width: 100%;
 	}
+	table.footer {
+	    border:none;
+	    color:black;
+	    font-size:12px;
+	    font-weight:bold;
+	}
+	table thead tr td.head {
+	    border:none;
+	    background-color:white;
+	    color:black;
+	}
     table tr {
         outline: none;
     }
@@ -56,6 +67,11 @@ $data = $this->getPageData();
         vertical-align: top;
         text-align:left;
     }
+    table.footer tr td {
+        border:none;
+        border-top:1px solid black;
+        background:none;
+    }
     table tr td.bold {
         font-weight:bold;
     }
@@ -65,10 +81,14 @@ $data = $this->getPageData();
     table tr:nth-child(odd) td {
         background-color: #f9f9f9;
 	}
+    table.footer tr:nth-child(odd) td {
+        background-color: #ffffff;
+	}
 </style>
 <?php $toPayText = Mage::helper('ghstatements')->__('To pay'); ?>
 <div>
-    <h4 align="right"><?php echo $data['header']; ?></h4>
+    <img src="skin/frontend/default/udropship/images/zolago.png" style="width:200px;float:left" >
+    <h5 align="right"><?php echo $data['header']; ?></h5>
     <p></p>
 	<h4><?php echo $data['name']; ?></h4>
 	<table cellspacing="0" border="1" class="statement">
