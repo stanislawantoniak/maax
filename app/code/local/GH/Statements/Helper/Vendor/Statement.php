@@ -330,18 +330,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->__("Return"),
 						$product->getName(),
 						$rma->getSku(),
-						$this->formatQuota(-floatval($rma->getPrice())),
+						$this->formatQuota(-floatval($rma->getApprovedRefundAmount())),
 						$this->formatQuota(floatval($rma->getDiscountAmount()) - floatval($rma->getGalleryDiscountValue())),
-						$this->formatQuota(-floatval($rma->getGalleryDiscountValue())),
-						$this->formatQuota(-floatval($rma->getFinalPrice())),
+						$this->formatQuota(-floatval($rma->getDiscountReturn())),
+						$this->formatQuota(-floatval($rma->getApprovedRefundAmount()) - floatval($rma->getDiscountReturn())),
                         $this->formatQuota(round($rma->getCommissionPercent(),2)),
 						$this->formatQuota(-floatval($rma->getCommissionReturn()))
 					);
-					$page4data["footer"][6]  += -floatval($rma->getPrice());
-					$page4data["footer"][7]  +=  floatval($rma->getDiscountAmount()) - floatval($rma->getGalleryDiscountValue());
-					$page4data["footer"][8]  += -floatval($rma->getGalleryDiscountValue());
-					$page4data["footer"][9]  += -floatval($rma->getFinalPrice());
-					$page4data["footer"][11] += -floatval($rma->getCommissionReturn());
+					$page4data["footer"][6]  += (-floatval($rma->getApprovedRefundAmount()));
+					$page4data["footer"][7]  += ( floatval($rma->getDiscountAmount()) - floatval($rma->getGalleryDiscountValue()));
+					$page4data["footer"][8]  += (-floatval($rma->getDiscountReturn()));
+					$page4data["footer"][9]  += (-floatval($rma->getApprovedRefundAmount()) - floatval($rma->getDiscountReturn()));
+					$page4data["footer"][11] += (-floatval($rma->getCommissionReturn()));
 					//fill 4th page end
 				}
 			}
