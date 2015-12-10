@@ -2,7 +2,7 @@
 class Zolago_Catalog_Model_Resource_Vendor_Price_Collection 
 	extends Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 {
-  
+
 	public function addAttributes() {
 		
 		// Add non-o attribs
@@ -49,6 +49,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		$stockTable = $this->getTable('cataloginventory/stock_item');
+		$productWebsiteTable = $this->getTable('catalog/product_website');
 		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
 		// Join price attrib
@@ -62,7 +63,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		// Join stock item from stocak index
-		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId(); 
+		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
 		$select->joinLeft(
 		    array('cataloginventory_stock_status' => $stockStatusTable),
 				'(cataloginventory_stock_status.product_id=e.entity_id) AND ('.$adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).

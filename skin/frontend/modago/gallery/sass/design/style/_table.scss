@@ -15,13 +15,19 @@
 	th{
 		padding: 15px 10px;
 		font-weight: normal;
-		font-family: "latoblack";
+		font-family: $fontBlack;
 		background: $panel-top;
 		letter-spacing: -0.5px;
 	}
 	&.table-top{
 		td,th{
 			vertical-align: top;
+		}
+	}
+	.data-table-td-shops {
+		@media(max-width: $screen-sm-max) {
+			word-wrap: break-word;
+			max-width: 130px;
 		}
 	}
 }

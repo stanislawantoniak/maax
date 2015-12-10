@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.2.5</version>
+            <version>0.2.7</version>
         </GH_Statements>
     </modules>
     <global>
@@ -63,6 +63,9 @@
         </resources>
     </global>
     <frontend>
+        <secure_url>
+            <udropship_statements>/udropship/statements/</udropship_statements>
+        </secure_url>
         <routers>
             <ghstatements>
                 <use>standard</use>
