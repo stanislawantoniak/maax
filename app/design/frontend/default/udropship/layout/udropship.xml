@@ -55,7 +55,7 @@
             <action method="setTemplate"><template>page/page.phtml</template></action>
         </reference>
         <reference name="head">
-            <action method="setTitle"><title>Dropship Vendor Interface</title></action>
+            <action method="setTitle"><title>Panel sprzedawcy</title></action>
             <action method="addCss"><stylesheet>css/udropship.css</stylesheet></action>
         </reference>
         <reference name="header">
