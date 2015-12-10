@@ -81,12 +81,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				"e.entity_id = cataloginventory_stock_table.product_id", 
 				array()
         );
-		$select->joinInner(
-			array('catalog_product_website' => $productWebsiteTable),
-			"e.entity_id = catalog_product_website.product_id",
-			array("catalog_product_website.website_id")
-		);
-		$select->where("catalog_product_website.website_id=?", $websiteId);
 		$this->addExpressionAttributeToSelect('politics', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (cataloginventory_stock_table.manage_stock = 1 AND cataloginventory_stock_table.is_in_stock = 0) , (cataloginventory_stock_table.min_qty>999999) )", array());
 		// Join all childs count
