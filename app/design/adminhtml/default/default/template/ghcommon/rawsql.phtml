@@ -1,0 +1,13 @@
+<div class="content-header">
+<table cellspacing="0">
+    <tr>
+        <td style="width:50%;"><h3><?php echo Mage::helper('ghcommon')->__('Query list') ?></h3></td>
+        <td class="a-right">
+            <?php echo $this->getButtonsHtml() ?>
+        </td>
+    </tr>
+</table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('ghcommon_rawsql_grid') ?>
+</div>
