@@ -106,8 +106,10 @@ class GH_Statements_Model_Observer
         $collection->addFieldToFilter('id',array('neq'=>$statement->getId()));
         $collection->getSelect()->order('id DESC');
         if ($item = $collection->getFirstItem()) {
-            $balance = $item->getData('to_pay') - $item->getData('payment_value')+$item->getData('last_statement_balance');            
-            $dateFrom = strtotime($item->getData('event_date'))+24*3600; // next day
+            if ($item->getId()) {
+                $balance = $item->getData('to_pay') - $item->getData('payment_value')+$item->getData('last_statement_balance');            
+                $dateFrom = strtotime($item->getData('event_date'))+24*3600; // next day
+            }
         }
         $lastBalance = new StdClass();
         $lastBalance->balance = $balance;
