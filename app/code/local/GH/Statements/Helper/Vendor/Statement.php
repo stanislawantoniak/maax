@@ -261,7 +261,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$poIncrementId,
 						"",
 						$order->getShippedDate(),
-						$this->__("Sell"),
+						$this->__("Sale"),
 						$product->getName(),
 						$order->getSku(),
 						$this->formatQuota($order->getPrice()),
