@@ -122,7 +122,6 @@ class Zolago_Campaign_Model_Observer
 
         //sales/promo campaign
         $campaignSalesPromo = $modelCampaignResource->getUpDateCampaignsSalePromotion();
-        Mage::log($campaignSalesPromo, null, "11.log");
 
 
         $dataToUpdate = array();
