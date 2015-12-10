@@ -49,7 +49,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		$stockTable = $this->getTable('cataloginventory/stock_item');
-		$productWebsiteTable = $this->getTable('catalog/product_website');
 		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
 		// Join price attrib
