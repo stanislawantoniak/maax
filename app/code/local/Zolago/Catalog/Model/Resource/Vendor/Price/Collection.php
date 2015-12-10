@@ -61,7 +61,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$this->addExpressionAttributeToSelect('display_price', $priceExpression, array());
 		
 		
-		// Join stock item from stocak index
+		// Join stock item from stock index
 		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
 		$select->joinLeft(
 		    array('cataloginventory_stock_status' => $stockStatusTable),
