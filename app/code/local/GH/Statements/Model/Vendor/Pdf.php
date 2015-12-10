@@ -29,6 +29,7 @@ class GH_Statements_Model_Vendor_Pdf extends Zolago_Pdf_Model_Pdf {
     }
 
 	public function getPdfFile(&$statement) {
+	    $this->setFooter('{PAGENO}');
 		@$this->WriteHTML($this->page1Html);
 		$this->AddPage();
 		@$this->WriteHTML($this->page2Html);
