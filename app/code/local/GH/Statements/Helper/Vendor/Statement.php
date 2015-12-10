@@ -333,7 +333,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->formatQuota($rma->getDiscountAmount()),
 						$this->formatQuota(floatval(-$rma->getGalleryDiscountValue())),
 						$this->formatQuota(floatval(-$rma->getApprovedRefundAmount())),
-						round($rma->getCommissionPercent(),2),
+                        $this->formatQuota(round($rma->getCommissionPercent(),2)),
 						$this->formatQuota(floatval(-$rma->getCommissionValue()))
 					);
 					$page4data["footer"][6] += floatval(-$rma->getPrice());
