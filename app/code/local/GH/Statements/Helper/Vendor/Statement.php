@@ -36,6 +36,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
+
 	    $headerText = sprintf('%s, %s',
 	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
 	        Mage::getStoreConfig('general/store_information/address',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
@@ -56,38 +57,42 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			"title" => $this->__("Balance"),
 			"statement" => array(),
 			"saldo" => array(
-				$this->__("[B] Previous statement balance%s",$lastStatementData) => $this->formatQuota($statement->getLastStatementBalance()),
-				$this->__("[C] Vendor payouts") => $this->formatQuota($statement->getPaymentValue()),
-				$this->__("Current statement balance [B]+[A]-[C]") => $this->formatQuota($statement->getActualBalance())
+				$this->__("[B] Previous statement balance%s",$lastStatementData) => $statement->getLastStatementBalance(),
+				$this->__("[C] Vendor payouts") => $statement->getPaymentValue(),
+				$this->__("Current statement balance [B]+[A]-[C]") => $statement->getActualBalance()
 			)
 		);
 
-		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $this->formatQuota($statement->getOrderValue());
-		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $this->formatQuota($statement->getRefundValue());
-		$page1data['statement'][$this->__("[3] Modago commission")] = $this->formatQuota($statement->getTotalCommission());
-		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $this->formatQuota($statement->getGalleryDiscountValue());
+		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $statement->getOrderValue();
+		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $statement->getRefundValue();
+		$page1data['statement'][$this->__("[3] Modago commission")] = $statement->getTotalCommission();
+		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $statement->getGalleryDiscountValue();
 		$step = 5;
 		$calculateMethod = '[1]-[2]-[3]+[4]';
 		if ($statement->getCommissionCorrection() != 0) {
-    		$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $this->formatQuota($statement->getCommissionCorrection());
+    		$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $statement->getCommissionCorrection();
     		$calculateMethod .= '+[5]';
     		$step++;
         }
         $calculateMethod .= sprintf('-[%d]',$step);
-		$page1data['statement'][$this->__("[%d] Carrier costs",$step++)] = $this->formatQuota($statement->getTrackingChargeTotal());
+		$page1data['statement'][$this->__("[%d] Carrier costs",$step++)] = $statement->getTrackingChargeTotal();
 		if ($statement->getDeliveryCorrection()!= 0) {
             $calculateMethod .= sprintf('+[%d]',$step);
-    		$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes",$step++)] = $this->formatQuota($statement->getDeliveryCorrection());
+    		$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes",$step++)] = $statement->getDeliveryCorrection();
         }
         if ($statement->getMarketingValue() != 0) {
             $calculateMethod .= sprintf('-[%d]',$step);        
-    		$page1data['statement'][$this->__("[%d] Marketing costs",$step++)] = $this->formatQuota($statement->getMarketingValue());
+    		$page1data['statement'][$this->__("[%d] Marketing costs",$step++)] = $statement->getMarketingValue();
         }
         if ($statement->getMarketingCorrection() != 0) {
             $calculateMethod .= sprintf('+[%d]',$step);        
-    		$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes",$step++)] = $this->formatQuota($statement->getMarketingCorrection());
+    		$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes",$step++)] = $statement->getMarketingCorrection();
         }
-		$page1data['statement'][$this->__("[A] To pay %s",$calculateMethod)] = $this->formatQuota($statement->getToPay());
+		$page1data['topay'] = array (
+		    'title' => $this->__("[A] To pay %s",$calculateMethod),
+		    'value' => $statement->getToPay()
+        );
+		    
 		$page2data = array(
 			"title" => $this->__("Tracking"),
 			"header" => array(
