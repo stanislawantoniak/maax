@@ -210,10 +210,10 @@
 "MODAGO financial statement on %s for period %s <br/>issued for %s","Rozliczenie usług serwisu MODAGO z dnia %s za okres %s <br/>dla %s"
 "to %s","do %s"
 "Orders shipped and returns for the accounting period","Zamówienia wysłane oraz zwroty w okresie rozliczeniowym"
-"Commissions Modago for orders shipped and returned during the accounting period","Prowizje Modago za zamówienia wysłane i zwrócone w okresie rozliczeniowym"
+"Commissions Modago for orders shipped and returned during the accounting period","Prowizje Modago za zamówienia wysłane/zwrócone w okresie rozliczeniowym"
 "Order return payment","Zwrot płatności"
 "Sell","Sprzedaź"
 "Goods return","Zwrot towarów"
 "Undelivered package","Niedostarczona przesyłka"
 "Online bank transfer","Przelew online"
-
+"MODAGO financial statement on %s","Rozliczenie usług serwisu MODAGO z dnia %s"
