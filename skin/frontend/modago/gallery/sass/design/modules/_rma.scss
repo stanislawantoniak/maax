@@ -792,13 +792,16 @@
 #rma-page {
 	.rma-page-header {
 		margin-bottom: 20px;
+		@media(max-width:$screen-xs-max) {
+			margin: 0 -15px 20px;
+		}
 		.rma-page-header1 {
-			font-size: 27px;
+			font-size: 30px;
 		}
 		.rma-page-header2 {
-			font-size: 37px;
-			strong {
-				font-size: 42px;
+			font-size: 30px;
+			span.bigger {
+				font-size: 36px;
 			}
 		}
 		@media(max-width: $screen-sm-max) {
@@ -806,9 +809,9 @@
 				font-size: 20px;
 			}
 			.rma-page-header2 {
-				font-size: 30px;
-				strong {
-					font-size: 32px;
+				font-size: 20px;
+				span.bigger {
+					font-size: 26px;
 				}
 			}
 		}
@@ -827,30 +830,32 @@
 	}
 	.benefits {
 		.benefit-item {
-			.benefit-text {
+			font-family: $fontRegular !important;
+			.benefit-text.benefit-text-rma {
 				margin-left: 5%;
 			}
 			&:first-child {
-				.benefit-text {
+				.benefit-text.benefit-text-rma {
 					margin-left: 0;
 				}
 			}
 			@media(max-width: $screen-sm-max) {
 				&:nth-child(3) {
-					.benefit-text {
+					.benefit-text.benefit-text-rma {
 						margin-left: 0;
 					}
+				}
+			}
+			@media(max-width: 380px) {
+				text-align: center;
+				width: 100%;
+				.benefit-text.benefit-text-rma {
+					margin: 0 0 10px;
 				}
 			}
 		}
 		@media(max-width: 500px) {
 			padding: 0;
-		}
-		@media(max-width: 359px) {
-			.benefit-text {
-				background: none !important;
-				padding: 15px 5px 15px 10px !important;
-			}
 		}
 	}
 
@@ -858,7 +863,16 @@
 
 .sales-rma-history {
 	#rma-page {
+		.rma-page-header {
+			@media(max-width: $screen-xs-max) {
+				margin: 0 0 20px;
+			}
+		}
 		.benefits {
+			padding: 0 15px !important;
+			@media(max-width: 380px) {
+				padding: 0 !important;
+			}
 			.benefit-item {
 				@media(max-width: $screen-sm-max) {
 					width: 50%;
@@ -867,6 +881,13 @@
 						h3 {
 							width: auto !important;
 						}
+					}
+				}
+				@media(max-width: 380px) {
+					text-align: center;
+					width: 100%;
+					.benefit-text.benefit-text-rma {
+						margin: 0 15px 10px;
 					}
 				}
 			}
