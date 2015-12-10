@@ -120,7 +120,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
             // Korekta za zwrócone zamówienia
             $statement->setData('rma_value', sprintf("%.4f", -1 * $statement->getData('rma_value')));
             // Korekta o rabaty finansowane przez Modago
-            $statement->setData('gallery_discount_value', sprintf("%.4f", -1 * $statement->getData('gallery_discount_value')));
+//            $statement->setData('gallery_discount_value', sprintf("%.4f", -1 * $statement->getData('gallery_discount_value')));
         }
         return $this;
     }
@@ -174,7 +174,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                 // Korekta za zwrócone zamówienia
                 array(
                     'text' => $helper->__("Refunds balance"),
-                    'index' => 'rma_value',
+                    'index' => 'refund_value',
                     'css_class' => 'row-2'
                 ),
             ),
@@ -192,7 +192,7 @@ class GH_Statements_Block_Dropship_Periodic_Grid extends Mage_Adminhtml_Block_Wi
                 // Prowizja Modago
                 array(
                     'text' => $helper->__("Modago commission"),
-                    'index' => 'order_commission_value',
+                    'index' => 'total_commission',
                     'css_class' => 'row-1'
                 ),
                 // Korekta o rabaty finansowane przez Modago

@@ -2,25 +2,21 @@
 /** @var GH_Statements_Block_Vendor_Page4 $this */
 $data = $this->getPageData();
 ?>
-<style>
-	table tr:nth-child(even) td {
-		background-color: #92abff;
-	}
-</style>
 <div>
-	<table cellspacing="0" border="1">
+	<h4><?php echo $data["title"]; ?></h4>
+	<table cellspacing="0" border="1" repeat_header="1">
 		<thead>
 		<tr>
 			<?php foreach($data['header'] as $value): ?>
-				<td><?php echo $value; ?></td>
+				<th><?php echo $value; ?></th>
 			<?php endforeach; ?>
 		</tr>
 		</thead>
 		<tbody>
 		<?php foreach($data['body'] as $values): ?>
 			<tr>
-				<?php foreach($values as $val): ?>
-					<td><?php echo $val;?></td>
+				<?php foreach($values as $key => $val): ?>
+					<td <?php if ($key>5) echo "class='right'";?>><?php echo $val;?></td>
 				<?php endforeach; ?>
 			</tr>
 		<?php endforeach; ?>
@@ -28,7 +24,7 @@ $data = $this->getPageData();
 		<tfoot>
 		<tr>
 			<?php for($i = 0;$i<count($data['header']);$i++): ?>
-				<td><?php echo isset($data['footer'][$i]) ? $data['footer'][$i] : "";?></td>
+				<th><?php echo isset($data['footer'][$i]) ? $data['footer'][$i] : "";?></th>
 			<?php endfor;?>
 		</tr>
 		</tfoot>

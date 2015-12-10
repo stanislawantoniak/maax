@@ -6,7 +6,9 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	 * @throws Zend_Controller_Response_Exception
 	 */
 	public function downloadStatementPdf(GH_Statements_Model_Statement $statement) {
-		$filename = preg_replace("/[^a-z0-9\._-]+/i","-",trim($statement->getName())).'.pdf';
+		$vendor = Mage::getModel("udropship/vendor")->load($statement->getVendorId());
+		$pdfName = "Statement-" . $vendor->getVendorName() . '-' . $statement->getEventDate();
+		$filename = preg_replace("/[^a-z0-9\._-]+/i", "-", trim($pdfName)) . '.pdf';
 		$file = file_get_contents($this->getStatementPdf($statement)); //todo:check path
 
 		Mage::app()->getResponse()
@@ -26,35 +28,73 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		if(!$statement->getStatementPdf() || !is_file(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf())) {
 			$this->generateStatementPdf($statement);
 		}
-		return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
+		return Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
 	}
 
+	protected function formatQuota($value)
+	{
+		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
+	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
+
+	    $headerText = sprintf('%s, %s',
+	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
+	        Mage::getStoreConfig('general/store_information/address',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
+	        
+	    $eventDate = date('Y-m-d',strtotime($statement->getEventDate()) + 3600*24);
+	    $vendor = Mage::getModel('udropship/vendor')->load($statement->getVendorId());
+	    $vendorData = sprintf('%s, %s (NIP:%s)',$vendor->getCompanyName(),$vendor->getBillingAddress(),$vendor->getTaxNo());
+	    if ($statement->getDateFrom()) {
+	        $periodText = sprintf('%s - %s',date("Y-m-d",strtotime($statement->getDateFrom())),date('Y-m-d',strtotime($statement->getEventDate())));	        
+	    } else {
+	        $periodText = $this->__('to %s',$statement->getEventDate());
+	    }
+	    $nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
+	    $lastStatementData = empty($statement->getDateFrom())? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
 		$page1data = array(
-			"name" => $statement->getName(),
-			"statement" => array(
-				$this->__("Payments for realised orders") => $statement->getOrderValue(),
-				$this->__("Payments correction for returned orders") => $statement->getRefundValue(),
-				$this->__("Modago commission") => floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue()),
-				$this->__("Modago commission corrections for discounts funded by Modago") => $statement->getGalleryDiscountValue(),
-				$this->__("Other Modago commission corrections") => $statement->getCommissionCorrection(),
-				$this->__("Carrier costs") => $statement->getTrackingChargeTotal(),
-				$this->__("Carrier costs corrections") => $statement->getDeliveryCorrection(),
-				$this->__("Marketing costs") => $statement->getMarketingValue(),
-				$this->__("Marketing costs corrections") => $statement->getMarketingCorrection(),
-				$this->__("To pay") => $statement->getToPay(),
-			),
+		    "header" => $headerText,
+			"name" => $nameText, // $statement->getName(),
+			"title" => $this->__("Balance"),
+			"statement" => array(),
 			"saldo" => array(
-				$this->__("Previous statement saldo") => $statement->getLastStatementBalance(),
-				$this->__("Vendor payouts") => $statement->getPaymentValue(),
-				$this->__("Current statement saldo") =>
-					floatval($statement->getLastStatementBalance())
-					+ floatval($statement->getToPay())
-					- floatval($statement->getPaymentValue())
+				$this->__("[B] Previous statement balance%s",$lastStatementData) => $statement->getLastStatementBalance(),
+				$this->__("[C] Vendor payouts") => $statement->getPaymentValue(),
+				$this->__("Current statement balance [B]+[A]-[C]") => $statement->getActualBalance()
 			)
 		);
 
+		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $statement->getOrderValue();
+		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $statement->getRefundValue();
+		$page1data['statement'][$this->__("[3] Modago commission")] = $statement->getTotalCommission();
+		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $statement->getGalleryDiscountValue();
+		$step = 5;
+		$calculateMethod = '[1]-[2]-[3]+[4]';
+		if ($statement->getCommissionCorrection() != 0) {
+    		$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $statement->getCommissionCorrection();
+    		$calculateMethod .= '+[5]';
+    		$step++;
+        }
+        $calculateMethod .= sprintf('-[%d]',$step);
+		$page1data['statement'][$this->__("[%d] Carrier costs",$step++)] = $statement->getTrackingChargeTotal();
+		if ($statement->getDeliveryCorrection()!= 0) {
+            $calculateMethod .= sprintf('+[%d]',$step);
+    		$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes",$step++)] = $statement->getDeliveryCorrection();
+        }
+        if ($statement->getMarketingValue() != 0) {
+            $calculateMethod .= sprintf('-[%d]',$step);        
+    		$page1data['statement'][$this->__("[%d] Marketing costs",$step++)] = $statement->getMarketingValue();
+        }
+        if ($statement->getMarketingCorrection() != 0) {
+            $calculateMethod .= sprintf('+[%d]',$step);        
+    		$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes",$step++)] = $statement->getMarketingCorrection();
+        }
+		$page1data['topay'] = array (
+		    'title' => $this->__("[A] To pay %s",$calculateMethod),
+		    'value' => $statement->getToPay()
+        );
+		    
 		$page2data = array(
+			"title" => $this->__("Tracking"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("RMA No."),
@@ -78,13 +118,14 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		);
 
 		$page3data = array(
+			"title" => $this->__("Orders shipped and returns for the accounting period"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("Order/RMA Date"),
 				$this->__("RMA No."),
 				$this->__("Operation type"),
 				$this->__("Operation date"),
-				$this->__("Order/RMA Realization time"),
+//				$this->__("Order/RMA Realization time"),
 				$this->__("Payment method"),
 				$this->__("Sale value (PLN)"),
 				$this->__("To pay (PLN)")
@@ -92,12 +133,13 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 			"body" => array(),
 			"footer" => array(
 				0 => $this->__("Total"),
-				7 => 0.00,
-				8 => 0.00
+				6 => 0.00,
+				7 => 0.00
 			)
 		);
 
 		$page4data = array(
+			"title" => $this->__("Commissions Modago for orders shipped and returned during the accounting period"),
 			"header" => array(
 				$this->__("Order No."),
 				$this->__("RMA No."),
@@ -148,13 +190,13 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$packageTypes[$track->getTrackType()],
 					$track->getShippedDate(),
 					$track->getTitle(),
-					$track->getCustomerId(),
+					$track->getShippingSourceAccount(),
 					$track->getTrackNumber(),
-					$track->getChargeShipment(),
-					floatval($track->getChargeInsurance()) + floatval($track->getChargeCod()),
-					$track->getChargeFuel(),
-					$track->getChargeSubtotal(),
-					$track->getChargeTotal()
+					$this->formatQuota($track->getChargeShipment()),
+					$this->formatQuota(floatval($track->getChargeInsurance()) + floatval($track->getChargeCod())),
+					$this->formatQuota($track->getChargeFuel()),
+					$this->formatQuota($track->getChargeSubtotal()),
+					$this->formatQuota($track->getChargeTotal())
 				);
 			}
 		}
@@ -171,9 +213,10 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		$rmaCollection = $rmaModel->getCollection();
 		$rmaCollection->addFieldToFilter("statement_id",$statement->getId());
 
+		$page3body = array();
+		$page4body = array();
 		if($orderCollection->getSize() || $rmaCollection->getSize()) {
 
-			$page3body = array();
 
 			if($orderCollection->getSize()) {
 				$pos = array();
@@ -193,46 +236,46 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							"",
 							$this->__("Order shipment"),
 							$order->getShippedDate(),
-							"",//todo: realization time
+//							"",//todo: realization time
 							$this->__($order->getPaymentMethod()),
 							$currentFinalPrice,
-							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0.00
+							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0,
 						);
 					} else {
-						$page3body[$poIncrementId][7] += $currentFinalPrice;
+						$page3body[$poIncrementId][6] += $currentFinalPrice;
 						if($order->getPaymentChannelOwner()) {
-							$page3body[$poIncrementId][8] += $currentFinalPrice;
+							$page3body[$poIncrementId][7] += $currentFinalPrice;
 						}
 					}
-					$page3data["footer"][7] += $currentFinalPrice;
+					$page3data["footer"][6] += $currentFinalPrice;
 					if($order->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
+						$page3data["footer"][7] += $currentFinalPrice;
 					}
 					//fill 3rd page end
 
 					//fill 4th page start
 					$orderId = $order->getId();
-					Mage::log($order->getData());
+
 					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$order->getSku());
 					$page4body[$orderId] = array(
 						$poIncrementId,
 						"",
 						$order->getShippedDate(),
-						$this->__("Sell"),
+						$this->__("Sale"),
 						$product->getName(),
 						$order->getSku(),
-						$order->getPrice(),
-						$order->getDiscountAmount(),
-						$order->getGalleryDiscountValue(),
-						$order->getFinalPrice(),
-						$order->getCommissionPercent(),
-						$order->getCommissionValue()
+						$this->formatQuota($order->getPrice()),
+						$this->formatQuota(floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue())), // Rabat udzielany przez partnera (discount_amount to suma rabatow vendora i sprzedawcy)
+						$this->formatQuota($order->getGalleryDiscountValue()),
+						$this->formatQuota($order->getFinalPrice()),
+                        $this->formatQuota(round($order->getCommissionPercent(),2)),
+						$this->formatQuota($order->getCommissionValue())
 					);
 					$page4data["footer"][6] += floatval($order->getPrice());
 					$page4data["footer"][7] += floatval($order->getDiscountAmount());
 					$page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
 					$page4data["footer"][9] += floatval($order->getFinalPrice());
-					$page4data["footer"][11] += floatval($order->getCommissionValue());
+					$page4data["footer"][11] +=floatval($order->getCommissionValue());
 					//fill 4th page end
 				}
 			}
@@ -243,7 +286,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					/** @var GH_Statements_Model_Rma $rma */
 					$rmaId = $rma->getRmaId();
 					$poId = $rma->getPoId();
-					$rmaIncrementId = $rma->getIncrementId();
+					$rmaIncrementId = $rma->getRmaIncrementId();
 					/** @var Zolago_Rma_Model_Rma $rmaModel */
 					$rmaModel = isset($rmas[$rmaId]) ?
 						$rmas[$rmaId] :
@@ -256,23 +299,23 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 							$rma->getPoIncrementId(),
 							date("Y-m-d", strtotime($rmaModel->getCreatedAt())),
 							$rmaIncrementId,
-							$this->__("Order shipment"),
-							$rma->getCarrierDate(), //todo: which date should be here?
-							"",//todo: realization time
+							$this->__("Order return payment"),
+							$rma->getEventDate(),
+//							"",//todo: realization time
 							$this->__($rma->getPaymentMethod()),
-							$currentFinalPrice,
-							$rma->getPaymentChannelOwner() ? $currentFinalPrice : 0.00
+							$this->formatQuota($currentFinalPrice),
+							$rma->getPaymentChannelOwner() ? $currentFinalPrice : 0
 						);
 					} else {
-						$page3body[$rmaIncrementId][7] += $currentFinalPrice;
+						$page3body[$rmaIncrementId][6] += $currentFinalPrice;
 						if($rma->getPaymentChannelOwner()) {
-							$page3body[$rmaIncrementId][8] += $currentFinalPrice;
+							$page3body[$rmaIncrementId][7] += $currentFinalPrice;
 						}
 					}
 
-					$page3data["footer"][7] += $currentFinalPrice;
+					$page3data["footer"][6] += $currentFinalPrice;
 					if($rma->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
+						$page3data["footer"][7] += $currentFinalPrice;
 					}
 					//fill 3rd page end
 
@@ -280,32 +323,52 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$rmaId = "rma_".$rma->getId();
 					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$rma->getSku());
 					$page4body[$rmaId] = array(
-						$rmaIncrementId,
-						"",
+                        $poIncrementId,
+                        $rmaIncrementId,
 						$rma->getEventDate(),
 						$this->__("Return"),
 						$product->getName(),
 						$rma->getSku(),
-						-$rma->getPrice(),
-						$rma->getDiscountAmount(),
-						-$rma->getGalleryDiscountValue(),
-						-$rma->getApprovedRefundAmount(),
-						$rma->getCommissionPercent(),
-						-$rma->getCommissionValue()
+						$this->formatQuota(floatval(-$rma->getPrice())),
+						$this->formatQuota($rma->getDiscountAmount()),
+						$this->formatQuota(floatval(-$rma->getGalleryDiscountValue())),
+						$this->formatQuota(floatval(-$rma->getApprovedRefundAmount())),
+                        $this->formatQuota(round($rma->getCommissionPercent(),2)),
+						$this->formatQuota(floatval(-$rma->getCommissionValue()))
 					);
 					$page4data["footer"][6] += floatval(-$rma->getPrice());
 					$page4data["footer"][7] += floatval($order->getDiscountAmount());
 					$page4data["footer"][8] += floatval(-$rma->getGalleryDiscountValue());
 					$page4data["footer"][9] += floatval(-$rma->getApprovedRefundAmount());
-					$page4data["footer"][11] += floatval(-$rma->getCommissionValue());
+					$page4data["footer"][11] +=floatval(-$rma->getCommissionValue());
 					//fill 4th page end
 				}
 			}
 		}
 
-		$page3data["body"] = isset($page3body) ? $page3body : array();
-		$page4data["body"] = isset($page4body) ? $page4body : array();
-
+		// format quota for specific fields in pagedata
+		// page 2
+    	$page2data["footer"][10] = $this->formatQuota($page2data["footer"][10]);
+    	$page2data["footer"][11] = $this->formatQuota($page2data["footer"][11]);
+    	// page 3
+    	foreach ($page3body as $key=>$row) {
+            $page3body[$key][6] = $this->formatQuota($page3body[$key][6]);
+            $page3body[$key][7] = $this->formatQuota($page3body[$key][7]);
+    	}
+    	$page3data['footer'][6] = $this->formatQuota($page3data['footer'][6]);
+    	$page3data['footer'][7] = $this->formatQuota($page3data['footer'][7]);
+    	// page 4
+    	$page4data['footer'][6] = $this->formatQuota($page4data['footer'][6]);
+    	$page4data['footer'][7] = $this->formatQuota($page4data['footer'][7]);
+    	$page4data['footer'][8] = $this->formatQuota($page4data['footer'][8]);
+    	$page4data['footer'][9] = $this->formatQuota($page4data['footer'][9]);
+    	$page4data['footer'][11] = $this->formatQuota($page4data['footer'][11]);
+    	
+		$page3data["body"] = $page3body;
+		$page4data["body"] = $page4body;
+		
+    	
+		
 		/** @var GH_Statements_Model_Vendor_Pdf $pdfModel */
 		$pdfModel = Mage::getModel('ghstatements/vendor_pdf');
 		$pdfModel->generatePage1Html($page1data);
