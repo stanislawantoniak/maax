@@ -107,7 +107,7 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		}
 		$allowed = $this->getAllowedStores();
 		if($allowed){
-			return $allowed[0]->getId();
+			return $allowed[0]["id"];
 		}
 		throw new Mage_Core_Exception("No store defined");
 	}
