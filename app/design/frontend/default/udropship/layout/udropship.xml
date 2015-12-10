@@ -57,7 +57,7 @@
         <reference name="head">
             <action method="setTitle"><title>Vendor Portal</title></action>
             <action method="addCss"><stylesheet>css/udropship.css</stylesheet></action>
-            <action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>
+            <!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
         </reference>
         <reference name="header">
             <action method="setTemplate"><template>unirgy/dropship/vendor/header.phtml</template></action>
