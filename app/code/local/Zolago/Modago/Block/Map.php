@@ -23,7 +23,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
 
             $collection = Mage::getResourceModel('zolagopos/pos_collection');
             /* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
-            $collection->addActiveFilter();
+            //$collection->addActiveFilter();
             $collection->addShowOnMapFilter();
             $collection->addVendorFilter($vendorId);
             $collection->setOrder("map_name", "ASC");
