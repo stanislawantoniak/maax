@@ -3,10 +3,12 @@
 $data = $this->getPageData();
 ?>
 <div>
-	<h4><?php echo $data["title"]; ?></h4>
 	<table cellspacing="0" border="1" repeat_header="1">
 		<thead>
 			<tr>
+			    <td class="head" colspan="12"><h4><?php echo $data["title"]; ?></h4></td>
+			</tr>
+			<tr>    
 			<?php foreach($data['header'] as $value): ?>
 				<th><?php echo $value; ?></th>
 			<?php endforeach; ?>
