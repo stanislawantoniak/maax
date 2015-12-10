@@ -68,7 +68,7 @@ $data = $this->getPageData();
 </style>
 <?php $toPayText = Mage::helper('ghstatements')->__('To pay'); ?>
 <div>
-    <h4><?php echo $data['header']; ?></h4>
+    <h4 align="right"><?php echo $data['header']; ?></h4>
     <p></p>
 	<h4><?php echo $data['name']; ?></h4>
 	<table cellspacing="0" border="1" class="statement">
@@ -76,9 +76,13 @@ $data = $this->getPageData();
 		<?php foreach($data['statement'] as $title=>$value): ?>
 			<tr>
 				<td <?php if ($title == $toPayText) echo "class='bold'";?>><?php echo $title; ?></td>
-				<td class="right<?php if ($title == $toPayText) echo " bold";?>"><?php echo $value;?></td>
+				<td class="right<?php if ($title == $toPayText) echo " bold";?>"><?php echo Mage::helper('core')->currency($value);?></td>
 			</tr>
 		<?php endforeach; ?>
+			<tr>
+				<td class='bold'><?php echo $data['topay']['title']; ?></td>
+				<td class="right bold"><?php echo Mage::helper('core')->currency($data['topay']['value']);?></td>
+			</tr>
 		</tbody>
 	</table>
 	<br />
@@ -88,7 +92,7 @@ $data = $this->getPageData();
 		<?php foreach($data['saldo'] as $title=>$value): ?>
 			<tr>
 				<td><?php echo $title; ?></td>
-				<td class="right"><?php echo $value;?></td>
+				<td class="right"><?php echo Mage::helper('core')->currency($value);?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>

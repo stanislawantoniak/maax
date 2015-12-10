@@ -36,8 +36,6 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
-        /** @var Mage_Core_Helper_Data $cHlp */
-        $cHlp = Mage::helper("core");
 
 	    $headerText = sprintf('%s, %s',
 	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
@@ -52,36 +50,49 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	        $periodText = $this->__('to %s',$statement->getEventDate());
 	    }
 	    $nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
+	    $lastStatementData = empty($statement->getDateFrom())? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
 		$page1data = array(
 		    "header" => $headerText,
 			"name" => $nameText, // $statement->getName(),
 			"title" => $this->__("Balance"),
 			"statement" => array(),
 			"saldo" => array(
-				$this->__("Previous statement balance") => $cHlp->currency($this->formatQuota($statement->getLastStatementBalance()), true, false),
-				$this->__("Vendor payouts") => $cHlp->currency($this->formatQuota($statement->getPaymentValue()),true, false),
-				$this->__("Current statement balance") => $cHlp->currency($this->formatQuota($statement->getActualBalance()),true, false)
+				$this->__("[B] Previous statement balance%s",$lastStatementData) => $statement->getLastStatementBalance(),
+				$this->__("[C] Vendor payouts") => $statement->getPaymentValue(),
+				$this->__("Current statement balance [B]+[A]-[C]") => $statement->getActualBalance()
 			)
 		);
 
-		$page1data['statement'][$this->__("Payments for fulfilled orders")] = $cHlp->currency($this->formatQuota($statement->getOrderValue()), true, false);
-		$page1data['statement'][$this->__("Payment refunds for returned orders")] = $cHlp->currency($this->formatQuota($statement->getRefundValue()), true, false);
-		$page1data['statement'][$this->__("Modago commission")] = $cHlp->currency($this->formatQuota($statement->getTotalCommission(), true, false));
-		$page1data['statement'][$this->__("Discounts covered by Modago")] = $cHlp->currency($this->formatQuota($statement->getGalleryDiscountValue()), true, false);
+		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $statement->getOrderValue();
+		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $statement->getRefundValue();
+		$page1data['statement'][$this->__("[3] Modago commission")] = $statement->getTotalCommission();
+		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $statement->getGalleryDiscountValue();
+		$step = 5;
+		$calculateMethod = '[1]-[2]-[3]+[4]';
 		if ($statement->getCommissionCorrection() != 0) {
-    		$page1data['statement'][$this->__("Other manual commission credit/debit notes")] = $cHlp->currency($this->formatQuota($statement->getCommissionCorrection()), true, false);
+    		$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $statement->getCommissionCorrection();
+    		$calculateMethod .= '+[5]';
+    		$step++;
         }
-		$page1data['statement'][$this->__("Carrier costs")] = $cHlp->currency($this->formatQuota($statement->getTrackingChargeTotal()), true, false);
+        $calculateMethod .= sprintf('-[%d]',$step);
+		$page1data['statement'][$this->__("[%d] Carrier costs",$step++)] = $statement->getTrackingChargeTotal();
 		if ($statement->getDeliveryCorrection()!= 0) {
-    		$page1data['statement'][$this->__("Manual carrier fees credit/debit notes")] = $cHlp->currency($this->formatQuota($statement->getDeliveryCorrection()), true, false);
+            $calculateMethod .= sprintf('+[%d]',$step);
+    		$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes",$step++)] = $statement->getDeliveryCorrection();
         }
         if ($statement->getMarketingValue() != 0) {
-    		$page1data['statement'][$this->__("Marketing costs")] = $cHlp->currency($this->formatQuota($statement->getMarketingValue()), true, false);
+            $calculateMethod .= sprintf('-[%d]',$step);        
+    		$page1data['statement'][$this->__("[%d] Marketing costs",$step++)] = $statement->getMarketingValue();
         }
         if ($statement->getMarketingCorrection() != 0) {
-    		$page1data['statement'][$this->__("Manual marketing fees credit/debit notes")] = $cHlp->currency($this->formatQuota($statement->getMarketingCorrection()), true, false);
+            $calculateMethod .= sprintf('+[%d]',$step);        
+    		$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes",$step++)] = $statement->getMarketingCorrection();
         }
-		$page1data['statement'][$this->__("To pay")] = $cHlp->currency($this->formatQuota($statement->getToPay()), true, false);
+		$page1data['topay'] = array (
+		    'title' => $this->__("[A] To pay %s",$calculateMethod),
+		    'value' => $statement->getToPay()
+        );
+		    
 		$page2data = array(
 			"title" => $this->__("Tracking"),
 			"header" => array(
