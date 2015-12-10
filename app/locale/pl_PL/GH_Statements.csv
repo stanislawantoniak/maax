@@ -165,7 +165,7 @@
 "Client No.","Nr klienta"
 "Tracking No.","Nr listu"
 "Package cost","Opłata za przesyłkę"
-"COD and insurance cost","Opłata za COD i ubezpieczenie"
+"COD and insurance cost","Opłata za COD i ubezp."
 "Fuel cost","Opłata paliwowa"
 "Cost netto","Koszt netto"
 "Cost brutto","Koszt brutto"
@@ -212,3 +212,6 @@
 "Orders shipped and returns for the accounting period","Zamówienia wysłane oraz zwroty w okresie rozliczeniowym"
 "Commissions Modago for orders shipped and returned during the accounting period","Prowizje Modago za zamówienia wysłane i zwrócone w okresie rozliczeniowym"
 "Order return payment","Zwrot płatności"
+"Sell","Sprzedaź"
+"Goods return","Zwrot towarów"
+
