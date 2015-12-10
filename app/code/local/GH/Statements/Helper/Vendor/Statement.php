@@ -268,7 +268,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->formatQuota(floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue())), // Rabat udzielany przez partnera (discount_amount to suma rabatow vendora i sprzedawcy)
 						$this->formatQuota($order->getGalleryDiscountValue()),
 						$this->formatQuota($order->getFinalPrice()),
-						round($order->getCommissionPercent(),2),
+                        $this->formatQuota(round($order->getCommissionPercent(),2)),
 						$this->formatQuota($order->getCommissionValue())
 					);
 					$page4data["footer"][6] += floatval($order->getPrice());
