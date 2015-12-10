@@ -75,9 +75,8 @@
 
 
 .footer-gray-wr {
-    background-color: $color_2e2e2e;
-    border-top: 1px solid $color_242424;
     line-height: 36px;
+	padding: 0;
     a {
         color:$color_828282;
     }
@@ -263,10 +262,6 @@
 		@include sprite-dimensions($allMap, ico_social_pinterest);
 		margin-left: 22px;
 	}
-}
-
-.footer-gray-wr {
-	padding: 10px 0;
 }
 
 .copy {
