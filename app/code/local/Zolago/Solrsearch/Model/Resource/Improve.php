@@ -908,6 +908,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             $tableName = array('price_index' => $this->getTable('catalog/product_index_price'));
 
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
+            $select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
         }
 
         if(isset($extraJoins[self::JOIN_URL])) {
