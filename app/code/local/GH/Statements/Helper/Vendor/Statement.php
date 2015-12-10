@@ -271,11 +271,11 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
                         $this->formatQuota(round($order->getCommissionPercent(),2)),
 						$this->formatQuota($order->getCommissionValue())
 					);
-					$page4data["footer"][6] += floatval($order->getPrice());
-					$page4data["footer"][7] += floatval($order->getDiscountAmount());
-					$page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
-					$page4data["footer"][9] += floatval($order->getFinalPrice());
-					$page4data["footer"][11] +=floatval($order->getCommissionValue());
+					$page4data["footer"][6]  += floatval($order->getPrice());
+					$page4data["footer"][7]  += floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue());
+					$page4data["footer"][8]  += floatval($order->getGalleryDiscountValue());
+					$page4data["footer"][9]  += floatval($order->getFinalPrice());
+					$page4data["footer"][11] += floatval($order->getCommissionValue());
 					//fill 4th page end
 				}
 			}
@@ -287,6 +287,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$rmaId = $rma->getRmaId();
 					$poId = $rma->getPoId();
 					$rmaIncrementId = $rma->getRmaIncrementId();
+					$poIncrementId  = $rma->getPoIncrementId();
 					/** @var Zolago_Rma_Model_Rma $rmaModel */
 					$rmaModel = isset($rmas[$rmaId]) ?
 						$rmas[$rmaId] :
@@ -329,18 +330,18 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$this->__("Return"),
 						$product->getName(),
 						$rma->getSku(),
-						$this->formatQuota(floatval(-$rma->getPrice())),
-						$this->formatQuota($rma->getDiscountAmount()),
-						$this->formatQuota(floatval(-$rma->getGalleryDiscountValue())),
-						$this->formatQuota(floatval(-$rma->getApprovedRefundAmount())),
+						$this->formatQuota(-floatval($rma->getPrice())),
+						$this->formatQuota(floatval($rma->getDiscountAmount()) - floatval($rma->getGalleryDiscountValue())),
+						$this->formatQuota(-floatval($rma->getGalleryDiscountValue())),
+						$this->formatQuota(-floatval($rma->getFinalPrice())),
                         $this->formatQuota(round($rma->getCommissionPercent(),2)),
-						$this->formatQuota(floatval(-$rma->getCommissionValue()))
+						$this->formatQuota(-floatval($rma->getCommissionReturn()))
 					);
-					$page4data["footer"][6] += floatval(-$rma->getPrice());
-					$page4data["footer"][7] += floatval($order->getDiscountAmount());
-					$page4data["footer"][8] += floatval(-$rma->getGalleryDiscountValue());
-					$page4data["footer"][9] += floatval(-$rma->getApprovedRefundAmount());
-					$page4data["footer"][11] +=floatval(-$rma->getCommissionValue());
+					$page4data["footer"][6]  += -floatval($rma->getPrice());
+					$page4data["footer"][7]  +=  floatval($rma->getDiscountAmount()) - floatval($rma->getGalleryDiscountValue());
+					$page4data["footer"][8]  += -floatval($rma->getGalleryDiscountValue());
+					$page4data["footer"][9]  += -floatval($rma->getFinalPrice());
+					$page4data["footer"][11] += -floatval($rma->getCommissionReturn());
 					//fill 4th page end
 				}
 			}
