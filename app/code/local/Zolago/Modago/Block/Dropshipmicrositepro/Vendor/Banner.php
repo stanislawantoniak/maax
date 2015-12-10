@@ -92,7 +92,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         return $this->getUrl('') == $this->getUrl('*/*/*',
             array(
                 //'_current'=>true,       //_current	bool	Uses the current module, controller, action and parameters
-                '_use_rewrite' => true
+                '_use_rewrite' => true,
+                "_no_vendor" => TRUE
             )
         );
     }
