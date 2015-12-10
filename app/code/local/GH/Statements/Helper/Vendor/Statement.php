@@ -261,11 +261,11 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 						$poIncrementId,
 						"",
 						$order->getShippedDate(),
-						$this->__("Sell"),
+						$this->__("Sale"),
 						$product->getName(),
 						$order->getSku(),
 						$this->formatQuota($order->getPrice()),
-						$this->formatQuota($order->getDiscountAmount()),
+						$this->formatQuota(floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue())), // Rabat udzielany przez partnera (discount_amount to suma rabatow vendora i sprzedawcy)
 						$this->formatQuota($order->getGalleryDiscountValue()),
 						$this->formatQuota($order->getFinalPrice()),
 						round($order->getCommissionPercent(),2),
