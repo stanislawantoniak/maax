@@ -63,6 +63,9 @@
         </resources>
     </global>
     <frontend>
+        <secure_url>
+            <udropship_statements>/udropship/statements/</udropship_statements>
+        </secure_url>
         <routers>
             <ghstatements>
                 <use>standard</use>

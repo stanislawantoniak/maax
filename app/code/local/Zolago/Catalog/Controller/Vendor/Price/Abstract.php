@@ -85,8 +85,8 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
             $collection = Mage::getResourceModel("zolagocatalog/vendor_price_collection");
         }
         /* @var $collection Zolago_Catalog_Model_Resource_Vendor_Price_Collection */
-
-        $collection->setStoreId($this->_getStoreId());
+        $storeId = Mage::app()->getRequest()->getParam("store_id");
+        $collection->setStoreId($storeId);
 
 
         // Filter visible

@@ -12,7 +12,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	public function getAllowedStores($vendor)
 	{
 		$allowed = array();
-		$limitedWebsites = $vendor->getLimitWebsites();
+		$limitedWebsites = $vendor->getWebsitesAllowed();
 
 		if (!is_array($limitedWebsites)) {
 			$realWebsites = array();
@@ -27,11 +27,18 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 				}
 			}
 		}
-		foreach (Mage::app()->getStores() as $store) {
-			if ($realWebsites && in_array($store->getWebsiteId(), $realWebsites)) {
-				$allowed[] = $store;
+
+		foreach (Mage::app()->getWebsites() as $website) {
+			$websiteDefaultStoreId = Mage::app()
+				->getWebsite($website->getWebsiteId())
+				->getDefaultGroup()
+				->getDefaultStoreId();
+
+			$websiteDefaultStore = Mage::getModel("core/store")->load($websiteDefaultStoreId);
+			if ($realWebsites && in_array($website->getWebsiteId(), $realWebsites)) {
+				$allowed[] = array("id" => $websiteDefaultStore->getId(), "name" => $website->getName());
 			} elseif (!$realWebsites) {
-				$allowed[] = $store;
+				$allowed[] = array("id" => $websiteDefaultStore->getId(), "name" => $website->getName());
 			}
 		}
 		return $allowed;

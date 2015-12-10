@@ -52,7 +52,7 @@ $helper = Mage::helper("zolagocatalog");
                         </a>
                     </li>
 					<?php foreach($this->getAllowedStores() as $store):?>
-					<option value="<?php echo $this->escapeHtml($store->getId());?>" <?php if($this->getCurrentStoreId()==$store->getId()):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store->getName());?></option>
+					<option value="<?php echo $this->escapeHtml($store["id"]);?>" <?php if($this->getCurrentStoreId()== $store["id"]):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store["name"]);?></option>
 					<?php endforeach;?>
 				</select>
 			</form>
