@@ -323,8 +323,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$rmaId = "rma_".$rma->getId();
 					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$rma->getSku());
 					$page4body[$rmaId] = array(
-						$rmaIncrementId,
-						"",
+                        $poIncrementId,
+                        $rmaIncrementId,
 						$rma->getEventDate(),
 						$this->__("Return"),
 						$product->getName(),
