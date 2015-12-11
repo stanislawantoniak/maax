@@ -53,7 +53,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	    $footerData = array (
     	    'name' => $this->__("MODAGO financial statement on %s",$eventDate),
         );
-	    $lastStatementData = empty($statement->getDateFrom())? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
+        $dateFrom = $statement->getDateFrom();
+	    $lastStatementData = empty($dateFrom)? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
 		$page1data = array(
 		    "header" => $headerText,
 			"name" => $nameText, // $statement->getName(),
