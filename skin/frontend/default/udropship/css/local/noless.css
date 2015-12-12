@@ -595,3 +595,15 @@
 		padding: 0 0 0 10px;
 	}
 }
+
+.vendor-image {
+	list-style-type: none;
+	height: 110px;
+}
+.vendor-image li {
+    display: block;
+    float: left;
+}
+.vendor-image li.image-placeholder {
+    background-color: #fffeec;
+}

@@ -386,6 +386,35 @@ class Zolago_Catalog_Vendor_ImageController
             return false;
         }
     }
+
+
+    public function changeProductImagesOrderAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $imagesData = $this->getRequest()->getParam("images", array());
+        if(empty($imagesData))
+            return array();
+
+        $positions = array();
+        foreach($imagesData as $position => $value_id){
+            $positions[$value_id] = $position;
+        }
+
+        $mediaApi = Mage::getModel("catalog/product_attribute_media_api");
+        $_product = Mage::getModel('catalog/product')->load($productId);
+        $galleryData = $_product->getData(Mage_Catalog_Model_Product_Attribute_Media_Api::ATTRIBUTE_CODE);
+        if (!isset($galleryData['images']) || !is_array($galleryData['images'])) {
+            return array();
+        }
+        foreach ($galleryData['images'] as $item) {
+            $data = array(
+                'position' => $positions[$item["value_id"]],
+                'types'    => ($positions[$item["value_id"]] == 0) ? array('small_image', 'image',"thumbnail") : array(),
+            );
+            $mediaApi->update($productId, $item['file'], $data);
+        }
+        echo "DONE";
+    }
 }
 
 

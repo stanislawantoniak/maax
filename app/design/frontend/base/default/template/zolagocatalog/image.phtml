@@ -36,15 +36,26 @@
 </div>
 <script type="text/javascript">
     jQuery(function ($) {
-        $(document).on('mouseover', '.vendor-image', function () {
-            $(this).sortable({
-                opacity: 0.9, scrollSensitivity: 10, scrollSpeed: 40, zIndex: 9999,
-                stop: function () {
+        $(".vendor-image").dragsort({
+            dragSelector: "li",
+            placeHolderTemplate: "<li class='image-placeholder'></li>",
+            dragEnd: function () {
+                //console.log("Alarm: DragEnd caught!");
+                //console.log($(this).data("product"));
 
-                }
-            });
-            $(this).disableSelection();
-        })
+                var images = [];
+                $.each($(this).closest("ul.vendor-image").find("li"), function (i, li) {
+                    images.push($(li).data("value"))
+                });
+                //console.log(images);
+                $.ajax({
+                    url: '<?php echo Mage::getUrl("udprod/vendor_image/changeProductImagesOrder")?>',
+                    type: "POST",
+                    data: {product: $(this).data("product"), images: images}
+                });
+            },
+            dragBetween: false
+        });
     });
 </script>
 <script type="text/javascript">
