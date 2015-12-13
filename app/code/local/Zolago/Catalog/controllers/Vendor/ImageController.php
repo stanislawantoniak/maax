@@ -395,25 +395,37 @@ class Zolago_Catalog_Vendor_ImageController
         if(empty($imagesData))
             return array();
 
-        $positions = array();
+        $resource = Mage::getSingleton('core/resource');
+
+        $readConnection = $resource->getConnection('core_read');
+        $writeConnection = $resource->getConnection('core_write');
+
+        $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        //1. set position
         foreach($imagesData as $position => $value_id){
-            $positions[$value_id] = $position;
+            $query = "UPDATE {$productMediaValueTable} SET position={$position} WHERE value_id={$value_id}";
+            $writeConnection->query($query);
         }
 
-        $mediaApi = Mage::getModel("catalog/product_attribute_media_api");
-        $_product = Mage::getModel('catalog/product')->load($productId);
-        $galleryData = $_product->getData(Mage_Catalog_Model_Product_Attribute_Media_Api::ATTRIBUTE_CODE);
-        if (!isset($galleryData['images']) || !is_array($galleryData['images'])) {
-            return array();
-        }
-        foreach ($galleryData['images'] as $item) {
-            $data = array(
-                'position' => $positions[$item["value_id"]],
-                'types'    => ($positions[$item["value_id"]] == 0) ? array('small_image', 'image',"thumbnail") : array(),
-            );
-            $mediaApi->update($productId, $item['file'], $data);
-        }
-        echo "DONE";
+
+        //2. set first image as image, small_image and thumbnail
+        $firstImageValueId = $imagesData[0];
+        $query = "SELECT value FROM {$productMediaTable} WHERE value_id={$firstImageValueId}";
+        $result = $readConnection->fetchCol($query);
+
+        $image = $result[0];
+        $product = Mage::getModel('catalog/product')->load($productId);
+        $product->setImage($image);
+        $product->getResource()->saveAttribute($product, 'image');
+        $product->setSmallImage($image);
+        $product->getResource()->saveAttribute($product, 'small_image');
+        $product->setThumbnail($image);
+        $product->getResource()->saveAttribute($product, 'thumbnail');
+
+
+        //3. TODO Send to solr
     }
 }
 

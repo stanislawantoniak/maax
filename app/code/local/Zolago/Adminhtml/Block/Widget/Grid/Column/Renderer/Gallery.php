@@ -19,7 +19,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
         if ($gallery->count() > 0) {
             $out .= "<ul class='vendor-image'>";
             foreach ($gallery as $_image) {
-                //krumo($_image->getData());
+
                 $thUrl = $catalogHelper->init($product, 'thumbnail', $_image->getFile())->resize(100);
 
                 $valueId = $_image->getValueId();
@@ -28,7 +28,9 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
                 if ($_image['disabled']) {
                     $img = "<li data-product='".$productId."' data-value='".$valueId."' class='mass-thumb-image need-to-check'><img src='" . $thUrl . '?' . time() . "' /></li>";
                 } else {
-                    $img = "<li data-product='".$productId."' data-value='".$valueId."' class='mass-thumb-image'><img src='" . $thUrl . "' /></li>";
+                    $img = "<li data-product='".$productId."' data-value='".$valueId."' class='mass-thumb-image'>
+                    <div class='vendor-image-controls'><a title='".$this->__("Turn off")."'><i class='icon-ban-circle'></i></a></div>
+                    <img src='" . $thUrl . "' /></li>";
                 }
                 $out .= $img;
 
