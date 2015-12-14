@@ -38,7 +38,7 @@
     jQuery(function ($) {
         $(".vendor-image").dragsort({
             dragSelector: "li",
-            placeHolderTemplate: "<li class='image-placeholder'></li>",
+            placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
             dragEnd: function () {
 
                 var images = [];
@@ -58,7 +58,7 @@
         //CONTROLS
         //1. ZOOM
         $(".vendor-image-zoom").click(function (e) {
-            console.log("ZOOM");
+            //console.log("ZOOM");
             e.preventDefault();
             var controlLink = $(this);
             var parentContainer = controlLink.closest("li");
@@ -80,7 +80,7 @@
 
         //2. Disable/Enable
         $(".vendor-image-availability").click(function (e) {
-            console.log("AVAILABILITY");
+            //console.log("AVAILABILITY");
             e.preventDefault();
             var availabilityLink = $(this);
             var parentContainer = availabilityLink.closest("li");
@@ -99,7 +99,7 @@
                 success: function(result){
                     parentContainer.find(".vendor-image-refresh").hide();
                     if(imageToDisable){
-                        console.log("Disabled");
+                        //console.log("Disabled");
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
                             .html("<i class='icon-circle'></i>");
@@ -109,7 +109,7 @@
                             })
                             .find("img").css({"opacity": "0.5"});
                     } else {
-                        console.log("Enabled");
+                        //console.log("Enabled");
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
                             .html("<i class='icon-ban-circle'></i>");
@@ -122,16 +122,16 @@
         });
         //3. Delete
         $('#vendorImageDelete').on('show.bs.modal', function(e) {
-            console.log($(e.relatedTarget));
-            console.log($(e.relatedTarget).data('value'));
+            //console.log($(e.relatedTarget));
+            //console.log($(e.relatedTarget).data('value'));
             $(this).find('.btn-ok').data('value', $(e.relatedTarget).data('value'));
         });
         $("#vendorImageDelete .btn-ok").click(function (e) {
             e.preventDefault();
-            console.log("DELETE!!!");
+            //console.log("DELETE!!!");
             var val = $("#vendorImageDelete .btn-ok").data('value');
 
-            console.log(val);
+            //console.log(val);
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
                 type: "POST",

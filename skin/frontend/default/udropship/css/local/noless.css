@@ -608,7 +608,7 @@
     height: 100px;
     width: 100px;
 }
-.vendor-image li.image-placeholder {
+.vendor-image li.vendor-image-placeholder {
     background-color: #fffeec;
 }
 
