@@ -15,7 +15,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
 		$this->setVendorSku(Mage::helper('udropship')->getVendorSkuAttribute());
     }
-	
+
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
@@ -51,7 +51,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		$index = $this->getColumn($columnId)->getIndex();
 		return $this->getFilterValueByIndex($index);
 	}
-	
+
 	protected function _prepareColumns() {
 		$this->addColumn($this->getVendorSku()->getAttributeCode(), array(
 			"type"		=>	"text",
@@ -68,11 +68,20 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 			"header"	=>	Mage::helper("zolagocatalog")->__("Product name"),
 		));
 
-		$attributeSets = Mage::getModel('eav/entity_attribute_set')
-			->getResourceCollection()
-			->addFieldToFilter("use_to_create_product", 1)
-			->load()
-			->toOptionHash();
+		$vendor = Mage::getSingleton('udropship/session')->getVendor();
+		$collection = Mage::getModel('eav/entity_attribute_set')
+			->getResourceCollection();
+		$collection->addFieldToFilter("use_to_create_product", 1);
+		$collection->setOrder('attribute_set_name', 'ASC');
+		$collection->getSelect()
+			->join(
+				array('vendor_attribute_set' => Mage::getSingleton('core/resource')->getTableName(
+					"zolagosizetable/vendor_attribute_set"
+				)),
+				'vendor_attribute_set.attribute_set_id=main_table.attribute_set_id'
+			)
+			->where("vendor_attribute_set.vendor_id=?", $vendor->getId());
+		$attributeSets = $collection->load()->toOptionHash();
 
 
 		$this->addColumn("attribute_set_id", array(
