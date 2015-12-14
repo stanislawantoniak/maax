@@ -205,7 +205,7 @@ define([
 											"disabled": "disabled"
 										}))).
 										append(jQuery("<td>").text(child.option_text)).
-										append(jQuery("<td>").text(child.sku)).
+										append(jQuery("<td>").text(child.skuv)).
 										append(jQuery("<td>").
 											addClass("signle-price-edit" + (!data.campaign ? " editable" : "")).
 											append(jQuery("<" + (!data.campaign ? "a" : "span") + ">").
