@@ -106,4 +106,4 @@ class Zolago_Payment_Model_Config extends Varien_Simplexml_Config
     }
 }
 
-?>
+
