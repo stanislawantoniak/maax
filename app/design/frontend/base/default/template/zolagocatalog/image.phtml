@@ -38,7 +38,7 @@
     jQuery(function ($) {
         $(':file').change(function(){
             var file = this.files[0];
-            console.log(file);
+
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
 
@@ -131,25 +131,35 @@
         });
 
         //3. Delete
-        $('#vendorImageDelete').on('show.bs.modal', function(e) {
-            //console.log($(e.relatedTarget));
-            //console.log($(e.relatedTarget).data('value'));
-            $(this).find('.btn-ok').data('value', $(e.relatedTarget).data('value'));
+        $(document).on('click', '.vendor-image-delete', function (e) {
+            var productImages = $(this).closest(".vendor-image").find("li");
+
+            if(productImages.length < 2){
+                //You can not delete last Image
+                noty({
+                    text: "<?php echo $_helper->__('You can not delete last image'); ?>",
+                    type: 'error',
+                    timeout: 4000
+                });
+            } else {
+                //Delete modal
+                $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'))
+                $('#vendorImageDelete').modal("show");
+            }
         });
+
         $("#vendorImageDelete .btn-ok").click(function (e) {
             e.preventDefault();
-            //console.log("DELETE!!!");
-            var val = $("#vendorImageDelete .btn-ok").data('value');
+            var imageToDelete = $("#vendorImageDelete .btn-ok").data('value');
 
-            //console.log(val);
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
                 type: "POST",
                 data: {
-                    image_value: val
+                    image_value: imageToDelete
                 },
-                success: function(result){
-                    $(".vendor-image li[data-value='"+val+"']").remove();
+                success: function (result) {
+                    $(".vendor-image li[data-value='" + imageToDelete + "']").remove();
                     $('#vendorImageDelete').modal("hide");
                 }
             });

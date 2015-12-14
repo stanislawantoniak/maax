@@ -3,6 +3,10 @@
 class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
 {
 
+    /**
+     * @param $productId
+     * @return string
+     */
     public function generateProductGallery($productId)
     {
         $out = '';
@@ -20,7 +24,6 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 $imageUrl = $_image->getUrl();
                 $thUrl = $catalogHelper->init($product, 'thumbnail', $_file)->resize(100);
 
-
                 $valueId = $_image->getValueId();
                 $productId = $product->getId();
                 $productName = $product->getName();
@@ -30,7 +33,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                     <div class='vendor-image-controls'>
                     <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'><i class='icon-circle'></i></a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
-                    <a class='vendor-image-delete' data-value='{$valueId}' data-toggle='modal' data-target='#vendorImageDelete' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
+                    <a class='vendor-image-delete' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
                     <img src='" . $thUrl . '?' . time() . "' />
                     <div class='vendor-image-refresh'><i class='icon-spin icon-refresh'></i></div>
@@ -40,7 +43,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                     <div class='vendor-image-controls'>
                     <a class='vendor-image-availability' title='" . $_helper->__("Disable") . "'><i class='icon-ban-circle'></i></a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
-                    <a class='vendor-image-delete' data-value='{$valueId}' data-toggle='modal' data-target='#vendorImageDelete' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
+                    <a class='vendor-image-delete' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
                     <img src='{$thUrl}' />
                     <div class='vendor-image-refresh'><i class='icon-spin icon-refresh'></i></div>
