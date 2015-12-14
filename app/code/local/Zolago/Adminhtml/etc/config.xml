@@ -32,6 +32,7 @@
                     <cms_block_edit_form>Zolago_Adminhtml_Block_Cms_Block_Edit_Form</cms_block_edit_form>
                     <sales_transactions_detail>Zolago_Adminhtml_Block_Sales_Transactions_Detail</sales_transactions_detail>
                     <system_store_tree>Zolago_Adminhtml_Block_System_Store_Tree</system_store_tree>
+                    <customer_edit_tabs>Zolago_Adminhtml_Block_Customer_Edit_Tabs</customer_edit_tabs>
                 </rewrite>
             </adminhtml>
         </blocks>
