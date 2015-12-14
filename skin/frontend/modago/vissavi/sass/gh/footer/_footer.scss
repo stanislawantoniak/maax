@@ -75,9 +75,9 @@
 
 
 .footer-gray-wr {
-    background-color: $color_2e2e2e;
-    border-top: 1px solid $color_242424;
+	background-color: #2f2f2f;
     line-height: 36px;
+	padding: 0;
     a {
         color:$color_828282;
     }
@@ -166,32 +166,47 @@
 		position: static;
 		display: inline-block;
 		float: left;
-		width: 170px;
+		width: 150px;
 		a {
 			width: 100%;
 			img {
 				width: 100%;
 			}
 		}
+		@media(max-width:539px) {
+			right: auto;
+			left: 0;
+		}
 	}
 	.footer-about {
 		position: relative;
-		top: 10px;
-		margin-left: 21.6%;
-		float: left;
-		//@media (min-width: $screen-sm-min) { margin-left:0; float:right;margin-right: -15px; margin-top:-15px }
-		@media (min-width: $screen-md-min) {
-			margin-left: 8.6%;
+		top: 3px;
+		float: right;
+		@media (max-width: $screen-sm-max) {
+			@media(max-width:539px) {
+				margin-top: 55px;
+			}
+			margin-bottom: -30px;
 			float: left;
-			margin-right: inherit;
-			margin-top: inherit
-		}
-		@media (min-width: $screen-lg-min) {
-			margin-left: 17.6%;
+			padding-top: 0;
+			ul {
+				width:100%;
+				max-width: 360px;
+				li {
+					display: inline-block !important;
+					width:49%;
+					white-space: nowrap;
+					@media(max-width: 400px) {
+						a {
+							font-size: 15px !important;
+						}
+					}
+				}
+			}
 		}
 		ul {
-			margin-left: 0px;
-			padding-left: 0px;
+			margin-left: 0;
+			padding-left: 0;
 		}
 		li {
 			display: inline-block;
@@ -248,10 +263,6 @@
 		@include sprite-dimensions($allMap, ico_social_pinterest);
 		margin-left: 22px;
 	}
-}
-
-.footer-gray-wr {
-	padding: 10px 0;
 }
 
 .copy {

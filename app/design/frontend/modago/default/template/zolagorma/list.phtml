@@ -85,9 +85,9 @@
 				<?php endforeach; ?>
 				</tbody>
 			</table>
-		<?php else: ?>
-			<p class="rma-po-empty"><?php echo $this->__("You don't have active RMAs."); ?></p>
-		<?php endif; ?>
+		<?php else:
+			echo $this->getLayout()->createBlock('cms/block')->setBlockId('rma-empty-page')->toHtml();
+		endif; ?>
 		<div class="bottom-links">
 			<a class="button button-third large" href="<?php echo $backUrl; ?>">
 				<i class="glyphicon glyphicon-chevron-left"></i>

@@ -7,7 +7,7 @@
  *
  */
 class Zolago_Catalog_Model_Observer
-{	
+{
 	/**
 	 * Handle default category on product page
 	 * @area: frontend
@@ -121,6 +121,28 @@ class Zolago_Catalog_Model_Observer
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);
         }
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     * @throws Exception
+     */
+    public function catalogProductDeleteAfter(Varien_Event_Observer $observer)
+    {
+        try {
+            $product = $observer->getEvent()->getProduct();
+            $productId = $product->getId();
+
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $tableName = $resource->getTableName('catalog_category_product');
+            $query = "DELETE FROM {$tableName} WHERE product_id = " . (int)$productId;
+            $writeConnection->query($query);
+        } catch (Mage_Adminhtml_Exception $e) {
+            Mage::logException($e);
+        }
+        return $this;
     }
 
     /**

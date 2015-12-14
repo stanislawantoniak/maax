@@ -115,6 +115,20 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Rma
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')
         ));
+        $this->addColumn("commission_return", array(
+            "index" => "commission_return",
+            "header" => Mage::helper("ghstatements")->__("Commission return"),
+            'type' => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+        $this->addColumn("discount_return", array(
+            "index" => "discount_return",
+            "header" => Mage::helper("ghstatements")->__("Discount return"),
+            'type' => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
         $this->addColumn("value", array(
             "index" => "value",
             "header" => Mage::helper("ghstatements")->__("To return"),

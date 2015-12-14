@@ -82,12 +82,30 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         return $finder->filter($filter);
     }
 
+    /**
+     * Check if current url is url for home page
+     *
+     * @return true
+     */
+    public function getIsHomePage()
+    {
+        return $this->getUrl('') == $this->getUrl('*/*/*',
+            array(
+                //'_current'=>true,       //_current	bool	Uses the current module, controller, action and parameters
+                '_use_rewrite' => true,
+                "_no_vendor" => TRUE      // home page but not vendor home
+            )
+        );
+    }
+
 	/**
 	 * @return Zolago_Banner_Model_Finder
 	 */
 	public function getFinder() {
 		if(!$this->hasData("finder")){
 			$vendor = $this->getVendor();
+            $isHomePage = $this->getIsHomePage();
+
 			if(!empty($vendor)){
 				$vendorId = $vendor->getId();
                 $rootCatId = $vendor->getRootCategory();
@@ -108,7 +126,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 $vendorId = $this->getSWVendorId();
 
                 $rootCatId = 0;
-                if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
+                if ($isHomePage) {
                     $rootCatId = Mage::app()->getStore()->getRootCategoryId();
                 } else {
                     //get current category
@@ -122,7 +140,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 $vendorId = Mage::helper('udropship')->getLocalVendorId();
 
                 $rootCatId = 0;
-                if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
+                if ($isHomePage) {
                     $rootCatId = Mage::app()->getStore()->getRootCategoryId();
                 } else {
                     //get current category

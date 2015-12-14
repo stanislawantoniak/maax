@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.7.9</version>
+            <version>0.8.4</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
