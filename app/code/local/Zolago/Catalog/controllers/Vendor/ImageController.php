@@ -388,11 +388,17 @@ class Zolago_Catalog_Vendor_ImageController
     }
 
 
+    /**
+     * Reorder products from Vendor Panel -> Zarządzanie zdjęciami
+     * /udprod/vendor_image/#elf_l1_Lw
+     * @return array
+     * @throws Exception
+     */
     public function changeProductImagesOrderAction()
     {
         $productId = $this->getRequest()->getParam("product", null);
         $imagesData = $this->getRequest()->getParam("images", array());
-        if(empty($imagesData))
+        if (empty($imagesData))
             return array();
 
         $resource = Mage::getSingleton('core/resource');
@@ -404,7 +410,7 @@ class Zolago_Catalog_Vendor_ImageController
         $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
 
         //1. set position
-        foreach($imagesData as $position => $value_id){
+        foreach ($imagesData as $position => $value_id) {
             $query = "UPDATE {$productMediaValueTable} SET position={$position} WHERE value_id={$value_id}";
             $writeConnection->query($query);
         }
@@ -425,7 +431,17 @@ class Zolago_Catalog_Vendor_ImageController
         $product->getResource()->saveAttribute($product, 'thumbnail');
 
 
-        //3. TODO Send to solr
+        //3. put products to solr queue
+        //catalog_converter_price_update_after
+        if ($product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $product->getId()
+                )
+            );
+        }
+
     }
 }
 
