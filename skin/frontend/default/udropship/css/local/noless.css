@@ -596,6 +596,9 @@
 	}
 }
 
+.no-padding {
+    padding: 0;
+}
 .vendor-image {
 	list-style-type: none;
 	height: 110px;
@@ -645,7 +648,7 @@
 
 .vendor-image .vendor-image-refresh {
 	display: none;
-	color: #ffffff;
+	color: #000000;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -653,4 +656,32 @@
 }
 #vendorImageZoom .modal-body {
     text-align: center;
+}
+.vendor-image-upload {
+    margin: 4% 0;
+}
+
+.vendor-image-upload .icon-upload {
+    font-size: 18px;
+}
+.vendor-image-upload .btn-file {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    border-radius: 20px;
+}
+.vendor-image-upload .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }

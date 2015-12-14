@@ -36,28 +36,37 @@
 </div>
 <script type="text/javascript">
     jQuery(function ($) {
-        $(".vendor-image").dragsort({
-            dragSelector: "li",
-            placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
-            dragEnd: function () {
+        $(':file').change(function(){
+            var file = this.files[0];
+            console.log(file);
+            var container = $(this).closest("td").find(".vendor-image-container");
+            var formData = new FormData($(this).closest("form")[0]);
 
-                var images = [];
-                $.each($(this).closest("ul.vendor-image").find("li"), function (i, li) {
-                    images.push($(li).data("value"))
-                });
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
+                type: "POST",
+                // Form data
+                data: formData,
+                //Options to tell JQuery not to process data or worry about content-type
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: 'multipart/form-data'
+            }).done(function(result){
+                container.replaceWith(result);
+                initDragSort();
 
-                $.ajax({
-                    url: '<?php echo Mage::getUrl("udprod/vendor_image/changeProductImagesOrder")?>',
-                    type: "POST",
-                    data: {product: $(this).data("product"), images: images}
-                });
-            },
-            dragBetween: false
+                jQuery('.need-to-check').tooltip({
+                    title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                }).find("img").css({"opacity": "0.5"});
+            });
         });
+        initDragSort();
+
 
         //CONTROLS
         //1. ZOOM
-        $(".vendor-image-zoom").click(function (e) {
+        $(document).on('click', '.vendor-image-zoom', function (e) {
             //console.log("ZOOM");
             e.preventDefault();
             var controlLink = $(this);
@@ -78,9 +87,9 @@
             modal.modal('show');
         });
 
+
         //2. Disable/Enable
-        $(".vendor-image-availability").click(function (e) {
-            //console.log("AVAILABILITY");
+        $(document).on('click', '.vendor-image-availability', function (e) {
             e.preventDefault();
             var availabilityLink = $(this);
             var parentContainer = availabilityLink.closest("li");
@@ -120,6 +129,7 @@
                 }
             });
         });
+
         //3. Delete
         $('#vendorImageDelete').on('show.bs.modal', function(e) {
             //console.log($(e.relatedTarget));
@@ -156,6 +166,28 @@
         $('#vendorImageDelete').on('hidden.bs.modal', function () {
             $(this).find('.btn-ok').data('value', "");
         });
+
+
+        function initDragSort(){
+            $(".vendor-image").dragsort({
+                dragSelector: "li",
+                placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
+                dragEnd: function () {
+
+                    var images = [];
+                    $.each($(this).closest("ul.vendor-image").find("li"), function (i, li) {
+                        images.push($(li).data("value"))
+                    });
+
+                    $.ajax({
+                        url: '<?php echo Mage::getUrl("udprod/vendor_image/changeProductImagesOrder")?>',
+                        type: "POST",
+                        data: {product: $(this).data("product"), images: images}
+                    });
+                },
+                dragBetween: false
+            });
+        }
 
     });
 </script>

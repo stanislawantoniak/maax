@@ -505,6 +505,43 @@ class Zolago_Catalog_Vendor_ImageController
             Mage::logException($e);
         }
     }
+
+    public function uploadProductImageAction(){
+        $productId = $this->getRequest()->getParam("product", null);
+
+        $product = Mage::getModel("catalog/product")->load($productId);
+
+        if (isset($_FILES['vendor_image_upload'])) {
+            $image = $_FILES['vendor_image_upload'];
+
+            $imageTmpName = $image['tmp_name'];
+            $imageName = $image['name'];
+
+
+            $imagePath = Mage::getBaseDir("media") . DS . "catalog/product" . DS .$imageName;
+            move_uploaded_file($imageTmpName, $imagePath);
+
+
+            Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $product->addImageToMediaGallery($imagePath, null, false, true);
+            try {
+                $product->save();
+            } catch (Mage_Core_Exception $e) {
+                Mage::logException($e);
+            }
+
+
+
+
+            $out = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
+
+            echo $out;
+
+        }
+
+    }
+
+
 }
 
 
