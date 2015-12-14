@@ -603,7 +603,7 @@
 .vendor-image li {
     display: block;
     float: left;
-    cursor: pointer;
+    cursor: default !important;
     position: relative;
     height: 100px;
     width: 100px;
@@ -629,11 +629,20 @@
 .vendor-image li:hover .vendor-image-controls a {
     text-decoration: none;
     color: #ffffff;
-
-	margin: 5px 10px;
-	display: block;
-	float: left;
+    margin: 3px 8px;
+    display: block;
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
 }
+.vendor-image li:hover .vendor-image-controls a:hover {
+    -webkit-transform:scale(1.5);
+    -moz-transform:scale(1.5);
+    -o-transform:scale(1.5);
+    transform:scale(1.5);
+}
+
 .vendor-image .vendor-image-refresh {
 	display: none;
 	color: #ffffff;
