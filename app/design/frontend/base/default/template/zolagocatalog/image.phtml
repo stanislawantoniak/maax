@@ -40,14 +40,12 @@
             dragSelector: "li",
             placeHolderTemplate: "<li class='image-placeholder'></li>",
             dragEnd: function () {
-                //console.log("Alarm: DragEnd caught!");
-                //console.log($(this).data("product"));
 
                 var images = [];
                 $.each($(this).closest("ul.vendor-image").find("li"), function (i, li) {
                     images.push($(li).data("value"))
                 });
-                //console.log(images);
+
                 $.ajax({
                     url: '<?php echo Mage::getUrl("udprod/vendor_image/changeProductImagesOrder")?>',
                     type: "POST",
@@ -56,12 +54,102 @@
             },
             dragBetween: false
         });
+        $(".vendor-image-zoom").click(function (e) {
+            console.log("ZOOM");
+            e.preventDefault();
+            var controlLink = $(this);
+            var parentContainer = controlLink.closest("li");
+            var productId = parentContainer.data("product");
+            var productName = parentContainer.data("productname");
+            var fullImage = parentContainer.data("image");
+
+            var img = $('<img />', {
+                id: 'vendor_image_' + productId,
+                src: fullImage,
+                alt: productName
+            });
+
+            var modal = $("#vendorImageZoom");
+            modal.find(".modal-header .modal-title").html(productName);
+            modal.find(".modal-body").html(img);
+            modal.modal('show');
+        });
+        $(".vendor-image-availability").click(function (e) {
+            console.log("AVAILABILITY");
+            e.preventDefault();
+            var availabilityLink = $(this);
+            var parentContainer = availabilityLink.closest("li");
+            var imageToDisable = (parentContainer.hasClass("need-to-check") ? 0 : 1);
+
+
+            parentContainer.find(".vendor-image-refresh").show();
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/toggleAvailabilityProductImage")?>',
+                type: "POST",
+                data: {
+                    action: imageToDisable,
+                    product: parentContainer.data("product"),
+                    image_value: parentContainer.data("value")
+                },
+                success: function(result){
+                    parentContainer.find(".vendor-image-refresh").hide();
+                    if(imageToDisable){
+                        console.log("Disabled");
+                        availabilityLink
+                            .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
+                            .html("<i class='icon-circle'></i>");
+                        parentContainer.addClass("need-to-check")
+                            .tooltip({
+                                title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                            })
+                            .find("img").css({"opacity": "0.5"});
+                    } else {
+                        console.log("Enabled");
+                        availabilityLink
+                            .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
+                            .html("<i class='icon-ban-circle'></i>");
+                        parentContainer.removeClass("need-to-check").tooltip('disable')
+                            .find("img").css({"opacity": "1"});
+                    }
+
+                }
+            });
+        });
+
+
+
+        //Clear modal on hide
+        $('#vendorImageZoom').on('hidden.bs.modal', function () {
+            $(this).find(".modal-header .modal-title").html("");
+            $(this).find(".modal-body").html("");
+        })
+
     });
 </script>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        jQuery('.need-to-check').css({"opacity": "0.5"}).tooltip({
+        jQuery('.need-to-check').tooltip({
             title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
-        });
+        }).find("img").css({"opacity": "0.5"});
     })
 </script>
+<!-- Modal For Image Zoom -->
+<div id="vendorImageZoom" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo Mage::helper("zolagocatalog")->__("Close"); ?>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

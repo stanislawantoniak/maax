@@ -2,6 +2,10 @@
 
 class Zolago_Catalog_Vendor_ImageController
     extends Zolago_Dropship_Controller_Vendor_Abstract {
+
+    const PRODUCT_IMAGE_ENABLE = 0;
+    const PRODUCT_IMAGE_DISABLE = 1;
+
     /**
      * Index
      */
@@ -398,6 +402,9 @@ class Zolago_Catalog_Vendor_ImageController
     {
         $productId = $this->getRequest()->getParam("product", null);
         $imagesData = $this->getRequest()->getParam("images", array());
+        if (empty($productId))
+            return array();
+
         if (empty($imagesData))
             return array();
 
@@ -442,6 +449,35 @@ class Zolago_Catalog_Vendor_ImageController
             );
         }
 
+    }
+
+    public function toggleAvailabilityProductImageAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $imageValue = $this->getRequest()->getParam("image_value", null);
+        $action = $this->getRequest()->getParam("action", 0);
+
+        $enableImage = self::PRODUCT_IMAGE_ENABLE;
+        $disableImage = self::PRODUCT_IMAGE_DISABLE;
+
+        $resource = Mage::getSingleton('core/resource');
+
+        $writeConnection = $resource->getConnection('core_write');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        try {
+            if ($action == $disableImage) {
+                $query = "UPDATE {$productMediaValueTable} SET disabled={$disableImage} WHERE value_id={$imageValue}";
+            } else {
+                $query = "UPDATE {$productMediaValueTable} SET disabled={$enableImage} WHERE value_id={$imageValue}";
+            }
+
+            $writeConnection->query($query);
+        } catch (GH_Common_Exception $e) {
+            Mage::logException($e);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
     }
 }
 
