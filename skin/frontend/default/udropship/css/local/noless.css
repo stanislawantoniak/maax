@@ -642,3 +642,6 @@
 	left: 50%;
 	z-index: 1;
 }
+#vendorImageZoom .modal-body {
+    text-align: center;
+}

@@ -54,6 +54,9 @@
             },
             dragBetween: false
         });
+
+        //CONTROLS
+        //1. ZOOM
         $(".vendor-image-zoom").click(function (e) {
             console.log("ZOOM");
             e.preventDefault();
@@ -74,6 +77,8 @@
             modal.find(".modal-body").html(img);
             modal.modal('show');
         });
+
+        //2. Disable/Enable
         $(".vendor-image-availability").click(function (e) {
             console.log("AVAILABILITY");
             e.preventDefault();
@@ -115,14 +120,42 @@
                 }
             });
         });
+        //3. Delete
+        $('#vendorImageDelete').on('show.bs.modal', function(e) {
+            console.log($(e.relatedTarget));
+            console.log($(e.relatedTarget).data('value'));
+            $(this).find('.btn-ok').data('value', $(e.relatedTarget).data('value'));
+        });
+        $("#vendorImageDelete .btn-ok").click(function (e) {
+            e.preventDefault();
+            console.log("DELETE!!!");
+            var val = $("#vendorImageDelete .btn-ok").data('value');
+
+            console.log(val);
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
+                type: "POST",
+                data: {
+                    image_value: val
+                },
+                success: function(result){
+                    $(".vendor-image li[data-value='"+val+"']").remove();
+                    $('#vendorImageDelete').modal("hide");
+                }
+            });
+
+        });
+        //--CONTROLS
 
 
-
-        //Clear modal on hide
+        //Clear modals on hide
         $('#vendorImageZoom').on('hidden.bs.modal', function () {
             $(this).find(".modal-header .modal-title").html("");
             $(this).find(".modal-body").html("");
-        })
+        });
+        $('#vendorImageDelete').on('hidden.bs.modal', function () {
+            $(this).find('.btn-ok').data('value', "");
+        });
 
     });
 </script>
@@ -151,5 +184,28 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<div id="vendorImageDelete"  class="modal fade" role="dialog">
+    <div class="modal-dialog  modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <?php echo Mage::helper("zolagocatalog")->__("Delete image"); ?>
+            </div>
+            <div class="modal-body">
+                <p class="alert alert-info">
+                    <?php echo Mage::helper("zolagocatalog")->__("Image will be removed forever!!! Are you sure?"); ?>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo Mage::helper("zolagocatalog")->__("Close"); ?>
+                </button>
+                <a class="btn btn-danger btn-ok">
+                    <?php echo Mage::helper("zolagocatalog")->__("Delete"); ?>
+                </a>
+            </div>
+        </div>
     </div>
 </div>

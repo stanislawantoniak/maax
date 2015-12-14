@@ -479,6 +479,32 @@ class Zolago_Catalog_Vendor_ImageController
             Mage::logException($e);
         }
     }
+
+    public function deleteProductImageAction()
+    {
+        $imageValue = $this->getRequest()->getParam("image_value", null);
+
+
+        $resource = Mage::getSingleton('core/resource');
+
+        $writeConnection = $resource->getConnection('core_write');
+        $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        try {
+            $query1 = "DELETE FROM  {$productMediaTable} WHERE value_id={$imageValue}";
+            $writeConnection->query($query1);
+
+            $query2 = "DELETE FROM  {$productMediaValueTable} WHERE value_id={$imageValue}";
+            $writeConnection->query($query2);
+
+
+        } catch (GH_Common_Exception $e) {
+            Mage::logException($e);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
 }
 
 
