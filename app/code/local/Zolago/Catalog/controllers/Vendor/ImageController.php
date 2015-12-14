@@ -437,7 +437,7 @@ class Zolago_Catalog_Vendor_ImageController
             Mage::dispatchEvent(
                 "catalog_converter_price_update_after",
                 array(
-                    "product_ids" => $product->getId()
+                    "product_ids" => array($product->getId())
                 )
             );
         }
