@@ -612,7 +612,7 @@
     width: 100px;
 }
 .vendor-image li.vendor-image-placeholder {
-    background-color: #fffeec;
+    /*background-color: #fffeec;*/
 }
 
 .vendor-image li .vendor-image-controls {
