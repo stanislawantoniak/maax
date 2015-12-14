@@ -22,13 +22,15 @@ class Zolago_Adminhtml_Block_Customer_Activity_Login_Grid extends Mage_Adminhtml
     }
 
     protected function _prepareColumns() {
+        /** @var Zolago_Log_Helper_Data $helper */
+        $helper = Mage::helper('zolagolog');
         $this->addColumn('login_at', array(
-            'header' => Mage::helper('zolagolog')->__('Login at'),
+            'header' => $helper->__('Login at'),
             'index'  => 'login_at',
             'type'   => 'datetime'
         ));
         $this->addColumn('logout_at', array(
-            'header' => Mage::helper('zolagolog')->__('Logout at'),
+            'header' => $helper->__('Logout at'),
             'index'  => 'logout_at',
             'type'   => 'datetime'
         ));

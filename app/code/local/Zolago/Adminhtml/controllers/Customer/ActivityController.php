@@ -16,4 +16,16 @@ class Zolago_Adminhtml_Customer_ActivityController extends Mage_Adminhtml_Contro
                 ->toHtml()
         );
     }
+
+    /**
+     * Show grid with recently viewed products for customer
+     */
+    public function recentlyviewedAction() {
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock("zolagoadminhtml/customer_activity_recentlyviewed_grid", "admin.customer.activity.recentlyviewed.grid")
+                ->setCustomerId($this->getRequest()->getParam('id'))
+                ->setUseAjax(true)
+                ->toHtml()
+        );
+    }
 }
