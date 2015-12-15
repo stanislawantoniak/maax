@@ -49,8 +49,8 @@ class Zolago_Adminhtml_Block_Customer_Activity_Recentlyviewed_Grid extends Mage_
     }
 
     protected function _prepareColumns() {
-        /** @var Zolago_Log_Helper_Data $helper */
-        $helper = Mage::helper('zolagolog');
+        /** @var Zolago_Catalog_Helper_Data $helper */
+        $helper = Mage::helper("zolagocatalog");
 
         // Name
         $this->addColumn('name', array(
@@ -59,7 +59,7 @@ class Zolago_Adminhtml_Block_Customer_Activity_Recentlyviewed_Grid extends Mage_
         ));
         // Last viewed
         $this->addColumn('added_at', array(
-            'header'  => $helper->__('Last viewed'),
+            'header'  => Mage::helper("zolagolog")->__('Last viewed'),
             'index'   => 'added_at',
             'type'    => 'datetime'
         ));
@@ -83,7 +83,7 @@ class Zolago_Adminhtml_Block_Customer_Activity_Recentlyviewed_Grid extends Mage_
         // Show
         $this->addColumn('action',
             array(
-                'header'  => Mage::helper('catalog')->__('Action'),
+                'header'  => $helper->__('Action'),
                 'width'   => '50px',
                 'type'    => 'action',
                 'getter'  => 'getId',
