@@ -14,7 +14,10 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
         $productId = $row->getEntityId();
         $_helper = Mage::helper("zolagocatalog");
 
+        $out .= "<div class='col-md-11 vendor-image-container no-padding'>";
         $out .= Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
+        $out .= "</div>";
+
         $out .= "<div class='vendor-image-upload col-md-1 no-padding'>
                     <form>
                         <span class='btn-file' title='" . $_helper->__("Upload image") . "'>
