@@ -40,4 +40,8 @@ class Zolago_Adminhtml_Customer_ActivityController extends Mage_Adminhtml_Contro
                 ->toHtml()
         );
     }
+
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('customer/manage');
+    }
 }
