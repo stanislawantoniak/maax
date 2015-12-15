@@ -391,10 +391,43 @@ class Zolago_Catalog_Vendor_ImageController
         }
     }
 
+    public function getFirstEnabledProductImage($productId)
+    {
+        $result = array();
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+
+        $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        $iDefaultStoreId = (int)Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+
+        $query = "
+        SELECT value FROM `{$productMediaTable}` AS gallery
+        JOIN `{$productMediaValueTable}` AS  gallery_value ON gallery.`value_id`=gallery_value.`value_id`
+
+        WHERE gallery.entity_id={$productId}
+        AND gallery_value.`store_id`={$iDefaultStoreId}
+        AND disabled=0
+        ORDER BY POSITION ASC
+        ";
+
+        try {
+            $result = $readConnection->fetchRow($query);
+
+        } catch (GH_Common_Exception $e) {
+            Mage::logException($e);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+
+        return $result;
+    }
+
 
     /**
      * Reorder products from Vendor Panel -> Zarządzanie zdjęciami
-     * /udprod/vendor_image/#elf_l1_Lw
+     * /udprod/vendor_image/
      * @return array
      * @throws Exception
      */
@@ -409,11 +442,7 @@ class Zolago_Catalog_Vendor_ImageController
             return array();
 
         $resource = Mage::getSingleton('core/resource');
-
-        $readConnection = $resource->getConnection('core_read');
         $writeConnection = $resource->getConnection('core_write');
-
-        $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
         $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
 
         //1. set position
@@ -424,11 +453,17 @@ class Zolago_Catalog_Vendor_ImageController
 
 
         //2. set first image as image, small_image and thumbnail
-        $firstImageValueId = $imagesData[0];
-        $query = "SELECT value FROM {$productMediaTable} WHERE value_id={$firstImageValueId}";
-        $result = $readConnection->fetchCol($query);
+        $this->setMainGalleryPage($productId);
 
-        $image = $result[0];
+    }
+
+    public function setMainGalleryPage($productId){
+        $firstImageValue = $this->getFirstEnabledProductImage($productId);
+
+        if (empty($firstImageValue)) {
+            return;
+        }
+        $image = $firstImageValue["value"];
         $product = Mage::getModel('catalog/product')->load($productId);
         $product->setImage($image);
         $product->getResource()->saveAttribute($product, 'image');
@@ -448,7 +483,6 @@ class Zolago_Catalog_Vendor_ImageController
                 )
             );
         }
-
     }
 
     public function toggleAvailabilityProductImageAction()
@@ -473,6 +507,9 @@ class Zolago_Catalog_Vendor_ImageController
             }
 
             $writeConnection->query($query);
+
+            $this->setMainGalleryPage($productId);
+
         } catch (GH_Common_Exception $e) {
             Mage::logException($e);
         } catch (Exception $e) {
@@ -482,6 +519,7 @@ class Zolago_Catalog_Vendor_ImageController
 
     public function deleteProductImageAction()
     {
+        $productId = $this->getRequest()->getParam("product", null);
         $imageValue = $this->getRequest()->getParam("image_value", null);
 
 
@@ -498,7 +536,7 @@ class Zolago_Catalog_Vendor_ImageController
             $query2 = "DELETE FROM  {$productMediaValueTable} WHERE value_id={$imageValue}";
             $writeConnection->query($query2);
 
-
+            $this->setMainGalleryPage($productId);
         } catch (GH_Common_Exception $e) {
             Mage::logException($e);
         } catch (Exception $e) {

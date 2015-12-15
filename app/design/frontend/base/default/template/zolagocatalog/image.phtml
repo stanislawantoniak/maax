@@ -143,19 +143,22 @@
                 });
             } else {
                 //Delete modal
-                $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'))
+                $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'));
+                $('#vendorImageDelete').find('.btn-ok').data('product', $(this).data('product'));
                 $('#vendorImageDelete').modal("show");
             }
         });
 
         $("#vendorImageDelete .btn-ok").click(function (e) {
             e.preventDefault();
+            var productImageToDelete = $("#vendorImageDelete .btn-ok").data('product');
             var imageToDelete = $("#vendorImageDelete .btn-ok").data('value');
 
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
                 type: "POST",
                 data: {
+                    product: productImageToDelete,
                     image_value: imageToDelete
                 },
                 success: function (result) {
@@ -175,6 +178,7 @@
         });
         $('#vendorImageDelete').on('hidden.bs.modal', function () {
             $(this).find('.btn-ok').data('value', "");
+            $(this).find('.btn-ok').data('product', "");
         });
 
 
