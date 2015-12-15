@@ -423,40 +423,6 @@ class Zolago_Catalog_Vendor_ImageController
 
         return $result;
     }
-
-
-    /**
-     * Reorder products from Vendor Panel -> Zarządzanie zdjęciami
-     * /udprod/vendor_image/
-     * @return array
-     * @throws Exception
-     */
-    public function changeProductImagesOrderAction()
-    {
-        $productId = $this->getRequest()->getParam("product", null);
-        $imagesData = $this->getRequest()->getParam("images", array());
-        if (empty($productId))
-            return array();
-
-        if (empty($imagesData))
-            return array();
-
-        $resource = Mage::getSingleton('core/resource');
-        $writeConnection = $resource->getConnection('core_write');
-        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
-
-        //1. set position
-        foreach ($imagesData as $position => $value_id) {
-            $query = "UPDATE {$productMediaValueTable} SET position={$position} WHERE value_id={$value_id}";
-            $writeConnection->query($query);
-        }
-
-
-        //2. set first image as image, small_image and thumbnail
-        $this->setMainGalleryPage($productId);
-
-    }
-
     public function setMainGalleryPage($productId){
         $firstImageValue = $this->getFirstEnabledProductImage($productId);
 
@@ -484,6 +450,43 @@ class Zolago_Catalog_Vendor_ImageController
             );
         }
     }
+
+    /**
+     * Reorder products from Vendor Panel -> Zarządzanie zdjęciami
+     * /udprod/vendor_image/
+     * @return array
+     * @throws Exception
+     */
+    public function changeProductImagesOrderAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $imagesData = $this->getRequest()->getParam("images", array());
+        if (empty($productId))
+            return array();
+
+        if (empty($imagesData))
+            return array();
+
+        $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        //1. set position
+        foreach ($imagesData as $position => $value_id) {
+            $where = $this->_getWriteAdapter()->quoteInto("value_id=?", $value_id);
+            $writeConnection->update(
+                $productMediaValueTable,
+                array("position" => $position),
+                $where
+            );
+        }
+
+        //2. set first image as image, small_image and thumbnail
+        $this->setMainGalleryPage($productId);
+
+    }
+
+
 
     public function toggleAvailabilityProductImageAction()
     {
