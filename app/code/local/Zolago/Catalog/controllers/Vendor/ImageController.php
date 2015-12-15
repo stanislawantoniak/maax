@@ -417,17 +417,19 @@ class Zolago_Catalog_Vendor_ImageController
         $firstImageValue = Mage::getResourceModel("zolagocatalog/product_gallery")
             ->getFirstEnabledProductImage($productId);
 
-        if (empty($firstImageValue)) {
-            return;
-        }
-        $image = $firstImageValue["value"];
         $product = Mage::getModel('catalog/product')->load($productId);
-        $product->setImage($image);
-        $product->getResource()->saveAttribute($product, 'image');
-        $product->setSmallImage($image);
-        $product->getResource()->saveAttribute($product, 'small_image');
-        $product->setThumbnail($image);
-        $product->getResource()->saveAttribute($product, 'thumbnail');
+
+        if (!empty($firstImageValue)) {
+            $image = $firstImageValue["value"];
+
+            $product->setImage($image);
+            $product->getResource()->saveAttribute($product, 'image');
+            $product->setSmallImage($image);
+            $product->getResource()->saveAttribute($product, 'small_image');
+            $product->setThumbnail($image);
+            $product->getResource()->saveAttribute($product, 'thumbnail');
+        }
+
 
 
         //3. put products to solr queue
