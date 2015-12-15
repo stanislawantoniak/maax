@@ -111,7 +111,7 @@
                         //console.log("Disabled");
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
-                            .html("<i class='icon-circle'></i>");
+                            .html("<i class='icon-eye-close'></i>");
                         parentContainer.addClass("need-to-check")
                             .tooltip({
                                 title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
@@ -121,7 +121,7 @@
                         //console.log("Enabled");
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
-                            .html("<i class='icon-ban-circle'></i>");
+                            .html("<i class='icon-eye-open'></i>");
                         parentContainer.removeClass("need-to-check").tooltip('disable')
                             .find("img").css({"opacity": "1"});
                     }

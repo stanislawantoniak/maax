@@ -31,7 +31,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 if ($_image['disabled']) {
                     $img = "<li data-productname='{$productName}' data-image='{$imageUrl}' data-product='{$productId}' data-value='{$valueId}' class='mass-thumb-image need-to-check'>
                     <div class='vendor-image-controls'>
-                    <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'><i class='icon-circle'></i></a>
+                    <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'><i class='icon-eye-close'></i></a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
                     <a class='vendor-image-delete' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
@@ -41,7 +41,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 } else {
                     $img = "<li data-productname='{$productName}' data-image='{$imageUrl}' data-product='{$productId}' data-value='{$valueId}' class='mass-thumb-image'>
                     <div class='vendor-image-controls'>
-                    <a class='vendor-image-availability' title='" . $_helper->__("Disable") . "'><i class='icon-ban-circle'></i></a>
+                    <a class='vendor-image-availability' title='" . $_helper->__("Disable") . "'><i class='icon-eye-open'></i></a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
                     <a class='vendor-image-delete' data-value='{$valueId}' data-product='{$productId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
