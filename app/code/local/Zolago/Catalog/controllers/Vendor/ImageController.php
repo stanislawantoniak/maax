@@ -473,7 +473,7 @@ class Zolago_Catalog_Vendor_ImageController
 
         //1. set position
         foreach ($imagesData as $position => $value_id) {
-            $where = $this->_getWriteAdapter()->quoteInto("value_id=?", $value_id);
+            $where = $writeConnection->quoteInto("value_id=?", $value_id);
             $writeConnection->update(
                 $productMediaValueTable,
                 array("position" => $position),
