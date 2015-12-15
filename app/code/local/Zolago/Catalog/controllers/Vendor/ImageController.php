@@ -455,7 +455,9 @@ class Zolago_Catalog_Vendor_ImageController
     }
 
 
-
+    /**
+     * Enable/disable product image
+     */
     public function toggleAvailabilityProductImageAction()
     {
         $productId = $this->getRequest()->getParam("product", null);
@@ -471,13 +473,21 @@ class Zolago_Catalog_Vendor_ImageController
         $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
 
         try {
+            $where = $writeConnection->quoteInto("value_id=?", $imageValue);
             if ($action == $disableImage) {
-                $query = "UPDATE {$productMediaValueTable} SET disabled={$disableImage} WHERE value_id={$imageValue}";
-            } else {
-                $query = "UPDATE {$productMediaValueTable} SET disabled={$enableImage} WHERE value_id={$imageValue}";
-            }
 
-            $writeConnection->query($query);
+                $writeConnection->update(
+                    $productMediaValueTable,
+                    array("disabled" => $disableImage),
+                    $where
+                );
+            } else {
+                $writeConnection->update(
+                    $productMediaValueTable,
+                    array("disabled" => $enableImage),
+                    $where
+                );
+            }
 
             $this->setMainGalleryPage($productId);
 
@@ -488,11 +498,13 @@ class Zolago_Catalog_Vendor_ImageController
         }
     }
 
+    /**
+     * Delete product image
+     */
     public function deleteProductImageAction()
     {
         $productId = $this->getRequest()->getParam("product", null);
         $imageValue = $this->getRequest()->getParam("image_value", null);
-
 
         $resource = Mage::getSingleton('core/resource');
 
@@ -501,11 +513,10 @@ class Zolago_Catalog_Vendor_ImageController
         $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
 
         try {
-            $query1 = "DELETE FROM  {$productMediaTable} WHERE value_id={$imageValue}";
-            $writeConnection->query($query1);
+            $where = $writeConnection->quoteInto("value_id=?", $imageValue);
 
-            $query2 = "DELETE FROM  {$productMediaValueTable} WHERE value_id={$imageValue}";
-            $writeConnection->query($query2);
+            $writeConnection->delete($productMediaTable, $where);
+            $writeConnection->delete($productMediaValueTable, $where);
 
             $this->setMainGalleryPage($productId);
         } catch (GH_Common_Exception $e) {
