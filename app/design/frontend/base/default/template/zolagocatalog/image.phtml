@@ -53,12 +53,23 @@
                 processData: false,
                 enctype: 'multipart/form-data'
             }).done(function(result){
-                container.replaceWith(result);
-                initDragSort();
+                data = $.parseJSON(result);
+                console.log(data);
+                if(data.error){
+                    noty({
+                        text: data.error,
+                        type: 'error',
+                        timeout: 4000
+                    });
+                } else {
+                    container.replaceWith(data.content);
+                    initDragSort();
 
-                jQuery('.need-to-check').tooltip({
-                    title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
-                }).find("img").css({"opacity": "0.5"});
+                    jQuery('.need-to-check').tooltip({
+                        title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                    }).find("img").css({"opacity": "0.5"});
+                }
+
             });
         });
         initDragSort();
