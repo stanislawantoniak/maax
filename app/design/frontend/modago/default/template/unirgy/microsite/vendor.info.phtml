@@ -17,14 +17,14 @@ $marketingInformation = $this->getMarketingInfo();
          aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <?php if (!empty($marketingInformation->store_information_title)): ?>
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"></button>
-                    <h2 class="title_section">
-                        <?php echo $this->__($marketingInformation->store_information_title); ?>
-                    </h2>
+                    <?php if (!empty($marketingInformation->store_information_title)): ?>
+                        <h2 class="title_section">
+                            <?php echo $this->__($marketingInformation->store_information_title); ?>
+                        </h2>
+                    <?php endif; ?>
                 </div>
-                <?php endif;?>
 
                 <div class="modal-body" style="color: #000000;">
                     <?php if (!empty($marketingInformation->store_information)): ?>
