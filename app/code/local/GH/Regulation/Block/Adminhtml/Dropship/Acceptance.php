@@ -46,8 +46,12 @@ class GH_Regulation_Block_Adminhtml_Dropship_Acceptance extends
         $yesNo = array(0 => Mage::helper('zolagocommon')->__("No"), 1 => Mage::helper('zolagocommon')->__("Yes"));
 
         $list = Mage::getResourceModel('ghregulation/regulation_kind_collection');
-
 	    $data = $vendor->getData();
+	    $address = $vendor->getBillingAddressObj(); // billing can use shipping
+	    $data['zip'] = $address['zip'];
+	    $data['city'] = $address['city'];	    
+	    $data['street'] = $address['street'];
+	    
 	    $json = $data["regulation_accept_document_data"];
 	    $data['regulation_accepted'] = $yesNo[$data['regulation_accepted']];
 	    unset($data["regulation_accept_document_data"]);
@@ -60,13 +64,13 @@ class GH_Regulation_Block_Adminhtml_Dropship_Acceptance extends
 		$settingsFieldset->addField("company_name","label",array(
 			"label" => Mage::helper('zolagodropship')->__("Company name"),
 		));
-		$settingsFieldset->addField("billing_street","label",array(
+		$settingsFieldset->addField("street","label",array(
 			"label" => Mage::helper('zolagodropship')->__("Street"),
 		));
-		$settingsFieldset->addField("billing_city","label",array(
+		$settingsFieldset->addField("city","label",array(
 			"label" => Mage::helper('zolagodropship')->__("City"),
 		));
-		$settingsFieldset->addField("billing_zip","label",array(
+		$settingsFieldset->addField("zip","label",array(
 			"label" => Mage::helper('zolagodropship')->__("Zip / Postal code"),
 		));
 		$settingsFieldset->addField("tax_no","label",array(
