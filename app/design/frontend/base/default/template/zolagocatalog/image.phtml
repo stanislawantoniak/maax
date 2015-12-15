@@ -35,9 +35,234 @@
     </div>
 </div>
 <script type="text/javascript">
-    jQuery(document).ready(function(){
-        jQuery('.need-to-check').css({"opacity": "0.5"}).tooltip({
-            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+    jQuery(function ($) {
+        $(':file').change(function(){
+            var file = this.files[0];
+
+            var container = $(this).closest("td").find(".vendor-image-container");
+            var formData = new FormData($(this).closest("form")[0]);
+
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
+                type: "POST",
+                // Form data
+                data: formData,
+                //Options to tell JQuery not to process data or worry about content-type
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: 'multipart/form-data'
+            }).done(function(result){
+                data = $.parseJSON(result);
+                console.log(data);
+                if(data.error){
+                    noty({
+                        text: data.error,
+                        type: 'error',
+                        timeout: 4000
+                    });
+                } else {
+                    container.replaceWith(data.content);
+                    initDragSort();
+
+                    jQuery('.need-to-check').tooltip({
+                        title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                    }).find("img").css({"opacity": "0.5"});
+                }
+
+            });
         });
+        initDragSort();
+
+
+        //CONTROLS
+        //1. ZOOM
+        $(document).on('click', '.vendor-image-zoom', function (e) {
+            //console.log("ZOOM");
+            e.preventDefault();
+            var controlLink = $(this);
+            var parentContainer = controlLink.closest("li");
+            var productId = parentContainer.data("product");
+            var productName = parentContainer.data("productname");
+            var fullImage = parentContainer.data("image");
+
+            var img = $('<img />', {
+                id: 'vendor_image_' + productId,
+                src: fullImage,
+                alt: productName
+            });
+
+            var modal = $("#vendorImageZoom");
+            modal.find(".modal-header .modal-title").html(productName);
+            modal.find(".modal-body").html(img);
+            modal.modal('show');
+        });
+
+
+        //2. Disable/Enable
+        $(document).on('click', '.vendor-image-availability', function (e) {
+            e.preventDefault();
+            var availabilityLink = $(this);
+            var parentContainer = availabilityLink.closest("li");
+            var imageToDisable = (parentContainer.hasClass("need-to-check") ? 0 : 1);
+
+
+            parentContainer.find(".vendor-image-refresh").show();
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/toggleAvailabilityProductImage")?>',
+                type: "POST",
+                data: {
+                    action: imageToDisable,
+                    product: parentContainer.data("product"),
+                    image_value: parentContainer.data("value")
+                },
+                success: function(result){
+                    parentContainer.find(".vendor-image-refresh").hide();
+                    if(imageToDisable){
+                        //console.log("Disabled");
+                        availabilityLink
+                            .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
+                            .html("<i class='icon-eye-close'></i>");
+                        parentContainer.addClass("need-to-check")
+                            .tooltip({
+                                title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                            })
+                            .find("img").css({"opacity": "0.5"});
+                    } else {
+                        //console.log("Enabled");
+                        availabilityLink
+                            .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
+                            .html("<i class='icon-eye-open'></i>");
+                        parentContainer.removeClass("need-to-check").tooltip('disable')
+                            .find("img").css({"opacity": "1"});
+                    }
+
+                }
+            });
+        });
+
+        //3. Delete
+        $(document).on('click', '.vendor-image-delete', function (e) {
+            var productImages = $(this).closest(".vendor-image").find("li");
+
+            if(productImages.length < 2){
+                //You can not delete last Image
+                noty({
+                    text: "<?php echo $_helper->__('You can not delete last image'); ?>",
+                    type: 'error',
+                    timeout: 4000
+                });
+            } else {
+                //Delete modal
+                $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'));
+                $('#vendorImageDelete').find('.btn-ok').data('product', $(this).data('product'));
+                $('#vendorImageDelete').modal("show");
+            }
+        });
+
+        $("#vendorImageDelete .btn-ok").click(function (e) {
+            e.preventDefault();
+            var productImageToDelete = $("#vendorImageDelete .btn-ok").data('product');
+            var imageToDelete = $("#vendorImageDelete .btn-ok").data('value');
+
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
+                type: "POST",
+                data: {
+                    product: productImageToDelete,
+                    image_value: imageToDelete
+                },
+                success: function (result) {
+                    $(".vendor-image li[data-value='" + imageToDelete + "']").remove();
+                    $('#vendorImageDelete').modal("hide");
+                }
+            });
+
+        });
+        //--CONTROLS
+
+
+        //Clear modals on hide
+        $('#vendorImageZoom').on('hidden.bs.modal', function () {
+            $(this).find(".modal-header .modal-title").html("");
+            $(this).find(".modal-body").html("");
+        });
+        $('#vendorImageDelete').on('hidden.bs.modal', function () {
+            $(this).find('.btn-ok').data('value', "");
+            $(this).find('.btn-ok').data('product', "");
+        });
+
+
+        function initDragSort(){
+            $(".vendor-image").dragsort({
+                dragSelector: "li",
+                placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
+                dragEnd: function () {
+
+                    var images = [];
+                    $.each($(this).closest("ul.vendor-image").find("li"), function (i, li) {
+                        images.push($(li).data("value"))
+                    });
+
+                    $.ajax({
+                        url: '<?php echo Mage::getUrl("udprod/vendor_image/changeProductImagesOrder")?>',
+                        type: "POST",
+                        data: {product: $(this).data("product"), images: images}
+                    });
+                },
+                dragBetween: false
+            });
+        }
+
+    });
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.need-to-check').tooltip({
+            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+        }).find("img").css({"opacity": "0.5"});
     })
 </script>
+<!-- Modal For Image Zoom -->
+<div id="vendorImageZoom" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo Mage::helper("zolagocatalog")->__("Close"); ?>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="vendorImageDelete"  class="modal fade" role="dialog">
+    <div class="modal-dialog  modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <?php echo Mage::helper("zolagocatalog")->__("Delete image"); ?>
+            </div>
+            <div class="modal-body">
+                <p class="alert alert-info">
+                    <?php echo Mage::helper("zolagocatalog")->__("Image will be removed forever!!! Are you sure?"); ?>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo Mage::helper("zolagocatalog")->__("Close"); ?>
+                </button>
+                <a class="btn btn-danger btn-ok">
+                    <?php echo Mage::helper("zolagocatalog")->__("Delete"); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
