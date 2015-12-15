@@ -17,7 +17,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
         $gallery = $product->getFullMediaGalleryImages();
 
         if ($gallery->count() > 0) {
-            $out .= "<div class='col-md-11 vendor-image-container no-padding'>";
+
             $out .= "<ul class='vendor-image'>";
             foreach ($gallery as $_image) {
                 $_file = $_image->getFile();
@@ -52,7 +52,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 $out .= $img;
             }
             $out .= "</ul>";
-            $out .= "</div>";
+
         }
 
         return $out;

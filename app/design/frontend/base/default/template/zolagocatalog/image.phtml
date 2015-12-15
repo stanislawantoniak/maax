@@ -36,9 +36,8 @@
 </div>
 <script type="text/javascript">
     jQuery(function ($) {
+        initDragSort($(".vendor-image"));
         $(':file').change(function(){
-            var file = this.files[0];
-
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
 
@@ -54,7 +53,7 @@
                 enctype: 'multipart/form-data'
             }).done(function(result){
                 data = $.parseJSON(result);
-                console.log(data);
+
                 if(data.error){
                     noty({
                         text: data.error,
@@ -62,8 +61,8 @@
                         timeout: 4000
                     });
                 } else {
-                    container.replaceWith(data.content);
-                    initDragSort();
+                    container.html(data.content);
+                    initDragSort(container.find(".vendor-image"));
 
                     jQuery('.need-to-check').tooltip({
                         title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
@@ -72,7 +71,6 @@
 
             });
         });
-        initDragSort();
 
 
         //CONTROLS
@@ -193,8 +191,8 @@
         });
 
 
-        function initDragSort(){
-            $(".vendor-image").dragsort({
+        function initDragSort(container){
+            container.dragsort({
                 dragSelector: "li",
                 placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
                 dragEnd: function () {
