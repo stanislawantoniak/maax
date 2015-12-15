@@ -23,6 +23,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 $_file = $_image->getFile();
                 $imageUrl = $_image->getUrl();
                 $thUrl = $catalogHelper->init($product, 'thumbnail', $_file)->resize(100);
+                $imageUrl = $catalogHelper->init($product, 'image', $_file)->resize(700);
 
                 $valueId = $_image->getValueId();
                 $productId = $product->getId();
