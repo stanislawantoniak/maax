@@ -53,7 +53,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	    $footerData = array (
     	    'name' => $this->__("MODAGO financial statement on %s",$eventDate),
         );
-	    $lastStatementData = empty($statement->getDateFrom())? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
+        $dateFrom = $statement->getDateFrom();
+	    $lastStatementData = empty($dateFrom)? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
 		$page1data = array(
 		    "header" => $headerText,
 			"name" => $nameText, // $statement->getName(),
@@ -259,13 +260,17 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					//fill 4th page start
 					$orderId = $order->getId();
 
-					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$order->getSku());
+					if ($product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$order->getSku())) {
+					    $prodName = $product->getName();
+					} else {
+					    $prodName = $order->getSku();
+					}
 					$page4body[$orderId] = array(
 						$poIncrementId,
 						"",
 						$order->getShippedDate(),
 						$this->__("Sale"),
-						$product->getName(),
+						$prodName,
 						$order->getSku(),
 						$this->formatQuota($order->getPrice()),
 						$this->formatQuota(floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue())), // Rabat udzielany przez partnera (discount_amount to suma rabatow vendora i sprzedawcy)

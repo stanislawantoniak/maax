@@ -1,0 +1,10 @@
+.checkout-shared-review {
+    #content-main {
+        .panel {            
+            &.panel-default {
+                border-color:$color_bfbfbf;
+            }
+            background-color: $color_ffffff;
+        }
+    }
+}
