@@ -83,7 +83,7 @@ class Zolago_Adminhtml_Block_Customer_Activity_Recentlyviewed_Grid extends Mage_
         // Show
         $this->addColumn('action',
             array(
-                'header'  => $helper->__('Action'),
+                'header'  => Mage::helper('catalog')->__('Action'),
                 'width'   => '50px',
                 'type'    => 'action',
                 'getter'  => 'getId',

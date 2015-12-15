@@ -28,4 +28,16 @@ class Zolago_Adminhtml_Customer_ActivityController extends Mage_Adminhtml_Contro
                 ->toHtml()
         );
     }
+
+    /**
+     * Show grid with viewed categories (pages)
+     */
+    public function viewedcategoriesAction() {
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock("zolagoadminhtml/customer_activity_viewedcategories_grid", "admin.customer.activity.viewedcategories.grid")
+                ->setCustomerId($this->getRequest()->getParam('id'))
+                ->setUseAjax(true)
+                ->toHtml()
+        );
+    }
 }
