@@ -83,3 +83,6 @@
 "I have full powers to accept the %s regulations","Posiadam pełnomocnictwo do zaakceptowania regulaminów %s"
 "Replaces %value% in this text: ","Zamienia %value% w tym tekście: "
 "Proxy assignment text override","Nadpisanie nazwy w pełnomocnictwie"
+"Regulation acceptance","Akceptacja regulaminu"
+"Confirmation token","Token potwierdzający"
+
