@@ -172,11 +172,11 @@ define([
 						</div>\
 						<div class="modal-body">\
 						<div class="carousel">\
-						<ul>\
-						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
-						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
-						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
-						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
+						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
+						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
+						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
+						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
+						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
 						</div>\
 						 </div>\
 						<div class="modal-footer">\
