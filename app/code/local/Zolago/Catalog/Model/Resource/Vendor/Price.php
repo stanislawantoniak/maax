@@ -109,7 +109,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 					'value' => $child['value'],
 					'price' => $child['price'],
                     'sku'   => $child['sku'],
-                    'skuv'  => $child['skuv'],
+                    'skuv'  => Mage::helper('core')->escapeHtml($child['skuv']),
 					'children'=>array()
 				);
 			}
