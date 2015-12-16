@@ -419,6 +419,7 @@ class Zolago_Catalog_Vendor_ImageController
 
         $product = Mage::getModel('catalog/product')->load($productId);
 
+        Mage::log($firstImageValue, null,"XXX.log");
         if (!empty($firstImageValue)) {
             $image = $firstImageValue["value"];
 
@@ -528,7 +529,7 @@ class Zolago_Catalog_Vendor_ImageController
     {
         $productId = $this->getRequest()->getParam("product", null);
         $imageValue = $this->getRequest()->getParam("image_value", null);
-
+        Mage::log($productId, null,"XXX.log");
         $resource = Mage::getSingleton('core/resource');
 
         $writeConnection = $resource->getConnection('core_write');
@@ -580,7 +581,20 @@ class Zolago_Catalog_Vendor_ImageController
                 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
                 $product->addImageToMediaGallery($imagePath, null, false, true);
                 $product->save();
-                $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);;
+
+
+                /*Set label*/
+                $product = Mage::getModel("catalog/product")->load($productId);
+                $gallery = $product->getData('media_gallery');
+                $lastImage = $gallery['images'][count($gallery['images'])-1];
+                $lastImage['label'] = $product->getName();
+                array_push($gallery['images'], $lastImage);
+                $product->setData('media_gallery', $gallery);
+                $product->save();
+                /*Set label*/
+
+
+                $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
             } catch (Exception $e) {
                 $result = array(
