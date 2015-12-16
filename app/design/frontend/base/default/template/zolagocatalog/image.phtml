@@ -117,7 +117,6 @@
                 success: function(result){
                     parentContainer.find(".vendor-image-refresh").hide();
                     if(imageToDisable){
-                        //console.log("Disabled");
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
                             .html("<i class='icon-eye-close'></i>");
@@ -127,7 +126,6 @@
                             })
                             .find("img").css({"opacity": "0.5"});
                     } else {
-                        //console.log("Enabled");
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
                             .html("<i class='icon-eye-open'></i>");
