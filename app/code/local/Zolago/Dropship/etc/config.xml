@@ -168,7 +168,7 @@
                         <label>Websites</label>
                         <fieldset>websites_allowed</fieldset>
                         <type>multiselect</type>
-                        <source_model>core/website</source_model>
+                        <source_model>zolagodropshipmicrosite/source</source_model>
                         <position>1</position>
                         <default>1</default>
                     </websites_allowed>
