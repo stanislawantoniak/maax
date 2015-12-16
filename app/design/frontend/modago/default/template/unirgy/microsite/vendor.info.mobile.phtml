@@ -7,9 +7,9 @@ $deliveryReturnsInfo = !empty($marketingInformation->delivery_information) || !e
 ?>
 <!-- brand details -->
 <?php if (!empty($marketingInformation->brand_information_title)&&!empty($marketingInformation->brand_information)): ?>
-    <li class="vendor-menu-mobile-content">
+    <li>
         <a href="#"><?php echo $this->__($marketingInformation->brand_information_title); ?><i class="fa fa-chevron-down"></i></a>
-        <ul>
+        <ul class="vendor-menu-mobile-content">
             <li style="height: inherit; padding: 8px 20px 8px 10px;">
                 <div>
                     <?php echo $marketingInformation->brand_information; ?>
