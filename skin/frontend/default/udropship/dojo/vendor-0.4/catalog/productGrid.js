@@ -159,37 +159,13 @@ define([
         }
 
         var node = el.parents("td");
+        var gallery = jQuery(this).find("gallery").html();
+        console.log(gallery);
 
+        modal.find(".modal-title").text(el.attr("title"));
+        modal.find(".modal-body").html('<div class="carousel">'+gallery+'</div>');
 
-        if (!modal.length) {
-            modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
-				<div class="modal-dialog">\
-					<div class="modal-content">\
-						<div class="modal-header">\
-							<button type="button" class="close" data-dismiss="modal">\n\
-								<span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\
-							<h4 class="modal-title"></h4>\
-						</div>\
-						<div class="modal-body">\
-						<div class="carousel">\
-						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
-						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
-						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
-						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
-						<img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg">\
-						</div>\
-						 </div>\
-						<div class="modal-footer">\
-							<button type="button" class="btn btn-default" data-dismiss="modal">' +
-                Translator.translate("Close") +
-                '</button>\
-            </div>\
-        </div>\
-    </div>\
-</div>').
-                appendTo(jQuery("body"));
-        }
-        jQuery('.carousel').rwdCarousel({
+        jQuery('#product-image-popup .carousel').rwdCarousel({
             items : 3,
             pagination : true,
             itemsScaleUp:true,
@@ -200,15 +176,12 @@ define([
                 "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
             ]
         });
-        modal.find(".modal-title").text(el.attr("title"));
-        //modal.find(".modal-body").html(
-        //    jQuery("<img>").attr("src", el.attr("href"))
-        //);
 
         // focus cell after close modal
         if (node.length) {
             modal.one("hidden.bs.modal", function () {
                 grid.focus(grid.cell(node[0]));
+                modal.find(".modal-body .carousel").html("");
             });
             modal.one("shown.bs.modal", function () {
                 modal.find("button").focus();
@@ -232,7 +205,7 @@ define([
     var rendererThumbnail = function (item, value, node, options) {
         var content,
             img;
-        console.log(item);
+        //console.log(item);
         if (item.thumbnail) {
             content = put("a", {
                 href: item.thumbnail,
@@ -253,7 +226,9 @@ define([
         put(content, "span", {
             innerHTML: item.images_count
         });
-
+        put(content, "gallery", {
+            innerHTML: item.gallery
+        });
         put(node, content);
 
         // Put img if exists
