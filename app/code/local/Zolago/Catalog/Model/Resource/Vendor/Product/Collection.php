@@ -186,6 +186,11 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		);
 	}
 
+	/**
+	 * @param $id
+	 * @param $catalogHelper
+	 * @return string
+	 */
 	public function getItemGallery($id, $catalogHelper){
 		$product = Mage::getModel("catalog/product")->load($id);
 		$gallery = $product->getMediaGalleryImages();
@@ -198,6 +203,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 				$result .= "<img src='{$imageUrl}' />";
 			}
 		}
+		return $result;
 	}
 	/**
 	 * Add thumbs
