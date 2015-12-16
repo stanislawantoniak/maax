@@ -596,9 +596,32 @@
 	}
 }
 
+
+/* Zarządzaj opisami produktów */
 #product-image-popup {
     overflow: hidden;
 }
 #product-image-popup .modal-dialog .modal-content .modal-header {
     cursor: move;
 }
+#product-image-popup .rwd-carousel {
+    overflow: hidden;
+}
+
+#product-image-popup .rwd-carousel .rwd-item {
+    float: left;
+    padding: 5px;
+}
+#product-image-popup .product-image-popup-arrow-left {
+    text-align: right;
+}
+#product-image-popup .rwd-controls .rwd-prev .icon,
+#product-image-popup .rwd-controls .rwd-next .icon {
+    font-size: 25px;
+}
+#product-image-popup .rwd-controls .rwd-prev.disabled,
+#product-image-popup .rwd-controls .rwd-next.disabled {
+    color: #d3d3d3;
+}
+
+/* Zarządzaj opisami produktów */

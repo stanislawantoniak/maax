@@ -190,18 +190,14 @@ define([
                 appendTo(jQuery("body"));
         }
         jQuery('.carousel').rwdCarousel({
-            items : 3, //10 items above 1000px browser width
-            itemsDesktop : [1000,3], //5 items between 1000px and 901px
-            itemsDesktopSmall : [900,2], // betweem 900px and 601px
-            itemsTablet: [600,2], //2 items between 600 and 0
-            itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
-            pagination : false,
+            items : 3,
+            pagination : true,
             itemsScaleUp:true,
             rewindNav : false,
             navigation: true,
             navigationText: [
-                "<i class='fa fa-chevron-left'></i>",
-                "<i class='fa fa-chevron-right'></i>"
+                "<div class='col-md-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
+                "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
             ]
         });
         modal.find(".modal-title").text(el.attr("title"));
