@@ -162,7 +162,8 @@
             e.preventDefault();
             var productImageToDelete = $("#vendorImageDelete .btn-ok").data('product');
             var imageToDelete = $("#vendorImageDelete .btn-ok").data('value');
-
+            $(".vendor-image li[data-value="+imageToDelete+"] .vendor-image-refresh").show();
+            $('#vendorImageDelete').modal("hide");
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
                 type: "POST",
@@ -172,7 +173,7 @@
                 },
                 success: function (result) {
                     $(".vendor-image li[data-value='" + imageToDelete + "']").remove();
-                    $('#vendorImageDelete').modal("hide");
+
                 }
             });
 
