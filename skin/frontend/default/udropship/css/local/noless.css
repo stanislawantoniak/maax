@@ -607,6 +607,9 @@
 #product-image-popup .rwd-carousel {
     overflow: hidden;
 }
+#product-image-popup .rwd-carousel .rwd-wrapper {
+    text-align: center;
+}
 
 #product-image-popup .rwd-carousel .rwd-item {
     float: left;

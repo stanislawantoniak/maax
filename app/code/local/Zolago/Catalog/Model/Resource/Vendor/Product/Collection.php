@@ -165,8 +165,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 
 		$catalogHelper = Mage::helper('catalog/image');
 
-
-
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//
 			$item['entity_id'] = (int)$item['entity_id'];
@@ -199,7 +197,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		if ($gallery->count() > 0) {
 			foreach ($gallery as $_image) {
 				$_file = $_image->getFile();
-				$imageUrl = $catalogHelper->init($product, 'image', $_file)->resize(400);
+				$imageUrl = $catalogHelper->init($product, 'image', $_file)->resize(600);
 				$result .= "<img src='{$imageUrl}' />";
 			}
 		}

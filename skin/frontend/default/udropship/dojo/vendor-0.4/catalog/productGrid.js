@@ -166,7 +166,7 @@ define([
         modal.find(".modal-body").html('<div class="carousel">'+gallery+'</div>');
 
         jQuery('#product-image-popup .carousel').rwdCarousel({
-            items : 3,
+            items : 1,
             pagination : true,
             itemsScaleUp:true,
             rewindNav : false,
