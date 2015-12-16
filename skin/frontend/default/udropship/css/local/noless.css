@@ -690,7 +690,6 @@
     opacity: 0;
     outline: none;
     background: white;
-    cursor: inherit;
+    cursor: pointer;
     display: block;
-    width: 10px;
 }
