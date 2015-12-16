@@ -595,3 +595,10 @@
 		padding: 0 0 0 10px;
 	}
 }
+
+#product-image-popup {
+    overflow: hidden;
+}
+#product-image-popup .modal-dialog .modal-content .modal-header {
+    cursor: move;
+}

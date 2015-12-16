@@ -146,7 +146,7 @@ define([
         var el = jQuery(this);
         var modal = jQuery("#product-image-popup");
 
-        // Procss enter click on thumb - redirect to a
+        // Process enter click on thumb - redirect to a
         if (e instanceof KeyboardEvent) {
             if (e.keyCode != 13) {
                 return;
@@ -170,7 +170,15 @@ define([
 								<span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\
 							<h4 class="modal-title"></h4>\
 						</div>\
-						<div class="modal-body"></div>\
+						<div class="modal-body">\
+						<div class="carousel">\
+						<ul>\
+						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
+						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
+						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
+						<li><img src="http://modago.local/media/bannerresized/inspiration/banners/4/9/5/54364681451b4_insp-2.jpg"></li>\
+						</div>\
+						 </div>\
 						<div class="modal-footer">\
 							<button type="button" class="btn btn-default" data-dismiss="modal">' +
                 Translator.translate("Close") +
@@ -181,11 +189,25 @@ define([
 </div>').
                 appendTo(jQuery("body"));
         }
-
+        jQuery('.carousel').rwdCarousel({
+            items : 3, //10 items above 1000px browser width
+            itemsDesktop : [1000,3], //5 items between 1000px and 901px
+            itemsDesktopSmall : [900,2], // betweem 900px and 601px
+            itemsTablet: [600,2], //2 items between 600 and 0
+            itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
+            pagination : false,
+            itemsScaleUp:true,
+            rewindNav : false,
+            navigation: true,
+            navigationText: [
+                "<i class='fa fa-chevron-left'></i>",
+                "<i class='fa fa-chevron-right'></i>"
+            ]
+        });
         modal.find(".modal-title").text(el.attr("title"));
-        modal.find(".modal-body").html(
-            jQuery("<img>").attr("src", el.attr("href"))
-        );
+        //modal.find(".modal-body").html(
+        //    jQuery("<img>").attr("src", el.attr("href"))
+        //);
 
         // focus cell after close modal
         if (node.length) {
@@ -197,7 +219,11 @@ define([
             });
         }
 
-        modal.modal("show");
+        modal.modal({backdrop: false});
+
+        jQuery("#product-image-popup").draggable({
+            handle: ".modal-header"
+        });
         e.preventDefault();
     };
 
@@ -210,6 +236,7 @@ define([
     var rendererThumbnail = function (item, value, node, options) {
         var content,
             img;
+        console.log(item);
         if (item.thumbnail) {
             content = put("a", {
                 href: item.thumbnail,
