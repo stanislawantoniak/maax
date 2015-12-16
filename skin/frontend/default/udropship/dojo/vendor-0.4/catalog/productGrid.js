@@ -160,7 +160,7 @@ define([
 
         var node = el.parents("td");
         var gallery = jQuery(this).find("gallery").html();
-        console.log(gallery);
+
 
         modal.find(".modal-title").text(el.attr("title"));
         modal.find(".modal-body").html('<div class="carousel">'+gallery+'</div>');
@@ -210,13 +210,28 @@ define([
             content = put("a", {
                 href: item.thumbnail,
                 title: item.name,
-                target: "_blank"
+                target: "_blank",
+                class: "thumb"
             });
             img = put("img", {
                 src: item.thumbnail_url
             });
+
+            //jQuery(node).popover({
+            //    placement: "right",
+            //    html : true,
+            //    container: 'body',
+            //    trigger : 'hover', //<--- you need a trigger other than manual
+            //    delay: {
+            //        hide: 1000
+            //    },
+            //    content: function() {
+            //        return "<div><img src='"+item.thumbnail+"' /><span class='view_lupa view_lupa_plus'></span></div>";
+            //    }
+            //});
             on(content, "click", thumbnailHandler)
             on(node, "keydown", thumbnailHandler)
+
         } else {
             content = put("p",
                 put("i", {className: "glyphicon glyphicon-ban-circle"})
@@ -231,10 +246,14 @@ define([
         });
         put(node, content);
 
+
         // Put img if exists
         if (img) {
             put(node, img);
         }
+
+
+
     };
 
     /**
