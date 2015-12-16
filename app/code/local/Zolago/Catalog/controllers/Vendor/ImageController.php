@@ -419,6 +419,7 @@ class Zolago_Catalog_Vendor_ImageController
 
         $product = Mage::getModel('catalog/product')->load($productId);
 
+        Mage::log($firstImageValue, null,"XXX.log");
         if (!empty($firstImageValue)) {
             $image = $firstImageValue["value"];
 
@@ -528,7 +529,7 @@ class Zolago_Catalog_Vendor_ImageController
     {
         $productId = $this->getRequest()->getParam("product", null);
         $imageValue = $this->getRequest()->getParam("image_value", null);
-
+        Mage::log($productId, null,"XXX.log");
         $resource = Mage::getSingleton('core/resource');
 
         $writeConnection = $resource->getConnection('core_write');

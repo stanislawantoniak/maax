@@ -29,7 +29,7 @@ class Zolago_Catalog_Model_Resource_Product_Gallery extends Mage_Catalog_Model_R
         $select->where("gallery_value.store_id=?", $defaultStoreId);
         $select->where("gallery_value.disabled=?", 0);
         $select->order("position ASC");
-
+        Mage::log($select->__toString(), null,"XXX.log");
         try {
             $result = $readConnection->fetchRow($select);
 

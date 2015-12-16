@@ -34,7 +34,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                     <div class='vendor-image-controls'>
                     <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'><i class='icon-eye-close'></i></a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
-                    <a class='vendor-image-delete' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
+                    <a class='vendor-image-delete' data-product='{$productId}' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
                     <img src='" . $thUrl . '?' . time() . "' />
                     <div class='vendor-image-refresh'><i class='icon-spin icon-refresh'></i></div>
