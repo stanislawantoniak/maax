@@ -584,13 +584,17 @@ class Zolago_Catalog_Vendor_ImageController
 
 
                 /*Set label*/
-                $product = Mage::getModel("catalog/product")->load($productId);
-                $gallery = $product->getData('media_gallery');
-                $lastImage = $gallery['images'][count($gallery['images'])-1];
-                $lastImage['label'] = $product->getName();
-                array_push($gallery['images'], $lastImage);
-                $product->setData('media_gallery', $gallery);
-                $product->save();
+                $_product = Mage::getModel("catalog/product")->load($productId);
+                $gallery = $_product->getData('media_gallery');
+                if (isset($gallery['images']) && count($gallery['images']) > 1) {
+                    if (isset($gallery['images'][count($gallery['images']) - 1])) {
+                        $lastImage = $gallery['images'][count($gallery['images']) - 1];
+                        $lastImage['label'] = $_product->getName();
+                        array_push($gallery['images'], $lastImage);
+                        $_product->setData('media_gallery', $gallery);
+                        $_product->save();
+                    }
+                }
                 /*Set label*/
 
 
