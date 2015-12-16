@@ -134,7 +134,7 @@
                         availabilityLink
                             .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
                             .html("<i class='icon-eye-close'></i>");
-                        parentContainer.addClass("need-to-check")
+                        parentContainer.tooltip('enable').addClass("need-to-check")
                             .tooltip({
                                 title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
                             })
