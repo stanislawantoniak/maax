@@ -44,16 +44,6 @@
 				text-align: center;
 			}
 		}
-		span#average_note_client {
-			span.note {
-				&+span {
-					font-size: 11px;
-					color:$color_646464;
-					font-family: $fontRegular;
-					line-height: 13px;
-				}
-			}
-		}
 	}
 	h3#bLogo{
 		display: inline-block;
@@ -130,7 +120,7 @@
 							text-transform: uppercase;
 						}
 						&:before {
-							background: $colorAccentProduct;
+							background: $colorAccentProductTitle;
 						}
 					}
 
@@ -163,4 +153,99 @@
 
 .seller-box-question {
 	border-top: none !important;
+}
+
+#seller-box-bundle {
+	#accordion {
+		.panel-default {
+			border:none;
+			margin-bottom: -5px;
+			&:first-child {
+				margin-bottom: -6px;
+				overflow: visible;
+			}
+			> .panel-heading {
+				padding: 14px 15px 14px 15px;
+				h4 {
+					padding:0;
+					&.panel-title {
+						position:relative;
+						a {
+							display:block;
+							padding-left:10px;
+							position:relative;
+
+
+						}
+						&:before {
+							content: " ";
+							display: block;
+							width: 18px;
+							height: 18px;
+							position: absolute;
+							left: -9px;
+							top: -2px;
+							@media (max-width: 360px) {
+								left: -4px;
+							}
+						}
+					}
+
+				}
+
+				&+ .panel-collapse {
+					.panel-body {
+						padding-left: 40px;
+						padding-right: 40px;
+						ul {
+							margin:0;
+							padding:0;
+						}
+						.view-store {
+							padding: 3px 10px;
+							display: inline-block;
+							float: right;
+							margin-right: 2px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+#complementary_product,
+#description_product,
+#note_product {
+	&.bg-w {
+		border-bottom: none;
+	}
+	h3[itemprop=brand], h3.itemprop-brand {
+		display: inline;
+		font-size: 13px;
+		padding: 0;
+	}
+	h2.title_section, h5.title_section {
+		padding-left: 20px;
+	}
+}
+
+#seller-box-bundle .seller.producer {
+	@media (max-width: $screen-xs-max) {
+		transform: translateY(25%);
+	}
+}
+
+span.average_note_client {
+	span.note {
+		img {
+			width: 22px;
+			height: 22px;
+		}
+		&+span {
+			font-size: 11px;
+			color:$color_646464;
+			font-family: $fontRegular;
+			line-height: 13px;
+		}
+	}
 }

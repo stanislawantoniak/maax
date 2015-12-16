@@ -1,0 +1,146 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /* @var $this Mage_Review_Block_Product_View */ ?>
+<?php /* @var $this Zolago_Modago_Block_Review_Product_View_List */ ?>
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 23.07.2014
+ */
+?>
+<?php
+// review label
+$_reviewsCount = count($this->getReviewsForProduct());
+$_reviewsLabel = '';
+switch($_reviewsCount) {
+    case 0:
+        $_reviewsLabel = $this->__('Zero reviews');
+        break;
+    case 1:
+        $_reviewsLabel = $this->__('Singular review');
+        break;
+    case 2:
+    case 3:
+    case 4:
+        $_reviewsLabel = $this->__('review');
+        break;
+    default:
+        $_reviewsLabel = $this->__('Zero reviews');
+        break;
+}
+?>
+
+<section id="note_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+    <header>
+        <h5 class="title_section"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down visible-xs"></i>
+        <span class="average_note_client" class="visible-xs">
+            <span class="note" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></span>
+            <span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
+        </span>
+        </h5>
+
+    </header>
+    <div class="main clearfix no-padding-bottom">
+        <div id="statystyki_opinii" class="row">
+            <div class="col-md-9 col-sm-12">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <dl class="raty_note">
+                            <dt><strong><?php echo $this->__("Avarage"); ?>:</strong><div id="average_rating" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></div></dt>
+                            <?php foreach($this->getRatingsAvarage() as $k => $v) : ?>
+                                <dd><strong><?php echo $k; ?></strong> <div id ="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo $v['avg']; ?>"></div></dd>
+                            <?php endforeach; ?>
+                        </dl>
+                    </div>
+                    <div class="col-md-4 col-sm-5">
+                        <dl class="rating_note">
+                            <dt><?php echo $this->__("Product reviews count"); ?>: <span><?php echo $_reviewsCount; ?><span></dt>
+                            <?php foreach($this->getStripsRatings() as $k => $v) : ?>
+                                <dd><span class="prefix"><?php echo $this->__("rating"); ?> <?php echo $k; ?>/5</span><span class="rating" data-percent="<?php echo $v; ?>"><span></span></span><span class="suffix"><?php echo (int) ($v * $_reviewsCount / 100); ?></span></dd>
+                            <?php endforeach; ?>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="add_opinion col-md-3 col-sm-12 hidden-xs">
+                <p><?php echo $this->__("Share your review with other users"); ?><br><a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a></p>
+            </div>
+	        <div class="visible-xs" style="text-align: center">
+                <a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a>
+	        </div>
+        </div>
+
+    </div>
+    <!-- ==================== COMMENTS ================================ -->
+    <div class="main clearfix">
+        <div class="col-sm-12" id="comments">
+            <div class="row">
+	            <?php echo $this->getChildHtml('product.review.form'); ?>
+                <?php if($_reviewsCount > 0): ?>
+                <h2 itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                    <span itemprop="ratingValue"><?php echo $this->getAvarageRating(); ?></span>
+                    <span itemprop="reviewCount"><?php echo $_reviewsCount; ?></span>
+                    <span itemprop="bestRating">5</span>
+                </h2>
+                <?php foreach($this->getReviewsForProduct() as $review) :  ?>
+                    <?php
+                    $avgReview = $this->getSingleReviewAvarage($review);
+                    $recommend = $review->getRecommendProduct();
+                    ?>
+                    <div class="comment row" itemtype="http://schema.org/Review" itemscope itemprop="review">
+                        <span itemtype="http://schema.org/Rating" itemscope itemprop="reviewRating">
+                            <span itemprop="ratingValue"><?php echo $avgReview; ?></span>
+                        </span>
+                        <div class="wrapper-header col-sm-6">
+                            <div class="header">
+                                <div class="comment_rating" data-number="5" data-score="<?php echo $avgReview; ?>"></div>
+                                <h5 class="title_comment" itemprop="headline"><?php echo $this->escapeHtml($review->getTitle()); ?></h5>
+                            </div>
+                            <div class="meta">
+                                <span class="meta-label"><?php echo Mage::helper('zolagomodago')->__("Review written"); ?></span><span class="date" itemprop="datePublished"> <?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user" itemprop="author"><?php echo $review->getNickname(); ?></span>
+                            </div>
+
+                        </div>
+                        <?php if($review->getRecommendProduct() !== null) : ?>
+                        <aside class="col-sm-6"><span class="<?php echo (bool) $review->getRecommendProduct() ? 'recommend' : 'not_recommend' ?>">
+                            <?php echo (bool) $review->getRecommendProduct() ? $this->__("Recommend product") : $this->__("Not recommend product"); ?>
+                                </span></aside>
+                        <?php endif; ?>
+                        <div class="body_comments col-sm-12" itemprop="description">
+                                <?php echo $review->getDetailHtmlFormatted(); ?>
+                        </div>
+
+                    </div>
+                <?php endforeach; ?>
+                <?php endif; ?>
+                <?php echo $this->getChildHtml('product_review_list.toolbar'); ?>
+            </div>
+        </div>
+
+    <!-- ====================== END :// COMMENTS ================================== -->
+    </div>
+</section>

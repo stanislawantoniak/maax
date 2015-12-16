@@ -1,4 +1,18 @@
 #product-gallery {
+	.product-flag {
+		display: none;
+		@media(max-width: $screen-sm-max) {
+			display: block;
+			top: 0;
+			right: 0;
+			bottom: auto;
+		}
+		@media(max-width: $screen-xs-max) {
+			bottom: 0;
+			top: auto;
+			right: 0;
+		}
+	}
 	.connected-carousels {
 		.stage {
 			width: 319px;
@@ -199,8 +213,14 @@
 }
 #product-gallery {
 	#productGalleryBigMedia, #productGalleryBigMediaOpen {
-		float: left;
-		width: 319px;
+		width: 100%;
+		max-width:409px;
+		padding-left:90px;
+		@media (max-width: 931px) {
+			padding-left: 0;
+			margin: 0 auto;
+			max-width:319px;
+		}
 		@media (max-width: 360px) {
 			width:360px;
 			margin-left: -15px;
@@ -211,6 +231,7 @@
 			margin-left: -15px;
 			margin-right: -15px;
 		}
+
 		.item{
 			padding:0;
 			height: auto;
@@ -218,11 +239,11 @@
 	}
 
 	#wrapper-productGalleryThumbMedia, #wrapper-productGalleryThumbMediaOpen {
-		float: left;
 		width: 80px;
 		margin-left: 7px;
 		margin-right: 10px;
-		position: relative;
+		position: absolute;
+		z-index:10;
 		@media (max-width: 931px) {
 			display:none;
 		}
