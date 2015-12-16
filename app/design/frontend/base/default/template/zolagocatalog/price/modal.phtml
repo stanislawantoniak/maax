@@ -90,7 +90,7 @@
 					<input type="hidden" name="<?php echo $_valueNameKey."[value_index]";?>" value="<?php echo $child['value'];?>"/>
 					<input type="hidden" name="<?php echo $_valueNameKey."[value_id]";?>" value="<?php echo $child['value_id'];?>"/>
 					<input type="hidden" name="<?php echo $_valueNameKey."[attribute_id]";?>" value="<?php echo $attribute['attribute_id'];?>"/>
-					<?php echo $this->escapeHtml($child['option_text']);?>
+					<?php echo $this->escapeHtml($child['option_text']);?> / <?php echo $child['skuv']; ?>
 				</td>
 				<td class="effective-price"></td>
 				<td class="price-deviation" data-source="" data-price="<?php echo $this->escapeHtml($child['price']);?>">
