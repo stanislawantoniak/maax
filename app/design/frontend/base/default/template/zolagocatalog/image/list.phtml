@@ -99,8 +99,6 @@
     }).bind(gridObj);
 
     gridObj.rowClickCallback = (function(grid, evt) {
-        console.log(grid);
-        console.log(evt);
 
         var tdElement = Event.findElement(evt, 'td');
         var trElement = Event.findElement(evt, 'tr');
