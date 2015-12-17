@@ -605,15 +605,16 @@
 .vendor-image {
 	list-style-type: none;
 	height: 110px;
-    padding: 0;
+    padding: 0 5px;
 }
 .vendor-image li {
     display: block;
     float: left;
-    cursor: default !important;
+    /*cursor: default !important;*/
     position: relative;
     height: 100px;
     width: 100px;
+    background: #ffffff;
 }
 .vendor-image li.vendor-image-placeholder {
     /*background-color: #fffeec;*/
@@ -654,6 +655,7 @@
     border: rgba(0, 0, 0, 0.4);
     cursor: move !important;
 
+
 }
 
 
@@ -669,7 +671,6 @@
     text-align: center;
 }
 .vendor-image-upload {
-    /*margin: 8% 0;*/
     width: 36px;
 }
 
