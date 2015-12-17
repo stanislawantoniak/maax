@@ -108,6 +108,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 					'value_id'=> $child['value_id'],
 					'value' => $child['value'],
 					'price' => $child['price'],
+                    'sku'   => $child['sku'],
+                    'skuv'  => Mage::helper('core')->escapeHtml($child['skuv']),
 					'children'=>array()
 				);
 			}
@@ -294,6 +296,32 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 			implode(" AND ", $conds),
 			array()
 		);
+
+        // Add sku
+        $select->joinLeft(
+            array("cpe" => $this->getTable("catalog/product")),
+            "cpe.entity_id = link.product_id",
+            array("sku")
+        );
+
+        // Add skuv
+        $skuvCode  = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+        /** @var Mage_Eav_Model_Config $model */
+        $model     = Mage::getSingleton('eav/config');
+        $attribute = $model->getAttribute('catalog_product', $skuvCode);
+        $skuvTable = $attribute->getBackendTable();
+
+        $select->joinLeft(
+            array('skuvtable' => $skuvTable),
+            implode(" AND ", array(
+                "skuvtable.entity_id = link.product_id",
+                $this->getReadConnection()->quoteInto("skuvtable.entity_type_id=?", $attribute->getEntityTypeId()),
+                $this->getReadConnection()->quoteInto("skuvtable.attribute_id=?", $attribute->getId()),
+                $this->getReadConnection()->quoteInto("skuvtable.store_id=?", 0), // For now skuv is only for default store
+            )),
+            array("skuv" => "skuvtable.value")
+        );
+
 		
 		// Optional price
 		$select->columns(array("price"=>new Zend_Db_Expr("IF(sa_price.value_id>0, sa_price.pricing_value, 0)")));

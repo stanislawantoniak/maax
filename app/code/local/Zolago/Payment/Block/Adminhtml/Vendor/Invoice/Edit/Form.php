@@ -69,7 +69,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form extends Mage_Admin
             'label' => $hlp->__('Vendor'),
             'required' => true,
             'name' => 'vendor_id',
-            "options" => Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash()
+            "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
         ));
 
         //2. WFIRMA
