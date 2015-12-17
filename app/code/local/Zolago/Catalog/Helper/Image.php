@@ -40,7 +40,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
                     <a class='vendor-image-delete' data-product='{$productId}' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
-                    <img src='" . $thUrl . '?' . time() . "' />
+                    <img style='min-height: 100px; min-width: 100px;' src='" . $thUrl . '?' . time() . "' />
                     <i class='icon icon-ban-circle'></i>
                     <div class='vendor-image-refresh'><i class='icon-spin icon-refresh'></i></div>
                     </li>";
@@ -53,7 +53,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
                     <a class='vendor-image-delete' data-value='{$valueId}' data-product='{$productId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
-                    <img src='{$thUrl}' />
+                    <img style='min-height: 100px; min-width: 100px;' src='{$thUrl}' />
                     <i class='icon icon-ban-circle' style='display: none'></i>
                     <div class='vendor-image-refresh'><i class='icon-spin icon-refresh'></i></div>
                     </li>";
