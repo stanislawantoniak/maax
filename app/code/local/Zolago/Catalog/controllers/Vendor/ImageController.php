@@ -537,14 +537,14 @@ class Zolago_Catalog_Vendor_ImageController
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__($e->getMessage()),
+                    'error' => $_helper->__("An error occurred"),
                     'errorcode' => $e->getCode()
                 );
             } catch (Exception $e) {
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__($e->getMessage()),
+                    'error' => $_helper->__("An error occurred"),
                     'errorcode' => $e->getCode()
                 );
             }
@@ -598,14 +598,14 @@ class Zolago_Catalog_Vendor_ImageController
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__($e->getMessage()),
+                    'error' => $_helper->__("An error occurred"),
                     'errorcode' => $e->getCode()
                 );
             } catch (Exception $e) {
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__($e->getMessage()),
+                    'error' => $_helper->__("An error occurred"),
                     'errorcode' => $e->getCode()
                 );
             }
@@ -666,7 +666,7 @@ class Zolago_Catalog_Vendor_ImageController
 
             } catch (Exception $e) {
                 $result = array(
-                    'error' => $_helper->__($e->getMessage()),
+                    'error' => $_helper->__("An error occurred"),
                     'errorcode' => $e->getCode());
             }
         }
