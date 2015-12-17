@@ -1,18 +1,26 @@
 <?php
 
 class Zolago_Catalog_Vendor_ImageController
-    extends Zolago_Dropship_Controller_Vendor_Abstract {
+    extends Zolago_Dropship_Controller_Vendor_Abstract
+{
+
+    const PRODUCT_IMAGE_ENABLE = 0;
+    const PRODUCT_IMAGE_DISABLE = 1;
+
     /**
      * Index
      */
 
-    public function indexAction() {
+    public function indexAction()
+    {
         Mage::register('as_frontend', true);// Tell block class to use regular URL's
-        $this->_renderPage(array('default','formkey','adminhtml_head'), 'udprod_image');
+        $this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'udprod_image');
     }
-    public function check_galleryAction() {
-        $list = $this->getRequest()->getParam('image',array());
-        $products = explode(',',$list);
+
+    public function check_galleryAction()
+    {
+        $list = $this->getRequest()->getParam('image', array());
+        $products = explode(',', $list);
         /* @var $mapper  Zolago_Catalog_Model_Mapper */
         $mapper = Mage::getModel('zolagocatalog/mapper');
         $mapper->checkGallery($list);
@@ -23,7 +31,8 @@ class Zolago_Catalog_Vendor_ImageController
         $this->_redirectUrl($referer_url);
     }
 
-    protected function _getVendorId() {
+    protected function _getVendorId()
+    {
         $vendor = $this->_getSession()->getVendor();
         if ($vendor) {
             $vendorId = $vendor->getId();
@@ -32,30 +41,34 @@ class Zolago_Catalog_Vendor_ImageController
         }
         return $vendorId;
     }
-    protected function _makeRedirect($pidList, $fragment = false) {
+
+    protected function _makeRedirect($pidList, $fragment = false)
+    {
         $extends = '';
         if ($pidList) {
-            $extends = '/filter/'.
-                       base64_encode('massaction=1').
-                       '/internal_image/'.implode(',',$pidList).'/';
+            $extends = '/filter/' .
+                base64_encode('massaction=1') .
+                '/internal_image/' . implode(',', $pidList) . '/';
 
         }
-        if($fragment) {
-            header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends , array('_fragment' => $fragment)));
+        if ($fragment) {
+            header('Location: ' . Mage::getUrl("udprod/vendor_image/" . $extends, array('_fragment' => $fragment)));
         } else {
-            header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends));
+            header('Location: ' . Mage::getUrl("udprod/vendor_image/" . $extends));
         }
 
         exit();
 
     }
-    protected function _prepareMapper($skuvS = array()) {
+
+    protected function _prepareMapper($skuvS = array())
+    {
         /* @var $mapper  Zolago_Catalog_Model_Mapper */
         $mapper = Mage::getModel('zolagocatalog/mapper');
         $mapper->setPath($this->_getPath());
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
-        if(!empty($skuvS)) {
+        if (!empty($skuvS)) {
             $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
         }
         $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
@@ -63,35 +76,37 @@ class Zolago_Catalog_Vendor_ImageController
         $mapper->setCollection($collection);
         return $mapper;
     }
-    public function namemapAction() {
+
+    public function namemapAction()
+    {
         /* @var $mapperModel  Zolago_Catalog_Model_Mapper */
         $mapperModel = Mage::getModel('zolagocatalog/mapper');
         $mapperModel->setPath($this->_getPath());
         $list = $mapperModel->_getFileList();
 
         $skuvS = array();
-        if(!empty($list)) {
-            foreach($list as $imageFile) {
+        if (!empty($list)) {
+            foreach ($list as $imageFile) {
                 $skuvS[] = explode('.', $imageFile)[0];
             }
         }
 
-        /* @var $mapper    Zolago_Catalog_Model_Mapper  */
+        /* @var $mapper    Zolago_Catalog_Model_Mapper */
         $mapper = $this->_prepareMapper($skuvS);
         $response = $mapper->mapByName($list);
         $count = $response['count'];
         $message = $response['message'];
 
-        if($count > 0){
+        if ($count > 0) {
             Mage::getModel('catalog/product_image')->clearCache();
-            if(!empty($message))
+            if (!empty($message))
                 $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)));
 
-            $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
+            $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '), $count));
 
         } else {
-            if(!empty($message))
-                $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0') .'<br /> ' . implode('<br/> ', $message)));
+            if (!empty($message))
+                $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Processed images: 0') . '<br /> ' . implode('<br/> ', $message)));
 
             $this->_makeRedirect(false, 'tab_1_2');
         }
@@ -107,7 +122,7 @@ class Zolago_Catalog_Vendor_ImageController
         $result = array();
         if (empty($data)) {
             $result['status'] = 0;
-            $result['message'] = array('count' => 0,'message'=>Mage::helper('zolagocatalog')->__('Nothing to map'));
+            $result['message'] = array('count' => 0, 'message' => Mage::helper('zolagocatalog')->__('Nothing to map'));
         }
         //var_export($result);
         $skuvS = array();
@@ -116,21 +131,21 @@ class Zolago_Catalog_Vendor_ImageController
             $skuvS[] = trim(explode('.', $imageFile)[0]);
         }
         //var_export($skuvS);
-        /* @var $mapper    Zolago_Catalog_Model_Mapper  */
+        /* @var $mapper    Zolago_Catalog_Model_Mapper */
         $mapper = $this->_prepareMapper($skuvS);
         $response = $mapper->mapByName($data);
         $result['status'] = 1;
         $result['message'] = array(
             'count' => $response['count'],
-            'message'=> $response['message'],
+            'message' => $response['message'],
             'pid' => $response['pid']
         );
         var_export($result);
     }
 
 
-
-    public function csvmapAction() {
+    public function csvmapAction()
+    {
         $pidList = array();
         try {
 
@@ -155,21 +170,21 @@ class Zolago_Catalog_Vendor_ImageController
 
             /* @var $mapper  Zolago_Catalog_Model_Mapper */
             $mapper = $this->_prepareMapper($skuvS);
-            $response  = $mapper->mapByFile($importList);
+            $response = $mapper->mapByFile($importList);
             $count = $response['count'];
             $message = $response['message'];
-            if($count > 0) {
-                if(!empty($message))
+            if ($count > 0) {
+                if (!empty($message))
                     $this->_getSession()->addError(sprintf(Mage::helper('zolagocatalog')->__('Errors: ') . implode('<br/> ', $message)));
 
-                $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '),$count));
+                $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Processed images: %s '), $count));
                 $pidList = $mapper->getPidList();
 
             } else {
                 $out = Mage::helper('zolagocatalog')->__('Processed images: 0');
                 if (is_array($message)) {
-                    $out .= '<br/>'.implode('<br/>',$message);
-                }                
+                    $out .= '<br/>' . implode('<br/>', $message);
+                }
                 $this->_getSession()->addError($out);
                 $this->_makeRedirect(false, 'tab_1_2');
             }
@@ -182,23 +197,26 @@ class Zolago_Catalog_Vendor_ImageController
     }
 
 
-    public function queueAction() {
+    public function queueAction()
+    {
         $this->_renderPage(null, 'udprod_image');
     }
 
-    protected function _getPath() {
+    protected function _getPath()
+    {
         $extendedPath = $this->_getVendorId();
-        $path = 'var'.DIRECTORY_SEPARATOR.'plupload'.DIRECTORY_SEPARATOR.$extendedPath;
+        $path = 'var' . DIRECTORY_SEPARATOR . 'plupload' . DIRECTORY_SEPARATOR . $extendedPath;
         return $path;
     }
 
-    public function connectorAction() {
+    public function connectorAction()
+    {
         $extendedPath = $this->_getVendorId();
         $path = 'lib/ElFinder';
-        include_once $path.DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
-        include_once $path.DIRECTORY_SEPARATOR.'elFinder.class.php';
-        include_once $path.DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
-        include_once $path.DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSystem.class.php';
+        include_once $path . DIRECTORY_SEPARATOR . 'elFinderConnector.class.php';
+        include_once $path . DIRECTORY_SEPARATOR . 'elFinder.class.php';
+        include_once $path . DIRECTORY_SEPARATOR . 'elFinderVolumeDriver.class.php';
+        include_once $path . DIRECTORY_SEPARATOR . 'elFinderVolumeLocalFileSystem.class.php';
 // Required for MySQL storage connector
 // include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeMySQL.class.php';
 // Required for FTP connector support
@@ -209,27 +227,29 @@ class Zolago_Catalog_Vendor_ImageController
          * Simple function to demonstrate how to control file access using "accessControl" callback.
          * This method will disable accessing files/folders starting from  '.' (dot)
          *
-         * @param  string  $attr  attribute name (read|write|locked|hidden)
-         * @param  string  $path  file path relative to volume root directory started with directory separator
+         * @param  string $attr attribute name (read|write|locked|hidden)
+         * @param  string $path file path relative to volume root directory started with directory separator
          * @return bool|null
          **/
-        function access($attr, $path, $data, $volume) {
+        function access($attr, $path, $data, $volume)
+        {
             return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
-                                                    ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-                                                    :  null;                                    // else elFinder decide it itself
+                ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
+                : null;                                    // else elFinder decide it itself
         }
+
         $path = $this->_getPath();
         $opts = array(
-                    // 'debug' => true,
-                    'roots' => array(
-                        array(
-                            'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-                            'path'          => $path,         // path to files (REQUIRED)
-                            'URL'           => dirname($_SERVER['PHP_SELF']) . 'var/plupload/'.$extendedPath, // URL to files (REQUIRED)
-                            'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
-                        )
-                    )
-                );
+            // 'debug' => true,
+            'roots' => array(
+                array(
+                    'driver' => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
+                    'path' => $path,         // path to files (REQUIRED)
+                    'URL' => dirname($_SERVER['PHP_SELF']) . 'var/plupload/' . $extendedPath, // URL to files (REQUIRED)
+                    'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
+                )
+            )
+        );
 
 // run elFinder
         // Create target dir
@@ -241,10 +261,12 @@ class Zolago_Catalog_Vendor_ImageController
 
 
     }
+
     /**
      * upload
      */
-    public function uploadAction() {
+    public function uploadAction()
+    {
         /**
          * upload.php
          *
@@ -287,9 +309,9 @@ class Zolago_Catalog_Vendor_ImageController
 
         $vendor = $this->_getSession()->getVendor();
         if ($vendor) {
-            $targetDir .= DIRECTORY_SEPARATOR. $vendor->getId();
+            $targetDir .= DIRECTORY_SEPARATOR . $vendor->getId();
         } else {
-            $targetDir .= DIRECTORY_SEPARATOR. '0';
+            $targetDir .= DIRECTORY_SEPARATOR . '0';
         }
         //$targetDir = 'uploads';
         $cleanupTargetDir = true; // Remove old files
@@ -379,13 +401,217 @@ class Zolago_Catalog_Vendor_ImageController
         die(' {"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 
     }
-    protected function _checkImage($path) {
+
+    protected function _checkImage($path)
+    {
         if (getimagesize($path)) {
             return true;
         } else {
             return false;
         }
     }
+
+
+    public function setMainGalleryPage($productId)
+    {
+        $firstImageValue = Mage::getResourceModel("zolagocatalog/product_gallery")
+            ->getFirstEnabledProductImage($productId);
+
+        $product = Mage::getModel('catalog/product')->load($productId);
+
+        Mage::log($firstImageValue, null,"XXX.log");
+        if (!empty($firstImageValue)) {
+            $image = $firstImageValue["value"];
+
+            $product->setImage($image);
+            $product->getResource()->saveAttribute($product, 'image');
+            $product->setSmallImage($image);
+            $product->getResource()->saveAttribute($product, 'small_image');
+            $product->setThumbnail($image);
+            $product->getResource()->saveAttribute($product, 'thumbnail');
+        }
+
+
+
+        //3. put products to solr queue
+        //catalog_converter_price_update_after
+        if ($product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => array($product->getId())
+                )
+            );
+        }
+    }
+
+    /**
+     * Reorder products from Vendor Panel -> Zarządzanie zdjęciami
+     * /udprod/vendor_image/
+     * @return array
+     * @throws Exception
+     */
+    public function changeProductImagesOrderAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $imagesData = $this->getRequest()->getParam("images", array());
+        if (empty($productId))
+            return array();
+
+        if (empty($imagesData))
+            return array();
+
+        $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        //1. set position
+        foreach ($imagesData as $position => $value_id) {
+            $where = $writeConnection->quoteInto("value_id=?", $value_id);
+            $writeConnection->update(
+                $productMediaValueTable,
+                array("position" => $position),
+                $where
+            );
+        }
+        //2. set first image as image, small_image and thumbnail
+        $this->setMainGalleryPage($productId);
+    }
+
+
+    /**
+     * Enable/disable product image
+     */
+    public function toggleAvailabilityProductImageAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $imageValue = $this->getRequest()->getParam("image_value", null);
+        $action = $this->getRequest()->getParam("action", 0);
+
+        $enableImage = self::PRODUCT_IMAGE_ENABLE;
+        $disableImage = self::PRODUCT_IMAGE_DISABLE;
+
+        $resource = Mage::getSingleton('core/resource');
+
+        $writeConnection = $resource->getConnection('core_write');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        try {
+            $where = $writeConnection->quoteInto("value_id=?", $imageValue);
+            if ($action == $disableImage) {
+
+                $writeConnection->update(
+                    $productMediaValueTable,
+                    array("disabled" => $disableImage),
+                    $where
+                );
+            } else {
+                $writeConnection->update(
+                    $productMediaValueTable,
+                    array("disabled" => $enableImage),
+                    $where
+                );
+            }
+
+            $this->setMainGalleryPage($productId);
+
+        } catch (GH_Common_Exception $e) {
+            Mage::logException($e);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
+
+    /**
+     * Delete product image
+     */
+    public function deleteProductImageAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $imageValue = $this->getRequest()->getParam("image_value", null);
+        Mage::log($productId, null,"XXX.log");
+        $resource = Mage::getSingleton('core/resource');
+
+        $writeConnection = $resource->getConnection('core_write');
+        $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
+        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+        try {
+            $where = $writeConnection->quoteInto("value_id=?", $imageValue);
+
+            $writeConnection->delete($productMediaTable, $where);
+            $writeConnection->delete($productMediaValueTable, $where);
+
+            $this->setMainGalleryPage($productId);
+        } catch (GH_Common_Exception $e) {
+            Mage::logException($e);
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
+
+    public function uploadProductImageAction()
+    {
+        $productId = $this->getRequest()->getParam("product", null);
+        $product = Mage::getModel("catalog/product")->load($productId);
+
+        $_helper = Mage::helper("zolagocatalog");
+        /* @var $_helperGHCommon GH_Common_Helper_Data */
+        $_helperGHCommon = Mage::helper('ghcommon');
+        $file = $_FILES["vendor_image_upload"];
+        $size = $file["size"];
+
+        $maxUploadFileSize = $_helperGHCommon->getMaxUploadFileSize();
+        if ($size >= $maxUploadFileSize) { //5MB
+            $result = array(
+                'error' => $_helper->__("File too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1))
+            );
+        } else {
+            try {
+                $uploader = new Mage_Core_Model_File_Uploader('vendor_image_upload');
+                $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
+                $uploader->addValidateCallback(
+                    'catalog_product_image',
+                    Mage::helper('catalog/image'), 'validateUploadFile');
+                $uploader->setAllowRenameFiles(true);
+                $uploader->setFilesDispersion(true);
+                $result = $uploader->save(Mage::getSingleton('catalog/product_media_config')->getBaseTmpMediaPath());
+
+                $imagePath = $result["path"] . $result["file"];
+                Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+                $product->addImageToMediaGallery($imagePath, null, false, true);
+                $product->save();
+
+
+                /*Set label*/
+                $_product = Mage::getModel("catalog/product")->load($productId);
+                $gallery = $_product->getData('media_gallery');
+                if (isset($gallery['images']) && count($gallery['images']) > 1) {
+                    if (isset($gallery['images'][count($gallery['images']) - 1])) {
+                        $lastImage = $gallery['images'][count($gallery['images']) - 1];
+                        $lastImage['label'] = $_product->getName();
+                        $lastImage['disabled'] = 0;
+                        array_push($gallery['images'], $lastImage);
+                        $_product->setData('media_gallery', $gallery);
+                        $_product->save();
+                    }
+                }
+                /*Set label*/
+
+
+                $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
+
+            } catch (Exception $e) {
+                $result = array(
+                    'error' => $_helper->__($e->getMessage()),
+                    'errorcode' => $e->getCode());
+            }
+        }
+
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+    }
+
+
 }
 
 

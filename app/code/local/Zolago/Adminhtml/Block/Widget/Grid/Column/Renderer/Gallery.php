@@ -4,28 +4,30 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
 
+    /**
+     * @param Varien_Object $row
+     * @return string
+     */
     public function render(Varien_Object $row)
     {
         $out = '';
-        $product = Mage::getModel('zolagocatalog/product')->load($row->getEntityId());
-        $catalogHelper = $this->helper('catalog/image');
+        $productId = $row->getEntityId();
+        $_helper = Mage::helper("zolagocatalog");
 
-        $gallery = $product->getFullMediaGalleryImages();
+        $out .= "<div class='col-md-11 vendor-image-container no-padding'>";
+        $out .= Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
+        $out .= "</div>";
 
-        if ($gallery->count() > 0) {
-            foreach ($gallery as $_image) {
-                $thUrl = $catalogHelper->init($product, 'thumbnail', $_image->getFile())->resize(100);
-
-                if($_image['disabled']) {
-                    $img = "<div class='mass-thumb-image need-to-check'><img src='" . $thUrl .'?'.time(). "' /></div>";
-                } else {
-                    $img = "<div class='mass-thumb-image'><img src='" . $thUrl . "' /></div>";
-                }
-
-                $out .= $img;
-            }
-        }
+        $out .= "<div class='vendor-image-upload col-md-1 pull-right no-padding'>
+                    <form>
+                        <span class='btn-file' title='" . $_helper->__("Upload image") . "'>
+                            <i class='icon icon-plus-sign'></i>
+                            <input type='hidden' name='product' value='{$productId}' />
+                            <input type='file' name='vendor_image_upload' />
+                        </span>
+                    </form>
+                </div>";
         return $out;
     }
-	
+
 }
