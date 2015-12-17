@@ -659,6 +659,7 @@ div .view_lupa {
 .vendor-image {
 	list-style-type: none;
 	height: 110px;
+    padding: 0;
 }
 .vendor-image li {
     display: block;
