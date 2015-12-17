@@ -90,7 +90,6 @@
         //CONTROLS
         //1. ZOOM
         $(document).on('click', '.vendor-image-zoom', function (e) {
-            //console.log("ZOOM");
             e.preventDefault();
             var controlLink = $(this);
             var parentContainer = controlLink.closest("li");
@@ -119,6 +118,7 @@
             var imageToDisable = (parentContainer.hasClass("need-to-check") ? 0 : 1);
 
 
+            parentContainer.find(".icon-ban-circle ").toggle();
             parentContainer.find(".vendor-image-refresh").show();
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/toggleAvailabilityProductImage")?>',
