@@ -321,6 +321,18 @@ $helper = Mage::helper("zolagocatalog");
 	require(['vendor/catalog/productGrid'], function(productGrid) {
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
         window.productGrid = productGrid.startup("grid-holder");
+        var modal = jQuery("#product-image-popup");
+        modal.keydown(function(e) {
+            var car = jQuery('#product-image-popup .carousel');
+            switch(e.keyCode) {
+                case 39:
+                    car.trigger('rwd.next');
+                    break;                        
+                case 37:
+                    car.trigger('rwd.prev');
+                    break;
+            }
+        });
 	});
 </script>
 
