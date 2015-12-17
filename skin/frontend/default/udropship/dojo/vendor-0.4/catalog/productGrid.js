@@ -145,6 +145,10 @@ define([
 
         var el = jQuery(this);
         var modal = jQuery("#product-image-popup");
+		
+		// mark row
+		var row = grid.row(e);
+		jQuery(row.element).addClass('grid_row_highlighted');
 
         // Process enter click on thumb - redirect to a
         if (e instanceof KeyboardEvent) {
@@ -195,6 +199,7 @@ define([
             modal.one("hidden.bs.modal", function () {
                 grid.focus(grid.cell(node[0]));
                 modal.find(".modal-body .carousel").html("");
+				jQuery(row.element).removeClass('grid_row_highlighted');
             });
             modal.one("shown.bs.modal", function () {
                 modal.find("button").focus();

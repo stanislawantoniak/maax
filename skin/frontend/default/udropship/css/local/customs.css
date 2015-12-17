@@ -538,3 +538,7 @@ table.foot-empty-cells tfoot td:empty {
     font-size: 15px;
     font-weight: bold;
 }
+.grid_row_highlighted {
+/*	background-color: #60a1ea !important; */
+	background-color: #999 !important;
+}
