@@ -141,75 +141,94 @@ define([
     ////////////////////////////////////////////////////////////////////////////
     // Formatters & renderes
     ////////////////////////////////////////////////////////////////////////////
-
     var thumbnailHandler = function (e) {
+        e.preventDefault();
 
         var el = jQuery(this);
         var modal = jQuery("#product-image-popup");
+        var timeout = 0;
 
-		// mark row
-		var row = grid.row(e);
-		jQuery(row.element).addClass('grid_row_highlighted');
-
-        // Process enter click on thumb - redirect to a
-        if (e instanceof KeyboardEvent) {
-            if (e.keyCode != 13) {
-                return;
-            }
-            if (modal.length && modal.is(":visible")) {
-                modal.modal("hide");
-                return;
-            }
-            el = jQuery(this).find("a");
+        if(modal.is(":visible")) {
+            timeout = 250;
+            modal.find('button.close').click();
         }
 
-        var node = el.parents("td");
+        setTimeout(function() {
+            // mark row
+            var row = grid.row(e),
+                rowClass = 'grid_row_highlighted';
+
+            jQuery('.'+rowClass).removeClass(rowClass);
+            jQuery(row.element).addClass(rowClass);
+
+            // Process enter click on thumb - redirect to a
+            if (e instanceof KeyboardEvent) {
+                if (e.keyCode != 13) {
+                    return;
+                }
+                if (modal.length && modal.is(":visible")) {
+                    modal.modal("hide");
+                    return;
+                }
+                el = jQuery(this).find("a");
+            }
+
+            var node = el.parents("td");
 
 
-        modal.find(".modal-title").text(el.attr("title")).prepend('<big><i class="icon icon-move"></i></big>&nbsp;&nbsp;');
-        modal.find(".modal-body").html('<div class="carousel">'+gallery[row.id]+'</div>');
-        jQuery('#product-image-popup .carousel').rwdCarousel({
-            items : 1,
-            pagination : true,
-            itemsScaleUp:true,
-            rewindNav : false,
-            navigation: true,
-            navigationText: [
-                "<div class='col-md-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
-                "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
-            ],
-			
-        }).find('.rwd-item').click(function(e) {
-			       var offset = jQuery(this).offset(); 
-       			   var pos_x = e.pageX - offset.left;
-			       var middle = jQuery(this).outerWidth() / 2;
+            modal.find(".modal-title").text(el.attr("title")).prepend('<big><i class="icon icon-move"></i></big>&nbsp;&nbsp;');
+            modal.find(".carousel").remove();
+            modal.find(".modal-body").html('<div class="carousel">'+gallery[row.id]+'</div>');
+            jQuery('#product-image-popup .carousel').rwdCarousel({
+                items : 1,
+                itemsDesktop : [1000,1], //5 items between 1000px and 901px
+                itemsDesktopSmall : [900,1], // betweem 900px and 601px
+                itemsTablet: [600,1], //2 items between 600 and 0
+                itemsMobile : [480,1],
+                pagination : true,
+                itemsScaleUp:true,
+                rewindNav : false,
+                navigation: true,
+                navigationText: [
+                    "<div class='col-xs-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
+                    "<div class='col-xs-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
+                ],
 
-			       if(pos_x < middle)
-			       {
-						jQuery(this).trigger('rwd.prev');
-			       }
-			       else
-			       {
-						jQuery(this).trigger('rwd.next');
-			       }
-		});
-				
-        // focus cell after close modal
-        if (node.length) {
-            modal.one("hidden.bs.modal", function () {
-                grid.focus(grid.cell(node[0]));
-                modal.find(".modal-body .carousel").html("");
-				jQuery(row.element).removeClass('grid_row_highlighted');
+            }).find('.rwd-item').click(function(e) {
+                var offset = jQuery(this).offset();
+                var pos_x = e.pageX - offset.left;
+                var middle = jQuery(this).outerWidth() / 2;
+
+                if(pos_x < middle)
+                {
+                    jQuery(this).trigger('rwd.prev');
+                }
+                else
+                {
+                    jQuery(this).trigger('rwd.next');
+                }
             });
-            modal.one("shown.bs.modal", function () {
-                modal.find("button").focus();
+
+            // focus cell after close modal
+            if (node.length) {
+                modal.one("hidden.bs.modal", function () {
+                    grid.focus(grid.cell(node[0]));
+                    modal.find(".modal-body .carousel").html("");
+                    jQuery('.' + rowClass).removeClass(rowClass);
+                });
+                modal.one("shown.bs.modal", function () {
+                    window.thumbnailModalOpened = true;
+                    modal.find("button").focus();
+                });
+            }
+
+
+            modal.modal({backdrop: false});
+
+            jQuery("#product-image-popup").draggable({
+                handle: ".modal-header"
             });
-        }
-        modal.modal({backdrop: false});
-        jQuery("#product-image-popup").draggable({
-            handle: ".modal-header"
-        });
-        e.preventDefault();
+        },timeout);
     };
 
     /**
