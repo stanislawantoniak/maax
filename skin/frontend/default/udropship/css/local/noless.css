@@ -661,6 +661,10 @@
 }
 
 
+.udprod-vendor_image-index .hor-scroll {
+    overflow: initial;
+}
+
 .vendor-image .vendor-image-refresh {
 	display: none;
 	color: #000000;
