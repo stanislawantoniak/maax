@@ -145,7 +145,7 @@ define([
 
         var el = jQuery(this);
         var modal = jQuery("#product-image-popup");
-		
+
 		// mark row
 		var row = grid.row(e);
 		jQuery(row.element).addClass('grid_row_highlighted');
@@ -179,7 +179,7 @@ define([
                 "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
             ],
 			
-        }).click(function(e) {
+        }).find('.rwd-item').click(function(e) {
 			       var offset = jQuery(this).offset(); 
        			   var pos_x = e.pageX - offset.left;
 			       var middle = jQuery(this).outerWidth() / 2;
@@ -801,7 +801,6 @@ define([
 
 
         window.grid = grid = new PriceGrid(config, container);
-
         // listen for selection via space, ctrl + mouse
         grid.on(".dgrid-row:keyup", handleSelection);
         grid.on("td.dgrid-cell:click", handleSelection);
