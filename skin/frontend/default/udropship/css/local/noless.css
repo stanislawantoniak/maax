@@ -643,11 +643,12 @@
     cursor: pointer;
 }
 
-.vendor-image li:hover .vendor-image-controls a:hover {
-    -webkit-transform:scale(1.5);
-    -moz-transform:scale(1.5);
-    -o-transform:scale(1.5);
-    transform:scale(1.5);
+.vendor-image li:hover {
+    -webkit-transform:scale(2);
+    -moz-transform:scale(2);
+    -o-transform:scale(2);
+    transform:scale(2);
+	z-index: 100;
 }
 
 .vendor-image .vendor-image-refresh {
