@@ -590,6 +590,7 @@ class Zolago_Catalog_Vendor_ImageController
                     if (isset($gallery['images'][count($gallery['images']) - 1])) {
                         $lastImage = $gallery['images'][count($gallery['images']) - 1];
                         $lastImage['label'] = $_product->getName();
+                        $lastImage['disabled'] = 0;
                         array_push($gallery['images'], $lastImage);
                         $_product->setData('media_gallery', $gallery);
                         $_product->save();
