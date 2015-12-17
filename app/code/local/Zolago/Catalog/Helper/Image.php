@@ -34,7 +34,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 if ($_image['disabled']) {
                     $img = "<li data-productname='{$productName}' data-image='{$imageUrl}' data-product='{$productId}' data-value='{$valueId}' class='mass-thumb-image need-to-check'>
                     <div class='vendor-image-controls'>
-                    <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'>
+                    <a class='vendor-image-availability' title='" . $_helper->__("This photo is currently disabled and you can not see them on your product page. You can enable on the picture by clicking on this button.") . "'>
                     <i class='icon-eye-close'></i>
                     </a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
@@ -47,7 +47,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 } else {
                     $img = "<li data-productname='{$productName}' data-image='{$imageUrl}' data-product='{$productId}' data-value='{$valueId}' class='mass-thumb-image'>
                     <div class='vendor-image-controls'>
-                    <a class='vendor-image-availability' title='" . $_helper->__("Disable") . "'>
+                    <a class='vendor-image-availability' title='" . $_helper->__("This photo is currently enabled and you can see them on your product page. You can turn off the picture by clicking on this button.") . "'>
                     <i class='icon-eye-open'></i>
                     </a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
