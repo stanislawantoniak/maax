@@ -734,7 +734,7 @@ div .view_lupa {
     overflow: hidden;
     border: none;
     border-radius: 20px;
-	font-size: 30px;
+	font-size: 14px;
 	cursor: pointer;
 }
 
@@ -753,4 +753,20 @@ div .view_lupa {
     cursor: pointer;
     display: block;
     width: 10px;
+}
+
+.vendor-image .mass-thumb-image .icon-ban-circle {
+    top: -75px;
+    right: 0px;
+    position: relative;
+    font-size: 4em;
+    opacity: 0.40;
+}
+
+.vendor-image .mass-thumb-image .icon-ban-circle:hover {
+    -webkit-transform:scale(1.5);
+    -moz-transform:scale(1.5);
+    -o-transform:scale(1.5);
+    transform:scale(1.5);
+    z-index: 100;
 }
