@@ -768,5 +768,5 @@ div .view_lupa {
     -moz-transform:scale(1.5);
     -o-transform:scale(1.5);
     transform:scale(1.5);
-    z-index: 100;
+    z-index: 0;
 }
