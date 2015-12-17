@@ -634,4 +634,18 @@
 }
 
 
+div .view_lupa {
+	position: absolute;
+	bottom: 2%;
+	right: 10px;
+	z-index: 900;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	background: url('/skin/frontend/modago/gallery/images/sprites/all-s399d59bcea.png');
+	background-position: -181px -451px;
+	height: 49px;
+	width: 49px;
+}
+
 /* Zarządzaj opisami produktów */
