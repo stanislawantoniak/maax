@@ -715,6 +715,10 @@ div .view_lupa {
 }
 
 
+.udprod-vendor_image-index .hor-scroll {
+    overflow: initial;
+}
+
 .vendor-image .vendor-image-refresh {
 	display: none;
 	color: #000000;
@@ -736,10 +740,8 @@ div .view_lupa {
 .vendor-image-upload .btn-file {
     position: relative;
     overflow: hidden;
-    border: none;
-    border-radius: 20px;
 	font-size: 14px;
-	cursor: pointer;
+	cursor: pointer !important;
 }
 
 .vendor-image-upload .btn-file input[type=file] {
@@ -756,21 +758,22 @@ div .view_lupa {
     background: white;
     cursor: pointer;
     display: block;
-    width: 10px;
+    /*width: 10px;*/
+    margin-top: 0px;
 }
 
 .vendor-image .mass-thumb-image .icon-ban-circle {
-    top: -75px;
-    right: 0px;
-    position: relative;
-    font-size: 4em;
-    opacity: 0.40;
+top: -75px;
+right: 0px;
+position: relative;
+font-size: 4em;
+opacity: 0.40;
 }
 
 .vendor-image .mass-thumb-image .icon-ban-circle:hover {
-    -webkit-transform:scale(1.5);
-    -moz-transform:scale(1.5);
-    -o-transform:scale(1.5);
-    transform:scale(1.5);
-    z-index: 0;
+-webkit-transform:scale(1.5);
+-moz-transform:scale(1.5);
+-o-transform:scale(1.5);
+transform:scale(1.5);
+z-index: 0;
 }
