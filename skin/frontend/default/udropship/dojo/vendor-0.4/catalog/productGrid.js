@@ -174,11 +174,6 @@ define([
                 "<div class='col-md-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
                 "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
             ],
-			afterInit: function () { 
-					jQuery(this).keypress(function(event) {
-						alert(e.keyCode);
-					})
-			},
 			
         }).click(function(e) {
 			       var offset = jQuery(this).offset(); 
@@ -194,8 +189,7 @@ define([
 						jQuery(this).trigger('rwd.next');
 			       }
 		});
-
-		
+				
         // focus cell after close modal
         if (node.length) {
             modal.one("hidden.bs.modal", function () {
