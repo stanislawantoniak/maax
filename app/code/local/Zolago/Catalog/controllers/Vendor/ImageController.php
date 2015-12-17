@@ -414,14 +414,13 @@ class Zolago_Catalog_Vendor_ImageController
 
     public function setMainGalleryPage($productId)
     {
-        $firstImageValue = Mage::getResourceModel("zolagocatalog/product_gallery")
-            ->getFirstEnabledProductImage($productId);
+        $enabledImages = Mage::getResourceModel("zolagocatalog/product_gallery")
+            ->getEnabledProductImages($productId);
 
         $product = Mage::getModel('catalog/product')->load($productId);
 
-        Mage::log($firstImageValue, null,"XXX.log");
-        if (!empty($firstImageValue)) {
-            $image = $firstImageValue["value"];
+        if (!empty($enabledImages) && isset($enabledImages[0])) {
+            $image = $enabledImages[0];
 
             $product->setImage($image);
             $product->getResource()->saveAttribute($product, 'image');
@@ -430,7 +429,6 @@ class Zolago_Catalog_Vendor_ImageController
             $product->setThumbnail($image);
             $product->getResource()->saveAttribute($product, 'thumbnail');
         }
-
 
 
         //3. put products to solr queue
@@ -488,38 +486,70 @@ class Zolago_Catalog_Vendor_ImageController
         $imageValue = $this->getRequest()->getParam("image_value", null);
         $action = $this->getRequest()->getParam("action", 0);
 
+        $enabledImages = Mage::getResourceModel("zolagocatalog/product_gallery")
+            ->getEnabledProductImages($productId);
+
+        $product = Mage::getModel("catalog/product")->load($productId);
+        $productStatus = $product->getStatus();
+
         $enableImage = self::PRODUCT_IMAGE_ENABLE;
         $disableImage = self::PRODUCT_IMAGE_DISABLE;
 
-        $resource = Mage::getSingleton('core/resource');
+        $_helper = Mage::helper("zolagocatalog");
 
-        $writeConnection = $resource->getConnection('core_write');
-        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+        //If product enabled then last image can't be disabled
+        if (
+            $action == $disableImage
+            && $productStatus == Mage_Catalog_Model_Product_Status::STATUS_ENABLED
+            && (count($enabledImages) <= 1)
+        ) {
+            $result = array(
+                'status' => 0,
+                'error' => $_helper->__("Product is enabled and it should have at least one enabled image.")
+            );
+        } else {
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
 
-        try {
-            $where = $writeConnection->quoteInto("value_id=?", $imageValue);
-            if ($action == $disableImage) {
+            try {
+                $where = $writeConnection->quoteInto("value_id=?", $imageValue);
+                if ($action == $disableImage) {
 
-                $writeConnection->update(
-                    $productMediaValueTable,
-                    array("disabled" => $disableImage),
-                    $where
+                    $writeConnection->update(
+                        $productMediaValueTable,
+                        array("disabled" => $disableImage),
+                        $where
+                    );
+                } else {
+                    $writeConnection->update(
+                        $productMediaValueTable,
+                        array("disabled" => $enableImage),
+                        $where
+                    );
+                }
+                $this->setMainGalleryPage($productId);
+                $result = array(
+                    'status' => 1
                 );
-            } else {
-                $writeConnection->update(
-                    $productMediaValueTable,
-                    array("disabled" => $enableImage),
-                    $where
+
+            } catch (GH_Common_Exception $e) {
+                Mage::logException($e);
+                $result = array(
+                    'status' => 0,
+                    'error' => $_helper->__($e->getMessage()),
+                    'errorcode' => $e->getCode()
+                );
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $result = array(
+                    'status' => 0,
+                    'error' => $_helper->__($e->getMessage()),
+                    'errorcode' => $e->getCode()
                 );
             }
-
-            $this->setMainGalleryPage($productId);
-
-        } catch (GH_Common_Exception $e) {
-            Mage::logException($e);
-        } catch (Exception $e) {
-            Mage::logException($e);
         }
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
 
     /**
@@ -529,25 +559,58 @@ class Zolago_Catalog_Vendor_ImageController
     {
         $productId = $this->getRequest()->getParam("product", null);
         $imageValue = $this->getRequest()->getParam("image_value", null);
-        Mage::log($productId, null,"XXX.log");
-        $resource = Mage::getSingleton('core/resource');
 
-        $writeConnection = $resource->getConnection('core_write');
-        $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
-        $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+        $enabledImages = Mage::getResourceModel("zolagocatalog/product_gallery")
+            ->getEnabledProductImages($productId);
 
-        try {
-            $where = $writeConnection->quoteInto("value_id=?", $imageValue);
+        $product = Mage::getModel("catalog/product")->load($productId);
+        $productStatus = $product->getStatus();
 
-            $writeConnection->delete($productMediaTable, $where);
-            $writeConnection->delete($productMediaValueTable, $where);
+        $_helper = Mage::helper("zolagocatalog");
 
-            $this->setMainGalleryPage($productId);
-        } catch (GH_Common_Exception $e) {
-            Mage::logException($e);
-        } catch (Exception $e) {
-            Mage::logException($e);
+        //If product enabled then last image can't be disabled
+        if (
+            $productStatus == Mage_Catalog_Model_Product_Status::STATUS_ENABLED
+            && (count($enabledImages) <= 1)
+        ) {
+            $result = array(
+                'status' => 0,
+                'error' => $_helper->__("Product is enabled and it should have at least one enabled image.")
+            );
+        } else {
+            $resource = Mage::getSingleton('core/resource');
+
+            $writeConnection = $resource->getConnection('core_write');
+            $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
+            $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
+
+            try {
+                $where = $writeConnection->quoteInto("value_id=?", $imageValue);
+
+                $writeConnection->delete($productMediaTable, $where);
+                $writeConnection->delete($productMediaValueTable, $where);
+
+                $this->setMainGalleryPage($productId);
+                $result = array(
+                    'status' => 1
+                );
+            } catch (GH_Common_Exception $e) {
+                Mage::logException($e);
+                $result = array(
+                    'status' => 0,
+                    'error' => $_helper->__($e->getMessage()),
+                    'errorcode' => $e->getCode()
+                );
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $result = array(
+                    'status' => 0,
+                    'error' => $_helper->__($e->getMessage()),
+                    'errorcode' => $e->getCode()
+                );
+            }
         }
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
 
     public function uploadProductImageAction()

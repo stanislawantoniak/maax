@@ -3,8 +3,12 @@
 class Zolago_Catalog_Model_Resource_Product_Gallery extends Mage_Catalog_Model_Resource_Product
 {
 
-
-    public function getFirstEnabledProductImage($productId)
+    /**
+     * Get product enabled images
+     * @param $productId
+     * @return array
+     */
+    public function getEnabledProductImages($productId)
     {
         $result = array();
 
@@ -29,9 +33,9 @@ class Zolago_Catalog_Model_Resource_Product_Gallery extends Mage_Catalog_Model_R
         $select->where("gallery_value.store_id=?", $defaultStoreId);
         $select->where("gallery_value.disabled=?", 0);
         $select->order("position ASC");
-        Mage::log($select->__toString(), null,"XXX.log");
+
         try {
-            $result = $readConnection->fetchRow($select);
+            $result = $readConnection->fetchCol($select);
 
         } catch (GH_Common_Exception $e) {
             Mage::logException($e);

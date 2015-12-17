@@ -14,6 +14,8 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
         $catalogHelper = Mage::helper('catalog/image');
         $_helper = Mage::helper("zolagocatalog");
 
+        $productStatus = $product->getStatus();
+
         $gallery = $product->getFullMediaGalleryImages();
 
         if ($gallery->count() > 0) {
@@ -21,7 +23,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
             $out .= "<ul class='vendor-image'>";
             foreach ($gallery as $_image) {
                 $_file = $_image->getFile();
-                $imageUrl = $_image->getUrl();
+
                 $thUrl = $catalogHelper->init($product, 'thumbnail', $_file)->resize(100);
                 $imageUrl = $catalogHelper->init($product, 'image', $_file)->resize(700);
 
@@ -32,7 +34,9 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 if ($_image['disabled']) {
                     $img = "<li data-productname='{$productName}' data-image='{$imageUrl}' data-product='{$productId}' data-value='{$valueId}' class='mass-thumb-image need-to-check'>
                     <div class='vendor-image-controls'>
-                    <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'><i class='icon-eye-close'></i></a>
+                    <a class='vendor-image-availability' title='" . $_helper->__("Enable") . "'>
+                    <i class='icon-eye-close'></i>
+                    </a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
                     <a class='vendor-image-delete' data-product='{$productId}' data-value='{$valueId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
@@ -43,7 +47,9 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                 } else {
                     $img = "<li data-productname='{$productName}' data-image='{$imageUrl}' data-product='{$productId}' data-value='{$valueId}' class='mass-thumb-image'>
                     <div class='vendor-image-controls'>
-                    <a class='vendor-image-availability' title='" . $_helper->__("Disable") . "'><i class='icon-eye-open'></i></a>
+                    <a class='vendor-image-availability' title='" . $_helper->__("Disable") . "'>
+                    <i class='icon-eye-open'></i>
+                    </a>
                     <a class='vendor-image-zoom' title='" . $_helper->__("Zoom") . "'><i class='icon-zoom-in'></i></a>
                     <a class='vendor-image-delete' data-value='{$valueId}' data-product='{$productId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>

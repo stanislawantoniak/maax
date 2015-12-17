@@ -1,11 +1,12 @@
-<link rel="stylesheet" media="screen and (min-width: 750px) and (max-width: 990px)" href="/skin/frontend/base/default/css/800.css" />
+<link rel="stylesheet" media="screen and (min-width: 750px) and (max-width: 990px)"
+      href="/skin/frontend/base/default/css/800.css"/>
 <?php $_helper = Mage::helper("zolagocatalog"); ?>
 
 <div class="container">
     <!--=== Page Header ===-->
     <div class="page-header">
         <div class="page-title">
-            <h3><?php echo $_helper->__("Mass Image");?></h3>
+            <h3><?php echo $_helper->__("Mass Image"); ?></h3>
         </div>
     </div>
     <div class="tabbable tabbabble-custom">
@@ -14,21 +15,21 @@
                 <a name="tmp"></a>
             </li>
             <li class="active" style="float:left">
-                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagocatalog')->__('Images');?></a>
+                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagocatalog')->__('Images'); ?></a>
             </li>
             <li class="" style="float:left;">
-                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add');?></a>
+                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add'); ?></a>
             </li>
 
 
         </ul>
         <div class="tab-content">
             <div id="tab_1_1" class="tab-pane active">
-                <?php echo $this->getChildHtml("image_list");?>
+                <?php echo $this->getChildHtml("image_list"); ?>
             </div>
 
             <div id="tab_1_2" class="tab-pane">
-                <?php echo $this->getChildHtml("image_queue");?>
+                <?php echo $this->getChildHtml("image_queue"); ?>
             </div>
 
         </div>
@@ -36,14 +37,14 @@
 </div>
 <script type="text/javascript">
     jQuery(function ($) {
-        var startLoadingNoProgressBar = function(){
+        var startLoadingNoProgressBar = function () {
 
             var loader = jQuery("#vendor-loading");
-            if(!loader.length){
+            if (!loader.length) {
                 loader = jQuery("<div>").attr({
                     "id": "vendor-loading",
                     class: "with-progress",
-                }).click(function(){
+                }).click(function () {
                     return false;
                 }).hide().appendTo("body");
             }
@@ -51,7 +52,7 @@
         }
 
         initDragSort($(".vendor-image"));
-        $('.vendor-image-upload input[type=file]').change(function() {
+        $('.vendor-image-upload input[type=file]').change(function () {
             if (!jQuery(this)[0].files[0]) {
                 return; // If no file to send
             }
@@ -68,10 +69,10 @@
                 contentType: false,
                 processData: false,
                 enctype: 'multipart/form-data'
-            }).done(function(result){
+            }).done(function (result) {
                 data = $.parseJSON(result);
                 stopLoading();
-                if(data.error){
+                if (data.error) {
                     noty({
                         text: data.error,
                         type: 'error',
@@ -131,26 +132,39 @@
                     product: parentContainer.data("product"),
                     image_value: parentContainer.data("value")
                 },
-                success: function(result){
-                    parentContainer.find(".vendor-image-refresh").hide();
-                    if(imageToDisable){
-                        availabilityLink
-                            .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
-                            .html("<i class='icon-eye-close'></i>");
-                        parentContainer.tooltip('enable').addClass("need-to-check")
-                            .tooltip({
-                                title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
-                            })
-                            .find("img").css({"opacity": "0.5"});
+                success: function (result) {
+                    data = $.parseJSON(result);
+
+                    if (data.error) {
+                        //You can not disabel last Enabled Image
+                        noty({
+                            text: data.error,
+                            type: 'error',
+                            timeout: 4000
+                        });
                     } else {
-                        availabilityLink
-                            .attr("title","<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
-                            .html("<i class='icon-eye-open'></i>");
-                        parentContainer.removeClass("need-to-check").tooltip('disable')
-                            .find("img").css({"opacity": "1"});
+                        if (imageToDisable) {
+                            availabilityLink
+                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
+                                .html("<i class='icon-eye-close'></i>");
+                            parentContainer.tooltip('enable').addClass("need-to-check")
+                                .tooltip({
+                                    title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                                })
+                                .find("img").css({"opacity": "0.5"});
+                        } else {
+                            availabilityLink
+                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
+                                .html("<i class='icon-eye-open'></i>");
+                            parentContainer.removeClass("need-to-check").tooltip('disable')
+                                .find("img").css({"opacity": "1"});
+                        }
                     }
 
+
                 }
+            }).done(function () {
+                parentContainer.find(".vendor-image-refresh").hide();
             });
         });
 
@@ -158,26 +172,18 @@
         $(document).on('click', '.vendor-image-delete', function (e) {
             var productImages = $(this).closest(".vendor-image").find("li");
 
-            if(productImages.length < 2){
-                //You can not delete last Image
-                noty({
-                    text: "<?php echo $_helper->__('You can not delete last image'); ?>",
-                    type: 'error',
-                    timeout: 4000
-                });
-            } else {
-                //Delete modal
-                $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'));
-                $('#vendorImageDelete').find('.btn-ok').data('product', $(this).data('product'));
-                $('#vendorImageDelete').modal("show");
-            }
+            //Delete modal
+            $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'));
+            $('#vendorImageDelete').find('.btn-ok').data('product', $(this).data('product'));
+            $('#vendorImageDelete').modal("show");
+
         });
 
         $("#vendorImageDelete .btn-ok").click(function (e) {
             e.preventDefault();
             var productImageToDelete = $("#vendorImageDelete .btn-ok").data('product');
             var imageToDelete = $("#vendorImageDelete .btn-ok").data('value');
-            $(".vendor-image li[data-value="+imageToDelete+"] .vendor-image-refresh").show();
+            $(".vendor-image li[data-value=" + imageToDelete + "] .vendor-image-refresh").show();
             $('#vendorImageDelete').modal("hide");
 
             $.ajax({
@@ -188,9 +194,21 @@
                     image_value: imageToDelete
                 },
                 success: function (result) {
-                    $(".vendor-image li[data-value='" + imageToDelete + "']").remove();
-
+                    data = $.parseJSON(result);
+                    if (data.error) {
+                        //You can not disable last Enabled Image
+                        noty({
+                            text: data.error,
+                            type: 'error',
+                            timeout: 4000
+                        });
+                        $(".vendor-image li[data-value=" + imageToDelete + "] .vendor-image-refresh").hide();
+                    } else {
+                        $(".vendor-image li[data-value='" + imageToDelete + "']").remove();
+                    }
                 }
+            }).done(function () {
+                $(".vendor-image li[data-value=" + imageToDelete + "] .vendor-image-refresh").hide();
             });
 
         });
@@ -208,7 +226,7 @@
         });
 
 
-        function initDragSort(container){
+        function initDragSort(container) {
             container.dragsort({
                 dragSelector: "li",
                 placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
@@ -232,7 +250,7 @@
     });
 </script>
 <script type="text/javascript">
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function () {
         jQuery('.need-to-check').tooltip({
             title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
         }).find("img").css({"opacity": "0.5"});
@@ -259,7 +277,7 @@
     </div>
 </div>
 
-<div id="vendorImageDelete"  class="modal fade" role="dialog">
+<div id="vendorImageDelete" class="modal fade" role="dialog">
     <div class="modal-dialog  modal-sm">
         <div class="modal-content">
             <div class="modal-header">
