@@ -643,11 +643,12 @@
     cursor: pointer;
 }
 
-.vendor-image li:hover .vendor-image-controls a:hover {
+.vendor-image li:hover {
     -webkit-transform:scale(1.5);
     -moz-transform:scale(1.5);
     -o-transform:scale(1.5);
     transform:scale(1.5);
+	z-index: 100;
 }
 
 .vendor-image .vendor-image-refresh {
@@ -692,4 +693,5 @@
     background: white;
     cursor: pointer;
     display: block;
+    width: 10px;
 }
