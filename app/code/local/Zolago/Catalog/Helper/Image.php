@@ -48,6 +48,7 @@ class Zolago_Catalog_Helper_Image extends Mage_Catalog_Helper_Product
                     <a class='vendor-image-delete' data-value='{$valueId}' data-product='{$productId}' title='" . $_helper->__("Delete") . "'><i class='icon-trash'></i></a>
                     </div>
                     <img src='{$thUrl}' />
+                    <i class='icon icon-ban-circle' style='display: none'></i>
                     <div class='vendor-image-refresh'><i class='icon-spin icon-refresh'></i></div>
                     </li>";
                 }
