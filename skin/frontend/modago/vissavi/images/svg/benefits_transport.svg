@@ -12,7 +12,7 @@
    height="64"
    viewBox="0 0 64 64"
    id="svg2"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.48.5 r10040"
    sodipodi:docname="benefits_transport.svg">
   <metadata
      id="metadata58">
@@ -35,14 +35,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1140"
+     inkscape:window-height="1022"
      id="namedview56"
      showgrid="false"
-     inkscape:zoom="3.6875"
-     inkscape:cx="32"
-     inkscape:cy="32"
+     inkscape:zoom="14.75"
+     inkscape:cx="33.802793"
+     inkscape:cy="30.774725"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="159"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <style
@@ -130,15 +130,36 @@
        inkscape:connector-curvature="0"
        style="fill:none;stroke:#333433" />
   </g>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.5px;line-height:125%;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="13.559321"
-     y="29.016949"
-     id="text4211"
-     sodipodi:linespacing="125%"><tspan
-       sodipodi:role="line"
-       id="tspan4213"
-       x="13.559321"
-       y="29.016949">FREE</tspan></text>
+  <g
+     transform="matrix(0.73295216,0,0,-0.73295216,18.970835,22.225613)"
+     id="g44-7">
+    <path
+       style="fill:#373535"
+       inkscape:connector-curvature="0"
+       d="m 0,0 0,-1.5 -3.5,0 0,-2.2 2.9,0 0,-1.5 -2.9,0 0,-3.3 -2,0 0,8.6 L 0,0 z"
+       id="path46-1" />
+  </g>
+  <path
+     style="fill:#373535"
+     inkscape:connector-curvature="0"
+     d="m 21.181859,25.172449 0.586361,0 c 0.219887,0 0.366476,0 0.513067,-0.07329 0.146591,-0.07329 0.219885,-0.146591 0.366476,-0.219887 0.07329,-0.07329 0.146591,-0.219885 0.219885,-0.29318 0.07329,-0.146591 0.07329,-0.219885 0.07329,-0.366476 0,-0.293181 -0.07329,-0.513067 -0.29318,-0.659657 -0.219885,-0.146591 -0.513067,-0.219886 -0.879543,-0.219886 l -0.586361,0 0,1.832381 z m 0,1.026132 0,2.345447 -1.465904,0 0,-6.303389 2.052265,0 c 0.439772,0 0.806248,0 1.172724,0.146591 0.29318,0.07329 0.586362,0.219885 0.732952,0.366476 0.219886,0.146591 0.366476,0.366476 0.513067,0.586361 0.07329,0.219887 0.07329,0.513067 0.07329,0.732953 0,0.219886 0,0.439771 -0.07329,0.586362 0,0.14659 -0.146591,0.366476 -0.219885,0.513067 -0.146591,0.146589 -0.219887,0.29318 -0.366476,0.366476 -0.219887,0.146589 -0.366478,0.219885 -0.586363,0.366476 0.146591,0 0.219885,0.07329 0.293181,0.146589 0.07329,0.07329 0.146591,0.146591 0.219886,0.293182 l 1.319313,2.198856 -1.319313,0 c -0.219886,0 -0.439771,-0.07329 -0.513067,-0.29318 l -1.026132,-1.832381 c -0.07329,-0.07329 -0.07329,-0.14659 -0.146591,-0.14659 -0.07329,0 -0.14659,-0.07329 -0.293181,-0.07329 l -0.366476,0 z"
+     id="path50-3" />
+  <g
+     transform="matrix(0.73295216,0,0,-0.73295216,29.48628,22.225613)"
+     id="g52">
+    <path
+       style="fill:#373535"
+       inkscape:connector-curvature="0"
+       d="m 0,0 0,-1.5 -3.5,0 0,-2 2.7,0 0,-1.5 -2.7,0 0,-2 3.5,0 0,-1.5 -5.5,0 0,8.6 L 0,0 z"
+       id="path54" />
+  </g>
+  <g
+     transform="matrix(0.73295216,0,0,0.73295216,34.348537,28.382412)"
+     id="g56">
+    <path
+       d="m 0,0 0,-1.5 -3.5,0 0,-2 2.7,0 0,-1.5 -2.7,0 0,-2 3.5,0 0,-1.5 -5.5,0 0,8.6 L 0,0 z"
+       id="path58"
+       inkscape:connector-curvature="0"
+       style="fill:#373535" />
+  </g>
 </svg>
