@@ -144,7 +144,7 @@
                         parentContainer.find(".icon-ban-circle ").toggle();
                         if (imageToDisable) {
                             availabilityLink
-                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
+                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("This photo is currently disabled and you can not see them on your product page. You can enable on the picture by clicking on this button."); ?>")
                                 .html("<i class='icon-eye-close'></i>");
                             parentContainer.tooltip('enable').addClass("need-to-check")
                                 .tooltip({
@@ -153,7 +153,7 @@
                                 .find("img").css({"opacity": "0.5"});
                         } else {
                             availabilityLink
-                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("Disable"); ?>")
+                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("This photo is currently enabled and you can see them on your product page. You can turn off the picture by clicking on this button."); ?>")
                                 .html("<i class='icon-eye-open'></i>");
                             parentContainer.removeClass("need-to-check").tooltip('disable')
                                 .find("img").css({"opacity": "1"});
