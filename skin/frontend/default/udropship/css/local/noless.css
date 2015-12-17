@@ -620,6 +620,15 @@
 }
 .vendor-image li.vendor-image-placeholder {
     /*background-color: #fffeec;*/
+    float: left;
+    text-align: center;
+    margin: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: rgba(0, 0, 0, 0.4);
+    position: relative;
+    height: 100px;
+    width: 100px;
+    display: block;
 }
 
 .vendor-image li .vendor-image-controls {
