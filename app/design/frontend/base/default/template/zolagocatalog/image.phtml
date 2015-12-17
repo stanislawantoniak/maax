@@ -1,6 +1,10 @@
+<?php
+/** @var $this Zolago_Catalog_Block_Vendor_Image */
+$_helper = Mage::helper("zolagocatalog");
+$maxSize = $this->maxUploadInByte();
+?>
 <link rel="stylesheet" media="screen and (min-width: 750px) and (max-width: 990px)"
       href="/skin/frontend/base/default/css/800.css"/>
-<?php $_helper = Mage::helper("zolagocatalog"); ?>
 
 <div class="container">
     <!--=== Page Header ===-->
@@ -53,9 +57,19 @@
 
         initDragSort($(".vendor-image"));
         $('.vendor-image-upload input[type=file]').change(function () {
+            console.log(jQuery(this)[0].files[0]);
             if (!jQuery(this)[0].files[0]) {
                 return; // If no file to send
             }
+            if (jQuery(this)[0].files[0].size >= <?php echo $maxSize; ?>) {
+                noty({
+                    text: '<?php echo $_helper->__('File too large. File must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>',
+                    type: 'error',
+                    timeout: 4000
+                });
+                return;
+            }
+
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
             startLoadingNoProgressBar();
