@@ -34,6 +34,7 @@ define([
              PopupEditor, status, attrbiute, attributeRules, attributeSet, misc) {
 
     var grid,
+		gallery,
         store,
         massAttribute,
         editDbClick = false, // Configure click type
@@ -163,11 +164,10 @@ define([
         }
 
         var node = el.parents("td");
-        var gallery = jQuery(this).find("gallery").html();
 
 
         modal.find(".modal-title").text(el.attr("title")).prepend('<big><i class="icon icon-move"></i></big>&nbsp;&nbsp;');
-        modal.find(".modal-body").html('<div class="carousel">'+gallery+'</div>');
+        modal.find(".modal-body").html('<div class="carousel">'+gallery[row.id]+'</div>');
         jQuery('#product-image-popup .carousel').rwdCarousel({
             items : 1,
             pagination : true,
@@ -257,9 +257,7 @@ define([
         put(content, "span", {
             innerHTML: item.images_count
         });
-        put(content, "gallery", {
-            innerHTML: item.gallery
-        });
+		gallery[item.entity_id] = item.gallery;
         put(node, content);
 
 
@@ -798,9 +796,10 @@ define([
                 return this.inherited(arguments);
             }
         };
-
+		gallery = [];
 
         window.grid = grid = new PriceGrid(config, container);
+		
         // listen for selection via space, ctrl + mouse
         grid.on(".dgrid-row:keyup", handleSelection);
         grid.on("td.dgrid-cell:click", handleSelection);
