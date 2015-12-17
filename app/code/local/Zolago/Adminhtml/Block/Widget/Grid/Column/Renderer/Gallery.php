@@ -24,13 +24,13 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
         $out .= "</div>";
         $out .= "<div class='vendor-image-upload col-md-2 col-lg-2'>
                     <form>
-                        <button class='btn'>
-                            <span class='btn-file' title='{$addImageLabel}'>
+
+                            <div class='btn btn-file' title='{$addImageLabel}'>
                                 <i class='icon icon-plus-sign'></i> {$addImageLabel}
                                 <input type='hidden' name='product' value='{$productId}' />
                                 <input type='file' name='vendor_image_upload' />
-                            </span>
-                        </button>
+                            </div>
+
                     </form>
                 </div>";
 
