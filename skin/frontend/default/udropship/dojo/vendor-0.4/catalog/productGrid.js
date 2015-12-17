@@ -146,7 +146,7 @@ define([
         var el = jQuery(this);
         var modal = jQuery("#product-image-popup");
 
-        // Procss enter click on thumb - redirect to a
+        // Process enter click on thumb - redirect to a
         if (e instanceof KeyboardEvent) {
             if (e.keyCode != 13) {
                 return;
@@ -159,45 +159,57 @@ define([
         }
 
         var node = el.parents("td");
+        var gallery = jQuery(this).find("gallery").html();
 
 
-        if (!modal.length) {
-            modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
-				<div class="modal-dialog">\
-					<div class="modal-content">\
-						<div class="modal-header">\
-							<button type="button" class="close" data-dismiss="modal">\n\
-								<span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\
-							<h4 class="modal-title"></h4>\
-						</div>\
-						<div class="modal-body"></div>\
-						<div class="modal-footer">\
-							<button type="button" class="btn btn-default" data-dismiss="modal">' +
-                Translator.translate("Close") +
-                '</button>\
-            </div>\
-        </div>\
-    </div>\
-</div>').
-                appendTo(jQuery("body"));
-        }
+        modal.find(".modal-title").text(el.attr("title")).prepend('<big><i class="icon icon-move"></i></big>&nbsp;&nbsp;');
+        modal.find(".modal-body").html('<div class="carousel">'+gallery+'</div>');
+        jQuery('#product-image-popup .carousel').rwdCarousel({
+            items : 1,
+            pagination : true,
+            itemsScaleUp:true,
+            rewindNav : false,
+            navigation: true,
+            navigationText: [
+                "<div class='col-md-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
+                "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
+            ],
+			afterInit: function () { 
+					jQuery(this).keypress(function(event) {
+						alert(e.keyCode);
+					})
+			},
+			
+        }).click(function(e) {
+			       var offset = jQuery(this).offset(); 
+       			   var pos_x = e.pageX - offset.left;
+			       var middle = jQuery(this).outerWidth() / 2;
 
-        modal.find(".modal-title").text(el.attr("title"));
-        modal.find(".modal-body").html(
-            jQuery("<img>").attr("src", el.attr("href"))
-        );
+			       if(pos_x < middle)
+			       {
+						jQuery(this).trigger('rwd.prev');
+			       }
+			       else
+			       {
+						jQuery(this).trigger('rwd.next');
+			       }
+		});
 
+		
         // focus cell after close modal
         if (node.length) {
             modal.one("hidden.bs.modal", function () {
                 grid.focus(grid.cell(node[0]));
+                modal.find(".modal-body .carousel").html("");
             });
             modal.one("shown.bs.modal", function () {
                 modal.find("button").focus();
             });
         }
-
-        modal.modal("show");
+        modal.modal({backdrop: false});
+        jQuery("#product-image-popup").draggable({
+            handle: ".modal-header"
+        });
         e.preventDefault();
     };
 
@@ -210,17 +222,33 @@ define([
     var rendererThumbnail = function (item, value, node, options) {
         var content,
             img;
+        //console.log(item);
         if (item.thumbnail) {
             content = put("a", {
                 href: item.thumbnail,
                 title: item.name,
-                target: "_blank"
+                target: "_blank",
+                class: "thumb"
             });
             img = put("img", {
                 src: item.thumbnail_url
             });
+
+            //jQuery(node).popover({
+            //    placement: "right",
+            //    html : true,
+            //    container: 'body',
+            //    trigger : 'hover', //<--- you need a trigger other than manual
+            //    delay: {
+            //        hide: 1000
+            //    },
+            //    content: function() {
+            //        return "<div><img src='"+item.thumbnail+"' /><span class='view_lupa view_lupa_plus'></span></div>";
+            //    }
+            //});
             on(content, "click", thumbnailHandler)
             on(node, "keydown", thumbnailHandler)
+
         } else {
             content = put("p",
                 put("i", {className: "glyphicon glyphicon-ban-circle"})
@@ -230,13 +258,19 @@ define([
         put(content, "span", {
             innerHTML: item.images_count
         });
-
+        put(content, "gallery", {
+            innerHTML: item.gallery
+        });
         put(node, content);
+
 
         // Put img if exists
         if (img) {
             put(node, img);
         }
+
+
+
     };
 
     /**
