@@ -162,9 +162,8 @@ define([
         var gallery = jQuery(this).find("gallery").html();
 
 
-        modal.find(".modal-title").text(el.attr("title"));
+        modal.find(".modal-title").text(el.attr("title")).prepend('<big><i class="icon icon-move"></i></big>&nbsp;&nbsp;');
         modal.find(".modal-body").html('<div class="carousel">'+gallery+'</div>');
-
         jQuery('#product-image-popup .carousel').rwdCarousel({
             items : 1,
             pagination : true,
@@ -174,9 +173,29 @@ define([
             navigationText: [
                 "<div class='col-md-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
                 "<div class='col-md-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
-            ]
-        });
+            ],
+			afterInit: function () { 
+					jQuery(this).keypress(function(event) {
+						alert(e.keyCode);
+					})
+			},
+			
+        }).click(function(e) {
+			       var offset = jQuery(this).offset(); 
+       			   var pos_x = e.pageX - offset.left;
+			       var middle = jQuery(this).outerWidth() / 2;
 
+			       if(pos_x < middle)
+			       {
+						jQuery(this).trigger('rwd.prev');
+			       }
+			       else
+			       {
+						jQuery(this).trigger('rwd.next');
+			       }
+		});
+
+		
         // focus cell after close modal
         if (node.length) {
             modal.one("hidden.bs.modal", function () {
@@ -187,9 +206,7 @@ define([
                 modal.find("button").focus();
             });
         }
-
         modal.modal({backdrop: false});
-
         jQuery("#product-image-popup").draggable({
             handle: ".modal-header"
         });
