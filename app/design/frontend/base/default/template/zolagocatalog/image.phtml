@@ -51,7 +51,10 @@
         }
 
         initDragSort($(".vendor-image"));
-        $('.vendor-image-upload input[type=file]').change(function(){
+        $('.vendor-image-upload input[type=file]').change(function() {
+            if (!jQuery(this)[0].files[0]) {
+                return; // If no file to send
+            }
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
             startLoadingNoProgressBar();
