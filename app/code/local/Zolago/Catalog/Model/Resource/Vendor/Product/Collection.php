@@ -124,7 +124,85 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 	public function getGridModel() {
 		return Mage::getSingleton('zolagocatalog/vendor_product_grid');
 	}
-	
+
+
+	/**
+	 * @return array
+	 */
+	public function prepareRestResponse(array $sort, array $range) {
+
+		$collection = $this;
+
+		$select = $collection->getSelect();
+		/* @var $select Varien_Db_Select */
+
+		if($sort){
+			$select->order($sort['order'] . " " . $sort['dir']);
+		}
+
+		// Pepare total
+		$totalSelect = clone $select;
+		$adapter = $select->getAdapter();
+
+		$totalSelect->reset(Zend_Db_Select::COLUMNS);
+		$totalSelect->reset(Zend_Db_Select::ORDER);
+		$totalSelect->resetJoinLeft();
+		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id)"));
+
+		$total = $adapter->fetchOne($totalSelect);
+
+		// Pepare range
+		$start = $range['start'];
+		$end = $range['end'];
+		if($end > $total){
+			$end = $total;
+		}
+		// Make limit
+		$select->limit($end-$start, $start);
+
+		$items = $adapter->fetchAll($select);
+
+
+		$catalogHelper = Mage::helper('catalog/image');
+
+		foreach($items as &$item){
+			$item['can_collapse'] = true;//
+			$item['entity_id'] = (int)$item['entity_id'];
+			//$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
+			$item['store_id'] = $collection->getStoreId();
+
+
+			$item = $this->_mapItem($item);
+			$item['gallery'] = $this->getItemGallery($item['entity_id'], $catalogHelper);
+		}
+
+		return array(
+			"items" => $items,
+			"start" => $start,
+			"end"	=> $end,
+			"total" => $total
+		);
+	}
+
+	/**
+	 * @param $id
+	 * @param $catalogHelper
+	 * @return string
+	 */
+	public function getItemGallery($id, $catalogHelper){
+		$product = Mage::getModel("catalog/product")->load($id);
+		$gallery = $product->getMediaGalleryImages();
+
+		$result = "";
+		if ($gallery->count() > 0) {
+			foreach ($gallery as $_image) {
+				$_file = $_image->getFile();
+				$imageUrl = $catalogHelper->init($product, 'image', $_file)->resize(600);
+				$result .= "<img src='{$imageUrl}' />";
+			}
+		}
+		return $result;
+	}
 	/**
 	 * Add thumbs
 	 * @param array $item
@@ -155,7 +233,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 				$thumb = null;
 			}
 		}
-		
+
 		$item['thumbnail_url'] = $thumbUrl;
 		$item['thumbnail'] = $thumb;
 		

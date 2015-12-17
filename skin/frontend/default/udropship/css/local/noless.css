@@ -599,6 +599,53 @@
 	}
 }
 
+
+/* Zarządzaj opisami produktów */
+#product-image-popup {
+    overflow: hidden;
+}
+#product-image-popup .modal-dialog .modal-content .modal-header {
+    cursor: move;
+}
+#product-image-popup .rwd-carousel {
+    overflow: hidden;
+}
+#product-image-popup .rwd-carousel .rwd-wrapper {
+    text-align: center;
+}
+
+#product-image-popup .rwd-carousel .rwd-item {
+    float: left;
+    padding: 5px;
+}
+#product-image-popup .product-image-popup-arrow-left {
+    text-align: right;
+}
+#product-image-popup .rwd-controls .rwd-prev .icon,
+#product-image-popup .rwd-controls .rwd-next .icon {
+    font-size: 25px;
+}
+#product-image-popup .rwd-controls .rwd-prev.disabled,
+#product-image-popup .rwd-controls .rwd-next.disabled {
+    color: #d3d3d3;
+}
+
+div .view_lupa {
+	position: absolute;
+	bottom: 2%;
+	right: 10px;
+	z-index: 900;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	background: url('/skin/frontend/modago/gallery/images/sprites/all-s399d59bcea.png');
+	background-position: -181px -451px;
+	height: 49px;
+	width: 49px;
+}
+
+/* Zarządzaj opisami produktów */}
+
 .no-padding {
     padding: 0;
 }
