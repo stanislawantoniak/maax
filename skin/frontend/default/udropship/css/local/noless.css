@@ -71,6 +71,8 @@
     float: left;
     text-align:center;
     margin:2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: rgba(0, 0, 0, 0.4);
 }
 
 #vendor_campaign_product_grid .form-group {
@@ -604,8 +606,8 @@
 }
 .vendor-image {
 	list-style-type: none;
-	height: 110px;
-    padding: 0 5px;
+	/*height: 110px;*/
+    /*padding: 0 5px;*/
 }
 .vendor-image li {
     display: block;
