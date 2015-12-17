@@ -121,8 +121,6 @@
             var parentContainer = availabilityLink.closest("li");
             var imageToDisable = (parentContainer.hasClass("need-to-check") ? 0 : 1);
 
-
-            parentContainer.find(".icon-ban-circle ").toggle();
             parentContainer.find(".vendor-image-refresh").show();
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/toggleAvailabilityProductImage")?>',
@@ -143,6 +141,7 @@
                             timeout: 4000
                         });
                     } else {
+                        parentContainer.find(".icon-ban-circle ").toggle();
                         if (imageToDisable) {
                             availabilityLink
                                 .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("Enable"); ?>")
