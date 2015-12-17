@@ -537,14 +537,14 @@ class Zolago_Catalog_Vendor_ImageController
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__("An error occurred"),
+                    'error' => $_helper->__($e->getMessage()),
                     'errorcode' => $e->getCode()
                 );
             } catch (Exception $e) {
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__("An error occurred"),
+                    'error' => $_helper->__($e->getMessage()),
                     'errorcode' => $e->getCode()
                 );
             }
@@ -601,14 +601,14 @@ class Zolago_Catalog_Vendor_ImageController
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__("An error occurred"),
+                    'error' => $_helper->__($e->getMessage()),
                     'errorcode' => $e->getCode()
                 );
             } catch (Exception $e) {
                 Mage::logException($e);
                 $result = array(
                     'status' => 0,
-                    'error' => $_helper->__("An error occurred"),
+                    'error' => $_helper->__($e->getMessage()),
                     'errorcode' => $e->getCode()
                 );
             }
@@ -668,9 +668,17 @@ class Zolago_Catalog_Vendor_ImageController
                 $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
             } catch (Exception $e) {
-                $result = array(
-                    'error' => $_helper->__("An error occurred"),
-                    'errorcode' => $e->getCode());
+                Mage::log($e->getCode());
+                if($e->getCode() == 0){
+                    $result = array(
+                        'error' => $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."),
+                        'errorcode' => $e->getCode());
+                } else {
+                    $result = array(
+                        'error' => $_helper->__($e->getMessage()),
+                        'errorcode' => $e->getCode());
+                }
+
             }
         }
 
