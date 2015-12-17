@@ -563,28 +563,31 @@ class Zolago_Catalog_Vendor_ImageController
         $enabledImages = Mage::getResourceModel("zolagocatalog/product_gallery")
             ->getEnabledProductImages($productId);
 
+
+        $imageData = Mage::getResourceModel("zolagocatalog/product_gallery")
+            ->getProductImageData($imageValue);
+
+        $lastEnabledImage = (count($enabledImages) <= 1 && empty($imageData["disabled"])) ? TRUE : FALSE;
+
         $product = Mage::getModel("catalog/product")->load($productId);
         $productStatus = $product->getStatus();
 
         $_helper = Mage::helper("zolagocatalog");
 
         //If product enabled then last image can't be disabled
-        if (
-            $productStatus == Mage_Catalog_Model_Product_Status::STATUS_ENABLED
-            && (count($enabledImages) <= 1)
-        ) {
+        if ($productStatus == Mage_Catalog_Model_Product_Status::STATUS_ENABLED && $lastEnabledImage) {
             $result = array(
                 'status' => 0,
                 'error' => $_helper->__("Product is enabled and it should have at least one enabled image.")
             );
         } else {
-            $resource = Mage::getSingleton('core/resource');
 
-            $writeConnection = $resource->getConnection('core_write');
-            $productMediaTable = $resource->getTableName('catalog_product_entity_media_gallery');
-            $productMediaValueTable = $resource->getTableName('catalog_product_entity_media_gallery_value');
 
             try {
+                $resource = Mage::getSingleton('core/resource');
+                $writeConnection = $resource->getConnection('core_write');
+                $productMediaTable = $resource->getTableName("catalog/product_attribute_media_gallery");
+                $productMediaValueTable = $resource->getTableName("catalog/product_attribute_media_gallery_value");
                 $where = $writeConnection->quoteInto("value_id=?", $imageValue);
 
                 $writeConnection->delete($productMediaTable, $where);
@@ -665,9 +668,17 @@ class Zolago_Catalog_Vendor_ImageController
                 $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
             } catch (Exception $e) {
-                $result = array(
-                    'error' => $_helper->__("An error occurred"),
-                    'errorcode' => $e->getCode());
+                Mage::log($e->getCode());
+                if($e->getCode() == 0){
+                    $result = array(
+                        'error' => $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."),
+                        'errorcode' => $e->getCode());
+                } else {
+                    $result = array(
+                        'error' => $_helper->__("An error occurred"),
+                        'errorcode' => $e->getCode());
+                }
+
             }
         }
 
