@@ -121,6 +121,16 @@
                     </zolagosolrsearch>
                 </observers>
             </vendor_manual_mass_save_price_after>
+
+            <!-- When admin manually push to solr from admin product grid -->
+            <admin_manually_push_to_solr_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </admin_manually_push_to_solr_after>
 			
 			<!-- Converter stock save -->
 			<zolagocatalog_converter_stock_complete>
