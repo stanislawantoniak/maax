@@ -86,6 +86,13 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         return $this->getData("no_vendor_context_url");
     }
 
+    public function getCategoryProductCount() {
+        if(!$this->hasData("category_product_count")) {
+            $this->setData("category_product_count", Mage::helper("zolagosolrsearch")->getCategoryProductCountData($this));
+        }
+        return $this->getData("category_product_count");
+    }
+
     /**
      * Overload load method - load cached data if possible
      * @param int $id
@@ -118,6 +125,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         // Load common used data for much better performance
         $this->getUrl(); // Get in easy way request_path from rewrite
         $this->getNoVendorContextUrl();
+        $this->getCategoryProductCount();
         $this->unsetData('url'); // Trick for vendor/no vendor context
         $this->getParentCategories();
 
