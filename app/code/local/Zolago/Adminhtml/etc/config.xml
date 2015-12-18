@@ -71,6 +71,16 @@
 				</zolagoadminhtml>
 			</updates>
 		</layout>
+        <events>
+            <adminhtml_catalog_product_grid_prepare_massaction>
+                <observers>
+                    <zolagoadminhtml_catalog_product_grid_prepare_massaction_push_to_solr>
+                        <class>zolagoadminhtml/observer</class>
+                        <method>addPushToSolrMassaction</method>
+                    </zolagoadminhtml_catalog_product_grid_prepare_massaction_push_to_solr>
+                </observers>
+            </adminhtml_catalog_product_grid_prepare_massaction>
+        </events>
 	</adminhtml>
 	<admin>
 		<routers>
