@@ -419,7 +419,7 @@ Mall.product = {
 					return jQuery(this).attr('data-score');
 				}
 			});
-			jQuery('#average_note_client .note').raty({
+			jQuery('.average_note_client .note').raty({
 				path: Config.path.averageNoteClient.averageNoteClientPath,
 				starOff : Config.path.averageNoteClient.averageNoteClientStarOff,
 				starOn  : Config.path.averageNoteClient.averageNoteClientStarOn,
@@ -1087,7 +1087,10 @@ Mall.product = {
             items.each(function(i) {
                 var flags = jQuery(this).find('a');
                 var flag = flags.data('flags');
-                flags.append('<i class="flag '+flag+'"></i>');
+	            var flagLabel = flags.data('flagLabel');
+	            if(flag && flagLabel) {
+		            flags.append('<div class="product-flag">' + flagLabel + '</div>');
+	            }
             });
         },
 
@@ -1124,7 +1127,7 @@ Mall.product = {
          * in this case other colors of product
          */
         getReleated: function() {
-            return jQuery("#rwd-color");
+            return jQuery(".rwd-color");
         },
 
 	    getLightbox: function() {
