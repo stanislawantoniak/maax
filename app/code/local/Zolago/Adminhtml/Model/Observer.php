@@ -15,7 +15,7 @@ class Zolago_Adminhtml_Model_Observer {
         $helper = $this->getHelper();
 
         $block->getMassactionBlock()->addItem('push_to_solr', array(
-            'label' => $helper->__('Push to SOLR'),
+            'label' => $helper->__('Push to solr queue'),
             'url'   => $block->getUrl('*/catalog_product_action_solr/push', array('_current' => true)),
         ));
     }

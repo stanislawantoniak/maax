@@ -2,6 +2,9 @@
 
 class Zolago_Adminhtml_Catalog_Product_Action_SolrController extends Mage_Adminhtml_Controller_Action {
 
+    /**
+     * When admin select mass action on admin product grid
+     */
     public function pushAction() {
 
         $ids = Mage::app()->getRequest()->getParam('product');
@@ -14,12 +17,16 @@ class Zolago_Adminhtml_Catalog_Product_Action_SolrController extends Mage_Adminh
                 "check_parents" => true
             )
         );
-        $this->_getSession()->addSuccess($this->getHelper()->__('%s successfully push to solr.', count($ids)));
+        $this->_getSession()->addSuccess($this->getHelper()->__('%s products have been added to the solr queue.', count($ids)));
         $this->_redirectReferer();
     }
 
+    /**
+     * ACL
+     * @return bool
+     */
     protected function _isAllowed() {
-        return true; //todo
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/products');
     }
 
     /**
