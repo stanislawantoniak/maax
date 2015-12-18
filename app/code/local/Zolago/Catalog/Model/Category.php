@@ -86,11 +86,12 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         return $this->getData("no_vendor_context_url");
     }
 
-    public function getCategoryProductCount() {
-        if(!$this->hasData("category_product_count")) {
-            $this->setData("category_product_count", Mage::helper("zolagosolrsearch")->getCategoryProductCountData($this));
+    public function getSolrCategoryProductCount() {
+        if(!$this->hasData("solr_category_product_count")) {
+            $this->setData("solr_category_product_count", Mage::helper("zolagosolrsearch")->getCategoryProductCountData($this));
         }
-        return $this->getData("category_product_count");
+        Mage::log($this->getData("solr_category_product_count"), null, "WWW.log");
+        return $this->getData("solr_category_product_count");
     }
 
     /**
@@ -102,20 +103,20 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
     public function load($id, $field=null) {
 
         // Skip cache in admin
-        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
-            return parent::load($id, $field);
-        }
+//        if(Mage::app()->getStore()->isAdmin() || !$this->canUseCache()) {
+//            return parent::load($id, $field);
+//        }
 
         $cacheKey = $this->_getCacheKey($id, $field, $this->getStoreId());
 
-        if($cacheData = $this->_loadFromCache($cacheKey)) {
-            $this->_beforeLoad($id, $field);
-            $this->setData($cacheData);
-            $this->_afterLoad();
-            $this->setOrigData();
-            $this->_hasDataChanges = false;
-            return $this;
-        }
+//        if($cacheData = $this->_loadFromCache($cacheKey)) {
+//            $this->_beforeLoad($id, $field);
+//            $this->setData($cacheData);
+//            $this->_afterLoad();
+//            $this->setOrigData();
+//            $this->_hasDataChanges = false;
+//            return $this;
+//        }
 
         // Clean all data from previous loaded instance
         $this->unsetData();
@@ -125,7 +126,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         // Load common used data for much better performance
         $this->getUrl(); // Get in easy way request_path from rewrite
         $this->getNoVendorContextUrl();
-        $this->getCategoryProductCount();
+        $this->getSolrCategoryProductCount();
         $this->unsetData('url'); // Trick for vendor/no vendor context
         $this->getParentCategories();
 

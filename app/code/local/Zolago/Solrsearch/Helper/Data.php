@@ -467,10 +467,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 
 	public function getCategoryProductCountData($category){
-		$solrModel = Mage::getModel('solrsearch/solr');
+		$solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
 		// Set parent category
 		$solrModel->setCurrentCategory($category);
-
+		$solrFieldList = array("category_id" => 44);
+		$solrModel->setFieldList($solrFieldList);
 		$resultSet = $solrModel->query("*");
 		return $resultSet;
 	}
