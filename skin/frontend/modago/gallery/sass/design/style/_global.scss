@@ -57,9 +57,13 @@ border-radius: 2px;
 }
 
 .latoblack {
-  font-family: "latoblack";
+  font-family: $fontBlack;
 }
 
 .messages a {
 	text-decoration: underline;
+}
+
+.modal img {
+	max-width: 100%;
 }
