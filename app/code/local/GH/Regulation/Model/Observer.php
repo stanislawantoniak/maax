@@ -38,7 +38,14 @@ class Gh_Regulation_Model_Observer
 				'label'     => Mage::helper('ghregulation')->__('Regulation document settings'),
 				'content'   => $content,
 			));
+			$block->addTab('regulation_accept', array(
+				'label'     => Mage::helper('ghregulation')->__('Regulation acceptance'),
+				'content'   => Mage::app()->getLayout()->createBlock('ghregulation/adminhtml_dropship_acceptance', 'admin.regulation.acceptance')
+					->setVendorId(Mage::app()->getRequest()->getParam('id'))
+					->toHtml()
+			));
 			$block->addTabToSection('regulation_type','vendor_rights',50);
+			$block->addTabToSection('regulation_accept','vendor_rights',55);
 		}
 	}
 	public function udropship_adminhtml_vendor_edit_prepare_form($observer) {
