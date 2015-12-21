@@ -1,8 +1,9 @@
 <?php
 /**
  * @method Unirgy_DropshipPo_Model_Mysql4_Po getResource()
- * @method string getPaymentMethodOwner()
+ * @method string getPaymentChannelOwner()
  * @method Zolago_Rma_Model_Rma setPaymentChannelOwner($owner)
+ * @method string getCreatedAt() TIMESTAMP
  */
 class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 {
