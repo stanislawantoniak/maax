@@ -18,7 +18,7 @@ $categories = $this->getMainCategoriesForSlidingMenu();
                     <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'class="sb-toggle-submenu"' : ''; ?>>
                     <span class="sb-submenu-title">
                         <?php echo $this->escapeHtml($cat['name']); ?>
-<!--                        (--><?php //echo $cat["solr_product_count"]; ?><!--)-->
+                        (<?php echo $cat["solr_product_count"]; ?>)
                     </span>
                 </a>
                 <?php if(isset($cat['has_dropdown']) && $cat['has_dropdown']) : ?>
@@ -28,7 +28,7 @@ $categories = $this->getMainCategoriesForSlidingMenu();
                         <a href="<?php echo $child['url']; ?>">
                             <span class="sb-subsubmenu-title">
                                 <?php echo $this->escapeHtml($child['name']); ?>
-<!--                                (--><?php //echo $child["solr_product_count"]; ?><!--)-->
+                                (<?php echo $child["solr_product_count"]; ?>)
                             </span>
                         </a>
                     </li>

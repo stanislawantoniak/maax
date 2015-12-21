@@ -67,27 +67,32 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
 //        }
 
         $filterQuery = array_merge($filterQuery, $defaultFilterQuery);
-        $filterQuery['category_id'] = array($this->getCategory()->getId());
+        $_category = $this->getCategory();
+        $currentCategoryId= $_category->getId();
+
+        if (empty($filterQuery['category_id'])) {
+            $filterQuery['category_id'] = array($currentCategoryId);
+        }
         $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
-//Check category is anchor
-        if ($this->getCategory()->getIsAnchor()) {
-            $childrenIds = $this->getCategory()->getAllChildren(true);
+        //Check category is anchor
+        if ($_category->getIsAnchor()) {
+            $childrenIds = $_category->getAllChildren(true);
 
             if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-                if (!isset($standardFilterQuery['category_id'])) {
+                if (!isset($standardFilterQuery['category_id'])){
                     $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
                 }
             }
         }
+        Mage::log($filterQuery,null,"TEST_4.log");
         $filterQueryArray = array();
 
-        foreach($filterQuery as $key=>$filterItem){
-            if(count($filterItem) > 0){
+        foreach ($filterQuery as $key => $filterItem) {
+            if (count($filterItem) > 0) {
                 $query = '';
-                foreach($filterItem as $value){
-                    $query .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
+                foreach ($filterItem as $value) {
+                    $query .= $key . ':%22' . urlencode(trim(addslashes($value))) . '%22+OR+';
                 }
-
                 $query = trim($query, '+OR+');
 
                 $filterQueryArray[] = $query;
