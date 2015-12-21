@@ -15,12 +15,14 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         /** @var Varien_Data_Tree_Node $category */
         foreach ($categories as $category) {
             $cat = Mage::getModel('catalog/category')->load($category->getId());
+            $num = $cat->getSolrProductsCount($cat);
 
             $tree[$category->getId()] = array(
                 'name'           => $category->getName(),
                 'url'            => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
                 'category_id'    => $category->getId(),
                 'level'          => $level,
+                "solr_product_count" => $num
 //                'products_count' => $cat->getProductCount() // ??
             );
 

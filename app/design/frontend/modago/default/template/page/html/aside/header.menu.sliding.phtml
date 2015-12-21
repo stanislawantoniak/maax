@@ -16,14 +16,20 @@ $categories = $this->getMainCategoriesForSlidingMenu();
             <li>
                 <a  <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '' : 'href="'.$cat['url'].'"' ?>
                     <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'class="sb-toggle-submenu"' : ''; ?>>
-                    <span class="sb-submenu-title"><?php echo $this->escapeHtml($cat['name']); ?></span>
+                    <span class="sb-submenu-title">
+                        <?php echo $this->escapeHtml($cat['name']); ?>
+<!--                        (--><?php //echo $cat["solr_product_count"]; ?><!--)-->
+                    </span>
                 </a>
                 <?php if(isset($cat['has_dropdown']) && $cat['has_dropdown']) : ?>
                 <ul>
                     <?php foreach ($cat['has_dropdown'] as $child) : ?>
                     <li>
                         <a href="<?php echo $child['url']; ?>">
-                            <span class="sb-subsubmenu-title"><?php echo $this->escapeHtml($child['name']); ?></span>
+                            <span class="sb-subsubmenu-title">
+                                <?php echo $this->escapeHtml($child['name']); ?>
+<!--                                (--><?php //echo $child["solr_product_count"]; ?><!--)-->
+                            </span>
                         </a>
                     </li>
                     <?php endforeach; ?>

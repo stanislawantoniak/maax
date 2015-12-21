@@ -5,12 +5,36 @@
  */
 class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model_Solr
 {
+    protected $_category;
+
+    public function getCategory()
+    {
+        return $this->_category;
+    }
+
+    public function setCategory($category)
+    {
+        return $this->_category = $category;
+    }
+
     public function prepareQueryData()
     {
+        $this->prepareFieldList();
         $this->prepareFilterQuery();
         return $this;
     }
 
+
+    /**
+     * Determine which fields will be selected
+     */
+    protected function prepareFieldList()
+    {
+        if (empty($this->fieldList))
+        {
+            $this->fieldList = array('products_id', 'category_id', 'store_id', 'website_id');
+        }
+    }
     /**
      * @return Unirgy_Dropship_Model_Vendor
      */
@@ -25,37 +49,43 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
      */
     protected function prepareFilterQuery()
     {
-        $filterQuery = Mage::getSingleton('core/session')->getSolrFilterQuery();
-
-        if (!is_array($filterQuery) || !isset($filterQuery)) {
-            $filterQuery = array();
-        }
+        $filterQuery = array();
 
         $defaultFilterQuery = array(
             'store_id' => array(Mage::app()->getStore()->getId()),
             'website_id' => array(Mage::app()->getStore()->getWebsiteId()),
             'product_status' => array(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+
         );
-        $checkInstock = (int)Mage::helper('solrsearch')->getSetting('check_instock');
-        if ($checkInstock > 0) {
+        $checkInStock = (int)Mage::helper('solrsearch')->getSetting('check_instock');
+        if ($checkInStock > 0) {
             $defaultFilterQuery['instock_int'] = array(Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK);
         }
-        if($vendorContext = $this->getVendor()){
-            $defaultFilterQuery['udropship_vendor_id_int'] = array($vendorContext->getId());
-        }
+
+//        if($vendorContext = $this->getVendor()){
+//            $defaultFilterQuery['udropship_vendor_id_int'] = array($vendorContext->getId());
+//        }
 
         $filterQuery = array_merge($filterQuery, $defaultFilterQuery);
+        $filterQuery['category_id'] = array($this->getCategory()->getId());
+        $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
+//Check category is anchor
+        if ($this->getCategory()->getIsAnchor()) {
+            $childrenIds = $this->getCategory()->getAllChildren(true);
 
+            if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
+                if (!isset($standardFilterQuery['category_id'])) {
+                    $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
+                }
+            }
+        }
         $filterQueryArray = array();
 
         foreach($filterQuery as $key=>$filterItem){
-
-
             if(count($filterItem) > 0){
                 $query = '';
                 foreach($filterItem as $value){
                     $query .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
-
                 }
 
                 $query = trim($query, '+OR+');
@@ -73,7 +103,7 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
                 $filterQueryString .= '%28'.@implode('%29+AND+%28', $filterQueryArray).'%29';
             }
         }
-
+        //Mage::log($filterQueryString,null,"TEST_4.log");
         $this->filterQuery = $filterQueryString;
     }
 }

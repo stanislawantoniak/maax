@@ -470,7 +470,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		$solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
 		// Set parent category
 		$solrModel->setCurrentCategory($category);
-		$solrFieldList = array("category_id" => 44);
+		$solrFieldList = array();
 		$solrModel->setFieldList($solrFieldList);
 		$resultSet = $solrModel->query("*");
 		return $resultSet;
