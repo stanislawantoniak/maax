@@ -85,6 +85,18 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         }
         return $this->getData("no_vendor_context_url");
     }
+    /**
+     * @todo more flexible
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getCurrentCategory() {
+        if(Mage::registry('current_category') instanceof Mage_Catalog_Model_Category) {
+            return Mage::registry('current_category');
+        }
+        return Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
+    }
+
+
 
     /**
      * Overload load method - load cached data if possible
@@ -342,6 +354,27 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
             }
         }
         return $this->_campaign;
+    }
+
+    /**
+     * @param $category
+     * @param bool|FALSE $vendorContext
+     * @return int
+     */
+    public function getSolrProductsCount($category, $vendorContext = FALSE){
+        //Mage::log($vendorContext, null, "TEST_8_1.log");
+        $solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
+        $solrModel->setCurrentCategory($category);
+        $solrFieldList = array("category_id" => $category->getId());
+        $solrModel->setCategory($category);
+        //Mage::log($vendorContext,null, "TEST_5.log");
+        if($vendorContext)
+            $solrModel->setVendorContext($vendorContext);
+
+        $solrModel->setFieldList($solrFieldList);
+        $resultSet = $solrModel->query("*");
+        //Mage::log($resultSet, null, "TEST_3.log");
+        return (empty($resultSet['response']['numFound']) ? 0 : (int)$resultSet['response']['numFound']);
     }
 
     /**

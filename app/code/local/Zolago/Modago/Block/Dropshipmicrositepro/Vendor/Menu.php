@@ -24,12 +24,12 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
             $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         }
         $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
-        return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2);
+        return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2, TRUE,TRUE);
     }
 
     /**
      * Returns main vendor categories for menu for mobile
-     *
+     *$vendor
      * @return array
      */
     public function getMainVendorCategoriesMobile()

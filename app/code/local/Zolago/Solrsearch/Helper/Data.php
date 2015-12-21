@@ -465,8 +465,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $array;
 	}
 
+
+
 	/**
-	 * Retrive info from solar for sibling categories
+	 * Retrieve info from solar for sibling categories
 	 *
 	 * @return array
 	 */
