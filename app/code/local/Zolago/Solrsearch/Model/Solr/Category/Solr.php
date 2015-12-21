@@ -6,6 +6,7 @@
 class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model_Solr
 {
     protected $_category;
+    protected $_vendorContext;
 
     public function getCategory()
     {
@@ -15,6 +16,16 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
     public function setCategory($category)
     {
         return $this->_category = $category;
+    }
+
+    public function getVendorContext()
+    {
+        return $this->_vendorContext;
+    }
+
+    public function setVendorContext($vendor)
+    {
+        return $this->_vendorContext = $vendor;
     }
 
     public function prepareQueryData()
@@ -30,19 +41,11 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
      */
     protected function prepareFieldList()
     {
-        if (empty($this->fieldList))
-        {
+        if (empty($this->fieldList)) {
             $this->fieldList = array('products_id', 'category_id', 'store_id', 'website_id');
         }
     }
-    /**
-     * @return Unirgy_Dropship_Model_Vendor
-     */
-    public function getVendor()
-    {
-        $vendorContext = Mage::helper('umicrosite')->getCurrentVendor();
-        return $vendorContext;
-    }
+
 
     /**
      * Prepare solr filter query paprams
@@ -62,13 +65,13 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
             $defaultFilterQuery['instock_int'] = array(Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK);
         }
 
-//        if($vendorContext = $this->getVendor()){
-//            $defaultFilterQuery['udropship_vendor_id_int'] = array($vendorContext->getId());
-//        }
+        if($vendorContext = $this->getVendorContext()){
+            $defaultFilterQuery['udropship_vendor_id_int'] = array($vendorContext->getId());
+        }
 
         $filterQuery = array_merge($filterQuery, $defaultFilterQuery);
         $_category = $this->getCategory();
-        $currentCategoryId= $_category->getId();
+        $currentCategoryId = $_category->getId();
 
         if (empty($filterQuery['category_id'])) {
             $filterQuery['category_id'] = array($currentCategoryId);
@@ -79,12 +82,12 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
             $childrenIds = $_category->getAllChildren(true);
 
             if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-                if (!isset($standardFilterQuery['category_id'])){
+                if (!isset($standardFilterQuery['category_id'])) {
                     $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
                 }
             }
         }
-        Mage::log($filterQuery,null,"TEST_4.log");
+        Mage::log($filterQuery, null, "TEST_4.log");
         $filterQueryArray = array();
 
         foreach ($filterQuery as $key => $filterItem) {
@@ -101,11 +104,11 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
 
         $filterQueryString = '';
 
-        if(count($filterQueryArray) > 0) {
-            if(count($filterQueryArray) < 2) {
+        if (count($filterQueryArray) > 0) {
+            if (count($filterQueryArray) < 2) {
                 $filterQueryString .= $filterQueryArray[0];
-            }else{
-                $filterQueryString .= '%28'.@implode('%29+AND+%28', $filterQueryArray).'%29';
+            } else {
+                $filterQueryString .= '%28' . @implode('%29+AND+%28', $filterQueryArray) . '%29';
             }
         }
         //Mage::log($filterQueryString,null,"TEST_4.log");

@@ -55,7 +55,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
             /* @var $collection Zolago_Solrsearch_Model_Catalog_Product_Collection */
             $collection->setFlag("store_id", Mage::app()->getStore()->getId());
             $data = $this->getSolrData();
-            Mage::log($data, null, "LLL.log");
 
             if (is_array($data)) {
                 $collection->setSolrData($this->getSolrData());

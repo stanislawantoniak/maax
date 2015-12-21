@@ -95,13 +95,8 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         }
         return Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
     }
-    public function getSolrCategoryProductCount() {
-        if(!$this->hasData("solr_category_product_count")) {
-            $this->setData("solr_category_product_count", Mage::helper("zolagosolrsearch")->getCategoryProductCountData($this->getCurrentCategory()));
-        }
-        Mage::log($this->getData("solr_category_product_count"), null, "WWW.log");
-        return $this->getData("solr_category_product_count");
-    }
+
+
 
     /**
      * Overload load method - load cached data if possible
@@ -135,7 +130,6 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         // Load common used data for much better performance
         $this->getUrl(); // Get in easy way request_path from rewrite
         $this->getNoVendorContextUrl();
-        //$this->getSolrCategoryProductCount();
         $this->unsetData('url'); // Trick for vendor/no vendor context
         $this->getParentCategories();
 
@@ -362,6 +356,10 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         return $this->_campaign;
     }
 
+    /**
+     * @param $category
+     * @return int
+     */
     public function getSolrProductsCount($category){
         $solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
         $solrModel->setCurrentCategory($category);
