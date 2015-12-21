@@ -111,7 +111,7 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
             /** @var Zolago_Catalog_Model_Category $categoryModel */
             $categoryModel = Mage::getModel('catalog/category');
             $categories = $categoryModel->getCategories($currentCategory->getId());
-            $subCategories = $zmHelper->getCategoriesTree($categories, 1, 2);
+            $subCategories = $zmHelper->getCategoriesTree($categories, 1, 2, TRUE, TRUE);
         }
         return $subCategories;
     }
