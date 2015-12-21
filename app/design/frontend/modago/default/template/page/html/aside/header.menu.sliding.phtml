@@ -13,23 +13,33 @@ $categories = $this->getMainCategoriesForSlidingMenu();
         </a>
         <ul class="sb-submenu">
             <?php foreach ($categories as $cat) : ?>
-            <li>
-                <a  <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '' : 'href="'.$cat['url'].'"' ?>
-                    <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'class="sb-toggle-submenu"' : ''; ?>>
-                    <span class="sb-submenu-title"><?php echo $this->escapeHtml($cat['name']); ?></span>
-                </a>
-                <?php if(isset($cat['has_dropdown']) && $cat['has_dropdown']) : ?>
-                <ul>
-                    <?php foreach ($cat['has_dropdown'] as $child) : ?>
+                <?php if ($cat["solr_product_count"] > 0): ?>
                     <li>
-                        <a href="<?php echo $child['url']; ?>">
-                            <span class="sb-subsubmenu-title"><?php echo $this->escapeHtml($child['name']); ?></span>
+                        <a  <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '' : 'href="'.$cat['url'].'"' ?>
+                            <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'class="sb-toggle-submenu"' : ''; ?>>
+                    <span class="sb-submenu-title">
+                        <?php echo $this->escapeHtml($cat['name']); ?>
+                        (<?php echo $cat["solr_product_count"]; //TODO ONLY FOR TEST ?>)
+                    </span>
                         </a>
+                        <?php if(isset($cat['has_dropdown']) && $cat['has_dropdown'] && ($cat["solr_product_count"] > 0)) : ?>
+                            <ul>
+                                <?php foreach ($cat['has_dropdown'] as $child) : ?>
+                                    <?php if ($child["solr_product_count"] > 0): ?>
+                                        <li>
+                                            <a href="<?php echo $child['url']; ?>">
+                                                <span class="sb-subsubmenu-title">
+                                                    <?php echo $this->escapeHtml($child['name']); ?>
+                                                    (<?php echo $child["solr_product_count"]; //TODO ONLY FOR TEST ?>)
+                                                </span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </li>
-                    <?php endforeach; ?>
-                </ul>
                 <?php endif; ?>
-            </li>
             <?php endforeach; ?>
         </ul>
     </li>
