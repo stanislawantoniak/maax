@@ -42,7 +42,8 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
     protected function prepareFieldList()
     {
         if (empty($this->fieldList)) {
-            $this->fieldList = array('products_id', 'category_id', 'store_id', 'website_id');
+            //$this->fieldList = array('products_id', 'category_id', 'store_id', 'website_id');
+            $this->fieldList = array();
         }
     }
 
