@@ -7,6 +7,7 @@
  * @method string getIncrementId()
  * @method string getPaymentMethodOwner()
  * @method Zolago_Po_Model_Po setPaymentChannelOwner($owner)
+ * @method string getCreatedAt() DATETIME
  */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
