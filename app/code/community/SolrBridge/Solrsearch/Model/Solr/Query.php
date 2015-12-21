@@ -73,7 +73,6 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         }
         if (isset($options['solrcore']) && !empty($options['solrcore'])) {
             $this->solrcore = $options['solrcore'];
-            $this->solrcore = $options['solrcore'];
         }
         if (isset($options['autocomplete']) && $options['autocomplete'] === true) {
             $this->isAutocomplete = true;
