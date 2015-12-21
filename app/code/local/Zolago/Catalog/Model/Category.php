@@ -361,20 +361,34 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
      * @param bool|FALSE $vendorContext
      * @return int
      */
-    public function getSolrProductsCount($category, $vendorContext = FALSE){
-        //Mage::log($vendorContext, null, "TEST_8_1.log");
-        $solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
-        $solrModel->setCurrentCategory($category);
-        $solrFieldList = array("category_id" => $category->getId());
-        $solrModel->setCategory($category);
-        //Mage::log($vendorContext,null, "TEST_5.log");
-        if($vendorContext)
-            $solrModel->setVendorContext($vendorContext);
+    public function getSolrProductsCount($category, $vendorContext = FALSE)
+    {
 
-        $solrModel->setFieldList($solrFieldList);
-        $resultSet = $solrModel->query("*");
-        //Mage::log($resultSet, null, "TEST_3.log");
-        return (empty($resultSet['response']['numFound']) ? 0 : (int)$resultSet['response']['numFound']);
+        $solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
+        $vid = 0;
+        if ($vendorContext) {
+            $solrModel->setVendorContext($vendorContext);
+            $vid = $vendorContext->getId();
+        }
+
+        $cacheKey = sprintf("SOLR_PRODUCTS_COUNT_%d_%d_%d", $category->getId(), $vid, Mage::app()->getStore()->getId());
+
+        $cacheData = Mage::helper("zolagomodago/category")->loadFromCache($cacheKey);
+
+        if ($cacheData === FALSE) {
+            $solrModel->setCurrentCategory($category);
+            $solrFieldList = array("category_id" => $category->getId());
+            $solrModel->setCategory($category);
+
+            $solrModel->setFieldList($solrFieldList);
+            $resultSet = $solrModel->query("*");
+            $cacheData = (empty($resultSet['response']['numFound']) ? 0 : (int)$resultSet['response']['numFound']);
+            // Do save
+            $this->_saveInCache($cacheKey, $cacheData);
+        }
+
+        return $cacheData;
+
     }
 
     /**
