@@ -355,10 +355,13 @@ class Zolago_Solrsearch_Model_Observer {
      * @return $this
      */
     public function collectProductsAndPushToQueue(Varien_Event_Observer $observer) {
-        $productIds = $observer->getEvent()->getProductIds();
+        $event        = $observer->getEvent();
+        $productIds   = $event->getProductIds();
+        $storeId      = $event->hasData('store_id') ? $event->getData('store_id') : Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+        $checkParents = $event->hasData('check_parents') ? $event->getData('check_parents') : false;
 
         foreach ($productIds as $productId) {
-            $this->collectProduct($productId);
+            $this->collectProduct($productId, $storeId, $checkParents);
         }
 
         $this->processCollectedProducts();

@@ -784,7 +784,7 @@ i.flag {
 	font-weight: bold;
 	padding-top:0 !important;
 	float:none;
-	margin: -16px 0 0 10px;
+	margin: -18px 0 0 10px;
 	background: $colorProductBtnAddBg !important;
 	&:hover {
 		background: $colorProductBtnAddBg !important;
@@ -795,8 +795,11 @@ i.flag {
 		opacity: .7;
 	}
 	@media(max-width: 371px) {
-		display: block;
-		margin: 15px 0 -15px;
+		padding: 0 10px 10px;
+		width: auto !important;
+	}
+	@media(max-width: 345px) {
+		margin-left: 3px;
 	}
 
 	&.ico {
