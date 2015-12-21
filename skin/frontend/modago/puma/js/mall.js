@@ -1776,7 +1776,7 @@ jQuery(document).ready(function() {
 
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
-			if(jQuery("#rwd-color").length) {
+			if(jQuery(".rwd-color").length) {
 
 			} else {
 				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})

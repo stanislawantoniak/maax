@@ -151,8 +151,8 @@ $bgMap: sprite-map("sprites/bg/*.png");
  **/
 $colorSiteBackground:                   #F2F1F0;
 
-$colorSiteOverlay:                      #FFF;
-$opacitySiteOverlay:                    .75;
+$colorSiteOverlay:                      #000;
+$opacitySiteOverlay:                    .5;
 
 $colorShadow:                           #bbb;
 
@@ -162,9 +162,9 @@ $colorLinkHover:                        #000;
 $colorLinkActive:                       #000;
 
 //icon colors
-$colorIcon:                             #787878;
+$colorIcon:                             #000;
 $colorIconHover:                        #FFF;
-$colorIconHoverBackground:              #787878;
+$colorIconHoverBackground:              #000;
 
 //icon texts colors
 $colorIconText:                         $colorIcon;
@@ -180,6 +180,7 @@ $colorAccentBlocks:                     #EBEBEB;
 $colorAccentSite:                       #CD0027;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
+$colorAccentError:                      #CD0027;
 
 //buttons
 $colorBtnPrimary:                       #FFF;
@@ -222,7 +223,7 @@ $colorIconHoverHeader:                  $colorIconHover;
 $colorIconHoverBgHeader:                $colorIconHoverBackground;
 
 $colorHeaderBadge:                      #FFF;
-$colorHeaderBadgeBg:                    #00c10e;
+$colorHeaderBadgeBg:                    $colorAccentSite;
 
 $colorIconTextHeader:                   $colorIconText;
 $colorIconTextHoverHeader:              $colorIconTextHover;
@@ -234,6 +235,8 @@ $colorAccentBlocksHeader:               $colorAccentBlocks;
 $colorHeaderSearch:                     $colorFont;
 $colorHeaderSearchBg:                   $colorBgBlocksHeader;
 $colorHeaderSearchBorder:               $colorIconHeader;
+$colorHeaderSearchBtnBg:                #000;
+$colorHeaderSearchBtn:                  #FFF;
 
 /* CHECKOUT HEADER VARIABLES */
 $colorHeaderCheckoutSteps:              $colorIconHeader;
@@ -271,20 +274,20 @@ $colorLinkFooter:                       $colorLink;
 $colorAccentBlocksCart:                 $colorAccentBlocks;
 
 /* HAMBURGER MENU VARIABLES */
-$colorHamburgerBg:                      #E8E8E8;
+$colorHamburgerBg:                      #2D2D2D;
 $colorHamburgerBgHeader:                $colorHamburgerBg;
 $colorHamburgerBgSeparator:             $colorHamburgerBg;
-$colorHamburgerBgItem:                  #cdcdcd;
-$colorHamburgerBgItem2:                 #c3c3c3;
-$colorHamburgerBgItem3:                 #b9b9b9;
-$colorHamburgerTextHeader:              #5f5f5f;
+$colorHamburgerBgItem:                  #000;
+$colorHamburgerBgItem2:                 #414141;
+$colorHamburgerBgItem3:                 #555556;
+$colorHamburgerTextHeader:              #fff;
 $colorHamburgerText:                    $colorHamburgerTextHeader;
 $colorHamburgerText2:                   $colorHamburgerTextHeader;
 $colorHamburgerText3:                   $colorHamburgerTextHeader;
 $colorHamburgerBorder:                  $colorHamburgerBg;
 $colorHamburgerBorder2:                 $colorHamburgerBg;
 $colorHamburgerBorder3:                 $colorHamburgerBg;
-$colorHamburgerIcon:                    $colorAccentSite;
+$colorHamburgerIcon:                    #FFF;
 
 /* FAQ VARIABLES */
 $colorFaqLabel:                         $colorFont;
@@ -302,7 +305,7 @@ $colorCookieBarLinkHover:               #e60028;
 $colorCookieBarLinkActive:              #b40026;
 
 /* PRODUCT VARIABLES */
-$colorAccentProduct:                    $colorAccentSite;
+$colorAccentProductTitle:               $colorAccentTitle;
 $colorProductAccordionBorder:           #d9d9d9;
 $colorProductAccordion:                 #000;
 
@@ -340,3 +343,12 @@ $colorAccentCarrierTimePicker:          $colorAccentRma;
 $colorBorderSidebar:                    #ebebeb;
 $colorBackgroundSidebar:                $colorBackgroundBlocks;
 $colorBorderSidebarSection:             #d2d2d2;
+
+/* PRODUCT SITE COLORS */
+$colorProductBtnAddBg:                  #000;
+$colorProductBtnAdd:                    #FFF;
+$colorProductFlagBg:                    $colorAccentSite;
+$colorProductFlag:                      #FFF;
+$colorProductExtraInfo:                 $colorFont;
+$colorProductExtraInfoBg:               #FCFCFC;
+$colorProductExtraInfoBorder:           #EBEBEB;
