@@ -12,9 +12,8 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories,
                                        $level = 1, $span = false, $allowVendorContext = true, $vendorContext = FALSE)
     {
-        $vendor = FALSE;
-        if ($vendorContext)
-            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+        $vendor = $vendorContext ? Mage::helper('umicrosite')->getCurrentVendor() : FALSE;
 
         $tree = array();
         /** @var Varien_Data_Tree_Node $category */
@@ -29,7 +28,6 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
                 'category_id' => $category->getId(),
                 'level' => $level,
                 "solr_product_count" => $solrProductCount
-//                'products_count' => $cat->getProductCount() // ??
             );
 
             if ($level == 1) {

@@ -66,9 +66,7 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
             $defaultFilterQuery['instock_int'] = array(Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK);
         }
 
-        if($vendorContext = $this->getVendorContext()){
-            $defaultFilterQuery['udropship_vendor_id_int'] = array($vendorContext->getId());
-        }
+
 
         $filterQuery = array_merge($filterQuery, $defaultFilterQuery);
         $_category = $this->getCategory();
@@ -102,6 +100,21 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
                 $filterQueryArray[] = $query;
             }
         }
+
+        $vendorContext = $this->getVendorContext();
+        if ($vendorContext && $vendorContext->getId()) {
+            Mage::log($vendorContext->getVendorType(),null,"TEST_7.log");
+            // Vendor context - add vendor/brandshop filter according to vendor type
+            switch ($vendorContext->getVendorType()) {
+                case Zolago_Dropship_Model_Source::VENDOR_TYPE_BRANDSHOP:
+                    $filterQueryArray[] = 'udropship_brandshop_id_int' . ':' . $vendorContext->getId();
+                    break;
+                case Zolago_Dropship_Model_Source::VENDOR_TYPE_STANDARD:
+                    $filterQueryArray[] = 'udropship_vendor_id_int' . ':' . $vendorContext->getId();
+                    break;
+            }
+        }
+        Mage::log($filterQueryArray, null, "TEST_6.log");
 
         $filterQueryString = '';
 
