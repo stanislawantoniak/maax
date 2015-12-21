@@ -22,7 +22,9 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
             $cat = Mage::getModel('catalog/category')->load($category->getId());
             //$solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
             $solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
-
+            if ($solrProductCount <= 0) {
+                continue;
+            }
             $tree[$category->getId()] = array(
                 'name' => $category->getName(),
                 'url' => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
