@@ -86,7 +86,7 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
                 }
             }
         }
-        Mage::log($filterQuery, null, "TEST_4.log");
+
         $filterQueryArray = array();
 
         foreach ($filterQuery as $key => $filterItem) {
@@ -103,7 +103,7 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
 
         $vendorContext = $this->getVendorContext();
         if ($vendorContext && $vendorContext->getId()) {
-            Mage::log($vendorContext->getVendorType(),null,"TEST_7.log");
+
             // Vendor context - add vendor/brandshop filter according to vendor type
             switch ($vendorContext->getVendorType()) {
                 case Zolago_Dropship_Model_Source::VENDOR_TYPE_BRANDSHOP:
@@ -114,7 +114,7 @@ class Zolago_Solrsearch_Model_Solr_Category_Solr extends Zolago_Solrsearch_Model
                     break;
             }
         }
-        Mage::log($filterQueryArray, null, "TEST_6.log");
+
 
         $filterQueryString = '';
 

@@ -18,9 +18,10 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         $tree = array();
         /** @var Varien_Data_Tree_Node $category */
         foreach ($categories as $category) {
-            $cat = Mage::getModel('catalog/category')->load($category->getId());
-            $solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
 
+            $cat = Mage::getModel('catalog/category')->load($category->getId());
+            //$solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
+            $solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
 
             $tree[$category->getId()] = array(
                 'name' => $category->getName(),
