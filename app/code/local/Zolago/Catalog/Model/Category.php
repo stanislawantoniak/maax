@@ -366,13 +366,13 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
         $solrModel->setCurrentCategory($category);
         $solrFieldList = array("category_id" => $category->getId());
         $solrModel->setCategory($category);
-        Mage::log($vendorContext,null, "TEST_5.log");
+        //Mage::log($vendorContext,null, "TEST_5.log");
         if($vendorContext){
             $solrModel->setVendorContext($vendorContext);
         }
         $solrModel->setFieldList($solrFieldList);
         $resultSet = $solrModel->query("*");
-        Mage::log($resultSet, null, "TEST_3.log");
+        //Mage::log($resultSet, null, "TEST_3.log");
         return (empty($resultSet['response']['numFound']) ? 0 : (int)$resultSet['response']['numFound']);
     }
 

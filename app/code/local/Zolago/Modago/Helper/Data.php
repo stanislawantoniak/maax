@@ -32,7 +32,6 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 //                'products_count' => $cat->getProductCount() // ??
             );
 
-//            echo Mage::getUrl($cat->getUrlPath())."\n";
             if ($level == 1) {
                 $tree[$category->getId()]['image'] = $cat->getImage();
             }
