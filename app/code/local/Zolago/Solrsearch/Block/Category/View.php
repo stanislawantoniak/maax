@@ -156,7 +156,16 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $blockHtml = $block->toHtml();
         } else {
             //Render automatically
-            $blockHtml = $this->renderSidebarWrapper($category, $vendor);
+            $lambda = function($params) {
+                return $params['scope']->renderSidebarWrapper($params['category'], $params['vendor']);
+            };
+            $cacheKey  = $name.'_auto_render_'.Mage::app()->getStore()->getId();
+            $blockHtml = Mage::helper('zolagocommon')->getCache(
+                $cacheKey
+                ,self::CACHE_GROUP
+                ,$lambda
+                ,array('category' => $category, 'vendor' => $vendor, 'scope' => $this)
+            );
         }
         return $blockHtml;
     }
