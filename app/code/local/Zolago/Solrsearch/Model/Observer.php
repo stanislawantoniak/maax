@@ -403,7 +403,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 * Process collected products
 	 */
 	public function processCollectedProducts() {
-		
+
 		//var_export($this->_collectedProdutcs);
 		if(!$this->_canBeHandled){
 			return;
@@ -425,10 +425,7 @@ class Zolago_Solrsearch_Model_Observer {
 			}
 			
 			if($childsIds){
-				$parentIds = $resource->getParentIdsByChild($childsIds);
-				foreach($parentIds as $parentIds){
-					$parentIdsFlat = array_merge($parentIdsFlat, $parentIds);
-				}
+                $parentIdsFlat = $resource->getParentIdsByChild($childsIds, true);
 			}
 			
 			$collection = Mage::getResourceModel('catalog/product_collection');
@@ -457,9 +454,9 @@ class Zolago_Solrsearch_Model_Observer {
 		
 		$this->_collectedProdutcs = array();
 		$this->_collectedCheckParents = array();
-		
-	}
-	
+
+    }
+
 	/**
 	 * Push single product to queue. Process parent if needed
 	 * @param Mage_Catalog_Model_Product|int $product
