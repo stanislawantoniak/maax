@@ -12,7 +12,7 @@ class Zolago_Turpentine_Helper_Ban extends Nexcessnet_Turpentine_Helper_Ban {
         $coll->distinct(true);
         $coll->addFieldToSelect('request_path');
         $coll->addFieldToSelect('product_id');
-        $coll->addFieldToFilter('product_id', array( 'in' => $ids));
+        $coll->addFieldToFilter('product_id', array( 'in' => $ids));        
 
         $urlPatterns = array();
         foreach ($coll as $row) {
@@ -29,7 +29,8 @@ class Zolago_Turpentine_Helper_Ban extends Nexcessnet_Turpentine_Helper_Ban {
         unset($urlPatterns);
 
         if ( empty($urlPatternsFin) ) {
-            $urlPatternsFin[] = "##_NEVER_MATCH_##";
+            $urlPatternsFin['regex'] = array();
+            $urlPatternsFin['heating'] = array(); 
         }
 
         return $urlPatternsFin;

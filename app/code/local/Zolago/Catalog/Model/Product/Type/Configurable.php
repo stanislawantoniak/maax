@@ -27,6 +27,15 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
         $usedProducts = array();
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
 
+        $collection->joinAttribute(
+            'status',
+            'catalog_product/status',
+            'entity_id',
+            null,
+            'inner',
+            Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+        );
+        
         $attributeSize = Mage::getResourceModel('catalog/product')
             ->getAttribute('size');
         $attributeSizeId = $attributeSize->getAttributeId();
@@ -35,7 +44,6 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
         $attributeVendorSku = Mage::getResourceModel('catalog/product')
             ->getAttribute('skuv');
         $attributeVendorSkuId = $attributeVendorSku->getAttributeId();
-
         $collection->getSelect()
             ->joinInner(
                 array("link_table" => 'catalog_product_super_link'),
@@ -60,7 +68,11 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
-            ->where("at_size.value IS NOT NULL");
+
+            ->where("at_size.value IS NOT NULL")
+            ->where("at_status.value <> ?",Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID)
+            
+            ;
 
         foreach ($collection as $product) {
             $usedProducts[$product->getParentId()][$product->getId()] = array(
@@ -88,7 +100,6 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
         $sizePriceRelations = array();
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
-
         $collection->joinAttribute(
             'price',
             'catalog_product/price',
@@ -113,8 +124,16 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             'inner',
             Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
         );
-
+        $collection->joinAttribute(
+            'status',
+            'catalog_product/status',
+            'entity_id',
+            null,
+            'inner',
+            Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+        );
         $collection->getSelect()
+            ->columns('concat(e.entity_id,"_",link_table.parent_id) as unique_id')
             ->joinInner(
                 array("link_table" => 'catalog_product_super_link'),
                 "e.entity_id = link_table.product_id",
@@ -123,7 +142,9 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
             ->where("at_size.value IS NOT NULL")
+            ->where("at_status.value <> ?",Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID)
         ;
+        $collection->setRowIdFieldName('unique_id');        
 //        Mage::log($collection->getSelect()->__toString(), null, "111.log");
         foreach ($collection as $product) {
             $sizePriceRelations[$product->getParentId()][$product->getId()] = array(
@@ -134,7 +155,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "price" => $product->getPrice() //Simple product price
             );
         }
-
+        Mage::log($sizePriceRelations);
         return $sizePriceRelations;
 
     }
@@ -159,6 +180,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
 
         $collection->getSelect()
+            ->columns('concat(e.entity_id,"_",link_table.parent_id) as unique_id')
             ->joinInner(
                 array("link_table" => 'catalog_product_super_link'),
                 "e.entity_id = link_table.product_id",
@@ -174,6 +196,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             ->where("at_msrp.store_id=?", $store)
 
             ->where("link_table.parent_id IN(?)", $productIds);
+        $collection->setRowIdFieldName('unique_id');        
 
         foreach ($collection as $product) {
             $mSRPForChildren[$product->getParentId()][$product->getId()] = array(
