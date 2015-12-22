@@ -65,6 +65,13 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
     }
 
     /**
+     * @param $tags
+     */
+    public function cleanCache($tags){
+        Mage::app()->getCacheInstance()->clean($tags);
+    }
+
+    /**
      * Check whether to use cache for category cache
      *
      * @return bool
