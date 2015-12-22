@@ -145,12 +145,16 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $vendorId = $vendor->getVendorId();
             $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
         }
+        $block = $this->getLayout()->createBlock('cms/block')->setBlockId($name);
+        $blockModel = Mage::getModel('cms/block')
+            ->setIsActive(1)
+            ->load($name);
+        $blockId = $blockModel->getId();
+        $currentStoreId = Mage::app()->getStore()->getId();
 
-        /** @var Zolago_Modago_Helper_Data $hlp */
-        $hlp = Mage::helper('zolagomodago');
-        $blockHtml = $hlp->getCachedCmsBlock($name, self::CACHE_GROUP, $categoryId);
-
-        if (!$blockHtml) {
+        if ($blockId && in_array($currentStoreId, $blockModel->getData("store_id"))) {
+            $blockHtml = $block->toHtml();
+        } else {
             //Render automatically
             $lambda = function($params) {
                 return $params['scope']->renderSidebarWrapper($params['category'], $params['vendor']);
