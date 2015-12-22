@@ -82,7 +82,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
         if (!$this->getData("vendor_menu_left")) {
 
             $categories = Mage::getModel('catalog/category')->getCategories($category->getId());
-            $menu = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 1, true, $vendor);
+            $menu = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2, true, $vendor);
 
             $this->setData("vendor_menu_left", $menu);
         }
@@ -94,20 +94,24 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
         $blockHtml = '';
         $categories = $this->getRenderVendorMenuLeft($category, $vendor);
 
-
         if (empty($categories)) {
             return $blockHtml;
         }
 
-        $blockHtml .= '<div id="sidebar" class="clearfix"><div class="sidebar"><div class="section clearfix hidden-xs">';
-        $blockHtml .= '<h3 class="open">' . $category->getName() . '</h3>';
-        $blockHtml .= '<ul class="nav nav-pills nav-stacked">';
-        foreach ($categories as $cat) {
-            $blockHtml .= '<li><a href="' . $cat["url"] . '" class="simple">' . $cat["name"] . '</a></li>';
+        $blockHtml .= '<div id="sidebar" class="clearfix">';
+        $blockHtml .= '<div class="sidebar">';
 
+        foreach ($categories as $cat) {
+            $blockHtml .= '<div class="section clearfix hidden-xs">';
+            $blockHtml .= '<h3 class="open">' . $cat["name"] . '</h3>';
+            $blockHtml .= '<ul class="nav nav-pills nav-stacked">';
+            foreach ($cat["has_dropdown"] as $catItem) {
+                $blockHtml .= '<li><a href="' . $catItem["url"] . '" class="simple">' . $catItem["name"] . '</a></li>';
+            }
+            $blockHtml .= '</div>';
         }
         $blockHtml .= '</ul>';
-        $blockHtml .= '</div></div></div>';
+        $blockHtml .= '</div></div>';
 
         return $blockHtml;
     }
