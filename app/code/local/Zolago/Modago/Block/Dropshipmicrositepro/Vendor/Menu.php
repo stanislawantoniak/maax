@@ -102,17 +102,21 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
         $blockHtml .= '<div class="sidebar">';
 
         foreach ($categories as $cat) {
-            $blockHtml .= '<div class="section clearfix hidden-xs">';
-            $blockHtml .= '<h3 class="open no-pointer">' . $cat["name"] . '</h3>';
-            $blockHtml .= '<div class="content content-cms bigger-left">';
-            $blockHtml .= '<dl class="no-margin">';
-            foreach ($cat["has_dropdown"] as $catItem) {
-                $blockHtml .= '<dd><a href="' . $catItem["url"] . '" class="simple">' . $catItem["name"] . '</a></dd>';
+            if(!empty($cat["has_dropdown"])){
+                $blockHtml .= '<div class="section clearfix hidden-xs">';
+                $blockHtml .= '<h3 class="open no-pointer"><strong>' . $cat["name"] . '</strong></h3>';
+                $blockHtml .= '<div class="content content-cms bigger-left">';
+                $blockHtml .= '<dl class="no-margin">';
+                foreach ($cat["has_dropdown"] as $catItem) {
+                    $blockHtml .= '<dd><a href="' . $catItem["url"] . '" class="simple">' . $catItem["name"] . '</a></dd>';
+                }
+                $blockHtml .= '</dl>';
+                $blockHtml .= '</div>';
+                $blockHtml .= '</div>';
             }
-            $blockHtml .= '</dl>';
-            $blockHtml .= '</div>';
+
         }
-        $blockHtml .= '</ul>';
+        $blockHtml .= '</div>';
         $blockHtml .= '</div>';
 
         return $blockHtml;
