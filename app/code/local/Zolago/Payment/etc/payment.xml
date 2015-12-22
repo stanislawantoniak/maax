@@ -4,7 +4,7 @@
     <zolagopayment>
       <!-- Gateway payments -->
       <gateway>
-        <!-- 
+        <!--
 				<providerCode>
                         // default settings
 						<method>targetPaymentCode</method>
@@ -14,16 +14,16 @@
 						</additional_information>
 						// override default per website
 						<websites>
-        					<websiteCode> 
+        					<websiteCode>
         						<method>targetPaymentCode</method>
 	        					<deny>0/1</deny>
 		        				<additional_information>
 			        				<key>someData</key>
     				    		</additional_information>
 	        				</websiteCode>
-    	    				<websiteCode> 
-                                ....	    				
-    			    		</websiteCode> 
+    	    				<websiteCode>
+                                ....
+    			    		</websiteCode>
     					</websites>
 				</providerCode>
 				-->

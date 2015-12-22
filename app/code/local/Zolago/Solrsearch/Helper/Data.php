@@ -433,10 +433,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			foreach ($allCats as $category) {
 
 				if ($currentCategory && $currentCategory->getId() == $category->getId()) {
-					
+
 				} else {
 					$selected = false;
-
+					$solrProductCount = $category->getSolrProductsCount($category);
+					if ($solrProductCount <= 0) {
+						continue;
+					}
 					$array['select_options'][] = array(
 						'text' => $category->getName(),
 						'value' => $category->getId(),
@@ -465,8 +468,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $array;
 	}
 
+
+
 	/**
-	 * Retrive info from solar for sibling categories
+	 * Retrieve info from solar for sibling categories
 	 *
 	 * @return array
 	 */
