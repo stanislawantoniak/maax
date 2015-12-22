@@ -48,7 +48,7 @@ body {
 	}
 	#header_top_block_left {
 		position: absolute;
-		left: 0px;
+		left: 120px;
 		top: 0px;
 		z-index: 20;
 		@include max-screen($screen-sm-max) {
@@ -57,28 +57,28 @@ body {
 	}
 	#header_top_block_center {
 		position: absolute;
-		left: 50%;
-		margin-left: -80px;
 		top: 1px;
-		width: 160px;
+		width: 103px;
 		z-index: 10;
+		left:0px;
 		img {
 			width: 100%;
 			height: auto;
 			margin-top: -3px; /* fix for vissavi logo */
 		}
 		@include max-screen($screen-sm-max) {
+			width: 58px;
 			left: 0;
 			margin-left: 0;
 		}
 		@include max-screen(470px) {
-			width: 150px;
+			width: 56px;
 			top: 3px;
 			left: -10px;
 			margin-left: 0;
 		}
 		@include max-screen(365px) {
-			width: 140px;
+			width: 56px;
 			top: 6px;
 			left: -10px;
 			margin-left: 0;
@@ -146,6 +146,7 @@ body {
 			height: 26px;
 			padding: 0;
 			position: relative;
+			border-left:1px solid $colorAccentBlocks;
 			background: $colorHeaderSearchBtnBg;
 			&:before {
 				font-family: FontAwesome;
@@ -286,7 +287,12 @@ body {
 
 /* HEADER BOTTOM */
 .header_bottom {
-
+	#navigation {
+		margin-left:120px;
+		@include max-screen($screen-sm-max) {
+			margin-left:0px;
+		}
+	}
 	#nav_desc {
 		&.navigation > li > a:hover,
 		&.navigation > li > a.active,
