@@ -103,15 +103,17 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
 
         foreach ($categories as $cat) {
             $blockHtml .= '<div class="section clearfix hidden-xs">';
-            $blockHtml .= '<h3 class="open">' . $cat["name"] . '</h3>';
-            $blockHtml .= '<ul class="nav nav-pills nav-stacked">';
+            $blockHtml .= '<h3 class="open no-pointer">' . $cat["name"] . '</h3>';
+            $blockHtml .= '<div class="content content-cms bigger-left">';
+            $blockHtml .= '<dl class="no-margin">';
             foreach ($cat["has_dropdown"] as $catItem) {
-                $blockHtml .= '<li><a href="' . $catItem["url"] . '" class="simple">' . $catItem["name"] . '</a></li>';
+                $blockHtml .= '<dd><a href="' . $catItem["url"] . '" class="simple">' . $catItem["name"] . '</a></dd>';
             }
+            $blockHtml .= '</dl>';
             $blockHtml .= '</div>';
         }
         $blockHtml .= '</ul>';
-        $blockHtml .= '</div></div>';
+        $blockHtml .= '</div>';
 
         return $blockHtml;
     }
