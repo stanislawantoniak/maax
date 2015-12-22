@@ -162,9 +162,9 @@ $colorLinkHover:                        #000;
 $colorLinkActive:                       #000;
 
 //icon colors
-$colorIcon:                             #000;
-$colorIconHover:                        #FFF;
-$colorIconHoverBackground:              #000;
+$colorIcon:                             #FFF;
+$colorIconHover:                        #2A2A2A;
+$colorIconHoverBackground:              #FFF;
 
 //icon texts colors
 $colorIconText:                         $colorIcon;
@@ -228,15 +228,15 @@ $colorHeaderBadgeBg:                    $colorAccentSite;
 $colorIconTextHeader:                   $colorIconText;
 $colorIconTextHoverHeader:              $colorIconTextHover;
 
-$colorBgBlocksHeader:                   $colorBackgroundBlocks;
+$colorBgBlocksHeader:                   $colorIconHover;
 $colorBgContentHeader:                  $colorBackgroundContent;
-$colorAccentBlocksHeader:               $colorAccentBlocks;
+$colorAccentBlocksHeader:               $colorBackgroundBlocks;
 
-$colorHeaderSearch:                     $colorFont;
-$colorHeaderSearchBg:                   $colorBgBlocksHeader;
+$colorHeaderSearch:                     #2a2a2a;
+$colorHeaderSearchBg:                   #FFF;
 $colorHeaderSearchBorder:               $colorIconHeader;
-$colorHeaderSearchBtnBg:                #000;
-$colorHeaderSearchBtn:                  #FFF;
+$colorHeaderSearchBtnBg:                #FFF;
+$colorHeaderSearchBtn:                  #2a2a2a;
 
 /* CHECKOUT HEADER VARIABLES */
 $colorHeaderCheckoutSteps:              $colorIconHeader;
@@ -263,6 +263,7 @@ $colorAccentDropdownCart:               $colorAccentDropdown;
 /* SEARCH DROPDOWN VARIABLES */
 $colorBgDropdownSearch:                 $colorBgDropdown;
 $colorDropdownSearch:                   $colorDropdown;
+$colorDropdownSearchText:               #fff;
 $colorAccentDropdownSearch:             $colorAccentDropdown;
 
 /* FOOTER VARIABLES */
