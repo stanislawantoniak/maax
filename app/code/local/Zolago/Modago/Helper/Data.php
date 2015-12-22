@@ -20,22 +20,24 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         foreach ($categories as $category) {
 
             $cat = Mage::getModel('catalog/category')->load($category->getId());
-            //$solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
             $solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
             if ($solrProductCount <= 0) {
                 continue;
             }
-            $tree[$category->getId()] = array(
-                'name' => $category->getName(),
-                'url' => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
-                'category_id' => $category->getId(),
-                'level' => $level,
-                "solr_product_count" => $solrProductCount
-            );
+            if($solrProductCount > 0){
+                $tree[$category->getId()] = array(
+                    'name' => $category->getName(),
+                    'url' => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
+                    'category_id' => $category->getId(),
+                    'level' => $level,
+                    "solr_product_count" => $solrProductCount
+                );
 
-            if ($level == 1) {
-                $tree[$category->getId()]['image'] = $cat->getImage();
+                if ($level == 1) {
+                    $tree[$category->getId()]['image'] = $cat->getImage();
+                }
             }
+
             if ($span && $level >= $span) {
                 continue;
             }
