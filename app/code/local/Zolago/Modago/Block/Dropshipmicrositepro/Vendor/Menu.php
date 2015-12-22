@@ -99,7 +99,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
             return $blockHtml;
         }
 
-        $blockHtml .= '<div class="sidebar"><div class="section clearfix hidden-xs">';
+        $blockHtml .= '<div id="sidebar" class="clearfix"><div class="sidebar"><div class="section clearfix hidden-xs">';
         $blockHtml .= '<h3 class="open">' . $category->getName() . '</h3>';
         $blockHtml .= '<ul class="nav nav-pills nav-stacked">';
         foreach ($categories as $cat) {
@@ -107,7 +107,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
 
         }
         $blockHtml .= '</ul>';
-        $blockHtml .= '</div></div>';
+        $blockHtml .= '</div></div></div>';
 
         return $blockHtml;
     }
