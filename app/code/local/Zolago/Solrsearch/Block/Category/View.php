@@ -152,19 +152,23 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         $blockId = $blockModel->getId();
         $currentStoreId = Mage::app()->getStore()->getId();
 
-        if ($blockId && in_array($currentStoreId, $blockModel->getData("store_id"))) {
+        $defaultStoreId = Mage_Core_Model_App::ADMIN_STORE_ID;
+
+        if ($blockId
+            && (in_array($currentStoreId, $blockModel->getData("store_id")) || in_array($defaultStoreId, $blockModel->getData("store_id")))
+        ) {
             $blockHtml = $block->toHtml();
         } else {
             //Render automatically
-            $lambda = function($params) {
+            $lambda = function ($params) {
                 return $params['scope']->renderSidebarWrapper($params['category'], $params['vendor']);
             };
-            $cacheKey  = $name.'_auto_render_'.Mage::app()->getStore()->getId();
+            $cacheKey = $name . '_auto_render_' . Mage::app()->getStore()->getId();
             $blockHtml = Mage::helper('zolagocommon')->getCache(
                 $cacheKey
-                ,self::CACHE_GROUP
-                ,$lambda
-                ,array('category' => $category, 'vendor' => $vendor, 'scope' => $this)
+                , self::CACHE_GROUP
+                , $lambda
+                , array('category' => $category, 'vendor' => $vendor, 'scope' => $this)
             );
         }
         return $blockHtml;
