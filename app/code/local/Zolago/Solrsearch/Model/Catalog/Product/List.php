@@ -71,7 +71,6 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
                             $vid = $vendorContext->getId();
                         }
                         $cacheKey = sprintf("SOLR_PRODUCTS_COUNT_%d_%d_%d", $category->getId(), $vid, Mage::app()->getStore()->getId());
-                        //Mage::getModel("zolagocatalog/category")->cleanCache(array($cacheKey));
                         Mage::getModel("zolagocatalog/category")->getCategoryCacheHelper()->_saveInCache($cacheKey, $numFound);
                     }
 
