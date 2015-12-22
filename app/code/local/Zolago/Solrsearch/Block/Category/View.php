@@ -146,9 +146,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
         }
         $block = $this->getLayout()->createBlock('cms/block')->setBlockId($name);
-        $blockId = Mage::getModel('cms/block')->load($name)->getId();
+        $blockModel = Mage::getModel('cms/block')
+            ->setIsActive(1)
+            ->load($name);
+        $blockId = $blockModel->getId();
+        $currentStoreId = Mage::app()->getStore()->getId();
 
-        if ($blockId) {
+        if ($blockId && in_array($currentStoreId, $blockModel->getData("store_id"))) {
             $blockHtml = $block->toHtml();
         } else {
             //Render automatically
