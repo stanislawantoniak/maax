@@ -120,7 +120,9 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
          $lambda = function($params) {
              return Mage::app()->getLayout()->createBlock('cms/block')->setBlockId($params['blockId'])->toHtml();
          };
-         $cacheKey = $blockId.'_'.$cacheKeySuffix;
+         /** @var Zolago_Dropship_Model_Vendor|false $vendor */
+         $vendor = Mage::helper("umicrosite")->getCurrentVendor();
+         $cacheKey = $blockId.'_'.$cacheKeySuffix.'_'.($vendor ? (int)$vendor->getId() : 0).'_'.Mage::app()->getStore()->getId();
          return Mage::helper('zolagocommon')->getCache($cacheKey,$groupId,$lambda,array('blockId' => $blockId));
          
      }
