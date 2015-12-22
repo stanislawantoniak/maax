@@ -20,7 +20,6 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         foreach ($categories as $category) {
 
             $cat = Mage::getModel('catalog/category')->load($category->getId());
-            //$solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
             $solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
             if ($solrProductCount <= 0) {
                 continue;
