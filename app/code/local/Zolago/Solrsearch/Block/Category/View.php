@@ -185,15 +185,23 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         if (empty($categories)) {
             return $blockHtml;
         }
-        $blockHtml .= '<div class="sidebar"><div class="section clearfix hidden-xs">';
-        $blockHtml .= '<h3 class="open">' . $category->getLongName() . '</h3>';
-        $blockHtml .= '<ul class="nav nav-pills nav-stacked">';
+        $blockHtml .= '<div id="sidebar" class="clearfix">';
+        $blockHtml .= '<div class="sidebar">';
+
+        $blockHtml .= '<div class="section clearfix hidden-xs">';
+        $blockHtml .= '<h3 class="open no-pointer"><strong>' . $category->getLongName() . '</strong></h3>';
+        $blockHtml .= '<div class="content content-cms bigger-left">';
+        $blockHtml .= '<dl class="no-margin">';
         foreach ($categories as $cat) {
-            $blockHtml .= '<li><a href="' . $cat["url"] . '" class="simple">' . $cat["name"] . '</a></li>';
+            $blockHtml .= '<dd><a href="' . $cat["url"] . '" class="simple">' . $cat["name"] . '</a></dd>';
 
         }
-        $blockHtml .= '</ul>';
-        $blockHtml .= '</div></div>';
+        $blockHtml .= '</dl>';
+
+        $blockHtml .= '</div>';
+        $blockHtml .= '</div>';
+        $blockHtml .= '</div>';
+        $blockHtml .= '</div>';
 
         return $blockHtml;
     }
