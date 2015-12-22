@@ -364,7 +364,7 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
      */
     public function getSolrProductsCount($category, $vendorContext = FALSE)
     {
-
+        /** @var Zolago_Solrsearch_Model_Solr_Category_Solr $solrModel */
         $solrModel = Mage::getModel('zolagosolrsearch/solr_category_solr');
         $vid = 0;
         if ($vendorContext) {

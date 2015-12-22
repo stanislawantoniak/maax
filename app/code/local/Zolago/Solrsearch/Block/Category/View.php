@@ -131,9 +131,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     }
 
+    /**
+     * @return string
+     */
     public function getSidebarWrapper()
     {
-        $categoryId = $this->getCurrentCategory()->getId();
+        $category = $this->getCurrentCategory();
+        $categoryId = $category->getId();
         $name = "sidebar-c{$categoryId}-wrapper";
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 
@@ -141,8 +145,60 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $vendorId = $vendor->getVendorId();
             $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
         }
+        $block = $this->getLayout()->createBlock('cms/block')->setBlockId($name);
+        $blockId = Mage::getModel('cms/block')->load($name)->getId();
 
-        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml();
+        if ($blockId) {
+            $blockHtml = $block->toHtml();
+        } else {
+            //Render automatically
+            $blockHtml = $this->renderSidebarWrapper($category, $vendor);
+        }
+        return $blockHtml;
+    }
+
+    /**
+     * @param $category
+     * @param $vendor
+     * @return string
+     */
+    public function renderSidebarWrapper($category, $vendor)
+    {
+        $blockHtml = '';
+        $categories = $this->getRenderMenuCategories($category, $vendor);
+
+        if (empty($categories)) {
+            return $blockHtml;
+        }
+        $blockHtml .= '<div class="sidebar"><div class="section clearfix hidden-xs">';
+        $blockHtml .= '<h3 class="open">' . $category->getLongName() . '</h3>';
+        $blockHtml .= '<ul class="nav nav-pills nav-stacked">';
+        foreach ($categories as $cat) {
+            $blockHtml .= '<li><a href="' . $cat["url"] . '" class="simple">' . $cat["name"] . '</a></li>';
+
+        }
+        $blockHtml .= '</ul>';
+        $blockHtml .= '</div></div>';
+
+        return $blockHtml;
+    }
+
+    /**
+     * @param $category
+     * @param $vendor
+     * @return mixed
+     */
+    public function getRenderMenuCategories($category, $vendor){
+        if(!$this->getData("sidebar_menu_categories")){
+            $categories = Mage::getModel('catalog/category')->getCategories($category->getId());
+            if($vendor){
+                $menu = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 1, true, $vendor);
+            } else {
+                $menu = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 1, false);
+            }
+            $this->setData("sidebar_menu_categories",$menu);
+        }
+        return $this->getData("sidebar_menu_categories");
     }
 
     public function getProductListHtml() {
