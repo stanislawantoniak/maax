@@ -254,6 +254,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
         //queue inform_magento
         $skuS = array_keys($priceBatch);
+        Mage::log($priceBatch, null, 'mylog.log');
 //        Mage::log('Count: '.count($skuS), 0);
         if (empty($priceBatch)) {
             return;
