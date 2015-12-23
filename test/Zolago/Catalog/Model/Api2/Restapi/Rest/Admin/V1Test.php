@@ -138,8 +138,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         );
         //$param = json_encode($json);
         $obj::updatePricesConverter($param);
-        Zolago_Catalog_Model_Observer::processPriceTypeQueue();
-        Zolago_Catalog_Model_Observer::processConfigurableQueue();
+        //Zolago_Catalog_Model_Observer::processPriceTypeQueue();
+        //Zolago_Catalog_Model_Observer::processConfigurableQueue();
     }
 
 
