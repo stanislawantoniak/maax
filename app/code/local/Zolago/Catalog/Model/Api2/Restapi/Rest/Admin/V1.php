@@ -261,7 +261,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
-
+        Mage::log($skeleton, null, 'mylog.log');
         if (empty($skeleton)) {
             return;
         }
