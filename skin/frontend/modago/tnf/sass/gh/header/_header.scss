@@ -34,6 +34,14 @@ body {
 			left: 288px;
 		}
 	}
+	.headroom--not-top {
+		@media(min-width: $screen-md-min) {
+			#logo img {
+				height: 58px !important;
+				width: auto !important;
+			}
+		}
+	}
 }
 
 .header_top {

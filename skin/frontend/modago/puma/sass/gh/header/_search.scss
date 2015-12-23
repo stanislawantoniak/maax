@@ -16,6 +16,7 @@
             }
         }
         .select-box {
+	        display: none;
 			.selectboxit.form-control.select-styled {
 				border-top: 1px solid $colorHeaderSearchBorder;
 				border-bottom: 1px solid $colorHeaderSearchBorder;
@@ -25,6 +26,7 @@
             }
         }
 	    .form-control.select-styled.search-context {
+		    display: none;
 		    border-top: 1px solid $colorHeaderSearchBorder;
 		    border-bottom: 1px solid $colorHeaderSearchBorder;
 		    border-right: none;
@@ -41,12 +43,12 @@
 		width: 282px;
 		.form-group {
 			float: left;
-			width:119px ;
 			input[type="text"] {
 				height: 26px;
-				width: 119px;
+				width: 235px;
 				padding-left: 15px;
 				float: left;
+				border-radius: 5px 0 0 5px;
 			}
 		}
 		.select-box {

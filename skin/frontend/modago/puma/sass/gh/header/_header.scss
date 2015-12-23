@@ -34,12 +34,21 @@ body {
 			left: 288px;
 		}
 	}
+	.headroom--not-top {
+		@media(min-width: $screen-md-min) {
+			#logo img {
+				height: 58px !important;
+				width: auto !important;
+				margin-top: -6px !important;
+			}
+		}
+	}
 }
 
 .header_top {
 	position: fixed;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	width: 100%;
 	z-index: 1000;
 
@@ -48,8 +57,8 @@ body {
 	}
 	#header_top_block_left {
 		position: absolute;
-		left: 120px;
-		top: 0px;
+		right: 270px;
+		top: 0;
 		z-index: 20;
 		@include max-screen($screen-sm-max) {
 			display: none;
@@ -60,11 +69,14 @@ body {
 		top: 1px;
 		width: 103px;
 		z-index: 10;
-		left:0px;
+		left:0;
 		img {
 			width: 100%;
 			height: auto;
-			margin-top: -3px; /* fix for vissavi logo */
+			margin-top: -3px;
+			@include max-screen($screen-sm-max) {
+				margin-top: -6px;
+			}
 		}
 		@include max-screen($screen-sm-max) {
 			width: 58px;
@@ -79,7 +91,7 @@ body {
 		}
 		@include max-screen(365px) {
 			width: 56px;
-			top: 6px;
+			top: 3px;
 			left: -10px;
 			margin-left: 0;
 		}
@@ -141,13 +153,13 @@ body {
 	;
 
 		.button-search {
-			border-radius: 0;
 			width: 29px;
 			height: 26px;
 			padding: 0;
 			position: relative;
 			border-left:1px solid $colorAccentBlocks;
 			background: $colorHeaderSearchBtnBg;
+			border-radius: 0 5px 5px 0;
 			&:before {
 				font-family: FontAwesome;
 				font-size: 16px;
@@ -188,15 +200,29 @@ body {
 		vertical-align: top;
 		cursor: pointer;
 
+
 		@include min-screen($screen-md-min) {
+			padding: 0 20px;
+			width: auto;
 			a:hover, &.open {
-				background-color: $colorIconHoverBgHeader;
+				/*background-color: $colorIconHoverBgHeader;*/
+				text-decoration: underline;
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
 				}
 				span {
 					color: $colorIconTextHoverHeader;
 				}
+			}
+			&:last-child {
+				.puma-menu-item {
+					border-right: none;
+				}
+			}
+			.puma-menu-item {
+				border-right: 1px solid $colorIconTextHeader;
+				padding-right: 20px;
+				margin-right: -20px;
 			}
 		}
 		&#link_search.not-open, &#link_search.not-open:hover {
@@ -497,12 +523,19 @@ body {
 	list-style: none;
 	a {
 		text-align: center;
-		text-transform: uppercase;
 		font-size: 9px;
 		color: $colorIconTextHeader;
 		text-decoration: none;
 		&:hover {
 			background: none;
+		}
+		@media (min-width: $screen-md-min) {
+			font-size: 12px;
+			width: auto !important;
+			.puma-menu-item {
+				line-height: 17px;
+				margin-top: 13px;
+			}
 		}
 	}
 
@@ -689,12 +722,6 @@ body {
 				}
 			}
 		}
-	}
-}
-
-#link_basket {
-	&.open a {
-		border-bottom: 4px solid $colorIconHoverBgHeader;
 	}
 }
 
