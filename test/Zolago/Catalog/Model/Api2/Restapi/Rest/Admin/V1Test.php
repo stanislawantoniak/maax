@@ -88,7 +88,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 //        "25768-M":{"A":31.9,"B":32.9},
 //      "25768-XL":{"A":31.9,"B":32.9},"25767-XXL":{"A":31.9,"B":32.9},"25767-XL":{"A":31.9,"B":32.9},
 //      "25768-S":{"A":31.9,"B":32.9},"25767-S":{"A":31.9,"B":32.9}}}]} ';
-        $randomek = rand(5, 500);
+        $randomek = rand(5, 70);
         Mage::log("nowa cena: ".$randomek, null, 'mylog.log');
 
         $param = array(
