@@ -403,7 +403,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 * Process collected products
 	 */
 	public function processCollectedProducts() {
-		
+
 		//var_export($this->_collectedProdutcs);
 		if(!$this->_canBeHandled){
 			return;
@@ -425,16 +425,12 @@ class Zolago_Solrsearch_Model_Observer {
 			}
 			
 			if($childsIds){
-				$parentIds = $resource->getParentIdsByChild($childsIds);
-				foreach($parentIds as $parentIds){
-					$parentIdsFlat = array_merge($parentIdsFlat, $parentIds);
-				}
+                $parentIdsFlat = $resource->getParentIdsByChild($childsIds, true);
 			}
-			
-			$collection = Mage::getResourceModel('catalog/product_collection');
-			/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-			
-			$collection->addAttributeToSelect(array("status", "visibility"));
+
+            /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+            $collection = Mage::getResourceModel('catalog/product_collection');
+			$collection->addAttributeToSelect(array("status", "visibility"), 'left');
 			
 			if($storeId!=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID){
 				$collection->addStoreFilter($storeId);
@@ -444,22 +440,73 @@ class Zolago_Solrsearch_Model_Observer {
 			}
 			
 			$collection->addIdFilter($products + $parentIdsFlat);
-			
-			
-			foreach($collection as $product){
-				if(isset($stores[$product->getId()])){
-					$product->setStoreIds($stores[$product->getId()]);
-				}
-				$this->_pushProduct($product, $storeId);
-			}
-			
+
+            // Load data from sql is faster than load object
+            $productData = $collection->getData();
+            foreach ($productData as &$product) {
+                if (isset($stores[$product['entity_id']])) {
+                    $product['store_ids'] = $stores[$product['entity_id']];
+                }
+            }
+            $this->_pushMultipleProducts($productData, $storeId);
 		}
 		
 		$this->_collectedProdutcs = array();
 		$this->_collectedCheckParents = array();
-		
-	}
-	
+
+    }
+
+    /**
+     * Multiple products push do queue
+     *
+     * @param array $productData
+     * @param $storeId
+     */
+    protected function _pushMultipleProducts(array $productData, $storeId) {
+        /* @var $queueModel Zolago_Solrsearch_Model_Queue */
+        $queueModel = Mage::getSingleton('zolagosolrsearch/queue');
+        /** @var Zolago_Solrsearch_Helper_Data $zssHelper */
+        $zssHelper = Mage::helper("zolagosolrsearch");
+
+        $queueItems = array();
+        foreach ($productData as $product) {
+
+            $deleteOnly = false;
+            // Check should be removed
+            if ($product['visibility'] == Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE) {
+                $deleteOnly = true;
+            }
+            if ($product['status'] != Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+                $deleteOnly = true;
+            }
+
+            if (empty($storeId) || $storeId == Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
+                $storeIds = $product['store_ids'];
+            } else {
+                $storeIds = array($storeId);
+            }
+            /* @var $item Zolago_Solrsearch_Model_Queue_Item */
+            $rawItem = Mage::getModel("zolagosolrsearch/queue_item");
+
+            foreach ($this->_filterStoreIds($storeIds) as $_storeId) {
+                $cores = $zssHelper->getCoresByStoreId($_storeId);
+                if (!is_array($cores) || !isset($cores[0])) {
+                    continue;
+                }
+                foreach ($cores as $core) {
+                    $item = clone $rawItem;
+                    $item->setProductId($product['entity_id']);
+                    $item->setCoreName($core);
+                    $item->setStoreId($_storeId);
+                    $item->setDeleteOnly((int)$deleteOnly);
+                    $item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
+                    $queueItems[$product['entity_id'] . '_' . $core . '_' . $_storeId . '_' . (int)$deleteOnly] = $item;
+                }
+            }
+        }
+        $queueModel->pushMultiple($queueItems);
+    }
+
 	/**
 	 * Push single product to queue. Process parent if needed
 	 * @param Mage_Catalog_Model_Product|int $product
@@ -521,7 +568,7 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 
 	}
-	
+
 	
 	/**
 	 * @param array $storeIds
