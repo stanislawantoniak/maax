@@ -134,6 +134,18 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
+            ),
+            '25-16X83123138Q' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+            '25-16X83123144N' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
             )
         );
         //$param = json_encode($json);
