@@ -1,0 +1,10 @@
+cd ../skin/frontend/modago/default
+compass compile
+cd ../gallery
+compass compile
+cd ../vissavi
+compass compile
+cd ../puma
+compass compile
+cd ../tnf
+compass compile

@@ -11,6 +11,15 @@
 			</action>
 		</reference>
 	</default>
+    <zolagomodago_index_index>
+        <reference name="content">
+            <reference name="modagohome">
+				<reference name="vendor.banner">
+					 <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/> 
+				</reference>
+            </reference>
+        </reference>
+    </zolagomodago_index_index>	
 	<faq_index_index>
 		<reference name="head">
 			<action method="removeItem">
@@ -19,4 +28,20 @@
 			</action>
 		</reference>
 	</faq_index_index>
+    <solrbridge_solrsearch_category_view>
+        <reference name="content">
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>  
+        </reference>
+    </solrbridge_solrsearch_category_view>
+    <solrsearch_index_index>
+        <reference name="content">
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/> 
+        </reference>
+    </solrsearch_index_index>
+    <catalog_product_view>
+        <reference name="product.info">
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
+        </reference>
+    </catalog_product_view>
+
 </layout>
