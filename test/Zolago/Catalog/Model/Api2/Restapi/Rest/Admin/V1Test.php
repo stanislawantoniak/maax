@@ -146,6 +146,39 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
+            ),
+
+
+
+            '25-19E41781038D' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+            '25-19E417810428' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+            '25-19E417810406' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+            '25-19E41781044A' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
+            ),
+            '25-19E41781036B' => array(
+                'A' => $randomek+3,
+                'B' => 6,
+                'C' => 18,
+                'Z' => 88
             )
         );
         //$param = json_encode($json);
