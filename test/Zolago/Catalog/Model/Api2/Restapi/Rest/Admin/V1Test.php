@@ -92,13 +92,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         Mage::log("nowa cena: ".$randomek, null, 'mylog.log');
 
         $param = array(
-        '25-1AU41410440G' => array(
+        '25-16X83123144N' => array(
                 'A' => $randomek,
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
             ),
-        '25-16X83123136O' => array(
+        '25-16X83123138Q' => array(
                 'A' => $randomek+1,
                 'B' => 6,
                 'C' => 18,
@@ -135,13 +135,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
                 'C' => 18,
                 'Z' => 88
             ),
-            '25-16X83123138Q' => array(
+            '25-16X83123142L' => array(
                 'A' => $randomek+3,
                 'B' => 6,
                 'C' => 18,
                 'Z' => 88
             ),
-            '25-16X83123144N' => array(
+            '25-16X83123140J' => array(
                 'A' => $randomek+3,
                 'B' => 6,
                 'C' => 18,
