@@ -39,10 +39,10 @@
 			top: 0;
 			cursor: pointer;
 			&.boxesArrowNext {
-				right: 0;
+				right: 9px;
 			}
 			&.boxesArrowPrev {
-				left: 0;
+				left: 9px;
 			}
 			i {
 				transition: margin 200ms ease;
@@ -51,14 +51,5 @@
 	}
 	.boxesArrow {
 		display: none;
-	}
-}
-
-body.umicrosite-index-landingpage #boxesSlider > .boxesArrow {
-	&.boxesArrowNext {
-		right: 9px;
-	}
-	&.boxesArrowPrev {
-		left: 9px;
 	}
 }

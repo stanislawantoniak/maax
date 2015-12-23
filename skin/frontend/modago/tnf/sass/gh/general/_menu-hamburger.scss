@@ -1,4 +1,3 @@
-
 /* ----------
  * 002 - Site
  */
@@ -6,6 +5,7 @@
 #sb-site, .sb-site {
 	overflow-x: hidden;
 }
+
 /* ---------------
  * 003 - Slidebars
  */
@@ -13,71 +13,87 @@
 .sb-slidebar {
 	background-color: $colorHamburgerBg;
 	> header {
-		background:$colorHamburgerBg;
-		
+		background: $colorHamburgerBg;
+
 		a, a:visited {
 			line-height: 57px;
-			color:$colorHamburgerText;
+			color: $colorHamburgerText;
 			font-size: 14px;
 			text-decoration: underline;
 		}
 	}
 }
+
 .sb-menu > li {
-border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-background: $colorHamburgerBgItem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	background: $colorHamburgerBgItem;
+	&:last-child {
+		border-bottom: none;
+	}
 }
+
 .sb-menu li a {
-color: $colorHamburgerText;
+	color: $colorHamburgerText;
 	&:hover {
 		text-decoration: underline;
 	}
 }
-.sb-menu  li ul {
+
+.sb-menu li ul {
 	color: $colorHamburgerText2;
 	background: $colorHamburgerBgItem2;
 	list-style: none;
 }
-.sb-menu  li li {
-	}
-.sb-menu  li ul ul {
+
+.sb-menu li li {
+}
+
+.sb-menu li ul ul {
 	color: $colorHamburgerText3;
 	background: $colorHamburgerBgItem3;
 }
+
 .sb-menu > li > a {
 	text-transform: uppercase;
 }
+
 .sb-menu > li > ul > li > a {
 	text-transform: uppercase;
 	border-top: 1px solid $colorHamburgerBorder2;
 }
+
 .sb-menu > li > ul > li:first-child > a {
-	border-top:none;
+	border-top: none;
 }
+
 .sb-menu > li > ul > li > ul > li > a {
 	border-top: 1px solid $colorHamburgerBorder3;
 }
+
 .sb-menu > li > ul > li > ul > li:first-child > a {
 	border-top: none;
 }
-.sb-menu li a.sb-submenu-active + ul{
+
+.sb-menu li a.sb-submenu-active + ul {
 	display: block;
 }
 
-
-.sb-menu  li a.sb-toggle-submenu {
+.sb-menu li a.sb-toggle-submenu {
 	background: url('../images/arrow-menu-sliding-wite.png') 90% 50% no-repeat;
 }
-.sb-menu  li a.sb-submenu-active {
+
+.sb-menu li a.sb-submenu-active {
 	background: url('../images/arrow-menu-sliding-active.png') 90% 50% no-repeat;
 }
 
-.sb-menu  li ul a.sb-toggle-submenu {
+.sb-menu li ul a.sb-toggle-submenu {
 	background: url('../images/arrow-menu-sliding-wite.png') 90% 50% no-repeat;
 }
-.sb-menu  li ul a.sb-submenu-active {
+
+.sb-menu li ul a.sb-submenu-active {
 	background: url('../images/arrow-menu-sliding-active.png') 90% 50% no-repeat;
 }
+
 .sb-menu > li.separator,
 .sb-menu li.separator {
 	background: $colorHamburgerBgSeparator;
@@ -88,35 +104,36 @@ color: $colorHamburgerText;
  */
 .fb-slidebar-header {
 
-		background:$colorHamburgerBgHeader;
-		
-		a, a:visited {
+	background: $colorHamburgerBgHeader;
+
+	a, a:visited {
+		line-height: 53px;
+		color: $colorHamburgerTextHeader;
+		font-size: 14px;
+		text-transform: uppercase;
+		@include max-screen($screen-sm-max) {
+			height: 41px;
+			line-height: 41px;
+		}
+		i {
+			font-size: 20px;
+			float: left;
 			line-height: 53px;
-			color:$colorHamburgerTextHeader;
-			font-size: 14px;
-			text-transform: uppercase;
 			@include max-screen($screen-sm-max) {
-			      height:41px;
-			      line-height: 41px;
-			   }
-			i {
-				font-size: 20px;
-				float: left;
-				line-height: 53px;
-				@include max-screen($screen-sm-max) {
-			      line-height: 41px;
-			   }
+				line-height: 41px;
 			}
 		}
 	}
+}
+
 .fb-slidebar {
 	background-color: $colorHamburgerBg;
-	
+
 	> header {
-		background:$colorHamburgerBgHeader;
+		background: $colorHamburgerBgHeader;
 		a, a:visited {
 			line-height: 53px;
-			color:$colorHamburgerTextHeader;
+			color: $colorHamburgerTextHeader;
 			font-size: 14px;
 			text-transform: uppercase;
 			i {
@@ -126,7 +143,7 @@ color: $colorHamburgerText;
 			}
 		}
 	}
-	
+
 }
 
 html, body, #sb-site, .sb-site, .sb-slidebar, #fb-site, .fb-site, .fb-slidebar {
@@ -169,18 +186,19 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 
 #sb-site.open {
 
-	-webkit-transform:translate(242px);
-	-moz-transform:translate(242px);
-	-o-transform:translate(242px);
-	transform:translate(242px);
+	-webkit-transform: translate(242px);
+	-moz-transform: translate(242px);
+	-o-transform: translate(242px);
+	transform: translate(242px);
 }
+
 .sb-open {
 	#sb-site.open {
 
-		-webkit-transform:translate(288px);
-		-moz-transform:translate(288px);
-		-o-transform:translate(288px);
-		transform:translate(288px);
+		-webkit-transform: translate(288px);
+		-moz-transform: translate(288px);
+		-o-transform: translate(288px);
+		transform: translate(288px);
 	}
 }
 
@@ -190,7 +208,7 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 
 .sb-slidebar {
 	height: 100%;
-	overflow:hidden;
+	overflow: hidden;
 	position: fixed;
 	top: 0;
 	z-index: 0; /* Slidebars sit behind sb-site. */
@@ -200,18 +218,18 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 	-webkit-overflow-scrolling: touch; /* Adds smooth native scrolling for iOS & Android devices. */
 	&.open {
 		display: block;
-		-webkit-transform:translate(288px);
-		-moz-transform:translate(288px);
-		-o-transform:translate(288px);
-		transform:translate(288px);
+		-webkit-transform: translate(288px);
+		-moz-transform: translate(288px);
+		-o-transform: translate(288px);
+		transform: translate(288px);
 	}
 	> header {
-		position:relative;
-		height:57px;
+		position: relative;
+		height: 57px;
 		a, a:visited {
-			display:block;
-			height:57px;
-			margin-left:15px;
+			display: block;
+			height: 57px;
+			margin-left: 15px;
 		}
 	}
 	.sb-slidebar-inner {
@@ -348,47 +366,53 @@ html.sb-static .sb-slidebar,
 	display: none;
 }
 
-
 .sb-menu {
-	margin:0px;
+	margin: 0px;
 	padding-left: 0;
 	margin-bottom: 12px;
 }
-.sb-menu  li {
+
+.sb-menu li {
 	width: 100%;
 	padding: 0;
 	margin: 0;
 
 }
+
 .sb-menu li a {
 	width: 100%;
 	padding: 16px 0px 16px 0;
 	display: inline-block;
 }
-.sb-menu  li ul {
+
+.sb-menu li ul {
 	margin: 0px;
 	padding-left: 0;
 	display: none;
 }
-.sb-menu  li li {
+
+.sb-menu li li {
 }
+
 .sb-menu > li > ul > li > a {
 	padding-left: 36px;
 }
+
 .sb-menu > li > ul > li:first-child > a {
-	border-top:none;
+	border-top: none;
 }
+
 .sb-menu > li > ul > li > ul > li > a {
 	padding-left: 54px;
 	font-size: 15px;
 }
 
-.sb-menu li a.sb-submenu-active + ul{
+.sb-menu li a.sb-submenu-active + ul {
 	display: block;
 }
 
 .sb-menu > li.separator,
 .sb-menu li.separator {
-	height:12px;
+	height: 12px;
 	display: block;
 }
