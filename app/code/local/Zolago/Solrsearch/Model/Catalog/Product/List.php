@@ -58,6 +58,23 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
             if (is_array($data)) {
                 $collection->setSolrData($this->getSolrData());
+                $fq = Mage::helper('solrsearch')->getParam('fq');
+
+                if ($this->getMode() == self::MODE_CATEGORY && empty($fq)) {
+                    $numFound = isset($data["response"]["numFound"]) ? (int)$data["response"]["numFound"] : 0;
+
+                    if (empty($numFound)) {
+                        //Clear cache solr_products_count (jako klient nie chcę widzieć kategorii w których nie ma produktów)
+                        $category = $this->getCurrentCategory();
+                        $vid = 0;
+                        if ($vendorContext = Mage::helper("umicrosite")->getCurrentVendor()) {
+                            $vid = $vendorContext->getId();
+                        }
+                        $cacheKey = sprintf("SOLR_PRODUCTS_COUNT_%d_%d_%d", $category->getId(), $vid, Mage::app()->getStore()->getId());
+                        Mage::getModel("zolagocatalog/category")->getCategoryCacheHelper()->_saveInCache($cacheKey, $numFound);
+                    }
+
+                }
             }
             $collection->setCurrentCategory($this->getCurrentCategory());
             $collection->load();

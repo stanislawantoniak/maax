@@ -55,7 +55,16 @@ class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template
         };
         $currentCategory = Mage::registry('current_category');
         if ($currentCategory) {
-            return Mage::helper('zolagocommon')->getCache('category_main_menu_mobile_'.$currentCategory->getId(),self::CACHE_GROUP,$lambda,array());
+            /** @var Zolago_Common_Helper_Data $hlp */
+            $hlp = Mage::helper('zolagocommon');
+            /** @var Zolago_Dropship_Model_Vendor|false $vendor */
+            $vendor = Mage::helper("umicrosite")->getCurrentVendor();
+            return $hlp->getCache(
+                'category_main_menu_mobile_'.$currentCategory->getId().'_'.($vendor ? (int)$vendor->getId() : 0) .'_'. Mage::app()->getStore()->getId()
+                ,self::CACHE_GROUP
+                ,$lambda
+                ,array()
+            );
         }
         return '';
     }
