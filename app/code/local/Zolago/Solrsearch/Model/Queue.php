@@ -99,16 +99,38 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection {
      public function cleanupLogTable() {
          Mage::getSingleton('solrsearch/ultility')->cleanupLogTable();
      }
+
     /**
+     * Push multi items to queue
+     *
      * @param array $items
-     * @return Zolago_Solrsearch_Model_Queue
-     * @todo Impelemnt
+     * @return $this
      */
     public function pushMultiple(array $items) {
+        /** @var Zolago_Solrsearch_Model_Resource_Queue_Item $resource */
         $resource = Mage::getResourceModel("zolagosolrsearch/queue_item");
-        $item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
 
-        // Do insert on
+        $group = array();
+        foreach ($items as $item) {
+            /* @var $item Zolago_Solrsearch_Model_Queue_Item */
+            $group[$item->getCoreName()][$item->getStoreId()][$item->getDeleteOnly()][] = $item;
+        }
+
+        foreach ($group as $coreId => $core) {
+            foreach ($core as $storeId => $store) {
+                foreach ($store as $deleteFlag => $deleteOnly) {
+                    $data = array(
+                        'status'     => Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT,
+                        'created_at' => Varien_Date::now()
+                    );
+                    $productIds = array();
+                    foreach ($deleteOnly as $item) {
+                        $productIds[] = $item->getProductId();
+                    }
+                    $resource->multiUpdate($data, $productIds, $storeId, $coreId, $deleteFlag);
+                }
+            }
+        }
         return $this;
     }
 

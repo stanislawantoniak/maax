@@ -8,6 +8,7 @@
 
 
  **/
+/* CMS VARIABLES */
 /* HEADER VARIABLES */
 /* CHECKOUT HEADER VARIABLES */
 /* TOP MENU VARIABLES */
@@ -21,6 +22,9 @@
 /* COOKIE BAR VARIABLES */
 /* PRODUCT VARIABLES */
 /* MY ACCOUNT VARIABLES */
+/* RMA VARIABLES */
+/* SIDEBAR COLORS */
+/* PRODUCT SITE COLORS */
 /* line 1, ../sass/slick/_topslider.scss */
 #topSlider {
   display: none;
@@ -181,20 +185,13 @@
   cursor: pointer; }
 /* line 41, ../sass/slick/_boxesslider.scss */
 #boxesSlider.boxesSliderHasArrows .boxesArrow.boxesArrowNext {
-  right: 0; }
+  right: 9px; }
 /* line 44, ../sass/slick/_boxesslider.scss */
 #boxesSlider.boxesSliderHasArrows .boxesArrow.boxesArrowPrev {
-  left: 0; }
+  left: 9px; }
 /* line 47, ../sass/slick/_boxesslider.scss */
 #boxesSlider.boxesSliderHasArrows .boxesArrow i {
   transition: margin 200ms ease; }
 /* line 52, ../sass/slick/_boxesslider.scss */
 #boxesSlider .boxesArrow {
   display: none; }
-
-/* line 58, ../sass/slick/_boxesslider.scss */
-body.umicrosite-index-landingpage #boxesSlider > .boxesArrow.boxesArrowNext {
-  right: 9px; }
-/* line 61, ../sass/slick/_boxesslider.scss */
-body.umicrosite-index-landingpage #boxesSlider > .boxesArrow.boxesArrowPrev {
-  left: 9px; }

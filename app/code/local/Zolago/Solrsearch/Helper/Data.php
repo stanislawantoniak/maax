@@ -55,6 +55,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	protected $_cores;
 
+    /**
+     * List of cores by store id
+     * Used in getCoresByStoreId()
+     * @var array
+     */
+    protected $_coresByStoreId = array();
+
 	/**
 	 * @var array
 	 */
@@ -195,21 +202,24 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 *
-	 * @param type $storeId
-	 * @return type
+	 * List of cores by store id
+	 * @param int $storeId
+	 * @return array
 	 */
 	public function getCoresByStoreId($storeId) {
-		$cores = array();
-		foreach ($this->getCores() as $core => $data) {
-			if (isset($data['stores'])) {
-				$ids = explode(",", trim($data['stores'], ","));
-				if (in_array($storeId, $ids)) {
-					$cores[] = $core;
-				}
-			}
-		}
-		return $cores;
+        if (!isset($this->_coresByStoreId[$storeId])) {
+            $cores = array();
+            foreach ($this->getCores() as $core => $data) {
+                if (isset($data['stores'])) {
+                    $ids = explode(",", trim($data['stores'], ","));
+                    if (in_array($storeId, $ids)) {
+                        $cores[] = $core;
+                    }
+                }
+            }
+            $this->_coresByStoreId[$storeId] = $cores;
+        }
+		return $this->_coresByStoreId[$storeId];
 	}
 
 	/**
