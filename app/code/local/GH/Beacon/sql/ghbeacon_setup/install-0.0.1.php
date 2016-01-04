@@ -15,7 +15,7 @@ $table = $installer->getConnection()
 		'nullable' => false,
 		'primary' => true,
 	))
-	->addColumn("beacon_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+	->addColumn("beacon_id", Varien_Db_Ddl_Table::TYPE_VARCHAR, 64, array(
 		'nullable'  => false,
 	))
 	->addColumn("email", Varien_Db_Ddl_Table::TYPE_VARCHAR, 128, array(
