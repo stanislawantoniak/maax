@@ -20,6 +20,9 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
             case 'vendorstype':
                 $out = $this->_getVendorsType();
                 break;
+            case 'vendorindexbygoogle':
+                $out = $this->_getVendorIndexByGoogle();
+                break;
             case 'review_status':
                 /** @var Zolago_Catalog_Model_Product_Source_Description $descriptionStatusSrc */
                 $descriptionStatusSrc = Mage::getSingleton("zolagocatalog/product_source_description");
@@ -57,7 +60,21 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 			$out[""] = "";
 			return array_reverse($out, true);
     }
-    
+
+    /**
+     * @return array
+     */
+    protected function _getVendorIndexByGoogle()
+    {
+        $helper = Mage::helper('zolagodropship');
+        $indexByGoogleOptions = array(
+            0 => $helper->__('Use vendor config'),
+            1 => $helper->__('No'),
+            2 => $helper->__('Yes'),
+        );
+        return $indexByGoogleOptions;
+    }
+
     /**
      * hardcoded vendors type
      * @return array

@@ -151,6 +151,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $model->setDescription($request->getParam('description'));
         $model->setCanAsk($request->getParam('can_ask'));
         $model->setCanAddProduct($request->getParam('can_add_product'));
+        $model->setIndexByGoogle($request->getParam('index_by_google'));
         try {
             $model->save();
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zolagodropship')->__('Settings has been saved.'));
