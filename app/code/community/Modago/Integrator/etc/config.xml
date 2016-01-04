@@ -69,6 +69,9 @@
             <authentication>
                 <integration_store>0</integration_store>
             </authentication>
+            <api>
+                <log_days>365</log_days>
+            </api>
         </modagointegrator>
     </default>
 </config>
