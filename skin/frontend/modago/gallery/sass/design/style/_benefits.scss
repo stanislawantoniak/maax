@@ -17,7 +17,7 @@ body.zolagomodago-index-index .benefits {
 		padding: 0 !important;
 	}
 	@media(max-width: 979px) {
-		margin: 15px -15px 0px !important;
+		margin: 15px -15px 0 !important;
 	}
 	.benefit-item {
 		font-family: $fontLight;
@@ -65,7 +65,7 @@ body.zolagomodago-index-index .benefits {
 		}*/
 
 		@media(max-width: 359px) {
-			.benefit-text {
+			.benefit-text:not(.benefit-text-rma) {
 				background: none !important;
 				padding: 15px 5px 15px 10px !important;
 			}
@@ -92,4 +92,9 @@ body.zolagomodago-index-index .benefits {
 			}
 		}
 	}
+}
+.register-column .benefits {
+	font-size: 14px !important;
+	margin: 10px 0 20px 16px !important;
+	padding: 0 !important;
 }

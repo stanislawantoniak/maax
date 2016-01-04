@@ -178,20 +178,25 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
      * @param int|array $childId
      * @return array
      */
-    public function getParentIdsByChild($childId)
+    public function getParentIdsByChild($childId, $asFlatList = false)
     {
         $parentIds = array();
 
         $select = $this->_getReadAdapter()->select()
                   ->from($this->getMainTable(), array('product_id', 'parent_id'))
                   ->where('product_id IN(?)', $childId);
-        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
-            if(!isset($parentIds[$row['product_id']])) {
-                $parentIds[$row['product_id']] = array();
+        if ($asFlatList) {
+            foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+                $parentIds[$row['parent_id']] = $row['parent_id'];
             }
-            $parentIds[$row['product_id']][] = $row['parent_id'];
+        } else {
+            foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+                if (!isset($parentIds[$row['product_id']])) {
+                    $parentIds[$row['product_id']] = array();
+                }
+                $parentIds[$row['product_id']][] = $row['parent_id'];
+            }
         }
-
         return $parentIds;
     }
 
@@ -908,6 +913,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             $tableName = array('price_index' => $this->getTable('catalog/product_index_price'));
 
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
+            $select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
         }
 
         if(isset($extraJoins[self::JOIN_URL])) {

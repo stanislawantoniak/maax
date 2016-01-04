@@ -1,5 +1,5 @@
 //MODAL AND MOBILE MENU CONTENT
-#seller_description {
+#seller_description, #brand_description {
   img {
     max-width: 60%;
     float: left;
@@ -57,6 +57,10 @@
   @media (min-width: $screen-md) {
     h4:first-child {
       padding-top: 15px !important;
+    }
+
+    .delivery-table {
+      max-width: 600px;
     }
   }
   @media (max-width: $screen-sm) {
@@ -169,6 +173,9 @@
 
     }
   }
+  .title_section_logo_wrapper img {
+    max-width: 100%;
+  }
 }
 
 #trigger_conditions_shipping {
@@ -178,5 +185,4 @@
 .no-padding {
   padding: 0;
 }
-
 //MODAL AND MOBILE MENU CONTENT

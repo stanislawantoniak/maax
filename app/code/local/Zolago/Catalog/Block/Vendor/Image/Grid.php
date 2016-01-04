@@ -15,18 +15,20 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
 		$this->setVendorSku(Mage::helper('udropship')->getVendorSkuAttribute());
     }
-	
+
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = ($vendor)? ($vendor->getId()):0;
         $collection->addAttributeToFilter("udropship_vendor", $vendorId);
-        $collection->addAttributeToFilter("visibility", array('in'=>array(2,3,4)));
-        $collection->addAttributeToSelect($this->getVendorSku()->getAttributeCode());
+		$collection->addAttributeToFilter("visibility", array('nin' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+		$collection->addAttributeToSelect($this->getVendorSku()->getAttributeCode());
         $collection->addAttributeToSelect('name');
+		//$collection->addAttributeToSelect('attribute_set');
+		$collection->addAttributeToSelect('description_status');
         $collection->addAttributeToSelect('gallery_to_check');
 		$collection->setFlag("skip_price_data",true);
-        
+
         $this->setCollection($collection);
 		
         return parent::_prepareCollection();
@@ -49,7 +51,14 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		$index = $this->getColumn($columnId)->getIndex();
 		return $this->getFilterValueByIndex($index);
 	}
-	
+
+	public function getAttributeSets() {
+		$vendor = Mage::getSingleton('udropship/session')->getVendor();
+		$array = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
+			->getAttributeSetsForVendor($vendor);
+		return $array;
+	}
+
 	protected function _prepareColumns() {
 		$this->addColumn($this->getVendorSku()->getAttributeCode(), array(
 			"type"		=>	"text",
@@ -64,6 +73,22 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 			"index"		=>	"name",
 			"width"     =>  "100px",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Product name"),
+		));
+
+		$attributeSets = $this->getAttributeSets();
+		$this->addColumn("attribute_set_id", array(
+			"type"		=>	"options",
+			"index"		=>	"attribute_set_id",
+			"width"     =>  "100px",
+			"header"	=>	Mage::helper("zolagocatalog")->__("Attribute set"),
+			"options"   => $attributeSets,
+		));
+		$this->addColumn("description_status", array(
+			"type"		=>	"options",
+			"index"		=>	"description_status",
+			"width"     =>  "100px",
+			"header"	=>	Mage::helper("zolagocatalog")->__("Description status"),
+			"options"	=>	$this->_getAttributeOptions('description_status'),
 		));
 		$this->addColumn("gallery_to_check", array(
 			"type"		=>	"options",
@@ -85,8 +110,17 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         ));
 		return parent::_prepareColumns();
 	}
-	
-	
+
+	protected function _getAttributeOptions($attribute_code)
+	{
+		$attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attribute_code);
+		$options = array();
+		foreach ($attribute->getSource()->getAllOptions(false, true) as $option) {
+			$options[$option['value']] = $option['label'];
+		}
+		return $options;
+	}
+
 	protected function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_id');

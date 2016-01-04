@@ -49,9 +49,9 @@
 <div class="next-row">
 	<table class="table table-condensed table-striped table-bordered">
 		<colgroup>
-			<col width="100"/>
-			<col width="100"/>
 			<col width="150"/>
+			<col width="100"/>
+			<col width="100"/>
 			<col/>
 			<col/>
 			<col/>
@@ -62,7 +62,7 @@
 		<tbody>
 		<?php foreach ($this->getChildren($_product) as $attribute):?>
 			<tr>
-				<th><?php echo $this->escapeHtml($attribute['label']);?></th>
+				<th><?php echo $this->escapeHtml($attribute['label']);?> / <?php echo Mage::helper('zolagodropship')->__('SKU');?></th>
 				<th><?php echo $this->__("Effective price");?></th>
 				<th><?php echo $this->__("Price deviation");?></th>
 				<?php foreach($this->getPriceTyps() as $type=>$label):?>
@@ -90,7 +90,7 @@
 					<input type="hidden" name="<?php echo $_valueNameKey."[value_index]";?>" value="<?php echo $child['value'];?>"/>
 					<input type="hidden" name="<?php echo $_valueNameKey."[value_id]";?>" value="<?php echo $child['value_id'];?>"/>
 					<input type="hidden" name="<?php echo $_valueNameKey."[attribute_id]";?>" value="<?php echo $attribute['attribute_id'];?>"/>
-					<?php echo $this->escapeHtml($child['option_text']);?>
+					<b><?php echo $this->escapeHtml($child['option_text']);?></b> / <?php echo $child['skuv']; ?>
 				</td>
 				<td class="effective-price"></td>
 				<td class="price-deviation" data-source="" data-price="<?php echo $this->escapeHtml($child['price']);?>">

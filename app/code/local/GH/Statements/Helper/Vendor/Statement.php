@@ -1,12 +1,28 @@
 <?php
 class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 
+    /**
+     * List of Zolago_Po_Model_Po
+     * Used by getPoById()
+     * @var array
+     */
+    protected $pos = array();
+
+	/**
+     * List of Zolago_Rma_Model_Rma
+     * used by getRmaById()
+     * @var array
+     */
+    protected $rmas = array();
+
 	/**
 	 * @param GH_Statements_Model_Statement $statement
 	 * @throws Zend_Controller_Response_Exception
 	 */
 	public function downloadStatementPdf(GH_Statements_Model_Statement $statement) {
-		$filename = preg_replace("/[^a-z0-9\._-]+/i","-",trim($statement->getName())).'.pdf';
+		$vendor = Mage::getModel("udropship/vendor")->load($statement->getVendorId());
+		$pdfName = "Statement-" . $vendor->getVendorName() . '-' . $statement->getEventDate();
+		$filename = preg_replace("/[^a-z0-9\._-]+/i", "-", trim($pdfName)) . '.pdf';
 		$file = file_get_contents($this->getStatementPdf($statement)); //todo:check path
 
 		Mage::app()->getResponse()
@@ -26,103 +42,80 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		if(!$statement->getStatementPdf() || !is_file(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf())) {
 			$this->generateStatementPdf($statement);
 		}
-		return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
+		return Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA).$statement->getStatementPdf();
 	}
 
+	protected function formatQuota($value)
+	{
+		return number_format(Mage::app()->getLocale()->getNumber(floatval($value)), 2);
+	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
+
+	    $headerText = sprintf('%s<br/>%s',
+	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
+	        Mage::getStoreConfig('general/store_information/address',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
+	        
+	    $eventDate = date('Y-m-d',strtotime($statement->getEventDate()) + 3600*24);
+	    $vendor = Mage::getModel('udropship/vendor')->load($statement->getVendorId());
+	    $vendorData = sprintf('%s, %s (NIP:%s)',$vendor->getCompanyName(),$vendor->getBillingAddress(),$vendor->getTaxNo());
+	    if ($statement->getDateFrom()) {
+	        $periodText = sprintf('%s - %s',date("Y-m-d",strtotime($statement->getDateFrom())),date('Y-m-d',strtotime($statement->getEventDate())));	        
+	    } else {
+	        $periodText = $this->__('to %s',$statement->getEventDate());
+	    }
+	    $nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
+	    $footerData = array (
+    	    'name' => $this->__("MODAGO financial statement on %s",$eventDate),
+        );
+        $dateFrom = $statement->getDateFrom();
+	    $lastStatementData = empty($dateFrom)? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
 		$page1data = array(
-			"name" => $statement->getName(),
-			"statement" => array(
-				$this->__("Payments for realised orders") => $statement->getOrderValue(),
-				$this->__("Payments correction for returned orders") => $statement->getRefundValue(),
-				$this->__("Modago commission") => floatval($statement->getOrderCommissionValue()) +  floatval($statement->getRmaCommissionValue()),
-				$this->__("Modago commission corrections for discounts funded by Modago") => $statement->getGalleryDiscountValue(),
-				$this->__("Other Modago commission corrections") => $statement->getCommissionCorrection(),
-				$this->__("Carrier costs") => $statement->getTrackingChargeTotal(),
-				$this->__("Carrier costs corrections") => $statement->getDeliveryCorrection(),
-				$this->__("Marketing costs") => $statement->getMarketingValue(),
-				$this->__("Marketing costs corrections") => $statement->getMarketingCorrection(),
-				$this->__("To pay") => $statement->getToPay(),
-			),
+		    "header" => $headerText,
+			"name" => $nameText, // $statement->getName(),
+			"title" => $this->__("Balance"),
+			"statement" => array(),
 			"saldo" => array(
-				$this->__("Previous statement saldo") => $statement->getLastStatementBalance(),
-				$this->__("Vendor payouts") => $statement->getPaymentValue(),
-				$this->__("Current statement saldo") =>
-					floatval($statement->getLastStatementBalance())
-					+ floatval($statement->getToPay())
-					- floatval($statement->getPaymentValue())
+				$this->__("[B] Previous statement balance%s",$lastStatementData) => $statement->getLastStatementBalance(),
+				$this->__("[C] Vendor payouts") => $statement->getPaymentValue(),
+				$this->__("Current statement balance [B]+[A]-[C]") => $statement->getActualBalance()
 			)
 		);
 
-		$page2data = array(
-			"header" => array(
-				$this->__("Order No."),
-				$this->__("RMA No."),
-				$this->__("Package type"),
-				$this->__("Shipped date"),
-				$this->__("Carrier"),
-				$this->__("Client No."),
-				$this->__("Tracking No."),
-				$this->__("Package cost"),
-				$this->__("COD and insurance cost"),
-				$this->__("Fuel cost"),
-				$this->__("Cost netto"),
-				$this->__("Cost brutto")
-			),
-			"body" => array(),
-			"footer" => array(
-				0 => $this->__("Total"),
-				10 => 0.00,
-				11 => 0.00
-			)
-		);
+		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $statement->getOrderValue();
+		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $statement->getRefundValue();
+		$page1data['statement'][$this->__("[3] Modago commission")] = $statement->getTotalCommission();
+		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $statement->getGalleryDiscountValue();
+		$step = 5;
+		$calculateMethod = '[1]-[2]-[3]+[4]';
+		if ($statement->getCommissionCorrection() != 0) {
+    		$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $statement->getCommissionCorrection();
+    		$calculateMethod .= '+[5]';
+    		$step++;
+        }
+        $calculateMethod .= sprintf('-[%d]',$step);
+		$page1data['statement'][$this->__("[%d] Carrier costs",$step++)] = $statement->getTrackingChargeTotal();
+		if ($statement->getDeliveryCorrection()!= 0) {
+            $calculateMethod .= sprintf('+[%d]',$step);
+    		$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes",$step++)] = $statement->getDeliveryCorrection();
+        }
+        if ($statement->getMarketingValue() != 0) {
+            $calculateMethod .= sprintf('-[%d]',$step);        
+    		$page1data['statement'][$this->__("[%d] Marketing costs",$step++)] = $statement->getMarketingValue();
+        }
+        if ($statement->getMarketingCorrection() != 0) {
+            $calculateMethod .= sprintf('+[%d]',$step);        
+    		$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes",$step++)] = $statement->getMarketingCorrection();
+        }
+		$page1data['topay'] = array (
+		    'title' => $this->__("[A] To pay %s",$calculateMethod),
+		    'value' => $statement->getToPay()
+        );
 
-		$page3data = array(
-			"header" => array(
-				$this->__("Order No."),
-				$this->__("Order/RMA Date"),
-				$this->__("RMA No."),
-				$this->__("Operation type"),
-				$this->__("Operation date"),
-				$this->__("Order/RMA Realization time"),
-				$this->__("Payment method"),
-				$this->__("Sale value (PLN)"),
-				$this->__("To pay (PLN)")
-			),
-			"body" => array(),
-			"footer" => array(
-				0 => $this->__("Total"),
-				7 => 0.00,
-				8 => 0.00
-			)
-		);
 
-		$page4data = array(
-			"header" => array(
-				$this->__("Order No."),
-				$this->__("RMA No."),
-				$this->__("Date of shipment/RMA closure"),
-				$this->__("Transaction type"),
-				$this->__("Product"),
-				$this->__("SKU"),
-				$this->__("Price before discount"),
-				$this->__("Vendor discount"),
-				$this->__("Modago discount"),
-				$this->__("Price after discounts (PLN)"),
-				$this->__("Modago commission rate (%)"),
-				$this->__("Modago commission (PLN)")
-			),
-			"body" => array(),
-			"footer" => array(
-				0 => $this->__("Total"),
-				6 => 0.00,
-				7 => 0.00,
-				8 => 0.00,
-				9 => 0.00,
-				11 => 0.00
-			)
-		);
-
+        //$page1data = $this->_initPage1Ddata(); //todo
+        $page2data = $this->_initPage2Ddata();
+        $page3data = $this->_initPage3Ddata();
+        $page4data = $this->_initPage4Ddata();
 
 		/** @var GH_Statements_Model_Track $tracksModel */
 		$tracksModel = Mage::getModel("ghstatements/track");
@@ -146,174 +139,379 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 					$track->getPoIncrementId(),
 					$track->getRmaIncrementId(),
 					$packageTypes[$track->getTrackType()],
-					$track->getShippedDate(),
+					$track->getShippedDate(), // todo zamienic
 					$track->getTitle(),
-					$track->getCustomerId(),
+					$track->getShippingSourceAccount(),
 					$track->getTrackNumber(),
-					$track->getChargeShipment(),
-					floatval($track->getChargeInsurance()) + floatval($track->getChargeCod()),
-					$track->getChargeFuel(),
-					$track->getChargeSubtotal(),
-					$track->getChargeTotal()
+					$this->formatQuota($track->getChargeShipment()),
+					$this->formatQuota(floatval($track->getChargeInsurance()) + floatval($track->getChargeCod())),
+					$this->formatQuota($track->getChargeFuel()),
+					$this->formatQuota($track->getChargeSubtotal()),
+					$this->formatQuota($track->getChargeTotal())
 				);
 			}
 		}
 
-		/** @var GH_Statements_Model_Order $orderModel */
-		$orderModel = Mage::getModel('ghstatements/order');
-		/** @var GH_Statements_Model_Resource_Order_Collection $orderCollection */
-		$orderCollection = $orderModel->getCollection();
-		$orderCollection->addFieldToFilter("statement_id",$statement->getId());
+        $page3body = array();
+        $page4body = array();
 
-		/** @var GH_Statements_Model_Rma $rmaModel */
-		$rmaModel = Mage::getModel('ghstatements/rma');
-		/** @var GH_Statements_Model_Resource_Rma_Collection $rmaCollection */
-		$rmaCollection = $rmaModel->getCollection();
-		$rmaCollection->addFieldToFilter("statement_id",$statement->getId());
+        /** @var GH_Statements_Model_Resource_Order_Collection $orderCollection */
+        $orderCollection = Mage::getResourceModel("ghstatements/order_collection");
+        $orderCollection->addFieldToFilter("statement_id",$statement->getId());
 
-		if($orderCollection->getSize() || $rmaCollection->getSize()) {
+        if ($orderCollection->count()) {
+            $this->_fillPage3byOrders($orderCollection, $page3data, $page3body);
+            $this->_fillPage4byCommission($orderCollection, $page4data, $page4body);
+        }
 
-			$page3body = array();
+        /** @var GH_Statements_Model_Resource_Refund_Collection $refundsCollection */
+        $refundsCollection = Mage::getResourceModel("ghstatements/refund_collection");
+        $refundsCollection->addFieldToFilter("statement_id", $statement->getId());
 
-			if($orderCollection->getSize()) {
-				$pos = array();
-				foreach($orderCollection as $order) {
-					$poId = $order->getPoId();
-					$poIncrementId = $order->getPoIncrementId();
-					$po = isset($pos[$poId]) ?
-						$pos[$poId] :
-						$pos[$poId] = Mage::getModel("udropship/po")->load($poId);
+        if ($refundsCollection->count()) {
+            $this->_fillPage3byRefunds($refundsCollection, $page3data, $page3body);
+        }
 
-					//fill 3rd page start
-					$currentFinalPrice = floatval($order->getFinalPrice()) + floatval($order->getShippingCost());
-					if(!isset($page3body[$poIncrementId])) {
-						$page3body[$poIncrementId] = array(
-							$poIncrementId,
-							date("Y-m-d", strtotime($po->getCreatedAt())),
-							"",
-							$this->__("Order shipment"),
-							$order->getShippedDate(),
-							"",//todo: realization time
-							$this->__($order->getPaymentMethod()),
-							$currentFinalPrice,
-							$order->getPaymentChannelOwner() ? $currentFinalPrice : 0.00
-						);
-					} else {
-						$page3body[$poIncrementId][7] += $currentFinalPrice;
-						if($order->getPaymentChannelOwner()) {
-							$page3body[$poIncrementId][8] += $currentFinalPrice;
-						}
-					}
-					$page3data["footer"][7] += $currentFinalPrice;
-					if($order->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
-					}
-					//fill 3rd page end
+        /** @var GH_Statements_Model_Resource_Rma_Collection $rmaCollection */
+        $rmaCollection = Mage::getResourceModel("ghstatements/rma_collection");
+        $rmaCollection->addFieldToFilter("statement_id", $statement->getId());
 
-					//fill 4th page start
-					$orderId = $order->getId();
-					Mage::log($order->getData());
-					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$order->getSku());
-					$page4body[$orderId] = array(
-						$poIncrementId,
-						"",
-						$order->getShippedDate(),
-						$this->__("Sell"),
-						$product->getName(),
-						$order->getSku(),
-						$order->getPrice(),
-						$order->getDiscountAmount(),
-						$order->getGalleryDiscountValue(),
-						$order->getFinalPrice(),
-						$order->getCommissionPercent(),
-						$order->getCommissionValue()
-					);
-					$page4data["footer"][6] += floatval($order->getPrice());
-					$page4data["footer"][7] += floatval($order->getDiscountAmount());
-					$page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
-					$page4data["footer"][9] += floatval($order->getFinalPrice());
-					$page4data["footer"][11] += floatval($order->getCommissionValue());
-					//fill 4th page end
-				}
-			}
+        if ($rmaCollection->count()) {
+            $this->_fillPage4byRma($rmaCollection, $page4data, $page4body);
+        }
 
-			if($rmaCollection->getSize()) {
-				$rmas = array();
-				foreach($rmaCollection as $rma) {
-					/** @var GH_Statements_Model_Rma $rma */
-					$rmaId = $rma->getRmaId();
-					$poId = $rma->getPoId();
-					$rmaIncrementId = $rma->getIncrementId();
-					/** @var Zolago_Rma_Model_Rma $rmaModel */
-					$rmaModel = isset($rmas[$rmaId]) ?
-						$rmas[$rmaId] :
-						$rmas[$rmaId] = Mage::getModel("urma/rma")->load($rmaId);
 
-					//fill 3rd page start
-					$currentFinalPrice = -floatval($rma->getApprovedRefundAmount());
-					if(!isset($page3body[$rmaIncrementId])) {
-						$page3body[$rmaIncrementId] = array(
-							$rma->getPoIncrementId(),
-							date("Y-m-d", strtotime($rmaModel->getCreatedAt())),
-							$rmaIncrementId,
-							$this->__("Order shipment"),
-							$rma->getCarrierDate(), //todo: which date should be here?
-							"",//todo: realization time
-							$this->__($rma->getPaymentMethod()),
-							$currentFinalPrice,
-							$rma->getPaymentChannelOwner() ? $currentFinalPrice : 0.00
-						);
-					} else {
-						$page3body[$rmaIncrementId][7] += $currentFinalPrice;
-						if($rma->getPaymentChannelOwner()) {
-							$page3body[$rmaIncrementId][8] += $currentFinalPrice;
-						}
-					}
-
-					$page3data["footer"][7] += $currentFinalPrice;
-					if($rma->getPaymentChannelOwner()) {
-						$page3data["footer"][8] += $currentFinalPrice;
-					}
-					//fill 3rd page end
-
-					//fill 4th page start
-					$rmaId = "rma_".$rma->getId();
-					$product = Mage::getModel('catalog/product')->loadByAttribute('skuv',$rma->getSku());
-					$page4body[$rmaId] = array(
-						$rmaIncrementId,
-						"",
-						$rma->getEventDate(),
-						$this->__("Return"),
-						$product->getName(),
-						$rma->getSku(),
-						-$rma->getPrice(),
-						$rma->getDiscountAmount(),
-						-$rma->getGalleryDiscountValue(),
-						-$rma->getApprovedRefundAmount(),
-						$rma->getCommissionPercent(),
-						-$rma->getCommissionValue()
-					);
-					$page4data["footer"][6] += floatval(-$rma->getPrice());
-					$page4data["footer"][7] += floatval($order->getDiscountAmount());
-					$page4data["footer"][8] += floatval(-$rma->getGalleryDiscountValue());
-					$page4data["footer"][9] += floatval(-$rma->getApprovedRefundAmount());
-					$page4data["footer"][11] += floatval(-$rma->getCommissionValue());
-					//fill 4th page end
-				}
-			}
-		}
-
-		$page3data["body"] = isset($page3body) ? $page3body : array();
-		$page4data["body"] = isset($page4body) ? $page4body : array();
-
+		// format quota for specific fields in pagedata
+		// page 2
+    	$page2data["footer"][10] = $this->formatQuota($page2data["footer"][10]);
+    	$page2data["footer"][11] = $this->formatQuota($page2data["footer"][11]);
+    	// page 3
+    	foreach ($page3body as $key=>$row) {
+            $page3body[$key][6] = $this->formatQuota($page3body[$key][6]);
+            $page3body[$key][7] = $this->formatQuota($page3body[$key][7]);
+    	}
+    	$page3data['footer'][6] = $this->formatQuota($page3data['footer'][6]);
+    	$page3data['footer'][7] = $this->formatQuota($page3data['footer'][7]);
+    	// page 4
+    	$page4data['footer'][6] = $this->formatQuota($page4data['footer'][6]);
+    	$page4data['footer'][7] = $this->formatQuota($page4data['footer'][7]);
+    	$page4data['footer'][8] = $this->formatQuota($page4data['footer'][8]);
+    	$page4data['footer'][9] = $this->formatQuota($page4data['footer'][9]);
+    	$page4data['footer'][11] = $this->formatQuota($page4data['footer'][11]);
+    	
+		$page3data["body"] = $page3body;
+		$page4data["body"] = $page4body;
+		
+    	
+		
 		/** @var GH_Statements_Model_Vendor_Pdf $pdfModel */
 		$pdfModel = Mage::getModel('ghstatements/vendor_pdf');
 		$pdfModel->generatePage1Html($page1data);
 		$pdfModel->generatePage2Html($page2data);
 		$pdfModel->generatePage3Html($page3data);
 		$pdfModel->generatePage4Html($page4data);
+		$pdfModel->generateFooter($footerData);
 		$pdfModel->setVariables($statement);
 
 		$pdfModel->getPdfFile($statement);
 	}
+
+    protected function _initPage1Ddata() {
+
+    }
+
+    /**
+     * @return array
+     */
+    protected function _initPage2Ddata() {
+        $page2data = array(
+            "title" => $this->__("Tracking"),
+            "header" => array(
+                $this->__("Order No."),
+                $this->__("RMA No."),
+                $this->__("Package type"),
+                $this->__("Shipped date"),
+                $this->__("Carrier"),
+                $this->__("Client No."),
+                $this->__("Tracking No."),
+                $this->__("Package cost"),
+                $this->__("COD and insurance cost"),
+                $this->__("Fuel cost"),
+                $this->__("Cost netto"),
+                $this->__("Cost brutto")
+            ),
+            "body" => array(),
+            "footer" => array(
+                0 => $this->__("Total"),
+                10 => 0.00,
+                11 => 0.00
+            )
+        );
+        return $page2data;
+    }
+
+    /**
+     * [0] Order No.
+     * [1] Order/RMA Date
+     * [2] RMA No.
+     * [3] Operation type
+     * [4] Operation date
+     * [ ] Order/RMA Realization time
+     * [5] Payment method
+     * [6] Sale value (PLN)
+     * [7] To pay (PLN)
+     *
+     * @return array
+     */
+    protected function _initPage3Ddata() {
+        $page3data = array(
+            "title" => $this->__("Orders shipped and returns for the accounting period"),
+            "header" => array(
+                $this->__("Order No."),
+                $this->__("Order/RMA Date"),
+                $this->__("RMA No."),
+                $this->__("Operation type"),
+                $this->__("Operation date"),
+                //$this->__("Order/RMA Realization time"),
+                $this->__("Payment method"),
+                $this->__("Sale value (PLN)"),
+                $this->__("To pay (PLN)")
+            ),
+            "body" => array(),
+            "footer" => array(
+                0 => $this->__("Total"),
+                6 => 0.00,
+                7 => 0.00
+            )
+        );
+        return $page3data;
+    }
+
+    /**
+     * [0] Order No.
+     * [1] RMA No.
+     * [2] Date of shipment/RMA closure
+     * [3] Transaction type
+     * [4] Product
+     * [5] SKU"
+     * [6] Price before discount
+     * [7] Vendor discount
+     * [8] Modago discount
+     * [9] Price after discounts (PLN)
+     * [10] Modago commission rate (%)
+     * [11] Modago commission (PLN)
+     * @return array
+     */
+    protected function _initPage4Ddata() {
+        $page4data = array(
+            "title" => $this->__("Commissions Modago for orders shipped and returned during the accounting period"),
+            "header" => array(
+                $this->__("Order No."),
+                $this->__("RMA No."),
+                $this->__("Date of shipment/RMA closure"),
+                $this->__("Transaction type"),
+                $this->__("Product"),
+                $this->__("SKU"),
+                $this->__("Price before discount"),
+                $this->__("Vendor discount"),
+                $this->__("Modago discount"),
+                $this->__("Price after discounts (PLN)"),
+                $this->__("Modago commission rate (%)"),
+                $this->__("Modago commission (PLN)")
+            ),
+            "body" => array(),
+            "footer" => array(
+                0 => $this->__("Total"),
+                6 => 0.00,
+                7 => 0.00,
+                8 => 0.00,
+                9 => 0.00,
+                11 => 0.00
+            )
+        );
+        return $page4data;
+    }
+
+    /**
+     * @param GH_Statements_Model_Resource_Order_Collection $orderCollection
+     * @param $page3data
+     * @param $page3body
+     * @return $this
+     */
+    protected function _fillPage3byOrders($orderCollection, &$page3data, &$page3body) {
+        /** @var Mage_Core_Model_Date $cd */
+        $cd = Mage::getModel('core/date');
+
+        foreach ($orderCollection as $order) {
+            /** @var GH_Statements_Model_Order $order */
+            $poId = $order->getPoId();
+            $po   = $this->getPoById($poId);
+            $_id = "order_" . $order->getPoIncrementId();
+            $currentFinalPrice = floatval($order->getFinalPrice()) + floatval($order->getShippingCost());
+            if (!isset($page3body[$_id])) {
+                $page3body[$_id] = array(
+                    $order->getPoIncrementId(),                                // [0] Order No.
+                    date("Y-m-d", $cd->timestamp($po->getCreatedAt())),        // [1] Order/RMA Date
+                    "",                                                        // [2] RMA No.
+                    $this->__("Order shipment"),                               // [3] Operation type
+                    date("Y-m-d", $cd->timestamp($order->getShippedDate())),   // [4] Operation date
+                    //"",                                                      // [ ] Order/RMA Realization time
+                    $this->__($order->getPaymentMethod()),                     // [5] Payment method
+                    $currentFinalPrice,                                        // [6] Sale value (PLN)
+                    $order->getPaymentChannelOwner() ? $currentFinalPrice : 0, // [7] To pay (PLN)
+                );
+            } else {
+                // Sum of po items value
+                $page3body[$_id][6] += $currentFinalPrice;
+                if ($order->getPaymentChannelOwner()) {
+                    $page3body[$_id][7] += $currentFinalPrice;
+                }
+            }
+            $page3data["footer"][6] += $currentFinalPrice;
+            if ($order->getPaymentChannelOwner()) {
+                $page3data["footer"][7] += $currentFinalPrice;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param GH_Statements_Model_Resource_Order_Collection $orderCollection
+     * @param $page4data
+     * @param $page4body
+     * @return $this
+     */
+    protected function _fillPage4byCommission($orderCollection, &$page4data, &$page4body) {
+        /** @var Mage_Core_Model_Date $cd */
+        $cd = Mage::getModel('core/date');
+
+        foreach ($orderCollection as $order) {
+            /** @var GH_Statements_Model_Order $order */
+            /** @var Zolago_Catalog_Model_Product $product */
+            $product = Mage::getModel('catalog/product')->loadByAttribute('skuv', $order->getSku());
+            $_id = "order_" . $order->getPoIncrementId();
+            $page4body[$_id] = array(
+                $order->getPoIncrementId(),                                                                              // [0] Order No.
+                "",                                                                                                      // [1] RMA No.
+                date("Y-m-d", $cd->timestamp($order->getShippedDate())),                                                 // [2] Date of shipment/RMA closure
+                $this->__("Sale"),                                                                                       // [3] Transaction type
+                $product->getName(),                                                                                     // [4] Product
+                $order->getSku(),                                                                                        // [5] SKU"
+                $this->formatQuota($order->getPrice()),                                                                  // [6] Price before discount
+                $this->formatQuota(floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue())), // [7] Vendor discount (Rabat udzielany przez partnera (discount_amount to suma rabatow vendora i sprzedawcy))
+                $this->formatQuota($order->getGalleryDiscountValue()),                                                   // [8] Modago discount
+                $this->formatQuota($order->getFinalPrice()),                                                             // [9] Price after discounts (PLN)
+                $this->formatQuota(round($order->getCommissionPercent(), 2)),                                            // [10] Modago commission rate (%)
+                $this->formatQuota($order->getCommissionValue())                                                         // [11] Modago commission (PLN)
+            );
+            $page4data["footer"][6] += floatval($order->getPrice());
+            $page4data["footer"][7] += floatval($order->getDiscountAmount()) - floatval($order->getGalleryDiscountValue());
+            $page4data["footer"][8] += floatval($order->getGalleryDiscountValue());
+            $page4data["footer"][9] += floatval($order->getFinalPrice());
+            $page4data["footer"][11] += floatval($order->getCommissionValue());
+        }
+        return $this;
+    }
+
+    /**
+     * @param GH_Statements_Model_Resource_Refund_Collection $refundsCollection
+     * @param $page3data
+     * @param $page3body
+     * @return $this
+     */
+    protected function _fillPage3byRefunds($refundsCollection, &$page3data, &$page3body) {
+        /** @var Mage_Core_Model_Date $cd */
+        $cd = Mage::getModel('core/date');
+
+        foreach ($refundsCollection as $refund) {
+            /** @var GH_Statements_Model_Refund $refund */
+            $rmaId = $refund->getRmaId();
+            $rmaIncrementId = $refund->getRmaIncrementId();
+            $poIncrementId = $refund->getPoIncrementId();
+            /** @var Zolago_Rma_Model_Rma $rma */
+            $rma = $this->getRmaById($rmaId);
+            /** @var Zolago_Po_Model_Po $po */
+            $po  = $this->getPoById($refund->getPoId());
+
+            $_id = 'refund_' . $refund->getId();
+            $value = -floatval($refund->getValue());
+            $paymentMethod = $this->__(ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())));
+
+            $page3body[$_id] = array(
+                $poIncrementId,                                      // [0] Order No.
+                date("Y-m-d", $cd->timestamp($rma->getCreatedAt())), // [1] Order/RMA Date
+                $rmaIncrementId,                                     // [2] RMA No.
+                $this->__("Order return payment"),                   // [3] Operation type
+                date("Y-m-d", $cd->timestamp($refund->getDate())),   // [4] Operation date
+                //"",                                                // [ ] Order/RMA Realization time
+                $paymentMethod,                                      // [5] Payment method
+                $this->formatQuota($value),                          // [6] Sale value (PLN)
+                $rma->getPaymentChannelOwner() ? $value : 0          // [7] To pay (PLN)
+            );
+
+            $page3data["footer"][6] += $value;
+            if ($rma->getPaymentChannelOwner()) {
+                $page3data["footer"][7] += $value;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param GH_Statements_Model_Resource_Rma_Collection $rmaCollection
+     * @param $page4data
+     * @param $page4body
+     * @return $this
+     */
+    protected function _fillPage4byRma($rmaCollection, &$page4data, &$page4body) {
+        /** @var Mage_Core_Model_Date $cd */
+        $cd = Mage::getModel('core/date');
+
+        foreach ($rmaCollection as $ghRma) {
+            /** @var GH_Statements_Model_Rma $ghRma */
+            /** @var Zolago_Catalog_Model_Product $product */
+            $product = Mage::getModel('catalog/product')->loadByAttribute('skuv', $ghRma->getSku());
+            $_id = 'rma' . $ghRma->getRmaIncrementId();
+            $page4body[$_id] = array(
+                $ghRma->getPoIncrementId(),                                                                               // [0] Order No.
+                $ghRma->getRmaIncrementId(),                                                                              // [1] RMA No.
+                date("Y-m-d", $cd->timestamp($ghRma->getEventDate())),                                                    // [2] Date of shipment/RMA closure
+                $this->__("Return"),                                                                                      // [3] Transaction type
+                $product->getName(),                                                                                      // [4] Product
+                $ghRma->getSku(),                                                                                         // [5] SKU"
+                $this->formatQuota(-floatval($ghRma->getApprovedRefundAmount())),                                         // [6] Price before discount
+                $this->formatQuota(floatval($ghRma->getDiscountAmount()) - floatval($ghRma->getGalleryDiscountValue())),  // [7] Vendor discount
+                $this->formatQuota(-floatval($ghRma->getDiscountReturn())),                                               // [8] Modago discount
+                $this->formatQuota(-floatval($ghRma->getApprovedRefundAmount()) - floatval($ghRma->getDiscountReturn())), // [9] Price after discounts (PLN)
+                $this->formatQuota(round($ghRma->getCommissionPercent(), 2)),                                             // [10] Modago commission rate (%)
+                $this->formatQuota(-floatval($ghRma->getCommissionReturn()))                                              // [11] Modago commission (PLN)
+            );
+            $page4data["footer"][6] += (-floatval($ghRma->getApprovedRefundAmount()));
+            $page4data["footer"][7] += (floatval($ghRma->getDiscountAmount()) - floatval($ghRma->getGalleryDiscountValue()));
+            $page4data["footer"][8] += (-floatval($ghRma->getDiscountReturn()));
+            $page4data["footer"][9] += (-floatval($ghRma->getApprovedRefundAmount()) - floatval($ghRma->getDiscountReturn()));
+            $page4data["footer"][11] += (-floatval($ghRma->getCommissionReturn()));
+        }
+        return $this;
+    }
+
+    /**
+     * @param $poId
+     * @return Zolago_Po_Model_Po
+     */
+    protected function getPoById($poId) {
+        return isset($this->pos[$poId]) ?
+            $this->pos[$poId] :
+            $this->pos[$poId] = Mage::getModel("zolagopo/po")->load($poId);
+    }
+
+    /**
+     * @param $rmaId
+     * @return Zolago_Rma_Model_Rma
+     */
+    protected function getRmaById($rmaId) {
+        return isset($this->rmas[$rmaId]) ?
+            $this->rmas[$rmaId] :
+            $this->rmas[$rmaId] = Mage::getModel("urma/rma")->load($rmaId);
+    }
 }

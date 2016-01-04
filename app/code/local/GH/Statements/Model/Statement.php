@@ -17,6 +17,14 @@
  * @method string getTrackingChargeTotal()
  * @method string getMarketingValue()
  * @method string getPaymentValue()
+ * @method string getTotalCommission()
+ * @method string getGalleryDiscountValue()
+ * @method string getCommissionCorrection()
+ * @method string getDeliveryCorrection()
+ * @method string getMarketingCorrection()
+ * @method string getToPay()
+ * @method string getLastStatementBalance()
+ * @method string getActualBalance()
  */
 class GH_Statements_Model_Statement extends Mage_Core_Model_Abstract {
 

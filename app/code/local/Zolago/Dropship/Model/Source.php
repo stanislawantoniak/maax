@@ -6,11 +6,16 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
     const VENDOR_TYPE_STANDARD = 1;
 
     const TRACK_STATUS_UNDELIVERED = 'U';
+	const TRACK_UNDELIVERED_SUFFIX = '_UNDELIVERED';
+	protected $_allvendors = array();
 
 	public function toOptionHash($selector=false){
 	    switch ($this->getPath()) {
 	        case 'allvendorswithempty':
 	            $out = $this->_getAllVendorsWithEmpty();
+	            break;
+	        case 'allvendorswithdisabled':
+	            $out = $this->_getAllVendorsWithDisabled();
 	            break;
             case 'vendorstype':
                 $out = $this->_getVendorsType();
@@ -26,6 +31,22 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 	    return $out;
    }
    
+   
+    protected function _getAllVendorsWithDisabled()
+    {
+        $field = 'vendor_name';
+        if (empty($this->_allvendors)) {
+            $vendors = Mage::getModel('udropship/vendor')->getCollection()
+                ->setItemObjectClass('Varien_Object')
+                ->addFieldToSelect(array($field))
+                ->setOrder('vendor_name', 'asc');
+            foreach ($vendors as $v) {
+                $this->_allvendors[$v->getVendorId()] = $v->getDataUsingMethod($field);
+            }
+        }
+        return $this->_allvendors;
+    }
+
     /**
      * 
      * @return array
@@ -34,7 +55,7 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 			$out = $this->getVendors();
 			$out = array_reverse($out, true);
 			$out[""] = "";
-			return array_reverse($out, true);;
+			return array_reverse($out, true);
     }
     
     /**

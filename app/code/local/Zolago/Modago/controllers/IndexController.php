@@ -4,25 +4,39 @@ require_once Mage::getConfig()->getModuleDir('controllers', "Unirgy_DropshipMicr
 
 class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexController
 {
-	public function indexAction()
-	{
+    const ROUTE_STORE_MAPS = "zolagomodago_storesmap";
 
-		$rootId = Mage::app()->getStore()->getRootCategoryId();
-		$rootCategory = Mage::getModel("catalog/category")->load($rootId);
-		$campaign = $rootCategory->getCurrentCampaign();
 
-		$fq = $this->getRequest()->getParam('fq', '');
+    public function indexAction()
+    {
 
-		if ($campaign || !empty($fq)) {
-			$this->_forward('view', "category", "catalog", array("id" => $rootCategory->getId()));
-			return;
-		}
+        if (Mage::app()->getRequest()->getRouteName() == self::ROUTE_STORE_MAPS) {
+            $website = Mage::app()->getWebsite();
+            if ($website->getHaveSpecificDomain() && $website->getVendorId()) {
+                $this->_forward('index', "map", "modago");
+                return;
+            } else {
+                $this->_forward('defaultNoRoute');
+                return;
+            }
+        }
 
-		if (Mage::helper('umicrosite')->getCurrentVendor()) {
-			return parent::indexAction();
-		}
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        $rootCategory = Mage::getModel("catalog/category")->load($rootId);
+        $campaign = $rootCategory->getCurrentCampaign();
 
-		$this->loadLayout();
-		$this->renderLayout();
-	}
+        $fq = $this->getRequest()->getParam('fq', '');
+
+        if ($campaign || !empty($fq)) {
+            $this->_forward('view', "category", "catalog", array("id" => $rootCategory->getId()));
+            return;
+        }
+
+        if (Mage::helper('umicrosite')->getCurrentVendor()) {
+            return parent::indexAction();
+        }
+
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

@@ -2,41 +2,51 @@
 class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 {
     /**
-     * @param      $categories
-     * @param int  $level
-     * @param int|bool $span
-     *
+     * @param Varien_Data_Tree_Node_Collection $categories
+     * @param int $level
+     * @param bool|false $span
+     * @param bool|true $allowVendorContext
+     * @param bool|FALSE $vendorContext
      * @return array
      */
-    public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories, 
-			$level = 1, $span = false, $allowVendorContext = true)
+    public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories,
+                                       $level = 1, $span = false, $allowVendorContext = true, $vendorContext = FALSE)
     {
+
+        $vendor = $vendorContext ? Mage::helper('umicrosite')->getCurrentVendor() : FALSE;
+
         $tree = array();
         /** @var Varien_Data_Tree_Node $category */
         foreach ($categories as $category) {
+
             $cat = Mage::getModel('catalog/category')->load($category->getId());
-
-            $tree[$category->getId()] = array(
-                'name'           => $category->getName(),
-                'url'            => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
-                'category_id'    => $category->getId(),
-                'level'          => $level,
-//                'products_count' => $cat->getProductCount() // ??
-            );
-
-//            echo Mage::getUrl($cat->getUrlPath())."\n";
-            if ($level == 1) {
-                $tree[$category->getId()]['image'] = $cat->getImage();
+            $solrProductCount = $cat->getSolrProductsCount($cat, $vendor);
+            if ($solrProductCount <= 0) {
+                continue;
             }
+            if($solrProductCount > 0){
+                $tree[$category->getId()] = array(
+                    'name' => $category->getName(),
+                    'url' => $allowVendorContext ? $cat->getUrl() : $cat->getNoVendorContextUrl(),
+                    'category_id' => $category->getId(),
+                    'level' => $level,
+                    "solr_product_count" => $solrProductCount
+                );
+
+                if ($level == 1) {
+                    $tree[$category->getId()]['image'] = $cat->getImage();
+                }
+            }
+
             if ($span && $level >= $span) {
                 continue;
             }
             if ($category->hasChildren()) {
                 $children = Mage::getModel('catalog/category')->getCategories($category->getId());
-                $tree[$category->getId()]['has_dropdown'] = self::getCategoriesTree($children, $level + 1, $span, $allowVendorContext);
-            }else{
-				$tree[$category->getId()]['has_dropdown']  = false;
-			}
+                $tree[$category->getId()]['has_dropdown'] = self::getCategoriesTree($children, $level + 1, $span, $allowVendorContext, $vendorContext);
+            } else {
+                $tree[$category->getId()]['has_dropdown'] = false;
+            }
         }
         return $tree;
     }
@@ -110,7 +120,9 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
          $lambda = function($params) {
              return Mage::app()->getLayout()->createBlock('cms/block')->setBlockId($params['blockId'])->toHtml();
          };
-         $cacheKey = $blockId.'_'.$cacheKeySuffix;
+         /** @var Zolago_Dropship_Model_Vendor|false $vendor */
+         $vendor = Mage::helper("umicrosite")->getCurrentVendor();
+         $cacheKey = $blockId.'_'.$cacheKeySuffix.'_'.($vendor ? (int)$vendor->getId() : 0).'_'.Mage::app()->getStore()->getId();
          return Mage::helper('zolagocommon')->getCache($cacheKey,$groupId,$lambda,array('blockId' => $blockId));
          
      }

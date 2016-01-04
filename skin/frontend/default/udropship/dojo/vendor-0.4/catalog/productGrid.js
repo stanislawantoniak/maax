@@ -34,6 +34,7 @@ define([
              PopupEditor, status, attrbiute, attributeRules, attributeSet, misc) {
 
     var grid,
+		gallery,
         store,
         massAttribute,
         editDbClick = false, // Configure click type
@@ -140,65 +141,94 @@ define([
     ////////////////////////////////////////////////////////////////////////////
     // Formatters & renderes
     ////////////////////////////////////////////////////////////////////////////
-
     var thumbnailHandler = function (e) {
+        e.preventDefault();
 
         var el = jQuery(this);
         var modal = jQuery("#product-image-popup");
+        var timeout = 0;
 
-        // Procss enter click on thumb - redirect to a
-        if (e instanceof KeyboardEvent) {
-            if (e.keyCode != 13) {
-                return;
+        if(modal.is(":visible")) {
+            timeout = 250;
+            modal.find('button.close').click();
+        }
+
+        setTimeout(function() {
+            // mark row
+            var row = grid.row(e),
+                rowClass = 'grid_row_highlighted';
+
+            jQuery('.'+rowClass).removeClass(rowClass);
+            jQuery(row.element).addClass(rowClass);
+
+            // Process enter click on thumb - redirect to a
+            if (e instanceof KeyboardEvent) {
+                if (e.keyCode != 13) {
+                    return;
+                }
+                if (modal.length && modal.is(":visible")) {
+                    modal.modal("hide");
+                    return;
+                }
+                el = jQuery(this).find("a");
             }
-            if (modal.length && modal.is(":visible")) {
-                modal.modal("hide");
-                return;
+
+            var node = el.parents("td");
+
+
+            modal.find(".modal-title").text(el.attr("title")).prepend('<big><i class="icon icon-move"></i></big>&nbsp;&nbsp;');
+            modal.find(".carousel").remove();
+            modal.find(".modal-body").html('<div class="carousel">'+gallery[row.id]+'</div>');
+            jQuery('#product-image-popup .carousel').rwdCarousel({
+                items : 1,
+                itemsDesktop : [1000,1], //5 items between 1000px and 901px
+                itemsDesktopSmall : [900,1], // betweem 900px and 601px
+                itemsTablet: [600,1], //2 items between 600 and 0
+                itemsMobile : [480,1],
+                pagination : true,
+                itemsScaleUp:true,
+                rewindNav : false,
+                navigation: true,
+                navigationText: [
+                    "<div class='col-xs-6 product-image-popup-arrow-left'><i class='icon icon-arrow-left'></i></div>",
+                    "<div class='col-xs-6 product-image-popup-arrow-right'><i class='icon icon-arrow-right'></i></div>"
+                ],
+
+            }).find('.rwd-item').click(function(e) {
+                var offset = jQuery(this).offset();
+                var pos_x = e.pageX - offset.left;
+                var middle = jQuery(this).outerWidth() / 2;
+
+                if(pos_x < middle)
+                {
+                    jQuery(this).trigger('rwd.prev');
+                }
+                else
+                {
+                    jQuery(this).trigger('rwd.next');
+                }
+            });
+
+            // focus cell after close modal
+            if (node.length) {
+                modal.one("hidden.bs.modal", function () {
+                    grid.focus(grid.cell(node[0]));
+                    modal.find(".modal-body .carousel").html("");
+                    jQuery('.' + rowClass).removeClass(rowClass);
+                });
+                modal.one("shown.bs.modal", function () {
+                    window.thumbnailModalOpened = true;
+                    modal.find("button").focus();
+                });
             }
-            el = jQuery(this).find("a");
-        }
-
-        var node = el.parents("td");
 
 
-        if (!modal.length) {
-            modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
-				<div class="modal-dialog">\
-					<div class="modal-content">\
-						<div class="modal-header">\
-							<button type="button" class="close" data-dismiss="modal">\n\
-								<span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\
-							<h4 class="modal-title"></h4>\
-						</div>\
-						<div class="modal-body"></div>\
-						<div class="modal-footer">\
-							<button type="button" class="btn btn-default" data-dismiss="modal">' +
-                Translator.translate("Close") +
-                '</button>\
-            </div>\
-        </div>\
-    </div>\
-</div>').
-                appendTo(jQuery("body"));
-        }
+            modal.modal({backdrop: false});
 
-        modal.find(".modal-title").text(el.attr("title"));
-        modal.find(".modal-body").html(
-            jQuery("<img>").attr("src", el.attr("href"))
-        );
-
-        // focus cell after close modal
-        if (node.length) {
-            modal.one("hidden.bs.modal", function () {
-                grid.focus(grid.cell(node[0]));
+            jQuery("#product-image-popup").draggable({
+                handle: ".modal-header"
             });
-            modal.one("shown.bs.modal", function () {
-                modal.find("button").focus();
-            });
-        }
-
-        modal.modal("show");
-        e.preventDefault();
+        },timeout);
     };
 
     /**
@@ -210,17 +240,33 @@ define([
     var rendererThumbnail = function (item, value, node, options) {
         var content,
             img;
+        //console.log(item);
         if (item.thumbnail) {
             content = put("a", {
                 href: item.thumbnail,
                 title: item.name,
-                target: "_blank"
+                target: "_blank",
+                class: "thumb"
             });
             img = put("img", {
                 src: item.thumbnail_url
             });
+
+            //jQuery(node).popover({
+            //    placement: "right",
+            //    html : true,
+            //    container: 'body',
+            //    trigger : 'hover', //<--- you need a trigger other than manual
+            //    delay: {
+            //        hide: 1000
+            //    },
+            //    content: function() {
+            //        return "<div><img src='"+item.thumbnail+"' /><span class='view_lupa view_lupa_plus'></span></div>";
+            //    }
+            //});
             on(content, "click", thumbnailHandler)
             on(node, "keydown", thumbnailHandler)
+
         } else {
             content = put("p",
                 put("i", {className: "glyphicon glyphicon-ban-circle"})
@@ -230,13 +276,17 @@ define([
         put(content, "span", {
             innerHTML: item.images_count
         });
-
+		gallery[item.entity_id] = item.gallery;
         put(node, content);
+
 
         // Put img if exists
         if (img) {
             put(node, img);
         }
+
+
+
     };
 
     /**
@@ -765,10 +815,10 @@ define([
                 return this.inherited(arguments);
             }
         };
-
+		gallery = [];
 
         window.grid = grid = new PriceGrid(config, container);
-
+		
         // listen for selection via space, ctrl + mouse
         grid.on(".dgrid-row:keyup", handleSelection);
         grid.on("td.dgrid-cell:click", handleSelection);

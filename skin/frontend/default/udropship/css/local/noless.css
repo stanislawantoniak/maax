@@ -71,6 +71,8 @@
     float: left;
     text-align:center;
     margin:2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: rgba(0, 0, 0, 0.4);
 }
 
 #vendor_campaign_product_grid .form-group {
@@ -144,7 +146,9 @@
 #basicModal .row, #editModal .row {
     margin: 10px auto;
 }
-.placements-categories .actions .list-group .list-group-item .align-right {
+.placements-categories .actions .list-group .list-group-item .align-right,
+.placements-categories .actions .dd-item .align-right
+{
     float: right;
     padding-left: 10px;
     padding-right: 0;
@@ -451,6 +455,9 @@
 	background-position: center center;
 	background-repeat: no-repeat;
 }
+#vendor-loading.show-process {
+	background-image: url(../../img/bootsrap/ajax-loading.gif) !important;
+}
 /* Po details */
 
 #items .discount .tooltip-inner{
@@ -593,3 +600,187 @@
 		padding: 0 0 0 10px;
 	}
 }
+
+.no-padding {
+    padding: 0;
+}
+.vendor-image {
+	list-style-type: none;
+	/*height: 110px;*/
+    /*padding: 0 5px;*/
+}
+.vendor-image li {
+    display: block;
+    float: left;
+    /*cursor: default !important;*/
+    position: relative;
+    height: 100px;
+    width: 100px;
+    background: #ffffff;
+}
+.vendor-image li.vendor-image-placeholder {
+    /*background-color: #fffeec;*/
+    float: left;
+    text-align: center;
+    margin: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: rgba(0, 0, 0, 0.4);
+    position: relative;
+    height: 100px;
+    width: 100px;
+    display: block;
+}
+
+.vendor-image li .vendor-image-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #000000;
+    width: 36px;
+    height: 100px;
+    opacity: 0.8;
+    display: none;
+	z-index: 1;
+}
+.vendor-image li:hover .vendor-image-controls {
+    display: block;
+}
+.vendor-image li .vendor-image-controls a {
+    text-decoration: none;
+    color: #ffffff;
+    padding: 3px 12px 3px 10px;
+    display: block;
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.vendor-image li:hover {
+    -webkit-transform:scale(1.5);
+    -moz-transform:scale(1.5);
+    -o-transform:scale(1.5);
+    transform:scale(1.5);
+	z-index: 100;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: rgba(0, 0, 0, 0.4);
+    cursor: move !important;
+
+
+}
+
+
+.udprod-vendor_image-index .hor-scroll {
+    overflow: initial;
+}
+
+.vendor-image .vendor-image-refresh {
+	display: none;
+	color: #000000;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 1;
+}
+#vendorImageZoom .modal-body {
+    text-align: center;
+}
+.vendor-image-upload {
+    width: 36px;
+}
+
+.vendor-image-upload .icon-upload {
+    font-size: 18px;
+}
+.vendor-image-upload .btn-file {
+    position: relative;
+    overflow: hidden;
+	font-size: 14px;
+	cursor: pointer !important;
+}
+
+.vendor-image-upload .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: pointer;
+    display: block;
+    /*width: 10px;*/
+    margin-top: 0px;
+}
+
+.vendor-image .mass-thumb-image .icon-ban-circle {
+top: -75px;
+right: 0px;
+position: relative;
+font-size: 4em;
+opacity: 0.40;
+}
+
+.vendor-image .mass-thumb-image .icon-ban-circle:hover {
+-webkit-transform:scale(1.5);
+-moz-transform:scale(1.5);
+-o-transform:scale(1.5);
+transform:scale(1.5);
+z-index: 0;
+}
+
+/* Zarządzaj opisami produktów */
+#product-image-popup {
+    overflow: hidden;
+	width: 590px;
+	height: 768px;
+}
+#product-image-popup .modal-dialog {
+	margin: 0;
+	padding: 10px;
+}
+#product-image-popup .modal-dialog .modal-content .modal-header {
+    cursor: move;
+}
+#product-image-popup .rwd-carousel {
+    overflow: hidden;
+}
+#product-image-popup .rwd-carousel .rwd-wrapper {
+    text-align: center;
+}
+
+#product-image-popup .rwd-carousel .rwd-item {
+    float: left;
+    padding: 5px;
+}
+#product-image-popup .product-image-popup-arrow-left {
+    text-align: right;
+}
+#product-image-popup .rwd-controls .rwd-prev .icon,
+#product-image-popup .rwd-controls .rwd-next .icon {
+    font-size: 25px;
+}
+#product-image-popup .rwd-controls .rwd-prev.disabled,
+#product-image-popup .rwd-controls .rwd-next.disabled {
+    color: #d3d3d3;
+}
+
+
+div .view_lupa {
+	position: absolute;
+	bottom: 2%;
+	right: 10px;
+	z-index: 900;
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	background: url('/skin/frontend/modago/gallery/images/sprites/all-s399d59bcea.png');
+	background-position: -181px -451px;
+	height: 49px;
+	width: 49px;
+}
+

@@ -43,6 +43,7 @@
 "Please enter a value with a valid mimetype.","Wprowadź wartość z poprawnym mimetype."
 "Please enter a value with a valid extension.","Wprowadź wartość z poprawnym rozszerzeniem."
 "Value is greather that expected","Wartość jest większa niż oczekiwana"
+"This field is required.","To pole jest wymagane."
 "Invalid zip code","Nieprawidłowy kod pocztowy"
 "Enter valid integer","Wprowadź poprawną cyfrę"
 "Enter valid positive integer","Wprowadź poprawną dodatnią cyfrę"

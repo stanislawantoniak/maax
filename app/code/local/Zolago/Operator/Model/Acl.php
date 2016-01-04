@@ -28,10 +28,6 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD		= "udropship/vendor/editPassword";
 	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST   = "udropship/vendor_settings/infoPost";
 
-	// Restricted 
-	const RES_UDROPSHIP_VENDOR_PREFERENCES			= "udropship/vendor/preferences";
-	const RES_UDROPSHIP_VENDOR_PREFERENCES_POST		= "udropship/vendor/preferencesPost";
-	
 	// Po Vendor controller - whole
 	const RES_UDPO_VENDOR							= "udpo/vendor";
 	// Po Vendor aggregated
@@ -58,11 +54,14 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Tiership manage
 	const RES_UTIERSHIP_OPERATOR					= "udtiership/vendor";
 	
-	// Campaign managment
-	const RES_CAMPAIGN_VENDOR						= "campaign/vendor";
+	// Campaign management
+	const RES_CAMPAIGN_VENDOR                       = "campaign/vendor";
+	const RES_CAMPAIGN_PLACEMENT                    = "campaign/placement";
+	const RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES      = "campaign/placement_category";
+	const RES_BANNER                                = "banner/vendor";
 
 
-    // Overpayments managment
+    // Overpayments management
 	const RES_PAYMENT_OPERATOR						= "udpo/payment";
 
     // GH API Access
@@ -73,6 +72,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
     // Price management
     const RES_UDPROD_VENDOR_PRICE                   = "udprod/vendor_price";
+    const RES_UDPROD_VENDOR_PRICE_DETAIL            = "udprod/vendor_price_detail";
 
     // Billing and statements
     const RES_BILLING_AND_STATEMENTS                = "udropship/statements";
@@ -87,8 +87,6 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_VENDOR_LOGOUT			=> "Vendor logout",
 		self::RES_UDROPSHIP_VENDOR_PASSWORD			=> "Vendor pasword",
 		self::RES_UDROPSHIP_VENDOR_PASSWORD_POST	=> "Vendor password post",
-		self::RES_UDROPSHIP_VENDOR_PREFERENCES		=> "Vendor preferneces",
-		self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST => "Vendor preferneces post",
 		self::RES_UDROPSHIP_VENDOR_EDIT_PASSWORD    => "Edit Password",
 		self::RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST=> "Edit Password post",
         // PO
@@ -113,9 +111,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_POS						=> "POS Manage",
 		// Operator manage
 		self::RES_UDROPSHIP_OPERATOR				=> "Operator manage",
-		// Campaign managment
-		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage",
-        // Overpayments managment
+		// Campaign management
+		self::RES_CAMPAIGN_VENDOR                   => "Campaign management",
+		self::RES_CAMPAIGN_PLACEMENT                => "Campaign placement management",
+		self::RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES  => "Campaign placement in categories management",
+		self::RES_BANNER                            => "Banners management",
+        // Overpayments management
         self::RES_PAYMENT_OPERATOR                  => "Payment manage",
         // GH API Access
         self::RES_GHAPI_OPERATOR                    => "GH API",
@@ -123,6 +124,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
         // Price management
         self::RES_UDPROD_VENDOR_PRICE               => "Price management",
+        self::RES_UDPROD_VENDOR_PRICE_DETAIL        => "Price detail management",
         // Billing and statements
         self::RES_BILLING_AND_STATEMENTS            => "Billing and statements"
 	);
@@ -168,10 +170,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_ORDER_OPERATOR, self::RES_UDPO_VENDOR_AGGREGATED);
 		
 		// Build ACL Rules - Marketing officer
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES);
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_CAMPAIGN_VENDOR);
-		
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_CAMPAIGN_PLACEMENT);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_BANNER);
+
 		// Build ACL Rules - RMA Operator
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_RMA_OPERATOR, self::RES_URMA_VENDOR);
 		
@@ -180,6 +183,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
         // Build ACL Rules - Product operator; price edit (zarzadzanie cenami)
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_PRICE); // zarzadzanie cenami
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_PRICE_DETAIL); // szczegoly cen
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
 
         // Build ACL Rules - Mass Actions (Zarządzanie opisami i zdjęciami produktów + przeglad atrybutow)

@@ -1,12 +1,5 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <sales_rma_history>
-        <label>Customer Rma History</label>
-        <update handle="customer_account"/>
-        <reference name="my.account.wrapper">
-             <block type="zolagorma/list" as="list" name="sales.rma.list"/>
-        </reference>
-    </sales_rma_history>	
     <sales_po_rmalist>
         <label>Customer Po History for RMA</label>
         <update handle="customer_account"/>
@@ -20,29 +13,7 @@
         <reference name="my.account.wrapper">
              <block type="zolagopo/list" as="list" name="sales.po.list"/>
         </reference>
-    </sales_po_history>	
-	<sales_po_newrma>
-		<label>Customer My Account Order RMA View</label>
-        <update handle="customer_account"/>
-		<reference name="head">
-			<action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
-			<action method="addItem"><type>js</type><name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
-			<action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
-		    <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
-		</reference>
-        <reference name="my.account.wrapper">
-			<block type="zolagopo/info" as="info" name="sales.po.info">
-				<action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
-				<action method="addLink" translate="label" module="sales"><name>invoice</name><path>*/*/invoice</path><label>Invoices</label></action>
-				<action method="addLink" translate="label" module="sales"><name>shipment</name><path>*/*/shipment</path><label>Shipments</label></action>
-				<action method="addLink" translate="label" module="sales"><name>creditmemo</name><path>*/*/creditmemo</path><label>Refunds</label></action>
-				<action method="addLink" translate="label" module="urma"><name>rma</name><path>*/*/rma</path><label>RMA</label></action>
-				<action method="setInRma"><status>1</status></action>
-			</block> 
-            <block type="zolagorma/new" name="zolagorma.new" template="zolagorma/new.phtml">
-            </block>
-        </reference>
-	</sales_po_newrma>
+    </sales_po_history>
 	
 	<urma_vendor_index>		
 		<update handle="adminhtml_head"/>
@@ -61,7 +32,10 @@
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
 		<update handle="forms"/>
-		
+		<reference name="head">
+			<action method="setTitle"><title>Vendor Portal</title></action>
+			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
+		</reference>
 		<reference name="content">			
 			<block name="vendor_rma_edit" type="zolagorma/vendor_rma_edit" template="zolagorma/vendor/rma/edit.phtml">
 				<block name="vendor_rma_edit_items" type="zolagorma/vendor_rma_edit_items" template="zolagorma/vendor/rma/edit/items.phtml"/>

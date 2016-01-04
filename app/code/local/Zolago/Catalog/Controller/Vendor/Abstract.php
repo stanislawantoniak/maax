@@ -305,12 +305,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		$allowedStores = $this->getAllowedStores();
 		
 		foreach($allowedStores as $_store){
-			if($_store->getId()==$store->getId()){
+			if($_store["id"]==$store->getId()){
 				return (int)$store->getId();
 			}
 		}
 		
-		throw new Mage_Core_Exception("Unknow store");
+		throw new Mage_Core_Exception("Unknown store");
 	}
 	
 	/**

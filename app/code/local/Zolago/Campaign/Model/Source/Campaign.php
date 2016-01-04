@@ -21,6 +21,7 @@
 
     /**
      * @param $ids
+     * @param $vendorId
      * @return Zolago_Campaign_Model_Resource_Campaign_Collection
      */
     private function getCollection($ids,$vendorId) {
@@ -41,5 +42,16 @@
         }
         $coll->setOrder("campaign_id");
         return $coll;
+    }
+
+    /**
+     * Get websites used in campaigns
+     * @return array
+     */
+    public function getCampaignWebsites()
+    {
+        $campaignWebsites = Mage::getResourceModel("zolagocampaign/campaign")
+            ->getCampaignWebsites();
+        return $campaignWebsites;
     }
 }

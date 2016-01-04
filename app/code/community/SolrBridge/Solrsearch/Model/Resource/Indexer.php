@@ -247,9 +247,9 @@ class SolrBridge_Solrsearch_Model_Resource_Indexer extends SolrBridge_Solrsearch
     		$this->percent = $this->calculatePercent($this->totalMagentoProducts, $this->totalFetchedProducts);
 
     		//Post json data to Solr
-			Mage::log("Sending Before");
+//			Mage::log("Sending Before");
     		$numberOfIndexedDocuments = $this->postJsonData($jsonData);
-			Mage::log("Sending After");
+//			Mage::log("Sending After");
 
     		unset($jsonData);
 

@@ -55,6 +55,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	protected $_cores;
 
+    /**
+     * List of cores by store id
+     * Used in getCoresByStoreId()
+     * @var array
+     */
+    protected $_coresByStoreId = array();
+
 	/**
 	 * @var array
 	 */
@@ -195,21 +202,24 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 *
-	 * @param type $storeId
-	 * @return type
+	 * List of cores by store id
+	 * @param int $storeId
+	 * @return array
 	 */
 	public function getCoresByStoreId($storeId) {
-		$cores = array();
-		foreach ($this->getCores() as $core => $data) {
-			if (isset($data['stores'])) {
-				$ids = explode(",", trim($data['stores'], ","));
-				if (in_array($storeId, $ids)) {
-					$cores[] = $core;
-				}
-			}
-		}
-		return $cores;
+        if (!isset($this->_coresByStoreId[$storeId])) {
+            $cores = array();
+            foreach ($this->getCores() as $core => $data) {
+                if (isset($data['stores'])) {
+                    $ids = explode(",", trim($data['stores'], ","));
+                    if (in_array($storeId, $ids)) {
+                        $cores[] = $core;
+                    }
+                }
+            }
+            $this->_coresByStoreId[$storeId] = $cores;
+        }
+		return $this->_coresByStoreId[$storeId];
 	}
 
 	/**
@@ -424,6 +434,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		} else {
 			// Categories are only shown for global context and not for vendor context
 			$allCats = Mage::getModel('catalog/category')->getCollection()
+					->addFieldToFilter('path', array('like' => '%/'.Mage::app()->getStore()->getRootCategoryId().'/%'))
 					->addAttributeToSelect('*')
 					->addAttributeToFilter('is_active', '1')
 					->addAttributeToFilter(self::ZOLAGO_USE_IN_SEARCH_CONTEXT, array('eq' => 1))
@@ -432,10 +443,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			foreach ($allCats as $category) {
 
 				if ($currentCategory && $currentCategory->getId() == $category->getId()) {
-					
+
 				} else {
 					$selected = false;
-
+					$solrProductCount = $category->getSolrProductsCount($category);
+					if ($solrProductCount <= 0) {
+						continue;
+					}
 					$array['select_options'][] = array(
 						'text' => $category->getName(),
 						'value' => $category->getId(),
@@ -464,8 +478,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $array;
 	}
 
+
+
 	/**
-	 * Retrive info from solar for sibling categories
+	 * Retrieve info from solar for sibling categories
 	 *
 	 * @return array
 	 */

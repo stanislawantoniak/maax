@@ -59,7 +59,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 				$invoiceContents[] = array(
 					'invoicecontent' => array(
 						'good'  => array(
-							'id'    => $client->getItemIdCommission()
+							'id'    => $client->getItemIdOther()
 						),
 						'price' => $invoice->getData('other_brutto'),
 						'vat'   => $this->getTax(), //nie musi tego byc, wtedy wezmie ustawienie z produktu w wFirmie
@@ -141,6 +141,7 @@ class GH_Wfirma_Helper_Data extends Mage_Core_Helper_Abstract {
 					//dane firmy
 					'name'          => $vendor->getData('company_name'), //nazwa długa
 					//'altname'       => 'TestContr', //nazwa skrócona
+					'tax_id_type'   => 'nip',//Rodzaj identyfikatora podatkowego. Dopuszczalne wartości nip, vat, pesel, regon, custom, none.
 					'nip'           => $vendor->getData('tax_no'),
 
 					//adres główny

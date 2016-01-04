@@ -1,22 +1,5 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<!-- forntend -->
-	<customer_account>
-		<reference name="customer_account_navigation">
-			 <action method="addLink" translate="label" module="zolagorma">
-				 <name>rma</name>
-				 <path>sales/rma/history</path>
-				 <label>Rma History</label>
-			 </action>
-			 <!-- 
-			 <action method="addLink" translate="label" module="zolagopo">
-				 <name>orders</name>
-				 <path>sales/po/history</path>
-				 <label>Purchase Order History</label>
-			 </action>
-			 -->
-		</reference>
-	</customer_account>
 	<sales_po_view>
 		<label>Customer My Account Order RMA View</label>
         <update handle="customer_account"/>
@@ -53,7 +36,10 @@
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
 		<update handle="forms"/>
-		
+		<reference name="head">
+			<action method="setTitle"><title>Vendor Portal</title></action>
+			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
+		</reference>
 		<reference name="content">			
 			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">
 				<!-- modals -->
@@ -87,6 +73,10 @@
 	<udpo_vendor_aggregated_index>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
+		<reference name="head">
+			<action method="setTitle"><title>Vendor Portal</title></action>
+			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
+		</reference>
 		<reference name="content">			
 			<block name="vendor_aggregated" type="zolagopo/vendor_aggregated" template="zolagopo/vendor/aggregated.phtml"/>
 		</reference>

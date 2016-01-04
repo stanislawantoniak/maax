@@ -180,7 +180,7 @@ define([
 							
 						tbody.append(
 							jQuery("<tr>").addClass("header-row").
-								append(jQuery("<td>").attr("colspan", 6).
+								append(jQuery("<td>").attr("colspan", 7).
 									addClass("align-center").text(Translator.translate("Child products"))
 							)
 						);	
@@ -190,11 +190,12 @@ define([
 								jQuery("<tr>").addClass("header-row").
 									append(jQuery("<td>").addClass("sub-checkbox")).
 									append(jQuery("<td>").text(item.label)).
+									append(jQuery("<td>").text(Translator.translate("SKU"))).
 									append(jQuery("<td>").text(Translator.translate("Price Variation"))).
 									append(jQuery("<td>").text(Translator.translate("In stock"))).
 									append(jQuery("<td>").text(Translator.translate("Stock Qty"))).
 									append(jQuery("<td>").text(Translator.translate("POS Stock")))
-							)
+							);
 					
 							item.children.forEach(function(child){
 								tbody.append(
@@ -204,6 +205,7 @@ define([
 											"disabled": "disabled"
 										}))).
 										append(jQuery("<td>").text(child.option_text)).
+										append(jQuery("<td>").text(child.skuv)).
 										append(jQuery("<td>").
 											addClass("signle-price-edit" + (!data.campaign ? " editable" : "")).
 											append(jQuery("<" + (!data.campaign ? "a" : "span") + ">").
