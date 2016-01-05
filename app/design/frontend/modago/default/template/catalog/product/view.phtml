@@ -108,7 +108,12 @@ if($vendorContext && $vendorContext->getId()) {
 <!-- END GALERY PRODUCT -->
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
-<?php echo $this->getChildHtml('product.shop');?>
+    <?php
+    $this->getChild('product.shop')
+        ->setData('exclude_from_google_index', $excludeProductDescriptionFromGoogleIndex);
+
+    echo $this->getChildHtml('product.shop');
+    ?>
 
 <!-- END:/ PRODUCT SHOP -->
 <!-- SELLER BOX BUNDLE -->
