@@ -261,6 +261,25 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
         return $model;
 
     }
+    /**
+     * function helps to read wsdl from self signed servers
+     *
+     * @param string $url wsdl file
+     * @param array $params wsdl params
+     * @return string
+     */
+    public function prepareWsdlUri($url,&$params) {
+        $opts = array(
+                    'ssl' => array('verify_peer'=>false,'verify_peer_name'=>false,'allow_self_signed' => true)
+                );
+        $params['stream_context'] = stream_context_create($opts);
+        $file = file_get_contents($url,false,stream_context_create($opts));
+        $dir = Mage::getBaseDir('var');
+        $filename = $dir.'/'.uniqid().'.wsdl';        
+        file_put_contents($filename,$file);        
+        return $filename;
+    }
+
 
 
 }
