@@ -62,6 +62,10 @@ $avg = $_reviewBlock->getAvarageRating();
 
 ?>
 
+<?php
+$excludeProductDescriptionFromGoogleIndex = $this->excludeProductDescriptionFromGoogleIndex();
+?>
+
 <div id="content" class="container-fluid">
 <div class="row">
 <div class="col-sm-12">
@@ -104,7 +108,12 @@ if($vendorContext && $vendorContext->getId()) {
 <!-- END GALERY PRODUCT -->
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
-<?php echo $this->getChildHtml('product.shop');?>
+    <?php
+    $this->getChild('product.shop')
+        ->setData('exclude_from_google_index', $excludeProductDescriptionFromGoogleIndex);
+
+    echo $this->getChildHtml('product.shop');
+    ?>
 
 <!-- END:/ PRODUCT SHOP -->
 <!-- SELLER BOX BUNDLE -->
@@ -151,7 +160,11 @@ if($vendorContext && $vendorContext->getId()) {
     $brandShopProductId = $_product->getData('brandshop');
     ?>
     <div class="main">
-        <div itemprop="description"><?php echo $productDescription; ?></div>
+        <div itemprop="description">
+            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleoff: index--><?php endif; ?><?php echo $productDescription; ?>
+            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleon: index--><?php endif; ?>
+        </div>
+
         <?php if (!empty($attributesData)) : ?>
             <ul class="list">
                 <?php foreach ($attributesData as $attr) : ?>
