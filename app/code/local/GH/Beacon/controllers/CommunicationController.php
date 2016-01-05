@@ -23,7 +23,7 @@ class GH_Beacon_CommunicationController extends Mage_Core_Controller_Front_Actio
 
             $beaconData = array(
                 "beacon_id" => $data['beacon_id'],
-                "email" => $data['email'],
+                "email" => $email,
                 "distance" => floatval(str_replace(",",".",$data['distance'])),
                 "date" => $data['date'],
                 "event_type" => $data['event_type']
