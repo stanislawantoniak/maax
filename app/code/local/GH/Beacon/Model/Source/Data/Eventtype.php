@@ -20,7 +20,7 @@ class GH_Beacon_Model_Source_Data_Eventtype {
         /** @var GH_Beacon_Helper_Data $helper */
         $helper = Mage::helper('ghbeacon');
         return array(
-            0 => $helper->__('output'),
+            0 => $helper->__('Output'),
             1 => $helper->__('Input'),
         );
     }

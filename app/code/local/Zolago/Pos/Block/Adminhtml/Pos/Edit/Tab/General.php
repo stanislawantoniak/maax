@@ -93,7 +93,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'ups_password',
         ));
 
-        $beacon = $form->addFieldset('beacon', array('legend'=>$helper->__('Beacon Settings')));
+        $beacon = $form->addFieldset('beacon', array('legend'=>Mage::helper('ghbeacon')->__('Beacon Settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_beacon');
         $builder->setFieldset($beacon);
         $builder->prepareForm(array(

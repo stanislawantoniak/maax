@@ -13,9 +13,9 @@ class GH_Beacon_CommunicationController extends Mage_Core_Controller_Front_Actio
                 throw new GH_Beacon_Exception("Incorrect email address");
             }
 
-            if($data['event_type'] != GH_Beacon_Model_Source_Data_Eventtype::TYPE_INPUT ||
+            if($data['event_type'] != GH_Beacon_Model_Source_Data_Eventtype::TYPE_INPUT &&
                 $data['event_type'] != GH_Beacon_Model_Source_Data_Eventtype::TYPE_OUTPUT) {
-                throw new GH_Beacon_Exception("Incorrect event type address");
+                throw new GH_Beacon_Exception("Incorrect event type");
             }
 
             /** @var GH_Beacon_Model_Data $beaconModel */

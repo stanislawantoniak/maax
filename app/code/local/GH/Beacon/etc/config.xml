@@ -25,15 +25,6 @@
                 <class>GH_Beacon_Helper</class>
             </ghbeacon>
         </helpers>
-        <translate>
-            <modules>
-                <GH_Beacon>
-                    <files>
-                        <default>GH_Beacon.csv</default>
-                    </files>
-                </GH_Beacon>
-            </modules>
-        </translate>
         <resources>
             <ghbeacon_setup>
                 <setup>
@@ -52,5 +43,25 @@
                 </args>
             </ghbeacon>
         </routers>
+        <translate>
+            <modules>
+                <GH_Beacon>
+                    <files>
+                        <default>GH_Beacon.csv</default>
+                    </files>
+                </GH_Beacon>
+            </modules>
+        </translate>
     </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <GH_Beacon>
+                    <files>
+                        <default>GH_Beacon.csv</default>
+                    </files>
+                </GH_Beacon>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>
