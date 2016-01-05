@@ -26,7 +26,7 @@ $installer->addAttribute('catalog_product', $code, array(
         'filterable' => false,
         'filterable_in_search' => false,
         'comparable' => false,
-        'visible_on_front' => true
+        'visible_on_front' => false
     )
 );
 
