@@ -16,6 +16,13 @@
                 <class>Modago_Integrator_Helper</class>
             </modagointegrator>
         </helpers>
+        <resources>
+            <modagointegrator_setup>
+                <setup>
+                    <module>Modago_Integrator</module>
+                </setup>
+            </modagointegrator_setup>
+        </resources>
     </global>
     <adminhtml>
         <translate>
