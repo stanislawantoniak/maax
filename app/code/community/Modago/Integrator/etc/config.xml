@@ -71,6 +71,7 @@
             </authentication>
             <api>
                 <log_days>365</log_days>
+                <batch_size>100</batch_size>
             </api>
         </modagointegrator>
     </default>

@@ -66,6 +66,19 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</enabled>
+						<api_url translate="label">
+							<!-- for test only -->
+							<label>API Url</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<depends>
+								<enabled>1</enabled>
+							</depends>
+							<validate>required-entry</validate>
+						</api_url>
 						<login translate="label">
 							<label>Partner ID</label>
 							<frontend_type>text</frontend_type>
@@ -136,11 +149,23 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
-							<validate>validate-number validate-zero-or-greater</validate>
+							<validate>validate-digits validate-zero-or-greater required-entry</validate>
 							<depends>
 								<enabled>1</enabled>
 							</depends>
 						</log_days>
+						<batch_size translate="label">
+							<label>Batch size</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>80</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<validate>validate-digits validate-zero-or-greater required-entry</validate>
+							<depends>
+								<enabled>1</enabled>
+							</depends>
+						</batch_size>
 					</fields>
 				</api>
 			</groups>
