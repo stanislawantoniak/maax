@@ -72,12 +72,14 @@
             <api>
                 <log_days>365</log_days>
                 <batch_size>100</batch_size>
+                <mapped_cod>cashondelivery</mapped_cod>
             </api>
         </modagointegrator>
         <payment>
             <zolagopayment>
-                <active>1</active>
+                <active>0</active>
                 <title>Zolago payment</title>
+                <model>modagointegrator/payment_zolagopayment</model>
                 <order_status>pending</order_status>
                 <allowspecific>0</allowspecific>
             </zolagopayment>
