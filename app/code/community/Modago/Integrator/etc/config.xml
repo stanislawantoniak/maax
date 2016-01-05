@@ -74,5 +74,13 @@
                 <batch_size>100</batch_size>
             </api>
         </modagointegrator>
+        <payment>
+            <zolagopayment>
+                <active>1</active>
+                <title>Zolago payment</title>
+                <order_status>pending</order_status>
+                <allowspecific>0</allowspecific>
+            </zolagopayment>
+        </payment>
     </default>
 </config>
