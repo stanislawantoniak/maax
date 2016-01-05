@@ -7,6 +7,12 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 
     const TRACK_STATUS_UNDELIVERED = 'U';
 	const TRACK_UNDELIVERED_SUFFIX = '_UNDELIVERED';
+
+
+    const BRANDSHOP_INDEX_BY_GOOGLE_USE_VENDOR_CONFIG = 0;
+    const BRANDSHOP_INDEX_BY_GOOGLE_YES = 1;
+    const BRANDSHOP_INDEX_BY_GOOGLE_NO = 2;
+
 	protected $_allvendors = array();
 
 	public function toOptionHash($selector=false){
@@ -68,9 +74,9 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
     {
         $helper = Mage::helper('zolagodropship');
         $indexByGoogleOptions = array(
-            0 => $helper->__('Use vendor config'),
-            1 => $helper->__('No'),
-            2 => $helper->__('Yes'),
+            self::BRANDSHOP_INDEX_BY_GOOGLE_USE_VENDOR_CONFIG => $helper->__('Use vendor config'),
+            self::BRANDSHOP_INDEX_BY_GOOGLE_YES => $helper->__('Yes'),
+            self::BRANDSHOP_INDEX_BY_GOOGLE_NO => $helper->__('No'),
         );
         return $indexByGoogleOptions;
     }
