@@ -17,7 +17,7 @@ $installer->addAttribute('catalog_product', $code, array(
         'source' => 'zolagodropship/source_indexbygoogle',
         'visible' => true,
         'required' => false,
-        'global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
+        'global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
         'user_defined' => true,
         'default' => '',
         'used_in_product_listing' => false,
