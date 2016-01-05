@@ -38,6 +38,12 @@ class Zolago_Adminhtml_Block_Customer_Beacon_Data_Grid extends Mage_Adminhtml_Bl
             'index'  => 'email',
         ));
 
+        $this->addColumn('beacon_id', array(
+            'header' => $helper->__('Beacon ID'),
+            'index'  => 'beacon_id',
+        ));
+
+
         $this->addColumn('distance', array(
             'header' => $helper->__('Distance'),
             'index'  => 'distance',
