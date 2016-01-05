@@ -8,7 +8,7 @@ $installer->startSetup();
 
 $code = 'index_product_by_google';
 
-//New Flag Attributes
+//Index By Google Attribute
 $installer->addAttribute('catalog_product', $code, array(
         'group' => 'General',
         'input' => 'select',
