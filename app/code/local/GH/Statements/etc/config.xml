@@ -153,6 +153,15 @@
                     <model>ghstatements/observer::processStatements</model>
                 </run>
             </ghstatements_callendar>
+            <ghstatements_balance>
+                <schedule>
+                    <!-- Run 0:00 everyday  -->
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>ghstatements/observer::calculateVendorBalance</model>
+                </run>
+            </ghstatements_balance>
         </jobs>
     </crontab>
 </config>

@@ -6,6 +6,25 @@
 class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 {
 
+    public function calculateVendorBalance()
+    {
+        // I. Collect values
+        // 1. Customer payments (Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
+        $customerPayments = $this->getCustomerPayments();
+        //Mage::log($customerPayments, null, "TEST.log");
+        // 2. Customer refunds (Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND)
+        // 3. Payouts to vendor
+        // 4. Invoices and credit notes
+
+        // II. Calculate balances
+        // 5. Balance
+        // 5.1. Monthly balance
+        // 5.2. Cumulative balance
+        // 5.3. Due balance
+
+
+        // III. Insert (update) balance table
+    }
     /**
      * @param $vendorId
      * @param $fieldToUpdate
@@ -54,7 +73,8 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorBalanceCollection = $vendorBalance->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId)
             ->addFieldToFilter("date", $dateFormatted)
-            ->addFieldToFilter("status", GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED);
+            //->addFieldToFilter("status", GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED)
+        ;
         $vendorBalanceItem = $vendorBalanceCollection->getFirstItem();
 
         //UPDATE (if a row with vendor and date already exist in the table)
@@ -99,6 +119,22 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         }
     }
 
+    public function getCustomerPayments()
+    {
+        $customerPayments = array();
+
+        $customerPaymentsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
+        $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
+            ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month")
+            ->where("allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
+            ->group("vendor_id")->group("balance_month");
+        //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_1.log");
+        //Reformat by vendor -> month
+        foreach ($customerPaymentsCollection as $customerPaymentsItem) {
+            $customerPayments[$customerPaymentsItem->getVendorId()][$customerPaymentsItem->getBalanceMonth()] = $customerPaymentsItem->getAmount();
+        }
+        return $customerPayments;
+    }
 
     /**
      * @param $vendorId
