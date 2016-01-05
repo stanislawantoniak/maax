@@ -13,7 +13,7 @@ $installer->addAttribute('catalog_product', $code, array(
         'group' => 'General',
         'input' => 'select',
         'type' => 'int',
-        'label' => 'Index Product By Google',
+        'label' => Mage::helper('zolagodropship')->__("Index By Google"),
         'source' => 'zolagodropship/source_indexbygoogle',
         'visible' => true,
         'required' => false,

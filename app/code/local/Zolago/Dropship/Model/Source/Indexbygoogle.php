@@ -18,7 +18,7 @@ class Zolago_Dropship_Model_Source_Indexbygoogle
         if (!$this->_options) {
             $this->_options = array(
                 array(
-                    'label' => Mage::helper('catalog')->__('Use config'),
+                    'label' => Mage::helper('catalog')->__('Use vendor and brandshop config'),
                     'value' => self::PRODUCT_INDEX_BY_GOOGLE_USE_CONFIG
                 ),
                 array(
