@@ -15,10 +15,6 @@ class Modago_Integrator_Model_Api
      * @param string $name
      * @return string
      */
-
-    protected function _getConfig($name) {
-        return  Mage::helper('modagointegrator/api')->getConfig($name);        
-    }
     
     /**
      * prepare and return soap client 
@@ -75,7 +71,7 @@ class Modago_Integrator_Model_Api
     protected function _getChangeOrderMessage() {
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
-        $size = $this->_getConfig('batchSize');
+        $size = $this->getHelperApi()->getBatchSize();
         $ret = $client->getChangeOrderMessage($key,$size,'');
         return $ret;
     }
@@ -126,12 +122,17 @@ class Modago_Integrator_Model_Api
      * @param string $msg 
      */
     protected function _finish($msg) {
-        echo $msg.PHP_EOL;        
+        echo $msg.PHP_EOL;
     }
     /**
      * run process
      */
     public function run() {
+		if (!$this->getHelperApi()->isEnabled()) {
+			$msg = Mage::helper('modagointegrator')->__('Configuration error. Integration is disabled');
+			return $this->_finish($msg);
+		}
+
         // login
         $key = $this->_getKey();
         if ($key == -1) {
@@ -169,4 +170,12 @@ class Modago_Integrator_Model_Api
         $this->_finish($msg);
     }
 
+	/**
+	 * Return Helper for API
+	 *
+	 * @return Modago_Integrator_Helper_Api
+	 */
+	public function getHelperApi() {
+		return Mage::helper('modagointegrator/api');
+	}
 }
