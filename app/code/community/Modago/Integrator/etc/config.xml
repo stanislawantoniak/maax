@@ -23,6 +23,17 @@
                 </setup>
             </modagointegrator_setup>
         </resources>
+        <events>
+            <sales_order_shipment_track_save_after>
+                <observers>
+                    <modagointegrator_observer>
+                        <type>singleton</type>
+                        <class>Modago_Integrator_Model_Observer</class>
+                        <method>send_track_info</method>
+                    </modagointegrator_observer>            
+                </observers>
+            </sales_order_shipment_track_save_after>
+        </events>
     </global>
     <adminhtml>
         <translate>

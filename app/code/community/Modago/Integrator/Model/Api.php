@@ -41,19 +41,8 @@ class Modago_Integrator_Model_Api
 
     protected function _getKey() {
         if (!$this->_key) {
-            $vendorId = $this->_getConfig('vendorId');
-            $password = $this->_getConfig('password');
-            $apiKey   = $this->_getConfig('apiKey');
             $client = $this->_getSoapClient();
-            $ret = $client->doLogin($vendorId,$password,$apiKey);
-            if (!empty($ret->token)) {
-                $this->_key = $ret->token;                
-            } else {
-                $this->_key = -1;
-                if (!empty($ret->message)) {
-                    Modago_Integrator_Model_Log::log($ret->message);
-                }
-            }
+            $this->_key = Mage::helper('modagointegrator/api')->getKey($client);
         }
         return $this->_key;
 
