@@ -6,36 +6,58 @@
 class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 {
 
+
+    const CONFIG_PATH_LOGIN       = 'modagointegrator/orders/login';
+    const CONFIG_PATH_PASSWORD    = 'modagointegrator/orders/password';
+    const CONFIG_PATH_API_KEY     = 'modagointegrator/orders/api_key';
+    const CONFIG_PATH_BATCH_SIZE  = 'modagointegrator/orders/batch_size';
+
     /**
-     * get parameters from config by name
-     * @param string $name
-     * @return string
+     * Return login for api (vendor id)
+     *
+     * @return mixed
      */
+    public function getLogin() {
+        return Mage::getStoreConfig(self::CONFIG_PATH_LOGIN);
+    }
 
-    public function getConfig($name) {
-        // dummy
-        $out = array (
-                   'vendorId' => 5,
-                   'password' => 'testtest123',
-                   'apiKey' => 'cadeef539ae2ccca4e80ded78da5e48a0af3ec77d08489a5bde50232a65ff58d',
-                   'batchSize' => 3,
-               );
-        return $out[$name];
-        // todo
+    /**
+     * Return password for api
+     *
+     * @return mixed
+     */
+    public function getPassword() {
+        return Mage::getStoreConfig(self::CONFIG_PATH_PASSWORD);
+    }
 
+    /**
+     * Return api key
+     *
+     * @return mixed
+     */
+    public function getApiKey() {
+        return Mage::getStoreConfig(self::CONFIG_PATH_API_KEY);
+    }
+
+    /**
+     * Get size of batch
+     *
+     * @return mixed
+     */
+    public function getBatchSize() {
+        return Mage::getStoreConfig(self::CONFIG_PATH_BATCH_SIZE);
     }
 
     /**
      * get token from server (login)
      *
-     * @param Modago_Integrator_Model_Soap_Client
+     * @param Modago_Integrator_Model_Soap_Client $client
      * @return string
      */
-
     public function getKey($client) {
-        $vendorId = $this->getConfig('vendorId');
-        $password = $this->getConfig('password');
-        $apiKey   = $this->getConfig('apiKey');
+        $vendorId = $this->getLogin();
+        $password = $this->getPassword();
+        $apiKey   = $this->getApiKey();
         $ret = $client->doLogin($vendorId,$password,$apiKey);
         $key = -1;
         if (!empty($ret->token)) {
@@ -49,15 +71,16 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     }
     
     /**
-     * get mapped mapped modago carrier name
+     * Get mapped Modago carrier name
      *
      * @param string $name
      * @return string
      */
      public function getCarrier($name) {
+
+
          // dummy
          return 'dhl';
          // todo
      }
-
 }
