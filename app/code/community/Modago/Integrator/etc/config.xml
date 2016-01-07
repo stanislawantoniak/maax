@@ -2,15 +2,24 @@
 <config>
     <modules>
         <Modago_Integrator>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Modago_Integrator>
     </modules>
     <global>
         <models>
             <modagointegrator>
                 <class>Modago_Integrator_Model</class>
+				<resourceModel>modagointegrator_resource</resourceModel>
             </modagointegrator>
-        </models>
+			<modagointegrator_resource>
+				<class>Modago_Integrator_Model_Resource</class>
+				<entities>
+					<log>
+						<table>modagointegrator_log</table>
+					</log>
+				</entities>
+			</modagointegrator_resource>
+		</models>
         <helpers>
             <modagointegrator>
                 <class>Modago_Integrator_Helper</class>

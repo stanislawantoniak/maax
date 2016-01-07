@@ -164,7 +164,7 @@ class Modago_Integrator_Model_Soap_Client  {
             $data = $client->$name($parameters);
         } catch (Exception $xt) {
             Mage::logException($xt);
-            Modago_Integrator_Model_Log::log($xt->getMessage());
+			Mage::helper('modagointegrator/api')->log($xt->getMessage());
         }
         unlink($url);
         return $data;

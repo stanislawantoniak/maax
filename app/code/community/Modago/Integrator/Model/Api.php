@@ -58,7 +58,7 @@ class Modago_Integrator_Model_Api
          $ret = $client->setChangeOrderMessageConfirmation($key,$list);
          if (empty($ret->status)) { // no answer or error
              if (!empty($ret->message)) {
-                 Modago_Integrator_Model_Log::log($ret->message);
+				 Mage::helper('modagointegrator/api')->log($ret->message);
              }
          }
      }
@@ -88,13 +88,13 @@ class Modago_Integrator_Model_Api
         $details = $client->getOrdersById($key,array($orderId)); // one by one
         if (empty($details->status)) { // error
             if (!empty($details->message)) {
-                Modago_Integrator_Model_Log::log($details->message);                
+				Mage::helper('modagointegrator/api')->log($details->message);
             }
             return false;
         }
         if (empty($details->orderList)) {
-            $msg = Mage::helper('modagointegrator')->__('Empty order details (%s)',$orderId); 
-            Modago_Integrator_Model_Log::log($msg);
+            $msg = Mage::helper('modagointegrator')->__('Empty order details (%s)',$orderId);
+			Mage::helper('modagointegrator/api')->log($msg);
             return false;
         }
         foreach ($details->orderList as $item) {
@@ -142,7 +142,7 @@ class Modago_Integrator_Model_Api
         $list = $this->_getChangeOrderMessage();
         if (empty($list->list) || empty($list->list->message)) { // no order list
             if (!empty($list->status) && (!empty($list->message))) { // no log if status == true                
-                Modago_Integrator_Model_Log::log($list->message);
+				Mage::helper('modagointegrator/api')->log($list->message);
             }
             $msg = Mage::helper('modagointegrator')->__('Order list empty');
             return $this->_finish($msg);

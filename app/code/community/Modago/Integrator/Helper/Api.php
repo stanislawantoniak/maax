@@ -120,7 +120,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
             $key = $ret->token;
         } else {
             if (!empty($ret->message)) {
-                Modago_Integrator_Model_Log::log($ret->message);
+                $this->log($ret->message);
             }
         }
         return $key;
@@ -136,5 +136,21 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 		$fieldName = 'carrier_' . $carrierCode;
 		$value = Mage::getStoreConfig(self::CONFIG_PATH . $fieldName);
 		return $value;
+	}
+
+	/**
+	 * Save log into table
+	 *
+	 * @param $text
+	 * @throws Exception
+	 */
+	public function log($text) {
+		if (!empty(($text))) {
+			/** @var Modago_Integrator_Model_Log $log */
+			$log = Mage::getModel('modagointegrator/log');
+			$log->setText($text);
+			$log->save();
+		}
+		//todo clear old
 	}
 }
