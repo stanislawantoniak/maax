@@ -16,6 +16,24 @@
                 <class>Modago_Integrator_Helper</class>
             </modagointegrator>
         </helpers>
+        <resources>
+            <modagointegrator_setup>
+                <setup>
+                    <module>Modago_Integrator</module>
+                </setup>
+            </modagointegrator_setup>
+        </resources>
+        <events>
+            <sales_order_shipment_track_save_after>
+                <observers>
+                    <modagointegrator_observer>
+                        <type>singleton</type>
+                        <class>Modago_Integrator_Model_Observer</class>
+                        <method>send_track_info</method>
+                    </modagointegrator_observer>            
+                </observers>
+            </sales_order_shipment_track_save_after>
+        </events>
     </global>
     <adminhtml>
         <translate>
@@ -49,6 +67,16 @@
                 </admin>
             </resources>
         </acl>
+        <events>
+            <adminhtml_init_system_config>
+                <observers>
+                    <modagointegrator_add_config_carrier_mapper_fields>
+                        <class>modagointegrator/observer</class>
+                        <method>addConfigCarrierMapperFields</method>
+                    </modagointegrator_add_config_carrier_mapper_fields>
+                </observers>
+            </adminhtml_init_system_config>
+        </events>
     </adminhtml>
     <frontend>
         <secure_url>
@@ -69,6 +97,20 @@
             <authentication>
                 <integration_store>0</integration_store>
             </authentication>
+            <orders>
+                <log_days>365</log_days>
+                <batch_size>100</batch_size>
+                <mapped_cod>cashondelivery</mapped_cod>
+            </orders>
         </modagointegrator>
+        <payment>
+            <zolagopayment>
+                <active>0</active>
+                <title>Zolago payment</title>
+                <model>modagointegrator/payment_zolagopayment</model>
+                <order_status>pending</order_status>
+                <allowspecific>0</allowspecific>
+            </zolagopayment>
+        </payment>
     </default>
 </config>
