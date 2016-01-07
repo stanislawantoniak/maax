@@ -67,6 +67,16 @@
                 </admin>
             </resources>
         </acl>
+        <events>
+            <adminhtml_init_system_config>
+                <observers>
+                    <modagointegrator_add_config_carrier_mapper_fields>
+                        <class>modagointegrator/observer</class>
+                        <method>addConfigCarrierMapperFields</method>
+                    </modagointegrator_add_config_carrier_mapper_fields>
+                </observers>
+            </adminhtml_init_system_config>
+        </events>
     </adminhtml>
     <frontend>
         <secure_url>
