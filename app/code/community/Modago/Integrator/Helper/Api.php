@@ -8,11 +8,15 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 
 
     const CONFIG_PATH             = 'modagointegrator/orders/';
+    const CONFIG_PATH_ENABLED     = 'modagointegrator/orders/enabled';
     const CONFIG_PATH_LOGIN       = 'modagointegrator/orders/login';
     const CONFIG_PATH_PASSWORD    = 'modagointegrator/orders/password';
     const CONFIG_PATH_API_KEY     = 'modagointegrator/orders/api_key';
     const CONFIG_PATH_BATCH_SIZE  = 'modagointegrator/orders/batch_size';
     const CONFIG_PATH_API_URL     = 'modagointegrator/orders/api_url';
+    const CONFIG_PATH_STORE       = 'modagointegrator/orders/store';
+    const CONFIG_PATH_LOG_DAYS    = 'modagointegrator/orders/log_days';
+    const CONFIG_PATH_MAPPED_COD  = 'modagointegrator/orders/mapped_cod';
 
     /**
      * Return login for api (vendor id)
@@ -49,6 +53,42 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     public function getBatchSize() {
         return Mage::getStoreConfig(self::CONFIG_PATH_BATCH_SIZE);
     }
+
+	/**
+	 * Return storeId where orders will be created
+	 *
+	 * @return int
+	 */
+	public function getStoreId() {
+		return (int) Mage::getStoreConfig(self::CONFIG_PATH_STORE);
+	}
+
+	/**
+	 * True if in integration config for creating orders is enabled
+	 *
+	 * @return bool
+	 */
+	public function isEnabled() {
+		return (bool) Mage::getStoreConfig(self::CONFIG_PATH_ENABLED);
+	}
+
+	/**
+	 * For how long records with logs will be keep
+	 *
+	 * @return int
+	 */
+	public function getLogDays() {
+		return (int) Mage::getStoreConfig(self::CONFIG_PATH_LOG_DAYS);
+	}
+
+	/**
+	 * Mapped payment method 'cash on delivery' to witch payment method in vendor shop
+	 * By default 'cashondelivery'
+	 * @return string
+	 */
+	public function getMappedCodPaymentCode() {
+		return Mage::getStoreConfig(self::CONFIG_PATH_LOG_DAYS);
+	}
 
     /**
      * Return api wsdl url
@@ -96,5 +136,5 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 		$fieldName = 'carrier_' . $carrierCode;
 		$value = Mage::getStoreConfig(self::CONFIG_PATH . $fieldName);
 		return $value;
-     }
+	}
 }
