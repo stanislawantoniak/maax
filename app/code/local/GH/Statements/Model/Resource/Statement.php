@@ -34,20 +34,20 @@ class GH_Statements_Model_Resource_Statement extends Mage_Core_Model_Resource_Db
             ->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId);
         $statements->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("DATE_FORMAT(event_date,'%Y-%m') statement_month, (last_statement_balance+to_pay-payment_value) AS current_balance_of_the_settlement")
+            ->columns("DATE_FORMAT(event_date,'%Y-%m') statement_month, actual_balance")
             ->having("statement_month=?", $dateFormatted)
             ->order("event_date DESC");
 
-        $currentBalanceOfTheSettlement = $statements
+        $actualBalance = $statements
             ->getFirstItem()
-            ->getData("current_balance_of_the_settlement");
+            ->getData("actual_balance");
 
 
         Mage::helper("ghstatements/vendor_balance")
             ->updateVendorBalanceData(
                 $vendorId,
                 "balance_due",
-                (float)$currentBalanceOfTheSettlement,
+                (float)$actualBalance,
                 $date
             );
     }
