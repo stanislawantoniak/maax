@@ -11,6 +11,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     const CONFIG_PATH_PASSWORD    = 'modagointegrator/orders/password';
     const CONFIG_PATH_API_KEY     = 'modagointegrator/orders/api_key';
     const CONFIG_PATH_BATCH_SIZE  = 'modagointegrator/orders/batch_size';
+    const CONFIG_PATH_API_URL     = 'modagointegrator/orders/api_url';
 
     /**
      * Return login for api (vendor id)
@@ -46,6 +47,20 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
      */
     public function getBatchSize() {
         return Mage::getStoreConfig(self::CONFIG_PATH_BATCH_SIZE);
+    }
+
+    /**
+     * Return api wsdl url
+     *
+     * @return string
+     */
+    public function getApiUrl() {
+        $url = Modago_Integrator_Model_Soap_Client::MODAGO_API_WSDL;
+        $testUrl = Mage::getStoreConfig(self::CONFIG_PATH_API_URL);
+        if (!empty($testUrl)) {
+            $url = $testUrl;
+        }
+        return $url;
     }
 
     /**

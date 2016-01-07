@@ -4,14 +4,15 @@
  */
 class Modago_Integrator_Model_Soap_Client  {
 
-    const MODAGO_API_WSDL = 'https://modago.dev/ghapi/wsdl/';
+    const MODAGO_API_WSDL = 'https://modago.pl/ghapi/wsdl/';
+
     /**
      * login
      *
      * @param int $vendorId
      * @param string $password
      * @param string $apiKey
-     * @return void
+     * @return array
      */
     public function doLogin($vendorId,$password,$apiKey) {
         $obj = new StdClass();
@@ -27,7 +28,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * @param string $token
      * @param int $batchSize
      * @param string $messageType
-     * @return void
+     * @return array
      */
      public function getChangeOrderMessage($token,$batchSize,$messageType) {
          $obj = new StdClass();
@@ -41,7 +42,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * Test for setChangeOrderMessageConfirmation
      * @param string $token
      * @param array $list
-     * @return void
+     * @return array
      */
      public function setChangeOrderMessageConfirmation($token,$list) {
          $obj = new StdClass();
@@ -54,7 +55,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * Test for getOrdersByID
      * @param string $token
      * @param array $list
-     * @return void
+     * @return array
      */
      public function getOrdersByID($token,$list) {
          $obj = new StdClass();
@@ -67,7 +68,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * Test for setOrderAsCollected
      * @param string $token
      * @param array $list
-     * @return void
+     * @return array
      */
     public function setOrderAsCollected($token, $list) {
         $obj = new StdClass();
@@ -84,7 +85,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * @param string $dateShipped
      * @param string $courier
      * @param string $shipmentTrackingNumber
-     * @return void
+     * @return array
      */
     public function setOrderShipment($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber) {
         $obj = new StdClass();
@@ -103,7 +104,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * @param string $orderID
      * @param string $reservationStatus
      * @param string $reservationMessage
-     * @return void
+     * @return array
      */
     public function setOrderReservation($token, $orderID, $reservationStatus, $reservationMessage) {
         $obj = new StdClass();
@@ -117,6 +118,7 @@ class Modago_Integrator_Model_Soap_Client  {
     /**
      * Test for getCategories
      * @param $token
+     * @return array
      */
     public function getCategories($token) {
         $obj = new StdClass();
@@ -146,15 +148,19 @@ class Modago_Integrator_Model_Soap_Client  {
      * soap query
      * @param string $name
      * @param stdClass $parameters
-     * @return void
+     * @return array
      */
     protected function _query($name,$parameters) {
         $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_1, 'trace' => 1,'cache_wsdl'=>WSDL_CACHE_NONE);
+        $data = array();
+        /** @var Modago_Integrator_Helper_Data $helper */
+        $helper = Mage::helper('modagointegrator');
+        /** @var Modago_Integrator_Helper_Api $helperApi */
+        $helperApi = Mage::helper('modagointegrator/api');
         try {
-            $url = Mage::helper('modagointegrator')->prepareWsdlUri(self::MODAGO_API_WSDL,$params);
-//            $url = self::MODAGO_API_WSDL;
+            $url = $helper->prepareWsdlUri($helperApi->getApiUrl(), $params);
             $client = new SoapClient($url,$params);
-            $data = array();
+
             $data = $client->$name($parameters);
         } catch (Exception $xt) {
             Mage::logException($xt);
