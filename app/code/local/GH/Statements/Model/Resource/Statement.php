@@ -11,17 +11,6 @@ class GH_Statements_Model_Resource_Statement extends Mage_Core_Model_Resource_Db
         $this->_init('ghstatements/statement', 'id');
     }
 
-    /**
-     * @param Mage_Core_Model_Abstract $object
-     * @return GH_Statements_Model_Statement
-     */
-    public function _afterSave(Mage_Core_Model_Abstract $object)
-    {
-
-        $this->_recalculateBalanceDue($object->getData("event_date"), $object->getData("vendor_id"));
-
-        return parent::_afterSave($object);
-    }
 
     /**
      * @param Mage_Core_Model_Abstract $object
@@ -29,12 +18,16 @@ class GH_Statements_Model_Resource_Statement extends Mage_Core_Model_Resource_Db
      */
     public function _afterDelete(Mage_Core_Model_Abstract $object)
     {
-        $this->_recalculateBalanceDue($object->getData("event_date"), $object->getData("vendor_id"));
+        $this->_recalculateBalanceDue($object->getData("vendor_id"), $object->getData("event_date"));
 
         return parent::_afterDelete($object);
     }
 
-    protected function _recalculateBalanceDue($date, $vendorId)
+    /**
+     * @param $vendorId
+     * @param $date
+     */
+    protected function _recalculateBalanceDue($vendorId, $date)
     {
         $dateFormatted = date("Y-m", strtotime($date));
         $statements = Mage::getModel("ghstatements/statement")
