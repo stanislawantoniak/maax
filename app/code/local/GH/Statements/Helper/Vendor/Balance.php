@@ -358,50 +358,25 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorBalance = Mage::getModel("ghstatements/vendor_balance");
         $vendorBalanceCollection = $vendorBalance->getCollection()
             ->addFieldToFilter("vendor_id", $vendorId)
-            ->addFieldToFilter("date", $dateFormatted)
-            //->addFieldToFilter("status", GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED)
+            ->addFieldToFilter("date", $dateFormatted)//->addFieldToFilter("status", GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED)
         ;
         $vendorBalanceItem = $vendorBalanceCollection->getFirstItem();
 
         //UPDATE (if a row with vendor and date already exist in the table)
         $id = $vendorBalanceItem->getId();
 
-        if ($id) {
-            try {
-                $vendorBalanceLine = $vendorBalance->load($id);
+        $data = array(
+            "vendor_id" => $vendorId,
+            "date" => $dateFormatted,
+            $fieldToUpdate => (float)$valueToUpdate
+        );
+        $vendorBalanceModel = $vendorBalance->load($id);
+        try {
+            $vendorBalanceLine = $vendorBalanceModel->addData($data);
+            $vendorBalanceLine->setId($id)->save();
 
-                switch ($fieldToUpdate) {
-                    case "payment_from_client":
-                        $paymentFromClient = $vendorBalanceLine->getData("payment_from_client");
-                        $valueToUpdate = $valueToUpdate + $paymentFromClient;
-                        break;
-                    case "payment_return_to_client":
-                        $paymentReturnToClient = $vendorBalanceLine->getData("payment_return_to_client");
-                        $valueToUpdate = $valueToUpdate + $paymentReturnToClient;
-                        break;
-                }
-
-                $vendorBalanceLine
-                    ->setData($fieldToUpdate, (float)$valueToUpdate)
-                    ->save();
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
-        } else {
-            //OR
-            //INSERT
-            try {
-                $vendorBalance->addData(
-                    array(
-                        "vendor_id" => $vendorId,
-                        "date" => $dateFormatted,
-                        $fieldToUpdate => (float)$valueToUpdate
-                    )
-                );
-                $vendorBalance->save();
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
+        } catch (Exception $e) {
+            Mage::logException($e);
         }
     }
 
