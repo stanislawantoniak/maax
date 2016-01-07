@@ -19,6 +19,11 @@ class Modago_Integrator_Model_Observer {
                 $trackNumber = $track->getTrackNumber();
                 $carrierCode = $track->getCarrierCode();
                 $carrier = Mage::helper('modagointegrator/api')->getCarrier($carrierCode);
+				if (empty($carrier)) {
+					$message = Mage::helper('modagointegrator')->__('Modago order %s tracking info cannot be saved because there is no carrier mapping for %s',$orderId, $carrierCode);
+					Modago_Integrator_Model_Log::log($message);
+					return; // aborting
+				}
                 $ret = $client->setOrderShipment($key,$orderId,$dateShipped,$carrier,$trackNumber);
                 if (empty($ret->status)) { // error
                     if (!empty($ret->message)) {

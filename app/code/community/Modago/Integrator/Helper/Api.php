@@ -7,6 +7,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 {
 
 
+    const CONFIG_PATH             = 'modagointegrator/orders/';
     const CONFIG_PATH_LOGIN       = 'modagointegrator/orders/login';
     const CONFIG_PATH_PASSWORD    = 'modagointegrator/orders/password';
     const CONFIG_PATH_API_KEY     = 'modagointegrator/orders/api_key';
@@ -84,18 +85,16 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
         }
         return $key;
     }
-    
-    /**
-     * Get mapped Modago carrier name
-     *
-     * @param string $name
-     * @return string
-     */
-     public function getCarrier($name) {
 
-
-         // dummy
-         return 'dhl';
-         // todo
+	/**
+	 * Get mapped Modago carrier name
+	 *
+	 * @param string $carrierCode
+	 * @return string
+	 */
+	public function getCarrier($carrierCode) {
+		$fieldName = 'carrier_' . $carrierCode;
+		$value = Mage::getStoreConfig(self::CONFIG_PATH . $fieldName);
+		return $value;
      }
 }
