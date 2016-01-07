@@ -101,7 +101,6 @@
 							<depends>
 								<enabled>1</enabled>
 							</depends>
-							<validate>required-entry</validate>
 						</api_key>
 						<password translate="label">
 							<label>API Password</label>
