@@ -10,8 +10,8 @@ class Modago_Integrator_Model_Shipping_Source_Modagocarrier {
 	public function toOptionArray($isMultiselect = false) {
 		$data = array(
 			array('value' => 'dhl', 'label' => 'DHL'),
-			array('value' => 'ups', 'label' => 'UPS')
-			// TODO add others
+			array('value' => 'ups', 'label' => 'UPS'),
+			array('value' => 'dpd', 'label' => 'DPD')
 		);
 		if(!$isMultiselect){
 			array_unshift($data, array('value'=>'', 'label'=>''));
