@@ -139,18 +139,22 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	}
 
 	/**
-	 * Save log into table
+	 * Save log into table and remove outdated
 	 *
 	 * @param $text
 	 * @throws Exception
+	 * @return $this
 	 */
 	public function log($text) {
-		if (!empty(($text))) {
+		if (!empty($text)) {
 			/** @var Modago_Integrator_Model_Log $log */
 			$log = Mage::getModel('modagointegrator/log');
 			$log->setText($text);
 			$log->save();
 		}
-		//todo clear old
+		/** @var Modago_Integrator_Model_Resource_Log $resModel */
+		$resModel = Mage::getResourceModel('modagointegrator/log');
+		$resModel->removeOldLogs();
+		return $this;
 	}
 }

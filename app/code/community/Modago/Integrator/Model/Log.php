@@ -12,10 +12,14 @@
  */
 class Modago_Integrator_Model_Log extends Mage_Core_Model_Abstract {
 
+	public function _construct() {
+		$this->_init('modagointegrator/log');
+	}
+
 	protected function _beforeSave() {
 		parent::_beforeSave();
 		if (!$this->hasData('date')) {
-			$this->setData(Mage::getModel('core/date')->date('Y-m-d H:i:s'));
+			$this->setDate(Mage::getModel('core/date')->date('Y-m-d H:i:s'));
 		}
 		return $this;
 	}

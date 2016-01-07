@@ -44,6 +44,9 @@ class Modago_Integrator_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function addConfigCarrierMapperFields(Varien_Event_Observer $observer) {
+
+		Mage::helper('modagointegrator/api')->log("jakas testowa");
+
 		/** @var Modago_Integrator_Helper_Data $helper */
 		$helper = Mage::helper('modagointegrator');
 		/** @var Mage_Core_Model_Config_Base $config */
