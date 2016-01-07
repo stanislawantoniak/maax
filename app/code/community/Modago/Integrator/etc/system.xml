@@ -50,8 +50,8 @@
 						</integration_store>
 					</fields>
 				</authentication>
-				<api translate="label" module="modagointegrator">
-					<label>Api</label>
+				<orders translate="label" module="modagointegrator">
+					<label>Creating orders from Modago</label>
 					<sort_order>20</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
@@ -175,9 +175,12 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
+							<depends>
+								<enabled>1</enabled>
+							</depends>
 						</mapped_cod>
 					</fields>
-				</api>
+				</orders>
 			</groups>
 		</modagointegrator>
 		<payment translate="label" module="modagointegrator">
