@@ -274,7 +274,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         //Reformat by vendor -> month
         foreach ($vendorInvoicesCollection as $vendorInvoicesItem) {
             $vendorInvoices[$vendorInvoicesItem->getVendorId()][$vendorInvoicesItem->getBalanceMonth()] = $vendorInvoicesItem->getAmount();
-            $vendorDateHelper[$vendorInvoicesItem->getVendorId()][] = $vendorInvoicesItem->getBalanceMonth();
+            $vendorDateHelper[$vendorInvoicesItem->getVendorId()][$vendorInvoicesItem->getBalanceMonth()] = $vendorInvoicesItem->getBalanceMonth();
         }
         Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_ORIGINAL.log");
 
@@ -297,7 +297,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         //Reformat by vendor -> month
         foreach ($vendorInvoiceCorrectionsCollection as $vendorInvoiceCorrectionsItem) {
             $vendorCorrections[$vendorInvoiceCorrectionsItem->getVendorId()][$vendorInvoiceCorrectionsItem->getBalanceMonth()] = $vendorInvoiceCorrectionsItem->getAmount();
-            $vendorDateHelper[$vendorInvoiceCorrectionsItem->getVendorId()][] = $vendorInvoiceCorrectionsItem->getBalanceMonth();
+            $vendorDateHelper[$vendorInvoiceCorrectionsItem->getVendorId()][$vendorInvoiceCorrectionsItem->getBalanceMonth()] = $vendorInvoiceCorrectionsItem->getBalanceMonth();
         }
         Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
 
