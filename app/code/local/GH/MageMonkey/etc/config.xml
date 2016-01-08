@@ -21,8 +21,7 @@
             </gh_magemonkey>
             <monkey>
                 <rewrite>
-                    <adminhtml_ecommerceapi_grid>GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid
-                    </adminhtml_ecommerceapi_grid>
+                    <adminhtml_ecommerceapi_grid>GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid</adminhtml_ecommerceapi_grid>
                 </rewrite>
             </monkey>
         </blocks>
