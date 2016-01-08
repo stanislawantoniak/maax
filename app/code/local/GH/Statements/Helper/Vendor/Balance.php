@@ -197,7 +197,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             ->where("primary=?", 1)
             ->group("vendor_id")
             ->group("balance_month");
-        //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
+        Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
         //Reformat by vendor -> month
         foreach ($customerPaymentsCollection as $customerPaymentsItem) {
             $customerPayments[$customerPaymentsItem->getVendorId()][$customerPaymentsItem->getBalanceMonth()] = $customerPaymentsItem->getAmount();
