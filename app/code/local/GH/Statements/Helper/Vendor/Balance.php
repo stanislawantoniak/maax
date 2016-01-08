@@ -120,7 +120,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $statements = Mage::getModel("ghstatements/statement")
             ->getCollection();
         $statements->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("vendor_id, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
+            ->columns("vendor_id, last_statement_balance,to_pay,payment_value, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
             ->group("vendor_id")
             ->group("balance_month")
             ->order("event_date DESC");
