@@ -198,11 +198,13 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 //            ->group("vendor_id")
 //            ->group("balance_month");
 //        Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
+
+        $payment = Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT;
         $read = Mage::getSingleton('core/resource')->getConnection('core_read');
         $query = "
         SELECT vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount,
         DATE_FORMAT(created_at,'%Y-%m') AS `balance_month` FROM `zolago_payment_allocation` AS `main_table`
-        WHERE (allocation_type='payment') AND (main_table.primary=1) GROUP BY `vendor_id`,`balance_month`
+        WHERE (allocation_type='{$payment}') AND (main_table.primary=1) GROUP BY `vendor_id`,`balance_month`
         ";
         $results = $read->fetchAll($query);
         Mage::log($results, null, "TEST_SALDO_PAYMENTS.log");
