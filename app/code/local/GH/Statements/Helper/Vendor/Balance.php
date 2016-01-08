@@ -297,11 +297,11 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         //Reformat by vendor -> month
         foreach ($vendorInvoiceCorrectionsCollection as $vendorInvoiceCorrectionsItem) {
             $vendorCorrections[$vendorInvoiceCorrectionsItem->getVendorId()][$vendorInvoiceCorrectionsItem->getBalanceMonth()] = $vendorInvoiceCorrectionsItem->getAmount();
-            $vendorDateHelper[$vendorInvoiceCorrectionsItem->getVendorId()] = $vendorInvoiceCorrectionsItem->getBalanceMonth();
+            $vendorDateHelper[$vendorInvoiceCorrectionsItem->getVendorId()][] = $vendorInvoiceCorrectionsItem->getBalanceMonth();
         }
         Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
 
-
+        Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
         //3. Calculate sum
         if (empty($vendorDateHelper))
             return $result;
