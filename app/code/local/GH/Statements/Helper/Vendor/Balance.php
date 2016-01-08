@@ -117,21 +117,21 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
     public function getBalanceDue()
     {
         $balanceDue = array();
-//        $statements = Mage::getModel("ghstatements/statement")
-//            ->getCollection();
-//        $statements->getSelect()->reset(Zend_Db_Select::COLUMNS)
-//            ->columns("vendor_id, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
-//            ->group("vendor_id")
-//            ->group("balance_month")
-//            ->order("event_date DESC");
-//
-//        //Reformat by vendor
-//        foreach ($statements as $statement) {
-//            $B = $statement->getLastStatementBalance();
-//            $A = $statement->getToPay();
-//            $C = $statement->getPaymentValue();
-//            $balanceDue[$statement->getVendorId()][$statement->getBalanceMonth()] = sprintf("%.4f", round($B + $A - $C, 2));
-//        }
+        $statements = Mage::getModel("ghstatements/statement")
+            ->getCollection();
+        $statements->getSelect()->reset(Zend_Db_Select::COLUMNS)
+            ->columns("vendor_id, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
+            ->group("vendor_id")
+            ->group("balance_month")
+            ->order("event_date DESC");
+        Mage::log($statements->getSelect()->__toString(), null, "TEST_SALDO_DUE.log");
+        //Reformat by vendor
+        foreach ($statements as $statement) {
+            $B = $statement->getLastStatementBalance();
+            $A = $statement->getToPay();
+            $C = $statement->getPaymentValue();
+            $balanceDue[$statement->getVendorId()][$statement->getBalanceMonth()] = sprintf("%.4f", round($B + $A - $C, 2));
+        }
 
         return $balanceDue;
     }
@@ -197,20 +197,13 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             ->where("`primary`=?",1)
             ->group("vendor_id")
             ->group("balance_month");
-        Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
+        //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
 
-//        $payment = Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT;
-//        $read = Mage::getSingleton('core/resource')->getConnection('core_read');
-//        $query = "SELECT vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month FROM `zolago_payment_allocation` AS `main_table` WHERE (allocation_type='payment') GROUP BY vendor_id,balance_month";
-//        $results = $read->fetchAll($query);
       //  Mage::log($results, null, "TEST_SALDO_PAYMENTS.log");
         //Reformat by vendor -> month
         foreach ($customerPaymentsCollection as $customerPaymentsItem) {
             $customerPayments[$customerPaymentsItem->getVendorId()][$customerPaymentsItem->getBalanceMonth()] = $customerPaymentsItem->getAmount();
         }
-//        foreach ($results as $result) {
-//            $customerPayments[$result["vendor_id"]][$result["balance_month"]] = $result["amount"];
-//        }
         return $customerPayments;
     }
 
