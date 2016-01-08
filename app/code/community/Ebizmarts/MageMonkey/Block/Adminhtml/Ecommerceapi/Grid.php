@@ -32,6 +32,7 @@ class Ebizmarts_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Mage_Adminh
         foreach (Mage::app()->getStores() as $storeId => $store) {
             $api = Mage::getModel('monkey/api', array('store' => $storeId));
             $result = $api->ecommOrders(0, 500);
+            var_dump($result);
             $orders += $result['data'];
         }
 
