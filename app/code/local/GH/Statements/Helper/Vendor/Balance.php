@@ -37,7 +37,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 
         // 4. Invoices and credit notes
         $vendorInvoices = $this->getVendorInvoices();
-        Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_RESULT.log");
+        //Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_RESULT.log");
         $data = $this->collectDataBeforeBalanceUpdate($vendorInvoices, "vendor_invoice_cost", $data, $closedBalanceMonths);
 
 
@@ -270,13 +270,13 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             ->where("wfirma_invoice_number != '' ")
             ->group("vendor_id")
             ->group("balance_month");
-        Mage::log($vendorInvoicesCollection->getSelect()->__toString(), null, "TEST_SALDO_INVOICES_ORIGINAL.log");
+        //Mage::log($vendorInvoicesCollection->getSelect()->__toString(), null, "TEST_SALDO_INVOICES_ORIGINAL.log");
         //Reformat by vendor -> month
         foreach ($vendorInvoicesCollection as $vendorInvoicesItem) {
             $vendorInvoices[$vendorInvoicesItem->getVendorId()][$vendorInvoicesItem->getBalanceMonth()] = $vendorInvoicesItem->getAmount();
             $vendorDateHelper[$vendorInvoicesItem->getVendorId()][$vendorInvoicesItem->getBalanceMonth()] = $vendorInvoicesItem->getBalanceMonth();
         }
-        Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_ORIGINAL.log");
+       //Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_ORIGINAL.log");
 
         //2. korekty wg daty wystawienia
         $vendorCorrections = array();
@@ -293,15 +293,15 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             ->where("wfirma_invoice_number != '' ")
             ->group("vendor_id")
             ->group("balance_month");
-        Mage::log($vendorInvoiceCorrectionsCollection->getSelect()->__toString(), null, "TEST_SALDO_INVOICES_CORRECTION.log");
+        //Mage::log($vendorInvoiceCorrectionsCollection->getSelect()->__toString(), null, "TEST_SALDO_INVOICES_CORRECTION.log");
         //Reformat by vendor -> month
         foreach ($vendorInvoiceCorrectionsCollection as $vendorInvoiceCorrectionsItem) {
             $vendorCorrections[$vendorInvoiceCorrectionsItem->getVendorId()][$vendorInvoiceCorrectionsItem->getBalanceMonth()] = $vendorInvoiceCorrectionsItem->getAmount();
             $vendorDateHelper[$vendorInvoiceCorrectionsItem->getVendorId()][$vendorInvoiceCorrectionsItem->getBalanceMonth()] = $vendorInvoiceCorrectionsItem->getBalanceMonth();
         }
-        Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
+        //Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
 
-        Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
+        //Mage::log($vendorCorrections, null, "TEST_SALDO_INVOICES_CORRECTION.log");
         //3. Calculate sum
         if (empty($vendorDateHelper))
             return $result;
@@ -314,7 +314,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                     $result[$vendorId][$month] = $invoiceAmount + $correctionAmount;
             }
         }
-        Mage::log($result, null, "TEST_SALDO_INVOICES_RESULT.log");
+        //Mage::log($result, null, "TEST_SALDO_INVOICES_RESULT.log");
         return $result;
     }
 
