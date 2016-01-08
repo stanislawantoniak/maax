@@ -35,7 +35,6 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 <?php
 
 $productName = $_helper->productAttribute($_product, $_product->getName(), 'name');
-$excludeProductDescriptionFromGoogleIndex = $this->getData("exclude_from_google_index");
 
 //$vendor = Mage::helper('udropship')->getVendor($vendor_id);
 //$vendorName = $vendor->getData("vendor_name");
@@ -53,8 +52,7 @@ $excludeProductDescriptionFromGoogleIndex = $this->getData("exclude_from_google_
         <div class="product-name"><h1 itemprop="name"><?php echo $productName; ?></h1></div>
         <meta itemprop="sku" content="<?php echo $_product->getSku() ?>" />
         <p class="short-description hidden-xs">
-            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleoff: index--><?php endif; ?><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
-            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleon: index--><?php endif; ?>
+            <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
         </p>
 
         <?php if ($_product->getCanShowPrice() !== false): ?>
