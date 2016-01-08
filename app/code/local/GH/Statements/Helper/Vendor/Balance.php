@@ -37,7 +37,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 
         // 4. Invoices and credit notes
         $vendorInvoices = $this->getVendorInvoices();
-        //Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_RESULT.log");
+        Mage::log($vendorInvoices, null, "TEST_SALDO_INVOICES_RESULT.log");
         $data = $this->collectDataBeforeBalanceUpdate($vendorInvoices, "vendor_invoice_cost", $data, $closedBalanceMonths);
 
 
