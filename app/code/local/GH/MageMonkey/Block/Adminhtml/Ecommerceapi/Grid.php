@@ -31,7 +31,10 @@ class GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Ebizmarts_MageMonk
 
 
 
-        $this->setCollection($collection);
+        if($collection){
+            $this->setCollection($collection);
+        }
+
 
         return parent::_prepareCollection();
     }
