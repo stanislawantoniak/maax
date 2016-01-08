@@ -34,8 +34,11 @@ class Ebizmarts_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Mage_Adminh
             $result = $api->ecommOrders(0, 500);
             //var_dump($result);
             try{
-                $collection = Mage::getModel('monkey/custom_collection', array($orders));
-                $orders += $result['data'];
+                if(isset($result['data'])){
+                    $orders += $result['data'];
+                    $collection = Mage::getModel('monkey/custom_collection', array($orders));
+                }
+
             } catch(Mage_Adminhtml_Exception $e){
                 Mage::logException($e);
             }
