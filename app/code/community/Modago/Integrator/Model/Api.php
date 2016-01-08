@@ -11,10 +11,11 @@ class Modago_Integrator_Model_Api
     protected $_key;
         
     /**
-     * get parameters from config by name
-     * @param string $name
-     * @return string
+     * @return Modago_Integrator_Helper_Api
      */
+    protected function _getHelper() {
+        return  Mage::helper('modagointegrator/api');
+    }
     
     /**
      * prepare and return soap client 
@@ -71,7 +72,7 @@ class Modago_Integrator_Model_Api
     protected function _getChangeOrderMessage() {
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
-        $size = $this->getHelperApi()->getBatchSize();
+        $size = $this->_getHelper()->getBatchSize();
         $ret = $client->getChangeOrderMessage($key,$size,'');
         return $ret;
     }
@@ -98,9 +99,14 @@ class Modago_Integrator_Model_Api
             return false;
         }
         foreach ($details->orderList as $item) {
-            // todo - create order from item (stdClass);
+            /** @var Modago_Integrator_Model_Order $integratorOrders */
+            $integratorOrders = Mage::getModel('modagointegrator/order');
+            $orderId = $integratorOrders->createOrderFromApi($item);
+            if(!$orderId) {
+                return false;
+            }
         }
-        return true;
+        return false; //todo: change to true - it's for debug
     }    
     
     
@@ -128,7 +134,7 @@ class Modago_Integrator_Model_Api
      * run process
      */
     public function run() {
-		if (!$this->getHelperApi()->isEnabled()) {
+		if (!$this->_getHelper()->isEnabled()) {
 			$msg = Mage::helper('modagointegrator')->__('Configuration error. Integration is disabled');
 			return $this->_finish($msg);
 		}
@@ -148,7 +154,8 @@ class Modago_Integrator_Model_Api
             return $this->_finish($msg);
         }
         $confirmMessages = array();
-        foreach ($list->list->message as $item) {
+        $foreachMsgData = is_array($list->list->message) ? $list->list->message : $list->list;
+        foreach ($foreachMsgData as $item) {
             switch ($item->messageType) {
                 case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
                     if ($this->_createNewOrder($item->orderID)) {
@@ -170,12 +177,4 @@ class Modago_Integrator_Model_Api
         $this->_finish($msg);
     }
 
-	/**
-	 * Return Helper for API
-	 *
-	 * @return Modago_Integrator_Helper_Api
-	 */
-	public function getHelperApi() {
-		return Mage::helper('modagointegrator/api');
-	}
 }

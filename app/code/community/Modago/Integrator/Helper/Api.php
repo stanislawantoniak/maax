@@ -139,6 +139,30 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	}
 
 	/**
+	 * gets store shipping method based on modago shipping method set up in config
+	 * @param string $modago_shipping_method
+	 * @return string
+	 */
+	public function getShippingMethodByApi($modago_shipping_method) {
+		//todo: map modago shipping method to store shipping method;
+		return $modago_shipping_method;
+	}
+
+	/**
+	 * gets store shipping method based on modago shipping method set up in config
+	 * @param string $modago_payment_method
+	 * @return string
+	 */
+	public function getPaymentMethodByApi($modago_payment_method) {
+		if($modago_payment_method == 'cash_on_delivery') {
+			return Mage::getStoreConfig(self::CONFIG_PATH_MAPPED_COD);
+		} else {
+			//todo: map modago payment method other than cash_on_delivery to store shipping method;
+			return $modago_payment_method;
+		}
+	}
+
+	/**
 	 * Save log into table and remove outdated
 	 *
 	 * @param $text

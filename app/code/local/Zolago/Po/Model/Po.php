@@ -871,6 +871,8 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
+			$list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
+
 
             $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
             if ($list[$i]['invoice_data']['invoice_required']) {
@@ -946,6 +948,15 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         }
         return '';
     }
+
+	/**
+	 * gets dummy email address for api
+	 * @param $orderId
+	 * @return string
+	 */
+	protected function getApiOrderEmail($orderId) {
+		return sprintf(Mage::getStoreConfig('ghapi_options/ghapi_general/ghapi_order_email'),$orderId);
+	}
 
     /**
      * Return collection of PO for given Vendor
