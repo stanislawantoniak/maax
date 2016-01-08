@@ -120,7 +120,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 //        $statements = Mage::getModel("ghstatements/statement")
 //            ->getCollection();
 //        $statements->getSelect()->reset(Zend_Db_Select::COLUMNS)
-//            ->columns("vendor_id, DATE_FORMAT(event_date,'%Y-%m') AS balance_month, last_statement_balance,to_pay,payment_value")
+//            ->columns("vendor_id, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
 //            ->group("vendor_id")
 //            ->group("balance_month")
 //            ->order("event_date DESC");
@@ -194,6 +194,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
             ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month")
             ->where("allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
+            ->where("main.table.primary=?",1)
             ->group("vendor_id")
             ->group("balance_month");
         Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
