@@ -11,7 +11,7 @@ class GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Ebizmarts_MageMonk
     protected function _prepareCollection()
     {
         $orders = array();
-        $collection = Mage::getModel('monkey/custom_collection', array($orders));
+
 
         foreach (Mage::app()->getStores() as $storeId => $store) {
             $api = Mage::getModel('monkey/api', array('store' => $storeId));
@@ -32,8 +32,13 @@ class GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Ebizmarts_MageMonk
 
 
 
-
+        try{
             $this->setCollection($collection);
+
+        } catch(Mage_Adminhtml_Exception $e){
+            Mage::logException($e);
+        }
+
 
 
 
