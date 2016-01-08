@@ -192,7 +192,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
 
         $customerPaymentsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month ")
+            ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month")
             ->where("allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
             //->where("primary=?", 1)
             ->group("vendor_id")
