@@ -42,6 +42,6 @@ class GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Ebizmarts_MageMonk
 
 
 
-        return parent::_prepareCollection();
+        //return parent::_prepareCollection();
     }
 }
