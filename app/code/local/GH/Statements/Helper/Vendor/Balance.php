@@ -122,7 +122,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $statements->getSelect()->reset(Zend_Db_Select::COLUMNS)
             ->columns("vendor_id, last_statement_balance,to_pay,payment_value, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
             ->order("event_date DESC");
-        Mage::log($statements->getSelect()->__toString(), null, "TEST_SALDO_DUE.log");
+        //Mage::log($statements->getSelect()->__toString(), null, "TEST_SALDO_DUE.log");
         //Reformat by vendor
         foreach ($statements as $statement) {
             $B = $statement->getLastStatementBalance();
@@ -132,9 +132,6 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 continue;
 
             $balanceDue[$statement->getVendorId()][$statement->getBalanceMonth()] = sprintf("%.4f", round($B + $A - $C, 2));
-
-
-
         }
 
         return $balanceDue;
