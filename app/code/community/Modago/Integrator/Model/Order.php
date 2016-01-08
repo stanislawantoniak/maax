@@ -9,6 +9,7 @@ class Modago_Integrator_Model_Order
 	protected $_order;
 	protected $_storeId;
 	protected $_modagoOrderId = false;
+	protected $_modagoVendorId = false;
 
 	public function setShippingMethod($methodName)
 	{
@@ -28,6 +29,7 @@ class Modago_Integrator_Model_Order
 	public function createOrderFromApi($apiOrder)
 	{
 		$this->_modagoOrderId = $apiOrder->order_id;
+		$this->_modagoVendorId = $apiOrder->vendor_id;
 
 		/** @var Modago_Integrator_Helper_Api $apiHelper */
 		$apiHelper = Mage::helper("modagointegrator/api");
@@ -57,80 +59,47 @@ class Modago_Integrator_Model_Order
 			->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
 			->setCustomerIsGuest(1);
 
-
-
 		if($apiOrder->invoice_data->invoice_address && count($apiOrder->invoice_data->invoice_address)) {
 			$billingAddress = Mage::getModel('sales/order_address')
 				->setStoreId($this->_storeId)
 				->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_BILLING)
-				//->setCustomerId($this->_customer->getId())
-				//->setCustomerAddressId($this->_customer->getDefaultBilling())
-				//->setCustomerAddress_id($billing->getEntityId())
-				//->setPrefix($billing->getPrefix())
 				->setFirstname($apiOrder->invoice_data->invoice_address->invoice_first_name)
-				//->setMiddlename($apiOrder->invoice_data->invoice_address->invoice_middle_name)
 				->setLastname($apiOrder->invoice_data->invoice_address->invoice_last_name)
-				//->setSuffix($billing->getSuffix())
 				->setCompany($apiOrder->invoice_data->invoice_address->invoice_company_name)
 				->setStreet($apiOrder->invoice_data->invoice_address->invoice_street)
 				->setCity($apiOrder->invoice_data->invoice_address->invoice_city)
 				->setCountry_id($apiOrder->invoice_data->invoice_address->invoice_country)
-				//->setRegion($billing->getRegion())
-				//->setRegion_id($billing->getRegionId())
 				->setPostcode($apiOrder->invoice_data->invoice_address->invoice_zip_code)
 				->setTelephone($apiOrder->invoice_data->invoice_address->phone);
-				//->setFax($billing->getFax());
 		} else {
 			$billingAddress = Mage::getModel('sales/order_address')
 				->setStoreId($this->_storeId)
 				->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_BILLING)
-				//->setCustomerId($this->_customer->getId())
-				//->setCustomerAddressId($this->_customer->getDefaultBilling())
-				//->setCustomerAddress_id($billing->getEntityId())
-				//->setPrefix($billing->getPrefix())
 				->setFirstname($apiOrder->delivery_data->delivery_address->delivery_first_name)
-				//->setMiddlename($apiOrder->delivery_data->delivery_address->delivery_middle_name)
 				->setLastname($apiOrder->delivery_data->delivery_address->delivery_last_name)
-				//->setSuffix($billing->getSuffix())
 				->setCompany($apiOrder->delivery_data->delivery_address->delivery_company_name)
 				->setStreet($apiOrder->delivery_data->delivery_address->delivery_street)
 				->setCity($apiOrder->delivery_data->delivery_address->delivery_city)
 				->setCountry_id($apiOrder->delivery_data->delivery_address->delivery_country)
-				//->setRegion($billing->getRegion())
-				//->setRegion_id($billing->getRegionId())
 				->setPostcode($apiOrder->delivery_data->delivery_address->delivery_zip_code)
 				->setTelephone($apiOrder->delivery_data->delivery_address->phone);
-			//->setFax($billing->getFax());
 		}
 		$this->_order->setBillingAddress($billingAddress);
-
-		//$shipping = $this->_customer->getDefaultShippingAddress();
 
 		$shippingAddress = Mage::getModel('sales/order_address')
 			->setStoreId($this->_storeId)
 			->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_SHIPPING)
-			//->setCustomerId($this->_customer->getId())
-			//->setCustomerAddressId($this->_customer->getDefaultShipping())
-			//->setCustomer_address_id($shipping->getEntityId())
-			//->setPrefix($shipping->getPrefix())
 			->setFirstname($apiOrder->delivery_data->delivery_address->delivery_first_name)
-			//->setMiddlename($apiOrder->delivery_data->delivery_address->delivery_middle_name)
 			->setLastname($apiOrder->delivery_data->delivery_address->delivery_last_name)
-			//->setSuffix($shipping->getSuffix())
 			->setCompany($apiOrder->delivery_data->delivery_address->delivery_company_name)
 			->setStreet($apiOrder->delivery_data->delivery_address->delivery_street)
 			->setCity($apiOrder->delivery_data->delivery_address->delivery_city)
 			->setCountry_id($apiOrder->delivery_data->delivery_address->delivery_country)
-			//->setRegion($shipping->getRegion())
-			//->setRegion_id($shipping->getRegionId())
 			->setPostcode($apiOrder->delivery_data->delivery_address->delivery_zip_code)
 			->setTelephone($apiOrder->delivery_data->delivery_address->phone);
-			//->setFax($shipping->getFax());
 
 		$this->_order->setShippingAddress($shippingAddress)
 			->setShippingMethod($apiHelper->getShippingMethodByApi($apiOrder->delivery_method));
-
-		Mage::log($apiHelper->getPaymentMethodByApi($apiOrder->payment_method),null,'payment.log');
 
 		$orderPayment = Mage::getModel('sales/order_payment')
 			->setStoreId($this->_storeId)
@@ -143,8 +112,8 @@ class Modago_Integrator_Model_Order
 		//todo check: products
 		$this->_addProducts($this->parseApiOrderProducts($apiOrder->order_items->item));
 
-		if($apiOrder->order_total != $this->_subTotal) {
-			Mage::exception('Modago_Integrator',
+		if(round(floatval($apiOrder->order_total),2) != round(floatval($this->_subTotal),2)) {
+			throw Mage::exception('Modago_Integrator',
 				$apiHelper->__(
 					'Calculated order total is not equal to the one sent by API. API: %s; Calculated: %s',
 					$apiOrder->order_total,
@@ -269,7 +238,8 @@ class Modago_Integrator_Model_Order
 			->setSku($product->getSku())
 			->setPrice($apiData['value_after_discount'])
 			->setBasePrice($apiData['value_after_discount'])
-			->setOriginalPrice($apiData['value_before_discount'])
+			->setOriginalPrice($apiData['value_before_discount']) //todo: check prices
+			//->setDiscount($apiData['discount']) //todo: save discount
 			->setRowTotal($rowTotal)
 			->setBaseRowTotal($rowTotal)
 
@@ -293,11 +263,19 @@ class Modago_Integrator_Model_Order
 	protected function parseApiOrderProducts($apiOrderProducts) {
 		$parsed = array();
 		foreach($apiOrderProducts as $item) {
-			$productId = Mage::getModel('catalog/product')->getResource()->getIdBySku($item->item_sku);
+			if(!$item->item_sku) {
+				continue; //todo: fix shipping costs
+			}
+
+			/** @var Mage_Catalog_Model_Product $productModel */
+			$productModel = Mage::getModel('catalog/product');
+
+			$productId = $productModel->getIdBySku($item->item_sku);
+
 			if($productId) {
 				/** @var Mage_Catalog_Model_Product $product */
-				$product = Mage::getModel('catalog/product')->load($productId);
-				$parsed = array (
+				$product = $productModel->load($productId);
+				$parsed[] = array (
 					'product'               => $product->getId(),
 					'sku'                   => $item->item_sku,
 					'name'                  => $item->item_name,
@@ -307,7 +285,7 @@ class Modago_Integrator_Model_Order
 					'value_after_discount'  => $item->item_value_after_discount
 				);
 			} else {
-				Mage::exception('Modago_Integrator',
+				throw Mage::exception('Modago_Integrator',
 					Mage::helper('modagointegrator/api')->__('Cannot find product with SKU: %s (Modago order id: %s)',$item->item_sku,$this->_modagoOrderId)
 				);
 			}
