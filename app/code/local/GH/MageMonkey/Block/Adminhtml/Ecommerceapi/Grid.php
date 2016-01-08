@@ -21,7 +21,7 @@ class GH_MageMonkey_Block_Adminhtml_Ecommerceapi_Grid extends Ebizmarts_MageMonk
                     $orders += $result['data'];
                     $collection = Mage::getModel('monkey/custom_collection', array($orders));
                 } else {
-                    echo $result . "STORE_ID : {$storeId} <br />";
+                    echo $result;
                 }
 
             } catch(Mage_Adminhtml_Exception $e){
