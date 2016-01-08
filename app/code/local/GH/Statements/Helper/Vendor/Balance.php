@@ -123,7 +123,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             ->columns("vendor_id, last_statement_balance,to_pay,payment_value, DATE_FORMAT(event_date,'%Y-%m') AS balance_month")
             ->group("vendor_id")
             ->group("balance_month")
-            ->order("event_date DESC");
+            ->order("date_from DESC");
         Mage::log($statements->getSelect()->__toString(), null, "TEST_SALDO_DUE.log");
         //Reformat by vendor
         foreach ($statements as $statement) {
