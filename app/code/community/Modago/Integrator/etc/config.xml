@@ -20,6 +20,11 @@
 				</entities>
 			</modagointegrator_resource>
 		</models>
+		<blocks>
+			<modagointegrator>
+				<class>Modago_Integrator_Block</class>
+			</modagointegrator>
+		</blocks>
         <helpers>
             <modagointegrator>
                 <class>Modago_Integrator_Helper</class>
@@ -44,6 +49,17 @@
             </sales_order_shipment_track_save_after>
         </events>
     </global>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<modagointegrator before="Mage_Adminhtml">Modago_Integrator_Adminhtml</modagointegrator>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
     <adminhtml>
         <translate>
             <modules>
@@ -107,6 +123,7 @@
                 <integration_store>0</integration_store>
             </authentication>
             <orders>
+                <active>0</active>
                 <log_days>365</log_days>
                 <batch_size>100</batch_size>
                 <mapped_cod>cashondelivery</mapped_cod>
