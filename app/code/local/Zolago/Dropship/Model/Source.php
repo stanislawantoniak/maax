@@ -7,6 +7,12 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 
     const TRACK_STATUS_UNDELIVERED = 'U';
 	const TRACK_UNDELIVERED_SUFFIX = '_UNDELIVERED';
+
+
+    const BRANDSHOP_INDEX_BY_GOOGLE_USE_VENDOR_CONFIG = 0;
+    const BRANDSHOP_INDEX_BY_GOOGLE_YES = 1;
+    const BRANDSHOP_INDEX_BY_GOOGLE_NO = 2;
+
 	protected $_allvendors = array();
 
 	public function toOptionHash($selector=false){
@@ -19,6 +25,9 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 	            break;
             case 'vendorstype':
                 $out = $this->_getVendorsType();
+                break;
+            case 'vendorindexbygoogle':
+                $out = $this->_getVendorIndexByGoogle();
                 break;
             case 'review_status':
                 /** @var Zolago_Catalog_Model_Product_Source_Description $descriptionStatusSrc */
@@ -57,7 +66,21 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 			$out[""] = "";
 			return array_reverse($out, true);
     }
-    
+
+    /**
+     * @return array
+     */
+    protected function _getVendorIndexByGoogle()
+    {
+        $helper = Mage::helper('zolagodropship');
+        $indexByGoogleOptions = array(
+            self::BRANDSHOP_INDEX_BY_GOOGLE_USE_VENDOR_CONFIG => $helper->__('Use vendor config'),
+            self::BRANDSHOP_INDEX_BY_GOOGLE_YES => $helper->__('Yes'),
+            self::BRANDSHOP_INDEX_BY_GOOGLE_NO => $helper->__('No'),
+        );
+        return $indexByGoogleOptions;
+    }
+
     /**
      * hardcoded vendors type
      * @return array

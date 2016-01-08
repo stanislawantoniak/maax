@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.11</version>
+			<version>0.0.13</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -404,6 +404,14 @@
                         <fieldset>vendor_info</fieldset>
                         <position>2</position>
                     </can_ask>
+                    <index_by_google>
+                        <label>Index Products By Google</label>
+                        <type>select</type>
+                        <source>yesno</source>
+                        <fieldset>vendor_info</fieldset>
+                        <position>3</position>
+                        <note>Googleoff metatags will be used</note>
+                    </index_by_google>
 
                     <sequence>
                         <label>Sequence</label>
