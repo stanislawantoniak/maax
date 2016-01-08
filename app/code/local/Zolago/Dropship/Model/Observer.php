@@ -277,6 +277,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'super_vendor_id',
             'statements_calendar',
             'can_ask',
+            'index_by_google',
             'review_status',
             'label_store',
             'root_category',

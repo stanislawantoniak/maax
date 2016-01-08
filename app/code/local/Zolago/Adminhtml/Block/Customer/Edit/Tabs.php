@@ -6,6 +6,7 @@
  * 1) Client login - data about customer login/logout
  * 2) Recently viewed - data about last seen products
  * 3) Viewed categories - history of viewed pages
+ * 4) Beacon data grid - offline history of customer activity
  */
 class Zolago_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Customer_Edit_Tabs {
 
@@ -27,6 +28,12 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Cus
             'label' => Mage::helper('zolagoadminhtml')->__('Viewed categories'),
             'title' => Mage::helper('zolagoadminhtml')->__('Viewed categories'),
             'url'   => $this->getUrl('*/customer_activity/viewedcategories', array('_current' => true)),
+            'class' => 'ajax',
+        ));
+        $this->addTab('tab_customer_beacon_data', array(
+            'label' => Mage::helper('zolagoadminhtml')->__('Offline history of customer activity'),
+            'title' => Mage::helper('zolagoadminhtml')->__('Beacon'),
+            'url'   => $this->getUrl('*/customer_beacon/data', array('_current' => true)),
             'class' => 'ajax',
         ));
         $this->_updateActiveTab();

@@ -48,6 +48,18 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop_Edit_Form extends Mage_Ad
             'values' 	=> $yesNo,
             )
         );
+
+        $indexByGoogleOptions = Mage::getSingleton('zolagodropship/source')
+            ->setPath('vendorindexbygoogle')
+            ->toOptionHash();
+
+        $fieldset->addField('index_by_google', 'select', array(
+                'label'     => Mage::helper('zolagodropship')->__('Index By Google'),
+                'name'      => 'index_by_google',
+                'values' 	=> $indexByGoogleOptions
+            )
+        );
+
         $form->setUseContainer(true);
         $form->setValues($model->getData());
         $this->setForm($form);
