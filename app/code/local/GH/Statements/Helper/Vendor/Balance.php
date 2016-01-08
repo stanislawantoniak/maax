@@ -314,7 +314,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                     $result[$vendorId][$month] = $invoiceAmount + $correctionAmount;
             }
         }
-        //Mage::log($result, null, "TEST_SALDO_INVOICES_RESULT.log");
+        Mage::log($result, null, "TEST_SALDO_INVOICES_RESULT.log");
         return $result;
     }
 
