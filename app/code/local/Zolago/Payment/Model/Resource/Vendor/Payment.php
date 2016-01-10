@@ -19,14 +19,9 @@ class Zolago_Payment_Model_Resource_Vendor_Payment extends Mage_Core_Model_Resou
      */
     protected function _afterDelete(Mage_Core_Model_Abstract $object)
     {
-//        Mage::helper("ghstatements/vendor_balance")
-//            ->updateVendorBalanceData($object->getVendorId(), "vendor_payment_cost", $object->getCost(), $object->getDate());
-
         Mage::helper("ghstatements/vendor_balance")
-            ->calculateVendorBalance(
-                date("Y-m", strtotime($object->getDate())),
-                $object->getVendorId()
-            );
+            ->updateVendorBalanceData($object->getVendorId(), "vendor_payment_cost", $object->getCost(), $object->getDate());
+
 
         return parent::_afterDelete($object);
     }
