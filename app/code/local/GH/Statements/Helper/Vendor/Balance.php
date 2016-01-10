@@ -373,12 +373,16 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         //UPDATE (if a row with vendor and date already exist in the table)
         $id = $vendorBalanceItem->getId();
 
+        $vendorBalanceModel = $vendorBalance->load($id);
+        if ($vendorBalanceModel && $vendorBalanceModel->getStatus() == GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_CLOSED)
+            return;
+
         $data = array(
             "vendor_id" => $vendorId,
             "date" => $dateFormatted,
             $fieldToUpdate => (float)$valueToUpdate
         );
-        $vendorBalanceModel = $vendorBalance->load($id);
+
         try {
             $vendorBalanceLine = $vendorBalanceModel->addData($data);
             $vendorBalanceLine->setId($id)->save();

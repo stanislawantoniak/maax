@@ -41,14 +41,16 @@ class Zolago_Payment_Model_Resource_Vendor_Invoice extends Mage_Core_Model_Resou
             $date = $object->getDate();
         }
 
-        Mage::helper("ghstatements/vendor_balance")
-            ->updateVendorBalanceData(
-                $object->getVendorId(),
-                "vendor_invoice_cost",
-                ($object->getCommissionBrutto() + $object->getTransportBrutto() + $object->getMarketingBrutto() + $object->getOtherBrutto()),
-                $date
-            );
-        if($object->getData("vendor_id") !== $object->getOrigData("vendor_id")){
+
+        if ($object->getData("vendor_id") !== $object->getOrigData("vendor_id")) {
+            Mage::helper("ghstatements/vendor_balance")
+                ->updateVendorBalanceData(
+                    $object->getVendorId(),
+                    "vendor_invoice_cost",
+                    ($object->getCommissionBrutto() + $object->getTransportBrutto() + $object->getMarketingBrutto() + $object->getOtherBrutto()),
+                    $date
+                );
+
             Mage::helper("ghstatements/vendor_balance")
                 ->updateVendorBalanceData(
                     $object->getOrigData("vendor_id"),
