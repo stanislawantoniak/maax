@@ -18,8 +18,12 @@ class GH_Statements_Model_Resource_Statement extends Mage_Core_Model_Resource_Db
      */
     public function _afterDelete(Mage_Core_Model_Abstract $object)
     {
-        $this->_recalculateBalanceDue($object->getData("vendor_id"), $object->getData("event_date"));
-
+//        $this->_recalculateBalanceDue($object->getData("vendor_id"), $object->getData("event_date"));
+        Mage::helper("ghstatements/vendor_balance")
+            ->calculateVendorBalance(
+                date("Y-m", strtotime($object->getData("event_date"))),
+                $object->getData("vendor_id")
+            );
         return parent::_afterDelete($object);
     }
 

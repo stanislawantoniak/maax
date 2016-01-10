@@ -112,7 +112,9 @@ class GH_Statements_Model_Observer
      */
     public static function calculateVendorBalance()
     {
-        Mage::helper("ghstatements/vendor_balance")->calculateVendorBalance();
+        /* @var $_helper GH_Statements_Helper_Vendor_Balance */
+        $_helper = Mage::helper("ghstatements/vendor_balance");
+        $_helper->calculateVendorBalance();
     }
 
     /**
