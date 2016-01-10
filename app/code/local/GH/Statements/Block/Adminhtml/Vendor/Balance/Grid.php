@@ -61,7 +61,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
                 'width' => '50px',
                 "type" => "options",
                 'index' => 'vendor_id',
-                "options" => Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash()
+                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
             )
         );
         // Płatności od klientów

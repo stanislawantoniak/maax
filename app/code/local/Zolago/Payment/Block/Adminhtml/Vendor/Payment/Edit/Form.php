@@ -44,7 +44,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit_Form extends Mage_Admin
             'label' => Mage::helper('zolagopayment')->__('Vendor'),
             'required' => true,
             'name' => 'vendor_id',
-            "options" => Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash()
+            "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
         ));
         $fieldset->addField('comment', 'textarea', array(
             'label' => Mage::helper('zolagopayment')->__('Comment'),
