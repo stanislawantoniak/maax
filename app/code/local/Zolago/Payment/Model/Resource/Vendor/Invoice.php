@@ -20,7 +20,7 @@ class Zolago_Payment_Model_Resource_Vendor_Invoice extends Mage_Core_Model_Resou
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
-        echo "<pre>";
+        //echo "<pre>";
         //var_dump($object->getData("vendor_id"));
         //var_dump($object->getOrigData("vendor_id"));
         //echo "</pre>";
