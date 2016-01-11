@@ -1,0 +1,61 @@
+<style>
+    .ramka_serwersms{
+        border: 1px solid #e02124;
+    }
+    
+    .ramka_serwersms td{
+        padding-left: 10px; padding-right: 10px;
+    }
+    
+    .ramka_serwersms a{
+        color: #e02124;
+    }
+    
+    .naglowek_serwersms{
+        background: #e02124; padding: 10px 10px;
+    }
+    .text-right{
+        text-align: right;
+    }
+    .serwersms_info{
+        font-size: 11px;
+        color: #333;
+    }
+</style>
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody><tr>
+            <td><h3 class="icon-head head-adminhtml-wyslane">Dodaj nazwę nadawcy</h3></td>
+        </tr>
+    </tbody></table>
+</div>
+<form action="<?php echo Mage::getUrl('serwersms/adminhtml_index/savenazwa'); ?>" method="post">
+    <fieldset>
+        <table class="ramka_serwersms">
+            <tr>
+                <td colspan="2" class="naglowek_serwersms">
+                    <img src="<?php echo $this->getSkinUrl('serwersms/serwersms.png') ?>" />
+                </td>
+            </tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
+            <tr>
+                <td><label for="nazwa">Nowa nazwa nadawcy (max 11 znaków):</label></td>
+                <td><input type="text" id="nazwa" name="nazwa" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Dodaj nazwę" />
+                    <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+                </td>
+            </tr>
+            <tr><td colspan="2" class="serwersms_info">Ograniczenia:<br><br>
+
+                    Nazwa nie może być numerem 9-cio cyfrowym (np. 500600700)<br>
+                    Nazwa nie może być numerem skróconym (np. 71200)<br>
+                    Nazwa może zawierać znaki z zakresu a-z, A-Z, 0-9 oraz dodatkowo znaki specjalne jak: spacja, kropka, myślnik<br>
+                    Nazwa nie może zawierać 4 lub więcej cyfr w ciągu (np. Test2011)
+</td></tr>
+        </table>
+    </fieldset>
+</form>

@@ -44,25 +44,29 @@ class Modago_Integrator_Model_Api
         return $this->_key;
 
     }
-    
-    /**
-     * confirm messages
-     *
-     * @param array 
-     */
-     protected function _confirmMessages($list) {
-         if (empty($list)) {
-             return ;
-         }
-         $key = $this->_getKey();
-         $client = $this->_getSoapClient();
-         $ret = $client->setChangeOrderMessageConfirmation($key,$list);
-         if (empty($ret->status)) { // no answer or error
-             if (!empty($ret->message)) {
-				 Mage::helper('modagointegrator/api')->log($ret->message);
-             }
-         }
-     }
+
+	/**
+	 * confirm messages
+	 *
+	 * @param array
+	 */
+	protected function _confirmMessages($list) {
+		if (empty($list)) {
+			return;
+		}
+		$key = $this->_getKey();
+		$client = $this->_getSoapClient();
+		$ret = $client->setChangeOrderMessageConfirmation($key, $list);
+		if (empty($ret->status)) { // no answer or error
+			Mage::helper('modagointegrator/api')->log('Error [setChangeOrderMessageConfirmation]: no response from API server');
+		} else {
+			if ($ret->message != 'ok') {
+				Mage::helper('modagointegrator/api')->log('Error [setChangeOrderMessageConfirmation]: ' . $ret->message);
+			} else {
+				Mage::helper('modagointegrator/api')->log('Success [setChangeOrderMessageConfirmation]: successfully confirmed list of messages (' . implode(',', $list) . ')');
+			}
+		}
+	}
     
     /**
      * get list of changed orders
@@ -74,6 +78,21 @@ class Modago_Integrator_Model_Api
         $key = $this->_getKey();
         $size = $this->_getHelper()->getBatchSize();
         $ret = $client->getChangeOrderMessage($key,$size,'');
+
+		if (empty($ret->status)) { // no answer or error
+			Mage::helper('modagointegrator/api')->log('Error [getChangeOrderMessage]: no response from API server');
+		} else {
+			if ($ret->message != 'ok') {
+				Mage::helper('modagointegrator/api')->log('Error [getChangeOrderMessage]: ' . $ret->message);
+			} else {
+				if (empty($ret->list)) {
+					Mage::helper('modagointegrator/api')->log('Success [getChangeOrderMessage]: no new orders');
+				} else {
+					Mage::helper('modagointegrator/api')->log('Success [getChangeOrderMessage]: new orders list (' . implode(',', $ret->list) . ')');
+				}
+			}
+		}
+
         return $ret;
     }
     

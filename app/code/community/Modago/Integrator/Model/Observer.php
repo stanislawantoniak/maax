@@ -29,11 +29,13 @@ class Modago_Integrator_Model_Observer {
                     if (!empty($ret->message)) {
 						Mage::helper('modagointegrator/api')->log($ret->message);
                     }
+                    return; // abort
                 }
+                $message = Mage::helper('modagointegrator')->__('Modago order %s tracking send',$orderId);
             } else {
                 $message = Mage::helper('modagointegrator')->__('Modago order %s tracking info cannot be saved',$orderId);
-				Mage::helper('modagointegrator/api')->log($message);
             }
+    		Mage::helper('modagointegrator/api')->log($message);
         }
     }    
 

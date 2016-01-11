@@ -269,35 +269,35 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVendorUrl() {
 		return $this->getVendorContext()->getVendorUrl();
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVendorName() {
 		return $this->getVendorContext()->getVendorName();
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVendorLogoUrl() {
 		return Mage::getBaseUrl('media') . $this->getVendorContext()->getLogo();
 	}
-	
+
 	/**
 	 * @return Zolago_Dropship_Model_Vendor
 	 */
     public function getVendorContext() {
 		return Mage::helper("umicrosite")->getCurrentVendor();
 	}
-	
+
 	/**
 	 * @return Zolago_Dropship_Model_Vendor
 	 */
@@ -308,7 +308,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $this->getData('vendor');
 	}
-	
+
 	/**
 	 * @param Zolago_Dropship_Model_Vendor|null $vendor
 	 * @return string
@@ -319,7 +319,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $vendor->getStoreDeliveryHeadline();
 	}
-	
+
 	/**
 	 * @param Zolago_Dropship_Model_Vendor|null $vendor
 	 * @return string
@@ -331,8 +331,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		return $vendor->getStoreReturnHeadline();
 	}
 
-  
-   
+
+
 
     /**
      * @todo Implementation
@@ -345,7 +345,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	    $helper = Mage::helper("zolagocatalog/product");
         return $helper->getProductBestFlag($this->getProduct());
     }
-	
+
 	/**
 	 * @param Mage_Catalog_Model_Category $category
 	 * @return string
@@ -356,7 +356,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $category->getName();
 	}
-	
+
 	/**
 	 * @param Mage_Catalog_Model_Category $category
 	 * @return string
@@ -367,7 +367,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
         return $category->getUrl();
 	}
-	
+
 	/**
 	 * @return Mage_Catalog_Model_Category
 	 */
@@ -388,7 +388,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 			}
 			$this->setData("parent_category", $model);
 		}
-		
+
 		return $this->getData("parent_category");
 	}
 
@@ -440,12 +440,12 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 }
                 $value = $attribute->getFrontend()->getValue($product);
                 if (!$product->hasData($attribute->getAttributeCode())) {
-                    if (!$showEmpty) 
+                    if (!$showEmpty)
                         continue;
                     $value = Mage::helper('catalog')->__('N/A');
                 } elseif (is_string($value) && $value == '') {
-                    if (!$showEmpty) 
-                        continue;                        
+                    if (!$showEmpty)
+                        continue;
                     $value = Mage::helper('catalog')->__('No');
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = Mage::app()->getStore()->convertPrice($value, true);
@@ -469,7 +469,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                             'frontend_type' => $attribute->getFrontendInput(),
                             'attribute_order' => $attribute->getColumnAttributeOrder(),
                             'default_order' => $counter,
-                            
+
                         );
                     }
                 }
@@ -479,12 +479,98 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         }
         //sort by ColumnAttributeOrder
         usort($data, function ($a, $b) {
-            if ($a['attribute_order'] != $b['attribute_order']) {        
+            if ($a['attribute_order'] != $b['attribute_order']) {
                 return $a['attribute_order'] - $b['attribute_order'];
             } else {
-                return $a['default_order'] - $b['default_order'];            
+                return $a['default_order'] - $b['default_order'];
             }
         });
         return $data;
+    }
+
+
+    /**
+     * Excluding Unwanted Text from the Google Index
+     * according to 3-level configuration
+     * 1. Product level. Three options: USE BRANDSHOP-VENDOR CONFIG, YES, NO
+     * 2. Brandshop-Vendor level. Three options: USE VENDOR CONFIG, YES, NO
+     * 3. Vendor level. Two options: YES(default value), NO
+     * @return bool
+     */
+    public function excludeProductDescriptionFromGoogleIndex()
+    {
+        $exclude = FALSE;
+
+        $product = $this->getProduct();
+
+        //Check level 3
+        $indexProductByGoogle = (int)$product->getIndexProductByGoogle();
+
+        switch ($indexProductByGoogle) {
+            case Zolago_Dropship_Model_Source_Indexbygoogle::PRODUCT_INDEX_BY_GOOGLE_USE_CONFIG:
+                //Go to level 2 (vndor-brandshop configuration)
+                $exclude = $this->getVendorBrandshopIndexByGoogleConfig($product);
+                break;
+            case Zolago_Dropship_Model_Source_Indexbygoogle::PRODUCT_INDEX_BY_GOOGLE_YES:
+                //Nothing (description should be shown)
+                break;
+            case Zolago_Dropship_Model_Source_Indexbygoogle::PRODUCT_INDEX_BY_GOOGLE_NO:
+                //Excluding description
+                $exclude = TRUE;
+                break;
+        }
+
+        return $exclude;
+    }
+
+
+    /**
+     * Brandshop-Vendor level. Three options: USE VENDOR CONFIG, YES, NO
+     * @param $product
+     * @return bool
+     */
+    public function getVendorBrandshopIndexByGoogleConfig($product)
+    {
+        $exclude = FALSE;
+        $vendorId = $product->getUdropshipVendor();
+        $brandshopId = $product->getBrandshop();
+
+        $model = Mage::getModel("zolagodropship/vendor_brandshop");
+        $model->loadByVendorBrandshop($vendorId,$brandshopId);
+
+        //Check level 2
+        $indexByGoogle = (int)$model->getIndexByGoogle();
+
+        switch ($indexByGoogle) {
+            case Zolago_Dropship_Model_Source_Brandshop_Indexbygoogle::BRANDSHOP_INDEX_BY_GOOGLE_USE_VENDOR_CONFIG:
+                //Go to level 1 (vndor configuration)
+                $exclude = $this->getVendorIndexByGoogleConfig($vendorId);
+                break;
+            case Zolago_Dropship_Model_Source_Brandshop_Indexbygoogle::BRANDSHOP_INDEX_BY_GOOGLE_YES:
+                //Nothing (description should be shown)
+                break;
+            case Zolago_Dropship_Model_Source_Brandshop_Indexbygoogle::BRANDSHOP_INDEX_BY_GOOGLE_NO:
+                //Excluding description
+                $exclude = TRUE;
+                break;
+        }
+        return $exclude;
+    }
+
+
+    /**
+     * @param $vendorId
+     * @return bool
+     */
+    public function getVendorIndexByGoogleConfig($vendorId)
+    {
+        $exclude = FALSE;
+        $model = Mage::getModel("zolagodropship/vendor")->load($vendorId);
+        $indexByGoogle = $model->getData("index_by_google");
+
+        if (!$indexByGoogle)
+            $exclude = TRUE;
+
+        return $exclude;
     }
 }
