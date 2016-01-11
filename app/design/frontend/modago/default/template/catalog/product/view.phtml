@@ -156,8 +156,8 @@ if($vendorContext && $vendorContext->getId()) {
     ?>
     <div class="main">
         <div itemprop="description">
-            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleoff: index--><?php endif; ?><?php echo $productDescription; ?>
-            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleon: index--><?php endif; ?>
+            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleoff: all--><?php endif; ?><?php echo $productDescription; ?>
+            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleon: all--><?php endif; ?>
         </div>
 
         <?php if (!empty($attributesData)) : ?>
