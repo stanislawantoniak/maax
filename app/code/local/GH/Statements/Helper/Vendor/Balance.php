@@ -41,10 +41,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $data = $this->collectDataBeforeBalanceUpdate($vendorInvoices, "vendor_invoice_cost", $data, $closedBalanceMonths);
 
 
-        // III. Calculate balances
-        // 5. Balance
-        // 5.1. Monthly balance (updates in GH_Statements_Model_Vendor_Balance::_beforeSave)
-        // 5.2. Cumulative balance (updates in GH_Statements_Model_Vendor_Balance::_afterSave)
+
 
         // 5.3. Due balance
         $balanceDue = $this->getBalanceDue();
@@ -55,6 +52,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         //Mage::log($data, null, "TEST_SALDO_BALANCE.log");
         if (empty($data)) {
             //Nothing to update
+            $this->recalculateBalanceCumulative();
             return;
         }
 
@@ -77,7 +75,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
                 }
             }
         }
-        if (!empty($toUpdate)){
+        if (!empty($toUpdate)) {
             foreach ($toUpdate as $vendorId => $toUpdateItem) {
                 foreach ($toUpdateItem as $date => $dataLine) {
                     $this->updateBalanceMonthLine($dataLine);
@@ -85,6 +83,14 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             }
             //Mage::log($toUpdate, null, "TEST_SALDO_RESULT.log");
         }
+
+
+        // III. Calculate balances
+        // 5. Balance
+        // 5.1. Monthly balance (updates in GH_Statements_Model_Vendor_Balance::_beforeSave)
+        // 5.2. Cumulative balance (updates in GH_Statements_Model_Vendor_Balance::_afterSave)
+
+        $this->recalculateBalanceCumulative();
 
     }
 
@@ -128,7 +134,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             $B = $statement->getLastStatementBalance();
             $A = $statement->getToPay();
             $C = $statement->getPaymentValue();
-            if(isset($balanceDue[$statement->getVendorId()][$statement->getBalanceMonth()]))
+            if (isset($balanceDue[$statement->getVendorId()][$statement->getBalanceMonth()]))
                 continue;
 
             $balanceDue[$statement->getVendorId()][$statement->getBalanceMonth()] = sprintf("%.4f", round($B + $A - $C, 2));
@@ -195,7 +201,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
             ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month")
             ->where("allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
-            ->where("`primary`=?",1)
+            ->where("`primary`=?", 1)
             ->group("vendor_id")
             ->group("balance_month");
         //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
@@ -212,7 +218,8 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      * Customers refunds
      * @return array
      */
-    public function getCustomerRefunds(){
+    public function getCustomerRefunds()
+    {
         $customerRefunds = array();
 
         $customerRefundsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
@@ -233,7 +240,8 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
      * Vendor payouts
      * @return array
      */
-    public function getVendorPayouts(){
+    public function getVendorPayouts()
+    {
         $vendorPayouts = array();
 
         $vendorPayoutsCollection = Mage::getModel("zolagopayment/vendor_payment")->getCollection();
@@ -315,7 +323,7 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
             return $result;
 
         foreach ($vendorDateHelper as $vendorId => $months) {
-            foreach($months as $month){
+            foreach ($months as $month) {
                 $invoiceAmount = isset($vendorInvoices[$vendorId][$month]) ? $vendorInvoices[$vendorId][$month] : 0;
                 $correctionAmount = isset($vendorCorrections[$vendorId][$month]) ? $vendorCorrections[$vendorId][$month] : 0;
                 //if (($invoiceAmount + $correctionAmount) > 0)
@@ -474,5 +482,127 @@ class GH_Statements_Helper_Vendor_Balance extends Mage_Core_Helper_Abstract
         $vendorPaymentSum += $vendorInvoiceCorrectionTotal;
 
         return $vendorPaymentSum;
+    }
+
+
+    /**
+     * balance_cumulative
+     */
+    public function recalculateBalanceCumulative()
+    {
+        $balances = Mage::getModel("ghstatements/vendor_balance")
+            ->getCollection()
+            ->setOrder("date", Varien_Data_Collection_Db::SORT_ORDER_ASC);
+
+        $vendorsToRecalculateBalance = array();
+
+        $balancesByVendor = array();
+        foreach ($balances as $balance) {
+            $balancesByVendor[$balance->getVendorId()][$balance->getDate()] = $balance->getData();
+            $vendorsToRecalculateBalance[$balance->getVendorId()] = $balance->getVendorId();
+            //arsort($balancesByVendor[$balance->getVendorId()]);
+        }
+
+        //unset not active vendors
+        $activeVendorsToRecalculateBalance = array();
+        $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+        $vendorsCollection->addFieldToFilter("vendor_id", array("in", $vendorsToRecalculateBalance));
+        $vendorsCollection->addFieldToFilter("status", Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+
+        foreach ($vendorsCollection as $vendorsCollectionItem) {
+            $activeVendorsToRecalculateBalance[] = $vendorsCollectionItem->getVendorId();
+        }
+        //--unset not active vendors
+
+
+        foreach ($balancesByVendor as $vendor => $data) {
+            $i = 0;
+
+            foreach ($data as $month => $monthData) {
+                if ($i == 0) {
+                    $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"];
+                } else {
+                    $balancesByVendor[$vendor][$month]["balance_cumulative"] = $monthData["balance_per_month"] + array_values($balancesByVendor[$vendor])[$i - 1]["balance_cumulative"];
+                }
+                $i++;
+            }
+        }
+
+
+        //Recover empty rows if balance_cumulative not zero
+        $startMonths = array();
+        if (!empty($balancesByVendor)) {
+            foreach ($balancesByVendor as $vendorId => $balancesByVendorItem) {
+                $startMonths[$vendorId][array_keys($balancesByVendorItem)[0]] = $balancesByVendorItem[array_keys($balancesByVendorItem)[0]]["balance_cumulative"];
+            }
+        }
+        unset($vendorId);
+
+        $balancePeriods = $this->constructBalancePeriods($startMonths);
+
+        $toUpdate = array();
+        foreach ($balancePeriods as $vendorId => $balancePeriod) {
+
+            foreach (array_keys($balancePeriod) as $balancePeriodDate) {
+
+                $monthBefore = date("Y-m", strtotime("-1 month", strtotime($balancePeriodDate)));
+
+                if (isset($balancesByVendor[$vendorId][$balancePeriodDate])) {
+                    $toUpdate[$vendorId][$balancePeriodDate] = sprintf("%.4f", $balancesByVendor[$vendorId][$balancePeriodDate]["balance_cumulative"]);
+                } else {
+
+                    //Build empty rows
+                    if (in_array($vendorId, $activeVendorsToRecalculateBalance)) {
+                        if (isset($balancesByVendor[$vendorId][$monthBefore])) {
+                            $toUpdate[$vendorId][$balancePeriodDate] = sprintf("%.4f", $balancesByVendor[$vendorId][$monthBefore]["balance_cumulative"]);
+                        } else {
+                            $toUpdate[$vendorId][$balancePeriodDate] = sprintf("%.4f", $toUpdate[$vendorId][$monthBefore]);
+                        }
+                    }
+                }
+            }
+        }
+
+        unset($vendor);
+        unset($month);
+
+
+        $adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
+        foreach ($toUpdate as $vendor => $toUpdateData) {
+            foreach ($toUpdateData as $month => $amount) {
+                $adapter->insertOnDuplicate(
+                    'gh_vendor_balance',
+                    array("vendor_id" => $vendor, "date" => $month, "balance_cumulative" => $amount),
+                    array('vendor_id', "date", "balance_cumulative")
+                );
+            }
+        }
+
+        //--Recover empty rows if balance_cumulative not zero
+    }
+
+
+    /**
+     * @param $startMonths
+     * @return array
+     */
+    public function constructBalancePeriods($startMonths)
+    {
+        $result = array();
+
+        foreach ($startMonths as $vendorId => $startMonthsItem) {
+
+            $start = new DateTime(array_keys($startMonthsItem)[0]);
+            $start->modify('first day of this month');
+            $end = new DateTime(date("Y-m-d", time()));
+            $end->modify('first day of next month');
+            $interval = DateInterval::createFromDateString('1 month');
+            $period = new DatePeriod($start, $interval, $end);
+
+            foreach ($period as $dt) {
+                $result[$vendorId][$dt->format("Y-m")] = $dt->format("Y-m");
+            }
+        }
+        return $result;
     }
 }
