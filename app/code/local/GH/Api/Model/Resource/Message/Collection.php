@@ -20,7 +20,9 @@ class GH_Api_Model_Resource_Message_Collection extends Mage_Core_Model_Resource_
 	public function filterByVendorId($vendorId) {
 		return $this->addFieldToFilter('vendor_id',$vendorId);
 	}
-
+	public function filterByOrderId($orderId) {
+	    return $this->addFieldToFilter('po_increment_id',$orderId);
+	}
 	public function filterByMessage($message) {
 		return $this->addFieldToFilter('message',$message);
 	}

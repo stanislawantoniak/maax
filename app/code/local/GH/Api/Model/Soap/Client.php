@@ -38,13 +38,15 @@ class GH_Api_Model_Soap_Client  {
      * @param string $token
      * @param int $batchSize
      * @param string $messageType
+     * @param string $orderId
      * @return void
      */
-     public function getChangeOrderMessage($token,$batchSize,$messageType) {
+     public function getChangeOrderMessage($token,$batchSize,$messageType,$orderId) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->messageBatchSize = $batchSize;
          $obj->messageType = $messageType;
+         $obj->orderId = $orderId;
          $this->_query('getChangeOrderMessage',$obj);
      }
 
