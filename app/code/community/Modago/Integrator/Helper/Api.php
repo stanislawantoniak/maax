@@ -120,7 +120,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
             $key = $ret->token;
         } else {
             if (!empty($ret->message)) {
-                $this->log($ret->message);
+                $this->log('Error: Getting token failed (' . $ret->message .')');
             }
         }
         return $key;

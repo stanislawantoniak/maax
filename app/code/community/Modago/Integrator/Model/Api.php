@@ -1,8 +1,8 @@
 <?php
+
 /**
  * connect to modago api
  */
-
 class Modago_Integrator_Model_Api
     extends Varien_Object {
 
@@ -22,7 +22,6 @@ class Modago_Integrator_Model_Api
      *
      * @return Modago_Integrator_Model_Soap_Client
      */
-
     protected function _getSoapClient() {
         if (!$this->_soap) {
             $this->_soap = Mage::getModel('modagointegrator/soap_client');
@@ -30,16 +29,17 @@ class Modago_Integrator_Model_Api
         return $this->_soap;
     }
     
-    /**
-     * get token from soap
-     * @param 
-     * @return 
-     */
-
+	/**
+	 * Get token from soap
+	 * Return string token on success
+	 * Return integer -1 on fail
+	 *
+	 * @return string|int
+	 */
     protected function _getKey() {
         if (!$this->_key) {
             $client = $this->_getSoapClient();
-            $this->_key = Mage::helper('modagointegrator/api')->getKey($client);
+            $this->_key = $this->_getHelper()->getKey($client);
         }
         return $this->_key;
 
@@ -54,16 +54,18 @@ class Modago_Integrator_Model_Api
 		if (empty($list)) {
 			return;
 		}
+		/** @var Modago_Integrator_Helper_Api $helper */
+		$helper = Mage::helper('modagointegrator/api');
 		$key = $this->_getKey();
 		$client = $this->_getSoapClient();
 		$ret = $client->setChangeOrderMessageConfirmation($key, $list);
 		if (empty($ret->status)) { // no answer or error
-			Mage::helper('modagointegrator/api')->log('Error [setChangeOrderMessageConfirmation]: no response from API server');
+			$helper->log('Error: no response from API server');
 		} else {
 			if ($ret->message != 'ok') {
-				Mage::helper('modagointegrator/api')->log('Error [setChangeOrderMessageConfirmation]: ' . $ret->message);
+				$helper->log('Error: confirming messages field (' . $ret->message . ') for list (' . implode(',', $list) . ')');
 			} else {
-				Mage::helper('modagointegrator/api')->log('Success [setChangeOrderMessageConfirmation]: successfully confirmed list of messages (' . implode(',', $list) . ')');
+				$helper->log('Success: successfully confirmed list of messages (' . implode(',', $list) . ')');
 			}
 		}
 	}
@@ -74,21 +76,23 @@ class Modago_Integrator_Model_Api
      * @return stdClass
      */
     protected function _getChangeOrderMessage() {
+		/** @var Modago_Integrator_Helper_Api $helper */
+		$helper = Mage::helper('modagointegrator/api');
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
         $size = $this->_getHelper()->getBatchSize();
         $ret = $client->getChangeOrderMessage($key,$size,'');
 
 		if (empty($ret->status)) { // no answer or error
-			Mage::helper('modagointegrator/api')->log('Error [getChangeOrderMessage]: no response from API server');
+			$helper->log('Error: no response from API server');
 		} else {
 			if ($ret->message != 'ok') {
-				Mage::helper('modagointegrator/api')->log('Error [getChangeOrderMessage]: ' . $ret->message);
+				$helper->log('Error: downloading list of changed orders fail (' . $ret->message . ')');
 			} else {
 				if (empty($ret->list)) {
-					Mage::helper('modagointegrator/api')->log('Success [getChangeOrderMessage]: no new orders');
+					$helper->log('Success: downloading list of changed orders return empty list');
 				} else {
-					Mage::helper('modagointegrator/api')->log('Success [getChangeOrderMessage]: new orders list (' . implode(',', $ret->list) . ')');
+					$helper->log('Success: downloading list of changed orders return list (' . implode(',', $ret->list) . ')');
 				}
 			}
 		}
