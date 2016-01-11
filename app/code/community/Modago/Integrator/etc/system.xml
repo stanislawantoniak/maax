@@ -166,6 +166,131 @@
 								<enabled>1</enabled>
 							</depends>
 						</batch_size>
+
+						<!-- Modago carriers part start -->
+						<!--<label_modago_carriers>-->
+							<!--<label>Modago carriers:</label>-->
+							<!--<frontend_type>label</frontend_type>-->
+							<!--<sort_order>100</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</label_modago_carriers>-->
+						<!--<modago_carrier_dhl>-->
+							<!--<label>Map Modago DHL to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>110</sort_order>-->
+							<!--<show_in_defaut>1</show_in_defaut>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_dhl>-->
+						<!--<modago_carrier_ups>-->
+							<!--<label>Map Modago carrier DHL to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>120</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_ups>-->
+						<!--<modago_carrier_dpd>-->
+							<!--<label>Map Modago carrier DPD to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>130</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_dpd>-->
+						<!--<modago_carrier_siodemka>-->
+							<!--<label>Map Modago carrier Siódemka to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>140</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_siodemka>-->
+						<!--<modago_carrier_gls>-->
+							<!--<label>Map Modago carrier GLS to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>150</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_gls>-->
+						<!--<modago_carrier_fedex>-->
+							<!--<label>Map Modago carrier Fedex to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>160</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_fedex>-->
+						<!--<modago_carrier_poczta_polska>-->
+							<!--<label>Map Modago carrier Poczta Polska to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>170</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_poczta_polska>-->
+						<!--<modago_carrier_inpost>-->
+							<!--<label>Map Modago carrier Inpost to</label>-->
+							<!--<frontend_type>select</frontend_type>-->
+							<!--<source_model>modagointegrator/shipping_source_allcarriers</source_model>-->
+							<!--<sort_order>180</sort_order>-->
+							<!--<show_in_default>1</show_in_default>-->
+							<!--<show_in_website>0</show_in_website>-->
+							<!--<show_in_store>0</show_in_store>-->
+							<!--<depends>-->
+								<!--<enabled>1</enabled>-->
+							<!--</depends>-->
+						<!--</modago_carrier_inpost>-->
+						<!-- Modago carriers part end -->
+
+						<!-- Vendor carriers part start -->
+						<label_vendor_carriers>
+							<label>Your carriers:</label>
+							<frontend_type>label</frontend_type>
+							<sort_order>200</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<depends>
+								<enabled>1</enabled>
+							</depends>
+						</label_vendor_carriers>
+							<!-- @see Modago_Integrator_Model_Observer::addConfigCarrierMapperFields -->
+						<!-- Vendor carriers part end -->
 					</fields>
 				</orders>
 			</groups>

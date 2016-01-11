@@ -97,9 +97,9 @@ class Modago_Integrator_Model_Observer {
 	 * @return array
 	 */
 	private function getAllCarriers() {
-		/** @var Mage_Shipping_Model_Config $shippingConfig */
-		$shippingConfig = Mage::getSingleton('shipping/config');
-		$allCarriers = $shippingConfig->getAllCarriers();
-		return $allCarriers;
+		/** @var Modago_Integrator_Model_Shipping_Source_Allcarriers $shippingSource */
+		$shippingSource = Mage::getSingleton('shipping/config');
+		$carriers = $shippingSource->getAllCarriers();
+		return $carriers;
 	}
 }
