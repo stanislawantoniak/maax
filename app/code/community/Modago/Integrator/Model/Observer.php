@@ -20,7 +20,7 @@ class Modago_Integrator_Model_Observer {
 				/** @var Modago_Integrator_Model_Soap_Client $client */
 				$client = Mage::getModel('modagointegrator/soap_client');
 				$key = $helperApi->getKey($client);
-				if ($key) {
+				if ($key != -1) {
 					$dateShipped = $track->getCreatedAt();
 					$trackNumber = $track->getTrackNumber();
 					$carrierCode = $track->getCarrierCode();
