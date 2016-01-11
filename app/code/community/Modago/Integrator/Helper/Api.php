@@ -157,8 +157,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 		if($modago_payment_method == 'cash_on_delivery') {
 			return Mage::getStoreConfig(self::CONFIG_PATH_MAPPED_COD);
 		} else {
-			//todo: map modago payment method other than cash_on_delivery to store shipping method;
-			return $modago_payment_method;
+			return Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_CODE;
 		}
 	}
 

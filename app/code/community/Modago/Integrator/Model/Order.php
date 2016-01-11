@@ -131,7 +131,7 @@ class Modago_Integrator_Model_Order
 		$transaction->save();
 
 		$this->_modagoOrderId = false;
-		return true;
+		return $this->_order->getId();
 	}
 
 	protected function _addProducts($products)
