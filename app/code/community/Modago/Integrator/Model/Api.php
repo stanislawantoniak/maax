@@ -98,7 +98,30 @@ class Modago_Integrator_Model_Api
 		}
         return $ret;
     }
-    
+
+	public function _getOrdersById(array $list) {
+		/** @var Modago_Integrator_Helper_Api $helper */
+		$helper = Mage::helper('modagointegrator/api');
+		$client = $this->_getSoapClient();
+		$key = $this->_getKey();
+		$ret = $client->getOrdersByID($key, $list);
+
+		if (empty($ret->status)) { // no answer or error
+			$helper->log($helper->__('Error: no response from API server'));
+		} else {
+			if ($ret->message != 'ok') {
+				$helper->log($helper->__('Error: getting order %s failed (%s)', implode(',', $list), $ret->message));
+			} else {
+				if (empty($ret->orderList)) {
+					$helper->log($helper->__('Error: no info about order %s', implode(',', $list)));
+				} else {
+					$helper->log($helper->__('Success: getting info about order %s', implode(',', $list)));
+				}
+			}
+		}
+		return $ret;
+	}
+
     /**
      * create new order
      *
@@ -106,27 +129,24 @@ class Modago_Integrator_Model_Api
      * @return bool
      */
     protected function _createNewOrder($orderId) {
-        $key = $this->_getKey();
-        $client = $this->_getSoapClient();
-        $details = $client->getOrdersById($key,array($orderId)); // one by one
+		/** @var Modago_Integrator_Helper_Api $helper */
+		$helper = Mage::helper('modagointegrator/api');
+        $details = $this->_getOrdersById(array($orderId)); // one by one
         if (empty($details->status)) { // error
-            if (!empty($details->message)) {
-				Mage::helper('modagointegrator/api')->log($details->message);
-            }
             return false;
         }
         if (empty($details->orderList)) {
-            $msg = Mage::helper('modagointegrator')->__('Empty order details (%s)',$orderId);
-			Mage::helper('modagointegrator/api')->log($msg);
             return false;
         }
         foreach ($details->orderList as $item) {
-            /** @var Modago_Integrator_Model_Order $integratorOrders */
-            $integratorOrders = Mage::getModel('modagointegrator/order');
-            $orderId = $integratorOrders->createOrderFromApi($item);
-            if(!$orderId) {
-                return false;
-            }
+			try {
+				/** @var Modago_Integrator_Model_Order $integratorOrders */
+				$integratorOrders = Mage::getModel('modagointegrator/order');
+				$orderId = $integratorOrders->createOrderFromApi($item);
+				$helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
+			} catch (Exception $e) {
+				$helper->log('Error: ' . $e->getMessage());
+			}
         }
         return false; //todo: change to true - it's for debug
     }    
