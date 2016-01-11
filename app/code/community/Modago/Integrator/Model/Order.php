@@ -125,7 +125,7 @@ class Modago_Integrator_Model_Order
 			->setGrandTotal($this->_subTotal)
 			->setBaseGrandTotal($this->_subTotal);
 
-		$this->_order->setUdpoNoSplitPoFlag(1); //todo: remove it's for testing on local!
+		$this->_order->setData('noautopo_flag',1); //todo: remove it's for testing on local!
 
 		$transaction->addObject($this->_order);
 		$transaction->addCommitCallback(array($this->_order, 'place'));
