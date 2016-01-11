@@ -27,7 +27,7 @@ class Modago_Integrator_Model_Observer {
 					$carrier = $helperApi->getCarrier($carrierCode);
 					if (empty($carrier)) {
 						$message = $helper->__('Error: Modago order %s tracking info cannot be saved because there is no carrier mapping for %s', $orderId, $carrierCode);
-						$helper->log($message);
+						$helperApi->log($message);
 						return; // aborting
 					}
 
@@ -36,7 +36,7 @@ class Modago_Integrator_Model_Observer {
 						$message = $helper->__('Error: no response from API server');
 					} else {
 						if ($ret->message != 'ok') {
-							$message = $helper->__('Error: sending track info to Modago API fail (' . $ret->message . ')');
+							$message = $helper->__('Error: sending track info to Modago API fail (%s)', $ret->message);
 						} else {
 							$message = $helper->__('Success: Modago order %s tracking send', $orderId);
 						}

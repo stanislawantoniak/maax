@@ -60,12 +60,12 @@ class Modago_Integrator_Model_Api
 		$client = $this->_getSoapClient();
 		$ret = $client->setChangeOrderMessageConfirmation($key, $list);
 		if (empty($ret->status)) { // no answer or error
-			$helper->log('Error: no response from API server');
+			$helper->log($helper->__('Error: no response from API server'));
 		} else {
 			if ($ret->message != 'ok') {
-				$helper->log('Error: confirming messages field (' . $ret->message . ') for list (' . implode(',', $list) . ')');
+				$helper->log($helper->__('Error: confirming messages field (%s) for list (%s)', $ret->message, implode(',', $list) ));
 			} else {
-				$helper->log('Success: successfully confirmed list of messages (' . implode(',', $list) . ')');
+				$helper->log($helper->__('Success: successfully confirmed list of messages (%s)', implode(',', $list) ));
 			}
 		}
 	}
@@ -84,19 +84,18 @@ class Modago_Integrator_Model_Api
         $ret = $client->getChangeOrderMessage($key,$size,'');
 
 		if (empty($ret->status)) { // no answer or error
-			$helper->log('Error: no response from API server');
+			$helper->log($helper->__('Error: no response from API server'));
 		} else {
 			if ($ret->message != 'ok') {
-				$helper->log('Error: downloading list of changed orders fail (' . $ret->message . ')');
+				$helper->log($helper->__('Error: downloading list of changed orders fail (%s)', $ret->message));
 			} else {
 				if (empty($ret->list)) {
-					$helper->log('Success: downloading list of changed orders return empty list');
+					$helper->log($helper->__('Success: downloading list of changed orders return empty list'));
 				} else {
-					$helper->log('Success: downloading list of changed orders return list (' . implode(',', $ret->list) . ')');
+					$helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $ret->list) ));
 				}
 			}
 		}
-
         return $ret;
     }
     
@@ -157,27 +156,27 @@ class Modago_Integrator_Model_Api
      * run process
      */
     public function run() {
+		/** @var Modago_Integrator_Helper_Data $helper */
+		$helper = Mage::helper('modagointegrator');
+
 		if (!$this->_getHelper()->isEnabled()) {
-			$msg = Mage::helper('modagointegrator')->__('Configuration error. Integration is disabled');
+			$msg = $helper->__('Configuration error. Integration is disabled');
 			return $this->_finish($msg);
 		}
 
         // login
         $key = $this->_getKey();
         if ($key == -1) {
-            $msg = Mage::helper('modagointegrator')->__('Login error');
+            $msg = $helper->__('Login error');
             return $this->_finish($msg);
         }
-        $list = $this->_getChangeOrderMessage();
-        if (empty($list->list) || empty($list->list->message)) { // no order list
-            if (!empty($list->status) && (!empty($list->message))) { // no log if status == true                
-				Mage::helper('modagointegrator/api')->log($list->message);
-            }
-            $msg = Mage::helper('modagointegrator')->__('Order list empty');
+        $ret = $this->_getChangeOrderMessage();
+        if (empty($ret->list) || empty($ret->list->message)) { // no order list
+            $msg = $helper->__('Order list empty');
             return $this->_finish($msg);
         }
         $confirmMessages = array();
-        $foreachMsgData = is_array($list->list->message) ? $list->list->message : $list->list;
+        $foreachMsgData = is_array($ret->list->message) ? $ret->list->message : $ret->list;
         foreach ($foreachMsgData as $item) {
             switch ($item->messageType) {
                 case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
