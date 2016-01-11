@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <SerwerSMS_Sms>
+            <active>true</active>
+            <codePool>local</codePool>
+        </SerwerSMS_Sms>
+    </modules>
+</config>

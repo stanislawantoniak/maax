@@ -30,6 +30,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop extends Mage_Adminhtml_Bl
                 'description'=>'description',
                 'brandshop_can_ask' => 'can_ask',
                 'brandshop_can_add_product' => 'can_add_product',
+                'brandshop_index_by_google' => 'index_by_google',
                 'main_vendor_id' => 'main_table.vendor_id',
             )
         );
@@ -64,6 +65,14 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop extends Mage_Adminhtml_Bl
                     $select->where('(brandshop.can_add_product is null or brandshop.can_add_product = false)');
                 } elseif ($value) {
                     $select->where('brandshop.can_add_product=true');
+                }
+                return $this;
+            case  'index_by_google':
+                echo $value;
+                if ($value === '0') {
+                    $select->where("(brandshop.index_by_google is null or brandshop.index_by_google = '0')");
+                } elseif ($value) {
+                    $select->where('brandshop.index_by_google=?', $value);
                 }
                 return $this;
             default:;
@@ -111,6 +120,18 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop extends Mage_Adminhtml_Bl
             'index'         => 'brandshop_can_add_product',
             'renderer' 		=> 'zolagodropship/adminhtml_vendor_brandshop_renderer',
             'filter' 		=> 'zolagodropship/adminhtml_vendor_brandshop_filter',
+        ));
+        $indexByGoogleOptions = Mage::getSingleton('zolagodropship/source')
+            ->setPath('vendorindexbygoogle')
+            ->toOptionHash();
+
+        $this->addColumn('index_by_google', array(
+            'header'        => Mage::helper('zolagodropship')->__('Index By Google'),
+            'align'         => 'center',
+            'index'         => 'brandshop_index_by_google',
+            "type" => "options",
+            "options" => $indexByGoogleOptions,
+            'renderer' 		=> 'zolagodropship/adminhtml_vendor_brandshop_RendererIndexByGoogle'
         ));
 
         return parent::_prepareColumns();

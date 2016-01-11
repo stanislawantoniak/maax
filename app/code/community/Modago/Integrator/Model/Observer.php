@@ -8,36 +8,43 @@ class Modago_Integrator_Model_Observer {
 
 
     public function send_track_info($observer) {
-		/** @var Modago_Integrator_Helper_Api $helper */
-		$helper = Mage::helper('modagointegrator/api');
-		if ($helper->isEnabled()) {
+		/** @var Modago_Integrator_Helper_Api $helperApi */
+		$helperApi = Mage::helper('modagointegrator/api');
+		/** @var Modago_Integrator_Helper_Data $helper */
+		$helper = Mage::helper('modagointegrator');
+		if ($helperApi->isEnabled()) {
 			$track = $observer->getEvent()->getTrack();
 			$order = $track->getShipment()->getOrder();
 			$orderId = $order->getData('modago_order_id');
 			if (!empty($orderId)) {
 				/** @var Modago_Integrator_Model_Soap_Client $client */
 				$client = Mage::getModel('modagointegrator/soap_client');
-				$key = $helper->getKey($client);
+				$key = $helperApi->getKey($client);
 				if ($key) {
 					$dateShipped = $track->getCreatedAt();
 					$trackNumber = $track->getTrackNumber();
 					$carrierCode = $track->getCarrierCode();
-					$carrier = $helper->getCarrier($carrierCode);
+					$carrier = $helperApi->getCarrier($carrierCode);
 					if (empty($carrier)) {
-						$message = Mage::helper('modagointegrator')->__('Error: Modago order %s tracking info cannot be saved because there is no carrier mapping for %s', $orderId, $carrierCode);
+						$message = $helper->__('Error: Modago order %s tracking info cannot be saved because there is no carrier mapping for %s', $orderId, $carrierCode);
 						$helper->log($message);
 						return; // aborting
 					}
+
 					$ret = $client->setOrderShipment($key, $orderId, $dateShipped, $carrier, $trackNumber);
-					if (empty($ret->status)) { // error
-						if (!empty($ret->message)) {
-							$helper->log($ret->message);
+					if (empty($ret->status)) { // no answer or error
+						$message = $helper->__('Error: no response from API server');
+					} else {
+						if ($ret->message != 'ok') {
+							$message = $helper->__('Error: sending track info to Modago API fail (' . $ret->message . ')');
+						} else {
+							$message = $helper->__('Success: Modago order %s tracking send', $orderId);
 						}
 					}
 				} else {
-					$message = Mage::helper('modagointegrator')->__('Error: Modago order %s tracking info cannot be saved', $orderId);
-					$helper->log($message);
+					$message = $helper->__('Error: Modago order %s tracking info cannot be saved', $orderId);
 				}
+				$helperApi->log($message);
 			}
 		}
     }    
