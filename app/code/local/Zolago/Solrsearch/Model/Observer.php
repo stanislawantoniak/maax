@@ -481,7 +481,7 @@ class Zolago_Solrsearch_Model_Observer {
             }
 
             if (empty($storeId) || $storeId == Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
-                $storeIds = $product['store_ids'];
+                $storeIds = empty($product['store_ids'])? array():$product['store_ids'];
             } else {
                 $storeIds = array($storeId);
             }
