@@ -88,19 +88,14 @@ class Modago_Integrator_Model_Api
 			if ($ret->message != 'ok') {
 				$helper->log($helper->__('Error: downloading list of changed orders fail (%s)', $ret->message));
 			} else {
-				if (empty($ret->list)) {
+				if (empty($ret->list) || empty($ret->list->message)) {
 					$helper->log($helper->__('Success: downloading list of changed orders return empty list'));
 				} else {
-				    if (empty($ret->list->message)) {
-				        $out = $ret->list;
-				    } else {
-				        $out = $ret->list->message;
-				    }
-				    $message = array();
-				    foreach ($out as $item) {
-				        $message[] = $item->orderID;
-				    }
-					$helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
+   				    $message = array();
+    			    foreach ($ret->list->message as $item) {
+		    		        $message[] = $item->orderID;
+                    }
+                    $helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
 				}
 			}
 		}
@@ -154,11 +149,13 @@ class Modago_Integrator_Model_Api
 				$helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
 			} catch (Exception $e) {
 				$helper->log('Error: ' . $e->getMessage());
+				return false;
 			}
         }
-        return false; //todo: change to true - it's for debug
-    }
-
+        return true; 
+    }    
+    
+    
 
     /**
      * cancel order
@@ -246,7 +243,7 @@ class Modago_Integrator_Model_Api
                 default:
                     $confirmMessages[] = $item->messageID;
                     // ignore item
-            }
+            }            
         }
         $this->_confirmMessages($confirmMessages);
     }
@@ -273,7 +270,7 @@ class Modago_Integrator_Model_Api
             $msg = $helper->__('Order list empty');
             return $this->_finish($msg);
         }
-        $foreachMsgData = !empty($ret->list->message) ? $ret->list->message : $ret->list;
+        $foreachMsgData = $ret->list->message;
         $this->processOrders($foreachMsgData);
         $msg = Mage::helper('modagointegrator')->__('End process');
         $this->_finish($msg);

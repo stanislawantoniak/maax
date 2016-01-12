@@ -56,9 +56,13 @@
 				</xsd:all>
 			</xsd:complexType>
 		<xsd:complexType name="messageList">
-			<xsd:sequence>
-				<xsd:element name="message" type="tns:messageItem" minOccurs="0" maxOccurs="unbounded"/>
-			</xsd:sequence>
+		    <xsd:complexContent>
+		        <restriction base="SOAP-ENC:Array">
+        			<xsd:sequence>
+		        		<xsd:element name="message" type="tns:messageItem" minOccurs="0" maxOccurs="unbounded"/>
+        			</xsd:sequence>
+		        </restriction>
+		    </xsd:complexContent>
 		</xsd:complexType>
 		<xsd:complexType name="messageIDList">
 			<xsd:sequence>
