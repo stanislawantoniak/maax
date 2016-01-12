@@ -157,9 +157,8 @@ class Modago_Integrator_Model_Api
 			}
         }
         return false; //todo: change to true - it's for debug
-    }    
-    
-    
+    }
+
 
     /**
      * cancel order
@@ -167,11 +166,113 @@ class Modago_Integrator_Model_Api
      * @param string $orderId
      * @return bool
      */
-     protected function _cancelOrder($orderId) {
-         // todo
-        Mage::log('cancel '.$orderId);
+    protected function _cancelOrder($orderId)
+    {
+        Mage::log('cancel ' . $orderId, null, "modago_integrator.log");
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        $ordersCollection = Mage::getModel("sales/order")->getCollection();
+        $ordersCollection->addFieldToFilter("modago_order_id", $orderId);
+        $modagoOrder = $ordersCollection->getFirstItem();
+        if (!$modagoOrder->getId()) {
+            $helper->log("Error: order {$orderId} not found.");
+            return false;
+        }
+
+        try {
+            $orderModel = Mage::getModel('sales/order');
+            $orderModel->load($modagoOrder->getId());
+            if ($orderModel->canCancel()) {
+                $orderModel->cancel();
+                $orderModel->setStatus('canceled');
+                $orderModel->save();
+                return true;
+            } else {
+                //ERROR
+                $helper->log("Error: order {$orderId} can not be canceled.");
+                return false;
+            }
+        } catch (Exception $e) {
+            $helper->log('Error: ' . $e->getMessage());
+        }
+
+
+    }
+
+
+    /*Can be canceled*/
+
+    /**
+     * Retrieve order cancel availability
+     *
+     * @return bool
+     */
+    public function canCancel()
+    {
+        if (!$this->_canVoidOrder()) {
+            return false;
+        }
+        if ($this->canUnhold()) {  // $this->isPaymentReview()
+            return false;
+        }
+
+        $allInvoiced = true;
+        foreach ($this->getAllItems() as $item) {
+            if ($item->getQtyToInvoice()) {
+                $allInvoiced = false;
+                break;
+            }
+        }
+        if ($allInvoiced) {
+            return false;
+        }
+
+        $state = $this->getState();
+        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
+            return false;
+        }
+
+        if ($this->getActionFlag(self::ACTION_FLAG_CANCEL) === false) {
+            return false;
+        }
+        /**
+         * Use only state for availability detect
+         */
+        /*foreach ($this->getAllItems() as $item) {
+            if ($item->getQtyToCancel()>0) {
+                return true;
+            }
+        }
+        return false;*/
         return true;
-     }
+    }
+
+    /**
+     * Check whether order could be canceled by states and flags
+     *
+     * @return bool
+     */
+    protected function _canVoidOrder()
+    {
+        if ($this->canUnhold() || $this->isPaymentReview()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Retrieve order unhold availability
+     *
+     * @return bool
+     */
+    public function canUnhold()
+    {
+        if ($this->getActionFlag(self::ACTION_FLAG_UNHOLD) === false || $this->isPaymentReview()) {
+            return false;
+        }
+        return $this->getState() === self::STATE_HOLDED;
+    }
     /**
      * end process
      *
