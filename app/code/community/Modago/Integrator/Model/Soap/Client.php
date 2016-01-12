@@ -153,7 +153,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * @return array
      */
     protected function _query($name,$parameters) {
-        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_1, 'trace' => 1,'cache_wsdl'=>WSDL_CACHE_NONE);
+        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_1, 'trace' => 1,'cache_wsdl'=>WSDL_CACHE_NONE,'features'=> SOAP_SINGLE_ELEMENT_ARRAYS);
         $data = array();
         /** @var Modago_Integrator_Helper_Data $helper */
         $helper = Mage::helper('modagointegrator');
