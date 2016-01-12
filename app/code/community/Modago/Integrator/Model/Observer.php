@@ -62,7 +62,7 @@ class Modago_Integrator_Model_Observer {
 				/** @var Modago_Integrator_Model_Soap_Client $client */
 				$client = Mage::getModel('modagointegrator/soap_client');
 				$key = $helperApi->getKey($client);
-				if ($key) {
+				if ($key != -1) {
 					$dateShipped = $track->getCreatedAt();
 					$trackNumber = $track->getTrackNumber();
 					$carrierCode = $track->getCarrierCode();
@@ -139,9 +139,9 @@ class Modago_Integrator_Model_Observer {
 	 * @return array
 	 */
 	private function getAllCarriers() {
-		/** @var Mage_Shipping_Model_Config $shippingConfig */
-		$shippingConfig = Mage::getSingleton('shipping/config');
-		$allCarriers = $shippingConfig->getAllCarriers();
-		return $allCarriers;
+		/** @var Modago_Integrator_Model_Shipping_Source_Allcarriers $shippingSource */
+		$shippingSource = Mage::getSingleton('shipping/config');
+		$carriers = $shippingSource->getAllCarriers();
+		return $carriers;
 	}
 }

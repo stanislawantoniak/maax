@@ -87,7 +87,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	 * @return string
 	 */
 	public function getMappedCodPaymentCode() {
-		return Mage::getStoreConfig(self::CONFIG_PATH_LOG_DAYS);
+		return Mage::getStoreConfig(self::CONFIG_PATH_MAPPED_COD);
 	}
 
     /**
