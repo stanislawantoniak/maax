@@ -178,16 +178,18 @@ class Modago_Integrator_Model_Api
         }
 
         try {
-            $orderModel = Mage::getModel('sales/order');
-            $orderModel->load($modagoOrder->getId());
-            if ($orderModel->canCancel()) {
-                $orderModel->cancel();
-                $orderModel->setStatus('canceled');
-                $orderModel->save();
+            $order = Mage::getModel('sales/order');
+            $order->load($modagoOrder->getId());
+            if ($order->canCancel()) {
+                $order->cancel();
+                $order->setStatus('canceled');
+                $order->save();
                 return true;
             } else {
                 //ERROR
-                $helper->log("Error: order {$orderId} can not be canceled.");
+                $msg = $this->cantBeCanceledReason($order);
+                $helper->log("Error: order {$orderId} can not be canceled. {$msg}");
+
                 return false;
             }
         } catch (Exception $e) {
@@ -195,6 +197,40 @@ class Modago_Integrator_Model_Api
         }
 
 
+    }
+
+    /**
+     * @param $order
+     * @return string
+     */
+    public function cantBeCanceledReason($order)
+    {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator');
+
+        $state = $order->getState();
+
+        //1. Is payment is review
+        if ($state === self::STATE_PAYMENT_REVIEW) {
+            return $helper->__("Payment has review status");
+        }
+
+        //2. Items invoiced
+        $allInvoiced = true;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getQtyToInvoice()) {
+                $allInvoiced = false;
+                break;
+            }
+        }
+        if ($allInvoiced) {
+            return $helper->__("All order items are invoiced");
+        }
+
+        //3. State: canceled, completed or closed
+        if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
+            return false;
+        }
     }
 
 
