@@ -88,19 +88,14 @@ class Modago_Integrator_Model_Api
 			if ($ret->message != 'ok') {
 				$helper->log($helper->__('Error: downloading list of changed orders fail (%s)', $ret->message));
 			} else {
-				if (empty($ret->list)) {
+				if (empty($ret->list) || empty($ret->list->message)) {
 					$helper->log($helper->__('Success: downloading list of changed orders return empty list'));
 				} else {
-				    if (empty($ret->list->message)) {
-				        $out = $ret->list;
-				    } else {
-				        $out = $ret->list->message;
-				    }
-				    $message = array();
-				    foreach ($out as $item) {
-				        $message[] = $item->orderID;
-				    }
-					$helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
+   				    $message = array();
+    			    foreach ($ret->list->message as $item) {
+		    		        $message[] = $item->orderID;
+                    }
+                    $helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
 				}
 			}
 		}
@@ -154,9 +149,10 @@ class Modago_Integrator_Model_Api
 				$helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
 			} catch (Exception $e) {
 				$helper->log('Error: ' . $e->getMessage());
+				return false;
 			}
         }
-        return false; //todo: change to true - it's for debug
+        return true; 
     }    
     
     
@@ -167,11 +163,76 @@ class Modago_Integrator_Model_Api
      * @param string $orderId
      * @return bool
      */
-     protected function _cancelOrder($orderId) {
-         // todo
-        Mage::log('cancel '.$orderId);
-        return true;
-     }
+    protected function _cancelOrder($orderId)
+    {
+        Mage::log('cancel ' . $orderId, null, "modago_integrator.log");
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        $ordersCollection = Mage::getModel("sales/order")->getCollection();
+        $ordersCollection->addFieldToFilter("modago_order_id", $orderId);
+        $modagoOrder = $ordersCollection->getFirstItem();
+        if (!$modagoOrder->getId()) {
+            $helper->log("Error: order {$orderId} not found.");
+            return false;
+        }
+
+        try {
+            $order = Mage::getModel('sales/order');
+            $order->load($modagoOrder->getId());
+            if ($order->canCancel()) {
+                $order->cancel();
+                $order->setStatus('canceled');
+                $order->save();
+                return true;
+            } else {
+                //ERROR
+                $msg = $this->cantBeCanceledReason($order);
+                $helper->log("Error: order {$orderId} can not be canceled. {$msg}");
+
+                return false;
+            }
+        } catch (Exception $e) {
+            $helper->log('Error: ' . $e->getMessage());
+        }
+
+
+    }
+
+    /**
+     * @param $order
+     * @return string
+     */
+    public function cantBeCanceledReason($order)
+    {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator');
+
+        $state = $order->getState();
+
+        //1. Is payment is review
+        if ($state === self::STATE_PAYMENT_REVIEW)
+            return $helper->__("Payment has review status");
+
+
+        //2. Items invoiced
+        $allInvoiced = true;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getQtyToInvoice()) {
+                $allInvoiced = false;
+                break;
+            }
+        }
+        if ($allInvoiced)
+            return $helper->__("All order items are invoiced");
+
+
+        //3. State: canceled, completed or closed
+        if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED)
+            return $helper->__("Order have status {$state}");
+
+    }
+
     /**
      * end process
      *
@@ -205,7 +266,7 @@ class Modago_Integrator_Model_Api
                 default:
                     $confirmMessages[] = $item->messageID;
                     // ignore item
-            }
+            }            
         }
         $this->_confirmMessages($confirmMessages);
     }
@@ -232,7 +293,7 @@ class Modago_Integrator_Model_Api
             $msg = $helper->__('Order list empty');
             return $this->_finish($msg);
         }
-        $foreachMsgData = !empty($ret->list->message) ? $ret->list->message : $ret->list;
+        $foreachMsgData = $ret->list->message;
         $this->processOrders($foreachMsgData);
         $msg = Mage::helper('modagointegrator')->__('End process');
         $this->_finish($msg);
