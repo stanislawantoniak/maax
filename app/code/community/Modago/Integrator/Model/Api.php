@@ -201,66 +201,6 @@ class Modago_Integrator_Model_Api
     }
 
 
-    /*Can be canceled*/
-
-    /**
-     * Retrieve order cancel availability
-     *
-     * @return bool
-     */
-    public function canCancel()
-    {
-        if (!$this->_canVoidOrder()) {
-            return false;
-        }
-        if ($this->canUnhold()) {  // $this->isPaymentReview()
-            return false;
-        }
-
-        $allInvoiced = true;
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToInvoice()) {
-                $allInvoiced = false;
-                break;
-            }
-        }
-        if ($allInvoiced) {
-            return false;
-        }
-
-        $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
-            return false;
-        }
-
-        if ($this->getActionFlag(self::ACTION_FLAG_CANCEL) === false) {
-            return false;
-        }
-        /**
-         * Use only state for availability detect
-         */
-        /*foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToCancel()>0) {
-                return true;
-            }
-        }
-        return false;*/
-        return true;
-    }
-
-    /**
-     * Check whether order could be canceled by states and flags
-     *
-     * @return bool
-     */
-    protected function _canVoidOrder()
-    {
-        if ($this->canUnhold() || $this->isPaymentReview()) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Retrieve order unhold availability
      *
