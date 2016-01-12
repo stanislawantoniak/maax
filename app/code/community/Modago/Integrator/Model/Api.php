@@ -163,11 +163,76 @@ class Modago_Integrator_Model_Api
      * @param string $orderId
      * @return bool
      */
-     protected function _cancelOrder($orderId) {
-         // todo
-        Mage::log('cancel '.$orderId);
-        return true;
-     }
+    protected function _cancelOrder($orderId)
+    {
+        Mage::log('cancel ' . $orderId, null, "modago_integrator.log");
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        $ordersCollection = Mage::getModel("sales/order")->getCollection();
+        $ordersCollection->addFieldToFilter("modago_order_id", $orderId);
+        $modagoOrder = $ordersCollection->getFirstItem();
+        if (!$modagoOrder->getId()) {
+            $helper->log("Error: order {$orderId} not found.");
+            return false;
+        }
+
+        try {
+            $order = Mage::getModel('sales/order');
+            $order->load($modagoOrder->getId());
+            if ($order->canCancel()) {
+                $order->cancel();
+                $order->setStatus('canceled');
+                $order->save();
+                return true;
+            } else {
+                //ERROR
+                $msg = $this->cantBeCanceledReason($order);
+                $helper->log("Error: order {$orderId} can not be canceled. {$msg}");
+
+                return false;
+            }
+        } catch (Exception $e) {
+            $helper->log('Error: ' . $e->getMessage());
+        }
+
+
+    }
+
+    /**
+     * @param $order
+     * @return string
+     */
+    public function cantBeCanceledReason($order)
+    {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator');
+
+        $state = $order->getState();
+
+        //1. Is payment is review
+        if ($state === self::STATE_PAYMENT_REVIEW)
+            return $helper->__("Payment has review status");
+
+
+        //2. Items invoiced
+        $allInvoiced = true;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getQtyToInvoice()) {
+                $allInvoiced = false;
+                break;
+            }
+        }
+        if ($allInvoiced)
+            return $helper->__("All order items are invoiced");
+
+
+        //3. State: canceled, completed or closed
+        if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED)
+            return $helper->__("Order have status {$state}");
+
+    }
+
     /**
      * end process
      *
