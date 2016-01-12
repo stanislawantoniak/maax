@@ -852,6 +852,11 @@
 	                <regulation_proxy_assignment_override/>
 	                <regulation_accept_text_agreement/>
                     <!--Regulation-->
+
+					<!--Marketing cost for each cost type start-->
+						<!-- dynamically created -->
+						<!-- @see Zolago_Dropship_Model_Vendor::_beforeSave() -> addConfigMarketingCostTypeFields() -->
+					<!--Marketing cost for each cost type end-->
 				</fields>
 			</vendor>
 		</udropship>
