@@ -56,6 +56,19 @@ class GH_Api_Block_Adminhtml_Dropship_Settings_Ghapi_Form extends Mage_Adminhtml
             'text'      => $last
         ));
 
+
+        /*Sales manago integration*/
+
+        $fieldset = $form->addFieldset('modago_salesmanago', array(
+            'legend' => $hlp->__('Integration with SALESmanago')
+        ));
+        $fieldset->addType('salesmanago', 'GH_Api_Block_Adminhtml_Renderer_Salesmanago');
+        $fieldset->addField('modago_salesmanago_login', 'salesmanago', array(
+            'name'      => 'modago_salesmanago_login',
+            'label'     => $hlp->__('Integration with SALESmanago')
+
+        ));
+
         if ($vendor) {
             $form->setValues($vendor->getData());
         }
