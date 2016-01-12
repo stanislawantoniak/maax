@@ -5,7 +5,7 @@ class Modago_Integrator_Model_Order
 	protected $_shippingMethod = 'freeshipping_freeshipping';
 	protected $_paymentMethod = 'cashondelivery';
 
-	protected $_subTotal = 0;
+	protected $_orderData = array();
 	protected $_order;
 	protected $_storeId;
 	protected $_modagoOrderId = false;
@@ -28,6 +28,7 @@ class Modago_Integrator_Model_Order
 	 */
 	public function createOrderFromApi($apiOrder)
 	{
+		$this->initOrderData();
 		$this->_modagoOrderId = $apiOrder->order_id;
 		$this->_modagoVendorId = $apiOrder->vendor_id;
 
@@ -109,21 +110,44 @@ class Modago_Integrator_Model_Order
 
 		$this->_order->setPayment($orderPayment);
 
+
+		//todo: fix shippings start
+		//shipping cost
+		$shippingCost = 0;
+		$shippingCostBeforeDiscount = 0;
+		$shippingCostDiscount = 0;
+		foreach($apiOrder->order_items->item as $key=>$item) {
+			if(!$item->is_delivery_item) {
+				continue;
+			} else {
+				$shippingCost = round(floatval($item->item_value_after_discount),2);
+				$shippingCostBeforeDiscount = round(floatval($item->item_value_before_discount),2);
+				$shippingCostDiscount = round(floatval($item->item_discount),2);
+				unset($apiOrder->order_items->item[$key]);
+				break;
+			}
+		}
+
+		$this->_order
+			->setShippingAmount($shippingCost)
+			->setBaseShippingAmount($shippingCost);
+		//todo: fix shippings end
+
 		//todo check: products
 		$this->_addProducts($this->parseApiOrderProducts($apiOrder->order_items->item));
 
-		if(round(floatval($apiOrder->order_total),2) != round(floatval($this->_subTotal),2)) {
+		/*if(round(floatval($apiOrder->order_total),2) != round(floatval($this->_orderData['subtotal']),2) + $shippingCost) {
 			throw Mage::exception('Modago_Integrator',
 				$apiHelper->__(
 					'Calculated order total is not equal to the one sent by API. API: %s; Calculated: %s',
 					$apiOrder->order_total,
-					$this->_subTotal
+					$this->_orderData['subtotal'] + $shippingCost
 				));
-		}
-		$this->_order->setSubtotal($this->_subTotal)
-			->setBaseSubtotal($this->_subTotal)
-			->setGrandTotal($this->_subTotal)
-			->setBaseGrandTotal($this->_subTotal);
+		}*/
+		$this->_order->setSubtotal($this->_orderData['subtotal'])
+			->setBaseSubtotal($this->_orderData['subtotal'])
+			->setGrandTotal($this->_orderData['subtotal'])
+			->setBaseGrandTotal($this->_orderData['subtotal']);
 
 		$this->_order->setData('noautopo_flag',1); //todo: remove it's for testing on local!
 
@@ -138,7 +162,6 @@ class Modago_Integrator_Model_Order
 
 	protected function _addProducts($products)
 	{
-		$this->_subTotal = 0;
 		foreach ($products as $productRequest) {
 			$this->_addProduct($productRequest);
 		}
@@ -149,7 +172,26 @@ class Modago_Integrator_Model_Order
 		$request = new Varien_Object();
 		$request->setData($requestData);
 
-		$product = Mage::getModel('catalog/product')->load($request['product']);
+		/** @var Mage_Catalog_Model_Product $product */
+		$product = Mage::getModel('catalog/product');
+
+		if($request['parent']) {
+			$productId = $request['parent'];
+			$product->load($productId);
+			$superAttributes = $product->getTypeInstance(true)->getConfigurableAttributes($product);
+			if(count($superAttributes)) {
+				$superAttributeArray = array();
+				foreach($superAttributes as $superAttribute) {
+					$superAttributeId = $superAttribute->getAttributeId();
+					$currentOptionId = Mage::getResourceModel('catalog/product')->getAttributeRawValue($request['product'],$superAttributeId,$this->_storeId);
+					$superAttributeArray[$superAttributeId] = $currentOptionId;
+				}
+				$request->setData('super_attribute',$superAttributeArray);
+			}
+		} else {
+			$productId = $request['product'];
+			$product->load($productId);
+		}
 
 		$cartCandidates = $product->getTypeInstance(true)
 			->prepareForCartAdvanced($request, $product);
@@ -168,7 +210,6 @@ class Modago_Integrator_Model_Order
 		foreach ($cartCandidates as $candidate) {
 			$item = $this->_productToOrderItem(
 				$candidate,
-				$candidate->getCartQty(),
 				$request
 			);
 
@@ -200,17 +241,18 @@ class Modago_Integrator_Model_Order
 			Mage::throwException(implode("\n", $errors));
 		}
 
-		foreach ($items as $item){
+		foreach ($items as $item) {
 			$this->_order->addItem($item);
 		}
+
+		$this->_order
+			->setData('is_virtual',0);
 
 		return $items;
 	}
 
-	function _productToOrderItem(Mage_Catalog_Model_Product $product, $qty = 1, $apiData)
+	function _productToOrderItem(Mage_Catalog_Model_Product $product, $apiData)
 	{
-		$rowTotal = $apiData['value_after_discount'] * $qty;
-
 		$options = $product->getCustomOptions();
 
 		$optionsByCode = array();
@@ -227,39 +269,28 @@ class Modago_Integrator_Model_Order
 
 		$options = $product->getTypeInstance(true)->getOrderOptions($product);
 
-		$orderItem = Mage::getModel('sales/order_item')
+		$orderItem = Mage::getModel('sales/order_item');
+
+		$orderItem->setData($apiData['apiData']);
+
+		$orderItem
 			->setStoreId($this->_storeId)
 			->setQuoteItemId(0)
-			->setQuoteParentItemId(NULL)
 			->setProductId($product->getId())
 			->setProductType($product->getTypeId())
-			->setQtyBackordered(NULL)
-			->setTotalQtyOrdered($product['rqty'])
-			->setQtyOrdered($product['qty'])
-			->setName($product->getName())
-			->setSku($product->getSku())
-			->setPrice($apiData['value_after_discount'])
-			->setBasePrice($apiData['value_after_discount'])
-			->setOriginalPrice($apiData['value_before_discount']) //todo: check prices
-			//->setDiscount($apiData['discount']) //todo: save discount
-			->setRowTotal($rowTotal)
-			->setBaseRowTotal($rowTotal)
-
-			->setWeeeTaxApplied(serialize(array()))
-			->setBaseWeeeTaxDisposition(0)
-			->setWeeeTaxDisposition(0)
-			->setBaseWeeeTaxRowDisposition(0)
-			->setWeeeTaxRowDisposition(0)
-			->setBaseWeeeTaxAppliedAmount(0)
-			->setBaseWeeeTaxAppliedRowAmount(0)
-			->setWeeeTaxAppliedAmount(0)
-			->setWeeeTaxAppliedRowAmount(0)
-
 			->setProductOptions($options);
 
-		$this->_subTotal += $rowTotal;
+		if(isset($options['product_calculations'])) {
+			$this->_orderData['subtotal'] += $apiData['apiData']['row_total_incl_tax'];
+		}
 
 		return $orderItem;
+	}
+
+	protected function initOrderData() {
+		$this->_orderData = array(
+			'subtotal' => 0.0
+		);
 	}
 
 	protected function parseApiOrderProducts($apiOrderProducts) {
@@ -277,14 +308,55 @@ class Modago_Integrator_Model_Order
 			if($productId) {
 				/** @var Mage_Catalog_Model_Product $product */
 				$product = $productModel->load($productId);
+
+				$taxPercent = $this->getProductTaxRate($product);
+				$priceIncl = $item->item_value_after_discount;
+				$originalPriceIncl = $item->item_value_before_discount;
+
+				$price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //price without tax
+				$originalPrice = round((($originalPriceIncl / (100 + $taxPercent)) * 100),2);
+
+				//parentSKU start
+				$parent = false;
+				$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+				if(is_array($parentIds) && count($parentIds)) {
+					$parent = current($parentIds);
+				}
+
+				$rowTotal = $item->item_qty * $price;
+				$taxAmountSingle = $priceIncl - $price;
+				$rowTotalIncl = $item->item_qty * ($price + $taxAmountSingle);
+
+
 				$parsed[] = array (
 					'product'               => $product->getId(),
-					'sku'                   => $item->item_sku,
-					'name'                  => $item->item_name,
-					'qty'                   => $item->item_qty,
-					'value_before_discount' => $item->item_value_before_discount,
-					'discount'              => $item->item_discount,
-					'value_after_discount'  => $item->item_value_after_discount
+					'parent'                => $parent,
+
+					'apiData' => array(
+						'sku'                   => $item->item_sku,
+						'name'                  => $item->item_name,
+
+						'qty_ordered'           => $item->item_qty,
+						'price'                 => $price,
+						'base_price'            => $price,
+						'original_price'        => $price,
+						'base_original_price'   => $price,
+
+						'tax_percent'           => $taxPercent,
+						'tax_amount'            => $taxAmountSingle,
+						'base_tax_amount'       => $taxAmountSingle,
+
+						'discount_amount'       => $item->item_discount,
+						'base_discount_amount'  => $item->item_discount,
+
+						'row_total'             => $rowTotal,
+						'base_row_total'        => $rowTotal,
+
+						'price_incl_tax'        => $rowTotalIncl,
+						'base_price_incl_tax'   => $rowTotalIncl,
+						'row_total_incl_tax'    => $rowTotalIncl,
+						'base_row_total_incl_tax'=> $rowTotalIncl
+					)
 				);
 			} else {
 				throw Mage::exception('Modago_Integrator',
@@ -293,5 +365,21 @@ class Modago_Integrator_Model_Order
 			}
 		}
 		return $parsed;
+	}
+
+	/**
+	 * gets tax for specified product in percent
+	 * @param Mage_Catalog_Model_Product $product
+	 * @return float
+	 */
+	protected function getProductTaxRate(Mage_Catalog_Model_Product $product) {
+		//tax
+		/** @var Mage_Tax_Model_Calculation $taxCalculation */
+		$taxCalculation = Mage::getModel('tax/calculation');
+		$request = $taxCalculation->getRateRequest(null, null, null, Mage::app()->getStore($this->_storeId));
+		$taxClassId = $product->getTaxClassId();
+		$percent = $taxCalculation->getRate($request->setProductClassId($taxClassId));
+
+		return $percent ? $percent : 0.00;
 	}
 }
