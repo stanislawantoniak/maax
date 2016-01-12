@@ -233,19 +233,6 @@ class Modago_Integrator_Model_Api
         }
     }
 
-
-    /**
-     * Retrieve order unhold availability
-     *
-     * @return bool
-     */
-    public function canUnhold()
-    {
-        if ($this->getActionFlag(self::ACTION_FLAG_UNHOLD) === false || $this->isPaymentReview()) {
-            return false;
-        }
-        return $this->getState() === self::STATE_HOLDED;
-    }
     /**
      * end process
      *
