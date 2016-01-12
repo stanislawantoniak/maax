@@ -6,6 +6,48 @@
  */
 class Modago_Integrator_Model_Observer {
 
+    
+    
+    /**
+     * check if order is changed
+     *
+     * @param Varien_Event_Observer $observer
+     */
+     public function check_order_changes($observer) {
+         $helperApi = Mage::helper('modagointegrator/api');
+		/** @var Modago_Integrator_Helper_Api $helperApi */
+         if ($helperApi->isEnabled()) {
+             $shipment = $observer->getEvent()->getShipment();
+             $order = $shipment->getOrder();
+             $orderId = $order->getData('modago_order_id');
+             if ($orderId) {
+                 $client = Mage::getModel('modagointegrator/soap_client');
+                 $key = $helperApi->getKey($client);                
+                 if ($key) {
+                     $size = $helperApi->getBatchSize();
+                     $ret = $client->getChangeOrderMessage($key,$size,null,$orderId);
+                     Mage::log($ret);
+                     if (!empty($ret->list)) {
+                         $foreachMsgData = !empty($ret->list->message) ? $ret->list->message : $ret->list;
+                         $model = Mage::getModel('modagointegrator/api')->processOrders($foreachMsgData);
+                         if (is_array($model)) {
+                             $message = Mage::helper('modagointegrator')->__('Error: Order %s was changed', $orderId);
+                             $helperApi->log($message);
+                             Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
+                         }
+                     }
+                 } else {
+					$message = $helper->__('Error: Cannot check order %s status', $orderId);
+                    $helperApi->log($message);
+				 }
+             }
+         }
+     }
+    /**
+     * save tracking info in modago api
+     *
+     * @param Varien_Event_Observer $observer
+     */
 
     public function send_track_info($observer) {
 		/** @var Modago_Integrator_Helper_Api $helperApi */

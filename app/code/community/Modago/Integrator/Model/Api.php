@@ -82,8 +82,7 @@ class Modago_Integrator_Model_Api
         $key = $this->_getKey();
         $size = $this->_getHelper()->getBatchSize();
         $ret = $client->getChangeOrderMessage($key,$size,'');
-
-		if (empty($ret->status)) { // no answer or error
+ 		if (empty($ret->status)) { // no answer or error
 			$helper->log($helper->__('Error: no response from API server'));
 		} else {
 			if ($ret->message != 'ok') {
@@ -92,7 +91,16 @@ class Modago_Integrator_Model_Api
 				if (empty($ret->list)) {
 					$helper->log($helper->__('Success: downloading list of changed orders return empty list'));
 				} else {
-					$helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $ret->list) ));
+				    if (empty($ret->list->message)) {
+				        $out = $ret->list;
+				    } else {
+				        $out = $ret->list->message;
+				    }
+				    $message = array();
+				    foreach ($out as $item) {
+				        $message[] = $item->orderID;
+				    }
+					$helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
 				}
 			}
 		}
@@ -152,6 +160,35 @@ class Modago_Integrator_Model_Api
     protected function _finish($msg) {
         echo $msg.PHP_EOL;
     }
+    
+    /**
+     * process order list
+     * 
+     * @param array $foreachMsgData
+     * @return 
+     */
+
+    public function processOrders($foreachMsgData) {
+        $confirmMessages = array();
+        foreach ($foreachMsgData as $item) {
+            switch ($item->messageType) {
+                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
+                    if ($this->_createNewOrder($item->orderID)) {
+                        $confirmMessages[] = $item->messageID;
+                    }
+                    break;
+                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_CANCELLED_ORDER:
+                    if ($this->_cancelOrder($item->orderID)) {
+                        $confirmMessages[] = $item->messageID;
+                    }
+                    break;
+                default:
+                    $confirmMessages[] = $item->messageID;
+                    // ignore item
+            }
+        }
+        $this->_confirmMessages($confirmMessages);
+    }
     /**
      * run process
      */
@@ -175,26 +212,8 @@ class Modago_Integrator_Model_Api
             $msg = $helper->__('Order list empty');
             return $this->_finish($msg);
         }
-        $confirmMessages = array();
-        $foreachMsgData = is_array($ret->list->message) ? $ret->list->message : $ret->list;
-        foreach ($foreachMsgData as $item) {
-            switch ($item->messageType) {
-                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
-                    if ($this->_createNewOrder($item->orderID)) {
-                        $confirmMessages[] = $item->messageID;
-                    }
-                    break;
-                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_CANCELLED_ORDER:
-                    if ($this->_cancelOrder($item->orderID)) {
-                        $confirmMessages[] = $item->messageID;
-                    }
-                    break;
-                default:
-                    $confirmMessages[] = $item->messageID;
-                    // ignore item
-            }
-        }
-        $this->_confirmMessages($confirmMessages);
+        $foreachMsgData = !empty($ret->list->message) ? $ret->list->message : $ret->list;
+        $this->processOrders($foreachMsgData);
         $msg = Mage::helper('modagointegrator')->__('End process');
         $this->_finish($msg);
     }

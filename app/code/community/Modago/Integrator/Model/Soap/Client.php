@@ -28,13 +28,15 @@ class Modago_Integrator_Model_Soap_Client  {
      * @param string $token
      * @param int $batchSize
      * @param string $messageType
+     * @param string $orderId
      * @return array
      */
-     public function getChangeOrderMessage($token,$batchSize,$messageType) {
+     public function getChangeOrderMessage($token,$batchSize,$messageType,$orderId = null) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->messageBatchSize = $batchSize;
          $obj->messageType = $messageType;
+         $obj->orderId = $orderId;
          return $this->_query('getChangeOrderMessage',$obj);
      }
 

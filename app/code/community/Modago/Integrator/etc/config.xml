@@ -47,6 +47,15 @@
                     </modagointegrator_observer>            
                 </observers>
             </sales_order_shipment_track_save_after>
+            <sales_order_shipment_save_before>
+                <observers>
+                    <modagointegrator_observer>
+                        <type>singleton</type>
+                        <class>Modago_Integrator_Model_Observer</class>
+                        <method>check_order_changes</method>
+                    </modagointegrator_observer>            
+                </observers>
+            </sales_order_shipment_save_before>
         </events>
     </global>
 	<admin>
