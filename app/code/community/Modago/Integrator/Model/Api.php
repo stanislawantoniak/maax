@@ -229,7 +229,7 @@ class Modago_Integrator_Model_Api
 
         //3. State: canceled, completed or closed
         if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
-            return false;
+            return $helper->__("Order have status {$state}");
         }
     }
 
