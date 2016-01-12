@@ -32,8 +32,8 @@ $helper = Mage::helper("zolagodropship");
 
             function accountCreated() {
                 jQuery("#modago_salesmanago_create_account_wrapper").hide();
-                alert('<?php echo $helper->__("Account has been created. You will have information on %s about active account after verification", $vendorEmail); ?>');
                 jQuery("#modago_salesmanago_create_account_info").html('<?php echo $accountCreated; ?>');
+                alert('<?php echo $helper->__("Account has been created. You will have information on %s about active account after verification", $vendorEmail); ?>');
             }
 
             jQuery("#modago_salesmanago_create_account").click(function (e) {
