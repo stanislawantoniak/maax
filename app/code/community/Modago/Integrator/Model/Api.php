@@ -211,9 +211,9 @@ class Modago_Integrator_Model_Api
         $state = $order->getState();
 
         //1. Is payment is review
-        if ($state === self::STATE_PAYMENT_REVIEW) {
+        if ($state === self::STATE_PAYMENT_REVIEW)
             return $helper->__("Payment has review status");
-        }
+
 
         //2. Items invoiced
         $allInvoiced = true;
@@ -223,14 +223,14 @@ class Modago_Integrator_Model_Api
                 break;
             }
         }
-        if ($allInvoiced) {
+        if ($allInvoiced)
             return $helper->__("All order items are invoiced");
-        }
+
 
         //3. State: canceled, completed or closed
-        if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
+        if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED)
             return $helper->__("Order have status {$state}");
-        }
+
     }
 
     /**
