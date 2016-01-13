@@ -108,18 +108,4 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tab_Offline extends Mage_Adminhtml_Bl
         $this->setForm($form);
         return $this;
     }
-
-    /**
-     * Return predefined additional element types
-     *
-     * @return array
-     */
-    protected function _getAdditionalElementTypes()
-    {
-        return array(
-            'file'      => Mage::getConfig()->getBlockClassName('adminhtml/customer_form_element_file'),
-            'image'     => Mage::getConfig()->getBlockClassName('adminhtml/customer_form_element_image'),
-            'boolean'   => Mage::getConfig()->getBlockClassName('adminhtml/customer_form_element_boolean'),
-        );
-    }
 }
