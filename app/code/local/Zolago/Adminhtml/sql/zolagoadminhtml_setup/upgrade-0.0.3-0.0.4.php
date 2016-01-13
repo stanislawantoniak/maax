@@ -80,7 +80,7 @@ $installer->addAttributeToGroup(
 
 
 /* 3. Set attributes as used_in_forms */
-$usedInForms = array("adminhtml_gh_offline","adminhtml_customer");
+$usedInForms = array("adminhtml_gh_offline");
 
 
 $attribute1->setData("used_in_forms", $usedInForms)
