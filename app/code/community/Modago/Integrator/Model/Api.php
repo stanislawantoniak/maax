@@ -143,6 +143,7 @@ class Modago_Integrator_Model_Api
         }
         foreach ($details->orderList as $item) {
 			try {
+				$item = current($item);
 				/** @var Modago_Integrator_Model_Order $integratorOrders */
 				$integratorOrders = Mage::getModel('modagointegrator/order');
 				$orderId = $integratorOrders->createOrderFromApi($item);
