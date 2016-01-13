@@ -52,6 +52,7 @@
             <salesrule_resource>
                 <rewrite>
                     <coupon>Zolago_SalesRule_Model_Resource_Coupon</coupon>
+					<!--<coupon_collection>Zolago_SalesRule_Model_Resource_Coupon_Collection</coupon_collection>-->
                 </rewrite>
             </salesrule_resource>
         </models>
@@ -114,6 +115,15 @@
 		</fieldsets>
 	</global>
 	<adminhtml>
+		<translate>
+			<modules>
+				<Zolago_SalesRule>
+					<files>
+						<default>Zolago_SalesRule.csv</default>
+					</files>
+				</Zolago_SalesRule>
+			</modules>
+		</translate>
 		<events>
 			<adminhtml_promo_quote_edit_tab_main_prepare_form>
 				<observers>
