@@ -55,10 +55,7 @@ $helper = Mage::helper("zolagodropship");
                     jQuery.ajax({
                         url : '<?php echo $ajaxUrl; ?>',
                         data: {vendor_id:vendorId},
-                        //type: 'POST',
                         success: function(result){
-                            //console.log(result);
-                        }
                     });
 
                     var r = confirm('<?php echo $helper->__("This function will create account in Marketing Automation SalesManago using Vendor email and actual password. Do you want to continue?"); ?>');
