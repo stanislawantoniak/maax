@@ -12,6 +12,11 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Cus
 
     protected function _beforeToHtml() {
         parent::_beforeToHtml();
+        $this->addTab('wishlist', array(
+            'label'     => Mage::helper('zolagoadminhtml')->__('Wishlist'),
+            'class'     => 'ajax',
+            'url'       => $this->getUrl('*/*/wishlist', array('_current' => true)),
+        ));
         $this->addTab('tab_customer_activity_login', array(
             'label'     => Mage::helper('zolagoadminhtml')->__('Client login'),
             'title'     => Mage::helper('zolagoadminhtml')->__('client login'),
