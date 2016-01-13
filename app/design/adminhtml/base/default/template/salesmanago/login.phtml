@@ -1,5 +1,5 @@
 <?php
-$vendorId = Mage::app()->getRequest()->getParam("id", null);
+$vendorId = $this->getData("vendor_id");
 $helper = Mage::helper("zolagodropship");
 ?>
 
@@ -12,8 +12,9 @@ $helper = Mage::helper("zolagodropship");
 
     $modagoSalesmanagoLogin = $vendor->getData("modago_salesmanago_login");
 
-
-
+    //Magento's timestamp function makes a usage of timezone and converts it to timestamp
+    $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+    $date = date('d.m.Y H:i:s', $currentTimestamp);
     ?>
 
 
@@ -24,7 +25,7 @@ $helper = Mage::helper("zolagodropship");
         </div>
         <?php else: ?>
 
-        <?php $accountJustCreated = $helper->__("Account created: %s, email for login: %s", date("d.m.Y H:i:s"), $vendorEmail); ?>
+        <?php $accountJustCreated = $helper->__("Account created: %s, email for login: %s", $date, $vendorEmail); ?>
 
         <div id="modago_salesmanago_create_account_info">
             <button id="modago_salesmanago_create_account">
@@ -55,7 +56,7 @@ $helper = Mage::helper("zolagodropship");
                     jQuery.ajax({
                         url : '<?php echo $ajaxUrl; ?>',
                         data: {vendor_id:vendorId},
-                        success: function(result){
+                        success: function(result){}
                     });
 
                     var r = confirm('<?php echo $helper->__("This function will create account in Marketing Automation SalesManago using Vendor email and actual password. Do you want to continue?"); ?>');
