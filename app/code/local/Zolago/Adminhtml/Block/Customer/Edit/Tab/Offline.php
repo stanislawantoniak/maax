@@ -39,7 +39,7 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tab_Offline extends Mage_Adminhtml_Bl
         $attributes = $customerForm->getAttributes();
         foreach ($attributes as $attribute) {
             /* @var $attribute Mage_Eav_Model_Entity_Attribute */
-            $attribute->setFrontendLabel(Mage::helper('customer')->__($attribute->getFrontend()->getLabel()));
+            $attribute->setFrontendLabel(Mage::helper('zolagoadminhtml')->__($attribute->getFrontend()->getLabel()));
             $attribute->unsIsVisible();
         }
 
