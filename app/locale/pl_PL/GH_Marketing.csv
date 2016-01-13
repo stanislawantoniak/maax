@@ -6,3 +6,13 @@
 "Billing cost","Kwota"
 "Statement","Rozliczenie"
 "GH Marketing","Koszty marketingu"
+"Marketing cost for %s","Koszty marketingu dla %s"
+"Choose option","Wybierz opcję"
+"CPC","CPC"
+"CPC (cost per click)","CPC (koszt za kliknięcie)"
+"CPS","CPS"
+"CPS (cost per sale)","CPS (koszt od sprzedaży)"
+"Fixed","Fixed"
+"Fixed (fixed cost)",Fixed (koszt jednostkowy)
+"Overhead % for the operator costs","Narzut % na koszty operatora"
+"Fixed cost per sale","Koszt jednostkowy od sprzedaży"
