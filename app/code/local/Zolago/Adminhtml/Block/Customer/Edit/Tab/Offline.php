@@ -33,7 +33,7 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tab_Offline extends Mage_Adminhtml_Bl
             ->initDefaultValues();
 
         $fieldset = $form->addFieldset('account_offline_fieldset', array(
-            'legend' => Mage::helper('customer')->__('Offline customer identification data')
+            'legend' => Mage::helper('customer')->__('Loyalty card numbers')
         ));
 
         $attributes = $customerForm->getAttributes();
