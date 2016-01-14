@@ -195,7 +195,6 @@ class Modago_Integrator_Model_Api
                     $order->cancel();
                     $order->setStatus('canceled');
                     $order->save();
-                    $helper->log($helper->__("Success: order (%s) was  canceled.", $orderId));
 
                     array_push($canceled, 1);
                 } else {
