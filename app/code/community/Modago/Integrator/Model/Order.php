@@ -221,7 +221,7 @@ class Modago_Integrator_Model_Order {
 				}
 			} else {
 				throw Mage::exception('Modago_Integrator',
-					Mage::helper('modagointegrator/api')->__('Cannot find product with SKU: %s (External order id: %s)',$apiProduct->item_sku,$this->_modagoOrderId)
+					Mage::helper('modagointegrator')->__('Cannot find product with SKU: %s (External order id: %s)',$apiProduct->item_sku,$this->_modagoOrderId)
 				);
 			}
 		}
