@@ -213,7 +213,7 @@ class Modago_Integrator_Model_Api
         $state = $order->getState();
 
         //1. Is payment is review
-        if ($state === self::STATE_PAYMENT_REVIEW)
+        if ($state === Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
             return $helper->__("Payment has review status");
 
 
@@ -230,7 +230,7 @@ class Modago_Integrator_Model_Api
 
 
         //3. State: canceled, completed or closed
-        if ($order->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED)
+        if ($order->isCanceled() || $state === Mage_Sales_Model_Order::STATE_COMPLETE || $state === Mage_Sales_Model_Order::STATE_CLOSED)
             return $helper->__("Order have status {$state}");
 
     }
