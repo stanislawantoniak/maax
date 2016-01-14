@@ -139,13 +139,18 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	}
 
 	/**
-	 * gets store shipping method based on modago shipping method set up in config
-	 * @param string $modago_shipping_method
+	 * gets store shipping carrier based on modago shipping method set up in config
+	 * @param string $modago_shipping_carrier
 	 * @return string
 	 */
-	public function getShippingMethodByApi($modago_shipping_method) {
+	public function getShippingCarrierByApi($apiShippingCarrier) {
 		//todo: in future we should add more handling here
-		return Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_METHOD_CODE;
+		return Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_CARRIER_CODE;
+	}
+
+	public function getShippingMethodByApi($apiShippingMethod) {
+		//todo: in future we should add more handling here
+		return Modago_Integrator_Model_Shipping_Zolagoshipment::getShippingMethodCode();
 	}
 
 	/**
@@ -153,8 +158,8 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	 * @param string $modago_payment_method
 	 * @return string
 	 */
-	public function getPaymentMethodByApi($modago_payment_method) {
-		if($modago_payment_method == 'cash_on_delivery') {
+	public function getPaymentMethodByApi($apiPaymentMethod) {
+		if($apiPaymentMethod == 'cash_on_delivery') {
 			return Mage::getStoreConfig(self::CONFIG_PATH_MAPPED_COD);
 		} else {
 			return Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_CODE;
