@@ -173,7 +173,7 @@ class Modago_Integrator_Model_Api
         $ordersCollection->addFieldToFilter("modago_order_id", $orderId);
         $modagoOrder = $ordersCollection->getFirstItem();
         if (!$modagoOrder->getId()) {
-            $helper->log("Error: order %s not found.", $orderId);
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
             return false;
         }
 
@@ -184,12 +184,12 @@ class Modago_Integrator_Model_Api
                 $order->cancel();
                 $order->setStatus('canceled');
                 $order->save();
-                $helper->log("Success: order (%s) was  canceled.", $orderId);
+                $helper->log($helper->__("Success: order (%s) was  canceled.", $orderId));
                 return true;
             } else {
                 //ERROR
                 $msg = $this->cantBeCanceledReason($order);
-                $helper->log("Error: order %s can not be canceled. %s", $orderId, $msg);
+                $helper->log($helper->__("Error: order %s can not be canceled. %s", $orderId, $msg));
 
                 return false;
             }
