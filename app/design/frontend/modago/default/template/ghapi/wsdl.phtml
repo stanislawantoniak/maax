@@ -31,6 +31,7 @@
 					<xsd:element name="sessionToken" type="xsd:string"/>
 					<xsd:element name="messageBatchSize" type="xsd:int"/>
 					<xsd:element name="messageType" type="xsd:string" nillable="true"/>
+					<xsd:element name="orderId" type="xsd:string" nillable="true"/>
 				</xsd:all>
   			</xsd:complexType>
 		</xsd:element>
@@ -55,9 +56,13 @@
 				</xsd:all>
 			</xsd:complexType>
 		<xsd:complexType name="messageList">
-			<xsd:sequence>
-				<xsd:element name="message" type="tns:messageItem" minOccurs="0" maxOccurs="unbounded"/>
-			</xsd:sequence>
+		    <xsd:complexContent>
+		        <restriction base="SOAP-ENC:Array">
+        			<xsd:sequence>
+		        		<xsd:element name="message" type="tns:messageItem" minOccurs="0" maxOccurs="unbounded"/>
+        			</xsd:sequence>
+		        </restriction>
+		    </xsd:complexContent>
 		</xsd:complexType>
 		<xsd:complexType name="messageIDList">
 			<xsd:sequence>
@@ -107,6 +112,7 @@
 				<xsd:element name="shipment_tracking_number" type="xsd:string"/>
 				<xsd:element name="pos_id" type="xsd:string"/>
 				<xsd:element name="order_currency" type="xsd:string"/>
+				<xsd:element name="order_email" type="xsd:string"/>
 				<xsd:element name="invoice_data" type="tns:invoiceData"/>
 				<xsd:element name="delivery_data" type="tns:deliveryData"/>
 				<xsd:element name="order_items" type="tns:orderItemList"/>

@@ -23,11 +23,11 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $token = $request->sessionToken;
         $batchSize = $request->messageBatchSize;
         $messageType = empty($request->messageType)? null:$request->messageType;
-
+        $orderId = empty($request->orderId)? null:$request->orderId;
         $model = $this->getMessageModel();
 
         try {
-            $messages = $model->getMessages($token,$batchSize,$messageType);
+            $messages = $model->getMessages($token,$batchSize,$messageType,$orderId);
 
             $list = array();
             foreach($messages as $msg) {

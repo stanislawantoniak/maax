@@ -28,13 +28,15 @@ class Modago_Integrator_Model_Soap_Client  {
      * @param string $token
      * @param int $batchSize
      * @param string $messageType
+     * @param string $orderId
      * @return array
      */
-     public function getChangeOrderMessage($token,$batchSize,$messageType) {
+     public function getChangeOrderMessage($token,$batchSize,$messageType,$orderId = null) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->messageBatchSize = $batchSize;
          $obj->messageType = $messageType;
+         $obj->orderId = $orderId;
          return $this->_query('getChangeOrderMessage',$obj);
      }
 
@@ -151,7 +153,7 @@ class Modago_Integrator_Model_Soap_Client  {
      * @return array
      */
     protected function _query($name,$parameters) {
-        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_1, 'trace' => 1,'cache_wsdl'=>WSDL_CACHE_NONE);
+        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_1, 'trace' => 1,'cache_wsdl'=>WSDL_CACHE_NONE,'features'=> SOAP_SINGLE_ELEMENT_ARRAYS);
         $data = array();
         /** @var Modago_Integrator_Helper_Data $helper */
         $helper = Mage::helper('modagointegrator');
@@ -164,7 +166,7 @@ class Modago_Integrator_Model_Soap_Client  {
             $data = $client->$name($parameters);
         } catch (Exception $xt) {
             Mage::logException($xt);
-            Modago_Integrator_Model_Log::log($xt->getMessage());
+			Mage::helper('modagointegrator/api')->log($xt->getMessage());
         }
         unlink($url);
         return $data;

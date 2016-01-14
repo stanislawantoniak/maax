@@ -6,35 +6,86 @@
  */
 class Modago_Integrator_Model_Observer {
 
+    
+    
+    /**
+     * check if order is changed
+     *
+     * @param Varien_Event_Observer $observer
+     */
+     public function check_order_changes($observer) {
+         $helperApi = Mage::helper('modagointegrator/api');
+		/** @var Modago_Integrator_Helper_Api $helperApi */
+         if ($helperApi->isEnabled()) {
+             $shipment = $observer->getEvent()->getShipment();
+             $order = $shipment->getOrder();
+             $orderId = $order->getData('modago_order_id');
+             if ($orderId) {
+                 $client = Mage::getModel('modagointegrator/soap_client');
+                 $key = $helperApi->getKey($client);                
+                 if ($key) {
+                     $size = $helperApi->getBatchSize();
+                     $ret = $client->getChangeOrderMessage($key,$size,null,$orderId);                     
+                     if (!empty($ret->list) && !empty($ret->list->message)) {
+                         $foreachMsgData = $ret->list->message;
+                         Mage::getModel('modagointegrator/api')->processOrders($foreachMsgData);
+                         $message = Mage::helper('modagointegrator')->__('Error: Order %s was changed', $orderId);
+                         $helperApi->log($message);
+                         Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
+                     }
+                 } else {
+					$message = $helper->__('Error: Cannot check order %s status', $orderId);
+                    $helperApi->log($message);
+				 }
+             }
+         }
+     }
+    /**
+     * save tracking info in modago api
+     *
+     * @param Varien_Event_Observer $observer
+     */
 
     public function send_track_info($observer) {
-        $track = $observer->getEvent()->getTrack();
-        $order = $track->getShipment()->getOrder();
-        $orderId = $order->getData('modago_order_id');
-        if (!empty($orderId)) {
-            $client = Mage::getModel('modagointegrator/soap_client');
-            $key = Mage::helper('modagointegrator/api')->getKey($client);
-            if ($key) {
-                $dateShipped = $track->getCreatedAt();
-                $trackNumber = $track->getTrackNumber();
-                $carrierCode = $track->getCarrierCode();
-                $carrier = Mage::helper('modagointegrator/api')->getCarrier($carrierCode);
-				if (empty($carrier)) {
-					$message = Mage::helper('modagointegrator')->__('Modago order %s tracking info cannot be saved because there is no carrier mapping for %s',$orderId, $carrierCode);
-					Modago_Integrator_Model_Log::log($message);
-					return; // aborting
+		/** @var Modago_Integrator_Helper_Api $helperApi */
+		$helperApi = Mage::helper('modagointegrator/api');
+		/** @var Modago_Integrator_Helper_Data $helper */
+		$helper = Mage::helper('modagointegrator');
+		if ($helperApi->isEnabled()) {
+			$track = $observer->getEvent()->getTrack();
+			$order = $track->getShipment()->getOrder();
+			$orderId = $order->getData('modago_order_id');
+			if (!empty($orderId)) {
+				/** @var Modago_Integrator_Model_Soap_Client $client */
+				$client = Mage::getModel('modagointegrator/soap_client');
+				$key = $helperApi->getKey($client);
+				if ($key != -1) {
+					$dateShipped = $track->getCreatedAt();
+					$trackNumber = $track->getTrackNumber();
+					$carrierCode = $track->getCarrierCode();
+					$carrier = $helperApi->getCarrier($carrierCode);
+					if (empty($carrier)) {
+						$message = $helper->__('Error: Modago order %s tracking info cannot be saved because there is no carrier mapping for %s', $orderId, $carrierCode);
+						$helperApi->log($message);
+						return; // aborting
+					}
+
+					$ret = $client->setOrderShipment($key, $orderId, $dateShipped, $carrier, $trackNumber);
+					if (empty($ret->status)) { // no answer or error
+						$message = $helper->__('Error: no response from API server');
+					} else {
+						if ($ret->message != 'ok') {
+							$message = $helper->__('Error: sending track info to Modago API fail (%s)', $ret->message);
+						} else {
+							$message = $helper->__('Success: Modago order %s tracking send', $orderId);
+						}
+					}
+				} else {
+					$message = $helper->__('Error: Modago order %s tracking info cannot be saved', $orderId);
 				}
-                $ret = $client->setOrderShipment($key,$orderId,$dateShipped,$carrier,$trackNumber);
-                if (empty($ret->status)) { // error
-                    if (!empty($ret->message)) {
-                         Modago_Integrator_Model_Log::log($ret->message);
-                    }
-                }
-            } else {
-                $message = Mage::helper('modagointegrator')->__('Modago order %s tracking info cannot be saved',$orderId);
-                Modago_Integrator_Model_Log::log($message);
-            }
-        }
+				$helperApi->log($message);
+			}
+		}
     }    
 
 	/**
@@ -44,6 +95,7 @@ class Modago_Integrator_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function addConfigCarrierMapperFields(Varien_Event_Observer $observer) {
+
 		/** @var Modago_Integrator_Helper_Data $helper */
 		$helper = Mage::helper('modagointegrator');
 		/** @var Mage_Core_Model_Config_Base $config */
@@ -84,9 +136,9 @@ class Modago_Integrator_Model_Observer {
 	 * @return array
 	 */
 	private function getAllCarriers() {
-		/** @var Mage_Shipping_Model_Config $shippingConfig */
-		$shippingConfig = Mage::getSingleton('shipping/config');
-		$allCarriers = $shippingConfig->getAllCarriers();
-		return $allCarriers;
+		/** @var Modago_Integrator_Model_Shipping_Source_Allcarriers $shippingSource */
+		$shippingSource = Mage::getSingleton('shipping/config');
+		$carriers = $shippingSource->getAllCarriers();
+		return $carriers;
 	}
 }
