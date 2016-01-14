@@ -6,8 +6,8 @@
 class GH_Marketing_Model_Source_Marketing_Cost_Type_Option {
 
 	const OPTION_CPC = 'cpc';
-	const OPTION_CPS  = 'cps';
-	const OPTION_FIXED = 'fixed';
+	const OPTION_CPS = 'cps';
+	const OPTION_CPA = 'cpa';
 
 	/**
 	 * Options getter
@@ -20,8 +20,8 @@ class GH_Marketing_Model_Source_Marketing_Cost_Type_Option {
 
 		$options = array(
 			array('value' => self::OPTION_CPC, 'label' => $hlp->__('CPC')),
-			array('value' => self::OPTION_CPS,  'label' => $hlp->__('CPS')),
-			array('value' => self::OPTION_FIXED, 'label' => $hlp->__('Fixed')),
+			array('value' => self::OPTION_CPS, 'label' => $hlp->__('CPS')),
+			array('value' => self::OPTION_CPA, 'label' => $hlp->__('CPA')),
 		);
 
 		if (!$isMultiselect) {
@@ -40,8 +40,8 @@ class GH_Marketing_Model_Source_Marketing_Cost_Type_Option {
 		$hlp = Mage::helper('ghmarketing');
 		return array(
 			self::OPTION_CPC => $hlp->__('CPC'),
-			self::OPTION_CPS  => $hlp->__('CPS'),
-			self::OPTION_FIXED => $hlp->__('Fixed'),
+			self::OPTION_CPS => $hlp->__('CPS'),
+			self::OPTION_CPA => $hlp->__('CPA'),
 		);
 	}
 

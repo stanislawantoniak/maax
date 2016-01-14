@@ -186,18 +186,23 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		$config = Mage::getConfig();
 		/** @var GH_Marketing_Model_Resource_Marketing_Cost_Type_Collection $marketingCostTypeCollection */
 		$marketingCostTypeCollection = Mage::getResourceModel('ghmarketing/marketing_cost_type_collection');
+		/** @var GH_Marketing_Model_Source_Marketing_Cost_Type_Option $costOptions */
+		$costOptions = Mage::getSingleton('ghmarketing/source_marketing_cost_type_option');
+		$options = $costOptions->toArray();
+		$_name = '<marketing_cost_type_';
 		foreach ($marketingCostTypeCollection as $type) {
-			$fieldSelect = '<marketing_cost_type_' . $type->getCode() . '/>'; // select
-			$fieldCpc    = '<marketing_cost_type_' . $type->getCode() . '_cpc/>';
-			$fieldCps    = '<marketing_cost_type_' . $type->getCode() . '_cps/>';
-			$fieldFixed  = '<marketing_cost_type_' . $type->getCode() . '_fixed/>';
+
+			// Fields by all cost type options
+			$fieldSelect = $_name . $type->getCode() . '/>';
+			$fieldOption = '';
+			foreach ($options as $value => $label) {
+				$fieldOption .= $_name . $type->getCode() . '_' . $value . '/>';
+			}
 
 			$allFields   =
 				'<fields>'.
 				$fieldSelect .
-				$fieldCpc .
-				$fieldCps .
-				$fieldFixed.
+				$fieldOption .
 				'</fields>';
 
 			$element = new Mage_Core_Model_Config_Element($allFields);
