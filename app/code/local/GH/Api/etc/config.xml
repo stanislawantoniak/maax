@@ -120,4 +120,15 @@
             </ghapi_general>
         </ghapi_options>
     </default>
+    <admin>
+        <routers>
+            <ghapi>
+                <use>admin</use>
+                <args>
+                    <frontName>ghapi</frontName>
+                    <module>GH_Api</module>
+                </args>
+            </ghapi>
+        </routers>
+    </admin>
 </config>
