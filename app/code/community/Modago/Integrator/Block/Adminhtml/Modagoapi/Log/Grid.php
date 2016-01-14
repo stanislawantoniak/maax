@@ -10,7 +10,7 @@ class Modago_Integrator_Block_Adminhtml_Modagoapi_Log_Grid extends Mage_Adminhtm
 	public function __construct() {
 		parent::__construct();
 		$this->setId('modagointegrator_modagoapi_log_grid');
-		$this->setDefaultSort('date');
+		$this->setDefaultSort('id');
 		$this->setSaveParametersInSession(true);
 		$this->setUseAjax(true);
 	}
@@ -36,7 +36,7 @@ class Modago_Integrator_Block_Adminhtml_Modagoapi_Log_Grid extends Mage_Adminhtm
 
 		$this->addColumn('date', array(
 			'header' => $helper->__('Event date'),
-			'type'   => 'datetime',
+			'type'   => 'text',
 			'index'  => 'date',
 			'width'  => '150px',
 		));
