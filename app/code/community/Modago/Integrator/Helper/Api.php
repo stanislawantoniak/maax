@@ -144,8 +144,8 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	 * @return string
 	 */
 	public function getShippingMethodByApi($modago_shipping_method) {
-		//todo: map modago shipping method to store shipping method;
-		return $modago_shipping_method;
+		//todo: in future we should add more handling here
+		return Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_METHOD_CODE;
 	}
 
 	/**
