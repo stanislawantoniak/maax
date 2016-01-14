@@ -40,3 +40,4 @@
 "Success: order (%s) was  canceled.","OK: Zamówienie (%s) zostało anulowane"
 "Success: successfully confirmed list of messages (%s)","OK: Poprawnie odebrano listę komunikatów (%s)"
 "Vendor ID","ID sklepu"
+"Modago logs","Logi Modago"
