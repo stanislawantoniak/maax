@@ -165,7 +165,6 @@ class Modago_Integrator_Model_Api
      */
     protected function _cancelOrder($orderId)
     {
-        Mage::log('cancel ' . $orderId, null, "modago_integrator.log");
         /** @var Modago_Integrator_Helper_Api $helper */
         $helper = Mage::helper('modagointegrator/api');
 
@@ -173,7 +172,7 @@ class Modago_Integrator_Model_Api
         $ordersCollection->addFieldToFilter("modago_order_id", $orderId);
         $modagoOrder = $ordersCollection->getFirstItem();
         if (!$modagoOrder->getId()) {
-            $helper->log("Error: order {$orderId} not found.");
+            $helper->log("Error: order %s not found.", $orderId);
             return false;
         }
 
@@ -184,11 +183,12 @@ class Modago_Integrator_Model_Api
                 $order->cancel();
                 $order->setStatus('canceled');
                 $order->save();
+                $helper->log("Success: order (%s) was  canceled.", $orderId);
                 return true;
             } else {
                 //ERROR
                 $msg = $this->cantBeCanceledReason($order);
-                $helper->log("Error: order {$orderId} can not be canceled. {$msg}");
+                $helper->log("Error: order %s can not be canceled. %s", $orderId, $msg);
 
                 return false;
             }
