@@ -56,6 +56,20 @@ class GH_Api_Block_Adminhtml_Dropship_Settings_Ghapi_Form extends Mage_Adminhtml
             'text'      => $last
         ));
 
+
+        /*Sales manago integration*/
+		/** @var Zolago_Adminhtml_Helper_Data $hlp */
+		$hlp = Mage::helper('zolagoadminhtml');
+        $fieldset = $form->addFieldset('modago_salesmanago', array(
+            'legend' => $hlp->__('Integration with SALESmanago')
+        ));
+        $fieldset->addType('salesmanago', 'Zolago_Adminhtml_Block_Renderer_Salesmanago');
+        $fieldset->addField('modago_salesmanago_login', 'salesmanago', array(
+            'name'      => 'modago_salesmanago_login',
+            'label'     => $hlp->__('Integration with SALESmanago')
+
+        ));
+
         if ($vendor) {
             $form->setValues($vendor->getData());
         }

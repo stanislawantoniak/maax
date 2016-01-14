@@ -361,7 +361,7 @@ class Zolago_Campaign_Model_Observer
             ));
 
 
-            $vendors = Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash();
+            $vendors = Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash();
             asort($vendors);
             $vendors = array("" => $hlp->__(' -- Select Vendor Store Owner -- ')) + $vendors;
 

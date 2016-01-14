@@ -172,9 +172,46 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
                 $this->setData('max_shipping_time', implode(',', $this->getData('max_shipping_time')));
             }
         }
-
+		$this->addConfigMarketingCostTypeFields();
         return parent::_beforeSave();
     }
+
+	/**
+	 * Add custom dynamic fields for marketing cost types into vendor config xml
+	 * (udropship/vendor/fields)
+	 *
+	 * @return $this
+	 */
+	public function addConfigMarketingCostTypeFields() {
+		$config = Mage::getConfig();
+		/** @var GH_Marketing_Model_Resource_Marketing_Cost_Type_Collection $marketingCostTypeCollection */
+		$marketingCostTypeCollection = Mage::getResourceModel('ghmarketing/marketing_cost_type_collection');
+		/** @var GH_Marketing_Model_Source_Marketing_Cost_Type_Option $costOptions */
+		$costOptions = Mage::getSingleton('ghmarketing/source_marketing_cost_type_option');
+		$options = $costOptions->toArray();
+		$_name = '<marketing_cost_type_';
+		foreach ($marketingCostTypeCollection as $type) {
+
+			// Fields by all cost type options
+			$fieldSelect = $_name . $type->getCode() . '/>';
+			$fieldOption = '';
+			foreach ($options as $value => $label) {
+				$fieldOption .= $_name . $type->getCode() . '_' . $value . '/>';
+			}
+
+			$allFields   =
+				'<fields>'.
+				$fieldSelect .
+				$fieldOption .
+				'</fields>';
+
+			$element = new Mage_Core_Model_Config_Element($allFields);
+			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
+			$adminApiFields = $config->getNode('global/udropship/vendor/fields');
+			$adminApiFields->extend($element);
+		}
+		return $this;
+	}
 
     public function getFormatedAddress($type='text')
     {

@@ -28,30 +28,30 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @param int | Mage_Core_Model_Store $storeId
 	 */
 	public function sendEmailTemplate($email, $name, $template, 
-			array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
+		array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
 
-            $templateParams['use_attachments'] = true;
-		
-			$storeId = Mage::app()->getStore($storeId)->getId();
-			if(is_null($sender)){
-				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
-			}
-            $templateParams['year'] = Mage::getModel('core/date')->date('Y');
-			
-            /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
-			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
-            /** @var Mage_Core_Model_Email_Info $emailInfo */
-			$emailInfo = Mage::getModel('core/email_info');
-			$emailInfo->addTo($email, $name);
-			$emailInfo->addBcc($bcc);
-			$mailer->addEmailInfo($emailInfo);
+        $templateParams['use_attachments'] = true;
 
-			// Set all required params and send emails
-			$mailer->setSender($sender);
-			$mailer->setStoreId($storeId);
-			$mailer->setTemplateId($template);
-			$mailer->setTemplateParams($templateParams);
-			return $mailer->send();
+		$storeId = Mage::app()->getStore($storeId)->getId();
+		if(is_null($sender)){
+			$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
+		}
+        $templateParams['year'] = Mage::getModel('core/date')->date('Y');
+
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+		$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
+        /** @var Mage_Core_Model_Email_Info $emailInfo */
+		$emailInfo = Mage::getModel('core/email_info');
+		$emailInfo->addTo($email, $name);
+		$emailInfo->addBcc($bcc);
+		$mailer->addEmailInfo($emailInfo);
+
+		// Set all required params and send emails
+		$mailer->setSender($sender);
+		$mailer->setStoreId($storeId);
+		$mailer->setTemplateId($template);
+		$mailer->setTemplateParams($templateParams);
+		return $mailer->send();
 	}
 	/**
 	 * @param string $filename

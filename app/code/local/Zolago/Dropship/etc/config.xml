@@ -844,6 +844,10 @@
                         <fieldset>modago_integrator</fieldset>
                     </last_integration>
 
+                    <modago_salesmanago_login translate="label">
+                        <fieldset>modago_salesmanago</fieldset>
+                    </modago_salesmanago_login>
+
                     <!--Regulation-->
 	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
 	                <regulation_accept_text_top/>
@@ -852,6 +856,11 @@
 	                <regulation_proxy_assignment_override/>
 	                <regulation_accept_text_agreement/>
                     <!--Regulation-->
+
+					<!--Marketing cost for each cost type start-->
+						<!-- dynamically created -->
+						<!-- @see Zolago_Dropship_Model_Vendor::_beforeSave() -> addConfigMarketingCostTypeFields() -->
+					<!--Marketing cost for each cost type end-->
 				</fields>
 			</vendor>
 		</udropship>
