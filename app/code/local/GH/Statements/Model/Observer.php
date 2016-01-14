@@ -93,7 +93,29 @@ class GH_Statements_Model_Observer
             }
         }
     }
-    
+
+
+    /**
+     * Calculate vendor balance based on
+     *
+     * 1. Customer payments
+     * 2. Customer refunds
+     * 3. Payouts to vendor
+     * 4. Invoices and credit notes
+     *
+     * 5. Balance
+     * 5.1. Monthly balance
+     * 5.2. Cumulative balance
+     * 5.3. Due balance
+     *
+     *
+     */
+    public static function calculateVendorBalance()
+    {
+        $resourceBalance = Mage::getResourceModel("ghstatements/vendor_balance");
+        $resourceBalance->calculateVendorBalanceData();
+    }
+
     /**
      * calculating date from and last balance
      */
