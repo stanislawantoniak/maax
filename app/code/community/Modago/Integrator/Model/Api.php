@@ -146,7 +146,7 @@ class Modago_Integrator_Model_Api
                 $item = current($item);
                 /** @var Modago_Integrator_Model_Order $integratorOrders */
                 $integratorOrders = Mage::getModel('modagointegrator/order');
-                $orderId = $integratorOrders->createOrderFromApi($item);
+                $orderId = $integratorOrders->createOrder($item);
                 $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
