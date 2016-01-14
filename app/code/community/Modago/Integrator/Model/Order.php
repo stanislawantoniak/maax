@@ -114,15 +114,12 @@ class Modago_Integrator_Model_Order
 		//todo: fix shippings start
 		//shipping cost
 		$shippingCost = 0;
-		$shippingCostBeforeDiscount = 0;
-		$shippingCostDiscount = 0;
+
 		foreach($apiOrder->order_items->item as $key=>$item) {
 			if(!$item->is_delivery_item) {
 				continue;
 			} else {
 				$shippingCost = round(floatval($item->item_value_after_discount),2);
-				$shippingCostBeforeDiscount = round(floatval($item->item_value_before_discount),2);
-				$shippingCostDiscount = round(floatval($item->item_discount),2);
 				unset($apiOrder->order_items->item[$key]);
 				break;
 			}
@@ -296,10 +293,6 @@ class Modago_Integrator_Model_Order
 	protected function parseApiOrderProducts($apiOrderProducts) {
 		$parsed = array();
 		foreach($apiOrderProducts as $item) {
-			if(!$item->item_sku) {
-				continue; //todo: fix shipping costs
-			}
-
 			/** @var Mage_Catalog_Model_Product $productModel */
 			$productModel = Mage::getModel('catalog/product');
 
@@ -310,11 +303,8 @@ class Modago_Integrator_Model_Order
 				$product = $productModel->load($productId);
 
 				$taxPercent = $this->getProductTaxRate($product);
-				$priceIncl = $item->item_value_after_discount;
-				$originalPriceIncl = $item->item_value_before_discount;
-
-				$price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //price without tax
-				$originalPrice = round((($originalPriceIncl / (100 + $taxPercent)) * 100),2);
+				$priceIncl = $item->item_value_after_discount; //brutto
+				$price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //netto
 
 				//parentSKU start
 				$parent = false;
@@ -345,9 +335,6 @@ class Modago_Integrator_Model_Order
 						'tax_percent'           => $taxPercent,
 						'tax_amount'            => $taxAmountSingle,
 						'base_tax_amount'       => $taxAmountSingle,
-
-						'discount_amount'       => $item->item_discount,
-						'base_discount_amount'  => $item->item_discount,
 
 						'row_total'             => $rowTotal,
 						'base_row_total'        => $rowTotal,

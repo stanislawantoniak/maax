@@ -141,11 +141,20 @@
         <payment>
             <zolagopayment>
                 <active>0</active>
-                <title>Zolago payment</title>
+                <title>Zolago payment system</title>
                 <model>modagointegrator/payment_zolagopayment</model>
                 <order_status>pending</order_status>
                 <allowspecific>0</allowspecific>
             </zolagopayment>
         </payment>
+        <carriers>
+          <zolagoshipment>
+            <active>1</active>
+            <sallowspecific>0</sallowspecific>
+            <model>modagointegrator/shipping_zolagoshipment</model>
+            <title>Carrier shipment</title>
+            <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
+          </zolagoshipment>
+        </carriers>
     </default>
 </config>
