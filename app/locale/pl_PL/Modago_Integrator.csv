@@ -5,3 +5,6 @@
 "Price source","Źródło ceny"
 "Shop/Language whose price is charged","Sklep/Język z którego pobierana jest cena"
 "Default Config","Domyślna konfiguracja"
+"Error: order %s not found.","Error: order %s not found.[PL]"
+"Success: order (%s) was  canceled.","Success: order (%s) was  canceled.[PL]"
+"Error: order %s can not be canceled. %s","Error: order %s can not be canceled. %s[PL]"
