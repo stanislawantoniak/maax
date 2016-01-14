@@ -5,6 +5,8 @@
 class Modago_Integrator_Model_Shipping_Zolagoshipment extends
     Mage_Shipping_Model_Carrier_Abstract {
 
+	const SHIPPING_METHOD_CODE = 'zolagoshipping';
+
 	/**
 	 * Empyt collect
 	 * @param Mage_Shipping_Model_Rate_Request $request
