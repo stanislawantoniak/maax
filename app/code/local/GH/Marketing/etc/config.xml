@@ -81,6 +81,16 @@
                 </ghmarketing>
             </updates>
         </layout>
+		<events>
+			<udropship_adminhtml_vendor_tabs_after>
+				<observers>
+					<ghmarketing>
+						<class>ghmarketing/observer</class>
+						<method>udropship_adminhtml_vendor_tabs_after</method>
+					</ghmarketing>
+				</observers>
+			</udropship_adminhtml_vendor_tabs_after>
+		</events>
     </adminhtml>
     <admin>
         <routers>

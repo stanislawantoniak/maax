@@ -59,45 +59,6 @@ class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form 
             'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/commission_percent'))
         ));
 
-		/** @var GH_Marketing_Helper_Data $hlp */
-		$hlp = Mage::helper('ghmarketing');
-		// Group of Marketing cost type configuration
-		/** @var GH_Marketing_Model_Resource_Marketing_Cost_Type_Collection $marketingCostTypeCollection */
-		$marketingCostTypeCollection = Mage::getResourceModel('ghmarketing/marketing_cost_type_collection');
-		foreach ($marketingCostTypeCollection as $type) {
-			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
-			$fieldsetAdditional = $form->addFieldset('fieldset_marketing_cost_type_' . $type->getCode(), array(
-				'legend' => $hlp->__('Marketing cost for %s', $type->getName())
-			));
-			$fieldSelect = 'marketing_cost_type_' . $type->getCode();
-			$fieldsetAdditional->addField($fieldSelect, 'select', array(
-				'name' => $fieldSelect,
-				'label' => $hlp->__('Choose option'),
-				'values' => Mage::getModel('ghmarketing/source_marketing_cost_type_option')->toOptionArray()
-			));
-			$fieldCpc = 'marketing_cost_type_'. $type->getCode() . '_cpc';
-			$fieldsetAdditional->addField($fieldCpc, 'text', array(
-				'name'               => $fieldCpc,
-				'label'              => $hlp->__('CPC (cost per click)'),
-				'class'              => 'validate-number',
-				'after_element_html' => $hlp->__('Overhead % for the operator costs')
-			));
-			$fieldCps = 'marketing_cost_type_'. $type->getCode() . '_cps';
-			$fieldsetAdditional->addField($fieldCps, 'text', array(
-				'name'               => $fieldCps,
-				'label'              => $hlp->__('CPS (cost per sale)'),
-				'class'              => 'validate-number',
-				'after_element_html' => $hlp->__('Overhead % for the operator costs')
-			));
-			$fieldFixed = 'marketing_cost_type_'. $type->getCode() . '_fixed';
-			$fieldsetAdditional->addField($fieldFixed, 'text', array(
-				'name'               => $fieldFixed,
-				'label'              => $hlp->__('Fixed (fixed cost)'),
-				'class'              => 'validate-number',
-				'after_element_html' => $hlp->__('Fixed cost per sale')
-			));
-		}
-
         if ($vendor) {
             $form->setValues($vendor->getData());
         }
