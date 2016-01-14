@@ -58,7 +58,8 @@ class GH_Api_Block_Adminhtml_Dropship_Settings_Ghapi_Form extends Mage_Adminhtml
 
 
         /*Sales manago integration*/
-
+		/** @var Zolago_Adminhtml_Helper_Data $hlp */
+		$hlp = Mage::helper('zolagoadminhtml');
         $fieldset = $form->addFieldset('modago_salesmanago', array(
             'legend' => $hlp->__('Integration with SALESmanago')
         ));
