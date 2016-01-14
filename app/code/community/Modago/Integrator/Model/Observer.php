@@ -35,7 +35,7 @@ class Modago_Integrator_Model_Observer {
                          Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
                      }
                  } else {
-					$message = $helper->__('Error: Cannot check order %s (%s) status',$incrementId, $orderId);
+					$message = $helperApi->__('Error: Cannot check order %s (%s) status',$incrementId, $orderId);
                     $helperApi->log($message);
 				 }
              }

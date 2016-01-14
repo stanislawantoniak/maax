@@ -9,6 +9,7 @@ class Modago_Integrator_Shell extends Mage_Shell_Abstract
 {
     public function run()
     {
+        Mage::app()->getTranslator()->init('adminhtml', true);
         if (!Mage::isInstalled()) {
             echo "Application is not installed yet, please complete install wizard first.";
             exit;

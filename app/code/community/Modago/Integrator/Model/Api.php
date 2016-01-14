@@ -150,7 +150,7 @@ class Modago_Integrator_Model_Api
                 $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
-                $helper->log('Error: ' . $e->getMessage());
+                $helper->log($helper->__('Error: %s' , $e->getMessage()));
                 return false;
             }
         }
