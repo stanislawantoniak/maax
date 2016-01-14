@@ -52,6 +52,14 @@ class Modago_Integrator_Model_Order {
 			->setCurrency($apiOrder->order_currency)
 			->setCustomerEmail($apiOrder->order_email);
 
+		//guest order setup
+		$quote
+			->setCheckoutMethod(Mage_Sales_Model_Quote::CHECKOUT_METHOD_GUEST)
+			->setCustomerId(null)
+			->setCustomerEmail($apiOrder->order_email)
+			->setCustomerIsGuest(true)
+			->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+
 		/*$customer = Mage::getModel('customer/customer')
 			->setWebsiteId($websiteId)
 			->loadByEmail($email);
@@ -64,17 +72,25 @@ class Modago_Integrator_Model_Order {
 				->setEmail($email)
 				->setPassword("password");
 			$customer->save();
-		}*/
-
+		}
 		// Assign Customer To Sales Order Quote
-		/*$quote->assignCustomer($customer);*/
+		$quote->assignCustomer($customer);*/
 
 		// Configure Notification
 		/*$quote->setSendConfirmation(1);*/
+
 		foreach($products as $productData){
+			$requestArray = array(
+				'qty'   => $productData['qty'],
+			);
+
+			if(isset($productData['super_attribute'])) {
+				$requestArray['super_attribute'] = $productData['super_attribute'];
+			}
+
 			$quote->addProduct(
 				$productData['model'],
-				new Varien_Object(array('qty' => $productData['qty']))
+				new Varien_Object($requestArray)
 			);
 		}
 
@@ -89,6 +105,12 @@ class Modago_Integrator_Model_Order {
 		$billingData = array();
 		foreach($rawBillingData as $key => $value) {
 			$billingData[str_replace($strToReplaceInKey,"",$key)] = $value;
+		}
+
+		// Set Sales Order Shipping Address
+		$shippingData = array();
+		foreach($apiOrder->delivery_data->delivery_address as $key => $value) {
+			$shippingData[str_replace('delivery_',"",$key)] = $value;
 		}
 
 		$billingAddress = $quote->getBillingAddress()->addData(array(
@@ -106,17 +128,12 @@ class Modago_Integrator_Model_Order {
 			'country_id'            => isset($billingData['country']) ? $billingData['country'] : '',
 			'region'                => '',
 			'postcode'              => isset($billingData['zip_code']) ? $billingData['zip_code'] : '',
-			'telephone'             => isset($billingData['phone']) ? $billingData['phone'] : '',
+			'telephone'             => isset($shippingData['phone']) ? $shippingData['phone'] : '',
 			'fax'                   => '',
 			'vat_id'                => isset($billingData['tax_id']) ? $billingData['tax_id'] : '',
 			'save_in_address_book'  => 1
 		));
 
-		// Set Sales Order Shipping Address
-		$shippingData = array();
-		foreach($apiOrder->delivery_data->delivery_address as $key => $value) {
-			$shippingData[str_replace('delivery_',"",$key)] = $value;
-		}
 		$shippingAddress = $quote->getShippingAddress()->addData(array(
 			'prefix'                => '',
 			'firstname'             => isset($shippingData['first_name']) ? $shippingData['first_name'] : '',
@@ -164,6 +181,7 @@ class Modago_Integrator_Model_Order {
 		$quote = $service = null;
 
 		// Finished
+		Mage::log($increment_id,null,'increment_id.log');
 		return $increment_id;
 
 	}
@@ -173,7 +191,8 @@ class Modago_Integrator_Model_Order {
 		foreach($apiOrder->order_items->item as $apiProduct) {
 			if($apiProduct->is_delivery_item == 1) {
 				//shipping cost
-				$this->_apiShippingCost = $apiProduct->item_value_after_discount;
+				Mage::register(Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_COST_REGISTRY_KEY,$apiProduct->item_value_after_discount);
+				Mage::register(Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_ACTIVE_REGISTRY_KEY,true);
 				continue;
 			}
 
@@ -274,6 +293,14 @@ class Modago_Integrator_Model_Order {
 	 */
 	protected function getShippingMethod($apiShippingMethod) {
 		return $this->getHelper()->getShippingMethodByApi($apiShippingMethod);
+	}
+
+	/**
+	 * @param string $apiShippingMethod
+	 * @return string
+	 */
+	protected function getShippingCarrierCode($apiShippingMethod) {
+		return $this->getHelper()->getShippingCarrierByApi($apiShippingMethod);
 	}
 
 	/**

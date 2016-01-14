@@ -5,6 +5,7 @@
 "Configuration error. Integration is disabled","Błąd konfiguracji. Integracja jest wyłączona"
 "Default Config","Domyślna konfiguracja"
 "End process","Proces zakończony"
+"Error: %s","Błąd: %s"
 "Error: Cannot check order %s (%s) status","Błąd: Nie można sprawdzić statusu zamówienia %s (%s) w Modago.pl"
 "Error: confirming messages field (%s) for list (%s)","Błąd: potwierdzenie odbioru listy komunikatów (%s) nie powiodło się (%s)"
 "Error: downloading list of changed orders fail (%s)","Błąd: Pobranie listy zmienionych zamówień nie powiodło się (%s)"
