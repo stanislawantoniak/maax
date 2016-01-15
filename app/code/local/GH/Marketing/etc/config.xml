@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Marketing>
-            <version>0.0.4</version>
+            <version>0.0.5</version>
         </GH_Marketing>
     </modules>
     <global>
@@ -81,6 +81,16 @@
                 </ghmarketing>
             </updates>
         </layout>
+		<events>
+			<udropship_adminhtml_vendor_tabs_after>
+				<observers>
+					<ghmarketing>
+						<class>ghmarketing/observer</class>
+						<method>udropship_adminhtml_vendor_tabs_after</method>
+					</ghmarketing>
+				</observers>
+			</udropship_adminhtml_vendor_tabs_after>
+		</events>
     </adminhtml>
     <admin>
         <routers>
