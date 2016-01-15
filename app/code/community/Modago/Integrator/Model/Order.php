@@ -175,13 +175,16 @@ class Modago_Integrator_Model_Order {
 		/** @var Mage_Sales_Model_Service_Quote $service */
 		$service = Mage::getModel('sales/service_quote', $quote);
 		$service->submitAll();
-		$increment_id = $service->getOrder()->getRealOrderId();
+
+		$order = $service->getOrder();
+		$increment_id = $order->getRealOrderId();
+
+		$order->setModagoOrderId($this->_modagoOrderId)->save();
 
 		// Resource Clean-Up
-		$quote = $service = null;
+		$quote = $service = $order = null;
 
 		// Finished
-		Mage::log($increment_id,null,'increment_id.log');
 		return $increment_id;
 
 	}
