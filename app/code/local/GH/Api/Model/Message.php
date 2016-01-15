@@ -264,10 +264,11 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @param $token
 	 * @param $batchSize
 	 * @param null $message
+	 * @param null $orderId
 	 * @return array
 	 * @throws Mage_Core_Exception
 	 */
-	public function getMessages($token,$batchSize,$message=null) {
+	public function getMessages($token,$batchSize,$message=null,$orderId = null) {
 		$user = $this->getUserByToken($token);
 
 		//check if batch is correct
@@ -279,6 +280,11 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		$messages = $this
 			->getCollection()
 			->filterByVendorId($user->getVendorId());
+        // order filter
+        if ($orderId) {
+			$messages->filterByOrderId($orderId);
+        };
+			
 
 		//set limit to batchSize
 		$messages->getSelect()->limit($batchSize);

@@ -66,6 +66,7 @@ jQuery(function ($) {
         params.token = jQuery('#soap_message_token').val();
         params.size = jQuery('#soap_message_size').val();
         params.messageType	= jQuery('#soap_message_type').val();
+        params.orderId = jQuery('#soap_message_order_id').val();
         doSoapAjax(params,'message');
     }
     //--getChangeOrderMessage

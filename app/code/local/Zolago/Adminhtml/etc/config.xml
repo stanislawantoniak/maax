@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Adminhtml>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </Zolago_Adminhtml>
     </modules>
     <global>
@@ -80,6 +80,14 @@
                     </zolagoadminhtml_catalog_product_grid_prepare_massaction_push_to_solr>
                 </observers>
             </adminhtml_catalog_product_grid_prepare_massaction>
+            <adminhtml_customer_prepare_save>
+                <observers>
+                    <zolagoadminhtml_customer_prepare_save>
+                        <class>zolagoadminhtml/observer</class>
+                        <method>saveOfflineCustomerData</method>
+                    </zolagoadminhtml_customer_prepare_save>
+                </observers>
+            </adminhtml_customer_prepare_save>
         </events>
 	</adminhtml>
 	<admin>
