@@ -36,6 +36,12 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Cus
             'url'   => $this->getUrl('*/customer_beacon/data', array('_current' => true)),
             'class' => 'ajax',
         ));
+		$this->addTab('tab_customer_coupons', array(
+			'label' => Mage::helper('zolagoadminhtml')->__('Customer coupons'),
+			'title' => Mage::helper('zolagoadminhtml')->__('Customer coupons'),
+			'url'   => $this->getUrl('*/customer_coupon/index', array('_current' => true)),
+			'class' => 'ajax',
+		));
         $this->_updateActiveTab();
         Mage_Adminhtml_Block_Widget_Tabs::_beforeToHtml();
         return $this;
