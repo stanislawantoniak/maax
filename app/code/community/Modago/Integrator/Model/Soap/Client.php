@@ -2,34 +2,24 @@
 /**
  * client class used for testing soap requests
  */
-class GH_Api_Model_Soap_Client  {
+class Modago_Integrator_Model_Soap_Client  {
 
-    protected $block;
-
-    /**
-     * Set answer renderer
-     *
-     * @param GH_Api_Block_Dropship_Answer $block
-     * @return void
-     */
-    public function setBlock($block) {
-        $this->block = $block;
-    }
+    const MODAGO_API_WSDL = 'https://modago.pl/ghapi/wsdl/';
 
     /**
-     * Test for doLogin
+     * login
      *
      * @param int $vendorId
      * @param string $password
      * @param string $apiKey
-     * @return void
+     * @return array
      */
     public function doLogin($vendorId,$password,$apiKey) {
         $obj = new StdClass();
         $obj->vendorId = $vendorId;
         $obj->password = $password;
         $obj->webApiKey = trim($apiKey);
-        $this->_query('doLogin',$obj);
+        return $this->_query('doLogin',$obj);
     }
     
     /**
@@ -39,54 +29,54 @@ class GH_Api_Model_Soap_Client  {
      * @param int $batchSize
      * @param string $messageType
      * @param string $orderId
-     * @return void
+     * @return array
      */
-     public function getChangeOrderMessage($token,$batchSize,$messageType,$orderId) {
+     public function getChangeOrderMessage($token,$batchSize,$messageType,$orderId = null) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->messageBatchSize = $batchSize;
          $obj->messageType = $messageType;
          $obj->orderId = $orderId;
-         $this->_query('getChangeOrderMessage',$obj);
+         return $this->_query('getChangeOrderMessage',$obj);
      }
 
     /**
      * Test for setChangeOrderMessageConfirmation
      * @param string $token
      * @param array $list
-     * @return void
+     * @return array
      */
      public function setChangeOrderMessageConfirmation($token,$list) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->messageID = $list;
-         $this->_query('setChangeOrderMessageConfirmation',$obj);
+         return $this->_query('setChangeOrderMessageConfirmation',$obj);
      }
 
     /**
      * Test for getOrdersByID
      * @param string $token
      * @param array $list
-     * @return void
+     * @return array
      */
      public function getOrdersByID($token,$list) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->orderID = $list;
-         $this->_query('getOrdersByID',$obj);
+         return $this->_query('getOrdersByID',$obj);
      }
 
     /**
      * Test for setOrderAsCollected
      * @param string $token
      * @param array $list
-     * @return void
+     * @return array
      */
     public function setOrderAsCollected($token, $list) {
         $obj = new StdClass();
         $obj->sessionToken = trim($token);
         $obj->orderID = $list;
-        $this->_query('setOrderAsCollected', $obj);
+        return $this->_query('setOrderAsCollected', $obj);
     }
 
     /**
@@ -97,7 +87,7 @@ class GH_Api_Model_Soap_Client  {
      * @param string $dateShipped
      * @param string $courier
      * @param string $shipmentTrackingNumber
-     * @return void
+     * @return array
      */
     public function setOrderShipment($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber) {
         $obj = new StdClass();
@@ -106,7 +96,7 @@ class GH_Api_Model_Soap_Client  {
         $obj->dateShipped = $dateShipped;
         $obj->courier = $courier;
         $obj->shipmentTrackingNumber = $shipmentTrackingNumber;
-        $this->_query('setOrderShipment', $obj);
+        return $this->_query('setOrderShipment', $obj);
     }
 
     /**
@@ -116,7 +106,7 @@ class GH_Api_Model_Soap_Client  {
      * @param string $orderID
      * @param string $reservationStatus
      * @param string $reservationMessage
-     * @return void
+     * @return array
      */
     public function setOrderReservation($token, $orderID, $reservationStatus, $reservationMessage) {
         $obj = new StdClass();
@@ -124,17 +114,18 @@ class GH_Api_Model_Soap_Client  {
         $obj->orderID = $orderID;
         $obj->reservationStatus = $reservationStatus;
         $obj->reservationMessage = $reservationMessage;
-        $this->_query('setOrderReservation', $obj);
+        return $this->_query('setOrderReservation', $obj);
     }
 
     /**
      * Test for getCategories
      * @param $token
+     * @return array
      */
     public function getCategories($token) {
         $obj = new StdClass();
         $obj->sessionToken = trim($token);
-        $this->_query('getCategories', $obj);
+        return $this->_query('getCategories', $obj);
     }
 
     /**
@@ -159,33 +150,25 @@ class GH_Api_Model_Soap_Client  {
      * soap query
      * @param string $name
      * @param stdClass $parameters
-     * @return void
+     * @return array
      */
     protected function _query($name,$parameters) {
-        $testFlag = (bool)Mage::getConfig()->getNode('global/test_server');
-        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'trace' => 1);
-        if ($testFlag) {
-            $url = Mage::helper('ghapi')->prepareWsdlUri(Mage::helper('ghapi')->getWsdlTestUrl(),$params);
-        } else {
-            $url = Mage::helper('ghapi')->getWsdlTestUrl();
-        }
-        $client = new SoapClient($url,$params);
+        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_1, 'trace' => 1,'cache_wsdl'=>WSDL_CACHE_NONE,'features'=> SOAP_SINGLE_ELEMENT_ARRAYS);
         $data = array();
+        /** @var Modago_Integrator_Helper_Data $helper */
+        $helper = Mage::helper('modagointegrator');
+        /** @var Modago_Integrator_Helper_Api $helperApi */
+        $helperApi = Mage::helper('modagointegrator/api');
         try {
+            $url = $helper->prepareWsdlUri($helperApi->getApiUrl(), $params);
+            $client = new SoapClient($url,$params);
+
             $data = $client->$name($parameters);
-            if ($testFlag) {
-                 @unlink($url);   
-            }          
         } catch (Exception $xt) {
             Mage::logException($xt);
+			Mage::helper('modagointegrator/api')->log($xt->getMessage());
         }
-        if ($this->block) {
-            $this->block->setSoapRequest($this->_format($client->__getLastRequest()));
-            $this->block->setSoapResponse($this->_format($client->__getLastResponse()));
-            if (isset($data->token)) {
-                $this->block->setToken($data->token);
-            }
-        }
+        unlink($url);
+        return $data;
     }
-
 }
