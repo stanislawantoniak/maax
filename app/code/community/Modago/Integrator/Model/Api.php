@@ -201,7 +201,7 @@ class Modago_Integrator_Model_Api
                     //ERROR
                     $msg = $this->cantBeCanceledReason($order);
 
-                    array_push($errors, $helper->__("Error: order %s can not be canceled. %s", $orderId, $msg));
+                    array_push($errors, $helper->__("Error: order %s can not be canceled.", $orderId) . $msg);
                     array_push($canceled, 0);
                 }
 
