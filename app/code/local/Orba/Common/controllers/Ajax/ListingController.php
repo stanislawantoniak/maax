@@ -14,6 +14,13 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$catModel = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
 		}
 
+		//if filter params then set display_mode to PRODUCTS
+		$fq = Mage::app()->getRequest()->getParams("fq", array());
+		if (!empty($fq)) {
+			$catModel->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
+		} else {
+			$catModel->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
+		}
 		$current_category = "current_category";
 		if(Mage::registry($current_category)) {
 			Mage::unregister($current_category);
@@ -117,6 +124,12 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             $title = $rewriteData["title"];
         }*/
 
+		//if filter params then set display_mode to PRODUCTS
+		if ($fq) {
+			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
+		} else {
+			$category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
+		}
 	    $header = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
 	    $header->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
 	    $header->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
