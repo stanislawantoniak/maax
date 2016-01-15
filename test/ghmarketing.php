@@ -35,8 +35,11 @@ try {
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
-	$server_output = curl_exec($ch);
+	if (!$server_output = curl_exec($ch)) {
+	    var_Dump(curl_error($ch));
+	}
 
 	curl_close($ch);
 
