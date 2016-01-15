@@ -79,14 +79,6 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
 
         $reloadToCms = (int)($category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
 
-
-        //if filter params then set display_mode to PRODUCTS
-        if ($fq) {
-            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
-        } else {
-            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
-        }
-
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
 
