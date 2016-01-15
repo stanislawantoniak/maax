@@ -298,7 +298,7 @@
 		<payment translate="label" module="modagointegrator">
 			<groups>
 				<zolagopayment translate="label">
-					<label>Zolago payment virtual method</label>
+					<label>Zolago payment</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>31</sort_order>
 					<show_in_default>1</show_in_default>
