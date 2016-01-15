@@ -154,7 +154,7 @@ class Modago_Integrator_Model_Api
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
 
