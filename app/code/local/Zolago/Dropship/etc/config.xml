@@ -410,7 +410,6 @@
                         <source>yesno</source>
                         <fieldset>vendor_info</fieldset>
                         <position>3</position>
-                        <note>Googleoff metatags will be used</note>
                     </index_by_google>
 
                     <sequence>
