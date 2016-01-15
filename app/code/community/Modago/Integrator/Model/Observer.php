@@ -118,9 +118,6 @@ class Modago_Integrator_Model_Observer {
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
-							<depends>
-								<enabled>1</enabled>
-							</depends>
 						</carrier_' . $carrierCode . '>');
 			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
 			$adminApiFields = $config->getNode('sections/modagointegrator/groups/orders/fields');
