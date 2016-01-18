@@ -46,7 +46,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
                 'width' => '50px',
                 "type" => "options",
                 'index' => 'vendor_id',
-                "options" => Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash()
+                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
             )
         );
         $this->addColumn('cost',

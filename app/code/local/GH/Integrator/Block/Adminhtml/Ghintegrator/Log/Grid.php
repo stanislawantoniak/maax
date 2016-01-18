@@ -52,7 +52,7 @@ class GH_Integrator_Block_Adminhtml_Ghintegrator_Log_Grid extends Mage_Adminhtml
 			    'width' => '100px',
 			    "type" => "options",
 			    'index' => 'vendor_id',
-			    "options" => Mage::getSingleton('zolagodropship/source')->setPath('vendors')->toOptionHash()
+			    "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
 		    )
 	    );
 
