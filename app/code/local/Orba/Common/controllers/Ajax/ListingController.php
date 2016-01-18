@@ -18,6 +18,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
 
         //if filter params then set display_mode to PRODUCTS
         $fq = Mage::app()->getRequest()->getParams("fq", array());
+        $originDisplayMode = $catModel->getDisplayMode();
+        $catModel->setOriginDisplayMode($originDisplayMode);
         if (!empty($fq)) {
             $catModel->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
         } else {
@@ -76,8 +78,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
 
 
         /** @var Zolago_Catalog_Model_Category $category */
-
-        $reloadToCms = (int)($category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
+        $reloadToCms = (int)($category->getOriginDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
@@ -119,12 +120,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
                     $title = $rewriteData["title"];
                 }*/
 
-        //if filter params then set display_mode to PRODUCTS
-        if ($fq) {
-            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
-        } else {
-            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
-        }
+
+
         $header = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
         $header->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
         $header->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
@@ -160,7 +157,6 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
      */
     public function get_productsAction()
     {
-        $this->_initCategory();
         $listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
         /* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
         $products = $this->_getProducts($listModel);
@@ -191,11 +187,6 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
      */
     protected function _getProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel)
     {
-
-
-        //$profiler = Mage::helper("zolagocommon/profiler");
-        /* @var $profiler Zolago_Common_Helper_Profiler */
-        //$profiler->start();
 
         /** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
         $_solrHelper = Mage::helper("zolagosolrsearch");
