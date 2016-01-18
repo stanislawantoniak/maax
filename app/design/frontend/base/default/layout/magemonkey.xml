@@ -31,11 +31,11 @@
             <!--</action>-->
         </reference>
         <reference name="customer_account_navigation">
-            <action method="addLink" ifconfig="monkey/general/active" translate="label" module="monkey">
-                <name>mailchimp</name>
-                <path>monkey/customer_account/index</path>
-                <label>Newsletter Subscriptions</label>
-            </action>
+            <!--<action method="addLink" ifconfig="monkey/general/active" translate="label" module="monkey">-->
+                <!--<name>mailchimp</name>-->
+                <!--<path>monkey/customer_account/index</path>-->
+                <!--<label>Newsletter Subscriptions</label>-->
+            <!--</action>-->
         </reference>
     </customer_account>
 
