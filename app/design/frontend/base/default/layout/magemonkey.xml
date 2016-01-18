@@ -24,7 +24,7 @@
     <!-- Customer -->
     <customer_account>
         <reference name="head">
-            <action method="addItem">
+            <action method="addItem" ifconfig="monkey/general/active">
                 <type>skin_js</type>
                 <name>magemonkey/monkey.js</name>
                 <params/>
