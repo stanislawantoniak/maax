@@ -439,7 +439,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $activeVendorsToRecalculateBalance = array();
         $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
         $vendorsCollection->addFieldToFilter("vendor_id", array("in", $vendorsToRecalculateBalance));
-        $vendorsCollection->addFieldToFilter("status", Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+        $vendorsCollection->addFieldToFilter("status", array("in" => array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE,Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE)));
 
         foreach ($vendorsCollection as $vendorsCollectionItem) {
             $activeVendorsToRecalculateBalance[] = $vendorsCollectionItem->getVendorId();
