@@ -32,7 +32,6 @@
             <monkey>
                 <rewrite>
                     <data>GH_MageMonkey_Helper_Data</data>
-                    <data>GH_MageMonkey_Helper_Data</data>
                 </rewrite>
             </monkey>
         </helpers>
