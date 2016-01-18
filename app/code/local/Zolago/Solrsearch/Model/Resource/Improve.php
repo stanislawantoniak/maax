@@ -913,7 +913,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             $tableName = array('price_index' => $this->getTable('catalog/product_index_price'));
 
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
-            $select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
+            //$select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
         }
 
         if(isset($extraJoins[self::JOIN_URL])) {
@@ -929,8 +929,20 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 array("request_path")
             );
         }
+        $result = $adapter->fetchAll($select);
 
-        return $adapter->fetchAll($select);
+        $solrData = array();
+        if (!empty($result)) {
+            foreach ($result as $resultItem) {
+                $price = (float)$resultItem["price"];
+                if (empty($price)) {
+                    Mage::log("ID: " . $resultItem["entity_id"] . "; " . "SKU: " . $resultItem["sku"], null, "solr_zero_price.log");
+                } else {
+                    $solrData[] = $resultItem;
+                }
+            }
+        }
+        return $solrData;
     }
 
     protected function _addTaxPercent() {
