@@ -30,6 +30,7 @@ class Zolago_Newsletter_ManageController extends Mage_Newsletter_ManageControlle
 
 
 	public function ajaxSaveAction() {
+		Mage::log((int)$this->_validateFormKey(), null, "11.log");
 		if (!$this->_validateFormKey()) {
 			return $this->_redirect('customer/account');
 		}
