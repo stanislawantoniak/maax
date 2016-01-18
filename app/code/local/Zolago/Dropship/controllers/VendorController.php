@@ -112,6 +112,14 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
     public function editPasswordAction() {
         $this->_renderPage(null, 'editpassword');
     }
+    public function preDispatch() {        
+        if (!Mage::registry('redirect_login_url')) {
+            $url = Mage::helper('core/url')->getCurrentUrl();
+            $redirect = $this->getRequest()->getParam('redirectUrl',$url);
+            Mage::register('redirect_login_url',$redirect);
+        }  
+        return parent::preDispatch();
+    }
 }
 
 
