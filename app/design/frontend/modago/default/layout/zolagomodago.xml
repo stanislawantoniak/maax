@@ -1480,18 +1480,6 @@
     <reference name="head">
       <action method="addItem">
         <type>skin_js</type>
-        <script>js/mall/checkout.js</script>
-      </action>
-      <action method="addItem">
-        <type>skin_js</type>
-        <script>js/mall/checkout/steps.js</script>
-      </action>
-      <action method="addItem">
-        <type>skin_js</type>
-        <script>js/mall/customer.js</script>
-      </action>
-      <action method="addItem">
-        <type>skin_js</type>
         <script>js/mall/rma/new.js</script>
       </action>
       <action method="addItem">
@@ -1506,22 +1494,22 @@
         <type>skin_js</type>
         <script>js/mall/customer/AddressBook/Layout.js</script>
       </action>
-      <action method="addItem">
-        <type>js_css</type>
-        <name>calendar/calendar-win2k-1.css</name>
-        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
-      </action>
-      <action method="addItem">
-        <type>js</type>
-        <name>calendar/calendar.js</name>
-        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
-      </action>
-      <action method="addItem">
-        <type>js</type>
-        <name>calendar/calendar-setup.js</name>
-        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
-      </action>
-      <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+      <!--<action method="addItem">-->
+        <!--<type>js_css</type>-->
+        <!--<name>calendar/calendar-win2k-1.css</name>-->
+        <!--&lt;!&ndash;<params/><if/><condition>can_load_calendar_js</condition>&ndash;&gt;-->
+      <!--</action>-->
+      <!--<action method="addItem">-->
+        <!--<type>js</type>-->
+        <!--<name>calendar/calendar.js</name>-->
+        <!--&lt;!&ndash;<params/><if/><condition>can_load_calendar_js</condition>&ndash;&gt;-->
+      <!--</action>-->
+      <!--<action method="addItem">-->
+        <!--<type>js</type>-->
+        <!--<name>calendar/calendar-setup.js</name>-->
+        <!--&lt;!&ndash;<params/><if/><condition>can_load_calendar_js</condition>&ndash;&gt;-->
+      <!--</action>-->
+      <!--<block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>-->
     </reference>
     <reference name="breadcrumbs">
       <action method="addCrumb">
