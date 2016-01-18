@@ -146,11 +146,11 @@ class Modago_Integrator_Model_Api
                 $item = current($item);
                 /** @var Modago_Integrator_Model_Order $integratorOrders */
                 $integratorOrders = Mage::getModel('modagointegrator/order');
-                $orderId = $integratorOrders->createOrderFromApi($item);
+                $orderId = $integratorOrders->createOrder($item);
                 $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
-                $helper->log('Error: ' . $e->getMessage());
+                $helper->log($helper->__('Error: %s' , $e->getMessage()));
                 return false;
             }
         }
@@ -167,39 +167,63 @@ class Modago_Integrator_Model_Api
      */
     protected function _cancelOrder($orderId)
     {
+
+
         /** @var Modago_Integrator_Helper_Api $helper */
         $helper = Mage::helper('modagointegrator/api');
 
-        $ordersCollection = Mage::getModel("sales/order")->getCollection();
-        $ordersCollection->addFieldToFilter("modago_order_id", $orderId);
-        $modagoOrder = $ordersCollection->getFirstItem();
-        if (!$modagoOrder->getId()) {
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+
+        if ($collection->getSize() <= 0) {
             $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return true;
+        }
+
+        $canceled = array();
+        $errors = array();
+
+        foreach ($collection as $collectionItem) {
+            if ($collectionItem->getState() == Mage_Sales_Model_Order::STATE_CANCELED)
+                continue;
+
+            try {
+                $order = Mage::getModel('sales/order');
+                $order->load($collectionItem->getId());
+
+                if ($order->canCancel()) {
+                    $order->cancel();
+                    $order->setStatus('canceled');
+                    $order->save();
+
+                    array_push($canceled, 1);
+                } else {
+                    //ERROR
+                    $msg = $this->cantBeCanceledReason($order);
+
+                    array_push($errors, $helper->__("Error: order %s can not be canceled.", $orderId) . $msg);
+                    array_push($canceled, 0);
+                }
+
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $helper->log('Error: ' . $e->getMessage());
+            }
+        }
+
+        if (!in_array(0, $canceled)) {
+            $helper->log($helper->__("Success: order (%s) was  canceled.", $orderId));
+            return true;
+        } else {
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $helper->log($error);
+                }
+            }
             return false;
         }
-
-        try {
-            $order = Mage::getModel('sales/order');
-            $order->load($modagoOrder->getId());
-            if ($order->canCancel()) {
-                $order->cancel();
-                $order->setStatus('canceled');
-                $order->save();
-                $helper->log($helper->__("Success: order (%s) was  canceled.", $orderId));
-                return true;
-            } else {
-                //ERROR
-                $msg = $this->cantBeCanceledReason($order);
-                $helper->log($helper->__("Error: order %s can not be canceled. %s", $orderId, $msg));
-
-                return false;
-            }
-        } catch (Exception $e) {
-            Mage::logException($e);
-            $helper->log('Error: ' . $e->getMessage());
-        }
-        return false;
     }
+
 
     /**
      * @param $order
@@ -210,11 +234,12 @@ class Modago_Integrator_Model_Api
         /** @var Modago_Integrator_Helper_Api $helper */
         $helper = Mage::helper('modagointegrator');
 
+        $orderIncrementId = $order->getData("increment_id");
         $state = $order->getState();
 
         //1. Is payment is review
         if ($state === Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW)
-            return $helper->__("Payment has review status");
+            return $helper->__("%s Payment has review status", $orderIncrementId);
 
 
         //2. Items invoiced
@@ -226,12 +251,16 @@ class Modago_Integrator_Model_Api
             }
         }
         if ($allInvoiced)
-            return $helper->__("All order items are invoiced");
+            return $helper->__("%s All order items are invoiced", $orderIncrementId);
 
 
         //3. State: canceled, completed or closed
-        if ($order->isCanceled() || $state === Mage_Sales_Model_Order::STATE_COMPLETE || $state === Mage_Sales_Model_Order::STATE_CLOSED)
-            return $helper->__("Order have status {$state}");
+        if (
+            $state === Mage_Sales_Model_Order::STATE_COMPLETE
+            || $state === Mage_Sales_Model_Order::STATE_CLOSED
+        ) {
+            return $helper->__(" %s Order have status %s ", $orderIncrementId, $state);
+        }
 
     }
 

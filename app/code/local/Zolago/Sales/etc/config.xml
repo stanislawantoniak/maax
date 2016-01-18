@@ -10,6 +10,12 @@
       <zolagosales>
         <class>Zolago_Sales_Block</class>
       </zolagosales>
+      <sales>
+          <rewrite>
+              <adminhtml_customer_edit_tab_recurring_profile>Zolago_Sales_Block_Adminhtml_Customer_Edit_Tab_Recurring_Profile</adminhtml_customer_edit_tab_recurring_profile>
+              <adminhtml_customer_edit_tab_agreement>Zolago_Sales_Block_Adminhtml_Customer_Edit_Tab_Agreement</adminhtml_customer_edit_tab_agreement>              
+          </rewrite>
+      </sales>
     </blocks>
     <models>
       <sales>

@@ -41,18 +41,18 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Cus
             'url'   => $this->getUrl('*/customer_beacon/data', array('_current' => true)),
             'class' => 'ajax',
         ));
-        $this->addTab('tab_customer_offline_data', array(
-            'label' => Mage::helper('zolagoadminhtml')->__('Offline client identification'),
-            'title' => Mage::helper('zolagoadminhtml')->__('Offline client identification'),
-            'content'   => $this->getLayout()->createBlock('zolagoadminhtml/customer_edit_tab_offline')->initForm()->toHtml(),
-            'active'    => Mage::registry('current_customer')->getId() ? false : true
-        ));
 		$this->addTab('tab_customer_coupons', array(
 			'label' => Mage::helper('zolagoadminhtml')->__('Customer coupons'),
 			'title' => Mage::helper('zolagoadminhtml')->__('Customer coupons'),
 			'url'   => $this->getUrl('*/customer_coupon/index', array('_current' => true)),
 			'class' => 'ajax',
 		));
+        $this->addTab('tab_customer_offline_data', array(
+            'label' => Mage::helper('zolagoadminhtml')->__('Offline client identification'),
+            'title' => Mage::helper('zolagoadminhtml')->__('Offline client identification'),
+            'content'   => $this->getLayout()->createBlock('zolagoadminhtml/customer_edit_tab_offline')->initForm()->toHtml(),
+            'active'    => Mage::registry('current_customer')->getId() ? false : true
+        ));
         $this->_updateActiveTab();
         Mage_Adminhtml_Block_Widget_Tabs::_beforeToHtml();
         return $this;

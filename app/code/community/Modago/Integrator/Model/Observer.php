@@ -20,6 +20,7 @@ class Modago_Integrator_Model_Observer {
              $shipment = $observer->getEvent()->getShipment();
              $order = $shipment->getOrder();
              $orderId = $order->getData('modago_order_id');
+             $incrementId = $order->getData('increment_id');
              if ($orderId) {
                  $client = Mage::getModel('modagointegrator/soap_client');
                  $key = $helperApi->getKey($client);                
@@ -29,12 +30,12 @@ class Modago_Integrator_Model_Observer {
                      if (!empty($ret->list) && !empty($ret->list->message)) {
                          $foreachMsgData = $ret->list->message;
                          Mage::getModel('modagointegrator/api')->processOrders($foreachMsgData);
-                         $message = Mage::helper('modagointegrator')->__('Error: Order %s was changed', $orderId);
+                         $message = Mage::helper('modagointegrator')->__('Error: Order %s (%s) was changed',$incrementId, $orderId);
                          $helperApi->log($message);
                          Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
                      }
                  } else {
-					$message = $helper->__('Error: Cannot check order %s status', $orderId);
+					$message = $helperApi->__('Error: Cannot check order %s (%s) status',$incrementId, $orderId);
                     $helperApi->log($message);
 				 }
              }
@@ -117,9 +118,6 @@ class Modago_Integrator_Model_Observer {
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
-							<depends>
-								<enabled>1</enabled>
-							</depends>
 						</carrier_' . $carrierCode . '>');
 			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
 			$adminApiFields = $config->getNode('sections/modagointegrator/groups/orders/fields');
