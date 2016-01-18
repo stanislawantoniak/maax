@@ -16,10 +16,9 @@ class GH_MageMonkey_Helper_Data extends Ebizmarts_MageMonkey_Helper_Data {
      */
     public function _subscribe($listId, $email, $mergeVars, $isConfirmNeed, $db)
     {
-        Mage::log("GH_MageMonkey_Helper_Data", null, "GH_MageMonkey_Helper_Data.log");
         if ($db) {
             if ($isConfirmNeed) {
-                Mage::getSingleton('core/session')->addSuccess(Mage::helper('monkey')->__('Confirmation request will be sent soon.[GH_MageMonkey_Helper_Data]'));
+                //Mage::getSingleton('core/session')->addSuccess(Mage::helper('monkey')->__('Confirmation request will be sent soon.[GH_MageMonkey_Helper_Data]'));
             }
             $subs = Mage::getModel('monkey/asyncsubscribers');
             $subs->setMapfields(serialize($mergeVars))
@@ -31,7 +30,7 @@ class GH_MageMonkey_Helper_Data extends Ebizmarts_MageMonkey_Helper_Data {
                 ->save();
         } else {
             if ($isConfirmNeed) {
-                Mage::getSingleton('core/session')->addSuccess(Mage::helper('monkey')->__('Confirmation request has been sent.'));
+                //Mage::getSingleton('core/session')->addSuccess(Mage::helper('monkey')->__('Confirmation request has been sent.'));
             }
             Mage::getSingleton('monkey/api')->listSubscribe($listId, $email, $mergeVars, 'html', $isConfirmNeed, TRUE);
         }
