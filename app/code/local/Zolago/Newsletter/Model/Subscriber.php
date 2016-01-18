@@ -252,12 +252,14 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationRequestEmail($sid=null)
 	{
+		Mage::log("Zolago_Newsletter_Model_Subscriber", null, "Mage_Newsletter_Model_Subscriber.log");
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE),
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY)
 		);
 	}
+
 
 
 	protected function _sendNewsletterEmail($sid=null,$template,$sender,$couponData=null) {
