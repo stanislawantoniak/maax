@@ -175,13 +175,16 @@ class Modago_Integrator_Model_Order {
 		/** @var Mage_Sales_Model_Service_Quote $service */
 		$service = Mage::getModel('sales/service_quote', $quote);
 		$service->submitAll();
-		$increment_id = $service->getOrder()->getRealOrderId();
+
+		$order = $service->getOrder();
+		$increment_id = $order->getRealOrderId();
+
+		$order->setModagoOrderId($this->_modagoOrderId)->save();
 
 		// Resource Clean-Up
-		$quote = $service = null;
+		$quote = $service = $order = null;
 
 		// Finished
-		Mage::log($increment_id,null,'increment_id.log');
 		return $increment_id;
 
 	}
@@ -191,6 +194,11 @@ class Modago_Integrator_Model_Order {
 		foreach($apiOrder->order_items->item as $apiProduct) {
 			if($apiProduct->is_delivery_item == 1) {
 				//shipping cost
+				//clear any keys that may exist:
+				Mage::unregister(Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_COST_REGISTRY_KEY);
+				Mage::unregister(Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_ACTIVE_REGISTRY_KEY);
+
+				//register new ones
 				Mage::register(Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_COST_REGISTRY_KEY,$apiProduct->item_value_after_discount);
 				Mage::register(Modago_Integrator_Model_Shipping_Zolagoshipment::SHIPPING_ACTIVE_REGISTRY_KEY,true);
 				continue;
