@@ -1477,6 +1477,7 @@
   <!-- ################################################################### -->
   <sales_po_newrma>
     <label>Customer My Account Order RMA View</label>
+    <update handle="checkout_updater"/>
     <reference name="head">
       <action method="addItem">
         <type>skin_js</type>
