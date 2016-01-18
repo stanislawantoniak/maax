@@ -22,7 +22,7 @@ $installer->addAttribute('catalog_product', 'ean', array(
 	'default' => '',
 	'unique' => 0,
 	'note' => null,
-	'global' => 1,
+	'global' => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
 	'group' => 'General',
 
 	'is_visible' => 0,
