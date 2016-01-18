@@ -5,6 +5,7 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
     public function invitationAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
+        Mage::log("invitationAction", null, "Zolago_Newsletter_SubscriberController.log");
         $error = $this->confirm(
             $_helper->__('Invalid newsletter invitation code.'),
             $_helper->__('Invalid subscription ID.')
@@ -18,6 +19,7 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
     public function confirmAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
+        Mage::log("confirmAction", null, "Zolago_Newsletter_SubscriberController.log");
         $error = $this->confirm(
             $this->__('Invalid subscription confirmation code.'),
             $_helper->__('Invalid subscription ID.')
