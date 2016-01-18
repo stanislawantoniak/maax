@@ -1,4 +1,7 @@
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var Zolago_Modago_Block_Solrsearch_Faces_Enum_Droplist $this */
+$key = $this->getFacetKey();
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
