@@ -38,4 +38,17 @@ class GH_MageMonkey_Model_Subscriber extends Ebizmarts_MageMonkey_Model_Subscrib
 //        }
         return parent::sendConfirmationSuccessEmail();
     }
+
+    public function confirm($code)
+    {
+        Mage::log("confirm STEP2.1 GH", null, "Zolago_Newsletter_SubscriberController.log");
+        if($this->getCode()==$code) {
+            $this->setStatus(self::STATUS_SUBSCRIBED)
+                ->setIsStatusChanged(true)
+                ->save();
+            return true;
+        }
+
+        return false;
+    }
 }
