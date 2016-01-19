@@ -17,6 +17,7 @@
             <monkey>
                 <rewrite>
                     <subscriber>GH_MageMonkey_Model_Subscriber</subscriber>
+                    <observer>GH_MageMonkey_Model_Observer</observer>
                 </rewrite>
             </monkey>
         </models>
