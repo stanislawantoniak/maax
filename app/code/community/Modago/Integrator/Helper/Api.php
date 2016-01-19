@@ -127,6 +127,41 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     }
 
 	/**
+	 * Test connection to API
+	 *
+	 * @param $vendorId
+	 * @param $password
+	 * @param $apiKey
+	 * @return array ( status => bool, msg => 'message for error' )
+	 */
+	public function testConnection($vendorId, $password, $apiKey) {
+		/** @var Modago_Integrator_Model_Soap_Client $client */
+		$client = Mage::getModel('modagointegrator/soap_client');
+		$ret = $client->doLogin($vendorId, $password, $apiKey);
+		if (!isset($ret->status)) {
+			$data = array(
+				'status' => false,
+				'msg'    => $this->__("No response from API server")
+			);
+		} else {
+			if ($ret->status) {
+				$msg = '';
+			} else {
+				// Possible problems
+				// error_password_invalid
+				// error_webapikey_invalid
+				// error_vendor_inactive
+				$msg = $this->__($ret->message);
+			}
+			$data = array(
+				'status' => $ret->status,
+				'msg'    => $msg
+			);
+		}
+		return $data;
+	}
+
+	/**
 	 * Get mapped Modago carrier name
 	 *
 	 * @param string $carrierCode
