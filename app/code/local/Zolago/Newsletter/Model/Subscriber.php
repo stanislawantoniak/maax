@@ -264,6 +264,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 
 
 	protected function _sendNewsletterEmail($sid=null,$template,$sender,$couponData=null) {
+		Mage::log("Zolago_Newsletter _sendNewsletterEmail", null, "Mage_Newsletter_Model_Subscriber.log");
 		if ($this->getImportMode() || !$template || !$sender) {
 			return $this;
 		}
