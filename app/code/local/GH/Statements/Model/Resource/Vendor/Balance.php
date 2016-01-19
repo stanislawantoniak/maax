@@ -101,14 +101,17 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         //Mage::log($balanceDue, null, "TEST_SALDO_BALANCEDUE.log");
         $data = $this->collectDataBeforeBalanceUpdate($balanceDue, "balance_due", $data, $closedBalanceMonths);
 
-        // IV. Insert (update) balance table
-        //Mage::log($data, null, "TEST_SALDO_BALANCE.log");
+
         if (empty($data)) {
             //Nothing to update
+            // 5.2. Cumulative balance
             $this->recalculateBalanceCumulative();
+            //Delete empty lines for not active vendors
+            $this->removeInactiveVendorEmptyLines();
             return;
         }
 
+        // IV. Insert (update) balance table
         $toUpdate = array();
         foreach ($data as $vendorId => $dataItem) {
             foreach ($dataItem as $month => $dataMonthItem) {
@@ -134,16 +137,17 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
                     $this->updateBalanceMonthLine($dataLine);
                 }
             }
-            //Mage::log($toUpdate, null, "TEST_SALDO_RESULT.log");
         }
 
 
         // V. Calculate balances
         // 5. Balance
         // 5.1. Monthly balance (updates in GH_Statements_Model_Vendor_Balance::_beforeSave)
-        // 5.2. Cumulative balance (updates in GH_Statements_Model_Vendor_Balance::_afterSave)
 
+        // 5.2. Cumulative balance
         $this->recalculateBalanceCumulative();
+        //Delete empty lines for not active vendors
+        $this->removeInactiveVendorEmptyLines();
 
     }
 
@@ -439,7 +443,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $activeVendorsToRecalculateBalance = array();
         $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
         $vendorsCollection->addFieldToFilter("vendor_id", array("in", $vendorsToRecalculateBalance));
-        $vendorsCollection->addFieldToFilter("status", array("in" => array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE,Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE)));
+        $vendorsCollection->addFieldToFilter("status", array("in" => array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE, Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE)));
 
         foreach ($vendorsCollection as $vendorsCollectionItem) {
             $activeVendorsToRecalculateBalance[] = $vendorsCollectionItem->getVendorId();
@@ -514,6 +518,46 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
     }
 
 
+    /**
+     * Delete empty lines for not active vendors
+     *
+     * @throws Exception
+     */
+    public function removeInactiveVendorEmptyLines()
+    {
 
+        //fetch not active vendors
+        $notActiveVendors = array();
+        $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+        $vendorsCollection->addFieldToFilter("status", array("neq" => array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE)));
+
+        if ($vendorsCollection->getSize() == 0)
+            return;
+
+        foreach ($vendorsCollection as $vendorsCollectionItem) {
+            $notActiveVendors[] = $vendorsCollectionItem->getVendorId();
+        }
+        //--fetch not active vendors
+
+
+        $balances = Mage::getModel("ghstatements/vendor_balance")
+            ->getCollection()
+            ->addFieldToFilter("status", GH_Statements_Model_Vendor_Balance::GH_VENDOR_BALANCE_STATUS_OPENED)
+            ->addFieldToFilter("payment_from_client", "0.0000")
+            ->addFieldToFilter("payment_return_to_client", "0.0000")
+            ->addFieldToFilter("vendor_payment_cost", "0.0000")
+            ->addFieldToFilter("vendor_invoice_cost", "0.0000")
+            ->addFieldToFilter("balance_per_month", "0.0000")
+            ->addFieldToFilter("balance_cumulative", "0.0000")
+            ->addFieldToFilter("balance_due", "0.0000")
+            ->addFieldToFilter("vendor_id", array("in" => $notActiveVendors));
+
+        if ($balances->getSize() == 0)
+            return;
+
+        foreach ($balances as $balance) {
+            $balance->delete();
+        }
+    }
 
 }
