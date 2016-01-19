@@ -2402,6 +2402,12 @@ Mall.listing = {
 	},
 	getProductsPerPage: function() {
 		return this._products_per_page;
+	},
+
+	positionBenefits: function() {
+		if(!jQuery(".box_listing_product").length) {
+			jQuery('footer').prepend(jQuery('.benefits'));
+		}
 	}
 
 };
@@ -2428,4 +2434,6 @@ jQuery(document).ready(function () {
     } else {
         Mall.listing.initShuffle();
     }
+
+	Mall.listing.positionBenefits();
 });
