@@ -46,7 +46,7 @@ $_hlp = Mage::helper("zolagocustomer");
 			form.submit(function () {
 				if(form.valid()) {
 					spinner.addClass(spinnerClasses).css('pointer-events','none');
-					jQuery.post('<?php echo $this->getUrl('newsletter/manage/ajaxSave'); ?>', form.serialize())
+					jQuery.post('<?php echo $this->getUrl('newsletter/manage/ajaxSave', array('_secure'=>false)); ?>', form.serialize())
 						.done(function(data) {
 							spinner.removeClass(spinnerClasses).css('pointer-events','auto');
 							if(data.popup) {
