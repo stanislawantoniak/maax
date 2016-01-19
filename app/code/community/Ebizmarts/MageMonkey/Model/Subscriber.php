@@ -20,6 +20,7 @@ class Ebizmarts_MageMonkey_Model_Subscriber extends Mage_Newsletter_Model_Subscr
 
     public function sendConfirmationRequestEmail()
     {
+        Mage::log("Ebizmarts_MageMonkey_Model_Subscriber", null, "GH_MageMonkey_Model_Subscriber.log");
         $store = Mage::helper('monkey')->getThisStore();
         if (Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_ACTIVE, $store) == 1 && !Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $store)) {
             return $this;
