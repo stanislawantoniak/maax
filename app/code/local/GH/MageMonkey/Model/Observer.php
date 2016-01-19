@@ -1,6 +1,10 @@
 <?php
 
-class GH_MageMonkey_Model_Observer extends Ebizmarts_MageMonkey_Model_Observer {
+/**
+ * Class GH_MageMonkey_Model_Observer
+ */
+class GH_MageMonkey_Model_Observer extends Ebizmarts_MageMonkey_Model_Observer
+{
     /**
      * Handle Subscriber object saving process
      *
@@ -21,7 +25,7 @@ class GH_MageMonkey_Model_Observer extends Ebizmarts_MageMonkey_Model_Observer {
 
         $defaultList = Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_LIST, $subscriber->getStoreId());
 
-        if($subscriber->getOrigData('subscriber_status') != 3 && $subscriber->getData('subscriber_status') == 3){
+        if ($subscriber->getOrigData('subscriber_status') != 3 && $subscriber->getData('subscriber_status') == 3) {
             Mage::getSingleton('monkey/api', array('store' => $subscriber->getStoreId()))->listUnsubscribe($defaultList, $subscriber->getSubscriberEmail());
         }
 
@@ -30,18 +34,17 @@ class GH_MageMonkey_Model_Observer extends Ebizmarts_MageMonkey_Model_Observer {
             return $observer;
         }
 
-        if(
+        if (
             (Mage::getSingleton('core/session')->getIsOneStepCheckout() || Mage::getSingleton('core/session')->getMonkeyCheckout())
             && !Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CHECKOUT_SUBSCRIBE, $subscriber->getStoreId())
-        )
-        {
+        ) {
             return $observer;
         }
-        if(
+        if (
             Mage::getStoreConfig(Mage_Newsletter_Model_Subscriber::XML_PATH_CONFIRMATION_FLAG, $subscriber->getStoreId())
             //&& Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $subscriber->getStoreId())
             && !Mage::getSingleton('customer/session')->isLoggedIn() && Mage::app()->getRequest()->getActionName() != 'createpost'
-        ){
+        ) {
 
             return $observer;
         }
