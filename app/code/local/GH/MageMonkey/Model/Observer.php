@@ -44,7 +44,11 @@ class GH_MageMonkey_Model_Observer extends Ebizmarts_MageMonkey_Model_Observer {
             Mage::log("GH_MageMonkey_Model_Observer 10",null,"handleSubscriber.log");
             return $observer;
         }
-        if(Mage::getStoreConfig(Mage_Newsletter_Model_Subscriber::XML_PATH_CONFIRMATION_FLAG, $subscriber->getStoreId()) && Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $subscriber->getStoreId()) && !Mage::getSingleton('customer/session')->isLoggedIn() && Mage::app()->getRequest()->getActionName() != 'createpost'){
+        if(
+            Mage::getStoreConfig(Mage_Newsletter_Model_Subscriber::XML_PATH_CONFIRMATION_FLAG, $subscriber->getStoreId())
+            //&& Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $subscriber->getStoreId())
+            && !Mage::getSingleton('customer/session')->isLoggedIn() && Mage::app()->getRequest()->getActionName() != 'createpost'
+        ){
             Mage::log("GH_MageMonkey_Model_Observer 11",null,"handleSubscriber.log");
             return $observer;
         }
