@@ -3,7 +3,8 @@
 /**
  * Class GH_MageMonkey_Model_Subscriber
  */
-class GH_MageMonkey_Model_Subscriber extends Ebizmarts_MageMonkey_Model_Subscriber {
+class GH_MageMonkey_Model_Subscriber extends Ebizmarts_MageMonkey_Model_Subscriber
+{
     public function sendUnsubscriptionEmail()
     {
 //        $store = Mage::helper('monkey')->getThisStore();
