@@ -14,6 +14,11 @@
             <gh_magemonkey_resource>
                 <class>GH_MageMonkey_Model_Resource</class>
             </gh_magemonkey_resource>
+            <monkey>
+                <rewrite>
+                    <subscriber>GH_MageMonkey_Model_Subscriber</subscriber>
+                </rewrite>
+            </monkey>
         </models>
         <blocks>
             <gh_magemonkey>
