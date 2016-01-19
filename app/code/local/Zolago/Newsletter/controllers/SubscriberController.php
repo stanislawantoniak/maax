@@ -5,7 +5,6 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
     public function invitationAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
-        Mage::log("invitationAction", null, "Zolago_Newsletter_SubscriberController.log");
         $error = $this->confirm(
             $_helper->__('Invalid newsletter invitation code.'),
             $_helper->__('Invalid subscription ID.')
@@ -19,7 +18,6 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
     public function confirmAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
-        Mage::log("confirmAction", null, "Zolago_Newsletter_SubscriberController.log");
         $error = $this->confirm(
             $this->__('Invalid subscription confirmation code.'),
             $_helper->__('Invalid subscription ID.')
@@ -32,20 +30,15 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
         $id    = (int) $this->getRequest()->getParam('id');
         $code  = (string) $this->getRequest()->getParam('code');
         $errors = true;
-        Mage::log("confirm STEP0", null, "Zolago_Newsletter_SubscriberController.log");
         if ($id && $code) {
-            Mage::log("confirm STEP1", null, "Zolago_Newsletter_SubscriberController.log");
             $subscriber = Mage::getModel('newsletter/subscriber')->load($id);
             $session = Mage::getSingleton('core/session');
             if($subscriber->getId() && $subscriber->getCode()) {
-                Mage::log("confirm STEP2", null, "Zolago_Newsletter_SubscriberController.log");
                 if($subscriber->confirm($code)) {
-                    Mage::log("confirm STEP3", null, "Zolago_Newsletter_SubscriberController.log");
                     $errors = false;
                     /** @var Zolago_Newsletter_Model_Subscriber $model */
                     $model = Mage::getModel("zolagonewsletter/subscriber");
                     try {
-                        Mage::log("confirm STEP4", null, "Zolago_Newsletter_SubscriberController.log");
                         $model->sendConfirmationSuccessEmail($id);
                     } catch(Exception $e) {
                         $errors = true;

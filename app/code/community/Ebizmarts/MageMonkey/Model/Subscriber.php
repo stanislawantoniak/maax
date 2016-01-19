@@ -20,7 +20,6 @@ class Ebizmarts_MageMonkey_Model_Subscriber extends Mage_Newsletter_Model_Subscr
 
     public function sendConfirmationRequestEmail()
     {
-        Mage::log("Ebizmarts_MageMonkey_Model_Subscriber", null, "Mage_Newsletter_Model_Subscriber.log");
         $store = Mage::helper('monkey')->getThisStore();
         if (Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_ACTIVE, $store) == 1 && !Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $store)) {
             return $this;
@@ -31,7 +30,6 @@ class Ebizmarts_MageMonkey_Model_Subscriber extends Mage_Newsletter_Model_Subscr
 
     public function sendConfirmationSuccessEmail()
     {
-        Mage::log("MageMonkey", null, "sendConfirmationSuccessEmail.log");
         $store = Mage::helper('monkey')->getThisStore();
         if (Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_ACTIVE, $store) == 1 && !Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $store)) {
             return $this;
@@ -42,7 +40,6 @@ class Ebizmarts_MageMonkey_Model_Subscriber extends Mage_Newsletter_Model_Subscr
 
     public function confirm($code)
     {
-        Mage::log("confirm STEP2.1 MAGEMONKEY", null, "Zolago_Newsletter_SubscriberController.log");
         $store = Mage::helper('monkey')->getThisStore();
         if (Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_ACTIVE, $store) && Mage::getStoreConfig(Mage_Newsletter_Model_Subscriber::XML_PATH_CONFIRMATION_FLAG, $this->getStoreId()) && Mage::getStoreConfig(Ebizmarts_MageMonkey_Model_Config::GENERAL_CONFIRMATION_EMAIL, $this->getStoreId())){
             Mage::helper('monkey')->listsSubscription($this, 0);
