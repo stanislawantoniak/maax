@@ -499,6 +499,7 @@ class Mage_Newsletter_Model_Subscriber extends Mage_Core_Model_Abstract
      */
     public function sendConfirmationRequestEmail()
     {
+        Mage::log("Mage_Newsletter_Model_Subscriber", null, "GH_MageMonkey_Model_Subscriber.log");
         if ($this->getImportMode()) {
             return $this;
         }
