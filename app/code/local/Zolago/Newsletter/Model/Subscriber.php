@@ -268,7 +268,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		if ($this->getImportMode() || !$template || !$sender) {
 			return $this;
 		}
-
+		Mage::log("Zolago_Newsletter _sendNewsletterEmail SID {$sid}", null, "Mage_Newsletter_Model_Subscriber.log");
 		if(!is_null($sid)) {
 			$model = Mage::getModel("newsletter/subscriber");
 			$subscriber = $model->load($sid);
@@ -288,7 +288,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 			'subscriber' => $subscriber,
 			'use_attachments' => true
 		);
-
+		Mage::log("Zolago_Newsletter _sendNewsletterEmail CUSTOMER ID " .$subscriber->getCustomerId(), null, "Mage_Newsletter_Model_Subscriber.log");
 		if(is_array($couponData)) {
 			$data['use_coupon'] = true;
 			$data['coupon'] = $couponData['coupon'];
