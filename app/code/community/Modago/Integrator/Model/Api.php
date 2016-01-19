@@ -9,7 +9,42 @@ class Modago_Integrator_Model_Api
 
     protected $_soap;
     protected $_key;
+    protected $_connection;
 
+
+    /**
+     * get database connection for transactions
+     *
+     * @return
+     */
+    protected function _getConnection() {
+        if (!$this->_connection) {
+            $this->_connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        }
+        Mage::log(get_class($this->_connection));
+        return $this->_connection;
+    }
+    /**
+     * start mysql transaction
+     */
+    public function beginTransaction() {
+        $this->_getConnection()->beginTransaction();
+    }
+
+    /**
+     * commit transaction
+     */
+    public function commit() {
+        $this->_getConnection()->commit();
+    }
+
+    /**
+     * rollback transaction
+     */
+    public function rollback() {
+        $this->_getConnection()->rollback();
+
+    }
     /**
      * @return Modago_Integrator_Helper_Api
      */
@@ -257,7 +292,7 @@ class Modago_Integrator_Model_Api
         //3. State: canceled, completed or closed
         if (
             $state === Mage_Sales_Model_Order::STATE_COMPLETE
-            || $state === Mage_Sales_Model_Order::STATE_CLOSED
+                       || $state === Mage_Sales_Model_Order::STATE_CLOSED
         ) {
             return $helper->__(" %s Order have status %s ", $orderIncrementId, $state);
         }
@@ -294,6 +329,21 @@ class Modago_Integrator_Model_Api
                     $confirmMessages[] = $item->messageID;
                 }
                 break;
+            case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_ITEMS_CHANGED:
+                try {
+                    $this->beginTransaction();
+                    $cancel = $this->_cancelOrder($item->orderID);
+                    $newOrder = $this->_createNewOrder($item->orderID);
+                    if ($cancel && $newOrder) {
+                        $confirmMessages[] = $item->messageID;
+                        $this->commit();
+                    } else {
+                        $this->rollback();
+                    }
+                } catch (Exception $xt) {
+                    $this->rollback();
+                    throw $xt;
+                }
             default:
                 $confirmMessages[] = $item->messageID;
                 // ignore item
