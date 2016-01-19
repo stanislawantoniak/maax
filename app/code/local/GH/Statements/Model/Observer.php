@@ -523,6 +523,7 @@ class GH_Statements_Model_Observer
 					    'title'             => $orderTrack->getTitle(),
 					    'customer_id'       => $po->getCustomerId(),
 					    'sales_track_id'    => $orderTrack->getEntityId(),
+					    'rma_track_id'		=> null,
                         'shipping_source_account' => $orderTrack->getShippingSourceAccount(),
 				    );
 
@@ -590,6 +591,7 @@ class GH_Statements_Model_Observer
 							'track_type'        => $rmaTrack->getTrackType(),
 							'title'             => $rmaTrack->getTitle(),
 							'customer_id'       => $po->getCustomerId(),
+							'sales_track_id'	=> null,
                             'rma_track_id'      => $rmaTrack->getEntityId(),
                             'shipping_source_account' => $rmaTrack->getShippingSourceAccount()
 						);
