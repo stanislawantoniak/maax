@@ -29,6 +29,11 @@
             <gh_magemonkey>
                 <class>GH_MageMonkey_Helper</class>
             </gh_magemonkey>
+            <monkey>
+                <rewrite>
+                    <data>GH_MageMonkey_Helper_Data</data>
+                </rewrite>
+            </monkey>
         </helpers>
     </global>
 </config>
