@@ -105,6 +105,7 @@
 						<connection_tester translate="label">
 							<label>Test connection to API</label>
 							<frontend_model>modagointegrator/adminhtml_modagoapi_connectiontester</frontend_model>
+							<comment>This button tests the connection to Modago API for saved settings</comment>
 							<sort_order>55</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>

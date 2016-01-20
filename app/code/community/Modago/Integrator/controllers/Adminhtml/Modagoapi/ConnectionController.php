@@ -10,16 +10,15 @@ class Modago_Integrator_Adminhtml_Modagoapi_ConnectionController extends Mage_Ad
 		/** @var Modago_Integrator_Helper_Api $helper */
 		$helper = Mage::helper('modagointegrator/api');
 
-		$req = $this->getRequest();
-		$login = $req->getParam('login');
-		$apiKey = $req->getParam('api_key');
-		$password = $req->getParam('password');
+		$login = $helper->getLogin();
+		$apiKey = $helper->getApiKey();
+		$password = $helper->getPassword();
 
 		$data = $helper->testConnection($login, $password, $apiKey);
 		if ($data['status']) {
-			echo $helper->__("Success: connection established");
+			echo $helper->__("Connection established");
 		} else {
-			echo $helper->__("Fail: connection not established (%s)", $data['msg']);
+			echo $helper->__("Connection not established (%s)", $data['msg']);
 		}
 	}
 

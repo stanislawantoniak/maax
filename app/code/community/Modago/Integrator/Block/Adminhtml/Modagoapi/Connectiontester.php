@@ -48,11 +48,6 @@ class Modago_Integrator_Block_Adminhtml_Modagoapi_Connectiontester extends Mage_
 			},
 			test: function() {
 				new Ajax.Request(this.testUrl, {
-					parameters: {
-						login: document.getElementById(\'modagointegrator_orders_login\').value,
-						api_key: document.getElementById(\'modagointegrator_orders_api_key\').value,
-						password: document.getElementById(\'modagointegrator_orders_password\').value,
-					},
 					onComplete: function(response) {
 						alert(response.responseText);
 					}
