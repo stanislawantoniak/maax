@@ -14,13 +14,12 @@ class Modago_Integrator_Model_Api
     /**
      * get database connection for transactions
      *
-     * @return
+     * @return Magento_Db_Adapter_Pdo_Mysql
      */
     protected function _getConnection() {
         if (!$this->_connection) {
             $this->_connection = Mage::getSingleton('core/resource')->getConnection('core_write');
         }
-        Mage::log(get_class($this->_connection));
         return $this->_connection;
     }
     /**
