@@ -52,3 +52,6 @@
 "Keep logs for","Zachowuj logi przez"
 "Days","Dni"
 "Your carriers:","Twoi kurierzy"
+"error_password_invalid","niepoprawne hasło lub hasło niezdefiniowane w panelu sprzedawcy"
+"error_webapikey_invalid"," niepoprawny lub nieaktywny klucz API"
+"error_vendor_inactive","niepoprawna wartość identyfikatora sprzedawcy lub nieaktywny sprzedawca"
