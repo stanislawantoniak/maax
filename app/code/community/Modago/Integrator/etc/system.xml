@@ -118,7 +118,7 @@
 				</api_settings>
 				<orders translate="label" module="modagointegrator">
 					<expanded>1</expanded>
-					<label>Creating orders from Modago</label>
+					<label>New orders settings</label>
 					<comment><![CDATA[<strong>New orders from Modago will be placed using this configuration.</strong>]]></comment>
 					<sort_order>30</sort_order>
 					<show_in_default>1</show_in_default>
