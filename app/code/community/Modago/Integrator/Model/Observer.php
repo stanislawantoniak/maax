@@ -73,7 +73,7 @@ class Modago_Integrator_Model_Observer {
 					if (empty($ret->status)) { // no answer or error
 					    
 						if (!empty($ret->message)) {
-							$message = $helper->__('Error: sending track info to Modago API fail (%s)', $ret->message);
+							$message = $helper->__('Error: sending track info to Modago API fail (%s)', $helperApi->translate($ret->message));
 						} else {
     						$message = $helper->__('Error: no response from API server');
                         }
@@ -123,7 +123,7 @@ class Modago_Integrator_Model_Observer {
 							<show_in_store>0</show_in_store>
 						</carrier_' . $carrierCode . '>');
 			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
-			$adminApiFields = $config->getNode('sections/modagointegrator/groups/orders/fields');
+			$adminApiFields = $config->getNode('sections/modagointegrator/groups/carriers/fields');
 			$adminApiFields->appendChild($element);
 			$sortOrder++;
 		}
