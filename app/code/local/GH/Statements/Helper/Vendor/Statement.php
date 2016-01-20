@@ -434,7 +434,8 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
             $po  = $this->getPoById($refund->getPoId());
 
             $_id = 'refund_' . $refund->getId();
-            $value = -floatval($refund->getValue());
+	        $registeredValue = $this->formatQuota(-floatval($refund->getRegisteredValue()));
+            $value = $this->formatQuota(-floatval($refund->getValue()));
             $paymentMethod = $this->__(ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod())));
 
             $page3body[$_id] = array(
@@ -445,14 +446,12 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
                 date("Y-m-d", $cd->timestamp($refund->getDate())),   // [4] Operation date
                 //"",                                                // [ ] Order/RMA Realization time
                 $paymentMethod,                                      // [5] Payment method
-                $this->formatQuota($value),                          // [6] Sale value (PLN)
-                $rma->getPaymentChannelOwner() ? $value : 0          // [7] To pay (PLN)
+	            $registeredValue,                                    // [6] Sale value (PLN)
+	            $value                                               // [7] To pay (PLN)
             );
 
-            $page3data["footer"][6] += $value;
-            if ($rma->getPaymentChannelOwner()) {
-                $page3data["footer"][7] += $value;
-            }
+            $page3data["footer"][6] += $registeredValue;
+            $page3data["footer"][7] += $value;
         }
         return $this;
     }
