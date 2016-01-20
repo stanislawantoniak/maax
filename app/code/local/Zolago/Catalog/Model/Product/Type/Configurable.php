@@ -74,6 +74,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             
             ;
 
+        Mage::log($collection->getSelect()->__toString(), null, "111.log");
         foreach ($collection as $product) {
             $usedProducts[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
