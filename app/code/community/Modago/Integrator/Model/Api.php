@@ -6,7 +6,6 @@
 class Modago_Integrator_Model_Api
     extends Varien_Object {
 
-
     protected $_soap;
     protected $_key;
     protected $_connection;
@@ -75,6 +74,9 @@ class Modago_Integrator_Model_Api
         if (!$this->_key) {
             $client = $this->_getSoapClient();
             $this->_key = $this->_getHelper()->getKey($client);
+            if ($this->_key == -1) {
+                Mage::throwException(Mage::helper('modagointegrator')->__('Token error'));
+            }
         }
         return $this->_key;
 
@@ -95,15 +97,19 @@ class Modago_Integrator_Model_Api
         $client = $this->_getSoapClient();
         $ret = $client->setChangeOrderMessageConfirmation($key, $list);
         if (empty($ret->status)) { // no answer or error
-            $helper->log($helper->__('Error: no response from API server'));
-        } else {
-            if ($ret->message != 'ok') {
-                $helper->log($helper->__('Error: confirming messages field (%s) for list (%s)', $ret->message, implode(',', $list) ));
+            if (!empty($ret->message)) {
+                $message = $helper->__('Error: confirming messages field (%s) for list (%s)', $ret->message, implode(',', $list) );
             } else {
-                $helper->log($helper->__('Success: successfully confirmed list of messages (%s)', implode(',', $list) ));
+                $message = $helper->__('Error: wrong response from API server');
             }
+            $helper->log($message);
+            Mage::throwException($message);
+        } else {
+            $helper->log($helper->__('Success: successfully confirmed list of messages (%s)', implode(',', $list) ));
         }
     }
+
+
 
     /**
      * get list of changed orders
@@ -118,20 +124,22 @@ class Modago_Integrator_Model_Api
         $size = $this->_getHelper()->getBatchSize();
         $ret = $client->getChangeOrderMessage($key,$size,'');
         if (empty($ret->status)) { // no answer or error
-            $helper->log($helper->__('Error: no response from API server'));
-        } else {
-            if ($ret->message != 'ok') {
-                $helper->log($helper->__('Error: downloading list of changed orders fail (%s)', $ret->message));
+            if (!empty($ret->message)) {
+                $message = $helper->__('Error: downloading list of changed orders fail (%s)', $ret->message);
             } else {
-                if (empty($ret->list) || empty($ret->list->message)) {
-                    $helper->log($helper->__('Success: downloading list of changed orders return empty list'));
-                } else {
-                    $message = array();
-                    foreach ($ret->list->message as $item) {
-                        $message[] = $item->orderID;
-                    }
-                    $helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
+                $message = $helper->__('Error: wrong response from API server');
+            }
+            $helper->log($message);
+            Mage::throwException($message);
+        } else {
+            if (empty($ret->list) || empty($ret->list->message)) {
+                $helper->log($helper->__('Success: downloading list of changed orders return empty list'));
+            } else {
+                $message = array();
+                foreach ($ret->list->message as $item) {
+                    $message[] = $item->orderID;
                 }
+                $helper->log($helper->__('Success: downloading list of changed orders return list (%s)', implode(',', $message) ));
             }
         }
         return $ret;
@@ -145,16 +153,20 @@ class Modago_Integrator_Model_Api
         $ret = $client->getOrdersByID($key, $list);
 
         if (empty($ret->status)) { // no answer or error
-            $helper->log($helper->__('Error: no response from API server'));
-        } else {
-            if ($ret->message != 'ok') {
-                $helper->log($helper->__('Error: getting order %s failed (%s)', implode(',', $list), $ret->message));
+            if (!empty($ret->message)) {
+                $message = $helper->__('Error: getting order %s failed (%s)', implode(',', $list), $ret->message);
             } else {
-                if (empty($ret->orderList)) {
-                    $helper->log($helper->__('Error: no info about order %s', implode(',', $list)));
-                } else {
-                    $helper->log($helper->__('Success: getting info about order %s', implode(',', $list)));
-                }
+                $message = $helper->__('Error: wrong response from API server');
+            }
+            $helper->log($message);
+            Mage::throwException($message);
+        } else {
+            if (empty($ret->orderList)) {
+                $message = $helper->__('Error: no info about order %s', implode(',', $list));
+                $helper->log($message);
+                Mage::throwException($message);
+            } else {
+                $helper->log($helper->__('Success: getting info about order %s', implode(',', $list)));
             }
         }
         return $ret;
@@ -176,11 +188,11 @@ class Modago_Integrator_Model_Api
         if (empty($details->orderList)) {
             return false;
         }
+        $integratorOrders = Mage::getModel('modagointegrator/order');
         foreach ($details->orderList as $item) {
             try {
                 $item = current($item);
                 /** @var Modago_Integrator_Model_Order $integratorOrders */
-                $integratorOrders = Mage::getModel('modagointegrator/order');
                 $orderId = $integratorOrders->createOrder($item);
                 $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
             } catch (Exception $e) {
@@ -188,11 +200,46 @@ class Modago_Integrator_Model_Api
                 $helper->log($helper->__('Error: %s' , $e->getMessage()));
                 return false;
             }
+            try {
+                if ($problems = $integratorOrders->getProductProblemList()) {
+                    $message = sprintf('Products out of stocks (%s)',implode(',',$problems));
+                    $this->_setOrderReservation($item->order_id,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$message);
+                }
+            } catch (Exception $xt) {
+                Mage::logException($xt);
+                $helper->log($helper->__('Error: %s', $xt->getMessage()));
+                // no lock, only log                
+            }
         }
+
         return true;
     }
 
 
+    /**
+     * send order reservation message
+     *
+     * @param string $orderId
+     * @param string $status
+     * @param string $message
+     */
+    protected function _setOrderReservation($orderId,$status,$message) {
+        $helper = Mage::helper('modagointegrator');
+        $client = $this->_getSoapClient();
+        $key = $this->_getKey();
+        $ret = $client->setOrderReservation($key,$orderId,$status,$message) ;
+        if (empty($ret->status)) {
+            if (!empty($ret->message)) {
+                $message = $helper->__('set order reservation problem failed: %s (%s)', $ret->message,$orderId);
+            } else {
+                $message = $helper->__('wrong response from API server');
+            }
+            Mage::throwException($message);
+        } else {
+            $helper->log($helper->__('Success: set order reservation successfull (%s: status %s)',$orderId,$status));
+        }
+        return true;
+    }
 
     /**
      * cancel order
