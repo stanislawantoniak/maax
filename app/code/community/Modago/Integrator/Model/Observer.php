@@ -120,7 +120,7 @@ class Modago_Integrator_Model_Observer {
 							<show_in_store>0</show_in_store>
 						</carrier_' . $carrierCode . '>');
 			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
-			$adminApiFields = $config->getNode('sections/modagointegrator/groups/orders/fields');
+			$adminApiFields = $config->getNode('sections/modagointegrator/groups/carriers/fields');
 			$adminApiFields->appendChild($element);
 			$sortOrder++;
 		}

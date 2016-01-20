@@ -7,15 +7,15 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 {
 
 
-    const CONFIG_PATH             = 'modagointegrator/orders/';
-    const CONFIG_PATH_ENABLED     = 'modagointegrator/orders/enabled';
-    const CONFIG_PATH_LOGIN       = 'modagointegrator/orders/login';
-    const CONFIG_PATH_PASSWORD    = 'modagointegrator/orders/password';
-    const CONFIG_PATH_API_KEY     = 'modagointegrator/orders/api_key';
-    const CONFIG_PATH_BATCH_SIZE  = 'modagointegrator/orders/batch_size';
-    const CONFIG_PATH_API_URL     = 'modagointegrator/orders/api_url';
+    const CONFIG_PATH_CARRIERS    = 'modagointegrator/carriers/';
+    const CONFIG_PATH_ENABLED     = 'modagointegrator/api_settings/enabled';
+    const CONFIG_PATH_LOGIN       = 'modagointegrator/api_settings/login';
+    const CONFIG_PATH_PASSWORD    = 'modagointegrator/api_settings/password';
+    const CONFIG_PATH_API_KEY     = 'modagointegrator/api_settings/api_key';
+    const CONFIG_PATH_API_URL     = 'modagointegrator/api_settings/api_url';
+    const CONFIG_PATH_BATCH_SIZE  = 'modagointegrator/api_advanced_settings/batch_size';
+    const CONFIG_PATH_LOG_DAYS    = 'modagointegrator/api_advanced_settings/log_days';
     const CONFIG_PATH_STORE       = 'modagointegrator/orders/store';
-    const CONFIG_PATH_LOG_DAYS    = 'modagointegrator/orders/log_days';
     const CONFIG_PATH_MAPPED_COD  = 'modagointegrator/orders/mapped_cod';
 
     /**
@@ -169,7 +169,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	 */
 	public function getCarrier($carrierCode) {
 		$fieldName = 'carrier_' . $carrierCode;
-		$value = Mage::getStoreConfig(self::CONFIG_PATH . $fieldName);
+		$value = Mage::getStoreConfig(self::CONFIG_PATH_CARRIERS . $fieldName);
 		return $value;
 	}
 
