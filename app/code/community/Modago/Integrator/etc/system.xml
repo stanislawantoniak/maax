@@ -137,7 +137,7 @@
 							<validate>required-entry</validate>
 						</store>
 						<mapped_cod>
-							<label>Map "Cash on Delivery" to</label>
+							<label>Map 'Cash on Delivery' to</label>
 							<comment>This payment method is Cash on Delivery</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>modagointegrator/payment_source_payment</source_model>
