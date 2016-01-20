@@ -16,7 +16,7 @@
             </mypromotions>
         </routers>
 		<secure_url>
-			<ghmarketing>/mypromotions</ghmarketing>
+			<mypromotions>/mypromotions</mypromotions>
 		</secure_url>
         <translate>
             <modules>
