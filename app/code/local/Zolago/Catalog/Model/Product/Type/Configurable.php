@@ -45,6 +45,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             ->getAttribute('skuv');
         $attributeVendorSkuId = $attributeVendorSku->getAttributeId();
         $collection->getSelect()
+            ->columns('concat(e.entity_id,"_",link_table.parent_id) as unique_id')
             ->joinInner(
                 array("link_table" => 'catalog_product_super_link'),
                 "e.entity_id = link_table.product_id",
@@ -71,8 +72,8 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
             ->where("at_size.value IS NOT NULL")
             ->where("at_status.value <> ?",Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID)
-            
             ;
+        $collection->setRowIdFieldName('unique_id');
 
         foreach ($collection as $product) {
             $usedProducts[$product->getParentId()][$product->getId()] = array(
@@ -145,7 +146,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             ->where("at_status.value <> ?",Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID)
         ;
         $collection->setRowIdFieldName('unique_id');        
-//        Mage::log($collection->getSelect()->__toString(), null, "111.log");
+
         foreach ($collection as $product) {
             $sizePriceRelations[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
@@ -155,7 +156,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "price" => $product->getPrice() //Simple product price
             );
         }
-        Mage::log($sizePriceRelations);
+
         return $sizePriceRelations;
 
     }
