@@ -107,11 +107,10 @@ class Modago_Integrator_Model_Observer {
 			/** @var Mage_Shipping_Model_Carrier_Abstract $carrier */
 			$carrierCode = $carrier->getCarrierCode();
 			$carrierTitle = $carrier->getConfigData('title');
-			$label = $helper->__('Map %s to', $carrierTitle);
 			// Must by XML
 			$element = new Mage_Core_Model_Config_Element('
 						<carrier_' . $carrierCode . ' translate="label">
-							<label>' . $label . '</label>
+							<label>' . $carrierTitle . '</label>
 							<frontend_type>select</frontend_type>
 							<source_model>modagointegrator/shipping_source_modagocarrier</source_model>
 							<sort_order>' . $sortOrder . '</sort_order>
