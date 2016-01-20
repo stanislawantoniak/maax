@@ -299,6 +299,54 @@ class Modago_Integrator_Model_Api
 
     }
 
+    protected function _paymentOrder($orderId) {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state",array(
+            'nin'=>array(
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                Mage_Sales_Model_Order::STATE_CLOSED,
+                Mage_Sales_Model_Order::STATE_COMPLETE)
+        ));
+
+        if(!$collection->getSize()) {
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return false;
+        }
+
+        /** @var Mage_Sales_Model_Order $order */
+        $order = $collection->getFirstItem();
+        if($order->getId() && $order->getData('modago_order_id') == $orderId) {
+            //get order from api
+            $apiResponse = $this->_getOrdersById(array($orderId));
+            if(isset($apiResponse->orderList->order[0])) {
+                $apiOrder = $apiResponse->orderList->order[0];
+                $total = floatval($apiOrder->order_total);
+                $totalPaid = round(($total - floatval($apiOrder->order_due_amount)),2);
+
+                $order->setTotalPaid($totalPaid);
+                if($totalPaid >= $total) {
+                    $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+                } else {
+                    $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+                }
+                $order->save();
+
+                return true;
+            } else {
+                $helper->log($helper->__("Error: order %s not found.", $orderId));
+                return false;
+            }
+        } else {
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return false;
+        }
+        return false;
+    }
+
     /**
      * end process
      *
@@ -344,6 +392,12 @@ class Modago_Integrator_Model_Api
                     $this->rollback();
                     throw $xt;
                 }
+            case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_PAYMENT_DATA_CHANGED:
+                if($this->_paymentOrder($item->orderID)) {
+                    $confirmMessages[] = $item->messageID;
+                }
+                break;
+
             default:
                 $confirmMessages[] = $item->messageID;
                 // ignore item
@@ -385,5 +439,7 @@ class Modago_Integrator_Model_Api
             return $this->_finish($msg);
         }
     }
+
+
 
 }
