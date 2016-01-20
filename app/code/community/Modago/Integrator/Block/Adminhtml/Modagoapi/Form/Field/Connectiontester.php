@@ -1,6 +1,11 @@
 <?php
 
-class Modago_Integrator_Block_Adminhtml_Modagoapi_Connectiontester extends Mage_Adminhtml_Block_System_Config_Form_Field {
+/**
+ * Field with button for testing between Modago API
+ *
+ * Class Modago_Integrator_Block_Adminhtml_Modagoapi_Form_Field_Connectiontester
+ */
+class Modago_Integrator_Block_Adminhtml_Modagoapi_Form_Field_Connectiontester extends Mage_Adminhtml_Block_System_Config_Form_Field {
 
 	protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element) {
 		$html = $this->getButtonHtml();
