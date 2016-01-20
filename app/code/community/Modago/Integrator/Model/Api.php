@@ -193,6 +193,63 @@ class Modago_Integrator_Model_Api
     }
 
 
+    /**
+     * Change delivery address in the order
+     *
+     * @param $orderId
+     * @return bool
+     */
+    protected function _changeOrderDeliveryAddress($orderId)
+    {
+        $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
+        $localOrderId = $localOrder->getId();
+
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+        $details = $this->_getOrdersById(array($orderId));
+
+        if (empty($details->status)) { // error
+            return false;
+        }
+        if (empty($details->orderList)) {
+            return false;
+        }
+        $orderList = $details->orderList;
+        $orders = $orderList->order;
+
+        foreach ($orders as $item) {
+            $deliveryAddress = $item->delivery_data->delivery_address;
+
+            $orderAddress = Mage::getModel("sales/order_address")->load($localOrderId);
+            $orderAddressId = $orderAddress->getId();
+
+            if (is_null($orderAddressId)) {
+                $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $orderId, $item->order_id));
+                return false;
+            }
+            $orderAddress->setData("firstname", $deliveryAddress->delivery_first_name);
+            $orderAddress->setData("lastname", $deliveryAddress->delivery_last_name);
+
+            $orderAddress->setData("company", $deliveryAddress->delivery_company_name);
+
+            $orderAddress->setData("street", $deliveryAddress->delivery_street);
+            $orderAddress->setData("city", $deliveryAddress->delivery_city);
+            $orderAddress->setData("postcode", $deliveryAddress->delivery_zip_code);
+            $orderAddress->setData("country_id", $deliveryAddress->delivery_country);
+            $orderAddress->setData("telephone", $deliveryAddress->phone);
+
+            try {
+                $orderAddress->save();
+                $helper->log($helper->__('Success: Delivery address in the order %s (%s) was updated', $orderId, $item->order_id));
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $helper->log($helper->__('Error: %s', $e->getMessage()));
+                return false;
+            }
+
+        }
+        return true;
+    }
 
     /**
      * cancel order
@@ -299,6 +356,54 @@ class Modago_Integrator_Model_Api
 
     }
 
+    protected function _paymentOrder($orderId) {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state",array(
+            'nin'=>array(
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                Mage_Sales_Model_Order::STATE_CLOSED,
+                Mage_Sales_Model_Order::STATE_COMPLETE)
+        ));
+
+        if(!$collection->getSize()) {
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return false;
+        }
+
+        /** @var Mage_Sales_Model_Order $order */
+        $order = $collection->getFirstItem();
+        if($order->getId() && $order->getData('modago_order_id') == $orderId) {
+            //get order from api
+            $apiResponse = $this->_getOrdersById(array($orderId));
+            if(isset($apiResponse->orderList->order[0])) {
+                $apiOrder = $apiResponse->orderList->order[0];
+                $total = floatval($apiOrder->order_total);
+                $totalPaid = round(($total - floatval($apiOrder->order_due_amount)),2);
+
+                $order->setTotalPaid($totalPaid);
+                if($totalPaid >= $total) {
+                    $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+                } else {
+                    $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+                }
+                $order->save();
+
+                return true;
+            } else {
+                $helper->log($helper->__("Error: order %s not found.", $orderId));
+                return false;
+            }
+        } else {
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return false;
+        }
+        return false;
+    }
+
     /**
      * end process
      *
@@ -344,6 +449,19 @@ class Modago_Integrator_Model_Api
                     $this->rollback();
                     throw $xt;
                 }
+                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_DELIVERY_DATA_CHANGED:
+
+                    if ($this->_changeOrderDeliveryAddress($item->orderID)) {
+                        $confirmMessages[] = $item->messageID;
+                    }
+                    break;
+
+            case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_PAYMENT_DATA_CHANGED:
+                if($this->_paymentOrder($item->orderID)) {
+                    $confirmMessages[] = $item->messageID;
+                }
+                break;
+
             default:
                 $confirmMessages[] = $item->messageID;
                 // ignore item
@@ -385,5 +503,7 @@ class Modago_Integrator_Model_Api
             return $this->_finish($msg);
         }
     }
+
+
 
 }

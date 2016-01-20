@@ -176,8 +176,21 @@ class Modago_Integrator_Model_Order {
 		$service = Mage::getModel('sales/service_quote', $quote);
 		$service->submitAll();
 
+		/** @var Mage_Sales_Model_Order $order */
 		$order = $service->getOrder();
 		$increment_id = $order->getRealOrderId();
+
+		//set paid amount
+		if($apiOrder->payment_method != 'cash_on_delivery') {
+			$total = floatval($apiOrder->order_total);
+			$totalPaid = round(($total - floatval($apiOrder->order_due_amount)), 2);
+			$order->setTotalPaid($totalPaid);
+			if ($totalPaid >= $total) {
+				$order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+			} else {
+				$order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+			}
+		}
 
 		$order->setModagoOrderId($this->_modagoOrderId)->save();
 
