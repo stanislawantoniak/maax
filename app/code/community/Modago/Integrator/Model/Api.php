@@ -192,7 +192,15 @@ class Modago_Integrator_Model_Api
         return true;
     }
 
+    /**
+     * Change address in the order
+     *
+     * @param $orderId
+     */
+    protected function _changeOrderAddress($orderId)
+    {
 
+    }
 
     /**
      * cancel order
@@ -344,6 +352,10 @@ class Modago_Integrator_Model_Api
                     $this->rollback();
                     throw $xt;
                 }
+                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_DELIVERY_DATA_CHANGED:
+                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_INVOICE_ADDRESS_CHANGED:
+                    $changeAddress = $this->_changeOrderAddress($item->orderID);
+                    break;
             default:
                 $confirmMessages[] = $item->messageID;
                 // ignore item
