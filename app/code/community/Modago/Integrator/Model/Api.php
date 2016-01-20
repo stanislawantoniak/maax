@@ -227,21 +227,23 @@ class Modago_Integrator_Model_Api
         foreach ($orders as $item) {
             $address = $item->invoice_data->invoice_address;
 
+            /* @var $orderAddress Mage_Sales_Model_Order_Address */
             $orderAddress = $localOrder->getBillingAddress();
 
             if (!$orderAddress) {
                 $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $orderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setData("firstname", $address->invoice_first_name);
-            $orderAddress->setData("lastname", $address->invoice_last_name);
+            $orderAddress->setFirstname($address->invoice_first_name);
+            $orderAddress->setLastname($address->invoice_last_name);
 
-            $orderAddress->setData("company", $address->invoice_company_name);
+            $orderAddress->setCompany($address->invoice_company_name);
 
-            $orderAddress->setData("street", $address->invoice_street);
-            $orderAddress->setData("city", $address->invoice_city);
-            $orderAddress->setData("postcode", $address->invoice_zip_code);
-            $orderAddress->setData("country_id", $address->invoice_country);
+            $orderAddress->setStreet($address->invoice_street);
+            $orderAddress->setCity($address->invoice_city);
+            $orderAddress->setPostcode($address->invoice_zip_code);
+            $orderAddress->setCountryId($address->invoice_country);
+            $orderAddress->setTelephone($address->phone);
             $orderAddress->setData("vat_id", $address->invoice_tax_id);
 
             try {
@@ -291,22 +293,24 @@ class Modago_Integrator_Model_Api
         foreach ($orders as $item) {
             $address = $item->delivery_data->delivery_address;
 
+            /* @var $orderAddress Mage_Sales_Model_Order_Address */
             $orderAddress = $localOrder->getShippingAddress();
 
             if (!$orderAddress) {
                 $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $orderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setData("firstname", $address->delivery_first_name);
-            $orderAddress->setData("lastname", $address->delivery_last_name);
 
-            $orderAddress->setData("company", $address->delivery_company_name);
+            $orderAddress->setFirstname($address->delivery_first_name);
+            $orderAddress->setLastname($address->delivery_last_name);
 
-            $orderAddress->setData("street", $address->delivery_street);
-            $orderAddress->setData("city", $address->delivery_city);
-            $orderAddress->setData("postcode", $address->delivery_zip_code);
-            $orderAddress->setData("country_id", $address->delivery_country);
-            $orderAddress->setData("telephone", $address->phone);
+            $orderAddress->setCompany($address->delivery_company_name);
+
+            $orderAddress->setStreet($address->delivery_street);
+            $orderAddress->setCity($address->delivery_city);
+            $orderAddress->setPostcode($address->delivery_zip_code);
+            $orderAddress->setCountryId($address->delivery_country);
+            $orderAddress->setTelephone($address->phone);
 
             try {
                 $orderAddress->save();
