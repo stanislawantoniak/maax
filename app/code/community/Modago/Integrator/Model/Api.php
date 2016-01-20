@@ -194,18 +194,25 @@ class Modago_Integrator_Model_Api
 
 
     /**
-     * Change delivery address in the order
+     * Change invoice address in the order
      *
      * @param $orderId
      * @return bool
      */
-    protected function _changeOrderDeliveryAddress($orderId)
+    protected function _changeOrderInvoiceAddress($orderId)
     {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        /* @var $localOrder Mage_Sales_Model_Order */
         $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
         $localOrderId = $localOrder->getId();
 
-        /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+        if (is_null($localOrderId)) {
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return false;
+        }
+
         $details = $this->_getOrdersById(array($orderId));
 
         if (empty($details->status)) { // error
@@ -218,25 +225,92 @@ class Modago_Integrator_Model_Api
         $orders = $orderList->order;
 
         foreach ($orders as $item) {
-            $deliveryAddress = $item->delivery_data->delivery_address;
+            $address = $item->invoice_data->invoice_address;
 
-            $orderAddress = Mage::getModel("sales/order_address")->load($localOrderId);
-            $orderAddressId = $orderAddress->getId();
+            /* @var $orderAddress Mage_Sales_Model_Order_Address */
+            $orderAddress = $localOrder->getBillingAddress();
 
-            if (is_null($orderAddressId)) {
+            if (!$orderAddress) {
+                $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $orderId, $item->order_id));
+                return false;
+            }
+            $orderAddress->setFirstname($address->invoice_first_name);
+            $orderAddress->setLastname($address->invoice_last_name);
+
+            $orderAddress->setCompany($address->invoice_company_name);
+
+            $orderAddress->setStreet($address->invoice_street);
+            $orderAddress->setCity($address->invoice_city);
+            $orderAddress->setPostcode($address->invoice_zip_code);
+            $orderAddress->setCountryId($address->invoice_country);
+            $orderAddress->setTelephone($address->phone);
+            $orderAddress->setData("vat_id", $address->invoice_tax_id);
+
+            try {
+                $orderAddress->save();
+                $helper->log($helper->__('Success: Invoice address in the order %s (%s) was updated', $orderId, $item->order_id));
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $helper->log($helper->__('Error: %s', $e->getMessage()));
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    /**
+     * Change delivery address in the order
+     *
+     * @param $orderId
+     * @return bool
+     */
+    protected function _changeOrderDeliveryAddress($orderId)
+    {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = Mage::helper('modagointegrator/api');
+
+        /* @var $localOrder Mage_Sales_Model_Order */
+        $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
+        $localOrderId = $localOrder->getId();
+
+        if (is_null($localOrderId)) {
+            $helper->log($helper->__("Error: order %s not found.", $orderId));
+            return false;
+        }
+
+        $details = $this->_getOrdersById(array($orderId));
+
+        if (empty($details->status)) { // error
+            return false;
+        }
+        if (empty($details->orderList)) {
+            return false;
+        }
+        $orderList = $details->orderList;
+        $orders = $orderList->order;
+
+        foreach ($orders as $item) {
+            $address = $item->delivery_data->delivery_address;
+
+            /* @var $orderAddress Mage_Sales_Model_Order_Address */
+            $orderAddress = $localOrder->getShippingAddress();
+
+            if (!$orderAddress) {
                 $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $orderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setData("firstname", $deliveryAddress->delivery_first_name);
-            $orderAddress->setData("lastname", $deliveryAddress->delivery_last_name);
 
-            $orderAddress->setData("company", $deliveryAddress->delivery_company_name);
+            $orderAddress->setFirstname($address->delivery_first_name);
+            $orderAddress->setLastname($address->delivery_last_name);
 
-            $orderAddress->setData("street", $deliveryAddress->delivery_street);
-            $orderAddress->setData("city", $deliveryAddress->delivery_city);
-            $orderAddress->setData("postcode", $deliveryAddress->delivery_zip_code);
-            $orderAddress->setData("country_id", $deliveryAddress->delivery_country);
-            $orderAddress->setData("telephone", $deliveryAddress->phone);
+            $orderAddress->setCompany($address->delivery_company_name);
+
+            $orderAddress->setStreet($address->delivery_street);
+            $orderAddress->setCity($address->delivery_city);
+            $orderAddress->setPostcode($address->delivery_zip_code);
+            $orderAddress->setCountryId($address->delivery_country);
+            $orderAddress->setTelephone($address->phone);
 
             try {
                 $orderAddress->save();
@@ -269,7 +343,7 @@ class Modago_Integrator_Model_Api
 
         if ($collection->getSize() <= 0) {
             $helper->log($helper->__("Error: order %s not found.", $orderId));
-            return true;
+            return false;
         }
 
         $canceled = array();
@@ -450,12 +524,15 @@ class Modago_Integrator_Model_Api
                     throw $xt;
                 }
                 case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_DELIVERY_DATA_CHANGED:
-
                     if ($this->_changeOrderDeliveryAddress($item->orderID)) {
                         $confirmMessages[] = $item->messageID;
                     }
                     break;
-
+                case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_INVOICE_ADDRESS_CHANGED:
+                    if ($this->_changeOrderInvoiceAddress($item->orderID)) {
+                        $confirmMessages[] = $item->messageID;
+                    }
+                    break;
             case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_PAYMENT_DATA_CHANGED:
                 if($this->_paymentOrder($item->orderID)) {
                     $confirmMessages[] = $item->messageID;
