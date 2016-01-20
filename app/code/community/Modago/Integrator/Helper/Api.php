@@ -220,4 +220,25 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 		$resModel->removeOldLogs();
 		return $this;
 	}
+	
+    /**
+     * translation of api responses
+     *
+     * @param string $text
+     * @return string
+     */
+     public function translate($text) {
+         
+         $translate = array (
+             'error_order_invalid_status' 	=> $this->__('Order status is invalid'),
+             'error_message_id_list_empty' 	=> $this->__('Empty message id list'),
+             'error_wrong_datetime_format' 	=> $this->__('Wrong date and time format'),
+             'error_order_id_wrong' 		=> $this->__('Wrong order ID'),
+             'error_order_id_list_empty'    => $this->__('Empty order ID list'),
+             'error_wrong_courier_name' 	=> $this->__('Wrong courier name'),             
+         );         
+         $from = array_keys($translate);
+         $to = array_values($translate);         
+         return str_replace($from,$to,$text);
+     }
 }
