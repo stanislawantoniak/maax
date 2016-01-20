@@ -213,8 +213,6 @@ class Modago_Integrator_Model_Api
             return false;
         }
 
-        $billingAddressId = $localOrder->getBillingAddressId();
-
         $details = $this->_getOrdersById(array($orderId));
 
         if (empty($details->status)) { // error
@@ -227,25 +225,24 @@ class Modago_Integrator_Model_Api
         $orders = $orderList->order;
 
         foreach ($orders as $item) {
-            $deliveryAddress = $item->invoice_data->invoice_address;
+            $address = $item->invoice_data->invoice_address;
 
             $orderAddress = $localOrder->getBillingAddress();
-            $orderAddressId = $orderAddress->getId();
 
-            if (is_null($orderAddressId)) {
-                $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $orderId, $item->order_id));
+            if (!$orderAddress) {
+                $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $orderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setData("firstname", $deliveryAddress->invoice_first_name);
-            $orderAddress->setData("lastname", $deliveryAddress->invoice_last_name);
+            $orderAddress->setData("firstname", $address->invoice_first_name);
+            $orderAddress->setData("lastname", $address->invoice_last_name);
 
-            $orderAddress->setData("company", $deliveryAddress->invoice_company_name);
+            $orderAddress->setData("company", $address->invoice_company_name);
 
-            $orderAddress->setData("street", $deliveryAddress->invoice_street);
-            $orderAddress->setData("city", $deliveryAddress->invoice_city);
-            $orderAddress->setData("postcode", $deliveryAddress->invoice_zip_code);
-            $orderAddress->setData("country_id", $deliveryAddress->invoice_country);
-            $orderAddress->setData("vat_id", $deliveryAddress->invoice_tax_id);
+            $orderAddress->setData("street", $address->invoice_street);
+            $orderAddress->setData("city", $address->invoice_city);
+            $orderAddress->setData("postcode", $address->invoice_zip_code);
+            $orderAddress->setData("country_id", $address->invoice_country);
+            $orderAddress->setData("vat_id", $address->invoice_tax_id);
 
             try {
                 $orderAddress->save();
@@ -292,25 +289,24 @@ class Modago_Integrator_Model_Api
         $orders = $orderList->order;
 
         foreach ($orders as $item) {
-            $deliveryAddress = $item->delivery_data->delivery_address;
+            $address = $item->delivery_data->delivery_address;
 
             $orderAddress = $localOrder->getShippingAddress();
-            $orderAddressId = $orderAddress->getId();
 
-            if (is_null($orderAddressId)) {
+            if (!$orderAddress) {
                 $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $orderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setData("firstname", $deliveryAddress->delivery_first_name);
-            $orderAddress->setData("lastname", $deliveryAddress->delivery_last_name);
+            $orderAddress->setData("firstname", $address->delivery_first_name);
+            $orderAddress->setData("lastname", $address->delivery_last_name);
 
-            $orderAddress->setData("company", $deliveryAddress->delivery_company_name);
+            $orderAddress->setData("company", $address->delivery_company_name);
 
-            $orderAddress->setData("street", $deliveryAddress->delivery_street);
-            $orderAddress->setData("city", $deliveryAddress->delivery_city);
-            $orderAddress->setData("postcode", $deliveryAddress->delivery_zip_code);
-            $orderAddress->setData("country_id", $deliveryAddress->delivery_country);
-            $orderAddress->setData("telephone", $deliveryAddress->phone);
+            $orderAddress->setData("street", $address->delivery_street);
+            $orderAddress->setData("city", $address->delivery_city);
+            $orderAddress->setData("postcode", $address->delivery_zip_code);
+            $orderAddress->setData("country_id", $address->delivery_country);
+            $orderAddress->setData("telephone", $address->phone);
 
             try {
                 $orderAddress->save();
