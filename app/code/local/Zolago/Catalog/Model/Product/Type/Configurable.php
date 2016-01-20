@@ -72,6 +72,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
             ->where("at_size.value IS NOT NULL")
             ->where("at_status.value <> ?",Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID)
+            
             ;
         $collection->setRowIdFieldName('unique_id');
 
@@ -146,7 +147,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             ->where("at_status.value <> ?",Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_INVALID)
         ;
         $collection->setRowIdFieldName('unique_id');        
-//        Mage::log($collection->getSelect()->__toString(), null, "111.log");
+
         foreach ($collection as $product) {
             $sizePriceRelations[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
@@ -156,7 +157,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "price" => $product->getPrice() //Simple product price
             );
         }
-        //Mage::log($sizePriceRelations);
+
         return $sizePriceRelations;
 
     }

@@ -15,6 +15,9 @@
                 </args>
             </mypromotions>
         </routers>
+		<secure_url>
+			<mypromotions>/mypromotions</mypromotions>
+		</secure_url>
         <translate>
             <modules>
                 <Zolago_SalesRule>
