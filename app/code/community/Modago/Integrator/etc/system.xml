@@ -17,7 +17,7 @@
 			<groups>
 				<authentication translate="label" module="modagointegrator">
 					<label>Product feeds settings</label>
-					<comment><![CDATA[<strong>Settings for this section can be obtained from Modago support team (integracja@zolago.com)</strong>]]></comment>
+					<comment><![CDATA[Settings for this section can be obtained from Modago support team (integracja@zolago.com)]]></comment>
 					<expanded>1</expanded>
 					<sort_order>10</sort_order>
 					<show_in_default>1</show_in_default>
@@ -119,7 +119,7 @@
 				<orders translate="label" module="modagointegrator">
 					<expanded>1</expanded>
 					<label>New orders settings</label>
-					<comment><![CDATA[<strong>New orders from Modago will be placed using this configuration.</strong>]]></comment>
+					<comment><![CDATA[New orders from Modago will be placed using this configuration.]]></comment>
 					<sort_order>30</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
@@ -150,12 +150,21 @@
 				</orders>
 				<carriers>
 					<label>Settings for couriers and shipping methods</label>
+					<comment><![CDATA[These setting are used to map your shipping methods to couriers that are be supported by Modago system. Please map all your shipping methods that you use for registering tracking number for shipments. Based on the mapping we will know which courier to poll for tracking info.]]></comment>
 					<expanded>1</expanded>
 					<sort_order>40</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
+						<label_vendor_carriers>
+							<label>Your shimpent method</label>
+							<frontend_model>modagointegrator/adminhtml_modagoapi_form_field_carrierlabel</frontend_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</label_vendor_carriers>
 						<!-- Vendor carriers part start -->
 							<!-- @see Modago_Integrator_Model_Observer::addConfigCarrierMapperFields -->
 						<!-- Vendor carriers part end -->
@@ -163,7 +172,7 @@
 				</carriers>
 				<api_advanced_settings>
 					<label>Module advanced settings</label>
-					<comment><![CDATA[<strong>Change these settings carefully and consult Modago support team before changes.</strong>]]></comment>
+					<comment><![CDATA[Change these settings carefully and consult Modago support team before changes.]]></comment>
 					<sort_order>50</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
