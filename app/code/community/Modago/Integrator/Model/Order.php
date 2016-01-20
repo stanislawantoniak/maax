@@ -6,6 +6,8 @@ class Modago_Integrator_Model_Order {
 
 	protected $_apiShippingCost = 0;
 	protected $_modagoOrderId;
+	protected $_productStocks = array();
+	protected $_productProblems = array();
 
 	public function __construct() {
 		$this->_helper = Mage::helper("modagointegrator/api");
@@ -193,6 +195,8 @@ class Modago_Integrator_Model_Order {
 		}
 
 		$order->setModagoOrderId($this->_modagoOrderId)->save();
+		// check products stats
+		$this->_checkProductStocks();
 
 		// Resource Clean-Up
 		$quote = $service = $order = null;
@@ -201,6 +205,31 @@ class Modago_Integrator_Model_Order {
 		return $increment_id;
 
 	}
+
+	
+    /**
+     * check reservations
+     */
+
+	protected function _checkProductStocks() {
+        foreach ($this->_productStocks as $productId) {
+	        $product = $this->getProduct($productId);
+            $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
+            if ($qty < 0) {
+                $this->_productProblems[] = $product->getSku(); 
+            }            
+	    }
+	}
+	
+    /**
+     * get problem list
+     *
+     * @return array
+     */
+     public function getProductProblemList() {
+         return $this->_productProblems;
+         
+     }
 
 	protected function getProducts($apiOrder) {
 		$out = array();
@@ -218,7 +247,7 @@ class Modago_Integrator_Model_Order {
 			}
 
 			$productId = $this->getProductIdBySku($apiProduct->item_sku);
-
+			$this->_productStocks[] = $productId;
 			if($productId) {
 				//check if product has configurable parent
 				$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($productId);
@@ -230,7 +259,6 @@ class Modago_Integrator_Model_Order {
 				}
 
 				$product = $this->getProduct($productId);
-
 				/*$taxPercent = $this->getProductTaxRate($product);
 				$priceIncl = $apiProduct->item_value_after_discount; //brutto
 				$price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //netto*/
