@@ -248,7 +248,7 @@ class Modago_Integrator_Model_Api
 
             try {
                 $orderAddress->save();
-                $helper->log($helper->__('Success: Invoice address in the order %s (%s) was updated', $orderId, $item->order_id));
+                $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $orderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $helper->log($helper->__('Error: %s', $e->getMessage()));
@@ -314,7 +314,7 @@ class Modago_Integrator_Model_Api
 
             try {
                 $orderAddress->save();
-                $helper->log($helper->__('Success: Delivery address in the order %s (%s) was updated', $orderId, $item->order_id));
+                $helper->log($helper->__('Success: Delivery address was updated. Order %s (%s)', $orderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $helper->log($helper->__('Error: %s', $e->getMessage()));
