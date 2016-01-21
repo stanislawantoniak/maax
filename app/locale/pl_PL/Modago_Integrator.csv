@@ -34,7 +34,7 @@
 "Secret key","Sekretny klucz"
 "Shop/Language whose price is charged","Sklep/Język z którego pobierana jest cena"
 "Success: downloading list of changed orders return empty list","OK: lista zmienionych zamówień jest pusta"
-"Success: downloading list of changed orders return list (%s)","OK: Pobrano listę zmienionych zmaówień (%s)"
+"Success: downloading list of changed orders return list (%s)","OK: Pobrano listę zmienionych zamówień (%s)"
 "Success: getting info about order %s","OK: Pobrano informacje o zamówieniu %s"
 "Success: Modago order %s tracking send","OK: Informacje o wysyłce dla zamówienia %s zostały wysłane"
 "Success: order %s (%s) was created","OK: Zamówienie %s (%s) zostało utworzone"
