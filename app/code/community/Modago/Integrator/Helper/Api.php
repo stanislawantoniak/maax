@@ -7,16 +7,17 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 {
 
 
-    const CONFIG_PATH_CARRIERS    = 'modagointegrator/carriers/';
-    const CONFIG_PATH_ENABLED     = 'modagointegrator/api_settings/enabled';
-    const CONFIG_PATH_LOGIN       = 'modagointegrator/api_settings/login';
-    const CONFIG_PATH_PASSWORD    = 'modagointegrator/api_settings/password';
-    const CONFIG_PATH_API_KEY     = 'modagointegrator/api_settings/api_key';
-    const CONFIG_PATH_API_URL     = 'modagointegrator/api_settings/api_url';
-    const CONFIG_PATH_BATCH_SIZE  = 'modagointegrator/api_advanced_settings/batch_size';
-    const CONFIG_PATH_LOG_DAYS    = 'modagointegrator/api_advanced_settings/log_days';
-    const CONFIG_PATH_STORE       = 'modagointegrator/orders/store';
-    const CONFIG_PATH_MAPPED_COD  = 'modagointegrator/orders/mapped_cod';
+    const CONFIG_PATH_CARRIERS       = 'modagointegrator/carriers/';
+    const CONFIG_PATH_ENABLED        = 'modagointegrator/api_settings/enabled';
+    const CONFIG_PATH_LOGIN          = 'modagointegrator/api_settings/login';
+    const CONFIG_PATH_PASSWORD       = 'modagointegrator/api_settings/password';
+    const CONFIG_PATH_API_KEY        = 'modagointegrator/api_settings/api_key';
+    const CONFIG_PATH_API_URL        = 'modagointegrator/api_settings/api_url';
+    const CONFIG_PATH_BATCH_SIZE     = 'modagointegrator/api_advanced_settings/batch_size';
+    const CONFIG_PATH_LOG_DAYS       = 'modagointegrator/api_advanced_settings/log_days';
+    const CONFIG_PATH_BLOCK_SHIPPING = 'modagointegrator/api_advanced_settings/block_shipping';
+    const CONFIG_PATH_STORE          = 'modagointegrator/orders/store';
+    const CONFIG_PATH_MAPPED_COD     = 'modagointegrator/orders/mapped_cod';
 
     /**
      * Return login for api (vendor id)
@@ -79,6 +80,15 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
 	 */
 	public function getLogDays() {
 		return (int) Mage::getStoreConfig(self::CONFIG_PATH_LOG_DAYS);
+	}
+
+	/**
+	 * Block shipping after order change (if true)
+	 *
+	 * @return bool
+	 */
+	public function getBlockShipping() {
+		return (bool) Mage::getStoreConfig(self::CONFIG_PATH_BLOCK_SHIPPING);
 	}
 
 	/**

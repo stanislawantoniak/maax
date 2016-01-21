@@ -16,7 +16,7 @@ class Modago_Integrator_Model_Observer {
      public function check_order_changes($observer) {
          $helperApi = Mage::helper('modagointegrator/api');
 		/** @var Modago_Integrator_Helper_Api $helperApi */
-         if ($helperApi->isEnabled()) {
+         if ($helperApi->isEnabled() && $helperApi->getBlockShipping()) {
              $shipment = $observer->getEvent()->getShipment();
              $order = $shipment->getOrder();
              $orderId = $order->getData('modago_order_id');
