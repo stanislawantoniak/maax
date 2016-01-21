@@ -60,7 +60,7 @@ class Zolago_Campaign_Model_Observer
      * for campaigns type=info: campaign_info_id
      *
      * for campaigns type=sale or promotion:
-     * campaign_regular_id,~A
+     * campaign_regular_id,
      * special_price,
      * campaign_strikeout_price_type,
      * special_from_date, special_to_date,
