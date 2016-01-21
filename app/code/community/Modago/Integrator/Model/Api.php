@@ -375,7 +375,7 @@ class Modago_Integrator_Model_Api
                 /* @var $orderAddress Mage_Sales_Model_Order_Address */
                 $orderAddress = $localOrder->getBillingAddress();
 
-                if (!$orderAddress) {
+                if (!$orderAddress || empty($item->invoice_data)) {
                     $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $orderId, $item->order_id));
                     return false;
                 }
