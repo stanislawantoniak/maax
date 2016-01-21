@@ -91,8 +91,15 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
         return $this->getData("items");
     }
 
+	/**
+	 * Return array of not selected field options for attribute
+	 *
+	 * @return array
+	 */
     public function getHiddenItems() {
-        if($this->getFilterModel() && $this->getFilterModel()->getCanShowMore()
+		/** @var Zolago_Catalog_Model_Category_Filter $filter */
+		$filter = $this->getFilterModel();
+        if($filter && $filter->getCanShowMore()
                 && is_array($this->getData("hidden_items"))) {
             return $this->getData("hidden_items");
         }
@@ -334,7 +341,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
             }
         }
         $this->_canShow = ($this->_maxCount>0)? true:false;
-        $this->_canShowHidden = ($this->_maxCountHidden>0)? true:false;
+		$this->_canShowHidden = ($this->_maxCountHidden > 0) ? (bool)$this->getFilterModel()->getCanShowMore() : false;
         return $out+$extraAdded;
 
     }
