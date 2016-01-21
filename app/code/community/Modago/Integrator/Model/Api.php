@@ -409,6 +409,39 @@ class Modago_Integrator_Model_Api
                 return false;
             }
 
+            //Change billing if invoice not required
+            $invoiceRequired = $item->invoice_data->invoice_required;
+
+            if(!$invoiceRequired) {
+                /* @var $orderAddress Mage_Sales_Model_Order_Address */
+                $orderAddress = $localOrder->getBillingAddress();
+
+                if (!$orderAddress) {
+                    $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $orderId, $item->order_id));
+                    return false;
+                }
+
+                $orderAddress->setFirstname($address->delivery_first_name);
+                $orderAddress->setLastname($address->delivery_last_name);
+
+                $orderAddress->setCompany($address->delivery_company_name);
+
+                $orderAddress->setStreet($address->delivery_street);
+                $orderAddress->setCity($address->delivery_city);
+                $orderAddress->setPostcode($address->delivery_zip_code);
+                $orderAddress->setCountryId($address->delivery_country);
+                $orderAddress->setTelephone($address->phone);
+
+                try {
+                    $orderAddress->save();
+                    $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $orderId, $item->order_id));
+                } catch (Exception $e) {
+                    Mage::logException($e);
+                    $helper->log($helper->__('Error: %s', $e->getMessage()));
+                    return false;
+                }
+            }
+
         }
         return true;
     }
