@@ -85,4 +85,6 @@
 "Error: wrong response from API server","Błąd: Nieprawidłowa odpowiedź z serwera API"
 "set order reservation problem failed: %s (%s)","ustawienie status 'problem z rezerwacją' nie powiodło się: %s (%s)"
 "wrong response from API server","Nieprawidłowa odpowiedź z serwera API"
-"Success: set order reservation successfull (%s: status %s)","OK: ustawienie statusu rezerwacji powiodło się (%s: status %s)"
+"Success: set order reservation successful (%s: status %s)","OK: ustawienie statusu rezerwacji powiodło się (%s: status %s)"
+"Block shipping","Blokowanie wysyłki"
+"Block shipping after order change in Modago API","Blokuj wysyłkę po zmianie w zamówieniu po stronie Modago API"
