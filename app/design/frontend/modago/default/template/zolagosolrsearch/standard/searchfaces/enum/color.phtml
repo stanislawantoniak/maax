@@ -61,7 +61,7 @@ $baseMediaUrl = Mage::getBaseUrl("media") . "/m-image/";
                     $isOptionSelected = true;
                 }
                 ?>
-                <label title="<?php echo $item ?>" data-state="hidden" for="<?php echo $item['itemId']?>" <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?> data-param='<?php echo $item['params'];?>' data-color="<?php echo $_color?>" data-url="<?php echo $item['url'] ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?> style="display: none;">
+                <label title="<?php echo $item['item']] ?>" data-state="hidden" for="<?php echo $item['itemId']?>" <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?> data-param='<?php echo $item['params'];?>' data-color="<?php echo $_color?>" data-url="<?php echo $item['url'] ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?> style="display: none;">
                     <input type="checkbox" 
 						name="<?php echo $item['name'];?>"
 						value="<?php echo $item['value']?>"
