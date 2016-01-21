@@ -40,7 +40,7 @@
 "Success: order %s (%s) was created","OK: Zamówienie %s (%s) zostało utworzone"
 "Success: order (%s) was  canceled.","OK: Zamówienie (%s) zostało anulowane"
 "Success: Invoice address was updated. Order %s (%s)","OK: Adres faktury został zaktualizowany. Zamówienie nr %s (%s)."
-"Success: Delivery address was updated. Order %s (%s)","OK: OK: Adres dostawy został zaktualizowany. Zamówienie nr %s (%s)."
+"Success: Delivery address was updated. Order %s (%s)","OK: Adres dostawy został zaktualizowany. Zamówienie nr %s (%s)."
 "Success: successfully confirmed list of messages (%s)","OK: Poprawnie odebrano listę komunikatów (%s)"
 "Vendor ID","ID sklepu"
 "Modago logs","Logi Modago"
