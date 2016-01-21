@@ -109,7 +109,7 @@
 							<label>Test connection to API</label>
 							<frontend_model>modagointegrator/adminhtml_modagoapi_form_field_connectiontester</frontend_model>
 							<comment>This button tests the connection to Modago API for saved settings</comment>
-							<sort_order>55</sort_order>
+							<sort_order>60</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
@@ -130,7 +130,7 @@
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_store</source_model>
 							<comment>New orders will be places in this storeview</comment>
-							<sort_order>60</sort_order>
+							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
@@ -141,7 +141,7 @@
 							<comment>This payment method is Cash on Delivery</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>modagointegrator/payment_source_payment</source_model>
-							<sort_order>70</sort_order>
+							<sort_order>20</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
@@ -182,7 +182,7 @@
 							<label>Keep logs for</label>
 							<comment>Days</comment>
 							<frontend_type>text</frontend_type>
-							<sort_order>80</sort_order>
+							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
@@ -192,12 +192,22 @@
 							<label>Batch size</label>
 							<comment>The maximum size of batch messages from API to be processed</comment>
 							<frontend_type>text</frontend_type>
-							<sort_order>90</sort_order>
+							<sort_order>20</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 							<validate>validate-digits validate-zero-or-greater required-entry</validate>
 						</batch_size>
+						<block_shipping>
+							<label>Block shipping</label>
+							<comment>Block shipping after order change in Modago API</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</block_shipping>
 					</fields>
 				</api_advanced_settings>
 			</groups>

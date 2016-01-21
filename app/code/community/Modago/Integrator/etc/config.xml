@@ -137,6 +137,7 @@
 			<api_advanced_settings>
 				<log_days>365</log_days>
 				<batch_size>100</batch_size>
+				<block_shipping>1</block_shipping>
 			</api_advanced_settings>
             <orders>
                 <mapped_cod>cashondelivery</mapped_cod>
