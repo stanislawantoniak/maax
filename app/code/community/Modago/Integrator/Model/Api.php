@@ -235,7 +235,7 @@ class Modago_Integrator_Model_Api
             }
             Mage::throwException($message);
         } else {
-            $helper->log($helper->__('Success: set order reservation successfull (%s: status %s)',$orderId,$status));
+            $helper->log($helper->__('Success: set order reservation successful (%s: status %s)',$orderId,$status));
         }
         return true;
     }
@@ -273,29 +273,48 @@ class Modago_Integrator_Model_Api
 
         foreach ($orders as $item) {
             $address = $item->invoice_data->invoice_address;
+            $shippingAddress = $item->delivery_data->delivery_address;
 
             /* @var $orderAddress Mage_Sales_Model_Order_Address */
             $orderAddress = $localOrder->getBillingAddress();
 
             if (!$orderAddress) {
-                $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $orderId, $item->order_id));
+                $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localOrderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setFirstname($address->invoice_first_name);
-            $orderAddress->setLastname($address->invoice_last_name);
+            if (empty($item->invoice_data->invoice_required)
+                || empty($item->invoice_data->invoice_address)) { // no billing address - use shipping
+                $address = $shippingAddress;
+                $addressData = array (
+                                   'first_name' => $address->delivery_first_name,
+                                   'last_name'  => $address->delivery_last_name,
+                                   'company'	 => $address->delivery_company_name,
+                                   'street'	 => $address->delivery_street,
+                                   'city'		 => $address->delivery_city,
+                                   'postcode'	 => $address->delivery_zip_code,
+                                   'country_id' => $address->delivery_country,
+                                   'telephone'	 => $address->phone,
+                               );
+            } else {
+                $addressData = array (
+                               'first_name' => $address->invoice_first_name,
+                               'last_name'  => $address->invoice_last_name,
+                               'company'	 => $address->invoice_company_name,
+                               'street'	 => $address->invoice_street,
+                               'city'		 => $address->invoice_city,
+                               'postcode'	 => $address->invoice_zip_code,
+                               'country_id' => $address->invoice_country,
+                               'telephone'	 => $shippingAddress->phone,
+                               'vat_id'	 => $address->invoice_tax_id,
+                           );
+             }
+             $this->_setOrderAddress($orderAddress,$addressData);
 
-            $orderAddress->setCompany($address->invoice_company_name);
 
-            $orderAddress->setStreet($address->invoice_street);
-            $orderAddress->setCity($address->invoice_city);
-            $orderAddress->setPostcode($address->invoice_zip_code);
-            $orderAddress->setCountryId($address->invoice_country);
-            $orderAddress->setTelephone($address->phone);
-            $orderAddress->setData("vat_id", $address->invoice_tax_id);
 
             try {
                 $orderAddress->save();
-                $helper->log($helper->__('Success: Invoice address in the order %s (%s) was updated', $orderId, $item->order_id));
+                $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $localOrderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $helper->log($helper->__('Error: %s', $e->getMessage()));
@@ -306,6 +325,19 @@ class Modago_Integrator_Model_Api
         return true;
     }
 
+    
+    /**
+     * set params for address
+     *
+     * @param Mage_Sales_Model_Order_Address $orderAddress
+     * @param array $address
+     */
+
+    protected function _setOrderAddress($orderAddress,$address) {
+        foreach ($address as $key=>$val) {
+            $orderAddress->setData($key,$val);
+        }
+    }
     /**
      * Change delivery address in the order
      *
@@ -340,32 +372,74 @@ class Modago_Integrator_Model_Api
         foreach ($orders as $item) {
             $address = $item->delivery_data->delivery_address;
 
-            /* @var $orderAddress Mage_Sales_Model_Order_Address */
-            $orderAddress = $localOrder->getShippingAddress();
-
-            if (!$orderAddress) {
-                $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $orderId, $item->order_id));
-                return false;
-            }
-
-            $orderAddress->setFirstname($address->delivery_first_name);
-            $orderAddress->setLastname($address->delivery_last_name);
-
-            $orderAddress->setCompany($address->delivery_company_name);
-
-            $orderAddress->setStreet($address->delivery_street);
-            $orderAddress->setCity($address->delivery_city);
-            $orderAddress->setPostcode($address->delivery_zip_code);
-            $orderAddress->setCountryId($address->delivery_country);
-            $orderAddress->setTelephone($address->phone);
-
             try {
+                /* @var $orderAddress Mage_Sales_Model_Order_Address */
+                $orderAddress = $localOrder->getShippingAddress();
+
+                if (!$orderAddress) {
+                    $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $localOrderId, $item->order_id));
+                    return false;
+                }
+
+                $addressData = array (
+                                   'first_name' => $address->delivery_first_name,
+                                   'last_name'  => $address->delivery_last_name,
+                                   'company'	 => $address->delivery_company_name,
+                                   'street'	 => $address->delivery_street,
+                                   'city'		 => $address->delivery_city,
+                                   'postcode'	 => $address->delivery_zip_code,
+                                   'country_id' => $address->delivery_country,
+                                   'telephone'	 => $address->phone,
+                               );
+                $this->_setOrderAddress($orderAddress,$addressData);
+                // if no invoice address set the same
+                if (empty($item->invoice_data->invoice_required)
+                        || empty($item->invoice_data->invoice_address)) {
+
+                    $orderInvoiceAddress = $localOrder->getBillingAddress();
+                    $this->_setOrderAddress($orderInvoiceAddress,$addressData);
+                    $orderInvoiceAddress->save();
+                }
+
                 $orderAddress->save();
-                $helper->log($helper->__('Success: Delivery address in the order %s (%s) was updated', $orderId, $item->order_id));
+                $helper->log($helper->__('Success: Delivery address was updated. Order %s (%s)', $localOrderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $helper->log($helper->__('Error: %s', $e->getMessage()));
                 return false;
+            }
+
+            //Change billing if invoice not required
+            $invoiceRequired = $item->invoice_data->invoice_required;
+
+            if(!$invoiceRequired) {
+                /* @var $orderAddress Mage_Sales_Model_Order_Address */
+                $orderAddress = $localOrder->getBillingAddress();
+
+                if (!$orderAddress) {
+                    $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localOrderId, $item->order_id));
+                    return false;
+                }
+
+                $orderAddress->setFirstname($address->delivery_first_name);
+                $orderAddress->setLastname($address->delivery_last_name);
+
+                $orderAddress->setCompany($address->delivery_company_name);
+
+                $orderAddress->setStreet($address->delivery_street);
+                $orderAddress->setCity($address->delivery_city);
+                $orderAddress->setPostcode($address->delivery_zip_code);
+                $orderAddress->setCountryId($address->delivery_country);
+                $orderAddress->setTelephone($address->phone);
+
+                try {
+                    $orderAddress->save();
+                    $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $localOrderId, $item->order_id));
+                } catch (Exception $e) {
+                    Mage::logException($e);
+                    $helper->log($helper->__('Error: %s', $e->getMessage()));
+                    return false;
+                }
             }
 
         }

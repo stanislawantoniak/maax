@@ -168,6 +168,9 @@ class Modago_Integrator_Model_Order {
 			->setPaymentMethod($paymentMethod);
 
 		// Set Sales Order Payment
+		Mage::unregister(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY);
+		Mage::register(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY,true);
+
 		$quote->getPayment()->importData(array('method' => $paymentMethod));
 
 		// Collect Totals & Save Quote
