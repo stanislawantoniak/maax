@@ -28,7 +28,7 @@
 "Not xml document (%s)","Dokument nie jest w formacie xml (%s)"
 "Order have status %s","Zamówienie ma status %s"
 "Order list empty","Lista zamówień pusta"
-"Payment has review status","Payment has review status [PL]"
+"Payment has review status","Płatność jest w statusie rewizyjnym"
 "Price source","Źródło ceny"
 "Process error: see exception log","Błąd procesu: więcej informacji w logach systemu"
 "Secret key","Sekretny klucz"
