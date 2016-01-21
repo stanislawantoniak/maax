@@ -235,7 +235,7 @@ class Modago_Integrator_Model_Api
             }
             Mage::throwException($message);
         } else {
-            $helper->log($helper->__('Success: set order reservation successfull (%s: status %s)',$orderId,$status));
+            $helper->log($helper->__('Success: set order reservation successful (%s: status %s)',$orderId,$status));
         }
         return true;
     }
