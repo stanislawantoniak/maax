@@ -252,7 +252,11 @@ class Modago_Integrator_Model_Api
         $helper = Mage::helper('modagointegrator/api');
 
         /* @var $localOrder Mage_Sales_Model_Order */
-        $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state", array("neq"=> Mage_Sales_Model_Order::STATE_CANCELED));
+
+        $localOrder = $collection->getFirstItem();
         $localOrderId = $localOrder->getId();
         $localIncrementOrderId = $localOrder->getIncrementId();
 
@@ -351,7 +355,11 @@ class Modago_Integrator_Model_Api
         $helper = Mage::helper('modagointegrator/api');
 
         /* @var $localOrder Mage_Sales_Model_Order */
-        $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state", array("neq"=> Mage_Sales_Model_Order::STATE_CANCELED));
+
+        $localOrder = $collection->getFirstItem();
         $localOrderId = $localOrder->getId();
         $localIncrementOrderId = $localOrder->getIncrementId();
 
