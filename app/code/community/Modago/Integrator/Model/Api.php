@@ -201,7 +201,7 @@ class Modago_Integrator_Model_Api
             }
             try {
                 if ($problems = $integratorOrders->getProductProblemList()) {
-                    $message = sprintf('Products out of stocks (%s)',implode(',',$problems));
+                    $message = $helper->__('Products out of stocks (%s)',implode(',',$problems));
                     $this->_setOrderReservation($item->order_id,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$message);
                 }
             } catch (Exception $xt) {
@@ -252,8 +252,13 @@ class Modago_Integrator_Model_Api
         $helper = Mage::helper('modagointegrator/api');
 
         /* @var $localOrder Mage_Sales_Model_Order */
-        $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state", array("neq"=> Mage_Sales_Model_Order::STATE_CANCELED));
+
+        $localOrder = $collection->getFirstItem();
         $localOrderId = $localOrder->getId();
+        $localIncrementOrderId = $localOrder->getIncrementId();
 
         if (is_null($localOrderId)) {
             $helper->log($helper->__("Error: order %s not found.", $orderId));
@@ -272,49 +277,48 @@ class Modago_Integrator_Model_Api
         $orders = $orderList->order;
 
         foreach ($orders as $item) {
+            $invoiceRequired = $item->invoice_data->invoice_required;
             $address = $item->invoice_data->invoice_address;
+
             $shippingAddress = $item->delivery_data->delivery_address;
 
             /* @var $orderAddress Mage_Sales_Model_Order_Address */
             $orderAddress = $localOrder->getBillingAddress();
 
             if (!$orderAddress) {
-                $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localOrderId, $item->order_id));
+                $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localIncrementOrderId, $item->order_id));
                 return false;
             }
-            if (empty($item->invoice_data->invoice_required)
-                || empty($item->invoice_data->invoice_address)) { // no billing address - use shipping
-                $address = $shippingAddress;
-                $addressData = array (
-                                   'first_name' => $address->delivery_first_name,
-                                   'last_name'  => $address->delivery_last_name,
-                                   'company'	 => $address->delivery_company_name,
-                                   'street'	 => $address->delivery_street,
-                                   'city'		 => $address->delivery_city,
-                                   'postcode'	 => $address->delivery_zip_code,
-                                   'country_id' => $address->delivery_country,
-                                   'telephone'	 => $address->phone,
-                               );
+
+            if($invoiceRequired == 0 || empty($address)){
+                $orderAddress->setFirstname($shippingAddress->delivery_first_name);
+                $orderAddress->setLastname($shippingAddress->delivery_last_name);
+
+                $orderAddress->setCompany($shippingAddress->delivery_company_name);
+
+                $orderAddress->setStreet($shippingAddress->delivery_street);
+                $orderAddress->setCity($shippingAddress->delivery_city);
+                $orderAddress->setPostcode($shippingAddress->delivery_zip_code);
+                $orderAddress->setCountryId($shippingAddress->delivery_country);
+                $orderAddress->setTelephone($shippingAddress->phone);
             } else {
-                $addressData = array (
-                               'first_name' => $address->invoice_first_name,
-                               'last_name'  => $address->invoice_last_name,
-                               'company'	 => $address->invoice_company_name,
-                               'street'	 => $address->invoice_street,
-                               'city'		 => $address->invoice_city,
-                               'postcode'	 => $address->invoice_zip_code,
-                               'country_id' => $address->invoice_country,
-                               'telephone'	 => $shippingAddress->phone,
-                               'vat_id'	 => $address->invoice_tax_id,
-                           );
-             }
-             $this->_setOrderAddress($orderAddress,$addressData);
 
+                $orderAddress->setFirstname($address->invoice_first_name);
+                $orderAddress->setLastname($address->invoice_last_name);
 
+                $orderAddress->setCompany($address->invoice_company_name);
+
+                $orderAddress->setStreet($address->invoice_street);
+                $orderAddress->setCity($address->invoice_city);
+                $orderAddress->setPostcode($address->invoice_zip_code);
+                $orderAddress->setCountryId($address->invoice_country);
+                $orderAddress->setTelephone($address->phone);
+                $orderAddress->setData("vat_id", $address->invoice_tax_id);
+            }
 
             try {
                 $orderAddress->save();
-                $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $localOrderId, $item->order_id));
+                $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $localIncrementOrderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $helper->log($helper->__('Error: %s', $e->getMessage()));
@@ -350,8 +354,13 @@ class Modago_Integrator_Model_Api
         $helper = Mage::helper('modagointegrator/api');
 
         /* @var $localOrder Mage_Sales_Model_Order */
-        $localOrder = Mage::getModel("sales/order")->load($orderId, "modago_order_id");
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state", array("neq"=> Mage_Sales_Model_Order::STATE_CANCELED));
+
+        $localOrder = $collection->getFirstItem();
         $localOrderId = $localOrder->getId();
+        $localIncrementOrderId = $localOrder->getIncrementId();
 
         if (is_null($localOrderId)) {
             $helper->log($helper->__("Error: order %s not found.", $orderId));
@@ -372,37 +381,28 @@ class Modago_Integrator_Model_Api
         foreach ($orders as $item) {
             $address = $item->delivery_data->delivery_address;
 
+            /* @var $orderAddress Mage_Sales_Model_Order_Address */
+            $orderAddress = $localOrder->getShippingAddress();
+
+            if (!$orderAddress) {
+                $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $localIncrementOrderId, $item->order_id));
+                return false;
+            }
+
+            $orderAddress->setFirstname($address->delivery_first_name);
+            $orderAddress->setLastname($address->delivery_last_name);
+
+            $orderAddress->setCompany($address->delivery_company_name);
+
+            $orderAddress->setStreet($address->delivery_street);
+            $orderAddress->setCity($address->delivery_city);
+            $orderAddress->setPostcode($address->delivery_zip_code);
+            $orderAddress->setCountryId($address->delivery_country);
+            $orderAddress->setTelephone($address->phone);
+
             try {
-                /* @var $orderAddress Mage_Sales_Model_Order_Address */
-                $orderAddress = $localOrder->getShippingAddress();
-
-                if (!$orderAddress) {
-                    $helper->log($helper->__('Error: Delivery address not found, order %s (%s)', $localOrderId, $item->order_id));
-                    return false;
-                }
-
-                $addressData = array (
-                                   'first_name' => $address->delivery_first_name,
-                                   'last_name'  => $address->delivery_last_name,
-                                   'company'	 => $address->delivery_company_name,
-                                   'street'	 => $address->delivery_street,
-                                   'city'		 => $address->delivery_city,
-                                   'postcode'	 => $address->delivery_zip_code,
-                                   'country_id' => $address->delivery_country,
-                                   'telephone'	 => $address->phone,
-                               );
-                $this->_setOrderAddress($orderAddress,$addressData);
-                // if no invoice address set the same
-                if (empty($item->invoice_data->invoice_required)
-                        || empty($item->invoice_data->invoice_address)) {
-
-                    $orderInvoiceAddress = $localOrder->getBillingAddress();
-                    $this->_setOrderAddress($orderInvoiceAddress,$addressData);
-                    $orderInvoiceAddress->save();
-                }
-
                 $orderAddress->save();
-                $helper->log($helper->__('Success: Delivery address was updated. Order %s (%s)', $localOrderId, $item->order_id));
+                $helper->log($helper->__('Success: Delivery address was updated. Order %s (%s)', $localIncrementOrderId, $item->order_id));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $helper->log($helper->__('Error: %s', $e->getMessage()));
@@ -417,7 +417,7 @@ class Modago_Integrator_Model_Api
                 $orderAddress = $localOrder->getBillingAddress();
 
                 if (!$orderAddress) {
-                    $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localOrderId, $item->order_id));
+                    $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localIncrementOrderId, $item->order_id));
                     return false;
                 }
 
@@ -434,7 +434,7 @@ class Modago_Integrator_Model_Api
 
                 try {
                     $orderAddress->save();
-                    $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $localOrderId, $item->order_id));
+                    $helper->log($helper->__('Success: Invoice address was updated. Order %s (%s)', $localIncrementOrderId, $item->order_id));
                 } catch (Exception $e) {
                     Mage::logException($e);
                     $helper->log($helper->__('Error: %s', $e->getMessage()));
@@ -586,7 +586,7 @@ class Modago_Integrator_Model_Api
                     $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
                 }
                 $order->save();
-
+                $helper->log($helper->__("Success: payment in order has changed %s (%s)", $order->getIncrementId(), $orderId));
                 return true;
             } else {
                 $helper->log($helper->__("Error: order %s not found.", $orderId));
@@ -618,6 +618,7 @@ class Modago_Integrator_Model_Api
     public function processOrders($foreachMsgData) {
         $confirmMessages = array();
         foreach ($foreachMsgData as $item) {
+
             switch ($item->messageType) {
             case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
                 if ($this->_createNewOrder($item->orderID)) {
