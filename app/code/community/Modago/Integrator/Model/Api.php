@@ -312,7 +312,7 @@ class Modago_Integrator_Model_Api
                 $orderAddress->setCity($address->invoice_city);
                 $orderAddress->setPostcode($address->invoice_zip_code);
                 $orderAddress->setCountryId($address->invoice_country);
-                $orderAddress->setTelephone($address->phone);
+                $orderAddress->setTelephone($shippingAddress->phone);
                 $orderAddress->setData("vat_id", $address->invoice_tax_id);
             }
 
