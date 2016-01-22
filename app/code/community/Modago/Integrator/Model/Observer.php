@@ -145,7 +145,7 @@ class Modago_Integrator_Model_Observer {
 	 */
 	private function getAllCarriers() {
 		/** @var Modago_Integrator_Model_Shipping_Source_Allcarriers $shippingSource */
-		$shippingSource = Mage::getSingleton('shipping/config');
+		$shippingSource = Mage::getSingleton('modagointegrator/shipping_source_allcarriers ');
 		$carriers = $shippingSource->getAllCarriers();
 		return $carriers;
 	}

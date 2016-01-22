@@ -43,6 +43,7 @@ class Modago_Integrator_Model_Shipping_Source_Allcarriers {
 				}
 				$this->_carriers[$code] = $carrier;
 			}
+			unset($this->_carriers['zolagoshipment']);
 		}
 		return $this->_carriers;
 	}
