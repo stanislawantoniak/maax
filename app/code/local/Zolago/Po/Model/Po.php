@@ -854,7 +854,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
         $coll->addFieldToFilter('increment_id', $ids);
         $coll->addPosData("external_id");
-        $dueAmount = ($po->getDebtAmount() < 0)? 0:abs($po->getDebtAmount);
+        $dueAmount = ($po->getDebtAmount() > 0)? 0:abs($po->getDebtAmount);
         $list = array();
         $i = 0;
         foreach ($coll as $po) {
