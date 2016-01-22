@@ -201,7 +201,7 @@ class Modago_Integrator_Model_Api
             }
             try {
                 if ($problems = $integratorOrders->getProductProblemList()) {
-                    $message = sprintf('Products out of stocks (%s)',implode(',',$problems));
+                    $message = $helper->__('Products out of stocks (%s)',implode(',',$problems));
                     $this->_setOrderReservation($item->order_id,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$message);
                 }
             } catch (Exception $xt) {
