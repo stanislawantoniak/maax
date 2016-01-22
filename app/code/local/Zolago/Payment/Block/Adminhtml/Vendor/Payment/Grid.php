@@ -17,8 +17,15 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('zolagopayment/vendor_payment')->getCollection();
+        $model = Mage::getModel('zolagopayment/vendor_payment');
+        $collection = $model->getCollection();
         $this->setCollection($collection);
+
+        $collection->getSelect()->join(
+            array("vendors" => $model->getResource()->getTable('udropship/vendor')), //$name
+            "main_table.vendor_id=vendors.vendor_id", //$cond
+            array("vendor_name")//$cols = '*'
+        );
         return parent::_prepareCollection();
     }
 
@@ -45,8 +52,10 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
                 'header' => $this->__('Vendor'),
                 'width' => '50px',
                 "type" => "options",
-                'index' => 'vendor_id',
-                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
+                'index' => 'vendor_name',
+                "options" => Mage::getSingleton('zolagodropship/source')
+                    ->setPath('allvendorswithdisabled')
+                    ->toOptionHash()
             )
         );
         $this->addColumn('cost',
