@@ -274,7 +274,7 @@ class Modago_Integrator_Model_Api
         foreach ($orders as $item) {
             $invoiceRequired = $item->invoice_data->invoice_required;
             $address = $item->invoice_data->invoice_address;
-            Mage::log($item, null, "api.log");
+
             $shippingAddress = $item->delivery_data->delivery_address;
 
             /* @var $orderAddress Mage_Sales_Model_Order_Address */
@@ -613,7 +613,7 @@ class Modago_Integrator_Model_Api
     public function processOrders($foreachMsgData) {
         $confirmMessages = array();
         foreach ($foreachMsgData as $item) {
-            Mage::log($item, null, "api_general.log");
+
             switch ($item->messageType) {
             case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
                 if ($this->_createNewOrder($item->orderID)) {
