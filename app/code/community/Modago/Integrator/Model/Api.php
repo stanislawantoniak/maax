@@ -586,7 +586,7 @@ class Modago_Integrator_Model_Api
                     $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
                 }
                 $order->save();
-
+                $helper->log($helper->__("Success: payment in order has changed %s (%s)", $order->getIncrementId(), $orderId));
                 return true;
             } else {
                 $helper->log($helper->__("Error: order %s not found.", $orderId));
