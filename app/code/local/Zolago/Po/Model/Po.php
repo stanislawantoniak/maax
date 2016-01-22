@@ -867,7 +867,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             $list[$i]['order_status']             = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
             $list[$i]['order_total']              = $po->getGrandTotalInclTax();
             $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
-            $list[$i]['order_due_amount']         = abs($po->getDebtAmount());
+            $list[$i]['order_due_amount']         = $po->getDebtAmount();
             $list[$i]['delivery_method']          = 'standard_courier'; // todo when inpost added
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
