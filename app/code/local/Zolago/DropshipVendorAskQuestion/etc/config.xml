@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_DropshipVendorAskQuestion>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </Zolago_DropshipVendorAskQuestion>
     </modules>
     <global>

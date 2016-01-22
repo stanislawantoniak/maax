@@ -129,8 +129,8 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                     'show_vendor_info'   => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
 	                'use_attachments'    => true,
 	                'increment_id'		 => $incrementId,
+	                'question_url'		 => Mage::getUrl('udqa/vendor/questionEdit',array('id'=>$question->getId())),
                 );
-
 	            /** @var Zolago_Common_Helper_Data $mailer */
 	            $mailer = Mage::helper('zolagocommon');
                 foreach ($emails as $email => $_) {

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Zolago_Catalog_Model_Category
+ *
+ * @method string getDisplayMode()
+ */
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {
     const CACHE_NAME = 'MODEL_CATEGORY';

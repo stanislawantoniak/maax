@@ -90,7 +90,7 @@
         <update handle="udropship_vendor" />
         <reference name="content">
             <block type="core/template" template="unirgy/dropship/vendor/loginwrapper.phtml" name="login-wrapper">
-                <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login">
+                <block type="zolagodropship/vendor_login" template="unirgy/dropship/vendor/login.phtml" name="login">
                     <block type="page/template_links" name="login_links" as="login_links">
                         <action method="addLink" translate="label title" module="udropship">
                             <label>Forgot Password</label>
@@ -109,7 +109,7 @@
     </udropship_vendor_login>
 
     <udropship_vendor_login_ajax>
-        <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login" output="toHtml" />
+        <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login" output="toHtml" /> 
     </udropship_vendor_login_ajax>
 
     <udropship_vendor_password>

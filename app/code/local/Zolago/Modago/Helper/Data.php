@@ -126,4 +126,25 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
          return Mage::helper('zolagocommon')->getCache($cacheKey,$groupId,$lambda,array('blockId' => $blockId));
          
      }
+     
+    /**
+     * polish suffix for products
+     *
+     * @param int $count
+     * @return string
+     */
+     public function polishProductSuffix($count) {
+         if ('pl_PL'== Mage::app()->getLocale()->getLocaleCode()) {
+             if (
+                 ($count % 100 == 12) || ($count % 100 == 13) || ($count % 100 == 14) // 12,13,14
+                 || !(($count % 10 == 2) || ($count % 10 == 3) || ($count % 10 == 4))) {
+
+                 return sprintf('%s produktów',$count);
+             } else {
+                 return sprintf('%s produkty',$count);
+             }
+         } else {
+             return $this->__('%s products',$count);
+         }
+     }
 }
