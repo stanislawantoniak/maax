@@ -64,7 +64,8 @@ class Mage_Catalog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
             'apply_to'                      => $this->_getValue($attr, 'apply_to'),
             'position'                      => $this->_getValue($attr, 'position', 0),
             'is_configurable'               => $this->_getValue($attr, 'is_configurable', 1),
-            'is_used_for_promo_rules'       => $this->_getValue($attr, 'used_for_promo_rules', 0)
+            'is_used_for_promo_rules'       => $this->_getValue($attr, 'used_for_promo_rules', 0),
+            'grid_permission'               => $this->_getValue($attr, 'grid_permission', Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DO_NOT_USE),
         ));
         return $data;
     }
