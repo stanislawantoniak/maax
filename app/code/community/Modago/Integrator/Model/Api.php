@@ -272,7 +272,10 @@ class Modago_Integrator_Model_Api
         $orders = $orderList->order;
 
         foreach ($orders as $item) {
+            $invoiceRequired = $item->invoice_data->invoice_required;
             $address = $item->invoice_data->invoice_address;
+            Mage::log($item, null, "api.log");
+            $shippingAddress = $item->delivery_data->delivery_address;
 
             /* @var $orderAddress Mage_Sales_Model_Order_Address */
             $orderAddress = $localOrder->getBillingAddress();
@@ -281,17 +284,37 @@ class Modago_Integrator_Model_Api
                 $helper->log($helper->__('Error: Invoice address not found, order %s (%s)', $localOrderId, $item->order_id));
                 return false;
             }
-            $orderAddress->setFirstname($address->invoice_first_name);
-            $orderAddress->setLastname($address->invoice_last_name);
 
-            $orderAddress->setCompany($address->invoice_company_name);
+            if($invoiceRequired == 0 || empty($address)){
+                $orderAddress->setFirstname($shippingAddress->delivery_first_name);
+                $orderAddress->setLastname($shippingAddress->delivery_last_name);
 
-            $orderAddress->setStreet($address->invoice_street);
-            $orderAddress->setCity($address->invoice_city);
-            $orderAddress->setPostcode($address->invoice_zip_code);
-            $orderAddress->setCountryId($address->invoice_country);
-            $orderAddress->setTelephone($address->phone);
-            $orderAddress->setData("vat_id", $address->invoice_tax_id);
+                $orderAddress->setCompany($shippingAddress->delivery_company_name);
+
+                $orderAddress->setStreet($shippingAddress->delivery_street);
+                $orderAddress->setCity($shippingAddress->delivery_city);
+                $orderAddress->setPostcode($shippingAddress->delivery_zip_code);
+                $orderAddress->setCountryId($shippingAddress->delivery_country);
+                $orderAddress->setTelephone($shippingAddress->phone);
+            } else {
+
+                $orderAddress->setFirstname($address->invoice_first_name);
+                $orderAddress->setLastname($address->invoice_last_name);
+
+                $orderAddress->setCompany($address->invoice_company_name);
+
+                $orderAddress->setStreet($address->invoice_street);
+                $orderAddress->setCity($address->invoice_city);
+                $orderAddress->setPostcode($address->invoice_zip_code);
+                $orderAddress->setCountryId($address->invoice_country);
+                $orderAddress->setTelephone($address->phone);
+                $orderAddress->setData("vat_id", $address->invoice_tax_id);
+            }
+
+
+
+
+
 
             try {
                 $orderAddress->save();
@@ -590,6 +613,7 @@ class Modago_Integrator_Model_Api
     public function processOrders($foreachMsgData) {
         $confirmMessages = array();
         foreach ($foreachMsgData as $item) {
+            Mage::log($item, null, "api_general.log");
             switch ($item->messageType) {
             case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_NEW_ORDER:
                 if ($this->_createNewOrder($item->orderID)) {
