@@ -23,10 +23,15 @@ $sizetable = $this->getSizeTable();
 			plugins: [
 				"advlist autolink lists link image charmap preview anchor textcolor",
 				"searchreplace visualblocks code",
-				"insertdatetime table contextmenu paste imageupload"
+				"insertdatetime table contextmenu paste imageupload",
+				"template"
 			],
-			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image imageupload",
-			relative_urls: false
+			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image imageupload | template",
+			relative_urls: false,
+			templates: [
+				{title: 'Some title 1', description: 'Some desc 1', content: 'My content'},
+				{title: 'Some title 2', description: 'Some desc 2', content: 'development.html'}
+			]
 			<?php if($locale != 'en_US'): ?>, language: "<?php echo $locale; ?>" <?php endif; ?>
 		});
 		var form = $("#sizetableForm");
