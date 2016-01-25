@@ -148,9 +148,10 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 	}
 	
 	
-    /**
-     * @param array $mappers set of mappers 
-     */
+	/**
+	 * @param array $mapper set of mappers
+	 * @return array
+	 */
     public function getAssignedProducts($mapper) {
     	if (!is_array($mapper) && !empty($mapper)) {
     		$mapper = array($mapper);
@@ -427,7 +428,11 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		}
 		return $out;
 	}
-	
+
+	/**
+	 * @param null $params
+	 * @return bool
+	 */
 	protected function _clearIndex($params = null) {
 		if(is_array($params)){
 			$conds = array();

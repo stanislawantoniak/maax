@@ -1,12 +1,34 @@
 <?php
+
+/**
+ * Map product from attribute set to category
+ *
+ * Class Zolago_Mapper_Model_Mapper
+ *
+ * @method Zolago_Mapper_Model_Mapper_Condition_Combine getConditions()
+ * @method Zolago_Mapper_Model_Resource_Mapper getResource()
+ *
+ * @method string getMapperId()
+ * @method string getWebsiteId()
+ * @method string getAttributeSetId()
+ * @method string getIsActive()
+ * @method string getName()
+ * @method string getPriority()
+ * @method string getConditionsSerialized()
+ * @method string getCreatedAt()
+ * @method string UpdatedAt()
+ */
 class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
-    
+
     protected function _construct() {
         $this->_init('zolagomapper/mapper');
     }
-    protected $_eventPrefix = "zolago_mapper";
-    protected $_productIds;
+	protected $_eventPrefix = "zolago_mapper";
+	protected $_productIds;
 
+	/**
+	 * @return false|Zolago_Mapper_Model_Mapper_Condition_Combine
+	 */
     public function getConditionsInstance() {
         return Mage::getModel('zolagomapper/mapper_condition_combine', $this);
     }
@@ -26,20 +48,20 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	}
 
     public function getMatchingProductIds($productsIds=null) {
-		
-		Varien_Profiler::start("ZolagoMapper::Matching");
+
         $this->_productIds = array();
         $this->setCollectedAttributes(array());
-		
+
         $productCollection = Mage::getResourceModel('catalog/product_collection');
 		/* @var $productCollection Mage_Catalog_Model_Resource_Product_Collection */
 		$productCollection->addAttributeToFilter("attribute_set_id", $this->getAttributeSetId());
 		$productCollection->addWebsiteFilter($this->getWebsiteId());
+		$productCollection->addAttributeToFilter("visibility", array('nin' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
 		// Add pre match ids
 		if(is_array($productsIds)){
 			$productCollection->addIdFilter($productsIds);
 		}
-		
+
         $this->getConditions()->collectValidatedAttributes($productCollection);
         Mage::getSingleton('core/resource_iterator')->walk(
             $productCollection->getSelect(), array(array($this, 'callbackValidateProduct')), array(
@@ -48,7 +70,6 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
             )
         );
         unset($productCollection);
-		Varien_Profiler::stop("ZolagoMapper::Matching");
         return $this->_productIds;
     }
 	
