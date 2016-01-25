@@ -128,21 +128,6 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Payment_Grid extends Mage_Adminhtml_
         return $this;
     }
 
-    /**
-     * Sets sorting order by some column
-     *
-     * @param Mage_Adminhtml_Block_Widget_Grid_Column $column
-     * @return Mage_Adminhtml_Block_Widget_Grid
-     */
-    protected function _setCollectionOrder($column)
-    {
-        if ($column->getOrderConditionCallback()) {
-            call_user_func($column->getOrderConditionCallback(), $this->getCollection(), $column);
-            return $this;
-        }
-
-        return parent::_setCollectionOrder($column);
-    }
 
     public function getRowUrl($row)
     {

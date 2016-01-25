@@ -20,8 +20,19 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
      */
     protected function _prepareCollection()
     {
+
+        $model = Mage::getModel('zolagopayment/vendor_payment');
+
+        /* @var $collection Zolago_Payment_Model_Resource_Vendor_Invoice_Collection */
         $collection = Mage::getModel('zolagopayment/vendor_invoice')->getCollection();
         $this->setCollection($collection);
+
+        $collection->getSelect()->join(
+            array("vendors" => $model->getResource()->getTable('udropship/vendor')), //$name
+            "main_table.vendor_id=vendors.vendor_id", //$cond
+            array("vendor_name" => "vendor_name")//$cols = '*'
+        );
+
         return parent::_prepareCollection();
     }
 
@@ -73,13 +84,13 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
             )
         );
 
-/*        $this->addColumn('Wfirma_invoice_id',
-            array(
-                'header' => "wfirma " . $hlp->__('Invoice ID'),
-                'width' => '50px',
-                'index' => 'wfirma_invoice_id'
-            )
-        );*/
+        /*        $this->addColumn('Wfirma_invoice_id',
+                    array(
+                        'header' => "wfirma " . $hlp->__('Invoice ID'),
+                        'width' => '50px',
+                        'index' => 'wfirma_invoice_id'
+                    )
+                );*/
         $this->addColumn('wfirma_invoice_number',
             array(
                 'header' => "Wfirma " . $hlp->__('Invoice #'),
@@ -95,7 +106,9 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
                 'width' => '100px',
                 "type" => "options",
                 'index' => 'vendor_id',
-                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
+                'filter_index' => 'vendor_name',
+                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash(),
+                'filter_condition_callback' => array($this, '_sortByVendorName'),
             )
         );
 
@@ -187,6 +200,29 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
     }
 
     /**
+     * @param $collection
+     * @param $column
+     * @return $this
+     */
+    function _sortByVendorName($collection, $column)
+    {
+        /* @var $collection Zolago_Payment_Model_Resource_Vendor_Payment_Collection */
+        $direction = strtoupper($column->getDir());
+
+        if ($direction) {
+            $collection->getSelect()->order($column->getFilterIndex(), $direction);
+        }
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $index = $column->getIndex();
+        $collection->getSelect()->where("main_table.{$index} = ?", $value);
+
+        return $this;
+    }
+
+    /**
      * @param $grid
      * @param $name
      * @param $label
@@ -205,6 +241,7 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
             )
         );
     }
+
 
     public function getRowUrl($row)
     {
