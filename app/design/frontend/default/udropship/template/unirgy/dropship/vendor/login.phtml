@@ -15,7 +15,6 @@
  * @license    http:///www.unirgy.com/LICENSE-M1.txt
  */
 ?>
-
 <?php $_session = Mage::getSingleton('udropship/session'); ?>
     <div style="margin-top:100px;" id="login-vendor">
         <div class="panel panel-default" >
@@ -31,6 +30,7 @@
                 <form class="form-horizontal" action="<?php echo $this->getUrl('udropship/vendor') ?>" method="post" id="login-form" role="form" autocomplete="off">
                     <div style="margin-bottom: 25px" class="form-group">
                         <label for="email"><?php echo $this->__('Username / Email') ?> <span class="required">*</span></label>
+                        <input type="hidden" name="redirectUrl" value="<?php echo $this->getRedirectUrl();?>">
                         <input name="login[username]"
                                value="<?php echo $this->htmlEscape($_session->getUsername()) ?>" type="text"
                                class="form-control input-lg input-text required-entry validate-email"

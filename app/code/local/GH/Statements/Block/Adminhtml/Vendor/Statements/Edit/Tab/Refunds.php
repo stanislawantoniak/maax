@@ -77,9 +77,17 @@ class GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_Refunds
             'filter_condition_callback' => array($this, '_refundInitiatorFilter')
         ));
 
+        $this->addColumn("registered_value", array(
+            "index" => "registered_value",
+            "header" => Mage::helper("ghstatements")->__("Sale value"),
+            'type' => 'price',
+            'currency' => 'base_currency_code',
+            'currency_code' => Mage::getStoreConfig('currency/options/base')
+        ));
+
         $this->addColumn("value", array(
             "index" => "value",
-            "header" => Mage::helper("ghstatements")->__("Refund Amount"),
+            "header" => Mage::helper("ghstatements")->__("To pay"),
             'type' => 'price',
             'currency' => 'base_currency_code',
             'currency_code' => Mage::getStoreConfig('currency/options/base')

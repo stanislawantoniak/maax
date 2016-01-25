@@ -266,6 +266,7 @@ class Modago_Integrator_Model_Api
         }
 
         $details = $this->_getOrdersById(array($orderId));
+        Mage::log($details, null, "api_invoice_b_as_sh.log");
 
         if (empty($details->status)) { // error
             return false;
@@ -368,6 +369,7 @@ class Modago_Integrator_Model_Api
         }
 
         $details = $this->_getOrdersById(array($orderId));
+        Mage::log($details, null, "api_delivery_b_as_sh.log");
 
         if (empty($details->status)) { // error
             return false;

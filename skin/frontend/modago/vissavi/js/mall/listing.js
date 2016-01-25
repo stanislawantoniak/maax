@@ -224,7 +224,7 @@ Mall.listing = {
 			if(!el.length){
 				return;
 			}
-			self._doShowMore(el.parent(), value, false);
+			self._doShowMore(el.parent(), value);
 		});
 	},
 
@@ -305,32 +305,18 @@ Mall.listing = {
 		Mall.listing.setMainSectionHeight();
 	},
 
-	_doShowMore: function(section, state, animate){
+	_doShowMore: function(section, state) {
 		var link = section.find(".showmore-filters"),
 			content = section.find("[data-state='hidden']");
 
-		if(animate){
-			if(state) {
-				content.show(500, function(){
-					link.text("Pokaż mniej");
-					link.attr("data-state", "1");
-				});
-			} else {
-				content.hide(500, function(){
-					link.text("Pokaż więcej");
-					link.attr("data-state", "0");
-				});
-			}
-		}else{
-			if(state){
-				content.show();
-				link.text("Pokaż mniej");
-				link.attr("data-state", "1");
-			}else{
-				content.hide();
-				link.text("Pokaż więcej");
-				link.attr("data-state", "0");
-			}
+		if (state) {
+			content.show();
+			link.text(Mall.translate.__("Show less"));
+			link.attr("data-state", "1");
+		} else {
+			content.hide();
+			link.text(Mall.translate.__("Show more"));
+			link.attr("data-state", "0");
 		}
 	},
 
@@ -1301,8 +1287,7 @@ Mall.listing = {
 			var me = jQuery(this);
 			self._doShowMore(
 				me.parents('.section'),
-				me.data('state') != '1',
-				false
+				me.attr('data-state') != '1'
 			);
 		});
 
@@ -2402,6 +2387,12 @@ Mall.listing = {
 	},
 	getProductsPerPage: function() {
 		return this._products_per_page;
+	},
+
+	positionBenefits: function() {
+		if(!jQuery(".box_listing_product").length) {
+			jQuery('footer').prepend(jQuery('.benefits'));
+		}
 	}
 
 };
@@ -2428,4 +2419,6 @@ jQuery(document).ready(function () {
     } else {
         Mall.listing.initShuffle();
     }
+
+	Mall.listing.positionBenefits();
 });
