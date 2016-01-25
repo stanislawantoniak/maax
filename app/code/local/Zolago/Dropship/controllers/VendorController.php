@@ -117,7 +117,6 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
         if (!Mage::registry($registryKey)) {
             $url = Mage::helper('core/url')->getCurrentUrl();
             $redirect = $this->getRequest()->getParam('redirectUrl',$url);
-	        Mage::log($redirect,null,'redir.log');
 	        if($redirect) {
 		        Mage::unregister($registryKey);
 		        Mage::register($registryKey, $redirect, true);
