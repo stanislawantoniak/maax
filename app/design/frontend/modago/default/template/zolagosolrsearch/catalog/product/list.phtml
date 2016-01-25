@@ -165,7 +165,8 @@ $_products = $_cache['products'];
 						Mall.translate.add("Show more", "<?php echo Mage::helper('zolagosolrsearch')->__("Show more"); ?>");
 						Mall.translate.add("Show less", "<?php echo Mage::helper('zolagosolrsearch')->__("Show less"); ?>");
 
-						Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>", "<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+						<?php $isSecure = Mage::app()->getStore()->isCurrentlySecure(); ?>
+						Mall.initUrls("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,$isSecure); ?>", "<?php echo Mage::getUrl("/",array("_no_vendor"=>true,'_secure'=>$isSecure)); ?>");
 
 						<?php foreach ($_products as $product): ?>
 						Mall.wishlist.addProduct({
