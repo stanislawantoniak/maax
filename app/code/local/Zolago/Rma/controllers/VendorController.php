@@ -89,7 +89,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						$this->_throwRefundTooMuchAmountException();
 					}
 
-					$refundStatementModel = false;
 					if($po->isPaymentDotpay()) {
 						/** @var Zolago_Payment_Model_Allocation $allocationModel */
 						$allocationModel = Mage::getModel('zolagopayment/allocation');
@@ -97,9 +96,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						if($result === false) {
 							$this->_throwRefundTooMuchAmountException();
 						}
-
-						/** @var GH_Statements_Model_Refund $refundStatementModel */
-						$refundStatementModel = Mage::getModel('ghstatements/refund');
 					}
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
 					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
@@ -117,14 +113,16 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 					/* @var $vendorSession  Zolago_Dropship_Model_Session*/
 					$vendorSession = Mage::getSingleton('udropship/session');
 					$commentData['vendor_id'] = $vendorSession->getVendorId();
+
+					/** @var GH_Statements_Model_Refund $refundStatementModel */
+					$refundStatementModel = Mage::getModel('ghstatements/refund');
+
 					if($vendorSession->isOperatorMode()) {
 						$operator = $vendorSession->getOperator();
 						$commentData['operator_id'] = $operator->getId();
-						if($refundStatementModel) {
-							$refundStatementModel
-								->setOperatorId($operator->getId())
-								->setOperatorName($operator->getFirstname()." ".$operator->getLastname()." (".$operator->getEmail().")");
-						}
+						$refundStatementModel
+							->setOperatorId($operator->getId())
+							->setOperatorName($operator->getFirstname()." ".$operator->getLastname()." (".$operator->getEmail().")");
 					}
 
 					if(!$po->isPaymentDotpay()) {
@@ -150,17 +148,20 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 						}
 					}
 
-					if($po->isPaymentDotpay() && $refundStatementModel) {
-						$refundStatementModel
-							->setPoId($po->getId())
-							->setPoIncrementId($po->getIncrementId())
-							->setRmaId($rma->getId())
-							->setRmaIncrementId($rma->getIncrementId())
-							->setDate(Mage::getModel('core/date')->date('Y-m-d'))
-							->setVendorId($po->getVendor()->getId())
-							->setValue($returnAmount)
-							->save();
+					$refundStatementModel
+						->setPoId($po->getId())
+						->setPoIncrementId($po->getIncrementId())
+						->setRmaId($rma->getId())
+						->setRmaIncrementId($rma->getIncrementId())
+						->setDate(Mage::getModel('core/date')->date('Y-m-d'))
+						->setVendorId($po->getVendor()->getId())
+						->setRegisteredValue($returnAmount);
+
+					if($rma->getPaymentChannelOwner()) {
+						$refundStatementModel->setValue($returnAmount);
 					}
+
+					$refundStatementModel->save();
 
 					$po->saveComments();
 					$rma->saveComments();

@@ -202,6 +202,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
+        Mage::log($url,null,'urlooooo.log');
 
         $pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
             ->setGeneratedUrl($url)
@@ -267,6 +268,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
         if (!$url) {
             $query = http_build_query($params);
             $url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
+        }
+
+        if(Mage::app()->getStore()->isCurrentlySecure()) {
+            $url = str_replace('http://','https://',$url);
         }
 
         return $url;

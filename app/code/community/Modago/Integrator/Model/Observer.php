@@ -16,30 +16,36 @@ class Modago_Integrator_Model_Observer {
      public function check_order_changes($observer) {
          $helperApi = Mage::helper('modagointegrator/api');
 		/** @var Modago_Integrator_Helper_Api $helperApi */
-         if ($helperApi->isEnabled()) {
-             $shipment = $observer->getEvent()->getShipment();
-             $order = $shipment->getOrder();
-             $orderId = $order->getData('modago_order_id');
-             $incrementId = $order->getData('increment_id');
-             if ($orderId) {
-                 $client = Mage::getModel('modagointegrator/soap_client');
-                 $key = $helperApi->getKey($client);                
-                 if ($key) {
-                     $size = $helperApi->getBatchSize();
-                     $ret = $client->getChangeOrderMessage($key,$size,null,$orderId);                     
-                     if (!empty($ret->list) && !empty($ret->list->message)) {
-                         $foreachMsgData = $ret->list->message;
-                         Mage::getModel('modagointegrator/api')->processOrders($foreachMsgData);
-                         $message = Mage::helper('modagointegrator')->__('Error: Order %s (%s) was changed',$incrementId, $orderId);
-                         $helperApi->log($message);
-                         Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
-                     }
-                 } else {
-					$message = $helperApi->__('Error: Cannot check order %s (%s) status',$incrementId, $orderId);
-                    $helperApi->log($message);
-				 }
-             }
-         }
+
+	     if ($helperApi->isEnabled()) {
+		     $registryKey = Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY;
+		     Mage::unregister($registryKey, true);
+		     Mage::register($registryKey, true);
+
+		     if ($helperApi->getBlockShipping()) {
+			     $shipment = $observer->getEvent()->getShipment();
+			     $order = $shipment->getOrder();
+			     $orderId = $order->getData('modago_order_id');
+			     $incrementId = $order->getData('increment_id');
+			     if ($orderId) {
+				     $client = Mage::getModel('modagointegrator/soap_client');
+				     $key = $helperApi->getKey($client);
+				     if ($key) {
+					     $size = $helperApi->getBatchSize();
+					     $ret = $client->getChangeOrderMessage($key, $size, null, $orderId);
+					     if (!empty($ret->list) && !empty($ret->list->message)) {
+						     $message = Mage::helper('modagointegrator')->__('Error: Order %s (%s) was changed', $incrementId, $orderId);
+						     $helperApi->log($message);
+						     Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
+					     }
+				     } else {
+					     $message = $helperApi->__('Error: Cannot check order %s (%s) status', $incrementId, $orderId);
+					     $helperApi->log($message);
+				     }
+			     }
+		     }
+	     }
+
      }
     /**
      * save tracking info in modago api
@@ -68,21 +74,26 @@ class Modago_Integrator_Model_Observer {
 					if (empty($carrier)) {
 						$message = $helper->__('Error: Modago order %s tracking info cannot be saved because there is no carrier mapping for %s', $orderId, $carrierCode);
 						$helperApi->log($message);
-						return; // aborting
+						Mage::throwException($message);    
 					}
 
 					$ret = $client->setOrderShipment($key, $orderId, $dateShipped, $carrier, $trackNumber);
 					if (empty($ret->status)) { // no answer or error
-						$message = $helper->__('Error: no response from API server');
-					} else {
-						if ($ret->message != 'ok') {
-							$message = $helper->__('Error: sending track info to Modago API fail (%s)', $ret->message);
+					    
+						if (!empty($ret->message)) {
+							$message = $helper->__('Error: sending track info to Modago API fail (%s)', $helperApi->translate($ret->message));
 						} else {
-							$message = $helper->__('Success: Modago order %s tracking send', $orderId);
-						}
+    						$message = $helper->__('Error: no response from API server');
+                        }
+                        $helperApi->log($message);
+                        Mage::throwException($message);
+					} else {
+    					$message = $helper->__('Success: Modago order %s tracking send', $orderId);
 					}
 				} else {
 					$message = $helper->__('Error: Modago order %s tracking info cannot be saved', $orderId);
+    				$helperApi->log($message);
+					Mage::throwException($message);
 				}
 				$helperApi->log($message);
 			}
@@ -107,11 +118,10 @@ class Modago_Integrator_Model_Observer {
 			/** @var Mage_Shipping_Model_Carrier_Abstract $carrier */
 			$carrierCode = $carrier->getCarrierCode();
 			$carrierTitle = $carrier->getConfigData('title');
-			$label = $helper->__('Map %s to', $carrierTitle);
 			// Must by XML
 			$element = new Mage_Core_Model_Config_Element('
 						<carrier_' . $carrierCode . ' translate="label">
-							<label>' . $label . '</label>
+							<label>' . $carrierTitle . '</label>
 							<frontend_type>select</frontend_type>
 							<source_model>modagointegrator/shipping_source_modagocarrier</source_model>
 							<sort_order>' . $sortOrder . '</sort_order>
@@ -120,7 +130,7 @@ class Modago_Integrator_Model_Observer {
 							<show_in_store>0</show_in_store>
 						</carrier_' . $carrierCode . '>');
 			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
-			$adminApiFields = $config->getNode('sections/modagointegrator/groups/orders/fields');
+			$adminApiFields = $config->getNode('sections/modagointegrator/groups/carriers/fields');
 			$adminApiFields->appendChild($element);
 			$sortOrder++;
 		}
@@ -135,7 +145,7 @@ class Modago_Integrator_Model_Observer {
 	 */
 	private function getAllCarriers() {
 		/** @var Modago_Integrator_Model_Shipping_Source_Allcarriers $shippingSource */
-		$shippingSource = Mage::getSingleton('shipping/config');
+		$shippingSource = Mage::getSingleton('modagointegrator/shipping_source_allcarriers ');
 		$carriers = $shippingSource->getAllCarriers();
 		return $carriers;
 	}
