@@ -99,7 +99,6 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
             )
         );
 
-
         $this->addColumn('vendor_id',
             array(
                 'header' => $hlp->__('Vendor'),
