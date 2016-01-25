@@ -21,10 +21,10 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
     protected function _prepareCollection()
     {
 
-        $model = Mage::getModel('zolagopayment/vendor_payment');
+        $model = Mage::getModel('zolagopayment/vendor_invoice');
 
         /* @var $collection Zolago_Payment_Model_Resource_Vendor_Invoice_Collection */
-        $collection = Mage::getModel('zolagopayment/vendor_invoice')->getCollection();
+        $collection = $model->getCollection();
         $this->setCollection($collection);
 
         $collection->getSelect()->join(
@@ -105,8 +105,8 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
                 'width' => '100px',
                 "type" => "options",
                 'index' => 'vendor_id',
-                'filter_index' => 'vendor_name',
                 "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash(),
+                'filter_index' => 'vendor_name',
                 'filter_condition_callback' => array($this, '_sortByVendorName'),
             )
         );
