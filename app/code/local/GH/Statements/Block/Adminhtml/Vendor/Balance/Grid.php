@@ -17,9 +17,17 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
 
     protected function _prepareCollection()
     {
-        /** @var GH_Statements_Model_Resource_Vendor_Balance_Collection $collection */
-        $collection = Mage::getResourceModel('ghstatements/vendor_balance_collection');
+        $model = Mage::getModel('ghstatements/vendor_balance');
+        /** @var GH_Statements_Model_Vendor_Balance_Collection $collection */
+        $collection = $model->getCollection();
         $this->setCollection($collection);
+
+        $collection->getSelect()->join(
+            array("vendors" => $model->getResource()->getTable('udropship/vendor')), //$name
+            "main_table.vendor_id=vendors.vendor_id", //$cond
+            array("vendor_name" => "vendor_name")//$cols = '*'
+        );
+
         parent::_prepareCollection();
         return $this;
     }
@@ -61,7 +69,9 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
                 'width' => '50px',
                 "type" => "options",
                 'index' => 'vendor_id',
-                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
+                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash(),
+                'filter_index' => 'vendor_name',
+                'filter_condition_callback' => array($this, '_sortByVendorName')
             )
         );
         // Płatności od klientów
@@ -135,6 +145,29 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
             ));
 
         return parent::_prepareColumns();
+    }
+
+    /**
+     * @param $collection
+     * @param $column
+     * @return $this
+     */
+    function _sortByVendorName($collection, $column)
+    {
+        /* @var $collection Zolago_Payment_Model_Resource_Vendor_Payment_Collection */
+        $direction = strtoupper($column->getDir());
+
+        if ($direction) {
+            $collection->getSelect()->order($column->getFilterIndex(), $direction);
+        }
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $index = $column->getIndex();
+        $collection->getSelect()->where("main_table.{$index} = ?", $value);
+
+        return $this;
     }
 
     public function getGridUrl()
