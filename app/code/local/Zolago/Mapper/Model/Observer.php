@@ -67,12 +67,20 @@ class Zolago_Mapper_Model_Observer {
 	}
 	
 	static public function processMapperQueue() {
-		$model = Mage::getModel('zolagomapper/queue_mapper')->process();		
+		/** @var Zolago_Mapper_Model_Queue_Mapper $model */
+		$model = Mage::getModel('zolagomapper/queue_mapper');
+		$count = $model->process();
+		if (!Mage::registry('zolago_mapper_error')) {
+			return 'SUCCESS: ' . Mage::helper('zolagomapper')->__("%s mappers processed", $count);
+		} else {
+			return 'ERROR: ' . Mage::registry('zolago_mapper_error');
+		}
 	}
 	
 	static public function processProductQueue() {
-		$model = Mage::getModel('zolagomapper/queue_product')->process();
-		
+		/** @var Zolago_Mapper_Model_Queue_Product $model */
+		$model = Mage::getModel('zolagomapper/queue_product');
+		$model->process();
 	}
 	
 	protected function _isAnyCodeMappable(array $codes) {

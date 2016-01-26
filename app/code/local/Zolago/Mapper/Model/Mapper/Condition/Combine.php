@@ -11,6 +11,7 @@ class Zolago_Mapper_Model_Mapper_Condition_Combine extends Mage_Rule_Model_Condi
 		}
 		$this->_rule = $ruleModel;
 		parent::__construct();
+		$this->setType('zolagomapper/mapper_condition_combine');
 	}
 	
 	protected function _getNewConditionModelInstance($modelClass) {
@@ -50,9 +51,17 @@ class Zolago_Mapper_Model_Mapper_Condition_Combine extends Mage_Rule_Model_Condi
         ));
         return $conditions;
     }
+
+	/**
+	 * @param $productCollection
+	 * @return $this
+	 */
 	public function collectValidatedAttributes($productCollection)
     {
         foreach ($this->getConditions() as $condition) {
+			/** @var Zolago_Mapper_Model_Mapper_Condition_Combine $condition */
+			/* OR */
+			/** @var Zolago_Mapper_Model_Mapper_Condition_Product $condition */
             $condition->collectValidatedAttributes($productCollection);
         }
         return $this;

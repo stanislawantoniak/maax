@@ -21,21 +21,20 @@ class Zolago_Mapper_Adminhtml_MapperController
             return;
 		} 
 
-		Varien_Profiler::start("ZolagoMapper::Run");
+		/** @var Zolago_Mapper_Model_Resource_Index $indexer */
 		$indexer = Mage::getResourceModel('zolagomapper/index');
-		$oldProducts = $indexer->getAssignedProducts(array($id),$model->getWebsiteId());
-		$mathedIds = $indexer->reindexForMappers($id);
-		$final = array_merge($oldProducts,$mathedIds);
+		$oldProducts = $indexer->getAssignedProducts(array($id));
+		$matchedIds = $indexer->reindexForMappers(array($id));
+		$final = array_merge($oldProducts, $matchedIds);
 		$final = array_unique($final);
 		$indexer->assignWithCatalog($final);
 		$storeId = $model->getDefaultStoreId();
         	    
 		$productColl = Mage::getResourceModel('catalog/product_collection');
 		
-		Varien_Profiler::start("ZolagoMapper::Run");
 		/* @var $productColl Mage_Catalog_Model_Resource_Product_Collection */
 		$productColl->setStoreId($storeId);
-		$productColl->addIdFilter($mathedIds);
+		$productColl->addIdFilter($matchedIds);
 		$productColl->addAttributeToSelect("price");
 		$productColl->addAttributeToSelect("name");
 
@@ -57,7 +56,6 @@ class Zolago_Mapper_Adminhtml_MapperController
 				setCategories($categoryColl)->
 				setStore(Mage::app()->getStore($storeId));
 		
-		Varien_Profiler::stop("ZolagoMapper::Run");
 		$this->renderLayout();
 	}
 	
@@ -92,6 +90,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 			$doSaveAndQueue = $request->getParam("do_saveAndQueue");
             if ($doSaveAndQueue) {
                 // Add to queue
+				/** @var Zolago_Mapper_Model_Queue_Mapper $queue */
                 $queue = Mage::getModel('zolagomapper/queue_mapper');
                 $queue->push($mapper->getId());
                 $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
@@ -124,7 +123,14 @@ class Zolago_Mapper_Adminhtml_MapperController
 			$this->_getSession()->addError(Mage::helper("zolagomapper")->__("Invaild mapper Id"));
 			return $this->_redirectReferer();
 		}
-		
+
+		try {
+			// Like a test for valid attributes
+			$model->getConditions()->collectValidatedAttributes(Mage::getResourceModel('catalog/product_collection'));
+		} catch (Zolago_Mapper_Exception $e) {
+			$this->_getSession()->addError(Mage::helper("zolagomapper")->__("This mapper is not correct. Set it again and save"));
+		}
+
 		if ($values = $this->_getSession()->getData('mapper_form_data', true)) {
 			if(isset($values['category_ids_as_string'])){
 				$model->setCategoryIds(explode(",",$values['category_ids_as_string']));
@@ -245,6 +251,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 	 */
 	protected function _registerModel() {
 		if(!Mage::registry("zolagomapper_current_mapper")){
+			/** @var Zolago_Mapper_Model_Mapper $model */
 			$model = Mage::getModel("zolagomapper/mapper");
 			if($id = $this->_getId()){
 				$model->load($id);
