@@ -16,28 +16,36 @@ class Modago_Integrator_Model_Observer {
      public function check_order_changes($observer) {
          $helperApi = Mage::helper('modagointegrator/api');
 		/** @var Modago_Integrator_Helper_Api $helperApi */
-         if ($helperApi->isEnabled() && $helperApi->getBlockShipping()) {
-             $shipment = $observer->getEvent()->getShipment();
-             $order = $shipment->getOrder();
-             $orderId = $order->getData('modago_order_id');
-             $incrementId = $order->getData('increment_id');
-             if ($orderId) {
-                 $client = Mage::getModel('modagointegrator/soap_client');
-                 $key = $helperApi->getKey($client);                
-                 if ($key) {
-                     $size = $helperApi->getBatchSize();
-                     $ret = $client->getChangeOrderMessage($key,$size,null,$orderId);                     
-                     if (!empty($ret->list) && !empty($ret->list->message)) {
-                         $message = Mage::helper('modagointegrator')->__('Error: Order %s (%s) was changed',$incrementId, $orderId);
-                         $helperApi->log($message);
-                         Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
-                     }
-                 } else {
-					$message = $helperApi->__('Error: Cannot check order %s (%s) status',$incrementId, $orderId);
-                    $helperApi->log($message);
-				 }
-             }
-         }
+
+	     if ($helperApi->isEnabled()) {
+		     $registryKey = Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY;
+		     Mage::unregister($registryKey, true);
+		     Mage::register($registryKey, true);
+
+		     if ($helperApi->getBlockShipping()) {
+			     $shipment = $observer->getEvent()->getShipment();
+			     $order = $shipment->getOrder();
+			     $orderId = $order->getData('modago_order_id');
+			     $incrementId = $order->getData('increment_id');
+			     if ($orderId) {
+				     $client = Mage::getModel('modagointegrator/soap_client');
+				     $key = $helperApi->getKey($client);
+				     if ($key) {
+					     $size = $helperApi->getBatchSize();
+					     $ret = $client->getChangeOrderMessage($key, $size, null, $orderId);
+					     if (!empty($ret->list) && !empty($ret->list->message)) {
+						     $message = Mage::helper('modagointegrator')->__('Error: Order %s (%s) was changed', $incrementId, $orderId);
+						     $helperApi->log($message);
+						     Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
+					     }
+				     } else {
+					     $message = $helperApi->__('Error: Cannot check order %s (%s) status', $incrementId, $orderId);
+					     $helperApi->log($message);
+				     }
+			     }
+		     }
+	     }
+
      }
     /**
      * save tracking info in modago api
@@ -137,7 +145,7 @@ class Modago_Integrator_Model_Observer {
 	 */
 	private function getAllCarriers() {
 		/** @var Modago_Integrator_Model_Shipping_Source_Allcarriers $shippingSource */
-		$shippingSource = Mage::getSingleton('shipping/config');
+		$shippingSource = Mage::getSingleton('modagointegrator/shipping_source_allcarriers ');
 		$carriers = $shippingSource->getAllCarriers();
 		return $carriers;
 	}
