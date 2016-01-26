@@ -29,7 +29,6 @@ class Modago_Integrator_Model_Observer {
             $orderId = $order->getData('modago_order_id');
             $incrementId = $order->getData('increment_id');
             if ($orderId) {
-                $api->setOrderAsCollected($orderId);
                 if ($helperApi->getBlockShipping()) {
                     $ret = $api->getChangeOrderMessage($orderId);
                     if (!empty($ret->list) && !empty($ret->list->message)) {
@@ -38,6 +37,7 @@ class Modago_Integrator_Model_Observer {
                         Mage::throwException(Mage::helper('modagointegrator')->__('Cannot save shipment. Order was changed on Modago.pl.'));
                     }
                 }
+                $api->setOrderAsCollected($orderId);
             }
         }
 
