@@ -798,7 +798,8 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
         $listNotValid = array();
         foreach ($poCollection as $po) {
             /** @var Zolago_Po_Model_Po $po */
-            if(!$po->getStatusModel()->isStartPackingAvailable($po)) {
+            if(!$po->getStatusModel()->isStartPackingAvailable($po) 
+                && !$po->getStatusModel()->isShippingAvailable($po)) {
                 $listNotValid[] = $po->getIncrementId();
             }
         }
