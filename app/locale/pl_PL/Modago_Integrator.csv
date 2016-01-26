@@ -89,3 +89,6 @@
 "Block shipping","Blokowanie wysyłki"
 "Block shipping after order change in Modago API","Blokuj wysyłkę po zmianie w zamówieniu po stronie Modago API"
 "Success: payment in order has changed %s (%s)","Zmieniła się wartość płatności w zamówieniu %s (%s)"
+"Products out of stocks (%s)","Brak produktów w magazynie (%s)"
+"Error: setting order %s as collected failed (%s)","Błąd: Oznaczenie zamówienia jako spakowane nie powiodło się (%s)"
+"Success: order set as collected (%s)","OK: Zamówienie oznaczono jako spakowane (%s)"
