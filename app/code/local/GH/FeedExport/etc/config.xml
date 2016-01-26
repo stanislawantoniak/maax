@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <GH_FeedExport>
+            <version>0.1.0</version>
+        </GH_FeedExport>
+    </modules>
+    <global>
+        <models>
+            <ghfeedexport>
+                <class>GH_FeedExport_Model</class>
+                <resourceModel>ghfeedexport_resource</resourceModel>
+            </ghfeedexport>
+            <ghfeedexport_resource>
+                <class>GH_FeedExport_Model_Resource</class>
+            </ghfeedexport_resource>
+        </models>
+        <blocks>
+            <ghfeedexport>
+                <class>GH_FeedExport_Block</class>
+            </ghfeedexport>
+        </blocks>
+        <helpers>
+            <ghfeedexport>
+                <class>GH_FeedExport_Helper</class>
+            </ghfeedexport>
+        </helpers>
+    </global>
+</config>
