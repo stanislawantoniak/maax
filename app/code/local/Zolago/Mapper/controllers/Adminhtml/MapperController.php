@@ -90,6 +90,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 			$doSaveAndQueue = $request->getParam("do_saveAndQueue");
             if ($doSaveAndQueue) {
                 // Add to queue
+				/** @var Zolago_Mapper_Model_Queue_Mapper $queue */
                 $queue = Mage::getModel('zolagomapper/queue_mapper');
                 $queue->push($mapper->getId());
                 $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("Mapper added to rebuild queue"));
@@ -122,7 +123,14 @@ class Zolago_Mapper_Adminhtml_MapperController
 			$this->_getSession()->addError(Mage::helper("zolagomapper")->__("Invaild mapper Id"));
 			return $this->_redirectReferer();
 		}
-		
+
+		try {
+			// Like a test for valid attributes
+			$model->getConditions()->collectValidatedAttributes(Mage::getResourceModel('catalog/product_collection'));
+		} catch (Zolago_Mapper_Exception $e) {
+			$this->_getSession()->addError(Mage::helper("zolagomapper")->__("This mapper is not correct. Set it again and save"));
+		}
+
 		if ($values = $this->_getSession()->getData('mapper_form_data', true)) {
 			if(isset($values['category_ids_as_string'])){
 				$model->setCategoryIds(explode(",",$values['category_ids_as_string']));

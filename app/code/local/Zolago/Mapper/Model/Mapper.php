@@ -62,13 +62,21 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 			$productCollection->addIdFilter($productsIds);
 		}
 
-        $this->getConditions()->collectValidatedAttributes($productCollection);
-        Mage::getSingleton('core/resource_iterator')->walk(
-            $productCollection->getSelect(), array(array($this, 'callbackValidateProduct')), array(
-                'attributes' => $this->getCollectedAttributes(),
-                'product' => Mage::getModel('catalog/product'),
-            )
-        );
+		try {
+			$this->getConditions()->collectValidatedAttributes($productCollection);
+			Mage::getSingleton('core/resource_iterator')->walk(
+				$productCollection->getSelect(), array(array($this, 'callbackValidateProduct')), array(
+					'attributes' => $this->getCollectedAttributes(),
+					'product' => Mage::getModel('catalog/product'),
+				)
+			);
+		} catch (Zolago_Mapper_Exception $e) {
+			Mage::helper('zolagomapper')->registerError($e);
+		} catch (Exception $e) {
+			Mage::helper('zolagomapper')->registerError($e);
+			Mage::logException($e);
+		}
+
         unset($productCollection);
         return $this->_productIds;
     }
@@ -104,7 +112,27 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	public function getWebsiteIds() {
 		return array($this->getWebsiteId());
 	}
-  
-    
+
+	/**
+	 * Retrieve attribute set object corresponding to this mapper
+	 *
+	 * @return Mage_Eav_Model_Entity_Attribute_Set
+	 */
+	public function getAttributeSetObject() {
+		/** @var Mage_Eav_Model_Entity_Attribute_Set $model */
+		$model = Mage::getModel("eav/entity_attribute_set");
+		$model->load($this->getAttributeSetId());
+		return $model;
+	}
+
+	/**
+	 * Return long name for human
+	 *
+	 * @return string
+	 */
+	public function getFullName() {
+		$name = $this->getAttributeSetObject()->getAttributeSetName() . ' ' . $this->getName();
+		return $name;
+	}
 }
 

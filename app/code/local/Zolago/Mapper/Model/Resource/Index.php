@@ -53,8 +53,18 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		return $this->_reindexMappers();
 		
     }
+
 	/**
-	 * @param mixed $params
+	 * Assign products to catalog category
+	 * Remove old outdated
+	 * Insert to new one
+	 * Return true if no errors with mappers
+	 * Return false if any problems with mappers
+	 * errors messages saved in registry -> zolago_mapper_error
+	 *
+	 * @param null $productsIds
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function assignWithCatalog($productsIds=null) {
 		$filter = $productsIds ? array("product_id"=>$productsIds) : null;
@@ -138,11 +148,16 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 //		// Process normal indexer
 //		Mage::getResourceSingleton("catalog/category_indexer_product")
 //			->catalogProductMassAction($event);
-		
-		Mage::dispatchEvent("zolago_mapper_after_assign_products", array(
-			"product_ids" => $affectedProductIds
-		));
 
+		if (!empty($categoryList)) {
+			Mage::dispatchEvent("zolago_mapper_after_assign_products", array(
+				"product_ids" => $affectedProductIds
+			));
+		}
+		if (Mage::registry('zolago_mapper_error')) {
+			// There was some error
+			return false;
+		}
 		return true;
 		
 	}
@@ -157,13 +172,13 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
     		$mapper = array($mapper);
     	}
     	$adapter = $this->getReadConnection();
-    	$select = $adapter->select()
-						  ->distinct()
-						  ->from(
-						  	$this->getTable('zolagomapper/index'),
-				    		array('product_id')
-						  )
-						  ->where('mapper_id in (?)',implode(',',$mapper));
+		$select = $adapter->select()
+			->distinct()
+			->from(
+				$this->getTable('zolagomapper/index'),
+				array('product_id'))
+			->where($adapter->quoteInto('mapper_id ' . (is_scalar($mapper) ? " = ?" : "IN (?)"), $mapper));
+
 		$out = array();
 		foreach ($adapter->fetchAssoc($select) as $item) {
 			$out[$item['product_id']] = $item['product_id'];

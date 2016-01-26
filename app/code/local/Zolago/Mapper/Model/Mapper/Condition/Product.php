@@ -2,8 +2,11 @@
 class Zolago_Mapper_Model_Mapper_Condition_Product extends Mage_CatalogRule_Model_Rule_Condition_Product {
     
 	protected $_excludedAttributes = array("attribute_set_id", "category_ids");
+	/**
+	 * @var Zolago_Mapper_Model_Mapper
+	 */
 	protected $_rule;
-	
+
 	public function __construct($ruleModel) {
 		if(! $ruleModel instanceof Mage_Rule_Model_Rule){
 			throw new Exception("Specify rule model");
@@ -82,5 +85,34 @@ class Zolago_Mapper_Model_Mapper_Condition_Product extends Mage_CatalogRule_Mode
 	public function _getExcludedAttributes() {
 		return $this->_excludedAttributes;
 	}
-    
+
+	/**
+	 * Collect validated attributes
+	 *
+	 * @param Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Collection $productCollection
+	 * @return $this
+	 * @throws Zolago_Mapper_Exception
+	 */
+	public function collectValidatedAttributes($productCollection)
+	{
+		$attribute = $this->getAttribute();
+		if ('category_ids' != $attribute) {
+			$attrObj = $this->getAttributeObject();
+			if (!$attrObj->getId()) {
+				throw new Zolago_Mapper_Exception(
+					Mage::helper('zolagomapper')->__('Invalid attribute %s in mapper %s (ID: %s)',
+						$attribute, $this->getRule()->getFullName(), $this->getRule()->getId()));
+			}
+			if ($attrObj->isScopeGlobal()) {
+				$attributes = $this->getRule()->getCollectedAttributes();
+				$attributes[$attribute] = true;
+				$this->getRule()->setCollectedAttributes($attributes);
+				$productCollection->addAttributeToSelect($attribute, 'left');
+			} else {
+				$this->_entityAttributeValues = $productCollection->getAllAttributeValues($attribute);
+			}
+		}
+
+		return $this;
+	}
 }

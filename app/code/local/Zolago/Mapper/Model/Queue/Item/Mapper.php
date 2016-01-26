@@ -9,4 +9,3 @@ class Zolago_Mapper_Model_Queue_Item_Mapper extends Zolago_Common_Model_Queue_It
         $this->setMapperId($itemId);
     }
 }
-?>
