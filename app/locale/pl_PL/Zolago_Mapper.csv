@@ -10,3 +10,4 @@
 "%s mappers added to rebuild queue, %s row skipped","%s mapery dodano do kolejki, %s wiersze pominięto"
 "An error occurred while adding mappers to queue","Wystąpił błąd podczas dodawania mapowania do kolejki"
 "The mapper has been saved.","Zapisano mapowanie."
+"This mapper is not correct. Set it again and save","Jest problem z tym mapowaniem. Ustaw wszystkie warunki i zapisz."
