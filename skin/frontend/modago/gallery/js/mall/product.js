@@ -14,6 +14,7 @@ Mall.product = {
 			Mall.product.rating.init();
             Mall.product.review.init();
             Mall.product.gallery.init();
+			Mall.product.sizetable.init();
 			if(document.location.hash) {
 				document.location.hash = '';
 				window.history.replaceState({},'',document.location.href.replace('#',''));
@@ -1178,7 +1179,31 @@ Mall.product = {
 		    return this.getLightboxGalleryImagesContainer().find('.'+this._lightboxGalleryItemClass);
 	    }
 
-    }
+    },
+
+	sizetable: {
+		_content: "",
+		_iframe_id: "sizeTableIframe",
+		_doc: "",
+		init: function() {
+			this._doc = document.getElementById(this._iframe_id).contentWindow.document;
+			this._doc.open();
+			this._doc.write(this.getContent());
+			this._doc.close();
+			this.resize();
+			jQuery(window).resize(this.resize);
+		},
+		resize: function() {
+			var body = Mall.product.sizetable._doc.body;
+			jQuery('#'+Mall.product.sizetable._iframe_id).css({width: '100%',height: body.scrollHeight+'px'});
+		},
+		getContent: function() {
+			return this._content;
+		},
+		setContent: function(content) {
+			this._content = content;
+		}
+	}
 };
 
 jQuery(document).ready(function() {

@@ -1,15 +1,17 @@
 <?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Edit */
 $_helper = Mage::helper('zolagosizetable');
-$stores = $this->getStores();
+$stores = $this->getAllowedStores();
 $locale = Mage::app()->getLocale()->getLocaleCode();
 $sizetable = $this->getSizeTable();
+$templates = $this->getSizeTablesTemplates();
+$anyTemplates = !empty($templates);
+$css = $this->getSizeTablesStylesForJs();
 ?>
 <script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce',array('_secure'=> $this->getRequest()->isSecure())); ?>tinymce.min.js"></script>
 <script
 	src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce',array('_secure' => $this->getRequest()->isSecure())); ?>jquery.tinymce.min.js"></script>
 <script>
-	jQuery(function ($) {
-		tinymce.init({
+	var tinymceOptions = {
 			imageupload_url: "<?php echo $this->getImageUploadAction(); ?>",
 			imageupload_translations: {
 				title: '<?php echo $this->__("Upload image"); ?>',
@@ -18,22 +20,40 @@ $sizetable = $this->getSizeTable();
 				cancel: '<?php echo $this->__("Cancel"); ?>'
 			},
 			skin: 'light',
-			selector: 'textarea.tinymce',
 			height: 300,
 			plugins: [
 				"advlist autolink lists link image charmap preview anchor textcolor",
 				"searchreplace visualblocks code",
-				"insertdatetime table contextmenu paste imageupload",
-				"template"
+				"insertdatetime table contextmenu paste imageupload<?php echo $anyTemplates ?  " template" : "" ?>"
 			],
-			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image imageupload | template",
+			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | "+
+			"bullist numlist outdent indent | link image imageupload<?php echo $anyTemplates ? " | template" : "" ?>",
 			relative_urls: false,
+			<?php if($anyTemplates): ?>
 			templates: [
-				{title: 'Some title 1', description: 'Some desc 1', content: 'My content'},
-				{title: 'Some title 2', description: 'Some desc 2', content: 'development.html'}
-			]
-			<?php if($locale != 'en_US'): ?>, language: "<?php echo $locale; ?>" <?php endif; ?>
-		});
+				<?php foreach($templates as $tpl): ?>
+				{title: '<?php echo $tpl['title'] ?>', description: '', content: '<?php echo $tpl['content'] ?>'},
+				<?php endforeach ?>
+			],
+			<?php endif; ?>
+			<?php if($locale != 'en_US'): ?>language: "<?php echo $locale; ?>" <?php endif; ?>
+		};
+	jQuery(function ($) {
+		tinymce.init(jQuery.extend(tinymceOptions,{
+			selector: '#sizetable_0',
+			content_style: <?php echo isset($css[0]) ? $css[0] : "\"\""; ?>
+		}));
+
+		//without the timeout only last tinymce is loaded
+		<?php foreach($stores as $storeData): ?>
+		setTimeout(function() {
+			tinymce.init(jQuery.extend(tinymceOptions, {
+				selector: '#sizetable_<?php echo $storeData['store_id']; ?>',
+				content_style: <?php echo $css[$storeData['store_id']]; ?>
+			}));
+		},150);
+		<?php endforeach; ?>
+
 		var form = $("#sizetableForm");
 		new Zolago.formIntegrator(form);
 		var validator = form.submit(function () {
@@ -96,7 +116,7 @@ $sizetable = $this->getSizeTable();
 
 							<div class="col-md-10">
 								<textarea name="default_value"
-								          id="default_value"
+								          id="sizetable_0"
 								          class="form-control required-entry tinymce"><?php if ($sizetable) echo $sizetable['default_value']; ?></textarea>
 							</div>
 						</div>

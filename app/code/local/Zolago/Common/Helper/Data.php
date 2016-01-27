@@ -242,4 +242,9 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
                              
      }
 
+	public function stringForJs($string,$quote='"',$includeQuotes=false) {
+		$finalQuote = $includeQuotes ? $quote : "";
+		return $finalQuote.str_replace(array($quote,"\n","\r"),array('\\'.$quote," "," "),$string).$finalQuote;
+	}
+
 }
