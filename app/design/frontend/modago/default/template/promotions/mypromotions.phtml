@@ -5,6 +5,10 @@ $helper = Mage::helper('zolagosalesrule');
 $helperModago = Mage::helper("zolagomodago");
 $galleryLogo = $this->getGalleryLogo();
 
+
+
+
+
 ?>
 <?php echo $this->getChildHtml("zolago_modago_mypromotions_header"); ?>
 
@@ -110,9 +114,15 @@ $galleryLogo = $this->getGalleryLogo();
 					<div class="row">
 						<section id="mypromotions-list" class="main col-lg-12 col-md-12 col-sm-12 col-xs-12 mypromotions-not-logged-in">
 							<div id="promo_list" style="pointer-events: none;">
-								<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('mypromotions_fake_coupons')->toHtml(); ?>
+                                <?php
+                                echo $this->getLayout()
+                                    ->createBlock('zolagomodago/brands_vendor')
+                                    ->setTemplate('promotions/brands.phtml')
+                                    ->toHtml();
+                                ?>
 							</div>
 						</section>
+
 					</div>
 				</div>
 					<?php if ($this->isPersistent()): //not logged in but has persistent ?>
