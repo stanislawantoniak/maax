@@ -203,14 +203,14 @@
     </adminhtml>
     <crontab>
         <jobs>
-            <feedexport_job>
-                <schedule>
-                    <cron_expr>*/10 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>feedexport/observer::generate</model>
-                </run>
-            </feedexport_job>
+            <!--<feedexport_job>-->
+                <!--<schedule>-->
+                    <!--<cron_expr>*/10 * * * *</cron_expr>-->
+                <!--</schedule>-->
+                <!--<run>-->
+                    <!--<model>feedexport/observer::generate</model>-->
+                <!--</run>-->
+            <!--</feedexport_job>-->
             <feedexport_clean_job>
                 <schedule>
                     <cron_expr>5 1 * * *</cron_expr>
