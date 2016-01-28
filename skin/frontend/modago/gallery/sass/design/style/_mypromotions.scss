@@ -585,8 +585,11 @@ body.mypromotions-index-index #content:not(.logged-in) {
 	}
 }
 #mypromotions-persistent-modal {
+  @media(max-width: $screen-md-max) {
+    padding: 8% 5%;
+  }
   @media(max-width: $screen-sm-max) {
-    padding: 12% 7%;
+    padding: 8% 7%;
   }
   @media(max-width: 479px) {
     padding: 5% 7%;
