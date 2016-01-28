@@ -1875,7 +1875,6 @@
         <block type="zolagomodago/promotions_gotoregister" name="mypromotions.gotoregister" template="promotions/gotoregister.phtml"/>
         <block type="zolagomodago/promotions_newsletter" name="mypromotions.newsletter" template="promotions/newsletter.phtml"/>
       </block>
-      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
     </reference>
   </mypromotions_index_index>
   <wishlist_index_index>
