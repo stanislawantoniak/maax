@@ -144,7 +144,7 @@
 
 .mypromotions-account-create {
   padding-top: 0 !important;
-  //padding-bottom: 5px !important;
+  padding-bottom: 0 !important;
   #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, #mypromotions-list {
     padding: 15px;
     header p {
@@ -175,7 +175,8 @@
 }
 
 body.mypromotions-index-index #content {
-	position: relative;
+  position: relative;
+  margin-bottom: -25px !important;
 }
 
 #myPromotionsModal {
@@ -553,7 +554,7 @@ body.mypromotions-index-index #content {
 	position: absolute;
 	z-index: 5;
 	top: 0;
-	padding: 8% 10%;
+	padding: 10%;
 	@media(max-width: $screen-md-max) {
 		padding: 8% 7%;
 	}
@@ -685,7 +686,7 @@ body.mypromotions-index-index #content {
 
 #mypromotions-list-overlay {
 	width: 100%;
-	height: 105%;
+	height: 100%;
 	left: 0;
 	top: 0;
 	position: absolute;
@@ -703,7 +704,8 @@ body.mypromotions-index-index #content {
   left: 0;
   width: 100%;
   height: 50px;
-  margin-bottom: 25px;
+  //margin-bottom: 25px;
+  margin-bottom: 0px;
   background: -moz-linear-gradient(top, rgba(242,241,240,0) 0%, rgba(242,241,240,1) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,241,240,0)), color-stop(100%,rgba(242,241,240,1))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(top, rgba(242,241,240,0) 0%,rgba(242,241,240,1) 100%); /* Chrome10+,Safari5.1+ */
