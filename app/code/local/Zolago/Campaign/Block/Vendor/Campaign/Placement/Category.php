@@ -45,6 +45,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
         $campaignBank = $campaign->getCampaigns($websiteId);
 
+
         $campaigns = array();
         //reformat result
         if ($vendorId == Mage::helper('udropship')->getLocalVendorId()) {
@@ -85,6 +86,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                     $result[$type] = array_values($_);
                 }
             }
+        }
+
+        foreach($result as $creationType => $creationVendorCampaigns){
+            ksort($result[$creationType]);
         }
 
         return json_encode($result, JSON_HEX_APOS);
