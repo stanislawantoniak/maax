@@ -552,7 +552,8 @@ body.mypromotions-index-index #content:not(.logged-in) {
 	}
 }
 
-#mypromotions-register-modal, #mypromotions-persistent-modal {
+#mypromotions-register-modal,
+#mypromotions-persistent-modal {
 	position: absolute;
 	z-index: 5;
 	top: 0;
@@ -564,7 +565,7 @@ body.mypromotions-index-index #content:not(.logged-in) {
 		padding: 7%;
 	}
 	@media(max-width: 479px) {
-		padding: 5%;
+		padding: 5% 7%;
 	}
 	#mypromotions-register {
 		//margin-top: 15px;
@@ -582,6 +583,11 @@ body.mypromotions-index-index #content:not(.logged-in) {
 			padding: 15px 15px 25px;
 		}
 	}
+}
+#mypromotions-persistent-modal {
+  @media(max-width: 479px) {
+    padding: 5% 7%;
+  }
 }
 #mypromotions-register-modal {
 	#mypromotions-register {
