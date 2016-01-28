@@ -290,15 +290,14 @@
 	 */
 	Mall.Checkout.prototype.successPlaceOrder = function(response){
 		if(response.status==1){
-			console.log(response.content);
-			var dl = JSON.parse(response.dataLayer);
+			var dl = response.dataLayer;
 			var redirect = response.content.redirect;
 			Mall.Checkout.redirect = redirect;
-			if (dl) {
+
+			if (dl && redirect) {
+				var dl = JSON.parse(dl);
 				// Pushing data from order to data layer
 				dataLayer.push(dl);
-			}
-			if (dl && redirect) {
 				// Data layer for measuring purchases by ga
 				var measuringPurchases = {
 					'event': 'purchases-popup',
@@ -322,6 +321,8 @@
 				dataLayer.push(measuringPurchases);
 			} else if(redirect){
 				window.location.replace(response.content.redirect);
+			} else {
+				window.location = window.location;
 			}
 		} else {
 			window.location = window.location;
