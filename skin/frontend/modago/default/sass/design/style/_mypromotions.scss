@@ -367,7 +367,7 @@ body.mypromotions-index-index #content:not(.logged-in) {
 
 .mypromotions-cms-container {
 	margin: 0 -15px;
-	padding-top: 15px;
+	//padding-top: 15px;
 	clear: both;
 	.mypromotions-cms {
 		font-size: 16px;
@@ -561,13 +561,13 @@ body.mypromotions-index-index #content:not(.logged-in) {
 		padding: 12% 5%;
 	}
 	@media(max-width: $screen-sm-max) {
-		padding: 15% 7%;
+		padding: 7%;
 	}
 	@media(max-width: 479px) {
-		padding: 25% 9%;
+		padding: 5%;
 	}
 	#mypromotions-register {
-		margin-top: 15px;
+		//margin-top: 15px;
 		padding: 20px 300px 30px 40px;
 		border: 4px solid $color-gold;
 		@media(min-width: $screen-md-min) {
@@ -676,7 +676,7 @@ body.mypromotions-index-index #content:not(.logged-in) {
 
 #mypromotions-persistent-modal {
 	.mypromotions-cms {
-		margin-top: 15px;
+		//margin-top: 15px;
 		border: 4px solid $color-gold;
 		@media(min-width: $screen-md-min) {
 			background: white url('../images/help/promolabels.png') no-repeat;
@@ -688,7 +688,7 @@ body.mypromotions-index-index #content:not(.logged-in) {
 
 #mypromotions-list-overlay {
 	width: 100%;
-	height: 105%;
+	height: 100%;
 	left: 0;
 	top: 0;
 	position: absolute;
