@@ -1184,18 +1184,24 @@ Mall.product = {
 	sizetable: {
 		_content: "",
 		_iframe_id: "sizeTableIframe",
+		_iframe: "",
 		_doc: "",
 		init: function() {
 			this._doc = document.getElementById(this._iframe_id).contentWindow.document;
 			this._doc.open();
 			this._doc.write(this.getContent());
 			this._doc.close();
+			this._iframe = jQuery('#'+this._iframe_id);
 			this.resize();
+			jQuery('#tabelaRozmiarow').on('shown.bs.modal',Mall.product.sizetable.resize);
 			jQuery(window).resize(this.resize);
 		},
 		resize: function() {
 			var body = Mall.product.sizetable._doc.body;
-			jQuery('#'+Mall.product.sizetable._iframe_id).css({width: '100%',height: body.scrollHeight+'px'});
+			Mall.product.sizetable._iframe.css('height','');
+			Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
+			Mall.product.sizetable._iframe.css('width','');
+			Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
 		},
 		getContent: function() {
 			return this._content;
