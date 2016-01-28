@@ -176,6 +176,8 @@
 
 body.mypromotions-index-index #content {
   position: relative;
+}
+body.mypromotions-index-index:not(.logged-in) #content {
   margin-bottom: -25px !important;
 }
 
@@ -556,7 +558,7 @@ body.mypromotions-index-index #content {
 	top: 0;
 	padding: 10%;
 	@media(max-width: $screen-md-max) {
-		padding: 8% 7%;
+		padding: 12% 5%;
 	}
 	@media(max-width: $screen-sm-max) {
 		padding: 5%;
