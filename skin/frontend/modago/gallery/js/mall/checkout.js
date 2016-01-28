@@ -278,24 +278,55 @@
 	/**
 	 * 
 	 */
-	Mall.Checkout.prototype.beforePlaceOrder = function(xhr){
-		//console.log("Before data send");
-	}
+	Mall.Checkout.prototype.beforePlaceOrder = function(xhr) {
+		// Show modal with sth like 'Thank you, please wait'
+		var modal = jQuery("#popup-after-submit-order");
+		modal.modal('show');
+		//todo disable closing popup?
+	};
 	
 	/**
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.successPlaceOrder = function(response){
-		//console.log("Sucess data send", response);
 		if(response.status==1){
-			//console.log(response.content)
-			if(response.content.redirect){
+			console.log(response.content);
+			var dl = JSON.parse(response.dataLayer);
+			var redirect = response.content.redirect;
+			Mall.Checkout.redirect = redirect;
+			if (dl) {
+				// Pushing data from order to data layer
+				dataLayer.push(dl);
+			}
+			if (dl && redirect) {
+				// Data layer for measuring purchases by ga
+				var measuringPurchases = {
+					'event': 'purchases-popup',
+					'ecommerce': {
+						'purchase': {
+							'actionField': {
+								'id': dl.transactionId,
+								//'affiliation': 'Online Store',
+								'revenue': dl.transactionTotal,
+								'tax': dl.transactionTax,
+								'shipping': dl.transactionShipping,
+								//'coupon': 'YYY-ZZZ'
+							},
+							'products': dl.transactionProducts
+						}
+					},
+					'eventCallback': function() {
+						document.location = Mall.Checkout.redirect;
+					}
+				};
+				dataLayer.push(measuringPurchases);
+			} else if(redirect){
 				window.location.replace(response.content.redirect);
 			}
-		}else{
-			alert(response.message);
+		} else {
+			window.location = window.location;
 		}
-	}
+	};
 	
 	/**
 	 * @param object response
@@ -322,10 +353,10 @@
 		return jQuery.ajax(url, {
 			method:		"post",
 			data:		this.collect(),
-			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)}, 
-			success:	function(){self.successPlaceOrder.apply(self, arguments)}, 
-			error:		function(){self.errorPlaceOrder.apply(self, arguments)}, 
-			complete:	function(){self.completePlaceOrder.apply(self, arguments)}, 
+			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)},
+			success:	function(){self.successPlaceOrder.apply(self, arguments)},
+			error:		function(){self.errorPlaceOrder.apply(self, arguments)},
+			complete:	function(){self.completePlaceOrder.apply(self, arguments)},
 		});
 	}
 	

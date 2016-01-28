@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+Update for Shopgo_GTM for removing spying part
+-->
+<layout version="0.1.0">
+	<default>
+		<reference name="google_tag_manager">
+			<action method="setTemplate">
+				<name>ghgtm/default.phtml</name>
+			</action>
+		</reference>
+	</default>
+	<checkout_onepage_success>
+		<reference name="google_tag_manager_success">
+			<action method="setTemplate">
+				<name>ghgtm/success.phtml</name>
+			</action>
+		</reference>
+		<remove name="google_tag_manager_success"/>
+	</checkout_onepage_success>
+</layout>
