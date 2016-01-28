@@ -18,7 +18,7 @@ Mall.promotions.initNotLogged = function() {
 };
 
 Mall.promotions.setListHeight = function () {
-	var heightBody = (jQuery("body").outerHeight() - jQuery('#header .header_top').outerHeight() - jQuery('.header_bottom').outerHeight() - jQuery('#footer').outerHeight() - 50),
+	var heightBody = (jQuery("body").outerHeight() - jQuery('#header .header_top').outerHeight() - jQuery('.header_bottom').outerHeight() - jQuery('#footer').outerHeight()),
 		heightModal = jQuery('.mypromotions-modal:visible').outerHeight(),
 		height,
 		target = jQuery('#mypromotions-list');
