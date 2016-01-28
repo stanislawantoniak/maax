@@ -177,7 +177,7 @@
 body.mypromotions-index-index #content {
   position: relative;
 }
-body.mypromotions-index-index:not(.logged-in) #content {
+body.mypromotions-index-index #content:not(.logged-in) {
   margin-bottom: -25px !important;
 }
 
