@@ -17,11 +17,11 @@ Mall.promotions.initNotLogged = function() {
 	}
 };
 
-Mall.promotions.setListHeight = function() {
-	var height = jQuery('.mypromotions-modal:visible').outerHeight(),
+Mall.promotions.setListHeight = function () {
+	var height = (jQuery("body").outerHeight() - jQuery('#header .header_top').outerHeight() - jQuery('.header_bottom').outerHeight() - jQuery('#footer').outerHeight()-50),
 		target = jQuery('#mypromotions-list');
 
-	target.css('height',height + 'px');
+	target.css('height', height + 'px');
 };
 
 Mall.promotions.jsCopySupported = false;

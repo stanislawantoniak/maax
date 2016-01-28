@@ -144,6 +144,7 @@
 
 .mypromotions-account-create {
   padding-top: 0 !important;
+  //padding-bottom: 5px !important;
   #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, #mypromotions-list {
     padding: 15px;
     header p {
@@ -552,15 +553,15 @@ body.mypromotions-index-index #content {
 	position: absolute;
 	z-index: 5;
 	top: 0;
-	padding: 30px 10%;
+	padding: 8% 10%;
 	@media(max-width: $screen-md-max) {
-		padding: 30px 7%;
+		padding: 8% 7%;
 	}
 	@media(max-width: $screen-sm-max) {
-		padding: 15px 5%;
+		padding: 5%;
 	}
 	@media(max-width: 479px) {
-		padding: 15px 3%;
+		padding: 5% 3%;
 	}
 	#mypromotions-register {
 		margin-top: 15px;
@@ -684,7 +685,7 @@ body.mypromotions-index-index #content {
 
 #mypromotions-list-overlay {
 	width: 100%;
-	height: 100%;
+	height: 105%;
 	left: 0;
 	top: 0;
 	position: absolute;
