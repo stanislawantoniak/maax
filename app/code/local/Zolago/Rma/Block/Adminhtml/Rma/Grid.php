@@ -94,4 +94,31 @@ class Zolago_Rma_Block_Adminhtml_Rma_Grid extends Unirgy_Rma_Block_Adminhtml_Rma
 
         return Mage_Adminhtml_Block_Widget_Grid::_prepareColumns();
     }
+
+    /**
+     * Sets sorting order by some column
+     *
+     * @param Mage_Adminhtml_Block_Widget_Grid_Column $column
+     * @return Mage_Adminhtml_Block_Widget_Grid
+     */
+    protected function _setCollectionOrder($column)
+    {
+        $collection = $this->getCollection();
+
+        if ($collection) {
+            $columnIndex = $column->getFilterIndex() ?
+                $column->getFilterIndex() : $column->getIndex();
+
+            if ($columnIndex = "udropship_vendor") {
+                $collection->getSelect()->join(
+                    array("vendors" => $collection->getTable('udropship/vendor')), //$name
+                    "t.udropship_vendor=vendors.vendor_id", //$cond
+                    array("vendor_name" => "vendor_name")//$cols = '*'
+                );
+                $columnIndex = "vendor_name";
+            }
+            $collection->setOrder($columnIndex, strtoupper($column->getDir()));
+        }
+        return $this;
+    }
 }
