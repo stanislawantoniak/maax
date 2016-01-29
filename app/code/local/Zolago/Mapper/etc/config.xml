@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Mapper>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Mapper>
     </modules>
     <global>
@@ -96,6 +96,15 @@
                     </zolagomapper>
                 </observers>
             </catalog_product_attribute_update_after>
+            <catalog_product_website_update>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>catalogProductWebsiteUpdate</method>
+                    </zolagomapper>
+                </observers>
+            </catalog_product_website_update>
 		</events>
     </global>
 	<admin>

@@ -1,6 +1,6 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipPo") . DS . "Adminhtml" . DS . "Order" . "PoController.php";
+require_once Mage::getModuleDir('controllers', "Unirgy_DropshipPo") . DS . "Adminhtml" . DS . "Order" .DS . "PoController.php";
 
 /**
  * Class Zolago_Po_Adminhtml_Order_PoController

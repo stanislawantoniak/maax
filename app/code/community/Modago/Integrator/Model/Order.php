@@ -122,10 +122,7 @@ class Modago_Integrator_Model_Order {
 			'lastname'              => isset($billingData['last_name']) ? $billingData['last_name'] : '',
 			'suffix'                => '',
 			'company'               => isset($billingData['company_name']) ? $billingData['company_name'] : '',
-			'street'                => array(
-											0 => isset($billingData['street']) ? $billingData['street'] : '',
-											1 => ''
-										),
+			'street'                => isset($billingData['street']) ? $billingData['street'] : '',
 			'city'                  => isset($billingData['city']) ? $billingData['city'] : '',
 			'country_id'            => isset($billingData['country']) ? $billingData['country'] : '',
 			'region'                => '',
@@ -143,10 +140,7 @@ class Modago_Integrator_Model_Order {
 			'lastname'              => isset($shippingData['last_name']) ? $shippingData['last_name'] : '',
 			'suffix'                => '',
 			'company'               => isset($shippingData['company_name']) ? $shippingData['company_name'] : '',
-			'street'                => array(
-											0 => isset($shippingData['street']) ? $shippingData['street'] : '',
-											1 => ''
-										),
+			'street'                => isset($shippingData['street']) ? $shippingData['street'] : '',
 			'city'                  => isset($shippingData['city']) ? $shippingData['city'] : '',
 			'country_id'            => isset($shippingData['country']) ? $shippingData['country'] : '',
 			'region'                => '',
@@ -156,7 +150,6 @@ class Modago_Integrator_Model_Order {
 			'vat_id'                => '', //not provided by api in delivery address
 			'save_in_address_book'  => 1
 		));
-
 		// Collect Rates and Set Shipping & Payment Method
 		$shippingMethod = $this->getShippingMethod($apiOrder->delivery_method);
 		$paymentMethod = $this->getPaymentMethod($apiOrder->payment_method);

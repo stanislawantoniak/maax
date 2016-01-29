@@ -42,24 +42,9 @@ switch($_reviewsCount) {
         break;
 }
 $avg = $_reviewBlock->getAvarageRating();
-?>
-
-<?php
-
-    $_helper = $this->helper('catalog/output');
-
-    /** @var $_product Zolago_Catalog_Model_Product*/
-    $_product = $this->getProduct();
-
-    $_helperSizetable = Mage::helper('zolagosizetable');
-    /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
-    $vendor_id = $_product->getData('udropship_vendor');
-    $storeId = Mage::app()->getStore()->getStoreId();
-    $attributeSetId = $_product->getData('attribute_set_id');
-    $brandId = $_product->getData( 'manufacturer');
-
-    $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
-
+$_helper = $this->helper('catalog/output');
+/** @var $_product Zolago_Catalog_Model_Product */
+$_product = $this->getProduct();
 ?>
 
 <?php
@@ -216,15 +201,15 @@ if($vendorContext && $vendorContext->getId()) {
 </div>
 </div>
 
-<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
     <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"></button>
 
             <div class="modal-body">
-                <?php
-                    echo $sizeTableValue;
-                ?>
+	            <div id="sizeTableIframeContainer">
+	                <iframe id="sizeTableIframe"></iframe>
+	            </div>
             </div>
         </div>
     </div>
@@ -365,5 +350,7 @@ if($vendorContext && $vendorContext->getId()) {
 	<?php endif;?>
 
     jQuery('.no-size').attr('title',"<?php echo $this->__("This size is temporarily unavailable."); ?>");
+
+	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 
 </script>
