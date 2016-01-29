@@ -1029,6 +1029,57 @@ Mall.Slick = {
 	}
 };
 
+// Google Tag Manager
+Mall.Gtm = {
+	// Steps defined
+	STEP_CHECKOUT_CART: 1,
+	STEP_CHECKOUT_LOGIN_GUEST: 2,
+	STEP_CHECKOUT_ADDRESS_GUEST: 3,
+	STEP_CHECKOUT_ADDRESS: 4,
+	STEP_CHECKOUT_SHIPPING_PAYMENT: 5,
+	STEP_CHECKOUT_SUMMARY: 6,
+	STEP_CHECKOUT_THANK_YOU: 7,
+	pushedSteps: [],
+
+	init: function () {
+		if (jQuery('body').hasClass("checkout-cart-index")) {
+			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_CART);
+		} else if (jQuery('body').hasClass("customer-account-login") && /checkout\/guest\/login/g.test(window.location)) {
+			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_LOGIN_GUEST);
+		}
+		else if (jQuery('body').hasClass("checkout") /*&& jQuery("#checkout #step-0").is(":visible")*/) {
+			if (jQuery('body').hasClass("checkout-guest-index")) {
+				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ADDRESS_GUEST);
+			} else {
+				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ADDRESS);
+			}
+		}
+		// manually triggered in steps.js
+		//else if (jQuery('body').hasClass("checkout") && jQuery("#checkout #step-1").is(":visible")) {
+		//	Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SHIPPING_PAYMENT);
+		//} else if (jQuery('body').hasClass("checkout") && jQuery("#checkout #step-2").is(":visible")) {
+		//	Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SUMMARY);
+		//}
+		else if (jQuery('body').hasClass("checkout-guest-success") || jQuery('body').hasClass("checkout-singlepage-success")) {
+			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_THANK_YOU);
+		}
+	},
+
+	checkoutStep: function (step) {
+		if (typeof dataLayer != "undefined" && jQuery.inArray(step, this.pushedSteps) == -1) {
+			dataLayer.push({
+				'event': 'checkout',
+				'ecommerce': {
+					'checkout': {
+						'actionField': {'step': step},
+					}
+				},
+			});
+			this.pushedSteps.push(step);
+		}
+	}
+};
+
 Mall.Scrolltop = {
 	heightToShow: false,
 	options: { //these are set in /app/design/frontend/modago/default/template/page/html/scrolltop.phtml
@@ -1660,6 +1711,7 @@ Mall.createInlineSvgs = function() {
 }
 
 jQuery(document).ready(function() {
+	Mall.Gtm.init();
 	Mall.createInlineSvgs();
 
     Mall.CustomEvents.init(300);

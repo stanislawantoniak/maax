@@ -21,7 +21,13 @@ class GH_Integrator_Block_Adminhtml_Ghintegrator_Log_Grid extends Mage_Adminhtml
      */
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('ghintegrator/log')->getCollection();
+        $model = Mage::getModel('ghintegrator/log');
+        $collection = $model->getCollection();
+        $collection->getSelect()->join(
+            array("vendors" => $model->getResource()->getTable('udropship/vendor')), //$name
+            "main_table.vendor_id=vendors.vendor_id", //$cond
+            array("vendor_name" => "vendor_name")//$cols = '*'
+        );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -46,15 +52,17 @@ class GH_Integrator_Block_Adminhtml_Ghintegrator_Log_Grid extends Mage_Adminhtml
             )
         );
 
-	    $this->addColumn('vendor_id',
-		    array(
-			    'header' => $hlp->__('Vendor'),
-			    'width' => '100px',
-			    "type" => "options",
-			    'index' => 'vendor_id',
-			    "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash()
-		    )
-	    );
+        $this->addColumn('vendor_id',
+            array(
+                'header' => $hlp->__('Vendor'),
+                'width' => '100px',
+                "type" => "options",
+                'index' => 'vendor_id',
+                "options" => Mage::getSingleton('zolagodropship/source')->setPath('allvendorswithdisabled')->toOptionHash(),
+                'filter_index' => 'vendor_name',
+                'filter_condition_callback' => array($this, '_sortByVendorName'),
+            )
+        );
 
 	    $this->addColumn('log',
 		    array(
@@ -74,6 +82,29 @@ class GH_Integrator_Block_Adminhtml_Ghintegrator_Log_Grid extends Mage_Adminhtml
 
 
         return parent::_prepareColumns();
+    }
+
+    /**
+     * @param $collection
+     * @param $column
+     * @return $this
+     */
+    function _sortByVendorName($collection, $column)
+    {
+        /* @var $collection Zolago_Payment_Model_Resource_Vendor_Payment_Collection */
+        $direction = strtoupper($column->getDir());
+
+        if ($direction) {
+            $collection->getSelect()->order($column->getFilterIndex(), $direction);
+        }
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $index = $column->getIndex();
+        $collection->getSelect()->where("main_table.{$index} = ?", $value);
+
+        return $this;
     }
 
 }

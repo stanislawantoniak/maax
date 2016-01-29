@@ -106,7 +106,12 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
             $prev = null;
         }
 
-        return $this->getPageUrl($prev);
+        $url = $this->getPageUrl($prev);
+        if(Mage::app()->getStore()->isCurrentlySecure()) {
+            $url = str_replace('http://','https://',$url);
+        }
+
+        return $url;
     }
 
     public function getNextPageUrl()
@@ -115,7 +120,13 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Pager extends Mage_Page_Block
         if ($next > $this->getTotalNum()) {
             $next = self::DEFAULT_FIRST;
         }
-        return $this->getPageUrl($next);
+
+        $url = $this->getPageUrl($next);
+        if(Mage::app()->getStore()->isCurrentlySecure()) {
+            $url = str_replace('http://','https://',$url);
+        }
+
+        return $url;
     }
 
     public function isFirstEnabled()

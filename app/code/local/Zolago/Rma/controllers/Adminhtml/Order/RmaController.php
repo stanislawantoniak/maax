@@ -1,6 +1,6 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_Rma") . DS . "Adminhtml" . DS . "Order" . "RmaController.php";
+require_once Mage::getModuleDir('controllers', "Unirgy_Rma") . DS . "Adminhtml" . DS . "Order" .DS . "RmaController.php";
 
 /**
  * Class Zolago_Rma_Adminhtml_Order_RmaController

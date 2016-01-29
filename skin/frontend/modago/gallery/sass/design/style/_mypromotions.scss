@@ -144,6 +144,7 @@
 
 .mypromotions-account-create {
   padding-top: 0 !important;
+  padding-bottom: 0 !important;
   #mypromotions-gotologin, #mypromotions-register, #mypromotions-gotoregister, #mypromotions-list {
     padding: 15px;
     header p {
@@ -174,7 +175,10 @@
 }
 
 body.mypromotions-index-index #content {
-	position: relative;
+  position: relative;
+}
+body.mypromotions-index-index #content:not(.logged-in) {
+  margin-bottom: -25px !important;
 }
 
 #myPromotionsModal {
@@ -363,7 +367,7 @@ body.mypromotions-index-index #content {
 
 .mypromotions-cms-container {
 	margin: 0 -15px;
-	padding-top: 15px;
+	//padding-top: 15px;
 	clear: both;
 	.mypromotions-cms {
 		font-size: 16px;
@@ -548,22 +552,23 @@ body.mypromotions-index-index #content {
 	}
 }
 
-#mypromotions-register-modal, #mypromotions-persistent-modal {
+#mypromotions-register-modal,
+#mypromotions-persistent-modal {
 	position: absolute;
 	z-index: 5;
 	top: 0;
-	padding: 30px 10%;
+	padding: 10%;
 	@media(max-width: $screen-md-max) {
-		padding: 30px 7%;
+		padding: 12% 5%;
 	}
 	@media(max-width: $screen-sm-max) {
-		padding: 15px 5%;
+		padding: 7%;
 	}
 	@media(max-width: 479px) {
-		padding: 15px 3%;
+		padding: 5% 7%;
 	}
 	#mypromotions-register {
-		margin-top: 15px;
+		//margin-top: 15px;
 		padding: 20px 300px 30px 40px;
 		border: 4px solid $color-gold;
 		@media(min-width: $screen-md-min) {
@@ -578,6 +583,17 @@ body.mypromotions-index-index #content {
 			padding: 15px 15px 25px;
 		}
 	}
+}
+#mypromotions-persistent-modal {
+  @media(max-width: $screen-md-max) {
+    padding: 8% 5%;
+  }
+  @media(max-width: $screen-sm-max) {
+    padding: 8% 7%;
+  }
+  @media(max-width: 479px) {
+    padding: 5% 7%;
+  }
 }
 #mypromotions-register-modal {
 	#mypromotions-register {
@@ -672,7 +688,7 @@ body.mypromotions-index-index #content {
 
 #mypromotions-persistent-modal {
 	.mypromotions-cms {
-		margin-top: 15px;
+		//margin-top: 15px;
 		border: 4px solid $color-gold;
 		@media(min-width: $screen-md-min) {
 			background: $color_ffffff url('../images/help/promolabels.png') no-repeat;
@@ -684,7 +700,7 @@ body.mypromotions-index-index #content {
 
 #mypromotions-list-overlay {
 	width: 100%;
-	height: 100%;
+	height: 104%;
 	left: 0;
 	top: 0;
 	position: absolute;
@@ -702,7 +718,8 @@ body.mypromotions-index-index #content {
   left: 0;
   width: 100%;
   height: 50px;
-  margin-bottom: 25px;
+  //margin-bottom: 25px;
+  margin-bottom: 0px;
   background: -moz-linear-gradient(top, rgba(242,241,240,0) 0%, rgba(242,241,240,1) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,241,240,0)), color-stop(100%,rgba(242,241,240,1))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(top, rgba(242,241,240,0) 0%,rgba(242,241,240,1) 100%); /* Chrome10+,Safari5.1+ */

@@ -52,19 +52,8 @@ if ($vendorContext && $vendorContext->getId()) {
 
 
 $_helper = $this->helper('catalog/output');
-
 /** @var $_product Zolago_Catalog_Model_Product */
 $_product = $this->getProduct();
-
-$_helperSizetable = Mage::helper('zolagosizetable');
-/** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
-$vendor_id = $_product->getData('udropship_vendor');
-$storeId = Mage::app()->getStore()->getStoreId();
-$attributeSetId = $_product->getData('attribute_set_id');
-$brandId = $_product->getData('manufacturer');
-
-$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
-
 ?>
 
 <div id="content" class="container-fluid">
@@ -188,9 +177,9 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 			<button type="button" class="close" data-dismiss="modal"></button>
 
 			<div class="modal-body">
-				<?php
-				echo $sizeTableValue;
-				?>
+				<div id="sizeTableIframeContainer">
+					<iframe id="sizeTableIframe"></iframe>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -311,5 +300,7 @@ $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attr
 	<?php endif;?>
 
 	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable."); ?>");
+
+	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 
 </script>
