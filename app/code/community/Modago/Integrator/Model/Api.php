@@ -81,6 +81,31 @@ class Modago_Integrator_Model_Api
 
     }
 
+    
+    /**
+     * set order as collected
+     *
+     * @param 
+     * @return 
+     */
+     public function setOrderAsCollected($orderId) {
+         $helper = Mage::helper('modagointegrator/api');
+         $client = $this->_getSoapClient();
+         $key = $this->_getKey();
+         $ret = $client->setOrderAsCollected($key,array($orderId));         
+         if (empty($ret->status)) {
+             if (!empty($ret->message)) {
+                 $message = $helper->__('Error: setting order %s as collected failed (%s)',$orderId,$helper->translate($ret->message));
+             } else {
+                $message = $helper->__('Error: wrong response from API server');
+             }
+             $helper->log($message);
+             Mage::throwException($message);
+         } else {
+             $helper->log($helper->__('Success: order set as collected (%s)',$orderId));
+         }
+     }
+
     /**
      * confirm messages
      *
@@ -109,19 +134,21 @@ class Modago_Integrator_Model_Api
     }
 
 
-
+    public function getChangeOrderMessage($orderId) {
+        return $this->_getChangeOrderMessage($orderId);        
+    }
     /**
      * get list of changed orders
      * @param
      * @return stdClass
      */
-    protected function _getChangeOrderMessage() {
+    protected function _getChangeOrderMessage($orderId = '') {
         /** @var Modago_Integrator_Helper_Api $helper */
         $helper = Mage::helper('modagointegrator/api');
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
         $size = $this->_getHelper()->getBatchSize();
-        $ret = $client->getChangeOrderMessage($key,$size,'');
+        $ret = $client->getChangeOrderMessage($key,$size,'',$orderId);
         if (empty($ret->status)) { // no answer or error
             if (!empty($ret->message)) {
                 $message = $helper->__('Error: downloading list of changed orders fail (%s)', $helper->translate($ret->message));
