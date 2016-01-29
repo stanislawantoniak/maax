@@ -1038,7 +1038,8 @@ Mall.Gtm = {
 	STEP_CHECKOUT_ADDRESS: 4,
 	STEP_CHECKOUT_SHIPPING_PAYMENT: 5,
 	STEP_CHECKOUT_SUMMARY: 6,
-	STEP_CHECKOUT_THANK_YOU: 7,
+	STEP_CHECKOUT_ORDER: 7,
+	STEP_CHECKOUT_THANK_YOU: 8,
 	pushedSteps: [],
 
 	init: function () {
@@ -1047,19 +1048,14 @@ Mall.Gtm = {
 		} else if (jQuery('body').hasClass("customer-account-login") && /checkout\/guest\/login/g.test(window.location)) {
 			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_LOGIN_GUEST);
 		}
-		else if (jQuery('body').hasClass("checkout") /*&& jQuery("#checkout #step-0").is(":visible")*/) {
+		else if (jQuery('body').hasClass("checkout")) {
 			if (jQuery('body').hasClass("checkout-guest-index")) {
 				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ADDRESS_GUEST);
 			} else {
 				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ADDRESS);
 			}
 		}
-		// manually triggered in steps.js
-		//else if (jQuery('body').hasClass("checkout") && jQuery("#checkout #step-1").is(":visible")) {
-		//	Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SHIPPING_PAYMENT);
-		//} else if (jQuery('body').hasClass("checkout") && jQuery("#checkout #step-2").is(":visible")) {
-		//	Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SUMMARY);
-		//}
+		// Next steps manually triggered in steps.js
 		else if (jQuery('body').hasClass("checkout-guest-success") || jQuery('body').hasClass("checkout-singlepage-success")) {
 			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_THANK_YOU);
 		}
@@ -1677,43 +1673,8 @@ Mall.refresh = function() {
     location.reload();
 };
 
-Mall.createInlineSvgs = function() {
-	jQuery('img[src$=".svg"]').each(function(){
-		var $img = jQuery(this);
-		var imgID = $img.attr('id');
-		var imgClass = $img.attr('class');
-		var imgURL = $img.attr('src');
-
-		jQuery.get(imgURL, function(data) {
-			// Get the SVG tag, ignore the rest
-			var $svg = jQuery(data).find('svg');
-
-			// Add replaced image's ID to the new SVG
-			if(typeof imgID !== 'undefined') {
-				$svg = $svg.attr('id', imgID);
-			}
-			// Add replaced image's classes to the new SVG
-			if(typeof imgClass !== 'undefined') {
-				$svg = $svg.attr('class', imgClass+' replaced-svg');
-			}
-
-			// Remove any invalid XML tags as per http://validator.w3.org
-			$svg = $svg.removeAttr('xmlns:a');
-
-			$svg.find('path').css('fill','');
-
-			// Replace image with new SVG
-			$img.replaceWith($svg);
-
-		}, 'xml');
-
-	});
-}
-
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
-	Mall.createInlineSvgs();
-
     Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
