@@ -283,6 +283,7 @@
 		var modal = jQuery("#popup-after-submit-order");
 		modal.modal('show');
 		//todo disable closing popup?
+		Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ORDER);
 	};
 	
 	/**
