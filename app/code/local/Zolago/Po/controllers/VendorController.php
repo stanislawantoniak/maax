@@ -111,11 +111,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					$collArray[$key]['url_path'] = $val['url_path'];
 				}
 			} else {
-				$collArray[$key] = $val;
-			}
-			// TODO: move this logic to sql query (IF statement)
-			if (!is_numeric($collArray[$key]['product_flag'])) {
-				$collArray[$key]['product_flag'] = $collArray[$key]['product_flag_simple'];
+				// Only needed data
+				$collArray[$key]['entity_id'] = $val['entity_id'];
+				$collArray[$key]['name'] = $val['name'];
+				$collArray[$key]['price'] = $val['price'];
+				$collArray[$key]['skuv'] = $val['skuv'];
+				// TODO: move this logic to sql query (IF statement)
+				if ($val['url_path_configurable']) {
+					$collArray[$key]['url_path'] = $val['url_path_configurable'];
+				} else {
+					$collArray[$key]['url_path'] = $val['url_path'] ? $val['url_path'] : "";
+				}
+				$flag = !is_numeric($val['product_flag']) ? $val['product_flag_simple'] : $val['product_flag'];
+				if ($flag) {
+					$collArray[$key]['product_flag'] = $flag;
+				}
 			}
 		}
 		$collArray = array_values($collArray);

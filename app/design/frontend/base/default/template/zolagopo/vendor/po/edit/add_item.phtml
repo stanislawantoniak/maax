@@ -132,8 +132,7 @@ jQuery(function($){
 		if(val){
 			$("#addItemModal .product-specified").removeClass("hidden");
 			price.val(Zolago.round(item.price));
-            var urlPath = (item.url_path_configurable != null && item.url_path_configurable.length) ? item.url_path_configurable : item.url_path;
-            link.html(item.name).attr('href', baseUrl + urlPath);
+            link.html(item.name).attr('href', baseUrl + item.url_path);
             var flagTxt = '';
             if (item.product_flag == FLAG_SALE) {
                 flagTxt = Translator.translate('(SALE)');
