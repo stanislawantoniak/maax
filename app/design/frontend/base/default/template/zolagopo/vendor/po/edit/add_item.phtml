@@ -83,7 +83,7 @@ jQuery(function($){
 	var formatResult = function(item) {
 		return item.name + "<br/><small class=\"text-muted\">"+
 				skuLabel + ": " + (item[skuCode]!=undefined ? item[skuCode] : "<?php echo $this->__("N/A");?>")  +  " &middot; "+
-				"Price: " + parseFloat(item.price) + " " + currency + "</small>"
+				Translator.translate("Price: ") + parseFloat(item.price) + " " + currency + "</small>"
 	};
 	var form = $("#add-item-form");
 	var product = $("#additem-product_id");
