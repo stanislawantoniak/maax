@@ -97,7 +97,9 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             'quantity' => 1,
             'type' => Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_TYPE_PACKAGE,
         );
-        $dhlSettings = array_merge($dhlSettings, $dhlSettingsDefault);
+        if ($dhlSettings) {
+            $dhlSettings = array_merge($dhlSettings, $dhlSettingsDefault);
+        }
         return $dhlSettings;
     }
 

@@ -57,18 +57,12 @@
 </head>
 <body>
 	<div id="rmaContainer">
+	    <?php if ($this->getLogo()) : ?>
 		<div id="logo">
 			<img src="<?php echo $this->getLogo(); ?>" />
 		</div>
+		<?php endif; ?>
 		<div id="rmaInfo">
-			<div id="rmaVendor" class="rmaRow" style="border-top: none">
-				<div class="rmaTitle">
-					<?php echo $_helper->__("Return to vendor"); ?>:
-				</div>
-				<div class="rmaContent">
-					<?php echo $this->getVendorName(); ?>
-				</div>
-			</div>
 			<div id="rmaDelivery" class="rmaRow">
 				<div class="rmaTitle">
 					<?php echo $_helper->__("Package delivery address"); ?>:
