@@ -281,9 +281,13 @@
 	Mall.Checkout.prototype.beforePlaceOrder = function(xhr) {
 		// Show modal with sth like 'Thank you, please wait'
 		var modal = jQuery("#popup-after-submit-order");
-		modal.modal('show');
-		//todo disable closing popup?
-		Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ORDER);
+		var pMethod = jQuery("input[type=hidden][name='payment[method]']").val();
+		if (pMethod == "cashondelivery" || pMethod == "banktransfer") {
+			modal.find(".modal-body").addClass("one-line"); // hide txt about redirecting to payment page
+		}
+		modal.modal('show'); // Show modal (popup)
+		jQuery('*').css('pointer-events','none'); // Block all actions
+		Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ORDER); // Send step by GTM
 	};
 	
 	/**
