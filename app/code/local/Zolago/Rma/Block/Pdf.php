@@ -13,8 +13,12 @@ class Zolago_Rma_Block_Pdf extends Zolago_Rma_Block_Abstract {
 		$this->weekdays = array_values($weekdays['format']['wide']);
 	}
 
-	public function getLogo() {
-		return $this->getSkinUrl("images/logo_black.png");
+	public function getLogo() {	    
+	    $logo = Mage::getStoreConfig('design/rma_document/rma_logo');
+	    if ($logo) {
+	        return Mage::getDesign()->getSkinBaseDir().DS.$logo;
+        } 
+        return null;
 	}
 
 	public function getVendorName() {
