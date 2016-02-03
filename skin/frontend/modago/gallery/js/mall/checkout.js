@@ -278,24 +278,61 @@
 	/**
 	 * 
 	 */
-	Mall.Checkout.prototype.beforePlaceOrder = function(xhr){
-		//console.log("Before data send");
-	}
+	Mall.Checkout.prototype.beforePlaceOrder = function(xhr) {
+		// Show modal with sth like 'Thank you, please wait'
+		var modal = jQuery("#popup-after-submit-order");
+		var pMethod = jQuery("input[type=hidden][name='payment[method]']").val();
+		if (pMethod == "cashondelivery" || pMethod == "banktransfer") {
+			modal.find(".modal-body").addClass("one-line"); // hide txt about redirecting to payment page
+		}
+		modal.modal('show'); // Show modal (popup)
+		jQuery('*').css('pointer-events','none'); // Block all actions
+		Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ORDER); // Send step by GTM
+	};
 	
 	/**
 	 * @param object response
 	 */
 	Mall.Checkout.prototype.successPlaceOrder = function(response){
-		//console.log("Sucess data send", response);
 		if(response.status==1){
-			//console.log(response.content)
-			if(response.content.redirect){
+			var dl = response.dataLayer;
+			var redirect = response.content.redirect;
+			Mall.Checkout.redirect = redirect;
+
+			if (dl && redirect) {
+				var dl = JSON.parse(dl);
+				// Pushing data from order to data layer
+				dataLayer.push(dl);
+				// Data layer for measuring purchases by ga
+				var measuringPurchases = {
+					'event': 'purchases-popup',
+					'ecommerce': {
+						'purchase': {
+							'actionField': {
+								'id': dl.transactionId,
+								//'affiliation': 'Online Store',
+								'revenue': dl.transactionTotal,
+								'tax': dl.transactionTax,
+								'shipping': dl.transactionShipping,
+								//'coupon': 'YYY-ZZZ'
+							},
+							'products': dl.transactionProducts
+						}
+					},
+					'eventCallback': function() {
+						document.location = Mall.Checkout.redirect;
+					}
+				};
+				dataLayer.push(measuringPurchases);
+			} else if(redirect){
 				window.location.replace(response.content.redirect);
+			} else {
+				window.location = window.location;
 			}
-		}else{
-			alert(response.message);
+		} else {
+			window.location = window.location;
 		}
-	}
+	};
 	
 	/**
 	 * @param object response
@@ -322,10 +359,10 @@
 		return jQuery.ajax(url, {
 			method:		"post",
 			data:		this.collect(),
-			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)}, 
-			success:	function(){self.successPlaceOrder.apply(self, arguments)}, 
-			error:		function(){self.errorPlaceOrder.apply(self, arguments)}, 
-			complete:	function(){self.completePlaceOrder.apply(self, arguments)}, 
+			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)},
+			success:	function(){self.successPlaceOrder.apply(self, arguments)},
+			error:		function(){self.errorPlaceOrder.apply(self, arguments)},
+			complete:	function(){self.completePlaceOrder.apply(self, arguments)},
 		});
 	}
 	
