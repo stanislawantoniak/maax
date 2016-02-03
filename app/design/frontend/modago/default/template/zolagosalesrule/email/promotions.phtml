@@ -3,10 +3,7 @@
 /** @var Zolago_SalesRule_Helper_Data $_hlp */
 $_hlp = Mage::helper('zolagosalesrule');
 ?>
-<div style="color: #000000; text-decoration: none;">
-<?php $list = $this->getPromotions(); ?>
-<?php foreach ($list as $item) : ?>
-    <div style="max-width: 200px;">
+<div style="color: #000000; text-decoration: none;max-width:400"><?php $list = $this->getPromotions(); ?><?php foreach ($list as $item) : ?><div style="max-width: 200px;float:left;">
         <a href="<?php echo Mage::getUrl('mypromotions'); ?>" style="text-decoration: none;">
             <?php if ($item['ruleItem']->getPromoImage()): ?>
                 <img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>">
