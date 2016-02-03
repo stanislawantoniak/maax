@@ -498,7 +498,7 @@ class Modago_Integrator_Model_Generator_Description
                 $attributesToSelect = array('*');
                 if (!($store = $this->getIntegrationStore()) 
                 || !($storeId = $store->getId())) {
-                    $storeId = Mage::app()->getStore()->getStoreId();
+                    $storeId = Mage::app()->getDefaultStoreView()->getStoreId();
                 }
                 $productFlatTable = Mage::getResourceSingleton('catalog/product_flat')->getFlatTableName($storeId);
                 $collection = Mage::getResourceModel('reports/product_collection');
