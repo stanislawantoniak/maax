@@ -9,12 +9,6 @@ class Zolago_Common_Model_Core_Email_Template_Mailer extends Mage_Core_Model_Ema
 	public function setTemplateParams(array $templateParams = array()) {
 		// Append logo if needed
 		if(isset($templateParams['use_attachments']) || isset($templateParams['_ATTACHMENTS'])){
-			/** @var Zolago_Common_Helper_Data $_hlp */
-			$_hlp = Mage::helper("zolagocommon");
-			$filename = $_hlp->getDesignFileByStore($this->getLogoFile(), $this->getStoreId());
-
-			Mage::log($this->getLogoFile(),null,'superlog.log');
-
 			$templateParams['_ATTACHMENTS'][] = array(
 				"filename"		=> $this->getLogoFile(),
 				"id"			=> "logo.png",
