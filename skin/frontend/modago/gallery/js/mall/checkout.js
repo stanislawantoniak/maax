@@ -299,8 +299,8 @@
 			var redirect = response.content.redirect;
 			Mall.Checkout.redirect = redirect;
 
-			if (dl && redirect) {
-				var dl = JSON.parse(dl);
+			if (dl && redirect && typeof dataLayer != "undefined") {
+				dl = JSON.parse(dl);
 				// Pushing data from order to data layer
 				dataLayer.push(dl);
 				// Data layer for measuring purchases by ga

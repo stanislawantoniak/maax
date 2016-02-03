@@ -47,6 +47,9 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 	 * @return array
 	 */
 	public function getRawDataLayer() {
+		if (!Mage::helper('gtm')->isGTMAvailable()) {
+			return '';
+		}
 		$data = array();
 		$data += $this->_getTransactionData() + $this->_getVisitorData();
 		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
