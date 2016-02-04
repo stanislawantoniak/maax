@@ -34,7 +34,8 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
             unset($question['question_id']);
             $qModel   = Mage::getModel('udqa/question')
                 ->setData($question)
-                ->setQuestionDate(now());
+                ->setQuestionDate(now())
+                ->setStoreId(Mage::app()->getStore()->getStoreId());
             if ($cSess->isLoggedIn()) {
                 $qModel
                     ->setCustomerEmail($customer->getEmail())
