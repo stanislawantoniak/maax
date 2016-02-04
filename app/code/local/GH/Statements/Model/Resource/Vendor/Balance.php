@@ -323,7 +323,10 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 		/** @var GH_Statements_Helper_Vendor_Balance $hlpBalance */
 		$hlpBalance = Mage::helper("ghstatements/vendor_balance");
 		$config = $hlpBalance->getDotpaysPaymentChannelOwnerForStores();
-		$mallDotpayIds = $config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL];
+		$mallDotpayIds =
+            isset($config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL]) ?
+                $config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL] :
+                array();
         $customerRefunds = array();
 
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $customerRefundsCollection */
