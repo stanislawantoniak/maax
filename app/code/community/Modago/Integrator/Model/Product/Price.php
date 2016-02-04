@@ -70,7 +70,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         if (Mage::helper('catalog/product_flat')->isEnabled()) {
             $attributesToSelect = array('price','special_price');
             if (!$storeId = $this->_integrationStore) {
-                $storeId = Mage::app()->getStore()->getStoreId();
+                $storeId = Mage::app()->getDefaultStoreView()->getStoreId();
             }
             $productFlatTable = Mage::getResourceSingleton('catalog/product_flat')->getFlatTableName($storeId);
             $collection = Mage::getResourceModel('reports/product_collection');
@@ -130,7 +130,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         if (Mage::helper('catalog/product_flat')->isEnabled()) {
             $attributesToSelect = array('price','special_price');
             if (!$storeId = $this->_integrationStore) {
-                $storeId = Mage::app()->getStore()->getStoreId();
+                $storeId = Mage::app()->getDefaultStoreView()->getStoreId();
             }
             $productFlatTable = Mage::getResourceSingleton('catalog/product_flat')->getFlatTableName($storeId);
             $collection = Mage::getResourceModel('reports/product_collection');
