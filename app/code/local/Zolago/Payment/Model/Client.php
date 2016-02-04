@@ -19,7 +19,7 @@ abstract class Zolago_Payment_Model_Client {
 	 * @return bool|int
 	 * @throws Exception
 	 */
-    public function saveTransaction($order, $amount, $status, $txnId, $txnType, $data = array(), $comment = "", $parentTrId = null, $parentTxnId = null)
+    public function saveTransaction($order, $amount, $status, $txnId, $txnType, $dotpayId='', $data = array(), $comment = "", $parentTrId = null, $parentTxnId = null)
     {
         if ($order instanceof Mage_Sales_Model_Order
             && is_numeric($amount)
@@ -45,7 +45,8 @@ abstract class Zolago_Payment_Model_Client {
                     ->setTxnStatus($status)
                     ->setParentId($parentTrId)
                     ->setParentTxnId($parentTxnId)
-                    ->setCustomerId($customerId);
+                    ->setCustomerId($customerId)
+	                ->setDotpayId($dotpayId);
 
             } elseif ($transaction->getId() && !$transaction->getIsClosed()) {
                 //update existing transaction
@@ -111,8 +112,7 @@ abstract class Zolago_Payment_Model_Client {
 		$transactions = $this->getTransactions($method);
 		if($transactions instanceof Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection) {
 			$transactions
-				->addFieldToFilter('is_closed', 0)
-				->load();
+				->addFieldToFilter('is_closed', 0);
 			return $transactions;
 		}
 		return false;
@@ -124,8 +124,7 @@ abstract class Zolago_Payment_Model_Client {
 			&& $expiration) {
 			$transactions
 				->addFieldToFilter('txn_status',self::TRANSACTION_STATUS_NEW)
-				->addFieldToFilter('main_table.created_at', array('lt' => $expiration))
-				->load();
+				->addFieldToFilter('main_table.created_at', array('lt' => $expiration));
 			return $transactions;
 		}
 		return false;
@@ -137,8 +136,8 @@ abstract class Zolago_Payment_Model_Client {
 			$transactions = Mage::getResourceModel('sales/order_payment_transaction_collection');
 			$transactions
 				->getSelect()
-				->joinLeft(array('payment_id_table'=>'sales_flat_quote_payment'),
-				"`main_table`.`payment_id` = `payment_id_table`.`payment_id`",
+				->joinLeft(array('payment_id_table'=>'sales_flat_order_payment'),
+				"`main_table`.`payment_id` = `payment_id_table`.`entity_id`",
 				"payment_id_table.method AS payment_method")
 				->where("`payment_id_table`.`method` = ?",$method);
 

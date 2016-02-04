@@ -69,6 +69,12 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'number'
         ));
 
+	    $grid->addColumn('dotpay_id', array(
+		    'header'    => 'Dotpay Client ID',
+		    'index'     => 'dotpay_id',
+		    'type'      => 'number'
+	    ));
+
         return $grid;
     }
 
