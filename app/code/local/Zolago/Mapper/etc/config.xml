@@ -96,6 +96,15 @@
                     </zolagomapper>
                 </observers>
             </catalog_product_attribute_update_after>
+            <catalog_product_website_update>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>catalogProductWebsiteUpdate</method>
+                    </zolagomapper>
+                </observers>
+            </catalog_product_website_update>
 		</events>
     </global>
 	<admin>

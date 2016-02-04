@@ -524,7 +524,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return Zolago_Po_Model_Po
     */
    public function updateTotals($force=false) {
-	   Mage::log($this->getData(),null,'PO_DATA.log');
 	    if($force || !$this->getGrandTotalInclTax()){
 			$this->_processTotalWeight();
 			$this->_processTotalQty();

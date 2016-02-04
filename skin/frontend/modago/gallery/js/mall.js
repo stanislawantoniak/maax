@@ -1029,6 +1029,53 @@ Mall.Slick = {
 	}
 };
 
+// Google Tag Manager
+Mall.Gtm = {
+	// Steps defined
+	STEP_CHECKOUT_CART: 1,
+	STEP_CHECKOUT_LOGIN_GUEST: 2,
+	STEP_CHECKOUT_ADDRESS_GUEST: 3,
+	STEP_CHECKOUT_ADDRESS: 4,
+	STEP_CHECKOUT_SHIPPING_PAYMENT: 5,
+	STEP_CHECKOUT_SUMMARY: 6,
+	STEP_CHECKOUT_ORDER: 7,
+	STEP_CHECKOUT_THANK_YOU: 8,
+	pushedSteps: [],
+
+	init: function () {
+		if (jQuery('body').hasClass("checkout-cart-index")) {
+			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_CART);
+		} else if (jQuery('body').hasClass("customer-account-login") && /checkout\/guest\/login/g.test(window.location)) {
+			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_LOGIN_GUEST);
+		}
+		else if (jQuery('body').hasClass("checkout")) {
+			if (jQuery('body').hasClass("checkout-guest-index")) {
+				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ADDRESS_GUEST);
+			} else {
+				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ADDRESS);
+			}
+		}
+		// Next steps manually triggered in steps.js
+		else if (jQuery('body').hasClass("checkout-guest-success") || jQuery('body').hasClass("checkout-singlepage-success")) {
+			Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_THANK_YOU);
+		}
+	},
+
+	checkoutStep: function (step) {
+		if (typeof dataLayer != "undefined" && jQuery.inArray(step, this.pushedSteps) == -1) {
+			dataLayer.push({
+				'event': 'checkout',
+				'ecommerce': {
+					'checkout': {
+						'actionField': {'step': step},
+					}
+				},
+			});
+			this.pushedSteps.push(step);
+		}
+	}
+};
+
 Mall.Scrolltop = {
 	heightToShow: false,
 	options: { //these are set in /app/design/frontend/modago/default/template/page/html/scrolltop.phtml
@@ -1627,6 +1674,7 @@ Mall.refresh = function() {
 };
 
 jQuery(document).ready(function() {
+	Mall.Gtm.init();
     Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();

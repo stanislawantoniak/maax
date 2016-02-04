@@ -16,6 +16,13 @@
 				</rewrite>
 			</dotpay>
 		</models>
+	    <resources>
+		    <zolagodotpay_setup>
+			    <setup>
+				    <module>Zolago_Dotpay</module>
+			    </setup>
+		    </zolagodotpay_setup>
+	    </resources>
 	</global>
 	<frontend>
 		<routers>

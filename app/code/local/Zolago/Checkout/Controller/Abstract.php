@@ -60,6 +60,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 					"message"	=> $ex->getMessage()
 				)
 			);
+			Mage::logException($ex);
 			return $this->_prepareJsonResponse($response);
 		}
 
@@ -88,6 +89,16 @@ abstract class Zolago_Checkout_Controller_Abstract
 				"message"	=> isset($oldResponse['error_messages']) ? $oldResponse['error_messages'] : false
 			)
 		);
+
+		// Part for tag manager script and GA
+		if ($success) {
+			$session = $this->getOnepage()->getCheckout();
+			$orderIds = array($session->getLastOrderId());
+			/** @var GH_GTM_Block_Gtm $block */
+			$block = Mage::app()->getLayout()->createBlock('gh_gtm/gtm','google_tag_manager');
+			$block->setOrderIds($orderIds);
+			$newResponse['dataLayer'] = $block->getRawDataLayer();
+		}
 
 		/* clear salesmanago cart event id after successful checkout */
 		if($success) {

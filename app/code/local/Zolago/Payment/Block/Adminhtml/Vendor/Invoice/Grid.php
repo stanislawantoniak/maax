@@ -25,14 +25,13 @@ class Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Grid extends Mage_Adminhtml_
 
         /* @var $collection Zolago_Payment_Model_Resource_Vendor_Invoice_Collection */
         $collection = $model->getCollection();
-        $this->setCollection($collection);
 
         $collection->getSelect()->join(
             array("vendors" => $model->getResource()->getTable('udropship/vendor')), //$name
             "main_table.vendor_id=vendors.vendor_id", //$cond
             array("vendor_name" => "vendor_name")//$cols = '*'
         );
-
+        $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 

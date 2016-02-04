@@ -1719,6 +1719,7 @@
 					this.getSidebarAddressesTemplate()
 				);
 				jQuery(window).trigger("resize");
+				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SHIPPING_PAYMENT);
 			},
 
             collect: function () {
@@ -1945,6 +1946,7 @@
 			},
 			
 			onEnter: function(checkout){
+				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SUMMARY);
 				// Prepare address sidebar
 				var addresses = checkout.getBillingAndShipping();
 				checkout.prepareAddressSidebar(
