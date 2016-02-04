@@ -175,5 +175,22 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
             'udqa/general/send_vendor_agent_notifications', $store
         );
     }
+    
+    /**
+     * store from question not from default
+     *
+     * @param Unirgy_DropshipVendorAskQuestion_Model_Question $question
+     * @return Mage_Core_Model_Store
+     */
+
+    public function getStore($question)
+    {
+        if (!$storeId = $question->getStoreId()) {            
+            return Mage::app()->getDefaultStoreView();
+        } else {
+            return Mage::getModel('core/store')->load($storeId);
+        }
+    }
+
 
 }
