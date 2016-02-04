@@ -7,6 +7,7 @@ class Modago_Integrator_Model_Generator_Description
     extends Modago_Integrator_Model_Generator
 {
 
+    protected $_attributeType = array();
     protected $_getList = true;
     protected $_getListBatch = 300;
     protected $_getListPage = 1;
@@ -218,7 +219,7 @@ class Modago_Integrator_Model_Generator_Description
                             $data[$key]['type'] = $value;
                             break;
 
-                        default:
+                        default:                            
                             if ($value !== "" && !is_null($value)) {
                                 $data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
                             }
@@ -325,17 +326,38 @@ class Modago_Integrator_Model_Generator_Description
         return false;
     }
 
+    public function getAttributeType($product,$code) {
+        if (!isset($this->_attributeType[$code])) {
+            $attribute = $product->getResource()
+                    ->getAttribute($code);
+            if ($attribute) {
+                    $type = $attribute->getFrontend()
+                                    ->getInputType();
+            } else {
+                $type = 'text';
+            }
+            $this->_attributeType[$code] = empty($type)? 'text':$type;
+        }
+        return $this->_attributeType[$code];
+    }
     /**
      *
      *
      * @param Mage_Catalog_Model_Product $product
      * @param string $attributeCode
+     * @param bool $cdata use cdata
      * @returns string
      */
-    protected function getAttributeText($product, $attributeCode, $attributeValue=false)
-    {
+    protected function getAttributeText($product, $attributeCode, $attributeValue=false,$cdata = true)
+    {    
         if ($product instanceof Mage_Catalog_Model_Product) {
             $attributeValue = $attributeValue !== false ? $attributeValue : $product->getData($attributeCode);
+            $type = $this->getAttributeType($product,$attributeCode); // check multiple product
+            if ($type == 'multiselect') {
+                $value = $product->getAttributeText($attributeCode);
+                $code = $attributeCode.'_value';
+                return $this->getAttributeText($product,$code,$value);
+            }
             if(in_array($attributeCode,$this->_valuesToInsertRaw)) {
                 return $attributeValue;
             }
@@ -347,11 +369,19 @@ class Modago_Integrator_Model_Generator_Description
                         if (is_array($attributeText)) {
                             $return = "";
                             foreach($attributeText as $attrVal) {
-                                $return .= "<value><![CDATA[".$attrVal."]]></value>";
+                                if ($cdata) {
+                                    $return .= "<value><![CDATA[".$attrVal."]]></value>";
+                                } else {
+                                    $return .= sprintf("<value>%s</value>",$attrVal);
+                                }
                             }
                             return $return;
                         } else {
-                            return "<![CDATA[$attributeText]]>";
+                            if ($cdata) {
+                                return "<![CDATA[$attributeText]]>";
+                            } else {
+                                return $attributeText;
+                            }
                         }
                     }
                 }
@@ -359,11 +389,19 @@ class Modago_Integrator_Model_Generator_Description
             elseif(is_array($attributeValue)) {
                 $return = "";
                 foreach($attributeValue as $attrVal) {
-                    $return .= "<value><![CDATA[".$this->getAttributeText($product,$attributeCode,$attrVal)."]]></value>";
+                    if ($cdata) {
+                        $return .= "<value><![CDATA[".$this->getAttributeText($product,$attributeCode,$attrVal,false)."]]></value>";
+                    } else {
+                        $return .= sprintf("<value>%s</value>",$this->getAttributeText($product,$attributeCode,$attrVal,false));
+                    }
                 }
                 return $return;
             }
-            return "<![CDATA[$attributeValue]]>";
+            if ($cdata) {
+                return "<![CDATA[$attributeValue]]>";
+            } else {
+                return $attributeValue;
+            }
         }
         return '';
     }
