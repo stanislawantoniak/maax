@@ -2,14 +2,14 @@
 /** @var Zolago_SalesRule_Block_Email_Promotion $this */
 /** @var Zolago_SalesRule_Helper_Data $_hlp */
 $_hlp = Mage::helper('zolagosalesrule');
+$counter=1;
 ?>
-<div style="color: #000000; text-decoration: none;">
-<?php $list = $this->getPromotions(); ?>
-<?php foreach ($list as $item) : ?>
-    <div style="max-width: 200px;">
+<div style="color: #000000; text-decoration: none;max-width:400"><?php $list = $this->getPromotions(); ?><?php foreach ($list as $item) : ?><div style="width:49%;float:left;
+<?php if($counter % 2 != 0):?>margin-right:1%;<?php else:?>margin-left:1%<?php endif;?>">
+		<?php $counter++;?>
         <a href="<?php echo Mage::getUrl('mypromotions'); ?>" style="text-decoration: none;">
             <?php if ($item['ruleItem']->getPromoImage()): ?>
-                <img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>">
+                <img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>" style="width:100%;height:auto;">
             <?php endif; ?>
 
             <div class="promo_info" style="background-color:#FFF; padding: 3px 10px 0 10px; margin-bottom: 15px; border: solid 1px rgb(243, 243, 243); border-top: none;">
@@ -24,6 +24,5 @@ $_hlp = Mage::helper('zolagosalesrule');
                 </div>
             </div>
         </a>
-    </div>
-<?php endforeach; ?>
-</div>
+    </div><?php endforeach; ?></div>
+<div style="clear:both;"></div>
