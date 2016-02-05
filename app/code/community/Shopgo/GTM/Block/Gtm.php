@@ -149,25 +149,65 @@ class Shopgo_GTM_Block_Gtm extends Mage_Core_Block_Template
 	protected function _getVisitorData()
 	{
 		$data = array();
-		$customer = Mage::getSingleton('customer/session');
+		/** @var Mage_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+
+		/** @var Mage_Persistent_Helper_Session $persistentSession */
+		$persistentSession = Mage::helper("persistent/session");
 
 		// visitorId
-		if ($customer->getCustomerId()) $data['visitorId'] = (string)$customer->getCustomerId();
+		/** @var Zolago_Customer_Model_Customer $customer */
+		if ($customerSession->getCustomerId()) {
+			$customer = $customerSession->getCustomer();
+		} elseif($persistentSession->isPersistent()) {
+			$customer = $persistentSession->getCustomer();
+		}
 
-		// visitorLoginState
-		$data['visitorLoginState'] = ($customer->isLoggedIn()) ? 'Logged in' : 'Logged out';
+		if(isset($customer) && $customer->getId()) {
+			$data['visitorId'] = (string)$customer->getId();
+			$data['visitorHasAccount'] = 'yes';
+
+			/** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+			$subscriber = Mage::getModel('newsletter/subscriber');
+			$subscriber->loadByCustomer($customer);
+			if($subscriber->getId()) {
+				switch($subscriber->getStatus()) {
+					case Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED:
+						$data['visitorHasSubscribed'] = 'yes';
+						break;
+					case Zolago_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED:
+						$data['visitorHasSubscribed'] = 'unsubscribed';
+						break;
+
+					//case Zolago_Newsletter_Model_Subscriber::STATUS_NOT_ACTIVE:
+					//case Zolago_Newsletter_Model_Subscriber::STATUS_UNCONFIRMED:
+					default:
+						$data['visitorHasSubscribed'] = 'no';
+						break;
+				}
+			}
+		} else {
+			$data['visitorHasAccount'] = $data['visitorHasSubscribed'] = 'no';
+		}
+
+		if(!isset($data['visitorHasSubscribed'])) {
+			$data['visitorHasSubscribed'] = 'no';
+		}
+
+		//visitorLogged
+		$data['visitorLogged'] = ($customerSession->isLoggedIn()) ? 'yes' : 'no';
 
 		// visitorType
-		$data['visitorType'] = (string)Mage::getModel('customer/group')->load($customer->getCustomerGroupId())->getCode();
+		/*$data['visitorType'] = (string)Mage::getModel('customer/group')->load($customer->getCustomerGroupId())->getCode();*/
 
 		// visitorExistingCustomer / visitorLifetimeValue
-		$orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')->addFieldToFilter('customer_id',$customer->getId());
+/*		$orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')->addFieldToFilter('customer_id',$customer->getId());
 		$ordersTotal = 0;
 		foreach ($orders as $order) {
 			$ordersTotal += $order->getGrandTotal();
 		}
 		$data['visitorLifetimeValue'] = round($ordersTotal,2);
-		$data['visitorExistingCustomer'] = ($ordersTotal > 0) ? 'Yes' : 'No';
+		$data['visitorExistingCustomer'] = ($ordersTotal > 0) ? 'Yes' : 'No';*/
 
 		return $data;
 	}
