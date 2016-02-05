@@ -286,7 +286,9 @@
 			modal.find(".modal-body").addClass("one-line"); // hide txt about redirecting to payment page
 		}
 		modal.modal('show'); // Show modal (popup)
-		jQuery('*').css('pointer-events','none'); // Block all actions
+		if(!Mall.debug.isOn) {
+			jQuery('*').css('pointer-events', 'none'); // Block all actions
+		}
 		Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ORDER); // Send step by GTM
 	};
 	
@@ -299,11 +301,23 @@
 			var redirect = response.content.redirect;
 			Mall.Checkout.redirect = redirect;
 
+			var callback =
+				Mall.debug.isOn ?
+					function() {
+						jQuery('#popup-after-submit-order').find('.popup-spinner-wrapper').html(
+							"<a href=\""+Mall.Checkout.redirect+"\" style=\"font-size:20px;line-height:1em;display:block\">Debug mode is on! Click here to continue redirecting</a>"
+						);
+					} :
+					function() {
+						document.location = Mall.Checkout.redirect;
+					};
+
 			if (dl && redirect && typeof dataLayer != "undefined") {
 				dl = JSON.parse(dl);
 				// Pushing data from order to data layer
 				dataLayer.push(dl);
 				// Data layer for measuring purchases by ga
+
 				var measuringPurchases = {
 					'event': 'purchases-popup',
 					'ecommerce': {
@@ -319,13 +333,11 @@
 							'products': dl.transactionProducts
 						}
 					},
-					'eventCallback': function() {
-						document.location = Mall.Checkout.redirect;
-					}
+					'eventCallback': callback
 				};
 				dataLayer.push(measuringPurchases);
 			} else if(redirect){
-				window.location.replace(response.content.redirect);
+				callback();
 			} else {
 				window.location = window.location;
 			}
