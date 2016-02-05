@@ -27,7 +27,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
             "main_table.vendor_id=vendors.vendor_id", //$cond
             array("vendor_name" => "vendor_name")//$cols = '*'
         );
-
+        
         parent::_prepareCollection();
         return $this;
     }
@@ -48,6 +48,7 @@ class GH_Statements_Block_Adminhtml_Vendor_Balance_Grid extends Mage_Adminhtml_B
         $this->addColumn('status', array(
             'header' => $helper->__('Status'),
             'index' => 'status',
+            'filter_index' => 'main_table.status',
             //'width' => '100px',
             'type' => 'options',
             'options' => array(

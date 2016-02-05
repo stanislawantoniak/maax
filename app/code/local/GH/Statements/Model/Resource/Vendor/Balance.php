@@ -281,14 +281,28 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
      */
     public function getCustomerPayments()
     {
+		/** @var GH_Statements_Helper_Vendor_Balance $hlpBalance */
+		$hlpBalance = Mage::helper("ghstatements/vendor_balance");
+		$config = $hlpBalance->getDotpaysPaymentChannelOwnerForStores();
+		$mallDotpayIds =
+            isset($config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL]) ?
+            $config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL] :
+            array();
         $customerPayments = array();
 
+		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $customerPaymentsCollection */
         $customerPaymentsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month")
-            ->where("allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
-            ->where("`primary`=?", 1)
-            ->group("vendor_id")
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(main_table.created_at,'%Y-%m') AS balance_month")
+			// Only transactions from our dotpay
+			->joinLeft(
+				array('spt' => $this->getTable('sales/payment_transaction')),
+				'main_table.transaction_id = spt.transaction_id',
+				array())
+			->where("spt.dotpay_id IN (?)", $mallDotpayIds)
+            ->where("main_table.allocation_type = ?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
+            ->where("main_table.primary = ?", 1)
+            ->group("main_table.vendor_id")
             ->group("balance_month");
         //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
 
@@ -306,13 +320,27 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
      */
     public function getCustomerRefunds()
     {
+		/** @var GH_Statements_Helper_Vendor_Balance $hlpBalance */
+		$hlpBalance = Mage::helper("ghstatements/vendor_balance");
+		$config = $hlpBalance->getDotpaysPaymentChannelOwnerForStores();
+		$mallDotpayIds =
+            isset($config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL]) ?
+                $config[Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL] :
+                array();
         $customerRefunds = array();
 
+		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $customerRefundsCollection */
         $customerRefundsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
         $customerRefundsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("vendor_id, SUM(CAST(allocation_amount AS DECIMAL(12,4)))  as amount, DATE_FORMAT(created_at,'%Y-%m') AS balance_month")
-            ->where("allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND)
-            ->group("vendor_id")
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(main_table.created_at,'%Y-%m') AS balance_month")
+			// Only transactions from our dotpay
+			->joinLeft(
+				array('spt' => $this->getTable('sales/payment_transaction')),
+				'main_table.transaction_id = spt.transaction_id',
+				array())
+			->where("spt.dotpay_id IN (?)", $mallDotpayIds)
+            ->where("main_table.allocation_type=?", Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND)
+            ->group("main_table.vendor_id")
             ->group("balance_month");
         //Mage::log($customerRefundsCollection->getSelect()->__toString(), null, "TEST_SALDO_REFUNDS.log");
         //Reformat by vendor -> month

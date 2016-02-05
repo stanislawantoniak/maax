@@ -16,9 +16,12 @@
         <message>(SALE)</message>
     </flag-sale>
     <flag-promo translate="message" module="zolagopo">
-        <message>(SALE)</message>
+        <message>(PROMOTION)</message>
     </flag-promo>
     <Failed-to-get-waybill translate="message" module="zolagopo">
         <message>Failed to get waybill</message>
     </Failed-to-get-waybill>
+	<add-item-price translate="message" module="zolagopo">
+		<message>Price: </message>
+	</add-item-price>
 </jstranslator>

@@ -1173,6 +1173,11 @@
                     <file>sales/shipment_update_guest.html</file>
                     <type>html</type>
                 </sales_email_shipment_comment_guest_template>
+                <tnf_email_template>
+                    <label>The North Face Email Template</label>
+                    <file>tnf_email_template.html</file>
+                    <type>html</type>
+                </tnf_email_template>
             </email>
         </template>
         <resources>

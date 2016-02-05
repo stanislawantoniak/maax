@@ -23,5 +23,51 @@
                 </general>
 		   </groups>
         </urma>
+        <design>
+            <groups>
+                <rma_document translate="label">
+                    <label>Rma document</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <rma_logo translate="label">
+                            <label>Logo on RMA pdf documents src</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </rma_logo>
+                    </fields>
+                </rma_document>
+            </groups>
+        </design>
+        <sales_pdf>
+            <groups>
+                <rma_pdf>
+                    <label>RMA Document for Customer</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <rma_document_file>
+                            <label>Pdf file with regulations</label>
+                            <frontend_type>file</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_file</backend_model>
+                            <upload_dir>media/rma/static</upload_dir>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </rma_document_file>
+                    </fields>
+                </rma_pdf>
+            </groups>
+        </sales_pdf>
     </sections>
 </config>
