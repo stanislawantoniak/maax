@@ -187,7 +187,7 @@ class Shopgo_GTM_Block_Gtm extends Mage_Core_Block_Template
 				}
 			}
 		} else {
-			$data['visitorHasAccount'] = $data['visitorHasSubscribed'] = 'no';
+			$data['visitorHasAccount'] = 'no';
 		}
 
 		if(!isset($data['visitorHasSubscribed'])) {
