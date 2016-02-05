@@ -1673,6 +1673,16 @@ Mall.refresh = function() {
     location.reload();
 };
 
+Mall.debug = {
+	isOn: false,
+	on: function() {
+		this.isOn = true;
+	},
+	off: function() {
+		this.isOn = false;
+	}
+};
+
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
     Mall.CustomEvents.init(300);
