@@ -1706,6 +1706,16 @@ Mall.createInlineSvgs = function() {
 	});
 }
 
+Mall.debug = {
+	isOn: false,
+	on: function() {
+		this.isOn = true;
+	},
+	off: function() {
+		this.isOn = false;
+	}
+};
+
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
 	Mall.createInlineSvgs();
