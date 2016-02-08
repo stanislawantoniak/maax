@@ -457,19 +457,15 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
             ->order(new Zend_Db_Expr('`category_product`.`position` asc'));
 
         foreach ($collection as $cat) {
-            $categoryInStoreTree =  $this->getCategory($cat->getId());
-            if ($categoryInStoreTree &&
-                (is_null($category) || $cat->getLevel() > $category->getLevel()) &&
+            if ((is_null($category) || $cat->getLevel() > $category->getLevel()) &&
                 (is_null($currentPosition) || $cat->getProductPosition() <= $currentPosition)
             ) {
-                $category = $categoryInStoreTree;
+                $category = $cat;
                 $currentPosition = $category->getProductPosition();
             }
         }
 
-        if ($category
-            //&& $category = $this->getCategory($category->getId())
-        ) {
+        if ($category && $category = $this->getCategory($category->getId())) {
             $categoryPath = array($category->getName());
             $parentId     = $category->getParentId();
 
