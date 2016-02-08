@@ -160,15 +160,17 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
         if (!isset($this->_categories[$categoryId])) {
             $category = Mage::getModel('catalog/category')->load($categoryId);
             $path     = explode('/', $category->getPath());
-
+            Mage::log($path, null, "TEST_5.1.log");
             // check that category from this store
+            Mage::log("getRootCategoryId", null, "TEST_5.1.log");
+            Mage::log($this->getStore()->getRootCategoryId(), null, "TEST_5.1.log");
             if (in_array($this->getStore()->getRootCategoryId(), $path)) {
                 $this->_categories[$categoryId] = $category;
             } else {
                 $this->_categories[$categoryId] = false;
             }
         }
-        Mage::log($this->_categories[$categoryId], null, "TEST_5.1.log");
+        Mage::log($this->_categories[$categoryId], null, "TEST_5.2.log");
         return $this->_categories[$categoryId];
     }
 }
