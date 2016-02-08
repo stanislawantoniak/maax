@@ -61,4 +61,29 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
 		);
 	}
+
+	/**
+	 * Set customer object and setting customer id in session
+	 *
+	 * @param   Mage_Customer_Model_Customer $customer
+	 * @return  Mage_Customer_Model_Session
+	 */
+	public function setCustomer(Mage_Customer_Model_Customer $customer)
+	{
+		// check if customer is not confirmed
+		if ($customer->isConfirmationRequired()) {
+			if ($customer->getConfirmation()) {
+				return $this->_logout();
+			}
+		}
+		$customer->setData('costam',true);
+		$this->_customer = $customer;
+		$this->setId($customer->getId());
+		// save customer as confirmed, if it is not
+		if ((!$customer->isConfirmationRequired()) && $customer->getConfirmation()) {
+			$customer->setConfirmation(null)->save();
+			$customer->setIsJustConfirmed(true);
+		}
+		return $this;
+	}
 }

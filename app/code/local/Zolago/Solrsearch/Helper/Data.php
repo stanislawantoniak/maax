@@ -162,6 +162,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$imageSizes = $product->getListingResizedImageInfo();
 			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] / $imageSizes["width"]),2) : 1;
 			$_product[9] = $this->_prepareManufacturerLogoUrl($product->getManufacturerLogoUrl());
+			$_product[10]= $product->getSku();
+			$_product[11]= str_replace($product->getUdropshipVendor()."-","",$product->getSku());
 
 			$products[] = $_product;
 		}
