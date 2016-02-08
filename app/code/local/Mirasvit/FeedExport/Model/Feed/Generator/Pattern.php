@@ -156,6 +156,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
 
     public function getCategory($categoryId)
     {
+        Mage::log($categoryId, null, "TEST_5.1.log");
         if (!isset($this->_categories[$categoryId])) {
             $category = Mage::getModel('catalog/category')->load($categoryId);
             $path     = explode('/', $category->getPath());
@@ -167,7 +168,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
                 $this->_categories[$categoryId] = false;
             }
         }
-
+        Mage::log($this->_categories[$categoryId], null, "TEST_5.1.log");
         return $this->_categories[$categoryId];
     }
 }
