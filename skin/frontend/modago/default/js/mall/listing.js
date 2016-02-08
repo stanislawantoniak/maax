@@ -382,6 +382,8 @@ Mall.listing = {
      * product[7] = image_url
      * product[8] = image_ratio
      * product[9] = manufacturer_logo_url
+	 * product[10]= sku
+	 * product[11]= skuv
      *
 	 * @param product
      * @returns {string}
@@ -395,7 +397,7 @@ Mall.listing = {
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
             "<div class='box_listing_product'>"+
-                "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
+                "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
                         "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+

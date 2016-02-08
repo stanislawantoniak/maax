@@ -15,4 +15,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Landingpage_Products exten
     public function getListModel() {
         return Mage::getSingleton('zolagosolrsearch/solr_vendor_landingpage_product_list');
     }
+
+    public function getSkuv(Zolago_Solrsearch_Model_Catalog_Product $product) {
+        return str_replace($product->getUdropshipVendor()."-","",$product->getSku());
+    }
 }

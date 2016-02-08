@@ -18,7 +18,10 @@ $_collection = $this->getCollection();
 
                         <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
-                                <a href="<?php echo $product->getCurrentUrl(); ?>">
+                                <a href="<?php echo $product->getCurrentUrl(); ?>"
+                                   data-entity="<?php echo $product->getEntityId(); ?>"
+                                   data-sku="<?php echo $product->getSku(); ?>"
+                                   data-skuv="<?php echo $this->getSkuv($product); ?>">
                                     <figure class="img_product" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
                                         <img src="<?php echo $_productImageUrl; ?>"
                                              alt="<?php $this->escapeHtml($product->getName()); ?>"
