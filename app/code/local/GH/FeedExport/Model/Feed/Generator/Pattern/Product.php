@@ -31,9 +31,7 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
             }
         }
 
-        if ($category
-            //&& $category = $this->getCategory($category->getId())
-        ) {
+        if ($category) {
             $categoryPath = array($category->getName());
             $parentId = $category->getParentId();
 
@@ -57,7 +55,7 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
             $product->setCategory($category->getName());
             $product->setCategoryModel($category);
             $product->setCategoryId($category->getEntityId());
-            $product->setCategoryPath(implode(' > ', array_reverse($categoryPath)));
+            $product->setCategoryPath(implode('/', array_reverse($categoryPath)));
         } else {
             $product->setCategory('');
             $product->setCategorySubcategory('');
