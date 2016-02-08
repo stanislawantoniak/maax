@@ -31,10 +31,8 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 
     public function getCollection()
     {
-        Mage::log($this->_type, null, "11.log");
         if ($this->_type == 'product') {
             $collection = Mage::getModel('catalog/product')->getCollection()
-
                 ->joinField('qty', 'cataloginventory/stock_item', 'qty',
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
                 ->addStoreFilter()
@@ -48,8 +46,6 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                     ->where('rule.feed_id = ?', $this->getFeed()->getId())
                     ->where('rule.is_new = 1');
             }
-            Mage::log($collection->getData(), null, "11.log");
-
         } elseif ($this->_type == 'category') {
             $root = Mage::getModel('catalog/category')->load($this->getFeed()->getStore()->getRootCategoryId());
 
@@ -76,7 +72,6 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 
     public function callback($row)
     {
-        Mage::log($row, null, "callback.log");
         $this->_patternModel  = Mage::getSingleton('feedexport/feed_generator_pattern');
         $this->_patternModel->setFeed($this->getFeed());
 
