@@ -77,11 +77,16 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
         preg_match_all('/{([^}]+)(\sparent|\sgrouped|\sconfigurable|\sbundle)?([^}]*)}/', $content, $matches);
 
         foreach ($matches[0] as $pattern) {
+            Mage::log($scope, null, "getPatternValue1.log");
             $value = false;
             switch ($scope) {
                 case 'product':
                     $model = Mage::getSingleton('feedexport/feed_generator_pattern_product')->setFeed($this->getFeed());
                     $value = $model->getValue($pattern, $obj);
+                    Mage::log($pattern, null, "getPatternValue.log");
+                    //Mage::log($obj->getData(), null, "getPatternValue.log");
+                    Mage::log($value, null, "getPatternValue.log");
+                    Mage::log("----------------------------------", null, "getPatternValue.log");
                     break;
 
                 case 'category':

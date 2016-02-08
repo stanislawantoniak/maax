@@ -340,6 +340,8 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     public function dynamicAttributeValue($arPattern, &$value, $obj)
     {
+        Mage::log("dynamicAttributeValue", null, "11.log");
+        Mage::log($arPattern, null, "11.log");
         if ($arPattern['key'] == 'custom') {
             $customAttribute = Mage::getModel('feedexport/dynamic_attribute')->getCollection()
                 ->addFieldToFilter('code', $arPattern['additional'])
@@ -353,6 +355,8 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     public function dynamicCategoryValue($arPattern, &$value, $obj)
     {
+        Mage::log("dynamicCategoryValue", null, "11.log");
+        Mage::log($arPattern, null, "11.log");
         if ($arPattern['key'] == 'mapping') {
             $this->_prepareProductCategory($obj);
 
@@ -444,6 +448,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     protected function _prepareProductCategory(&$product)
     {
+        Mage::log($product->getData(), null, "TEST_3.log");
         $category = null;
         $currentPosition = null;
 
@@ -455,7 +460,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
                 array('product_position' => 'position')
             )
             ->order(new Zend_Db_Expr('`category_product`.`position` asc'));
-
+        Mage::log($collection->getSelect()->__toString(), null, "TEST_4.log");
         foreach ($collection as $cat) {
             if ((is_null($category) || $cat->getLevel() > $category->getLevel()) &&
                 (is_null($currentPosition) || $cat->getProductPosition() <= $currentPosition)
