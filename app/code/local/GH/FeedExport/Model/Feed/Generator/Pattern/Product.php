@@ -31,9 +31,7 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
             }
         }
 
-        if ($category
-            //&& $category = $this->getCategory($category->getId())
-        ) {
+        if ($category) {
             $categoryPath = array($category->getName());
             $parentId = $category->getParentId();
 
