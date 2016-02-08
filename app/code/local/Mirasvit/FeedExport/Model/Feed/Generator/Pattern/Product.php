@@ -340,8 +340,6 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     public function dynamicAttributeValue($arPattern, &$value, $obj)
     {
-        Mage::log("dynamicAttributeValue", null, "11.log");
-        Mage::log($arPattern, null, "11.log");
         if ($arPattern['key'] == 'custom') {
             $customAttribute = Mage::getModel('feedexport/dynamic_attribute')->getCollection()
                 ->addFieldToFilter('code', $arPattern['additional'])
@@ -355,8 +353,6 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     public function dynamicCategoryValue($arPattern, &$value, $obj)
     {
-        Mage::log("dynamicCategoryValue", null, "11.log");
-        Mage::log($arPattern, null, "11.log");
         if ($arPattern['key'] == 'mapping') {
             $this->_prepareProductCategory($obj);
 
@@ -448,12 +444,10 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     protected function _prepareProductCategory(&$product)
     {
-        Mage::log($product->getData(), null, "TEST_3.log");
         $category = null;
         $currentPosition = null;
 
         $collection = Mage::getModel('catalog/category')->getCollection();
-        Mage::log($collection->getData(), null, "TEST_3_1.log");
         $collection->getSelect()
             ->joinInner(
                 array('category_product' => $collection->getTable('catalog/category_product')),
@@ -461,21 +455,22 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
                 array('product_position' => 'position')
             )
             ->order(new Zend_Db_Expr('`category_product`.`position` asc'));
-        Mage::log($collection->getSelect()->__toString(), null, "TEST_4.log");
-        Mage::log($this->getStore()->getRootCategoryId(), null, "TEST_4_1.log");
+
         foreach ($collection as $cat) {
             $ctM = Mage::getModel('catalog/category')->load($cat->getId());
             $path     = explode('/', $ctM->getPath());
-            if ((is_null($category) || $cat->getLevel() > $category->getLevel()) &&
+            if (in_array($this->getStore()->getRootCategoryId(), $path) &&
+                (is_null($category) || $cat->getLevel() > $category->getLevel()) &&
                 (is_null($currentPosition) || $cat->getProductPosition() <= $currentPosition)
-                && in_array($this->getStore()->getRootCategoryId(), $path)
             ) {
                 $category = $cat;
                 $currentPosition = $category->getProductPosition();
             }
         }
-        Mage::log($category = $this->getCategory($category->getId()), null, "TEST_5.log");
-        if ($category && $category = $this->getCategory($category->getId())) {
+
+        if ($category
+            //&& $category = $this->getCategory($category->getId())
+        ) {
             $categoryPath = array($category->getName());
             $parentId     = $category->getParentId();
 
