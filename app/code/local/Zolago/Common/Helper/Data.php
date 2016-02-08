@@ -247,4 +247,15 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $finalQuote.str_replace(array($quote,"\n","\r"),array('\\'.$quote," "," "),$string).$finalQuote;
 	}
 
+
+	public function getSkuvFromSku($sku,$vendorId) {
+		$toRemove = $vendorId."-";
+		$toRemoveLen = strlen($toRemove);
+		if(substr($sku,0,$toRemoveLen) == $toRemove) {
+			return substr_replace($sku,"",0,$toRemoveLen);
+		} else {
+			return $sku;
+		}
+	}
+
 }

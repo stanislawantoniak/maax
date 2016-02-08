@@ -17,6 +17,9 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Landingpage_Products exten
     }
 
     public function getSkuv(Zolago_Solrsearch_Model_Catalog_Product $product) {
-        return str_replace($product->getUdropshipVendor()."-","",$product->getSku());
+        /** @var Zolago_Common_Helper_Data $hlp */
+        $hlp = Mage::helper('zolagocommon');
+
+        return $hlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor());
     }
 }
