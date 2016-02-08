@@ -462,9 +462,13 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
             )
             ->order(new Zend_Db_Expr('`category_product`.`position` asc'));
         Mage::log($collection->getSelect()->__toString(), null, "TEST_4.log");
+        Mage::log($this->getStore()->getRootCategoryId(), null, "TEST_4_1.log");
         foreach ($collection as $cat) {
+            $ctM = Mage::getModel('catalog/category')->load($cat->getId());
+            $path     = explode('/', $ctM->getPath());
             if ((is_null($category) || $cat->getLevel() > $category->getLevel()) &&
                 (is_null($currentPosition) || $cat->getProductPosition() <= $currentPosition)
+                && in_array($this->getStore()->getRootCategoryId(), $path)
             ) {
                 $category = $cat;
                 $currentPosition = $category->getProductPosition();
