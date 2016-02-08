@@ -259,7 +259,6 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
             return $this;
         }
         $categoryIds = $object->getCategoryIds();
-        Mage::log($categoryIds, null, "_saveCategories.log");
         $oldCategoryIds = $this->getCategoryIds($object);
 
         $object->setIsChangedCategories(false);
