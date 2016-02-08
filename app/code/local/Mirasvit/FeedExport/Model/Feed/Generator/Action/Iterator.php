@@ -46,8 +46,6 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator extends Mirasvit_
 
         $collection = $iteratorModel->getCollection();
         $size       = $collection->getSize();
-        //Mage::log($iteratorModel, null, "11.log");
-        Mage::log($size, null, "11.log");
         $idx        = intval($this->getValue('idx'));
         $add        = intval($this->getValue('add'));
 
@@ -84,7 +82,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator extends Mirasvit_
                 break;
             }
         }
-        Mage::log($result, null, "TEST.log");
+
         $iteratorModel->save($result);
 
 
