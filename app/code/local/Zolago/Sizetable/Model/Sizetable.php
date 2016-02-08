@@ -18,7 +18,7 @@ class Zolago_Sizetable_Model_Sizetable extends Mage_Core_Model_Abstract{
 				$this->setVendorId($vendor_id);
 				$this->setDefaultValue($data['default_value']);
 			}else{
-				throw new Exception("Error Processing Request: Insuficient Data Provided.");
+				throw new Exception("Error Processing Request: Insufficient Data Provided.");
 			}
 		} catch (Exception $e){
 			Mage::logException($e);
