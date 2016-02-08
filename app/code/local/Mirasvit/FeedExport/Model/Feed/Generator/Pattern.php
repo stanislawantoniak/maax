@@ -77,16 +77,11 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
         preg_match_all('/{([^}]+)(\sparent|\sgrouped|\sconfigurable|\sbundle)?([^}]*)}/', $content, $matches);
 
         foreach ($matches[0] as $pattern) {
-            Mage::log($scope, null, "getPatternValue1.log");
             $value = false;
             switch ($scope) {
                 case 'product':
                     $model = Mage::getSingleton('feedexport/feed_generator_pattern_product')->setFeed($this->getFeed());
                     $value = $model->getValue($pattern, $obj);
-                    Mage::log($pattern, null, "getPatternValue.log");
-                    //Mage::log($obj->getData(), null, "getPatternValue.log");
-                    Mage::log($value, null, "getPatternValue.log");
-                    Mage::log("----------------------------------", null, "getPatternValue.log");
                     break;
 
                 case 'category':
@@ -156,21 +151,18 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern extends Varien_Object
 
     public function getCategory($categoryId)
     {
-        Mage::log($categoryId, null, "TEST_5.1.log");
         if (!isset($this->_categories[$categoryId])) {
             $category = Mage::getModel('catalog/category')->load($categoryId);
             $path     = explode('/', $category->getPath());
-            Mage::log($path, null, "TEST_5.1.log");
+
             // check that category from this store
-            Mage::log("getRootCategoryId", null, "TEST_5.1.log");
-            Mage::log($this->getStore()->getRootCategoryId(), null, "TEST_5.1.log");
             if (in_array($this->getStore()->getRootCategoryId(), $path)) {
                 $this->_categories[$categoryId] = $category;
             } else {
                 $this->_categories[$categoryId] = false;
             }
         }
-        Mage::log($this->_categories[$categoryId], null, "TEST_5.2.log");
+
         return $this->_categories[$categoryId];
     }
 }
