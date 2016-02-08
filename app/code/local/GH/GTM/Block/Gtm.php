@@ -32,7 +32,6 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 
 		// Get transaction and visitor data.
 		$data = $data + $this->_getTransactionData();
-		$data = $data + $this->_getContextData();
 
 		// Get transaction and visitor data, if desired.
 		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
