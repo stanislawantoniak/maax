@@ -14,6 +14,11 @@
             <ghfeedexport_resource>
                 <class>GH_FeedExport_Model_Resource</class>
             </ghfeedexport_resource>
+            <feedexport>
+                <rewrite>
+                    <feed_generator_pattern_product>GH_FeedExport_Model_Feed_Generator_Pattern_Product</feed_generator_pattern_product>
+                </rewrite>
+            </feedexport>
         </models>
         <blocks>
             <ghfeedexport>
