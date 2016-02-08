@@ -463,13 +463,13 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
                 (is_null($category) || $cat->getLevel() > $category->getLevel()) &&
                 (is_null($currentPosition) || $cat->getProductPosition() <= $currentPosition)
             ) {
-                $category = $cat;
+                $category = $ctM;
                 $currentPosition = $category->getProductPosition();
             }
         }
 
         if ($category
-            && $category = $this->getCategory($category->getId())
+            //&& $category = $this->getCategory($category->getId())
         ) {
             $categoryPath = array($category->getName());
             $parentId     = $category->getParentId();
