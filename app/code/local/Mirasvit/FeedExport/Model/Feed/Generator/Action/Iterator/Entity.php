@@ -36,7 +36,7 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                 ->joinField('qty', 'cataloginventory/stock_item', 'qty',
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
                 ->addStoreFilter()
-                //->addFieldToFilter('sku', "9-T0A0QLN2N")
+                ->addFieldToFilter('sku', "9-T0A0QLN2N")
             ;
 
             if (count($this->getFeed()->getRuleIds()) || Mage::app()->getRequest()->getParam('skip')) {
