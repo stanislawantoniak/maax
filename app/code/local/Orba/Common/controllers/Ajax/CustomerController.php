@@ -217,6 +217,13 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 	    }
 
 
+	    if(Mage::getStoreConfig(Shopgo_GTM_Helper_Data::XML_PATH_ACTIVE)) {
+		    /** @var GH_GTM_Helper_Data $gtmHelper */
+		    $gtmHelper = Mage::helper('gh_gtm');
+		    $content['visitor_data'] = $gtmHelper->getVisitorData();
+	    }
+
+
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);
     }
