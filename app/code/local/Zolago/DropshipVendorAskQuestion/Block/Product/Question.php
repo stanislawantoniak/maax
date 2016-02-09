@@ -66,7 +66,9 @@ class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_Dro
 	}
 
 	public function isOwnStore() {
-		return Mage::app()->getWebsite()->getHaveSpecificDomain() ? true : false;
+		/** @var Zolago_Common_Helper_Data $hlp */
+		$hlp = Mage::helper('zolagocommon');
+		return $hlp->isOwnStore();
 	}
 
 	public function getOwnStoreVendorId() {

@@ -258,4 +258,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 	}
 
+	public function isOwnStore() {
+		return Mage::app()->getWebsite()->getHaveSpecificDomain() ? true : false;
+	}
 }
