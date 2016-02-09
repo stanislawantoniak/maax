@@ -140,7 +140,7 @@ $tinyMCEKinds = array("C", "A", "B");
                                             <textarea name="default_value[<?php echo $tinyMCEKind; ?>]"
                                                       id="sizetable_<?php echo $defaultStoreId; ?>_<?php echo $tinyMCEKind; ?>"
                                                       class="form-control tinymce">
-                                                <?php if ($defaultValue[$tinyMCEKind]) echo $defaultValue[$tinyMCEKind]; ?>
+                                                <?php if (isset($defaultValue[$tinyMCEKind])) echo $defaultValue[$tinyMCEKind]; ?>
                                             </textarea>
                                     </div>
                                 <?php endforeach; ?>
