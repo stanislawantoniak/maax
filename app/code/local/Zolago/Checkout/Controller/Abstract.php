@@ -231,6 +231,8 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
 				throw new Mage_Core_Exception($shippingMethodResponse['message']);
 			}
+
+			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
 		}
 		
 		/**
@@ -247,7 +249,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 			//save selected payment to session in order to retrieve it after page refresh
 			$this->_getCheckoutSession()->setPayment($payment);
 		}
-		
 
 		// Override collect totals - make final collect totals
 		$onepage->getQuote()->
@@ -294,7 +295,9 @@ abstract class Zolago_Checkout_Controller_Abstract
 			"status"=>true,
 			"content" => array()
 		);
+
 		try{
+			//Mage::log($this->getRequest()->getParams(),null,'params.log');
 		    $this->importPostData();
 		} catch (Exception $ex) {
 			$response = array(
@@ -302,6 +305,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 				"content"=>$ex->getMessage()
 			);
 		}
+
 		if($this->getRequest()->isAjax()){
 			$this->_prepareJsonResponse($response);
 		}

@@ -87,4 +87,35 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 		return count($result) ? current($result) : array();
 	}
 
+	public function getShippingMethodName($name) {
+		switch($name) {
+			case 'udtiership_1':
+				$name = 'kurier';
+				break;
+		}
+		return $name;
+	}
+
+	public function getPaymentMethodName($name) {
+		switch($name) {
+			case Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE:
+				$name = 'dotpay przelew';
+				break;
+
+			case Zolago_Payment_Model_Cc::PAYMENT_METHOD_CODE:
+				$name = 'dotpay karta';
+				break;
+
+			case Mage_Payment_Model_Method_Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE:
+				$name = 'przelew';
+				break;
+
+			case 'cashondelivery':
+				$name = 'pobranie';
+				break;
+		}
+
+		return $name;
+	}
+
 }
