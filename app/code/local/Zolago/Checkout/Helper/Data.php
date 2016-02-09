@@ -74,6 +74,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
 				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
+				$variant = array();
+				$options = Mage::helper('catalog/product_configuration')->getConfigurableOptions($item);
+				foreach ($options as $option) {
+					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
+				}
 				$_product = array(
 					'name' => Mage::helper('core')->escapeHtml($item->getName()),
 					'sku' => Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor())),
@@ -82,7 +87,9 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 					'quantity' => (int)$item->getQty(),
 					'vendor' => Mage::helper('core')->escapeHtml($vendor),
 					'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
-				);
+					'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
+					'variant' => implode('|', $variant),
+			);
 				$data['products'][] = $_product;
 			}
 			if (empty($data['products'])) {

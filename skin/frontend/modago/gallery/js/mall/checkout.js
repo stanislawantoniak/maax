@@ -291,7 +291,7 @@
 		}
 		Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_ORDER); // Send step by GTM
 	};
-	
+
 	/**
 	 * @param object response
 	 */
@@ -328,7 +328,7 @@
 								'revenue': dl.transactionTotal,
 								'tax': dl.transactionTax,
 								'shipping': dl.transactionShipping,
-								//'coupon': 'YYY-ZZZ'
+								'coupon': dl.transactionPromoName,
 							},
 							'products': dl.transactionProducts
 						}

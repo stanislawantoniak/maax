@@ -19,6 +19,123 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		}
 	}
 
+	protected function _getTransactionData()
+	{
+		/** @var Zolago_Dropship_Helper_Data $udropHlp */
+		$udropHlp = Mage::helper('udropship');
+		/** @var Zolago_Common_Helper_Data $zcHlp */
+		$zcHlp = Mage::helper('zolagocommon');
+		/** @var Zolago_Solrsearch_Helper_Data $solrHlp */
+		$solrHlp = Mage::helper("zolagosolrsearch");
+		$data = array();
+
+		$orderIds = $this->getOrderIds();
+		if (empty($orderIds) || !is_array($orderIds)) return array();
+
+		$collection = Mage::getResourceModel('sales/order_collection')->addFieldToFilter('entity_id', array('in' => $orderIds));
+
+		$i = 0;
+		$products = array();
+
+		foreach ($collection as $order) {
+			/** @var Mage_Sales_Model_Order $order */
+			if ($i == 0) {
+				// Build all fields for first order.
+
+				// Coupon name if applied
+				$couponName = array();
+				$ruleIds = array_unique(explode(',', $order->getAppliedRuleIds()));
+				if (!empty($ruleIds)) {
+					foreach ($ruleIds as $id) {
+						$rule = Mage::getModel('salesrule/rule')->load($id);
+						$couponName[] = $rule->getName();
+					}
+					if (!empty($couponName)) {
+						$couponName = implode('|', $couponName);
+					}
+				}
+
+				$data = array(
+					'transactionId' => $order->getIncrementId(),
+					'transactionDate' => date("Y-m-d"),
+					'transactionType' => Mage::helper('gtm')->getTransactionType(),
+					'transactionAffiliation' => Mage::helper('gtm')->getTransactionAffiliation(),
+					'transactionTotal' => round($order->getBaseGrandTotal(),2),
+					'transactionShipping' => round($order->getBaseShippingAmount(),2),
+					'transactionTax' => round($order->getBaseTaxAmount(),2),
+					'transactionPaymentType' => $order->getPayment()->getMethodInstance()->getTitle(),
+					'transactionCurrency' => Mage::app()->getStore()->getBaseCurrencyCode(),
+					'transactionShippingMethod' => $order->getShippingCarrier() ? $order->getShippingCarrier()->getCarrierCode() : 'No Shipping Method',
+					'transactionPromoCode' => $order->getCouponCode(),
+					'transactionPromoName' => $couponName,
+					'transactionProducts' => array()
+				);
+			} else {
+				// For subsequent orders, append to order ID, totals and shipping method.
+				$data['transactionId'] .= '|' . $order->getIncrementId();
+				$data['transactionTotal'] += $order->getBaseGrandTotal();
+				$data['transactionShipping'] += $order->getBaseShippingAmount();
+				$data['transactionTax'] += $order->getBaseTaxAmount();
+				$data['transactionShippingMethod'] .= '|' . $order->getShippingCarrier() ? $order->getShippingCarrier()->getCarrierCode() : 'No Shipping Method';
+			}
+
+			// Build products array.
+			foreach ($order->getAllVisibleItems() as $item) {
+				$product = Mage::getModel("zolagocatalog/product")->load($item->getProductId());
+				/** @var Zolago_Catalog_Model_Product $product */
+				/** @var Zolago_Catalog_Model_Category $cat */
+				$cat = $solrHlp->getDefaultCategory($product, Mage::app()->getStore()->getRootCategoryId());
+				$productCategories = array();
+				if (!empty($cat)) {
+					// Only categories after root category
+					$productCategories = array_slice($cat->getPathIds(),1 + array_search(Mage::app()->getStore()->getRootCategoryId(), $cat->getPathIds()));
+				}
+
+				$categories = array();
+				foreach ($productCategories as $category) {
+					$categories[] = trim(Mage::helper('core')->escapeHtml(Mage::getModel('catalog/category')->load($category)->getName()));
+				}
+				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
+				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
+				$variant = array();
+				$options = Mage::helper('catalog/product_configuration')->getConfigurableOptions($item);
+				foreach ($options as $option) {
+					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
+				}
+				if (empty($products[$item->getSku()])) {
+					// Build all fields the first time we encounter this item.
+					$products[$item->getSku()] = array(
+						'name' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getName())),
+						'sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
+						'category' => implode('|',$categories),
+						'price' => (double)number_format($item->getBasePrice(),2,'.',''),
+						'quantity' => (int)$item->getQtyOrdered(),
+						'vendor' => Mage::helper('core')->escapeHtml($vendor),
+						'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
+						'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
+						'variant' => implode('|', $variant),
+					);
+				} else {
+					// If we already have the item, update quantity.
+					$products[$item->getSku()]['quantity'] += (int)$item->getQtyOrdered();
+				}
+			}
+
+			$i++;
+		}
+
+		// Push products into main data array.
+		foreach ($products as $product) {
+			$data['transactionProducts'][] = $product;
+		}
+
+		// Trim empty fields from the final output.
+		foreach ($data as $key => $value) {
+			if (!is_numeric($value) && empty($value)) unset($data[$key]);
+		}
+
+		return $data;
+	}
 
 	/**
 	 * Generate JavaScript for the data layer.
@@ -49,8 +166,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		if (!Mage::helper('gtm')->isGTMAvailable()) {
 			return '';
 		}
-		$data = array();
-		$data += $this->_getTransactionData() + $this->_getVisitorData();
+		$data = $this->_getTransactionData();
 		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
 			return json_encode($data);
 		} else {

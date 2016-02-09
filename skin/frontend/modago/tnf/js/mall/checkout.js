@@ -328,7 +328,7 @@
 								'revenue': dl.transactionTotal,
 								'tax': dl.transactionTax,
 								'shipping': dl.transactionShipping,
-								//'coupon': 'YYY-ZZZ'
+								'coupon': dl.transactionPromoName,
 							},
 							'products': dl.transactionProducts
 						}
