@@ -16,7 +16,8 @@ class Modago_Integrator_Model_Generator_Description
     protected $_categories = array();
     protected $_attributeSets = array();
     protected $_attributesForConfigurable = array();
-
+    protected $_attributesSelect = array();
+    
     protected $_valuesToInsertDirectly = array(
             'name',
             'color',
@@ -68,6 +69,11 @@ class Modago_Integrator_Model_Generator_Description
     protected $_header;
     protected $_footer;
 
+    protected $_outData = array();
+    protected $_key = 0;
+    protected $_oldStore;
+
+
     protected function _construct() {
         $this->setFileNamePrefix('description');
     }
@@ -87,6 +93,40 @@ class Modago_Integrator_Model_Generator_Description
         }
         return $this->_footer;
     }
+
+    protected function _saveOldStore() {
+        if ($this->_isFlat()) {
+            $this->_oldStore = Mage::app()->getStore()->getId();
+            Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID); // simulate admin
+        }
+    }
+    protected function _restoreOldStore() {
+        if ($this->_isFlat()) {
+            Mage::app()->getStore()->setId($this->_oldStore);        
+        }
+    }
+    protected function _getAttributeValue($product,$code,$value) {
+        if (!isset($this->_attributesSelect[$code][$value])) {
+            $attribute = $product->getResource()->getAttribute($code);
+            if ($attribute) {
+                $attribute->setStoreId($this->getIntegrationStore()->getId());            
+                $attributeText = $attribute->getSource()->getOptionText($value);                
+                $this->_attributesSelect[$code][$value] = $attributeText;
+            } else {
+                $this->_attributesSelect[$code][$value] = false;
+            }
+        }
+        return $this->_attributesSelect[$code][$value];
+    }
+    /**
+     * check if flat catalog product is enabled
+     *
+     * @return bool
+     */
+    protected function _isFlat() {
+        return Mage::helper('catalog/product_flat')->isEnabled();
+    }
+
 
     /**
      * prepare content
@@ -148,6 +188,7 @@ class Modago_Integrator_Model_Generator_Description
     protected function _prepareList()
     {
         if ($this->_getList) {
+            $this->_saveOldStore();
             //init collection
             $this->getCollection();
             $this->setCollectionPage($this->_getListPage++);
@@ -160,77 +201,16 @@ class Modago_Integrator_Model_Generator_Description
                 $this->_getList = false;
             }
 
-            $data = array();
-            $key = 0;
-
             foreach ($this->getCollection() as $product) {
+                $product->setStoreId($this->getIntegrationStore()->getId());
                 /** @var Mage_Catalog_Model_Product $product */
-                //set default values
-                $data[$key] = $this->_defaultValues;
-                foreach ($product->getData() as $dataKey => $value) {
-                    if(in_array($dataKey, $this->_valuesToSkip)) { //skip is most important
-                        continue;
-                    }
-                    if (in_array($dataKey, $this->_valuesToInsertDirectly)) { //insert directly overrides 'is_configurable'
-                        $keyToInsert = isset($this->_keysThatHaveOtherNames[$dataKey]) ? $this->_keysThatHaveOtherNames[$dataKey] : $dataKey;
-                        if (in_array($dataKey, $this->_cdataKeys)) {
-                            $dataValue = "<![CDATA[$value]]>";
-                        } else {
-                            $dataValue = $this->getAttributeText($product, $dataKey);
-                        }
-                        $data[$key][$keyToInsert] = $dataValue;
-                    } else {
-                        switch ($dataKey) {
-                        case "status":
-                            $data[$key]['status'] = $value == "1" ? 1 : 0;
-                            break;
-
-                        case "tax_class_id":
-                            $store = $this->getIntegrationStore();
-                            $request = Mage::getSingleton('tax/calculation')->getRateRequest(null, null, null, $store);
-                            $percent = Mage::getSingleton('tax/calculation')->getRate($request->setProductClassId($value));
-                            $data[$key]['vat'] = $percent;
-                            unset($store, $request, $percent);
-                            break;
-
-                        case "stock_item":
-                            $data[$key]['stockItem'] = 1;
-                            break;
-
-                        case "manufacturer":
-                            $data[$key]['brand'] = $this->getAttributeText($product, $dataKey);
-                            break;
-
-                        case "attribute_set_id":
-                            $attributeSetId = $product->getAttributeSetId();
-                            /** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSetModel */
-                            $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
-                            $attributeSetModel->load($attributeSetId);
-                            if (is_object($attributeSetModel) && $attributeSetModel->getId()) {
-                                if (!isset($this->_attributeSets[$attributeSetId])) {
-                                    $this->_attributeSets[$attributeSetId] = "<![CDATA[" . $attributeSetModel->getAttributeSetName() . "]]>";
-                                }
-                                $data[$key]['attribute_set'] = $this->_attributeSets[$attributeSetId];
-                            }
-                            unset($attributeSetId, $attributeSetModel);
-                            break;
-
-                        case 'type_id':
-                            $data[$key]['type'] = $value;
-                            break;
-
-                        default:                            
-                            if ($value !== "" && !is_null($value)) {
-                                $data[$key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
-                            }
-                        }
-                    }
-                }
+                $this->_outData[$this->_key] = $this->_defaultValues;
+                $this->_processEavCatalog($product);
 
                 //categories start
                 $categoriesIds = $product->getCategoryIds();
                 foreach ($categoriesIds as $categoryId) {
-                    $data[$key]['categories'][] = "<![CDATA[".$this->getCategoryName($categoryId)."]]>";
+                    $this->_outData[$this->_key]['categories'][] = "<![CDATA[".$this->getCategoryName($categoryId)."]]>";
                 }
                 unset($categoriesIds);
                 //categories end
@@ -242,7 +222,7 @@ class Modago_Integrator_Model_Generator_Description
                     $conf = Mage::getModel('catalog/product_type_configurable')->setProduct($product);
                     $simples = $conf->getUsedProductCollection();
                     foreach ($simples as $simple) {
-                        $data[$key]['simples'][] = $simple->getSku();
+                        $this->_outData[$this->_key]['simples'][] = $simple->getSku();
                     }
                     unset($conf,$sizes);
                     //simples end
@@ -258,7 +238,7 @@ class Modago_Integrator_Model_Generator_Description
                         $parentResult = $readConnection->fetchAll($query);
 
                         if (is_array($parentResult) && count($parentResult) && isset($parentResult[0]['sku']) && $parentResult[0]['sku']) {
-                            $data[$key]['parentSKU'] = $parentResult[0]['sku'];
+                            $this->_outData[$this->_key]['parentSKU'] = $parentResult[0]['sku'];
 
                             //options start
                             $parentModel = Mage::getModel('catalog/product')->loadByAttribute('sku',$parentResult[0]['sku']);
@@ -266,7 +246,7 @@ class Modago_Integrator_Model_Generator_Description
                             foreach ($attributes as $attribute) {
                                 if ($parentModel->getTypeInstance(true)->canUseAttribute($attribute, $parentModel)) {
                                     $dataKey = $attribute->getAttributeCode();
-                                    $data[$key]['options'][$dataKey] = $this->getAttributeText($product,$dataKey);
+                                    $this->_outData[$this->_key]['options'][$dataKey] = $this->getAttributeText($product,$dataKey);
                                 }
                             }
                         }
@@ -288,14 +268,14 @@ class Modago_Integrator_Model_Generator_Description
                         $lowestPosition = $imagePosition;
                         $lowestPositionKey = $k;
                     }
-                    $data[$key]['images'][$k] = array(
-                                                    'sequence' => $image->getPosition(),
-                                                    'value' => $image->getUrl()
-                                                );
+                    $this->_outData[$this->_key]['images'][$k] = array(
+                                'sequence' => $image->getPosition(),
+                                'value' => $image->getUrl()
+                            );
                     unset($image);
                 }
                 if($lowestPositionKey >= 0) {
-                    $data[$key]['images'][$lowestPositionKey]['default'] = 1;
+                    $this->_outData[$this->_key]['images'][$lowestPositionKey]['default'] = 1;
                 }
 
                 $this->clearMediaGallery($product);
@@ -308,33 +288,151 @@ class Modago_Integrator_Model_Generator_Description
                 if($crossSellingCollection instanceof Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Link_Product_Collection) {
                     $crossSellingCollection->addStoreFilter($this->getIntegrationStore());
                     foreach ($crossSellingCollection as $crossProduct) {
-                        $data[$key]['cross_selling'][] = $crossProduct->getSku();
+                        $this->_outData[$this->_key]['cross_selling'][] = $crossProduct->getSku();
                     }
                 }
                 unset($crossSellingCollection);
                 //cross_selling end
 
+                ksort($this->_outData[$this->_key]);
+                $this->_key++;
                 unset($product);
-                ksort($data[$key]);
-                $key++;
             }
-            unset($key);
             $this->clearCollection(); //free the memory
             $this->clearBackend();
-            return $data;
+            $this->_restoreOldStore();
+            return $this->_outData;
         }
-        return false;
+        return array();
     }
+
+    /**
+     * clear table using skipValues
+     *
+     * @param array $data
+     */
+    protected function _clearTable(&$data) {
+        foreach ($this->_valuesToSkip as $skip) {
+            unset($data[$skip]);
+        }
+    }
+
+    /**
+     * process attributes when flat catalog is enabled
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    protected function _processFlatCatalog($product) {
+        $data = $product->getData();
+        //remove valuesToSkip
+        $this->_clearTable($data);
+        // assign values to proper keys
+        $newData = $data;
+        foreach ($newData as $key=>$val) {
+            $valueKey = $key.'_value';
+            if (isset($data[$valueKey])) {
+                $data[$key] = $data[$valueKey];
+                unset($data[$valueKey]);
+            }
+        }
+        foreach ($data as $dataKey=>$value) {
+            $this->_processParam($product,$dataKey,$value);
+        }
+    }
+
+
+    /**
+     * process one param from product data
+     * @param Mage_Catalog_Model_Product $product
+     * @param string $dataKey
+     * @param string $value
+     */
+    protected function _processParam($product,$dataKey,$value) {
+        if (in_array($dataKey, $this->_valuesToInsertDirectly)) { //insert directly overrides 'is_configurable'
+            $keyToInsert = isset($this->_keysThatHaveOtherNames[$dataKey]) ? $this->_keysThatHaveOtherNames[$dataKey] : $dataKey;
+            if (in_array($dataKey, $this->_cdataKeys)) {
+                $dataValue = "<![CDATA[$value]]>";
+            } else {
+                $dataValue = $this->getAttributeText($product, $dataKey);
+            }
+            $this->_outData[$this->_key][$keyToInsert] = $dataValue;
+        } else {
+            switch ($dataKey) {
+            case "status":
+                $this->_outData[$this->_key]['status'] = $value == "1" ? 1 : 0;
+                break;
+
+            case "tax_class_id":
+                $store = $this->getIntegrationStore();
+                $request = Mage::getSingleton('tax/calculation')->getRateRequest(null, null, null, $store);
+                $percent = Mage::getSingleton('tax/calculation')->getRate($request->setProductClassId($value));
+                $this->_outData[$this->_key]['vat'] = $percent;
+                unset($store, $request, $percent);
+                break;
+
+            case "stock_item":
+                $this->_outData[$this->_key]['stockItem'] = 1;
+                break;
+
+            case "manufacturer":
+                $this->_outData[$this->_key]['brand'] = $this->getAttributeText($product, $dataKey);
+                break;
+
+            case "attribute_set_id":
+                $attributeSetId = $product->getAttributeSetId();
+                /** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSetModel */
+                $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
+                $attributeSetModel->load($attributeSetId);
+                if (is_object($attributeSetModel) && $attributeSetModel->getId()) {
+                    if (!isset($this->_attributeSets[$attributeSetId])) {
+                        $this->_attributeSets[$attributeSetId] = "<![CDATA[" . $attributeSetModel->getAttributeSetName() . "]]>";
+                    }
+                    $this->_outData[$this->_key]['attribute_set'] = $this->_attributeSets[$attributeSetId];
+                }
+                unset($attributeSetId, $attributeSetModel);
+                break;
+
+            case 'type_id':
+                $this->_outData[$this->_key]['type'] = $value;
+                break;
+
+            default:
+                if ($value !== "" && !is_null($value)) {
+                    $this->_outData[$this->_key]['attributes'][$dataKey] = $this->getAttributeText($product, $dataKey);
+                }
+            }
+        }
+    }
+    /**
+     * process attributes when flat catalog is disabled
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return
+     */
+    protected function _processEavCatalog($product) {
+        $data = $product->getData();
+        $this->_clearTable($data);
+        foreach ($data as $dataKey => $value) {
+            $this->_processParam($product,$dataKey,$value);
+        }
+    }
+    /**
+     * check attribute type
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param string $code
+     * @return string
+     */
 
     public function getAttributeType($product,$code) {
         if (!isset($this->_attributeType[$code])) {
             $attribute = $product->getResource()
-                    ->getAttribute($code);
+                         ->getAttribute($code);
             if ($attribute) {
-                    $type = $attribute->getFrontend()
-                                    ->getInputType();
+                $type = $attribute->getFrontend()
+                        ->getInputType();
             } else {
-                $type = 'text';
+                $type = 'unknown';
             }
             $this->_attributeType[$code] = empty($type)? 'text':$type;
         }
@@ -349,44 +447,11 @@ class Modago_Integrator_Model_Generator_Description
      * @returns string
      */
     protected function getAttributeText($product, $attributeCode, $attributeValue=false,$cdata = true)
-    {    
+    {
+        
         if ($product instanceof Mage_Catalog_Model_Product) {
             $attributeValue = $attributeValue !== false ? $attributeValue : $product->getData($attributeCode);
-            $type = $this->getAttributeType($product,$attributeCode); // check multiple product
-            if ($type == 'multiselect') {
-                $value = $product->getAttributeText($attributeCode);
-                $code = $attributeCode.'_value';
-                return $this->getAttributeText($product,$code,$value);
-            }
-            if(in_array($attributeCode,$this->_valuesToInsertRaw)) {
-                return $attributeValue;
-            }
-            elseif (is_numeric($attributeValue)) {
-                $attribute = $product->getResource()->getAttribute($attributeCode);
-                if ($attribute) {
-                    $attributeText = $attribute->getSource()->getOptionText($attributeValue);
-                    if ($attributeText) {
-                        if (is_array($attributeText)) {
-                            $return = "";
-                            foreach($attributeText as $attrVal) {
-                                if ($cdata) {
-                                    $return .= "<value><![CDATA[".$attrVal."]]></value>";
-                                } else {
-                                    $return .= sprintf("<value>%s</value>",$attrVal);
-                                }
-                            }
-                            return $return;
-                        } else {
-                            if ($cdata) {
-                                return "<![CDATA[$attributeText]]>";
-                            } else {
-                                return $attributeText;
-                            }
-                        }
-                    }
-                }
-            }
-            elseif(is_array($attributeValue)) {
+            if (is_array($attributeValue)) { // array of attributes
                 $return = "";
                 foreach($attributeValue as $attrVal) {
                     if ($cdata) {
@@ -397,10 +462,49 @@ class Modago_Integrator_Model_Generator_Description
                 }
                 return $return;
             }
-            if ($cdata) {
-                return "<![CDATA[$attributeValue]]>";
-            } else {
+            if(in_array($attributeCode,$this->_valuesToInsertRaw)) {
                 return $attributeValue;
+            }
+            // simple type
+            $type = $this->getAttributeType($product,$attributeCode); // get type            
+            switch ($type) {
+            case 'multiselect':
+                $values = explode(',',$attributeValue);
+                $attributeText = array();
+                foreach ($values as $val) {
+                    if ($val) {
+                        $attributeText[] = $this->_getAttributeValue($product,$attributeCode,$val);                
+                    }
+                }
+                $code = $attributeCode.'_value';
+                return $this->getAttributeText($product,$code,$attributeText);
+            case 'select':
+                $attributeText = $this->_getAttributeValue($product,$attributeCode,$attributeValue);
+                $return = "";                       
+                        if (is_array($attributeText)) {
+                            foreach($attributeText as $attrVal) {
+                                if ($cdata) {
+                                    $return .= "<value><![CDATA[".$attrVal."]]></value>";
+                                } else {
+                                    $return .= sprintf("<value>%s</value>",$attrVal);
+                                }
+                            }
+                        } else {
+                            if ($cdata) {
+                                $return = "<![CDATA[$attributeText]]>";
+                            } else {
+                                $return = $attributeText;
+                            }
+                        }
+                return $return;
+                break;
+            default:
+                if ($cdata) {
+                    return "<![CDATA[$attributeValue]]>";
+                } else {
+                    return $attributeValue;
+                }
+                break;
             }
         }
         return '';
@@ -532,31 +636,14 @@ class Modago_Integrator_Model_Generator_Description
      */
     protected function getCollection() {
         if(!$this->_collection) {
-            if (Mage::helper('catalog/product_flat')->isEnabled()) {
-                $attributesToSelect = array('*');
-                if (!($store = $this->getIntegrationStore()) 
-                || !($storeId = $store->getId())) {
-                    $storeId = Mage::app()->getDefaultStoreView()->getStoreId();
-                }
-                $productFlatTable = Mage::getResourceSingleton('catalog/product_flat')->getFlatTableName($storeId);
-                $collection = Mage::getResourceModel('reports/product_collection');
-                $collection->joinTable(array('flat_table'=>$productFlatTable),'entity_id=entity_id', $attributesToSelect);
-                $collection->getSelect()
-                    ->where('flat_table.status = ?',Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
-                $collection->setPageSize($this->_getListBatch);
-                $this->_collection = $collection;
-
-            } else {
-
-                $this->_collection = Mage::getResourceModel('catalog/product_collection')
-                                     ->setStore($this->getIntegrationStore())
-                                     ->addAttributeToSelect("*")
-                                     ->addAttributeToFilter(
-                                         'status',
-                                         array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
-                                     )
-                                     ->setPageSize($this->_getListBatch);
-            }
+            $this->_collection = Mage::getResourceModel('catalog/product_collection');
+            $this->_collection->setStoreId($this->getIntegrationStore())
+                                 ->addAttributeToSelect("*")
+                                 ->addAttributeToFilter(
+                                     'status',
+                                     array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+                                 )
+                                 ->setPageSize($this->_getListBatch);
         }
         return $this->_collection;
     }
