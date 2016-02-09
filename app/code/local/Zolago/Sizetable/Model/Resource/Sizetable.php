@@ -63,14 +63,18 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
 		$data = array();
 
 		foreach ($postData as $storeId => $sizetable) {
-			if($sizetable != '') {
+			$notEmptySizeTable = array_filter($sizetable);
+			if(!empty($notEmptySizeTable)) {
 				$data[] = array(
 					'sizetable_id' => $sizetableId,
 					'store_id' => (int)$storeId,
-					'value' => $sizetable
+					'value' => serialize($sizetable)
 				);
 			}
+			unset($notEmptySizeTable);
 		}
+
+
 		if(count($data)) {
 			$this->_getWriteAdapter()->insertMultiple($table, $data);
 		}
