@@ -7,9 +7,9 @@
 <?php if (empty($methods)): ?>
         <?php echo $this->__('No Payment Methods') ?>
 <?php else: ?>
-    <!--        Selected payment-->
+<?php //   <!--        Selected payment--> ?>
     <div class="top-panel" style="display: none;">
-<!--        <h4 class="default">TWÓJ DOMYŚLNY SPOSÓB PŁATNOŚCI</h4>-->
+<?php // <!--        <h4 class="default">TWÓJ DOMYŚLNY SPOSÓB PŁATNOŚCI</h4>--> ?>
         <div class="row">
             <div class="col-xs-6">
                 <dl>
@@ -34,7 +34,7 @@
         </div>
         <div class="payment-collect"></div>
     </div>
-    <!--        Selected payment-->
+<?php //    <!--        Selected payment--> ?>
 
     <?php
     foreach ($methods as $_method):
