@@ -113,17 +113,33 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				}
 			}
 
-			$carrier = 'todo'; // Todo carrier_name . carrier_method ?
-			if (!empty($carrier)) {
-				$data['basket']['carrier'] = $carrier;
+			/** @var Mage_Checkout_Model_Session $checkoutSession */
+			$checkoutSession = Mage::getSingleton('checkout/session');
+			$checkoutData = $checkoutSession->getData();
+			/** @var GH_GTM_Helper_Data $gtmHelper */
+			$gtmHelper = Mage::helper("gh_gtm");
+
+			if(isset($checkoutData['shipping_method'])) {
+				$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
+				if (!empty($shippingMethod)) {
+					$data['basket']['shipping_method'] = $shippingMethod;
+				}
 			}
-			$paymentMethod = 'todo';// Todo
-			if (!empty($carrier)) {
-				$data['basket']['payment_method'] = $paymentMethod;
+
+			Mage::log($checkoutData,null,'session.log');
+
+			if(isset($checkoutData['payment']['method'])) {
+				$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+				if (!empty($paymentMethod)) {
+					$data['basket']['payment_method'] = $paymentMethod;
+				}
 			}
-			$paymentProvider = 'todo'; // Todo
-			if (!empty($paymentProvider)) {
-				$data['basket']['payment_provider'] = $paymentProvider;
+
+			if(isset($checkoutData['payment']['additional_information']['provider'])) {
+				$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
+				if (!empty($paymentDetails)) {
+					$data['basket']['payment_details'] = $paymentDetails;
+				}
 			}
 		}
 		return $data;

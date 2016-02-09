@@ -76,7 +76,11 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 				$data['transactionTotal'] += $order->getBaseGrandTotal();
 				$data['transactionShipping'] += $order->getBaseShippingAmount();
 				$data['transactionTax'] += $order->getBaseTaxAmount();
+
+				//todo:
 				$data['transactionShippingMethod'] .= '|' . $order->getShippingCarrier() ? $order->getShippingCarrier()->getCarrierCode() : 'No Shipping Method';
+				$data['transactionPaymentMethod'];
+				$data['transactionPaymentDetails'];
 			}
 
 			// Build products array.
