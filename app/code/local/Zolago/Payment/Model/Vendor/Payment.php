@@ -69,7 +69,7 @@ class Zolago_Payment_Model_Vendor_Payment extends Mage_Core_Model_Abstract
      */
     public function delete() {
         if ($this->getData('statement_id'))  {
-            Mage::throwException("Can't delete. Payment in statement");
+            Mage::throwException(Mage::helper('zolagopayment')->__("Can't delete. Payment in statement"));
         }
         parent::delete();
     }
