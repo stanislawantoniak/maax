@@ -595,10 +595,25 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 			->setStoreId(Mage::app()->getStore()->getId())
 			->load('sizetablecontainer');
 
-		$vars = array(
-			'sizetableCss' => $this->_getSizeTableStyle(),
-			'sizetableContent' => $this->_getSizeTableContent()
-		);
+
+        $sizeTableContent = $this->_getSizeTableContent();
+        $d = "";
+        if(!empty($sizeTableContent)){
+            $b = unserialize($this->_getSizeTableContent());
+            $c = array(
+                "<h1>" . $b["title"] . "</h1>",
+                "<div class='sizetable-container-c'>" . $b["C"] . "</div>",
+                "<div class='sizetable-container-a'>" . $b["A"] . "</div>",
+                "<div class='sizetable-container-b'>" . $b["B"] . "</div>"
+            );
+            $path = $this->getSkinUrl("css/sizeTableStyle.css");
+            $additionalCss = '<link rel="stylesheet" type="text/css" href="'.$path.'" media="all" />';
+            $d = $additionalCss . implode("", $c);
+        }
+        $vars = array(
+            'sizetableCss' => $this->_getSizeTableStyle(),
+            'sizetableContent' => $d
+        );
 		/* This will be {{var sizetableCss}} and {{var sizetableContent}} in sizetablecontainer block  */
 
 		/** @var Mage_Cms_Model_Template_Filter $filterModel */

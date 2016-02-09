@@ -1,11 +1,17 @@
 <?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Edit */
 $_helper = Mage::helper('zolagosizetable');
 $stores = $this->getAllowedStores();
+
+$defaultStoreId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+
 $locale = Mage::app()->getLocale()->getLocaleCode();
 $sizetable = $this->getSizeTable();
 $templates = $this->getSizeTablesTemplates();
 $anyTemplates = !empty($templates);
 $css = $this->getSizeTablesStylesForJs();
+
+$tinyMCEKinds = array("C", "A", "B");
+
 ?>
 <script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce',array('_secure'=> $this->getRequest()->isSecure())); ?>tinymce.min.js"></script>
 <script
@@ -40,19 +46,10 @@ $css = $this->getSizeTablesStylesForJs();
 		};
 	jQuery(function ($) {
 		tinymce.init(jQuery.extend(tinymceOptions,{
-			selector: '#sizetable_0',
+			selector: '.tinymce',
 			content_style: <?php echo isset($css[0]) ? $css[0] : "\"\""; ?>
 		}));
 
-		//without the timeout only last tinymce is loaded
-		<?php foreach($stores as $storeData): ?>
-		setTimeout(function() {
-			tinymce.init(jQuery.extend(tinymceOptions, {
-				selector: '#sizetable_<?php echo $storeData['store_id']; ?>',
-				content_style: <?php echo $css[$storeData['store_id']]; ?>
-			}));
-		},150);
-		<?php endforeach; ?>
 
 		var form = $("#sizetableForm");
 		new Zolago.formIntegrator(form);
@@ -89,40 +86,73 @@ $css = $this->getSizeTablesStylesForJs();
 	endif;
 	?>
 	<div class="row">
-		<form class="form-horizontal row-border" id="sizetableForm" action="<?php echo $this->getAction(); ?>"
-		      method="post">
+		<form class="form-horizontal row-border" id="sizetableForm" action="<?php echo $this->getAction(); ?>" method="post">
 			<?php echo $this->getLayout()->getBlock('formkey')->toHtml(); ?>
 			<?php if ($sizetable): ?>
 				<input type="hidden" name="sizetable_id" value="<?php echo $sizetable['sizetable_id']; ?>"/>
 			<?php endif; ?>
+
+            <!--Default Size Table-->
 			<div class="col-md-12">
 				<div class="widget box">
-					<div class="widget-header"><h4><i
-								class="icon-reorder"></i> <?php echo $_helper->__("Default values"); ?></h4></div>
+					<div class="widget-header">
+                        <h4><i class="icon-reorder"></i> <?php echo $_helper->__("Default values"); ?></h4>
+                    </div>
 					<div class="widget-content">
 						<div class="form-group">
-							<label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Name"); ?> <span
-									class="required">*</span></label>
-
-							<div class="col-md-10"><input type="text" name="name" id="name"
-							                              class="form-control required-entry"
-							                              <?php if ($sizetable): ?>value="<?php echo $sizetable['name']; ?>"<?php endif; ?>>
+							<label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Name"); ?>
+								<span class="required">*</span>
+							</label>
+							<div class="col-md-10">
+								<input type="text" name="name" id="name" class="form-control required-entry" <?php if ($sizetable): ?>value="<?php echo $sizetable['name']; ?>"<?php endif; ?>>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-md-2 control-label" for="default_value">
-								<?php echo $_helper->__("Default size table"); ?> <span class="required">*</span>
-							</label>
+                            <div class="col-md-12">
+                                <div class="alert alert-info fade in">
+                                    <?php echo $_helper->__("Default size table"); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <?php $defaultValue = !empty($sizetable['default_value']) ? unserialize($sizetable['default_value']) : $sizetable['default_value']; ?>
+                            <label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Header"); ?>
+                                <span class="required">*</span>
+                            </label>
 
-							<div class="col-md-10">
-								<textarea name="default_value"
-								          id="sizetable_0"
-								          class="form-control required-entry tinymce"><?php if ($sizetable) echo $sizetable['default_value']; ?></textarea>
-							</div>
-						</div>
+                            <div class="col-md-10">
+                                <input type="text"
+                                       name="default_value[title]"
+                                       id="default_value_title"
+                                       class="form-control"
+                                       value="<?php if ($defaultValue): ?><?php echo $defaultValue["title"]; ?><?php endif; ?>"
+                                    />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Content"); ?>
+
+                            </label>
+
+                            <div class="col-md-10">
+                                <?php foreach ($tinyMCEKinds as $i => $tinyMCEKind): ?>
+                                    <div class="col-md-<?php if ($i == 0): ?>12<?php else: ?>6<?php endif; ?>">
+                                            <textarea name="default_value[<?php echo $tinyMCEKind; ?>]"
+                                                      id="sizetable_<?php echo $defaultStoreId; ?>_<?php echo $tinyMCEKind; ?>"
+                                                      class="form-control tinymce">
+                                                <?php if ($defaultValue[$tinyMCEKind]) echo $defaultValue[$tinyMCEKind]; ?>
+                                            </textarea>
+                                    </div>
+                                <?php endforeach; ?>
+                                <?php unset($i, $tinyMCEKind); ?>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
+            <!--Default Size Table-->
+
+            <!--Translations per store-->
 			<div class="col-md-12">
 				<div class="widget box widget-closed">
 					<div class="widget-header">
@@ -134,27 +164,70 @@ $css = $this->getSizeTablesStylesForJs();
 						</div>
 					</div>
 					<div class="widget-content">
-						<?php foreach ($stores as $store): ?>
-							<div class="form-group">
-								<label class="col-md-2 control-label" for="sizetable_<?php echo $store['store_id']; ?>">
-									<?php echo $_helper->__("Size table for") . " " . $store['name']; ?>
-								</label>
-
-								<div class="col-md-10">
-									<textarea name="sizetable[<?php echo $store['store_id']; ?>]"
-									          id="sizetable_<?php echo $store['store_id']; ?>"
-									          class="form-control tinymce"><?php if (isset($sizetable['sizetable'][$store['store_id']])) echo $sizetable['sizetable'][$store['store_id']]; ?></textarea>
-								</div>
-							</div>
-						<?php endforeach; ?>
+                        <div class="col-md-12">
+                            <div class="alert alert-warning fade in align-center">
+                                <?php echo $_helper->__("If you don't specify size table translations for one of the store views then default one will be displayed"); ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="tabbable tabbable-custom tabs-left">
+                                    <ul class="nav nav-tabs tabs-left" id="sizeTableTabsEditor">
+                                        <?php foreach ($stores as $n => $store): ?>
+                                            <li class="<?php if ($n == 0): ?>active<?php endif; ?>">
+                                                <a data-toggle="tab" href="#sizetable_tab_<?php echo $store['store_id']; ?>">
+                                                    <?php echo $_helper->__("Size table for") . " <span class='blue'>" . $store['name'] . "</span>"; ?>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <?php $sizeTableStoresData = $sizetable['sizetable']; ?>
+                                        <?php foreach ($stores as $i => $store): ?>
+                                            <?php $sizeTablePerStore = isset($sizeTableStoresData[$store['store_id']]) ? unserialize($sizeTableStoresData[$store['store_id']]) : false; ?>
+                                            <div id="sizetable_tab_<?php echo $store['store_id']; ?>" class="tab-pane <?php if ($i == 0): ?> active<?php endif; ?>">
+                                                <div class="container">
+                                                    <div class="form-group">
+                                                        <label class="col-md-1 control-label" for="title">
+                                                            <?php echo $_helper->__("Header"); ?>
+                                                        </label>
+                                                        <div class="col-md-11">
+                                                            <input type="text"
+                                                                   name="sizetable[<?php echo $store['store_id']; ?>][title]"
+                                                                   id="title_<?php echo $store['store_id']; ?>"
+                                                                   class="form-control"
+                                                                   value="<?php if ($sizeTablePerStore): ?><?php echo $sizeTablePerStore["title"]; ?><?php endif; ?>"
+                                                                />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-1 control-label" for="sizetable_<?php echo $store['store_id']; ?>">
+                                                            <?php echo $_helper->__("Content"); ?>
+                                                        </label>
+                                                        <div class="col-md-11">
+                                                            <?php foreach ($tinyMCEKinds as $j => $tinyMCEKind): ?>
+                                                                <div class="col-md-<?php if ($j == 0): ?>12<?php else: ?>6<?php endif; ?>">
+                                                                <textarea name="sizetable[<?php echo $store['store_id']; ?>][<?php echo $tinyMCEKind; ?>]"
+                                                                          id="sizetable_<?php echo $store['store_id']; ?>_<?php echo $tinyMCEKind; ?>"
+                                                                          class="form-control tinymce">
+                                                                    <?php if ($sizeTablePerStore): ?><?php echo $sizeTablePerStore[$tinyMCEKind]; ?><?php endif; ?>
+                                                                </textarea>
+                                                                </div>
+                                                            <?php endforeach; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-12">
-				<div class="alert alert-warning fade in align-center">
-					<?php echo $_helper->__("If you don't specify size table translations for one of the store views then default one will be displayed"); ?>
-				</div>
-			</div>
+            <!--Translations per store-->
+
 			<div class="col-md-12">
 				<div class="form-actions">
 					<input type="submit" value="<?php echo $_helper->__("Save"); ?>" class="btn btn-primary pull-right">

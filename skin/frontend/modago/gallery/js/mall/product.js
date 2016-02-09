@@ -1198,10 +1198,17 @@ Mall.product = {
 		},
 		resize: function() {
 			var body = Mall.product.sizetable._doc.body;
-			Mall.product.sizetable._iframe.css('height','');
-			Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
-			Mall.product.sizetable._iframe.css('width','');
-			Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+
+			jQuery("#sizeTableIframeContainer").width("100%");
+			jQuery("#sizeTableIframeContainer").height(jQuery("#sizeTableIframe").contents().find("html").height()+50);
+			//Mall.product.sizetable._iframe.css('height','');
+			//Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
+			//Mall.product.sizetable._iframe.css('width','');
+			//Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+
+			//Content
+
+
 		},
 		getContent: function() {
 			return this._content;

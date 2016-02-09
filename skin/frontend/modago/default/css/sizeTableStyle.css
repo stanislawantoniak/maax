@@ -1,0 +1,6 @@
+.sizetable-container-a {float:left;}
+@media (max-width: 768px){
+.sizetable-container-a {float:none;}
+}
+
+.sizetable-container-b {width:100%;}
