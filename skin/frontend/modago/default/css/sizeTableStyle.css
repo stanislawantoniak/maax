@@ -1,8 +1,9 @@
 .sizetable-container-a {
     float: left;
+    padding-right: 20px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 558px) {
     .sizetable-container-a {
         float: none;
     }
