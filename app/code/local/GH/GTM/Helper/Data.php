@@ -53,4 +53,38 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 		return $data;
 	}
 
+	const CONTEXT_PATH_SEARCH = "search/index/index";
+	const CONTEXT_PATH_PRODUCT = "catalog/product/view";
+	const CONTEXT_PATH_CATEGORY = "catalog/category/view";
+	const CONTEXT_PATH_LP = "umicrosite/index/landingPage";
+	public function getAllowedContextPaths() {
+		return array(
+			self::CONTEXT_PATH_SEARCH,
+			self::CONTEXT_PATH_PRODUCT,
+			self::CONTEXT_PATH_CATEGORY,
+			self::CONTEXT_PATH_LP
+		);
+	}
+
+	public function getContextPath() {
+		return
+			Mage::app()->getRequest()->getModuleName()."/".
+			Mage::app()->getRequest()->getControllerName()."/".
+			Mage::app()->getRequest()->getActionName();
+	}
+
+	public function getVendorDataByUrlKey($urlKey) {
+		$resource = Mage::getSingleton('core/resource');
+		$readConnection = $resource->getConnection('core_read');
+
+		$query =
+			'SELECT `vendor_name`,`vendor_type` FROM `' .
+			$resource->getTableName('udropship/vendor') .
+			'` WHERE `url_key` = "' . $urlKey . '" LIMIT 1';
+
+		$result = $readConnection->fetchAll($query);
+
+		return count($result) ? current($result) : array();
+	}
+
 }
