@@ -40,19 +40,19 @@ $css = $this->getSizeTablesStylesForJs();
 		};
 	jQuery(function ($) {
 		tinymce.init(jQuery.extend(tinymceOptions,{
-			selector: '#sizetable_0',
+			selector: '.tinymce',
 			content_style: <?php echo isset($css[0]) ? $css[0] : "\"\""; ?>
 		}));
 
 		//without the timeout only last tinymce is loaded
-		<?php foreach($stores as $storeData): ?>
-		setTimeout(function() {
-			tinymce.init(jQuery.extend(tinymceOptions, {
-				selector: '#sizetable_<?php echo $storeData['store_id']; ?>',
-				content_style: <?php echo $css[$storeData['store_id']]; ?>
-			}));
-		},150);
-		<?php endforeach; ?>
+<!--		--><?php //foreach($stores as $storeData): ?>
+//		setTimeout(function() {
+//			tinymce.init(jQuery.extend(tinymceOptions, {
+//				selector: '#sizetable_<?php //echo $storeData['store_id']; ?>//',
+//				content_style: <?php //echo $css[$storeData['store_id']]; ?>
+//			}));
+//		},150);
+//		<?php //endforeach; ?>
 
 		var form = $("#sizetableForm");
 		new Zolago.formIntegrator(form);
@@ -115,10 +115,24 @@ $css = $this->getSizeTablesStylesForJs();
 							</label>
 
 							<div class="col-md-10">
-								<textarea name="default_value"
-								          id="sizetable_0"
-								          class="form-control required-entry tinymce"><?php if ($sizetable) echo $sizetable['default_value']; ?></textarea>
+								<div class="col-md-10">
+									<textarea name="default_value" id="sizetable_0_C" class="form-control required-entry tinymce">
+									<?php if ($sizetable) echo $sizetable['default_value']; ?>
+								</textarea>
+								</div>
+
+								<div class="col-md-5">
+								<textarea name="default_value" id="sizetable_0_A" class="form-control required-entry tinymce">
+									<?php if ($sizetable) echo $sizetable['default_value']; ?>
+								</textarea>
+								</div>
+								<div class="col-md-5">
+								<textarea name="default_value" id="sizetable_0_B" class="form-control required-entry tinymce">
+									<?php if ($sizetable) echo $sizetable['default_value']; ?>
+								</textarea>
+								</div>
 							</div>
+
 						</div>
 					</div>
 				</div>
