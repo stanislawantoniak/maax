@@ -1,12 +1,13 @@
 .sizetable-container-a {
     float: left;
     padding-right: 20px;
+    width: 50%;
 }
 
 @media (max-width: 558px) {
     .sizetable-container-a {
         float: none;
-        width: 50%;
+        width: 100%;
     }
 }
 
