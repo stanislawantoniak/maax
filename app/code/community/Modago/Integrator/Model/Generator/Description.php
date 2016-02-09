@@ -71,7 +71,6 @@ class Modago_Integrator_Model_Generator_Description
 
     protected $_outData = array();
     protected $_key = 0;
-    protected $_oldStore;
 
 
     protected function _construct() {
@@ -95,16 +94,21 @@ class Modago_Integrator_Model_Generator_Description
     }
 
     protected function _saveOldStore() {
-        if ($this->_isFlat()) {
-            $this->_oldStore = Mage::app()->getStore()->getId();
-            Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID); // simulate admin
-        }
+        $this->_getHelper()->saveOldStore();
     }
     protected function _restoreOldStore() {
-        if ($this->_isFlat()) {
-            Mage::app()->getStore()->setId($this->_oldStore);        
-        }
+        $this->_getHelper()->restoreOldStore();
     }
+    
+    /**
+     * prepare attribute test from select and multiselect
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param string $code
+     * @param int $value
+     * @return 
+     */
+
     protected function _getAttributeValue($product,$code,$value) {
         if (!isset($this->_attributesSelect[$code][$value])) {
             $attribute = $product->getResource()->getAttribute($code);
@@ -124,10 +128,21 @@ class Modago_Integrator_Model_Generator_Description
      * @return bool
      */
     protected function _isFlat() {
-        return Mage::helper('catalog/product_flat')->isEnabled();
+        return $this->_helper()->isFlat();
     }
+    
+    /**
+     * prepare helper
+     *
+     * @return Modago_Integrator_Helper_Data
+     */
 
-
+    protected function _getHelper() {
+        if (empty($this->_helper)) {
+            $this->_helper = Mage::helper('modagointegrator');
+        }
+        return $this->_helper;
+    }
     /**
      * prepare content
      * should return array similar to this:
