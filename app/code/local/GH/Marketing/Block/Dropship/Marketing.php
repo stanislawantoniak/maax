@@ -17,7 +17,7 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		$helper = Mage::helper('ghmarketing');
 		$dates = $this->getDates();
 		$html  = "<select id='budget-date' class='form-control'>";
-		$html .= "<option value=''>" . $helper->__("Select date") . "</option>";
+		$html .= "<option value=''>" . $helper->__("Select month") . "</option>";
 		foreach ($dates as $date) {
 			$html .= "<option value='{$date}'>{$date}</option>";
 		}
@@ -131,6 +131,15 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 			}
 			$rows[] = $row;
 		}
+
+		// Empty row for better look
+		$row = array('data' => array(), 'cells' => array());
+		$row['cells'][] = $this->makeSingleElement('td', array('class' => 'empty-row'), '');
+		foreach ($costTypes as $type) {
+			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
+			$row['cells'][] = $this->makeSingleElement('td', array(), '');
+		}
+		$rows[] = $row;
 
 		// Total row
 		$row = array('data' => array(), 'cells' => array());
