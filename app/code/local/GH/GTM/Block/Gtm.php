@@ -77,10 +77,33 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 				$data['transactionShipping'] += $order->getBaseShippingAmount();
 				$data['transactionTax'] += $order->getBaseTaxAmount();
 
-				//todo:
-				$data['transactionShippingMethod'] .= '|' . $order->getShippingCarrier() ? $order->getShippingCarrier()->getCarrierCode() : 'No Shipping Method';
-				$data['transactionPaymentMethod'];
-				$data['transactionPaymentDetails'];
+
+				/** @var Mage_Checkout_Model_Session $checkoutSession */
+				$checkoutSession = Mage::getSingleton('checkout/session');
+				$checkoutData = $checkoutSession->getData();
+				/** @var GH_GTM_Helper_Data $gtmHelper */
+				$gtmHelper = Mage::helper("gh_gtm");
+
+				if(isset($checkoutData['shipping_method'])) {
+					$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
+					if (!empty($shippingMethod)) {
+						$data['transactionShippingMethod'] = $shippingMethod;
+					}
+				}
+
+				if(isset($checkoutData['payment']['method'])) {
+					$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+					if (!empty($paymentMethod)) {
+						$data['transactionPaymentMethod'] = $paymentMethod;
+					}
+				}
+
+				if(isset($checkoutData['payment']['additional_information']['provider'])) {
+					$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
+					if (!empty($paymentDetails)) {
+						$data['transactionPaymentDetails'] = $paymentDetails;
+					}
+				}
 			}
 
 			// Build products array.
@@ -151,12 +174,16 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		$data = array();
 		$dataScript = '';
 
+		/** @var GH_GTM_Helper_Data $gtmHlp */
+		$gtmHlp = Mage::helper('gh_gtm');
+
 		// Get transaction and visitor data.
 		$data = $data + $this->_getTransactionData();
 		$data = $data + $this->_getContextData();
+		$data = $data + $gtmHlp->getVisitorData(false);
 
 		// Get transaction and visitor data, if desired.
-		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
+		if ($gtmHlp->isDataLayerEnabled() && !empty($data)) {
 			// Generate the data layer JavaScript.
 			$dataScript .= "<script>dataLayer = [" . json_encode($data) . "];</script>\n\n";
 		}
@@ -171,8 +198,12 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		if (!Mage::helper('gtm')->isGTMAvailable()) {
 			return '';
 		}
+		/** @var GH_GTM_Helper_Data $gtmHlp */
+		$gtmHlp = Mage::helper('gh_gtm');
+
 		$data = $this->_getTransactionData();
-		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
+
+		if ($gtmHlp->isDataLayerEnabled() && !empty($data)) {
 			return json_encode($data);
 		} else {
 			return '';

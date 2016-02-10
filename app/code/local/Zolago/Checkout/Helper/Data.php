@@ -126,8 +126,6 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				}
 			}
 
-			Mage::log($checkoutData,null,'session.log');
-
 			if(isset($checkoutData['payment']['method'])) {
 				$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
 				if (!empty($paymentMethod)) {
