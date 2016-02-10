@@ -41,12 +41,8 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		/** @var Zolago_Dropship_Helper_Data $udropHlp */
 		$udropHlp = Mage::helper('udropship');
-		/** @var Zolago_Common_Helper_Data $zcHlp */
-		$zcHlp = Mage::helper('zolagocommon');
 		/** @var Zolago_Solrsearch_Helper_Data $solrHlp */
 		$solrHlp = Mage::helper("zolagosolrsearch");
-		/** @var Mage_Catalog_Helper_Product_Configuration $cpcHlp */
-		$cpcHlp = Mage::helper('catalog/product_configuration');
 		$data = array();
 
 		/** @var Zolago_Sales_Model_Quote $quota */
@@ -76,25 +72,23 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
 				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
-				$variant = array();
-				$options = array();
-				if ($product->getTypeId() == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
-					$options = $cpcHlp->getConfigurableOptions($item);
-				}
-				foreach ($options as $option) {
-					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
-				}
 				$_product = array(
 					'name' => Mage::helper('core')->escapeHtml($item->getName()),
-					'sku' => Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor())),
+					'sku' => Mage::helper('core')->escapeHtml($item->getSku()),
 					'category' => implode('/', $categories),
 					'price' => (double)number_format($item->getbasePrice(), 2, '.', ''),
 					'quantity' => (int)$item->getQty(),
 					'vendor' => Mage::helper('core')->escapeHtml($vendor),
 					'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 					'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
-					'variant' => implode('|', $variant),
-			);
+					'variant' => '',
+
+				);
+				$children = $item->getChildren();
+				if (!empty($children) && isset($children[0])) {
+					$_product['variant'] = $children[0]->getProduct()->getAttributeText('size');
+				}
+
 				$data['products'][] = $_product;
 			}
 			if (empty($data['products'])) {
