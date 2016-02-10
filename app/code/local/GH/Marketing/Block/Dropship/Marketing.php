@@ -157,7 +157,7 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		foreach ($costTypes as $type) {
 			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
 			$value = rand(10, 1000);
-			$input = $this->makeSingleElement('input', array('class' => 'form-control', 'type' => 'text', 'placeholder' =>  $store->formatPrice($value, false)));
+			$input = $this->makeSingleElement('input', array('name' => "budget-{$type->getMarketingCostTypeId()}",'class' => 'form-control', 'type' => 'text', 'placeholder' =>  $store->formatPrice($value, false)));
 			$row['cells'][] = $this->makeSingleElement('td', array(), $input);
 		}
 		$rows[] = $row;
@@ -185,5 +185,10 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		/** @var Zolago_Dropship_Model_Vendor $vendor */
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		return $vendor;
+	}
+
+	public function getCurrentMonth() {
+		// todo
+		return Mage::getModel('core/date')->date('m-Y');
 	}
 }
