@@ -105,27 +105,8 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	 */
 	public function getRows() {
 
-		return array(
-			array('data' => array(), 'cells' => array("<td>Kategoria 1</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>")),
-			array('data' => array(), 'cells' => array("<td>Kategoria 1</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>")),
-			array('data' => array(), 'cells' => array("<td>Kategoria 1</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>")),
-			array('data' => array(), 'cells' => array("<td>Kategoria 1</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>")),
-			// Total row
-			array('data' => array('class' => 'total-row'), 'cells' => array("<td>Total</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>")),
-			// Budget row
-			array(
-				'data' => array('class' => 'budget-row'),
-				'cells' => array(
-					"<td>Budget</td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-					"<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>",
-				)),
-		);
+		/** @var GH_Marketing_Helper_Data $helper */
+		$helper = Mage::helper('ghmarketing');
 
 		$categories = $this->getCategories();
 		$costTypes  = $this->getMarketingCostTypes();
@@ -150,13 +131,28 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 			}
 			$rows[] = $row;
 		}
+
 		// Total row
-		//todo
+		$row = array('data' => array(), 'cells' => array());
+		$row['cells'][] = $this->makeSingleElement('td', array('class' => 'total-row'), $helper->__("Total"));
+		foreach ($costTypes as $type) {
+			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
+			$value = $totals[$type->getMarketingCostTypeId()];
+			$row['cells'][] = $this->makeSingleElement('td', array(), $store->formatPrice($value));
+		}
+		$rows[] = $row;
+
 		// Budget row
-		//todo
+		$row = array('data' => array(), 'cells' => array());
+		$row['cells'][] = $this->makeSingleElement('td', array('class' => 'budget-row'), $helper->__("Budget"));
+		foreach ($costTypes as $type) {
+			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
+			$value = rand(10, 1000);
+			$input = $this->makeSingleElement('input', array('class' => 'form-control', 'type' => 'text', 'placeholder' =>  $store->formatPrice($value, false)));
+			$row['cells'][] = $this->makeSingleElement('td', array(), $input);
+		}
+		$rows[] = $row;
 		return $rows;
-
-
 	}
 
 	public function makeSingleElement($element, $data = array(), $value = null, $close = true) {
