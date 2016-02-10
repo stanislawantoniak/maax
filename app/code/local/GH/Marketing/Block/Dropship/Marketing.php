@@ -99,7 +99,17 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	}
 
 	/**
-	 * TODO description
+	 * Get rows array for getTbody
+	 * array like:
+	 * array(
+	 *    // rows for categories
+	 *    array('data' => array(), 'cells' => array("<td>Category Y</td>","<td>value</td>",[...])),
+	 *    [...]
+	 *    // Total row
+	 *    array('data' => array('class' => 'total-row'), 'cells' => array("<td>Total</td>","<td>total 1</td>", [...])),
+	 *     // Budget row
+	 *    array('data' => array('class' => 'budget-row'),'cells' => array("<td>Budget</td>","<td><input class=\"form-control\" type=\"text\" placeholder=\"\"></td>", [...]
+	 * ))
 	 *
 	 * @return array
 	 */
@@ -188,7 +198,9 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	}
 
 	public function getCurrentMonth() {
-		// todo
-		return Mage::getModel('core/date')->date('m-Y');
+		/** @var Mage_Core_Controller_Request_Http $req */
+		$req = $this->getRequest();
+		$month = $req->getParam('month');
+		return empty($month) ? Mage::getModel('core/date')->date('m-Y') : $month;
 	}
 }
