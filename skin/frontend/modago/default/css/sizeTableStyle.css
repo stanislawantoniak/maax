@@ -56,34 +56,34 @@ table tr td {
 (min-device-width: 768px) and (max-device-width: 1024px) {
 
     /* Force table to not be like tables anymore */
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
+    #sizetable-container table,
+    #sizetable-container thead,
+    #sizetable-container tbody,
+    #sizetable-container th,
+    #sizetable-container td,
+    #sizetable-container tr {
         display: block;
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-    thead tr {
+    #sizetable-container thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
 
-    tr {
+    #sizetable-container tr {
         border: 1px solid #ccc;
         height: auto !important;
     }
 
-    tr:first-child {
+    #sizetable-container tr:first-child {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
 
-    td {
+    #sizetable-container td {
         /* Behave  like a "row" */
         border: none !important;
         border-bottom: 1px solid #eee;
@@ -92,7 +92,7 @@ table tr td {
         height: auto !important;
     }
 
-    td:before {
+    #sizetable-container td:before {
         /* Now like a table header */
         position: absolute;
         /* Top/left values mimic padding */
@@ -106,7 +106,7 @@ table tr td {
     /*
     Label the data
     */
-    td:before {
+    #sizetable-container td:before {
         content: attr(data-label);
     }
 }
