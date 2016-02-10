@@ -613,7 +613,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             $d = $additionalCss . implode("", $c);
         }
         $vars = array(
-            'sizetableCss' => $this->_getSizeTableStyle(),
+            //'sizetableCss' => $this->_getSizeTableStyle(),
             'sizetableContent' => $d
         );
 		/* This will be {{var sizetableCss}} and {{var sizetableContent}} in sizetablecontainer block  */
