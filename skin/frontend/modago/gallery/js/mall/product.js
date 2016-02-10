@@ -1201,6 +1201,7 @@ Mall.product = {
 
 			var headers = [],
 				frameContents = jQuery("#sizeTableIframe").contents();
+            //frameContents.find("table").addClass("sizetable-table");
 
 			jQuery("#sizeTableIframeContainer").width("100%");
 			jQuery("#sizeTableIframeContainer").height(frameContents.find("html").height()+50);

@@ -7,8 +7,11 @@ $defaultStoreId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
 $locale = Mage::app()->getLocale()->getLocaleCode();
 $sizetable = $this->getSizeTable();
 $templates = $this->getSizeTablesTemplates();
-$anyTemplates = !empty($templates);
-$css = $this->getSizeTablesStylesForJs();
+//$anyTemplates = !empty($templates);
+$anyTemplates = array();
+$cssPath = "/skin/frontend/modago/default/css/sizeTableStyle.css";
+
+//$css = $this->getSizeTablesStylesForJs();
 
 $tinyMCEKinds = array("C", "A", "B");
 
@@ -47,7 +50,8 @@ $tinyMCEKinds = array("C", "A", "B");
 	jQuery(function ($) {
 		tinymce.init(jQuery.extend(tinymceOptions,{
 			selector: '.tinymce',
-			content_style: <?php echo isset($css[0]) ? $css[0] : "\"\""; ?>
+//			content_style: <?php //echo isset($css[0]) ? $css[0] : "\"\""; ?>//,
+			content_css: '<?php echo $cssPath; ?>'
 		}));
 
 
