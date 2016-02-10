@@ -50,7 +50,6 @@ $tinyMCEKinds = array("C", "A", "B");
 	jQuery(function ($) {
 		tinymce.init(jQuery.extend(tinymceOptions,{
 			selector: '.tinymce',
-//			content_style: <?php //echo isset($css[0]) ? $css[0] : "\"\""; ?>//,
 			content_css: '<?php echo $cssPath; ?>'
 		}));
 
