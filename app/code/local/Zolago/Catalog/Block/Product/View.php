@@ -603,8 +603,10 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             $c = array(
                 "<h1>" . $b["title"] . "</h1>",
                 "<div class='sizetable-container-c'>" . $b["C"] . "</div>",
+                "<div class='sizetable-container-ab'>",
                 "<div class='sizetable-container-a'>" . $b["A"] . "</div>",
-                "<div class='sizetable-container-b'>" . $b["B"] . "</div>"
+                "<div class='sizetable-container-b'>" . $b["B"] . "</div>",
+                "</div>"
             );
             $path = $this->getSkinUrl("css/sizeTableStyle.css");
             $additionalCss = '<link rel="stylesheet" type="text/css" href="'.$path.'" media="all" />';
