@@ -201,7 +201,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                 );
             }
         }
-		if($this->isModuleActive('ghmarketing') && $this->getVendor()->getData('ghapi_vendor_access_allow')) {
+		if($this->isModuleActive('ghmarketing') && $this->getVendor()->getData('marketing_charges_enabled')) {
 			if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_BUDGET_MARKETING)) {
 				$groupOne[] = array(
 					"active" => $this->isActive("budget_marketing"),
