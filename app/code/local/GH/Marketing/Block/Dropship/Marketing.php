@@ -12,14 +12,13 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	 *
 	 * @return string
 	 */
-	public function getDateSelect() {
+	public function getDateSelect() {	    
 		/** @var GH_Marketing_Helper_Data $helper */
 		$helper = Mage::helper('ghmarketing');
 		$dates = $this->getDates();
-		$html  = "<select id='budget-date' class='form-control'>";
-		$html .= "<option value=''>" . $helper->__("Select month") . "</option>";
+		$html  = "<select id='budget-date' class='form-control' data-base='".$this->getUrl('*/*/*')."'>";
 		foreach ($dates as $date) {
-			$html .= "<option value='{$date}'>{$date}</option>";
+			$html .= sprintf("<option value='%s'%s>%s</option>",$date['date'],($date['selected']? ' selected':''),$date['date']) ;
 		}
 		$html .= "<select>";
 		return $html;
@@ -31,16 +30,24 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	 * @return array
 	 */
 	public function getDates() {
-		// TODO
-		return array(
-			'2015-08',
-			'2015-09',
-			'2015-10',
-			'2015-11',
-			'2015-12',
-			'2016-01',
-			'2016-02',
-		);
+	    $selectedMonth = $this->getRequest()->getParam('month',date('Y-m'));
+	    $vendor = $this->getVendor();
+	    $date = $vendor->getRegulationAcceptDocumentDate();
+	    if ($date) {
+	        $begin = date('Y-m-01',strtotime($date));
+        } else {
+            $begin = date('Y-m-01');
+        }
+        $list = array();
+        while (strtotime($begin) <= strtotime(date('Y-m-01'))) {
+            $shortDate = date('Y-m',strtotime($begin));
+            $list[] = array(
+                'date' => $shortDate, 
+                'selected' => ($shortDate == $selectedMonth)? true:false,
+            );
+            $begin = date('Y-m-d',strtotime("$begin +1 month"));
+        }
+        return array_reverse($list);
 	}
 
 	/**
