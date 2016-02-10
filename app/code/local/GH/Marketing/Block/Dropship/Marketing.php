@@ -36,7 +36,7 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	    if ($date) {
 	        $begin = date('Y-m-01',strtotime($date));
         } else {
-            $begin = date('Y-m-01');
+            $begin = Mage::getModel('core/date')->date('Y-m-01');
         }
         $list = array();
         while (strtotime($begin) <= strtotime(date('Y-m-01'))) {
@@ -174,7 +174,7 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		foreach ($costTypes as $type) {
 			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
 			$value = rand(10, 1000);
-			$input = $this->makeSingleElement('input', array('name' => "budget[{$type->getMarketingCostTypeId()}]",'class' => 'form-control', 'type' => 'text', 'placeholder' =>  $store->formatPrice($value, false)));
+			$input = $this->makeSingleElement('input', array('name' => "budget[{$type->getMarketingCostTypeId()}]",'class' => 'form-control', 'type' => 'text', 'value' =>  number_format($value,2,',','')));
 			$row['cells'][] = $this->makeSingleElement('td', array(), $input);
 		}
 		$rows[] = $row;
@@ -204,7 +204,7 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		return $vendor;
 	}
 
-	public function getCurrentMonth($format = 'm-Y') {
+	public function getCurrentMonth($format = 'Y-m') {
 		/** @var Mage_Core_Controller_Request_Http $req */
 		$req = $this->getRequest();
 		$month = $req->getParam('month');
