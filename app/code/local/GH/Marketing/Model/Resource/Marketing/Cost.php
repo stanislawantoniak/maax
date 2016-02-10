@@ -49,4 +49,37 @@ class GH_Marketing_Model_Resource_Marketing_Cost extends Mage_Core_Model_Resourc
             'marketing_cost_id in('.implode(',',$ids).')'
         );
     }
+
+	/**
+	 * TODO dokonczyc
+	 *
+	 * @param null $vendor
+	 * @param null $month
+	 * @return array
+	 */
+	public function getGroupedCosts($vendor = null, $month = null) {
+		$readConn = $this->getReadConnection();
+		$select = $readConn->select();
+		$tableName = $this->getTable('ghmarketing/marketing_cost');
+		$select->from(array('mc' => $tableName));
+
+		if (!empty($month)) {
+			$time = strtotime($month);
+			$fromDate = date("Y-m-d", $time);
+			$toDate = date("Y-m-d", strtotime("+1 month", $time));
+			$select->where('mc.date >= ?', $fromDate);
+			$select->where('mc.date < ?', $toDate);
+		}
+		if (!empty($vendor)) {
+			$select->where("mc.vendor_id = ? ", $vendor->getId());
+		}
+		//todo join attribute set id
+		//sum billing _cost
+		//group by group by `type_id`,`attribute_set_id`
+
+		Mage::log((string)$select, null, 'mylog.log');
+
+
+		return $readConn->fetchAll($select);
+	}
 }
