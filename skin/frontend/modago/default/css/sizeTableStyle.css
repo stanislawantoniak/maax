@@ -91,7 +91,8 @@ table tr td {
         left: -9999px;
     }
 
-    #sizetable-container td {
+
+    #sizetable-container td:not(:first-child) {
         /* Behave  like a "row" */
         border: none !important;
         border-bottom: 1px solid #eee;
