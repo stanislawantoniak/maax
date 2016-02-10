@@ -1199,14 +1199,23 @@ Mall.product = {
 		resize: function() {
 			var body = Mall.product.sizetable._doc.body;
 
-			jQuery("#sizeTableIframeContainer").width("100%");
-			jQuery("#sizeTableIframeContainer").height(jQuery("#sizeTableIframe").contents().find("html").height()+50);
-			//Mall.product.sizetable._iframe.css('height','');
-			//Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
-			//Mall.product.sizetable._iframe.css('width','');
-			//Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+			var headers = [],
+				frameContents = jQuery("#sizeTableIframe").contents();
 
-			//Content
+			jQuery("#sizeTableIframeContainer").width("100%");
+			jQuery("#sizeTableIframeContainer").height(frameContents.find("html").height()+50);
+
+
+			//Responsive Tables handle
+			frameContents.find("table tr:first-child td").each(function (i, td) {
+				headers.push(jQuery.trim(jQuery(td).text()))
+			});
+			frameContents.find("table tr:not(:first-child)").each(function (j, tr) {
+				jQuery(tr).find("td").each(function (j, tdLeft) {
+					jQuery(tdLeft).attr("data-label", headers[j]);
+				});
+			});
+			//--Responsive Tables handle
 
 
 		},
