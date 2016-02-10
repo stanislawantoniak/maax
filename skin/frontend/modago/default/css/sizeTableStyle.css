@@ -16,8 +16,8 @@
     width: 100%;
 }
 
-#sizetable-container {
-    min-width: inherit;
+div#sizetable-container {
+    min-width: inherit !important;
 }
 
 #sizetable-container .sizetable-container-c {
