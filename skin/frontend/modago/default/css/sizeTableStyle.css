@@ -1,26 +1,32 @@
 #sizetable-container .sizetable-container-a {
     float: left;
-    padding-right: 20px;
-    width: 40%;
+    padding-right: 1%;
+    width: 50%;
+    position: relative;
 }
-
+#sizetable-container .sizetable-container-b {
+    width: 49%;
+    position: relative;
+    float: left;
+}
 @media (max-width: 558px) {
     #sizetable-container .sizetable-container-a {
         float: none;
         width: 100%;
         text-align: center;
     }
+    #sizetable-container .sizetable-container-b {
+        width: 100%;
+    }
 }
 
-#sizetable-container .sizetable-container-b {
-    width: 100%;
+
+
+div#sizetable-container {
+    min-width: inherit !important;
 }
 
-#sizetable-container {
-    min-width: inherit;
-}
-
-#sizetable-container .sizetable-container-c {
+#sizetable-container .sizetable-container-c:not(:empty) {
     padding-bottom: 20px;
 }
 
@@ -29,6 +35,9 @@ Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.
 */
+#sizetable-container table {
+    text-align: left;
+}
 @media only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px) {
 
