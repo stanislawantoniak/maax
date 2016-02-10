@@ -23,7 +23,7 @@ body img {
     #sizetable-container .sizetable-container-a {
         float: none;
         width: 100%;
-        text-align: center;
+        /*text-align: center;*/
     }
     #sizetable-container .sizetable-container-b {
         width: 100%;
