@@ -20,7 +20,7 @@ div#sizetable-container {
     min-width: inherit !important;
 }
 
-#sizetable-container .sizetable-container-c {
+#sizetable-container .sizetable-container-c:not(:empty) {
     padding-bottom: 20px;
 }
 
