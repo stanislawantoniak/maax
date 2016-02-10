@@ -197,10 +197,28 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		return $vendor;
 	}
 
-	public function getCurrentMonth() {
+	public function getCurrentMonth($format = 'm-Y') {
 		/** @var Mage_Core_Controller_Request_Http $req */
 		$req = $this->getRequest();
 		$month = $req->getParam('month');
-		return empty($month) ? Mage::getModel('core/date')->date('m-Y') : $month;
+		return empty($month) ? Mage::getModel('core/date')->date($format) : $month;
+	}
+
+	public function getCost($type, $catId, $vendor = null, $month = null) {
+
+	}
+
+	public function getAllCosts($vendor = null, $month = null) {
+		if (empty($month)) {
+			$month = $this->getCurrentMonth('Y-m');
+		}
+		if (empty($vendor)) {
+			$vendor = $this->getVendor();
+		}
+
+		/** @var GH_Marketing_Model_Resource_Marketing_Cost $modelResource */
+		$modelResource = Mage::getResourceModel("ghmarketing/marketing_cost");
+
+		return $modelResource->getGroupedCosts($vendor, $month);
 	}
 }
