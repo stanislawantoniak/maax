@@ -45,6 +45,8 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		$zcHlp = Mage::helper('zolagocommon');
 		/** @var Zolago_Solrsearch_Helper_Data $solrHlp */
 		$solrHlp = Mage::helper("zolagosolrsearch");
+		/** @var Mage_Catalog_Helper_Product_Configuration $cpcHlp */
+		$cpcHlp = Mage::helper('catalog/product_configuration');
 		$data = array();
 
 		/** @var Zolago_Sales_Model_Quote $quota */
@@ -75,7 +77,10 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
 				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
 				$variant = array();
-				$options = Mage::helper('catalog/product_configuration')->getConfigurableOptions($item);
+				$options = array();
+				if ($product->getTypeId() == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
+					$options = $cpcHlp->getConfigurableOptions($item);
+				}
 				foreach ($options as $option) {
 					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
 				}
