@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Marketing>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </GH_Marketing>
     </modules>
     <global>
@@ -17,6 +17,9 @@
                     <marketing_cost>
                         <table>gh_marketing_cost</table>
                     </marketing_cost>
+                    <marketing_budget>
+                        <table>gh_marketing_budget</table>
+                    </marketing_budget>
                     <marketing_cost_type>
                         <table>gh_marketing_cost_type</table>
                     </marketing_cost_type>
