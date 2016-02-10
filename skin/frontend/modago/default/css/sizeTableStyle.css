@@ -1,6 +1,7 @@
 body,html {
     font-family: "latoregular",sans-serif;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.42857;
     padding: 0;
     margin: 0;
 }
