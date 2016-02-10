@@ -92,13 +92,16 @@ table tr td {
     }
 
 
-    #sizetable-container td:not(:first-child) {
+    #sizetable-container td {
         /* Behave  like a "row" */
         border: none !important;
         border-bottom: 1px solid #eee;
         position: relative;
-        padding-left: 40% !important;
+
         height: auto !important;
+    }
+    #sizetable-container td:not(:first-child) {
+        padding-left: 40% !important;
     }
 
     #sizetable-container td:before {
