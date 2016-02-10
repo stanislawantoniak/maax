@@ -128,7 +128,7 @@ $tinyMCEKinds = array("C", "A", "B");
                                        name="default_value[title]"
                                        id="default_value_title"
                                        class="form-control"
-                                       value="<?php if ($defaultValue): ?><?php echo $defaultValue["title"]; ?><?php endif; ?>"
+                                       value="<?php if(isset($defaultValue["title"])): ?><?php echo $defaultValue["title"]; ?><?php endif; ?>"
                                     />
                             </div>
                         </div>
@@ -199,7 +199,7 @@ $tinyMCEKinds = array("C", "A", "B");
                                                                    name="sizetable[<?php echo $store['store_id']; ?>][title]"
                                                                    id="title_<?php echo $store['store_id']; ?>"
                                                                    class="form-control"
-                                                                   value="<?php if ($sizeTablePerStore): ?><?php echo $sizeTablePerStore["title"]; ?><?php endif; ?>"
+                                                                   value="<?php if (isset($sizeTablePerStore["title"])): ?><?php echo $sizeTablePerStore["title"]; ?><?php endif; ?>"
                                                                 />
                                                         </div>
                                                     </div>
@@ -213,7 +213,7 @@ $tinyMCEKinds = array("C", "A", "B");
                                                                 <textarea name="sizetable[<?php echo $store['store_id']; ?>][<?php echo $tinyMCEKind; ?>]"
                                                                           id="sizetable_<?php echo $store['store_id']; ?>_<?php echo $tinyMCEKind; ?>"
                                                                           class="form-control tinymce">
-                                                                    <?php if ($sizeTablePerStore): ?><?php echo $sizeTablePerStore[$tinyMCEKind]; ?><?php endif; ?>
+                                                                    <?php if (isset($sizeTablePerStore[$tinyMCEKind])): ?><?php echo $sizeTablePerStore[$tinyMCEKind]; ?><?php endif; ?>
                                                                 </textarea>
                                                                 </div>
                                                             <?php endforeach; ?>
