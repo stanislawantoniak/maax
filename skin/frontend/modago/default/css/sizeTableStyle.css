@@ -96,7 +96,7 @@ table tr td {
         border: none !important;
         border-bottom: 1px solid #eee;
         position: relative;
-        padding-left: 50% !important;
+        padding-left: 40% !important;
         height: auto !important;
     }
 
@@ -116,5 +116,6 @@ table tr td {
     */
     #sizetable-container td:before {
         content: attr(data-label);
+        margin-left: 5px;
     }
 }
