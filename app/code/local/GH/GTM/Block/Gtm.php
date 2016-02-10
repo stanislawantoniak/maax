@@ -124,24 +124,23 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 				}
 				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
 				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
-				$variant = array();
-				$options = Mage::helper('catalog/product_configuration')->getConfigurableOptions($item);
-				foreach ($options as $option) {
-					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
-				}
 				if (empty($products[$item->getSku()])) {
 					// Build all fields the first time we encounter this item.
 					$products[$item->getSku()] = array(
 						'name' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getName())),
-						'sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
+						'id' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
 						'category' => implode('|',$categories),
 						'price' => (double)number_format($item->getBasePrice(),2,'.',''),
 						'quantity' => (int)$item->getQtyOrdered(),
 						'vendor' => Mage::helper('core')->escapeHtml($vendor),
 						'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 						'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
-						'variant' => implode('|', $variant),
+						'variant' => '',
 					);
+					$children = $item->getChildrenItems();
+					if (!empty($children) && isset($children[0])) {
+						$_product['variant'] = $children[0]->getProduct()->getAttributeText('size');
+					}
 				} else {
 					// If we already have the item, update quantity.
 					$products[$item->getSku()]['quantity'] += (int)$item->getQtyOrdered();
