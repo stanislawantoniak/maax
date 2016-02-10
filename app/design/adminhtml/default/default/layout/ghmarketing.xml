@@ -13,4 +13,12 @@
             </block>
         </reference>
     </adminhtml_marketing_cost_index>
+
+	<!--<udropship_marketing_budget>-->
+		<!--<update handle="udropship_vendor" />-->
+		<!--<update handle="bootstrap" />-->
+		<!--<reference name="content">-->
+			<!--<block type="core/template" template="ghmarketing/dropship/budget.phtml"/>-->
+		<!--</reference>-->
+	<!--</udropship_marketing_budget>-->
 </layout>

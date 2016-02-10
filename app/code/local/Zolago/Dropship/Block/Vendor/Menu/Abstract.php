@@ -201,12 +201,22 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                 );
             }
         }
+		if($this->isModuleActive('ghmarketing') && $this->getVendor()->getData('ghapi_vendor_access_allow')) {
+			if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_BUDGET_MARKETING)) {
+				$groupOne[] = array(
+					"active" => $this->isActive("budget_marketing"),
+					"icon"   => "icon-usd",
+					"label"  => Mage::helper('ghmarketing')->__('Budget and marketing costs'),// Todo translate
+					"url"    => $this->getUrl('udropship/marketing/budget')
+				);
+			}
+		}
         $grouped = $this->_processGroups($groupOne);
 
         if(count($grouped)) {
             return array(
                        "label"		=> $this->__("Ads. & promotion"),
-                       "active"     => $this->isActive(array("zolagocampaign", "zolagocampaign_placement")),
+                       "active"     => $this->isActive(array("zolagocampaign", "zolagocampaign_placement", "budget_marketing")),
                        "icon"		=> "icon-bullhorn",
                        "url"		=> "#",
                        "children"	=> $grouped

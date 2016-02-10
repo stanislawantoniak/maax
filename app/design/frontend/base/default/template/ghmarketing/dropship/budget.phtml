@@ -1,0 +1,42 @@
+<?php
+/** @var GH_Marketing_Block_Dropship_Marketing $this */
+/** @var GH_Marketing_Helper_Data $helper */
+$helper = Mage::helper('ghmarketing');
+?>
+
+<div class="container">
+	<div class="page-header">
+		<div class="page-title">
+			<h3><?php echo $helper->__('Budget and marketing costs'); ?></h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="widget box">
+				<div class="widget-header"><h4><i class="icon-reorder"></i><?php echo $helper->__("header"); ?></h4>
+				</div>
+				<div class="widget-content">
+					<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+						<div class="row">
+							<div class="dataTables_header clearfix">
+								<div class="col-xs-12">
+									<div class="pull-right" style="padding-right: 0;">
+										<?php echo $this->getDateSelect(); ?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<table
+							class="table table-striped table-bordered table-hover datatable dataTable"
+							id="DataTables_Table_0">
+							<?php
+							echo $this->getThead();
+							echo $this->getTbody();
+							?>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
