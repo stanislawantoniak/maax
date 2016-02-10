@@ -10,6 +10,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
     const MODAGO_INTEGRATOR_ORIGINAL_PRICE = "A";
     const MODAGO_INTEGRATOR_SPECIAL_PRICE = "B";
 
+    protected $_helper;
     /**
      * Modago_Integrator_Model_Product_Price constructor.
      * @param $_integrationStore
@@ -19,11 +20,17 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $this->_integrationStore = $this->getIntegrationStore();
     }
 
+    protected function _getHelper() {
+        if (empty($this->_helper)) {
+            $this->_helper = Mage::helper('modagointegrator');
+        }
+        return $this->_helper;
+    }
 
     protected function getIntegrationStore()
     {
         /** @var Modago_Integrator_Helper_Data $helper */
-        $helper = Mage::helper('modagointegrator');
+        $helper = $this->_getHelper();
         return $helper->getIntegrationStore();
     }
 
@@ -66,27 +73,13 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 
         if (empty($parentChildRelation))
             return $res;
-
-        if (Mage::helper('catalog/product_flat')->isEnabled()) {
-            $attributesToSelect = array('price','special_price');
-            if (!$storeId = $this->_integrationStore) {
-                $storeId = Mage::app()->getDefaultStoreView()->getStoreId();
-            }
-            $productFlatTable = Mage::getResourceSingleton('catalog/product_flat')->getFlatTableName($storeId);
-            $collection = Mage::getResourceModel('reports/product_collection');
-            $collection->joinTable(array('flat_table'=>$productFlatTable),'entity_id=entity_id', $attributesToSelect);
-            $collection->getSelect()
-                ->where('flat_table.type_id = ?',Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)
-                ->where('flat_table.status = ?',Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
-
-        } else {
-            $collection = Mage::getModel("catalog/product")->getCollection();
-            $collection->setStore($this->_integrationStore);
-            $collection->addAttributeToSelect("price");
-            $collection->addAttributeToSelect("special_price");
-            $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
-            $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
-        }
+        $this->_getHelper()->saveOldStore();
+        $collection = Mage::getModel("catalog/product")->getCollection();
+        $collection->setStore($this->_integrationStore);
+        $collection->addAttributeToSelect("price");
+        $collection->addAttributeToSelect("special_price");
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $prices = array();
         $specialPrices = array();
         foreach ($collection as $collectionItem) {
@@ -116,6 +109,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             }
         }
 
+        $this->_getHelper()->restoreOldStore();
 
         return $res;
     }
@@ -126,33 +120,17 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
      */
     public function appendPricesForSimple($res)
     {
-
-        if (Mage::helper('catalog/product_flat')->isEnabled()) {
-            $attributesToSelect = array('price','special_price');
-            if (!$storeId = $this->_integrationStore) {
-                $storeId = Mage::app()->getDefaultStoreView()->getStoreId();
-            }
-            $productFlatTable = Mage::getResourceSingleton('catalog/product_flat')->getFlatTableName($storeId);
-            $collection = Mage::getResourceModel('reports/product_collection');
-            $collection->joinTable(array('flat_table'=>$productFlatTable),'entity_id=entity_id', $attributesToSelect);
-            $collection->getSelect()
-                ->where('flat_table.type_id = ?',Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
-                ->where('flat_table.visibility <> ?',Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE)
-                ->where('flat_table.status = ?',Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
-
-        } else {
-
-            $collection = Mage::getModel("catalog/product")->getCollection();
-            $collection->setStore($this->_integrationStore);
+        $this->_getHelper()->saveOldStore();
+        $collection = Mage::getModel("catalog/product")->getCollection();
+        $collection->setStore($this->_integrationStore);
 
 
-            $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-            $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
-            $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+        $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
 
-            $collection->addAttributeToSelect("price");
-            $collection->addAttributeToSelect("special_price");
-        }
+        $collection->addAttributeToSelect("price");
+        $collection->addAttributeToSelect("special_price");
         foreach ($collection as $collectionItem) {
             $sku = $collectionItem->getSku();
             //do not override price if already got from configurable
@@ -170,6 +148,8 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             }
 
         }
+        $this->_getHelper()->restoreOldStore();
+
         return $res;
     }
 
