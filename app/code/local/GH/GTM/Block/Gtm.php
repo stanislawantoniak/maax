@@ -128,18 +128,17 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 					// Build all fields the first time we encounter this item.
 					$products[$item->getSku()] = array(
 						'name' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getName())),
-						'id' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
-						'category' => implode('|',$categories),
+						'id' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($product->getSku())),
+						'category' => implode('/',$categories),
 						'price' => (double)number_format($item->getBasePrice(),2,'.',''),
 						'quantity' => (int)$item->getQtyOrdered(),
 						'vendor' => Mage::helper('core')->escapeHtml($vendor),
 						'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 						'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
-						'variant' => '',
 					);
 					$children = $item->getChildrenItems();
 					if (!empty($children) && isset($children[0])) {
-						$_product['variant'] = $children[0]->getProduct()->getAttributeText('size');
+						$products[$item->getSku()]['variant'] = $children[0]->getProduct()->getAttributeText('size');
 					}
 				} else {
 					// If we already have the item, update quantity.
