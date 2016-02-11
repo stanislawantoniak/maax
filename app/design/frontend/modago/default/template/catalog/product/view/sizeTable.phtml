@@ -1,0 +1,30 @@
+<?php $table = $this->getData("table"); ?>
+
+<table>
+    <?php foreach ($table as $i => $tds): ?>
+        <?php $n = 0; ?>
+
+
+        <?php foreach ($tds as $j => $td): ?>
+            <?php if (!empty($td)): ?>
+                <?php $n++; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+        <?php if ($n > 0): ?>
+            <tr>
+                <?php foreach ($tds as $j => $td): ?>
+                    <?php if (!empty($td) || ($i == 0 && $j == 0)): ?>
+                        <?php $n++; ?>
+                        <td <?php if (($j == 0 || $i == 0) && !($j == 0 && $i == 0)): ?> style="background-color: #f2f1f0;" <?php endif; ?> >
+                            <?php echo $table[$i][$j]; ?>
+                        </td>
+                    <?php endif; ?>
+
+                <?php endforeach; ?>
+            </tr>
+        <?php endif; ?>
+
+
+    <?php endforeach; ?>
+</table>
