@@ -41,6 +41,8 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		/** @var Zolago_Dropship_Helper_Data $udropHlp */
 		$udropHlp = Mage::helper('udropship');
+		/** @var Zolago_Common_Helper_Data $zcHlp */
+		$zcHlp = Mage::helper('zolagocommon');
 		/** @var Zolago_Solrsearch_Helper_Data $solrHlp */
 		$solrHlp = Mage::helper("zolagosolrsearch");
 		$data = array();
@@ -75,8 +77,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				$_product = array(
 					'name' => Mage::helper('core')->escapeHtml($item->getName()),
 					'id' => Mage::helper('core')->escapeHtml($product->getSku()),
+					'skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor()))),
+					'simple_sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
+					'simple_skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
 					'category' => implode('/', $categories),
-					'price' => (double)number_format($item->getbasePrice(), 2, '.', ''),
+					'price' => (double)number_format($item->getbasePrice() - ($item->getDiscountAmount() - $item->getDiscountTaxCompensation()), 2, '.', ''),
 					'quantity' => (int)$item->getQty(),
 					'vendor' => Mage::helper('core')->escapeHtml($vendor),
 					'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
