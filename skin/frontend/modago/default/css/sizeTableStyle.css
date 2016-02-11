@@ -76,6 +76,9 @@ table tr td {
         border: 1px solid #ccc;
         height: auto !important;
     }
+    #sizetable-container tr:not(:first-child) td {
+        width: 50%;
+    }
 
     .sizetable-desktop {
         display: none;
