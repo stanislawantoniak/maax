@@ -18,6 +18,7 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_file;
     protected $_path;
     protected $_logFile;
+    protected $_oldStore;
 
     public function getFileTypes() {
         return array(self::FILE_DESCRIPTIONS,self::FILE_PRICES,self::FILE_STOCKS);
@@ -279,6 +280,38 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
         file_put_contents($filename,$file);        
         return $filename;
     }
+    
+    /**
+     * check if flat catalog product is enabled
+     *
+     * @return bool
+     */
+    public function isFlat() {
+        return Mage::helper('catalog/product_flat')->isEnabled();
+    }
+    
+    /**
+     * emulate admin store
+     */
+
+    public function saveOldStore() {
+        if ($this->isFlat()) {
+            $this->_oldStore = Mage::app()->getStore()->getId();
+            Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID); // simulate admin
+        }
+    }
+    
+    /**
+     * restore store id after emulation
+     */
+
+    public function restoreOldStore() {
+        if ($this->isFlat()) {
+            Mage::app()->getStore()->setId($this->_oldStore);        
+        }
+    }
+
+
 
 
 

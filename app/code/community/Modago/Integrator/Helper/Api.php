@@ -18,6 +18,7 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     const CONFIG_PATH_BLOCK_SHIPPING = 'modagointegrator/api_advanced_settings/block_shipping';
     const CONFIG_PATH_STORE          = 'modagointegrator/orders/store';
     const CONFIG_PATH_MAPPED_COD     = 'modagointegrator/orders/mapped_cod';
+    const CONFIG_PATH_SIMPLE_ONLY	 = 'modagointegrator/orders/simple_only';
 
     /**
      * Return login for api (vendor id)
@@ -26,6 +27,14 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
      */
     public function getLogin() {
         return Mage::getStoreConfig(self::CONFIG_PATH_LOGIN);
+    }
+    /**
+     * Only simple products in basket
+     *
+     * @return mixed
+     */
+    public function isSimpleOnly() {
+        return Mage::getStoreConfig(self::CONFIG_PATH_SIMPLE_ONLY);
     }
 
     /**
