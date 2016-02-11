@@ -128,18 +128,32 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				}
 			}
 
-			if(isset($checkoutData['payment']['method'])) {
-				$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
-				if (!empty($paymentMethod)) {
-					$data['basket']['payment_method'] = $paymentMethod;
+			// Last used payment method and details
+			$paymentMethod  = null;
+			$paymentDetails = null;
+			if ($quota->getCustomer() && $quota->getCustomer()->getId()) {
+				$payment = $quota->getCustomer()->getLastUsedPayment();
+				if (isset($payment['method'])) {
+					$paymentMethod = $gtmHelper->getPaymentMethodName($payment['method']);
+				}
+				if (isset($payment['additional_information']['provider'])) {
+					$paymentDetails = $payment['additional_information']['provider'];
 				}
 			}
-
+			// Maybe new chosen
+			if(isset($checkoutData['payment']['method'])) {
+				$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+			}
 			if(isset($checkoutData['payment']['additional_information']['provider'])) {
 				$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
-				if (!empty($paymentDetails)) {
-					$data['basket']['payment_details'] = $paymentDetails;
-				}
+			}
+
+			// Save payment method and details if exists
+			if (!empty($paymentMethod)) {
+				$data['basket']['payment_method'] = $paymentMethod;
+			}
+			if (!empty($paymentDetails)) {
+				$data['basket']['payment_details'] = $paymentDetails;
 			}
 		}
 		return $data;
