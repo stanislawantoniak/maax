@@ -50,10 +50,12 @@
                 <?php foreach ($names as $j => $name): ?>
                     <?php if (!empty($table[$j][$i])): ?>
                         <tr>
+                            <?php if ($j !== 0): ?>
                             <td <?php if ($j !== 0): ?>style="background-color: #f2f1f0;"<?php endif; ?>>
                                 <?php echo $name; ?>
                             </td>
-                            <td <?php if ($j == 0): ?> colspan="2" style="background-color: #f2f1f0;" <?php endif; ?>>
+                            <?php endif; ?>
+                            <td <?php if ($j == 0): ?> colspan="2" style="background-color: #f2f1f0;text-align: center;" <?php endif; ?>>
                                 <?php echo $table[$j][$i]; ?>
                                 <!--                                (--><?php //echo $j; ?><!--,-->
                                 <?php //echo $i; ?><!--)-->
