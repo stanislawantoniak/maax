@@ -41,10 +41,10 @@ body img {
 
 
 .sizetable-desktop {
-    visibility: visible;
+    display: block;
 }
 .sizetable-mobile {
-    visibility: hidden;
+    display: none;
 }
 
 /*
@@ -78,10 +78,9 @@ table tr td {
     }
 
     .sizetable-desktop {
-        visibility: hidden;
         display: none;
     }
     .sizetable-mobile {
-        visibility: visible;
+        display: block;
     }
 }
