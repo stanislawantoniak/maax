@@ -25,12 +25,13 @@ if (!empty($results)) {
     if (!empty($toUpdate)) {
         foreach ($toUpdate as $toUpdateItem) {
             $defaultValue = serialize(array("C" => $toUpdateItem["default_value"]));
-            $queryUpdate = "UPDATE {$sizeTableTable} SET default_value = '{$defaultValue}' WHERE sizetable_id = " . (int)$toUpdateItem["sizetable_id"];
+            $queryUpdate = sprintf("UPDATE %s SET default_value='%s' WHERE sizetable_id =%s", $sizeTableTable, $defaultValue, (int)$toUpdateItem["sizetable_id"]);
+
             $writeConnection->query($queryUpdate);
         }
     }
 }
-unset($toUpdate, $result, $toUpdateItem);
+unset($toUpdate, $result, $toUpdateItem, $queryUpdate);
 
 
 //Scope values
@@ -49,21 +50,11 @@ if (!empty($results)) {
     if (!empty($toUpdate)) {
         foreach ($toUpdate as $toUpdateItem) {
             $value = serialize(array("C" => $toUpdateItem["value"]));
-            $queryUpdate = "UPDATE {$sizeTableScopeTable} SET value = '{$value}' WHERE sizetable_id = " . (int)$toUpdateItem["sizetable_id"]. " AND store_id=". (int)$toUpdateItem["store_id"];
+            $queryUpdate = sprintf("UPDATE %s SET value='%s' WHERE sizetable_id=%s AND store_id=%s",$sizeTableScopeTable, $value,(int)$toUpdateItem["sizetable_id"],(int)$toUpdateItem["store_id"]);
+
             $writeConnection->query($queryUpdate);
         }
     }
-}
-
-
-
-function is_serialized($str)
-{
-    $data = @unserialize($str);
-    if ($str === 'b:0;' || $data !== false)
-        return true;
-
-    return false;
 }
 
 $installer->endSetup();
