@@ -132,24 +132,59 @@ $tinyMCEKinds = array("C", "A", "B");
                                     />
                             </div>
                         </div>
+						<?php
+						$tds = range(0, 15);
+						$trs = range(0, 10);
+
+						?>
                         <div class="form-group">
-                            <label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Content"); ?>
+                            <label class="col-md-2 control-label" for="name">
+								<?php echo $_helper->__("Size table"); ?>
+							</label>
+							<div class="col-md-10">
+								<table>
+									<?php foreach ($trs as $i => $tr): ?>
+										<tr>
+											<?php foreach ($tds as $j => $td): ?>
+												<td>
+													<?php if($j == 0): ?>
+														<input <?php if($j == 0): ?>style="background-color: #f2f1f0;"<?php endif; ?> type="text" size="18"
+															name="default_value[table][<?php echo $i; ?>][<?php echo $j; ?>]"
+															   value="<?php if(isset($defaultValue["table"])): ?><?php echo $defaultValue["table"][$i][$j]; ?><?php endif; ?>"
+															/>
+														<?php else: ?>
+														<input type="text" <?php if($i == 0): ?>style="background-color: #f2f1f0;"<?php endif; ?> size="6"
+															   name="default_value[table][<?php echo $i; ?>][<?php echo $j; ?>]"
+															   value="<?php if(isset($defaultValue["table"])): ?><?php echo $defaultValue["table"][$i][$j]; ?><?php endif; ?>"
+															/>
+													<?php endif; ?>
 
-                            </label>
+												</td>
+											<?php endforeach; ?>
+										</tr>
+									<?php endforeach; ?>
+								</table>
+							</div>
 
-                            <div class="col-md-10">
-                                <?php foreach ($tinyMCEKinds as $i => $tinyMCEKind): ?>
-                                    <div class="col-md-<?php if ($i == 0): ?>12<?php else: ?>6<?php endif; ?>">
+                        </div>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="name">
+								<?php echo $_helper->__("Content"); ?>
+							</label>
+
+							<div class="col-md-10">
+								<?php foreach ($tinyMCEKinds as $i => $tinyMCEKind): ?>
+									<div class="col-md-<?php if ($i == 0): ?>12<?php else: ?>6<?php endif; ?>">
                                             <textarea name="default_value[<?php echo $tinyMCEKind; ?>]"
-                                                      id="sizetable_<?php echo $defaultStoreId; ?>_<?php echo $tinyMCEKind; ?>"
-                                                      class="form-control tinymce">
+													  id="sizetable_<?php echo $defaultStoreId; ?>_<?php echo $tinyMCEKind; ?>"
+													  class="form-control tinymce">
                                                 <?php if (isset($defaultValue[$tinyMCEKind])) echo $defaultValue[$tinyMCEKind]; ?>
                                             </textarea>
-                                    </div>
-                                <?php endforeach; ?>
-                                <?php unset($i, $tinyMCEKind); ?>
-                            </div>
-                        </div>
+									</div>
+								<?php endforeach; ?>
+								<?php unset($i, $tinyMCEKind); ?>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
