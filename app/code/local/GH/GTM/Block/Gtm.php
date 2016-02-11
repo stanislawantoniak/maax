@@ -133,7 +133,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 						'simple_sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
 						'simple_skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
 						'category' => implode('/',$categories),
-						'price' => (double)number_format($item->getbasePrice() - ($item->getDiscountAmount() - $item->getDiscountTaxCompensation()),2,'.',''),
+						'price' => (double)number_format($item->getbasePrice() - (($item->getDiscountAmount() - $item->getHiddenTaxAmount())/$item->getQtyOrdered()),2,'.',''),
 						'quantity' => (int)$item->getQtyOrdered(),
 						'vendor' => Mage::helper('core')->escapeHtml($vendor),
 						'brandshop' => Mage::helper('core')->escapeHtml($brandshop),

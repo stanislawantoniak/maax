@@ -54,7 +54,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		if ($gtmHelper->isDataLayerEnabled() && !empty($items)) {
 
 			$data = array('products' => array(), 'basket' => array());
-			/** @var  $item */
+			/** @var Mage_Sales_Model_Quote_Item $item */
 			foreach ($items as $item) {
 				$product = Mage::getModel("zolagocatalog/product")->load($item->getProductId());
 				/** @var Zolago_Catalog_Model_Product $product */
@@ -81,7 +81,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 					'simple_sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
 					'simple_skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
 					'category' => implode('/', $categories),
-					'price' => (double)number_format($item->getbasePrice() - ($item->getDiscountAmount() - $item->getDiscountTaxCompensation()), 2, '.', ''),
+					'price' => (double)number_format($item->getbasePrice() - (($item->getDiscountAmount() - $item->getHiddenTaxAmount())/$item->getQty()), 2, '.', ''),
 					'quantity' => (int)$item->getQty(),
 					'vendor' => Mage::helper('core')->escapeHtml($vendor),
 					'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
