@@ -51,35 +51,37 @@ class GH_Marketing_Model_Resource_Marketing_Cost extends Mage_Core_Model_Resourc
     }
 
 	/**
-	 * TODO dokonczyc
+	 * Retrieve cost grouped by category and cost type
+	 * for vendor and month
 	 *
-	 * @param null $vendor
+	 * @param null $vendorId
 	 * @param null $month
 	 * @return array
 	 */
-	public function getGroupedCosts($vendor = null, $month = null) {
+	public function getGroupedCosts($vendorId = null, $month = null) {
 		$readConn = $this->getReadConnection();
 		$select = $readConn->select();
 		$tableName = $this->getTable('ghmarketing/marketing_cost');
-		$select->from(array('mc' => $tableName));
+		$select->from(array('main_table' => $tableName), array(
+			"type_id" => "main_table.type_id",
+			"sum"     => "SUM(main_table.billing_cost)"));
 
 		if (!empty($month)) {
 			$time = strtotime($month);
-			$fromDate = date("Y-m-d", $time);
-			$toDate = date("Y-m-d", strtotime("+1 month", $time));
-			$select->where('mc.date >= ?', $fromDate);
-			$select->where('mc.date < ?', $toDate);
+			$fromDate = date("Y-m-d 00:00:00", strtotime("first day of", $time));
+			$toDate   = date("Y-m-d 23:59:59", strtotime("last day of", $time));
+			$select->where('main_table.date >= ?', $fromDate);
+			$select->where('main_table.date < ?', $toDate);
 		}
-		if (!empty($vendor)) {
-			$select->where("mc.vendor_id = ? ", $vendor->getId());
+		if (!empty($vendorId)) {
+			$select->where("main_table.vendor_id = ? ", $vendorId);
 		}
-		//todo join attribute set id
-		//sum billing _cost
-		//group by group by `type_id`,`attribute_set_id`
-
-		Mage::log((string)$select, null, 'mylog.log');
-
-
+		$select->join(
+			array('cpe' => $this->getTable('catalog/product'))
+			,"cpe.entity_id = main_table.product_id"
+			,array('attribute_set_id')
+		);
+		$select->group(array("main_table.type_id", "cpe.attribute_set_id"));
 		return $readConn->fetchAll($select);
 	}
 }

@@ -8,6 +8,19 @@
 class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 
 	/**
+	 * Cache for calculated costs
+	 *
+	 * @var array
+	 */
+	protected $_allCosts = null;
+
+	/**
+	 * Cache for budgets
+	 *
+	 * @var null
+	 */
+	protected $_allBudgets = null;
+	/**
 	 * Retrieve html of <select> with budget dates (yyyy-mm)
 	 *
 	 * @return string
@@ -25,7 +38,8 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 	}
 
 	/**
-	 * TODO description
+	 * Retrieve dates as months for current vendor
+	 * from regulation document accepted date to now
 	 *
 	 * @return array
 	 */
@@ -90,6 +104,11 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		return $categories;
 	}
 
+	/**
+	 * Retrieve html of <tbody> with marketing costs rows + Separator row + Total row + Budget row
+	 *
+	 * @return string
+	 */
 	public function getTbody() {
 		$html = "<tbody>";
 		// Rows with current costs in categories for marketing costs types + Total row + Budget row
@@ -137,12 +156,12 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		}
 
 		// Rows with costs corresponding to category and marketing cost type
-		foreach ($categories as $value => $label) {
+		foreach ($categories as $catId => $label) {
 			$row = array('data' => array(), 'cells' => array());
 			$row['cells'][] = $this->makeSingleElement('td', array(), $label);
 			foreach ($costTypes as $type) {
 				/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
-				$value = rand(10, 100);
+				$value = $this->getCost($type->getId(), $catId);
 				$totals[$type->getMarketingCostTypeId()] += $value;
 				$row['cells'][] = $this->makeSingleElement('td', array(), $store->formatPrice($value));
 			}
@@ -173,7 +192,7 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		$row['cells'][] = $this->makeSingleElement('td', array('class' => 'budget-row'), $helper->__("Budget"));
 		foreach ($costTypes as $type) {
 			/** @var GH_Marketing_Model_Marketing_Cost_Type $type */
-			$value = rand(10, 1000);
+			$value = $this->getBudget($type->getId());
 			$input = $this->makeSingleElement('input', array('name' => "budget[{$type->getMarketingCostTypeId()}]",'class' => 'form-control', 'type' => 'text', 'value' =>  number_format($value,2,',','')));
 			$row['cells'][] = $this->makeSingleElement('td', array(), $input);
 		}
@@ -204,6 +223,15 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		return $vendor;
 	}
 
+	/**
+	 * Retrieve current month in format Y-m
+	 * Month can by parameter in request
+	 * If not current date taken
+	 *
+	 * @param string $format
+	 * @return mixed
+	 * @throws Exception
+	 */
 	public function getCurrentMonth($format = 'Y-m') {
 		/** @var Mage_Core_Controller_Request_Http $req */
 		$req = $this->getRequest();
@@ -211,21 +239,117 @@ class GH_Marketing_Block_Dropship_Marketing extends Mage_Core_Block_Template {
 		return empty($month) ? Mage::getModel('core/date')->date($format) : $month;
 	}
 
-	public function getCost($type, $catId, $vendor = null, $month = null) {
-
+	/**
+	 * Get cost for marketing type and category
+	 *
+	 * @param $typeId
+	 * @param $catId
+	 * @param null $vendor
+	 * @param null $month
+	 * @return int
+	 */
+	public function getCost($typeId, $catId, $vendor = null, $month = null) {
+		$allCosts = $this->getAllCosts($vendor, $month);
+		$key = $this->buildKeyForCache($vendor, $month);
+		if (isset($allCosts[$key][$catId][$typeId])) {
+			return $allCosts[$key][$catId][$typeId];
+		}
+		return 0;
 	}
 
-	public function getAllCosts($vendor = null, $month = null) {
+	/**
+	 * Get budget for marketing type
+	 *
+	 * @param $typeId
+	 * @param null $month
+	 * @param null $vendorId
+	 * @return int
+	 */
+	public function getBudget($typeId, $month = null, $vendorId = null) {
+		$key = $this->buildKeyForCache($vendorId, $month);
+		$budgets = $this->getAllBudgets($month, $vendorId);
+		if (isset($budgets[$key][$typeId])) {
+			return $budgets[$key][$typeId];
+		}
+		return 0;
+	}
+
+	/**
+	 * Collect budgets and cache it
+	 *
+	 * @param $month
+	 * @param $vendorId
+	 * @return null
+	 */
+	public function getAllBudgets($month, $vendorId) {
 		if (empty($month)) {
 			$month = $this->getCurrentMonth('Y-m');
 		}
 		if (empty($vendor)) {
-			$vendor = $this->getVendor();
+			$vendorId = $this->getVendor()->getId();
 		}
+		$key = $this->buildKeyForCache($vendorId, $month);
+		if (!isset($this->_allBudgets[$key])) {
+			/** @var GH_Marketing_Model_Resource_Marketing_Budget_Collection $collection */
+			$collection = Mage::getResourceModel('ghmarketing/marketing_budget_collection');
+			$collection->addVendorFilter($vendorId);
+			$collection->addMonthFilter($month);
 
-		/** @var GH_Marketing_Model_Resource_Marketing_Cost $modelResource */
-		$modelResource = Mage::getResourceModel("ghmarketing/marketing_cost");
+			$this->_allBudgets[$key] = array();
+			foreach ($collection as $budget) {
+				/** @var GH_Marketing_Model_Marketing_Budget $budget */
+				$this->_allBudgets[$key][$budget->getMarketingCostTypeId()] = $budget->getBudget();
+			}
+		}
+		return $this->_allBudgets;
+	}
 
-		return $modelResource->getGroupedCosts($vendor, $month);
+	/**
+	 * Retrieve all costs for specific Vendor and Month
+	 * If no vendor selected current taken
+	 * If no mount selected current taken
+	 * return example:
+	 * [<key-vendor-month>][<attribute_set_id>][<type_id>]
+	 *
+	 * @param null $vendorId
+	 * @param null $month
+	 * @return array
+	 */
+	public function getAllCosts($vendorId = null, $month = null) {
+		if (empty($month)) {
+			$month = $this->getCurrentMonth('Y-m');
+		}
+		if (empty($vendor)) {
+			$vendorId = $this->getVendor()->getId();
+		}
+		$key = $this->buildKeyForCache($vendorId, $month);
+		if (!isset($this->_allCosts[$key])) {
+			/** @var GH_Marketing_Model_Resource_Marketing_Cost $modelResource */
+			$modelResource = Mage::getResourceModel("ghmarketing/marketing_cost");
+			$data = $modelResource->getGroupedCosts($vendorId, $month);
+			$this->_allCosts[$key] = array();
+			foreach ($data as $row) {
+				$this->_allCosts[$key][$row['attribute_set_id']][$row['type_id']] = round($row['sum'], 2);
+			}
+		}
+		return $this->_allCosts;
+	}
+
+	/**
+	 * Build key for cache with all costs
+	 * from vendor and month
+	 *
+	 * @param $vendorId
+	 * @param $month
+	 * @return string
+	 */
+	public function buildKeyForCache($vendorId, $month) {
+		if (empty($month)) {
+			$month = $this->getCurrentMonth();
+		}
+		if (empty($vendor)) {
+			$vendorId = $this->getVendor()->getId();
+		}
+		return $vendorId.'-'.$month;
 	}
 }
