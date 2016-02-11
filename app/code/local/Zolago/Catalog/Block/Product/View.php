@@ -600,12 +600,28 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $d = "";
         if(!empty($sizeTableContent)){
             $b = unserialize($this->_getSizeTableContent());
+
+
+            $blockTable = "";
+            if(isset($b["table"])){
+                $blockTable = $this->getLayout()
+                    ->createBlock('core/template')
+                    ->setTemplate('catalog/product/view/sizeTable.phtml')
+                    ->setData("table", $b["table"])
+                    ->toHtml();
+            }
+            $contentTitle = isset($b["title"]) ? $b["title"] : "";
+
+            $contentC = isset($b["C"]) ? $b["C"] : "";
+            $contentA = isset($b["A"]) ? $b["A"] : "";
+            $contentB = isset($b["B"]) ? $b["B"] : "";
             $c = array(
-                "<h1>" . $b["title"] . "</h1>",
-                "<div class='sizetable-container-c'>" . $b["C"] . "</div>",
+                "<h1>" . $contentTitle . "</h1>",
+                "<div class='sizetable-container-c'>" . $blockTable . "</div>",
+                "<div class='sizetable-container-c'>" . $contentC . "</div>",
                 "<div class='sizetable-container-ab'>",
-                "<div class='sizetable-container-a'>" . $b["A"] . "</div>",
-                "<div class='sizetable-container-b'>" . $b["B"] . "</div>",
+                "<div class='sizetable-container-a'>" . $contentA . "</div>",
+                "<div class='sizetable-container-b'>" . $contentB . "</div>",
                 "</div>"
             );
             $path = $this->getSkinUrl("css/sizeTableStyle.css");
