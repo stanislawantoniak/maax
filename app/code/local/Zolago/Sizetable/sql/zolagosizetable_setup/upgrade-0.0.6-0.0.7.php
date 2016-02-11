@@ -57,4 +57,14 @@ if (!empty($results)) {
     }
 }
 
+function is_serialized($str)
+{
+    $data = @unserialize($str);
+    if ($str === 'b:0;' || $data !== false)
+        return true;
+
+    return false;
+}
+
+
 $installer->endSetup();
