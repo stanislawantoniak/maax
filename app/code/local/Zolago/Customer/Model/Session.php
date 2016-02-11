@@ -76,7 +76,6 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 				return $this->_logout();
 			}
 		}
-		$customer->setData('costam',true);
 		$this->_customer = $customer;
 		$this->setId($customer->getId());
 		// save customer as confirmed, if it is not
