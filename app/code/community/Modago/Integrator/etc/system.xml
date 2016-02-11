@@ -151,6 +151,16 @@
 							<show_in_store>0</show_in_store>
 							<validate>required-entry</validate>
 						</store>
+						<simple_only translate="label">
+							<label>Only simple products in order</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<comment>In new orders shoul be only simple products (without configurable/bundle etc.)</comment>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</simple_only>
 						<mapped_cod>
 							<label>Map 'Cash on Delivery' to</label>
 							<comment>This payment method is Cash on Delivery</comment>

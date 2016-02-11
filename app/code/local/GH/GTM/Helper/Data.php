@@ -5,7 +5,7 @@
  */
 class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 
-	public function getVisitorData(){
+	public function getVisitorData($includeEvent = true){
 		$data = array();
 		/** @var Zolago_Customer_Model_Session $customerSession */
 		$customerSession = Mage::getSingleton('customer/session');
@@ -47,8 +47,9 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 		//visitorLogged
 		$data['visitorLogged'] = $customerSession->isLoggedIn() ? 'yes' : 'no';
 
-
-		$data['event'] = 'visitorDataReady';
+		if($includeEvent) {
+			$data['event'] = 'visitorDataReady';
+		}
 
 		return $data;
 	}

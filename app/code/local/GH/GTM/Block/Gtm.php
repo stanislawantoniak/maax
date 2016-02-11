@@ -77,10 +77,33 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 				$data['transactionShipping'] += $order->getBaseShippingAmount();
 				$data['transactionTax'] += $order->getBaseTaxAmount();
 
-				//todo:
-				$data['transactionShippingMethod'] .= '|' . $order->getShippingCarrier() ? $order->getShippingCarrier()->getCarrierCode() : 'No Shipping Method';
-				$data['transactionPaymentMethod'];
-				$data['transactionPaymentDetails'];
+
+				/** @var Mage_Checkout_Model_Session $checkoutSession */
+				$checkoutSession = Mage::getSingleton('checkout/session');
+				$checkoutData = $checkoutSession->getData();
+				/** @var GH_GTM_Helper_Data $gtmHelper */
+				$gtmHelper = Mage::helper("gh_gtm");
+
+				if(isset($checkoutData['shipping_method'])) {
+					$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
+					if (!empty($shippingMethod)) {
+						$data['transactionShippingMethod'] = $shippingMethod;
+					}
+				}
+
+				if(isset($checkoutData['payment']['method'])) {
+					$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+					if (!empty($paymentMethod)) {
+						$data['transactionPaymentMethod'] = $paymentMethod;
+					}
+				}
+
+				if(isset($checkoutData['payment']['additional_information']['provider'])) {
+					$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
+					if (!empty($paymentDetails)) {
+						$data['transactionPaymentDetails'] = $paymentDetails;
+					}
+				}
 			}
 
 			// Build products array.
@@ -101,24 +124,25 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 				}
 				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
 				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
-				$variant = array();
-				$options = Mage::helper('catalog/product_configuration')->getConfigurableOptions($item);
-				foreach ($options as $option) {
-					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
-				}
 				if (empty($products[$item->getSku()])) {
 					// Build all fields the first time we encounter this item.
 					$products[$item->getSku()] = array(
 						'name' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getName())),
-						'sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
-						'category' => implode('|',$categories),
-						'price' => (double)number_format($item->getBasePrice(),2,'.',''),
+						'id' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($product->getSku())),
+						'skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor()))),
+						'simple_sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
+						'simple_skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
+						'category' => implode('/',$categories),
+						'price' => (double)number_format($item->getbasePrice() - ($item->getDiscountAmount() - $item->getDiscountTaxCompensation()),2,'.',''),
 						'quantity' => (int)$item->getQtyOrdered(),
 						'vendor' => Mage::helper('core')->escapeHtml($vendor),
 						'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 						'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
-						'variant' => implode('|', $variant),
 					);
+					$children = $item->getChildrenItems();
+					if (!empty($children) && isset($children[0])) {
+						$products[$item->getSku()]['variant'] = $children[0]->getProduct()->getAttributeText('size');
+					}
 				} else {
 					// If we already have the item, update quantity.
 					$products[$item->getSku()]['quantity'] += (int)$item->getQtyOrdered();
@@ -151,12 +175,16 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		$data = array();
 		$dataScript = '';
 
+		/** @var GH_GTM_Helper_Data $gtmHlp */
+		$gtmHlp = Mage::helper('gh_gtm');
+
 		// Get transaction and visitor data.
 		$data = $data + $this->_getTransactionData();
 		$data = $data + $this->_getContextData();
+		$data = $data + $gtmHlp->getVisitorData(false);
 
 		// Get transaction and visitor data, if desired.
-		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
+		if ($gtmHlp->isDataLayerEnabled() && !empty($data)) {
 			// Generate the data layer JavaScript.
 			$dataScript .= "<script>dataLayer = [" . json_encode($data) . "];</script>\n\n";
 		}
@@ -171,8 +199,12 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		if (!Mage::helper('gtm')->isGTMAvailable()) {
 			return '';
 		}
+		/** @var GH_GTM_Helper_Data $gtmHlp */
+		$gtmHlp = Mage::helper('gh_gtm');
+
 		$data = $this->_getTransactionData();
-		if (Mage::helper('gtm')->isDataLayerEnabled() && !empty($data)) {
+
+		if ($gtmHlp->isDataLayerEnabled() && !empty($data)) {
 			return json_encode($data);
 		} else {
 			return '';

@@ -74,22 +74,24 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 				$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
 				$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
-				$variant = array();
-				$options = Mage::helper('catalog/product_configuration')->getConfigurableOptions($item);
-				foreach ($options as $option) {
-					$variant[] = Mage::helper('core')->escapeHtml(trim($option['label']) . ": " . trim($option['value']));
-				}
 				$_product = array(
 					'name' => Mage::helper('core')->escapeHtml($item->getName()),
-					'sku' => Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor())),
+					'id' => Mage::helper('core')->escapeHtml($product->getSku()),
+					'skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor()))),
+					'simple_sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($item->getSku())),
+					'simple_skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($item->getSku(),$item->getUdropshipVendor()))),
 					'category' => implode('/', $categories),
-					'price' => (double)number_format($item->getbasePrice(), 2, '.', ''),
+					'price' => (double)number_format($item->getbasePrice() - ($item->getDiscountAmount() - $item->getDiscountTaxCompensation()), 2, '.', ''),
 					'quantity' => (int)$item->getQty(),
 					'vendor' => Mage::helper('core')->escapeHtml($vendor),
 					'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 					'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
-					'variant' => implode('|', $variant),
-			);
+				);
+				$children = $item->getChildren();
+				if (!empty($children) && isset($children[0])) {
+					$_product['variant'] = $children[0]->getProduct()->getAttributeText('size');
+				}
+
 				$data['products'][] = $_product;
 			}
 			if (empty($data['products'])) {
@@ -126,20 +128,32 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				}
 			}
 
-			Mage::log($checkoutData,null,'session.log');
-
-			if(isset($checkoutData['payment']['method'])) {
-				$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
-				if (!empty($paymentMethod)) {
-					$data['basket']['payment_method'] = $paymentMethod;
+			// Last used payment method and details
+			$paymentMethod  = null;
+			$paymentDetails = null;
+			if ($quota->getCustomer() && $quota->getCustomer()->getId()) {
+				$payment = $quota->getCustomer()->getLastUsedPayment();
+				if (isset($payment['method'])) {
+					$paymentMethod = $gtmHelper->getPaymentMethodName($payment['method']);
+				}
+				if (isset($payment['additional_information']['provider'])) {
+					$paymentDetails = $payment['additional_information']['provider'];
 				}
 			}
-
+			// Maybe new chosen
+			if(isset($checkoutData['payment']['method'])) {
+				$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+			}
 			if(isset($checkoutData['payment']['additional_information']['provider'])) {
 				$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
-				if (!empty($paymentDetails)) {
-					$data['basket']['payment_details'] = $paymentDetails;
-				}
+			}
+
+			// Save payment method and details if exists
+			if (!empty($paymentMethod)) {
+				$data['basket']['payment_method'] = $paymentMethod;
+			}
+			if (!empty($paymentDetails)) {
+				$data['basket']['payment_details'] = $paymentDetails;
 			}
 		}
 		return $data;

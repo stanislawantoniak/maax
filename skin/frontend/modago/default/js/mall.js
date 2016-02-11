@@ -102,9 +102,12 @@ var Mall = {
         return protocol + '//' + host;
     },
 
+	noAccountInfo: ['/checkout/guest/index/','/checkout/singlepage/index/'],
     dispatch: function() {
         // fetch shopping cart and favourites informations
-        this.getAccountInfo();
+	    if(jQuery.inArray(this.getUrlPath(),Mall.noAccountInfo) == -1) {
+		    this.getAccountInfo();
+	    }
     },
 
     getAccountInfo: function() {
@@ -1616,6 +1619,10 @@ Mall.getUrlPart = function (name,url) {
 		return '';
 	}
 };
+
+Mall.getUrlPath = function() {
+	return window.location.href.replace(Mall.getBaseUrl(),"");
+}
 
 Mall.showAgreement = function(target) {
 	jQuery(target).hide();
