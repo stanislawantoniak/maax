@@ -25,7 +25,7 @@ if (!empty($results)) {
     if (!empty($toUpdate)) {
         foreach ($toUpdate as $toUpdateItem) {
             $defaultValue = serialize(array("C" => $toUpdateItem["default_value"]));
-            $queryUpdate = sprintf("UPDATE %s SET default_value='%s' WHERE sizetable_id =%s", $sizeTableTable, $defaultValue, (int)$toUpdateItem["sizetable_id"]);
+            $queryUpdate = sprintf("UPDATE %s SET default_value='%s' WHERE sizetable_id=%s", $sizeTableTable, $defaultValue, (int)$toUpdateItem["sizetable_id"]);
 
             $writeConnection->query($queryUpdate);
         }
