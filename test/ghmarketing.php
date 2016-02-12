@@ -30,7 +30,7 @@ try {
 	$ch = curl_init();
 
 	curl_setopt($ch, CURLOPT_USERPWD, 'zolago:kopytko1234');
-	curl_setopt($ch, CURLOPT_URL, "https://dev01.lorante.com/ghmarketing/load/index");
+	curl_setopt($ch, CURLOPT_URL, "https://test01.lorante.com/ghmarketing/load/index");
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -38,7 +38,7 @@ try {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
 	if (!$server_output = curl_exec($ch)) {
-	    var_Dump(curl_error($ch));
+		var_dump(curl_error($ch));
 	}
 
 	curl_close($ch);
