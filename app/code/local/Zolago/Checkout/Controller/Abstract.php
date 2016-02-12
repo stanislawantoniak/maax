@@ -278,6 +278,25 @@ abstract class Zolago_Checkout_Controller_Abstract
 				"content"=>$ex->getMessage()
 			);
 		}
+
+		// part for GTM datalayer
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		$checkoutData = $checkoutSession->getData();
+		/** @var GH_GTM_Helper_Data $gtmHelper */
+		$gtmHelper = Mage::helper("gh_gtm");
+		$data = array();
+
+		if(isset($checkoutData['shipping_method'])) {
+			$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
+			if (!empty($shippingMethod)) {
+				$data['basket_shipping_method'] = $shippingMethod;
+			}
+		}
+		if (!empty($data)) {
+			$response["dataLayer"] = $data;
+		}
+
 		if($this->getRequest()->isAjax()){
 			$this->_prepareJsonResponse($response);
 		}
@@ -297,13 +316,37 @@ abstract class Zolago_Checkout_Controller_Abstract
 		);
 
 		try{
-			//Mage::log($this->getRequest()->getParams(),null,'params.log');
 		    $this->importPostData();
 		} catch (Exception $ex) {
 			$response = array(
 				"status"=>0,
 				"content"=>$ex->getMessage()
 			);
+		}
+
+		// part for GTM dataLayer
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		$checkoutData = $checkoutSession->getData();
+		/** @var GH_GTM_Helper_Data $gtmHelper */
+		$gtmHelper = Mage::helper("gh_gtm");
+		$data = array();
+
+		if(isset($checkoutData['payment']['method'])) {
+			$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+			if (!empty($paymentMethod)) {
+				$data['basket_payment_method'] = $paymentMethod;
+			}
+		}
+
+		if(isset($checkoutData['payment']['additional_information']['provider'])) {
+			$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
+			if (!empty($paymentDetails)) {
+				$data['basket_payment_details'] = $paymentDetails;
+			}
+		}
+		if (!empty($data)) {
+			$response["dataLayer"] = $data;
 		}
 
 		if($this->getRequest()->isAjax()){

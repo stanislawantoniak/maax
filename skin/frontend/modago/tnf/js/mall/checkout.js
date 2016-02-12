@@ -477,6 +477,12 @@
 				var saveUrl = proto.content.find("form").attr("action");
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
 					if(response.status==1){
+						// part for GTM dataLayer
+						var dl = response.dataLayer;
+						if (dl && typeof dataLayer != "undefined") {
+							// Pushing data (shipping/payment) to data layer
+							dataLayer.push(dl);
+						}
 						self.next();
 					}else{
 						alert(response.content);
