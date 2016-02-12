@@ -38,7 +38,7 @@ try {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
 	if (!$server_output = curl_exec($ch)) {
-	    var_Dump(curl_error($ch));
+		var_dump(curl_error($ch));
 	}
 
 	curl_close($ch);
