@@ -277,4 +277,13 @@
 		border: none;
 	}
 }
+#tabelaRozmiarow {
+  @media (max-width: 450px){
+	.modal-dialog {
+	  width: 88%;
+	}
+  }
+}
+
+
 
