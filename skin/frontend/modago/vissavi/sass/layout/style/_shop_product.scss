@@ -66,6 +66,18 @@
             	display:block;
             }
 		}
+	  .no-size {
+		span {
+		  canvas.diagonal {
+			background: linear-gradient(to top left,
+					rgba(0, 0, 0, 0) 0%,
+					rgba(0, 0, 0, 0) calc(50% - 0.8px),
+					$color_858585 50%,
+					rgba(0, 0, 0, 0) calc(50% + 0.8px),
+					rgba(0, 0, 0, 0) 100%);
+		  }
+		}
+	  }
 		.color-label {
 			margin-top: -10px;
 		}
