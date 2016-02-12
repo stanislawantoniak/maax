@@ -53,7 +53,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		if ($gtmHelper->isDataLayerEnabled() && !empty($items)) {
 
-			$data = array('products' => array(), 'basket' => array());
+			$data = array('products' => array());
 			/** @var Mage_Sales_Model_Quote_Item $item */
 			foreach ($items as $item) {
 				$product = Mage::getModel("zolagocatalog/product")->load($item->getProductId());
@@ -100,8 +100,8 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 
 			// Info about basket
-			$data['basket']['currency'] = $quota->getQuoteCurrencyCode();
-			$data['basket']['total'] = $quota->getBaseGrandTotal();
+			$data['basket_currency'] = $quota->getQuoteCurrencyCode();
+			$data['basket_total'] = $quota->getBaseGrandTotal();
 			// Coupon name if applied
 			$couponName = array();
 			$ruleIds = array_unique(explode(',', $quota->getAppliedRuleIds()));
@@ -111,7 +111,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 					$couponName[] = $rule->getName();
 				}
 				if (!empty($couponName)) {
-					$data['basket']['coupon'] = implode('|', $couponName);
+					$data['basket_coupon'] = implode('|', $couponName);
 				}
 			}
 
@@ -124,7 +124,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 			if(isset($checkoutData['shipping_method'])) {
 				$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
 				if (!empty($shippingMethod)) {
-					$data['basket']['shipping_method'] = $shippingMethod;
+					$data['basket_shipping_method'] = $shippingMethod;
 				}
 			}
 
@@ -150,10 +150,10 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 			// Save payment method and details if exists
 			if (!empty($paymentMethod)) {
-				$data['basket']['payment_method'] = $paymentMethod;
+				$data['basket_payment_method'] = $paymentMethod;
 			}
 			if (!empty($paymentDetails)) {
-				$data['basket']['payment_details'] = $paymentDetails;
+				$data['basket_payment_details'] = $paymentDetails;
 			}
 		}
 		return $data;
