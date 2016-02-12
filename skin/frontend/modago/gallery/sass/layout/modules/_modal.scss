@@ -69,7 +69,7 @@
 	}
   }
   @media (max-width: 450px) {
-	.modal-dialog {
+	.modal-dialog !important; {
 	  width: 88%;
 	}
   }
