@@ -58,15 +58,19 @@
 		}
 	}
 
-
 #tabelaRozmiarow {
-	.modal-content {
-			padding: 15px 15px;
-			text-align: left;
-			.title_section {
-				margin-left:-30px;
-				margin-right: -30px;
-				margin-bottom: 0px;
-			}
-		}
+  .modal-content {
+	padding: 15px 15px;
+	text-align: left;
+	.title_section {
+	  margin-left: -30px;
+	  margin-right: -30px;
+	  margin-bottom: 0px;
+	}
+  }
+  @media (max-width: 450px) {
+	.modal-dialog {
+	  width: 88%;
+	}
+  }
 }

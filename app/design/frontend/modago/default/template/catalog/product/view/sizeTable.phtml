@@ -45,7 +45,7 @@
 
 
     <?php foreach ($sizes as $i => $size): ?>
-        <?php if (isset($table[$i][$j]) && !empty($size)): ?>
+        <?php if (isset($table[$i][$j]) && !empty($size) && $i > 0): ?>
             <table>
                 <?php foreach ($names as $j => $name): ?>
                     <?php if (!empty($table[$j][$i])): ?>
@@ -57,8 +57,7 @@
                             <?php endif; ?>
                             <td <?php if ($j == 0): ?> colspan="2" style="background-color: #f2f1f0;text-align: center;" <?php endif; ?>>
                                 <?php echo $table[$j][$i]; ?>
-                                <!--                                (--><?php //echo $j; ?><!--,-->
-                                <?php //echo $i; ?><!--)-->
+<!--                                                                (--><?php //echo $j; ?><!--,--><?php //echo $i; ?><!--)-->
                             </td>
                         </tr>
                     <?php endif; ?>
