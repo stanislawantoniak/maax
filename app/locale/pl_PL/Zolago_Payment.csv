@@ -68,3 +68,4 @@
 "Can't delete. Invoice in statement","Nie można usunąć faktury uwzględnionej w rozliczeniu"
 "Vendor not allowed to get this invoice","Sprzedawca nie jest uprawniony do wyświetlenia tej faktury"
 "Get invoice","Pobierz fakturę"
+"Can't delete. Payment in statement","Nie można usunąć. Płatnośc uwzględniona w rozliczeniu"
