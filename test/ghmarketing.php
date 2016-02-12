@@ -30,7 +30,7 @@ try {
 	$ch = curl_init();
 
 	curl_setopt($ch, CURLOPT_USERPWD, 'zolago:kopytko1234');
-	curl_setopt($ch, CURLOPT_URL, "https://dev01.lorante.com/ghmarketing/load/index");
+	curl_setopt($ch, CURLOPT_URL, "https://test01.lorante.com/ghmarketing/load/index");
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
