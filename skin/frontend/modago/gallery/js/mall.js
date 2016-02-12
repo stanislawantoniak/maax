@@ -102,10 +102,13 @@ var Mall = {
         return protocol + '//' + host;
     },
 
-    dispatch: function() {
-        // fetch shopping cart and favourites informations
-        this.getAccountInfo();
-    },
+	noAccountInfo: ['/checkout/guest/index/','/checkout/singlepage/index/'],
+	dispatch: function() {
+		// fetch shopping cart and favourites informations
+		if(jQuery.inArray(this.getUrlPath(),Mall.noAccountInfo) == -1) {
+			this.getAccountInfo();
+		}
+	},
 
     getAccountInfo: function() {
 	    var recentlyViewed = jQuery('#rwd-recently-viewed');
@@ -149,6 +152,11 @@ var Mall = {
         if(data.status == false) {
             return;
         }
+
+	    if(typeof data.content.visitor_data != 'undefined') {
+		    Mall.Gtm.visitorData(data.content.visitor_data);
+	    }
+
         Mall.setUserBlockData(data.content);
         if(data.content.cart.all_products_count == null) {
             data.content.cart.all_products_count = 0;
@@ -1073,6 +1081,12 @@ Mall.Gtm = {
 			});
 			this.pushedSteps.push(step);
 		}
+	},
+
+	visitorData: function(data) {
+		if(typeof dataLayer != 'undefined') {
+			dataLayer.push(data);
+		}
 	}
 };
 
@@ -1605,6 +1619,10 @@ Mall.getUrlPart = function (name,url) {
 		return '';
 	}
 };
+
+Mall.getUrlPath = function() {
+	return window.location.href.replace(Mall.getBaseUrl(),"");
+}
 
 Mall.showAgreement = function(target) {
 	jQuery(target).hide();

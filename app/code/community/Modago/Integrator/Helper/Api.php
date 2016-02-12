@@ -260,4 +260,16 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
          $to = array_values($translate);         
          return str_replace($from,$to,$text);
      }
+     
+    /**
+     * create mutex 
+     *
+     * @param string name
+     * @return Modago_Integrator_Model_Mutex
+     */
+     public function getMutex($name) {
+         return Mage::getModel('modagointegrator/mutex')->init($name);
+     }
+     
+
 }
