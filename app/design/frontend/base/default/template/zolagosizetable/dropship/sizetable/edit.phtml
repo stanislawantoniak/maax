@@ -216,9 +216,10 @@ $tinyMCEKinds = array("C", "A", "B");
                                         <?php endforeach; ?>
                                     </ul>
                                     <div class="tab-content">
-                                        <?php $sizeTableStoresData = $sizetable['sizetable']; Zend_Debug::dump($sizeTableStoresData); ?>
+                                        <?php $sizeTableStoresData = $sizetable['sizetable']; ?>
                                         <?php foreach ($stores as $i => $store): ?>
                                             <?php $sizeTablePerStore = isset($sizeTableStoresData[$store['store_id']]) ? unserialize($sizeTableStoresData[$store['store_id']]) : false; ?>
+											<?php Zend_Debug::dump($sizeTablePerStore); ?>
                                             <div id="sizetable_tab_<?php echo $store['store_id']; ?>" class="tab-pane <?php if ($i == 0): ?> active<?php endif; ?>">
                                                 <div class="container">
                                                     <div class="form-group">
