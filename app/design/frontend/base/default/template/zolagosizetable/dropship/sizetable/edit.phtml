@@ -249,12 +249,12 @@ $tinyMCEKinds = array("C", "A", "B");
 																				<?php if($j == 0): ?>
 																					<input <?php if($j == 0): ?>style="background-color: #f2f1f0;"<?php endif; ?> type="text" size="18"
 																						   name="sizetable[<?php echo $store['store_id']; ?>][table][<?php echo $i; ?>][<?php echo $j; ?>]"
-																						   value=""
+																						   value="<?php if(isset($sizeTablePerStore["table"])): ?><?php echo $sizeTablePerStore["table"][$i][$j]; ?><?php endif; ?>"
 																					/>
 																				<?php else: ?>
 																					<input type="text" <?php if($i == 0): ?>style="background-color: #f2f1f0;"<?php endif; ?> size="6"
 																						   name="sizetable[<?php echo $store['store_id']; ?>][table][<?php echo $i; ?>][<?php echo $j; ?>]"
-																						   value=""
+																						   value="<?php if(isset($sizeTablePerStore["table"])): ?><?php echo $sizeTablePerStore["table"][$i][$j]; ?><?php endif; ?>"
 																					/>
 																				<?php endif; ?>
 
