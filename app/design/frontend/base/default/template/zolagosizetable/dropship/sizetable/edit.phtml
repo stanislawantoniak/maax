@@ -132,11 +132,7 @@ $tinyMCEKinds = array("C", "A", "B");
                                     />
                             </div>
                         </div>
-						<?php
-						$tds = range(0, 15);
-						$trs = range(0, 10);
-
-						?>
+						<?php $tds = range(0, 15); $trs = range(0, 10); ?>
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="name">
 								<?php echo $_helper->__("Size table"); ?>
@@ -238,6 +234,38 @@ $tinyMCEKinds = array("C", "A", "B");
                                                                 />
                                                         </div>
                                                     </div>
+													<?php $tds = range(0, 15); $trs = range(0, 10); ?>
+													<div class="form-group">
+														<label class="col-md-2 control-label" for="name">
+															<?php echo $_helper->__("Size table"); ?>
+														</label>
+														<div class="col-md-10">
+															<table>
+																<?php foreach ($trs as $i => $tr): ?>
+																	<tr>
+																		<?php foreach ($tds as $j => $td): ?>
+																			<td>
+																				<?php if($j == 0): ?>
+																					<input <?php if($j == 0): ?>style="background-color: #f2f1f0;"<?php endif; ?> type="text" size="18"
+																						   name="sizetable[<?php echo $store['store_id']; ?>][table][<?php echo $i; ?>][<?php echo $j; ?>]"
+																						   value=""
+																					/>
+																				<?php else: ?>
+																					<input type="text" <?php if($i == 0): ?>style="background-color: #f2f1f0;"<?php endif; ?> size="6"
+																						   name="sizetable[<?php echo $store['store_id']; ?>][table][<?php echo $i; ?>][<?php echo $j; ?>]"
+																						   value=""
+																					/>
+																				<?php endif; ?>
+
+																			</td>
+																		<?php endforeach; ?>
+																	</tr>
+																<?php endforeach; ?>
+																<?php unset($i, $j); ?>
+															</table>
+														</div>
+
+													</div>
                                                     <div class="form-group">
                                                         <label class="col-md-1 control-label" for="sizetable_<?php echo $store['store_id']; ?>">
                                                             <?php echo $_helper->__("Content"); ?>
