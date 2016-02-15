@@ -59,7 +59,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_CAMPAIGN_PLACEMENT                    = "campaign/placement";
 	const RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES      = "campaign/placement_category";
 	const RES_BANNER                                = "banner/vendor";
-	const RES_BUDGET_MARKETING						= "marketing/budget";
+	const RES_BUDGET_MARKETING						= "udropship/marketing";
 
 
     // Overpayments management

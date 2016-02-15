@@ -277,11 +277,12 @@
 		border: none;
 	}
 }
-#tabelaRozmiarow {
-  @media (max-width: 450px){
-	.modal-dialog {
-	  width: 88%;
-	}
+
+@media (max-width: 450px) {
+  #tabelaRozmiarow {
+    .modal-dialog {
+      width: 88% !important;
+    }
   }
 }
 
