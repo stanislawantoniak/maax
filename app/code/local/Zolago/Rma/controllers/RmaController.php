@@ -211,7 +211,6 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 						$emailTemplateVariables['store_name'] = $store->getName();
 						$emailTemplateVariables['author'] = $author;
 
-						Mage::log($customerName);
 						$templateId = 'urma/general/zolagorma_comment_customer_email_template';
 
 						try {
