@@ -84,6 +84,15 @@
                 </entity_id>
             </zolagopo_convert_po_item>
         </fieldsets>
+        <template>
+            <email>
+                <zolagorma_comment_customer_email_template translate="label" module="zolagorma">
+                    <label>RMA Customer Comment Notification Email</label>
+                    <file>zolagorma_comment_customer_email.html</file>
+                    <type>html</type>
+                </zolagorma_comment_customer_email_template>
+            </email>
+        </template>
         <events>
             <shipment_returned>
                 <observers>
@@ -269,6 +278,13 @@
             </zolagorma_global_return_reson_save_after>
         </events>
     </adminhtml>
+    <default>
+        <zolagorma>
+            <email>
+                <zolagorma_comment_customer_email_template>zolagorma_comment_customer_email</zolagorma_comment_customer_email_template>
+            </email>
+        </zolagorma>
+    </default>
     <crontab>
         <jobs>
             <zolagorma_process_collect_tracking>

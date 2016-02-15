@@ -194,10 +194,40 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
 
                         //After add new customer-author comment set RMA flag new customer comment to true
-
                         $rma->setNewCustomerQuestion(1);
                         $rma->save();
                         $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+
+						$store = $rma->getStore();
+
+						/*Send email to vendor*/
+						$emailTemplateVariables = array();
+						$emailTemplateVariables['vendor_name'] = $rma->getVendorName();
+						$emailTemplateVariables['rma_id'] = $rma->getIncrementId();
+						$emailTemplateVariables['rma_status'] = $rma->getStatusLabel();
+						$emailTemplateVariables['comment'] = $commentText;
+						$emailTemplateVariables['store_name'] = $store->getName();
+
+						$templateId = 'urma/general/zolagorma_comment_customer_email_template';
+
+						try {
+							$this->_sendEmailTemplate(
+								$author->getName(),
+								$author->getEmail(),
+								$templateId,
+								$emailTemplateVariables,
+								$rma->getStore()->getId()
+							);
+						} catch (Exception $e) {
+							//Only log mysqli_sql_exception
+							////If something went wrong with vendor email
+							//customer don't need to know about it
+							Mage::logException($e);
+						}
+
+						/*--Send email to vendor*/
+
+
                         return $this->_redirect('sales/rma/view', array("id" => $rmaId));
 
 
@@ -219,7 +249,35 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         return $this->_redirect('sales/rma/view', array("id" => $rmaId));
 
     }
-	
+	/**
+	 * @param $customerName
+	 * @param $customerEmail
+	 * @param $template
+	 * @param array $templateParams
+	 * @param null $storeId
+	 * @return Zolago_Common_Model_Core_Email_Template_Mailer
+	 */
+	protected function _sendEmailTemplate($customerName, $customerEmail,
+										  $template, $templateParams = array(), $storeId = null)
+	{
+		$templateParams['use_attachments'] = true;
+
+		$mailer = Mage::getModel('core/email_template_mailer');
+		/* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+		$emailInfo = Mage::getModel('core/email_info');
+		$emailInfo->addTo($customerEmail, $customerName);
+		$mailer->addEmailInfo($emailInfo);
+
+		// Set all required params and send emails
+		$mailer->setSender(array(
+			'name' => Mage::getStoreConfig('trans_email/ident_support/name', $storeId),
+			'email' => Mage::getStoreConfig('trans_email/ident_support/email', $storeId)));
+		$mailer->setStoreId($storeId);
+		$mailer->setTemplateId(Mage::getStoreConfig($template, $storeId));
+		$mailer->setTemplateParams($templateParams);
+
+		return $mailer->send();
+	}
 	/**
 	 * @param int $rmaId
 	 * @return Zolago_Rma_Model_Rma
