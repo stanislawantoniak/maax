@@ -219,7 +219,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 								$rma->getStore()->getId()
 							);
 						} catch (Exception $e) {
-							//Only log mysqli_sql_exception
+							//Only log exception
 							//If something went wrong with vendor email
 							//customer don't need to know about it
 							Mage::logException($e);
