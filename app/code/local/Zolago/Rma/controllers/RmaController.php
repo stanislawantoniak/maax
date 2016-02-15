@@ -201,18 +201,21 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 						$store = $rma->getStore();
 
 						/*Send email to vendor*/
+						$customerName = implode(" ", array($author->getData("firstname"), $author->getData("lastname")));
 						$emailTemplateVariables = array();
 						$emailTemplateVariables['vendor_name'] = $rma->getVendorName();
-						$emailTemplateVariables['rma_id'] = $rma->getIncrementId();
+						$emailTemplateVariables['rma_increment_id'] = $rma->getIncrementId();
 						$emailTemplateVariables['rma_status'] = $rma->getStatusLabel();
 						$emailTemplateVariables['comment'] = $commentText;
 						$emailTemplateVariables['store_name'] = $store->getName();
+						$emailTemplateVariables['author'] = $author;
 
+						Mage::log($customerName);
 						$templateId = 'urma/general/zolagorma_comment_customer_email_template';
 
 						try {
 							$this->_sendEmailTemplate(
-								$author->getName(),
+								$customerName,
 								$author->getEmail(),
 								$templateId,
 								$emailTemplateVariables,

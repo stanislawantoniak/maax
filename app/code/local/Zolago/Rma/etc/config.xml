@@ -279,11 +279,11 @@
         </events>
     </adminhtml>
     <default>
-        <zolagorma>
+        <urma>
             <email>
                 <zolagorma_comment_customer_email_template>zolagorma_comment_customer_email</zolagorma_comment_customer_email_template>
             </email>
-        </zolagorma>
+        </urma>
     </default>
     <crontab>
         <jobs>
