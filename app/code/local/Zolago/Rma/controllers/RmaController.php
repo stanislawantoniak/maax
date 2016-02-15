@@ -205,6 +205,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 						$emailTemplateVariables = array();
 						$emailTemplateVariables['vendor_name'] = $rma->getVendorName();
 						$emailTemplateVariables['rma_increment_id'] = $rma->getIncrementId();
+						$emailTemplateVariables['rma_url'] = Mage::getUrl("urma/vendor/edit", array("id" => $rma->getId()));
 						$emailTemplateVariables['rma_status'] = $rma->getStatusLabel();
 						$emailTemplateVariables['comment'] = $commentText;
 						$emailTemplateVariables['store_name'] = $store->getName();
