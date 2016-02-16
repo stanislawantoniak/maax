@@ -36,11 +36,16 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
             if($subscriber->getId() && $subscriber->getCode()) {
                 if($subscriber->confirm($code)) {
                     $errors = false;
-                    /** @var Zolago_Newsletter_Model_Subscriber $model */
-                    $model = Mage::getModel("zolagonewsletter/subscriber");
                     try {
-                        $model->sendConfirmationSuccessEmail($id);
+                        if (!$subscriber->getMailSendFlag()) {                        
+                    	    if ($subscriber->sendSubscriberCouponMail() == 0) {
+                    	        $model = Mage::getModel('zolagonewsletter/subscriber');
+                                $model->sendConfirmationSuccessEmail($id);
+                            }
+                	    }
+                	    $subscriber->setMailSendFlag();
                     } catch(Exception $e) {
+                        Mage::logException($e);
                         $errors = true;
                         $_helper = Mage::helper("zolagonewsletter");
                         $session->addError($_helper->__("Some newsletter error occurred"));
