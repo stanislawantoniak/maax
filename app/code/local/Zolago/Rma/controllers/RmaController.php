@@ -200,8 +200,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
 						$store = $rma->getStore();
 
-						/*Send email to vendor*/
-						$customerName = implode(" ", array($author->getData("firstname"), $author->getData("lastname")));
+						/*Send Email to vendor agents of vendor*/
 						$emailTemplateVariables = array();
 						$emailTemplateVariables['vendor_name'] = $rma->getVendorName();
 						$emailTemplateVariables['rma_increment_id'] = $rma->getIncrementId();
@@ -211,24 +210,34 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 						$emailTemplateVariables['store_name'] = $store->getName();
 						$emailTemplateVariables['author'] = $author;
 
-						$templateId = 'urma/general/zolagorma_comment_customer_email_template';
 
-						try {
-							$this->_sendEmailTemplate(
-								$customerName,
-								$author->getEmail(),
-								$templateId,
-								$emailTemplateVariables,
-								$rma->getStore()->getId()
-							);
-						} catch (Exception $e) {
-							//Only log exception
-							//If something went wrong with vendor email
-							//customer don't need to know about it
-							Mage::logException($e);
+						$template = $store->getConfig('urma/general/zolagorma_comment_customer_email_template');
+						$identity = $store->getConfig('udropship/vendor/vendor_email_identity');
+
+
+						/* @var $helper Zolago_Common_Helper_Data */
+						$helper = Mage::helper("zolagocommon");
+
+
+
+						$vendorM = Mage::getResourceModel('udropship/vendor');
+						$vendor = $rma->getVendor();
+						$vendorAgents = $vendorM->getVendorAgentEmails($vendor->getId());
+						if (!empty($vendorAgents)) {
+							foreach ($vendorAgents as $email => $_) {
+								$emailTemplateVariables['recepient'] = implode(' ', array($_['firstname'], $_['lastname']));
+								$helper->sendEmailTemplate(
+									$email,
+									$vendor->getVendorName(),
+									$template,
+									$emailTemplateVariables,
+									true,
+									$identity
+								);
+							}
 						}
 
-						/*--Send email to vendor*/
+						/*--Send Email to vendor agents of vendor*/
 
 
                         return $this->_redirect('sales/rma/view', array("id" => $rmaId));
