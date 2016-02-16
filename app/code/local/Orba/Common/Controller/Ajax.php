@@ -54,8 +54,9 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
      * Logs AJAX exception and prepares proper JSON response with error message
      * 
      * @param Exception $e
+	 * @param array $details
      */
-    protected function _processException($e) {
+    protected function _processException($e, $details = array()) {
         if (get_class($e) === 'Exception') {
             $message = $this->__('Technical error');
         } else {
@@ -65,6 +66,7 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
         $result = array(
             'status' => false,
             'message' => $this->__($message),
+			'details' => $details
         );
         $this->getResponse()
                 ->clearHeaders()
