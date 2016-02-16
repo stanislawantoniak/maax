@@ -13,6 +13,7 @@ if($this->isOwnStore()) {
     }
 }
 
+/** @var Zolago_Customer_Model_Session $session */
 $session = Mage::getSingleton('customer/session');
 
 $_helper = Mage::helper('zolagoudqa');
@@ -33,11 +34,29 @@ if(!isset($vendors)) {
 $customer_name = isset($dataPopulate['customer_name']) ? $dataPopulate['customer_name'] : false;
 $customer_email = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
 $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question_text'] : false;
+
+//po id from email
+$poId = $this->getRequest()->getParam('po');
+$poToken = $this->getRequest()->getParam('token');
+
+if($poId && $poToken && $this->isPoContactTokenValid($poId,$poToken)) {
+    $customerPoData = $this->getCustomerDataByPoId($poId);
+    $customer_name = $customerPoData['name'];
+    $customer_email = $customerPoData['email'];
+} else {
+    $customerPoData = false;
+}
+
 ?>
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
 	<?php if(isset($product)): ?>
 	    <input type="hidden" name="question[product_id]" value="<?php echo $product->getId()?>" />
 	<?php endif; ?>
+
+    <?php if($customerPoData !== false): ?>
+        <input type="hidden" name="question[po_id]" value="<?php echo $poId; ?>" />
+        <input type="hidden" name="question[po_contact_token]" value="<?php echo $poToken; ?>" />
+    <?php endif; ?>
 
     <input type="hidden" name="question[visibility]" value="0" />
 
@@ -60,7 +79,7 @@ $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question
 						</div>
 					</li>
 				<?php endif; ?>
-                <?php if(!$session->isLoggedIn()):?>
+                <?php if(!$session->isLoggedIn() && !$customerPoData):?>
 
                 <li class="wide">
                     <div class="form-group">
@@ -83,9 +102,20 @@ $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question
                     </div>
                 </li>
 
-                <?php else:?>
+                <?php elseif(
+                    is_array($customerPoData) &&
+                    isset($customerPoData['name']) &&
+                    isset($customerPoData['email']) &&
+                    $customerPoData['name'] &&
+                    $customerPoData['email']
+                ): ?>
+                    <input type="hidden" name="question[customer_name]" value="<?php echo $this->escapeHtml($customerPoData['name']); ?>" />
+                    <input type="hidden" name="question[customer_email]" value="<?php echo $this->escapeHtml($customerPoData['email']); ?>" />
+                    <input type="hidden" name="question[customer_id]" value="<?php echo $this->escapeHtml($customerPoData['id']); ?>" />
+                <?php else: ?>
                     <input type="hidden" name="question[customer_name]" value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>" />
                     <input type="hidden" name="question[customer_email]" value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>" />
+                    <input type="hidden" name="question[customer_id]" value="<?php $this->escapeHtml($session->getCustomerId()); ?>" />
                 <?php endif;?>
                 <li class="wide">
                     <div class="form-group">

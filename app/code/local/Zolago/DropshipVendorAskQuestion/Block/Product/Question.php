@@ -2,43 +2,12 @@
 
 class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_DropshipVendorAskQuestion_Block_Product_Question
 {
+	protected $po;
+
     public function getFormAction()
     {
-        return $this->getUrl('udqa/customer/post');
+        return $this->getUrl('udqa/customer/post',array("_secure"=>true));
     }
-
-/*	todo: check if it's needed
- *     public function getVendors()
-    {
-        $product = $this->getProduct();
-        $simpleProducts = array();
-        if ($product->getTypeId()=='configurable') {
-            $simpleProducts = $product->getTypeInstance(true)->getUsedProducts(null, $product);
-        }
-        array_unshift($simpleProducts, $product);
-        $vendors = Mage::getSingleton('udropship/source')->getVendors(true);
-        $vIds = array();
-        $isUdm = Mage::helper('udropship')->isUdmultiActive();
-        foreach ($simpleProducts as $p) {
-            if ($isUdm) {
-                $_vIds = $p->getMultiVendorData();
-                $_vIds = is_array($_vIds) ? array_keys($_vIds) : array();
-                $vIds = array_merge($vIds, $_vIds);
-            } else {
-                $vIds[] = $p->getUdropshipVendor();
-            }
-        }
-        $vIds = array_filter($vIds);
-        return array_intersect_key($vendors, array_flip($vIds));
-    }
-    public function addToParentGroup($groupName)
-    {
-        if ($this->getParentBlock()) {
-            $this->getParentBlock()->addToChildGroup($groupName, $this);
-        }
-        return $this;
-    }
-*/
 
 	public function getVendorsList() {
         /** @var Zolago_Dropship_Model_Source $modelUds */
@@ -73,5 +42,48 @@ class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_Dro
 
 	public function getOwnStoreVendorId() {
 		return Mage::app()->getWebsite()->getVendorId();
+	}
+
+	/**
+	 * returns array with customer's ['name'], ['email'] and ['id'] by po id
+	 * @param $poId
+	 * @return array
+	 */
+	public function getCustomerDataByPoId($poId) {
+		$po = $this->getPo($poId);
+		if($po->getId()) {
+			$out = array();
+			if(!is_null($po->getCustomerId())) { //registered customer po
+				/** @var Zolago_Customer_Model_Customer $customer */
+				$customer = Mage::getModel('zolagocustomer/customer')->load($po->getCustomerId());
+				$out['name'] = $customer->getName();
+				$out['email'] = $customer->getEmail();
+				$out['id'] = $customer->getId();
+			} else { //guest po
+				$out['name'] = $po->getShippingAddress()->getName();
+				$out['email'] = $po->getCustomerEmail();
+				$out['id'] = null;
+			}
+			return $out;
+		}
+		return array();
+	}
+
+	public function isPoContactTokenValid($poId,$poToken) {
+		$po = $this->getPo($poId);
+		return $po->getId() && $po->getContactToken() == $poToken;
+	}
+
+	/**
+	 * @param int|string $poId
+	 * @return Zolago_Po_Model_Po
+	 */
+	public function getPo($poId) {
+		if(!$this->po || $this->po->getId() != $poId) {
+			/** @var Zolago_Po_Model_Po $po */
+			$po = Mage::getModel('zolagopo/po');
+			$this->po = $po->load($poId);
+		}
+		return $this->po;
 	}
 }
