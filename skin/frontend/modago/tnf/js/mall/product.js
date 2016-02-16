@@ -323,9 +323,32 @@ Mall.product = {
 
 		var elFilterSize = jQuery('.size-box-bundle .form-group label');
 		elFilterSize.each(function(){
-			if (jQuery(this).hasClass('no-size')) {
-				jQuery(this).find('span').append('<canvas class="diagonal"></canvas>');
+
+			elFilterSizeWidth = jQuery(this).width();
+			elFilterSizeHeight = jQuery(this).height();;
+			obliczaniePrzekatnej = Math.pow(elFilterSizeWidth, 2) + Math.pow(elFilterSizeHeight, 2);
+			przekatna = Math.sqrt(obliczaniePrzekatnej);
+			obliczenieWyrownania = (przekatna - elFilterSizeWidth)/2;
+			obliczenieWyrownaniaOryginal = obliczenieWyrownania + 2;
+
+			var angle = Math.tan(elFilterSizeHeight/elFilterSizeWidth);
+
+			if (elFilterSizeWidth > 31) {
+				var angle = -(angle * (180 / Math.PI));
+			} else {
+				var angle = 135;
 			}
+
+			if (jQuery(this).hasClass('no-size')) {
+				jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
+			}
+
+			//jQuery(this).find('canvas').drawLine({
+			//	strokeStyle: '#afafaf',
+			//	strokeWidth: 1.5,
+			//	x1: -1, y1: elFilterSizeHeight-1,
+			//	x2: elFilterSizeWidth, y2: -1
+			//});
 		});
 	},
 
