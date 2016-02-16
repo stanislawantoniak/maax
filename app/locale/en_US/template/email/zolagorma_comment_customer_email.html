@@ -67,12 +67,14 @@
 								<p style="margin: 0;">
 									Customer <span style="text-transform:uppercase;">{{var author.firstname}} {{var author.lastname}}</span><br>
 									({{var author.email}})
-									left a comments related to RMA-<a href="{{var rma_url}}">{{var rma_increment_id}}</a>:
+									left a comment related to RMA-<a href="{{var rma_url}}">{{var rma_increment_id}}</a>:
 								</p>
-								<div style="border-top:25px solid white;border-bottom:35px solid white;line-height:1.4em;margin:0;padding:0">
-									<p><b>Comment for {{var vendor_name}}:</b></p>
-									<p>{{var comment}}</p>
-								</div>
+
+
+								<p>{{var comment}}</p>
+
+								<p><a href="{{var rma_url}}">See details</a></p>
+
 
 							</div>
 						</td>

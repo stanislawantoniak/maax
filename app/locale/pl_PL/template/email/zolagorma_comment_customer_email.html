@@ -1,4 +1,4 @@
-<!--@subject {{var store_name}} – Nowy komentarz do twojej reklamacji (nr. RMA-{{var rma_increment_id}}) @-->
+<!--@subject {{var store_name}} – Nowy komentarz do reklamacji (nr. RMA-{{var rma_increment_id}}) @-->
 <body style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
 <!--[if gte mso 9]>
 <style type="text/css">
@@ -65,14 +65,14 @@
 								 style="border-top:25px solid white;border-bottom:10px solid white;border-left:35px solid white;border-right:35px solid white;font-family:'Arial','Helvetica',sans-serif;font-size:13px;">
 
 								<p style="margin: 0;">
-									Gość <span style="text-transform:uppercase;">{{var author.firstname}} {{var author.lastname}}</span><br>
-									({{var author.email}})
-									wprowadził komentarz w reklamacji nr. (RMA-<a href="{{var rma_url}}">{{var rma_increment_id}}</a>):
+									Nowy komentarz do reklamacji nr. (RMA-<a href="{{var rma_url}}">{{var rma_increment_id}}</a>):
 								</p>
-								<div style="border-top:25px solid white;border-bottom:35px solid white;line-height:1.4em;margin:0;padding:0">
-									<p><b>Wiadomość od obsługi sklepu {{var vendor_name}}:</b></p>
-									<p>{{var comment}}</p>
-								</div>
+
+
+								<p>{{var comment}}</p>
+
+								<p><a href="{{var rma_url}}">Zobaczyć szczegóły</a></p>
+
 
 							</div>
 						</td>
