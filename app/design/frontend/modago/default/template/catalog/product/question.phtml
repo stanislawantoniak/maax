@@ -112,10 +112,6 @@ if($poId && $poToken && $this->isPoContactTokenValid($poId,$poToken)) {
                     <input type="hidden" name="question[customer_name]" value="<?php echo $this->escapeHtml($customerPoData['name']); ?>" />
                     <input type="hidden" name="question[customer_email]" value="<?php echo $this->escapeHtml($customerPoData['email']); ?>" />
                     <input type="hidden" name="question[customer_id]" value="<?php echo $this->escapeHtml($customerPoData['id']); ?>" />
-                <?php else: ?>
-                    <input type="hidden" name="question[customer_name]" value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>" />
-                    <input type="hidden" name="question[customer_email]" value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>" />
-                    <input type="hidden" name="question[customer_id]" value="<?php $this->escapeHtml($session->getCustomerId()); ?>" />
                 <?php endif;?>
                 <li class="wide">
                     <div class="form-group">
