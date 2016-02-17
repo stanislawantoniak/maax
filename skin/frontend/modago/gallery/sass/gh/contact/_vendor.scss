@@ -1,0 +1,15 @@
+.contact-vendor-po {
+	h1,h2,p.required {
+		@media(min-width: $screen-sm-min) {
+			padding-left: 40px;
+		}
+	}
+	h1 {
+		padding-bottom: 0;
+		font-size: 28px;
+	}
+	h2 {
+		padding-top: 10px;
+		font-size: 25px;
+	}
+}
