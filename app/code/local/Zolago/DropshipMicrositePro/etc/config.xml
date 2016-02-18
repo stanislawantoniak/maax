@@ -6,6 +6,11 @@
 		</Zolago_DropshipMicrositePro>
 	</modules>
 	<global>
+	    <cms>
+	        <block>
+	            <tempate_filter>zolagoudmspro/templateFilter</tempate_filter>
+	        </block>
+	    </cms>
         <blocks>
             <udmspro>
                 <rewrite>
@@ -19,7 +24,7 @@
 		<models>
 			<zolagoudmspro>
                 <class>Zolago_DropshipMicrositePro_Model</class>
-            </zolagoudmspro>
+            </zolagoudmspro>            
 		</models>
         <helpers>
             <udmspro>
