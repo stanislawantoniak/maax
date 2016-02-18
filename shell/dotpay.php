@@ -62,7 +62,7 @@ class Dotpay extends Mage_Shell_Abstract {
 			/** @var Zolago_Po_Model_Po $po */
 			$po = Mage::getModel("zolagopo/po")->load($poid);
 			/** @var Zolago_Dotpay_Model_Client $client */
-			$client = Mage::getModel("zolagodotpay/client");
+			$client = Mage::getModel("zolagodotpay/client", $po->getStore());
 			$client->saveTransaction(
 				$po->getOrder(),
 				$amount,
