@@ -6,6 +6,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	private $pin;
 	private $dotpay_id;
 	private $apiUrl;
+	private $store;
 
 	//operation statuses
 	const DOTPAY_OPERATION_STATUS_NEW                               = 'new';                               //nowa
@@ -42,6 +43,25 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 	//payment method database name
 	const PAYMENT_METHOD = 'dotpay';
+
+	/**
+	 * Zolago_Dotpay_Model_Client constructor.
+	 *
+	 * @param null|string|bool|int|Mage_Core_Model_Store $store
+	 */
+	public function __construct($store = null) {
+		$this->store = Mage::app()->getStore($store);
+	}
+
+	public function setStore($store) {
+		// Reset
+		$this->login		= null;
+		$this->password		= null;
+		$this->pin			= null;
+		$this->dotpay_id	= null;
+		$this->apiUrl		= null;
+		$this->store		= Mage::app()->getStore($store);
+	}
 
 	/**
 	 * @param Mage_Sales_Model_Order $order
@@ -165,28 +185,28 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 	public function getLogin() {
 		if(!$this->login) {
-			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH);
+			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH, $this->store);
 		}
 		return $this->login;
 	}
 
 	public function getPassword() {
 		if(!$this->password) {
-			$this->password = Mage::getStoreConfig(self::DOTPAY_PASSWORD_CONFIG_PATH);
+			$this->password = Mage::getStoreConfig(self::DOTPAY_PASSWORD_CONFIG_PATH, $this->store);
 		}
 		return $this->password;
 	}
 
 	public function getPin() {
 		if(!$this->pin) {
-			$this->pin = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
+			$this->pin = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH, $this->store);
 		}
 		return $this->pin;
 	}
 
 	public function getDotpayId() {
 		if(!$this->dotpay_id) {
-			$this->dotpay_id = Mage::getStoreConfig(self::DOTPAY_ID_CONFIG_PATH);
+			$this->dotpay_id = Mage::getStoreConfig(self::DOTPAY_ID_CONFIG_PATH, $this->store);
 		}
 		return $this->dotpay_id;
 	}
@@ -196,7 +216,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		//Test url: https://ssl.dotpay.pl/test_seller/api/
 		//Normal url: https://ssl.dotpay.pl/s2/login/api/
 		if(!$this->apiUrl) {
-			$this->apiUrl = Mage::getStoreConfig(self::DOTPAY_API_URL_CONFIG_PATH);
+			$this->apiUrl = Mage::getStoreConfig(self::DOTPAY_API_URL_CONFIG_PATH, $this->store);
 		}
 		return $this->apiUrl;
 	}
