@@ -23,12 +23,15 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
             && ($pattern['key'] == "is_in_stock")
         ) {
             $products = $this->_getChildProducts($product);
-            $isChildInStock = array();
+            $isChildInStock = 0;
             foreach ($products as $child) {
-                $isChildInStock[] = $child->getData("stock_item")->getData("is_in_stock");
+                if ($child->getData("stock_item")->getData("is_in_stock") == 1) {
+                    $isChildInStock = 1;
+                    break;
+                }
             }
             $stockPrent = array_filter($isChildInStock);
-            $product->setData("configurable_is_in_stock", (empty($stockPrent) ? 0 : 1));
+            $product->setData("configurable_is_in_stock", $isChildInStock);
             unset($stockPrent);
         }
 
