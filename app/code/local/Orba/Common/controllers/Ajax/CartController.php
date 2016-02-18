@@ -105,7 +105,7 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
 			$details = array();
 			if (get_class($e) !== 'Exception') { // if not technical error
 				// Default out of stock message
-				$e->setMessage("We apologize, but someone just places an order for the last item. Availability status will be updated at the next time entering to the product card.");
+				$e->setMessage("We apologize, but someone just placed an order for the last item. Availability status will be updated at the next time entering to the product card.");
 				$details = array("error_type" => "product-unavailable", 'title_section' => $this->__("The product is temporarily unavailable"));
 				// Checking if in quote is similar product
 				foreach ($items as $item) {
