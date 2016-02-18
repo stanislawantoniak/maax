@@ -360,12 +360,12 @@ Mall.product = {
 				jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
 			}
 
-			jQuery(this).find('canvas').drawLine({
-				strokeStyle: '#afafaf',
-				strokeWidth: 1.5,
-				x1: -1, y1: elFilterSizeHeight-1,
-				x2: elFilterSizeWidth, y2: -1
-			});
+			//jQuery(this).find('canvas').drawLine({
+			//	strokeStyle: '#afafaf',
+			//	strokeWidth: 1.5,
+			//	x1: -1, y1: elFilterSizeHeight-1,
+			//	x2: elFilterSizeWidth, y2: -1
+			//});
 		});
 	},
 
