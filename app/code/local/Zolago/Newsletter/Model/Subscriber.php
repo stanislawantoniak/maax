@@ -3,6 +3,30 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 {
 	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/subscription/confirmation_sales_rule";
 
+	protected $_mailFlag = false;
+	
+	public function getMailSendFlag() {
+	    return $this->_mailFlag;
+	}
+	public function setMailSendFlag() {
+	    $this->_mailFlag = true;
+	}
+   /**
+     * Send new coupons to one subscriber
+     */
+    public function sendSubscriberCouponMail()
+    {
+        $email = $this->getSubscriberEmail();
+        $customerId = $this->getCustomerId();
+        $subscribersCustomersId = array ($customerId);
+        $subscribers[$this->getId()] = $email;
+        $subscribersCustomersId[$email] = $customerId;
+        $subscribersCustomersSubscribers[$customerId] = $email;
+        $subscribersStore[$customerId] = $this->getStoreId();
+        return Mage::helper('zolagosalesrule')->sendCouponMails($subscribers, $subscribersCustomersId, $subscribersCustomersSubscribers,$subscribersStore);
+    }    
+
+
 	/**
 	 * Sends out confirmation success email by Subscriber ID
 	 * @param int $sid
@@ -30,7 +54,6 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 				);
 			}
 		}
-
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE),
