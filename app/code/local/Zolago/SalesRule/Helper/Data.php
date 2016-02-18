@@ -381,6 +381,98 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $this->_changeDesign($oldArea,$oldPack,$oldTheme);
          return true;             
      }
+    /**
+     * prepare coupons and send it via mail
+     *
+     * @param array $subscribers
+     * @param array $subscribersCustomersId
+     * @param array $subscribersCustomersSubscribers
+     * @return int
+     */
+    public function sendCouponMails($subscribers,$subscribersCustomersId, $subscribersCustomersSubscribers) {    
+        $sendCount = 0;
+        //1. Coupons
+	    $result = $this->getSalesRulesForSubscribers();
+
+        //Group coupons by rule
+        if (empty($result)) {
+            return $sendCount;
+        }
+
+        //Find if customer already got coupon in rule
+        $resultRules = $this->getSalesRulesCouponsByCustomers(array_values($subscribersCustomersId));
+
+        $rulesForCustomer = array();
+        foreach($resultRules as $resultRulesItem){
+            $rulesForCustomer[$resultRulesItem["rule_id"]][] = $subscribersCustomersSubscribers[$resultRulesItem["customer_id"]];
+        }
+
+        $coupons = array();
+        foreach ($result as $couponData) {
+            $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
+        }
+        
+
+        //3. Assign coupons to customers
+        $data = array(
+            "subscribers" => $subscribers,
+            "coupons" => $coupons,
+            "data_to_send" => array()
+        );
+
+        $res = $this->assignCouponsToSubscribers($data, $rulesForCustomer);
+
+        $store = array();
+        //4. Send mails
+        $dataAssign = $res["data_to_send"];
+        if (!empty($dataAssign)) {
+            foreach ($dataAssign as $email => $sendData) {
+                $customerId = isset($subscribersCustomersId[$email]) ? $subscribersCustomersId[$email] : false;
+                if($customerId){
+                    // change locale
+                    $storeId = empty($subscribersStore[$customerId])? 0:$subscribersStore[$customerId];
+                    if ($storeId) {                    
+                        if (empty($store[$storeId])) { // nie ładujemy tych samych bez przerwy
+                            $store[$storeId] = Mage::getModel('core/store')->load($storeId)->getLocaleCode();
+                        }
+                        $locale = $store[$storeId];
+                    } else {
+                        $locale = Mage::app()->getLocale()->getLocaleCode();                        
+                    }
+                    Mage::app()->getLocale()->setLocaleCode($locale);
+                    Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
+                    if (!$this->sendPromotionEmail($customerId, array_values($sendData))) {
+                        //if mail sending failed
+                        unset($dataAssign[$email]);
+                    } else {
+                        $sendCount ++;
+                    }
+                }
+            }
+            unset($customerId);
+        }
+
+        //5. Set customer_id to salesrule_coupon table
+        if (!empty($dataAssign)) {
+            $insertData = array();
+            foreach ($dataAssign as $email => $sendData) {
+                foreach($sendData as $couponId){
+                    if(isset($subscribersCustomersId[$email])){
+                        $insertData[] = "({$couponId},".$subscribersCustomersId[$email].")";
+                    }
+                }
+            }
+
+            if(!empty($insertData)){
+                $insertData = implode(",", $insertData);
+                /* @var $salesCouponModel Zolago_SalesRule_Model_Resource_Coupon */
+                $salesCouponModel = Mage::getResourceModel("salesrule/coupon");
+                $salesCouponModel->bindCustomerToCoupon($insertData);
+            }
+
+        }
+        return $sendCount;
+    }
 
     public function getSalesRulesForSubscribers()
     {
