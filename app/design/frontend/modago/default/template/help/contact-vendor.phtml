@@ -1,8 +1,10 @@
 <?php
-/** @var Mage_Core_Block_Template $this */
+/** @var Zolago_DropshipVendorAskQuestion_Block_Contact_Vendor $this */
 ?>
+
 
 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-page-mobile-menu')->toHtml(); ?>
 
 <div class="container-fluid visible-xs" id="help-contact-msg-fix"></div>
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-contact-vendor')->toHtml(); ?>
+
+<?php echo $this->getCmsBlock(); ?>
