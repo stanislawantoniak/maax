@@ -6,6 +6,8 @@ class Zolago_Dotpay_Model_Observer {
 
 		$stores = Mage::app()->getStores();
 		$dotpayIdsUpdated = array();
+		/** @var Zolago_Dotpay_Model_Client $client */
+		$client = Mage::getModel("zolagodotpay/client");
 
 		foreach($stores as $store) {
 			/** @var Mage_Core_Model_Store $store */
@@ -13,15 +15,7 @@ class Zolago_Dotpay_Model_Observer {
 			if(in_array($dotpayId,$dotpayIdsUpdated)) {
 				continue; //don't check same dotpay id transactions twice
 			}
-
-			/** @var Zolago_Dotpay_Model_Client $client */
-			$client = Mage::getModel("zolagodotpay/client");
-
-			$client
-				->setLogin($store->getConfig(Zolago_Dotpay_Model_Client::DOTPAY_LOGIN_CONFIG_PATH))
-				->setPassword($store->getConfig(Zolago_Dotpay_Model_Client::DOTPAY_PASSWORD_CONFIG_PATH))
-				->setPin($store->getConfig(Zolago_Dotpay_Model_Client::DOTPAY_PIN_CONFIG_PATH))
-				->setDotpayId($dotpayId);
+			$client->setStore($store);
 
 			$transactions = $client->getDotpayTransactionsToUpdate();
 			foreach($transactions as $transaction) {

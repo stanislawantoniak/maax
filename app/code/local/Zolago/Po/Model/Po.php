@@ -28,7 +28,20 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	 * Email sender
 	 */
     const XML_PATH_EMAIL_IDENTITY = 'sales_email/order/identity';
-	
+
+	/**
+	 * Retrieve boolean flag about if commission should be charged for GH_statements
+	 * For now info about charge_commission will be taken from actual dotpay config
+	 *
+	 * @return bool
+	 */
+	public function getChargeCommissionFlag() {
+		/** @var GH_Statements_Helper_Data $helper */
+		$helper = Mage::helper('ghstatements');
+		$flag = $helper->getDotpayChargeCommission($this->getStore());
+		return $flag;
+	}
+
 	/**
 	 * @return array
 	 */
