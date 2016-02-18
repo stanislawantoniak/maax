@@ -19,11 +19,13 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
         if ($pattern['type'] == 'parent') {
             $product = $this->_getParentProduct($product);
         }
-        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-            $products             = $this->_getChildProducts($product);
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            && ($pattern['key'] == "is_in_stock")
+        ) {
+            $products = $this->_getChildProducts($product);
             $isChildInStock = array();
             foreach ($products as $child) {
-                $isChildInStock[] =  $child->getData("stock_item")->getData("is_in_stock");
+                $isChildInStock[] = $child->getData("stock_item")->getData("is_in_stock");
             }
             $stockPrent = array_filter($isChildInStock);
             $product->setData("configurable_is_in_stock", (empty($stockPrent) ? 0 : 1));
