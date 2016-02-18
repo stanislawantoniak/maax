@@ -9,7 +9,7 @@ $categories = $this->getMainCategoriesForSlidingMenu();
 <?php if(count($categories) > 0) : ?>
     <li>
         <a class="sb-toggle-submenu">
-	        <img src="<?php echo $this->getSkinUrl("images/svg/categories.svg"); ?>" class="hamburger-ico ico-label"><?php echo $this->__('Categories'); ?>
+	        <img src="<?php echo str_replace(array('http://','https://'),array('//','//'),$this->getSkinUrl("images/svg/categories.svg")); ?>" class="hamburger-ico ico-label"><?php echo $this->__('Categories'); ?>
         </a>
         <ul class="sb-submenu">
             <?php foreach ($categories as $cat) : ?>

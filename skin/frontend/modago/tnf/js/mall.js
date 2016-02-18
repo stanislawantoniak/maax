@@ -1212,11 +1212,14 @@ Mall.Cart = {
 
 function addtocartcallback(response) {
 	var popup = jQuery("#popup-after-add-to-cart");
+	var gtmEvent = '';
     if(response.status == false) {
 	    popup.find(".modal-loading").hide();
 	    popup.find(".modal-loaded").hide();
 	    popup.find(".modal-error").show();
+	    popup.find(".modal-error.modal-header .title_section").text(typeof response.details != "undefined" ? response.details.title_section : 'Error occurred');
         popup.find(".modal-error-txt").html(response.message);
+		gtmEvent = 'addToBasketError';
     } else {
         if(Mall.product._current_product_type == 'configurable') {
             var superAttr = jQuery(Mall._current_superattribute);
@@ -1231,9 +1234,14 @@ function addtocartcallback(response) {
 	    popup.find(".modal-loading").hide();
 	    popup.find(".modal-loaded").show();
 	    popup.modal("show");
-
+		gtmEvent = 'addToBasketSuccess';
         Mall.getAccountInfo();
     }
+	if (typeof dataLayer != "undefined" && gtmEvent.length) {
+		dataLayer.push({
+			'event': gtmEvent
+		});
+	}
 	popup.css({display: 'block','pointer-events':'auto'});
 	jQuery("#add-to-cart").css("pointer-events","auto");
 }
