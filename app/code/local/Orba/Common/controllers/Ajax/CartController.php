@@ -11,12 +11,67 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
             if ($message = $this->_getFlashMessage()) {
                 $result['content']['message'] = $message;
             }
+			if ($details = $this->_getFlashDetails()) {
+				$result['details'] = $details;
+			}
             $this->_setSuccessResponse($result);
         } catch (Exception $e) {
             $this->_processException($e);
         }
     }
-    
+
+	public function getDetailsForGTM($superAttribute) {
+		/** @var Zolago_Dropship_Helper_Data $udropHlp */
+		$udropHlp = Mage::helper('udropship');
+		/** @var Zolago_Common_Helper_Data $zcHlp */
+		$zcHlp = Mage::helper('zolagocommon');
+		/** @var Zolago_Solrsearch_Helper_Data $solrHlp */
+		$solrHlp = Mage::helper("zolagosolrsearch");
+
+		$savedInfo = Mage::registry('gtm-last-added-product-info');
+		/** @var Mage_Sales_Model_Quote_Item $item */
+		$item = $savedInfo['quote_item'];
+		/** @var Zolago_Catalog_Model_Product $product */
+		$product = $savedInfo['product'];
+		$vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
+		$brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
+		$attributeSize = $product->getResource()->getAttribute('size');
+		$attributeSizeId = $attributeSize->getAttributeId();
+
+		/** @var Zolago_Catalog_Model_Category $cat */
+		$cat = $solrHlp->getDefaultCategory($product, Mage::app()->getStore()->getRootCategoryId());
+		$productCategories = array();
+		if (!empty($cat)) {
+			// Only categories after root category
+			$productCategories = array_slice($cat->getPathIds(),1 + array_search(Mage::app()->getStore()->getRootCategoryId(), $cat->getPathIds()));
+		}
+
+		$categories = array();
+		foreach ($productCategories as $category) {
+			$categories[] = trim(Mage::helper('core')->escapeHtml(Mage::getModel('catalog/category')->load($category)->getName()));
+		}
+
+
+		$details = array(
+			'currencyCode' => Mage::app()->getStore()->getBaseCurrencyCode(),
+			'products' => array(
+				'name' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($product->getName())),
+				'id' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($product->getData('sku'))),
+				'skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($product->getData('sku'),$product->getUdropshipVendor()))),
+				'simple_sku' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($product->getSku())),
+				'simple_skuv' => $this->jsQuoteEscape(Mage::helper('core')->escapeHtml($zcHlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor()))),
+				'category' => implode('/', $categories),
+				'price' => (double)number_format($item->getBaseCost() / $item->getQty(), 2, '.', ''),
+				'quantity' => (int)$item->getQty(),
+				'vendor' => Mage::helper('core')->escapeHtml($vendor),
+				'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
+				'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
+				'variant' => (string)$product->getResource()->getAttribute('size')->getSource()->getOptionText(isset($superAttribute[$attributeSizeId]) ? $superAttribute[$attributeSizeId] : -1)
+			)
+		);
+		return $details;
+	}
+
     /**
      * Adds product to the shopping cart. Available params:
      * - product_id (required if sku left blank)
@@ -41,6 +96,7 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
         try {
             if ($productId) {
                 $ajaxCart->addProduct($productId, $qty, $superAttribute);
+				$this->_setFlashDetails($this->getDetailsForGTM($superAttribute));
                 $this->_setCartSuccessResponse('Product has been added to the shopping cart.');
             } else {
                 throw Mage::exception('Orba_Common', 'No product has been specified.');

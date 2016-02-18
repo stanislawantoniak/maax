@@ -21,6 +21,40 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
         $this->_setFlashMessage(null);
         return $message;
     }
+
+	/**
+	 * Sets "flash details"
+	 *
+	 * @param array $details
+	 * @return $this
+	 */
+	protected function _setFlashDetails($details = array()) {
+		$this->_getSession()->setOrbacommonAjaxFlashDetails($details);
+		return $this;
+	}
+
+	/**
+	 * Gets "flash details" and clears it
+	 *
+	 * @return string|array
+	 */
+	protected function _getFlashDetails() {
+		$details = $this->_getSession()->getOrbacommonAjaxFlashDetails();
+		$this->_setFlashDetails(null);
+		return $details;
+	}
+
+	/**
+	 * Escape quotes in java scripts
+	 *
+	 * @param mixed $data
+	 * @param string $quote
+	 * @return mixed
+	 */
+	public function jsQuoteEscape($data, $quote = '\'')
+	{
+		return Mage::helper('core')->jsQuoteEscape($data, $quote);
+	}
     
     /**
      * Gets session instance
@@ -114,7 +148,11 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
         $content = array(
             'message' => $this->__($message)
         );
-        return $this->_formatSuccessContentForResponse($content);
+		$result = $this->_formatSuccessContentForResponse($content);
+		if ($details = $this->_getFlashDetails()) {
+			$result['details'] = $details;
+		}
+        return $result;
     }
     
     /**
