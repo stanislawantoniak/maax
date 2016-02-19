@@ -358,9 +358,9 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
              $name = $item['ruleItem']->getPromoImage();
              if ($name && !in_array($name, $addedFiles)) {
-                 $this->_resizePromotionImage($name,200);
+                 $this->_resizePromotionImage($name,280);
                  $data['_ATTACHMENTS'][] = array (
-                     'filename' => $this->getPromotionResizedImagePath(200).DS.$name,
+                     'filename' => $this->getPromotionResizedImagePath(280).DS.$name,
                      'id' => $name,
                      'disposition' => 'inline',                 
                  );
