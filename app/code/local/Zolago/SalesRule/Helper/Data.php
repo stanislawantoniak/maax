@@ -268,7 +268,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 				$imageObj = new Varien_Image($basePath);
 				$imageObj->constrainOnly(true);
 				$imageObj->keepAspectRatio(true);
-				$imageObj->keepFrame(false);
+				$imageObj->keepFrame(true);
 				$imageObj->resize($width, $height);
 				$imageObj->save($newPath);
 			}
