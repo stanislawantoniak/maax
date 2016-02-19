@@ -266,6 +266,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 			//if image has already resized then just return URL
 			if (file_exists($basePath) && is_file($basePath) && !file_exists($newPath)) {
 				$imageObj = new Varien_Image($basePath);
+				$imageObj->backgroundColor(array(255, 255, 255));
 				$imageObj->constrainOnly(true);
 				$imageObj->keepAspectRatio(true);
 				$imageObj->keepFrame(true);
