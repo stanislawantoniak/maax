@@ -258,6 +258,27 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         }
 	}
 
+	protected function _resizePromotionVendorLogo($fileName,$width=104, $height=31) {
+		$basePath = Mage::getBaseDir('media') . DS . $fileName;
+		$newPath = $this->getPromotionVendorLogoResizedPath($width) . DS . $fileName;
+		//if width empty then return original size image's URL
+		if ($width != '') {
+			//if image has already resized then just return URL
+			if (file_exists($basePath) && is_file($basePath) && !file_exists($newPath)) {
+				$imageObj = new Varien_Image($basePath);
+				$imageObj->constrainOnly(true);
+				$imageObj->keepAspectRatio(true);
+				$imageObj->keepFrame(false);
+				$imageObj->resize($width, $height);
+				$imageObj->save($newPath);
+			}
+		}
+	}
+	
+	public function getPromotionVendorLogoResizedPath($width = 104) {
+		return Mage::getBaseDir('media') . DS . 'vendor' . DS . 'resized' . DS . $width;
+	}
+
 	public function getResizedPromotionImage($fileName,$width = 294, $height = 154) {
 
         $folderURL = $this->getCampaignCouponImageUrl();
@@ -296,16 +317,26 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         $collection->addFieldToFilter('coupon_id', array('in' => $ids));
         $out = array();
         foreach ($collection as $item) {
+	        /** @var Zolago_SalesRule_Model_Rule $rule */
             $rule = Mage::getModel('salesrule/rule')->load($item['rule_id']);
             $campaignId = $rule->getCampaignId();
-            $couponImage = NULL;
+            $couponImage = $vendorLogo = NULL;
             if ($campaignId) {
+	            /** @var Zolago_Campaign_Model_Campaign $campaign */
                 $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
                 if ($campaign) {
                     $couponImage = $campaign->getCouponImage();
+	                $vendor = $campaign->getVendor();
+	                $vendorLogo = $vendor->getLogo();
+	                $vendorName = $vendor->getVendorName();
+	                if(!$vendorLogo) {
+		                $vendorLogo = Mage::getDesign()->getSkinUrl("images/logo_black.png");
+	                }
                 }
             }
             $rule->setPromoImage($couponImage);
+	        $rule->setVendorLogo($vendorLogo);
+	        $rule->setVendorName($vendorName);
             $item['ruleItem'] = $rule;
             $out[] = $item;
 
@@ -353,7 +384,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              'store_name' => $store->getName(),
              'year'  => Mage::getModel('core/date')->date('Y')
          );
-         $addedFiles = array();
+         $addedFiles = $addedLogos = array();
          foreach ($list as $item) {
 
              $name = $item['ruleItem']->getPromoImage();
@@ -366,6 +397,18 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                  );
                  $addedFiles[] = $name;
               }
+
+	         $vendorLogo = $item['ruleItem']->getVendorLogo();
+	         if($vendorLogo && !in_array($vendorLogo,$addedLogos)) {
+		         $this->_resizePromotionVendorLogo($vendorLogo);
+		         $data['_ATTACHMENTS'][] = array (
+			         'filename' => $this->getPromotionVendorLogoResizedPath() . DS . $vendorLogo,
+			         'id' => $vendorLogo,
+			         'disposition' => 'inline',
+		         );
+		         $addedLogos[] = $vendorLogo;
+	         }
+
           }
          $helper = Mage::helper('zolagocommon');
          $sender = Mage::getStoreConfig('promo/promotions_mail_settings/mail_identity');
