@@ -35,7 +35,6 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
 
             $product->setData("configurable_is_in_stock", $isChildInStock);
             $product->setData("configurable_qty", $childQty);
-            unset($stockPrent);
         }
 
         if ($pattern['type'] == 'grouped') {
