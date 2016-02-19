@@ -20,19 +20,21 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
             $product = $this->_getParentProduct($product);
         }
         if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
-            && ($pattern['key'] == "is_in_stock")
+            && ($pattern['key'] == "is_in_stock" || $pattern['key'] == "qty")
         ) {
             $products = $this->_getChildProducts($product);
             $isChildInStock = 0;
+            $childQty = 0;
             foreach ($products as $child) {
                 if ($child->getData("stock_item")->getData("is_in_stock") == 1) {
                     $isChildInStock = 1;
-                    break;
+                    $childQty += ceil($child->getData("stock_item")->getQty());
+                    //break;
                 }
             }
 
             $product->setData("configurable_is_in_stock", $isChildInStock);
-            unset($stockPrent);
+            $product->setData("configurable_qty", $childQty);
         }
 
         if ($pattern['type'] == 'grouped') {
@@ -126,7 +128,9 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
                     $value = 0;
                 }
                 $value = intval($value);
-
+                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+                    $value = $product->getData("configurable_qty");
+                }
                 break;
 
             case 'is_in_stock':
