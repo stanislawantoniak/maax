@@ -45,7 +45,9 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
                 $isChildInStock = 0;
                 foreach ($products as $child) {
-                    if ($child->getData("stock_item")->getData("is_in_stock") == 1) {
+                    $childStockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($child->getId());
+                    if ($childStockItem->getData("is_in_stock") == 1) {
+
                         $isChildInStock = 1;
                         break;
                     }
