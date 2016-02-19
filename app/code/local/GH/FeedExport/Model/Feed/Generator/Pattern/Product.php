@@ -30,7 +30,7 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
                     break;
                 }
             }
-            $stockPrent = array_filter($isChildInStock);
+
             $product->setData("configurable_is_in_stock", $isChildInStock);
             unset($stockPrent);
         }
