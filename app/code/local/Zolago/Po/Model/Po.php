@@ -38,7 +38,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	public function getChargeCommissionFlag() {
 		/** @var GH_Statements_Helper_Data $helper */
 		$helper = Mage::helper('ghstatements');
-		$flag = $helper->getDotpayChargeCommission($this->getStore());
+		$flag = $helper->getDotpayChargeCommissionFlag($this->getStore());
 		return $flag;
 	}
 
