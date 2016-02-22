@@ -309,6 +309,7 @@ class GH_Statements_Model_Observer
                 $data['po_id'] = $po->getId();
                 $data['po_increment_id'] = $po->getIncrementId(); // Nr zamówienia
                 $data['payment_channel_owner'] = $po->getPaymentChannelOwner(); // System płatności (galeria | partner)
+                $data['charge_commission_flag'] = $po->getChargeCommissionFlag(); // Czy naliczać prowizje w rozliczeniu?
                 $data['shipped_date'] = $track->getShippedDate(); // Data wysyłki
                 $data['carrier'] = $track->getTitle(); // Kurier
                 $data['gallery_shipping_source'] = $track->getGalleryShippingSource(); // Kontrakt kurierski
@@ -343,12 +344,15 @@ class GH_Statements_Model_Observer
                         $data['shipping_cost'] = $shippingCost; // Transport
                         $shippingCost = 0;
                     }
-                    // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
-                    $data['commission_value'] =
-                        (($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
-                         * (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
-                    $data['commission_value'] = round($data['commission_value'], 2, PHP_ROUND_HALF_UP);
-                    
+					if ($po->getChargeCommissionFlag()) { // Flaga czy naliczać prowizje w rozliczeniu?
+						// (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
+						$data['commission_value'] =
+							(($data['price'] - $data['discount_amount'] + $data['gallery_discount_value'])
+								* (floatval($data['commission_percent']) / 100)) * self::getTax(); // Prowizja Modago
+						$data['commission_value'] = round($data['commission_value'], 2, PHP_ROUND_HALF_UP);
+					} else {
+						$data['commission_value'] = 0;
+					}
                     if ($po->getPaymentChannelOwner() == Zolago_Payment_Model_Source_Channel_Owner::OWNER_MALL) {
                         // kwota zamówień
                         $orderGalleryValue += $data['final_price']+$data['shipping_cost'];  // kwota brutto 
@@ -737,6 +741,7 @@ class GH_Statements_Model_Observer
             $data["reason"]                 = $rmaItem->getItemConditionName();
             $data["payment_method"]         = ucfirst(str_replace('_', ' ', $po->ghapiPaymentMethod()));
             $data["payment_channel_owner"]  = $po->getPaymentChannelOwner();
+            $data["charge_commission_flag"] = $po->getChargeCommissionFlag();
 
             //if rma type is returned package and po was shipped using cod then return 100% of provision - assume that return value = sell value
             $data["approved_refund_amount"] = !$packageReturned ? $rmaItem->getReturnedValue() : $poItem->getFinalItemPrice();
@@ -752,12 +757,15 @@ class GH_Statements_Model_Observer
                     $data["gallery_discount_value"] += floatval($relation->getDiscountAmount()); // Zniżka finansowana przez Modago
                 }
             }
-            // (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
-            $data["commission_value"]       =
-                (($data['price'] - $data["discount_amount"] + $data["gallery_discount_value"])
-                 * (floatval($data["commission_percent"]) / 100)) * self::getTax(); // Prowizja Modago
-            $data["commission_value"]       = round($data["commission_value"], 2, PHP_ROUND_HALF_UP);
-
+			if ($po->getChargeCommissionFlag()) { // Flaga czy naliczać prowizje w rozliczeniu?
+				// (( <Sprzedaż przed zniżką> - <zniżka> + <Zniżka finansowana przez Modago>) * <Stawka prowizji Modago> ) * <podatek>
+				$data["commission_value"] =
+					(($data['price'] - $data["discount_amount"] + $data["gallery_discount_value"])
+						* (floatval($data["commission_percent"]) / 100)) * self::getTax(); // Prowizja Modago
+				$data["commission_value"] = round($data["commission_value"], 2, PHP_ROUND_HALF_UP);
+			} else {
+				$data["commission_value"] = 0;
+			}
             $fraction = $data["approved_refund_amount"] / $data["final_price"]; // Procentowy udział
             $data['commission_return']      = round($data["commission_value"] * $fraction, 2, PHP_ROUND_HALF_UP);
             $data['discount_return']        = round($data["gallery_discount_value"] * $fraction, 2, PHP_ROUND_HALF_UP);

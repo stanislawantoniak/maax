@@ -8,6 +8,10 @@
  * @method string getPaymentMethodOwner()
  * @method Zolago_Po_Model_Po setPaymentChannelOwner($owner)
  * @method string getCreatedAt() DATETIME
+ * @method string getCustomerEmail()
+ * @method Zolago_Po_Model_Po setCustomerEmail(string $email)
+ * @method int getCustomerId()
+ * @method Zolago_Po_Model_Po setCustomerId(int $customerId)
  */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
@@ -24,7 +28,20 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	 * Email sender
 	 */
     const XML_PATH_EMAIL_IDENTITY = 'sales_email/order/identity';
-	
+
+	/**
+	 * Retrieve boolean flag about if commission should be charged for GH_statements
+	 * For now info about charge_commission will be taken from actual dotpay config
+	 *
+	 * @return bool
+	 */
+	public function getChargeCommissionFlag() {
+		/** @var GH_Statements_Helper_Data $helper */
+		$helper = Mage::helper('ghstatements');
+		$flag = $helper->getDotpayChargeCommissionFlag($this->getStore());
+		return $flag;
+	}
+
 	/**
 	 * @return array
 	 */
@@ -1147,4 +1164,15 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         }
 
     }
+
+	public function getContactToken() {
+		return md5(
+			$this->getStoreId().
+			$this->getOrderId().
+			$this->getEntityId().
+			$this->getCreatedAt().
+			$this->getOrder()->getCustomerId().
+			$this->getIncrementId()
+		);
+	}
 }

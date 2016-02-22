@@ -67,9 +67,9 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
         if (!Zend_Validate::is($this->getQuestionText(), 'NotEmpty')) {
             $errors[] = $qaHlp->__('Please enter the question text.');
         }
-        if (!Zend_Validate::is($this->getCustomerName(), 'NotEmpty')) {
+        /*if (!Zend_Validate::is($this->getCustomerName(), 'NotEmpty')) {
             $errors[] = $qaHlp->__('Please enter your name.');
-        }
+        }*/
         if (!Zend_Validate::is($this->getCustomerEmail(), 'EmailAddress')) {
             $errors[] = Mage::helper('customer')->__('Invalid email address "%s".', $this->getCustomerEmail());
         }

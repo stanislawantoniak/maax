@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Statements>
-            <version>0.3.0</version>
+            <version>0.3.1</version>
         </GH_Statements>
     </modules>
     <global>
@@ -141,6 +141,11 @@
                 <tax_for_commission>1.23</tax_for_commission>
             </general>
         </ghstatements>
+		<payment>
+			<dotpay>
+				<charge_commission_flag>1</charge_commission_flag>
+			</dotpay>
+		</payment>
     </default>
     <crontab>
         <jobs>
