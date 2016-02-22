@@ -43,6 +43,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
 		Mage::log($query, null, "table_2_1.log");
         $results = $conn->fetchOne($query);
 		Mage::log($results, null, "table_2.log");
+		Mage::log($conn->fetchAll($query), null, "table_3.log");
         return $results;
 
     }
