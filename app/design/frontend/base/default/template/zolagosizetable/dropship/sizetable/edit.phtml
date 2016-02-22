@@ -118,7 +118,10 @@ $tinyMCEKinds = array("C", "A", "B");
                             </div>
                         </div>
                         <div class="form-group">
-                            <?php $defaultValue = !empty($sizetable['default_value']) ? unserialize($sizetable['default_value']) : $sizetable['default_value']; ?>
+                            <?php
+
+							Mage::log($sizetable['default_value'],null, "11.log");
+							$defaultValue = !empty($sizetable['default_value']) ? unserialize($sizetable['default_value']) : $sizetable['default_value']; ?>
                             <label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Header"); ?>
                                 <span class="required">*</span>
                             </label>
