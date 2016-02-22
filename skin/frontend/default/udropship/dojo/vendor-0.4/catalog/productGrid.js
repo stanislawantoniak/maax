@@ -338,8 +338,25 @@ define([
         });
         put(content, "p", {
             innerHTML: Translator.translate("SKU") + ": " + escape(item.skuv),
-            className: "info editable"
+            className: "info editable",
         });
+
+        var canvas = document.getTextWidthCanvas || (document.getTextWidthCanvas = document.createElement("canvas"));
+        var context = canvas.getContext("2d");
+        context.font = "arial 13px";
+        var metrics = context.measureText(value);
+
+        if(metrics.width > 156) {
+            node.title = value;
+            jQuery(node).tooltip({
+                container: "body",
+                trigger: "hover",
+                animation: false,
+                placement: "top",
+                delay: {"show": 0, "hide": 0}
+            });
+        }
+
         put(node, content);
     };
 
