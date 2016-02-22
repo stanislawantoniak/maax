@@ -1,8 +1,19 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Abstract */ ?>
-<?php $_customer = $this->getCustomer();?>
-<?php $_quoteBilling = $this->getQuote()->getBillingAddress();?>
-<?php $_quoteShipping = $this->getQuote()->getShippingAddress();?>
-<?php $_helper = Mage::helper("zolagocheckout");?>
+<?php
+/* @var $this Zolago_Modago_Block_Checkout_Onepage_Abstract */
+$_customer = $this->getCustomer();
+$_quoteBilling = $this->getQuote()->getBillingAddress();
+$_quoteShipping = $this->getQuote()->getShippingAddress();
+/** @var Zolago_Checkout_Helper_Data $_helper */
+$_helper = Mage::helper("zolagocheckout");
+$basketDataLayer = $_helper->getBasketDataLayer();
+?>
+<?php if (!empty($basketDataLayer)): ?>
+	<script>
+		if (typeof dataLayer != "undefined") {
+			dataLayer.push(<?php echo json_encode($basketDataLayer); ?>);
+		}
+	</script>
+<?php endif; ?>
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">

@@ -15,6 +15,7 @@
  * @method string getRegulationConfirmRequestSentDate()
  * @method bool getIntegratorEnabled()
  * @method string getLastIntegration()
+ * @method string getMarketingChargesEnabled()
  *
  * @method array getRootCategory()
  * @method array getWebsitesAllowed()

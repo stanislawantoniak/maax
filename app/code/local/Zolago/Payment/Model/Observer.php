@@ -41,7 +41,7 @@ class Zolago_Payment_Model_Observer
                 $txnType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND;
 
                 /* @var $client Zolago_Dotpay_Model_Client */
-                $client = Mage::getModel("zolagodotpay/client");
+                $client = Mage::getModel("zolagodotpay/client", $order->getStore());
                 $refundTransactionId = $client->saveTransaction(
 	                $order,
 	                $amount,

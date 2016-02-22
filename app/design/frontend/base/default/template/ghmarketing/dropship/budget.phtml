@@ -1,0 +1,61 @@
+<?php
+/** @var GH_Marketing_Block_Dropship_Marketing $this */
+/** @var GH_Marketing_Helper_Data $helper */
+$helper = Mage::helper('ghmarketing');
+?>
+
+<div class="container">
+	<div class="page-header">
+		<div class="page-title">
+			<h3><?php echo $helper->__('Budget and marketing costs'); ?></h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="widget box">
+				<div class="widget-header"><h4><i class="icon-reorder"></i><?php echo $helper->__("Marketing budget and cost for month %s", $this->getCurrentMonth()); ?></h4>
+				</div>
+				<div class="widget-content">				    
+    				<form action="<?php echo $this->getUrl('*/*/save'); ?>" method="POST" class="row-border form-horizontal">
+						<div class="form-group text-right">
+                            <label class="control-label col-md-10"><?php echo $helper->__('Please select month:');?></label>
+						    <div class="col-md-2">                  
+						        <div class="row">                  
+						            <div class="col-md-12">
+                        				<?php echo $this->getDateSelect(); ?>
+                    				</div>
+                                </div>
+    						</div>
+						</div>
+    					<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+							<table
+								class="table table-striped table-bordered table-hover datatable dataTable"
+								id="DataTables_Table_0">
+								<?php
+								echo $this->getThead();
+								echo $this->getTbody();
+								?>
+							</table>
+							<div class="table-footer">
+								<div class="col-xl-12">
+									<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+									<input type="hidden" name="month" value="<?php echo $this->getCurrentMonth(); ?>"/>
+									<input type="submit" value="<?php echo $helper->__("Save budget"); ?>" class="btn btn-primary pull-right">
+								</div>
+							</div>
+	    				</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+    jQuery(function($) {
+        $("#budget-date").change(function() {
+            var target=$(this),
+                url=target.data('base') + "month/" + target.val();                
+            document.location.href=url;
+        });
+    });
+</script>

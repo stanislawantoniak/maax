@@ -63,5 +63,15 @@ class Zolago_Payment_Model_Vendor_Payment extends Mage_Core_Model_Abstract
     {
         return Mage::getSingleton("zolagopayment/vendor_payment_validator");
     }
+    
+    /**
+     * lock delete if payment is in statement
+     */
+    public function delete() {
+        if ($this->getData('statement_id'))  {
+            Mage::throwException(Mage::helper('zolagopayment')->__("Can't delete. Payment in statement"));
+        }
+        parent::delete();
+    }
 
 }

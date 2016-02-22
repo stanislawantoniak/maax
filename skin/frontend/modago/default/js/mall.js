@@ -102,9 +102,12 @@ var Mall = {
         return protocol + '//' + host;
     },
 
+	noAccountInfo: ['/checkout/guest/index/','/checkout/singlepage/index/'],
     dispatch: function() {
         // fetch shopping cart and favourites informations
-        this.getAccountInfo();
+	    if(jQuery.inArray(this.getUrlPath(),Mall.noAccountInfo) == -1) {
+		    this.getAccountInfo();
+	    }
     },
 
     getAccountInfo: function() {
@@ -149,6 +152,11 @@ var Mall = {
         if(data.status == false) {
             return;
         }
+
+	    if(typeof data.content.visitor_data != 'undefined') {
+		    Mall.Gtm.visitorData(data.content.visitor_data);
+	    }
+
         Mall.setUserBlockData(data.content);
         if(data.content.cart.all_products_count == null) {
             data.content.cart.all_products_count = 0;
@@ -1073,6 +1081,12 @@ Mall.Gtm = {
 			});
 			this.pushedSteps.push(step);
 		}
+	},
+
+	visitorData: function(data) {
+		if(typeof dataLayer != 'undefined') {
+			dataLayer.push(data);
+		}
 	}
 };
 
@@ -1198,11 +1212,20 @@ Mall.Cart = {
 
 function addtocartcallback(response) {
 	var popup = jQuery("#popup-after-add-to-cart");
+	var gtmEvent = '';
     if(response.status == false) {
 	    popup.find(".modal-loading").hide();
 	    popup.find(".modal-loaded").hide();
 	    popup.find(".modal-error").show();
+		var title = typeof response.details != "undefined" ? response.details.title_section : 'Error occurred';
+	    popup.find(".modal-error.modal-header .title_section").text(title);
         popup.find(".modal-error-txt").html(response.message);
+		if (typeof dataLayer != "undefined") {
+			dataLayer.push({
+				'event': 'addToCartError',
+				'details': title
+			});
+		}
     } else {
         if(Mall.product._current_product_type == 'configurable') {
             var superAttr = jQuery(Mall._current_superattribute);
@@ -1217,7 +1240,34 @@ function addtocartcallback(response) {
 	    popup.find(".modal-loading").hide();
 	    popup.find(".modal-loaded").show();
 	    popup.modal("show");
-
+		if (typeof dataLayer != "undefined") {
+			var ecommerce = {};
+			if (typeof response.details != "undefined") {
+				ecommerce = {
+					'currencyCode': response.details.currencyCode,
+					'add': {
+						'products': [{
+							'name': response.details.products.name,
+							'id': response.details.products.id,
+							'skuv': response.details.products.skuv,
+							'simple_sku': response.details.products.simple_sku,
+							'simple_skuv': response.details.products.simple_skuv,
+							'category': response.details.products.category,
+							'price': response.details.products.price,
+							'quantity': response.details.products.quantity,
+							'vendor': response.details.products.vendor,
+							'brandshop': response.details.products.brandshop,
+							'brand': response.details.products.brand,
+							'variant': response.details.products.variant,
+						}]
+					}
+				}
+			}
+			dataLayer.push({
+				'event': 'addToCart',
+				'ecommerce': ecommerce
+			});
+		}
         Mall.getAccountInfo();
     }
 	popup.css({display: 'block','pointer-events':'auto'});
@@ -1605,6 +1655,10 @@ Mall.getUrlPart = function (name,url) {
 		return '';
 	}
 };
+
+Mall.getUrlPath = function() {
+	return window.location.href.replace(Mall.getBaseUrl(),"");
+}
 
 Mall.showAgreement = function(target) {
 	jQuery(target).hide();

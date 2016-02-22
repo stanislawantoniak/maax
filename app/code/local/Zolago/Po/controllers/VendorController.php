@@ -1380,6 +1380,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             }
             $session->setHighlight($highlight);
         } catch (Exception $e) {
+            // cancel shipment if exists
+            if (!empty($shipment)) {
+                Mage::helper('udpo')->cancelShipment($shipment, true);
+                
+            }
+            $udpo->getStatusModel()->processStartPacking($udpo, true);
             $session->addError($e->getMessage());
         }
 

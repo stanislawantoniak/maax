@@ -59,6 +59,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_CAMPAIGN_PLACEMENT                    = "campaign/placement";
 	const RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES      = "campaign/placement_category";
 	const RES_BANNER                                = "banner/vendor";
+	const RES_BUDGET_MARKETING						= "udropship/marketing";
 
 
     // Overpayments management
@@ -116,6 +117,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_CAMPAIGN_PLACEMENT                => "Campaign placement management",
 		self::RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES  => "Campaign placement in categories management",
 		self::RES_BANNER                            => "Banners management",
+		self::RES_BUDGET_MARKETING					=> "Budget marketing costs",
         // Overpayments management
         self::RES_PAYMENT_OPERATOR                  => "Payment manage",
         // GH API Access
@@ -144,6 +146,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	
 
 	public function __construct() {
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		// Set resources
 		foreach(array_keys(self::$_currentResources) as $resourceCode){
 			$this->addResource($resourceCode);
@@ -174,6 +178,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_CAMPAIGN_PLACEMENT);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_CAMPAIGN_PLACEMENT_IN_CATEGORIES);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_BANNER);
+		if ($vendor->getMarketingChargesEnabled()) {
+			$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_BUDGET_MARKETING);
+		} else {
+			$this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_MARKETING_OFFICER, self::RES_BUDGET_MARKETING);
+		}
 
 		// Build ACL Rules - RMA Operator
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_RMA_OPERATOR, self::RES_URMA_VENDOR);
@@ -196,7 +205,6 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PAYMENT_OPERATOR, self::RES_PAYMENT_OPERATOR);
 
         // Build ACL Rules - GH API Access
-        $vendor = Mage::getSingleton('udropship/session')->getVendor();
         if ($vendor->getData('ghapi_vendor_access_allow')) {
             $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
         } else {

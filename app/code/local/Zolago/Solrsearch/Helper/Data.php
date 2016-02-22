@@ -147,6 +147,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		// Create product list
 		$products = array();
 
+		/** @var Zolago_Common_Helper_Data $hlp */
+		$hlp = Mage::helper('zolagocommon');
+
 		foreach ($listModel->getCollection() as $product) {
 			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
 
@@ -162,6 +165,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$imageSizes = $product->getListingResizedImageInfo();
 			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] / $imageSizes["width"]),2) : 1;
 			$_product[9] = $this->_prepareManufacturerLogoUrl($product->getManufacturerLogoUrl());
+			$_product[10]= $product->getSku();
+			$_product[11]= $hlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor());
 
 			$products[] = $_product;
 		}
