@@ -33,8 +33,13 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
                     //break;
                 }
             }
+            $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+            if($stockItem->getManageStock() == 0){
+                $product->setData("configurable_is_in_stock", $isChildInStock);
+            } else {
+                $product->setData("configurable_is_in_stock", $product->getData("is_in_stock"));
+            }
 
-            $product->setData("configurable_is_in_stock", $isChildInStock);
             $product->setData("configurable_qty", $childQty);
         }
 

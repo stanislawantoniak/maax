@@ -1,6 +1,7 @@
 <?php
 
-class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Rule {
+class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Rule
+{
 
 
 
@@ -17,19 +18,21 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             $valid = true;
         }
 
-        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            && $stockItem->getManageStock() == 0
+        ) {
+
             $rule = Mage::getModel('feedexport/rule')->load($this->getId());
-            $type = $rule->getType();
+
             $conditions_serialized = unserialize($rule->getData("conditions_serialized"));
-            //Mage::log($conditions_serialized, null, "TEST.log");
-//
+
             $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();;
-            //Mage::log($conditions, null, "TEST.log");
 
             $checkConfigurableStock = false;
             if (!empty($conditions)) {
                 foreach ($conditions as $condition) {
-                    //Mage::log($condition, null, "TEST2.log");
+
                     if ($condition["attribute"] == "is_in_stock"
                         && $condition["operator"] == "=="
                         && $condition["value"] == 1
@@ -52,7 +55,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
                         break;
                     }
                 }
-                //Mage::log($isChildInStock, null, "TEST.log");
+
                 if ($isChildInStock == 0) {
                     $stock = false;
                 }
@@ -61,11 +64,12 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         }
 
 
-        if($valid && $stock){
+        if ($valid && $stock) {
             $check = $product->getId();
         }
         return $check;
     }
+
     protected function _getChildProducts($product)
     {
         $connection = Mage::getSingleton('core/resource')->getConnection('read');
