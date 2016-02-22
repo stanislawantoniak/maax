@@ -74,6 +74,13 @@ class Zolago_Catalog_Vendor_ProductController
                         $storeId,
                         array("attribute_mode" => $request->getParam("attribute_mode"))
                     );
+                    /*
+                     * clear changed ids after mass attribute set change because we don't want those items
+                     * to be reselected on description grid - they are not visible to vendor on his current view
+                     */
+                    $response["changed_ids"] = array();
+                    $response["global"]  = false;
+
                     break;
                 /**
                  * Handle status change
@@ -81,15 +88,36 @@ class Zolago_Catalog_Vendor_ProductController
                 case "confirm":
                     $attributeCode = "description_status";
                     $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
-                    $this->_validateProductAttributes($ids, $attributeSetId, $storeId);
-                    $this->_processAttributresSave(
-                        $ids,
-                        array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
-                        ),
-                        $storeId,
-                        array("check_editable" => false)
-                    );
-                    $this->_generateUrlKeys($ids, $storeId);
+                    $validationData = $this->_validateProductAttributes($ids, $attributeSetId, $storeId);
+
+                    $ids = $validationData['ids'];
+                    $error = $validationData['error'];
+                    $success = false;
+
+                    $idsCount = count($ids);
+                    if($idsCount) {
+                        $this->_processAttributresSave(
+                            $ids,
+                            array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
+                            ),
+                            $storeId,
+                            array("check_editable" => false)
+                        );
+
+                        $this->_generateUrlKeys($ids, $storeId);
+
+                        if($error) {
+                            $success = '<div class="alert alert-success">' .
+                                Mage::helper('zolagocatalog')->__('Descriptions for %d products have been accepted', $idsCount) .
+                                '</div>';
+                        }
+                    }
+
+                    if($error) {
+                        $response['message'] = ($success ? $success : '') . ($error ? $error : '');
+                    }
+
+
                     break;
                 default:
                     Mage::throwException("Invaild mass method");
@@ -370,14 +398,17 @@ class Zolago_Catalog_Vendor_ProductController
     }
 
     /**
-     * @param type $productIds
-     * @param type $attributeSetId
-     * @param type $storeId
+     * @param array $productIds
+     * @param int $attributeSetId
+     * @param int $storeId
+     * @returns array
      * @throws Mage_Core_Exception
      */
     protected function _validateProductAttributes($productIds, $attributeSetId, $storeId)
     {
         $errorProducts = array();
+        $idsToUpdate = array();
+        $errorMsg = false;
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection->setFlag("skip_price_data", true);
@@ -390,17 +421,27 @@ class Zolago_Catalog_Vendor_ProductController
         $collection->addAttributeToSelect('image');
 
         foreach ($collection as $product) {
+            $productId = $product->getId();
+
+            $productErr = array();
+
             if ($imageValidation = $this->_validateBaseImage($product)) {
-                $errorProducts[] = sprintf('%s: %s', $product->getName(), $imageValidation);
+                $productErr[] = sprintf('%s: %s', $product->getName(), $imageValidation);
             }
             if ($attributeValidation = $this->_validateRequiredAttributes($product, $storeId)) {
-                $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Empty required attributes (%s)', $product->getName(), implode(',', $attributeValidation));
+                $productErr[] = Mage::helper('zolagocatalog')->__('%s: Empty required attributes (%s)', $product->getName(), implode(',', $attributeValidation));
             }
             if ($this->_validateStatusAccepted($product)) {
-                $errorProducts[] = Mage::helper('zolagocatalog')->__('%s: Product description already accepted', $product->getName());
+                $productErr[] = Mage::helper('zolagocatalog')->__('%s: Product description already accepted', $product->getName());
             }
             if ($emptyValidation = $this->_validateEmptyImage($product)) {
-                $errorProducts[] = sprintf('%s: %s', $product->getName(), implode(',', $emptyValidation));
+                $productErr[] = sprintf('%s: %s', $product->getName(), implode(',', $emptyValidation));
+            }
+
+            if(count($productErr)) {
+                $errorProducts[] = implode("<br/>",$productErr);
+            } else {
+                $idsToUpdate[] = $productId;
             }
         }
 
@@ -411,11 +452,15 @@ class Zolago_Catalog_Vendor_ProductController
                 $errorProducts = array_slice($errorProducts, 0, self::ERROR_LIST_LEN);
                 $errorProducts[] = '...';
             }
-            throw new Mage_Core_Exception(
-                '<div class="alert alert-danger">' . Mage::helper('zolagocatalog')->__('Discovered %d validation problems:', $countErrorProducts) . "</div>" .
-                implode("<br/>", $errorProducts)
-            );
+            $class = count($idsToUpdate) ? "warning" : "danger";
+            $errorMsg =
+                '<div class="alert alert-' . $class . '">' .
+                Mage::helper('zolagocatalog')->__('Discovered %d validation problems:', $countErrorProducts) .
+                '</div>' .
+                implode("<br/>", $errorProducts);
         }
+
+        return array('ids' => $idsToUpdate, 'error' => $errorMsg);
     }
 
     /**
