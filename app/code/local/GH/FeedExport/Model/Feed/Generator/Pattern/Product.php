@@ -8,6 +8,294 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
     //Category separator  (e.g. Apparel/Men/T-Shirts)
     const FEEDEXPORT_CS = '/';
 
+
+    public function getValue($pattern, $product)
+    {
+        $value   = null;
+        $pattern = $this->parsePattern($pattern);
+
+        $this->evalValue($pattern, $value, $product);
+
+        if ($pattern['type'] == 'parent') {
+            $product = $this->_getParentProduct($product);
+        }
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            && ($pattern['key'] == "is_in_stock" || $pattern['key'] == "qty")
+        ) {
+            $products = $this->_getChildProducts($product);
+            $isChildInStock = 0;
+            $childQty = 0;
+            foreach ($products as $child) {
+                $childStockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($child->getId());
+                if ($childStockItem->getData("is_in_stock") == 1) {
+                    $isChildInStock = 1;
+                    $childQty += (int)$childStockItem->getData("qty");
+                    //break;
+                }
+            }
+            $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+            if($stockItem->getManageStock() == 0){
+                $product->setData("configurable_is_in_stock", $isChildInStock);
+            } else {
+                $product->setData("configurable_is_in_stock", $product->getData("is_in_stock"));
+            }
+
+            $product->setData("configurable_qty", $childQty);
+        }
+
+        if ($pattern['type'] == 'grouped') {
+            $products             = $this->_getChildProducts($product);
+            $values               = array();
+            $childPattern         = $pattern;
+            $childPattern['type'] = null;
+            foreach ($products as $child) {
+                $child = $child->load($child->getId());
+                $value = $this->getValue($childPattern, $child);
+                if ($value) {
+                    $values[] = $value;
+                }
+            }
+
+            $value = implode(',', $values);
+
+            return $value;
+        }
+
+        switch($pattern['key']) {
+            case 'url':
+                $value = Mage::helper('feedexport')->getProductUrl($product, $this->getFeed()->getStoreId());
+
+                if ($this->getFeed()) {
+                    $getParams = array();
+
+                    if ($this->getFeed()->getReportEnabled()) {
+                        $getParams['fee'] = $this->getFeed()->getId();
+                        $getParams['fep'] = $product->getId();
+                    }
+
+                    $patternModel = Mage::getSingleton('feedexport/feed_generator_pattern');
+                    if ($this->getFeed()->getGaSource()) {
+                        $getParams['utm_source'] = $patternModel->getPatternValue($this->getFeed()->getGaSource(), 'product', $product);
+                    }
+                    if ($this->getFeed()->getGaMedium()) {
+                        $getParams['utm_medium'] = $patternModel->getPatternValue($this->getFeed()->getGaMedium(), 'product', $product);
+                    }
+                    if ($this->getFeed()->getGaName()) {
+                        $getParams['utm_campaign'] = $patternModel->getPatternValue($this->getFeed()->getGaName(), 'product', $product);
+                    }
+                    if ($this->getFeed()->getGaTerm()) {
+                        $getParams['utm_term'] = $patternModel->getPatternValue($this->getFeed()->getGaTerm(), 'product', $product);
+                    }
+                    if ($this->getFeed()->getGaContent()) {
+                        $getParams['utm_content'] = $patternModel->getPatternValue($this->getFeed()->getGaContent(), 'product', $product);
+                    }
+
+                    if (count($getParams)) {
+                        $value .= strpos($value, '?') !== false ? '&' : '?';
+                        $value .= http_build_query($getParams);
+                    }
+                }
+
+                break;
+
+            case 'image':
+            case 'thumbnail':
+            case 'small_image':
+                $this->imageValue($pattern, $value, $product);
+                break;
+
+            case 'image2':
+            case 'image3':
+            case 'image4':
+            case 'image5':
+            case 'image6':
+            case 'image7':
+            case 'image8':
+            case 'image9':
+            case 'image10':
+            case 'image11':
+            case 'image12':
+            case 'image13':
+            case 'image14':
+            case 'image15':
+                $this->imageGalleryValue($pattern, $value, $product);
+
+                break;
+
+            case 'qty':
+                $stockItem = $product->getStockItem();
+                if (!($stockItem && $stockItem->getData('item_id'))) {
+                    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+                }
+                if ($stockItem && $stockItem->getData('item_id')) {
+                    $product->setStockItem($stockItem);
+                    $value = ceil($stockItem->getQty());
+                } else {
+                    $value = 0;
+                }
+                $value = intval($value);
+                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+                    $value = $product->getData("configurable_qty");
+                }
+                break;
+
+            case 'is_in_stock':
+                $stockItem = $product->getStockItem();
+                if (!($stockItem && $stockItem->getData('item_id'))) {
+                    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+                }
+                if ($stockItem) {
+                    $value = $stockItem->getIsInStock();
+                } else {
+                    $value = 0;
+                }
+
+                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+                    $value = $product->getData("configurable_is_in_stock");
+                }
+                break;
+
+            case 'category_id':
+                $this->_prepareProductCategory($product);
+                $value = $product->getData('category_id');
+                break;
+
+            case 'category':
+                $this->_prepareProductCategory($product);
+                $value = $product->getCategory();
+                break;
+
+            case 'category_url':
+                $this->_prepareProductCategory($product);
+                if ($product->getCategoryModel()) {
+                    $value = $product->getCategoryModel()->getUrl();
+                }
+                break;
+
+            case 'category_path':
+                $this->_prepareProductCategory($product);
+                $value = $product->getCategoryPath();
+                break;
+
+            case 'price':
+                $value = Mage::helper('tax')->getPrice($product, $product->getPrice());
+                break;
+
+            case 'final_price':
+                if ($product->getTypeId() == 'bundle') {
+                    $bundle = Mage::getModel('bundle/product_price');
+                    $prices = $bundle->getTotalPrices($product);
+                    if (isset($prices[0])) {
+                        $value = $prices[0];
+                        break;
+                    }
+                } else {
+                    $value = Mage::helper('tax')->getPrice($product, $product->getFinalPrice());
+                }
+
+                break;
+
+            case 'store_price':
+                $value = $this->getStore()->convertPrice($product->getFinalPrice(), false, false);
+                break;
+
+            case 'base_price':
+                $value = $product->getPrice();
+                break;
+
+            case 'tier_price':
+                $tierPrice = $product->getTierPrice();
+                if (count($tierPrice)) {
+                    $value = $tierPrice[0]['price'];
+                }
+                break;
+
+            case 'group_price':
+                $groupPrice = $product->getData('group_price');
+                if (count($groupPrice)) {
+                    $value = $groupPrice[0]['price'];
+                }
+                break;
+
+            case 'attribute_set':
+                $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
+                $attributeSetModel->load($product->getAttributeSetId());
+
+                $value = $attributeSetModel->getAttributeSetName();
+                break;
+
+            case 'weight':
+                if ($product->getTypeId() == 'bundle') {
+                    $selectionCollection = $product->getTypeInstance(true)->getSelectionsCollection(
+                        $product->getTypeInstance(true)->getOptionsIds($product), $product
+                    );
+                    $productIds = array(0);
+                    foreach($selectionCollection as $option) {
+                        $productIds[] = $option->product_id;
+                    }
+                    $collection = Mage::getModel('catalog/product')->getCollection()
+                        ->addAttributeToSelect('weight')
+                        ->addFieldToFilter('entity_id', array('in' => $productIds));
+                    $value = 0;
+                    foreach ($collection as $subProduct) {
+                        $value += $subProduct->getWeight();
+                    }
+                } else {
+                    $value = $product->getData('weight');
+                }
+                break;
+
+            case 'rating_summary':
+                $summaryData = Mage::getModel('review/review_summary')->load($product->getId());
+                $value       = $summaryData->getRatingSummary() * 0.05;
+                break;
+
+            case 'reviews_count':
+                $summaryData = Mage::getModel('review/review_summary')->load($product->getId());
+                $value       = $summaryData->getReviewsCount();
+                break;
+
+            default:
+                if (substr($pattern['key'], 0, strlen('group_price')) == 'group_price') {
+                    $custId = substr($pattern['key'], strlen('group_price'));
+                    $groupPrice = $product->getData('group_price');
+                    if (is_array($groupPrice)) {
+                        foreach ($groupPrice as $key => $price) {
+                            if ($price['cust_group'] == $custId) {
+                                $value = $price['price'];
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                $attribute = $this->_getProductAttribute($pattern['key']);
+                if ($attribute) {
+                    if ($attribute->getFrontendInput() == 'select' || $attribute->getFrontendInput() == 'multiselect') {
+                        $value = $product->getResource()
+                            ->getAttribute($pattern['key'])
+                            ->getSource()
+                            ->getOptionText($product->getData($pattern['key']));
+                        $value = implode(', ', (array) $value);
+                    } else {
+                        $value = $product->getData($pattern['key']);
+                    }
+                } else {
+                    if ($product->hasData($pattern['key'])) {
+                        $value = $product->getData($pattern['key']);
+                    }
+                }
+        }
+
+        $this->dynamicAttributeValue($pattern, $value, $product);
+        $this->dynamicCategoryValue($pattern, $value, $product);
+        $this->amastyMetaValue($pattern, $value, $product);
+
+        $value = $this->applyFormatters($pattern, $value);
+
+        return $value;
+    }
+
     protected function _prepareProductCategory(&$product)
     {
         $category = null;
