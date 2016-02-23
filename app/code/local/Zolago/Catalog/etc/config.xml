@@ -51,9 +51,9 @@
                     <pricessizes>
                         <table>vw_product_relation_prices_sizes_relation</table>
                     </pricessizes>
-                    <product_description_history>
+                    <description_history>
                         <table>zolago_catalog_product_description_history</table>
-                    </product_description_history>
+                    </description_history>
                 </entities>
             </zolagocatalog_resource>
 			<catalog>

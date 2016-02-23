@@ -8,7 +8,7 @@ class Zolago_Catalog_Model_Resource_Description_History_Collection extends Mage_
 
     protected function _construct()
     {
-        $this->_init('zolagocatalog/product_description_history');
+        $this->_init('zolagocatalog/description_history');
     }
 
 }

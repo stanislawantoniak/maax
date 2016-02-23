@@ -63,6 +63,16 @@ class Zolago_Catalog_Vendor_ProductController
                 case "attribute":
                     $attributeCode = key($request->getParam("attribute"));
                     $attributeValue = $request->getParam("attribute")[$attributeCode];
+
+                    /**
+                     * Save attribute change history
+                     */
+
+                    /* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
+                    $descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
+                    $descriptionHistoryModel->updateChangesHistory($this->getVendorId(),$ids, $attributeCode,$attributeValue, $this->_getCollection(), $attributeMode);
+                    /*Save attribute change history*/
+
                     if ($attributeCode == "description" || $attributeCode == "short_description") {
                         $attributeValue = Mage::helper("zolagocatalog")->secureInvisibleContent($attributeValue);
                     } elseif ($attributeCode == 'name') {
@@ -101,14 +111,14 @@ class Zolago_Catalog_Vendor_ProductController
 
                         $this->_generateUrlKeys($validatedIds, $storeId);
 
-                        if($error) {
+                        if ($error) {
                             $success = '<div class="alert alert-success">' .
                                 Mage::helper('zolagocatalog')->__('Descriptions for %d products have been accepted', $validatedIdsCount) .
                                 '</div>';
                         }
                     }
 
-                    if($error) {
+                    if ($error) {
                         $response['message'] = ($success ? $success : '') . ($error ? $error : '');
                     }
 
@@ -120,7 +130,7 @@ class Zolago_Catalog_Vendor_ProductController
 
                     break;
                 default:
-                    Mage::throwException("Invaild mass method");
+                    Mage::throwException("Invalid mass method");
 
             }
             /**
@@ -445,8 +455,8 @@ class Zolago_Catalog_Vendor_ProductController
                 $productErr[] = sprintf('%s: %s', $product->getName(), implode(',', $emptyValidation));
             }
 
-            if(count($productErr)) {
-                $errorProducts[] = implode("<br/>",$productErr);
+            if (count($productErr)) {
+                $errorProducts[] = implode("<br/>", $productErr);
             } else {
                 $idsToUpdate[] = $productId;
             }
