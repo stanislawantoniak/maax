@@ -312,7 +312,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	/**
 	 * @param array $productIds
 	 * @param array $attributesData
-	 * @param type $storeId
+	 * @param int $storeId
 	 * @throws Mage_Core_Exception
 	 */
 	protected function _processAttributresSave(array $productIds, array $attributesData, $storeId, array $data) {
