@@ -343,7 +343,7 @@ define([
 
         var canvas = document.getTextWidthCanvas || (document.getTextWidthCanvas = document.createElement("canvas"));
         var context = canvas.getContext("2d");
-        context.font = "arial 13px";
+        context.font = "normal arial 13px";
         var metrics = context.measureText(value);
 
         if(metrics.width > 156) {
