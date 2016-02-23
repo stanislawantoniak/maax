@@ -174,6 +174,11 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
             }
         }
 		$this->addConfigMarketingCostTypeFields();
+
+        //set created_at
+        if(!$this->getVendorId()) {
+            $this->setData('created_at',Mage::getModel('core/date')->gmtDate());
+        }
         return parent::_beforeSave();
     }
 
@@ -465,7 +470,11 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     }
 
 	public function getIntegratorSecret() {
-		return md5($this->getId()+$this->getCreatedAt());
+        if(!$this->getData('integrator_secret')) {
+            $this->setData('integrator_secret',md5($this->getId()+$this->getCreatedAt()));
+            $this->save();
+        }
+		return $this->getData('integrator_secret');
 	}
 	
     /**
