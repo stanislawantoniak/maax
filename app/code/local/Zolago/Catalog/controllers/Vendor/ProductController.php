@@ -74,12 +74,6 @@ class Zolago_Catalog_Vendor_ProductController
                         $storeId,
                         array("attribute_mode" => $request->getParam("attribute_mode"))
                     );
-                    /*
-                     * clear changed ids after mass attribute set change because we don't want those items
-                     * to be reselected on description grid - they are not visible to vendor on his current view
-                     */
-                    $response["changed_ids"] = array();
-                    $response["global"]  = false;
 
                     break;
                 /**
@@ -90,31 +84,37 @@ class Zolago_Catalog_Vendor_ProductController
                     $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
                     $validationData = $this->_validateProductAttributes($ids, $attributeSetId, $storeId);
 
-                    $ids = $validationData['ids'];
+                    $validatedIds = $validationData['ids'];
+                    $errorIds = array_values(array_diff($ids,$validatedIds));
                     $error = $validationData['error'];
                     $success = false;
 
-                    $idsCount = count($ids);
-                    if($idsCount) {
+                    $validatedIdsCount = count($validatedIds);
+                    if($validatedIdsCount) {
                         $this->_processAttributresSave(
-                            $ids,
+                            $validatedIds,
                             array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
                             ),
                             $storeId,
                             array("check_editable" => false)
                         );
 
-                        $this->_generateUrlKeys($ids, $storeId);
+                        $this->_generateUrlKeys($validatedIds, $storeId);
 
                         if($error) {
                             $success = '<div class="alert alert-success">' .
-                                Mage::helper('zolagocatalog')->__('Descriptions for %d products have been accepted', $idsCount) .
+                                Mage::helper('zolagocatalog')->__('Descriptions for %d products have been accepted', $validatedIdsCount) .
                                 '</div>';
                         }
                     }
 
                     if($error) {
                         $response['message'] = ($success ? $success : '') . ($error ? $error : '');
+                    }
+
+                    if(count($errorIds)) {
+                        $response['changed_ids'] = $errorIds;
+                        $response['global'] = false;
                     }
 
 
@@ -231,9 +231,16 @@ class Zolago_Catalog_Vendor_ProductController
             $attributeSetName = $attributeSetModel->getAttributeSetName();
 
             $productIdsCount = count($ids);
+
+            /*
+             * clear changed ids after mass attribute set change because we don't want those items
+             * to be reselected on description grid - they are not visible to vendor on his current view
+             */
+            $changedIds = array();
+            
             $response = array(
                 "status" => 1,
-                "changed_ids" => $ids,
+                "changed_ids" => $changedIds,
                 "count" => $productIdsCount,
                 "message" => $helper->__("<b>%s</b> product(s) moved to category <b>%s</b>", $productIdsCount, $attributeSetName)
             );
