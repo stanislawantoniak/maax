@@ -42,6 +42,24 @@
                     <tags>AJAX_RESPONSE</tags>
                 </ajax_response>
             </types>
+			<!-- Invalidate cache for customer ajax start -->
+			<checkout_cart_save_after>
+				<observers>
+					<orbacommon_ajax_cart_observer>
+						<class>Orba_Common_Model_Observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_cart_observer>
+				</observers>
+			</checkout_cart_save_after>
+			<sales_quote_save_after>
+				<observers>
+					<orbacommon_ajax_quote_observer>
+						<class>Orba_Common_Model_Observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_quote_observer>
+				</observers>
+			</sales_quote_save_after>
+			<!-- Invalidate cache for customer ajax end -->
         </cache>
     </global>
     <frontend>

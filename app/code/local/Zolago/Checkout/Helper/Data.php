@@ -119,7 +119,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 			$checkoutSession = Mage::getSingleton('checkout/session');
 			$checkoutData = $checkoutSession->getData();
 			/** @var GH_GTM_Helper_Data $gtmHelper */
-			$gtmHelper = Mage::helper("gh_gtm");
+			$gtmHelper = Mage::helper("ghgtm");
 
 			if(isset($checkoutData['shipping_method'])) {
 				$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));

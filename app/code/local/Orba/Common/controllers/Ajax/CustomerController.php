@@ -1,81 +1,85 @@
 <?php
 
 class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
-	
-	const MAX_CART_ITEMS_COUNT = 5;
+
+	/**
+	 * Set Sales Manago cookie with their ID
+	 */
+	public function get_salesmanago_informationAction() {
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+		/** @var Mage_Persistent_Helper_Session $persistentHelper */
+		$persistentHelper = Mage::helper('persistent/session');
+
+		if($customerSession->isLoggedIn()) {
+			$customer = $customerSession->getCustomer();
+		} elseif($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()) {
+			$customer = $persistentHelper->getCustomer();
+		} else {
+			$customer = false;
+		}
+
+		if($customer !== false && $customer->getId()) {
+			/** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
+			$salesmanagoHelper = Mage::helper('tracking');
+
+			$smContactId = false;
+
+			if($customer->getSalesmanagoContactId()) { //if customer has salesmanago contact id then set it to variable
+				$smContactId = $customer->getSalesmanagoContactId();
+			} else {
+				//sync customer with salesmanago as contact - it updates existing one or generates a new one
+				try {
+					$data = $salesmanagoHelper->_setCustomerData($customer->getData());
+					$r = $salesmanagoHelper->salesmanagoContactSync($data, true);
+					$smContactId = isset($r['contactId']) && $r['contactId'] ? $r['contactId'] : false;
+				} catch (Exception $e) {
+					Mage::logException($e);
+				}
+
+				if($smContactId) {
+					$customer->setData('salesmanago_contact_id', $smContactId)
+						->getResource()
+						->saveAttribute($customer, "salesmanago_contact_id");
+				}
+			}
+
+			if(!isset($_COOKIE['smclient']) || empty($_COOKIE['smclient']) ||
+				(isset($_COOKIE['smclient']) && $_COOKIE['smclient'] != $smContactId)) {
+				$salesmanagoHelper->addCookie('smclient',$smContactId);
+			}
+		}
+	}
 
     public function get_account_informationAction()
     {
-		
-		//$profiler = Mage::helper('zolagocommon/profiler');
+		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+
 		/* @var $profiler Zolago_Common_Helper_Profiler */
-		
-		//$profiler->start();
-        
-        /*shipping_cost*/
-		
-        $cost = Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
-		//$profiler->log("Quote shipping costs");
+		$profiler = Mage::helper('zolagocommon/profiler');
+		$profiler->start();
 
-        $costSum = 0;
-        if (!empty($cost)) {
-            $costSum = array_sum($cost);
-        }
-        $formattedCost = Mage::helper('core')->currency($costSum, true, false);
-        /*shipping_cost*/
+		$this->saveIsAjaxContext();
+		$cart = $cacheHelper->getCart();
+		$profiler->log("cart");
+		$search = $cacheHelper->getSearch($this->getRequest()->getParams());
+		$profiler->log("search");
+		$loggedIn = Mage::helper('customer')->isLoggedIn();
+		$profiler->log("logged in");
+		$favorites = $this->_getFavorites();
+		$profiler->log("favs");
+		$isUserPersistent = $this->isUserPersistent();
+		$profiler->log("persistent");
 
-		$quote = Mage::helper('checkout/cart')->getQuote();
-		/* @var $quote Mage_Sales_Model_Quote */
-		$totals = $quote->getTotals();
-		//$profiler->log("Quote totals");
-
-	    /** @var Mage_Persistent_Helper_Session $persistentHelper */
-	    $persistentHelper = Mage::helper('persistent/session');
-
-	    /** @var Zolago_Customer_Model_Session $customerSession */
-		$customerSession = Mage::getSingleton('customer/session');
-
-		$persistent = $persistentHelper->isPersistent() &&
-			!$customerSession->isLoggedIn();
-		
-		//$profiler->log("Persistent");
-	    //set registry to correctly identify current context
-	    $ajaxRefererUrlKey = 'ajax_referer_url';
-	    if(Mage::registry($ajaxRefererUrlKey)) {
-		    Mage::unregister($ajaxRefererUrlKey);
-	    }
-	    Mage::register($ajaxRefererUrlKey,$this->_getRefererUrl());
-
-
-	    /** @var Zolago_Solrsearch_Helper_Data $searchHelper */
-		$searchHelper = Mage::helper('zolagosolrsearch');
-		$searchContext = $searchHelper->getContextSelectorArray(
-				$this->getRequest()->getParams()
-		);
-		//$profiler->log("Context");
-
-        $layout = $this->getLayout();
         $content = array(
-            'user_account_url' => Mage::getUrl('customer/account', array("_no_vendor"=>true)),
-            'user_account_url_orders' => Mage::getUrl('sales/order/process', array("_no_vendor"=>true)),
-            'logged_in' => Mage::helper('customer')->isLoggedIn(),
-            'favorites_count' => $this->_getFavorites(),
-            'favorites_url' => Mage::getUrl("wishlist", array("_no_vendor"=>true)),
-            'cart' => array(
-                'all_products_count' => Mage::helper('checkout/cart')->getSummaryCount(),
-                'products' => $this->_getShoppingCartProducts(),
-                'total_amount' => round(isset($totals["subtotal"]) ? $totals["subtotal"]->getValue() : 0, 2),
-                'shipping_cost' => $formattedCost,
-                'show_cart_url' => Mage::getUrl('checkout/cart', array("_no_vendor"=>true)),
-                'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
-                'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
-            ),
-			'persistent' => $persistent,
-			'persistent_url' => Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true)),
-			'search' => $searchContext,
-            'salesmanago_tracking' => $this->_cleanUpHtml($layout->createBlock("tracking/layer")->toHtml())
+			'logged_in'			=> $loggedIn,
+			'favorites_count'	=> $favorites,
+			'cart'				=> $cart,
+			'persistent'		=> $isUserPersistent,
+			'search'			=> $search,
         );
-		//$profiler->log("Rest");
+		$profiler->log("content");
 		
 		// Load product context data & crosssell wishlist info & ask vendor form customer info
 		if($productId=$this->getRequest()->getParam("product_id")){
@@ -125,11 +129,19 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
                 $content['data_populate']['customer_email'] = isset($dataPopulate['customer_email']) ? $dataPopulate['customer_email'] : false;
                 $content['data_populate']['question_text']  = isset($dataPopulate['question_text'])  ? $dataPopulate['question_text']  : false;
             }
+			/**
+			 * When Varnish ON we need to add info about last viewed product
+			 * for event @see app/code/local/Zolago/Reports/Model/Event/Observer.php::ajaxAddLastViewed
+			 */
+			Mage::dispatchEvent('ajax_get_account_information_after', array('product' => $product));
 		}
 
-
+		$profiler->log("product");
 
 	    if($this->getRequest()->getParam('recently_viewed')) {
+			/** @var Mage_Persistent_Helper_Session $persistentHelper */
+			$persistentHelper = Mage::helper('persistent/session');
+
             /** @var Mage_Reports_Block_Product_Viewed $singleton */
             $singleton = Mage::getSingleton('Mage_Reports_Block_Product_Viewed');
 
@@ -164,151 +176,29 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			    $content['recentlyViewed'] = $recentlyViewedContent;
 		    }
 	    }
-
-        /*
-         * When Varnish ON we need to add info about last viewed product
-         * for event @see app/code/local/Zolago/Reports/Model/Event/Observer.php::ajaxAddLastViewed
-         */
-        if ($productId) {
-            /* @var $product Mage_Catalog_Model_Product */
-            $product = Mage::getModel("catalog/product");
-            $product->setId($productId);
-            Mage::dispatchEvent('ajax_get_account_information_after', array('product' => $product));
-        }
-
-	    /* salesmanago cookie */
-	    if($customerSession->isLoggedIn()) {
-		    $customer = $customerSession->getCustomer();
-	    } elseif($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()) {
-			$customer = $persistentHelper->getCustomer();
-	    } else {
-		    $customer = false;
-	    }
-
-	    if($customer !== false && $customer->getId()) {
-		    /** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
-		    $salesmanagoHelper = Mage::helper('tracking');
-
-		    $smContactId = false;
-
-		    if($customer->getSalesmanagoContactId()) { //if customer has salesmanago contact id then set it to variable
-			    $smContactId = $customer->getSalesmanagoContactId();
-		    } else {
-		        //sync customer with salesmanago as contact - it updates existing one or generates a new one
-			    try {
-				    $data = $salesmanagoHelper->_setCustomerData($customer->getData());
-				    $r = $salesmanagoHelper->salesmanagoContactSync($data, true);
-				    $smContactId = isset($r['contactId']) && $r['contactId'] ? $r['contactId'] : false;
-			    } catch (Exception $e) {
-				    Mage::logException($e);
-			    }
-
-			    if($smContactId) {
-				    $customer->setData('salesmanago_contact_id', $smContactId)
-					    ->getResource()
-					    ->saveAttribute($customer, "salesmanago_contact_id");
-			    }
-		    }
-
-		    if(!isset($_COOKIE['smclient']) || empty($_COOKIE['smclient']) ||
-			    (isset($_COOKIE['smclient']) && $_COOKIE['smclient'] != $smContactId)) {
-			    $salesmanagoHelper->addCookie('smclient',$smContactId);
-		    }
-	    }
+		$profiler->log("recentlyViewed");
 
 
-	    if(Mage::getStoreConfig(Shopgo_GTM_Helper_Data::XML_PATH_ACTIVE)) {
-		    /** @var GH_GTM_Helper_Data $gtmHelper */
-		    $gtmHelper = Mage::helper('gh_gtm');
+		/** @var GH_GTM_Helper_Data $gtmHelper */
+		$gtmHelper = Mage::helper('ghgtm');
+	    if($gtmHelper->isGTMAvailable()) {
 		    $content['visitor_data'] = $gtmHelper->getVisitorData();
 	    }
-
+		$profiler->log("gtm");
 
         $result = $this->_formatSuccessContentForResponse($content);
         $this->_setSuccessResponse($result);
-    }
-	
-	public function _getShoppingCartProducts(){
-		
-		$quote = Mage::getSingleton('checkout/session')->getQuote();
-        $cartItems = $quote->getAllVisibleItems();
-		
-		if(sizeof($cartItems) > self::MAX_CART_ITEMS_COUNT){
-			$cartItems = array_slice($cartItems, 0, self::MAX_CART_ITEMS_COUNT);	
-		}
-		
-//		// Product load 
-//		$productsIds = array();
-//		foreach ($cartItems as $item){
-//            $productsIds[] = $item->getProductId();
-//		}
-//		
-//		$collection = Mage::getResourceModel("catalog/product_collection");
-//		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-//		
-//		$collection->addAttributeToSelect("name");
-//		$collection->addAttributeToSelect("image");
-//		$collection->addAttributeToSelect("url_path");
-//		
-//		if($productsIds){
-//			$collection->addIdFilter($productsIds);
-//		}else{
-//			$collection->addIdFilter(-1);
-//		}
-		
-		$array = array();
-        foreach ($cartItems as $item)
-        {
-//            $productId = $item->getProductId();
-//            $product = $collection->getItemById($productId);
-            $product = $item->getProduct();
-			/* @var $product Mage_Catalog_Model_Product */
-			
-			if($product && $product->getId()){
-				$options = $this->_getProductOptions($item);
-				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(40, 50);
 
-				$array[] = array(
-					'name' => $product->getName(),
-					'url' => $product->getNoVendorContextUrl(),
-					'qty' => $item->getQty(),
-					'unit_price' => round($item->getPriceInclTax(), 2),
-					'image_url' => (string) $image,
-					'options' => $options
-				);
-			}
-			
-        }
-		
-		return (sizeof($array) > 0) ? $array : 0;
-	}
-	
+		$profiler->log("all");
+		$profiler->log("--------------------------------");
+    }
+
 	public function _getFavorites(){
 		$wishlist = Mage::helper('zolagowishlist')->getWishlist();
 		return $wishlist->getItemsCount();
 	}
 	
-	public function _getProductOptions($item){
-		
-		$product = $item->getProduct();
-		
-		$options = $product->getTypeInstance(true)->getOrderOptions($product);
-		
-		$array = array();
-		if ($options){
-			if(isset($options['attributes_info'])){
-				foreach ($options['attributes_info'] as $attrib){
-					
-					$array[] = array(
-						'label' => $attrib['label'],
-						'value' => $attrib['value']
-					);
-				}
-			}		
-		}
-            
-		return $array;
-	}
+
 
     /**
      * clean ups html from excess of newlines, whitespaces and tabs
@@ -319,4 +209,28 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
         $string = preg_replace('/\s*$^\s*/m', "\n", $string);
         return preg_replace('/[ \t]+/', ' ', $string);
     }
+
+	public function isUserPersistent() {
+		/** @var Mage_Persistent_Helper_Session $persistentHelper */
+		$persistentHelper = Mage::helper('persistent/session');
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+		return $persistentHelper->isPersistent() && !$customerSession->isLoggedIn();
+	}
+
+	/**
+	 * Need to store in registry info about that is ajax context
+	 * Purpose: for correct receiving data like current vendor
+	 *
+	 * @return $this
+	 */
+	public function saveIsAjaxContext() {
+		//set registry to correctly identify current context
+		$ajaxReferrerUrlKey = 'ajax_referrer_url';
+		if (Mage::registry($ajaxReferrerUrlKey)) {
+			Mage::unregister($ajaxReferrerUrlKey);
+		}
+		Mage::register($ajaxReferrerUrlKey, $this->_getRefererUrl());
+		return $this;
+	}
 }

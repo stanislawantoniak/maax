@@ -248,7 +248,6 @@
           <!-- Cache Lifetime of 1 hour -->
         </action>
       </reference>
-      <remove name="salesmanago_tracking"/>
     </reference>
     <reference name="root">
       <action method="setTemplate">

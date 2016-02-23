@@ -4,7 +4,7 @@ class Zolago_DropshipMicrosite_Helper_Protected extends Unirgy_DropshipMicrosite
 	protected function _getFrontendVendor($useUrl = false) {
 
 		if($useUrl === false) {
-			$useUrl = Mage::registry('ajax_referer_url');
+			$useUrl = Mage::registry('ajax_referrer_url');
 		}
 
 		return parent::_getFrontendVendor($useUrl);
