@@ -61,6 +61,28 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
                         }
                     }
                     $model->updateModelData($data);
+
+                    /*Filter empty values*/
+                    foreach($data['sizetable'] as $storeId => $sizeTablePerStore){
+                        $countPerStore = 0;
+                        $filterValues = array_filter(array($sizeTablePerStore["title"], $sizeTablePerStore["A"],$sizeTablePerStore["B"],$sizeTablePerStore["C"]));
+                        if(!empty($filterValues)){
+                            $countPerStore++;
+                        }
+                        foreach($sizeTablePerStore["table"] as $sizeTablePerStoreTable){
+                            $filterTable = array_filter($sizeTablePerStoreTable);
+                            if(!empty($filterTable)){
+                                $countPerStore++;
+                            }
+                        }
+                        unset($filterValues,$filterTable);
+
+                        if($countPerStore == 0){
+                            unset($data['sizetable'][$storeId]);
+                        }
+                    }
+                    /*Filter empty values*/
+
                     $model->setPostData($data['sizetable']);
 
                     $model->save();
