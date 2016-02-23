@@ -76,7 +76,7 @@ class Zolago_Catalog_Vendor_ProductController
                         $attributeCode,
                         $attributeValue,
                         $this->_getCollection(),
-                        $attributeMode
+                        $attributeMode[$attributeCode]
                     );
 
                     /*Save attribute change history*/

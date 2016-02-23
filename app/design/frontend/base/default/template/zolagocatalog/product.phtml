@@ -36,6 +36,11 @@ $helper = Mage::helper("zolagocatalog");
 				<i class="icon-puzzle-piece"></i>
 				<?php echo Mage::helper("gh_attributerules")->__("Autofill rules"); ?>
 			</a>
+			&nbsp;
+			<a id="changesHistory-trigger" data-toggle="modal" data-target="#showChangesHistory">
+				<i class="icon-time"></i>
+				<?php echo Mage::helper("zolagocatalog")->__("Show Changes History"); ?>
+			</a>
 		</div>
         <div class="col-xs-4 text-right">
             <span class="grid-total-text"><?php echo $helper->__("Products: "); ?></span><span class="grid-total-number">0</span>

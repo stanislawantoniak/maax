@@ -153,23 +153,25 @@
 				<block type="zolagocatalog/vendor_product_attributesetswitcher" name="attribute_set_switcher" template="zolagocatalog/product/attributesetswitcher.phtml"/>
 				<block type="core/template" name="mass_actions" template="zolagocatalog/product/massactions.phtml"/>
 				<block type="zolagocatalog/vendor_product_grid" name="grid" template="zolagocatalog/product/grid.phtml"/>
-                <block type="core/text_list" name="popups">
-                    <block type="zolagocatalog/vendor_product_custom_columns" name="columns"
-                           template="zolagocatalog/product/custom/columns.phtml"/>
-                    <block type="core/template" name="filters" template="zolagocatalog/product/custom/filters.phtml">
-                        <block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter"
-                               as="other_filter" template="zolagocatalog/product/custom/filters/otherfilter.phtml"/>
-                        <block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter"
-                               as="additional_filter"
-                               template="zolagocatalog/product/custom/filters/additionalcolumnfilter.phtml"/>
-                        <block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter"
-                               as="static_filter" template="zolagocatalog/product/custom/filters/staticfilter.phtml"/>
-                    </block>
-                    <block type="gh_attributerules/attribute" name="attributerules"
-                           template="zolagocatalog/product/custom/attributerules.phtml"/>
-                    <block type="zolagocatalog/vendor_product_changeAttributeSet" name="change_attribute_set"
-                           template="zolagocatalog/product/custom/change_attribute_set.phtml"/>
-                </block>
+				<block type="core/text_list" name="popups">
+					<block type="zolagocatalog/vendor_product_custom_columns" name="columns"
+						   template="zolagocatalog/product/custom/columns.phtml"/>
+					<block type="core/template" name="filters" template="zolagocatalog/product/custom/filters.phtml">
+						<block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter"
+							   as="other_filter" template="zolagocatalog/product/custom/filters/otherfilter.phtml"/>
+						<block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter"
+							   as="additional_filter"
+							   template="zolagocatalog/product/custom/filters/additionalcolumnfilter.phtml"/>
+						<block type="zolagocatalog/vendor_product_custom_staticfilter" name="static_filter"
+							   as="static_filter" template="zolagocatalog/product/custom/filters/staticfilter.phtml"/>
+					</block>
+					<block type="gh_attributerules/attribute" name="attributerules"
+						   template="zolagocatalog/product/custom/attributerules.phtml"/>
+					<block type="zolagocatalog/product_description_history" name="changeshistory"
+						   template="zolagocatalog/product/custom/changeshistory.phtml"/>
+					<block type="zolagocatalog/vendor_product_changeAttributeSet" name="change_attribute_set"
+						   template="zolagocatalog/product/custom/change_attribute_set.phtml"/>
+				</block>
 			</block>
 		</reference>
 	</udprod_vendor_product_index>
