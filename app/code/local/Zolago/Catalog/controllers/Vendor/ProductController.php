@@ -70,7 +70,15 @@ class Zolago_Catalog_Vendor_ProductController
 
                     /* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
                     $descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
-                    $descriptionHistoryModel->updateChangesHistory($this->getVendorId(),$ids, $attributeCode,$attributeValue, $this->_getCollection(), $attributeMode);
+                    $descriptionHistoryModel->updateChangesHistory(
+                        $this->getVendorId(),
+                        $ids,
+                        $attributeCode,
+                        $attributeValue,
+                        $this->_getCollection(),
+                        $attributeMode
+                    );
+
                     /*Save attribute change history*/
 
                     if ($attributeCode == "description" || $attributeCode == "short_description") {

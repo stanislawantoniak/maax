@@ -32,7 +32,6 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
      * @param $attributeMode
      */
     public function updateChangesHistory($vendorId, $ids, $attributeCode, $attributeValue, $collection, $attributeMode = ""){
-        //Mage::log($collection->addFieldToFilter("entity_id", array("in" => $ids))->getData(), null, "collection.log");
 
         $oldValues = array();
         $changedCollection = $collection->addFieldToFilter("entity_id", array("in" => $ids));
@@ -45,9 +44,7 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         //Mage::log($attributeMode[$attributeCode], null, "attribute_mode.log");
 
         //Mage::log($attributeValue, null, "attribute_value.log");
-        //1. todo Check configuration
-        //1.1. Max changes count udprod/product_description_history_changes_count/max_changes_count
-        //1.2. Changes history expiration  life time (in hours) udprod/product_description_history_changes_count/history_expiration_time
+
         $changesData = array(
             "ids" => $ids,
             "attribute_code" => $attributeCode,
@@ -63,9 +60,6 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         );
         $this->addData($data);
         $this->save();
-
-
-        //2. Save history
 
     }
 
