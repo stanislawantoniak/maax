@@ -574,7 +574,8 @@
 	transition: 0.01s;
 }
 
-#showAttributeRules-trigger {
+#showAttributeRules-trigger,
+#changesHistory-trigger {
 	color: #4d7496;
 	background-color: #ffffff;
 	border: none;
