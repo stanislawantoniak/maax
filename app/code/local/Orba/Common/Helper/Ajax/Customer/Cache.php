@@ -8,7 +8,11 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	const CACHE_TAG				= 'CUSTOMER_AJAX_INFO';
 	const CACHE_TAG_CART		= 'CUSTOMER_AJAX_INFO_CART';
 	const CACHE_TAG_SEARCH		= 'CUSTOMER_AJAX_INFO_SEARCH';
+	const CACHE_TAG_CUSTOMER_INFO = 'CUSTOMER_AJAX_CUSTOMER_INFO';
 	const CACHE_LIFE_TIME		= 900; // 15 min
+
+	// temporary for store data for later save by $this->saveCustomerInfoCache()
+	protected $customerInfo = array();
 
 	/**
 	 * Key building depends on logic in
@@ -45,6 +49,16 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCacheKeyForCustomerInfo() {
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+		$cId = (int)$customerSession->getId();
+		return self::CACHE_NAME . 'customer-info-' . $cId;
+	}
+
+	/**
 	 * @return array|false|mixed
 	 */
 	public function getCart() {
@@ -71,6 +85,131 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		);
 		$this->saveInCache($key, $cart, array(self::CACHE_TAG_CART));
 		return $cart;
+	}
+
+	/**
+	 * Get and store info about favorites count
+	 * and favorites product ids
+	 *
+	 * @return $this
+	 */
+	public function getFavoritesDetails() {
+
+		if (!isset($this->customerInfo['favorites_count']) && !isset($this->customerInfo['favorites_products'])) {
+			// Favorites Count
+			/** @var Zolago_Wishlist_Helper_Data $wishlistHelper */
+			$wishlistHelper = Mage::helper('zolagowishlist');
+			$wishlist = $wishlistHelper->getWishlist();
+			$coll = $wishlist->getItemCollection();
+			$data = $coll->getData();
+
+			$wishlistProdIds = array();
+			foreach ($data as $item) {
+				/** @var Mage_Wishlist_Model_Item $item */
+				$wishlistProdIds[$item['product_id']] = true;
+			}
+			$this->customerInfo = array_merge($this->customerInfo, array('favorites_count' => count($wishlistProdIds)));
+
+			// Favorites products ids
+			$this->customerInfo = array_merge($this->customerInfo, array('favorites_products' => $wishlistProdIds));
+		}
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFavoritesCount() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if ($cacheData) {
+				return $cacheData['favorites_count'];
+			}
+		}
+		$this->getFavoritesDetails();
+		return $this->customerInfo['favorites_count'];
+	}
+
+	/**
+	 * Array of favorites products ids
+	 *
+	 * @return array
+	 */
+	public function getFavoritesProductsIds() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if ($cacheData) {
+				return $cacheData['favorites_products'];
+			}
+		}
+		$this->getFavoritesDetails();
+		return $this->customerInfo['favorites_products'];
+	}
+
+	/**
+	 * Manually save part of cache connected only to customer
+	 *
+	 * @return $this
+	 */
+	public function saveCustomerInfoCache() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
+		return $this;
+	}
+
+	/**
+	 * Retrieve recently viewed products info
+	 *
+	 * @param $skipProductId
+	 * @return array
+	 */
+	public function getRecentlyViewed($skipProductId) {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if ($cacheData) {
+				// Don't show in last viewed box current product
+				unset($cacheData['recently_viewed'][(int)$skipProductId]);
+				return array_values($cacheData['recently_viewed']);
+			}
+		}
+
+		/** @var Mage_Persistent_Helper_Session $persistentHelper */
+		$persistentHelper = Mage::helper('persistent/session');
+
+		/** @var Mage_Reports_Block_Product_Viewed $singleton */
+		$singleton = Mage::getSingleton('Mage_Reports_Block_Product_Viewed');
+
+		// By persistent
+		if($persistentHelper->isPersistent() && $persistentHelper->getSession()->getCustomerId()){
+			$customerId = $persistentHelper->getSession()->getCustomerId();
+			$singleton->setCustomerId($customerId);
+		}
+		$recentlyViewedProducts = $singleton->getItemsCollection();
+
+		$recentlyViewedContent = array();
+		if ($recentlyViewedProducts->count() > 0) {
+			foreach ($recentlyViewedProducts as $product) {
+				/* @var $product Zolago_Catalog_Model_Product */
+				$image = Mage::helper("zolago_image")
+					->init($product, 'small_image')
+					->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+					->adaptiveResize(200, 312);
+				$recentlyViewedContent[(int)$product->getId()] = array(
+					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
+					'image_url' => (string)$image,
+					'redirect_url' => $product->getNoVendorContextUrl()
+				);
+			}
+		}
+		// Cache all recently viewed
+		$this->customerInfo = $copy = array_merge($this->customerInfo, array('recently_viewed' => $recentlyViewedContent));
+
+		// Don't show in last viewed box current product
+		unset($copy['recently_viewed'][(int)$skipProductId]);
+		return array_values($copy['recently_viewed']);
 	}
 
 	/**

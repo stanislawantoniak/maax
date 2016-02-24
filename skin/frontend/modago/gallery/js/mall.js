@@ -336,16 +336,16 @@ var Mall = {
         }
 
 
-		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
+		if(typeof data.content.recently_viewed != 'undefined' && data.content.recently_viewed.length) {
 			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
 			if ( rwd_recently_viewed.length !=0 ) {
 
 				var recentlyViewedContent = "";
 
-				for(var i in data["content"]["recentlyViewed"]){
-					var redirect_url = data["content"]["recentlyViewed"][i].redirect_url;
-					var image_url = data["content"]["recentlyViewed"][i].image_url;
-					var title = data["content"]["recentlyViewed"][i].title;
+				for(var i in data["content"]["recently_viewed"]){
+					var redirect_url = data["content"]["recently_viewed"][i].redirect_url;
+					var image_url = data["content"]["recently_viewed"][i].image_url;
+					var title = data["content"]["recently_viewed"][i].title;
 					recentlyViewedContent += "<a href=\""+redirect_url+"\" class=\"simple\">";
 					recentlyViewedContent += "<div class=\"box_listing_product\">";
 					recentlyViewedContent += "<figure class=\"img_product\">";
