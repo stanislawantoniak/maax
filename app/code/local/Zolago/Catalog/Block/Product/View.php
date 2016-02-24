@@ -573,4 +573,54 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
         return $exclude;
     }
+
+	protected function _getSizeTableContent() {
+		/** @var $_product Zolago_Catalog_Model_Product*/
+		$_product = $this->getProduct();
+		$_helperSizetable = Mage::helper('zolagosizetable');
+		/** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
+		$vendor_id = $_product->getData('udropship_vendor');
+		$storeId = Mage::app()->getStore()->getStoreId();
+		$attributeSetId = $_product->getData('attribute_set_id');
+		$brandId = $_product->getData( 'manufacturer');
+
+		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+
+		return $sizeTableValue;
+	}
+
+	protected function _getSizeTableContainer() {
+		/** @var Mage_Cms_model_Block $block */
+		$block  = Mage::getModel('cms/block')
+			->setStoreId(Mage::app()->getStore()->getId())
+			->load('sizetablecontainer');
+
+		$vars = array(
+			'sizetableCss' => $this->_getSizeTableStyle(),
+			'sizetableContent' => $this->_getSizeTableContent()
+		);
+		/* This will be {{var sizetableCss}} and {{var sizetableContent}} in sizetablecontainer block  */
+
+		/** @var Mage_Cms_Model_Template_Filter $filterModel */
+		$filterModel = Mage::getModel('cms/template_filter');
+		$filterModel->setVariables($vars);
+
+		return $filterModel->filter($block->getContent());
+	}
+
+	protected function _getSizeTableStyle() {
+		/** @var Mage_Cms_model_Block $block */
+		$block  = Mage::getModel('cms/block')
+			->setStoreId(Mage::app()->getStore()->getId())
+			->load('sizetablecss');
+
+		return $block->getContent();
+	}
+
+	public function getSizeTableForJs() {
+		$sizetable = $this->_getSizeTableContainer();
+		$sizetable = str_replace(array("\"","\n","\r"),array("\\\""," "," "),$sizetable);
+
+		return "\"" . $sizetable . "\"";
+	}
 }

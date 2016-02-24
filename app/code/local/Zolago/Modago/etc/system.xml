@@ -227,6 +227,26 @@
 			            </hide_after>
 		            </fields>
 	            </scrolltop>
+	            <header>
+		            <fields>
+			            <secondary_logo_src translate="label">
+				            <label>Alternative logo SRC</label>
+				            <frontend_type>text</frontend_type>
+				            <sort_order>50</sort_order>
+				            <show_in_default>1</show_in_default>
+				            <show_in_website>1</show_in_website>
+				            <show_in_store>1</show_in_store>
+			            </secondary_logo_src>
+			            <secondary_logo_alt translate="label">
+				            <label>Alternative logo ALT</label>
+				            <frontend_type>text</frontend_type>
+				            <sort_order>60</sort_order>
+				            <show_in_default>1</show_in_default>
+				            <show_in_website>1</show_in_website>
+				            <show_in_store>1</show_in_store>
+			            </secondary_logo_alt>
+		            </fields>
+	            </header>
             </groups>
         </design>
     </sections>

@@ -1,29 +1,41 @@
 <?php
 
-class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
-	/**
-	 * Init category and register it
-	 */
-    protected function _initCategory() {
-		$categoryId = $this->getRequest()->getParam("scat", 0);
-		$catModel = null;
-		if($categoryId){
-			$catModel = Mage::getModel("catalog/category")->load($categoryId);
-		}
-		if(!$catModel || !$catModel->getId()){
-			$catModel = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
-		}
+class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
+{
+    /**
+     * Init category and register it
+     */
+    protected function _initCategory()
+    {
+        $categoryId = $this->getRequest()->getParam("scat", 0);
+        $catModel = null;
+        if ($categoryId) {
+            $catModel = Mage::getModel("catalog/category")->load($categoryId);
+        }
+        if (!$catModel || !$catModel->getId()) {
+            $catModel = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();
+        }
 
-		$current_category = "current_category";
-		if(Mage::registry($current_category)) {
-			Mage::unregister($current_category);
-		}
-		Mage::register($current_category,$catModel);
+        //if filter params then set display_mode to PRODUCTS
+        $fq = Mage::app()->getRequest()->getParams("fq", array());
+        $originDisplayMode = $catModel->getDisplayMode();
+        $catModel->setOriginDisplayMode($originDisplayMode);
+        if (!empty($fq)) {
+            $catModel->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
+        } else {
+            $catModel->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
+        }
+        $current_category = "current_category";
+        if (Mage::registry($current_category)) {
+            Mage::unregister($current_category);
+        }
+        Mage::register($current_category, $catModel);
 
-		return $catModel;
-	}
+        return $catModel;
+    }
 
-    protected function _initCurrentLayout(){
+    protected function _initCurrentLayout()
+    {
         $layout = $this->getLayout();
         $design = Mage::getDesign();
 
@@ -66,16 +78,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 
 
         /** @var Zolago_Catalog_Model_Category $category */
-
-        $reloadToCms = (int)($category->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
-
-
-        //if filter params then set display_mode to PRODUCTS
-        if ($fq) {
-            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PRODUCT);
-        } else {
-            $category->setDisplayMode(Mage_Catalog_Model_Category::DM_PAGE);
-        }
+        $reloadToCms = (int)($category->getOriginDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
@@ -86,40 +89,42 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
         }
         Mage::register($categoryWithFiltersKey, $url);
 
-	    //title
-	    $campaign = $category->getCurrentCampaign();
-	    if($campaign){
-		    $title = $campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName();
-	    } else {
-		    /** @var GH_Rewrite_Helper_Data $_rewriteHlp */
-		    $_rewriteHlp = Mage::helper("ghrewrite");
-		    $rewriteData = $_rewriteHlp->getCategoryRewriteData();
-		    if ($rewriteData && count($rewriteData) && isset($rewriteData['title']) && !empty($rewriteData['title'])) {
-			    $title = $rewriteData['title'];
-		    } elseif($category->getMetaTitle()) {
-			    $title = $category->getMetaTitle();
-		    } else {
-			    $title = Mage::app()->getStore()->getName();
-		    }
-	    }
-
-/*        $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
-        $path = $breadcrumbs->getPathProp();
-        $title = array();
-        foreach ($path as $name => $breadcrumb) {
-            $title[] = $breadcrumb['label'];
+        //title
+        $campaign = $category->getCurrentCampaign();
+        if ($campaign) {
+            $title = $campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName();
+        } else {
+            /** @var GH_Rewrite_Helper_Data $_rewriteHlp */
+            $_rewriteHlp = Mage::helper("ghrewrite");
+            $rewriteData = $_rewriteHlp->getCategoryRewriteData();
+            if ($rewriteData && count($rewriteData) && isset($rewriteData['title']) && !empty($rewriteData['title'])) {
+                $title = $rewriteData['title'];
+            } elseif ($category->getMetaTitle()) {
+                $title = $category->getMetaTitle();
+            } else {
+                $title = Mage::app()->getStore()->getName();
+            }
         }
-        $title = join($breadcrumbs->getTitleSeparator(), array_reverse($title));
 
-        $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
+        /*        $breadcrumbs = new Zolago_Catalog_Block_Breadcrumbs();
+                $path = $breadcrumbs->getPathProp();
+                $title = array();
+                foreach ($path as $name => $breadcrumb) {
+                    $title[] = $breadcrumb['label'];
+                }
+                $title = join($breadcrumbs->getTitleSeparator(), array_reverse($title));
 
-        if (!empty($rewriteData) && isset($rewriteData["title"]) && !empty($rewriteData["title"])) {
-            $title = $rewriteData["title"];
-        }*/
+                $rewriteData = Mage::helper("ghrewrite")->getCategoryRewriteData();
 
-	    $header = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
-	    $header->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
-	    $header->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
+                if (!empty($rewriteData) && isset($rewriteData["title"]) && !empty($rewriteData["title"])) {
+                    $title = $rewriteData["title"];
+                }*/
+
+
+
+        $header = $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type");
+        $header->setChild('zolagocatalog_breadcrumbs', $layout->createBlock('zolagocatalog/breadcrumbs'));
+        $header->setChild('solrsearch_product_list_active', $layout->createBlock('zolagosolrsearch/active'));
 
 
         $content = array_merge($products, array(//Zolago_Modago_Block_Solrsearch_Faces
@@ -127,7 +132,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
             "header" => $this->_cleanUpHtml($header->toHtml()),
             "filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/solrsearch_faces")->toHtml()),
             "document_title" => $title,
-	        "category_with_filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
+            "category_with_filters" => $this->_cleanUpHtml($layout->createBlock("zolagomodago/catalog_category_rewrite")->toHtml()),
             "reload_to_cms" => $reloadToCms,
             "listing_type" => $type
         ));
@@ -136,140 +141,141 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
         $this->_setSuccessResponse($result);
     }
 
-	/**
-	 * clean ups html from excess of newlines, whitespaces and tabs
-	 * @param $string
-	 * @return string
-	 */
-	protected function _cleanUpHtml($string) {
-		$string = preg_replace('/\s*$^\s*/m', "\n", $string);
-		return preg_replace('/[ \t]+/', ' ', $string);
-	}
-	
-	/**
-	 * Get product list for listing
-	 */
-	public function get_productsAction() {
-		$this->_initCategory();
-		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
-		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
-		$products=$this->_getProducts($listModel);
+    /**
+     * clean ups html from excess of newlines, whitespaces and tabs
+     * @param $string
+     * @return string
+     */
+    protected function _cleanUpHtml($string)
+    {
+        $string = preg_replace('/\s*$^\s*/m', "\n", $string);
+        return preg_replace('/[ \t]+/', ' ', $string);
+    }
 
-		$result = $this->_formatSuccessContentForResponse($products);
+    /**
+     * Get product list for listing
+     */
+    public function get_productsAction()
+    {
+        $listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
+        /* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+        $products = $this->_getProducts($listModel);
 
-		$this->_setSuccessResponse($result);
-	}
-	
-	/**
-	 * 
-	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
-	 * @param type $param
-	 * @return type
-	 */
-	protected function _getSolrParam(Zolago_Solrsearch_Model_Catalog_Product_List $listModel, $param) {
-		if (is_null($out = $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param))) {
-		    $out = $listModel->getCollection()->getSolrData('responseHeader', 'params', $param);
-		}
-		return $out;
-	}
-	
-	/**
-	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
-	 * @return array
-	 * @todo fix q param in getSolrParams (check if empty - **, ,***, ** , etc.))
-	 */
-	protected function _getProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel) {
-		
-		
-		//$profiler = Mage::helper("zolagocommon/profiler");
-		/* @var $profiler Zolago_Common_Helper_Profiler */
-		//$profiler->start();
+        $result = $this->_formatSuccessContentForResponse($products);
 
-		/** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
-		$_solrHelper = Mage::helper("zolagosolrsearch");
-		$layout = $layout = $this->_initCurrentLayout();
+        $this->_setSuccessResponse($result);
+    }
 
-		$params = $this->getRequest()->getParams();
-		unset($params["start"]);
-		$categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
+    /**
+     *
+     * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
+     * @param type $param
+     * @return type
+     */
+    protected function _getSolrParam(Zolago_Solrsearch_Model_Catalog_Product_List $listModel, $param)
+    {
+        if (is_null($out = $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param))) {
+            $out = $listModel->getCollection()->getSolrData('responseHeader', 'params', $param);
+        }
+        return $out;
+    }
 
-		$category = $this->_initCategory();
+    /**
+     * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
+     * @return array
+     * @todo fix q param in getSolrParams (check if empty - **, ,***, ** , etc.))
+     */
+    protected function _getProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel)
+    {
 
-		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
+        /** @var Zolago_Solrsearch_Helper_Data $_solrHelper */
+        $_solrHelper = Mage::helper("zolagosolrsearch");
+        $layout = $layout = $this->_initCurrentLayout();
 
-		$url = $this->generateAjaxLink($category, $categoryId, $params, $type);
+        $params = $this->getRequest()->getParams();
+        unset($params["start"]);
+        $categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 
+        $category = $this->_initCategory();
 
+        $type = $listModel->getMode() == $listModel::MODE_SEARCH ? "search" : "category";
 
-		$pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
-			->setGeneratedUrl($url)
-			->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
+        $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
-		return array(
-			"total"			=> (int)$listModel->getCollection()->getSize(),
-			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
-			"rows"			=> (int)$this->_getSolrParam($listModel, 'rows'),
-			"query"			=> '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
-			"sort"			=> $listModel->getCurrentOrder(),
-			"dir"			=> $listModel->getCurrentDir(),
-			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
-			"pager"		    => $this->_cleanUpHtml($pager->toHtml()),
-			"url"           => $url
-		);
-	}
+        Mage::log($url,null,'urlooooo.log');
+
+        $pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
+            ->setGeneratedUrl($url)
+            ->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
+
+        return array(
+            "total" => (int)$listModel->getCollection()->getSize(),
+            "start" => (int)$this->_getSolrParam($listModel, 'start'),
+            "rows" => (int)$this->_getSolrParam($listModel, 'rows'),
+            "query" => '', ///    jak nie działało było dobrze. parametr prawdopodobnie kompletnie niepotrzebny w tym kontekście.  [ $this->_getSolrParam($listModel, 'q'), ]
+            "sort" => $listModel->getCurrentOrder(),
+            "dir" => $listModel->getCurrentDir(),
+            "products" => $_solrHelper->prepareAjaxProducts($listModel),
+            "pager" => $this->_cleanUpHtml($pager->toHtml()),
+            "url" => $url
+        );
+    }
 
 
+    /**
+     * Generate category url (depends on landing page ->@see Zolago_Campaign_Helper_LandingPage getLandingPageUrlByCampaign)
+     * or GH_Rewrite ->@see GH_Rewrite_Helper_Data prepareRewriteUrl
+     * or category_url
+     * @param $category
+     * @param $categoryId
+     * @param $params
+     * @param $type
+     * @return $this|bool|mixed|string
+     */
+    public function generateAjaxLink($category, $categoryId, $params, $type)
+    {
+        $url = false;
+        /** @var GH_Rewrite_Helper_Data $rewriteHelper */
+        $rewriteHelper = Mage::helper('ghrewrite');
+        $rewriteHelper->clearParams($params);
+        $rewriteHelper->sortParams($params);
 
-	/**
-	 * Generate category url (depends on landing page ->@see Zolago_Campaign_Helper_LandingPage getLandingPageUrlByCampaign)
-	 * or GH_Rewrite ->@see GH_Rewrite_Helper_Data prepareRewriteUrl
-	 * or category_url
-	 * @param $category
-	 * @param $categoryId
-	 * @param $params
-	 * @param $type
-	 * @return $this|bool|mixed|string
-	 */
-	public function generateAjaxLink($category, $categoryId, $params, $type)
-	{
-		$url = false;
-		/** @var GH_Rewrite_Helper_Data $rewriteHelper */
-		$rewriteHelper = Mage::helper('ghrewrite');
-		$rewriteHelper->clearParams($params);
-		$rewriteHelper->sortParams($params);
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
 
-		$rootId = Mage::app()->getStore()->getRootCategoryId();
+        /* @var $zDropshipHelper Zolago_Dropship_Helper_Data */
+        $zDropshipHelper = Mage::helper("zolagodropship");
+        $vendorRootCategory = $zDropshipHelper->getCurrentVendorRootCategory();
 
-		/* @var $zDropshipHelper Zolago_Dropship_Helper_Data */
-		$zDropshipHelper = Mage::helper("zolagodropship");
-		$vendorRootCategory = $zDropshipHelper->getCurrentVendorRootCategory();
+        if ($type == "search") {
+            $query = http_build_query($params);
+            $url = Mage::getUrl('search') . ($query ? "?" . $query : "");
+        } elseif ($type == "category") {
 
-		if ($type == "search") {
-			$query = http_build_query($params);
-			$url = Mage::getUrl('search') . ($query ? "?" . $query : "");
-		} elseif ($type == "category") {
+            $campaign = $category->getCurrentCampaign();
+            if ($campaign) {
+                /* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+                $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+                $url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
 
-			$campaign = $category->getCurrentCampaign();
-			if ($campaign) {
-				/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
-				$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
-				$url = $landingPageHelper->getLandingPageUrlByCampaign($campaign, FALSE, $params);
+            } elseif ($categoryId == $rootId || $categoryId == $vendorRootCategory) {
+                //Case when remove last filter on GALLERY ROOT listing or VENDOR ROOT listing (Landing pages)
+                $query = http_build_query($params);
+                $url = Mage::getBaseUrl() . ($query ? "?" . $query : "");
+            } else {
+                $url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
+            }
+        }
+        if (!$url) {
+            $query = http_build_query($params);
+            $url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
+        }
 
-			} elseif ($categoryId == $rootId || $categoryId == $vendorRootCategory) {
-				//Case when remove last filter on GALLERY ROOT listing or VENDOR ROOT listing (Landing pages)
-				$query = http_build_query($params);
-				$url = Mage::getBaseUrl() . ($query ? "?" . $query : "");
-			} else {
-				$url = $rewriteHelper->prepareRewriteUrl('catalog/category/view', $categoryId, $params);
-			}
-		}
-		if (!$url) {
-			$query = http_build_query($params);
-			$url = Mage::getBaseUrl() . $category->getUrlPath() . ($query ? "?" . $query : "");
-		}
+        if(Mage::app()->getStore()->isCurrentlySecure()) {
+            $url = str_replace('http://','https://',$url);
+        }
 
-		return $url;
-	}
-	
-	
+        return $url;
+    }
+
+
 }

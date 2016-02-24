@@ -6,6 +6,8 @@ class Modago_Integrator_Model_Order {
 
 	protected $_apiShippingCost = 0;
 	protected $_modagoOrderId;
+	protected $_productStocks = array();
+	protected $_productProblems = array();
 
 	public function __construct() {
 		$this->_helper = Mage::helper("modagointegrator/api");
@@ -120,10 +122,7 @@ class Modago_Integrator_Model_Order {
 			'lastname'              => isset($billingData['last_name']) ? $billingData['last_name'] : '',
 			'suffix'                => '',
 			'company'               => isset($billingData['company_name']) ? $billingData['company_name'] : '',
-			'street'                => array(
-											0 => isset($billingData['street']) ? $billingData['street'] : '',
-											1 => ''
-										),
+			'street'                => isset($billingData['street']) ? $billingData['street'] : '',
 			'city'                  => isset($billingData['city']) ? $billingData['city'] : '',
 			'country_id'            => isset($billingData['country']) ? $billingData['country'] : '',
 			'region'                => '',
@@ -141,10 +140,7 @@ class Modago_Integrator_Model_Order {
 			'lastname'              => isset($shippingData['last_name']) ? $shippingData['last_name'] : '',
 			'suffix'                => '',
 			'company'               => isset($shippingData['company_name']) ? $shippingData['company_name'] : '',
-			'street'                => array(
-											0 => isset($shippingData['street']) ? $shippingData['street'] : '',
-											1 => ''
-										),
+			'street'                => isset($shippingData['street']) ? $shippingData['street'] : '',
 			'city'                  => isset($shippingData['city']) ? $shippingData['city'] : '',
 			'country_id'            => isset($shippingData['country']) ? $shippingData['country'] : '',
 			'region'                => '',
@@ -154,10 +150,12 @@ class Modago_Integrator_Model_Order {
 			'vat_id'                => '', //not provided by api in delivery address
 			'save_in_address_book'  => 1
 		));
-
 		// Collect Rates and Set Shipping & Payment Method
 		$shippingMethod = $this->getShippingMethod($apiOrder->delivery_method);
 		$paymentMethod = $this->getPaymentMethod($apiOrder->payment_method);
+
+		Mage::unregister(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY);
+		Mage::register(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY,true);
 
 		$shippingAddress
 			->setCollectShippingRates(true)
@@ -176,10 +174,25 @@ class Modago_Integrator_Model_Order {
 		$service = Mage::getModel('sales/service_quote', $quote);
 		$service->submitAll();
 
+		/** @var Mage_Sales_Model_Order $order */
 		$order = $service->getOrder();
 		$increment_id = $order->getRealOrderId();
 
+		//set paid amount
+		if($apiOrder->payment_method != 'cash_on_delivery') {
+			$total = floatval($apiOrder->order_total);
+			$totalPaid = round(($total - floatval($apiOrder->order_due_amount)), 2);
+			$order->setTotalPaid($totalPaid);
+			if ($totalPaid >= $total) {
+				$order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+			} else {
+				$order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+			}
+		}
+
 		$order->setModagoOrderId($this->_modagoOrderId)->save();
+		// check products stats
+		$this->_checkProductStocks();
 
 		// Resource Clean-Up
 		$quote = $service = $order = null;
@@ -188,6 +201,31 @@ class Modago_Integrator_Model_Order {
 		return $increment_id;
 
 	}
+
+	
+    /**
+     * check reservations
+     */
+
+	protected function _checkProductStocks() {
+        foreach ($this->_productStocks as $productId) {
+	        $product = $this->getProduct($productId);
+            $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
+            if ($qty < 0) {
+                $this->_productProblems[] = $product->getSku(); 
+            }            
+	    }
+	}
+	
+    /**
+     * get problem list
+     *
+     * @return array
+     */
+     public function getProductProblemList() {
+         return $this->_productProblems;
+         
+     }
 
 	protected function getProducts($apiOrder) {
 		$out = array();
@@ -205,7 +243,7 @@ class Modago_Integrator_Model_Order {
 			}
 
 			$productId = $this->getProductIdBySku($apiProduct->item_sku);
-
+			$this->_productStocks[] = $productId;
 			if($productId) {
 				//check if product has configurable parent
 				$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($productId);
@@ -217,7 +255,6 @@ class Modago_Integrator_Model_Order {
 				}
 
 				$product = $this->getProduct($productId);
-
 				/*$taxPercent = $this->getProductTaxRate($product);
 				$priceIncl = $apiProduct->item_value_after_discount; //brutto
 				$price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //netto*/

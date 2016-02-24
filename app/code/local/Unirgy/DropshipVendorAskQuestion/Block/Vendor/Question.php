@@ -45,6 +45,13 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
         }
         return $this->_form;
     }
+    public function getStoreName($id) {
+        if ($id) {
+            return Mage::getModel('core/store')->load($id)->getName();
+        } else {
+            return Mage::app()->getDefaultStoreView()->getName();
+        }
+    }
     public function getQuestion()
     {
         if (null === $this->_question) {
@@ -65,6 +72,14 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
 
         $data = new Varien_Object($values);
 
+        $fieldset->addField('store_name' , 'note' ,array (
+            'name' => 'store_name',
+            'label' => $this->__('Store name'),
+            'text' => $this->getStoreName($data->getStoreId()),
+            'is_wide'=>true,
+            'is_top'=>true,
+        ));
+            
         $fieldset->addField('question_date', 'note', array(
             'name' => 'question_date',
             'label' => $this->__('QUESTION DATE'),

@@ -41,6 +41,11 @@
             <zolagorma>
                 <class>Zolago_Rma_Block</class>
             </zolagorma>
+            <urma>
+                <rewrite>
+                    <adminhtml_rma_grid>Zolago_Rma_Block_Adminhtml_Rma_Grid</adminhtml_rma_grid>
+                </rewrite>
+            </urma>
         </blocks>
         <helpers>
             <zolagorma>

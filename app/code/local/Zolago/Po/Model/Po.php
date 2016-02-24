@@ -524,7 +524,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @return Zolago_Po_Model_Po
     */
    public function updateTotals($force=false) {
-	   Mage::log($this->getData(),null,'PO_DATA.log');
 	    if($force || !$this->getGrandTotalInclTax()){
 			$this->_processTotalWeight();
 			$this->_processTotalQty();
@@ -854,10 +853,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
         $coll->addFieldToFilter('increment_id', $ids);
         $coll->addPosData("external_id");
-
         $list = array();
         $i = 0;
         foreach ($coll as $po) {
+            $dueAmount = ($po->getDebtAmount() > 0)? 0:abs($po->getDebtAmount());
             /** @var Zolago_Po_Model_Po $po */
             $list[$i]['vendor_id']                = $vendor->getId();
             $list[$i]['vendor_name']              = $vendor->getVendorName();
@@ -867,7 +866,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             $list[$i]['order_status']             = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
             $list[$i]['order_total']              = $po->getGrandTotalInclTax();
             $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
-            $list[$i]['order_due_amount']         = abs($po->getDebtAmount());
+            $list[$i]['order_due_amount']         = $dueAmount;
             $list[$i]['delivery_method']          = 'standard_courier'; // todo when inpost added
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();

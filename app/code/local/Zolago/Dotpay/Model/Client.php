@@ -3,6 +3,8 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	//api access data
 	private $login;
 	private $password;
+	private $pin;
+	private $dotpay_id;
 	private $apiUrl;
 
 	//operation statuses
@@ -25,6 +27,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 	//dotpay config paths
 	const DOTPAY_PIN_CONFIG_PATH = "payment/dotpay/pin";
+	const DOTPAY_ID_CONFIG_PATH = "payment/dotpay/id";
 	const DOTPAY_CANCEL_TIME_CONFIG_PATH = "payment/dotpay/cancel_time"; //time in minutes
 	const DOTPAY_API_URL_CONFIG_PATH = "payment/dotpay/api_url";
 	const DOTPAY_LOGIN_CONFIG_PATH = "payment/dotpay/login";
@@ -56,6 +59,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$status,
 					$data['operation_number'],
 					$type,
+					$this->getDotpayId(),
 					$data);
 			}
 		}
@@ -68,11 +72,9 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @return bool
 	 */
 	public function validateData($data) {
-
-		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
 		//isset for all because response not always gives all data
 		$signature =
-			$PIN .
+			$this->getPin() .
 			(isset($data['id']) ? $data['id'] : '') .
 			(isset($data['operation_number']) ? $data['operation_number'] : '') .
 			(isset($data['operation_type']) ? $data['operation_type'] : '') .
@@ -150,25 +152,43 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	}
 
 	public function getDotpayTransactionsToUpdate() {
-		return parent::getTransactionsToUpdate(self::PAYMENT_METHOD);
+		$collection = parent::getTransactionsToUpdate(self::PAYMENT_METHOD);
+		$collection->addFieldToFilter('dotpay_id',$this->getDotpayId());
+		return $collection;
 	}
 
 	public function getDotpayTransactionsToCancel() {
-		return parent::getTransactionsToCancel(self::PAYMENT_METHOD,$this->getExpirationTime());
+		$collection = parent::getTransactionsToCancel(self::PAYMENT_METHOD,$this->getExpirationTime());
+		$collection->addFieldToFilter('dotpay_id',$this->getDotpayId());
+		return $collection;
 	}
 
-	private function getLogin() {
+	public function getLogin() {
 		if(!$this->login) {
 			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH);
 		}
 		return $this->login;
 	}
 
-	private function getPassword() {
+	public function getPassword() {
 		if(!$this->password) {
 			$this->password = Mage::getStoreConfig(self::DOTPAY_PASSWORD_CONFIG_PATH);
 		}
 		return $this->password;
+	}
+
+	public function getPin() {
+		if(!$this->pin) {
+			$this->pin = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
+		}
+		return $this->pin;
+	}
+
+	public function getDotpayId() {
+		if(!$this->dotpay_id) {
+			$this->dotpay_id = Mage::getStoreConfig(self::DOTPAY_ID_CONFIG_PATH);
+		}
+		return $this->dotpay_id;
 	}
 
 	private function getApiUrl() {
@@ -355,5 +375,41 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param string $login
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setLogin($login) {
+		$this->login = $login;
+		return $this;
+	}
+
+	/**
+	 * @param string $password
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setPassword($password) {
+		$this->password = $password;
+		return $this;
+	}
+
+	/**
+	 * @param string $pin
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setPin($pin) {
+		$this->pin = $pin;
+		return $this;
+	}
+
+	/**
+	 * @param string|int $dotpay_id
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setDotpayId($dotpay_id) {
+		$this->dotpay_id = $dotpay_id;
+		return $this;
 	}
 }

@@ -23,6 +23,8 @@
  * @method GH_Statements_Model_Refund setVendorId(int $vendor_id)
  * @method float getValue()
  * @method GH_Statements_Model_Refund setValue(float $value)
+ * @method float getRegisteredValue()
+ * @method GH_Statements_Model_Refund setRegisteredValue(float $registered_value)
  */
 
 class GH_Statements_Model_Refund extends Mage_Core_Model_Abstract {

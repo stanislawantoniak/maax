@@ -202,3 +202,8 @@
 "Refund is not possible because order was sent using COD and client didn't receive the package.","Nie można utworzyć zwrotu, ponieważ zamówienie zostało wysłane za pobraniem, a klient nie odebrał przesyłki"
 "Refund disabled","Zwrot zablokowany"
 "RMA Reasons","Przyczyny zgłoszeń RMA"
+"Rma document","Dokument RMA"
+"Logo on RMA pdf documents src","Plik z logo na dokumentach RMA"
+"RMA Document for Customer","Dokument RMA dla klienta"
+"Pdf file with regulations","PDF statyczny z instrukcją"
+"Check your DHL Account Settings","Sprawdź ustawienia konta DHL"

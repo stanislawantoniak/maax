@@ -11,6 +11,7 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_LandingPageContext_Vendor
         $vendors = array();
 
         $vendorCollection = Mage::getModel("udropship/vendor")->getCollection();
+        $vendorCollection->setOrder("vendor_name", "ASC");
 
         foreach ($vendorCollection as $vendorCollectionItem) {
             $vendors[$vendorCollectionItem->getVendorId()] = $vendorCollectionItem->getVendorName();

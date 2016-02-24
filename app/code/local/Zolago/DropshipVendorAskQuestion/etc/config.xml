@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_DropshipVendorAskQuestion>
-            <version>0.0.5</version>
+            <version>0.0.7</version>
         </Zolago_DropshipVendorAskQuestion>
     </modules>
     <global>
@@ -13,6 +13,7 @@
             <udqa>
                 <rewrite>
                     <product_question>Zolago_DropshipVendorAskQuestion_Block_Product_Question</product_question>
+                    <adminhtml_question_grid>Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid</adminhtml_question_grid>
                 </rewrite>
             </udqa>
         </blocks>

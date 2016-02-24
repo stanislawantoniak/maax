@@ -15,6 +15,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
      */
     public function loadCollectionAction() {
         $collArray = array();
+		$data = array();
         $q = $this->getRequest()->getParam("q");
 
         if(is_string($q) && strlen(trim($q))>0) {
@@ -28,7 +29,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             $collection->setStoreId($storeId);
             $collection->addAttributeToSelect("name", "left");
-            $collection->addAttributeToSelect("price");
+            $collection->addFinalPrice();
             $collection->addAttributeToSelect($vendorSku, "left");
 
 
@@ -95,16 +96,39 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                                   array("attribute"=>"name",		"like"=> '%'.$q.'%')
                                               ), "left");
 
-            $collection->load();
-
-            $collArray = array_values($collection->toArray());
+            $data = $collection->getData();
         }
 
-        foreach ($collArray as $key => $val) {
-            if (!is_numeric($collArray[$key]['product_flag'])) {
-                $collArray[$key]['product_flag'] = $collArray[$key]['product_flag_simple'];
-            }
-        }
+		foreach ($data as $idx => $val) {
+			$key = $val['entity_id'];
+			// Override when simple is super linked to couple of configurable
+			if (isset($collArray[$key])) {
+				// No matter witch url - first existing
+				if (empty($collArray[$key]['url_path_configurable'])) {
+					$collArray[$key]['url_path_configurable'] = $val['url_path_configurable'];
+				}
+				if (empty($collArray[$key]['url_path'])) {
+					$collArray[$key]['url_path'] = $val['url_path'];
+				}
+			} else {
+				// Only needed data
+				$collArray[$key]['entity_id'] = $val['entity_id'];
+				$collArray[$key]['name'] = $val['name'];
+				$collArray[$key]['price'] = $val['price'];
+				$collArray[$key]['skuv'] = $val['skuv'];
+				// TODO: move this logic to sql query (IF statement)
+				if ($val['url_path_configurable']) {
+					$collArray[$key]['url_path'] = $val['url_path_configurable'];
+				} else {
+					$collArray[$key]['url_path'] = $val['url_path'] ? $val['url_path'] : "";
+				}
+				$flag = !is_numeric($val['product_flag']) ? $val['product_flag_simple'] : $val['product_flag'];
+				if ($flag) {
+					$collArray[$key]['product_flag'] = $flag;
+				}
+			}
+		}
+		$collArray = array_values($collArray);
 
         $this->getResponse()->setHeader('content-type', 'application/json');
         $this->getResponse()->setBody(Zend_Json::encode($collArray));
