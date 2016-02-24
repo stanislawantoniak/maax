@@ -4,49 +4,51 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 
 	const MAX_CART_ITEMS_COUNT = 5;
 
-	const CACHE_NAME = 'AJAX_CUSTOMER_';
-	const CACHE_TAG = 'CUSTOMER_AJAX_INFO';
-	const CACHE_TAG_CART = 'CUSTOMER_AJAX_INFO_CART';
-	const CACHE_LIFE_TIME = 900; // 15 min
+	const CACHE_NAME			= 'AJAX_CUSTOMER_';
+	const CACHE_TAG				= 'CUSTOMER_AJAX_INFO';
+	const CACHE_TAG_CART		= 'CUSTOMER_AJAX_INFO_CART';
+	const CACHE_TAG_SEARCH		= 'CUSTOMER_AJAX_INFO_SEARCH';
+	const CACHE_LIFE_TIME		= 900; // 15 min
 
 	/**
-	 * $what can be:
-	 * 'CART'
-	 * 'SEARCH'
+	 * Key building depends on logic in
+	 * @see Zolago_Solrsearch_Helper_Data::getContextSelectorArray()
 	 *
-	 * @param string $what
+	 * @param array $params
 	 * @return string
-	 * @throws Mage_Core_Exception
 	 */
-	public function getCacheKeyFor($what = '', $params = array()) {
-
-		switch ($what) {
-			case 'CART':
-				/** @var Mage_Checkout_Model_Session $checkoutSession */
-				$checkoutSession = Mage::getSingleton('checkout/session');
-				$quoteId = $checkoutSession->getQuoteId();
-				return self::CACHE_NAME . $what . (int)$quoteId;
-			case 'SEARCH':
-				// TODO fix building key
-				// curr_cat_id + md5(url_key) + store_id
-				/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
-				$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
-				/** @var Zolago_Dropship_Model_Vendor|false $vendor */
-				$vendor = $micrositeHelper->getCurrentVendor();
-				$vId = (int)($vendor && $vendor->getId()) ? $vendor->getId() : 0;
-				$currentCategory = Mage::registry('current_category');
-				$cId = (int)($currentCategory && $currentCategory->getId()) ? $currentCategory->getId() : (isset($params['category_id']) ? $params['category_id'] : 0);
-				$rId = (int)Mage::app()->getStore()->getRootCategoryId();
-				return self::CACHE_NAME . $what . $vId . '-' . $cId . '-' . $rId;
+	public function getCacheKeyForSearch($params = array()) {
+		/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
+		$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
+		/** @var Zolago_Dropship_Model_Vendor|false $vendor */
+		$vendor = $micrositeHelper->getCurrentVendor();
+		$vId = (int)($vendor && $vendor->getId()) ? $vendor->getId() : 0;
+		if ($vId) {
+			return self::CACHE_NAME . 'search_vendor-' . $vId;
 		}
-		return '';
+		$currentCategory = Mage::registry('current_category');
+		$cId = (int)($currentCategory && $currentCategory->getId()) ? $currentCategory->getId() : (isset($params['category_id']) ? $params['category_id'] : 0);
+		$sId = (int)Mage::app()->getStore()->getId();
+		$rId = (int)Mage::app()->getStore()->getRootCategoryId();
+		return self::CACHE_NAME . 'search_category-' . $cId . '-' .$sId . '-' . $rId;
+
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCacheKeyForCart() {
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		$quoteId = $checkoutSession->getQuoteId();
+		return self::CACHE_NAME . 'cart-' . (int)$quoteId;
 	}
 
 	/**
 	 * @return array|false|mixed
 	 */
 	public function getCart() {
-		$key = $this->getCacheKeyFor('CART');
+		$key = $this->getCacheKeyForCart();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
 			if ($cacheData) {
@@ -67,18 +69,26 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 			'shipping_cost'			=> $zmcHelper->getFormattedShippingCostSummary(),
 			'currency_symbol'		=> Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
 		);
-		$this->saveInCache($key, $cart);
+		$this->saveInCache($key, $cart, array(self::CACHE_TAG_CART));
 		return $cart;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function removeCacheCart() {
-		$key = $this->getCacheKeyFor('CART');
+		$key = $this->getCacheKeyForCart();
 		$cache = Mage::app()->getCache();
 		$cache->remove($key);
+		return $this;
 	}
 
+	/**
+	 * @param $params
+	 * @return array
+	 */
 	public function getSearch($params) {
-		$key = $this->getCacheKeyFor('SEARCH', $params);
+		$key = $this->getCacheKeyForSearch($params);
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
 			if ($cacheData) {
@@ -88,12 +98,20 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		/** @var Zolago_Solrsearch_Helper_Data $searchHelper */
 		$searchHelper = Mage::helper('zolagosolrsearch');
 		$searchContext = $searchHelper->getContextSelectorArray($params);
-		$this->saveInCache($key, $searchContext);
+		$this->saveInCache($key, $searchContext, array(self::CACHE_TAG_SEARCH));
 		return $searchContext;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function removeCacheSearch() {
-		//todo
+		$cache = Mage::app()->getCache();
+		$ids = $cache->getIdsMatchingTags(array(self::CACHE_TAG_SEARCH));
+		foreach ($ids as $id) {
+			$cache->remove($id);
+		}
+		return $this;
 	}
 
 	/**
@@ -181,14 +199,15 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	/**
 	 * @param $key
 	 * @param $data
+	 * @param array $tags
 	 * @return $this
 	 */
-	public function saveInCache($key, $data) {
+	public function saveInCache($key, $data, $tags = array()) {
 		if ($this->canUseCache()) {
 			$cache = Mage::app()->getCache();
 			$oldSerialization = $cache->getOption("automatic_serialization");
 			$cache->setOption("automatic_serialization", true);
-			$cache->save($data, $key, array(self::CACHE_TAG), $this->getCacheLifeTime());
+			$cache->save($data, $key, array_merge(array(self::CACHE_TAG), $tags), $this->getCacheLifeTime());
 			$cache->setOption("automatic_serialization", $oldSerialization);
 		}
 		return $this;
