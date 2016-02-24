@@ -123,7 +123,6 @@ define([
         target: "/udprod/vendor_product/rest/",
         idProperty: "entity_id",
         put: function (obj, options) {
-            console.log("put");
             return RestStore.prototype.put.call(this, obj, options);
         },
         // Overwrite request for:
@@ -909,6 +908,7 @@ define([
             init: function (grid) {
                 console.log("init");
                 this._changesHistory = new changesHistory(grid);
+                this.attachLogicRevertChange();
             },
             setSpinner: function () {
                 var spinner = jQuery("<div>").css('text-align', 'center')
@@ -935,6 +935,22 @@ define([
 
                 });
             },
+            attachLogicRevertChange: function () {
+                jQuery("#revertChangeAttribute").click(function(){
+                    var changeAttributeHistoryId = jQuery(this).data("id");
+                    console.log(changeAttributeHistoryId);
+
+                    jQuery.ajax({
+                        cache: false,
+                        url: "/udprod/vendor_product/revertChangesHistory",
+                        data: {id: changeAttributeHistoryId}
+                    }).success(function (data, textStatus, jqXHR) {
+                        window.changesHistory.updateModal();
+                    }).always(function () {
+
+                    });
+                });
+            }
         },
         window.attributeRules = {
             _tmpRemoveBtn: null,

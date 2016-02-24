@@ -588,4 +588,13 @@ class Zolago_Catalog_Vendor_ProductController
         $this->loadLayout();
         $this->renderLayout();
     }
+
+    public function revertChangesHistoryAction(){
+        $id = $this->getRequest()->getParam("id", null);
+        var_dump($id);
+
+        /* @var $descriptionHistory Zolago_Catalog_Block_Product_Description_History */
+        $descriptionHistory = Mage::getModel("zolagocatalog/description_history");
+        $descriptionHistory->revertChangesHistory($id);
+    }
 }
