@@ -29,14 +29,11 @@ $historyAll = $history->toArray();
             <div class="modal-body">
                 <p class="alert alert-info"><?php echo $infoMessage; ?></p>
 
-                <?php if ($history->getSize() > 0): ?>
+                <?php if ($historyAll["totalRecords"] > 0): ?>
                     <div class="widget-content">
-
-                        <?php if(count($historyAll["items"]) > 1): ?>
-
-                                <?php for ($i = 0; $i < count($historyAll["items"]); $i++): ?>
-                                <?php $firstRow = $historyAll["items"][$i]; ?>
-                                <div class="widget box">
+                        <?php for ($i = 0; $i < $historyAll["totalRecords"]; $i++): ?>
+                            <?php $firstRow = $historyAll["items"][$i]; ?>
+                            <div class="widget box">
                                     <div class="widget-content changes-history-item">
 
                                         <div class="row" style="height: 55px;">
@@ -176,11 +173,7 @@ $historyAll = $history->toArray();
                                     </div>
 
                                 </div>
-                                <?php endfor; ?>
-
-                        <?php endif; ?>
-
-
+                        <?php endfor; ?>
                     </div>
                 <?php else: ?>
                     <p>
