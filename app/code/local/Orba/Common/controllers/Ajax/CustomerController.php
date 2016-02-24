@@ -79,13 +79,8 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 		// Customer info for contact form in product page
 		if ($productId && Mage::helper('customer')->isLoggedIn()) {
-			/* @var $coreHelper Mage_Core_Helper_Data */
-			$coreHelper = Mage::helper('core');
-			/** @var Mage_Customer_Model_Session $session */
-			$session = Mage::getSingleton('customer/session');
-
-			$content['customer_name']  = $coreHelper->escapeHtml($session->getCustomer()->getName());
-			$content['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
+			$content['customer_name']  = $cacheHelper->getCustomerName();
+			$content['customer_email'] = $cacheHelper->getCustomerEmail();
 		}
 		// And populate data question form if error
 		if ($productId && $dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true)) {
@@ -117,7 +112,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 			$content['product'] = array(
 				"entity_id"			=> $productId,
-				"in_my_wishlist"	=> isset($favsProdsIds[$productId]),
+				"in_my_wishlist"	=> isset($favsProdsIds[$productId]) ? 1 : 0,
 				"wishlist_count"	=> $wishlistCount
 			);
 			/**

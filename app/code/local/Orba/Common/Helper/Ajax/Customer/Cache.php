@@ -65,7 +65,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCart();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
-			if ($cacheData) {
+			if (!empty($cacheData)) {
 				return $cacheData;
 			}
 		}
@@ -91,11 +91,12 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * Get and store info about favorites count
 	 * and favorites product ids
 	 *
+	 * @param bool $force
 	 * @return $this
 	 */
-	public function getFavoritesDetails() {
+	public function getFavoritesDetails($force = false) {
 
-		if (!isset($this->customerInfo['favorites_count']) && !isset($this->customerInfo['favorites_products'])) {
+		if ((!isset($this->customerInfo['favorites_count']) && !isset($this->customerInfo['favorites_products'])) || $force) {
 			// Favorites Count
 			/** @var Zolago_Wishlist_Helper_Data $wishlistHelper */
 			$wishlistHelper = Mage::helper('zolagowishlist');
@@ -123,7 +124,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
-			if ($cacheData) {
+			if (isset($cacheData['favorites_count'])) {
 				return $cacheData['favorites_count'];
 			}
 		}
@@ -140,7 +141,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
-			if ($cacheData) {
+			if (isset($cacheData['favorites_products'])) {
 				return $cacheData['favorites_products'];
 			}
 		}
@@ -149,14 +150,52 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCustomerName() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if (isset($cacheData['customer_name'])) {
+				return $cacheData['customer_name'];
+			}
+		}
+		/* @var $coreHelper Mage_Core_Helper_Data */
+		$coreHelper = Mage::helper('core');
+		/** @var Mage_Customer_Model_Session $session */
+		$session = Mage::getSingleton('customer/session');
+		return $this->customerInfo['customer_name'] = $coreHelper->escapeHtml($session->getCustomer()->getName());
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCustomerEmail() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if (isset($cacheData['customer_email'])) {
+				return $cacheData['customer_email'];
+			}
+		}
+		/* @var $coreHelper Mage_Core_Helper_Data */
+		$coreHelper = Mage::helper('core');
+		/** @var Mage_Customer_Model_Session $session */
+		$session = Mage::getSingleton('customer/session');
+		return $this->customerInfo['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
+	}
+
+	/**
 	 * Manually save part of cache connected only to customer
 	 *
 	 * @return $this
 	 */
 	public function saveCustomerInfoCache() {
-		$key = $this->getCacheKeyForCustomerInfo();
-		$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
-		return $this;
+		if (!empty($this->customerInfo)) {
+			$key = $this->getCacheKeyForCustomerInfo();
+			$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
+			return $this;
+		}
 	}
 
 	/**
@@ -169,7 +208,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
-			if ($cacheData) {
+			if (isset($cacheData['recently_viewed'])) {
 				// Don't show in last viewed box current product
 				unset($cacheData['recently_viewed'][(int)$skipProductId]);
 				return array_values($cacheData['recently_viewed']);
@@ -230,7 +269,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForSearch($params);
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
-			if ($cacheData) {
+			if (!empty($cacheData)) {
 				return $cacheData;
 			}
 		}
