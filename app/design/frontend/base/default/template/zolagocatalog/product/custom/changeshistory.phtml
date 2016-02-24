@@ -32,9 +32,9 @@ $historyAll = $history->toArray();
                 <?php if ($history->getSize() > 0): ?>
                     <div class="widget-content">
 
-                        <?php if($historyAll["items"] > 1): ?>
+                        <?php if(count($historyAll["items"]) > 1): ?>
 
-                                <?php for ($i = 0; $i < $historyAll["totalRecords"]-1; $i++): ?>
+                                <?php for ($i = 0; $i < count($historyAll["items"]); $i++): ?>
                                 <?php $firstRow = $historyAll["items"][$i]; ?>
                                 <div class="widget box">
                                     <div class="widget-content changes-history-item">
