@@ -252,3 +252,4 @@
 "Account has been created. You will have information on %s about active account after verification","Konto zostało założone - po weryfikacji na adres email %s otrzymasz informację, że konto jest aktywne"
 "This function will create account in Marketing Automation SalesManago using Vendor email and actual password. Do you want to continue?","Funkcja zakłada konto dla sprzedawcy w systemie Marketing Automation SalesManago. Konto będzie założone przy użyciu podstawowego adresu email sprzedawcy oraz aktualnego hasła. Czy kontytnuować?"
 "Account created: %s, email for login: %s","Konto założone dnia: %s, email do logowania: %s"
+"Config and regulations","Konfiguracja i regulaminy"

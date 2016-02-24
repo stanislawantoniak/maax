@@ -6,6 +6,18 @@
 class Zolago_Catalog_Block_Product_Description_History extends Mage_Core_Block_Template
 {
 
+
+    public function getInfoMessage()
+    {
+        /* @var $descriptionHistory Zolago_Catalog_Block_Product_Description_History */
+        $descriptionHistory = Mage::getModel("zolagocatalog/description_history");
+
+        $historyCountLimit = $descriptionHistory->getHistoryCountLimit();
+        $historyLifetimeLimit = $descriptionHistory->getHistoryLifetimeLimit();
+
+        return Mage::helper("zolagocatalog")->__("You can revert last %s changes last %sh", $historyCountLimit, $historyLifetimeLimit);
+    }
+
     public function getChangesHistory()
     {
 

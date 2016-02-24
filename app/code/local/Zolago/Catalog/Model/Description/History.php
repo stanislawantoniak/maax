@@ -59,8 +59,16 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         $changedCollection = $collection
             ->addFieldToFilter("entity_id", array("in" => $ids));
         foreach ($changedCollection as $changedCollectionItem) {
-            $oldValues[$changedCollectionItem->getId()] = $changedCollectionItem->getData($attributeCode);
+            $oldValue = $changedCollectionItem->getData($attributeCode);
+            if (!empty($oldValue))
+                $oldValues[$changedCollectionItem->getId()] = $changedCollectionItem->getData($attributeCode);
+
         }
+
+        //Do not save if change was from empty value
+        if(empty($oldValues))
+            return;
+
 
         $changesData = array(
             //"ids" => $ids,
@@ -83,12 +91,12 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
     /**
      * @param $id
      */
-    public function revertChangesHistory($id){
+    public function revertChangesHistory($id)
+    {
         $changesHistoryItem = $this->load($id);
 
 
         //todo check if vendor can revert this item
-
 
 
         $changesData = unserialize($changesHistoryItem->getData("changes_data"));
@@ -96,23 +104,15 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         $attributeCode = $changesData["attribute_code"];
 
 
-        $oldValue = $changesData["old_value"];
-        $productsAffectedIds = array_keys($oldValue);
-
         $store = 0;
 
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
 
-        foreach($productsAffectedIds as $productsAffectedId){
-
-            $revertedValue = $oldValue[$productsAffectedId];
-            if(is_null($oldValue[$productsAffectedId])){
-                $revertedValue = "";
-            }
+        foreach ($changesData["old_value"] as $productsAffectedId => $oldValue) {
             $aM->updateAttributesPure(
                 array($productsAffectedId),
-                array($attributeCode => $revertedValue),
+                array($attributeCode => $oldValue),
                 $store
             );
         }

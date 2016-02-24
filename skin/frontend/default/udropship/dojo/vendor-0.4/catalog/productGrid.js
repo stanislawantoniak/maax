@@ -909,6 +909,13 @@ define([
                 console.log("init");
                 this._changesHistory = new changesHistory(grid);
                 this.attachLogicRevertChange();
+                this.attachControls();
+            },
+            attachControls : function(){
+                jQuery(".show-changes-history-details").click(function(){
+                    jQuery(this).closest(".changes-history-item").find(".changes-history-details").toggleClass("hidden");
+
+                })
             },
             setSpinner: function () {
                 var spinner = jQuery("<div>").css('text-align', 'center')
