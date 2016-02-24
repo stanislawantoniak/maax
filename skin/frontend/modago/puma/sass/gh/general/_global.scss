@@ -160,3 +160,10 @@ div.noscroll {
 [itemprop=aggregateRating],[itemprop=reviewRating], [itemprop=ratingValue], [itemprop=reviewCount], [itemprop=bestRating] {
 	display: none;
 }
+
+body > img[width="1"][height="1"] {
+	position: absolute;
+	bottom: 0;
+	opacity: 0;
+	pointer-events: none;
+}

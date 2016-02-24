@@ -63,3 +63,10 @@ border-radius: 2px;
 .messages a {
 	text-decoration: underline;
 }
+
+body > img[width="1"][height="1"] {
+	position: absolute;
+	bottom: 0;
+	opacity: 0;
+	pointer-events: none;
+}
