@@ -8,7 +8,7 @@ $installer = new Mage_Catalog_Model_Resource_Setup('core_setup');
 $installer->startSetup();
 
 $table = $installer->getConnection()
-    ->newTable($installer->getTable('zolagocatalog/product_description_history'))
+    ->newTable($installer->getTable('zolagocatalog/description_history'))
     ->addColumn(
         'history_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
         array(
