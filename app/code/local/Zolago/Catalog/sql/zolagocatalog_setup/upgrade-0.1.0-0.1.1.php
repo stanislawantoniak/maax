@@ -21,13 +21,13 @@ $installer->getConnection()->addColumn(
 $installer->getConnection()
     ->addIndex(
         $table,
-        $installer->getIdxName('zolagocatalog/product_description_history', array('vendor_id')),
+        $installer->getIdxName('zolagocatalog/description_history', array('vendor_id')),
         array('vendor_id')
     );
 
 $installer->getConnection()
     ->addForeignKey(
-        $installer->getFkName('zolagocatalog/product_description_history', 'vendor_id', 'udropship/vendor', 'vendor_id'),
+        $installer->getFkName('zolagocatalog/description_history', 'vendor_id', 'udropship/vendor', 'vendor_id'),
         $table, 'vendor_id',
         $installer->getTable('udropship/vendor'), 'vendor_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
