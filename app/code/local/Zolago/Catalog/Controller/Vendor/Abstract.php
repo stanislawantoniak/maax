@@ -153,7 +153,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	 * handle Get method
 	 */
 	protected function _handleRestGet($productId=null) {
-		$reposnse = $this->getResponse();
+		$response = $this->getResponse();
 		
 		$collection = $this->_getCollection();
 
@@ -174,10 +174,10 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		);
 		
 		if($productId && $out['items']){
-			$reposnse->
+			$response->
 				setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
 		}else{
-			$reposnse->
+			$response->
 				setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
 				setBody(Mage::helper("core")->jsonEncode($out['items']));
 		}

@@ -254,3 +254,5 @@
 "Product is enabled and it should have at least one enabled image.","Produkt jest aktywny i powinien mieć co najmniej jedno włączone zdjęcie"
 "This photo is currently enabled and you can see them on your product page. You can turn off the picture by clicking on this button.","To zdjęcie jest aktualnie włączone i widać je na karcie produktu. Zdjęcie możesz wyłączyć klikając w ten przycisk."
 "This photo is currently disabled and you can not see them on your product page. You can enable on the picture by clicking on this button.","To zdjęcie jest aktualnie wyłączone i nie widać go na karcie produktu. Zdjęcie możesz włączyć klikając w ten przycisk."
+"Descriptions for %d products have been accepted","Zaakceptowano opisy %d produktów"
+"Server error occured. Close this window to reload page.","Wystąpił błąd serwera. Po zamknięciu tego komunikatu nastąpi przeładowanie strony."

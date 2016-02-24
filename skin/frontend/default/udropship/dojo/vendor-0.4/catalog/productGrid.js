@@ -27,11 +27,12 @@ define([
     'vendor/catalog/productGrid/mass/attribute',     // attrbiute
     'vendor/catalog/productGrid/mass/attributeRules',// attributeRules
     'vendor/catalog/productGrid/mass/attributeSet',// attributeSet
+    'vendor/catalog/productGrid/mass/changesHistory',// changesHistory,
     "vendor/misc"//misc
 ], function (BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet,
              Selection, Selector, Keyboard, declare, dom, domConstruct, on, query,
              put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid,
-             PopupEditor, status, attrbiute, attributeRules, attributeSet, misc) {
+             PopupEditor, status, attrbiute, attributeRules, attributeSet, changesHistory, misc) {
 
     var grid,
 		gallery,
@@ -122,6 +123,7 @@ define([
         target: "/udprod/vendor_product/rest/",
         idProperty: "entity_id",
         put: function (obj, options) {
+            console.log("put");
             return RestStore.prototype.put.call(this, obj, options);
         },
         // Overwrite request for:
@@ -338,8 +340,25 @@ define([
         });
         put(content, "p", {
             innerHTML: Translator.translate("SKU") + ": " + escape(item.skuv),
-            className: "info editable"
+            className: "info editable",
         });
+
+        var canvas = document.getTextWidthCanvas || (document.getTextWidthCanvas = document.createElement("canvas"));
+        var context = canvas.getContext("2d");
+        context.font = "normal arial 13px";
+        var metrics = context.measureText(value);
+
+        if(metrics.width > 156) {
+            node.title = value;
+            jQuery(node).tooltip({
+                container: "body",
+                trigger: "hover",
+                animation: false,
+                placement: "top",
+                delay: {"show": 0, "hide": 0}
+            });
+        }
+
         put(node, content);
     };
 
@@ -584,6 +603,7 @@ define([
 
             store.put(dataObject).then(function () {
                 e.deferred.resolve();
+                window.changesHistory.updateModal();
             }, function (ex) {
                 alert(ex.response.text);
                 e.deferred.reject();
@@ -607,17 +627,18 @@ define([
         massAttribute.setFocusedCell(e.cell);
 
         massAttribute.send(req).then(function () {
+            console.log("massAttribute");
             e.deferred.resolve();
             if (e.useSaveAsRule) {
                 // Get current attributes mapper block by ajax with spinner
                 window.attributeRules.updateModal();
             }
+            window.changesHistory.updateModal();
         }, function () {
             e.deferred.reject();
         }).always(function () {
             misc.stopLoading();
         });
-
     };
 
     /**
@@ -879,39 +900,42 @@ define([
                         misc.stopLoading();
                     })
                 ;
-                //jQuery.ajax({
-                //    cache: false,
-                //    url: window.attributeSet.getFormActionUrl(),
-                //    data: {
-                //        product_ids: ids,
-                //        attribute_set: attribute_set,
-                //        attribute_set_current: attribute_set_current,
-                //        global: global
-                //    },
-                //    method: "POST",
-                //}).done(function (data, textStatus, jqXHR) {
-                //    if (data.status == 1) {
-                //        window.grid.refresh();
-                //        noty({
-                //            text: data.content.message,
-                //            type: "success",
-                //            //timeout: 10000
-                //        });
-                //    }
-                //    if (data.status == 0) {
-                //        noty({
-                //            text: data.content,
-                //            type: "error",
-                //            //timeout: 10000
-                //        });
-                //    }
-                //}).always(function () {
-                //    misc.stopLoading();
-                //});
 
             });
         }
     },
+        window.changesHistory = {
+            _changesHistory: {},
+            init: function (grid) {
+                console.log("init");
+                this._changesHistory = new changesHistory(grid);
+            },
+            setSpinner: function () {
+                var spinner = jQuery("<div>").css('text-align', 'center')
+                    .append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+                this.getModal().find(".modal-body").html(spinner);
+            },
+            getModal: function () {
+                return jQuery('#showChangesHistory');
+            },
+            /**
+             * Update html by ajax auto fill attributes modal
+             */
+            updateModal: function () {
+                this.setSpinner();
+                jQuery.ajax({
+                    cache: false,
+                    url: "/udprod/vendor_product/manageChangesHistory",
+                    data: {}
+                }).success(function (data, textStatus, jqXHR) {
+                    var content = jQuery(data).find(".modal-dialog");
+                    jQuery("#showChangesHistory").html(content);
+                    window.changesHistory.init(window.grid);
+                }).always(function () {
+
+                });
+            },
+        },
         window.attributeRules = {
             _tmpRemoveBtn: null,
             _attributeRules: {},
@@ -1203,6 +1227,7 @@ define([
 
             window.attributeRules.init(_grid);
             window.attributeSet.init(_grid);
+            window.changesHistory.init(_grid);
 
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked
