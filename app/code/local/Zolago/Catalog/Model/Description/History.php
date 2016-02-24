@@ -63,7 +63,7 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         }
 
         $changesData = array(
-            "ids" => $ids,
+            //"ids" => $ids,
             "attribute_code" => $attributeCode,
             "attribute_mode" => $attributeMode,
             "old_value" => $oldValues,
@@ -78,6 +78,46 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         $this->addData($data);
         $this->save();
 
+    }
+
+    /**
+     * @param $id
+     */
+    public function revertChangesHistory($id){
+        $changesHistoryItem = $this->load($id);
+
+
+        //todo check if vendor can revert this item
+
+
+
+        $changesData = unserialize($changesHistoryItem->getData("changes_data"));
+
+        $attributeCode = $changesData["attribute_code"];
+
+
+        $oldValue = $changesData["old_value"];
+        $productsAffectedIds = array_keys($oldValue);
+
+        $store = 0;
+
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+
+        foreach($productsAffectedIds as $productsAffectedId){
+
+            $revertedValue = $oldValue[$productsAffectedId];
+            if(is_null($oldValue[$productsAffectedId])){
+                $revertedValue = "";
+            }
+            $aM->updateAttributesPure(
+                array($productsAffectedId),
+                array($attributeCode => $revertedValue),
+                $store
+            );
+        }
+
+        $changesHistoryItem->delete();
     }
 
 }

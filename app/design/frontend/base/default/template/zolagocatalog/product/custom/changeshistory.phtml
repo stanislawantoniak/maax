@@ -38,9 +38,18 @@ $operationLabels = array(
                                         <?php /*  @var $historyRow  Zolago_Catalog_Model_Description_History */ ?>
                                         <tr>
                                             <td>
-                                                <div>
-                                                    <div class="label label-success">
-                                                        <i class="icon-bullhorn"></i>   <?php echo $historyRow->getChangesDate(); ?>
+                                                <div class="row">
+                                                    <div class="col-md-12 no-padding">
+                                                        <div class="col-md-2">
+                                                            <div class="label label-success">
+                                                                <i class="icon-bullhorn"></i>   <?php echo $historyRow->getChangesDate(); ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <?php if ($n == 0): ?>
+                                                                <button id="revertChangeAttribute" data-id="<?php echo $historyRow->getId(); ?>" class="btn btn-xs btn-danger">Revert Change</button>
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </div>
 
 
@@ -65,7 +74,7 @@ $operationLabels = array(
                                                                 <td>
                                                                     <?php
                                                                     $options = array();
-                                                                    $storeId   = 1;
+
                                                                     $attribute = Mage::getModel('eav/entity_attribute')
                                                                         ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $changeMade["attribute_code"]);
                                                                     //var_dump($attribute->getData());
@@ -99,7 +108,7 @@ $operationLabels = array(
                                                                             <th><?php echo $helper->__("Values Before Change"); ?></th>
                                                                         </tr>
                                                                         </thead>
-                                                                        <?php foreach($changeMade["ids"] as $id): ?>
+                                                                        <?php foreach(array_keys($changeMade["old_value"]) as $id): ?>
                                                                             <tr>
                                                                                 <?php $_product = Mage::getModel("zolagocatalog/product")->load($id); ?>
                                                                                 <td>
