@@ -578,4 +578,14 @@ class Zolago_Catalog_Vendor_ProductController
         $this->loadLayout();
         $this->renderLayout();
     }
+
+
+    /**
+     * Action to update Show Changes History modal
+     */
+    public function manageChangesHistoryAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

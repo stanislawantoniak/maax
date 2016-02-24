@@ -167,8 +167,9 @@
 					</block>
 					<block type="gh_attributerules/attribute" name="attributerules"
 						   template="zolagocatalog/product/custom/attributerules.phtml"/>
-					<block type="zolagocatalog/product_description_history" name="changeshistory"
-						   template="zolagocatalog/product/custom/changeshistory.phtml"/>
+
+					<block type="zolagocatalog/product_description_history" name="changeshistory" template="zolagocatalog/product/custom/changeshistory.phtml"/>
+
 					<block type="zolagocatalog/vendor_product_changeAttributeSet" name="change_attribute_set"
 						   template="zolagocatalog/product/custom/change_attribute_set.phtml"/>
 				</block>
@@ -176,11 +177,17 @@
 		</reference>
 	</udprod_vendor_product_index>
 
-    <udprod_vendor_product_manageattributes>
+	<udprod_vendor_product_manageattributes>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="gh_attributerules/attribute" name="attributerules" template="zolagocatalog/product/custom/attributerules.phtml"/>
+		</block>
+	</udprod_vendor_product_manageattributes>
+
+    <udprod_vendor_product_managechangeshistory>
         <block type="core/text_list" name="root" output="toHtml">
-            <block type="gh_attributerules/attribute" name="attributerules" template="zolagocatalog/product/custom/attributerules.phtml"/>
+			<block type="zolagocatalog/product_description_history" name="changeshistory" template="zolagocatalog/product/custom/changeshistory.phtml"/>
         </block>
-    </udprod_vendor_product_manageattributes>
+    </udprod_vendor_product_managechangeshistory>
 	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />

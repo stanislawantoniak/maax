@@ -11,10 +11,28 @@
  */
 class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
 {
+    const DESCRIPTION_HISTORY_COUNT_LIMIT = "udprod/product_description_history_changes_config/max_changes_count";
+    const DESCRIPTION_HISTORY_LIFETIME_LIMIT = "udprod/product_description_history_changes_config/history_expiration_time";
 
     protected function _construct()
     {
         $this->_init('zolagocatalog/description_history');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHistoryCountLimit()
+    {
+        return Mage::getStoreConfig(self::DESCRIPTION_HISTORY_COUNT_LIMIT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHistoryLifetimeLimit()
+    {
+        return Mage::getStoreConfig(self::DESCRIPTION_HISTORY_LIFETIME_LIMIT);
     }
 
     /**
@@ -26,24 +44,23 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
      *
      *
      * @param $vendorId
+     * @param $ids
      * @param $attributeCode
      * @param $attributeValue
-     * @param $collection
+     * @param $collection Mage_Catalog_Model_Resource_Product_Collection
      * @param $attributeMode
      */
-    public function updateChangesHistory($vendorId, $ids, $attributeCode, $attributeValue, $collection, $attributeMode = ""){
+    public function updateChangesHistory($vendorId, $ids, $attributeCode, $attributeValue, $collection, $attributeMode = "")
+    {
+
+        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
 
         $oldValues = array();
-        $changedCollection = $collection->addFieldToFilter("entity_id", array("in" => $ids));
-        foreach($changedCollection as $changedCollectionItem){
+        $changedCollection = $collection
+            ->addFieldToFilter("entity_id", array("in" => $ids));
+        foreach ($changedCollection as $changedCollectionItem) {
             $oldValues[$changedCollectionItem->getId()] = $changedCollectionItem->getData($attributeCode);
         }
-
-        //Mage::log($ids, null, "ids.log");
-        //Mage::log($attributeCode, null, "attribute_code.log");
-        //Mage::log($attributeMode[$attributeCode], null, "attribute_mode.log");
-
-        //Mage::log($attributeValue, null, "attribute_value.log");
 
         $changesData = array(
             "ids" => $ids,
@@ -55,7 +72,7 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         );
         $data = array(
             "vendor_id" => $vendorId,
-            "changes_date" => date('Y-m-d H:i:s', time()),
+            "changes_date" => date('Y-m-d H:i:s', $currentTimestamp),
             "changes_data" => serialize($changesData)
         );
         $this->addData($data);
