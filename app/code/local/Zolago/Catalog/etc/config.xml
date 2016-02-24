@@ -18,10 +18,10 @@
             </options>
 		</cataloginventory>
         <udprod>
-            <product_description_history_changes_count>
+            <product_description_history_changes_config>
                 <max_changes_count>5</max_changes_count>
                 <history_expiration_time>24</history_expiration_time>
-            </product_description_history_changes_count>
+            </product_description_history_changes_config>
         </udprod>
         <udropship>
             <vendor>

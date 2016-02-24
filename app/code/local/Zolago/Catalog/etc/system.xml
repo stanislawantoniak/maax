@@ -35,7 +35,7 @@
         </zolagocatalog>
         <udprod translate="label" module="zolagocatalog">
             <groups>
-                <product_description_history_changes_count translate="label">
+                <product_description_history_changes_config translate="label">
                     <label>Manage products descriptions</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>210</sort_order>
@@ -48,7 +48,7 @@
                             <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
+                            <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <validate>validate-number</validate>
                         </max_changes_count>
@@ -57,12 +57,12 @@
                             <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
+                            <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <validate>validate-number</validate>
                         </history_expiration_time>
                     </fields>
-                </product_description_history_changes_count>
+                </product_description_history_changes_config>
             </groups>
         </udprod>
 		<cataloginventory>
