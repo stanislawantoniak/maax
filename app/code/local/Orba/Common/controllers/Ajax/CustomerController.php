@@ -60,7 +60,6 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$profiler = Mage::helper('zolagocommon/profiler');
 		$profiler->start();
 
-		$this->saveIsAjaxContext();
 		$cart = $cacheHelper->getCart();
 		$profiler->log("cart");
 		$search = $cacheHelper->getSearch($this->getRequest()->getParams());
@@ -218,19 +217,4 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		return $persistentHelper->isPersistent() && !$customerSession->isLoggedIn();
 	}
 
-	/**
-	 * Need to store in registry info about that is ajax context
-	 * Purpose: for correct receiving data like current vendor
-	 *
-	 * @return $this
-	 */
-	public function saveIsAjaxContext() {
-		//set registry to correctly identify current context
-		$ajaxReferrerUrlKey = 'ajax_referrer_url';
-		if (Mage::registry($ajaxReferrerUrlKey)) {
-			Mage::unregister($ajaxReferrerUrlKey);
-		}
-		Mage::register($ajaxReferrerUrlKey, $this->_getRefererUrl());
-		return $this;
-	}
 }

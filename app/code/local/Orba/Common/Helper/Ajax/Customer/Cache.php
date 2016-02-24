@@ -18,7 +18,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return string
 	 * @throws Mage_Core_Exception
 	 */
-	public function getCacheKeyFor($what = '') {
+	public function getCacheKeyFor($what = '', $params = array()) {
 
 		switch ($what) {
 			case 'CART':
@@ -27,13 +27,15 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				$quoteId = $checkoutSession->getQuoteId();
 				return self::CACHE_NAME . $what . (int)$quoteId;
 			case 'SEARCH':
+				// TODO fix building key
+				// curr_cat_id + md5(url_key) + store_id
 				/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
 				$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
 				/** @var Zolago_Dropship_Model_Vendor|false $vendor */
 				$vendor = $micrositeHelper->getCurrentVendor();
 				$vId = (int)($vendor && $vendor->getId()) ? $vendor->getId() : 0;
 				$currentCategory = Mage::registry('current_category');
-				$cId = (int)($currentCategory && $currentCategory->getId()) ? $currentCategory->getId() : (isset($contextData['category_id']) ? $contextData['category_id'] : 0);
+				$cId = (int)($currentCategory && $currentCategory->getId()) ? $currentCategory->getId() : (isset($params['category_id']) ? $params['category_id'] : 0);
 				$rId = (int)Mage::app()->getStore()->getRootCategoryId();
 				return self::CACHE_NAME . $what . $vId . '-' . $cId . '-' . $rId;
 		}
@@ -76,7 +78,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	}
 
 	public function getSearch($params) {
-		$key = $this->getCacheKeyFor('SEARCH');
+		$key = $this->getCacheKeyFor('SEARCH', $params);
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
 			if ($cacheData) {
@@ -199,5 +201,22 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 */
 	public function getCacheLifeTime() {
 		return self::CACHE_LIFE_TIME;
+	}
+
+	/**
+	 * Need to store in registry info about that is ajax context
+	 * Purpose: for correct receiving data like current vendor
+	 * @see Zolago_DropshipMicrosite_Helper_Protected::_getFrontendVendor()
+	 *
+	 * @return $this
+	 */
+	public function saveIsAjaxContext() {
+		//set registry to correctly identify current context
+		$ajaxReferrerUrlKey = 'ajax_referer_url';
+		if (Mage::registry($ajaxReferrerUrlKey)) {
+			Mage::unregister($ajaxReferrerUrlKey);
+		}
+		Mage::register($ajaxReferrerUrlKey, $this->_getRefererUrl());
+		return $this;
 	}
 }

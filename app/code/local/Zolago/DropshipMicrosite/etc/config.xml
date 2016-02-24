@@ -18,6 +18,7 @@
             <umicrosite>
                 <rewrite>
                     <data>Zolago_DropshipMicrosite_Helper_Datarewrite</data>
+                    <protected>Zolago_DropshipMicrosite_Helper_Protected</protected>
                 </rewrite>
             </umicrosite>
         </helpers>
