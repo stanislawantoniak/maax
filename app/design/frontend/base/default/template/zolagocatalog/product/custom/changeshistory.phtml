@@ -39,7 +39,7 @@ $operationLabels = array(
                                         <tr>
                                             <td>
                                                 <div>
-                                                    <div class="label label-info">
+                                                    <div class="label label-success">
                                                         <i class="icon-bullhorn"></i>   <?php echo $historyRow->getChangesDate(); ?>
                                                     </div>
 
@@ -92,7 +92,7 @@ $operationLabels = array(
 
                                                                     <?php //var_dump($changeMade); ?>
                                                                     <?php $oldValues = array(); ?>
-                                                                    <table>
+                                                                    <table class="table table-striped table-bordered table-hover table-responsive datatable dataTable">
                                                                         <thead>
                                                                         <tr role="row">
                                                                             <th></th>
@@ -112,14 +112,13 @@ $operationLabels = array(
                                                                                 <td>
                                                                                     <?php $oldValue = $changeMade["old_value"][$id]; ?>
                                                                                     <?php if ($attribute->getFrontendInput() == "select"): ?>
-                                                                                        <?php echo  isset($options[$oldValue]) ? $options[$oldValue] : ""; ?><br />
+                                                                                        <?php echo  isset($options[$oldValue]) ? $options[$oldValue] : "..."; ?><br />
                                                                                     <?php elseif ($attribute->getFrontendInput() == "multiselect"): ?>
 
                                                                                         <?php foreach(explode(",",$oldValue) as $oldValueItem): ?>
-                                                                                            <?php echo  isset($options[$oldValueItem]) ? $options[$oldValueItem] : ""; ?><br />
+                                                                                            <?php echo  isset($options[$oldValueItem]) ? $options[$oldValueItem] : "..."; ?><br />
                                                                                         <?php endforeach; ?>
                                                                                     <?php else: ?>
-
                                                                                         <?php echo $oldValue; ?>
                                                                                     <?php endif; ?>
 
