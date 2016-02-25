@@ -589,12 +589,35 @@ class Zolago_Catalog_Vendor_ProductController
         $this->renderLayout();
     }
 
-    public function revertChangesHistoryAction(){
+    /**
+     *
+     */
+    public function revertChangesHistoryAction()
+    {
         $id = $this->getRequest()->getParam("id", null);
-        var_dump($id);
 
-        /* @var $descriptionHistory Zolago_Catalog_Block_Product_Description_History */
+        /* @var $descriptionHistory Zolago_Catalog_Model_Description_History */
         $descriptionHistory = Mage::getModel("zolagocatalog/description_history");
-        $descriptionHistory->revertChangesHistory($id);
+
+        try {
+            $changesHistory = $descriptionHistory->load($id);
+            if (!$changesHistory->getId()) {
+                echo json_encode(array("error" => "Change not found"));
+                return;
+            }
+
+
+            if ($changesHistory->getVendorId() !== $this->getVendorId()) {
+                echo json_encode(array("error" => "It is not your change"));
+                return;
+            }
+
+            $descriptionHistory->revertChangesHistory($changesHistory);
+            echo json_encode(array());
+            return;
+
+        } catch (Exception $e) {
+
+        }
     }
 }
