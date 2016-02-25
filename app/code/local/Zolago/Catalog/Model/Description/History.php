@@ -71,7 +71,6 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
 
 
         $changesData = array(
-            //"ids" => $ids,
             "attribute_code" => $attributeCode,
             "attribute_mode" => $attributeMode,
             "old_value" => $oldValues,
@@ -110,11 +109,15 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
         $aM = Mage::getSingleton('catalog/product_action');
 
         foreach ($changesData["old_value"] as $productsAffectedId => $oldValue) {
-            $aM->updateAttributesPure(
-                array($productsAffectedId),
-                array($attributeCode => $oldValue),
-                $store
-            );
+            //nie można tą funkcją przywrócić pustego opisu
+            if(!empty($oldValue)){
+                $aM->updateAttributesPure(
+                    array($productsAffectedId),
+                    array($attributeCode => $oldValue),
+                    $store
+                );
+            }
+
         }
 
         $changesHistoryItem->delete();

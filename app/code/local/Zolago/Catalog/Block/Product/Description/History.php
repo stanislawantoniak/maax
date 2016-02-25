@@ -9,7 +9,7 @@ class Zolago_Catalog_Block_Product_Description_History extends Mage_Core_Block_T
 
     public function getInfoMessage()
     {
-        /* @var $descriptionHistory Zolago_Catalog_Block_Product_Description_History */
+        /* @var $descriptionHistory Zolago_Catalog_Model_Description_History */
         $descriptionHistory = Mage::getModel("zolagocatalog/description_history");
 
         $historyCountLimit = $descriptionHistory->getHistoryCountLimit();
@@ -21,7 +21,7 @@ class Zolago_Catalog_Block_Product_Description_History extends Mage_Core_Block_T
     public function getChangesHistory()
     {
 
-        /* @var $descriptionHistory Zolago_Catalog_Block_Product_Description_History */
+        /* @var $descriptionHistory Zolago_Catalog_Model_Description_History */
         $descriptionHistory = Mage::getModel("zolagocatalog/description_history");
 
         $historyLifetimeLimit = $descriptionHistory->getHistoryLifetimeLimit();
