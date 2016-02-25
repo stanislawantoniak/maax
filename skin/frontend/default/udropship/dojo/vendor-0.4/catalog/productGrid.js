@@ -924,7 +924,7 @@ define([
                 return jQuery('#showChangesHistory');
             },
             /**
-             * Update html by ajax auto fill attributes modal
+             * Update html by ajax changesHistory modal
              */
             updateModal: function () {
                 this.setSpinner();
@@ -937,7 +937,7 @@ define([
                     jQuery("#showChangesHistory").html(content);
                     window.changesHistory.init(window.grid);
                 }).always(function () {
-
+                    window.grid.refresh();
                 });
             },
             attachLogicRevertChange: function () {
