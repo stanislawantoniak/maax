@@ -310,7 +310,8 @@ Mall.wishlist = {
         jQuery("#added-wishlist").show();
         jQuery("#added-wishlist").find(".likeAdded").html(likeHtml);
 
-        Mall.buildAccountInfo(data, true);
+		// set products count badge
+		Mall.setFavoritesCountBadge(data.content.favorites_count);
 
         return this;
     },
@@ -366,7 +367,8 @@ Mall.wishlist = {
         jQuery("#added-wishlist").hide();
         jQuery("#notadded-wishlist").html(likeHtml);
 
-        Mall.buildAccountInfo(data, true);
+		// set products count badge
+		Mall.setFavoritesCountBadge(data.content.favorites_count);
     },
 
     /**
@@ -423,7 +425,8 @@ Mall.wishlist = {
                 jQuery(obj).parent().append(wrapper);
                 jQuery(obj).remove();
 
-                Mall.buildAccountInfo(data, true);
+				// set products count badge
+				Mall.setFavoritesCountBadge(data.content.favorites_count);
                 Mall.wishlist.calculateWidths();
             }
         });
@@ -490,7 +493,8 @@ Mall.wishlist = {
 		            jQuery(obj).parent().append(wrapper);
 		            jQuery(obj).remove();
 	            }
-                Mall.buildAccountInfo(data, true);
+				// set products count badge
+				Mall.setFavoritesCountBadge(data.content.favorites_count);
                 Mall.wishlist.calculateWidths();
             }
         });

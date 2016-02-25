@@ -43,6 +43,64 @@
                 </ajax_response>
             </types>
         </cache>
+		<events>
+			<!-- Invalidate cache for customer ajax start -->
+			<checkout_cart_save_after>
+				<observers>
+					<orbacommon_ajax_cart_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_cart_observer>
+				</observers>
+			</checkout_cart_save_after>
+			<sales_quote_save_after>
+				<observers>
+					<orbacommon_ajax_quote_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_quote_observer>
+				</observers>
+			</sales_quote_save_after>
+			<catalog_category_save_after>
+				<observers>
+					<orbacommon_ajax_search_category_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateSearchCustomerAjaxCache</method>
+					</orbacommon_ajax_search_category_observer>
+				</observers>
+			</catalog_category_save_after>
+			<wishlist_save_after>
+				<observers>
+					<orbacommon_ajax_wishlist_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateWishlistCustomerAjaxCache</method>
+					</orbacommon_ajax_wishlist_observer>
+				</observers>
+			</wishlist_save_after>
+			<ajax_get_account_information_after>
+				<observers>
+					<orbacommon_recently_viewed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_recently_viewed_observer>
+				</observers>
+			</ajax_get_account_information_after>
+			<newsletter_subscriber_save_after>
+				<observers>
+					<orbacommon_has_subscribed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateVisitorHasSubscribedAjaxCache</method>
+					</orbacommon_has_subscribed_observer>
+				</observers>
+			</newsletter_subscriber_save_after>
+			<!-- Invalidate cache for customer ajax end -->
+		</events>
     </global>
     <frontend>
         <routers>

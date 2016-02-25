@@ -82,7 +82,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 				$checkoutSession = Mage::getSingleton('checkout/session');
 				$checkoutData = $checkoutSession->getData();
 				/** @var GH_GTM_Helper_Data $gtmHelper */
-				$gtmHelper = Mage::helper("gh_gtm");
+				$gtmHelper = Mage::helper("ghgtm");
 
 				if(isset($checkoutData['shipping_method'])) {
 					$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
@@ -176,7 +176,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		$dataScript = '';
 
 		/** @var GH_GTM_Helper_Data $gtmHlp */
-		$gtmHlp = Mage::helper('gh_gtm');
+		$gtmHlp = Mage::helper('ghgtm');
 
 		// Get transaction and visitor data.
 		$data = $data + $this->_getTransactionData();
@@ -200,7 +200,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 			return '';
 		}
 		/** @var GH_GTM_Helper_Data $gtmHlp */
-		$gtmHlp = Mage::helper('gh_gtm');
+		$gtmHlp = Mage::helper('ghgtm');
 
 		$data = $this->_getTransactionData();
 
@@ -224,7 +224,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 		}
 
 		/** @var GH_GTM_Helper_Data $gtmHlp */
-		$gtmHlp = Mage::helper("gh_gtm");
+		$gtmHlp = Mage::helper("ghgtm");
 		$path = $gtmHlp->getContextPath();
 		$allowedPaths = $gtmHlp->getAllowedContextPaths();
 
