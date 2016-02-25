@@ -574,13 +574,25 @@
 	transition: 0.01s;
 }
 
-#showAttributeRules-trigger {
+#showAttributeRules-trigger,
+#changesHistory-trigger
+{
 	color: #4d7496;
 	background-color: #ffffff;
 	border: none;
 	font-size: 11px !important;
 	padding: 0;
 	cursor: pointer;
+}
+.show-changes-history-details {
+	margin: 10px 0;
+	cursor: pointer;
+}
+.icon-repeat.icon-flipped:before {
+	transform: scale(-1, 1);
+	-moz-transform: scale(-1, 1);
+	-webkit-transform: scale(-1, 1);
+	-ms-transform: scale(-1, 1);
 }
 
 #showAttributeRules div.tooltip-wrapper {
