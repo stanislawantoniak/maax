@@ -161,8 +161,9 @@ $itemsCount = count($items);
                                                         <?php if (count(array_keys($changeMade["old_value"]))
                                                             && count(array_keys($changeMade["old_value"])) > 5
                                                         ): ?>
-                                                            .....
-                                                            and <?php echo(count(array_keys($changeMade["old_value"])) - 5); ?> products more
+
+                                                            <?php echo $helper->__("... and %s products more", count(array_keys($changeMade["old_value"])) - 5); ?>
+
                                                         <?php endif; ?>
                                                     </td>
 
