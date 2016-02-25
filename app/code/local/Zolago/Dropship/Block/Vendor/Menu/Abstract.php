@@ -150,19 +150,17 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     public function getRegulationsSection()
     {
 
-        if (!$this->isOperatorMode()) {
-            if ($this->isModuleActive('ghregulation')
-                    && $this->isAllowed("ghregulation/vendor")
-               ) {
+        if ($this->isModuleActive('ghregulation')
+                && $this->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_RULES)
+           ) {
 
 
-                return array(
-                           "label" => $this->__("Terms of cooperation"),
-                           "active" => $this->isActive(array("ghregulation")),
-                           "icon" => "icon-flag",
-                           "url" => $this->getUrl('udropship/vendor/rules'),
-                       );
-            }
+            return array(
+                       "label" => $this->__("Terms of cooperation"),
+                       "active" => $this->isActive(array("ghregulation")),
+                       "icon" => "icon-flag",
+                       "url" => $this->getUrl('udropship/vendor/rules'),
+                   );
         }
 
         return null;
@@ -186,31 +184,31 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
         if($this->isModuleActive('zolagocampaign')) {
             if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_CAMPAIGN_VENDOR)) {
                 $groupOne[] = array(
-                    "active" => $this->isActive("zolagocampaign"),
-                    "icon"   => "icon-star",
-                    "label"  => $this->__('Campaigns'),
-                    "url"    => $this->getUrl('zolagocampaign/vendor/index')
-                );
+                                  "active" => $this->isActive("zolagocampaign"),
+                                  "icon"   => "icon-star",
+                                  "label"  => $this->__('Campaigns'),
+                                  "url"    => $this->getUrl('zolagocampaign/vendor/index')
+                              );
             }
             if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_CAMPAIGN_PLACEMENT)) {
                 $groupOne[] = array(
-                    "active" => $this->isActive("zolagocampaign_placement"),
-                    "icon"   => "icon-th",
-                    "label"  => $this->__('Manage placements'),
-                    "url"    => $this->getUrl('zolagocampaign/placement/index')
-                );
+                                  "active" => $this->isActive("zolagocampaign_placement"),
+                                  "icon"   => "icon-th",
+                                  "label"  => $this->__('Manage placements'),
+                                  "url"    => $this->getUrl('zolagocampaign/placement/index')
+                              );
             }
         }
-		if($this->isModuleActive('ghmarketing') && $this->getVendor()->getData('marketing_charges_enabled')) {
-			if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_BUDGET_MARKETING)) {
-				$groupOne[] = array(
-					"active" => $this->isActive("budget_marketing"),
-					"icon"   => "icon-usd",
-					"label"  => Mage::helper('ghmarketing')->__('Budget and marketing costs'),// Todo translate
-					"url"    => $this->getUrl('udropship/marketing/budget')
-				);
-			}
-		}
+        if($this->isModuleActive('ghmarketing') && $this->getVendor()->getData('marketing_charges_enabled')) {
+            if ($this->isAllowed(Zolago_Operator_Model_Acl::RES_BUDGET_MARKETING)) {
+                $groupOne[] = array(
+                                  "active" => $this->isActive("budget_marketing"),
+                                  "icon"   => "icon-usd",
+                                  "label"  => Mage::helper('ghmarketing')->__('Budget and marketing costs'),// Todo translate
+                                  "url"    => $this->getUrl('udropship/marketing/budget')
+                              );
+            }
+        }
         $grouped = $this->_processGroups($groupOne);
 
         if(count($grouped)) {
@@ -229,35 +227,33 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     public function getSettingSection() {
 
         $groupOne = array();
-        if($this->isAllowed("udropship/vendor/preferences")) {
 
-            if(!$this->isOperatorMode()) {
-                $groupOne[] = array(
-                                  "active" => $this->isActive("vendorsettings_info"),
-                                  "icon"	 => "icon-briefcase",
-                                  "label"	 => $this->__('Company settings'),
-                                  "url"	 => $this->getUrl('udropship/vendor_settings/info')
-                              );
-                $groupOne[] = array(
-                                  "active" => $this->isActive("vendorsettings_shipping"),
-                                  "icon"	 => "icon-plane",
-                                  "label"	 => $this->__('Shipment settings'),
-                                  "url"	 => $this->getUrl('udropship/vendor_settings/shipping')
-                              );
-                $groupOne[] = array(
-                                  "active" => $this->isActive("vendorsettings_rma"),
-                                  "icon"	 => "icon-retweet",
-                                  "label"	 => $this->__('RMA settings'),
-                                  "url"	 => $this->getUrl('udropship/vendor_settings/rma')
-                              );
-            }
-
+        if(!$this->isOperatorMode() || $this->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_SETTINGS)) {
+            $groupOne[] = array(
+                              "active" => $this->isActive("vendorsettings_info"),
+                              "icon"	 => "icon-briefcase",
+                              "label"	 => $this->__('Company settings'),
+                              "url"	 => $this->getUrl('udropship/vendor_settings/info')
+                          );
+            $groupOne[] = array(
+                              "active" => $this->isActive("vendorsettings_shipping"),
+                              "icon"	 => "icon-plane",
+                              "label"	 => $this->__('Shipment settings'),
+                              "url"	 => $this->getUrl('udropship/vendor_settings/shipping')
+                          );
+            $groupOne[] = array(
+                              "active" => $this->isActive("vendorsettings_rma"),
+                              "icon"	 => "icon-retweet",
+                              "label"	 => $this->__('RMA settings'),
+                              "url"	 => $this->getUrl('udropship/vendor_settings/rma')
+                          );
         }
 
 
 
 
-        if($this->isModuleActive('zolagooperator') && $this->isAllowed("zolagooperator")) {
+
+        if($this->isModuleActive('zolagooperator') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_UDROPSHIP_OPERATOR)) {
             $groupOne[] = array(
                               "active" => $this->isActive("zolagooperator"),
                               "icon"	 => "icon-user",
@@ -266,7 +262,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                           );
         }
 
-        if($this->isModuleActive('zolagopos') && $this->isAllowed("zolagopos")) {
+        if($this->isModuleActive('zolagopos') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_UDROPSHIP_POS)) {
             $groupOne[] = array(
                               "active" => $this->isActive("zolagopos"),
                               "icon"	 => "icon-home",
@@ -275,7 +271,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                           );
         }
 
-        if($this->isModuleActive('zolagosizetable') && $this->isAllowed("zolagosizetable")) {
+        if($this->isModuleActive('zolagosizetable') && $this->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_SIZETABLE)) {
             $groupOne[] = array(
                               "active" => $this->isActive("zolagosizetable"),
                               "icon"	 => "icon-table",
@@ -333,51 +329,51 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
      */
     public function getStatementsSection() {
         if ($this->isModuleActive('ghstatements')
-            && $this->isAllowed("udropship/statements")
-        ) {
+                && $this->isAllowed("udropship/statements")
+           ) {
             /** @var GH_Statements_Helper_Data $helper */
             $helper = Mage::helper('ghstatements');
             // Sledzenie salda / Balance tracking
             $groupOne[] = array(
-                "active"    => $this->isActive("statements-balance"),
-                "icon"      => "icon-usd",
-                "label"     => $helper->__("Balance tracking"),
-                "url"       => $this->getUrl('udropship/statements/balance'),
-            );
+                              "active"    => $this->isActive("statements-balance"),
+                              "icon"      => "icon-usd",
+                              "label"     => $helper->__("Balance tracking"),
+                              "url"       => $this->getUrl('udropship/statements/balance'),
+                          );
             /** @see GH_Statements_Dropship_StatementsController::balanceAction() */
 
             // Rozliczenia okresowe / Periodic statements
             $groupOne[] = array(
-                "active"    => $this->isActive("statements-periodic"),
-                "icon"      => "icon-usd",
-                "label"     => $helper->__("Periodic statements"),
-                "url"       => $this->getUrl('udropship/statements/periodic'),
-            );
+                              "active"    => $this->isActive("statements-periodic"),
+                              "icon"      => "icon-usd",
+                              "label"     => $helper->__("Periodic statements"),
+                              "url"       => $this->getUrl('udropship/statements/periodic'),
+                          );
             /** @see GH_Statements_Dropship_StatementsController::statementsAction() */
 
             // Faktury / Invoices
             $groupOne[] = array(
-                "active"    => $this->isActive("statements-invoices"),
-                "icon"      => "icon-usd",
-                "label"     => $helper->__("Invoices"),
-                "url"       => $this->getUrl('udropship/statements/invoices'),
-            );
+                              "active"    => $this->isActive("statements-invoices"),
+                              "icon"      => "icon-usd",
+                              "label"     => $helper->__("Invoices"),
+                              "url"       => $this->getUrl('udropship/statements/invoices'),
+                          );
             /** @see GH_Statements_Dropship_StatementsController::invoicesAction() */
 
             $grouped = $this->_processGroups($groupOne);
 
             if (count($grouped)) {
                 return array(
-                    "label"     => $helper->__("Billing and statements"),
-                    "active"    => $this->isActive(array(
-                        "statements-balance",
-                        "statements-periodic",
-                        "statements-invoices",
-                    )),
-                    "icon"      => "icon-usd",
-                    "url"       => "#",
-                    "children"  => $grouped
-                );
+                           "label"     => $helper->__("Billing and statements"),
+                           "active"    => $this->isActive(array(
+                                       "statements-balance",
+                                       "statements-periodic",
+                                       "statements-invoices",
+                                   )),
+                           "icon"      => "icon-usd",
+                           "url"       => "#",
+                           "children"  => $grouped
+                       );
             }
         }
         return null;

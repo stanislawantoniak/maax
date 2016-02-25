@@ -1,7 +1,6 @@
 <?php
 
 require_once Mage::getModuleDir('controllers', "Zolago_Dropship") . DS . "VendorController.php";
-
 class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorController
 {
 
@@ -9,7 +8,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
     {
         if (Mage::helper('udropship')->isUdpoActive()) {
             $session = $this->_getSession();
-            if ($session->isOperatorMode()) {
+            if (!$session->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_SETTINGS)) {
                 $operator = $session->getOperator();
                 if ($operator->isAllowed("udpo/vendor")) {
                     return $this->_forward('index', 'vendor', 'udpo');
@@ -24,7 +23,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
     {
         if (Mage::helper('udropship')->isUdpoActive()) {
             $session = $this->_getSession();
-            if ($session->isOperatorMode()) {
+            if (!$session->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_SETTINGS)) {
                 $operator = $session->getOperator();
                 if ($operator->isAllowed("udpo/vendor")) {
                     return $this->_forward('index', 'vendor', 'udpo');
@@ -38,7 +37,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
     {
         if (Mage::helper('udropship')->isUdpoActive()) {
             $session = $this->_getSession();
-            if ($session->isOperatorMode()) {
+            if (!$session->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_SETTINGS)) {
                 $operator = $session->getOperator();
                 if ($operator->isAllowed("udpo/vendor")) {
                     return $this->_forward('index', 'vendor', 'udpo');
@@ -47,7 +46,6 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
         }
         $this->_renderPage(null, "vendorsettings_rma");
     }
-
 
     /**
      * Save USTAWIENIA PODSTAWOWE
@@ -66,8 +64,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 $vendor = $session->getVendor();
                 /** @var Zolago_Operator_Model_Operator $operator */
                 $operator = $session->getOperator();
-
-                if ($vendor->getId() && !$operator->getId()) {
+                if ($vendor->getId() && $session->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_SETTINGS)) {
                     foreach (
                         array(
                             'company_name',
@@ -101,21 +98,9 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                     );
                     $vendor->save();
 
-                } elseif($operator->getId()) {
-                    if (array_key_exists('password', $param)) {
-                        $operator->setData('password', $param['password']);
-                    } else {
-                        Mage::throwException(Mage::helper('udropship')->__("You don't send correct password"));
-                    }
-                } else {
-                    Mage::throwException(Mage::helper('udropship')->__("You can't change the password"));
                 }
 
-                if (isset($param['onlyEditPassword'])) {
-                    $session->addSuccess(Mage::helper('udropship')->__('Password has been saved'));
-                } else {
-                    $session->addSuccess(Mage::helper('udropship')->__('Settings has been saved'));
-                }
+                $session->addSuccess(Mage::helper('udropship')->__('Settings has been saved'));
             } catch (Exception $e) {
 	            if(count($errorData)) {
 		            $session->setData('vendorSettings', $errorData);
@@ -123,11 +108,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 $session->addError($e->getMessage());
             }
         }
-        if (array_key_exists('redirectAfter', $param)) {
-            $this->_redirect($param['redirectAfter']);
-        } else {
-            $this->_redirect('udropship/vendor_settings/info');
-        }
+        $this->_redirect('udropship/vendor_settings/info');
     }
 
 
