@@ -124,12 +124,32 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
 			if (isset($cacheData['favorites_count'])) {
 				return $cacheData['favorites_count'];
 			}
 		}
 		$this->getFavoritesDetails();
 		return $this->customerInfo['favorites_count'];
+	}
+
+	public function removeCacheFavoritesCount() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
+			if (isset($cacheData['visitorHasSubscribed'])) {
+				unset($cacheData['visitorHasSubscribed']);
+				$cache = Mage::app()->getCache();
+				$cache->remove($key);
+				$this->saveCustomerInfoCache($cacheData);
+			}
+		}
+		return $this;
 	}
 
 	/**
@@ -141,6 +161,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
 			if (isset($cacheData['favorites_products'])) {
 				return $cacheData['favorites_products'];
 			}
@@ -156,6 +179,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
 			if (isset($cacheData['customer_name'])) {
 				return $cacheData['customer_name'];
 			}
@@ -174,6 +200,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
 			if (isset($cacheData['customer_email'])) {
 				return $cacheData['customer_email'];
 			}
@@ -185,10 +214,16 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		return $this->customerInfo['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
 	}
 
+	/**
+	 * @return bool|string
+	 */
 	public function getVisitorHasSubscribed() {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
 			if (isset($cacheData['visitorHasSubscribed'])) {
 				return $cacheData['visitorHasSubscribed'];
 			}
@@ -224,14 +259,20 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		return $this->customerInfo['visitorHasSubscribed'] = $visitorHasSubscribed;
 	}
 
+	public function removeCacheVisitorHasSubscribed() {
+		//todo
+	}
+
 	/**
 	 * Manually save part of cache connected only to customer
 	 *
+	 * @param array $customerInfo
 	 * @return $this
 	 */
-	public function saveCustomerInfoCache() {
-		if (!empty($this->customerInfo)) {
+	public function saveCustomerInfoCache($customerInfo = array()) {
+		if (!empty($this->customerInfo) || !empty($customerInfo)) {
 			$key = $this->getCacheKeyForCustomerInfo();
+			$this->customerInfo = !empty($customerInfo) ? $customerInfo : $this->customerInfo;
 			$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
 			return $this;
 		}
@@ -247,6 +288,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $this->getCacheKeyForCustomerInfo();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
 			if (isset($cacheData['recently_viewed'])) {
 				// Don't show in last viewed box current product
 				unset($cacheData['recently_viewed'][(int)$skipProductId]);
@@ -453,6 +497,18 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 			Mage::unregister($ajaxReferrerUrlKey);
 		}
 		Mage::register($ajaxReferrerUrlKey, $this->_getRefererUrl());
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removeAllCache() {
+		$cache = Mage::app()->getCache();
+		$ids = $cache->getIdsMatchingTags(array(self::CACHE_TAG));
+		foreach ($ids as $id) {
+			$cache->remove($id);
+		}
 		return $this;
 	}
 }
