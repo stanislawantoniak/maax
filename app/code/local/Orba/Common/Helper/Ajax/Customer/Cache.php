@@ -52,10 +52,20 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return string
 	 */
 	public function getCacheKeyForCustomerInfo() {
-		/** @var Zolago_Customer_Model_Session $customerSession */
-		$customerSession = Mage::getSingleton('customer/session');
-		$cId = (int)$customerSession->getId();
-		return self::CACHE_NAME . 'customer-info-' . $cId;
+		/** @var Mage_Persistent_Helper_Session $persistentHelper */
+		$persistentHelper = Mage::helper('persistent/session');
+		$key = $persistentHelper->getSession()->getKey();
+
+		if (!empty($key)) {
+			return self::CACHE_NAME . 'customer-key-' . $key;
+		} else {
+			/** @var Zolago_Customer_Model_Session $customerSession */
+			$customerSession = Mage::getSingleton('customer/session');
+			/** @var Mage_Core_Model_Cookie $mCookie */
+			$mCookie = Mage::getModel('core/cookie');
+			$fronted = $mCookie->get($customerSession->getSessionName());
+			return self::CACHE_NAME . 'customer-cookie-' . $fronted;
+		}
 	}
 
 	/**
