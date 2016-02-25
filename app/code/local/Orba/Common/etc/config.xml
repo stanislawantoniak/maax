@@ -74,11 +74,11 @@
 			</catalog_category_save_after>
 			<wishlist_product_add_after>
 				<observers>
-					<zolagowishlist>
+					<orbacommon_ajax_wishlist_observer>
 						<type>singleton</type>
 						<class>orbacommon/observer</class>
-						<method></method>
-					</zolagowishlist>
+						<method>invalidateWishlistCustomerAjaxCache</method>
+					</orbacommon_ajax_wishlist_observer>
 				</observers>
 			</wishlist_product_add_after>
 			<!-- Invalidate cache for customer ajax end -->
