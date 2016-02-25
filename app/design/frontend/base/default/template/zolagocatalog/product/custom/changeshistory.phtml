@@ -15,6 +15,10 @@ $operationLabels = array(
 );
 
 $historyAll = $history->toArray();
+
+$items = $historyAll["items"];
+$itemsCount = count($items);
+
 ?>
 
 
@@ -29,159 +33,169 @@ $historyAll = $history->toArray();
             <div class="modal-body">
                 <p class="alert alert-info"><?php echo $infoMessage; ?></p>
 
-                <?php if (count($historyAll["items"]) > 0): ?>
+                <?php if ($itemsCount > 0):
+
+                    ?>
                     <div class="widget-content">
-                        <?php for ($i = 0; $i < (count($historyAll["items"])-1); $i++): ?>
-                            <?php $firstRow = $historyAll["items"][$i]; ?>
+                        <?php for ($i = 0; $i < ($itemsCount - 1); $i++): ?>
+                            <?php $firstRow = $items[$i]; ?>
                             <div class="widget box">
-                                    <div class="widget-content changes-history-item">
+                                <div class="widget-content changes-history-item">
 
-                                        <div class="row" style="height: 55px;">
-                                            <div class="col-md-12">
-                                                <div class="col-md-6" style="margin: 10px 0;">
-                                                    <i class="icon-time"></i> <?php echo date("Y-m-d (H:m)", strtotime($firstRow["changes_date"])); ?>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <?php if($i == 0): ?>
-                                                        <button id="revertChangeAttribute"
-                                                                data-id="<?php echo $firstRow["history_id"]; ?>"
-                                                                class="btn btn-lg btn-primary pull-right">
-                                                            <?php echo $helper->__("Revert Changes"); ?>
-                                                        </button>
-                                                    <?php else: ?>
-                                                        <a class="pull-right show-changes-history-details">
-                                                            <?php echo $helper->__("Show Details"); ?>
-                                                        </a>
-                                                    <?php endif; ?>
+                                    <div class="row" style="height: 55px;">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6" style="margin: 10px 0;">
+                                                <i class="icon-time"></i> <?php echo date("Y-m-d (H:m)", strtotime($firstRow["changes_date"])); ?>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <?php if ($i == 0): ?>
+                                                    <button id="revertChangeAttribute"
+                                                            data-id="<?php echo $firstRow["history_id"]; ?>"
+                                                            class="btn btn-lg btn-primary pull-right">
+                                                        <?php echo $helper->__("Revert Changes"); ?>
+                                                    </button>
+                                                <?php else: ?>
+                                                    <a class="pull-right show-changes-history-details">
+                                                        <?php echo $helper->__("Show Details"); ?>
+                                                    </a>
+                                                <?php endif; ?>
 
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12 changes-history-details <?php if($i > 0): ?>hidden<?php endif; ?>">
-                                                <?php $changeMade = unserialize($firstRow["changes_data"]); ?>
-                                                <table class="table table-hover table-striped table-bordered table-highlight-head">
-                                                    <thead>
-                                                    <tr role="row">
-                                                        <th width="15%"><?php echo $helper->__("Changed attribute"); ?></th>
+                                    </div>
+                                    <div class="row">
+                                        <div
+                                            class="col-md-12 changes-history-details <?php if ($i > 0): ?>hidden<?php endif; ?>">
+                                            <?php $changeMade = unserialize($firstRow["changes_data"]); ?>
+                                            <table
+                                                class="table table-hover table-striped table-bordered table-highlight-head">
+                                                <thead>
+                                                <tr role="row">
+                                                    <th width="15%"><?php echo $helper->__("Changed attribute"); ?></th>
 
-                                                        <th><?php echo $helper->__("Products"); ?></th>
+                                                    <th><?php echo $helper->__("Products"); ?></th>
 
-                                                        <th width="15%"><?php echo $helper->__("Action Type"); ?></th>
-                                                        <th width="15%"><?php echo $helper->__("Value set"); ?></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <?php
-                                                            $options = array();
+                                                    <th width="15%"><?php echo $helper->__("Action Type"); ?></th>
+                                                    <th width="15%"><?php echo $helper->__("Value set"); ?></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <?php
+                                                        $options = array();
 
-                                                            $attribute = Mage::getModel('eav/entity_attribute')
-                                                                ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $changeMade["attribute_code"]);
-                                                            //var_dump($attribute->getData());
-                                                            $values = Mage::getResourceModel('eav/entity_attribute_option_collection')
-                                                                ->setAttributeFilter($attribute->getId())
-                                                                ->setStoreFilter(Mage::app()->getStore()->getId(), false)
-                                                                ->addFieldToSelect('option_id');
+                                                        $attribute = Mage::getModel('eav/entity_attribute')
+                                                            ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $changeMade["attribute_code"]);
+//                                                        Zend_Debug::dump($attribute->getData());
+                                                        $values = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                                                            ->setAttributeFilter($attribute->getId())
+                                                            ->setStoreFilter(Mage::app()->getStore()->getId(), true)
+                                                            ->addFieldToSelect('option_id');
 
-                                                            //var_dump($attribute->getFrontendInput());
-                                                            if(in_array($attribute->getFrontendInput(),array("select","multiselect"))){
-                                                                foreach($values as $value){
-                                                                    $options[$value["option_id"]] = $value["value"];
-                                                                }
+                                                        //Zend_Debug::dump($attribute->getFrontendInput());
+                                                        if (in_array($attribute->getFrontendInput(), array("select", "multiselect"))) {
+                                                            foreach ($values as $value) {
+                                                                $options[$value["option_id"]] = $value["value"];
                                                             }
+                                                        }
+                                                        //Zend_Debug::dump($options);
+
+                                                        echo $attribute->getStoreLabel();
+                                                        ?>
+                                                    </td>
+
+                                                    <td>
 
 
-                                                            echo $attribute->getStoreLabel();
-                                                            ?>
-                                                        </td>
+                                                        <?php //var_dump($changeMade); ?>
+                                                        <?php $oldValues = array(); ?>
+                                                        <table
+                                                            class="table table-striped table-bordered table-hover table-responsive datatable dataTable">
+                                                            <thead>
+                                                            <tr role="row">
+                                                                <th></th>
+                                                                <th><?php echo $helper->__("Values Before Change"); ?></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <?php foreach (array_keys($changeMade["old_value"]) as $j => $id): ?>
+                                                                <tr>
+                                                                    <?php if ($j >= 5) {
+                                                                        break;
+                                                                    } ?>
+                                                                    <?php $_product = Mage::getModel("zolagocatalog/product")->load($id); ?>
+                                                                    <td>
+                                                                        <?php echo $_product->getName(); ?>
+                                                                        <p class="info editable">
+                                                                            SKU: <?php echo $_product->getSkuv(); ?></p>
+                                                                    </td>
 
-                                                        <td>
+
+                                                                    <td>
+                                                                        <?php $oldValue = $changeMade["old_value"][$id]; ?>
+                                                                        <?php if ($attribute->getFrontendInput() == "select"): ?>
+                                                                            <?php echo isset($options[$oldValue]) ? $options[$oldValue] : "..."; ?>
+                                                                            <br/>
+                                                                        <?php elseif ($attribute->getFrontendInput() == "multiselect"): ?>
+
+                                                                            <?php foreach (explode(",", $oldValue) as $oldValueItem): ?>
+                                                                                <?php echo isset($options[$oldValueItem]) ? $options[$oldValueItem] : "..."; ?>
+                                                                                <br/>
+                                                                            <?php endforeach; ?>
+                                                                        <?php else: ?>
+                                                                            <?php echo $oldValue; ?>
+                                                                        <?php endif; ?>
 
 
-
-                                                            <?php //var_dump($changeMade); ?>
-                                                            <?php $oldValues = array(); ?>
-                                                            <table class="table table-striped table-bordered table-hover table-responsive datatable dataTable">
-                                                                <thead>
-                                                                <tr role="row">
-                                                                    <th></th>
-                                                                    <th><?php echo $helper->__("Values Before Change"); ?></th>
+                                                                        <?php unset($oldValue); ?>
+                                                                    </td>
+                                                                    <?php unset($id); ?>
                                                                 </tr>
-                                                                </thead>
-                                                                <?php foreach(array_keys($changeMade["old_value"]) as $j=>$id): ?>
-                                                                    <tr>
-                                                                        <?php if($j >= 5){break;} ?>
-                                                                        <?php $_product = Mage::getModel("zolagocatalog/product")->load($id); ?>
-                                                                        <td>
-                                                                            <?php echo $_product->getName(); ?>
-                                                                            <p class="info editable">SKU: <?php echo $_product->getSkuv(); ?></p>
-                                                                        </td>
+                                                            <?php endforeach; ?>
+                                                            <?php unset($j); ?>
 
+                                                        </table>
 
-
-                                                                        <td>
-                                                                            <?php $oldValue = $changeMade["old_value"][$id]; ?>
-                                                                            <?php if ($attribute->getFrontendInput() == "select"): ?>
-                                                                                <?php echo  isset($options[$oldValue]) ? $options[$oldValue] : "..."; ?><br />
-                                                                            <?php elseif ($attribute->getFrontendInput() == "multiselect"): ?>
-
-                                                                                <?php foreach(explode(",",$oldValue) as $oldValueItem): ?>
-                                                                                    <?php echo  isset($options[$oldValueItem]) ? $options[$oldValueItem] : "..."; ?><br />
-                                                                                <?php endforeach; ?>
-                                                                            <?php else: ?>
-                                                                                <?php echo $oldValue; ?>
-                                                                            <?php endif; ?>
-
-
-                                                                            <?php unset($oldValue); ?>
-                                                                        </td>
-                                                                        <?php unset($id); ?>
-                                                                    </tr>
-                                                                <?php endforeach; ?>
-                                                                <?php unset($j); ?>
-
-                                                            </table>
-
-                                                            <?php if (count(array_keys($changeMade["old_value"]))
+                                                        <?php if (count(array_keys($changeMade["old_value"]))
                                                             && count(array_keys($changeMade["old_value"])) > 5
-                                                            ): ?>
-                                                                .....
-                                                                and <?php echo (count(array_keys($changeMade["old_value"]))-5); ?> products more
-                                                            <?php endif; ?>
-                                                        </td>
+                                                        ): ?>
+                                                            .....
+                                                            and <?php echo(count(array_keys($changeMade["old_value"])) - 5); ?> products more
+                                                        <?php endif; ?>
+                                                    </td>
 
 
-                                                        <td><?php echo $operationLabels[$changeMade["attribute_mode"]]; ?></td>
+                                                    <td><?php echo $operationLabels[$changeMade["attribute_mode"]]; ?></td>
 
-                                                        <td>
+                                                    <td>
 
-                                                            <?php $newValue = $changeMade["new_value"]; ?>
-                                                            <?php if ($attribute->getFrontendInput() == "select"): ?>
-                                                                <?php echo  isset($options[$newValue]) ? $options[$newValue] : ""; ?><br />
-                                                            <?php elseif ($attribute->getFrontendInput() == "multiselect"): ?>
+                                                        <?php $newValue = $changeMade["new_value"]; ?>
+                                                        <?php if ($attribute->getFrontendInput() == "select"): ?>
+                                                            <?php echo isset($options[$newValue]) ? $options[$newValue] : ""; ?>
+                                                            <br/>
+                                                        <?php elseif ($attribute->getFrontendInput() == "multiselect"): ?>
 
-                                                                <?php foreach(explode(",",$newValue) as $newValueItem): ?>
-                                                                    <?php echo  isset($options[$newValueItem]) ? $options[$newValueItem] : ""; ?><br />
-                                                                <?php endforeach; ?>
-                                                            <?php else: ?>
+                                                            <?php foreach (explode(",", $newValue) as $newValueItem): ?>
+                                                                <?php echo isset($options[$newValueItem]) ? $options[$newValueItem] : ""; ?>
+                                                                <br/>
+                                                            <?php endforeach; ?>
+                                                        <?php else: ?>
 
-                                                                <?php echo $newValue; ?>
-                                                            <?php endif; ?>
+                                                            <?php echo $newValue; ?>
+                                                        <?php endif; ?>
 
 
-                                                            <?php unset($oldValue); ?>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                        <?php unset($oldValue); ?>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
-
                                     </div>
 
                                 </div>
+
+                            </div>
                         <?php endfor; ?>
                     </div>
                 <?php else: ?>
@@ -193,7 +207,11 @@ $historyAll = $history->toArray();
                 <?php endif; ?>
 
             </div>
-            <div class="modal-footer"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo $helper->__("Cancel"); ?>
+                </button>
+            </div>
         </div>
     </div>
 
