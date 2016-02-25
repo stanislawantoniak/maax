@@ -81,6 +81,15 @@
 					</orbacommon_ajax_wishlist_observer>
 				</observers>
 			</wishlist_save_after>
+			<ajax_get_account_information_after>
+				<observers>
+					<orbacommon_recently_viewed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_recently_viewed_observer>
+				</observers>
+			</ajax_get_account_information_after>
 			<!-- Invalidate cache for customer ajax end -->
 		</events>
     </global>
