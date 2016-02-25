@@ -60,7 +60,7 @@ class Zolago_Catalog_Block_Product_Description_History extends Mage_Core_Block_T
     public function getAttributeOptions($attribute_code) {
         $attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attribute_code);
         $options = array();
-        foreach ($attribute->getSource()->getAllOptions(false, true) as $option) {
+        foreach ($attribute->getSource()->getAllOptions(false, false) as $option) {
             $options[$option['value']] = $option['label'];
         }
         return $options;
