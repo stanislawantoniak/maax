@@ -88,29 +88,24 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
     }
 
     /**
-     * @param $id
+     * @param Zolago_Catalog_Model_Description_History $changesHistoryItem
+     * @throws Exception
      */
-    public function revertChangesHistory($id)
+    public function revertChangesHistory(Zolago_Catalog_Model_Description_History $changesHistoryItem)
     {
-        $changesHistoryItem = $this->load($id);
-
-
-        //todo check if vendor can revert this item
-
-
         $changesData = unserialize($changesHistoryItem->getData("changes_data"));
 
         $attributeCode = $changesData["attribute_code"];
 
 
-        $store = 0;
+        $store = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
 
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
 
         foreach ($changesData["old_value"] as $productsAffectedId => $oldValue) {
             //nie można tą funkcją przywrócić pustego opisu
-            if(!empty($oldValue)){
+            if (!empty($oldValue)) {
                 $aM->updateAttributesPure(
                     array($productsAffectedId),
                     array($attributeCode => $oldValue),

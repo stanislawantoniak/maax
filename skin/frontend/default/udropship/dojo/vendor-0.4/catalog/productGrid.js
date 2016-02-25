@@ -949,7 +949,19 @@ define([
                         url: "/udprod/vendor_product/revertChangesHistory",
                         data: {id: changeAttributeHistoryId}
                     }).success(function (data, textStatus, jqXHR) {
-                        window.changesHistory.updateModal();
+
+                        var response = jQuery.parseJSON(data);
+
+                        if(response.length == 0){
+                            window.changesHistory.updateModal();
+                        } else {
+                            noty({
+                                text: response.error,
+                                type: 'error',
+                                timeout: 10000
+                            });
+                        }
+
                     }).always(function () {
 
                     });
