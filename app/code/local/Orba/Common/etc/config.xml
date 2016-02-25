@@ -90,6 +90,13 @@
 					</orbacommon_recently_viewed_observer>
 				</observers>
 			</ajax_get_account_information_after>
+			<newsletter_subscriber_save_after>
+				<orbacommon_recently_viewed_observer>
+					<type>singleton</type>
+					<class>orbacommon/observer</class>
+					<method>invalidateVisitorHasSubscribedAjaxCache</method>
+				</orbacommon_recently_viewed_observer>
+			</newsletter_subscriber_save_after>
 			<!-- Invalidate cache for customer ajax end -->
 		</events>
     </global>
