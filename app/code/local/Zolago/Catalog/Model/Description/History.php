@@ -60,7 +60,8 @@ class Zolago_Catalog_Model_Description_History extends Mage_Core_Model_Abstract
             ->addFieldToFilter("entity_id", array("in" => $ids));
         foreach ($changedCollection as $changedCollectionItem) {
             $oldValue = $changedCollectionItem->getData($attributeCode);
-            if (!empty($oldValue))
+
+            if (!empty($oldValue) && !empty($attributeValue))
                 $oldValues[$changedCollectionItem->getId()] = $changedCollectionItem->getData($attributeCode);
 
         }
