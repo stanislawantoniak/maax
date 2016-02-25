@@ -626,7 +626,6 @@ define([
         massAttribute.setFocusedCell(e.cell);
 
         massAttribute.send(req).then(function () {
-            console.log("massAttribute");
             e.deferred.resolve();
             if (e.useSaveAsRule) {
                 // Get current attributes mapper block by ajax with spinner
@@ -906,7 +905,6 @@ define([
         window.changesHistory = {
             _changesHistory: {},
             init: function (grid) {
-                console.log("init");
                 this._changesHistory = new changesHistory(grid);
                 this.attachLogicRevertChange();
                 this.attachControls();

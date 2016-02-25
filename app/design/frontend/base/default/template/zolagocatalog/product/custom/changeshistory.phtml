@@ -29,9 +29,9 @@ $historyAll = $history->toArray();
             <div class="modal-body">
                 <p class="alert alert-info"><?php echo $infoMessage; ?></p>
 
-                <?php if ($historyAll["totalRecords"] > 0): ?>
+                <?php if (count($historyAll["items"]) > 0): ?>
                     <div class="widget-content">
-                        <?php for ($i = 0; $i < $historyAll["totalRecords"]; $i++): ?>
+                        <?php for ($i = 0; $i < (count($historyAll["items"])-1); $i++): ?>
                             <?php $firstRow = $historyAll["items"][$i]; ?>
                             <div class="widget box">
                                     <div class="widget-content changes-history-item">
