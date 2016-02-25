@@ -4,12 +4,12 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 
 	const MAX_CART_ITEMS_COUNT = 5;
 
-	const CACHE_NAME			= 'AJAX_CUSTOMER_';
-	const CACHE_TAG				= 'CUSTOMER_AJAX_INFO';
-	const CACHE_TAG_CART		= 'CUSTOMER_AJAX_INFO_CART';
-	const CACHE_TAG_SEARCH		= 'CUSTOMER_AJAX_INFO_SEARCH';
-	const CACHE_TAG_CUSTOMER_INFO = 'CUSTOMER_AJAX_CUSTOMER_INFO';
-	const CACHE_LIFE_TIME		= 900; // 15 min
+	const CACHE_NAME				= 'AJAX_CUSTOMER_';
+	const CACHE_TAG					= 'CUSTOMER_AJAX_INFO';
+	const CACHE_TAG_CART			= 'CUSTOMER_AJAX_INFO_CART';
+	const CACHE_TAG_SEARCH			= 'CUSTOMER_AJAX_INFO_SEARCH';
+	const CACHE_TAG_CUSTOMER_INFO	= 'CUSTOMER_AJAX_INFO_CUSTOMER';
+	const CACHE_LIFE_TIME			= 900; // 15 min
 
 	// temporary for store data for later save by $this->saveCustomerInfoCache()
 	protected $customerInfo = array();
@@ -183,6 +183,45 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		/** @var Mage_Customer_Model_Session $session */
 		$session = Mage::getSingleton('customer/session');
 		return $this->customerInfo['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
+	}
+
+	public function getVisitorHasSubscribed() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if (isset($cacheData['visitorHasSubscribed'])) {
+				return $cacheData['visitorHasSubscribed'];
+			}
+		}
+
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+		$customerId = $customerSession->getCustomerId();
+		$visitorHasSubscribed = false;
+		if($customerId) {
+			//visitorHasSubscribed
+			$resource = Mage::getSingleton('core/resource');
+			$readConnection = $resource->getConnection('core_read');
+
+			$query =
+				'SELECT `subscriber_status` FROM `' .
+				$resource->getTableName('newsletter/subscriber') .
+				'` WHERE `customer_id` = ' . $customerId;
+
+			$result = $readConnection->fetchAll($query);
+			if (count($result)) {
+				$newsletterStatus = current(current($result));
+				switch ($newsletterStatus) {
+					case Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED:
+						$visitorHasSubscribed = 'yes';
+						break;
+					case Zolago_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED:
+						$visitorHasSubscribed = 'unsubscribed';
+						break;
+				}
+			}
+		}
+		return $this->customerInfo['visitorHasSubscribed'] = $visitorHasSubscribed;
 	}
 
 	/**
