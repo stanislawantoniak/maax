@@ -102,32 +102,30 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
                 throw Mage::exception('Orba_Common', 'No product has been specified.');
             }
         } catch (Exception $e) {
-			$details = array();
-			if (get_class($e) !== 'Exception') { // if not technical error
-				// Default out of stock message
-				$e->setMessage("We apologize, but someone just placed an order for the last item. Availability status will be updated at the next time entering to the product card.");
-				$details = array("error_type" => "product-unavailable", 'title_section' => $this->__("The product is temporarily unavailable"));
-				// Checking if in quote is similar product
-				foreach ($items as $item) {
-					/** @var Zolago_Catalog_Model_Product $product */
-					$product = $item->getProduct();
-					if ($product->getId() == $productId) {
-						$inBasketFlag = true;
-						foreach ($superAttribute as $attributeId => $value) {
-							$attribute = Mage::getSingleton('eav/config')->getAttribute($product->getResource()->getEntityType(), $attributeId);
-							$attributeCode = $attribute->getAttributeCode();
-							if ($product->getData($attributeCode) != $value) {
-								$inBasketFlag = false;
-								break;
-							}
-						}
-						if ($inBasketFlag) {
-							/** @var $e Mage_Core_Exception */
-							$e->setMessage("Unfortunately, you can't add another product to the cart because it already contains last item. Quickly place the order before the product will disappear from the store.");
-							$details = array("error_type" => "already-in-the-basket", 'title_section' => $this->__("The product is already in the basket"));
-							break;
-						}
+			if (get_class($e) == 'Exception') {
+				Mage::logException($e);
+			}
+			// Default out of stock message
+			$e->setMessage("We apologize, but someone just placed an order for the last item. Availability status will be updated at the next time entering to the product card.");
+			$details = array("error_type" => "product-unavailable", 'title_section' => $this->__("The product is temporarily unavailable"));
+			// Checking if in quote is similar product
+			foreach ($items as $item) {
+				/** @var Zolago_Catalog_Model_Product $product */
+				$product = $item->getProduct();
+				$inBasketFlag = true;
+				foreach ($superAttribute as $attributeId => $value) {
+					$attribute = Mage::getSingleton('eav/config')->getAttribute($product->getResource()->getEntityType(), $attributeId);
+					$attributeCode = $attribute->getAttributeCode();
+					if ($product->getData($attributeCode) != $value) {
+						$inBasketFlag = false;
+						break;
 					}
+				}
+				if ($inBasketFlag) {
+					/** @var $e Mage_Core_Exception */
+					$e->setMessage("Unfortunately, you can't add another product to the cart because it already contains last item. Quickly place the order before the product will disappear from the store.");
+					$details = array("error_type" => "already-in-the-basket", 'title_section' => $this->__("The product is already in the basket"));
+					break;
 				}
 			}
             $this->_processException($e, $details);
