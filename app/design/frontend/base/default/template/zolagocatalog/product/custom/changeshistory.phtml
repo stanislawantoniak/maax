@@ -33,11 +33,9 @@ $itemsCount = count($items);
             <div class="modal-body">
                 <p class="alert alert-info"><?php echo $infoMessage; ?></p>
 
-                <?php if ($itemsCount > 0):
-
-                    ?>
+                <?php if ($itemsCount > 0): ?>
                     <div class="widget-content">
-                        <?php for ($i = 0; $i < ($itemsCount - 1); $i++): ?>
+                        <?php for ($i = 0; $i < $itemsCount; $i++): ?>
                             <?php $firstRow = $items[$i]; ?>
                             <div class="widget box">
                                 <div class="widget-content changes-history-item">
