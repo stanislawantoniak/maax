@@ -626,7 +626,6 @@ define([
         massAttribute.setFocusedCell(e.cell);
 
         massAttribute.send(req).then(function () {
-            console.log("massAttribute");
             e.deferred.resolve();
             if (e.useSaveAsRule) {
                 // Get current attributes mapper block by ajax with spinner
@@ -906,7 +905,6 @@ define([
         window.changesHistory = {
             _changesHistory: {},
             init: function (grid) {
-                console.log("init");
                 this._changesHistory = new changesHistory(grid);
                 this.attachLogicRevertChange();
                 this.attachControls();
@@ -926,7 +924,7 @@ define([
                 return jQuery('#showChangesHistory');
             },
             /**
-             * Update html by ajax auto fill attributes modal
+             * Update html by ajax changesHistory modal
              */
             updateModal: function () {
                 this.setSpinner();
@@ -939,13 +937,12 @@ define([
                     jQuery("#showChangesHistory").html(content);
                     window.changesHistory.init(window.grid);
                 }).always(function () {
-
+                    window.grid.refresh();
                 });
             },
             attachLogicRevertChange: function () {
                 jQuery("#revertChangeAttribute").click(function(){
                     var changeAttributeHistoryId = jQuery(this).data("id");
-                    console.log(changeAttributeHistoryId);
 
                     jQuery.ajax({
                         cache: false,
