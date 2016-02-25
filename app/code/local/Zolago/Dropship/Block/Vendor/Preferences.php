@@ -2,6 +2,9 @@
 
 class Zolago_Dropship_Block_Vendor_Preferences extends Unirgy_Dropship_Block_Vendor_Preferences
 {
+    public function isOperatorMode() {
+        return Mage::getSingleton('udropship/session')->isOperatorMode();
+    }
     public function getFieldsets()
     {
         $hlp = Mage::helper('udropship');
