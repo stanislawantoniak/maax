@@ -133,6 +133,23 @@ var Mall = {
             ,type: "POST"
         });
     },
+
+	getSalesManagoInfo: function () {
+		jQuery.ajax({
+			cache: false,
+			error: function (jqXhr, status, error) {
+				// do nothing at the moment
+			},
+			success: function (data, status) {
+				if (typeof initSalesManagoScript == "function") {
+					initSalesManagoScript();
+				}
+			},
+			url: "/orbacommon/ajax_customer/get_salesmanago_information",
+			type: "POST"
+		});
+	},
+
     getIsBrowserMobile: function(){
         //return jQuery.browser.device = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
         var mobBrowser = false;
@@ -178,6 +195,7 @@ var Mall = {
         data.content.cart.products_count_msg = Mall.i18nValidation.__("products_count_msg", "See your cart");
         data.content.cart.products_worth_msg = Mall.i18nValidation.__("products_worth_msg", "See your cart");
         data.content.cart.shipping_cost_msg = Mall.i18nValidation.__("shipping_cost_msg", "See your cart");
+		data.content.cart.show_cart_url = dropdownBasket.find(".summary_basket a").attr('href');
 	    dropdownBasket.find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
 //        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
 
@@ -215,7 +233,7 @@ var Mall = {
         if (!jQuery('body').hasClass('checkout')) {
             var persistentContent = "";
             if (data.content.persistent) {
-                persistentContent = "<a href=\"" + data.content.persistent_url + "\">" +
+                persistentContent = "<a href=\"" + Mall.reg.get('persistent_url') + "\">" +
                 Mall.i18nValidation.__("remove_my_data_from_this_device", "Remove my data from device") +
                 " <i class=\"fa fa-angle-right\"></i>" +
                 "</a>";
@@ -318,16 +336,16 @@ var Mall = {
         }
 
 
-		if(typeof data.content.recentlyViewed != 'undefined' && data.content.recentlyViewed.length) {
+		if(typeof data.content.recently_viewed != 'undefined' && data.content.recently_viewed.length) {
 			var rwd_recently_viewed = jQuery("#rwd-recently-viewed .rwd-carousel");
 			if ( rwd_recently_viewed.length !=0 ) {
 
 				var recentlyViewedContent = "";
 
-				for(var i in data["content"]["recentlyViewed"]){
-					var redirect_url = data["content"]["recentlyViewed"][i].redirect_url;
-					var image_url = data["content"]["recentlyViewed"][i].image_url;
-					var title = data["content"]["recentlyViewed"][i].title;
+				for(var i in data["content"]["recently_viewed"]){
+					var redirect_url = data["content"]["recently_viewed"][i].redirect_url;
+					var image_url = data["content"]["recently_viewed"][i].image_url;
+					var title = data["content"]["recently_viewed"][i].title;
 					recentlyViewedContent += "<a href=\""+redirect_url+"\" class=\"simple\">";
 					recentlyViewedContent += "<div class=\"box_listing_product\">";
 					recentlyViewedContent += "<figure class=\"img_product\">";
@@ -434,30 +452,29 @@ var Mall = {
         var desktopW = 992;
         var windowW = jQuery(window).width();
 
-        jQuery("body").append(content.salesmanago_tracking);
         if(content.logged_in){
             //on load
 
             if(windowW < desktopW){
                 //Tablet
-                jQuery("#link_your_account>a, a#link_your_account_br").attr("href", content.user_account_url);
+                jQuery("#link_your_account>a,a#link_your_account_br").attr("href", jQuery("#link_your_account>a").attr('data-user-account-url'));
             } else {
                 //Desktop
-                jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+                jQuery("#link_your_account>a,a#link_your_account_br").attr("href", jQuery("#link_your_account>a").attr('data-user-account-url-orders'));
             }
             //on window resize
             jQuery( window ).resize(function() {
                 var windowWidth = jQuery(this).width();
                 if(windowWidth < desktopW){
                     //Tablet
-                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", jQuery("#link_your_account>a").attr('data-user-account-url'));
                 } else {
                     //Desktop
-                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", jQuery("#link_your_account>a").attr('data-user-account-url'));
                 }
             });
         } else {
-            jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+            jQuery("#link_your_account>a,a#link_your_account_br").attr("href", jQuery("#link_your_account>a").attr('data-user-account-url'));
 
 
             if(windowW < desktopW){
@@ -479,10 +496,6 @@ var Mall = {
                 }
             });
         }
-
-
-        // set basket url
-        jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
     },
 
@@ -1207,6 +1220,19 @@ Mall.Cart = {
         Mall.Cart.applyCoupon();
     }
 };
+
+Mall.Cookie = {
+	get: function(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+		}
+		return "";
+	}
+}
 
 // callbacks
 
