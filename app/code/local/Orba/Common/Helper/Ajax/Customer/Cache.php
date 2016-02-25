@@ -149,7 +149,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return $this
 	 */
 	public function removeCacheFavoritesCount() {
-		return $this->removeCacheCustomer('visitorHasSubscribed');
+		return $this->removeCacheCustomer('favorites_count');
 	}
 
 	/**

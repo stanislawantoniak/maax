@@ -72,7 +72,7 @@
 					</orbacommon_ajax_search_category_observer>
 				</observers>
 			</catalog_category_save_after>
-			<wishlist_product_add_after>
+			<wishlist_save_after>
 				<observers>
 					<orbacommon_ajax_wishlist_observer>
 						<type>singleton</type>
@@ -80,7 +80,7 @@
 						<method>invalidateWishlistCustomerAjaxCache</method>
 					</orbacommon_ajax_wishlist_observer>
 				</observers>
-			</wishlist_product_add_after>
+			</wishlist_save_after>
 			<!-- Invalidate cache for customer ajax end -->
 		</events>
     </global>
