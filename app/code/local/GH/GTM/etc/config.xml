@@ -16,9 +16,9 @@
 			</ghgtm_resource>
 		</models>
 		<blocks>
-			<gh_gtm>
+			<ghgtm>
 				<class>GH_GTM_Block</class>
-			</gh_gtm>
+			</ghgtm>
 			<gtm>
 				<rewrite>
 					<gtm>GH_GTM_Block_Gtm</gtm>
@@ -26,9 +26,9 @@
 			</gtm>
 		</blocks>
 		<helpers>
-			<gh_gtm>
+			<ghgtm>
 				<class>GH_GTM_Helper</class>
-			</gh_gtm>
+			</ghgtm>
 			<gtm>
 				<rewrite>
 					<data>GH_GTM_Helper_Data</data>

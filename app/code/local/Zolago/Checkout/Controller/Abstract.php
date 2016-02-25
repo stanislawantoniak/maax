@@ -95,7 +95,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$session = $this->getOnepage()->getCheckout();
 			$orderIds = array($session->getLastOrderId());
 			/** @var GH_GTM_Block_Gtm $block */
-			$block = Mage::app()->getLayout()->createBlock('gh_gtm/gtm','google_tag_manager');
+			$block = Mage::app()->getLayout()->createBlock('ghgtm/gtm','google_tag_manager');
 			$block->setOrderIds($orderIds);
 			$newResponse['dataLayer'] = $block->getRawDataLayer();
 		}
@@ -284,7 +284,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$checkoutSession = Mage::getSingleton('checkout/session');
 		$checkoutData = $checkoutSession->getData();
 		/** @var GH_GTM_Helper_Data $gtmHelper */
-		$gtmHelper = Mage::helper("gh_gtm");
+		$gtmHelper = Mage::helper("ghgtm");
 		$data = array();
 
 		if(isset($checkoutData['shipping_method'])) {
@@ -329,7 +329,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$checkoutSession = Mage::getSingleton('checkout/session');
 		$checkoutData = $checkoutSession->getData();
 		/** @var GH_GTM_Helper_Data $gtmHelper */
-		$gtmHelper = Mage::helper("gh_gtm");
+		$gtmHelper = Mage::helper("ghgtm");
 		$data = array();
 
 		if(isset($checkoutData['payment']['method'])) {
