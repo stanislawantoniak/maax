@@ -942,6 +942,7 @@ define([
             },
             attachLogicRevertChange: function () {
                 jQuery("#revertChangeAttribute").click(function(){
+                    window.changesHistory.setSpinner();
                     var changeAttributeHistoryId = jQuery(this).data("id");
 
                     jQuery.ajax({
