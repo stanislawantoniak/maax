@@ -937,7 +937,7 @@ define([
                     jQuery("#showChangesHistory").html(content);
                     window.changesHistory.init(window.grid);
                 }).always(function () {
-                    window.grid.refresh();
+
                 });
             },
             attachLogicRevertChange: function () {
@@ -954,6 +954,7 @@ define([
 
                         if(response.length == 0){
                             window.changesHistory.updateModal();
+                            window.grid.refresh();
                         } else {
                             noty({
                                 text: response.error,
