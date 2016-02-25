@@ -30,6 +30,13 @@ class Zolago_Catalog_Block_Product_Description_History extends Mage_Core_Block_T
         $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
         $historyLifeTime = date("Y-m-d H:m:s", strtotime("-{$historyLifetimeLimit} hours", $currentTimestamp));
 
+        $toRemoveCollection = $descriptionHistory->getCollection()
+            ->addFieldToFilter("changes_date", array("lt" => $historyLifeTime));
+
+        foreach($toRemoveCollection as $toRemoveItem) {
+            $toRemoveItem->delete();
+        }
+
         $collection = $descriptionHistory
             ->getCollection()
             ->addFieldToFilter("changes_date", array("gteq" => $historyLifeTime))

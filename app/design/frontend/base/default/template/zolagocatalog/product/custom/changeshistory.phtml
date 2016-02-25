@@ -110,8 +110,9 @@ $historyAll = $history->toArray();
                                                                     <th><?php echo $helper->__("Values Before Change"); ?></th>
                                                                 </tr>
                                                                 </thead>
-                                                                <?php foreach(array_keys($changeMade["old_value"]) as $id): ?>
+                                                                <?php foreach(array_keys($changeMade["old_value"]) as $j=>$id): ?>
                                                                     <tr>
+                                                                        <?php if($j >= 5){break;} ?>
                                                                         <?php $_product = Mage::getModel("zolagocatalog/product")->load($id); ?>
                                                                         <td>
                                                                             <?php echo $_product->getName(); ?>
@@ -139,8 +140,16 @@ $historyAll = $history->toArray();
                                                                         <?php unset($id); ?>
                                                                     </tr>
                                                                 <?php endforeach; ?>
+                                                                <?php unset($j); ?>
 
                                                             </table>
+
+                                                            <?php if (count(array_keys($changeMade["old_value"]))
+                                                            && count(array_keys($changeMade["old_value"])) > 5
+                                                            ): ?>
+                                                                .....
+                                                                and <?php echo (count(array_keys($changeMade["old_value"]))-5); ?> products more
+                                                            <?php endif; ?>
                                                         </td>
 
 
