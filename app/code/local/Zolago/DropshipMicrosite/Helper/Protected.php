@@ -12,7 +12,7 @@ class Zolago_DropshipMicrosite_Helper_Protected extends Unirgy_DropshipMicrosite
 			$useUrl = $ajaxRefererUrl ? $ajaxRefererUrl : Mage::app()->getRequest()->getServer('HTTP_REFERER');
 		}
 		// Add simple cache
-		if (!is_null($this->_getFrontedVendorCache[(string)$useUrl])) {
+		if (!empty($this->_getFrontedVendorCache[(string)$useUrl])) {
 			return $this->_getFrontedVendorCache[(string)$useUrl];
 		}
 		return $this->_getFrontedVendorCache[(string)$useUrl] = parent::_getFrontendVendor($useUrl);
