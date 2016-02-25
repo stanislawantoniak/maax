@@ -53,4 +53,16 @@ class Zolago_Catalog_Block_Product_Description_History extends Mage_Core_Block_T
         return Mage::getModel("udropship/session")->getVendor();
     }
 
+    /**
+     * @param $attribute_code
+     * @return array
+     */
+    public function getAttributeOptions($attribute_code) {
+        $attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attribute_code);
+        $options = array();
+        foreach ($attribute->getSource()->getAllOptions(false, true) as $option) {
+            $options[$option['value']] = $option['label'];
+        }
+        return $options;
+    }
 }

@@ -19,6 +19,8 @@ $historyAll = $history->toArray();
 $items = $historyAll["items"];
 $itemsCount = count($items);
 
+$vendorId = $this->getVendor()->getId();
+
 ?>
 
 
@@ -87,7 +89,7 @@ $itemsCount = count($items);
 
                                                         $attribute = Mage::getModel('eav/entity_attribute')
                                                             ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $changeMade["attribute_code"]);
-//                                                        Zend_Debug::dump($attribute->getData());
+                                                        //Zend_Debug::dump($attribute->getData());
                                                         $values = Mage::getResourceModel('eav/entity_attribute_option_collection')
                                                             ->setAttributeFilter($attribute->getId())
                                                             ->setStoreFilter(Mage::app()->getStore()->getId(), true)
@@ -95,11 +97,10 @@ $itemsCount = count($items);
 
                                                         //Zend_Debug::dump($attribute->getFrontendInput());
                                                         if (in_array($attribute->getFrontendInput(), array("select", "multiselect"))) {
-                                                            foreach ($values as $value) {
-                                                                $options[$value["option_id"]] = $value["value"];
-                                                            }
+                                                            $options = $this->getAttributeOptions($changeMade["attribute_code"]);
                                                         }
                                                         //Zend_Debug::dump($options);
+
 
                                                         echo $attribute->getStoreLabel();
                                                         ?>
@@ -133,6 +134,8 @@ $itemsCount = count($items);
 
                                                                     <td>
                                                                         <?php $oldValue = $changeMade["old_value"][$id]; ?>
+
+
                                                                         <?php if ($attribute->getFrontendInput() == "select"): ?>
                                                                             <?php echo isset($options[$oldValue]) ? $options[$oldValue] : "..."; ?>
                                                                             <br/>
@@ -142,6 +145,7 @@ $itemsCount = count($items);
                                                                                 <?php echo isset($options[$oldValueItem]) ? $options[$oldValueItem] : "..."; ?>
                                                                                 <br/>
                                                                             <?php endforeach; ?>
+
                                                                         <?php else: ?>
                                                                             <?php echo $oldValue; ?>
                                                                         <?php endif; ?>
