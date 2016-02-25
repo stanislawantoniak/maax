@@ -88,6 +88,16 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
+	 * @return $this
+	 */
+	public function removeCacheCart() {
+		$key = $this->getCacheKeyForCart();
+		$cache = Mage::app()->getCache();
+		$cache->remove($key);
+		return $this;
+	}
+
+	/**
 	 * Get and store info about favorites count
 	 * and favorites product ids
 	 *
@@ -135,21 +145,11 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		return $this->customerInfo['favorites_count'];
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function removeCacheFavoritesCount() {
-		$key = $this->getCacheKeyForCustomerInfo();
-		if ($this->canUseCache()) {
-			$cacheData = $this->loadFromCache($key);
-			if (!empty($cacheData)) {
-				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
-			}
-			if (isset($cacheData['visitorHasSubscribed'])) {
-				unset($cacheData['visitorHasSubscribed']);
-				$cache = Mage::app()->getCache();
-				$cache->remove($key);
-				$this->saveCustomerInfoCache($cacheData);
-			}
-		}
-		return $this;
+		return $this->removeCacheCustomer('visitorHasSubscribed');
 	}
 
 	/**
@@ -170,6 +170,13 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		}
 		$this->getFavoritesDetails();
 		return $this->customerInfo['favorites_products'];
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removeCacheFavoritesProductsIds() {
+		return $this->removeCacheCustomer('favorites_products');
 	}
 
 	/**
@@ -194,6 +201,13 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
+	 * @return $this
+	 */
+	public function removeCacheCustomerName() {
+		return $this->removeCacheCustomer('customer_name');
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getCustomerEmail() {
@@ -212,6 +226,13 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		/** @var Mage_Customer_Model_Session $session */
 		$session = Mage::getSingleton('customer/session');
 		return $this->customerInfo['customer_email'] = $coreHelper->escapeHtml($session->getCustomer()->getEmail());
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removeCacheCustomerEmail() {
+		return $this->removeCacheCustomer('customer_email');
 	}
 
 	/**
@@ -259,8 +280,32 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		return $this->customerInfo['visitorHasSubscribed'] = $visitorHasSubscribed;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function removeCacheVisitorHasSubscribed() {
-		//todo
+		return $this->removeCacheCustomer('visitorHasSubscribed');
+	}
+
+	/**
+	 * @param $id
+	 * @return $this
+	 */
+	public function removeCacheCustomer($id) {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
+			if (isset($cacheData[$id])) {
+				unset($cacheData[$id]);
+				$cache = Mage::app()->getCache();
+				$cache->remove($key);
+				$this->saveCustomerInfoCache($cacheData);
+			}
+		}
+		return $this;
 	}
 
 	/**
@@ -337,11 +382,8 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	/**
 	 * @return $this
 	 */
-	public function removeCacheCart() {
-		$key = $this->getCacheKeyForCart();
-		$cache = Mage::app()->getCache();
-		$cache->remove($key);
-		return $this;
+	public function removeCacheRecentlyViewed() {
+		return $this->removeCacheCustomer('recently_viewed');
 	}
 
 	/**
