@@ -602,13 +602,13 @@ class Zolago_Catalog_Vendor_ProductController
         try {
             $changesHistory = $descriptionHistory->load($id);
             if (!$changesHistory->getId()) {
-                echo json_encode(array("error" => "Change not found"));
+                echo json_encode(array("error" => Mage::helper('zolagocatalog')->__("Change not found")));
                 return;
             }
 
 
             if ($changesHistory->getVendorId() !== $this->getVendorId()) {
-                echo json_encode(array("error" => "It is not your change"));
+                echo json_encode(array("error" => Mage::helper('zolagocatalog')->__("It is not your change")));
                 return;
             }
 
