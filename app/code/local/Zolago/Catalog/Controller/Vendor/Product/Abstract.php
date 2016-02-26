@@ -312,7 +312,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	/**
 	 * @param array $productIds
 	 * @param array $attributesData
-	 * @param type $storeId
+	 * @param int $storeId
 	 * @throws Mage_Core_Exception
 	 */
 	protected function _processAttributresSave(array $productIds, array $attributesData, $storeId, array $data) {
@@ -519,6 +519,9 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			$attributeData = array();
 			$storeId = $data['store_id'];
 
+			/* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
+			$descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
+
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
                     $attributeData[$attribute] = $data[$attribute];
@@ -529,6 +532,20 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
                         // Clear product name
                         $attributeData[$attribute] = Mage::helper("zolagocatalog")->cleanProductName($data[$attribute]);
                     }
+
+					/**
+					 * Save attribute change history
+					 */
+
+					$descriptionHistoryModel->updateChangesHistory(
+						$this->getVendorId(),
+						array($productId),
+						$attribute,
+						$data[$attribute],
+						Mage::getModel("catalog/product")->getCollection()->addAttributeToSelect($attribute),
+						$data["attribute_mode"][$attribute]
+					);
+					/*Save attribute change history*/
 				}
 			}
 			if($attributeData){

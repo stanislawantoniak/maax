@@ -13,6 +13,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const ROLE_PAYMENT_OPERATOR						= "payment_operator";
     const ROLE_GHAPI_OPERATOR						= "ghapi_operator";
     const ROLE_BILLING_OPERATOR		                = "billing_operator";
+    const ROLE_SUPERUSER_OPERATOR		            = "superuser_operator";
 	
 	// Resource definition
 	
@@ -26,7 +27,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDROPSHIP_VENDOR_PASSWORD				= "udropship/vendor/password";
 	const RES_UDROPSHIP_VENDOR_PASSWORD_POST		= "udropship/vendor/passwordPost";
 	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD		= "udropship/vendor/editPassword";
-	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST   = "udropship/vendor_settings/infoPost";
+	const RES_UDROPSHIP_VENDOR_EDIT_PASSWORD_POST   = "udropship/vendor/savePassword";
 
 	// Po Vendor controller - whole
 	const RES_UDPO_VENDOR							= "udpo/vendor";
@@ -77,7 +78,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
     // Billing and statements
     const RES_BILLING_AND_STATEMENTS                = "udropship/statements";
-
+    // settings
+    const RES_VENDOR_SETTINGS						= "udropship/vendor_settings";
+    // sizetable
+    const RES_VENDOR_SIZETABLE						= "udropship/sizetable";
+    const RES_VENDOR_RULES							= "udropship/vendor/rules";
+    const RES_VENDOR_RULES_DOCUMENT					= "udropship/vendor/getDocument";
     // Resources as array
 	protected static $_currentResources = array(
 		self::RES_UDROPSHIP_VENDOR_SET_LOCALE		=> "Vendor Set locale",	
@@ -128,7 +134,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_UDPROD_VENDOR_PRICE               => "Price management",
         self::RES_UDPROD_VENDOR_PRICE_DETAIL        => "Price detail management",
         // Billing and statements
-        self::RES_BILLING_AND_STATEMENTS            => "Billing and statements"
+        self::RES_BILLING_AND_STATEMENTS            => "Billing and statements",
+        self::RES_VENDOR_SETTINGS					=> "Vendor settings",
+        self::RES_VENDOR_SIZETABLE					=> "Sizetable settings",
+        self::RES_VENDOR_RULES						=> "Regulations",
+        self::RES_VENDOR_RULES_DOCUMENT				=> "Get regulations documents",
 	);
 	
 	// Roles as array
@@ -141,7 +151,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
 		self::ROLE_PAYMENT_OPERATOR                 => "Payment manage",
         self::ROLE_GHAPI_OPERATOR                   => "GH API Settings",
-        self::ROLE_BILLING_OPERATOR                 => "Billing and statements"
+        self::ROLE_BILLING_OPERATOR                 => "Billing and statements",
+        self::ROLE_SUPERUSER_OPERATOR               => "Config and regulations"
 	);
 	
 
@@ -216,6 +227,13 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
         // Build ACL Rules - Billing and statements
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
+        // superuser
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SETTINGS);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SIZETABLE);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES_DOCUMENT);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_POS);
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_OPERATOR);
 	}
 	
 	/**

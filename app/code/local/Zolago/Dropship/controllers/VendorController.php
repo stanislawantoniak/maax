@@ -24,6 +24,38 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 		*/
 	}
 
+    public function savePasswordAction() {
+        /** @var Zolago_Dropship_Model_Session $session */
+        $session = Mage::getSingleton('udropship/session');
+        $request = $this->getRequest();
+        $param = $request->getPost();
+
+        if ($request->isPost()) {
+            try {
+                /** @var Zolago_Dropship_Model_Vendor $vendor */
+                $vendor = $session->getVendor();
+                /** @var Zolago_Operator_Model_Operator $operator */
+                $operator = $session->getOperator();
+                if ($operator->getId()) {
+                    $operator->setPostPassword($param['password']);
+                    $operator->save();
+                } elseif ($vendor->getId()) {
+                    $vendor->setData('password',$param['password']);
+                    $tmp = array('password' => $param['password']);
+                    Mage::dispatchEvent('udropship_vendor_preferences_save_before',
+                        array('vendor' => $vendor, 'post_data' => &$tmp)
+                    );
+                    $vendor->save();
+                               
+                }                
+                $session->addSuccess(Mage::helper('udropship')->__('Password has been saved'));
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $session->addError($e->getMessage());
+            }
+        }
+        $this->_redirect(empty($param['redirectAfter'])? "udropship/vendor/editPassword":$param['redirectAfter']);        
+    }
 
 	public function passwordPostAction()
 	{
@@ -122,6 +154,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 		        Mage::register($registryKey, $redirect, true);
 	        }
         }
+
         return parent::preDispatch();
     }
 }

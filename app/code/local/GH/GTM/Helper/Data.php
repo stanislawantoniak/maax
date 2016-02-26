@@ -20,26 +20,9 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 			$data['visitorHasAccount'] = 'yes';
 
 			//visitorHasSubscribed
-			$resource = Mage::getSingleton('core/resource');
-			$readConnection = $resource->getConnection('core_read');
-
-			$query =
-				'SELECT `subscriber_status` FROM `' .
-				$resource->getTableName('newsletter/subscriber') .
-				'` WHERE `customer_id` = ' . $customerId;
-
-			$result = $readConnection->fetchAll($query);
-			if(count($result)) {
-				$newsletterStatus = current(current($result));
-				switch($newsletterStatus) {
-					case Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED:
-						$data['visitorHasSubscribed'] = 'yes';
-						break;
-					case Zolago_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED:
-						$data['visitorHasSubscribed'] = 'unsubscribed';
-						break;
-				}
-			}
+			/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+			$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+			$data['visitorHasSubscribed'] = $cacheHelper->getVisitorHasSubscribed();
 		} else {
 			$data['visitorHasAccount'] = 'no';
 		}

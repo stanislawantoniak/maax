@@ -171,4 +171,7 @@
     <no-results-found translate="message" module="zolagocatalog">
         <message>No results found</message>
     </no-results-found>
+    <server-error translate="message" module="zolagocatalog">
+        <message>Server error occured. Close this window to reload page.</message>
+    </server-error>
 </jstranslator>
