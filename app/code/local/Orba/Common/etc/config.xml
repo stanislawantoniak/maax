@@ -81,6 +81,63 @@
 					</orbacommon_ajax_wishlist_observer>
 				</observers>
 			</wishlist_save_after>
+			<wishlist_item_add_after>
+				<observers>
+					<orbacommon_ajax_wishlist_item_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateWishlistCustomerAjaxCache</method>
+					</orbacommon_ajax_wishlist_item_observer>
+				</observers>
+			</wishlist_item_add_after>
+			<wishlist_items_renewed>
+				<observers>
+					<orbacommon_ajax_wishlist_items_renewed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateWishlistCustomerAjaxCache</method>
+					</orbacommon_ajax_wishlist_items_renewed_observer>
+				</observers>
+			</wishlist_items_renewed>
+
+			<customer_login>
+				<observers>
+					<orbacommon_ajax_cart_customer_login_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_cart_customer_login_observer>
+				</observers>
+			</customer_login>
+			<customer_login>
+				<observers>
+					<orbacommon_ajax_recently_viewed_customer_login_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_ajax_recently_viewed_customer_login_observer>
+				</observers>
+			</customer_login>
+
+			<customer_register_success>
+				<observers>
+					<orbacommon_ajax_cart_customer_register_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_cart_customer_register_observer>
+				</observers>
+			</customer_register_success>
+			<customer_register_success>
+				<observers>
+					<orbacommon_ajax_recently_viewed_customer_register_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_ajax_recently_viewed_customer_register_observer>
+				</observers>
+			</customer_register_success>
+
 			<ajax_get_account_information_after>
 				<observers>
 					<orbacommon_recently_viewed_observer>
