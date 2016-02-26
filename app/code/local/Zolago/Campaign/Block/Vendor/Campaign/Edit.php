@@ -175,6 +175,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             ));
 
 
+
+            /*Coupons*/
             $imageOptions = array(
                 "name" => "coupon_image",
                 "class" => "form-control",
@@ -192,6 +194,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "wrapper_class" => "col-md-6 landing-page-config",
                 "folder_storage" => Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER
             ));
+            /*--Coupons*/
         } else {
             $general->addField('is_landing_page', 'hidden', array(
                 'label' => $helper->__('Url type'),
