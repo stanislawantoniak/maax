@@ -175,8 +175,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             ));
 
 
-
             /*Coupons*/
+            $landingPage->addField('coupon_settings', 'label', array(
+                'name' => 'coupon_settings',
+                'label' => "",
+                'title' => "",
+                "form_group_wrapper_class" => "subsection"
+
+            ));
+
             $imageOptions = array(
                 "name" => "coupon_image",
                 "class" => "form-control",
@@ -195,6 +202,30 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "folder_storage" => Zolago_Campaign_Model_Campaign::LP_COUPON_PDF_FOLDER
             ));
             /*--Coupons*/
+
+            $landingPage->addField('front_additional', 'label', array(
+                'name' => 'front_additional',
+                'label' => "",
+                'title' => "",
+                "form_group_wrapper_class" => "subsection"
+            ));
+
+            $landingPage->addField("active_filter_label", "text", array(
+                "name" => "active_filter_label",
+                "class" => "form-control",
+                "required" => false,
+                "label" => $helper->__('Active Filter Label'),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-6"
+            ));
+            $landingPage->addField("banner_text_info", "textarea", array(
+                "name" => "banner_text_info",
+                "class" => "form-control",
+                "required" => false,
+                "label" => $helper->__('Banner Text Description'),
+                "label_wrapper_class" => "col-md-3",
+                "wrapper_class" => "col-md-6"
+            ));
         } else {
             $general->addField('is_landing_page', 'hidden', array(
                 'label' => $helper->__('Url type'),
