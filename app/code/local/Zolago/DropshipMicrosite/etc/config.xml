@@ -36,6 +36,20 @@
         </resources>
 
         <events>
+            <udropship_vendor_login>
+                <observers>
+                    <umicrosite>
+                        <type>disabled</type>
+                    </umicrosite>
+                </observers>                
+            </udropship_vendor_login>
+            <udropship_vendor_logout>
+                <observers>
+                    <umicrosite>
+                        <type>disabled</type>
+                    </umicrosite>
+                </observers>                
+            </udropship_vendor_logout>
             <catalog_controller_category_init_after>
                 <observers>
                     <microsite_category_init_after>
