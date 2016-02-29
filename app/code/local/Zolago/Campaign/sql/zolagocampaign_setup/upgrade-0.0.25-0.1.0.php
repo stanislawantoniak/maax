@@ -27,7 +27,6 @@ $this->getConnection()
     ->addColumn($table, 'banner_text_info', array(
         "type" => Varien_Db_Ddl_Table::TYPE_TEXT,
         "nullable" => false,
-        "length" => 255,
         "comment" => "Banner Text Description"
     ));
 

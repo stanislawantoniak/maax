@@ -218,13 +218,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "label_wrapper_class" => "col-md-3",
                 "wrapper_class" => "col-md-6"
             ));
-            $landingPage->addField("banner_text_info", "textarea", array(
+            $landingPage->addField("banner_text_info", "textareagh", array(
                 "name" => "banner_text_info",
                 "class" => "form-control",
                 "required" => false,
                 "label" => $helper->__('Banner Text Description'),
                 "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-6"
+                "wrapper_class" => "col-md-6",
+                'rows' => 10,
+                'cols' => 40
             ));
         } else {
             $general->addField('is_landing_page', 'hidden', array(

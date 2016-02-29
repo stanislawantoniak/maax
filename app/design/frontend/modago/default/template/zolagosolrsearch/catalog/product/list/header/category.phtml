@@ -46,12 +46,22 @@ if ($this->isContentMode() && !$vendor) return; // no header only on CMS page an
                                     src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>"
                                     title="<?php echo $campaign->getNameCustomer(); ?>"
                                     alt="<?php echo $campaign->getNameCustomer(); ?>"/>
+                                <?php if ($campaign->getBannerTextInfo()): ?>
+                                    <div class="lp-banner-text-info">
+                                        <?php echo $campaign->getBannerTextInfo(); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="visible-xs lp-banner-mobile">
                                 <img
                                     src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>"
                                     title="<?php echo $campaign->getNameCustomer(); ?>"
                                     alt="<?php echo $campaign->getNameCustomer(); ?>"/>
+                                <?php if ($campaign->getBannerTextInfo()): ?>
+                                    <div class="lp-banner-text-info">
+                                        <?php echo $campaign->getBannerTextInfo(); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
