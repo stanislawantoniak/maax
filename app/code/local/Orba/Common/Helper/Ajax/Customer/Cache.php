@@ -346,12 +346,10 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return $this
 	 */
 	public function saveCustomerInfoCache($customerInfo = array()) {
-		if (!empty($this->customerInfo) || !empty($customerInfo)) {
-			$key = $this->getCacheKeyForCustomerInfo();
-			$this->customerInfo = !empty($customerInfo) ? $customerInfo : $this->customerInfo;
-			$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
-			return $this;
-		}
+		$key = $this->getCacheKeyForCustomerInfo();
+		$this->customerInfo = $customerInfo;
+		$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
+		return $this;
 	}
 
 	/**
