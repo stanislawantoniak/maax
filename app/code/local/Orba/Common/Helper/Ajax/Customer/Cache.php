@@ -116,7 +116,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 */
 	public function getFavoritesDetails($force = false) {
 
-		if ((!isset($this->customerInfo['favorites_count']) && !isset($this->customerInfo['favorites_products'])) || $force) {
+		if ((!isset($this->customerInfo['favorites_count']) || !isset($this->customerInfo['favorites_products'])) || $force) {
 			// Favorites Count
 			/** @var Zolago_Wishlist_Helper_Data $wishlistHelper */
 			$wishlistHelper = Mage::helper('zolagowishlist');

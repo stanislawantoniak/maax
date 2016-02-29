@@ -23,6 +23,8 @@
  * @method int getCampaignUrl()
  * @method int getCouponImage()
  * @method int getCouponConditions()
+ * @method string getActiveFilterLabel()
+ * @method string getBannerTextInfo()
  *
  * @method Zolago_Campaign_Model_Resource_Campaign getResource()
  */
