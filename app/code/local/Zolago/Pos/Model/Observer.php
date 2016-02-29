@@ -43,4 +43,8 @@ class Zolago_Pos_Model_Observer {
 		$collection->setPageSize(1);
 		return $collection->getFirstItem();
 	}
+
+    public function setAppropriatePoPos(){
+
+    }
 }
