@@ -77,21 +77,18 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
         $categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 
 
+
+        // CMS page
+        $reloadToCms = ((int)($category->getOriginDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq));
+
         /** @var Zolago_Catalog_Model_Category $category */
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-
         if ($vendor) {
             // Set root category
             $vendorRootCategory = $vendor->rootCategory();
-            $campaignX = $vendorRootCategory->getCurrentCampaign();
-            Mage::log($vendorRootCategory->getId()==$category->getId(), null, "listing2.log");
-            Mage::log($campaignX, null, "listing3.log");
-
+            //Vendor landing page
+            $reloadToCms = ($vendorRootCategory->getId() == $category->getId() && empty($fq));
         }
-
-        $reloadToCms = ((int)($category->getOriginDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq)) // CMS page
-            || ($vendorRootCategory->getId() == $category->getId() && empty($fq)) //Vendor landing page
-        ;
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
