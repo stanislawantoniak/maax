@@ -35,6 +35,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	protected function _getCollection() {
 		if(!$this->_collection){
 			// Add extra fields
+			/**
+			 * For product grid
+			 * @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_prepareCollection()
+			 * For price grid
+			 * @see Zolago_Catalog_Controller_Vendor_Price_Abstract::_prepareCollection()
+			 */
 			$this->_collection = $this->_prepareCollection();
 			
 		}
@@ -42,7 +48,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	}
 	
 	/**
-	 * Prepare colection
+	 * Prepare collection
 	 * @param Varien_Data_Collection $collection
 	 * @return Varien_Data_Collection
 	 */
