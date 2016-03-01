@@ -109,7 +109,10 @@ class Zolago_Pos_Model_Observer {
 			...
 		);
 		 * */
+
 		$data = array();
+
+		//What we need
 		$productIds = array();
 		foreach ($collection as $po) {
 			$udropshipVendor = $po->getData("udropship_vendor");
@@ -119,10 +122,9 @@ class Zolago_Pos_Model_Observer {
 				$vendorSimpleSku = $poItem->getData("vendor_simple_sku");
 
 				if (!empty($vendorSimpleSku)) {
-
 					$data[$udropshipVendor][$po->getId()][$poItem->getData("product_id")] = array(
 						"skuv" => $vendorSimpleSku,
-						"qty" => $poItem->getData("qty")
+						"qty" => (int)$poItem->getData("qty")
 					);
 					$productIds[$udropshipVendor][$poItem->getData("product_id")] = $vendorSimpleSku;
 				}
@@ -132,33 +134,50 @@ class Zolago_Pos_Model_Observer {
 		}
 
 
-		//3. Get STOCK from converter
+
+		//3. Get STOCK from converter (What we have)
 		$converterHelper = Mage::helper("zolagoconverter");
 		if (empty($productIds)) {
 			//Nothing to recalculate
 			return;
 		}
 
+		$posesToAssign = array();
 
-		$qtyData = array();
-		foreach ($productIds as $vendorId => $dataPerProduct) {
+		foreach ($data as $vendorId => $dataPerPO) {
 			$vendorPOSes = $this->getVendorPOSes($vendorId);
 
-			//Hmmmm Vendor don't have POSes!!!
+			//Hm Vendor don't have POSes!!!
 			if ($vendorPOSes->getSize() == 0)
 				continue;
 
 
-			//Get qty in POSes
-			foreach ($dataPerProduct as $productId => $skuv) {
-				foreach ($vendorPOSes as $pos) {
-					$qtyInPOS = (int)$converterHelper->getQty($vendorId, $pos, $skuv);
-					if($qtyInPOS > 0)
-						$qtyData[$vendorId][$productId][$pos->getExternalId()] = $qtyInPOS;
+			foreach ($dataPerPO as $poId => $dataPerProduct) {
 
+				foreach ($vendorPOSes as $pos) {
+					$goodPOS = array();
+					foreach ($dataPerProduct as $id => $productDetails) {
+						$qtyFromConverter = (int)$converterHelper->getQty($vendorId, $pos, $productDetails["skuv"]);
+
+						if ($productDetails["qty"] <= $qtyFromConverter) {
+							$goodPOS[] = 1;
+						}
+					}
+					if (count($goodPOS) == count($dataPerProduct)) {
+						$posesToAssign[$poId] = $pos->getExternalId();
+						//We found good POS for PO, go to the next PO
+						break;
+					}
 				}
+
 			}
+
 		}
+
+
+		//4. Assign POSes
+
+
 
 
     }
