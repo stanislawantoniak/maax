@@ -10,7 +10,9 @@ $landingPageHelper = Mage::helper("zolagocampaign/landingPage");
 /* @var $campaign Zolago_Campaign_Model_Campaign */
 $banner = ($campaign = $category->getCurrentCampaign()) ? (array)$landingPageHelper->getCampaignLandingPageBannerByCampaign($campaign) : NULL;
 
-$bannerTextInfo = $campaign->getBannerTextInfo();
+
+$bannerTextInfo = ($campaign) ? $campaign->getBannerTextInfo() : "";
+
 
 $moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
 

@@ -17,7 +17,7 @@ $category = $this->getCurrentCategory();
 
 /* @var $campaign Zolago_Campaign_Model_Campaign */
 $campaign = $category->getCurrentCampaign();
-$campaignActiveFilterLabel = $campaign->getActiveFilterLabel();
+$campaignActiveFilterLabel = $campaign ? $campaign->getActiveFilterLabel() : "";
 
 /* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
 $listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
