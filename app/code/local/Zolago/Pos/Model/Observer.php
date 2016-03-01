@@ -6,8 +6,8 @@ class Zolago_Pos_Model_Observer {
             && ($po = Mage::registry('current_udpo'))
 			&& $po->getDefaultPosId())
         {
-			$soi->setDefaultPosId($po->getDefaultPosId());
-			$soi->setDefaultPosName($po->getDefaultPosName());
+			//$soi->setDefaultPosId($po->getDefaultPosId());
+			//$soi->setDefaultPosName($po->getDefaultPosName());
 		}
 	}
 	
@@ -32,16 +32,31 @@ class Zolago_Pos_Model_Observer {
 			
 		}
 	}
-	
-	protected function _getBestPosByVendor($vendor) {
+
+	/**
+	 * @param $vendor
+	 * @return bool|Varien_Object
+	 */
+	protected function _getBestPosByVendor($vendor)
+	{
 		/* @var $vendor Unirgy_Dropship_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
 		$collection->addActiveFilter();
-		$collection->setOrder("priority", "DESC");
-		$collection->setPageSize(1);
-		return $collection->getFirstItem();
+		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_ASC);
+
+		if ($collection->getSize() == 1)
+			return $collection->getFirstItem();
+
+
+		/**
+		 * Leave POS assignment for cron
+		 *
+		 * @see Zolago_Pos_Model_Observer::setAppropriatePoPos()
+		 */
+		return FALSE;
+
 	}
 
     public function setAppropriatePoPos(){

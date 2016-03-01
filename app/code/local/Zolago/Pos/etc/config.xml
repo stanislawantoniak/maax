@@ -129,7 +129,7 @@
 	</admin>
 	<crontab>
 		<jobs>
-			<zolagocampaign_set_campaign_attributes>
+			<zolagopos_set_appropriate_po_pos>
 				<schedule>
 					<!-- Run every 5 minutes -->
 					<cron_expr>*/5 * * * *</cron_expr>
@@ -137,7 +137,7 @@
 				<run>
 					<model>zolagopos/observer::setAppropriatePoPos</model>
 				</run>
-			</zolagocampaign_set_campaign_attributes>
+			</zolagopos_set_appropriate_po_pos>
 		</jobs>
 	</crontab>
 </config>
