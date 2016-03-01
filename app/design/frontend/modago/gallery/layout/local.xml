@@ -21,7 +21,7 @@
         </reference>
         <reference name="head">
             <action method="setTitle" translate="title">
-                <title>Brands</title>
+                <title>Shops</title>
             </action>
         </reference>
         <reference name="content">
