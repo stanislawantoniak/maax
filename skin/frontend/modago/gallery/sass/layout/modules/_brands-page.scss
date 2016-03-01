@@ -52,10 +52,6 @@
     }
   }
 
-  .visible-lg,
-  .visible-md,
-  .visible-sm,
-  .visible-xs,
   .visible-xxs,
   .visible-xss-3,
   .visible-xss-landscape,
@@ -108,24 +104,6 @@
     @media (min-width: $screen-lg) {
       .col-lg-3-eight {
         width: 12.5%;
-      }
-      .visible-lg {
-        display: block !important;
-      }
-    }
-    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-      .visible-md {
-        display: block !important;
-      }
-    }
-    @media(min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-      .visible-sm {
-        display: block !important;
-      }
-    }
-    @media(max-width: $screen-xs-max) {
-      .visible-xs {
-        display: block !important;
       }
     }
     @media (max-width: 440px) {
