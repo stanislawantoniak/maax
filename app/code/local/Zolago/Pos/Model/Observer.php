@@ -3,6 +3,8 @@ class Zolago_Pos_Model_Observer {
 
 	const ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT = 100;
 
+	protected static $converterSTOCK = array();
+
 	public function addPosInfoToOrderInfo() {
 		if (($soi = Mage::app()->getLayout()->getBlock('order_info'))
             && ($po = Mage::registry('current_udpo'))
@@ -133,7 +135,7 @@ class Zolago_Pos_Model_Observer {
 
 		}
 
-
+		krumo($data);
 
 		//3. Get STOCK from converter (What we have)
 		$converterHelper = Mage::helper("zolagoconverter");
@@ -168,6 +170,9 @@ class Zolago_Pos_Model_Observer {
 
 						if ($productDetails["qty"] <= $qtyFromConverter) {
 							$goodPOS[] = 1;
+							$qtysFromConverter[$productDetails["skuv"]] = $qtyFromConverter-$productDetails["qty"];
+						} else {
+							$posesToAssign[$poId] = "PROBLEM_POS";
 						}
 					}
 					if (count($goodPOS) == count($dataPerProduct)) {
@@ -183,9 +188,10 @@ class Zolago_Pos_Model_Observer {
 
 
 		//4. Assign POSes
+		krumo($posesToAssign);
+		krumo($qtysFromConverter);
 
-
-
+		die("test");
 
     }
 }
