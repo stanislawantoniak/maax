@@ -186,7 +186,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	}
 
 	/**
-	 * @return type
+	 * @return array
 	 */
 	protected function _prepareDynamicColumns(){
 		$attributeCollection = $this->_getGridVisibleAttributes();
@@ -204,6 +204,23 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			);
 			$columns[$code] = $data;
 		}
+		$isInStock = array(
+			'is_in_stock'		=> array(
+				"index"			=> 'is_in_stock',
+				"required"		=> 0,
+				'type'			=> "options",
+				"clickable"		=> true,
+				"filterable"	=> true,
+				"header"		=> Mage::helper('zolagocatalog')->__("Total quantity"),
+				"attribute"		=> false,
+				"allow_empty"	=> 0
+			)
+		);
+
+		// Insert after description status column
+		$p1 = array_slice($columns, 0, ((int)array_search('description_status', array_keys($columns))) + 1 ,true);
+		$p2 = array_slice($columns, ((int)array_search('description_status', array_keys($columns))) + 1, null, true);
+		$columns = $p1 + $isInStock + $p2;
 		return $columns;
 	}
 
@@ -233,9 +250,8 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$attribute = $config['attribute'];
 		}
 		/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-
+		$extend = array();
 		if($attribute){
-			$extend = array();
 			
 			// Editable
 			if($attribute->getGridPermission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
@@ -308,12 +324,15 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				$extend['type'] = "price";
 				$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
 			}
-			
-			
-			return new Varien_Object(array_merge($config, $extend));
+		} elseif (isset($config['index']) && $config['index'] == 'is_in_stock') {
+			$extend['options'] = array();
+			$extend['filter_options'] = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
+			foreach ($extend['filter_options'] as $option) {
+				$extend['options'][$option['value']] = $option['label'];
+			}
+			$extend['edit_options'] = $extend['filter_options'];
 		}
-
-		return new Varien_Object($config);
+		return empty($extend) ? new Varien_Object($config) : new Varien_Object(array_merge($config, $extend));
 	}
 
 	/**

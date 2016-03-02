@@ -147,11 +147,21 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		$totalSelect->reset(Zend_Db_Select::COLUMNS);
 		$totalSelect->reset(Zend_Db_Select::ORDER);
 		$totalSelect->resetJoinLeft();
-		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id)"));
+		$isInStockFilter = Mage::app()->getRequest()->getQuery('is_in_stock');
+		if (!is_null($isInStockFilter)) {
+			/**
+			 * select now have 'having' clauses
+			 * for more info
+			 * @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_prepareCollection()
+			 * @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_getSqlCondition()
+			 */
+			$this->joinChildQuantities($totalSelect);
+		}
+		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id) AS count"));
 
-		$total = $adapter->fetchOne($totalSelect);
-
-		// Pepare range
+		$total = $adapter->fetchRow($totalSelect);
+		$total = isset($total['count']) ? $total['count'] : 0;
+		// Prepare range
 		$start = $range['start'];
 		$end = $range['end'];
 		if($end > $total){
@@ -170,7 +180,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			$item['entity_id'] = (int)$item['entity_id'];
 			//$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
 			$item['store_id'] = $collection->getStoreId();
-
+			$item['stock_qty'] = (int)$item['stock_qty'];
+			$item['is_in_stock'] = $item['stock_qty'] > 0 ?
+				Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK :
+				Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK;
 
 			$item = $this->_mapItem($item);
 			$item['gallery'] = $this->getItemGallery($item['entity_id'], $catalogHelper);
@@ -248,6 +261,67 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			$this->_productMockup = Mage::getModel("catalog/product");
 		}
 		return $this->_productMockup;
+	}
+
+	/**
+	 * @param bool|Varien_Db_Select $select
+	 * @return $this
+	 */
+	public function joinChildQuantities($select = false) {
+		if (!$select) {
+			$select		= $this->getSelect();
+		}
+		$adapter		= $select->getAdapter();
+		$linkTable		= $this->getResource()->getTable("catalog/product_super_link");
+		$stockItemTable	= $this->getResource()->getTable('cataloginventory/stock_item');
+
+		$subSelect		= $adapter->select();
+		$subSelect->from(array("link_qty" => $linkTable), array("IFNULL(SUM(child_qty.qty), 0)"));
+		$subSelect->join(
+			array("child_qty" => $stockItemTable),
+			"link_qty.product_id = child_qty.product_id",
+			array()
+		);
+		$subSelect->where("link_qty.parent_id = e.entity_id");
+		$subSelect->where("child_qty.is_in_stock = ?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+		$select->columns("(" . $subSelect . ") AS stock_qty");
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function joinAllChildrenCount() {
+		$select			= $this->getSelect();
+		$adapter		= $select->getAdapter();
+		$linkTable		= $this->getResource()->getTable("catalog/product_super_link");
+
+		$subSelect = $adapter->select();
+		$subSelect->from(array("link_all" => $linkTable), array("COUNT(link_all.link_id)"));
+		$subSelect->where("link_all.parent_id=e.entity_id");
+		$select->columns("(" . $subSelect . ") AS all_child_count");
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function joinAvailableChildrenCount() {
+		$select			= $this->getSelect();
+		$adapter		= $select->getAdapter();
+		$linkTable		= $this->getResource()->getTable("catalog/product_super_link");
+		$stockItemTable	= $this->getResource()->getTable('cataloginventory/stock_item');
+
+		$subSelect = $adapter->select();
+		$subSelect->from(array("link_available" => $linkTable), array("COUNT(link_available.link_id)"));
+		$subSelect->join(
+			array("child_stock_available" => $stockItemTable),
+			"link_available.product_id = child_stock_available.product_id",
+			array());
+		$subSelect->where("link_available.parent_id = e.entity_id");
+		$subSelect->where("child_stock_available.is_in_stock = ?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+		$select->columns("(" . $subSelect . ") AS available_child_count");
+		return $this;
 	}
 }
 

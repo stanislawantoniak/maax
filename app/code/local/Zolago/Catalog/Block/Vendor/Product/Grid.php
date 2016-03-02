@@ -112,7 +112,7 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			if($columnObject->getOptions()){
 				$filterHeaderOptions['options'] = $columnObject->getOptions();
 				$filterHeaderOptions['filterOptions'] = $columnObject->getFilterOptions();
-				$filterHeaderOptions['allowEmpty'] = true;
+				$filterHeaderOptions['allowEmpty'] = $columnObject->hasAllowEmpty() ? $columnObject->getAllowEmpty() : 1;
 			}
 
 			
