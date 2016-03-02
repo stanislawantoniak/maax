@@ -98,7 +98,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				"link_available.product_id=child_stock_available.product_id", 
 				array());
 		$subSelect->where("link_available.parent_id=e.entity_id");
-		$subSelect->where("child_stock_available.is_in_stock=?",1);
+		$subSelect->where("child_stock_available.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 		$this->addExpressionAttributeToSelect('available_child_count', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), null)", array());
 		
@@ -109,7 +109,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				array("child_qty"=>$stockTable), 
 				"link_qty.product_id=child_qty.product_id", array());
 		$subSelect->where("link_qty.parent_id=e.entity_id");
-		$subSelect->where("child_qty.is_in_stock=?",1);
+		$subSelect->where("child_qty.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 		
 		// Use subselect only for parent products
 		$this->addExpressionAttributeToSelect('stock_qty', 
