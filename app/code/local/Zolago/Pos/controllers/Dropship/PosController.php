@@ -42,12 +42,11 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 	public function newAction() {
 		$this->_forward("edit");
 	}
-
-	/**
-	 * Save Pos
-	 */
-	public function saveAction() {
-
+	
+    /**
+     * save vendor pos settings
+     */
+    public function settingsSaveAction() {
 		$helper = Mage::helper('zolagopos');
 		if (!$this->getRequest()->isPost()) {
 			return $this->_redirectReferer();
@@ -58,6 +57,36 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		if ($formKey != $formKeyPost) {
 			return $this->_redirectReferer();
 		}
+		$vendor = $this->_getSession()->getVendor();
+		$posId = $this->getRequest()->getParam('problem_pos_id');		
+		try {
+		    $pos = Mage::getModel('zolagopos/pos')->load($posId);
+		    if (!$pos->getId()) {
+		        Mage::throwException($helper->__('Pos does not exists'));
+		    }
+		    if (!$pos->getIsActive()) {
+		        Mage::throwException($helper->__('Pos "%s" inactive',$pos->getName()));		        
+		    }
+		    if (!$pos->isAssignedToVendor($vendor)) {
+		        Mage::throwException($helper->__('Pos not assigned to vendor'));
+		    }
+		    $vendor->setData('problem_pos_id',$posId);
+	    	$vendor->save();
+	    	$this->_getSession()->addSuccess($helper->__('Settings saved'));
+        } catch (Mage_Core_Exception $xt) {
+            $this->_getSession()->addError($xt->getMessage());            
+        } catch (Exception $xt) {
+            Mage::logException($xt);
+            $this->_getSession()->addError($xt->getMessage());
+        }
+		$this->_redirect("*/pos",array("_fragment"=>"tab_1_2"));
+    }
+
+
+	/**
+	 * Save Pos
+	 */
+	public function saveAction() {
 
 		$pos = $this->_registerModel();
 		$vendor = $this->_getSession()->getVendor();

@@ -51,6 +51,18 @@
                 </observers>
             </udpo_order_save_before>
 		</events>
+		<udropship>
+		    <vendor>
+		        <fields>
+		            <problem_pos_id>	
+		                <label>Problem POS</label>
+                        <fieldset>vendor_info</fieldset>
+                        <source_model>zolagopos/source</source_model>
+                        <type>select</type>
+		            </problem_pos_id>
+		        </fields>
+		    </vendor>
+		</udropship>
 	</global>
 	<frontend>
 		<routers>
