@@ -445,13 +445,17 @@ define([
     };
 
 	var rendererIsInStock = function (item, value, node, options) {
+		var itemsTxt		= Translator.translate("Available together {{stock_qty}} items");
+		var variantsTxt		= Translator.translate("{{available_child_count}} variants of {{all_child_count}}");
+		if (item.stock_qty == 1) {
+			itemsTxt = Translator.translate("Available together {{stock_qty}} item");
+		}
 
-		var html = Translator.translate("Available together {{stock_qty}} pieces<br/>{{available_child_count}} variants of {{all_child_count}}");
-		html = html.replace("{{stock_qty}}", item.stock_qty);
-		html = html.replace("{{available_child_count}}", item.available_child_count);
-		html = html.replace("{{all_child_count}}", item.all_child_count);
+		itemsTxt	= itemsTxt.replace("{{stock_qty}}", item.stock_qty);
+		variantsTxt	= variantsTxt.replace("{{available_child_count}}", item.available_child_count);
+		variantsTxt	= variantsTxt.replace("{{all_child_count}}", item.all_child_count);
 
-		node.title = "<div style='text-align: center;'>" + html + "</div>";
+		node.title = "<div style='text-align: center;'>" + itemsTxt + "<br/>" + variantsTxt + "</div>";
 
 		jQuery(node).tooltip({
 			html: true,

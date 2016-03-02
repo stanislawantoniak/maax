@@ -135,45 +135,15 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 					 * NOTE: is_in_stock is added after collection load for better performance ( 1 subselect vs 2)
 					 * @see Zolago_Catalog_Model_Resource_Vendor_Product_Collection::prepareRestResponse()
 					 */
-					$select = $collection->getSelect();
-					$adapter = $select->getAdapter();
-
-					// Join child quantities
-					$linkTable		= $collection->getResource()->getTable("catalog/product_super_link");
-					$stockItemTable	= $collection->getResource()->getTable('cataloginventory/stock_item');
-					$subSelect		= $adapter->select();
-					$subSelect->from(array("link_qty" => $linkTable), array("IFNULL(SUM(child_qty.qty), 0)"));
-					$subSelect->join(
-						array("child_qty" => $stockItemTable),
-						"link_qty.product_id = child_qty.product_id",
-						array()
-						);
-					$subSelect->where("link_qty.parent_id = e.entity_id");
-					$subSelect->where("child_qty.is_in_stock = ?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
-					$select->columns("(" . $subSelect . ") AS stock_qty");
-
-					// Join all children count
-					$subSelect = $adapter->select();
-					$subSelect->from(array("link_all" => $linkTable), array("COUNT(link_all.link_id)"));
-					$subSelect->where("link_all.parent_id=e.entity_id");
-					$select->columns("(" . $subSelect . ") AS all_child_count");
-
-					// Join available children count
-					$subSelect = $adapter->select();
-					$subSelect->from(array("link_available" => $linkTable), array("COUNT(link_available.link_id)"));
-					$subSelect->join(
-						array("child_stock_available" => $stockItemTable),
-						"link_available.product_id = child_stock_available.product_id",
-						array());
-					$subSelect->where("link_available.parent_id = e.entity_id");
-					$subSelect->where("child_stock_available.is_in_stock = ?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
-					$select->columns("(" . $subSelect . ") AS available_child_count");
+					$collection->joinChildQuantities();
+					$collection->joinAllChildrenCount();
+					$collection->joinAvailableChildrenCount();
 					break;
 			}
 		}
 		return $collection;
     }
-	
+
 	/**
 	 * @param string $key
 	 * @param mixed $value
@@ -205,7 +175,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			return $value;
 		}
 		
-		if($attribute){
+		if($attribute && $attribute->getId()){
 			// process name
 			if($attribute->getAttributeCode()=="name"){
 				$this->_getCollection()->addFieldToFilter(array(
@@ -257,6 +227,15 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				}
 				return array("eq"=>$value);
 			}
+		} elseif ($key == 'is_in_stock') {
+			if (((int)$value) == Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK) {
+				$condition = 'stock_qty > ?';
+			} else {
+				$condition = 'stock_qty <= ?';
+			}
+			$collection = $this->_getCollection();
+			$collection->getSelect()->having($condition, 0);
+			return null;
 		}
 		
 		// Return default
@@ -276,6 +255,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		if(isset($out["thumbnail"])){
 			$out["images_count"] = true;
 		}
+		$out["is_in_stock"] = true;
 		return array_keys($out);
 	}
 	
