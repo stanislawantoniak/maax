@@ -3,8 +3,6 @@ class Zolago_Pos_Model_Observer {
 
 	const ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT = 100;
 
-	protected static $converterSTOCK = array();
-
 	public function addPosInfoToOrderInfo() {
 		if (($soi = Mage::app()->getLayout()->getBlock('order_info'))
             && ($po = Mage::registry('current_udpo'))
@@ -135,7 +133,7 @@ class Zolago_Pos_Model_Observer {
 
 		}
 
-		krumo($data);
+		//krumo($data);
 
 		//3. Get STOCK from converter (What we have)
 		$converterHelper = Mage::helper("zolagoconverter");
@@ -146,6 +144,8 @@ class Zolago_Pos_Model_Observer {
 
 		$posesToAssign = array();
 		$qtysFromConverter = array(); //Collect qtys from converter
+
+		$poses = array();
 
 		foreach ($data as $vendorId => $dataPerPO) {
 			$vendorPOSes = $this->getVendorPOSes($vendorId);
@@ -158,6 +158,7 @@ class Zolago_Pos_Model_Observer {
 			foreach ($dataPerPO as $poId => $dataPerProduct) {
 
 				foreach ($vendorPOSes as $pos) {
+					$poses[$pos->getId()] = $pos->getName();
 					$goodPOS = array();
 					foreach ($dataPerProduct as $id => $productDetails) {
 						if (isset($qtysFromConverter[$productDetails["skuv"]])) {
@@ -176,22 +177,41 @@ class Zolago_Pos_Model_Observer {
 						}
 					}
 					if (count($goodPOS) == count($dataPerProduct)) {
-						$posesToAssign[$poId] = $pos->getExternalId();
+						$posesToAssign[$poId] = $pos->getId();
 						//We found good POS for PO, go to the next PO
 						break;
 					}
 				}
 				unset($qtyFromConverter);
 			}
+			unset($poId);
 
 		}
 
 
 		//4. Assign POSes
-		krumo($posesToAssign);
-		krumo($qtysFromConverter);
+		//krumo($posesToAssign);
+		//krumo($qtysFromConverter);
+		//Nothing to assign
+		if (empty($qtysFromConverter))
+			return;
 
-		die("test");
+		//krumo(array_keys($posesToAssign));
+		$collectionPO = Mage::getModel("udropship/po")->getCollection();
+		$collectionPO->addFieldToFilter("entity_id", array("in" => array_keys($posesToAssign)));
+
+		foreach($collectionPO as $udpo){
+			//krumo($udpo->getData("entity_id"));
+			if($posesToAssign[$udpo->getData("entity_id")] == "PROBLEM_POS"){
+				//set problem pos
+			} else {
+				$udpo->setDefaultPosId($posesToAssign[$udpo->getId()]);
+				$udpo->setDefaultPosName($poses[$posesToAssign[$udpo->getId()]]);
+				$udpo->save();
+			}
+
+		}
+		//die("test");
 
     }
 }
