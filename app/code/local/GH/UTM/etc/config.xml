@@ -11,11 +11,11 @@
 				<class>GH_UTM_Model</class>
 			</ghutm>
 		</models>
-<!--		<blocks>
+		<blocks>
 			<ghutm>
 				<class>GH_UTM_Block</class>
 			</ghutm>
-		</blocks>-->
+		</blocks>
 		<helpers>
 			<ghutm>
 				<class>GH_UTM_Helper</class>

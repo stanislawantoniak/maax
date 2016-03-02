@@ -5,7 +5,7 @@ $installer = $this;
 
 $installer->startSetup();
 
-$table = $this->getTable("admin_user");
+$table = $this->getTable("customer/entity");
 
 $installer->getConnection()->addColumn($table, "utm_data", array(
     "type" => Varien_Db_Ddl_Table::TYPE_TEXT,
