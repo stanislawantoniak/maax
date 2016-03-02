@@ -133,8 +133,6 @@ class Zolago_Pos_Model_Observer {
 
 		}
 
-		//krumo($data);
-
 		//3. Get STOCK from converter (What we have)
 		$converterHelper = Mage::helper("zolagoconverter");
 		if (empty($productIds)) {
@@ -145,13 +143,14 @@ class Zolago_Pos_Model_Observer {
 		$posesToAssign = array();
 		$qtysFromConverter = array(); //Collect qtys from converter
 
+
 		$poses = array();
 
 		foreach ($data as $vendorId => $dataPerPO) {
 			$vendorPOSes = $this->getVendorPOSes($vendorId);
 
 			//Hm Vendor doesn't have POSes!!!
-			if ($vendorPOSes->getSize() == 0)
+			if ($vendorPOSes->count() == 0)
 				continue;
 
 
@@ -161,17 +160,17 @@ class Zolago_Pos_Model_Observer {
 					$poses[$pos->getId()] = $pos->getName();
 					$goodPOS = array();
 					foreach ($dataPerProduct as $id => $productDetails) {
-						if (isset($qtysFromConverter[$productDetails["skuv"]])) {
-							$qtyFromConverter = $qtysFromConverter[$productDetails["skuv"]];
+						if (isset($qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]])) {
+							$qtyFromConverter = $qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]];
 						} else {
 							$qtyFromConverter = (int)$converterHelper->getQty($vendorId, $pos, $productDetails["skuv"]);
 						}
 
-						$qtysFromConverter[$productDetails["skuv"]] = $qtyFromConverter;
+						$qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]] = $qtyFromConverter;
 
 						if ($productDetails["qty"] <= $qtyFromConverter) {
 							$goodPOS[] = 1;
-							$qtysFromConverter[$productDetails["skuv"]] = $qtyFromConverter-$productDetails["qty"];
+							$qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]] = $qtyFromConverter-$productDetails["qty"];
 						} else {
 							$posesToAssign[$poId] = "PROBLEM_POS";
 						}
@@ -190,28 +189,23 @@ class Zolago_Pos_Model_Observer {
 
 
 		//4. Assign POSes
-		//krumo($posesToAssign);
-		//krumo($qtysFromConverter);
+
 		//Nothing to assign
 		if (empty($qtysFromConverter))
 			return;
 
-		//krumo(array_keys($posesToAssign));
 		$collectionPO = Mage::getModel("udropship/po")->getCollection();
 		$collectionPO->addFieldToFilter("entity_id", array("in" => array_keys($posesToAssign)));
 
 		foreach($collectionPO as $udpo){
-			//krumo($udpo->getData("entity_id"));
 			if($posesToAssign[$udpo->getData("entity_id")] == "PROBLEM_POS"){
-				//set problem pos
+				//TODO set problem pos
 			} else {
 				$udpo->setDefaultPosId($posesToAssign[$udpo->getId()]);
 				$udpo->setDefaultPosName($poses[$posesToAssign[$udpo->getId()]]);
 				$udpo->save();
 			}
-
 		}
-		//die("test");
 
     }
 }
