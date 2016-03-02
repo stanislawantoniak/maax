@@ -1790,7 +1790,7 @@ Mall.utm = {
 
 			var utmsJson = JSON.stringify(sortedUtms);
 			if(!(cookieVal = Mall.Cookie.get(this.cookieName) && cookieVal == utmsJson)) {
-				//do ajax request with utmsJson
+				//todo: do ajax request with utmsJson
 			}
 		}
 	},
