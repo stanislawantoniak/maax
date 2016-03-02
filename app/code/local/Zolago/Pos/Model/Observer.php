@@ -199,7 +199,22 @@ class Zolago_Pos_Model_Observer {
 
 		foreach($collectionPO as $udpo){
 			if($posesToAssign[$udpo->getData("entity_id")] == "PROBLEM_POS"){
-				//TODO set problem pos
+			    $vendor = $udpo->getVendor();
+			    $posId = $vendor->getProblemPosId();
+			    if ($posId) {
+			        $pos = Mage::getModel('zolagopos/pos')->load($posId);
+			        $udpo->setDefaultPosId($posId);
+			        $udpo->setDefaultPosName($pos->getName());
+			        $udpo->save();
+			    } else {
+			        $posList = $this->getVendorPoses($vendor->getId());
+			        $pos = $posList->getFirstItem();
+			        if ($pos->getId()) {
+    			        $udpo->setDefaultPosId($pos->getId());
+	    		        $udpo->setDefaultPosName($pos->getName());
+		    	        $udpo->save();
+                    } // else no assigned pos
+			    }
 			} else {
 				$udpo->setDefaultPosId($posesToAssign[$udpo->getId()]);
 				$udpo->setDefaultPosName($poses[$posesToAssign[$udpo->getId()]]);
