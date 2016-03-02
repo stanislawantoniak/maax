@@ -60,7 +60,7 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 		$dummyVendor
 			->setDummy(true)
 			->setVendorResizedLogoUrl($this->getSkinUrl('images/brand_comming.png'))
-			->setVendorName('Kolejne już wkrótce');
+			->setVendorName(Mage::helper("zolagomodago")->__("Next soon"));
 
 		$maxDummies = max($dummyVendorsCount);
 
