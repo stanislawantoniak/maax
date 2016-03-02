@@ -226,7 +226,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function getCurrentVendor()
 	{
-		return Mage::helper('zolagodropshipmicrosite/protected')->getCurrentVendor();
+		return Mage::helper('umicrosite/protected')->getCurrentVendor();
 	}
 
 

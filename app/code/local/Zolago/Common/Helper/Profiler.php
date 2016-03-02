@@ -2,9 +2,11 @@
 class Zolago_Common_Helper_Profiler extends Mage_Core_Helper_Abstract {
 	
 	protected $_timestamp;
+	protected $_sum;
 	
 	public function start() {
 		$this->_timestamp = $this->_getMicrotime();
+		$this->_sum = 0;
 	}
 	
 	
@@ -13,6 +15,7 @@ class Zolago_Common_Helper_Profiler extends Mage_Core_Helper_Abstract {
 		$delay = $currentTimestamp - $this->_timestamp;
 		if($rest){
 			$this->_timestamp = $currentTimestamp;
+			$this->_sum += $delay;
 		}
 		Mage::log($this->_format($string, $delay));
 	}
@@ -23,6 +26,6 @@ class Zolago_Common_Helper_Profiler extends Mage_Core_Helper_Abstract {
     } 
 	
 	protected function _format($string, $delay) {
-		return sprintf("%s: %fs", $string, $delay);
+		return sprintf("%s: %fs (sum: %fs)", $string, $delay, $this->_sum);
 	}
 }

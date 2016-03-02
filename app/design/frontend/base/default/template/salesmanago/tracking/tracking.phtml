@@ -1,28 +1,28 @@
 <?php
-	$client_id = $this->getClientId();
-	$endpoint = $this->getEndPoint();
-	$client_salesmanago_id = $this->getClientSalesManagoId();
-	$additional_js = $this->getAdditionalJs();
-	
-	if(!empty($client_id) && !empty($endpoint)){
-		$trackingScript = "<script type='text/javascript'>\n";
-		$trackingScript .= "\tvar _smid = '".$client_id."';\n";
-		if(isset($additional_js) && !empty($additional_js)){
-			$trackingScript .= "\t".$additional_js."\n";
+/** @var SalesManago_Tracking_Block_Layer $this */
+$client_id = $this->getClientId();
+$endpoint = $this->getEndPoint();
+$additional_js = $this->getAdditionalJs();
+
+if (!empty($client_id) && !empty($endpoint)): ?>
+	<script type='text/javascript'>
+		var _smid = '<?php echo $client_id; ?>';
+		function initSalesManagoScript() {
+			<?php echo $additional_js; ?>
+			var sm = document.createElement('script');
+			sm.type = 'text/javascript';
+			sm.async = true;
+			sm.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $endpoint; ?>/static/sm.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(sm, s);
 		}
-		if($client_salesmanago_id){
-			  $trackingScript .= "\tvar _smclientid = '".$client_salesmanago_id."';\n";
-		}
-		$trackingScript .= "\t(function () {\n";
-		$trackingScript .= "\t\tvar sm = document.createElement('script');\n";
-		$trackingScript .= "\t\tsm.type = 'text/javascript';\n";
-		$trackingScript .= "\t\tsm.async = true;\n";
-		$trackingScript .= "\t\tsm.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + '".$endpoint."/static/sm.js';\n";
-		$trackingScript .= "\t\tvar s = document.getElementsByTagName('script')[0];\n";
-		$trackingScript .= "\t\ts.parentNode.insertBefore(sm, s);\n";
-		$trackingScript .= "\t})();\n";
-		$trackingScript .= "</script>\n";
-		
-		echo $trackingScript;
-	}	
-?>
+		jQuery(document).ready(function () {
+			var smCookie = Mall.Cookie.get('smclient');
+			if (smCookie) {
+				initSalesManagoScript();
+			} else {
+				Mall.getSalesManagoInfo();
+			}
+		});
+	</script>
+<?php endif; ?>

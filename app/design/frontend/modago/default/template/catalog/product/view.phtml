@@ -202,13 +202,12 @@ if($vendorContext && $vendorContext->getId()) {
 </div>
 
 <div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"></button>
-
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y: hidden;">
 	            <div id="sizeTableIframeContainer">
-	                <iframe id="sizeTableIframe"></iframe>
+	                <iframe id="sizeTableIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
 	            </div>
             </div>
         </div>
@@ -321,6 +320,11 @@ if($vendorContext && $vendorContext->getId()) {
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 <?php echo $this->getChildHtml('zolago.page.benefits'); ?>
 
+
+<?php
+$a = $this->getSizeTableForJs();
+
+?>
 <script type="text/javascript">
     Mall.wishlist.addProduct({
         id: <?php echo $_product->getId(); ?>,
@@ -342,8 +346,6 @@ if($vendorContext && $vendorContext->getId()) {
     Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
     Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
 
-
-
 	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
 	<?php if($_product->getCategory()):?>
 	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
@@ -351,6 +353,6 @@ if($vendorContext && $vendorContext->getId()) {
 
     jQuery('.no-size').attr('title',"<?php echo $this->__("This size is temporarily unavailable."); ?>");
 
-	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
+	Mall.product.sizetable.setContent(<?php echo $a;?>);
 
 </script>

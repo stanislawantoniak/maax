@@ -128,15 +128,32 @@ Mall.product = {
 			old_price_selector = price_box.find(".old-price"),
 			price_selector = price_box.find("span.price");
 		if(price != oldPrice) {
-			old_price_selector.html(template.replace("#{price}", number_format(oldPrice, "2", ",", " ")));
+			old_price_selector.html(template.replace("#{price}", number_format(this.roundUp(oldPrice, 2), "2", ",", " ")));
 		} else {
 			old_price_selector.html("");
 		}
 
 		// set price
-		price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
+		price_selector.html(template.replace("#{price}", number_format(this.roundUp(price, 2), "2", ",", " ")));
 	},
+	roundUp: function(value, exp) {
+		if (typeof exp === 'undefined' || +exp === 0)
+			return Math.round(value);
 
+		value = +value;
+		exp = +exp;
+
+		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+			return NaN;
+
+		// Shift
+		value = value.toString().split('e');
+		value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+		// Shift back
+		value = value.toString().split('e');
+		return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+	},
 	setAttributes: function(attributes, useSizeboxList) {
 		this.clearAttributesContainer();
 
@@ -343,12 +360,12 @@ Mall.product = {
 				jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
 			}
 
-			jQuery(this).find('canvas').drawLine({
-				strokeStyle: '#afafaf',
-				strokeWidth: 1.5,
-				x1: -1, y1: elFilterSizeHeight-1,
-				x2: elFilterSizeWidth, y2: -1
-			});
+			//jQuery(this).find('canvas').drawLine({
+			//	strokeStyle: '#afafaf',
+			//	strokeWidth: 1.5,
+			//	x1: -1, y1: elFilterSizeHeight-1,
+			//	x2: elFilterSizeWidth, y2: -1
+			//});
 		});
 	},
 
@@ -1198,10 +1215,27 @@ Mall.product = {
 		},
 		resize: function() {
 			var body = Mall.product.sizetable._doc.body;
-			Mall.product.sizetable._iframe.css('height','');
-			Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
-			Mall.product.sizetable._iframe.css('width','');
-			Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+
+			var headers = [],
+				frameContents = jQuery("#sizeTableIframe").contents();
+            //frameContents.find("table").addClass("sizetable-table");
+
+			jQuery("#sizeTableIframeContainer").width("100%");
+			jQuery("#sizeTableIframeContainer").height(frameContents.find("html").height()+50);
+
+
+			//Responsive Tables handle
+			frameContents.find("table tr:first-child td").each(function (i, td) {
+				headers.push(jQuery.trim(jQuery(td).text()))
+			});
+			frameContents.find("table tr:not(:first-child)").each(function (j, tr) {
+				jQuery(tr).find("td").each(function (j, tdLeft) {
+					jQuery(tdLeft).attr("data-label", headers[j]);
+				});
+			});
+			//--Responsive Tables handle
+
+
 		},
 		getContent: function() {
 			return this._content;

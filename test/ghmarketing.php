@@ -3,26 +3,26 @@ $postData = array(
 	'token' => "testtest123",
 	'data' => array(
 		array(
-			'sku' => '5-13724-BEZOWY',    //products sku
-			'date' => '2015-09-30',        //date of clicks
-			'cost' => '332',               //price of clicks
-			'click_count' => '664',               //clicks amount
-			'type' => 'cpc_test'           //cpc type
+			'sku' => '10-08J512-5-523',    //products sku
+			'date' => '2016-02-10',        //date of clicks
+			'cost' => rand(5,50),          //price of clicks
+			'click_count' => rand(1,100),  //clicks amount
+			'type' => 'nokaut'             //cpc type
 		),
 		array(
-			'sku' => '5-15043-BEZOWY',
-			'date' => '2015-09-30',
-			'cost' => '123',
-			'click_count' => '246',
-			'type' => 'cpc_test'
+			'sku' => '10-08J442A4-01',    //products sku
+			'date' => '2016-02-10',        //date of clicks
+			'cost' => rand(5,50),          //price of clicks
+			'click_count' => rand(1,100),  //clicks amount
+			'type' => 'skapiec'            //cpc type
 		),
 		array(
-			'sku' => '5-9486',
-			'date' => '2015-09-30',
-			'cost' => '65',
-			'click_count' => '130',
-			'type' => 'cpc_test'
-		)
+			'sku' => '10-04B121-3-02',    //products sku
+			'date' => '2016-02-10',        //date of clicks
+			'cost' => rand(5,50),          //price of clicks
+			'click_count' => rand(1,100),  //clicks amount
+			'type' => 'AN1'                //cpc type
+		),
 	)
 );
 
@@ -30,7 +30,7 @@ try {
 	$ch = curl_init();
 
 	curl_setopt($ch, CURLOPT_USERPWD, 'zolago:kopytko1234');
-	curl_setopt($ch, CURLOPT_URL, "https://dev01.lorante.com/ghmarketing/load/index");
+	curl_setopt($ch, CURLOPT_URL, "https://test01.lorante.com/ghmarketing/load/index");
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -38,7 +38,7 @@ try {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
 	if (!$server_output = curl_exec($ch)) {
-	    var_Dump(curl_error($ch));
+		var_dump(curl_error($ch));
 	}
 
 	curl_close($ch);

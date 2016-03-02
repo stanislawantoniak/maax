@@ -1,3 +1,15 @@
+<?php
+/** @var Zolago_Checkout_Helper_Data $_helper */
+$_helper = Mage::helper("zolagocheckout");
+$basketDataLayer = $_helper->getBasketDataLayer();
+?>
+<?php if (!empty($basketDataLayer)): ?>
+	<script>
+		if (typeof dataLayer != "undefined") {
+			dataLayer.push(<?php echo json_encode($basketDataLayer); ?>);
+		}
+	</script>
+<?php endif; ?>
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">

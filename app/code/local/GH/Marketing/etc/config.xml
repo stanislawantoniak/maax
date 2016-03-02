@@ -2,7 +2,7 @@
 <config>
     <modules>
         <GH_Marketing>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </GH_Marketing>
     </modules>
     <global>
@@ -17,6 +17,9 @@
                     <marketing_cost>
                         <table>gh_marketing_cost</table>
                     </marketing_cost>
+                    <marketing_budget>
+                        <table>gh_marketing_budget</table>
+                    </marketing_budget>
                     <marketing_cost_type>
                         <table>gh_marketing_cost_type</table>
                     </marketing_cost_type>
@@ -50,9 +53,17 @@
                     <frontName>ghmarketing</frontName>
                 </args>
             </ghmarketing>
+			<udropship>
+				<args>
+					<modules>
+						<GH_Marketing before="Unirgy_Dropship">GH_Marketing_Dropship</GH_Marketing>
+					</modules>
+				</args>
+			</udropship>
         </routers>
         <secure_url>
             <ghmarketing>/ghmarketing</ghmarketing>
+			<udropship_marketing>/udropship/marketing/</udropship_marketing>
         </secure_url>
         <translate>
             <modules>

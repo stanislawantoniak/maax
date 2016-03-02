@@ -95,7 +95,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$session = $this->getOnepage()->getCheckout();
 			$orderIds = array($session->getLastOrderId());
 			/** @var GH_GTM_Block_Gtm $block */
-			$block = Mage::app()->getLayout()->createBlock('gh_gtm/gtm','google_tag_manager');
+			$block = Mage::app()->getLayout()->createBlock('ghgtm/gtm','google_tag_manager');
 			$block->setOrderIds($orderIds);
 			$newResponse['dataLayer'] = $block->getRawDataLayer();
 		}
@@ -231,6 +231,8 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
 				throw new Mage_Core_Exception($shippingMethodResponse['message']);
 			}
+
+			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
 		}
 		
 		/**
@@ -247,7 +249,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 			//save selected payment to session in order to retrieve it after page refresh
 			$this->_getCheckoutSession()->setPayment($payment);
 		}
-		
 
 		// Override collect totals - make final collect totals
 		$onepage->getQuote()->
@@ -277,6 +278,25 @@ abstract class Zolago_Checkout_Controller_Abstract
 				"content"=>$ex->getMessage()
 			);
 		}
+
+		// part for GTM datalayer
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		$checkoutData = $checkoutSession->getData();
+		/** @var GH_GTM_Helper_Data $gtmHelper */
+		$gtmHelper = Mage::helper("ghgtm");
+		$data = array();
+
+		if(isset($checkoutData['shipping_method'])) {
+			$shippingMethod = $gtmHelper->getShippingMethodName(current($checkoutData['shipping_method']));
+			if (!empty($shippingMethod)) {
+				$data['basket_shipping_method'] = $shippingMethod;
+			}
+		}
+		if (!empty($data)) {
+			$response["dataLayer"] = $data;
+		}
+
 		if($this->getRequest()->isAjax()){
 			$this->_prepareJsonResponse($response);
 		}
@@ -294,6 +314,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			"status"=>true,
 			"content" => array()
 		);
+
 		try{
 		    $this->importPostData();
 		} catch (Exception $ex) {
@@ -302,6 +323,32 @@ abstract class Zolago_Checkout_Controller_Abstract
 				"content"=>$ex->getMessage()
 			);
 		}
+
+		// part for GTM dataLayer
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		$checkoutData = $checkoutSession->getData();
+		/** @var GH_GTM_Helper_Data $gtmHelper */
+		$gtmHelper = Mage::helper("ghgtm");
+		$data = array();
+
+		if(isset($checkoutData['payment']['method'])) {
+			$paymentMethod = $gtmHelper->getPaymentMethodName($checkoutData['payment']['method']);
+			if (!empty($paymentMethod)) {
+				$data['basket_payment_method'] = $paymentMethod;
+			}
+		}
+
+		if(isset($checkoutData['payment']['additional_information']['provider'])) {
+			$paymentDetails = $checkoutData['payment']['additional_information']['provider'];
+			if (!empty($paymentDetails)) {
+				$data['basket_payment_details'] = $paymentDetails;
+			}
+		}
+		if (!empty($data)) {
+			$response["dataLayer"] = $data;
+		}
+
 		if($this->getRequest()->isAjax()){
 			$this->_prepareJsonResponse($response);
 		}

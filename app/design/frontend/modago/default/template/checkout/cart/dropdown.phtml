@@ -1,12 +1,13 @@
 <?php
 /**
- * Author: Paweł Chyl <pawel.chyl@orba.pl>
- * Date: 02.05.14
- * @see Zolago_Modago_Block_Checkout_Cart
+ * This file is pre template for dropdown basket
+ * part of .summary-basket after ajax load will be replaced by Mall._summary_basket
+ * part of #product-list after ajax load will be replaced by Mall._product_template
  */
-
+/** @var Zolago_Modago_Block_Checkout_Cart $this */
 /** @var Zolago_Checkout_Helper_Data $hlp */
 $hlp = Mage::helper('zolagocheckout');
+$showCartUrl = str_replace(array('http://','https://'),array('//','//'), Mage::getUrl('checkout/cart', array("_no_vendor"=>true)));
 ?>
 
 <div id="dropdown-basket" class="dropdown dropdown-anchor-right basket basket-dropdown" style="display: none;">
@@ -22,7 +23,7 @@ $hlp = Mage::helper('zolagocheckout');
                     <li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li>
                     <li>{{shipping_cost_msg}}: {{shipping_cost}}</li>
                 </ul>
-                <a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>
+                <a href="<?php echo $showCartUrl; ?>" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>
             </div>
 	        <div class="loading_basket">
 		        <i class="fa fa-spinner fa-spin"></i>
