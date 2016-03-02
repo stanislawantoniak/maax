@@ -1231,6 +1231,15 @@ Mall.Cookie = {
 			if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
 		}
 		return "";
+	},
+	set: function setCookie(cname, cvalue, exhours) {
+		var d = new Date(), expires = "";
+		var h = typeof exhours !== 'undefined' ? exhours : false;
+		if(h) {
+			d.setTime(d.getTime() + (h * 60 * 60 * 1000));
+			expires = "expires=" + d.toUTCString();
+		}
+		document.cookie = cname + "=" + cvalue + "; " + expires;
 	}
 }
 
@@ -1760,6 +1769,47 @@ Mall.debug = {
 	},
 	off: function() {
 		this.isOn = false;
+	}
+};
+
+Mall.utm = {
+	cookieName: 'ghutm',
+	attrPrefix: 'utm_',
+	init: function() {
+		var utms = this.getUtms(),
+			properties = Object.getOwnPropertyNames(utms).sort(), //it is important that it's sorted here
+			propertiesNum = properties.length;
+
+		if(propertiesNum) {
+			var sortedUtms = {},
+				cookieVal;
+			for (var i = 0; i < propertiesNum; i++) {
+				var k = properties[i];
+				sortedUtms[k] = utms[k];
+			}
+
+			var utmsJson = JSON.stringify(sortedUtms);
+			if(!(cookieVal = Mall.Cookie.get(this.cookieName) && cookieVal == utmsJson)) {
+				//do ajax request with utmsJson
+			}
+		}
+	},
+	getUtms: function() {
+		var query_string = {},
+			query = window.location.search.substring(1),
+			self = this;
+
+		if(Mall.getUrlPath().search(this.attrPrefix) !== -1) {
+			var vars = query.split("&");
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split("=");
+				if (pair[0].search(self.attrPrefix) === 0) {
+					query_string[pair[0]] = decodeURIComponent(pair[1]);
+				}
+			}
+		}
+
+		return query_string;
 	}
 };
 
