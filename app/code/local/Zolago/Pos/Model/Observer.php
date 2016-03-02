@@ -48,7 +48,7 @@ class Zolago_Pos_Model_Observer {
 		$collection->addActiveFilter();
 		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_ASC);
 
-		if ($collection->getSize() == 1)
+		if ($collection->count() == 1)
 			return $collection->getFirstItem();
 
 
@@ -143,6 +143,7 @@ class Zolago_Pos_Model_Observer {
 		}
 
 		$posesToAssign = array();
+		$qtysFromConverter = array(); //Collect qtys from converter
 
 		foreach ($data as $vendorId => $dataPerPO) {
 			$vendorPOSes = $this->getVendorPOSes($vendorId);
@@ -157,7 +158,13 @@ class Zolago_Pos_Model_Observer {
 				foreach ($vendorPOSes as $pos) {
 					$goodPOS = array();
 					foreach ($dataPerProduct as $id => $productDetails) {
-						$qtyFromConverter = (int)$converterHelper->getQty($vendorId, $pos, $productDetails["skuv"]);
+						if (isset($qtysFromConverter[$productDetails["skuv"]])) {
+							$qtyFromConverter = $qtysFromConverter[$productDetails["skuv"]];
+						} else {
+							$qtyFromConverter = (int)$converterHelper->getQty($vendorId, $pos, $productDetails["skuv"]);
+						}
+
+						$qtysFromConverter[$productDetails["skuv"]] = $qtyFromConverter;
 
 						if ($productDetails["qty"] <= $qtyFromConverter) {
 							$goodPOS[] = 1;
@@ -169,7 +176,7 @@ class Zolago_Pos_Model_Observer {
 						break;
 					}
 				}
-
+				unset($qtyFromConverter);
 			}
 
 		}
