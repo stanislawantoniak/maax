@@ -147,7 +147,7 @@ class Zolago_Pos_Model_Observer {
 		foreach ($data as $vendorId => $dataPerPO) {
 			$vendorPOSes = $this->getVendorPOSes($vendorId);
 
-			//Hm Vendor don't have POSes!!!
+			//Hm Vendor doesn't have POSes!!!
 			if ($vendorPOSes->getSize() == 0)
 				continue;
 
