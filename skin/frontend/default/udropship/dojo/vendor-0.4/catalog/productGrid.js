@@ -468,7 +468,7 @@ define([
 
 		var content = put("div");
 		put(content, "p", {
-			innerHTML: this.options[value] || ""
+			innerHTML: parseInt(item.stock_qty)
 		});
 		put(node, content);
 	};
