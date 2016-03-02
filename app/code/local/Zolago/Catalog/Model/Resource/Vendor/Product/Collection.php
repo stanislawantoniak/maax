@@ -170,6 +170,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			$item['entity_id'] = (int)$item['entity_id'];
 			//$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
 			$item['store_id'] = $collection->getStoreId();
+			$item['stock_qty'] = (int)$item['stock_qty'];
 			$item['is_in_stock'] = $item['stock_qty'] > 0 ?
 				Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK :
 				Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK;

@@ -404,7 +404,7 @@ define([
         put(node, content);
     };
 
-    var rendererDescription = function (item, value, node, options) {
+    var rendererDescriptionStatus = function (item, value, node, options) {
 
         // @see Zolago_Catalog_Model_Product_Source_Description
         //const DESCRIPTION_NOT_ACCEPTED = 1;// Nie zatwierdzony
@@ -444,6 +444,30 @@ define([
         put(node, content);
     };
 
+	var rendererIsInStock = function (item, value, node, options) {
+
+		var html = Translator.translate("Available together {{stock_qty}} pieces<br/>{{available_child_count}} variants of {{all_child_count}}");
+		html = html.replace("{{stock_qty}}", item.stock_qty);
+		html = html.replace("{{available_child_count}}", item.available_child_count);
+		html = html.replace("{{all_child_count}}", item.all_child_count);
+
+		node.title = "<div style='text-align: center;'>" + html + "</div>";
+
+		jQuery(node).tooltip({
+			html: true,
+			container: "body",
+			trigger: "hover",
+			animation: false,
+			placement: "top",
+			delay: {"show": 0, "hide": 0},
+		});
+
+		var content = put("div");
+		put(content, "p", {
+			innerHTML: this.options[value] || ""
+		});
+		put(node, content);
+	};
     /**
      * @param {string} currency
      * @returns {Function}
@@ -530,10 +554,12 @@ define([
                 // Prepare fomratter
                 if (childColumn.options) {
                     if (column.field == "description_status") {
-                        childColumn.renderCell = rendererDescription;
+                        childColumn.renderCell = rendererDescriptionStatus;
                     } else if (column.field == "status") {
                         childColumn.renderCell = rendererStatus;
-                    } else {
+                    } else if (column.field == "is_in_stock") {
+						childColumn.renderCell = rendererIsInStock;
+					} else {
                         childColumn.formatter = formatterOptionsFactor(
                             childColumn.options, column.type == "multiselect");
                     }
