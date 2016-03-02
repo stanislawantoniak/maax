@@ -514,5 +514,26 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         }
         return false;
     }
+    
+    /**
+     * overriding magic function 
+     *
+     * @return int
+     */
+     public function getProblemPosId() {
+         $id = $this->getData('problem_pos_id');
+         if ($id) {	
+             // check if pos is assigned to vendor
+             $pos = Mage::getModel('zolagopos/pos')->load($id);
+             if ($pos->getId() 
+                 && $pos->getIsActive()
+                 && $pos->isAssignedToVendor($this)) {
+
+                     return $id;
+             } 
+         }
+         return null;
+     }
+
 
 }
