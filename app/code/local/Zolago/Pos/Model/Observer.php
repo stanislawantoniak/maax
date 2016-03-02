@@ -48,7 +48,7 @@ class Zolago_Pos_Model_Observer {
 		$collection->addActiveFilter();
 		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_ASC);
 
-		if ($collection->getSize() == 1)
+		if ($collection->count() == 1)
 			return $collection->getFirstItem();
 
 
@@ -133,8 +133,6 @@ class Zolago_Pos_Model_Observer {
 
 		}
 
-
-
 		//3. Get STOCK from converter (What we have)
 		$converterHelper = Mage::helper("zolagoconverter");
 		if (empty($productIds)) {
@@ -143,42 +141,71 @@ class Zolago_Pos_Model_Observer {
 		}
 
 		$posesToAssign = array();
+		$qtysFromConverter = array(); //Collect qtys from converter
+
+
+		$poses = array();
 
 		foreach ($data as $vendorId => $dataPerPO) {
 			$vendorPOSes = $this->getVendorPOSes($vendorId);
 
-			//Hm Vendor don't have POSes!!!
-			if ($vendorPOSes->getSize() == 0)
+			//Hm Vendor doesn't have POSes!!!
+			if ($vendorPOSes->count() == 0)
 				continue;
 
 
 			foreach ($dataPerPO as $poId => $dataPerProduct) {
 
 				foreach ($vendorPOSes as $pos) {
+					$poses[$pos->getId()] = $pos->getName();
 					$goodPOS = array();
 					foreach ($dataPerProduct as $id => $productDetails) {
-						$qtyFromConverter = (int)$converterHelper->getQty($vendorId, $pos, $productDetails["skuv"]);
+						if (isset($qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]])) {
+							$qtyFromConverter = $qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]];
+						} else {
+							$qtyFromConverter = (int)$converterHelper->getQty($vendorId, $pos, $productDetails["skuv"]);
+						}
+
+						$qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]] = $qtyFromConverter;
 
 						if ($productDetails["qty"] <= $qtyFromConverter) {
 							$goodPOS[] = 1;
+							$qtysFromConverter[$pos->getExternalId()][$productDetails["skuv"]] = $qtyFromConverter-$productDetails["qty"];
+						} else {
+							$posesToAssign[$poId] = "PROBLEM_POS";
 						}
 					}
 					if (count($goodPOS) == count($dataPerProduct)) {
-						$posesToAssign[$poId] = $pos->getExternalId();
+						$posesToAssign[$poId] = $pos->getId();
 						//We found good POS for PO, go to the next PO
 						break;
 					}
 				}
-
+				unset($qtyFromConverter);
 			}
+			unset($poId);
 
 		}
 
 
 		//4. Assign POSes
 
+		//Nothing to assign
+		if (empty($qtysFromConverter))
+			return;
 
+		$collectionPO = Mage::getModel("udropship/po")->getCollection();
+		$collectionPO->addFieldToFilter("entity_id", array("in" => array_keys($posesToAssign)));
 
+		foreach($collectionPO as $udpo){
+			if($posesToAssign[$udpo->getData("entity_id")] == "PROBLEM_POS"){
+				//TODO set problem pos
+			} else {
+				$udpo->setDefaultPosId($posesToAssign[$udpo->getId()]);
+				$udpo->setDefaultPosName($poses[$posesToAssign[$udpo->getId()]]);
+				$udpo->save();
+			}
+		}
 
     }
 }
