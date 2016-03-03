@@ -13,17 +13,17 @@
   margin: 15px 0 8px 0;
   h1 {
     text-transform: uppercase;
-    font-family: latoregular;
-    font-size: 36px;
+    font-family: $font-family-sans-serif;
+    font-size: $font-size-h1;
     @media (max-width: $screen-sm) {
-      font-size: 18px;
+      font-size: $font-size-h4;
     }
 
   }
 }
 .brands-cms-content {
   font-size: 18px;
-  font-family: latoregular;
+  font-family: $font-family-sans-serif;
   @media (max-width: $screen-sm) {
     font-size: 14px;
   }
