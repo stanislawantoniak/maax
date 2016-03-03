@@ -87,7 +87,12 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
         /* @var $collection Zolago_Catalog_Model_Resource_Vendor_Price_Collection */
         $storeId = Mage::app()->getRequest()->getParam("store_id");
         $collection->setStoreId($storeId);
-
+        $collection->addAttributes();
+        $collection->joinAdditionalData();
+        $storeId = $this->_getStoreId();
+        $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
+        //$collection->addStoreFilter($store->getId());
+        $collection->addWebsiteFilter($websiteId);
 
         // Filter visible
         $collection->addAttributeToFilter("visibility",
@@ -95,6 +100,7 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
 
         // Filter dropship
         $collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId(), "inner");
+
 
 
         return $collection;
