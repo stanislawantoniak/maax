@@ -186,7 +186,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->where("e.entity_id IN (?)", $ids);
 		
 		$results = $this->getReadConnection()->fetchAll($select);
-		Mage::log($select, null, "getDetails_X.log");
+		Mage::log((string)$select, null, "getDetails_X.log");
 
 		
 		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
