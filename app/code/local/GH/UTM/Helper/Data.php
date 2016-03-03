@@ -40,13 +40,52 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return array
 	 */
 	public function getExceptions() {
-		return explode(",",Mage::getStoreConfig(GH_UTM_Model_Source::GHUTM_CONFIG_PATH_EXCEPTIONS));
+		$exceptions = explode(",",Mage::getStoreConfig(GH_UTM_Model_Source::GHUTM_CONFIG_PATH_EXCEPTIONS));
+		foreach($exceptions as $k=>$exception) {
+			$exceptions[$k] = trim($exception);
+		}
+		return $exceptions;
 	}
 
-	public function setUtmCustomer(Mage_Customer_Model_Customer $customer) {
-		$utmData = json_decode($customer->getUtmData(),1);
-		//todo: finish this
+	public function updateUtmData($utmDataJson) {
+		$newUtmData = json_decode($utmDataJson,1);
+		$exceptions = $this->getExceptions();
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+		/** @var Zolago_Customer_Model_Customer $customer */
+		$customer = $customerSession->getCustomer();
 
+		//handle exceptions
+		if(!empty($exceptions) &&
+			isset($newUtmData['utm_source']) &&
+			in_array($newUtmData['utm_source'],$exceptions) &&
+			(($customer->getId() && $customer->getUtmData()) || $this->getCookie())
+		) {
+			return false;
+		}
+
+		//set time
+		$newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME] = Mage::getModel('core/date')->gmtTimestamp();
+		$newUtmDataJson = json_encode($newUtmData);
+
+		if($customer->getId()) {
+			$customer->setUtmData($newUtmDataJson)->save();
+			/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+			$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+			$cacheHelper->removeCacheCustomerUtmData();
+		}
+		$cookieExpiry = $newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME] + $this->getCookieExpiry();
+
+		setcookie(GH_UTM_Model_Source::GHUTM_COOKIE_NAME,$newUtmDataJson,$cookieExpiry,"/");
+
+		return true;
+	}
+
+	public function getCookie() {
+		if(isset($_COOKIE[GH_UTM_Model_Source::GHUTM_COOKIE_NAME])) {
+			return $_COOKIE[GH_UTM_Model_Source::GHUTM_COOKIE_NAME];
+		}
+		return '';
 	}
 
 }

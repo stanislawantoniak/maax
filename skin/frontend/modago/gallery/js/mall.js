@@ -1773,16 +1773,15 @@ Mall.debug = {
 	}
 };
 
-Mall.utm = {
+Mall.Utm = {
 	cookieName: 'ghutm',
 	attrPrefix: 'utm_',
-	superiorAttr: 'utm_source',
 	utm_data: false,
 
 	init: function() {
 		this.utm_data = this.getUtms();
 		var properties = Object.getOwnPropertyNames(this.utm_data),
-			cookieVal = Mall.Cookie.get(this.cookieName);
+			cookieVal = decodeURIComponent(Mall.Cookie.get(this.cookieName));
 
 		if(properties.length) { //act only if there are utm_ attributes in href
 			if (!cookieVal) {
@@ -1831,6 +1830,7 @@ Mall.utm = {
 
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
+	Mall.Utm.init();
     Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
