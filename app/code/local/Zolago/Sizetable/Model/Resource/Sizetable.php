@@ -10,7 +10,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
 
     public function getSizetableCMS($vendor_id, $store_id, $attribute_set_id, $brand_id)
     {
-		Mage::log("$vendor_id, $store_id, $attribute_set_id, $brand_id", null, "table_1.log");
+
         if (!$vendor_id) {
             return false;
         }
