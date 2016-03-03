@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<GH_UTM>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</GH_UTM>
 	</modules>
 	<global>
@@ -25,6 +25,7 @@
 			<ghutm_setup>
 				<setup>
 					<module>GH_UTM</module>
+					<class>Mage_Eav_Model_Entity_Setup</class>
 				</setup>
 			</ghutm_setup>
 		</resources>
