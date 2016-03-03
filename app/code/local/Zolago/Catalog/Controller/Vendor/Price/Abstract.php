@@ -90,9 +90,9 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
         $collection->addAttributes();
         $collection->joinAdditionalData();
 
-        $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
+        //$websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
         //$collection->addStoreFilter($store->getId());
-        $collection->addWebsiteFilter($websiteId);
+        //$collection->addWebsiteFilter($websiteId);
 
         // Filter visible
         $collection->addAttributeToFilter("visibility",
