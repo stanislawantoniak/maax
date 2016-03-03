@@ -73,10 +73,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		]
 	 */
 	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=false) {
-		Mage::log($ids, null, "getDetails.log");
-		Mage::log((int)$isAllowedToCampaign, null, "getDetails.log");
-		Mage::log("STORE ID: ".(int)$storeId, null, "getDetails.log");
-
+		
 		$out = array();
 		
 		
@@ -92,8 +89,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 				"var" => rand(0,10000),
 			));
 		}
-
-
+		
 		// Child data
 		foreach($this->getChilds($ids, $storeId) as $child){
 			if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']])){
@@ -130,8 +126,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		foreach($this->_getCampaign($ids, $storeId, $isAllowedToCampaign) as $campaign){
 			$out[$campaign['entity_id']]['campaign'] = $campaign;
 		}
-		Mage::log($this->getChilds($ids, $storeId), null, "getDetails.log");
-		Mage::log("-----------------", null, "getDetails.log");
+		
 		// Make flat arrays
 		foreach ($out as &$item){
 			if(isset($item['children'])){
@@ -155,12 +150,19 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$collection = Mage::getResourceModel('catalog/product_collection');
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		
-		$collection->addAttributeToSelect(array(
-			"price", 
-			"special_price", 
-			//"campaign_regular_id",
-			"msrp"
-		), 'left');
+
+		$collection->joinAttribute(
+			"msrp",
+			'catalog_product/msrp',
+			'entity_id', null, 'left', $storeId);
+		$collection->joinAttribute(
+			"special_price",
+			'catalog_product/special_price',
+			'entity_id', null, 'left', $storeId);
+		$collection->joinAttribute(
+			"price",
+			'catalog_product/price',
+			'entity_id', null, 'left', $storeId);
 		$collection->joinAttribute(
 			"campaign_regular_id",
 			'catalog_product/campaign_regular_id',
@@ -190,8 +192,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->where("e.entity_id IN (?)", $ids);
 		
 		$results = $this->getReadConnection()->fetchAll($select);
-		Mage::log((string)$select, null, "getDetails_X.log");
-
+		
 		
 		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
 		
