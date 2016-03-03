@@ -158,9 +158,13 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$collection->addAttributeToSelect(array(
 			"price", 
 			"special_price", 
-			"campaign_regular_id",
+			//"campaign_regular_id",
 			"msrp"
 		), 'left');
+		$collection->joinAttribute(
+			"campaign_regular_id",
+			'catalog_product/campaign_regular_id',
+			'entity_id', null, 'left', $storeId);
 		
 		$select = $collection->getSelect();
 		
