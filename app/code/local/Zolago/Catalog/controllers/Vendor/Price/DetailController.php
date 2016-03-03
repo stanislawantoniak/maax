@@ -246,8 +246,8 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		//$collection->addStoreFilter($store->getId());
 		$collection->addWebsiteFilter($websiteId);
 
-		$collection->addIdFilter($ids);
-		Mage::log($collection->getData(), null, "price_detail.log");
+		//$collection->addIdFilter($ids);
+		Mage::log($collection->getSelect()->__toString(), null, "price_detail.log");
 		if($collection->getSize()<count($ids)){
 			throw new Mage_Core_Exception("You are trying to edit not your product");
 		}
