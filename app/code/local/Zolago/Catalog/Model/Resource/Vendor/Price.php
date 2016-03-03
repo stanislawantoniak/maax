@@ -73,7 +73,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		]
 	 */
 	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=false) {
-		
+
 		$out = array();
 		
 		
@@ -150,12 +150,23 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$collection = Mage::getResourceModel('catalog/product_collection');
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		
-		$collection->addAttributeToSelect(array(
-			"price", 
-			"special_price", 
+
+		$collection->joinAttribute(
+			"msrp",
+			'catalog_product/msrp',
+			'entity_id', null, 'left', $storeId);
+		$collection->joinAttribute(
+			"special_price",
+			'catalog_product/special_price',
+			'entity_id', null, 'left', $storeId);
+		$collection->joinAttribute(
+			"price",
+			'catalog_product/price',
+			'entity_id', null, 'left', $storeId);
+		$collection->joinAttribute(
 			"campaign_regular_id",
-			"msrp"
-		), 'left');
+			'catalog_product/campaign_regular_id',
+			'entity_id', null, 'left', $storeId);
 		
 		$select = $collection->getSelect();
 		
@@ -181,7 +192,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->where("e.entity_id IN (?)", $ids);
 		
 		$results = $this->getReadConnection()->fetchAll($select);
-		
+
 		
 		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
 		
