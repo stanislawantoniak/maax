@@ -170,7 +170,7 @@ define([
 			if(!data.campaign){
 				buttons.push({"label": Translator.translate("Change prices"), className: "signle-price-edit editable"});
 			}
-			
+			console.log(data);
 			switch(data.type_id){
 				case "configurable":
 					if(data.children){
