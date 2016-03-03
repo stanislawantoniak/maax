@@ -268,6 +268,9 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		//sort(-entity_id)
 		if(preg_match("/sort\((\-|\+)(\w+)\)/", $query, $matches)){
 			if(in_array($matches[2], $this->_getAvailableSortParams())){
+				if ($matches[2] == 'is_in_stock') {
+					$matches[2] = 'stock_qty';
+				}
 				return array(
 					"order"=>$matches[2], 
 					"dir"=>$matches[1]=="+" ? 
