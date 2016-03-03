@@ -9,7 +9,7 @@ $configMax = array();
 $addDummies = false;
 foreach($config as $k=>$c) {
 	$configMax[$k] = $k * $c;
-	if($configMax[$k] > $vendorsCount) {
+	if($configMax[$k] >= $vendorsCount) {
 		$addDummies = true;
 	}
 }
