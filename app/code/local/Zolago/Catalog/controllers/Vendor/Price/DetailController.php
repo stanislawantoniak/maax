@@ -212,22 +212,7 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		$this->loadLayout();
 		$this->renderLayout();
 	}
-	/**
-	 * @return Zolago_Catalog_Model_Resource_Vendor_Price_Collection
-	 */
-	protected function _getCollection() {
-		if(!$this->_collection) {
-			// Add extra fields
-			$collection = $this->_prepareCollection();
-			$collection->addAttributes();
-			$collection->joinAdditionalData();
 
-			Mage::log($collection->getData(), null, "detail_prices.log");
-			$this->_collection = $collection;
-
-		}
-		return $this->_collection;
-	}
 	/**
 	 * Details action (JSON)
 	 */
@@ -239,15 +224,9 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		$storeId = $this->getRequest()->getParam("store");
 		$out = array();
 		
-		$collection = $this->_getCollection();
-
-
-		$websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
-		//$collection->addStoreFilter($store->getId());
-		$collection->addWebsiteFilter($websiteId);
-
-		//$collection->addIdFilter($ids);
-		Mage::log($collection->getSelect()->__toString(), null, "price_detail.log");
+		$collection = $this->_prepareCollection();
+		$collection->addIdFilter($ids);
+		Mage::log($collection->getData(), null, "details.log");
 		if($collection->getSize()<count($ids)){
 			throw new Mage_Core_Exception("You are trying to edit not your product");
 		}
