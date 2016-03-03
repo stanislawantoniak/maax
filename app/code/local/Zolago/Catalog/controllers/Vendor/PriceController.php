@@ -74,6 +74,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             /** @var Zolago_Catalog_Model_Product $collection */
             $prodCollection = Mage::getModel('catalog/product')
                               ->getCollection()
+                              ->setStore($storeId)
                               ->addAttributeToFilter('entity_id', array('in' => $priceCollection->getAllIds()))
                               ->addAttributeToSelect(array('skuv','name','campaign_regular_id'));
 

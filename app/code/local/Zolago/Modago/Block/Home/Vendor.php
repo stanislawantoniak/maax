@@ -41,6 +41,45 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 		}
 		return $this->getData("vendor_collection");
 	}
+
+	public function addDummyVendorsToCollection(&$collection,$configMax) {
+		$collectionSize = $collection->count();
+
+		$dummyVendorsCount = array();
+		for($i = 2; $i <= 8; $i++) {
+			$dummyVendorsCount[$i] = $collectionSize % $i;
+		}
+
+		foreach($dummyVendorsCount as $cols=>$num) {
+			if($num) {
+				$dummyVendorsCount[$cols] = $cols - $num;
+			}
+		}
+
+		$dummyVendor = new Zolago_Dropship_Model_Vendor();
+		$dummyVendor
+			->setDummy(true)
+			->setVendorResizedLogoUrl($this->getSkinUrl('images/brand_comming.png'))
+			->setVendorName(Mage::helper("zolagomodago")->__("Next soon"));
+
+		$maxDummies = max($dummyVendorsCount);
+
+		for ($i = 0; $i < $maxDummies; $i++) {
+			$classesToAdd = "brands-dummy";
+
+			foreach($dummyVendorsCount as $col => $num) {
+				if($collectionSize >= $configMax[$col] || $num <= $i) {
+					$classesToAdd .= ' hidden-'.$col;
+				}
+			}
+
+			$clonedDummy = clone($dummyVendor);
+			$clonedDummy->setClasses($classesToAdd);
+
+			$collection->addItem($clonedDummy);
+		}
+
+	}
 	
 	/**
 	 * @param Unirgy_Dropship_Model_Vendor $vendor
