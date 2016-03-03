@@ -109,30 +109,41 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
         /** @var Mage_Checkout_Helper_Cart $cartHelper */
         $cartHelper = Mage::helper('checkout/cart');
         $quote = $cartHelper->getQuote();
-        $items = $quote->getAllItems();
+        $items = $quote->getAllItems(); // In this array they are items from quota + items that could not be added to quota (they don't have item_id)
+		$productId = $this->_getProductIdFromRequest();
         // Default out of stock message
         $e->setMessage("We apologize, but someone just placed an order for the last item. Availability status will be updated at the next time entering to the product card.");
         $details = array("error_type" => "product-unavailable", 'title_section' => $this->__("The product is temporarily unavailable"));
         // Checking if in quote is similar product
-        foreach ($items as $item) {
-            /** @var Zolago_Catalog_Model_Product $product */
-            $product = $item->getProduct();
-            $inBasketFlag = true;
-            foreach ($superAttribute as $attributeId => $value) {
-                $attribute = Mage::getSingleton('eav/config')->getAttribute($product->getResource()->getEntityType(), $attributeId);
-                $attributeCode = $attribute->getAttributeCode();
-                if ($product->getData($attributeCode) != $value) {
-                    $inBasketFlag = false;
-                    break;
-                }
-            }
-            if ($inBasketFlag) {
-                /** @var $e Mage_Core_Exception */
-                $e->setMessage("Unfortunately, you can't add another product to the cart because it already contains last item. Quickly place the order before the product will disappear from the store.");
-                $details = array("error_type" => "already-in-the-basket", 'title_section' => $this->__("The product is already in the basket"));
-                break;
-            }
-        }
+		foreach ($items as $item) {
+			/** @var Mage_Sales_Model_Quote_Item $item */
+			/** @var Zolago_Catalog_Model_Product $product */
+			$product = $item->getProduct();
+			$parentItem = $item->getParentItem();
+			// skip items that could not be added to cart (they don't have item_id)
+			// and with that same product_id as just tried added product
+			if ($item->getId() && ($item->getProduct()->getId() == $productId ||
+					(	$parentItem instanceof Mage_Sales_Model_Quote_Item &&
+						$parentItem->getProduct() instanceof Mage_Catalog_Model_Product &&
+						$parentItem->getProduct()->getId() == $productId))
+			) {
+				$inBasketFlag = false;
+				foreach ($superAttribute as $attributeId => $value) {
+					$attribute = Mage::getSingleton('eav/config')->getAttribute($product->getResource()->getEntityType(), $attributeId);
+					$attributeCode = $attribute->getAttributeCode();
+					if ($product->getData($attributeCode) == $value) {
+						$inBasketFlag = true;
+						break;
+					}
+				}
+				if ($inBasketFlag) {
+					/** @var $e Mage_Core_Exception */
+					$e->setMessage("Unfortunately, you can't add another product to the cart because it already contains last item. Quickly place the order before the product will disappear from the store.");
+					$details = array("error_type" => "already-in-the-basket", 'title_section' => $this->__("The product is already in the basket"));
+					break;
+				}
+			}
+		}
         $this->_processException($e, $details);
     }
 
