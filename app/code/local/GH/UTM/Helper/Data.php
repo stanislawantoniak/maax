@@ -54,7 +54,7 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 		$customerSession = Mage::getSingleton('customer/session');
 		/** @var Zolago_Customer_Model_Customer $customer */
 		$customer = $customerSession->getCustomer();
-
+		
 		//handle exceptions
 		if(!empty($exceptions) &&
 			isset($newUtmData['utm_source']) &&
@@ -65,7 +65,11 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 
 		//set time
-		$newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME] = Mage::getModel('core/date')->gmtTimestamp();
+		$cookieExpiry = Mage::getModel('core/date')->gmtTimestamp() + $this->getCookieExpiry();
+		if(!isset($newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME]) || !$newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME]) {
+			$newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME] = $cookieExpiry;
+		}
+
 		$newUtmDataJson = json_encode($newUtmData);
 
 		if($customer->getId()) {
@@ -74,7 +78,6 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 			$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
 			$cacheHelper->removeCacheCustomerUtmData();
 		}
-		$cookieExpiry = $newUtmData[GH_UTM_Model_Source::GHUTM_DATE_NAME] + $this->getCookieExpiry();
 
 		setcookie(GH_UTM_Model_Source::GHUTM_COOKIE_NAME,$newUtmDataJson,$cookieExpiry,"/");
 

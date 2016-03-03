@@ -29,6 +29,19 @@
 			</ghutm_setup>
 		</resources>
 	</global>
+	<frontend>
+		<events>
+			<customer_login>
+				<observers>
+					<ghutm_customer_login>
+						<type>singleton</type>
+						<class>GH_UTM_Model_Observer</class>
+						<method>customerLogin</method>
+					</ghutm_customer_login>
+				</observers>
+			</customer_login>
+		</events>
+	</frontend>
 	<adminhtml>
 		<acl>
 			<resources>
