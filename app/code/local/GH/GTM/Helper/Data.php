@@ -23,7 +23,10 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 			/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
 			$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
 			$data['visitorHasSubscribed'] = $cacheHelper->getVisitorHasSubscribed();
-			$data = array_merge($data, json_decode($cacheHelper->getCustomerUtmData()), 1);
+			$json = json_decode($cacheHelper->getCustomerUtmData(), 1);
+			if (is_array($json)) {
+				$data = array_merge($data, $json);
+			}
 		} else {
 			$data['visitorHasAccount'] = 'no';
 		}
