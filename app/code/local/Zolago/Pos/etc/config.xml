@@ -116,17 +116,6 @@
 				</zolagopos>
 			</updates>
 		</layout>
-		<events>
-			<controller_action_layout_render_before_udpoadmin_order_po_view>
-                <observers>
-					<zolagopos>
-						<type>singleton</type>
-						<class>zolagopos/observer</class>
-						<method>addPosInfoToOrderInfo</method>
-					</zolagopos>
-				</observers>
-            </controller_action_layout_render_before_udpoadmin_order_po_view>
-		</events>
 	</adminhtml>
 	<admin>
 		<routers>

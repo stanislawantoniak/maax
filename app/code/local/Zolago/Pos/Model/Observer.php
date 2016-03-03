@@ -2,16 +2,6 @@
 class Zolago_Pos_Model_Observer {
 
 	const ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT = 100;
-
-	public function addPosInfoToOrderInfo() {
-		if (($soi = Mage::app()->getLayout()->getBlock('order_info'))
-            && ($po = Mage::registry('current_udpo'))
-			&& $po->getDefaultPosId())
-        {
-			//$soi->setDefaultPosId($po->getDefaultPosId());
-			//$soi->setDefaultPosName($po->getDefaultPosName());
-		}
-	}
 	
 	public function udpoOrderSaveBefore($observer) { // After
 		$udpos = $observer->getUdpos();
