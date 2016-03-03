@@ -89,7 +89,7 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
         $collection->setStoreId($storeId);
         $collection->addAttributes();
         $collection->joinAdditionalData();
-        $storeId = $this->_getStoreId();
+
         $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
         //$collection->addStoreFilter($store->getId());
         $collection->addWebsiteFilter($websiteId);
