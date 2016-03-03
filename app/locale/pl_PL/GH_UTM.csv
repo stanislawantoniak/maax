@@ -1,0 +1,7 @@
+"No data","Brak danych"
+"Traffic source","Źródło ruchu"
+"Traffic Sources","Źródła ruchu"
+"Cookie expiry time","Czas wygaśnięcia cookie"
+"Sources exceptions","Wyjątki źródeł"
+"in days","w dniach"
+"Separate values by comma. Those sources won't overwrite existing traffic source (unless it's empty)","Rozdziel wartości przecinkami. Te źródła nie będą nadpisywać istniejących już wpisów o źródłach ruchu. Będą się zapisywały tylko jeżeli źródło wcześniej nie istniało"

@@ -65,12 +65,20 @@
 				</admin>
 			</resources>
 		</acl>
+		<translate>
+			<modules>
+				<GH_UTM>
+					<files>
+						<default>GH_UTM.csv</default>
+					</files>
+				</GH_UTM>
+			</modules>
+		</translate>
 	</adminhtml>
 	<default>
 		<ghutm>
 			<config>
 				<cookie_days>30</cookie_days>
-				<exceptions>google</exceptions>
 			</config>
 		</ghutm>
 	</default>
