@@ -140,13 +140,14 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			$select->order($sort['order'] . " " . $sort['dir']);
 		}
 
-		// Pepare total
+		// Prepare total
 		$totalSelect = clone $select;
 		$adapter = $select->getAdapter();
 
 		$totalSelect->reset(Zend_Db_Select::COLUMNS);
 		$totalSelect->reset(Zend_Db_Select::ORDER);
 		$totalSelect->resetJoinLeft();
+		$totalSelect->columns('e.entity_id');
 		$isInStockFilter = Mage::app()->getRequest()->getQuery('is_in_stock');
 		if (!is_null($isInStockFilter)) {
 			/**
@@ -157,10 +158,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			 */
 			$this->joinChildQuantities($totalSelect);
 		}
-		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id) AS count"));
 
-		$total = $adapter->fetchRow($totalSelect);
-		$total = isset($total['count']) ? $total['count'] : 0;
+		$finalTotalSelect = "SELECT COUNT(ts.entity_id) AS count FROM ({$totalSelect}) as ts";
+		$total = (int)$adapter->fetchOne($finalTotalSelect);
+
 		// Prepare range
 		$start = $range['start'];
 		$end = $range['end'];
