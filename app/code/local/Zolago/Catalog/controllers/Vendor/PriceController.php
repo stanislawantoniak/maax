@@ -323,7 +323,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
             $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
             //$collection->addStoreFilter($store->getId());
             $collection->addWebsiteFilter($websiteId);
-Mage::log($collection, null, "prices.log");
+Mage::log($collection->getData(), null, "prices.log");
             $this->_collection = $collection;
 
         }
