@@ -53,6 +53,12 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Cus
             'content'   => $this->getLayout()->createBlock('zolagoadminhtml/customer_edit_tab_offline')->initForm()->toHtml(),
             'active'    => Mage::registry('current_customer')->getId() ? false : true
         ));
+	    $this->addTab('tab_customer_ghutm', array(
+		    'label' => Mage::helper('ghutm')->__('Traffic source'),
+		    'title' => Mage::helper('ghutm')->__('Traffic source'),
+		    'content'   => $this->getLayout()->createBlock('zolagoadminhtml/customer_edit_tab_ghutm')->initForm()->toHtml(),
+		    'active'    => Mage::registry('current_customer')->getId() ? false : true
+	    ));
         $this->_updateActiveTab();
         Mage_Adminhtml_Block_Widget_Tabs::_beforeToHtml();
         return $this;
