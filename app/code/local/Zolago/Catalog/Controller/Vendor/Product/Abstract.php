@@ -323,6 +323,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				$out[] = $column->getAttribute()->getAttributeCode();
 			}
 		}
+		$out[] = 'is_in_stock';
 		return $out;
 	}
 	
