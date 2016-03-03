@@ -36,7 +36,7 @@ class Zolago_Pos_Model_Observer {
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
 		$collection->addActiveFilter();
-		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_ASC);
+		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
 
 		if ($collection->count() == 1)
 			return $collection->getFirstItem();
@@ -58,7 +58,7 @@ class Zolago_Pos_Model_Observer {
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
 		$collection->addActiveFilter();
-		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_ASC);
+		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
 		return $collection;
 	}
 
