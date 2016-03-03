@@ -72,8 +72,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		   ...
 		]
 	 */
-	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=false) {
-		
+	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=true) {
+		Mage::log($ids, null, "getDetails.log");
+		Mage::log((int)$isAllowedToCampaign, null, "getDetails.log");
+		Mage::log("-----------------", null, "getDetails.log");
 		$out = array();
 		
 		
