@@ -9,6 +9,8 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 		$data = array();
 		/** @var Zolago_Customer_Model_Session $customerSession */
 		$customerSession = Mage::getSingleton('customer/session');
+		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
 
 		// visitorHasSubscribed - by default 'no'
 		$data['visitorHasSubscribed'] = 'no';
@@ -20,14 +22,35 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 			$data['visitorHasAccount'] = 'yes';
 
 			//visitorHasSubscribed
-			/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
-			$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
 			$data['visitorHasSubscribed'] = $cacheHelper->getVisitorHasSubscribed();
-			$json = json_decode($cacheHelper->getCustomerUtmData(), 1);
-			if (is_array($json)) {
-				$data = array_merge($data, $json);
+			$utmData = json_decode($cacheHelper->getCustomerUtmData(), 1);
+			if (is_array($utmData)) {
+				$data = array_merge($data, $utmData);
 			}
 		} else {
+			// Add info about UTMs - start
+			$origUtmData = Mage::app()->getRequest()->getParam('utm_data');
+			$cookie = $this->getUtmDataCookieProcessed();
+			$haveCookie = !empty($cookie);
+
+			if ($haveCookie) {
+				if (empty($origUtmData)) { // don't have UTM: DataLayer from cookie
+					$utmData = $this->getUtmDataCookieProcessed(true);
+				} else { // have UTM: DataLayer from variable
+					$utmData = $this->getUtmDataProcessed($origUtmData);
+				}
+			} else { // no cookie
+				if (empty($origUtmData)) { // don't have UTM
+					// nothing to do
+					$utmData = array();
+				} else { // have UTM: DataLayer from variable
+					$utmData = $this->getUtmDataProcessed($origUtmData);
+				}
+			}
+			if (!empty($utmData)) {
+				$data = array_merge($data, $utmData);
+			}
+			// Add info about UTMs - end
 			$data['visitorHasAccount'] = 'no';
 		}
 
@@ -39,6 +62,40 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @param $utmDataParam
+	 * @return array
+	 */
+	public function getUtmDataProcessed($utmDataParam) {
+		$utmData = json_decode($utmDataParam, 1);
+		if (!is_array($utmData)) {
+			$utmData = array();
+		}
+		return $utmData;
+	}
+
+	/**
+	 * @param bool $asArray
+	 * @return array|string
+	 */
+	public function getUtmDataCookieProcessed($asArray = true) {
+//		/** @var GH_UTM_Helper_Data $utmHelper */
+//		$utmHelper		= Mage::helper('ghutm');
+//		$cookie			= $utmHelper->getCookie();
+//		$regCookie		= Mage::registry("utm_data_cookie");
+//		$value			= $cookie ? $cookie : $regCookie;
+		$value			= '{"utm_campaign":"wyprz"}'; // todo remove
+
+		if ($asArray) {
+			$utmData = json_decode($value, 1);
+			if (!is_array($utmData)) {
+				return array();
+			}
+			return $utmData;
+		}
+		return $value;
 	}
 
 	const CONTEXT_PATH_SEARCH = "search/index/index";

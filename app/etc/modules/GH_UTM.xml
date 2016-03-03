@@ -4,6 +4,10 @@
         <GH_UTM>
             <active>true</active>
             <codePool>local</codePool>
+			<depends>
+				<GH_GTM/>
+				<Zolago_Customer/>
+			</depends>
         </GH_UTM>
     </modules>
 </config>
