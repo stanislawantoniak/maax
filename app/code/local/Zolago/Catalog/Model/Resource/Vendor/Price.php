@@ -149,23 +149,23 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		$collection = Mage::getResourceModel('catalog/product_collection');
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-		
+
 
 		$collection->joinAttribute(
-			"msrp",
-			'catalog_product/msrp',
+			"price",
+			'catalog_product/price',
 			'entity_id', null, 'left', $storeId);
 		$collection->joinAttribute(
 			"special_price",
 			'catalog_product/special_price',
 			'entity_id', null, 'left', $storeId);
 		$collection->joinAttribute(
-			"price",
-			'catalog_product/price',
-			'entity_id', null, 'left', $storeId);
-		$collection->joinAttribute(
 			"campaign_regular_id",
 			'catalog_product/campaign_regular_id',
+			'entity_id', null, 'left', $storeId);
+		$collection->joinAttribute(
+			"msrp",
+			'catalog_product/msrp',
 			'entity_id', null, 'left', $storeId);
 		
 		$select = $collection->getSelect();
