@@ -1825,7 +1825,7 @@ Mall.utm = {
 		return query_string;
 	},
 	setUtmsUpdate: function() {
-		Mall.reg.set('utm_data',JSON.stringify(this.utms));
+		Mall.reg.set('utm_data',JSON.stringify(this.utm_data));
 	}
 };
 

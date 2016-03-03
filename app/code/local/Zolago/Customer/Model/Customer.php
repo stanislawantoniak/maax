@@ -4,6 +4,7 @@
  * Customer model
  *
  * @method string getEmail()
+ * @method string getUtmData()
  */
 class Zolago_Customer_Model_Customer extends Mage_Customer_Model_Customer
 {

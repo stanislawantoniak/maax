@@ -162,6 +162,29 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		return $this->removeCacheCustomer('favorites_count');
 	}
 
+	public function getCustomerUtmData() {
+		$key = $this->getCacheKeyForCustomerInfo();
+		if ($this->canUseCache()) {
+			$cacheData = $this->loadFromCache($key);
+			if (!empty($cacheData)) {
+				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+			}
+			if (isset($cacheData['utm_data'])) {
+				return $cacheData['utm_data'];
+			}
+		}
+		/** @var Zolago_Customer_Model_Session $customerSession */
+		$customerSession = Mage::getSingleton('customer/session');
+		/** @var Zolago_Customer_Model_Customer $customer */
+		$customer = $customerSession->getCustomer();
+		$this->customerInfo['utm_data'] = $customer->getUtmData(); // raw json
+		return $this->customerInfo['utm_data'];
+	}
+
+	public function removeCacheCustomerUtmData() {
+		return $this->removeCacheCustomer('utm_data');
+	}
+
 	/**
 	 * Array of favorites products ids
 	 *
