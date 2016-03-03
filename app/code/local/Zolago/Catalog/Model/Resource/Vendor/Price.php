@@ -93,8 +93,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 			));
 		}
 
-		Mage::log($this->getChilds($ids, $storeId), null, "getDetails.log");
-		Mage::log("-----------------", null, "getDetails.log");
+
 		// Child data
 		foreach($this->getChilds($ids, $storeId) as $child){
 			if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']])){
@@ -131,7 +130,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		foreach($this->_getCampaign($ids, $storeId, $isAllowedToCampaign) as $campaign){
 			$out[$campaign['entity_id']]['campaign'] = $campaign;
 		}
-		
+		Mage::log($this->getChilds($ids, $storeId), null, "getDetails.log");
+		Mage::log("-----------------", null, "getDetails.log");
 		// Make flat arrays
 		foreach ($out as &$item){
 			if(isset($item['children'])){
@@ -186,7 +186,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->where("e.entity_id IN (?)", $ids);
 		
 		$results = $this->getReadConnection()->fetchAll($select);
-		
+		Mage::log($select, null, "getDetails_X.log");
+
 		
 		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
 		
