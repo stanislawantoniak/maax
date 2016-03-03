@@ -225,8 +225,6 @@ var Mall = {
                 }
             });
         }
-        // replace favorites url
-        jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
 
         // add footer persistent infos
         //but not in checkout
