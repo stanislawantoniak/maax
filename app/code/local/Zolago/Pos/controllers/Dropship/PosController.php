@@ -87,7 +87,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 	 * Save Pos
 	 */
 	public function saveAction() {
-
+		$helper = Mage::helper('zolagopos');
 		$pos = $this->_registerModel();
 		$vendor = $this->_getSession()->getVendor();
 
