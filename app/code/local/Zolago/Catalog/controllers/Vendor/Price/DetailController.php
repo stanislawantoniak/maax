@@ -221,11 +221,8 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 			$collection = $this->_prepareCollection();
 			$collection->addAttributes();
 			$collection->joinAdditionalData();
-			$storeId = $this->_getStoreId();
-			$websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
-			//$collection->addStoreFilter($store->getId());
-			$collection->addWebsiteFilter($websiteId);
-			Mage::log($collection->getData(), null, "prices.log");
+
+			Mage::log($collection->getData(), null, "detail_prices.log");
 			$this->_collection = $collection;
 
 		}
@@ -243,6 +240,12 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		$out = array();
 		
 		$collection = $this->_getCollection();
+
+
+		$websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
+		//$collection->addStoreFilter($store->getId());
+		$collection->addWebsiteFilter($websiteId);
+
 		$collection->addIdFilter($ids);
 		Mage::log($collection->getData(), null, "price_detail.log");
 		if($collection->getSize()<count($ids)){
