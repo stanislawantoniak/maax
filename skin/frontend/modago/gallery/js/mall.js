@@ -118,10 +118,11 @@ var Mall = {
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
 				"category_id": Mall.reg.get("varnish_category_id"),
-	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
-                ,"crosssell_ids": jQuery('#complementary_product .like').map(function() {
+	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0,
+                "crosssell_ids": jQuery('#complementary_product .like').map(function() {
                     return jQuery(this).attr("data-idproduct");
-                }).get()
+                }).get(),
+	            "utm_data": Mall.reg.get('utm_data')
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -1775,22 +1776,34 @@ Mall.debug = {
 Mall.utm = {
 	cookieName: 'ghutm',
 	attrPrefix: 'utm_',
+	superiorAttr: 'utm_source',
+	utm_data: false,
+
 	init: function() {
-		var utms = this.getUtms(),
-			properties = Object.getOwnPropertyNames(utms).sort(), //it is important that it's sorted here
-			propertiesNum = properties.length;
+		this.utm_data = this.getUtms();
+		var properties = Object.getOwnPropertyNames(this.utm_data),
+			cookieVal = Mall.Cookie.get(this.cookieName);
 
-		if(propertiesNum) {
-			var sortedUtms = {},
-				cookieVal;
-			for (var i = 0; i < propertiesNum; i++) {
-				var k = properties[i];
-				sortedUtms[k] = utms[k];
-			}
-
-			var utmsJson = JSON.stringify(sortedUtms);
-			if(!(cookieVal = Mall.Cookie.get(this.cookieName) && cookieVal == utmsJson)) {
-				//todo: do ajax request with utmsJson
+		if(properties.length) { //act only if there are utm_ attributes in href
+			if (!cookieVal) {
+				this.setUtmsUpdate();
+				return;
+			} else {
+				try {
+					var cookieObj = JSON.parse(cookieVal);
+					for(var utmName in this.utm_data) {
+						if(!cookieObj.hasOwnProperty(utmName) || cookieObj[utmName] != this.utm_data[utmName]) {
+							//cookie does not contain one of utm keys provided by url or
+							//cookie has different value than utms in url
+							this.setUtmsUpdate();
+							return;
+						}
+						
+					}
+				} catch (e) {
+					//catches json parse error which means that cookie has wrong value so we need to create new one
+					this.setUtmsUpdate();
+				}
 			}
 		}
 	},
@@ -1810,6 +1823,9 @@ Mall.utm = {
 		}
 
 		return query_string;
+	},
+	setUtmsUpdate: function() {
+		Mall.reg.set('utm_data',JSON.stringify(this.utms));
 	}
 };
 

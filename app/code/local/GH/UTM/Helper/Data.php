@@ -43,4 +43,10 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 		return explode(",",Mage::getStoreConfig(GH_UTM_Model_Source::GHUTM_CONFIG_PATH_EXCEPTIONS));
 	}
 
+	public function setUtmCustomer(Mage_Customer_Model_Customer $customer) {
+		$utmData = json_decode($customer->getUtmData(),1);
+		//todo: finish this
+
+	}
+
 }

@@ -59,6 +59,13 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$recentlyViewed = (bool)$this->getRequest()->getParam("recently_viewed");
 //		$categoryId = $this->getRequest()->getParam("category_id");
 
+	    $utmData = $this->getRequest()->getParam('utm_data');
+	    if($utmData) {
+		    /** @var GH_UTM_Helper_Data $utmHelper */
+		    $utmHelper = Mage::helper('ghutm');
+		    $utmHelper->updateUtmData($utmData);
+	    }
+
 		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
 		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
 
