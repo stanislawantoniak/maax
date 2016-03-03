@@ -197,7 +197,7 @@ class Zolago_Pos_Model_Observer {
 			        $udpo->setDefaultPosName($pos->getName());
 			        $udpo->save();
 			    } else {
-			        $posList = $this->getVendorPoses($vendor->getId());
+			        $posList = self::getVendorPoses($vendor->getId());
 			        $pos = $posList->getFirstItem();
 			        if ($pos->getId()) {
     			        $udpo->setDefaultPosId($pos->getId());
