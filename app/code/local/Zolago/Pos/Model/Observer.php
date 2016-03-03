@@ -51,7 +51,7 @@ class Zolago_Pos_Model_Observer {
 
 	}
 
-	protected function getVendorPOSes($vendorId){
+	public function getVendorPOSes($vendorId){
 		$vendor = Mage::getModel("udropship/vendor")->load($vendorId);
 		/* @var $vendor Unirgy_Dropship_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
@@ -62,7 +62,7 @@ class Zolago_Pos_Model_Observer {
 		return $collection;
 	}
 
-    public function setAppropriatePoPos(){
+    public static function setAppropriatePoPos(){
 		//1. Get POs for recalculate  POSes
 		/* @var $vendor Zolago_Po_Model_Po */
 		$collection = Mage::getModel("zolagopo/po")->getCollection();
@@ -137,7 +137,7 @@ class Zolago_Pos_Model_Observer {
 		$poses = array();
 
 		foreach ($data as $vendorId => $dataPerPO) {
-			$vendorPOSes = $this->getVendorPOSes($vendorId);
+			$vendorPOSes = self::getVendorPOSes($vendorId);
 
 			//Hm Vendor doesn't have POSes!!!
 			if ($vendorPOSes->count() == 0)
@@ -197,7 +197,7 @@ class Zolago_Pos_Model_Observer {
 			        $udpo->setDefaultPosName($pos->getName());
 			        $udpo->save();
 			    } else {
-			        $posList = $this->getVendorPoses($vendor->getId());
+			        $posList = self::getVendorPoses($vendor->getId());
 			        $pos = $posList->getFirstItem();
 			        if ($pos->getId()) {
     			        $udpo->setDefaultPosId($pos->getId());
