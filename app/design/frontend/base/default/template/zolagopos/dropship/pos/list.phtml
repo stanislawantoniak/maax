@@ -1,0 +1,15 @@
+<br/>
+<div class="container z-grid">    
+	<div class="widget box">
+		<div class="widget-content">
+			<?php echo $this->getGridHtml(); ?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function(){
+	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	// create integrator
+	new Zolago.gridIntegrator(gridObj);
+})();;
+</script>

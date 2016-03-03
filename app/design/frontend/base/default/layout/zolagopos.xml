@@ -4,8 +4,12 @@
         <update handle="udropship_vendor" />
         <update handle="adminhtml_head" />
         <update handle="bootstrap" />
+        <update handle="noty" />
         <reference name="content">
-            <block type="zolagopos/dropship_pos" template="zolagopos/dropship/pos.phtml"/>
+            <block type="zolagopos/dropship_pos" template="zolagopos/dropship/pos.phtml" name="pos">
+                <block type="zolagopos/dropship_pos_list" name="pos_list" template="zolagopos/dropship/pos/list.phtml"/>
+                <block name="pos_settings" as="pos_settings" type="zolagopos/dropship_pos_settings" template="zolagopos/dropship/pos/settings.phtml"/>
+            </block>
         </reference>
 	</udropship_pos_index>
 	<udropship_pos_edit>

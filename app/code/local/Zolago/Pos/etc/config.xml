@@ -51,6 +51,18 @@
                 </observers>
             </udpo_order_save_before>
 		</events>
+		<udropship>
+		    <vendor>
+		        <fields>
+		            <problem_pos_id>	
+		                <label>Problem POS</label>
+                        <fieldset>vendor_info</fieldset>
+                        <source_model>zolagopos/source</source_model>
+                        <type>select</type>
+		            </problem_pos_id>
+		        </fields>
+		    </vendor>
+		</udropship>
 	</global>
 	<frontend>
 		<routers>
@@ -104,17 +116,6 @@
 				</zolagopos>
 			</updates>
 		</layout>
-		<events>
-			<controller_action_layout_render_before_udpoadmin_order_po_view>
-                <observers>
-					<zolagopos>
-						<type>singleton</type>
-						<class>zolagopos/observer</class>
-						<method>addPosInfoToOrderInfo</method>
-					</zolagopos>
-				</observers>
-            </controller_action_layout_render_before_udpoadmin_order_po_view>
-		</events>
 	</adminhtml>
 	<admin>
 		<routers>
@@ -127,4 +128,17 @@
 			</adminhtml>
 		</routers>
 	</admin>
+	<crontab>
+		<jobs>
+			<zolagopos_set_appropriate_po_pos>
+				<schedule>
+					<!-- Run every 5 minutes -->
+					<cron_expr>*/5 * * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>zolagopos/observer::setAppropriatePoPos</model>
+				</run>
+			</zolagopos_set_appropriate_po_pos>
+		</jobs>
+	</crontab>
 </config>
