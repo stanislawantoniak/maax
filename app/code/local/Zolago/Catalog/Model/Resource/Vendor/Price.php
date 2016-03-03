@@ -76,7 +76,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		Mage::log($ids, null, "getDetails.log");
 		Mage::log((int)$isAllowedToCampaign, null, "getDetails.log");
 		Mage::log("STORE ID: ".(int)$storeId, null, "getDetails.log");
-		Mage::log("-----------------", null, "getDetails.log");
+
 		$out = array();
 		
 		
@@ -92,7 +92,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 				"var" => rand(0,10000),
 			));
 		}
-		
+
+		Mage::log($this->getChilds($ids, $storeId), null, "getDetails.log");
+		Mage::log("-----------------", null, "getDetails.log");
 		// Child data
 		foreach($this->getChilds($ids, $storeId) as $child){
 			if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']])){
