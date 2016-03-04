@@ -43,14 +43,14 @@ class Zolago_Catalog_Vendor_ProductController
                 $collection->addAttributeToFilter($key, $value);
             }
             $global = true;
-            $ids = $collection->getAllIds();
+			$ids = array();
+			$idName = $collection->getEntity()->getIdFieldName();
+			foreach ($collection->getData() as $row) {
+				$ids[] = (int)$row[$idName];
+			}
         }
 
         try {
-            array_walk($ids, function ($value) {
-                return (int)$value;
-            });
-
             $response = array(
                 "changed_ids" => $ids,
                 "global" => $global
