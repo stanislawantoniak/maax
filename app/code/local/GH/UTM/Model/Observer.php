@@ -48,7 +48,7 @@ class GH_UTM_Model_Observer {
 			/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
 			$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
 			$cacheHelper->removeCacheCustomerUtmData();
-			setcookie(GH_UTM_Model_Source::GHUTM_COOKIE_NAME,$finalUtmJson,$finalUtm[GH_UTM_Model_Source::GHUTM_DATE_NAME],"/");
+			$utmHelper->setCookie(GH_UTM_Model_Source::GHUTM_COOKIE_NAME,$finalUtmJson,$finalUtm[GH_UTM_Model_Source::GHUTM_DATE_NAME]);
 		}
 	}
 }
