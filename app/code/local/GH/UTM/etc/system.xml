@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<ghutm translate="label" module="ghutm">
+			<label>Traffic Sources</label>
+			<tab>customer</tab>
+			<sort_order>1000</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>0</show_in_store>
+			<groups>
+				<config translate="label" module="ghutm">
+					<label>Configuration</label>
+					<expanded>1</expanded>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<cookie_days translate="label">
+							<label>Cookie expiry time</label>
+							<comment>in days</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</cookie_days>
+						<exceptions translate="label">
+							<label>Sources exceptions</label>
+							<comment>Separate values by comma. Those sources won't overwrite existing traffic source (unless it's empty)</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</exceptions>
+					</fields>
+				</config>
+			</groups>
+		</ghutm>
+	</sections>
+</config>
