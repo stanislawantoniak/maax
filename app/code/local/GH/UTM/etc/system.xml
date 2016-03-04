@@ -29,7 +29,7 @@
 						<exceptions translate="label">
 							<label>Sources exceptions</label>
 							<comment>Separate values by comma. Those sources won't overwrite existing traffic source (unless it's empty)</comment>
-							<frontend_type>text</frontend_type>
+							<frontend_type>textarea</frontend_type>
 							<sort_order>20</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
