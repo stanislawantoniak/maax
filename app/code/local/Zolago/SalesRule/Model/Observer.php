@@ -41,12 +41,12 @@ class Zolago_SalesRule_Model_Observer {
 
         if($discount) {
             $discountInfo[$ruleId] = array(
-                                         "rule_id"			=> $ruleId,
-                                         "discount_amount"	=> $discount,
-                                         "name"				=> $rule->getName(),
-                                         "payer"				=> $rule->getRulePayer(),
-                                         "simple_action"		=> $rule->getSimpleAction()
-                                     );
+                "rule_id"			=> $ruleId,
+                "discount_amount"	=> $discount,
+                "name"				=> $rule->getName(),
+                "payer"				=> $rule->getRulePayer(),
+                "simple_action"		=> $rule->getSimpleAction()
+            );
         } else {
             unset($discountInfo[$ruleId]);
         }
@@ -130,24 +130,24 @@ class Zolago_SalesRule_Model_Observer {
         $model = Mage::registry('current_promo_quote_rule');
         /* @var $model Mage_SalesRule_Model_Rule */
         $fieldset->addField("rule_payer", "select", array(
-                                "label"		=> Mage::helper("zolagosalesrule")->__("Payer"),
-                                "values"	=> Mage::getSingleton('zolagosalesrule/rule_payer')->toOptionArray(),
-                                "name"		=> "rule_payer",
-                                "value"     => $model->getRulePayer()
-                            ), "name");
+            "label"		=> Mage::helper("zolagosalesrule")->__("Payer"),
+            "values"	=> Mage::getSingleton('zolagosalesrule/rule_payer')->toOptionArray(),
+            "name"		=> "rule_payer",
+            "value"     => $model->getRulePayer()
+        ), "name");
         $fieldset->addField("promotion_type", "select", array(
-                                "label"		=> Mage::helper("zolagosalesrule")->__("Promotion type"),
-                                "values"	=> Mage::getSingleton('zolagosalesrule/promotion_type')->toOptionArray(),
-                                "name"		=> "promotion_type",
-                                "value"     => $model->getPromotionType()
-                            ));
+            "label"		=> Mage::helper("zolagosalesrule")->__("Promotion type"),
+            "values"	=> Mage::getSingleton('zolagosalesrule/promotion_type')->toOptionArray(),
+            "name"		=> "promotion_type",
+            "value"     => $model->getPromotionType()
+        ));
         $localVendorId = Mage::helper('udropship')->getLocalVendorId();
         $fieldset->addField("campaign_id", "select", array(
-                                "label"		=> Mage::helper("zolagosalesrule")->__("Campaign"),
-                                "values"	=> Mage::getSingleton('zolagocampaign/source_campaign')->toOptionArray(true, $model->getId(),$localVendorId),
-                                "name"		=> "campaign_id",
-                                "value"     => $model->getCampaignId()
-                            ));
+            "label"		=> Mage::helper("zolagosalesrule")->__("Campaign"),
+            "values"	=> Mage::getSingleton('zolagocampaign/source_campaign')->toOptionArray(true, $model->getId(),$localVendorId),
+            "name"		=> "campaign_id",
+            "value"     => $model->getCampaignId()
+        ));
 //        $param = array(
 //                     "label" => Mage::helper('zolagosalesrule')->__('Promotion image file'),
 //                     "required" => false,
@@ -159,7 +159,7 @@ class Zolago_SalesRule_Model_Observer {
 //
 //        $fieldset->addField("promo_image", "image", $param);
     }
-    
+
     /**
      * send new coupons for all subscribers via cron
      */
@@ -168,7 +168,7 @@ class Zolago_SalesRule_Model_Observer {
         $collection = Mage::getModel('newsletter/subscriber')
             ->getCollection()
             ->addFieldToFilter("subscriber_status", Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
-            ;
+        ;
         $collection->getSelect()
             ->joinLeft(array("customer" => "customer_entity"),
                 "main_table.subscriber_email = customer.email",
@@ -194,12 +194,12 @@ class Zolago_SalesRule_Model_Observer {
         }
         Mage::helper('zolagosalesrule')->sendCouponMails($subscribers, $subscribersCustomersId, $subscribersCustomersSubscribers,$subscribersStore);
     }
-   /**
+    /**
      * Send new coupons to one subscriber
      */
     public static function sendSubscriberCouponMail(Varien_Event_Observer $observer)
     {
-	    /** @var Zolago_Salesrule_Helper_Data $helper */
+        /** @var Zolago_Salesrule_Helper_Data $helper */
         $model = $observer->getEvent()->getSubscriber();
         if ($model->getMailSendFlag()) {
             return;
@@ -217,5 +217,5 @@ class Zolago_SalesRule_Model_Observer {
         if (Mage::helper('zolagosalesrule')->sendCouponMails($subscribers, $subscribersCustomersId, $subscribersCustomersSubscribers,$subscribersStore) > 0) {
             $model->setMailSendFlag();
         }
-    }    
+    }
 }
