@@ -212,8 +212,6 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
-        Mage::log($url,null,'urlooooo.log');
-
         $pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
             ->setGeneratedUrl($url)
             ->setTemplate("zolagosolrsearch/catalog/product/list/pager.phtml");
