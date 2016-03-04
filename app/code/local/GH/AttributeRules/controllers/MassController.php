@@ -47,7 +47,12 @@ class GH_AttributeRules_MassController extends Zolago_Catalog_Vendor_ProductCont
                 foreach($restQuery as $key => $value){
                     $collection->addAttributeToFilter($key, $value);
                 }
-                $productIds = $collection->getAllIds();
+				// get all ids
+				$productIds = array();
+				$idName = $collection->getEntity()->getIdFieldName();
+				foreach ($collection->getData() as $row) {
+					$productIds[] = (int)$row[$idName];
+				}
             }
 
             /** @var $gridModel Zolago_Catalog_Model_Vendor_Product_Grid */
