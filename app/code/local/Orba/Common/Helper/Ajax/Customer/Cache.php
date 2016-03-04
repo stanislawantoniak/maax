@@ -28,24 +28,27 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$vendor = $micrositeHelper->getCurrentVendor();
 		$vId = (int)($vendor && $vendor->getId()) ? $vendor->getId() : 0;
 		if ($vId) {
-			return self::CACHE_NAME . 'search_vendor-' . $vId;
+			$key = self::CACHE_NAME . 'search_vendor-' . $vId;
+			return $key;
 		}
 		$currentCategory = Mage::registry('current_category');
 		$cId = (int)($currentCategory && $currentCategory->getId()) ? $currentCategory->getId() : (isset($params['category_id']) ? $params['category_id'] : 0);
 		$sId = (int)Mage::app()->getStore()->getId();
 		$rId = (int)Mage::app()->getStore()->getRootCategoryId();
-		return self::CACHE_NAME . 'search_category-' . $cId . '-' .$sId . '-' . $rId;
-
+		$key = self::CACHE_NAME . 'search_category-' . $cId . '-' .$sId . '-' . $rId;
+		return $key;
 	}
 
 	/**
+	 * @param int|bool $quoteId
 	 * @return string
 	 */
-	public function getCacheKeyForCart() {
+	public function getCacheKeyForCart($quoteId = false) {
 		/** @var Mage_Checkout_Model_Session $checkoutSession */
 		$checkoutSession = Mage::getSingleton('checkout/session');
-		$quoteId = $checkoutSession->getQuoteId();
-		return self::CACHE_NAME . 'cart-' . (int)$quoteId;
+		$quoteId = $quoteId ? $quoteId : $checkoutSession->getQuoteId();
+		$key = self::CACHE_NAME . 'cart-' . (int)$quoteId;
+		return $key;
 	}
 
 	/**
@@ -57,14 +60,16 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$key = $persistentHelper->getSession()->getKey();
 
 		if (!empty($key)) {
-			return self::CACHE_NAME . 'customer-key-' . $key;
+			$key = self::CACHE_NAME . 'customer-key-' . $key;
+			return $key;
 		} else {
 			/** @var Zolago_Customer_Model_Session $customerSession */
 			$customerSession = Mage::getSingleton('customer/session');
 			/** @var Mage_Core_Model_Cookie $mCookie */
 			$mCookie = Mage::getModel('core/cookie');
 			$fronted = $mCookie->get($customerSession->getSessionName());
-			return self::CACHE_NAME . 'customer-cookie-' . $fronted;
+			$key = self::CACHE_NAME . 'customer-cookie-' . $fronted;
+			return $key;
 		}
 	}
 
@@ -72,6 +77,21 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return array|false|mixed
 	 */
 	public function getCart() {
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		$quoteId = (int)$checkoutSession->getQuoteId();
+		if (!$quoteId) {
+			// no quote so always nothing in cart
+			$cart = array(
+				'all_products_count'	=> 0,
+				'products'				=> 0,
+				'total_amount'			=> 0,
+				'shipping_cost'			=> Mage::helper('core')->currency(0, true, false),
+				'currency_symbol'		=> Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
+			);
+			return $cart;
+		}
+
 		$key = $this->getCacheKeyForCart();
 		if ($this->canUseCache()) {
 			$cacheData = $this->loadFromCache($key);
@@ -87,7 +107,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		$quote = $ccHelper->getQuote();
 		$totals = $quote->getTotals();
 		$cart = array(
-			'all_products_count'	=> Mage::helper('checkout/cart')->getSummaryCount(),
+			'all_products_count'	=> (int)Mage::helper('checkout/cart')->getSummaryCount(),
 			'products'				=> $this->_getShoppingCartProducts(),
 			'total_amount'			=> round(isset($totals["subtotal"]) ? $totals["subtotal"]->getValue() : 0, 2),
 			'shipping_cost'			=> $zmcHelper->getFormattedShippingCostSummary(),
@@ -98,10 +118,11 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
+	 * @param int|false $quoteId
 	 * @return $this
 	 */
-	public function removeCacheCart() {
-		$key = $this->getCacheKeyForCart();
+	public function removeCacheCart($quoteId) {
+		$key = $this->getCacheKeyForCart($quoteId);
 		$cache = Mage::app()->getCache();
 		$cache->remove($key);
 		return $this;
@@ -325,12 +346,10 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return $this
 	 */
 	public function saveCustomerInfoCache($customerInfo = array()) {
-		if (!empty($this->customerInfo) || !empty($customerInfo)) {
-			$key = $this->getCacheKeyForCustomerInfo();
-			$this->customerInfo = !empty($customerInfo) ? $customerInfo : $this->customerInfo;
-			$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
-			return $this;
-		}
+		$key = $this->getCacheKeyForCustomerInfo();
+		$this->customerInfo = $customerInfo;
+		$this->saveInCache($key, $this->customerInfo, array(self::CACHE_TAG_CUSTOMER_INFO));
+		return $this;
 	}
 
 	/**

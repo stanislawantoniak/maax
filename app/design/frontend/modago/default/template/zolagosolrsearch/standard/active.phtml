@@ -14,7 +14,10 @@ if(!empty($rewriteData)){
     }
 }
 $category = $this->getCurrentCategory();
+
+/* @var $campaign Zolago_Campaign_Model_Campaign */
 $campaign = $category->getCurrentCampaign();
+$campaignActiveFilterLabel = $campaign ? $campaign->getActiveFilterLabel() : "";
 
 /* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
 $listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
@@ -41,10 +44,17 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
                                                 $selectedFacetValue = $this->formatFacetPrice($v);
                                             } elseif (in_array($face_key, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE, Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE))) {
                                                 $selectedFacetValue = ($campaign) ? $campaign->getNameCustomer() : "";
+
+                                                if (!empty($campaignActiveFilterLabel))
+                                                    $selectedFacetValue = $campaignActiveFilterLabel;
                                             }
                                             ?>
                                             <span class="label">
-                                                <?php echo $this->__($this->getFacetLabel($key)); ?>:
+                                                <?php if (!in_array($key, array("campaign_info_id_facet", "campaign_regular_id_facet"))
+                                                || empty($campaignActiveFilterLabel)
+                                                ): ?>
+                                                    <?php echo $this->__($this->getFacetLabel($key)); ?>:
+                                                <?php endif; ?>
                                                 <span class="value">
                                                     <?php echo $this->facetFormat($selectedFacetValue) ?>
                                                 </span>

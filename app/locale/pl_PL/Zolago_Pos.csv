@@ -44,4 +44,12 @@
 "This field is required.","To pole jest wymagane."
 "POS Saved","Dane POS zostały zapisane"
 "Zip code has not valid format (ex.12-345)","Niepoprawny kod pocztowy. Powinien składać się z 5 liczb, w formacie XX-XXX."
-
+"List","Lista"
+"Settings","Ustawienia"
+"Pos for problematic orders","Pos dla zamówień z problemem dostępności"
+"-- choose POS --","-- wybierz POS --"
+"Pos settings","Ustawienia POS"
+"Pos does not exists","POS nie istnieje"
+"Pos "%s" inactive","Pos %s nieaktywny"
+"Pos not assigned to vendor","Pos nie jest przypisany do sprzedawcy"
+"Settings saved","Ustawienia zapisane"
