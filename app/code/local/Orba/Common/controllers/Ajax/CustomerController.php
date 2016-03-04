@@ -143,6 +143,9 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$gtmHelper = Mage::helper('ghgtm');
 	    if($gtmHelper->isGTMAvailable()) {
 		    $content['visitor_data'] = $gtmHelper->getVisitorData();
+		    if(isset($content['visitor_data'][GH_UTM_Model_Source::GHUTM_DATE_NAME])) {
+			    $content['visitor_data'][GH_UTM_Model_Source::GHUTM_DATE_NAME."_date"] = date('Y-m-d H:i:s',$content['visitor_data'][GH_UTM_Model_Source::GHUTM_DATE_NAME]);
+		    }
 	    }
 
 		$cacheHelper->saveCustomerInfoCache();
