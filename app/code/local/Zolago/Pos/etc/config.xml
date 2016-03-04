@@ -21,7 +21,7 @@
 						<table>zolago_pos_vendor</table>
 					</pos_vendor>
 					<pos_vendor_website>
-						<table>pos_vendor_website</table>
+						<table>zolago_pos_vendor_website</table>
 					</pos_vendor_website>
 				</entities>
 			</zolagopos_resource>
