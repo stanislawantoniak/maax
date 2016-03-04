@@ -79,7 +79,7 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 			$cacheHelper->removeCacheCustomerUtmData();
 		}
 
-		setcookie(GH_UTM_Model_Source::GHUTM_COOKIE_NAME,$newUtmDataJson,$cookieExpiry,"/");
+		$this->setCookie(GH_UTM_Model_Source::GHUTM_COOKIE_NAME,$newUtmDataJson,$cookieExpiry);
 
 		return true;
 	}
@@ -91,4 +91,8 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 		return '';
 	}
 
+	public function setCookie($cookieName,$cookieValue,$cookieExpiry,$cookiePath="/",$domain=null,$secure=null,$httponly=null) {
+		setcookie($cookieName,$cookieValue,$cookieExpiry,$cookiePath,$domain,$secure,$httponly);
+		$_COOKIE[$cookieName] = $cookieValue;
+	}
 }
