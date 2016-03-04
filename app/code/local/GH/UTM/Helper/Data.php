@@ -53,7 +53,7 @@ class GH_UTM_Helper_Data extends Mage_Core_Helper_Abstract {
 		/** @var Zolago_Customer_Model_Session $customerSession */
 		$customerSession = Mage::getSingleton('customer/session');
 		/** @var Zolago_Customer_Model_Customer $customer */
-		$customer = $customerSession->getCustomer();
+		$customer = Mage::getModel("customer/customer")->load($customerSession->getCustomerId());
 		
 		//handle exceptions
 		if(!empty($exceptions) &&

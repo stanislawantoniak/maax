@@ -1,17 +1,7 @@
 <?php
 
 class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
-
-	public function preDispatch()
-	{
-		/** @var Zolago_Customer_Model_Session $customerSession */
-		$customerSession = Mage::getSingleton('customer/session');
-		$customerSession->setId($customerSession->getCustomerId());
-
-		parent::preDispatch();
-		return $this;
-	}
-
+	
 	/**
 	 * Set Sales Manago cookie with their ID
 	 */
