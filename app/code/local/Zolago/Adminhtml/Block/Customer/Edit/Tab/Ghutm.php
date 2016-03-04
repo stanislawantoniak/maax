@@ -49,7 +49,7 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tab_Ghutm extends Mage_Adminhtml_Bloc
             foreach($utmData as $utmName=>$utmValue) {
                 $fieldset->addField($utmName, 'text', array(
                     'label' => $utmName,
-                    'value' => $utmValue,
+                    'value' => $utmName == GH_UTM_Model_Source::GHUTM_DATE_NAME ? date('Y-m-d H:i:s',$utmValue) : $utmValue,
                     'readonly' => true,
                     'style' => 'border:none;width:100%',
                 ));
