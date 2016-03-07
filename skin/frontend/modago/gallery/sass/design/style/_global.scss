@@ -67,3 +67,10 @@ border-radius: 2px;
 .modal img {
 	max-width: 100%;
 }
+
+body > img[width="1"][height="1"] {
+	position: absolute;
+	bottom: 0;
+	opacity: 0;
+	pointer-events: none;
+}

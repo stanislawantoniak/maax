@@ -77,8 +77,18 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
         $categoryId = isset($params['scat']) && $params['scat'] ? $params['scat'] : 0;
 
 
+
+        // CMS page
+        $reloadToCms = ((int)($category->getOriginDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq));
+
         /** @var Zolago_Catalog_Model_Category $category */
-        $reloadToCms = (int)($category->getOriginDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) && empty($fq);
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if ($vendor) {
+            // Set root category
+            $vendorRootCategory = $vendor->rootCategory();
+            //Vendor landing page
+            $reloadToCms = ($vendorRootCategory->getId() == $category->getId() && empty($fq));
+        }
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
 
@@ -201,8 +211,6 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax
         $type = $listModel->getMode() == $listModel::MODE_SEARCH ? "search" : "category";
 
         $url = $this->generateAjaxLink($category, $categoryId, $params, $type);
-
-        Mage::log($url,null,'urlooooo.log');
 
         $pager = $layout->createBlock("zolagosolrsearch/catalog_product_list_pager")
             ->setGeneratedUrl($url)

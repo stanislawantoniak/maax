@@ -245,15 +245,18 @@ class Modago_Integrator_Model_Order {
 			$productId = $this->getProductIdBySku($apiProduct->item_sku);
 			$this->_productStocks[] = $productId;
 			if($productId) {
-				//check if product has configurable parent
-				$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($productId);
+			    if (!Mage::helper('modagointegrator/api')->isSimpleOnly()) {
+    				//check if product has configurable parent
+    				$parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($productId);
+                } else {
+                    $parentIds = false;
+                }
 				if (is_array($parentIds) && count($parentIds)) {
 					$childId = $productId;
 					$productId = current($parentIds);
 				} else {
 					$childId = false;
-				}
-
+				}                
 				$product = $this->getProduct($productId);
 				/*$taxPercent = $this->getProductTaxRate($product);
 				$priceIncl = $apiProduct->item_value_after_discount; //brutto

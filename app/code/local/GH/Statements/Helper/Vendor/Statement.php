@@ -51,71 +51,10 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 	}
 	protected function generateStatementPdf(GH_Statements_Model_Statement &$statement) {
 
-	    $headerText = sprintf('%s<br/>%s',
-	        Mage::getStoreConfig('general/store_information/name',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
-	        Mage::getStoreConfig('general/store_information/address',Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
-	        
-	    $eventDate = date('Y-m-d',strtotime($statement->getEventDate()) + 3600*24);
-	    $vendor = Mage::getModel('udropship/vendor')->load($statement->getVendorId());
-	    $vendorData = sprintf('%s, %s (NIP:%s)',$vendor->getCompanyName(),$vendor->getBillingAddress(),$vendor->getTaxNo());
-	    if ($statement->getDateFrom()) {
-	        $periodText = sprintf('%s - %s',date("Y-m-d",strtotime($statement->getDateFrom())),date('Y-m-d',strtotime($statement->getEventDate())));	        
-	    } else {
-	        $periodText = $this->__('to %s',$statement->getEventDate());
-	    }
-	    $nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s",$eventDate,$periodText,$vendorData);
-	    $footerData = array (
-    	    'name' => $this->__("MODAGO financial statement on %s",$eventDate),
-        );
-        $dateFrom = $statement->getDateFrom();
-	    $lastStatementData = empty($dateFrom)? '':sprintf(' (%s)',date('Y-m-d',strtotime($statement->getDateFrom())));
-		$page1data = array(
-		    "header" => $headerText,
-			"name" => $nameText, // $statement->getName(),
-			"title" => $this->__("Balance"),
-			"statement" => array(),
-			"saldo" => array(
-				$this->__("[B] Previous statement balance%s",$lastStatementData) => $statement->getLastStatementBalance(),
-				$this->__("[C] Vendor payouts") => $statement->getPaymentValue(),
-				$this->__("Current statement balance [B]+[A]-[C]") => $statement->getActualBalance()
-			)
-		);
-
-		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $statement->getOrderValue();
-		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $statement->getRefundValue();
-		$page1data['statement'][$this->__("[3] Modago commission")] = $statement->getTotalCommission();
-		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $statement->getGalleryDiscountValue();
-		$step = 5;
-		$calculateMethod = '[1]-[2]-[3]+[4]';
-		if ($statement->getCommissionCorrection() != 0) {
-    		$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $statement->getCommissionCorrection();
-    		$calculateMethod .= '+[5]';
-    		$step++;
-        }
-        $calculateMethod .= sprintf('-[%d]',$step);
-		$page1data['statement'][$this->__("[%d] Carrier costs",$step++)] = $statement->getTrackingChargeTotal();
-		if ($statement->getDeliveryCorrection()!= 0) {
-            $calculateMethod .= sprintf('+[%d]',$step);
-    		$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes",$step++)] = $statement->getDeliveryCorrection();
-        }
-        if ($statement->getMarketingValue() != 0) {
-            $calculateMethod .= sprintf('-[%d]',$step);        
-    		$page1data['statement'][$this->__("[%d] Marketing costs",$step++)] = $statement->getMarketingValue();
-        }
-        if ($statement->getMarketingCorrection() != 0) {
-            $calculateMethod .= sprintf('+[%d]',$step);        
-    		$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes",$step++)] = $statement->getMarketingCorrection();
-        }
-		$page1data['topay'] = array (
-		    'title' => $this->__("[A] To pay %s",$calculateMethod),
-		    'value' => $statement->getToPay()
-        );
-
-
-        //$page1data = $this->_initPage1Ddata(); //todo
-        $page2data = $this->_initPage2Ddata();
-        $page3data = $this->_initPage3Ddata();
-        $page4data = $this->_initPage4Ddata();
+		$page1data = $this->_initPage1Ddata($statement);
+		$page2data = $this->_initPage2Ddata();
+		$page3data = $this->_initPage3Ddata();
+		$page4data = $this->_initPage4Ddata();
 
 		/** @var GH_Statements_Model_Track $tracksModel */
 		$tracksModel = Mage::getModel("ghstatements/track");
@@ -158,6 +97,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
         /** @var GH_Statements_Model_Resource_Order_Collection $orderCollection */
         $orderCollection = Mage::getResourceModel("ghstatements/order_collection");
         $orderCollection->addFieldToFilter("statement_id",$statement->getId());
+        $orderCollection->addFieldToFilter("charge_commission_flag", 1);
 
         if ($orderCollection->count()) {
             $this->_fillPage3byOrders($orderCollection, $page3data, $page3body);
@@ -175,6 +115,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
         /** @var GH_Statements_Model_Resource_Rma_Collection $rmaCollection */
         $rmaCollection = Mage::getResourceModel("ghstatements/rma_collection");
         $rmaCollection->addFieldToFilter("statement_id", $statement->getId());
+        $rmaCollection->addFieldToFilter("charge_commission_flag", 1);
 
         if ($rmaCollection->count()) {
             $this->_fillPage4byRma($rmaCollection, $page4data, $page4body);
@@ -201,8 +142,10 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
     	
 		$page3data["body"] = $page3body;
 		$page4data["body"] = $page4body;
-		
-    	
+
+		$footerData = array (
+			'name' => $this->__("MODAGO financial statement on %s", $this->getEventDate($statement)),
+		);
 		
 		/** @var GH_Statements_Model_Vendor_Pdf $pdfModel */
 		$pdfModel = Mage::getModel('ghstatements/vendor_pdf');
@@ -216,9 +159,79 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
 		$pdfModel->getPdfFile($statement);
 	}
 
-    protected function _initPage1Ddata() {
+	/**
+	 * @param $statement
+	 * @return bool|string
+	 */
+	protected function getEventDate(&$statement) {
+		return date('Y-m-d',strtotime($statement->getEventDate()) + 3600*24);
+	}
 
-    }
+	/**
+	 * @param GH_Statements_Model_Statement $statement
+	 * @return array
+	 */
+	protected function _initPage1Ddata(&$statement) {
+		$headerText = sprintf('%s<br/>%s',
+			Mage::getStoreConfig('general/store_information/name', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
+			Mage::getStoreConfig('general/store_information/address', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID));
+
+		$eventDate = $this->getEventDate($statement);
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = Mage::getModel('udropship/vendor')->load($statement->getVendorId());
+		$vendorData = sprintf('%s, %s (NIP:%s)', $vendor->getCompanyName(), $vendor->getBillingAddress(), $vendor->getTaxNo());
+		if ($statement->getDateFrom()) {
+			$periodText = sprintf('%s - %s', date("Y-m-d", strtotime($statement->getDateFrom())), date('Y-m-d', strtotime($statement->getEventDate())));
+		} else {
+			$periodText = $this->__('to %s', $statement->getEventDate());
+		}
+		$nameText = $this->__("MODAGO financial statement on %s for period %s <br/>issued for %s", $eventDate, $periodText, $vendorData);
+
+		$dateFrom = $statement->getDateFrom();
+		$lastStatementData = empty($dateFrom) ? '' : sprintf(' (%s)', date('Y-m-d', strtotime($statement->getDateFrom())));
+		$page1data = array(
+			"header" => $headerText,
+			"name" => $nameText,
+			"title" => $this->__("Balance"),
+			"statement" => array(),
+			"saldo" => array(
+				$this->__("[B] Previous statement balance%s", $lastStatementData) => $statement->getLastStatementBalance(),
+				$this->__("[C] Vendor payouts") => $statement->getPaymentValue(),
+				$this->__("Current statement balance [B]+[A]-[C]") => $statement->getActualBalance()
+			)
+		);
+
+		$page1data['statement'][$this->__("[1] Payments for fulfilled orders")] = $statement->getOrderValue();
+		$page1data['statement'][$this->__("[2] Payment refunds for returned orders")] = $statement->getRefundValue();
+		$page1data['statement'][$this->__("[3] Modago commission")] = $statement->getTotalCommission();
+		$page1data['statement'][$this->__("[4] Discounts covered by Modago")] = $statement->getGalleryDiscountValue();
+		$step = 5;
+		$calculateMethod = '[1]-[2]-[3]+[4]';
+		if ($statement->getCommissionCorrection() != 0) {
+			$page1data['statement'][$this->__("[5] Other manual commission credit/debit notes")] = $statement->getCommissionCorrection();
+			$calculateMethod .= '+[5]';
+			$step++;
+		}
+		$calculateMethod .= sprintf('-[%d]', $step);
+		$page1data['statement'][$this->__("[%d] Carrier costs", $step++)] = $statement->getTrackingChargeTotal();
+		if ($statement->getDeliveryCorrection() != 0) {
+			$calculateMethod .= sprintf('+[%d]', $step);
+			$page1data['statement'][$this->__("[%d] Manual carrier fees credit/debit notes", $step++)] = $statement->getDeliveryCorrection();
+		}
+		if ($statement->getMarketingValue() != 0) {
+			$calculateMethod .= sprintf('-[%d]', $step);
+			$page1data['statement'][$this->__("[%d] Marketing costs", $step++)] = $statement->getMarketingValue();
+		}
+		if ($statement->getMarketingCorrection() != 0) {
+			$calculateMethod .= sprintf('+[%d]', $step);
+			$page1data['statement'][$this->__("[%d] Manual marketing fees credit/debit notes", $step++)] = $statement->getMarketingCorrection();
+		}
+		$page1data['topay'] = array(
+			'title' => $this->__("[A] To pay %s", $calculateMethod),
+			'value' => $statement->getToPay()
+		);
+		return $page1data;
+	}
 
     /**
      * @return array

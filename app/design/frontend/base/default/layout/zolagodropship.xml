@@ -205,6 +205,8 @@
 			</action>
 			<block name="header.topmenu" as="topmenu" type="zolagodropship/vendor_menu_topmenu" template="unirgy/dropship/vendor/menu/topmenu.phtml"/>
 		</reference>
+		<!--we don't need salesmanago on vendor panel-->
+		<remove name="salesmanago_tracking"/>
 	</bootstrap>
 	<!-- Noty handling -->
 	<noty>
@@ -346,4 +348,11 @@
 	
 	<!-- todo move it to new module-based xml layout -->
 
+	<udropship_marketing_budget>
+		<update handle="udropship_vendor" />
+		<update handle="bootstrap" />
+		<reference name="content">
+			<block type="ghmarketing/dropship_marketing" template="ghmarketing/dropship/budget.phtml"/>
+		</reference>
+	</udropship_marketing_budget>
 </layout>

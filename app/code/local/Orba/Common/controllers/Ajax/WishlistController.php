@@ -27,9 +27,14 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 		}
 
 		$this->_changeWishlistInCache(1,$this->getRequest()->getParam('product'));
-		
-		// Send correct data
-		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
+
+		// Only info about new count
+		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+		$content = array(
+			'favorites_count'	=> $cacheHelper->getFavoritesCount(),
+		);
+		$this->_sendJson(true, $content);
 	}
 
 	protected function _changeWishlistInCache($inWishlist,$productId) {
@@ -93,10 +98,14 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 		}
 
 		$this->_changeWishlistInCache(0,$this->getRequest()->getParam('product'));
-		
-		// Send correct data
-		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
-		
+
+		// Only info about new count
+		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+		$content = array(
+			'favorites_count'	=> $cacheHelper->getFavoritesCount(),
+		);
+		$this->_sendJson(true, $content);
 	}
 	
 	/**
@@ -112,9 +121,14 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 	 * @param mixed $content
 	 */
 	protected function _sendJson($status, $content) {
-		$this->getResponse()->
-			setHeader("Content-type", "application/json")->
-			setBody(Mage::helper('core')->jsonEncode(array(
+		$_helper = Mage::helper('orbacommon');
+		$this->getResponse()
+			->clearHeaders()
+			->setHeader("Content-type", "application/json", true)
+			->setHeader('Pragma', 'no-cache', true)
+			->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true)
+			->setHeader('Expires', $_helper->timestampToGmtDate(0), true)
+			->setBody(Mage::helper('core')->jsonEncode(array(
 				'status'	=> (bool)$status,
 				'content'	=> $content
 			))

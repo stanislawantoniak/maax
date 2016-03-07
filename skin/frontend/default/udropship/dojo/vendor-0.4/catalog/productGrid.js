@@ -27,11 +27,12 @@ define([
     'vendor/catalog/productGrid/mass/attribute',     // attrbiute
     'vendor/catalog/productGrid/mass/attributeRules',// attributeRules
     'vendor/catalog/productGrid/mass/attributeSet',// attributeSet
+    'vendor/catalog/productGrid/mass/changesHistory',// changesHistory,
     "vendor/misc"//misc
 ], function (BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet,
              Selection, Selector, Keyboard, declare, dom, domConstruct, on, query,
              put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid,
-             PopupEditor, status, attrbiute, attributeRules, attributeSet, misc) {
+             PopupEditor, status, attrbiute, attributeRules, attributeSet, changesHistory, misc) {
 
     var grid,
 		gallery,
@@ -338,8 +339,25 @@ define([
         });
         put(content, "p", {
             innerHTML: Translator.translate("SKU") + ": " + escape(item.skuv),
-            className: "info editable"
+            className: "info editable",
         });
+
+        var canvas = document.getTextWidthCanvas || (document.getTextWidthCanvas = document.createElement("canvas"));
+        var context = canvas.getContext("2d");
+        context.font = "normal arial 13px";
+        var metrics = context.measureText(value);
+
+        if(metrics.width > 156) {
+            node.title = value;
+            jQuery(node).tooltip({
+                container: "body",
+                trigger: "hover",
+                animation: false,
+                placement: "top",
+                delay: {"show": 0, "hide": 0}
+            });
+        }
+
         put(node, content);
     };
 
@@ -386,7 +404,7 @@ define([
         put(node, content);
     };
 
-    var rendererDescription = function (item, value, node, options) {
+    var rendererDescriptionStatus = function (item, value, node, options) {
 
         // @see Zolago_Catalog_Model_Product_Source_Description
         //const DESCRIPTION_NOT_ACCEPTED = 1;// Nie zatwierdzony
@@ -426,6 +444,34 @@ define([
         put(node, content);
     };
 
+	var rendererIsInStock = function (item, value, node, options) {
+		var itemsTxt		= Translator.translate("Available together {{stock_qty}} items");
+		var variantsTxt		= Translator.translate("{{available_child_count}} variants of {{all_child_count}}");
+		if (item.stock_qty == 1) {
+			itemsTxt = Translator.translate("Available together {{stock_qty}} item");
+		}
+
+		itemsTxt	= itemsTxt.replace("{{stock_qty}}", item.stock_qty);
+		variantsTxt	= variantsTxt.replace("{{available_child_count}}", item.available_child_count);
+		variantsTxt	= variantsTxt.replace("{{all_child_count}}", item.all_child_count);
+
+		node.title = "<div style='text-align: center;'>" + itemsTxt + "<br/>" + variantsTxt + "</div>";
+
+		jQuery(node).tooltip({
+			html: true,
+			container: "body",
+			trigger: "hover",
+			animation: false,
+			placement: "top",
+			delay: {"show": 0, "hide": 0},
+		});
+
+		var content = put("div");
+		put(content, "p", {
+			innerHTML: parseInt(item.stock_qty)
+		});
+		put(node, content);
+	};
     /**
      * @param {string} currency
      * @returns {Function}
@@ -512,10 +558,12 @@ define([
                 // Prepare fomratter
                 if (childColumn.options) {
                     if (column.field == "description_status") {
-                        childColumn.renderCell = rendererDescription;
+                        childColumn.renderCell = rendererDescriptionStatus;
                     } else if (column.field == "status") {
                         childColumn.renderCell = rendererStatus;
-                    } else {
+                    } else if (column.field == "is_in_stock") {
+						childColumn.renderCell = rendererIsInStock;
+					} else {
                         childColumn.formatter = formatterOptionsFactor(
                             childColumn.options, column.type == "multiselect");
                     }
@@ -584,6 +632,7 @@ define([
 
             store.put(dataObject).then(function () {
                 e.deferred.resolve();
+                window.changesHistory.updateModal();
             }, function (ex) {
                 alert(ex.response.text);
                 e.deferred.reject();
@@ -612,12 +661,12 @@ define([
                 // Get current attributes mapper block by ajax with spinner
                 window.attributeRules.updateModal();
             }
+            window.changesHistory.updateModal();
         }, function () {
             e.deferred.reject();
         }).always(function () {
             misc.stopLoading();
         });
-
     };
 
     /**
@@ -879,39 +928,78 @@ define([
                         misc.stopLoading();
                     })
                 ;
-                //jQuery.ajax({
-                //    cache: false,
-                //    url: window.attributeSet.getFormActionUrl(),
-                //    data: {
-                //        product_ids: ids,
-                //        attribute_set: attribute_set,
-                //        attribute_set_current: attribute_set_current,
-                //        global: global
-                //    },
-                //    method: "POST",
-                //}).done(function (data, textStatus, jqXHR) {
-                //    if (data.status == 1) {
-                //        window.grid.refresh();
-                //        noty({
-                //            text: data.content.message,
-                //            type: "success",
-                //            //timeout: 10000
-                //        });
-                //    }
-                //    if (data.status == 0) {
-                //        noty({
-                //            text: data.content,
-                //            type: "error",
-                //            //timeout: 10000
-                //        });
-                //    }
-                //}).always(function () {
-                //    misc.stopLoading();
-                //});
 
             });
         }
     },
+        window.changesHistory = {
+            _changesHistory: {},
+            init: function (grid) {
+                this._changesHistory = new changesHistory(grid);
+                this.attachLogicRevertChange();
+                this.attachControls();
+            },
+            attachControls : function(){
+                jQuery(".show-changes-history-details").click(function(){
+                    jQuery(this).closest(".changes-history-item").find(".changes-history-details").toggleClass("hidden");
+
+                })
+            },
+            setSpinner: function () {
+                var spinner = jQuery("<div>").css('text-align', 'center')
+                    .append('<img src="/skin/frontend/default/udropship/img/bootsrap/ajax-loading.gif">');
+                this.getModal().find(".modal-body").html(spinner);
+            },
+            getModal: function () {
+                return jQuery('#showChangesHistory');
+            },
+            /**
+             * Update html by ajax changesHistory modal
+             */
+            updateModal: function () {
+                this.setSpinner();
+                jQuery.ajax({
+                    cache: false,
+                    url: "/udprod/vendor_product/manageChangesHistory",
+                    data: {}
+                }).success(function (data, textStatus, jqXHR) {
+                    var content = jQuery(data).find(".modal-dialog");
+                    jQuery("#showChangesHistory").html(content);
+                    window.changesHistory.init(window.grid);
+                }).always(function () {
+
+                });
+            },
+            attachLogicRevertChange: function () {
+                jQuery("#revertChangeAttribute").click(function(){
+                    window.changesHistory.setSpinner();
+                    var changeAttributeHistoryId = jQuery(this).data("id");
+
+                    jQuery.ajax({
+                        cache: false,
+                        url: "/udprod/vendor_product/revertChangesHistory",
+                        data: {id: changeAttributeHistoryId}
+                    }).success(function (data, textStatus, jqXHR) {
+
+                        var response = jQuery.parseJSON(data);
+
+                        if(response.length == 0){
+                            window.changesHistory.updateModal();
+                            window.grid.refresh();
+                        } else {
+                            noty({
+                                text: response.error,
+                                type: 'error',
+                                timeout: 10000
+                            });
+                        }
+
+                    }).always(function () {
+
+                    });
+                });
+            }
+        },
         window.attributeRules = {
             _tmpRemoveBtn: null,
             _attributeRules: {},
@@ -1203,6 +1291,7 @@ define([
 
             window.attributeRules.init(_grid);
             window.attributeSet.init(_grid);
+            window.changesHistory.init(_grid);
 
             // For mapping attribute process, checkbox 'save as rule' need to be disabled when
             // for multi select option delete is checked

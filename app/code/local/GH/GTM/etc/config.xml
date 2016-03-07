@@ -6,10 +6,19 @@
 		</GH_GTM>
 	</modules>
 	<global>
+		<models>
+			<ghgtm>
+				<class>GH_GTM_Model</class>
+				<resourceModel>ghgtm_resource</resourceModel>
+			</ghgtm>
+			<ghgtm_resource>
+				<class>GH_GTM_Model_Resource</class>
+			</ghgtm_resource>
+		</models>
 		<blocks>
-			<gh_gtm>
+			<ghgtm>
 				<class>GH_GTM_Block</class>
-			</gh_gtm>
+			</ghgtm>
 			<gtm>
 				<rewrite>
 					<gtm>GH_GTM_Block_Gtm</gtm>
@@ -17,15 +26,26 @@
 			</gtm>
 		</blocks>
 		<helpers>
-			<gh_gtm>
+			<ghgtm>
 				<class>GH_GTM_Helper</class>
-			</gh_gtm>
+			</ghgtm>
 			<gtm>
 				<rewrite>
 					<data>GH_GTM_Helper_Data</data>
 				</rewrite>
 			</gtm>
 		</helpers>
+		<events>
+			<checkout_cart_product_add_after>
+				<observers>
+					<ghgtm_cart_product_add_after>
+						<type>singleton</type>
+						<class>GH_GTM_Model_Observer</class>
+						<method>registerLastAddedProduct</method>
+					</ghgtm_cart_product_add_after>
+				</observers>
+			</checkout_cart_product_add_after>
+		</events>
 	</global>
 	<frontend>
 		<layout>

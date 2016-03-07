@@ -19,5 +19,14 @@
       width: 100%;
       height: auto;
     }
+    .lp-banner-text-info {
+      margin-top: 10px;
+      h1, h2, h3, h4, h5 {
+        padding: 7px 0px !important;
+      }
+      p {
+        margin: 0 0 15px 0 !important;
+      }
+    }
   }
 }

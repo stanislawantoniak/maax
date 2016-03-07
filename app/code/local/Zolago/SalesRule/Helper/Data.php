@@ -258,6 +258,28 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         }
 	}
 
+	protected function _resizePromotionVendorLogo($fileName,$width=104, $height=31) {
+		$basePath = Mage::getBaseDir('media') . DS . $fileName;
+		$newPath = $this->getPromotionVendorLogoResizedPath($width) . DS . $fileName;
+		//if width empty then return original size image's URL
+		if ($width != '') {
+			//if image has already resized then just return URL
+			if (file_exists($basePath) && is_file($basePath) && !file_exists($newPath)) {
+				$imageObj = new Varien_Image($basePath);
+				$imageObj->backgroundColor(array(255, 255, 255));
+				$imageObj->constrainOnly(true);
+				$imageObj->keepAspectRatio(true);
+				$imageObj->keepFrame(true);
+				$imageObj->resize($width, $height);
+				$imageObj->save($newPath);
+			}
+		}
+	}
+	
+	public function getPromotionVendorLogoResizedPath($width = 104) {
+		return Mage::getBaseDir('media') . DS . 'vendor' . DS . 'resized' . DS . $width;
+	}
+
 	public function getResizedPromotionImage($fileName,$width = 294, $height = 154) {
 
         $folderURL = $this->getCampaignCouponImageUrl();
@@ -296,16 +318,26 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
         $collection->addFieldToFilter('coupon_id', array('in' => $ids));
         $out = array();
         foreach ($collection as $item) {
+	        /** @var Zolago_SalesRule_Model_Rule $rule */
             $rule = Mage::getModel('salesrule/rule')->load($item['rule_id']);
             $campaignId = $rule->getCampaignId();
-            $couponImage = NULL;
+            $couponImage = $vendorLogo = NULL;
             if ($campaignId) {
+	            /** @var Zolago_Campaign_Model_Campaign $campaign */
                 $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
                 if ($campaign) {
                     $couponImage = $campaign->getCouponImage();
+	                $vendor = $campaign->getVendor();
+	                $vendorLogo = $vendor->getLogo();
+	                $vendorName = $vendor->getVendorName();
+	                if(!$vendorLogo) {
+		                $vendorLogo = Mage::getDesign()->getSkinUrl("images/logo_black.png");
+	                }
                 }
             }
             $rule->setPromoImage($couponImage);
+	        $rule->setVendorLogo($vendorLogo);
+	        $rule->setVendorName($vendorName);
             $item['ruleItem'] = $rule;
             $out[] = $item;
 
@@ -353,19 +385,31 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
              'store_name' => $store->getName(),
              'year'  => Mage::getModel('core/date')->date('Y')
          );
-         $addedFiles = array();
+         $addedFiles = $addedLogos = array();
          foreach ($list as $item) {
 
              $name = $item['ruleItem']->getPromoImage();
              if ($name && !in_array($name, $addedFiles)) {
-                 $this->_resizePromotionImage($name,200);
+                 $this->_resizePromotionImage($name,280);
                  $data['_ATTACHMENTS'][] = array (
-                     'filename' => $this->getPromotionResizedImagePath(200).DS.$name,
+                     'filename' => $this->getPromotionResizedImagePath(280).DS.$name,
                      'id' => $name,
                      'disposition' => 'inline',                 
                  );
                  $addedFiles[] = $name;
               }
+
+	         $vendorLogo = $item['ruleItem']->getVendorLogo();
+	         if($vendorLogo && !in_array($vendorLogo,$addedLogos)) {
+		         $this->_resizePromotionVendorLogo($vendorLogo);
+		         $data['_ATTACHMENTS'][] = array (
+			         'filename' => $this->getPromotionVendorLogoResizedPath() . DS . $vendorLogo,
+			         'id' => $vendorLogo,
+			         'disposition' => 'inline',
+		         );
+		         $addedLogos[] = $vendorLogo;
+	         }
+
           }
          $helper = Mage::helper('zolagocommon');
          $sender = Mage::getStoreConfig('promo/promotions_mail_settings/mail_identity');
@@ -381,6 +425,98 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          $this->_changeDesign($oldArea,$oldPack,$oldTheme);
          return true;             
      }
+    /**
+     * prepare coupons and send it via mail
+     *
+     * @param array $subscribers
+     * @param array $subscribersCustomersId
+     * @param array $subscribersCustomersSubscribers
+     * @return int
+     */
+    public function sendCouponMails($subscribers,$subscribersCustomersId, $subscribersCustomersSubscribers) {    
+        $sendCount = 0;
+        //1. Coupons
+	    $result = $this->getSalesRulesForSubscribers();
+
+        //Group coupons by rule
+        if (empty($result)) {
+            return $sendCount;
+        }
+
+        //Find if customer already got coupon in rule
+        $resultRules = $this->getSalesRulesCouponsByCustomers(array_values($subscribersCustomersId));
+
+        $rulesForCustomer = array();
+        foreach($resultRules as $resultRulesItem){
+            $rulesForCustomer[$resultRulesItem["rule_id"]][] = $subscribersCustomersSubscribers[$resultRulesItem["customer_id"]];
+        }
+
+        $coupons = array();
+        foreach ($result as $couponData) {
+            $coupons[$couponData['rule_id']][$couponData['coupon_id']] = $couponData['coupon_id'];
+        }
+        
+
+        //3. Assign coupons to customers
+        $data = array(
+            "subscribers" => $subscribers,
+            "coupons" => $coupons,
+            "data_to_send" => array()
+        );
+
+        $res = $this->assignCouponsToSubscribers($data, $rulesForCustomer);
+
+        $store = array();
+        //4. Send mails
+        $dataAssign = $res["data_to_send"];
+        if (!empty($dataAssign)) {
+            foreach ($dataAssign as $email => $sendData) {
+                $customerId = isset($subscribersCustomersId[$email]) ? $subscribersCustomersId[$email] : false;
+                if($customerId){
+                    // change locale
+                    $storeId = empty($subscribersStore[$customerId])? 0:$subscribersStore[$customerId];
+                    if ($storeId) {                    
+                        if (empty($store[$storeId])) { // nie ładujemy tych samych bez przerwy
+                            $store[$storeId] = Mage::getModel('core/store')->load($storeId)->getLocaleCode();
+                        }
+                        $locale = $store[$storeId];
+                    } else {
+                        $locale = Mage::app()->getLocale()->getLocaleCode();                        
+                    }
+                    Mage::app()->getLocale()->setLocaleCode($locale);
+                    Mage::getSingleton('core/translate')->setLocale($locale)->init('frontend', true);
+                    if (!$this->sendPromotionEmail($customerId, array_values($sendData))) {
+                        //if mail sending failed
+                        unset($dataAssign[$email]);
+                    } else {
+                        $sendCount ++;
+                    }
+                }
+            }
+            unset($customerId);
+        }
+
+        //5. Set customer_id to salesrule_coupon table
+        if (!empty($dataAssign)) {
+            $insertData = array();
+            foreach ($dataAssign as $email => $sendData) {
+                foreach($sendData as $couponId){
+                    if(isset($subscribersCustomersId[$email])){
+                        $insertData[] = "({$couponId},".$subscribersCustomersId[$email].")";
+                    }
+                }
+            }
+
+            if(!empty($insertData)){
+                $insertData = implode(",", $insertData);
+                /* @var $salesCouponModel Zolago_SalesRule_Model_Resource_Coupon */
+                $salesCouponModel = Mage::getResourceModel("salesrule/coupon");
+                $salesCouponModel->bindCustomerToCoupon($insertData);
+            }
+
+        }
+        return $sendCount;
+    }
 
     public function getSalesRulesForSubscribers()
     {

@@ -130,13 +130,20 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				case "name":
 					$collection->joinAttribute("skuv", 'catalog_product/skuv', 'entity_id', null, 'left');
 				break;
+				case "is_in_stock":
+					/**
+					 * NOTE: is_in_stock is added after collection load for better performance ( 1 subselect vs 2)
+					 * @see Zolago_Catalog_Model_Resource_Vendor_Product_Collection::prepareRestResponse()
+					 */
+					$collection->joinChildQuantities();
+					$collection->joinAllChildrenCount();
+					$collection->joinAvailableChildrenCount();
+					break;
 			}
 		}
-		
-		
 		return $collection;
     }
-	
+
 	/**
 	 * @param string $key
 	 * @param mixed $value
@@ -168,7 +175,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			return $value;
 		}
 		
-		if($attribute){
+		if($attribute && $attribute->getId()){
 			// process name
 			if($attribute->getAttributeCode()=="name"){
 				$this->_getCollection()->addFieldToFilter(array(
@@ -220,6 +227,15 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				}
 				return array("eq"=>$value);
 			}
+		} elseif ($key == 'is_in_stock') {
+			if (((int)$value) == Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK) {
+				$condition = 'stock_qty > ?';
+			} else {
+				$condition = 'stock_qty <= ?';
+			}
+			$collection = $this->_getCollection();
+			$collection->getSelect()->having($condition, 0);
+			return null;
 		}
 		
 		// Return default
@@ -239,6 +255,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		if(isset($out["thumbnail"])){
 			$out["images_count"] = true;
 		}
+		$out["is_in_stock"] = true;
 		return array_keys($out);
 	}
 	
@@ -306,13 +323,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				$out[] = $column->getAttribute()->getAttributeCode();
 			}
 		}
+		$out[] = 'is_in_stock';
 		return $out;
 	}
 	
 	/**
 	 * @param array $productIds
 	 * @param array $attributesData
-	 * @param type $storeId
+	 * @param int $storeId
 	 * @throws Mage_Core_Exception
 	 */
 	protected function _processAttributresSave(array $productIds, array $attributesData, $storeId, array $data) {
@@ -519,6 +537,9 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			$attributeData = array();
 			$storeId = $data['store_id'];
 
+			/* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
+			$descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
+
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
                     $attributeData[$attribute] = $data[$attribute];
@@ -529,6 +550,20 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
                         // Clear product name
                         $attributeData[$attribute] = Mage::helper("zolagocatalog")->cleanProductName($data[$attribute]);
                     }
+
+					/**
+					 * Save attribute change history
+					 */
+
+					$descriptionHistoryModel->updateChangesHistory(
+						$this->getVendorId(),
+						array($productId),
+						$attribute,
+						$data[$attribute],
+						Mage::getModel("catalog/product")->getCollection()->addAttributeToSelect($attribute),
+						$data["attribute_mode"][$attribute]
+					);
+					/*Save attribute change history*/
 				}
 			}
 			if($attributeData){

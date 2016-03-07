@@ -43,6 +43,92 @@
                 </ajax_response>
             </types>
         </cache>
+		<events>
+			<!-- Invalidate cache for customer ajax start -->
+			<sales_quote_save_after>
+				<observers>
+					<orbacommon_ajax_quote_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_quote_observer>
+				</observers>
+			</sales_quote_save_after>
+			<catalog_category_save_after>
+				<observers>
+					<orbacommon_ajax_search_category_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateSearchCustomerAjaxCache</method>
+					</orbacommon_ajax_search_category_observer>
+				</observers>
+			</catalog_category_save_after>
+			<wishlist_items_renewed>
+				<observers>
+					<orbacommon_ajax_wishlist_items_renewed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateWishlistCustomerAjaxCache</method>
+					</orbacommon_ajax_wishlist_items_renewed_observer>
+				</observers>
+			</wishlist_items_renewed>
+			<customer_login>
+				<observers>
+					<orbacommon_ajax_recently_viewed_customer_login_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_ajax_recently_viewed_customer_login_observer>
+				</observers>
+			</customer_login>
+			<customer_register_success>
+				<observers>
+					<orbacommon_ajax_cart_customer_register_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateCartCustomerAjaxCache</method>
+					</orbacommon_ajax_cart_customer_register_observer>
+					<orbacommon_ajax_recently_viewed_customer_register_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_ajax_recently_viewed_customer_register_observer>
+				</observers>
+			</customer_register_success>
+			<persistent_synchronize_on_login_after>
+				<observers>
+					<orbacommon_ajax_recently_viewed_persistent_synchronize_on_login_after_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_ajax_recently_viewed_persistent_synchronize_on_login_after_observer>
+					<orbacommon_ajax_wishlist_persistent_synchronize_on_login_after_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateWishlistCustomerAjaxCache</method>
+					</orbacommon_ajax_wishlist_persistent_synchronize_on_login_after_observer>
+				</observers>
+			</persistent_synchronize_on_login_after>
+			<ajax_get_account_information_after>
+				<observers>
+					<orbacommon_recently_viewed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateRecentlyViewedCustomerAjaxCache</method>
+					</orbacommon_recently_viewed_observer>
+				</observers>
+			</ajax_get_account_information_after>
+			<newsletter_subscriber_save_after>
+				<observers>
+					<orbacommon_has_subscribed_observer>
+						<type>singleton</type>
+						<class>orbacommon/observer</class>
+						<method>invalidateVisitorHasSubscribedAjaxCache</method>
+					</orbacommon_has_subscribed_observer>
+				</observers>
+			</newsletter_subscriber_save_after>
+			<!-- Invalidate cache for customer ajax end -->
+		</events>
     </global>
     <frontend>
         <routers>

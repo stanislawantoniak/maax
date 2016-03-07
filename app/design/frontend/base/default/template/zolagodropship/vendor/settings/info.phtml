@@ -199,7 +199,7 @@ if(count($_errorData)) {
                         </div>
                     </div>
                 </div>
-
+                <?php if(!$this->isOperatorMode()): ?>
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo $helper->__("Administrator contact (ITC or business)"); ?></h4>
@@ -293,7 +293,7 @@ if(count($_errorData)) {
                         </div>
                     </div>
                 </div>
-
+                <?php endif; ?>
                 <div class="form-actions">
                     <button type="reset" id="filter_reset" class="btn pull-right">
                         <span><span><?php echo $this->__('Cancel'); ?></span></span>
