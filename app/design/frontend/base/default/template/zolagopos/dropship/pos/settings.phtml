@@ -16,7 +16,7 @@ $posWebsiteRelation = $this->getPosWebsiteRelation();
         <div class="col-md-12">
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><i class="icon-reorder"></i><?php echo $helper->__("Pos settings");?></h4>
+                        <h4><i class="icon-reorder"></i><?php echo $helper->__("POS default settings");?></h4>
                     </div>
                     <div class="widget-content fiters">
                         <div>
@@ -31,6 +31,7 @@ $posWebsiteRelation = $this->getPosWebsiteRelation();
                                             <option value="<?php echo $pos->getPosId();?>"<?php if ($vendor->getProblemPosId() == $pos->getPosId()):?> selected<?php endif;?>><?php echo $pos->getName(); ?></option>
                                         <?php endforeach; ?>
                                     </select>
+                                    <span class="help-block"><?php echo $helper->__("Orders that can not be proceed from one warehouse")?></span>
                                 </div>
                             </div>
                         </div>
