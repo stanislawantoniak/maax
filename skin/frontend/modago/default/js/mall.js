@@ -1229,8 +1229,17 @@ Mall.Cookie = {
 			if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
 		}
 		return "";
+	},
+	set: function setCookie(cname, cvalue, exhours) {
+		var d = new Date(), expires = "";
+		var h = typeof exhours !== 'undefined' ? exhours : false;
+		if(h) {
+			d.setTime(d.getTime() + (h * 60 * 60 * 1000));
+			expires = "expires=" + d.toUTCString();
+		}
+		document.cookie = cname + "=" + cvalue + "; " + expires;
 	}
-}
+};
 
 // callbacks
 
@@ -1761,8 +1770,64 @@ Mall.debug = {
 	}
 };
 
+Mall.Utm = {
+	cookieName: 'ghutm',
+	attrPrefix: 'utm_',
+	utm_data: false,
+
+	init: function() {
+		this.utm_data = this.getUtms();
+		var properties = Object.getOwnPropertyNames(this.utm_data),
+			cookieVal = decodeURIComponent(Mall.Cookie.get(this.cookieName));
+
+		if(properties.length) { //act only if there are utm_ attributes in href
+			if (!cookieVal) {
+				this.setUtmsUpdate();
+				return;
+			} else {
+				try {
+					var cookieObj = JSON.parse(cookieVal);
+					for(var utmName in this.utm_data) {
+						if(!cookieObj.hasOwnProperty(utmName) || cookieObj[utmName] != this.utm_data[utmName]) {
+							//cookie does not contain one of utm keys provided by url or
+							//cookie has different value than utms in url
+							this.setUtmsUpdate();
+							return;
+						}
+
+					}
+				} catch (e) {
+					//catches json parse error which means that cookie has wrong value so we need to create new one
+					this.setUtmsUpdate();
+				}
+			}
+		}
+	},
+	getUtms: function() {
+		var query_string = {},
+			query = window.location.search.substring(1),
+			self = this;
+
+		if(Mall.getUrlPath().search(this.attrPrefix) !== -1) {
+			var vars = query.split("&");
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split("=");
+				if (pair[0].search(self.attrPrefix) === 0) {
+					query_string[pair[0]] = decodeURIComponent(pair[1]);
+				}
+			}
+		}
+
+		return query_string;
+	},
+	setUtmsUpdate: function() {
+		Mall.reg.set('utm_data',JSON.stringify(this.utm_data));
+	}
+};
+
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
+	Mall.Utm.init();
     Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
