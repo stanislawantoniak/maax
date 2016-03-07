@@ -194,12 +194,6 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
         if (empty($skus)) {
             return array();
         }
-//        $po_open_order = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
-
-//        if (empty($po_open_order)) {
-//            return array();
-//        }
-        //$poOpenOrder = explode(',', $po_open_order);
 
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
@@ -229,6 +223,25 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             ->group('po_item.sku');
 
         $result = $adapter->fetchAssoc($select);
+
+        return $result;
+    }
+
+    public function getPosWebsiteRelation($vendorId)
+    {
+        $adapter = $this->getReadConnection();
+        $posVendorWebsiteTable = $this->getTable("zolagopos/pos_vendor_website");
+
+        $select = $adapter->select();
+
+        $select
+            ->from(
+                array('pos_vendor_website' => $posVendorWebsiteTable),
+                array("website_id", "pos_id")
+            )
+            ->where("vendor_id=?", (int)$vendorId);
+
+        $result = $adapter->fetchAll($select);
 
         return $result;
     }

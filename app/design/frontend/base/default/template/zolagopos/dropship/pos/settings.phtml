@@ -1,15 +1,22 @@
+<?php /* @var $this Zolago_Pos_Block_Dropship_Pos_Settings */ ?>
+
 <?php $helper = Mage::helper('zolagopos'); ?>
 <?php $vendor = $this->getVendor(); ?>
 <?php $posList = $this->getPosList(); ?>
-<?php Mage::log($vendor->getData()); ?>
+<?php
+
+$posConfigurableWebsites = $this->getPosConfigurableWebsites();
+
+$posWebsiteRelation = $this->getPosWebsiteRelation();
+?>
 <br/>
+<form id="pos_settings" class="form-horizontal" method="post" action="<?php echo $this->getSaveUrl(); ?>">
+    <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>">
     <div class="row">
         <div class="col-md-12">
-            <form id="pos_settings" class="form-horizontal" method="post" action="/udropship/pos/settingsSave">
-                <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>">
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo $helper->__("Pos settings");?></h4>
+                        <h4><i class="icon-reorder"></i><?php echo $helper->__("Pos settings");?></h4>
                     </div>
                     <div class="widget-content fiters">
                         <div>
@@ -29,15 +36,77 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-actions">
-                    <button type="reset" id="filter_reset" class="btn pull-right">
-                        <span><span><?php echo $this->__('Cancel');?></span></span>
-                    </button>
-                    <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
-                        <span><span><?php echo $this->__('Save');?></span></span>
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 
+    <?php if(empty($posConfigurableWebsites)): ?>
+        <input name="website_pos_not_available" value="1" type="hidden" />
+        <?php else: ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><i class="icon-reorder"></i><?php echo $helper->__("Assign POS for websites"); ?></h4>
+                    </div>
+                    <div class="widget-content">
+                        <div class="tabbable tabbable-custom tabs-left">
+                            <ul class="nav nav-tabs tabs-left">
+                                <?php $i = 0; ?>
+                                <?php foreach($posConfigurableWebsites as $website): ?>
+                                    <?php /* @var $website Mage_Core_Model_Website */ ?>
+                                    <li class="<?php if ($i == 0): ?>active<?php endif; ?>">
+                                        <a href="#box_tab<?php echo $i; ?>" data-toggle="tab"><?php echo $website->getName(); ?></a>
+                                    </li>
+                                    <?php $i++; ?>
+                                <?php endforeach; ?>
+                                <?php unset($i, $website); ?>
+                            </ul>
+                            <div class="tab-content">
+                                <?php $j = 0; ?>
+                                <?php foreach ($posConfigurableWebsites as $website): ?>
+                                    <?php /* @var $website Mage_Core_Model_Website */ ?>
+                                    <div class="tab-pane <?php if ($j == 0): ?>active<?php endif; ?>" id="box_tab<?php echo $j; ?>">
+                                        <div class="col-md-12">
+                                            <label class="col-md-1 control-label"><?php echo $helper->__("POS"); ?></label>
+
+                                            <div class="col-md-11">
+                                                <?php foreach ($posList as $pos): ?>
+                                                    <label class="checkbox">
+                                                        <div class="checker">
+                                                    <span>
+                                                        <input name="website_pos[<?php echo $website->getId(); ?>][<?php echo $pos->getId(); ?>]"
+                                                               <?php if(isset($posWebsiteRelation[$website->getId()][$pos->getId()])): ?>checked<?php endif; ?>
+                                                               type="checkbox" class="uniform" value="<?php echo $pos->getId(); ?>">
+                                                    </span>
+                                                        </div>
+                                                        <?php echo $pos->getName(); ?>
+                                                    </label>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php $j++; ?>
+                                <?php endforeach; ?>
+                                <?php unset($j); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+<div class="row">
+    <div class="col-md-12">
+            <div class="form-actions">
+                <button type="reset" id="filter_reset" class="btn pull-right">
+                    <span><span><?php echo $this->__('Cancel');?></span></span>
+                </button>
+                <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                    <span><span><?php echo $this->__('Save');?></span></span>
+                </button>
+            </div>
+
+    </div>
+</div>
+</form>

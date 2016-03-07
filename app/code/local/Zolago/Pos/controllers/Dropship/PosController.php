@@ -58,9 +58,44 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 			return $this->_redirectReferer();
 		}
 		$vendor = $this->_getSession()->getVendor();
-		$posId = $this->getRequest()->getParam('problem_pos_id');		
+		$posId = $this->getRequest()->getParam('problem_pos_id');
+		$websitePos = $this->getRequest()->getParam("website_pos");
+
+
+        $websitePosNotAvailable = $this->getRequest()->getParam("website_pos_not_available", 0);
+
+		$vendorId = (int)$vendor->getId();
+
+
+
 		try {
-		    $pos = Mage::getModel('zolagopos/pos')->load($posId);
+
+            $posModel = Mage::getModel('zolagopos/pos');
+
+
+            $adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $posVendorWebsiteTable = $posModel->getResource()->getTable("zolagopos/pos_vendor_website");
+
+            if(empty($websitePosNotAvailable)){
+                $where = $adapter->quoteInto('vendor_id=?', $vendorId);
+                $adapter->delete($posVendorWebsiteTable, $where);
+            }
+
+
+            if (!empty($websitePos)) {
+                foreach ($websitePos as $websiteId => $poses) {
+                    foreach ($poses as $posId) {
+                        $adapter->insertOnDuplicate(
+                            $posVendorWebsiteTable,
+                            array('pos_id' => (int)$posId, "vendor_id" => $vendorId, "website_id" => (int)$websiteId),
+                            array("pos_id", 'vendor_id', "website_id")
+                        );
+                    }
+
+                }
+            }
+
+		    $pos = $posModel->load($posId);
 		    if (!$pos->getId()) {
 		        Mage::throwException($helper->__('Pos does not exists'));
 		    }
