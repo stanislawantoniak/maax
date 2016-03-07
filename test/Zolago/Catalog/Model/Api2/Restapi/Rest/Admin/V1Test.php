@@ -5,73 +5,46 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
         $liczba = rand(5, 500);
         $param =array (
-            5 => array (
-                '5-8325-85C' => array(
+            10 => array (
+                '10-04J462-4-011' => array(
+                    'SKLEP2' => 5,
+                    'SKLEP1' => 6,
+                    'MAGAZYN' => $liczba,
+                    'k99' => 7
+                ),
+                '10-04J462-4-012' => array(
                     'SKLEP2' => 0,
                     'SKLEP1' => 0,
                     'MAGAZYN' => $liczba,
                     'k99' => 0
                 ),
-                '5-8325-85B' => array(
+                '10-04J462-4-013' => array(
                     'SKLEP2' => 0,
                     'SKLEP1' => 0,
                     'MAGAZYN' => $liczba,
                     'k99' => 0
                 ),
-                '5-8325-75E' => array(
+                '10-04J462-4-014' => array(
                     'SKLEP2' => 0,
                     'SKLEP1' => 0,
                     'MAGAZYN' => $liczba,
                     'k99' => 0
                 ),
-                '5-8325-75D' => array(
+
+                '10-04J462-4-015' => array(
                     'SKLEP2' => 0,
                     'SKLEP1' => 0,
                     'MAGAZYN' => $liczba,
                     'k99' => 0
                 ),
-                '5-8325-70E' => array(
+
+                '10-04J462-4-016' => array(
                     'SKLEP2' => 0,
                     'SKLEP1' => 0,
                     'MAGAZYN' => $liczba,
                     'k99' => 0
                 ),
-                '5-8325-70C' => array(
-                    'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
-                    'k99' => 0
-                ),
-                '5-8325-70B' => array(
-                    'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
-                    'k99' => 0
-                ),
-                '5-8325-65C' => array(
-                    'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
-                    'k99' => 0
-                ),
-//                '5-30025-BEZOWY-38' => array (
-//                    'SKLEP2' => 0,
-//                    'SKLEP1' => $liczba,
-//                    'MAGAZYN' => 0,
-//                    'k99' => 0
-//                ),
-//                '5-30025-BEZOWY-40' => array (
-//                    'SKLEP2' => 0,
-//                    'SKLEP1' =>$liczba,
-//                    'MAGAZYN' => 0,
-//                    'k99' => 0
-//                ),
-//                '5-30025-BEZOWY-42' => array (
-//                    'SKLEP2' => 0,
-//                    'SKLEP1' => $liczba,
-//                    'MAGAZYN' => 0,
-//                    'k99' => 0
-//                ),
+
             ),
         );
         $obj::updateStockConverter($param);

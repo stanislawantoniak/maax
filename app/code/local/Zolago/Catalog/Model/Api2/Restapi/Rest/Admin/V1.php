@@ -155,29 +155,36 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             return;
         }
         $skuS = array();
+
         foreach ($stockBatch as $stockBatchItem) {
             $skuS = array_merge($skuS, array_keys($stockBatchItem));
         }
 
         $stockId = 1;
         $availableStockByMerchant = array();
+
         //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
         foreach ($stockBatch as $merchant => $stockData) {
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
+
         }
-        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
+
         if (empty($availableStockByMerchant)) {
             return;
         }
 
+
+
         $productIdsSkuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
+
+
         //2. calculate stock on open orders (reservation)
 
         /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS); //reservation
-
 
         $availableStockByMerchantOnOpenOrders = array();
         foreach ($availableStockByMerchant as $sku => $availableStockByMerchantQty) {
@@ -400,6 +407,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //Save price
         $model->savePriceValues($insert, $ids);
     }
+
 
 
 }
