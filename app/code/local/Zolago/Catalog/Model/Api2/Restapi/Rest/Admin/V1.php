@@ -142,6 +142,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         return $json;
     }
 
+
     /**
      * 1. Update stock item
      * 2. Run indexer
