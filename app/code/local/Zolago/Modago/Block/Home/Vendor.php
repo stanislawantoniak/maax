@@ -18,10 +18,9 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 	/**
 	 * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
 	 */
-	public function getVendorColleciton() {
+	public function getVendorColleciton($limit=false) {
 		if(!$this->hasData("vendor_collection")){
             $localVendorId = Mage::helper('udropship/data')->getLocalVendorId();
-            $vendorsCount = Mage::getStoreConfig('design/popular_brands/popular_brands_count');
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
 			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
 			$collection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
@@ -31,9 +30,11 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
             $collection->setOrder("sequence", Varien_Data_Collection::SORT_ORDER_ASC);
             $collection->setOrder("vendor_name", Varien_Data_Collection::SORT_ORDER_ASC);
 
-            $collection->setPageSize($vendorsCount);
-			// Load serialized data
+			if($limit) {
+				$collection->setPageSize($limit);
+			}
 
+			// Load serialized data
 			foreach($collection as $vendor){
 				Mage::helper('udropship')->loadCustomData($vendor);
 			}
@@ -42,19 +43,8 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 		return $this->getData("vendor_collection");
 	}
 
-	public function addDummyVendorsToCollection(&$collection,$configMax) {
+	public function addDummyVendorsToCollection(&$collection,$totalBrandsBlocks) {
 		$collectionSize = $collection->count();
-
-		$dummyVendorsCount = array();
-		for($i = 2; $i <= 8; $i++) {
-			$dummyVendorsCount[$i] = $collectionSize % $i;
-		}
-
-		foreach($dummyVendorsCount as $cols=>$num) {
-			if($num) {
-				$dummyVendorsCount[$cols] = $cols - $num;
-			}
-		}
 
 		$dummyVendor = new Zolago_Dropship_Model_Vendor();
 		$dummyVendor
@@ -62,21 +52,10 @@ class Zolago_Modago_Block_Home_Vendor extends Mage_Core_Block_Template
 			->setVendorResizedLogoUrl($this->getSkinUrl('images/brand_comming.png'))
 			->setVendorName(Mage::helper("zolagomodago")->__("Next soon"));
 
-		$maxDummies = max($dummyVendorsCount);
+		$maxDummies = $totalBrandsBlocks - $collectionSize;
 
 		for ($i = 0; $i < $maxDummies; $i++) {
-			$classesToAdd = "brands-dummy";
-
-			foreach($dummyVendorsCount as $col => $num) {
-				if($collectionSize >= $configMax[$col] || $num <= $i) {
-					$classesToAdd .= ' hidden-'.$col;
-				}
-			}
-
-			$clonedDummy = clone($dummyVendor);
-			$clonedDummy->setClasses($classesToAdd);
-
-			$collection->addItem($clonedDummy);
+			$collection->addItem($dummyVendor);
 		}
 
 	}
