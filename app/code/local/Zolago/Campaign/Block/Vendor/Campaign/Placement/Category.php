@@ -33,10 +33,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryRoot = explode("/", $category->getPath())[1];
 
-        $coreStoreGroup = Mage::getModel("core/store_group")->getCollection();
-        $coreStoreGroup->addFieldToFilter("root_category_id", $categoryRoot);
-        $websiteId = $coreStoreGroup->getFirstItem()->getWebsiteId();
-
+        $websiteId = Mage::app()->getRequest()->getParam("website",0);
 
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = $vendor->getId();
