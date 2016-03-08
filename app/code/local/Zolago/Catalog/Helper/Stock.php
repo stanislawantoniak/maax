@@ -129,9 +129,9 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             $posIds[$pos->getExternalId()] = $pos->getId();
         }
 
-        if (empty($posIds)) {
+        if (empty($posIds))
             return;
-        }
+
         $rows = array();
 
         $table = Mage::getModel("zolagopos/stock")->getResource()->getMainTable();
@@ -151,8 +151,8 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             }
         }
 
-        if (empty($rows)) {
+        if (empty($rows))
             return;
-        }
+
     }
 }
