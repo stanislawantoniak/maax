@@ -8,7 +8,7 @@ class Zolago_Pos_Block_Dropship_Pos_Settings extends Mage_Core_Block_Template {
     /**
      * pos list
      *
-     * @return array
+     * @return Zolago_Pos_Model_Resource_Pos_Collection
      */
      public function getPosList() {
          $vendor = $this->getVendor();
@@ -34,7 +34,7 @@ class Zolago_Pos_Block_Dropship_Pos_Settings extends Mage_Core_Block_Template {
     /**
      * logged vendor
      *
-     * @return Unirgy_Dropship_Model_Vendor     
+     * @return Zolago_Dropship_Model_Vendor
      */
      public function getVendor() {
          return Mage::getSingleton('udropship/session')->getVendor();
