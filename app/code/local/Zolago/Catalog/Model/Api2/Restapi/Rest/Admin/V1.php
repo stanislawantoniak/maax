@@ -161,7 +161,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $skuS = array_merge($skuS, array_keys($stockBatchItem));
         }
 
-        $stockId = 1;
+        $stockId = Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
         $availableStockByMerchant = array();
 
 
@@ -169,7 +169,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-
+        Mage::log($availableStockByMerchant, null, "XXX.log");
         if (empty($availableStockByMerchant))
             return;
         
@@ -190,6 +190,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         foreach ($collection as $val) {
             $stocks[$val->getProductId()] = (int)$val->getIsInStock();
         }
+
         foreach ($availableStockByMerchant as $id => $qty) {
             $is_in_stock = ($qty > 0) ? 1 : 0;
             $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
