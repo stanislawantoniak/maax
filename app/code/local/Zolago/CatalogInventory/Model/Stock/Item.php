@@ -39,34 +39,7 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Mage_CatalogInventory_Mod
         if (!is_null($stockStatus)) { //simple product
             $productId = $this->getProductId();
 
-//            SELECT
-//  `cataloginventory_stock_status`.`product_id`,
-//IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0) AS stock_status
-//FROM
-//  `cataloginventory_stock_status`
-//
-//  LEFT JOIN `zolago_pos_stock` AS `pos_stock`
-//    ON pos_stock.product_id = cataloginventory_stock_status.product_id
-//  LEFT JOIN `zolago_pos` AS `pos`
-//    ON pos.pos_id = pos_stock.pos_id
-//  LEFT JOIN `zolago_pos_vendor_website` AS `pos_website`
-//    ON pos_website.website_id = cataloginventory_stock_status.website_id
-//WHERE (
-//    cataloginventory_stock_status.product_id IN ('33712')
-//  )
-//  AND (stock_id = 1)
-//            AND (
-//            cataloginventory_stock_status.website_id = 1
-//            )
-//            AND (pos_website.website_id = 1)
-//            AND (pos.is_active = 1)
-//            AND  pos_stock.`pos_id`=pos.`pos_id`
-//            AND  pos_website.`pos_id`=pos.pos_id
-//            AND`cataloginventory_stock_status`.`product_id`
-//GROUP BY `cataloginventory_stock_status`.`product_id`
-
-
-            //TODO add logic for POSes
+            //logic for POSes
 
             $select = $this->getResource()->getReadConnection()->select()
                 ->from("cataloginventory_stock_status",
