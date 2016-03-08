@@ -3,14 +3,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 
     public function testStock() {
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-        $liczba = rand(5, 500);
+        $liczba = 21;
         $param =array (
             10 => array (
                 '10-04J462-4-011' => array(
-                    'SKLEP2' => 5,
-                    'SKLEP1' => 6,
+                    'SKLEP2' => 10,
+                    'SKLEP1' => 20,
                     'MAGAZYN' => $liczba,
-                    'k99' => 7
+                    'k99' => 30
                 ),
                 '10-04J462-4-012' => array(
                     'SKLEP2' => 0,

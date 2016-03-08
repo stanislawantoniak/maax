@@ -164,11 +164,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $stockId = 1;
         $availableStockByMerchant = array();
 
-        //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
+
         foreach ($stockBatch as $merchant => $stockData) {
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
-
         }
 
         if (empty($availableStockByMerchant)) {
@@ -176,63 +175,37 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
 
-
-        $productIdsSkuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
-
-
-
-        //2. calculate stock on open orders (reservation)
-
-        /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
-        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
-        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS); //reservation
-
-        $availableStockByMerchantOnOpenOrders = array();
-        foreach ($availableStockByMerchant as $sku => $availableStockByMerchantQty) {
-            //$productIdsSkuAssoc[$sku] product_id
-            //$openOrdersQty[$sku] products qty on open orders
-            if (isset($productIdsSkuAssoc[$sku])) {
-                $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku]['qty'] : 0;
-                $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = (($availableStockByMerchantQty - $qtyOnOpenOrders) > 0 ) ? ($availableStockByMerchantQty - $qtyOnOpenOrders) : 0;
-            }
-        }
-        unset($qtyOnOpenOrders);
-        unset($availableStockByMerchantQty);
-
         /*Prepare data to insert*/
-        if (empty($availableStockByMerchantOnOpenOrders)) {
-            return;
-        }
 
         $productsIds = array();
 
         $productsIdsForSolrAndVarnishBan = array();
 
         $cataloginventoryStockItem = array();
-        if (!empty($availableStockByMerchantOnOpenOrders)) {
-            $collection = Mage::getResourceModel('cataloginventory/stock_item_collection');
-            $productIds = array_keys($availableStockByMerchantOnOpenOrders);
-            $collection->addProductsFilter($productIds);
-            $stocks = array();
-            foreach ($collection as $val) {
-                $stocks[$val->getProductId()] = (int) $val->getIsInStock();
-            }            
-            foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
-                $is_in_stock = ($qty > 0) ? 1 : 0;
-                $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
 
-                $productsIds[$id] = $id;
-                if ($stocks[$id] != $is_in_stock) {
-                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
-                        "product_id" => $id,
-                        "qty" => $qty,
-                        "is_in_stock" => $is_in_stock,
-                        "stock_id" => $stockId
-                    ));
-                    $productsIdsForSolrAndVarnishBan[$id] = $id;
-                };
-            }
+        $collection = Mage::getResourceModel('cataloginventory/stock_item_collection');
+        $productIds = array_keys($availableStockByMerchant);
+        $collection->addProductsFilter($productIds);
+        $stocks = array();
+        foreach ($collection as $val) {
+            $stocks[$val->getProductId()] = (int)$val->getIsInStock();
         }
+        foreach ($availableStockByMerchant as $id => $qty) {
+            $is_in_stock = ($qty > 0) ? 1 : 0;
+            $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
+
+            $productsIds[$id] = $id;
+            if ($stocks[$id] != $is_in_stock) {
+                Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                    "product_id" => $id,
+                    "qty" => $qty,
+                    "is_in_stock" => $is_in_stock,
+                    "stock_id" => $stockId
+                ));
+                $productsIdsForSolrAndVarnishBan[$id] = $id;
+            };
+        }
+
         if (empty($cataloginventoryStockItem)) {
             return;
         }

@@ -47,7 +47,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
      *
      * @return array
      */
-    public static function getAvailableStock($dataStock, $vendor)
+    public static function getAvailableStock($dataStock, $vendorId)
     {
         //$batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_STOCK_UPDATE_LOG;
 
@@ -67,12 +67,17 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         $skuS = array_keys($dataStock);
         //1. get min POS stock (calculate available stock)
         $posResourceModel = Mage::getResourceModel('zolagopos/pos');
-        $minPOSValues = $posResourceModel->getMinPOSStock($vendor);
-
-        $availablePos = array_keys($minPOSValues);
+        $minPOSValues = $posResourceModel->getMinPOSStock($vendorId);
 
 
         $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
+        //2. calculate stock on open orders (reservation)
+
+        /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
+        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
+        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($vendorId, $skuS); //reservation
+
 
         $dataAllocateToPOS = array();
 
@@ -81,24 +86,14 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             $dataStockItems = (array)$dataStockItem;
             if (!empty($dataStockItems)) {
                 foreach ($dataStockItems as $stockId => $posStockConverter) {
-                    //Mage::log(print_r($posStockConverter, true), 0, "minimalStockPOS.log");
-                    //false if POS is not active
-                    //Mage::log(in_array($stockId, $availablePos), 0, "minimalStockPOS.log");
-                    if (in_array($stockId, $availablePos)) {
-                        $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
 
-                        //Mage::log($stockId, 0, "minimalStockPOS.log");
-                        //Mage::log($minimalStockPOS, 0, "minimalStockPOS.log");
-                        //available stock = if [POS stock from converter]>[minimal stock from POS] then [POS stock from converter] - [minimal stock from POS] else 0
-                        $data[$sku][$stockId] = ($posStockConverter > $minimalStockPOS)
-                            ? ($posStockConverter - $minimalStockPOS) : 0;
+                    $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
+                    $reservedOnPOStock = isset($openOrdersQty[$sku][$stockId]) ? (int)$openOrdersQty[$sku][$stockId] : 0;
 
-                        //Allocate Product STOCK by POS
-                        $dataAllocateToPOS[$skuIdAssoc[$sku]][$stockId] = $data[$sku][$stockId];
+                    $data[$sku][$stockId] = $posStockConverter - $minimalStockPOS - $reservedOnPOStock;
 
-
-
-                    }
+                    //Allocate Product STOCK by POS
+                    $dataAllocateToPOS[$skuIdAssoc[$sku]][$stockId] = $data[$sku][$stockId];
 
 
                 }
@@ -111,16 +106,20 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         $dataSum = array();
         foreach ($data as $sku => $_) {
             $qty = array_sum((array)$_);
-            $dataSum[$sku] = $qty;
+            $dataSum[$skuIdAssoc[$sku]] = $qty;
         }
         unset($_);
-        self::allocateProductByPOS($vendor,$dataAllocateToPOS);
+        self::allocateProductByPOS($vendorId,$dataAllocateToPOS);
 
 
         return $dataSum;
     }
 
 
+    /**
+     * @param $vendorId
+     * @param $dataAllocateToPOS
+     */
     public static function allocateProductByPOS($vendorId, $dataAllocateToPOS)
     {
         $poses = Zolago_Pos_Model_Observer::getVendorPOSes($vendorId);
@@ -141,7 +140,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         foreach ($dataAllocateToPOS as $productId => $data) {
             foreach ($data as $stockExternalId => $qty) {
                 $posId = isset($posIds[$stockExternalId]) ? $posIds[$stockExternalId] : FALSE;
-                if ($posId && $qty > 0) {
+                if ($posId) {
                     $adapter->insertOnDuplicate(
                         $table,
                         array("product_id" => (int)$productId, "pos_id" => (int)$posId, "qty" => $qty),
@@ -155,8 +154,5 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         if (empty($rows)) {
             return;
         }
-
-
-
     }
 }
