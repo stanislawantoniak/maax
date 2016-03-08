@@ -116,6 +116,17 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         return $dataSum;
     }
 
+    /**
+     * @return Zolago_Pos_Model_Resource_Pos_Collection
+     */
+    public function getVendorPOSes($vendorId) {
+        /* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
+        $collection = Mage::getResourceModel("zolagopos/pos_collection");
+        $collection->addVendorFilter((int)$vendorId);
+        $collection->addActiveFilter();
+        $collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
+        return $collection;
+    }
 
     /**
      * @param $vendorId
@@ -123,7 +134,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
      */
     public static function allocateProductByPOS($vendorId, $dataAllocateToPOS)
     {
-        $poses = Zolago_Pos_Model_Observer::getVendorPOSes($vendorId);
+        $poses = self::getVendorPOSes($vendorId);
         $posIds = array();
         foreach ($poses as $pos) {
             /* @var $pos Zolago_Pos_Model_Pos */
