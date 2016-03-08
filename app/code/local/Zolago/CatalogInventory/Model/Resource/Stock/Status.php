@@ -17,14 +17,58 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
         $this->_init('cataloginventory/stock_status', 'product_id');
     }
 
+
     /**
-     * Retrieve stock identifier
+     * Retrieve product status
+     * Return array as key product id, value - stock status
      *
-     * @return int
+     * @param int|array $productIds
+     * @param int $websiteId
+     * @param int $stockId
+     * @return array
      */
-    public function getStockId()
+    public function getProductStatus($productIds, $websiteId, $stockId = 1)
     {
-        return 1;
+        if (!is_array($productIds)) {
+            $productIds = array($productIds);
+        }
+
+        $select = $this->_getReadAdapter()->select()
+            ->from($this->getMainTable(),
+                array(
+                    'product_id',
+                    //'stock_status',
+                    'IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0) AS stock_status'
+                )
+            )
+			->joinLeft(
+                array('link' => $this->getTable("catalog/product_super_link")),
+                "link.parent_id = cataloginventory_stock_status.product_id",
+                array()
+            )
+			->joinLeft(
+                array('pos_stock' => $this->getTable("zolagopos/stock")),
+                "pos_stock.product_id = link.product_id",
+                array()
+            )
+			->joinLeft(
+                array('pos' => $this->getTable("zolagopos/pos")),
+                "pos.pos_id = pos_stock.pos_id",
+                array()
+            )
+            ->joinLeft(
+                array('pos_website' => $this->getTable("zolagopos/pos_vendor_website")),
+                "pos_website.website_id = cataloginventory_stock_status.website_id",
+                array()
+            )
+            ->where('cataloginventory_stock_status.product_id IN(?)', $productIds)
+            ->where('stock_id=?', (int)$stockId)
+            ->where('cataloginventory_stock_status.website_id=?', (int)$websiteId)
+            ->where('pos_website.website_id=?', (int)$websiteId)
+            ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
+            ->group('cataloginventory_stock_status.product_id');
+        Mage::log((string)$select, null, "333.log");
+        return $this->_getReadAdapter()->fetchPairs($select);
     }
 
     /**
@@ -40,7 +84,7 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
     {
         $this->beginTransaction();
         try {
-            $stockId = $this->getStockId();
+            $stockId = Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
 
             $insert = sprintf(
                 "INSERT INTO %s (product_id,qty,stock_status,stock_id,website_id) VALUES %s "

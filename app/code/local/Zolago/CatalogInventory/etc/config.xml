@@ -14,6 +14,16 @@
             <zolago_cataloginventory_resource>
                 <class>Zolago_CatalogInventory_Model_Resource</class>
             </zolago_cataloginventory_resource>
+            <cataloginventory_resource>
+                <rewrite>
+                    <stock_status>Zolago_CatalogInventory_Model_Resource_Stock_Status</stock_status>
+                </rewrite>
+            </cataloginventory_resource>
+            <cataloginventory>
+                <rewrite>
+                    <stock_item>Zolago_CatalogInventory_Model_Stock_Item</stock_item>
+                </rewrite>
+            </cataloginventory>
         </models>
         <helpers>
             <zolagocataloginventory>
