@@ -871,18 +871,25 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             return $adapter->fetchAll($select);
         }
 
-        // Join stocks index.
-        // @spike Mayby from regular table?
+		// Join stocks index.
         if(isset($extraJoins[self::JOIN_STOCK])) {
-            $joinCond = array(
-                            "stock_item.product_id=product.entity_id",
-                            $adapter->quoteInto("stock_item.website_id=?", $websiteId),
-                        );
-            $select->joinLeft(
-                array("stock_item"=>$this->getTable("cataloginventory/stock_status")),
-                implode(" AND ", $joinCond),
-                array("qty", "stock_status")
-            );
+			$select->joinLeft(
+				array('link' => $this->getTable("catalog/product_super_link")),
+				"link.parent_id = product.entity_id",
+				array()
+			);
+			$select->joinLeft(
+				array('stock' => $this->getTable("zolagopos/stock")),
+				"stock.product_id = link.product_id",
+				array()
+			);
+			$select->joinLeft(
+				array('pos' => $this->getTable("zolagopos/pos")),
+				"pos.pos_id = stock.pos_id AND pos.is_active = " . Zolago_Pos_Model_Pos::STATUS_ACTIVE,
+				array()
+			);
+			$select->columns('IF(IFNULL(SUM(stock.qty), 0) > 0, 1, 0) AS stock_status');
+			$select->group('product.entity_id');
         }
         // Join price data
         if(isset($extraJoins[self::JOIN_PRICE])) {

@@ -70,6 +70,19 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract {
     public function testCheckProductActionHelp() {
         return "use ex: php -f shell/devtest -action testCheckProduct -pid 26";
     }
+
+	/**
+	 * Process solr search queue like before AOE scheduler
+	 */
+	public function solrAction() {
+		/** @var Zolago_Solrsearch_Model_Queue $model */
+		$model = Mage::getSingleton('zolagosolrsearch/queue');
+		$model->process();
+	}
+
+	public function solrActionHelp() {
+		return "use ex: php -f shell/devtest -action solr";
+	}
 }
 
 $shell = new Aoe_Scheduler_Shell_Scheduler();
