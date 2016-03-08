@@ -43,13 +43,11 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
     /**
      * @param $dataStock
-     * @param $merchant
-     *
+     * @param $vendorId
      * @return array
      */
     public static function getAvailableStock($dataStock, $vendorId)
     {
-        //$batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_STOCK_UPDATE_LOG;
 
         if (empty($dataStock)) {
             return array();
@@ -68,7 +66,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         //1. get min POS stock (calculate available stock)
         $posResourceModel = Mage::getResourceModel('zolagopos/pos');
         $minPOSValues = $posResourceModel->getMinPOSStock($vendorId);
-
+        $availablePos = array_keys($minPOSValues);
 
         $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
 
@@ -86,6 +84,8 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             $dataStockItems = (array)$dataStockItem;
             if (!empty($dataStockItems)) {
                 foreach ($dataStockItems as $stockId => $posStockConverter) {
+                    if (!in_array($stockId, $availablePos))
+                        continue;
 
                     $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
                     $reservedOnPOStock = isset($openOrdersQty[$sku][$stockId]) ? (int)$openOrdersQty[$sku][$stockId] : 0;

@@ -170,9 +170,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
 
-        if (empty($availableStockByMerchant)) {
+        if (empty($availableStockByMerchant))
             return;
-        }
+        
 
 
         /*Prepare data to insert*/
