@@ -161,7 +161,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $skuS = array_merge($skuS, array_keys($stockBatchItem));
         }
 
-        $stockId = 1;
+        $stockId = Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
         $availableStockByMerchant = array();
 
 
