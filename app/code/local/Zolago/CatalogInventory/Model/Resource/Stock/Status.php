@@ -35,21 +35,20 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
 
         $posStockTable = $this->getTable("zolagopos/stock");
         $select = $this->_getReadAdapter()->select()
-            ->from($posStockTable,
+            ->from(array("pos_stock" => $posStockTable),
                 array(
-                    'catalog_product_super_link.parent_id AS product_id',
-                    //'stock_status',
-                    "IF(IFNULL(SUM({$posStockTable}.qty), 0) > 0, 1, 0) AS stock_status"
+                    'product_id' => 'catalog_product_super_link.parent_id',
+                    "stock_status" => new Zend_Db_Expr("IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0)")
                 )
             )
             ->joinLeft(
                 array("catalog_product_super_link" => $this->getTable("catalog/product_super_link")),
-                "{$posStockTable}.product_id = catalog_product_super_link.product_id",
+                "pos_stock.product_id = catalog_product_super_link.product_id",
                 array()
             )
 			->joinLeft(
                 array('pos' => $this->getTable("zolagopos/pos")),
-                "pos.pos_id = {$posStockTable}.pos_id",
+                "pos.pos_id = pos_stock.pos_id",
                 array()
             )
             ->joinLeft(

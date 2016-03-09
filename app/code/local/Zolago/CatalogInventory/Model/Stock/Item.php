@@ -44,16 +44,15 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
             $resource = $this->getResource();
             $posStockTable = $resource->getTable("zolagopos/stock");
             $select = $resource->getReadConnection()->select()
-                ->from($posStockTable,
+                ->from(array("pos_stock" => $posStockTable),
                     array(
                         'product_id',
-                        //'stock_status',
-                        "IF(IFNULL(SUM({$posStockTable}.qty), 0) > 0, 1, 0) AS stock_status"
+                        "stock_status" => new Zend_Db_Expr("IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0)")
                     )
                 )
                 ->joinLeft(
                     array('pos' => $resource->getTable("zolagopos/pos")),
-                    "pos.pos_id = {$posStockTable}.pos_id",
+                    "pos.pos_id = pos_stock.pos_id",
                     array()
                 )
                 ->joinLeft(
@@ -61,10 +60,10 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
                     "pos_website.pos_id = pos.pos_id",
                     array()
                 )
-                ->where("{$posStockTable}.product_id=?", $productId)
+                ->where("pos_stock.product_id=?", $productId)
                 ->where('pos_website.website_id=?', Mage::app()->getWebsite()->getId())
                 ->where("pos.is_active = ?", Zolago_Pos_Model_Pos::STATUS_ACTIVE)
-                ->group("{$posStockTable}.product_id");
+                ->group("pos_stock.product_id");
 
             $result = $resource->getReadConnection()->fetchRow($select);
 
