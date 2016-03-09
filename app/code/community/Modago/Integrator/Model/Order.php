@@ -263,6 +263,7 @@ class Modago_Integrator_Model_Order {
 				$price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //netto*/
 
 				$product->setPrice($apiProduct->item_value_after_discount); //$price
+				$product->setSpecialPrice(null);
 
 				$out[$productId] = array(
 					'model' => $product,
