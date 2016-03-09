@@ -482,16 +482,7 @@ define([
 		});
 		put(node, content);
 	};
-
-    var rendererProductPreview = function(item,value,node,options) {
-        var content = put("div");
-        console.log(item);
-        put(content, "a", {
-            href: '#',
-            innerHTML: "test",
-            onclick: "javscript: alert('łałałiła');"
-        });
-    };
+    
     /**
      * @param {string} currency
      * @returns {Function}
