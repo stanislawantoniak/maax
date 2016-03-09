@@ -3,7 +3,7 @@
 /**
  * Class Zolago_CatalogInventory_Model_Stock_Item
  */
-class Zolago_CatalogInventory_Model_Stock_Item extends Mage_CatalogInventory_Model_Stock_Item {
+class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Stock_Item {
 
 
     /**
