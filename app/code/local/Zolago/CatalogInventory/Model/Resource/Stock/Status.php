@@ -67,7 +67,7 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             ->where('pos_website.website_id=?', (int)$websiteId)
             ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
             ->group('cataloginventory_stock_status.product_id');
-        Mage::log((string)$select, null, "333.log");
+
         return $this->_getReadAdapter()->fetchPairs($select);
     }
 

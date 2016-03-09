@@ -49,7 +49,6 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
                         'IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0) AS stock_status'
                     )
                 )
-
                 ->joinLeft(
                     array('pos_stock' => $this->getResource()->getTable("zolagopos/stock")),
                     "pos_stock.product_id = cataloginventory_stock_status.product_id",
@@ -69,14 +68,13 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
                 ->where('stock_id=?', 1)
                 ->where('cataloginventory_stock_status.website_id=?', Mage::app()->getWebsite()->getId())
                 ->where('pos_website.website_id=?', Mage::app()->getWebsite()->getId())
-                ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
-
+                ->where("pos.is_active = ?", Zolago_Pos_Model_Pos::STATUS_ACTIVE)
                 ->where("pos_stock.pos_id=pos.pos_id")
                 ->where("pos_website.pos_id=pos.pos_id")
                 ->group('cataloginventory_stock_status.product_id');
             $result = $this->getResource()->getReadConnection()->fetchRow($select);
 
-            $stockStatus = $result["stock_status"];
+            $stockStatus = isset($result["stock_status"]) ? $result["stock_status"] : 0;
 
         }
         return $stockStatus;
