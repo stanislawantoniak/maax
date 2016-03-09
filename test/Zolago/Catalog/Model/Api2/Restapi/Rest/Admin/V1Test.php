@@ -3,45 +3,86 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
 
     public function testStock() {
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-        $liczba = 1;
+        $liczbaA1 = 5;
+        $liczbaB1 = 6;
+
+
+        $liczbaA2 = 6;
+        $liczbaB2 = 5;
+
         $param =array (
             10 => array (
                 '10-04J462-4-011' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
+                    'SKLEP1' => $liczbaA1,
+                    'MAGAZYN' => $liczbaB1,
                     'k99' => 0
                 ),
                 '10-04J462-4-012' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
+                    'SKLEP1' => $liczbaA1,
+                    'MAGAZYN' => $liczbaB1,
                     'k99' => 0
                 ),
                 '10-04J462-4-013' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
+                    'SKLEP1' => $liczbaA1,
+                    'MAGAZYN' => $liczbaB1,
                     'k99' => 0
                 ),
                 '10-04J462-4-014' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
+                    'SKLEP1' => $liczbaA1,
+                    'MAGAZYN' => $liczbaB1,
                     'k99' => 0
                 ),
 
                 '10-04J462-4-015' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
+                    'SKLEP1' => $liczbaA1,
+                    'MAGAZYN' => $liczbaB1,
                     'k99' => 0
                 ),
 
                 '10-04J462-4-016' => array(
                     'SKLEP2' => 0,
-                    'SKLEP1' => 0,
-                    'MAGAZYN' => $liczba,
+                    'SKLEP1' => $liczbaA1,
+                    'MAGAZYN' => 0,
+                    'k99' => 0
+                ),
+
+
+
+                //10-04B163A5-01
+                '10-04B163A5-010' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => $liczbaA2,
+                    'MAGAZYN' => $liczbaB2,
+                    'k99' => 0
+                ),
+                '10-04B163A5-011' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => $liczbaA2,
+                    'MAGAZYN' => $liczbaB2,
+                    'k99' => 0
+                ),
+                '10-04B163A5-012' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => $liczbaA2,
+                    'MAGAZYN' => $liczbaB2,
+                    'k99' => 0
+                ),
+                '10-04B163A5-013' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => $liczbaA2,
+                    'MAGAZYN' => $liczbaB2,
+                    'k99' => 0
+                ),
+
+                '10-04B163A5-014' => array(
+                    'SKLEP2' => 0,
+                    'SKLEP1' => $liczbaA2,
+                    'MAGAZYN' => $liczbaB2,
                     'k99' => 0
                 ),
 

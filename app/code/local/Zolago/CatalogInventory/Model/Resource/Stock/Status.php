@@ -33,23 +33,23 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             $productIds = array($productIds);
         }
 
-        $catalogProductSuperLinkTable = $this->getTable("catalog/product_super_link");
+        $posStockTable = $this->getTable("zolagopos/stock");
         $select = $this->_getReadAdapter()->select()
-            ->from($this->getTable("catalog/product_super_link"),
+            ->from($posStockTable,
                 array(
-                    'parent_id',
+                    'catalog_product_super_link.parent_id',
                     //'stock_status',
-                    'IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0) AS stock_status'
+                    "IF(IFNULL(SUM({$posStockTable}.qty), 0) > 0, 1, 0) AS stock_status"
                 )
             )
-			->joinLeft(
-                array('pos_stock' => $this->getTable("zolagopos/stock")),
-                "pos_stock.product_id = {$catalogProductSuperLinkTable}.product_id",
+            ->joinLeft(
+                array("catalog_product_super_link" => $this->getTable("catalog/product_super_link")),
+                "{$posStockTable}.product_id = catalog_product_super_link.product_id",
                 array()
             )
 			->joinLeft(
                 array('pos' => $this->getTable("zolagopos/pos")),
-                "pos.pos_id = pos_stock.pos_id",
+                "pos.pos_id = {$posStockTable}.pos_id",
                 array()
             )
             ->joinLeft(
@@ -57,11 +57,11 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
                 "pos_website.pos_id = pos.pos_id",
                 array()
             )
-            ->where("{$catalogProductSuperLinkTable}.parent_id IN(?)", $productIds)
+            ->where("catalog_product_super_link.parent_id IN(?)", $productIds)
 
             ->where('pos_website.website_id=?', (int)$websiteId)
             ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
-            ->group("{$catalogProductSuperLinkTable}.parent_id");
+            ->group("catalog_product_super_link.parent_id");
 
         return $this->_getReadAdapter()->fetchPairs($select);
     }
