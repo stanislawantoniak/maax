@@ -75,7 +75,7 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
                 ->where("pos_website.pos_id=pos.pos_id")
                 ->group('cataloginventory_stock_status.product_id');
             $result = $this->getResource()->getReadConnection()->fetchRow($select);
-            Mage::log((string)$select, null, "555.log");
+
             $stockStatus = $result["stock_status"];
 
         }
