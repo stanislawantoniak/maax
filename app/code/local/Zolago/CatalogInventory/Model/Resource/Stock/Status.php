@@ -33,22 +33,18 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             $productIds = array($productIds);
         }
 
+        $catalogProductSuperLinkTable = $this->getTable("catalog/product_super_link");
         $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(),
+            ->from($this->getTable("catalog/product_super_link"),
                 array(
-                    'product_id',
+                    'parent_id',
                     //'stock_status',
                     'IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0) AS stock_status'
                 )
             )
 			->joinLeft(
-                array('link' => $this->getTable("catalog/product_super_link")),
-                "link.parent_id = cataloginventory_stock_status.product_id",
-                array()
-            )
-			->joinLeft(
                 array('pos_stock' => $this->getTable("zolagopos/stock")),
-                "pos_stock.product_id = link.product_id",
+                "pos_stock.product_id = {$catalogProductSuperLinkTable}.product_id",
                 array()
             )
 			->joinLeft(
@@ -58,18 +54,14 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             )
             ->joinLeft(
                 array('pos_website' => $this->getTable("zolagopos/pos_vendor_website")),
-                "pos_website.website_id = cataloginventory_stock_status.website_id",
+                "pos_website.pos_id = pos.pos_id",
                 array()
             )
-            ->where('cataloginventory_stock_status.product_id IN(?)', $productIds)
-            ->where('stock_id=?', (int)$stockId)
-            ->where('cataloginventory_stock_status.website_id=?', (int)$websiteId)
-            ->where('pos_website.website_id=?', (int)$websiteId)
-            ->where("pos_stock.pos_id=pos.pos_id")
-            ->where("pos_website.pos_id=pos.pos_id")
-            ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
-            ->group('cataloginventory_stock_status.product_id');
+            ->where("{$catalogProductSuperLinkTable}.parent_id IN(?)", $productIds)
 
+            ->where('pos_website.website_id=?', (int)$websiteId)
+            ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
+            ->group("{$catalogProductSuperLinkTable}.parent_id");
 
         return $this->_getReadAdapter()->fetchPairs($select);
     }
