@@ -169,7 +169,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-        Mage::log($availableStockByMerchant, null, "XXX.log");
+
         if (empty($availableStockByMerchant))
             return;
         
