@@ -65,7 +65,7 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
                     array()
                 )
                 ->where('cataloginventory_stock_status.product_id=?', $productId)
-                ->where('stock_id=?', 1)
+                ->where('stock_id=?', Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID)
                 ->where('cataloginventory_stock_status.website_id=?', Mage::app()->getWebsite()->getId())
                 ->where('pos_website.website_id=?', Mage::app()->getWebsite()->getId())
                 ->where("pos.is_active = ?", Zolago_Pos_Model_Pos::STATUS_ACTIVE)
