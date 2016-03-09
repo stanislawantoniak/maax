@@ -87,7 +87,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         foreach ($collection as $candidate) {
 			/* @var $candidate Zolago_Operator_Model_Operator */
 			// Only active context-vendor
-            if ($candidate->getVendor()->getStatus()!="A") {
+            if (!in_array($candidate->getVendor()->getStatus(),array("A","I"))) {
                 continue;
             }
 			// Passwd match
