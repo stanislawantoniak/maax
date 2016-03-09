@@ -65,8 +65,11 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             ->where('stock_id=?', (int)$stockId)
             ->where('cataloginventory_stock_status.website_id=?', (int)$websiteId)
             ->where('pos_website.website_id=?', (int)$websiteId)
+            ->where("pos_stock.pos_id=pos.pos_id")
+            ->where("pos_website.pos_id=pos.pos_id")
             ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
             ->group('cataloginventory_stock_status.product_id');
+
 
         return $this->_getReadAdapter()->fetchPairs($select);
     }
