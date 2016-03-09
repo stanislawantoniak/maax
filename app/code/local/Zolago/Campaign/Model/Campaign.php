@@ -571,9 +571,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $resourceModel = $this->getResource();
         $notValidCampaignsData = $resourceModel->getNotValidCampaignProducts(); //products need to be updated
 
-        if(empty($notValidCampaignsData)){
+        if(empty($notValidCampaignsData))
             return;
-        }
+
 
         $vendorsInUpdate = array();
         $productsIds = array();
