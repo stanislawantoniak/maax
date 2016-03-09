@@ -656,16 +656,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         //2. Recover products from INFO campaigns
         if (!empty($reformattedDataInfo)) {
-            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
-            $actionModel = Mage::getSingleton('catalog/product_action');
 
             /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
             $zolagocatalogHelper = Mage::helper('zolagocatalog');
             $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
 
-            if(empty($stores)){
+            if(empty($stores))
                 return;
-            }
+
 
 
 
