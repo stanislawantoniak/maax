@@ -3,7 +3,24 @@
  * Front menu block class
  */
 class Zolago_Modago_Block_Page_Html_Header_Menu extends Mage_Core_Block_Template {
-    
+
+
+    /**
+     * Check if current url is url for home page
+     *
+     * @return true
+     */
+    public function getIsHomePage()
+    {
+        return $this->getUrl('') == $this->getUrl('*/*/*',
+            array(
+                //'_current'=>true,       //_current	bool	Uses the current module, controller, action and parameters
+                '_use_rewrite' => true,
+                "_no_vendor" => TRUE      // home page but not vendor home
+            )
+        );
+    }
+
     /**
      * Prepare html
      */
