@@ -37,7 +37,7 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
         $select = $this->_getReadAdapter()->select()
             ->from($posStockTable,
                 array(
-                    'catalog_product_super_link.parent_id',
+                    'catalog_product_super_link.parent_id AS product_id',
                     //'stock_status',
                     "IF(IFNULL(SUM({$posStockTable}.qty), 0) > 0, 1, 0) AS stock_status"
                 )
