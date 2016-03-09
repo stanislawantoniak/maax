@@ -84,8 +84,8 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
             $dataStockItems = (array)$dataStockItem;
             if (!empty($dataStockItems)) {
                 foreach ($dataStockItems as $stockId => $posStockConverter) {
-//                    if (!in_array($stockId, $availablePos)) //no POS or it is not active
-//                        continue;
+                    if (!in_array($stockId, $availablePos)) //no POS or it is not active
+                        continue;
 
                     $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
                     $reservedOnPOStock = isset($openOrdersQty[$sku][$stockId]) ? (int)$openOrdersQty[$sku][$stockId] : 0;
