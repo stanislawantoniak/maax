@@ -450,8 +450,7 @@ define([
             delay: {"show": 0, "hide": 0}
         };
 
-        jQuery(node).find(".description_status_tooltip").tooltip(tooltipOptions);
-        jQuery(node).find(".product_preview_tooltip").tooltip(tooltipOptions);
+        jQuery(node).find(".description_status_tooltip,.product_preview_tooltip").tooltip(tooltipOptions);
     };
 
 	var rendererIsInStock = function (item, value, node, options) {
