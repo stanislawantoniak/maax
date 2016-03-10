@@ -149,7 +149,7 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 		}
 		if (is_null($this->posStockStatus)) {
 			$stockStatus = $this->getStockStatusInPos(); // get and set posQty, posIsInStock ans posStockStatus
-			if ($this->getProduct()->getId()) {
+			if ($this->getProduct() && $this->getProduct()->getId()) {
 				$this->getProduct()->setIsSalable($stockStatus);
 			}
 		}
