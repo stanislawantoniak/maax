@@ -76,7 +76,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             return $res;
 
         $this->_getHelper()->saveOldStore();
-        $collection = Mage::getModel("catalog/product")->getCollection();
+        $collection = Mage::getResourceModel('catalog/product_collection');
         $collection->setStore($this->_integrationStore);
         $collection->addFinalPrice();
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
@@ -123,7 +123,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
     public function appendPricesForSimple($res)
     {
         $this->_getHelper()->saveOldStore();
-        $collection = Mage::getModel("catalog/product")->getCollection();
+        $collection = Mage::getResourceModel('catalog/product_collection');
         $collection->setStore($this->_integrationStore);
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
         $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
