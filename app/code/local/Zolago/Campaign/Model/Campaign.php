@@ -283,7 +283,211 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     }
 
+    /**
+     * Handle change website on campaign
+     */
+    protected function handleChangeWebsite()
+    {
+        $productIdsToUpdate = array();
+        $ids1 = $this->handleChangeWebsiteOnInfoCampaign();
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $ids1);
 
+        $ids2 = $this->handleChangeWebsiteOnSaleCampaign();
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $ids2);
+
+        return $productIdsToUpdate;
+    }
+
+    /**
+     * Handle change  campaign type
+     */
+    protected function handleChangeType()
+    {
+        $productIdsToUpdate = array();
+        $ids1 = $this->handleChangeCampaignFromSaleToInfo();
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $ids1);
+
+        $ids2 = $this->handleChangeCampaignFromInfoToSale();
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $ids2);
+
+        return $productIdsToUpdate;
+    }
+
+    protected function handleChangeWebsiteOnSaleCampaign()
+    {
+        $productIdsUpdated = array();
+
+        $allWebsites = Mage::app()->getWebsites();
+
+        $toRestore = array();
+        foreach ($allWebsites as $_website) {
+            $websiteId = $_website->getId();
+
+
+            $saleCampaigns = Mage::getModel("zolagocampaign/campaign")->getCollection();
+            $saleCampaigns->addFieldToFilter(
+                "type", array("in" =>
+                    array(
+                        Zolago_Campaign_Model_Campaign_Type::TYPE_SALE,
+                        Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION
+                    )
+                )
+            );
+            $saleCampaigns->addFieldToFilter("website_id", array("nin" => $websiteId));
+            $saleCampaigns->getSelect()->join(
+                'zolago_campaign_website',
+                'zolago_campaign_website.campaign_id = main_table.campaign_id',
+                array()
+            );
+            $saleCampaignIds = $saleCampaigns->getAllIds();
+
+            if (empty($saleCampaignIds))
+                continue;
+
+            $storeIds = $_website->getStoreIds();
+
+            foreach ($storeIds as $storeId) {
+
+                $productsCollections = Mage::getResourceModel("catalog/product_collection");
+                $productsCollections->joinAttribute(
+                    "campaign_regular_id",
+                    'catalog_product/campaign_regular_id',
+                    'entity_id',
+                    null,
+                    'left',
+                    $storeId);
+                $productsCollections->addAttributeToFilter("campaign_regular_id", array("neq" => 'NULL'));
+                $productsCollections->addAttributeToFilter("campaign_regular_id", array("in" => $saleCampaignIds));
+
+
+                if ($productsCollections->count() > 0)
+                    $toRestore[$storeId] = $productsCollections->getAllIds();
+            }
+
+        }
+
+        if (empty($toRestore))
+            return $productIdsUpdated;
+
+        foreach ($toRestore as $storeId => $productsIds) {
+            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
+            $actionModel = Mage::getSingleton('catalog/product_action');
+
+            $attributesData = array(
+                self::ZOLAGO_CAMPAIGN_ID_CODE => null,
+                'special_price' => '',
+                'special_from_date' => '',
+                'special_to_date' => '',
+                'campaign_strikeout_price_type' => '',
+                'product_flag' => null
+            );
+            $actionModel->updateAttributesPure($productsIds, $attributesData, $storeId);
+            $productIdsUpdated = array_merge($productIdsUpdated, $productsIds);
+        }
+
+
+        return $productIdsUpdated;
+    }
+
+    protected function handleChangeWebsiteOnInfoCampaign()
+    {
+
+        $productIdsUpdated = array();
+
+        $allWebsites = Mage::app()->getWebsites();
+
+        $toRestore = array();
+        foreach ($allWebsites as $_website) {
+            $websiteId = $_website->getId();
+
+
+            $infoCampaigns = Mage::getModel("zolagocampaign/campaign")->getCollection();
+            $infoCampaigns->addFieldToFilter("type", Zolago_Campaign_Model_Campaign_Type::TYPE_INFO);
+            $infoCampaigns->addFieldToFilter("website_id", array("nin" => $websiteId));
+            $infoCampaigns->getSelect()->join(
+                'zolago_campaign_website',
+                'zolago_campaign_website.campaign_id = main_table.campaign_id',
+                array()
+            );
+            $infoCampaignIds = $infoCampaigns->getAllIds();
+            if (empty($infoCampaignIds))
+                continue;
+
+
+
+            $storeIds = $_website->getStoreIds();
+
+            foreach ($storeIds as $storeId) {
+
+                $productsCollections = Mage::getResourceModel("catalog/product_collection");
+                $productsCollections->joinAttribute(
+                    "campaign_info_id",
+                    'catalog_product/campaign_info_id',
+                    'entity_id',
+                    null,
+                    'left',
+                    $storeId);
+                $productsCollections->addAttributeToFilter("campaign_info_id", array("neq" => 'NULL'));
+
+                foreach ($productsCollections as $productsCollectionItem) {
+                    $campaign_info_id = $productsCollectionItem->getData("campaign_info_id");
+                    $intersect = array_intersect(explode(",", $campaign_info_id), $infoCampaignIds);
+
+                    $toRestore[$storeId][$productsCollectionItem->getId()] = $intersect;
+                }
+            }
+
+
+        }
+
+        unset($storeId);
+
+        if (empty($toRestore))
+            return $productIdsUpdated;
+
+        foreach ($toRestore as $storeId => $data) {
+            foreach ($data as $productId => $campaignIds) {
+
+                $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $storeId);
+                $campaignIdsAlready = explode(",", $val);
+
+                sort($campaignIdsAlready);
+                $campaignIdsAlready = array_diff($campaignIdsAlready, $campaignIds);
+
+                $toUpdate[$storeId][implode(',', $campaignIdsAlready)][] = $productId;
+
+            }
+        }
+
+
+        if (empty($toUpdate))
+            return $productIdsUpdated;
+
+
+        $updatedIds = array();
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+
+        unset($store);
+        unset($productIds);
+        foreach ($toUpdate as $store => $data) {
+
+            foreach ($data as $value => $productIds) {
+                $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => (string)$value), $store);
+                $updatedIds = array_merge($updatedIds, $productIds);
+            }
+        }
+        unset($productIds);
+
+        //set null to attribute for default store id (required for good quote calculation)
+        $aM->updateAttributesPure($updatedIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => null),
+            Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+        );
+        $productIdsUpdated = array_merge($productIdsUpdated, $updatedIds);
+
+        return $productIdsUpdated;
+
+    }
     /**
      * Clear SALE and PROMO product attributes
      * if campaign type was changed to INFO
@@ -355,23 +559,21 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $productIdsToUpdate = array();
 
-        $productFromSaleToInfoIdsCleared = $this->handleChangeCampaignFromSaleToInfo();
-        $productIdsToUpdate = array_merge($productIdsToUpdate, $productFromSaleToInfoIdsCleared);
+        $productChangeWebsiteCleared = $this->handleChangeWebsite();
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $productChangeWebsiteCleared);
+
+        $productChangeCampaignTypeCleared = $this->handleChangeType();
+        $productIdsToUpdate = array_merge($productIdsToUpdate, $productChangeCampaignTypeCleared);
 
 
-        $productFromInfoToSaleIdsCleared = $this->handleChangeCampaignFromInfoToSale();
-        $productIdsToUpdate = array_merge($productIdsToUpdate, $productFromInfoToSaleIdsCleared);
-
-
-        $setProductsAsAssigned = array();
         //Select campaigns with expired date
         /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
         $resourceModel = $this->getResource();
         $notValidCampaignsData = $resourceModel->getNotValidCampaignProducts(); //products need to be updated
 
-        if(empty($notValidCampaignsData)){
+        if(empty($notValidCampaignsData))
             return;
-        }
+
 
         $vendorsInUpdate = array();
         $productsIds = array();
@@ -454,16 +656,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         //2. Recover products from INFO campaigns
         if (!empty($reformattedDataInfo)) {
-            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
-            $actionModel = Mage::getSingleton('catalog/product_action');
 
             /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
             $zolagocatalogHelper = Mage::helper('zolagocatalog');
             $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
 
-            if(empty($stores)){
+            if(empty($stores))
                 return;
-            }
+
 
 
 
