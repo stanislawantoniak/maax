@@ -10,8 +10,9 @@ body img {
 }
 
 #sizetable-container p {
-    margin: 0;
+    margin: 0 !important;
 }
+
 
 #sizetable-container .sizetable-container-a {
     float: left;
