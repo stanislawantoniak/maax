@@ -203,6 +203,7 @@ class Modago_Integrator_Model_Generator_Description
     protected function _prepareList()
     {
         if ($this->_getList) {
+            $this->_outData = array();
             $this->_saveOldStore();
             //init collection
             $this->getCollection();
@@ -666,6 +667,7 @@ class Modago_Integrator_Model_Generator_Description
     protected function clearCollection() {
         if($this->_collection) {
             $this->_collection->clear();
+            $this->_collection = null;
         }
     }
 
