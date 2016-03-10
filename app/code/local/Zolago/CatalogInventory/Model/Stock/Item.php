@@ -33,44 +33,60 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
         return $this;
     }
 
+    public function getQty()
+    {
+        //$qty = $this->getData('qty');
+        $qty = $this->getQtyInPos();
+        return $qty;
+    }
+
     public function getStockStatusInPos()
     {
         $stockStatus = $this->getStockStatus();
         if (!is_null($stockStatus)) { //simple product
-            $productId = $this->getProductId();
-
             //logic for POSes
-
-            $resource = $this->getResource();
-            $posStockTable = $resource->getTable("zolagopos/stock");
-            $select = $resource->getReadConnection()->select()
-                ->from(array("pos_stock" => $posStockTable),
-                    array(
-                        'product_id',
-                        "stock_status" => new Zend_Db_Expr("IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0)")
-                    )
-                )
-                ->joinLeft(
-                    array('pos' => $resource->getTable("zolagopos/pos")),
-                    "pos.pos_id = pos_stock.pos_id",
-                    array()
-                )
-                ->joinLeft(
-                    array('pos_website' => $resource->getTable("zolagopos/pos_vendor_website")),
-                    "pos_website.pos_id = pos.pos_id",
-                    array()
-                )
-                ->where("pos_stock.product_id=?", $productId)
-                ->where('pos_website.website_id=?', Mage::app()->getWebsite()->getId())
-                ->where("pos.is_active = ?", Zolago_Pos_Model_Pos::STATUS_ACTIVE)
-                ->group("pos_stock.product_id");
-
-            $result = $resource->getReadConnection()->fetchRow($select);
-
-            $stockStatus = isset($result["stock_status"]) ? $result["stock_status"] : 0;
+            $qty = $this->getQtyInPos();
+            $stockStatus = ($qty > 0) ? $qty : 0;
 
         }
         return $stockStatus;
+    }
+
+
+    /**
+     * @return int
+     * @throws Mage_Core_Exception
+     */
+    public function getQtyInPos()
+    {
+        $productId = $this->getProductId();
+
+        //logic for POSes
+        $resource = $this->getResource();
+        $posStockTable = $resource->getTable("zolagopos/stock");
+        $select = $resource->getReadConnection()->select()
+            ->from(array("pos_stock" => $posStockTable),
+                array("qty"
+                )
+            )
+            ->joinLeft(
+                array('pos' => $resource->getTable("zolagopos/pos")),
+                "pos.pos_id = pos_stock.pos_id",
+                array()
+            )
+            ->joinLeft(
+                array('pos_website' => $resource->getTable("zolagopos/pos_vendor_website")),
+                "pos_website.pos_id = pos.pos_id",
+                array()
+            )
+            ->where("pos_stock.product_id=?", $productId)
+            ->where('pos_website.website_id=?', Mage::app()->getWebsite()->getId())
+            ->where("pos.is_active = ?", Zolago_Pos_Model_Pos::STATUS_ACTIVE)
+            ->group("pos_stock.product_id");
+
+        $qty = $resource->getReadConnection()->fetchOne($select);
+
+        return (int)$qty;
     }
 
 }
