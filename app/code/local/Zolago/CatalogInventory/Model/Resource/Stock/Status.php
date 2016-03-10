@@ -25,9 +25,10 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
      * @param int|array $productIds
      * @param int $websiteId
      * @param int $stockId
+	 * @param bool $extend
      * @return array
      */
-    public function getProductStatus($productIds, $websiteId, $stockId = 1)
+    public function getProductStatus($productIds, $websiteId, $stockId = 1, $extend = false)
     {
         if (!is_array($productIds)) {
             $productIds = array($productIds);
@@ -38,7 +39,7 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             ->from(array("pos_stock" => $posStockTable),
                 array(
                     'product_id' => 'catalog_product_super_link.parent_id',
-                    "stock_status" => new Zend_Db_Expr("IF(IFNULL(SUM(pos_stock.qty), 0) > 0, 1, 0)")
+                    "qty" => new Zend_Db_Expr("SUM(pos_stock.qty)")
                 )
             )
             ->joinLeft(
@@ -62,7 +63,20 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
             ->where("pos.is_active = ?" , Zolago_Pos_Model_Pos::STATUS_ACTIVE)
             ->group("catalog_product_super_link.parent_id");
 
-        return $this->_getReadAdapter()->fetchPairs($select);
+		$result = $this->_getReadAdapter()->fetchPairs($select);
+		$data = array();
+		foreach ($result as $id => $qty) {
+			$stockStatus = (int)($qty > 0);
+			if (!$extend) {
+				$data[$id] = $stockStatus;
+			} else {
+				$data[$id] = array(
+					'stock_status'	=> $stockStatus,
+					'qty'			=> $qty
+				);
+			}
+		}
+        return $data;
     }
 
     /**
