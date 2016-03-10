@@ -30,6 +30,11 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Status
      */
     public function getProductStatus($productIds, $websiteId, $stockId = 1, $extend = false)
     {
+        $flag = TRUE; // TODO implement by POS flag
+
+        if(!$flag)
+            return parent::getProductStatus($productIds, $websiteId, $stockId = 1);
+
         if (!is_array($productIds)) {
             $productIds = array($productIds);
         }

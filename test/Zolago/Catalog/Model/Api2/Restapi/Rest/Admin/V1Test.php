@@ -4,8 +4,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1Test extends Zolago_TestCas
     public function testStock() {
 		/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $obj */
         $obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-        $liczbaA1 = 5;
-        $liczbaB1 = 6;
+        $liczbaA1 = 7;
+        $liczbaB1 = 2;
 
 
         $liczbaA2 = 6;
