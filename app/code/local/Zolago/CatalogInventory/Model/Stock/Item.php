@@ -35,15 +35,23 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 
     public function getQty()
     {
-        //$qty = $this->getData('qty');
-        $qty = $this->getQtyInPos();
+        $flag = TRUE; // TODO implement by POS flag
+
+        $qty = $this->getData('qty');
+        if ($flag) {
+            $qty = $this->getQtyInPos();
+        }
+
         return $qty;
     }
 
     public function getStockStatusInPos()
     {
+
+        $flag = TRUE; // TODO implement by POS flag
+
         $stockStatus = $this->getStockStatus();
-        if (!is_null($stockStatus)) { //simple product
+        if (!is_null($stockStatus) && $flag) { //simple product
             //logic for POSes
             $qty = $this->getQtyInPos();
             $stockStatus = ($qty > 0) ? $qty : 0;
