@@ -1,6 +1,10 @@
-<?php /** @var $this Zolago_Catalog_Block_Vendor_Product_Preview */ ?>
-<?php /** @var Zolago_Catalog_Helper_Data $helper */ ?>
-<?php $helper = Mage::helper("zolagocatalog"); ?>
+<?php
+/** @var $this Zolago_Catalog_Block_Vendor_Product_Preview */
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
 
 <div class="modal fade" id="productPreviewModal" role="dialog">
 	<div class="modal-dialog">
@@ -16,6 +20,9 @@
 					<?php echo $helper->__("See product on %s",$websiteDomain); ?>
 				</a><br/>
 				<?php endforeach; ?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel"); ?></button>
 			</div>
 		</div>
 	</div>
