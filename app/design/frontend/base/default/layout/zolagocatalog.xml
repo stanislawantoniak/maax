@@ -172,6 +172,7 @@
 
 					<block type="zolagocatalog/vendor_product_changeAttributeSet" name="change_attribute_set"
 						   template="zolagocatalog/product/custom/change_attribute_set.phtml"/>
+					<block type="zolagocatalog/vendor_product_preview" name="product_preview" template="zolagocatalog/product/custom/preview.phtml" />
 				</block>
 			</block>
 		</reference>

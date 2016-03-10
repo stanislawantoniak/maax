@@ -80,6 +80,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
                             'edit_url' => Mage::getUrl("campaign/placement_category/",
                                 array(
                                     "category" => $collectionItem->getId(),
+                                    "website" => $websiteId,
                                     "_secure" => true
                                 )
 

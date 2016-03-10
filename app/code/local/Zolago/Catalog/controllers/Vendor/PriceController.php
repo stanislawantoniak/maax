@@ -229,7 +229,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
         $response = $this->getResponse();
         $request = $this->getRequest();
 
-        $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+        $storeId = $request->getParam('store_id'); //Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
         $global = $request->getParam("global");
         $productsIds = explode(",", $request->getParam("selected", ""));
         $query = Mage::helper("core")->jsonDecode(base64_decode($request->getParam("encoded_query")));

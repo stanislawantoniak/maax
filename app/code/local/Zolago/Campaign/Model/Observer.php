@@ -373,12 +373,41 @@ class Zolago_Campaign_Model_Observer
                 'value' => $websiteModel->getVendorId(),
                 'options' => $vendors,
             ));
-
+            
+            $fieldset->addField('vendor_sites_allowed','select', array (
+                'name' => 'website[vendor_sites_allowed]',
+                'label' => $hlp->__('Vendor sites allowed'),
+                'value'  => $websiteModel->getVendorSitesAllowed(),
+                'options' => Mage::getSingleton('ghapi/source')->setPath('yesno')->toOptionHash(),
+            ));
+            $fieldset->addField('is_preview_website','select', array (
+                'name' => 'website[is_preview_website]',
+                'label' => $hlp->__('Website is for preview'),
+                'value'  => $websiteModel->getIsPreviewWebsite(),
+                'options' => Mage::getSingleton('ghapi/source')->setPath('yesno')->toOptionHash(),
+            ));
+                
+            $fieldset->addField('preview_website_login', 'text', array(
+                'name' => 'website[website_login]',
+                'label' => $hlp->__('Access login for preview:'),
+                'required' => true,
+                'value' => $websiteModel->getWebsiteLogin(),
+            ));
+            $fieldset->addField('preview_website_password', 'password', array(
+                'name' => 'website[website_password]',
+                'label' => $hlp->__('Access password for preview:'),
+                'required' => true,
+                'value' => $websiteModel->getWebsitePassword(),
+            ));
             $block->setChild('form_after', $block->getLayout()->createBlock('adminhtml/widget_form_element_dependence')
                 ->addFieldMap("website_have_specific_domain", "website_have_specific_domain")
                 ->addFieldMap("website_vendor_id", "website_vendor_id")
+                ->addFieldMap("is_preview_website", "is_preview_website")
+                ->addFieldMap("preview_website_login", "preview_website_login")
+                ->addFieldMap("preview_website_password", "preview_website_password")
                 ->addFieldDependence("website_vendor_id", "website_have_specific_domain", "1")
-
+                ->addFieldDependence( "preview_website_login","is_preview_website", "1")
+                ->addFieldDependence( "preview_website_password","is_preview_website", "1")
             );
         }
     }

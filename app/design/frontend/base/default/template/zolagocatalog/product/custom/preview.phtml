@@ -1,0 +1,46 @@
+<?php
+/** @var $this Zolago_Catalog_Block_Vendor_Product_Preview */
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
+
+<div class="modal fade" id="productPreviewModal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"><?php echo $helper->__("Product preview"); ?></h4>
+			</div>
+			<div class="modal-body">
+				<?php foreach($this->getPreviewWebsitesUrls() as $websiteDomain=>$websiteUrl): ?>
+				<a href="#" target="_blank" data-href-template="<?php echo $websiteUrl; ?>">
+					<?php echo $helper->__("See product on %s",$websiteDomain); ?>
+				</a><br/>
+				<?php endforeach; ?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel"); ?></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	jQuery(document).ready(function() {
+		var productPreviewReplace = "<?php echo $this::ID_TO_REPLACE; ?>",
+			productPreviewModal = jQuery('#productPreviewModal');
+
+		jQuery(document).delegate('.product_preview_tooltip','click',function() {
+			var productPreviewCurrentId = jQuery(this).data('productId');
+
+			productPreviewModal.find('a').each(function() {
+				var current = jQuery(this),
+					link = current.data('hrefTemplate').replace(productPreviewReplace,productPreviewCurrentId);
+				current.attr('href',link);
+			});
+		});
+	});
+</script>
