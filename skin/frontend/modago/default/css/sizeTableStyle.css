@@ -39,9 +39,9 @@ body img {
     min-width: inherit;
 }
 
-#sizetable-container .sizetable-container-c:not(:empty) {
+/*#sizetable-container .sizetable-container-c:not(:empty) {
     padding-bottom: 20px;
-}
+}*/
 
 
 .sizetable-desktop {
