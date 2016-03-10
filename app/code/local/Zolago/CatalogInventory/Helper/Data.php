@@ -1,10 +1,8 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: victory
- * Date: 6/18/14
- * Time: 1:11 PM
- */ 
+ * Class Zolago_CatalogInventory_Helper_Data
+ */
 class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	const FLAG_IN_STOCK			= 2;
@@ -46,7 +44,7 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		$stockModel->loadByProduct($product);
-		
+
 		$minimalStock = min(
 			$stockModel->getMaxSaleQty(), 
 			max($stockModel->getQty(),0)
