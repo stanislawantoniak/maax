@@ -893,7 +893,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				"pvw.pos_id = pos.pos_id AND pvw.website_id = " . (int)$websiteId,
 				array()
 			);
-			$select->columns('IF(IFNULL(SUM(IF(IFNULL(pvw.website_id, 0), stock.qty, 0)), 0) > 0, 1, 0) AS stock_status');
+			$select->columns('IF(SUM(IF(IFNULL(pvw.website_id, 0), stock.qty, 0)) > 0, 1, 0) AS stock_status');
 			$select->group('product.entity_id');
         }
         // Join price data
