@@ -7,8 +7,9 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 {
     protected $_integrationStore;
 
-    const MODAGO_INTEGRATOR_ORIGINAL_PRICE = "A";
-    const MODAGO_INTEGRATOR_SPECIAL_PRICE = "B";
+    const MODAGO_INTEGRATOR_FINAL_PRICE = "A";
+    const MODAGO_INTEGRATOR_ORIGINAL_PRICE = "B";
+    const MODAGO_INTEGRATOR_PRICE_SALE_BEFORE = "salePriceBefore";
 
     protected $_helper;
     /**
@@ -73,38 +74,39 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 
         if (empty($parentChildRelation))
             return $res;
+
         $this->_getHelper()->saveOldStore();
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore($this->_integrationStore);
-        $collection->addAttributeToSelect("price");
-        $collection->addAttributeToSelect("special_price");
+        $collection->addFinalPrice();
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
         $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+
         $prices = array();
-        $specialPrices = array();
+        $finalPrices = array();
         foreach ($collection as $collectionItem) {
             $parentProductId = $collectionItem->getId();
             $price = $collectionItem->getPrice();
             if (!empty($price)) {
                 $prices[$parentProductId] = $price;
             }
-            $specialPrice = $collectionItem->getSpecialPrice();
-            if (!empty($specialPrice)) {
-                $specialPrices[$parentProductId] = $specialPrice;
+            $finalPrice = $collectionItem->getFinalPrice();
+            if (!empty($finalPrice)) {
+                $finalPrices[$parentProductId] = $finalPrice;
             }
-            unset($price);
-            unset($specialPrice);
+            unset($price, $finalPrice);
         }
         unset($parentProductId);
 
 
         foreach ($parentChildRelation as $parentId => $children) {
             foreach ($children as $childId => $childSku) {
+                if (isset($finalPrices[$parentId])) {
+                    $res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $finalPrices[$parentId]);
+                }
                 if (isset($prices[$parentId])) {
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $prices[$parentId]);
-                }
-                if (isset($specialPrices[$parentId])) {
-                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$childSku] = array("sku" => $childSku, "price" => $specialPrices[$parentId]);
+                    $res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$childSku] = array("sku" => $childSku, "price" => $prices[$parentId]);
                 }
             }
         }
@@ -123,27 +125,26 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $this->_getHelper()->saveOldStore();
         $collection = Mage::getModel("catalog/product")->getCollection();
         $collection->setStore($this->_integrationStore);
-
-
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
         $collection->addAttributeToFilter('visibility', array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
 
-        $collection->addAttributeToSelect("price");
-        $collection->addAttributeToSelect("special_price");
+        $collection->addFinalPrice();
+
         foreach ($collection as $collectionItem) {
             $sku = $collectionItem->getSku();
             //do not override price if already got from configurable
+            if (!isset($res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$sku])) {
+                $finalPrice = $collectionItem->getFinalPrice();
+                if (!empty($finalPrice)) {
+                    $res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$sku] = array("sku" => $sku, "price" => $finalPrice);
+                }
+            }
             if (!isset($res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku])) {
                 $price = $collectionItem->getPrice();
                 if (!empty($price)) {
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array("sku" => $sku, "price" => $price);
-                }
-            }
-            if (!isset($res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku])) {
-                $specialPrice = $collectionItem->getSpecialPrice();
-                if (!empty($specialPrice)) {
-                    $res[self::MODAGO_INTEGRATOR_SPECIAL_PRICE][$sku] = array("sku" => $sku, "price" => $specialPrice);
+                    $res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku] = array("sku" => $sku, "price" => $price);
                 }
             }
 
