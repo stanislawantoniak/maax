@@ -9,6 +9,10 @@ body img {
     max-width: 100%;
 }
 
+#sizetable-container p {
+    margin: 0;
+}
+
 #sizetable-container .sizetable-container-a {
     float: left;
     padding-right: 1%;
