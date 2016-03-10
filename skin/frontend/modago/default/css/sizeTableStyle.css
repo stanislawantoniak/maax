@@ -4,10 +4,17 @@ body,html {
     line-height: 1.42857;
     padding: 0;
     margin: 0;
+    overflow: hidden;
 }
 body img {
     max-width: 100%;
 }
+
+#sizetable-container p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 
 #sizetable-container .sizetable-container-a {
     float: left;
