@@ -519,6 +519,16 @@ table.foot-empty-cells tfoot td:empty {
     display: inline-block;
     background-size: 25px;
 }
+.icon-product-preview {
+    background: url(../../images/icon-product-preview.png);
+    width: 28px;
+    height: 21px;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin-left: 5px;
+}
 @media screen and (min-width: 768px) {
 	#shippingModal .modal-dialog {
 		width: 730px;

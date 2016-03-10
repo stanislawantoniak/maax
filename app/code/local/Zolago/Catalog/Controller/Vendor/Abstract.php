@@ -93,7 +93,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
-			$storeId = in_array('status', $attributeChanged) ? Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID : $data['store_id'];
+            $storeId = $data['store_id'];
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){

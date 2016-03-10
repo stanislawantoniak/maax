@@ -270,3 +270,5 @@
 "Available together {{stock_qty}} item","Dostępna razem {{stock_qty}} sztuka"
 "{{available_child_count}} variants of {{all_child_count}}","{{available_child_count}} wariantów z {{all_child_count}}"
 "Total quantity","Łączna ilość sztuk"
+"Product preview","Podgląd produktu"
+"See product on %s","Obejrzyj produkt na %s"
