@@ -144,6 +144,12 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
                 $price = $collectionItem->getPrice();
                 if (!empty($price)) {
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array("sku" => $sku, "price" => $price);
+
+                }
+            }
+            if (!isset($res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku])) {
+                $price = $collectionItem->getPrice();
+                if (!empty($price)) {
                     $res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku] = array("sku" => $sku, "price" => $price);
                 }
             }
