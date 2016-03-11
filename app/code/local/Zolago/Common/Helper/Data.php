@@ -261,4 +261,20 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function isOwnStore() {
 		return Mage::app()->getWebsite()->getHaveSpecificDomain() ? true : false;
 	}
+
+	/**
+	 * @param $storeCode
+	 * @return false|Mage_Core_Model_Store
+	 */
+	public function getStoreByCode($storeCode)
+	{
+		$stores = array_keys(Mage::app()->getStores());
+		foreach($stores as $id){
+			$store = Mage::app()->getStore($id);
+			if($store->getCode() == $storeCode) {
+				return $store;
+			}
+		}
+		return Mage::getModel('core/store'); // Empty model
+	}
 }
