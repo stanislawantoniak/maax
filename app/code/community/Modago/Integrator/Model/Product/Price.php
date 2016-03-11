@@ -86,14 +86,18 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         $finalPrices = array();
         foreach ($collection as $collectionItem) {
             $parentProductId = $collectionItem->getId();
+
             $price = $collectionItem->getPrice();
-            if (!empty($price)) {
+
+            if (!empty((float)$price)) {
                 $prices[$parentProductId] = $price;
             }
             $finalPrice = $collectionItem->getFinalPrice();
-            if (!empty($finalPrice)) {
+
+            if (!empty((float)$finalPrice)) {
                 $finalPrices[$parentProductId] = $finalPrice;
             }
+
             unset($price, $finalPrice);
         }
         unset($parentProductId);
@@ -136,20 +140,20 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             //do not override price if already got from configurable
             if (!isset($res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$sku])) {
                 $finalPrice = $collectionItem->getFinalPrice();
-                if (!empty($finalPrice)) {
+                if (!empty((float)$finalPrice)) {
                     $res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$sku] = array("sku" => $sku, "price" => $finalPrice);
                 }
             }
             if (!isset($res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku])) {
                 $price = $collectionItem->getPrice();
-                if (!empty($price)) {
+                if (!empty((float)$price)) {
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array("sku" => $sku, "price" => $price);
 
                 }
             }
             if (!isset($res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku])) {
                 $price = $collectionItem->getPrice();
-                if (!empty($price)) {
+                if (!empty((float)$price)) {
                     $res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku] = array("sku" => $sku, "price" => $price);
                 }
             }
