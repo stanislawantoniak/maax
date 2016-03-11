@@ -2,8 +2,8 @@
 /** @var $this Zolago_Catalog_Block_Vendor_Product_Preview */
 /** @var Zolago_Catalog_Helper_Data $helper */
 $helper = Mage::helper("zolagocatalog");
-/** @var Zolago_Common_Helper_Data $_zolagoHlp */
-$_modagoHlp = Mage::helper("zolagocommon");
+/** @var Zolago_Common_Helper_Data $commonHlp */
+$commonHlp = Mage::helper("zolagocommon");
 ?>
 
 <div class="modal fade" id="productPreviewModal" role="dialog">
@@ -15,6 +15,10 @@ $_modagoHlp = Mage::helper("zolagocommon");
 				<h4 class="modal-title"><?php echo $helper->__("Product preview"); ?></h4>
 			</div>
 			<div class="modal-body">
+				<p class="alert alert-info">
+					<?php echo $commonHlp->__("Product must be set as &quot;Enabled&quot; and description accepted, in order to browse product on production website. On preview site %s product can always be browsed, no matter the status.",
+						$commonHlp->getStoreByCode('staging')->getName()); ?>
+				</p>
 				<?php foreach($this->getPreviewWebsitesUrls() as $websiteDomain=>$websiteUrl): ?>
 				<a href="#" target="_blank" data-href-template="<?php echo $websiteUrl; ?>">
 					<?php echo $helper->__("See product on %s",$websiteDomain); ?>
@@ -22,7 +26,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
 				<?php endforeach; ?>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel"); ?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $commonHlp->__("Cancel"); ?></button>
 			</div>
 		</div>
 	</div>
