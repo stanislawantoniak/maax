@@ -38,6 +38,7 @@ abstract class Modago_Integrator_Controller_Abstract extends
      * @param bool $generate
      */
     protected function _getFile($type,$generate = false) {
+        set_time_limit(3600);
         try {
             $this->_checkAuthorization();
             $model = Mage::helper('modagointegrator')->createGenerator($type);
