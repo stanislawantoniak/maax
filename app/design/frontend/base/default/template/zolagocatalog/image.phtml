@@ -57,10 +57,13 @@ $maxSize = $this->maxUploadInByte();
 
         initDragSort($(".vendor-image"));
         $('.vendor-image-upload input[type=file]').change(function () {
-            console.log(jQuery(this)[0].files[0]);
+            console.log(jQuery(this)[0].files);
+
             if (!jQuery(this)[0].files[0]) {
                 return; // If no file to send
             }
+
+
             if (jQuery(this)[0].files[0].size >= <?php echo $maxSize; ?>) {
                 noty({
                     text: '<?php echo $_helper->__('File too large. File must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>',
@@ -73,35 +76,53 @@ $maxSize = $this->maxUploadInByte();
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
             startLoadingNoProgressBar();
-            $.ajax({
-                url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
-                type: "POST",
-                // Form data
-                data: formData,
-                //Options to tell JQuery not to process data or worry about content-type
-                cache: false,
-                contentType: false,
-                processData: false,
-                enctype: 'multipart/form-data'
-            }).done(function (result) {
-                data = $.parseJSON(result);
-                stopLoading();
-                if (data.error) {
-                    noty({
-                        text: data.error,
-                        type: 'error',
-                        timeout: 4000
-                    });
-                } else {
-                    container.html(data.content);
-                    initDragSort(container.find(".vendor-image"));
 
-                    jQuery('.need-to-check').tooltip({
-                        title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
-                    }).find("img").css({"opacity": "0.5"});
-                }
+            var form = $(this).closest("form");
+            var files = jQuery(this)[0].files;
+
+
+            jQuery.each(function(i, file){
 
             });
+
+            var form_data = new FormData();
+
+            form_data.append("product",form.find("input[name=product]").val()  );
+            form_data.append("vendor_image_upload",jQuery(this)[0].files[0]);
+
+
+                $.ajax({
+                    url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    // Form data
+                    data: form_data,
+                    //Options to tell JQuery not to process data or worry about content-type
+
+
+                }).done(function (result) {
+                    data = $.parseJSON(result);
+                    stopLoading();
+                    if (data.error) {
+                        noty({
+                            text: data.error,
+                            type: 'error',
+                            timeout: 4000
+                        });
+                    } else {
+                        container.html(data.content);
+                        initDragSort(container.find(".vendor-image"));
+
+                        jQuery('.need-to-check').tooltip({
+                            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                        }).find("img").css({"opacity": "0.5"});
+                    }
+
+                });
+
+
         });
 
 

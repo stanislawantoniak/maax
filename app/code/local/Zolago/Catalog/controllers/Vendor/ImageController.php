@@ -619,94 +619,68 @@ class Zolago_Catalog_Vendor_ImageController
     public function uploadProductImageAction()
     {
         $productId = $this->getRequest()->getParam("product", null);
-
-        $result = array();
-
+        $product = Mage::getModel("catalog/product")->load($productId);
 
         $_helper = Mage::helper("zolagocatalog");
         /* @var $_helperGHCommon GH_Common_Helper_Data */
         $_helperGHCommon = Mage::helper('ghcommon');
-
-
-        $files = $_FILES["vendor_image_upload"];
-        //var_dump($files);
-        //die("test");
-
-        $sizes = $files["size"];
-        //var_dump($sizes);
+        $file = $_FILES["vendor_image_upload"];
+        $size = $file["size"];
 
         $maxUploadFileSize = $_helperGHCommon->getMaxUploadFileSize();
-//        foreach ($sizes as $j => $size) {
-//            if ($size >= $maxUploadFileSize) { //5MB
-//                $result = array(
-//                    'error' => $_helper->__("File is too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1))
-//                );
-//                break;
-//            }
-//        }
-
-
-
-
-        try {
-            set_time_limit(36000);
-            for ($i = 0; $i < count($files["name"]); $i++) {
-                $file = array();
-                $tmpName = $_FILES['vendor_image_upload']['tmp_name'];
-                $file['tmp_name'] = $tmpName[$i];
-                $name = $_FILES['vendor_image_upload']['name'];
-                $file['name'] = $name[$i];
-                $uploader = new Mage_Core_Model_File_Uploader($file);
-
-
+        if ($size >= $maxUploadFileSize) { //5MB
+            $result = array(
+                'error' => $_helper->__("File too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1))
+            );
+        } else {
+            try {
+                $uploader = new Mage_Core_Model_File_Uploader('vendor_image_upload');
                 $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
                 $uploader->addValidateCallback(
                     'catalog_product_image',
                     Mage::helper('catalog/image'), 'validateUploadFile');
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(true);
-                $uploadResult = $uploader->save(Mage::getSingleton('catalog/product_media_config')->getBaseTmpMediaPath());
+                $result = $uploader->save(Mage::getSingleton('catalog/product_media_config')->getBaseTmpMediaPath());
 
-                $imagePath = $uploadResult["path"] . $uploadResult["file"];
-                $product = Mage::getModel("catalog/product")->load($productId);
+                $imagePath = $result["path"] . $result["file"];
                 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
                 $product->addImageToMediaGallery($imagePath, null, false, true);
                 $product->save();
-                unset($product);
-            }
 
-            /*Set label*/
-            $_product = Mage::getModel("catalog/product")->load($productId);
-            $gallery = $_product->getData('media_gallery');
-            if (isset($gallery['images']) && count($gallery['images']) > 1) {
-                if (isset($gallery['images'][count($gallery['images']) - 1])) {
-                    $lastImage = $gallery['images'][count($gallery['images']) - 1];
-                    $lastImage['label'] = $_product->getName();
-                    $lastImage['disabled'] = 0;
-                    array_push($gallery['images'], $lastImage);
-                    $_product->setData('media_gallery', $gallery);
-                    $_product->save();
+
+                /*Set label*/
+                $_product = Mage::getModel("catalog/product")->load($productId);
+                $gallery = $_product->getData('media_gallery');
+                if (isset($gallery['images']) && count($gallery['images']) > 1) {
+                    if (isset($gallery['images'][count($gallery['images']) - 1])) {
+                        $lastImage = $gallery['images'][count($gallery['images']) - 1];
+                        $lastImage['label'] = $_product->getName();
+                        $lastImage['disabled'] = 0;
+                        array_push($gallery['images'], $lastImage);
+                        $_product->setData('media_gallery', $gallery);
+                        $_product->save();
+                    }
                 }
-            }
-            /*Set label*/
-            $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
+                /*Set label*/
 
-        } catch (Exception $e) {
-            if ($e->getCode() == 0) {
-                $result = array(
-                    'error' => $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."),
-                    'errorcode' => $e->getCode());
-            } else {
-                $result = array(
-                    'error' => $_helper->__("An error occurred"),
-                    'errorcode' => $e->getCode());
-            }
 
+                $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
+
+            } catch (Exception $e) {
+                Mage::log($e->getCode());
+                if($e->getCode() == 0){
+                    $result = array(
+                        'error' => $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."),
+                        'errorcode' => $e->getCode());
+                } else {
+                    $result = array(
+                        'error' => $_helper->__("An error occurred"),
+                        'errorcode' => $e->getCode());
+                }
+
+            }
         }
-
-
-
-
 
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
