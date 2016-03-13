@@ -86,42 +86,43 @@ $maxSize = $this->maxUploadInByte();
 
             });
 
+            //Send file
+            var j = 0;
             var form_data = new FormData();
 
             form_data.append("product", productId);
-            form_data.append("vendor_image_upload",files[0]);
+            form_data.append("vendor_image_upload", files[j]);
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                // Form data
+                data: form_data,
+                //Options to tell JQuery not to process data or worry about content-type
 
 
-                $.ajax({
-                    url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    // Form data
-                    data: form_data,
-                    //Options to tell JQuery not to process data or worry about content-type
+            }).done(function (result) {
+                console.log(j);
+                data = $.parseJSON(result);
+                stopLoading();
+                if (data.error) {
+                    noty({
+                        text: data.error,
+                        type: 'error',
+                        timeout: 4000
+                    });
+                } else {
+                    container.html(data.content);
+                    initDragSort(container.find(".vendor-image"));
 
-
-                }).done(function (result) {
-                    data = $.parseJSON(result);
-                    stopLoading();
-                    if (data.error) {
-                        noty({
-                            text: data.error,
-                            type: 'error',
-                            timeout: 4000
-                        });
-                    } else {
-                        container.html(data.content);
-                        initDragSort(container.find(".vendor-image"));
-
-                        jQuery('.need-to-check').tooltip({
-                            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
-                        }).find("img").css({"opacity": "0.5"});
-                    }
-
-                });
+                    jQuery('.need-to-check').tooltip({
+                        title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                    }).find("img").css({"opacity": "0.5"});
+                }
+            });
+            //--Send file
 
 
         });
