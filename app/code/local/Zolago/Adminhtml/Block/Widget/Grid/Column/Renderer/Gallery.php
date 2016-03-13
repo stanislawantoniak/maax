@@ -28,7 +28,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
                             <div class='btn btn-file' title='{$addImageLabel}'>
                                 <i class='icon icon-plus-sign'></i> {$addImageLabel}
                                 <input type='hidden' name='product' value='{$productId}' />
-                                <input type='file' name='vendor_image_upload' />
+                                <input type='file' multiple name='vendor_image_upload[]' />
                             </div>
 
                     </form>
