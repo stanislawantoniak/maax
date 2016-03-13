@@ -79,16 +79,17 @@ $maxSize = $this->maxUploadInByte();
 
             var form = $(this).closest("form");
             var files = jQuery(this)[0].files;
+            var productId = form.find("input[name=product]").val();
 
 
-            jQuery.each(function(i, file){
+            jQuery.each(files,function(i, file){
 
             });
 
             var form_data = new FormData();
 
-            form_data.append("product",form.find("input[name=product]").val()  );
-            form_data.append("vendor_image_upload",jQuery(this)[0].files[0]);
+            form_data.append("product", productId);
+            form_data.append("vendor_image_upload",files[0]);
 
 
                 $.ajax({
