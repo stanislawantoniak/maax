@@ -173,21 +173,21 @@ $maxSize = $this->maxUploadInByte();
 
             if (fileSuccess > 0) {
                 noty({
-                    text: '<?php echo $_helper->__("Images uploaded"); ?>' + ' (' + fileSuccess + ')',
+                    text: '<?php echo $_helper->__("Images uploaded"); ?>' + ' - <b>' + fileSuccess + '</b>',
                     type: 'success',
                     timeout: timeout
                 });
             }
             if (fileTooBigError > 0) {
                 noty({
-                    text: '<?php echo $_helper->__('Files are too large. File must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>' + ' (' + fileTooBigError + ')',
+                    text: '<?php echo $_helper->__('File too large. File must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>' + ' - <b>' + fileTooBigError + '</b>',
                     type: 'error',
                     timeout: timeout
                 });
             }
             if (fileWrongFormatError > 0) {
                 noty({
-                    text: '<?php echo $_helper->__("Disallowed file types. Please upload jpg, jpeg, gif or png."); ?>' + ' (' + fileWrongFormatError + ')',
+                    text: '<?php echo $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."); ?>' + ' - <b>' + fileWrongFormatError + '</b>',
                     type: 'warning',
                     timeout: timeout
                 });
