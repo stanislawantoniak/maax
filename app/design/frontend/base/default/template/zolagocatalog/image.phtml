@@ -74,6 +74,12 @@ $maxSize = $this->maxUploadInByte();
                 fileTooBigError = 0,
                 fileWrongFormatError = 0;
 
+            var analyze = analyzeFileSize(files, fileTooBigError);
+
+            files = analyze.files;
+            //console.log(files);
+            fileTooBigError = analyze.fileTooBigError;
+
             var filesCount = jQuery(files).size();
 
             var container = $(this).closest("td").find(".vendor-image-container");
@@ -85,7 +91,19 @@ $maxSize = $this->maxUploadInByte();
             sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError, fileWrongFormatError);
 
         });
-
+        function analyzeFileSize(files,fileTooBigError) {
+            //console.log(typeof files);
+            var goodFiles = [];
+            jQuery.each(files, function (j, file) {
+                //console.log("Number: "+j+ " "+file.name + ": size "+file.size+"  result:    " + (file.size >= <?php echo $maxSize; ?>));
+                if (file.size >= <?php echo $maxSize; ?>) {
+                    fileTooBigError++;
+                } else {
+                    goodFiles.push(file);
+                }
+            });
+            return {"files": goodFiles, "fileTooBigError" : fileTooBigError};
+        }
 
         function sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError,fileWrongFormatError){
             //1. Construct form
