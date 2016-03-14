@@ -637,7 +637,7 @@ class Zolago_Catalog_Vendor_ImageController
         $maxUploadFileSize = $_helperGHCommon->getMaxUploadFileSize();
         if (empty($file) || ($size >= $maxUploadFileSize)) { //5MB
             $result = array(
-                'error' => $_helper->__("File too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1)),
+                'error' => $_helper->__("Files are too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1)),
                 "type" => self::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_TOO_BIG
             );
         } else {
