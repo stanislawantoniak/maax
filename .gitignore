@@ -21,6 +21,7 @@ skin/frontend/modago/default_orig_2
 /vendor/
 /Vagrantfile
 /puphpet/
+/test/
 bin/
 /vendor/
 /.project
