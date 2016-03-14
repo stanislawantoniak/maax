@@ -74,19 +74,7 @@ $maxSize = $this->maxUploadInByte();
                 fileTooBigError = 0,
                 fileWrongFormatError = 0;
 
-            //console.log(files);
-
-
-            //var analyze = analyzeFileSize(files, fileTooBigError);
-
-            //files = analyze.files;
-            //console.log(files);
-            //fileTooBigError = analyze.fileTooBigError;
-            //console.log("Too big files: " + fileTooBigError);
-
             var filesCount = jQuery(files).size();
-            //console.log("Files count: " + filesCount);
-            //return;
 
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
@@ -97,19 +85,7 @@ $maxSize = $this->maxUploadInByte();
             sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError, fileWrongFormatError);
 
         });
-//        function analyzeFileSize(files,fileTooBigError) {
-//            //console.log(typeof files);
-//            var goodFiles = [];
-//            jQuery.each(files, function (j, file) {
-//                //console.log("Number: "+j+ " "+file.name + ": size "+file.size+"  result:    " + (file.size >= <?php //echo $maxSize; ?>//));
-//                if (file.size >= <?php //echo $maxSize; ?>//) {
-//                    fileTooBigError++;
-//                } else {
-//                    goodFiles.push(file);
-//                }
-//            });
-//            return {"files": goodFiles, "fileTooBigError" : fileTooBigError};
-//        }
+
 
         function sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError,fileWrongFormatError){
             //1. Construct form
@@ -155,10 +131,10 @@ $maxSize = $this->maxUploadInByte();
                     }).find("img").css({"opacity": "0.5"});
                 }
 
-                console.log("success: "+fileSuccess);
-                console.log("error wrong file format: "+fileWrongFormatError);
-                console.log("error file too big: "+fileTooBigError);
-                console.log("-------------");
+//                console.log("success: "+fileSuccess);
+//                console.log("error wrong file format: "+fileWrongFormatError);
+//                console.log("error file too big: "+fileTooBigError);
+//                console.log("-------------");
 
                 if(i < filesCount){
                     //Next ajax
