@@ -56,28 +56,67 @@ $maxSize = $this->maxUploadInByte();
         }
 
         initDragSort($(".vendor-image"));
+
+
         $('.vendor-image-upload input[type=file]').change(function () {
-            console.log(jQuery(this)[0].files[0]);
+
             if (!jQuery(this)[0].files[0]) {
                 return; // If no file to send
             }
-            if (jQuery(this)[0].files[0].size >= <?php echo $maxSize; ?>) {
-                noty({
-                    text: '<?php echo $_helper->__('File too large. File must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>',
-                    type: 'error',
-                    timeout: 4000
-                });
-                return;
-            }
+
+
+            var form = $(this).closest("form"),
+                productId = form.find("input[name=product]").val(),
+                i = 0,
+                files = jQuery(this)[0].files,
+
+                fileSuccess = 0,
+                fileTooBigError = 0,
+                fileWrongFormatError = 0;
+
+            var analyze = analyzeFileSize(files, fileTooBigError);
+
+            files = analyze.files;
+            //console.log(files);
+            fileTooBigError = analyze.fileTooBigError;
+
+            var filesCount = jQuery(files).size();
 
             var container = $(this).closest("td").find(".vendor-image-container");
             var formData = new FormData($(this).closest("form")[0]);
+
+
             startLoadingNoProgressBar();
+            //Send ajax
+            sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError, fileWrongFormatError);
+
+        });
+        function analyzeFileSize(files,fileTooBigError) {
+            //console.log(typeof files);
+            var goodFiles = [];
+            jQuery.each(files, function (j, file) {
+                //console.log("Number: "+j+ " "+file.name + ": size "+file.size+"  result:    " + (file.size >= <?php echo $maxSize; ?>));
+                if (file.size >= <?php echo $maxSize; ?>) {
+                    fileTooBigError++;
+                } else {
+                    goodFiles.push(file);
+                }
+            });
+            return {"files": goodFiles, "fileTooBigError" : fileTooBigError};
+        }
+
+        function sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError,fileWrongFormatError){
+            //1. Construct form
+            var form_data = new FormData();
+            form_data.append("product", productId);
+            form_data.append("vendor_image_upload", files[i]);
+
+            //2. Send save ajax
             $.ajax({
                 url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
                 type: "POST",
                 // Form data
-                data: formData,
+                data: form_data,
                 //Options to tell JQuery not to process data or worry about content-type
                 cache: false,
                 contentType: false,
@@ -85,14 +124,23 @@ $maxSize = $this->maxUploadInByte();
                 enctype: 'multipart/form-data'
             }).done(function (result) {
                 data = $.parseJSON(result);
-                stopLoading();
+                //console.log(data);
+                i++;
+
+                //console.log("i="+i);
+
                 if (data.error) {
-                    noty({
-                        text: data.error,
-                        type: 'error',
-                        timeout: 4000
-                    });
+                    if(data.type == <?php echo Zolago_Catalog_Vendor_ImageController::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_WRONG_FORMAT; ?>){
+                        fileWrongFormatError++;
+                    }
+                    if(data.type == <?php echo Zolago_Catalog_Vendor_ImageController::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_TOO_BIG; ?>){
+                        //fileTooBigError++;
+                    }
+                    if(data.type == <?php echo Zolago_Catalog_Vendor_ImageController::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_DEFINED_BY_CODE; ?>){
+
+                    }
                 } else {
+                    fileSuccess++;
                     container.html(data.content);
                     initDragSort(container.find(".vendor-image"));
 
@@ -101,8 +149,51 @@ $maxSize = $this->maxUploadInByte();
                     }).find("img").css({"opacity": "0.5"});
                 }
 
+//                console.log("success: "+fileSuccess);
+//                console.log("error wrong file format: "+fileWrongFormatError);
+//                console.log("error file too big: "+fileTooBigError);
+//                console.log("-------------");
+
+                if(i < filesCount){
+                    //Next ajax
+                    sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError, fileWrongFormatError);
+
+                } else {
+                    //Request summary
+                    requestImagesUploadSummary(fileSuccess, fileTooBigError, fileWrongFormatError);
+                    stopLoading();
+                }
             });
-        });
+
+
+        }
+
+        function requestImagesUploadSummary(fileSuccess, fileTooBigError, fileWrongFormatError) {
+            var timeout = 10000;
+
+            if (fileSuccess > 0) {
+                noty({
+                    text: '<?php echo $_helper->__("Images uploaded"); ?>' + ' - <b>' + fileSuccess + '</b>',
+                    type: 'success',
+                    timeout: timeout
+                });
+            }
+            if (fileTooBigError > 0) {
+                noty({
+                    text: '<?php echo $_helper->__('File too large. File must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>' + ' - <b>' + fileTooBigError + '</b>',
+                    type: 'error',
+                    timeout: timeout
+                });
+            }
+            if (fileWrongFormatError > 0) {
+                noty({
+                    text: '<?php echo $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."); ?>' + ' - <b>' + fileWrongFormatError + '</b>',
+                    type: 'warning',
+                    timeout: timeout
+                });
+            }
+
+        }
 
 
         //CONTROLS
