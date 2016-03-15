@@ -12,6 +12,8 @@
  * @method Zolago_Po_Model_Po setCustomerEmail(string $email)
  * @method int getCustomerId()
  * @method Zolago_Po_Model_Po setCustomerId(int $customerId)
+ * @method string getInpostLockerName()
+ * @method Zolago_Po_Model_Po setInpostLockerName(string $lockerName)
  */
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {

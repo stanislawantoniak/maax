@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <GH_Inpost>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Unirgy_Dropship/>
+            </depends>
+        </GH_Inpost>
+    </modules>
+</config>
