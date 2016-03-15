@@ -508,6 +508,10 @@ class Modago_Integrator_Model_Api
                 $order->load($collectionItem->getId());
 
                 if ($order->canCancel()) {
+                    // change increment id
+                    $incrementId = $order->getIncrementId();
+                    $number = sprintf('%s_%s_canceled',$incrementId,date('YmdHis'));
+                    $order->setIncrementId($number);
                     $order->cancel();
                     $order->setStatus('canceled');
                     $order->save();
