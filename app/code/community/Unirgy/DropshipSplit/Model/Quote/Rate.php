@@ -20,6 +20,7 @@ class Unirgy_DropshipSplit_Model_Quote_Rate extends Mage_Sales_Model_Quote_Addre
     public function importShippingRate(Mage_Shipping_Model_Rate_Result_Abstract $rate)
     {
         parent::importShippingRate($rate);
+        /* @var $rate Mage_Shipping_Model_Rate_Result_Method */
         $this->setUdropshipVendor($rate->getUdropshipVendor());
         return $this;
     }
