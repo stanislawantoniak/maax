@@ -94,3 +94,4 @@
 "Success: order set as collected (%s)","OK: Zamówienie oznaczono jako spakowane (%s)"
 "Only simple products in order","Tylko produkty proste w zamówieniu"
 "In new orders should be only simple products (without configurable/bundle etc.)","W nowo zakładanych zamówieniach znajdą się tylko produkty proste (bez konfigurowalnych, powiązanych itp.)"
+"Order number prefix","Prefix numeru zamówienia"
