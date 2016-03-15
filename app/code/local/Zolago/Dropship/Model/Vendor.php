@@ -545,6 +545,32 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
 		return $collection;
 	}
+     
+    /**
+     * overriding getStatus for staging and vendor sites allowed
+     *
+     * @return string
+     */
+     public function getStatus() {
+        // admin 
+        $status = $this->getData('status');
+        if (Mage::app()->getStore()->isAdmin()) {
+            return $status;
+        }
+        if (!Mage::app()->getWebsite()->getVendorSitesAllowed()) {
+            if ($status == Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE) {
+                $status = Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE;
+            }
+            return $status;
+        }
+        if (Mage::app()->getWebsite()->getIsPreviewWebsite()) {
+            if ($status == Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE) {
+                $status = Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE;
+            }
+            return $status;
+        }
+        return $status;
+     }
 
 	/**
 	 * @param Mage_Core_Model_Website|int $website

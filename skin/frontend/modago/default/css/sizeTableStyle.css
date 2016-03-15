@@ -4,10 +4,17 @@ body,html {
     line-height: 1.42857;
     padding: 0;
     margin: 0;
+    overflow: hidden;
 }
 body img {
     max-width: 100%;
 }
+
+#sizetable-container p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 
 #sizetable-container .sizetable-container-a {
     float: left;
@@ -35,9 +42,9 @@ body img {
     min-width: inherit;
 }
 
-#sizetable-container .sizetable-container-c:not(:empty) {
+/*#sizetable-container .sizetable-container-c:not(:empty) {
     padding-bottom: 20px;
-}
+}*/
 
 
 .sizetable-desktop {

@@ -428,20 +428,29 @@ define([
                 value = 1;
                 break;
         }
-        node.title = this.options[value] || "";
 
-        jQuery(node).tooltip({
+        var productPreview = '<i class="icon-product-preview product_preview_tooltip" title="' + Translator.translate("Product preview") + '" ' +
+                             'data-toggle="modal" data-target="#productPreviewModal" data-product-id="' + item.entity_id + '"></i>',
+            descriptionStatus = "<i class='" + icon + " description_status_tooltip' title='" + (this.options[value] || "") + "'></i> ";
+
+        var content = put("div");
+        put(content, "p", {
+            innerHTML: descriptionStatus + productPreview
+        });
+
+
+
+        put(node, content);
+
+        var tooltipOptions = {
             container: "body",
             trigger: "hover",
             animation: false,
             placement: "top",
             delay: {"show": 0, "hide": 0}
-        });
-        var content = put("div");
-        put(content, "p", {
-            innerHTML: "<i class='" + icon + "'></i>"
-        });
-        put(node, content);
+        };
+
+        jQuery(node).find(".description_status_tooltip,.product_preview_tooltip").tooltip(tooltipOptions);
     };
 
 	var rendererIsInStock = function (item, value, node, options) {
@@ -472,6 +481,7 @@ define([
 		});
 		put(node, content);
 	};
+    
     /**
      * @param {string} currency
      * @returns {Function}

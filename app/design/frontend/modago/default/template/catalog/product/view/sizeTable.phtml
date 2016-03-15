@@ -1,5 +1,7 @@
 <?php $table = $this->getData("table"); ?>
 
+
+<?php if($table): ?>
 <div class="sizetable-desktop">
     <table>
         <?php foreach ($table as $i => $tds): ?>
@@ -69,3 +71,4 @@
 
     <?php endforeach; ?>
 </div>
+<?php endif; ?>

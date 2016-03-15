@@ -33,10 +33,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryRoot = explode("/", $category->getPath())[1];
 
-        $coreStoreGroup = Mage::getModel("core/store_group")->getCollection();
-        $coreStoreGroup->addFieldToFilter("root_category_id", $categoryRoot);
-        $websiteId = $coreStoreGroup->getFirstItem()->getWebsiteId();
-
+        $websiteId = Mage::app()->getRequest()->getParam("website",0);
 
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = $vendor->getId();
@@ -105,10 +102,11 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryId = $this->getCategoryId();
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
+        $websiteId = $this->getWebsiteId();
 
         /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
         $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
-        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(), FALSE, false);
+        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(), FALSE, $websiteId);
 
         $placementsByType = array();
         if (!empty($placements)) {
@@ -202,10 +200,22 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         return $placementsByType;
     }
 
+    public function getWebsiteId()
+    {
+        $category = $this->getRequest()->getParam('website', null);
+        return $category;
+    }
+
     public function getCategoryId()
     {
         $category = $this->getRequest()->getParam('category', null);
         return $category;
+    }
+
+    public function getWebsiteName(){
+        $websiteId = $this->getWebsiteId();
+        $website = Mage::getModel("core/website")->load($websiteId);
+        return $website->getName();
     }
 
     public function getCategoryName()

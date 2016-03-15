@@ -183,4 +183,7 @@
 	<variants-of>
 		<message>{{available_child_count}} variants of {{all_child_count}}</message>
 	</variants-of>
+    <product-preview>
+        <message>Product preview</message>
+    </product-preview>
 </jstranslator>

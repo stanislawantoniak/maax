@@ -23,8 +23,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
 
         <div class="page-heading row">
             <div class="col-lg-12">
-                <h3><?php echo $_helper->__('Manage placements on page') ?>: <span
-                        data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
+                <h3><?php echo $_helper->__('Manage placements on page') ?>: <span data-source="category"><?php echo $this->getCategoryName(); ?></span> (<?php echo $this->getWebsiteName(); ?>)</h3>
 
                 <p><?php echo $_helper->__('Add or remove from page, select order and priority of ads.') ?></p>
 
@@ -37,6 +36,11 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                     <li>
                         <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true)) ?>">
                             <?php echo $_helper->__('Manage placements') ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true)) ?>">
+                            <?php echo $this->getWebsiteName(); ?>
                         </a>
                     </li>
                     <li>
@@ -62,8 +66,11 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
 
 
                                     <div class="toolbar no-padding">
-                                        <div class="btn-group"><span class="btn btn-xs widget-collapse"><i
-                                                    class="icon-angle-down"></i></span></div>
+                                        <div class="btn-group">
+                                            <span class="btn btn-xs widget-collapse">
+                                                <i class="icon-angle-down"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="widget-content banner-type" style="display: block;">
