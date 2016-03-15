@@ -662,7 +662,6 @@ class Zolago_Catalog_Vendor_ImageController
                 $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
             } catch (Exception $e) {
-                Mage::log($e->getCode());
                 if ($e->getCode() == 0) {
                     $result = array(
                         'error' => $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."),
