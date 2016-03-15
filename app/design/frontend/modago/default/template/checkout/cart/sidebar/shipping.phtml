@@ -72,6 +72,15 @@ $cost = $items->cost;
         </div>
     <?php endif; ?>
 </fieldset>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        //TODO move to js
+        jQuery("[name=_shipping_method][value=ghinpost_large]").click(function () {
+            alert("Ouch! You've just selected paczkomat number HELLO_WORLD");
+        });
+    });
+</script>
 
 
 
