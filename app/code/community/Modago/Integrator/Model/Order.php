@@ -187,8 +187,6 @@ class Modago_Integrator_Model_Order {
 
         /** @var Mage_Sales_Model_Order $order */
         $order = $service->getOrder();
-        $increment_id = $order->getRealOrderId();
-
         //set paid amount
         if($apiOrder->payment_method != 'cash_on_delivery') {
             $total = floatval($apiOrder->order_total);
@@ -200,8 +198,10 @@ class Modago_Integrator_Model_Order {
                 $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
             }
         }
-
-        $order->setModagoOrderId($this->_modagoOrderId)->save();
+        $number = sprintf('%s_%s',$this->getHelper()->getOrderPrefix(),$this->_modagoOrderId);
+        $order->setModagoOrderId($this->_modagoOrderId)
+            ->setIncrementId($number)
+            ->save();
         // check products stats
         $this->_checkProductStocks();
 
@@ -209,7 +209,7 @@ class Modago_Integrator_Model_Order {
         $quote = $service = $order = null;
 
         // Finished
-        return $increment_id;
+        return $number;
 
     }
 

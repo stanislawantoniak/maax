@@ -151,6 +151,15 @@
 							<show_in_store>0</show_in_store>
 							<validate>required-entry</validate>
 						</store>
+						<prefix translate="label">
+							<label>Order number prefix</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<validate>required-entry</validate>
+						</prefix>
 						<simple_only translate="label">
 							<label>Only simple products in order</label>
 							<frontend_type>select</frontend_type>

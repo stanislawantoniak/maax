@@ -17,9 +17,19 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     const CONFIG_PATH_LOG_DAYS       = 'modagointegrator/api_advanced_settings/log_days';
     const CONFIG_PATH_BLOCK_SHIPPING = 'modagointegrator/api_advanced_settings/block_shipping';
     const CONFIG_PATH_STORE          = 'modagointegrator/orders/store';
+    const CONFIG_PATH_PREFIX         = 'modagointegrator/orders/prefix';
     const CONFIG_PATH_MAPPED_COD     = 'modagointegrator/orders/mapped_cod';
     const CONFIG_PATH_SIMPLE_ONLY	 = 'modagointegrator/orders/simple_only';
 
+    
+    /**
+     * return prefix for increment id for order
+     *
+     * @return string
+     */
+    public function getOrderPrefix() {
+        return Mage::getStoreConfig(self::CONFIG_PATH_PREFIX);
+    }
     /**
      * Return login for api (vendor id)
      *
