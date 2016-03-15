@@ -198,7 +198,7 @@ class Modago_Integrator_Model_Order {
                 $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
             }
         }
-        $number = sprintf('%s_%s',$this->getHelper()->getOrderPrefix(),$this->_modagoOrderId);
+        $number = sprintf('%s%s',$this->getHelper()->getOrderPrefix(),$this->_modagoOrderId);
         $order->setModagoOrderId($this->_modagoOrderId)
             ->setIncrementId($number)
             ->save();

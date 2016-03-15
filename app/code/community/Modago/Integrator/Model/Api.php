@@ -293,7 +293,6 @@ class Modago_Integrator_Model_Api
         }
 
         $details = $this->_getOrdersById(array($orderId));
-        Mage::log($details, null, "api_invoice_b_as_sh.log");
 
         if (empty($details->status)) { // error
             return false;
@@ -510,7 +509,7 @@ class Modago_Integrator_Model_Api
                 if ($order->canCancel()) {
                     // change increment id
                     $incrementId = $order->getIncrementId();
-                    $number = sprintf('%s_%s_canceled',$incrementId,date('YmdHis'));
+                    $number = sprintf('%s%s_canceled',$incrementId,date('YmdHis'));
                     $order->setIncrementId($number);
                     $order->cancel();
                     $order->setStatus('canceled');
