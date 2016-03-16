@@ -4,9 +4,23 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 08.09.2014
  */
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
 $_shippingAddress = $this->getQuote()->getShippingAddress();
 $sameAsBilling = (int) $this->getQuote()->getShippingAddress()->getSameAsBilling();
 $_cutomerAddressId = $_shippingAddress->getCustomerAddressId();
+
+/** @var Zolago_Customer_Model_Session $customerSession */
+$customerSession = Mage::getSingleton('customer/session');
+
+$inpost					= $customerSession->getInpostLockerName();
+//$inpost					= "WAW099";
+$inpostStreet			= "Łęczycka";
+$inpostStreetNumber		= 55;
+$inpostZipCode			= "95-100";
+$inpostCity				= "Warszawa";
+$inpostDetails			= "(przy markecie Biedronka)";
+$inpostLogo				= $this->getSkinUrl('images/inpost/checkout-logo.png');
 ?>
 
 <fieldset>
@@ -19,6 +33,7 @@ $_cutomerAddressId = $_shippingAddress->getCustomerAddressId();
     <input type="hidden" name="shipping[same_as_billing]" value="<?php echo $sameAsBilling; ?>">
     <input type="hidden" name="shipping_address_id" value="<?php /*echo $_cutomerAddressId;*/ ?>">
     <legend><?php echo $this->__("Shipping address"); ?></legend>
+	<?php if(empty($inpost)): ?>
     <div class="form-group form-checkbox small">
         <input type="checkbox" name="shipping[different_shipping_address]" id="orders_someone_else" class="css-checkbox orders_someone_else" <?php if ($this->getOrderSomeoneElseFlag()) : ?>checked<?php endif; ?>>
         <label for="orders_someone_else" class="css-label orders_someone_else"><?php echo $this->__("I'm buing for someone else."); ?></label>
@@ -88,4 +103,38 @@ $_cutomerAddressId = $_shippingAddress->getCustomerAddressId();
             </div>
         </div>
     </div>
+	<?php else: // is InPost locker ?>
+	<div id="inpost-wrapper" class="panel panel-default inpost-wrapper">
+		<div class="panel-body">
+			<div class="form-group">
+				<input id="inpost_locker_name"
+					   class=""
+					   name="inpost[locker_name]"
+					   value="<?php echo $inpost; ?>"
+					   type="hidden">
+				<div class="row">
+					<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
+						<strong><?php echo $helper->__("Locker InPost"); ?></strong>
+						<br/>
+						<span id="inpost-locker-street"><?php echo $inpostStreet; ?></span> <span id="inpost-locker-street-number"><?php echo $inpostStreetNumber; ?></span>
+						<br/>
+						<span id="inpost-locker-zip-code"><?php echo $inpostZipCode; ?></span> <span id="inpost-locker-city"><?php echo $inpostCity; ?></span>
+						<br/>
+						<span id="inpost-locker-details"><?php echo $inpostDetails; ?></span>
+					</div>
+					<div class="col-xs-5 col-sm-6 col-md-6 col-lg-6 text-right">
+						<div class="figure-button-wrapper">
+							<figure class="inpost-img">
+								<div><img src="<?php echo $inpostLogo; ?>"></div>
+							</figure>
+							<br/>
+							<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large change-locker"><?php echo $helper->__('Change'); ?></a>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>
 </fieldset>
