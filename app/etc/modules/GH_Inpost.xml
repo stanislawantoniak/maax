@@ -6,6 +6,7 @@
             <codePool>local</codePool>
             <depends>
                 <Unirgy_Dropship/>
+                <Unirgy_DropshipTierShipping />
             </depends>
         </GH_Inpost>
     </modules>
