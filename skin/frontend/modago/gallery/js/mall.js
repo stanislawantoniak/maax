@@ -1880,8 +1880,39 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery("#cart-buy").on('click', function() {
+    jQuery("#cart-buy").on('click', function(e) {
+        e.preventDefault();
         jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
+        var vendors = Mall.reg.get("vendors"),
+            formData,
+            content = jQuery("#cart-shipping-methods"),
+            buyButton = this;
+
+        var shipping = content.find("input[name=_shipping_method]:checked").val();
+
+        if (jQuery.type(shipping) !== "undefined") {
+            var inputs = '';
+            jQuery.each(vendors, function (i, vendor) {
+                inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
+            });
+            content.find("form .shipping-collect").html(inputs);
+            formData = content.find("#cart-shipping-methods-form").serializeArray();
+        }
+
+
+
+        jQuery.ajax({
+            url: content.find("form#cart-shipping-methods-form").attr("action"),
+            data: formData
+        }).done(function(response){
+            if(response.status){
+                window.location = jQuery(buyButton).attr("href");
+            }
+
+        });
+
+
+
     });
 
 

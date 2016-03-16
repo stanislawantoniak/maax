@@ -17,13 +17,15 @@ $vednorCosts = $items->vendorCosts;
 $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
-//krumo($rates);
+
+$checkoutSession = Mage::getSingleton('checkout/session');
+$sessionShippingMethod = $checkoutSession->getData("shipping_method");
 ?>
 
 
 <?php if(!empty($rates)): ?>
-<fieldset id="shipping-methods">
-
+<fieldset id="cart-shipping-methods">
+    <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">
     <div class="data-validate"></div>
     <script type="text/javascript">
         (function(){
@@ -32,34 +34,39 @@ $cost = $items->cost;
         })();
     </script>
     <div class="shipping-collect"></div>
-    <?php foreach($methods as $method): ?>
-        <?php
-        $formattedCost = '';
-        if (isset($cost[$method['code']])) {
-            $costSum = array_sum($cost[$method['code']]);
-            $formattedCost = Mage::helper('core')->currency($costSum, true, false);
-        }?>
-        <div class="panel panel-default panel-color">
-            <div class="panel-body">
-                <dl class="pull-left">
 
-                    <dt>
-                        <input type="radio"
-                               value="<?php echo $method['code']; ?>"
-                               name="_shipping_method"
-                               required="required"
-                               class="shipping-method"
-                               data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']);?>"
-                               data-carrier-method="<?php echo $this->escapeHtml($method['method_title']);?>"
-                               data-method-cost="<?php echo $costSum;?>"/>
+        <?php foreach ($methods as $method): ?>
+            <?php
+            $formattedCost = '';
+            if (isset($cost[$method['code']])) {
+                $costSum = array_sum($cost[$method['code']]);
+                $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+            } ?>
+            <div class="panel panel-default panel-color">
+                <div class="panel-body">
+                    <dl>
+                        <dt class="pull-left">
+                            <input type="radio"
+                                   value="<?php echo $method['code']; ?>"
+                                   <?php if(in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
+                                   name="_shipping_method"
+                                   required="required"
+                                   class="shipping-method"
+                                   data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
+                                   data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
+                                   data-method-cost="<?php echo $costSum; ?>"/>
 
-                        <?php echo $method['carrier_title']?></dt>
-                    <dd><?php echo $method['method_title']?></dd>
-                    <dd class="separator large"><?php echo $this->__('Shipping cost'); ?>: <strong><?php echo $formattedCost; ?> </strong></dd>
-                </dl>
+                            <?php echo $method['carrier_title'] ?>
+                            <br/>
+                            <?php echo $method['method_title'] ?>
+                        </dt>
+
+                        <dd class="pull-right"><strong><?php echo $formattedCost; ?> </strong></dd>
+                    </dl>
+                </div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+
 
 
     <?php else: ?>
@@ -71,12 +78,13 @@ $cost = $items->cost;
             </div>
         </div>
     <?php endif; ?>
+</form>
 </fieldset>
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
         //TODO move to js
-        jQuery("[name=_shipping_method][value=ghinpost_large]").click(function () {
+        jQuery("[name=_shipping_method][value=udtiership_2]").click(function () {
             alert("Ouch! You've just selected paczkomat number HELLO_WORLD");
         });
     });

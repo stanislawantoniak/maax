@@ -118,6 +118,33 @@ abstract class Zolago_Checkout_Controller_Abstract
 				setHeader("content-type", "application/json")->
 				setBody($helper->jsonEncode($newResponse));
 	}
+
+    /**
+     * Save post shipping (got from /checkout/cart/ page) data to quote
+     * @throws Mage_Core_Exception
+     */
+    public function importPostShippingData(){
+        $request = $this->getRequest();
+
+
+        $onepage = $this->getOnepage();
+
+
+        /**
+        shipping_method[vendor_id]:udtiership_1
+         */
+
+        if($shippingMethod = $request->getParam("shipping_method")){
+
+
+            $shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
+            if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
+                throw new Mage_Core_Exception($shippingMethodResponse['message']);
+            }
+
+            $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
+        }
+    }
 	
 	/**
 	 * Save post data to quote
@@ -353,6 +380,28 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$this->_prepareJsonResponse($response);
 		}
 	}
+
+
+    public function saveBasketShippingAction() {
+
+        $response = array(
+            "status"=>true,
+            "content" => array()
+        );
+
+        try{
+            $this->importPostShippingData();
+        } catch (Exception $ex) {
+            $response = array(
+                "status"=>0,
+                "content"=>$ex->getMessage()
+            );
+        }
+
+        if($this->getRequest()->isAjax()){
+            $this->_prepareJsonResponse($response);
+        }
+    }
 
 	/**
 	 * @param mixed $response
