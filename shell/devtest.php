@@ -54,7 +54,7 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract {
     }
 
     public function tierCommissionActionHelp() {
-        return "use ex: php -f shell/devtest -action tierCommission -poid 26";
+        return "use ex: php -f shell/devtest.php -action tierCommission -poid 26";
     }
 
     public function testCheckProductAction() {
@@ -68,7 +68,7 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract {
     }
 
     public function testCheckProductActionHelp() {
-        return "use ex: php -f shell/devtest -action testCheckProduct -pid 26";
+        return "use ex: php -f shell/devtest.php -action testCheckProduct -pid 26";
     }
 
 	/**
@@ -81,7 +81,102 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract {
 	}
 
 	public function solrActionHelp() {
-		return "use ex: php -f shell/devtest -action solr";
+		return "use ex: php -f shell/devtest.php -action solr";
+	}
+
+	public function updateStockConverterAction() {
+		/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $obj */
+		$obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+		$liczbaA1 = 5;
+		$liczbaB1 = 6;
+
+
+		$liczbaA2 = 6;
+		$liczbaB2 = 5;
+
+		$param =array (
+			10 => array (
+				'10-04J462-4-011' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA1,
+					'MAGAZYN' => $liczbaB1,
+					'k99' => 0
+				),
+				'10-04J462-4-012' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA1,
+					'MAGAZYN' => $liczbaB1,
+					'k99' => 0
+				),
+				'10-04J462-4-013' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA1,
+					'MAGAZYN' => $liczbaB1,
+					'k99' => 0
+				),
+				'10-04J462-4-014' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA1,
+					'MAGAZYN' => $liczbaB1,
+					'k99' => 0
+				),
+
+				'10-04J462-4-015' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA1,
+					'MAGAZYN' => $liczbaB1,
+					'k99' => 0
+				),
+
+				'10-04J462-4-016' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA1,
+					'MAGAZYN' => 0,
+					'k99' => 0
+				),
+
+
+
+				//10-04B163A5-01
+				'10-04B163A5-010' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA2,
+					'MAGAZYN' => $liczbaB2,
+					'k99' => 0
+				),
+				'10-04B163A5-011' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA2,
+					'MAGAZYN' => $liczbaB2,
+					'k99' => 0
+				),
+				'10-04B163A5-012' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA2,
+					'MAGAZYN' => $liczbaB2,
+					'k99' => 0
+				),
+				'10-04B163A5-013' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA2,
+					'MAGAZYN' => $liczbaB2,
+					'k99' => 0
+				),
+
+				'10-04B163A5-014' => array(
+					'SKLEP2' => 0,
+					'SKLEP1' => $liczbaA2,
+					'MAGAZYN' => $liczbaB2,
+					'k99' => 0
+				),
+
+			),
+		);
+		$obj::updateStockConverter($param);
+	}
+
+	public function updateStockConverterActionHelp() {
+		return "use ex: php -f shell/devtest.php -action updateStockConverter";
 	}
 }
 

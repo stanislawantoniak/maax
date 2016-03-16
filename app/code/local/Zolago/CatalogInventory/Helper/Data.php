@@ -100,7 +100,7 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 		if($productsCheck){
 			foreach($productsCheck as $product){
 				/* @var $product Mage_Catalog_Model_Product */
-				$stockModel->loadByProduct($product);
+				$stockModel->loadByProduct($product); // todo poprawić to, w $item powinien byc model stock, po co ladowac jeszcze raz
 				$flags = array();
 				if($stockModel && $stockModel->getId()){
 					if($stockModel->getIsInStock () && $stockModel->getQty()>$itemThershold){
