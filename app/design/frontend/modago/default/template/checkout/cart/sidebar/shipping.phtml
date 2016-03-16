@@ -20,6 +20,7 @@ $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
 $sessionShippingMethod = $checkoutSession->getData("shipping_method");
+//krumo($sessionShippingMethod);
 ?>
 
 
@@ -48,7 +49,7 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
                         <dt class="pull-left">
                             <input type="radio"
                                    value="<?php echo $method['code']; ?>"
-                                   <?php if(in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
+                                   <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
                                    name="_shipping_method"
                                    required="required"
                                    class="shipping-method"
