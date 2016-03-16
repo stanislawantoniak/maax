@@ -136,14 +136,16 @@ abstract class Zolago_Checkout_Controller_Abstract
 
         if($shippingMethod = $request->getParam("shipping_method")){
 
-
             $shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
             if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
                 throw new Mage_Core_Exception($shippingMethodResponse['message']);
             }
-
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
+
+		if($inpostCode = $request->getParam("inpost_code")){
+			$this->_getCheckoutSession()->setInpostCode($inpostCode);
+		}
     }
 	
 	/**

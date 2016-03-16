@@ -20,7 +20,11 @@ $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
 $sessionShippingMethod = $checkoutSession->getData("shipping_method");
-//krumo($sessionShippingMethod);
+
+$inpostCode = $checkoutSession->getData("inpost_code");
+//echo "<pre>";
+//var_dump($checkoutSession->getData());
+//echo "</pre>";
 ?>
 
 
@@ -34,6 +38,7 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
         })();
     </script>
+    <div class="shipping-collect-inpost"></div>
     <div class="shipping-collect"></div>
 
         <?php foreach ($methods as $method): ?>
@@ -47,7 +52,7 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
             <div class="panel panel-default panel-color">
                 <div class="panel-body">
                     <dl>
-                        <dt class="pull-left">
+                        <div class="pull-left">
                             <input type="radio"
                                    value="<?php echo $method['code']; ?>"
                                    <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
@@ -59,12 +64,18 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
                                    data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
                                    data-method-cost="<?php echo $costSum; ?>"/>
 
+
                             <?php echo $method['carrier_title'] ?>
                             <br/>
                             <?php echo $method['method_title'] ?>
-                        </dt>
 
-                        <dd class="pull-right"><strong><?php echo $formattedCost; ?> </strong></dd>
+                            <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                <br />
+                                <div class="inpost-code-holder"><?php echo $inpostCode; ?></div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
                     </dl>
                 </div>
             </div>
@@ -83,15 +94,24 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
     <?php endif; ?>
 </form>
 </fieldset>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
 
-        //TODO move to js
-        jQuery("[data-carrier-inpost=1]").click(function () {
-            alert("Ouch! You've just selected paczkomat number HELLO_WORLD");
-        });
-    });
-</script>
 
+
+<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Select Paczkomat"); ?></h2>
+            </div>
+
+            <div class="modal-body">
+                <a class="select-inpost-code" href="">BiedronkaUstka</a>
+                <br />
+                <a class="select-inpost-code" href="">MarketNettoUstka</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
