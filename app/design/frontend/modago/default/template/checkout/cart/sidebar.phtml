@@ -24,6 +24,13 @@
 <div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
         <!--<div class="inner-cart-summary">-->
+        <!--            Select Shipping-->
+        <header>
+            <h2><?php echo $this->__("Select Shipping"); ?></h2>
+        </header>
+        <div class="col-sidebar-cart-summary clearfix">
+            <?php echo $this->getChildHtml('shipping'); ?>
+        </div>
         <header>
             <h2><?php echo $this->__("Your shopping"); ?></h2>
         </header>
