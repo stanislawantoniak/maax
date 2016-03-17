@@ -22,6 +22,14 @@ class Modago_Integrator_Helper_Api extends Mage_Core_Helper_Abstract
     const CONFIG_PATH_SIMPLE_ONLY	 = 'modagointegrator/orders/simple_only';
 
     
+    
+    /**
+     * module version
+     * @return string
+     */
+     public function getModuleVersion() {
+         Mage::helper('modagointegrator')->getModuleVersion();
+     }
     /**
      * return prefix for increment id for order
      *
