@@ -6,6 +6,8 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
     extends Mage_Checkout_Block_Onepage_Abstract
 {
 
+	protected $inpostLocker = null;
+
 	/**
 	 * Placebo function
 	 * todo: fix it when inpost locker object will be created
@@ -13,21 +15,32 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 	 * @return Varien_Object
 	 */
 	public function getInpostLocker() {
-		$locker = new Varien_Object();
-		/** @var Mage_Checkout_Model_Session $checkoutSession */
-		$checkoutSession = Mage::getSingleton('checkout/session');
-		$inpostCode = $checkoutSession->getInpostCode();
-		if (!empty($inpostCode)) {
-			$locker->setId(1);
-			$locker->setLockerName($inpostCode);
-			$locker->setStreet("Łęczycka");
-			$locker->setStreetNumber(55);
-			$locker->setPostcode("95-100");
-			$locker->setCity("Warszawa");
-			$locker->setCountryId($this->getStoreDefaultCountryId());
-			$locker->setDetails("(przy markecie Biedronka -> {$inpostCode})");
+		if (is_null($this->inpostLocker)) {
+			$locker = new Varien_Object();
+			/** @var Mage_Checkout_Model_Session $checkoutSession */
+			$checkoutSession = Mage::getSingleton('checkout/session');
+			$inpostCode = $checkoutSession->getInpostCode();
+
+//			$checkoutSession->setInpostCode("");
+//			$checkoutSession->setInpostCode("sdsds");
+			
+			if (!empty($inpostCode)) {
+				$locker->setId(1);
+				$locker->setLockerName($inpostCode);
+				$locker->setStreet("Łęczycka");
+				$locker->setStreetNumber(55);
+				$locker->setPostcode("95-100");
+				$locker->setCity("Warszawa");
+				$locker->setCountryId($this->getStoreDefaultCountryId());
+				$locker->setDetails("(przy markecie Biedronka -> {$inpostCode})");
+			}
+			$this->inpostLocker = $locker;
 		}
-		return $locker;
+		return $this->inpostLocker;
+	}
+
+	public function getDeliveryDays() {
+		return "1-2"; // TODO
 	}
 
 	/**

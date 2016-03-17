@@ -184,18 +184,18 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 			<div class="panel-group">
 				<div class="row">
 					<?php if(!$locker->getId()): ?>
-					<div class="col-md-12  col-sm-4">
+					<div class="col-md-12 col-sm-4 delivery-type delivery-type-short">
 						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
-							<dd>{{carrier_name}} </dd>
-							<dd>{{carrier_method}}</dd>
+							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
+							<dd><?php echo $helper->__("Delivery in %s days", $this->getDeliveryDays()); ?></dd>
 						</dl>
 					</div>
 					<?php else: ?>
-						<div class="col-md-12 col-sm-4 delivery-type-inpost">
+						<div class="col-md-12 col-sm-4 delivery-type">
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 							<dl>
-								<dd class="delivery-type-inpost-logo"><span><?php echo $helper->__("Locker InPost"); ?></span><img src="<?php echo $inpostLogo; ?>"/></dd>
+								<dd class="online-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $inpostLogo; ?>"/></dd>
 								<dd>{{inpost_locker_street}} {{inpost_locker_street_number}}</dd>
 								<dd>{{inpost_locker_zip_code}} {{inpost_locker_city}}</dd>
 								<dd>{{inpost_locker_details}}</dd>
