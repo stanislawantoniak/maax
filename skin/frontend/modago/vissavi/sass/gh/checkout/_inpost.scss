@@ -1,0 +1,40 @@
+// InPost locker view in checkout step I
+
+#checkout {
+  .inpost-wrapper {
+    display: block;
+    margin-top: 5px;
+    .panel-body {
+      padding: 25px 25px 15px 25px;
+      @media (max-width: $screen-xs-min) {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .form-group {
+        margin-bottom: 5px;
+      }
+    }
+    .figure-button-wrapper {
+      direction: rtl;
+    }
+    figure.inpost-img {
+      min-height: 60px;
+      display: inline-table;
+      vertical-align: middle;
+      border: 1px solid $gray-lighter;
+      padding: 5px;
+      background-color: $color_ffffff;
+      div {
+        display: table-cell;
+        vertical-align: middle;
+        img {
+          max-height: 51px;
+        }
+      }
+    }
+  }
+  .change-locker {
+    width: 99px;
+    margin-top: 10px;
+  }
+}
