@@ -142,9 +142,11 @@ abstract class Zolago_Checkout_Controller_Abstract
             }
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
-
+		$checkoutSession = $this->_getCheckoutSession();
 		if($inpostCode = $request->getParam("inpost_code")){
-			$this->_getCheckoutSession()->setInpostCode($inpostCode);
+			$checkoutSession->setInpostCode($inpostCode);
+		} else {
+			$checkoutSession->unsInpostCode();
 		}
     }
 	
