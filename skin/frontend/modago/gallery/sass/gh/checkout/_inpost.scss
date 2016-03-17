@@ -37,4 +37,19 @@
     width: 99px;
     margin-top: 10px;
   }
+  .delivery-type-inpost {
+    dd {
+      max-width: 60%;
+      word-wrap: break-word;
+    }
+    .delivery-type-inpost-logo {
+      img {
+        max-width: 80px;
+        position: absolute;
+        right: 0;
+        border: 1px solid $color_000000;
+        padding: 5px;
+      }
+    }
+  }
 }

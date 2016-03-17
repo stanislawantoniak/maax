@@ -1,10 +1,13 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */
 
-/** @var Zolago_Checkout_Helper_Data $_helper */
-$_helper = Mage::helper("zolagocheckout");
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
 
 /** @var Zolago_Modago_Helper_Data $modagoHelper */
 $modagoHelper = Mage::helper('zolagomodago');
+
+$locker		= $this->getInpostLocker();
+$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
 $_totalDiscount = $this->getTotalDiscount();
 $_coupon = $this->getCoupon();
@@ -31,10 +34,10 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 				<?php endforeach; ?>
 				<div class="panel_action row visible-xs">
 					<div class="col-sm-6">
-						<a href="<?php echo $this->getBasketUrl(); ?>" id="zmien_produkty" class="button button-third large pull-left"><?php echo $_helper->__('Change'); ?></a>
+						<a href="<?php echo $this->getBasketUrl(); ?>" id="zmien_produkty" class="button button-third large pull-left"><?php echo $helper->__('Change'); ?></a>
 					</div>
 					<div class="col-sm-6">
-						<a href="#" id="zwin_produkty" class="button button-third large pull-right"><?php echo $_helper->__('Roll products'); ?></a>
+						<a href="#" id="zwin_produkty" class="button button-third large pull-right"><?php echo $helper->__('Roll products'); ?></a>
 					</div>
 				</div>
 			</div>
@@ -45,7 +48,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 						<div class="row">
 							<a href="<?php echo $this->getBasketUrl(); ?>"
 							   id="zmiana_zawartosci_koszyka"
-							   class="button button-third large pull-left"><?php echo $_helper->__('Change basket'); ?></a>
+							   class="button button-third large pull-left"><?php echo $helper->__('Change basket'); ?></a>
 						</div>
 					</div>
 					
@@ -68,7 +71,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 								<?php endif;?>
 								<dt>
 									<strong>
-										<span class="lb"><?php echo $_helper->__('To pay'); ?>:</span>
+										<span class="lb"><?php echo $helper->__('To pay'); ?>:</span>
 										<span class="total_value"></span>
 									</strong>
 								</dt>
@@ -90,7 +93,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 			<div class="row hidden-xs">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements">
 					<div class="checkout_agreement_vendors"
-					     data-original-title="<?php echo $_helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+					     data-original-title="<?php echo $helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
 					     data-placement="bottom">
 						<div class="agreement-nocheck-checkout">
 							<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
@@ -125,9 +128,9 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 				</div>
 				<div class="col-md-3 col-sm-6" col-lg-2">
                     <?php if($checkoutOrderDeactivate): ?>
-                        <a class="button button-primary large link pull-right disabled"><?php echo $_helper->__('Order now and pay'); ?></a>
+                        <a class="button button-primary large link pull-right disabled"><?php echo $helper->__('Order now and pay'); ?></a>
                         <?php else: ?>
-                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $_helper->__('Order now and pay'); ?></button>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $helper->__('Order now and pay'); ?></button>
                     <?php endif; ?>
 				</div>
 			</div>
@@ -141,30 +144,32 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 		<section  class="main bg-w opened-panel-group sidebar-addresses">
 			<header >
 				<h2 class="open">
-					<?php echo $_helper->__('Shipping information'); ?>
+					<?php echo $helper->__('Address data'); ?>
 					<i class="bullet-strzalka-up visible-xs"></i>
 				</h2>
 			</header>
 			<div class="panel-group">
 				<div class="row">
+				<?php if(!$locker->getId()): ?>
 					<div class="col-md-12  col-sm-4">
-						<h4><?php echo $_helper->__('Delivery address'); ?>:</h4>
+						<h4><?php echo $helper->__('Delivery address'); ?>:</h4>
 						{{shipping}}
 					</div>
+				<?php endif; ?>
 					<div class="col-md-12  col-sm-4">
-						<h4><?php echo $_helper->__('Sales document'); ?>:</h4>
+						<h4><?php echo $helper->__('Sales document'); ?>:</h4>
 						<dl>
 							<dd>{{sales_document}}<dd>
 						</dl>
 					</div>
 					<div class="col-md-12 col-sm-4 invoice-data">
-						<h4><?php echo $_helper->__('Invoice data'); ?>:</h4>
+						<h4><?php echo $helper->__('Invoice data'); ?>:</h4>
 						{{billing}}
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
-						<button class="button button-third large pull-right prev-button-address"><?php echo $_helper->__('Change'); ?></button>
+						<button class="button button-third large pull-right prev-button-address"><?php echo $helper->__('Change'); ?></button>
 					</div>
 				</div>
 			</div>
@@ -172,21 +177,40 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 		<section class="main bg-w opened-panel-group sidebar-deliverypayment">
 			<header>
 				<h2 class="open">
-					<?php echo $_helper->__('Delivery and payment'); ?>
+					<?php echo $helper->__('Delivery and payment'); ?>
 					<i class="bullet-strzalka-up visible-xs"></i>
 				</h2>
 			</header>
 			<div class="panel-group">
 				<div class="row">
+					<?php if(!$locker->getId()): ?>
 					<div class="col-md-12  col-sm-4">
-						<h4><?php echo $_helper->__('Delivery type'); ?>:</h4>
+						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
 							<dd>{{carrier_name}} </dd>
 							<dd>{{carrier_method}}</dd>
 						</dl>
 					</div>
+					<?php else: ?>
+						<div class="col-md-12 col-sm-4 delivery-type-inpost">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="delivery-type-inpost-logo"><span><?php echo $helper->__("Locker InPost"); ?></span><img src="<?php echo $inpostLogo; ?>"/></dd>
+								<dd>{{inpost_locker_street}} {{inpost_locker_street_number}}</dd>
+								<dd>{{inpost_locker_zip_code}} {{inpost_locker_city}}</dd>
+								<dd>{{inpost_locker_details}}</dd>
+							</dl>
+						</div>
+					<?php endif; ?>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-12  col-sm-4">
-						<h4><?php echo $_helper->__('Payment type'); ?>:</h4>
+						<h4><?php echo $helper->__('Payment type'); ?>:</h4>
 						<dl>
 							<dd>{{payment_method}}</dd>
 							<dd class="online-data">{{online_data}}</dd>
@@ -195,7 +219,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 				</div>
 				<div class="row">
 					<div class="col-sm-12">
-						<button class="button button-third large pull-right  prev-button-deliverypaymnet"><?php echo $_helper->__('Change'); ?></button>
+						<button class="button button-third large pull-right  prev-button-deliverypaymnet"><?php echo $helper->__('Change'); ?></button>
 					</div>
 				</div>
 			</div>
@@ -203,7 +227,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 		<div class="main bg-w visible-xs opened-panel-group">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements_mobile">
 				<div class="checkout_agreement_vendors"
-				     data-original-title="<?php echo $_helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+				     data-original-title="<?php echo $helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
 				     data-placement="bottom">
 					<div class="agreement-nocheck-checkout">
 						<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
@@ -237,9 +261,9 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 				</div>
 				<div class="col-sm-6">
                     <?php if($checkoutOrderDeactivate): ?>
-                        <a class="button button-primary large link pull-right disabled "><?php echo $_helper->__('Order now and pay'); ?></a>
+                        <a class="button button-primary large link pull-right disabled "><?php echo $helper->__('Order now and pay'); ?></a>
                     <?php else: ?>
-                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $_helper->__('Order now and pay'); ?></button>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $helper->__('Order now and pay'); ?></button>
                     <?php endif; ?>
 				</div>
 			</div>
