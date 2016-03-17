@@ -18,13 +18,12 @@ $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
 
-$checkoutSession = Mage::getSingleton('checkout/session');
-$sessionShippingMethod = $checkoutSession->getData("shipping_method");
 
-$inpostCode = $checkoutSession->getData("inpost_code");
-//echo "<pre>";
-//var_dump($checkoutSession->getData());
-//echo "</pre>";
+$sessionShippingMethod = $this->getData("shipping_method");
+$inpostCode = $this->getData("inpost_code");
+
+//Zend_Debug::dump($sessionShippingMethod);
+
 ?>
 
 
