@@ -9,7 +9,7 @@ jQuery(document).ready(function() {
         jQuery("#cart-shipping-methods .shipping-collect-inpost").html(inPostCodeInput);
         
         jQuery("#select_inpost_point").modal("hide");
-        setShippingMethod("input[name=_shipping_method][data-carrier-inpost=1]");
+        jQuery("input[name=_shipping_method][data-carrier-inpost=1]").click();
         var inPostRadio = jQuery("input[name=_shipping_method][data-carrier-inpost=1]");
         
         //jQuery(".inpost-code-holder").html(code);
@@ -30,7 +30,8 @@ jQuery(document).ready(function() {
         var selectedMethodData = [];
         if(jQuery(methodRadio).attr("data-carrier-inpost") == 1){
             //Open modal to select paczkomat
-            jQuery("#select_inpost_point").modal("show");
+            console.log("Open modal");
+            jQuery("#select_inpost_point").modal("toggle");
         } else {
             jQuery("#cart-shipping-methods .shipping-collect-inpost").html("");
             
