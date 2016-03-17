@@ -32,19 +32,21 @@ $shippingBlock = $this->getChild('shipping')
 <div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
         <!--<div class="inner-cart-summary">-->
-        <?php if(!empty($sessionShippingMethod)): ?>
+        <?php if (!empty($sessionShippingMethod)): ?>
             <header>
                 <h2><?php echo $this->__("Your shopping"); ?></h2>
             </header>
             <ul id="product_summary">
-                    <?php echo $this->getChildHtml('totals'); ?>
-                </ul>
+                <?php echo $this->getChildHtml('totals'); ?>
+            </ul>        
         <?php endif; ?>
-        
+        <?php if (empty($sessionShippingMethod)): ?>
+            <header>
+                <h2><?php echo $this->__("Wybierz opcję dostawy"); ?></h2>
+            </header>        
+        <?php endif; ?>
         <!--            Select Shipping-->
-        <header>
-            <h2><?php echo $this->__("Select Shipping"); ?></h2>
-        </header>
+
         <div class="col-sidebar-cart-summary clearfix">
             <?php echo $this->getChildHtml('shipping'); ?>
         </div>
