@@ -41,6 +41,7 @@ $lockerName = $locker->getLockerName();
         (function(){
             Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
+            Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
         })();
     </script>
     <div class="shipping-collect-inpost">
@@ -69,48 +70,35 @@ $lockerName = $locker->getLockerName();
                 ?>
                 <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>           
                     <div>
-
-                        <?php echo $this->escapeHtml($method['carrier_title']); ?><br />
-                        <?php echo $this->escapeHtml($method['method_title']); ?>                                
-
-                        <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                        <div data-item="name"><?php echo $this->escapeHtml($method['carrier_title']); ?></div>
+                        <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>                               
+                        
+                        <div class="shipping-data-additional">
+                            <div data-item="additional"></div>
                             <br />
-                            <div class="inpost-locker-data-holder">
-                                <div class="inpost-code-holder">
-                                    <?php echo $lockerName; ?>
-                                </div>
-                                <div>
-                                    <div class="delivery-type-inpost-logo pull-left">
-                                        <img src="<?php echo $inpostLogo; ?>" height="50px"/>
+                            <div class="pull-left">                                
+                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                        <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="50px"/></div>
+                                <?php else: ?>
+                                    <div data-item="logo">
+                                        <figure class="logo-courier pull-right">
+                                            <div class="shipment-icon">
+                                                <i class="fa fa-truck fa-3x"></i>
+                                            </div>
+                                        </figure> 
                                     </div>
-                                    <div class="pull-right">
-                                        <a class="button button-third large pull-right" id="change-shipping-type">
-                                               <?php echo $helper->__("Change"); ?>
-                                        </a>
-                                    </div>
-                                </div> 
-                            </div>  
-                        <?php else: ?>
-                            <br />
-                            <div class="clerfix">
-                                <div class="pull-left">
-                                    <figure class="logo-courier pull-right">
-                                        <div class="shipment-icon">
-                                            <i class="fa fa-truck fa-3x"></i>
-                                        </div>
-                                    </figure>
-                                </div>
-                                <div class="pull-right">
-                                        <a class="button button-third large pull-right" id="change-shipping-type">
-                                               <?php echo $helper->__("Change"); ?>
-                                        </a>
-                                    </div>
-                            </div>
-                        <?php endif; ?>
+                                <?php endif; ?>                                
+                            </div> 
+                            <div class="pull-right">
+                                <a class="button button-third large pull-right" id="change-shipping-type">
+                                    <?php echo $helper->__("Change"); ?>
+                                </a>
+                            </div>                        
+                        </div>
                     </div>
-
+                    <br />
                 <?php endif; ?>
-            <?php endforeach; ?>
+        <?php endforeach; ?>
     </div>
     <div class="shipping-method-selector row col-md-12" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
         <?php foreach ($methods as $method): ?>
@@ -152,9 +140,7 @@ $lockerName = $locker->getLockerName();
                 </div>
             </div>
         <?php endforeach; ?>
-    </div>   
-    
-        
+    </div>      
     
     
     
@@ -183,9 +169,9 @@ $lockerName = $locker->getLockerName();
             </div>
 
             <div class="modal-body">
-                <a class="select-inpost-code" href="">BiedronkaUstka</a>
+                <a class="select-inpost-code" data-inpost-address="Pl. Dąbrowskiego 1, Ustka" href="">BiedronkaUstka</a>
                 <br />
-                <a class="select-inpost-code" href="">MarketNettoUstka</a>
+                <a class="select-inpost-code" data-inpost-address="Sprzymierzeńców 20, Ustka" href="">MarketNettoUstka</a>
             </div>
         </div>
     </div>
@@ -194,8 +180,11 @@ $lockerName = $locker->getLockerName();
     #change-shipping-type {
       bottom: -22px; position: relative;  
     }
-    .delivery-type-inpost-logo img {
+    .shipping-data-additional img {
         padding: 5px 7px; border: 1px solid lightgray;
+    }
+    .shipping-method-selected {
+        margin-bottom: 40px;
     }
 </style>
 
