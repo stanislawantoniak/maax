@@ -230,7 +230,7 @@ class Modago_Integrator_Model_Api
         /* @var $localOrder Mage_Sales_Model_Order */
         $collection = Mage::getModel("sales/order")->getCollection();
         $collection->addFieldToFilter("modago_order_id", $orderId);
-        $collection->addFieldToFilter("state", array("neq"=> $status));
+        $collection->addFieldToFilter("state", array("nin"=> $status));
         $localOrder = $collection->getFirstItem();
 
         return (!empty($localOrder->getId()))? $localOrder:false;
