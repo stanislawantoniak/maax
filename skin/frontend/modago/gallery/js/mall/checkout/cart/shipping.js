@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
         var inPostRadio = jQuery("input[name=_shipping_method][data-carrier-inpost=1]");
         
         //jQuery(".inpost-code-holder").html(code);
-        selectedMethodData["logo"] = '<img  src="'+Mall.reg.get("inpost_logo")+'" height="50px"/>';
+        selectedMethodData["logo"] = '<img  src="'+Mall.reg.get("inpost_logo")+'" height="52px"/>';
         selectedMethodData["name"] = inPostRadio.attr("data-carrier-name");
         selectedMethodData["method"] = inPostRadio.attr("data-carrier-method");
         selectedMethodData["additional"] = selectInPostCodeLink.attr("data-inpost-address");
