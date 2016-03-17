@@ -148,7 +148,6 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
         } else {
             $this->_path = $path;
             $this->addToFile('<?xml version="1.0" encoding="UTF-8"?>');
-            $this->addToFile('<version>'.$this->getModuleVersion().'</version>');
         }
         return $this;
     }
