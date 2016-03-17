@@ -1723,13 +1723,13 @@
 			},
 
             collect: function () {
-                //var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
-                //if (jQuery.type(shipping) !== "undefined") {
-                //    var inputs = '';
-                //    jQuery.each(this.getVendors(), function (i, vendor) {
-                //        inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
-                //    });
-                //    this.content.find("form .shipping-collect").html(inputs);
+                var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
+                if (jQuery.type(shipping) !== "undefined") {
+                    var inputs = '';
+                    jQuery.each(this.getVendors(), function (i, vendor) {
+                        inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
+                    });
+                    this.content.find("form .shipping-collect").html(inputs);
 
                     var pInputs = '';
                     pInputs += '<input type="hidden" name="payment[method]" value="' + jQuery("input[name='payment_emul']").val() + '" required="required" />';
@@ -1737,7 +1737,7 @@
                     this.content.find("form .payment-collect").html(pInputs);
 
                     return this.content.find("form").serializeArray();
-                //}
+                }
                 return false;
 
             },

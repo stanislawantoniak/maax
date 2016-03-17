@@ -1916,24 +1916,30 @@ jQuery(document).ready(function() {
                 inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
             });
             content.find("form .shipping-collect").html(inputs);
-            formData = content.find("#cart-shipping-methods-form").serializeArray();
+
         }
 
 
+
+    }
+
+    jQuery("#cart-buy").on('click', function (e) {
+        e.preventDefault();
+        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
+        var button = jQuery(this);
+
+        var formData = jQuery("#cart-shipping-methods-form").serializeArray();
+
         jQuery.ajax({
-            url: content.find("form#cart-shipping-methods-form").attr("action"),
+            url: jQuery("#cart-shipping-methods-form").attr("action"),
             data: formData
         }).done(function (response) {
             console.log(response);
             if (response.status) {
-
+                window.location = button.attr("href");
             }
 
         });
-    }
-
-    jQuery("#cart-buy").on('click', function(e) {
-        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
     });
 
 

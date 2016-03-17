@@ -38,8 +38,18 @@ $inpostCode = $checkoutSession->getData("inpost_code");
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
         })();
     </script>
-    <div class="shipping-collect-inpost"></div>
-    <div class="shipping-collect"></div>
+    <div class="shipping-collect-inpost">
+        <?php if(!empty($inpostCode)): ?>
+                <input type="hidden" name="inpost_code" value="<?php echo $inpostCode; ?>" required="required" />
+        <?php endif; ?>
+    </div>
+    <div class="shipping-collect">
+        <?php if(!empty($sessionShippingMethod)): ?>
+            <?php foreach($sessionShippingMethod as $vendorId => $methodCode): ?>
+                <input type="hidden" name="shipping_method[<?php echo $vendorId; ?>]" value="<?php echo $methodCode; ?>" required="required" />
+                <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 
         <?php foreach ($methods as $method): ?>
             <?php

@@ -13,11 +13,20 @@ $rates = $items->rates;
 $vednorCosts = $items->vendorCosts;
 $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
+
+
+$checkoutSession = Mage::getSingleton('checkout/session');
+$sessionShippingMethod = $checkoutSession->getData("shipping_method");
+
+$inpostCode = $checkoutSession->getData("inpost_code");
+//echo "<pre>";
+//var_dump($checkoutSession->getData());
+//echo "</pre>";
 ?>
 
 
 <?php if(!empty($rates)): ?>
-<fieldset id="shipping-methods">
+<fieldset id="shipping-methods" style="visibility: hidden; height: 0;">
     <h4 class="fieldset-title"><?php echo $this->__('Rodzaj dostawy'); ?>:</h4>
     <div class="data-validate"></div>
     <script type="text/javascript">
@@ -26,7 +35,6 @@ $cost = $items->cost;
 			Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
 		})();
     </script>
-    <div class="shipping-collect"></div>
 	<?php foreach($methods as $method): ?>
     <?php
     $formattedCost = '';
@@ -37,10 +45,11 @@ $cost = $items->cost;
     <div class="panel panel-default panel-color">
         <div class="panel-body">
             <dl class="pull-left">
-                <div style="visibility: hidden; height: 0;">
-                    <input type="radio" 
-						   value="<?php echo $method['code']; ?>" 
-						   name="_shipping_method" 
+                <div style="">
+                    <input type="radio"
+						   value="<?php echo $method['code']; ?>"
+                           <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
+						   name="_shipping_method"
 						   required="required"
 						   class="shipping-method"
 						   data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']);?>"
