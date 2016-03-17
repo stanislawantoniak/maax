@@ -27,6 +27,8 @@ $sessionShippingMethod = $this->getData("shipping_method");
 
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+$lockerId = $locker->getId();
+$lockerName = $locker->getLockerName();
 //Zend_Debug::dump($locker);
 ?>
 
@@ -42,8 +44,8 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
         })();
     </script>
     <div class="shipping-collect-inpost">
-        <?php if(!empty($locker->getData("locker_name"))): ?>
-                <input type="hidden" name="inpost_code" value="<?php echo $locker->getData("locker_name"); ?>" required="required" />
+        <?php if($lockerId): ?>
+                <input type="hidden" name="inpost_code" value="<?php echo $lockerName; ?>" required="required" />
         <?php endif; ?>
     </div>
     <div class="shipping-collect">
@@ -79,7 +81,7 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
                                     <br />
                                     <div class="inpost-locker-data-holder">
                                         <div class="inpost-code-holder">
-                                            <?php echo $locker->getData("locker_name"); ?>
+                                            <?php echo $lockerName; ?>
                                         </div>
                                         <div>
                                             <div class="delivery-type-inpost-logo pull-left">
@@ -134,7 +136,7 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
                             <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
                                 <br />
-                                <div class="inpost-code-holder"><?php echo $locker->getData("locker_name"); ?></div>
+                                <div class="inpost-code-holder"><?php echo $lockerName; ?></div>
                             <?php endif; ?>
                         </div>
 

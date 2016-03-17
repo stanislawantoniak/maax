@@ -236,7 +236,7 @@
       </action>
       <action method="addItem">
         <type>skin_js</type>
-        <script>js/mall/checkout/shipping.js</script>
+        <script>js/mall/checkout/cart/shipping.js</script>
       </action>
       <action method="addItem">
         <type>skin_js</type>
