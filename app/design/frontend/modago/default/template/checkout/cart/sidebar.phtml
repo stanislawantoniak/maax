@@ -7,7 +7,7 @@
  */
 $checkoutSession = Mage::getSingleton('checkout/session');
 $sessionShippingMethod = $checkoutSession->getData("shipping_method");
-
+//Zend_Debug::dump($sessionShippingMethod);
 $inpostCode = $checkoutSession->getData("inpost_code");
 
 

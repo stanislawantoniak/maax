@@ -23,13 +23,13 @@ $cost = $items->cost;
 
 $sessionShippingMethod = $this->getData("shipping_method");
 
-//Zend_Debug::dump($sessionShippingMethod);
+Zend_Debug::dump($sessionShippingMethod);
 
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
 $lockerName = $locker->getLockerName();
-//Zend_Debug::dump($locker);
+Zend_Debug::dump($lockerId);
 ?>
 
 
@@ -67,15 +67,11 @@ $lockerName = $locker->getLockerName();
                     $formattedCost = Mage::helper('core')->currency($costSum, true, false);
                 }
                 ?>
-                <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>
-                    <div>
+                    <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>           
                         <div>
-                                <div>
 
-                                    <?php echo $this->escapeHtml($method['carrier_title']); ?><br />
-                                    <?php echo $this->escapeHtml($method['method_title']); ?>
-
-                                <?php endif; ?>
+                                <?php echo $this->escapeHtml($method['carrier_title']); ?><br />
+                                <?php echo $this->escapeHtml($method['method_title']); ?>                                
 
                                 <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
                                     <br />
@@ -99,9 +95,8 @@ $lockerName = $locker->getLockerName();
                                         </div> 
                                     </div>                                    
                                     
-                                </div>
-                        </div>
-                    </div>
+                            </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
     </div>
