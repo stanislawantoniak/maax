@@ -3,6 +3,8 @@
 
 
 <?php
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper		= Mage::helper("zolagocheckout");
 
 $items = $this->getItems();
 $vendors = $items->vendors;
@@ -20,10 +22,12 @@ $cost = $items->cost;
 
 
 $sessionShippingMethod = $this->getData("shipping_method");
-$inpostCode = $this->getData("inpost_code");
 
 //Zend_Debug::dump($sessionShippingMethod);
 
+$locker		= $this->getInpostLocker();
+$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+//Zend_Debug::dump($locker);
 ?>
 
 
@@ -38,8 +42,8 @@ $inpostCode = $this->getData("inpost_code");
         })();
     </script>
     <div class="shipping-collect-inpost">
-        <?php if(!empty($inpostCode)): ?>
-                <input type="hidden" name="inpost_code" value="<?php echo $inpostCode; ?>" required="required" />
+        <?php if(!empty($locker->getData("locker_name"))): ?>
+                <input type="hidden" name="inpost_code" value="<?php echo $locker->getData("locker_name"); ?>" required="required" />
         <?php endif; ?>
     </div>
     <div class="shipping-collect">
@@ -51,9 +55,9 @@ $inpostCode = $this->getData("inpost_code");
     </div>
     
     
-        <?php if (!empty($sessionShippingMethod)): ?>
-
-            <?php foreach ($methods as $method): ?>
+        
+    <div class="shipping-method-selected row col-md-12">
+        <?php foreach ($methods as $method): ?>
                 <?php
                 $formattedCost = '';
                 if (isset($cost[$method['code']])) {
@@ -62,10 +66,9 @@ $inpostCode = $this->getData("inpost_code");
                 }
                 ?>
                 <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>
-                    <div class="panel panel-default panel-color">
-                        <div class="panel-body">
-                            <dl>
-                                <div class="pull-left">
+                    <div>
+                        <div>
+                                <div>
 
                                     <?php echo $this->escapeHtml($method['carrier_title']); ?><br />
                                     <?php echo $this->escapeHtml($method['method_title']); ?>
@@ -74,21 +77,34 @@ $inpostCode = $this->getData("inpost_code");
 
                                 <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
                                     <br />
-                                    <div class="inpost-code-holder"><?php echo $inpostCode; ?></div>
-
+                                    <div class="inpost-locker-data-holder">
+                                        <div class="inpost-code-holder">
+                                            <?php echo $locker->getData("locker_name"); ?>
+                                        </div>
+                                        <div>
+                                            <div class="delivery-type-inpost-logo pull-left">
+                                                <img
+                                                    style="padding: 5px 7px; border: 1px solid lightgray;"
+                                                    src="<?php echo $inpostLogo; ?>" height="50px"/>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a class="button button-third large pull-right" id="change-shipping-type"
+                                                        style="bottom: -22px; position: relative;"
+                                                        >
+                                                    <?php echo $helper->__("Change"); ?>
+                                                </a>
+                                            </div>
+                                        </div> 
+                                    </div>                                    
+                                    
                                 </div>
-
-                                <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
-                            </dl>
                         </div>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
-    
-    
-        <?php else: ?>
-    
-    <?php foreach ($methods as $method): ?>
+    </div>
+    <div class="shipping-method-selector row col-md-12" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+        <?php foreach ($methods as $method): ?>
             <?php
 
             $formattedCost = '';
@@ -118,7 +134,7 @@ $inpostCode = $this->getData("inpost_code");
 
                             <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
                                 <br />
-                                <div class="inpost-code-holder"><?php echo $inpostCode; ?></div>
+                                <div class="inpost-code-holder"><?php echo $locker->getData("locker_name"); ?></div>
                             <?php endif; ?>
                         </div>
 
@@ -127,8 +143,14 @@ $inpostCode = $this->getData("inpost_code");
                 </div>
             </div>
         <?php endforeach; ?>
+    </div>  
     
-        <?php endif; ?>
+    
+        
+    
+    
+    
+        
 
     <?php else: ?>
         <div class="panel panel-default panel-color">
