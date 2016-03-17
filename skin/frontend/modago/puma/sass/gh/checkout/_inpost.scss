@@ -37,4 +37,30 @@
     width: 99px;
     margin-top: 10px;
   }
+  .sidebar-deliverypayment {
+    .delivery-type {
+      margin-bottom: 0;
+      dd {
+        word-wrap: break-word;
+        max-width: 130px;
+      }
+      .delivery-type-logo {
+        img, .truck {
+          max-width: 80px;
+          position: absolute;
+          right: 0;
+          border: 1px solid $color_000000;
+          padding: 5px;
+          top: 0;
+        }
+        .truck {
+          width: 80px;
+          text-align: center;
+        }
+      }
+    }
+    .delivery-type-short {
+      margin-bottom: 25px;
+    }
+  }
 }
