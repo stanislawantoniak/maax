@@ -230,7 +230,7 @@ class Modago_Integrator_Model_Api
         /* @var $localOrder Mage_Sales_Model_Order */
         $collection = Mage::getModel("sales/order")->getCollection();
         $collection->addFieldToFilter("modago_order_id", $orderId);
-        $collection->addFieldToFilter("state", array("neq"=> $status));
+        $collection->addFieldToFilter("state", array("nin"=> $status));
         $localOrder = $collection->getFirstItem();
 
         return (!empty($localOrder->getId()))? $localOrder:false;
@@ -268,15 +268,10 @@ class Modago_Integrator_Model_Api
             foreach ($orderList as $item) {
                 $item = current($item);
                 /** @var Modago_Integrator_Model_Order $integratorOrders */
-                if ($order = $integratorOrders->createOrder($item)) {
+                if ($order = $integratorOrders->createOrder($item,$notification)) {
                     $orderId = $order->getIncrementId();
                     $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
                     $orders[$item->order_id] = $order;
-                }
-            }
-            if (($problems = $integratorOrders->getProductProblemList()) && $notification) {
-                foreach ($problems as $orderId => $problem) {
-                    $this->_setOrderReservation($orderId,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$problem);
                 }
             }
         } catch (Exception $e) {
@@ -653,10 +648,10 @@ class Modago_Integrator_Model_Api
         $helper = $this->_getHelper();
 
         if (!$order = $this->_findLocalOrder($orderId,array(
-                               Mage_Sales_Model_Order::STATE_CANCELED,
-                               Mage_Sales_Model_Order::STATE_CLOSED,
-                               Mage_Sales_Model_Order::STATE_COMPLETE)
-                                                 )) {
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                Mage_Sales_Model_Order::STATE_CLOSED,
+                Mage_Sales_Model_Order::STATE_COMPLETE)
+                                            )) {
             $this->_getLocalOrder($orderId);
             return true; // new order has right payment
         }
@@ -758,6 +753,13 @@ class Modago_Integrator_Model_Api
             default:
                 $confirmMessages[] = $item->messageID;
                 // ignore item
+            }
+        }
+        // notifications
+        $integratorOrders = $this->_getOrderIntegrator();
+        if ($problems = $integratorOrders->getProductProblemList()) {
+            foreach ($problems as $orderId => $problem) {
+                $this->_setOrderReservation($orderId,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$problem);
             }
         }
         $this->_confirmMessages($confirmMessages);

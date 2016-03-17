@@ -4,7 +4,6 @@ class Modago_Integrator_Model_Order {
     protected $_storeId;
     protected $_helper;
 
-    protected $_apiShippingCost = 0;
     protected $_modagoOrderId;
     protected $_productStocks = array();
     protected $_productProblems = array();
@@ -38,8 +37,10 @@ class Modago_Integrator_Model_Order {
     }
 
 
-    public function createOrder($apiOrder) {
+    public function createOrder($apiOrder,$notification = true) {
         $order = false;
+        $this->_productStocks = array();
+        
         try {
             //set vars needed for proper logging:
             $this->_modagoOrderId = $apiOrder->order_id;
@@ -217,7 +218,9 @@ class Modago_Integrator_Model_Order {
             $helper = Mage::helper('modagointegrator/api');
             $message = $helper->__('Error: %s' , $xt->getMessage());
             $helper->log($message);
-            $this->_productProblems[$apiOrder->order_id] = $message;
+            if ($notification) {
+                $this->_productProblems[$apiOrder->order_id] = $message;
+            }
         }
         return $order;
     }

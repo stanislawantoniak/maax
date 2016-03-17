@@ -15,7 +15,8 @@ class Modago_Integrator_Model_Generator_Stock
 
 	public function _getHeader() {
 		if(!$this->_header) {
-			$this->_header = "<mall><merchant>".$this->getExternalId()."</merchant><stocksPerPOS><pos id=\"MAGAZYN\">";
+			$this->_header = "<mall><version>".Mage::helper('modagointegrator')->getModuleVersion().
+			    "</version><merchant>".$this->getExternalId()."</merchant><stocksPerPOS><pos id=\"MAGAZYN\">";
 		}
 		return $this->_header;
 	}
