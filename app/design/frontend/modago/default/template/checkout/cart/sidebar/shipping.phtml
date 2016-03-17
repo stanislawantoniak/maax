@@ -23,13 +23,13 @@ $cost = $items->cost;
 
 $sessionShippingMethod = $this->getData("shipping_method");
 
-Zend_Debug::dump($sessionShippingMethod);
+//Zend_Debug::dump($sessionShippingMethod);
 
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
 $lockerName = $locker->getLockerName();
-Zend_Debug::dump($lockerId);
+//Zend_Debug::dump($lockerId);
 ?>
 
 
