@@ -104,7 +104,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 				<input id="shipping_city"       name="shipping[city]"      value="<?php echo $this->escapeHtml($locker->getCity()); ?>" type="hidden"/>
 				<input id="orders_someone_else" name="shipping[different_shipping_address]" type="checkbox" class="hidden"/>
 				<input id="inpost_locker_name"  name="inpost[locker_name]" value="<?php echo $locker->getLockerName(); ?>" type="hidden"/>
-				<div class="row">
+				<div class="row inpost-info">
 					<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
 						<strong><?php echo $helper->__("Locker InPost"); ?></strong>
 						<br/>
@@ -122,6 +122,29 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 							<br/>
 							<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large change-locker"><?php echo $helper->__('Change'); ?></a>
 						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+						<?php echo $this->__("Telephone number"); ?>
+						<fieldset>
+							<div class="form-group clearfix border-top">
+								<div class="row">
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 account-telephone_for_locker">
+										<input id="account-telephone_for_locker"
+											   name="account[telephone_for_locker]"
+											   value="<?php echo $this->escapeHtml($shippingAddress->getTelephone()); ?>"
+											   type="tel"
+											   class="form-control phone hint validate-telephone"
+											   required="true"/>
+									</div>
+									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 account-telephone_for_locker_comment">
+										<?php echo $helper->__("The phone number is required to receive package from locker."); ?><br/>
+										<?php echo $helper->__("We do not use it in any other way without your permission!"); ?>
+									</div>
+								</div>
+							</div>
+						</fieldset>
 					</div>
 				</div>
 				<div class="clearfix"></div>
