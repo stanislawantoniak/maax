@@ -1880,9 +1880,8 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery("#cart-buy").on('click', function() {
-        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
-    });
+
+    
 
 
     jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {

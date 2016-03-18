@@ -5,7 +5,15 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 13.08.2014
  */
+$checkoutSession = Mage::getSingleton('checkout/session');
+$sessionShippingMethod = $checkoutSession->getData("shipping_method");
+//Zend_Debug::dump($sessionShippingMethod);
+$inpostCode = $checkoutSession->getData("inpost_code");
 
+
+$shippingBlock = $this->getChild('shipping')
+        ->setData("shipping_method", $sessionShippingMethod)
+        ->setData("inpost_code", $inpostCode);
 ?>
 
 <?php
@@ -24,13 +32,28 @@
 <div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
         <!--<div class="inner-cart-summary">-->
-        <header>
-            <h2><?php echo $this->__("Your shopping"); ?></h2>
-        </header>
-        <div class="col-sidebar-cart-summary clearfix">
+        <?php if (!empty($sessionShippingMethod)): ?>
+            <header>
+                <h2><?php echo $this->__("Your shopping"); ?></h2>
+            </header>
             <ul id="product_summary">
                 <?php echo $this->getChildHtml('totals'); ?>
-            </ul>
+            </ul>        
+        <?php endif; ?>
+        <?php if (empty($sessionShippingMethod)): ?>
+            <header>
+                <h2><?php echo $this->__("Wybierz opcję dostawy"); ?></h2>
+            </header>        
+        <?php endif; ?>
+        <!--            Select Shipping-->
+
+        <div class="col-sidebar-cart-summary clearfix">
+            <?php echo $this->getChildHtml('shipping'); ?>
+        </div>
+        
+        
+        <div class="col-sidebar-cart-summary clearfix">
+            
             <div id="discount_voucher">
                 <div class="form-group clearfix">
                     <?php if (!$_hasCoupon) : ?>

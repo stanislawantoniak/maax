@@ -1,70 +1,97 @@
-<?php $formKey = Mage::getSingleton('core/session')->getFormKey(); ?>
-<?php $_helper = Mage::helper("zolagocheckout");?>
+<?php
+/** @var Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment $this */
+$formKey	= Mage::getSingleton('core/session')->getFormKey();
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper		= Mage::helper("zolagocheckout");
+$locker		= $this->getInpostLocker();
+$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
     <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
-
-<div class="sidebar-second col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
-    <section class="main bg-w  hidden-sm hidden-xs sidebar-addresses">
-        <header>
-            <h2 class="open"><?php echo $_helper->__('Shipping information'); ?></h2>
-        </header>
-        <div class="row">
-            <div class="col-md-12  col-sm-4">
-                <h4><?php echo $_helper->__('Delivery address'); ?>:</h4>
-                {{shipping}}
-            </div>
-            <div class="col-md-12  col-sm-4">
-                <h4><?php echo $_helper->__('Sales document'); ?>:</h4>
-                <dl>
-					<dd>{{sales_document}}<dd>
-				</dl>
-            </div>
-            <div class="col-md-12 col-sm-4 invoice-data">
-                <h4><?php echo $_helper->__('Invoice data'); ?>:</h4>
-                {{billing}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <button class="button button-third large pull-right prev-button-address"><?php echo $_helper->__('Change'); ?></button>
-            </div>
-        </div>
-    </section>
-    <?php /*echo $this->getStep2Sidebar();*/?>
-</div>
-<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section" id="content-main">
-    <section class="main bg-w">
-        <header class="title-section">
-            <h2><?php echo $_helper->__('Confirm delivery and payment method'); ?></h2>
-        </header>
-        <div class="row">
-            <div id="containererreurtotal"  style="margin-bottom: 10px;"></div>
-        </div>
-
-        <?php echo $this->getChildHtml("shipping");?>
-        <?php echo $this->getChildHtml("payment");?>
-
-        <div class="row">
-            <div class="col-sm-6">
-                <button  class="button button-third large pull-left" id="step-1-prev"><?php echo $_helper->__("Back"); ?></button>
-            </div>
-            <div class="col-sm-6">
-                <button class="button button-primary large link pull-right" id="step-1-submit"><i></i>&nbsp;<?php echo $_helper->__("Next"); ?></button>
-            </div>
-        </div>
-
-    </section>
-
-</div>
-
+	<div class="sidebar-second col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
+		<section class="main bg-w hidden-sm hidden-xs sidebar-addresses">
+			<header>
+				<h2 class="open"><?php echo $helper->__('Address data'); ?></h2>
+			</header>
+			<div class="row">
+				<?php if(!$locker->getId()): ?>
+				<div class="col-md-12 col-sm-4">
+					<h4><?php echo $helper->__('Delivery address'); ?>:</h4>
+					{{shipping}}
+				</div>
+				<?php endif; ?>
+				<div class="col-md-12 col-sm-4">
+					<h4><?php echo $helper->__('Sales document'); ?>:</h4>
+					<dl>
+						<dd>{{sales_document}}<dd>
+					</dl>
+				</div>
+				<div class="col-md-12 col-sm-4 invoice-data">
+					<h4><?php echo $helper->__('Invoice data'); ?>:</h4>
+					{{billing}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<button class="button button-third large pull-right prev-button-address"><?php echo $helper->__('Change'); ?></button>
+				</div>
+			</div>
+		</section>
+		<section class="main bg-w opened-panel-group hidden-sm hidden-xs sidebar-deliverypayment">
+			<header>
+				<h2 class="open">
+					<?php echo $helper->__('Delivery and payment'); ?>
+					<i class="bullet-strzalka-up visible-xs"></i>
+				</h2>
+			</header>
+			<div class="panel-group">
+				<div class="row">
+					<?php if(!$locker->getId()): ?>
+					<div class="col-md-12 col-sm-4 delivery-type delivery-type-short">
+						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+						<dl>
+							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
+							<dd><?php echo $helper->__("Delivery in %s days", $this->getDeliveryDays()); ?></dd>
+						</dl>
+					</div>
+					<?php else: ?>
+						<div class="col-md-12 col-sm-4 delivery-type">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $inpostLogo; ?>"/></dd>
+								<dd>{{inpost_locker_street}} {{inpost_locker_street_number}}</dd>
+								<dd>{{inpost_locker_zip_code}} {{inpost_locker_city}}</dd>
+								<dd>{{inpost_locker_details}}</dd>
+							</dl>
+						</div>
+					<?php endif; ?>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section" id="content-main">
+		<section class="main bg-w">
+			<header class="title-section">
+				<h2><?php echo $helper->__('Confirm delivery and payment method'); ?></h2>
+			</header>
+			<div class="row">
+				<div id="containererreurtotal"  style="margin-bottom: 10px;"></div>
+			</div>
+			<?php echo $this->getChildHtml("shipping");?>
+			<?php echo $this->getChildHtml("payment");?>
+			<div class="row">
+				<div class="col-sm-6">
+					<button  class="button button-third large pull-left" id="step-1-prev"><?php echo $helper->__("Back"); ?></button>
+				</div>
+				<div class="col-sm-6">
+					<button class="button button-primary large link pull-right" id="step-1-submit"><i></i>&nbsp;<?php echo $helper->__("Next"); ?></button>
+				</div>
+			</div>
+		</section>
+	</div>
 </form>
-
-
-
-
-
-
-
-
-
-

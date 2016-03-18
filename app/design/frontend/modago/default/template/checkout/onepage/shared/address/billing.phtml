@@ -18,7 +18,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
     <input type="hidden" name="billing[lastname]" value="<?php echo $this->escapeHtml($_billingAddress->getLastname()); ?>">
     <input type="hidden" name="billing[region_id]" value="<?php echo $this->escapeHtml($_billingAddress->getRegionId()); ?>">
     <input type="hidden" name="billing[region]" value="<?php echo $this->escapeHtml($_billingAddress->getRegion()); ?>">
-    <input type="hidden" name="billing[country_id]" value="<?php echo $this->getStoreDefaultCountryId();?>">
+    <input type="hidden" name="billing[country_id]" value="<?php echo $_billingAddress->getCountryId() ? $_billingAddress->getCountryId() : $this->getStoreDefaultCountryId();?>">
     <input type="hidden" name="billing[telephone]" id="billing_telephone" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>">
     <input type="hidden" name="billing[fax]" value="<?php echo $this->escapeHtml($_billingAddress->getFax()); ?>">
     <input type="hidden" name="billing[use_for_shipping]" value="0">

@@ -1,0 +1,194 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
+
+
+
+<?php
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper		= Mage::helper("zolagocheckout");
+
+$items = $this->getItems();
+$vendors = $items->vendors;
+
+$vendorsJ = Mage::helper('core')->jsonEncode($vendors);
+
+$allVendorsMethod = $items->allVendorsMethod;
+
+$methods = $items->methods;
+$rates = $items->rates;
+$vednorCosts = $items->vendorCosts;
+$costSumm = $this->getItemsShippingCost();
+$cost = $items->cost;
+
+
+
+$sessionShippingMethod = $this->getData("shipping_method");
+
+//Zend_Debug::dump($sessionShippingMethod);
+
+$locker		= $this->getInpostLocker();
+$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+$lockerId = $locker->getId();
+$lockerName = $locker->getLockerName();
+//Zend_Debug::dump($lockerId);
+?>
+
+
+<?php if(!empty($rates)): ?>
+<fieldset id="cart-shipping-methods">
+    <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">
+    <div class="data-validate"></div>
+    <script type="text/javascript">
+        (function(){
+            Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
+            Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
+            Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
+        })();
+    </script>
+    <div class="shipping-collect-inpost">
+        <?php if($lockerId): ?>
+                <input type="hidden" name="inpost_code" value="<?php echo $lockerName; ?>" required="required" />
+        <?php endif; ?>
+    </div>
+    <div class="shipping-collect">
+        <?php if(!empty($sessionShippingMethod)): ?>
+            <?php foreach($sessionShippingMethod as $vendorId => $methodCode): ?>
+                <input type="hidden" name="shipping_method[<?php echo $vendorId; ?>]" value="<?php echo $methodCode; ?>" required="required" />
+                <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+    
+    
+        
+    <div class="shipping-method-selected row col-md-12">
+        <?php foreach ($methods as $method): ?>
+                <?php
+                $formattedCost = '';
+                if (isset($cost[$method['code']])) {
+                    $costSum = array_sum($cost[$method['code']]);
+                    $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+                }
+                ?>
+                <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>           
+                    <div>
+                        <div data-item="name"><?php echo $this->escapeHtml($method['carrier_title']); ?></div>
+                        <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>                               
+                        
+                        <div class="shipping-data-additional">
+                            <div data-item="additional"></div>
+                            <br />
+                            <div class="pull-left">                                
+                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                        <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
+                                <?php else: ?>
+                                    <div data-item="logo">
+                                        <figure class="logo-courier pull-right">
+                                            <div class="shipment-icon">
+                                                <i class="fa fa-truck fa-3x"></i>
+                                            </div>
+                                        </figure> 
+                                    </div>
+                                <?php endif; ?>                                
+                            </div> 
+                            <div class="pull-right">
+                                <a class="button button-third large pull-right" id="change-shipping-type">
+                                    <?php echo $helper->__("Change"); ?>
+                                </a>
+                            </div>                        
+                        </div>
+                    </div>
+                    <br />
+                <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <div class="shipping-method-selector row col-md-12" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+        <?php foreach ($methods as $method): ?>
+            <?php
+
+            $formattedCost = '';
+            if (isset($cost[$method['code']])) {
+                $costSum = array_sum($cost[$method['code']]);
+                $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+            } ?>
+            <div class="panel panel-default panel-color">
+                <div class="panel-body">
+                    <dl>
+                        <div class="pull-left">
+                            <input type="radio"
+                                   value="<?php echo $method['code']; ?>"
+                                   <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
+                                   name="_shipping_method"
+                                   data-carrier-inpost="<?php echo (int)(strpos(strtolower($method["method_title"]), 'inpost') !== false); ?>"
+                                   required="required"
+                                   class="shipping-method"
+                                   data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
+                                   data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
+                                   data-method-cost="<?php echo $costSum; ?>"/>
+
+
+                            <?php echo $method['carrier_title'] ?>
+                            <br/>
+                            <?php echo $method['method_title'] ?>
+
+                            <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                <br />
+                                <div class="inpost-code-holder"><?php echo $lockerName; ?></div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
+                    </dl>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>      
+    
+    
+    
+        
+
+    <?php else: ?>
+        <div class="panel panel-default panel-color">
+            <div class="panel-body">
+                <dl class="pull-left">
+                    <?php echo $this->__('No delivery method available'); ?>
+                </dl>
+            </div>
+        </div>
+    <?php endif; ?>
+</form>
+</fieldset>
+
+
+
+<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Select Paczkomat"); ?></h2>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    <a class="select-inpost-code" data-inpost-address="Pl. Dąbrowskiego 1, Ustka" href="">BiedronkaUstka, Pl. Dąbrowskiego 1, Ustka</a>
+                </p>
+                <p>
+                    <a class="select-inpost-code" data-inpost-address="Sprzymierzeńców 20, Ustka" href="">MarketNettoUstka, Sprzymierzeńców 20, Ustka</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    #change-shipping-type {
+      bottom: -22px; position: relative;  
+    }
+    .shipping-data-additional img {
+        padding: 5px 7px; border: 1px solid lightgray;
+    }
+    .shipping-method-selected {
+        margin-bottom: 40px;
+    }
+</style>
+
+
