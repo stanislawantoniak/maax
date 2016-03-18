@@ -12,6 +12,15 @@
       }
       .form-group {
         margin-bottom: 5px;
+        .inpost-info {
+          margin-bottom: 10px;
+        }
+        .account-telephone_for_locker {
+          @media(min-width: $screen-sm-min) {
+            max-width: 100%;
+          }
+          margin-bottom: 10px;
+        }
       }
     }
     .figure-button-wrapper {
