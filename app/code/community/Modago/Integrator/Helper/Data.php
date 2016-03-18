@@ -33,13 +33,22 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
          return Mage::getConfig()->getModuleConfig("Modago_Integrator")->version;
      }
 
+     
+    /**
+     * default stock manage
+     *
+     * @return bool
+     */
+     public function getStockManage() {
+         return Mage::getStoreConfig('cataloginventory/item_options/manage_stock');
+     }
     /**
      * path to log file
      *
      * @return string
      */
     public function getPathLogFile() {
-        $dir = Modago_Integrator_Model_Generator::getDir();
+        $dir = Modago_Integrator_Model_Builder::getDir();
         if (!is_dir($dir)) {
             mkdir($dir,0777,true);
         }
@@ -267,7 +276,9 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 			$this->log(sprintf('Wrong generate file type: %s',$type));
             $this->throwException(sprintf('Wrong generate file type: %s',$type));
         }
-        return $model;
+        $builder = Mage::getModel('modagointegrator/builder');
+        $builder->setGenerator($model);
+        return $builder;
 
     }
     /**
@@ -318,7 +329,16 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
             Mage::app()->getStore()->setId($this->_oldStore);        
         }
     }
-
+    
+    /**
+     * rename file
+     * @param string $source
+     * @param string $destination
+     * @return bool
+     */
+     public function renameFile($source,$destination) {
+         return rename($source,$destination);
+     }
 
 
 

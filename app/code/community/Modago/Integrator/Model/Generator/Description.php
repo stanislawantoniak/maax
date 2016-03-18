@@ -77,16 +77,16 @@ class Modago_Integrator_Model_Generator_Description
         $this->setFileNamePrefix('description');
     }
 
-    public function _getHeader()
+    public function getHeader()
     {
         if (!$this->_header) {
-            $this->_header = "<mall><version>".Mage::helper('modagointegrator')->getModuleVersion().
+            $this->_header = "<mall><version>".$this->getHelper()->getModuleVersion().
                 " </version><merchant>" . $this->getExternalId() . "</merchant><products>";
         }
         return $this->_header;
     }
 
-    public function _getFooter()
+    public function getFooter()
     {
         if (!$this->_footer) {
             $this->_footer = "</products></mall>";
@@ -95,10 +95,10 @@ class Modago_Integrator_Model_Generator_Description
     }
 
     protected function _saveOldStore() {
-        $this->_getHelper()->saveOldStore();
+        $this->getHelper()->saveOldStore();
     }
     protected function _restoreOldStore() {
-        $this->_getHelper()->restoreOldStore();
+        $this->getHelper()->restoreOldStore();
     }
     
     /**
@@ -129,21 +129,9 @@ class Modago_Integrator_Model_Generator_Description
      * @return bool
      */
     protected function _isFlat() {
-        return $this->_helper()->isFlat();
+        return $this->getHelper()->isFlat();
     }
     
-    /**
-     * prepare helper
-     *
-     * @return Modago_Integrator_Helper_Data
-     */
-
-    protected function _getHelper() {
-        if (empty($this->_helper)) {
-            $this->_helper = Mage::helper('modagointegrator');
-        }
-        return $this->_helper;
-    }
     /**
      * prepare content
      * should return array similar to this:
@@ -201,7 +189,7 @@ class Modago_Integrator_Model_Generator_Description
      *
      * @return array
      */
-    protected function _prepareList()
+    public function prepareList()
     {
         if ($this->_getList) {
             $this->_outData = array();
@@ -533,7 +521,7 @@ class Modago_Integrator_Model_Generator_Description
      * @var array $item
      * @return string
      */
-    protected function _prepareXmlBlock($item)
+    public function prepareXmlBlock($key,$item)
     {
         $xml = "<product>";
         foreach ($item as $key => $val) {

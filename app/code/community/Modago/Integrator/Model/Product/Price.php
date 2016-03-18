@@ -43,7 +43,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
      * @param $res
      * @return mixed
      */
-    public function appendPricesForConfigurable($res)
+    public function appendPricesForConfigurable(&$res)
     {
         //1. Configurable
         /** @var Mage_Core_Model_Resource $resource */
@@ -63,9 +63,8 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             Mage::logException($e);
         }
 
-
         if (empty($result)) {
-            return $res;
+            return;
         }
 
         $parentChildRelation = array();
@@ -75,28 +74,26 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             //if product has more then one parent, then use first order by SKU ASC
             if (!isset($parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]])) {                
                 $parentChildRelation[$resultItem["parent_id"]][$resultItem["child_id"]] = $resultItem["sku"];
-                $childrenIds[] = $resultItem["child_id"];
+                $childrenIds[$resultItem['child_id']] = $resultItem["child_id"];
             }
         }
         
         if (empty($parentChildRelation) || empty($childrenIds)) {
-            return $res;
+            return ;
         }
-        
-        $this->_getHelper()->saveOldStore();
-        $collection = Mage::getResourceModel('catalog/product_collection');
-        $collection->setStore($this->_integrationStore);
-        $collection->addFinalPrice();
-        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
-        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
+        unset($result);        
         
         //Collect prices for used children
-        $collectionUsedSimple = Mage::getResourceModel('catalog/product_collection');
+        $collectionUsedSimple = Mage::getResourceModel('catalog/product_collection');        
+        $collectionUsedSimple
+            ->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns('entity_id');
+            
         $collectionUsedSimple->setStore($this->_integrationStore);
         $collectionUsedSimple->addFinalPrice();
         $collectionUsedSimple->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
         $collectionUsedSimple->addAttributeToFilter('entity_id', array('in' => $childrenIds));
-        
         $pricesUsedSimple = array();
         $finalPricesUsedSimple = array();
         foreach ($collectionUsedSimple as $collectionUsedSimpleItem) {
@@ -111,10 +108,18 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             }
             unset($priceUsedSimple, $finalPriceUsedSimple, $childProductId);
         }
-        
+        unset($collectionUsedSimple);
         //--Collect prices for used children
-
-        
+        $this->_getHelper()->saveOldStore();
+        $collection = Mage::getResourceModel('catalog/product_collection');
+        $collection	
+            ->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns('entity_id');                        
+        $collection->setStore($this->_integrationStore);
+        $collection->addFinalPrice();
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         //Collect prices for parents
         $prices = array();
         $finalPrices = array();
@@ -134,8 +139,8 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
 
             unset($price, $finalPrice, $parentProductId);
         }
+        unset($collection);
         //--Collect prices for parents
-
 
         foreach ($parentChildRelation as $parentId => $children) {
             foreach ($children as $childId => $childSku) {
@@ -181,14 +186,12 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         }
         
         $this->_getHelper()->restoreOldStore();
-
-        return $res;
     }
 
     /**
      * @param $res
      */
-    public function appendPricesForSimple($res)
+    public function appendPricesForSimple(&$res)
     {
         $this->_getHelper()->saveOldStore();
         $collection = Mage::getResourceModel('catalog/product_collection');

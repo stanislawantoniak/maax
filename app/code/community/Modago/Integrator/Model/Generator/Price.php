@@ -20,19 +20,18 @@ class Modago_Integrator_Model_Generator_Price
      *
      * @return array
      */
-    protected function _prepareList()
+    public function prepareList()
     {
         if ($this->_getList) {
             return false;
         }
-
         $res = array();
 
-        $res = Mage::getModel("modagointegrator/product_price")
-            ->appendPricesForConfigurable($res);
+        Mage::getModel("modagointegrator/product_price")
+               ->appendPricesForConfigurable($res);
 
-        $res = Mage::getModel("modagointegrator/product_price")
-            ->appendPricesForSimple($res);
+        Mage::getModel("modagointegrator/product_price")
+               ->appendPricesForSimple($res);
 
         $this->_getList = true;
         return $res;
@@ -44,8 +43,23 @@ class Modago_Integrator_Model_Generator_Price
      * @param array $item
      * @return string
      */
-    protected function _prepareXmlBlock($item)
-    {
+    public function prepareXmlBlock($key,$items)
+    {        
+        $out = $this->_getSectionHeader($key);
+        foreach ($items as $item) {
+            $out .= $this->_prepareXmlBlockItem($item);
+        }
+        $out .= $this->_getSectionFooter();
+        return $out;
+    }
+    
+    /**
+     * block for one price item
+     * @param array $item
+     * @return string
+     */
+
+    protected function _prepareXmlBlockItem($item) {
         $price = number_format($item['price'], 2, ".", "");
         return '<product price="' . $price . '">' . $item['sku'] . '</product>';
     }
@@ -55,10 +69,11 @@ class Modago_Integrator_Model_Generator_Price
      *
      * @return string
      */
-    protected function _getHeader()
+    public function getHeader()
     {
         if (!$this->_header) {
-            $this->_header = '<mall><version>'.Mage::helper('modagointegrator')->getModuleVersion().'</version><merchant>' . $this->getExternalId() . '</merchant>';
+            $this->_header = '<mall><version>'.$this->getHelper()->getModuleVersion().
+                '</version><merchant>' . $this->getExternalId() . '</merchant>';
         }
         return $this->_header;
     }
@@ -68,7 +83,7 @@ class Modago_Integrator_Model_Generator_Price
      *
      * @return string
      */
-    protected function _getFooter()
+    public function getFooter()
     {
         if (!$this->_footer) {
             $this->_footer = "</mall>";
@@ -95,45 +110,6 @@ class Modago_Integrator_Model_Generator_Price
     protected function _getSectionFooter()
     {
         return "</priceList>";
-    }
-
-    /**
-     * generation file
-     *
-     * @return bool
-     */
-    public function generate()
-    {
-        $this->_status = false;
-        $this->_fileName = null;
-        $helper = $this->getHelper();
-        try {
-            $helper->createFile($this->_getPath().'.tmp');
-            $helper->log(sprintf('Create tmp file: %s.tmp',$this->_getPath()));
-            $helper->addToFile($this->_getHeader());
-            $helper->log('Save data begin');            
-            $list = $this->_prepareList();
-
-            foreach ($list as $type => $items) {
-                $helper->addToFile($this->_getSectionHeader($type));
-                foreach ($items as $item) {
-                    $block = $this->_prepareXmlBlock($item);
-                    $helper->addToFile($block);
-                }
-                $helper->addToFile($this->_getSectionFooter());
-            }
-            $helper->log('Save data end');            
-            $helper->addToFile($this->_getFooter());
-            $helper->closeFile();
-            $helper->log('Close file');
-            $this->_status = rename($this->_getPath().'.tmp',$this->_getPath());
-            $helper->log(sprintf('Generate file: %s',($this->_status)? 'success':'fail'));
-        } catch (Modago_Integrator_Exception $ex) {
-            Mage::logException($ex);
-            $helper->closeFile();
-            $helper->log($ex->getMessage());            
-        }
-        return $this->_status;
     }
 
 }
