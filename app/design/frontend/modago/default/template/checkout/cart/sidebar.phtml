@@ -11,9 +11,10 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
 $inpostCode = $checkoutSession->getData("inpost_code");
 
 
-$shippingBlock = $this->getChild('shipping')
+$shippingBlock = $this->getChild('checkout_cart_shipping')
         ->setData("shipping_method", $sessionShippingMethod)
-        ->setData("inpost_code", $inpostCode);
+        ->setData("inpost_code", $inpostCode)
+        ;
 ?>
 
 <?php
@@ -28,6 +29,7 @@ $shippingBlock = $this->getChild('shipping')
         $_couponLabel = $_ruleModel->getStoreLabel();
         $_couponDescription = $_ruleModel->getDescription();
     }
+    
 ?>
 <div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
@@ -48,7 +50,7 @@ $shippingBlock = $this->getChild('shipping')
         <!--            Select Shipping-->
 
         <div class="col-sidebar-cart-summary clearfix">
-            <?php echo $this->getChildHtml('shipping'); ?>
+            <?php echo $this->getChildHtml('checkout_cart_shipping'); ?>
         </div>
         
         
