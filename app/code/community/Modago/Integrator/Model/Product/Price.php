@@ -143,8 +143,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
                     //Append "A" price
                     $res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$childSku] = array(
                         "sku" => $childSku,
-                        "price" => $finalPrices[$parentId],
-                        "type" => self::MODAGO_INTEGRATOR_FINAL_PRICE
+                        "price" => $finalPrices[$parentId]
                     );
                 }
 
@@ -152,8 +151,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
                     //Append "C" price
                     $res[self::MODAGO_INTEGRATOR_FINAL_PRICE_SIMPLE][$childSku] = array(
                         "sku" => $childSku,
-                        "price" => $finalPricesUsedSimple[$childId],
-                        "type" => self::MODAGO_INTEGRATOR_FINAL_PRICE_SIMPLE
+                        "price" => $finalPricesUsedSimple[$childId]
                     );
                 }
 
@@ -162,15 +160,13 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
                     //Append "B" price
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$childSku] = array(
                         "sku" => $childSku,
-                        "price" => $prices[$parentId],
-                        "type" => self::MODAGO_INTEGRATOR_ORIGINAL_PRICE
+                        "price" => $prices[$parentId]
                     );
 
                     //Append "salePriceBefore" price
                     $res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$childSku] = array(
                         "sku" => $childSku,
-                        "price" => $prices[$parentId],
-                        "type" => self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE
+                        "price" => $prices[$parentId]
                     );
                 }
 
@@ -178,8 +174,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
                     //Append "Z" price
                     $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE_SIMPLE][$childSku] = array(
                         "sku" => $childSku,
-                        "price" => $pricesUsedSimple[$childId],
-                        "type" => self::MODAGO_INTEGRATOR_ORIGINAL_PRICE_SIMPLE
+                        "price" => $pricesUsedSimple[$childId]
                     );
                 }
             }
@@ -214,8 +209,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             if (!isset($res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$sku]) && !empty($finalPrice)) {
                 $res[self::MODAGO_INTEGRATOR_FINAL_PRICE][$sku] = array(
                     "sku" => $sku,
-                    "price" => $finalPrice,
-                    "type" => self::MODAGO_INTEGRATOR_FINAL_PRICE
+                    "price" => $finalPrice
                 );
             }
 
@@ -223,8 +217,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             if (!isset($res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku]) && !empty($price)) {
                 $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE][$sku] = array(
                     "sku" => $sku,
-                    "price" => $price,
-                    "type" => self::MODAGO_INTEGRATOR_ORIGINAL_PRICE
+                    "price" => $price
                 );
             }
 
@@ -232,8 +225,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             if (!isset($res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku]) && !empty( $price)) {
                 $res[self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE][$sku] = array(
                     "sku" => $sku,
-                    "price" => $price,
-                    "type" => self::MODAGO_INTEGRATOR_PRICE_SALE_BEFORE
+                    "price" => $price
                 );
             }
 
@@ -241,8 +233,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             if (!isset($res[self::MODAGO_INTEGRATOR_FINAL_PRICE_SIMPLE][$sku]) && !empty($finalPrice)) {
                 $res[self::MODAGO_INTEGRATOR_FINAL_PRICE_SIMPLE][$sku] = array(
                     "sku" => $sku,
-                    "price" => $finalPrice,
-                    "type" => self::MODAGO_INTEGRATOR_FINAL_PRICE_SIMPLE
+                    "price" => $finalPrice
                 );
             }
 
@@ -250,8 +241,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             if (!isset($res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE_SIMPLE][$sku]) && !empty($price)) {
                 $res[self::MODAGO_INTEGRATOR_ORIGINAL_PRICE_SIMPLE][$sku] = array(
                     "sku" => $sku,
-                    "price" => $price,
-                    "type" => self::MODAGO_INTEGRATOR_ORIGINAL_PRICE_SIMPLE
+                    "price" => $price
                 );
             }
             unset($sku, $finalPrice, $price);
