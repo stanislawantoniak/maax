@@ -25,6 +25,13 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 
+    /**
+     * module version
+     * @return string
+     */
+     public function getModuleVersion() {
+         return Mage::getConfig()->getModuleConfig("Modago_Integrator")->version;
+     }
 
     /**
      * path to log file
@@ -234,7 +241,8 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
             $path = $this->getPathLogFile();
             $this->_logFile = $path;
         }
-        file_put_contents($this->_logFile,date('Y-m-d H:i:s').' : '.$message.PHP_EOL,FILE_APPEND);
+        $line = sprintf('%s : [v. %s] %s',date('Y-m-d H:i:s'),$this->getModuleVersion(),$message);
+        file_put_contents($this->_logFile,$line.PHP_EOL,FILE_APPEND);
     }
 
     /**
