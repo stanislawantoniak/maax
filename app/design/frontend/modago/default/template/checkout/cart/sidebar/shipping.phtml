@@ -69,7 +69,7 @@ $lockerName = $locker->getLockerName();
                 }
                 ?>
                 <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>           
-                    <div>
+                    <div class="shipping-method-selected-content">
                         <div data-item="name"><?php echo $this->escapeHtml($method['carrier_title']); ?></div>
                         <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>                               
                         
@@ -186,7 +186,7 @@ $lockerName = $locker->getLockerName();
     .shipping-data-additional img {
         padding: 5px 7px; border: 1px solid lightgray;
     }
-    .shipping-method-selected {
+    .shipping-method-selected-content {
         margin-bottom: 40px;
     }
 </style>
