@@ -89,7 +89,6 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
                     $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
                     $reservedOnPOStock = isset($openOrdersQty[$sku][$stockId]) ? (int)$openOrdersQty[$sku][$stockId] : 0;
-
                     $data[$sku][$stockId] = $posStockConverter - $minimalStockPOS - $reservedOnPOStock;
 
                     //Allocate Product STOCK by POS
@@ -138,9 +137,11 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         $posIds = array();
         foreach ($poses as $pos) {
             /* @var $pos Zolago_Pos_Model_Pos */
-            $posIds[$pos->getExternalId()] = $pos->getId();
+            $externalId = $pos->getExternalId();
+            if ($externalId = $pos->getExternalId()) {
+                $posIds[$externalId] = $pos->getId();
+            }
         }
-
         if (empty($posIds))
             return;
 
