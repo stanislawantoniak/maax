@@ -32,8 +32,22 @@ function setTotals(){
     var content = jQuery("#cart-shipping-methods");
 
     var methodRadio = content.find("input[name=_shipping_method]:checked");
+
+    //shipping total
+    var shippingCost = jQuery(methodRadio).attr("data-method-cost");
     var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
     jQuery("#product_summary").find("span.val_delivery_cost").closest("li").find("span.price").html(shippingCostFormatted);
+
+
+    console.log(Mall.reg.get("quote_products_total"));
+    console.log(Mall.reg.get("quote_discount_total"));
+    console.log(shippingCost);
+
+
+
+    //Grand total
+    var totalSumm = parseInt( parseInt(Mall.reg.get("quote_products_total")) + parseInt(shippingCost) +  - parseInt(Mall.reg.get("quote_discount_total")) );
+    jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSumm));
 }
 
 function appendSelectedCartShipping(selectedMethodData) {

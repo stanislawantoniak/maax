@@ -30,21 +30,21 @@
 ?>
 <?php if ($this->displayBoth()):?>
     <li >
-        <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
+        <span class="val_delivery_cost test-1"><?php echo $this->__("Min shipping cost:"); ?></span>
         <?php echo $this->helper('checkout')->formatPrice($this->getShippingExcludeTax()) ?>
     </li>
     <li>
-        <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
+        <span class="val_delivery_cost test-2"><?php echo $this->__("Min shipping cost:"); ?></span>
         <?php echo $this->helper('checkout')->formatPrice($this->getShippingIncludeTax()) ?>
     </li>
 <?php elseif($this->displayIncludeTax()) : ?>
     <li>
-        <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
+        <span class="val_delivery_cost test-3"><?php echo $this->__("Min shipping cost:"); ?></span>
         <?php echo $this->helper('checkout')->formatPrice($this->getShippingIncludeTax()) ?>
     </li>
 <?php else:?>
     <li>
-        <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
+        <span class="val_delivery_cost test-4"><?php echo $this->__("Min shipping cost:"); ?></span>
         <?php echo $this->helper('checkout')->formatPrice($this->getShippingExcludeTax()) ?>
     </li>
 <?php endif;?>

@@ -23,13 +23,20 @@ $cost = $items->cost;
 
 $sessionShippingMethod = $this->getData("shipping_method");
 
-//Zend_Debug::dump($cost);
 
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
 $lockerName = $locker->getLockerName();
 //Zend_Debug::dump($locker->getData());
+
+$discountTotal = 0;
+$productsPriceTotal = 0;
+foreach ($this->getQuote()->getAllVisibleItems() as $item) {
+    $discountTotal += $item->getDiscountAmount();
+    $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
+}
+
 ?>
 <?php if(!empty($rates) && !empty($sessionShippingMethod)): ?>
     <ul id="product_summary">
@@ -46,6 +53,9 @@ $lockerName = $locker->getLockerName();
             Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
             Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
+
+            Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
+            Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
         })();
     </script>
     <div class="shipping-collect-inpost">

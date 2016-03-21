@@ -7,7 +7,7 @@
  */
 $checkoutSession = Mage::getSingleton('checkout/session');
 $sessionShippingMethod = $checkoutSession->getData("shipping_method");
-//Zend_Debug::dump($sessionShippingMethod);
+
 $inpostCode = $checkoutSession->getData("inpost_code");
 
 
@@ -37,15 +37,15 @@ $shippingBlock = $this->getChild('shipping')
                 <h2><?php echo $this->__("Your shopping"); ?></h2>
             </header>
 
-            <div class="col-sidebar-cart-summary clearfix">
-                <?php echo $this->getChildHtml('shipping'); ?>
-            </div>
         <?php endif; ?>
         <?php if (empty($sessionShippingMethod)): ?>
             <header>
                 <h2><?php echo $this->__("Wybierz opcję dostawy"); ?></h2>
             </header>        
         <?php endif; ?>
+        <div class="col-sidebar-cart-summary clearfix">
+            <?php echo $this->getChildHtml('shipping'); ?>
+        </div>
         <!--            Select Shipping-->
 
 
