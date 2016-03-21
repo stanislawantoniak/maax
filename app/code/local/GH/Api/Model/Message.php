@@ -279,7 +279,9 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		//get messages collection
 		$messages = $this
 			->getCollection()
-			->filterByVendorId($user->getVendorId());
+			->filterByVendorId($user->getVendorId())
+			->setOrder('po_increment_id','DESC')
+			->setOrder('message_id','ASC');
         // order filter
         if ($orderId) {
 			$messages->filterByOrderId($orderId);

@@ -4,7 +4,6 @@ class Modago_Integrator_Model_Order {
     protected $_storeId;
     protected $_helper;
 
-    protected $_apiShippingCost = 0;
     protected $_modagoOrderId;
     protected $_productStocks = array();
     protected $_productProblems = array();
@@ -38,179 +37,192 @@ class Modago_Integrator_Model_Order {
     }
 
 
-    public function createOrder($apiOrder) {
-        //set vars needed for proper logging:
-        $this->_modagoOrderId = $apiOrder->order_id;
-        $this->_order = new stdClass();
+    public function createOrder($apiOrder,$notification = true) {
+        $order = false;
+        $this->_productStocks = array();
+        
+        try {
+            //set vars needed for proper logging:
+            $this->_modagoOrderId = $apiOrder->order_id;
+            $this->_order = new stdClass();
 
-        $products = $this->getProducts($apiOrder);
+            $products = $this->getProducts($apiOrder);
 
-        //return 0;
+            //return 0;
 
-        // Start New Sales Order Quote
-        /** @var Mage_Sales_Model_Quote $quote */
-        $quote = Mage::getModel('sales/quote')
-                 ->setStore($this->getStore())
-                 ->setCurrency($apiOrder->order_currency)
-                 ->setCustomerEmail($apiOrder->order_email);
+            // Start New Sales Order Quote
+            /** @var Mage_Sales_Model_Quote $quote */
+            $quote = Mage::getModel('sales/quote')
+                     ->setStore($this->getStore())
+                     ->setCurrency($apiOrder->order_currency)
+                     ->setCustomerEmail($apiOrder->order_email);
 
-        //guest order setup
-        $quote
-        ->setCheckoutMethod(Mage_Sales_Model_Quote::CHECKOUT_METHOD_GUEST)
-        ->setCustomerId(null)
-        ->setCustomerEmail($apiOrder->order_email)
-        ->setCustomerIsGuest(true)
-        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+            //guest order setup
+            $quote
+            ->setCheckoutMethod(Mage_Sales_Model_Quote::CHECKOUT_METHOD_GUEST)
+            ->setCustomerId(null)
+            ->setCustomerEmail($apiOrder->order_email)
+            ->setCustomerIsGuest(true)
+            ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
 
-        /*$customer = Mage::getModel('customer/customer')
-        	->setWebsiteId($websiteId)
-        	->loadByEmail($email);
-        if($customer->getId()==""){
-        	$customer = Mage::getModel('customer/customer');
-        	$customer->setWebsiteId($websiteId)
-        		->setStore($store)
-        		->setFirstname('Jhon')
-        		->setLastname('Deo')
-        		->setEmail($email)
-        		->setPassword("password");
-        	$customer->save();
-        }
-        // Assign Customer To Sales Order Quote
-        $quote->assignCustomer($customer);*/
+            /*$customer = Mage::getModel('customer/customer')
+            	->setWebsiteId($websiteId)
+            	->loadByEmail($email);
+            if($customer->getId()==""){
+            	$customer = Mage::getModel('customer/customer');
+            	$customer->setWebsiteId($websiteId)
+            		->setStore($store)
+            		->setFirstname('Jhon')
+            		->setLastname('Deo')
+            		->setEmail($email)
+            		->setPassword("password");
+            	$customer->save();
+            }
+            // Assign Customer To Sales Order Quote
+            $quote->assignCustomer($customer);*/
 
-        // Configure Notification
-        /*$quote->setSendConfirmation(1);*/
+            // Configure Notification
+            /*$quote->setSendConfirmation(1);*/
 
-        foreach($products as $productData) {
-            $requestArray = array(
-                                'qty'   => $productData['qty'],
-                            );
+            foreach($products as $productData) {
+                $requestArray = array(
+                                    'qty'   => $productData['qty'],
+                                );
 
-            if(isset($productData['super_attribute'])) {
-                $requestArray['super_attribute'] = $productData['super_attribute'];
+                if(isset($productData['super_attribute'])) {
+                    $requestArray['super_attribute'] = $productData['super_attribute'];
+                }
+
+                $quote->addProduct(
+                    $productData['model'],
+                    new Varien_Object($requestArray)
+                );
             }
 
-            $quote->addProduct(
-                $productData['model'],
-                new Varien_Object($requestArray)
-            );
-        }
-
-        // Set Sales Order Billing Address
-        if($apiOrder->invoice_data->invoice_required) {
-            $rawBillingData = $apiOrder->invoice_data->invoice_address;
-            $strToReplaceInKey = 'invoice_';
-        } else {
-            $rawBillingData = $apiOrder->delivery_data->delivery_address;
-            $strToReplaceInKey = 'delivery_';
-        }
-        $billingData = array();
-        foreach($rawBillingData as $key => $value) {
-            $billingData[str_replace($strToReplaceInKey,"",$key)] = $value;
-        }
-
-        // Set Sales Order Shipping Address
-        $shippingData = array();
-        foreach($apiOrder->delivery_data->delivery_address as $key => $value) {
-            $shippingData[str_replace('delivery_',"",$key)] = $value;
-        }
-
-        $billingAddress = $quote->getBillingAddress()->addData(array(
-                              'prefix'                => '',
-                              'firstname'             => isset($billingData['first_name']) ? $billingData['first_name'] : '',
-                              'middlename'            => '',
-                              'lastname'              => isset($billingData['last_name']) ? $billingData['last_name'] : '',
-                              'suffix'                => '',
-                              'company'               => isset($billingData['company_name']) ? $billingData['company_name'] : '',
-                              'street'                => isset($billingData['street']) ? $billingData['street'] : '',
-                              'city'                  => isset($billingData['city']) ? $billingData['city'] : '',
-                              'country_id'            => isset($billingData['country']) ? $billingData['country'] : '',
-                              'region'                => '',
-                              'postcode'              => isset($billingData['zip_code']) ? $billingData['zip_code'] : '',
-                              'telephone'             => isset($shippingData['phone']) ? $shippingData['phone'] : '',
-                              'fax'                   => '',
-                              'vat_id'                => isset($billingData['tax_id']) ? $billingData['tax_id'] : '',
-                              'save_in_address_book'  => 1
-                          ));
-
-        $shippingAddress = $quote->getShippingAddress()->addData(array(
-                               'prefix'                => '',
-                               'firstname'             => isset($shippingData['first_name']) ? $shippingData['first_name'] : '',
-                               'middlename'            => '',
-                               'lastname'              => isset($shippingData['last_name']) ? $shippingData['last_name'] : '',
-                               'suffix'                => '',
-                               'company'               => isset($shippingData['company_name']) ? $shippingData['company_name'] : '',
-                               'street'                => isset($shippingData['street']) ? $shippingData['street'] : '',
-                               'city'                  => isset($shippingData['city']) ? $shippingData['city'] : '',
-                               'country_id'            => isset($shippingData['country']) ? $shippingData['country'] : '',
-                               'region'                => '',
-                               'postcode'              => isset($shippingData['zip_code']) ? $shippingData['zip_code'] : '',
-                               'telephone'             => isset($shippingData['phone']) ? $shippingData['phone'] : '',
-                               'fax'                   => '',
-                               'vat_id'                => '', //not provided by api in delivery address
-                               'save_in_address_book'  => 1
-                           ));
-        // Collect Rates and Set Shipping & Payment Method
-        $shippingMethod = $this->getShippingMethod($apiOrder->delivery_method);
-        $paymentMethod = $this->getPaymentMethod($apiOrder->payment_method);
-
-        Mage::unregister(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY);
-        Mage::register(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY,true);
-
-        $shippingAddress
-        ->setCollectShippingRates(true)
-        ->collectShippingRates()
-        ->setShippingMethod($shippingMethod)
-        ->setPaymentMethod($paymentMethod);
-
-        // Set Sales Order Payment
-        $quote->getPayment()->importData(array('method' => $paymentMethod));
-        // Collect totals
-        $this->_collectTotals($quote);
-        // set totals
-        $quote->setSubtotal($apiOrder->order_total);
-        $quote->setBaseSubtotal($apiOrder->order_total);
-
-        $quote->setSubtotalWithDiscount(0);
-        $quote->setBaseSubtotalWithDiscount(0);
-
-        $quote->setGrandTotal($apiOrder->order_total);
-        $quote->setBaseGrandTotal($apiOrder->order_total);
-
-        $quote->setTotalsCollectedFlag(true);
-        //  Save Quote
-        $quote->save();
-        // Create Order From Quote
-        /** @var Mage_Sales_Model_Service_Quote $service */
-        $service = Mage::getModel('sales/service_quote', $quote);
-        $service->submitAll();
-
-        /** @var Mage_Sales_Model_Order $order */
-        $order = $service->getOrder();
-        $increment_id = $order->getRealOrderId();
-
-        //set paid amount
-        if($apiOrder->payment_method != 'cash_on_delivery') {
-            $total = floatval($apiOrder->order_total);
-            $totalPaid = round(($total - floatval($apiOrder->order_due_amount)), 2);
-            $order->setTotalPaid($totalPaid);
-            if ($totalPaid >= $total) {
-                $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+            // Set Sales Order Billing Address
+            if($apiOrder->invoice_data->invoice_required) {
+                $rawBillingData = $apiOrder->invoice_data->invoice_address;
+                $strToReplaceInKey = 'invoice_';
             } else {
-                $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+                $rawBillingData = $apiOrder->delivery_data->delivery_address;
+                $strToReplaceInKey = 'delivery_';
+            }
+            $billingData = array();
+            foreach($rawBillingData as $key => $value) {
+                $billingData[str_replace($strToReplaceInKey,"",$key)] = $value;
+            }
+
+            // Set Sales Order Shipping Address
+            $shippingData = array();
+            foreach($apiOrder->delivery_data->delivery_address as $key => $value) {
+                $shippingData[str_replace('delivery_',"",$key)] = $value;
+            }
+
+            $billingAddress = $quote->getBillingAddress()->addData(array(
+                                  'prefix'                => '',
+                                  'firstname'             => isset($billingData['first_name']) ? $billingData['first_name'] : '',
+                                  'middlename'            => '',
+                                  'lastname'              => isset($billingData['last_name']) ? $billingData['last_name'] : '',
+                                  'suffix'                => '',
+                                  'company'               => isset($billingData['company_name']) ? $billingData['company_name'] : '',
+                                  'street'                => isset($billingData['street']) ? $billingData['street'] : '',
+                                  'city'                  => isset($billingData['city']) ? $billingData['city'] : '',
+                                  'country_id'            => isset($billingData['country']) ? $billingData['country'] : '',
+                                  'region'                => '',
+                                  'postcode'              => isset($billingData['zip_code']) ? $billingData['zip_code'] : '',
+                                  'telephone'             => isset($shippingData['phone']) ? $shippingData['phone'] : '',
+                                  'fax'                   => '',
+                                  'vat_id'                => isset($billingData['tax_id']) ? $billingData['tax_id'] : '',
+                                  'save_in_address_book'  => 1
+                              ));
+
+            $shippingAddress = $quote->getShippingAddress()->addData(array(
+                                   'prefix'                => '',
+                                   'firstname'             => isset($shippingData['first_name']) ? $shippingData['first_name'] : '',
+                                   'middlename'            => '',
+                                   'lastname'              => isset($shippingData['last_name']) ? $shippingData['last_name'] : '',
+                                   'suffix'                => '',
+                                   'company'               => isset($shippingData['company_name']) ? $shippingData['company_name'] : '',
+                                   'street'                => isset($shippingData['street']) ? $shippingData['street'] : '',
+                                   'city'                  => isset($shippingData['city']) ? $shippingData['city'] : '',
+                                   'country_id'            => isset($shippingData['country']) ? $shippingData['country'] : '',
+                                   'region'                => '',
+                                   'postcode'              => isset($shippingData['zip_code']) ? $shippingData['zip_code'] : '',
+                                   'telephone'             => isset($shippingData['phone']) ? $shippingData['phone'] : '',
+                                   'fax'                   => '',
+                                   'vat_id'                => '', //not provided by api in delivery address
+                                   'save_in_address_book'  => 1
+                               ));
+            // Collect Rates and Set Shipping & Payment Method
+            $shippingMethod = $this->getShippingMethod($apiOrder->delivery_method);
+            $paymentMethod = $this->getPaymentMethod($apiOrder->payment_method);
+
+            Mage::unregister(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY);
+            Mage::register(Modago_Integrator_Model_Payment_Zolagopayment::PAYMENT_METHOD_ACTIVE_REGISTRY_KEY,true);
+
+            $shippingAddress
+            ->setCollectShippingRates(true)
+            ->collectShippingRates()
+            ->setShippingMethod($shippingMethod)
+            ->setPaymentMethod($paymentMethod);
+
+            // Set Sales Order Payment
+            $quote->getPayment()->importData(array('method' => $paymentMethod));
+            // Collect totals
+            $this->_collectTotals($quote);
+            // set totals
+            $quote->setSubtotal($apiOrder->order_total);
+            $quote->setBaseSubtotal($apiOrder->order_total);
+
+            $quote->setSubtotalWithDiscount(0);
+            $quote->setBaseSubtotalWithDiscount(0);
+
+            $quote->setGrandTotal($apiOrder->order_total);
+            $quote->setBaseGrandTotal($apiOrder->order_total);
+
+            $quote->setTotalsCollectedFlag(true);
+            //  Save Quote
+            $quote->save();
+            // Create Order From Quote
+            /** @var Mage_Sales_Model_Service_Quote $service */
+            $service = Mage::getModel('sales/service_quote', $quote);
+            $service->submitAll();
+
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $service->getOrder();
+            //set paid amount
+            if($apiOrder->payment_method != 'cash_on_delivery') {
+                $total = floatval($apiOrder->order_total);
+                $totalPaid = round(($total - floatval($apiOrder->order_due_amount)), 2);
+                $order->setTotalPaid($totalPaid);
+                if ($totalPaid >= $total) {
+                    $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+                } else {
+                    $order->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+                }
+            }
+            $number = sprintf('%s%s',$this->getHelper()->getOrderPrefix(),$this->_modagoOrderId);
+            $order->setModagoOrderId($this->_modagoOrderId)
+            ->setIncrementId($number)
+            ->save();
+            // check products stats
+            $this->_checkProductStocks();
+
+            // Resource Clean-Up
+            $quote = $service = null;
+
+            // Finished
+            return $order;
+        } catch (Exception $xt) {
+            Mage::logException($xt);
+            $helper = Mage::helper('modagointegrator/api');
+            $message = $helper->__('Error: %s' , $xt->getMessage());
+            $helper->log($message);
+            if ($notification) {
+                $this->_productProblems[$apiOrder->order_id] = $message;
             }
         }
-
-        $order->setModagoOrderId($this->_modagoOrderId)->save();
-        // check products stats
-        $this->_checkProductStocks();
-
-        // Resource Clean-Up
-        $quote = $service = $order = null;
-
-        // Finished
-        return $increment_id;
-
+        return $order;
     }
 
     /**
@@ -261,13 +273,17 @@ class Modago_Integrator_Model_Order {
      * check reservations
      */
 
-    protected function _checkProductStocks() {
+    protected function _checkProductStocks() {        
+        $skus = array();
         foreach ($this->_productStocks as $productId) {
             $product = $this->getProduct($productId);
             $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
             if ($qty < 0) {
-                $this->_productProblems[] = $product->getSku();
+                $skus[] = $product->getSku();
             }
+        }
+        if (count($skus)) {
+            Mage::throwException(Mage::helper('modagointegrator')->__('Products out of stocks (%s)',implode(',',$skus)));
         }
     }
 
@@ -315,8 +331,8 @@ class Modago_Integrator_Model_Order {
                 /*$taxPercent = $this->getProductTaxRate($product);
                 $priceIncl = $apiProduct->item_value_after_discount; //brutto
                 $price = round((($priceIncl / (100 + $taxPercent)) * 100),2); //netto*/
-
-                $product->setPrice($apiProduct->item_value_after_discount); //$price
+                $price = round($apiProduct->item_value_after_discount/$apiProduct->item_qty,2);
+                $product->setPrice($price); //$price
                 $product->setSpecialPrice(null);
 
                 $out[$productId] = array(

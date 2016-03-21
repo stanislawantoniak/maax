@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Modago_Integrator>
-            <version>0.0.2</version>
+            <version>1.2.10</version>
         </Modago_Integrator>
     </modules>
     <global>
