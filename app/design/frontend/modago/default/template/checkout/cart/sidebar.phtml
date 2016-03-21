@@ -36,9 +36,10 @@ $shippingBlock = $this->getChild('shipping')
             <header>
                 <h2><?php echo $this->__("Your shopping"); ?></h2>
             </header>
-            <ul id="product_summary">
-                <?php echo $this->getChildHtml('totals'); ?>
-            </ul>        
+
+            <div class="col-sidebar-cart-summary clearfix">
+                <?php echo $this->getChildHtml('shipping'); ?>
+            </div>
         <?php endif; ?>
         <?php if (empty($sessionShippingMethod)): ?>
             <header>
@@ -47,9 +48,7 @@ $shippingBlock = $this->getChild('shipping')
         <?php endif; ?>
         <!--            Select Shipping-->
 
-        <div class="col-sidebar-cart-summary clearfix">
-            <?php echo $this->getChildHtml('shipping'); ?>
-        </div>
+
         
         
         <div class="col-sidebar-cart-summary clearfix">

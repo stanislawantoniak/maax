@@ -19,20 +19,17 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 			$locker = new Varien_Object();
 			/** @var Mage_Checkout_Model_Session $checkoutSession */
 			$checkoutSession = Mage::getSingleton('checkout/session');
-			$inpostCode = $checkoutSession->getInpostCode();
-
-//			$checkoutSession->setInpostCode("");
-//			$checkoutSession->setInpostCode("sdsds");
+			$shippingPointCode = $checkoutSession->getShippingPointCode();
 			
-			if (!empty($inpostCode)) {
+			if (!empty($shippingPointCode)) {
 				$locker->setId(1);
-				$locker->setLockerName($inpostCode);
+				$locker->setLockerName($shippingPointCode);
 				$locker->setStreet("Łęczycka");
 				$locker->setStreetNumber(55);
 				$locker->setPostcode("95-100");
 				$locker->setCity("Warszawa");
 				$locker->setCountryId($this->getStoreDefaultCountryId());
-				$locker->setDetails("(przy markecie Biedronka -> {$inpostCode})");
+				$locker->setDetails("(przy markecie Biedronka -> {$shippingPointCode})");
 			}
 			$this->inpostLocker = $locker;
 		}

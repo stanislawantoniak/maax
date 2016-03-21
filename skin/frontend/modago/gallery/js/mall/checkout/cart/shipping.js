@@ -1,7 +1,9 @@
 jQuery(document).ready(function () {
 
+
+    setTotals();
     jQuery("[data-select-shipping-method-trigger=1]").click(function (e) {
-        setShippingMethod();
+        setShippingMethod(e.target);
         if (jQuery(e.target).is("a")) {
             e.preventDefault();
             jQuery("#select_inpost_point").modal("hide");
@@ -21,25 +23,18 @@ jQuery(document).ready(function () {
 
 
     jQuery("#cart-buy").on('click', function (e) {
-        e.preventDefault();
         jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
-        var button = jQuery(this);
-
-        var formData = jQuery("#cart-shipping-methods-form").serializeArray();
-
-        jQuery.ajax({
-            url: jQuery("#cart-shipping-methods-form").attr("action"),
-            data: formData
-        }).done(function (response) {
-            console.log(response);
-            if (response.status) {
-                window.location = button.attr("href");
-            }
-
-        });
     });
 
 });
+
+function setTotals(){
+    var content = jQuery("#cart-shipping-methods");
+
+    var methodRadio = content.find("input[name=_shipping_method]:checked");
+    var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
+    jQuery("#product_summary").find("span.val_delivery_cost").closest("li").find("span.price").html(shippingCostFormatted);
+}
 
 function appendSelectedCartShipping(selectedMethodData) {
     console.log(selectedMethodData);
@@ -88,6 +83,20 @@ function setShippingMethod(target) {
     }
 
     appendSelectedCartShipping(selectedMethodData);
+
+
+
+    var formData = jQuery("#cart-shipping-methods-form").serializeArray();
+    console.log(formData);
+
+    jQuery.ajax({
+        url: jQuery("#cart-shipping-methods-form").attr("action"),
+        data: formData
+    }).done(function (response) {
+        console.log(response);
+    });
+
+    setTotals();
 }
 
 

@@ -143,11 +143,12 @@ abstract class Zolago_Checkout_Controller_Abstract
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
 		$checkoutSession = $this->_getCheckoutSession();
-		if($inpostCode = $request->getParam("inpost_code")){
-			$checkoutSession->setInpostCode($inpostCode);
+		if($shippingPointCode = $request->getParam("shipping_point_code")){
+			$checkoutSession->setShippingPointCode($shippingPointCode);
 		} else {
-			$checkoutSession->unsInpostCode();
+			$checkoutSession->setShippingPointCode();
 		}
+		$onepage->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
     }
 	
 	/**

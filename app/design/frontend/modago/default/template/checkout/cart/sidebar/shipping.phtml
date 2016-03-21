@@ -23,15 +23,19 @@ $cost = $items->cost;
 
 $sessionShippingMethod = $this->getData("shipping_method");
 
-//Zend_Debug::dump($sessionShippingMethod);
+//Zend_Debug::dump($cost);
 
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
 $lockerName = $locker->getLockerName();
-//Zend_Debug::dump($lockerId);
+//Zend_Debug::dump($locker->getData());
 ?>
-
+<?php if(!empty($rates) && !empty($sessionShippingMethod)): ?>
+    <ul id="product_summary">
+        <?php echo $this->getChildHtml('totals'); ?>
+    </ul>
+<?php endif; ?>
 
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">
@@ -91,7 +95,11 @@ $lockerName = $locker->getLockerName();
                         <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
 
                         <div class="shipping-data-additional">
-                            <div data-item="additional"></div>
+                            <div data-item="additional">
+                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false && $lockerId): ?>
+                                    <?php echo $lockerName; ?>
+                                <?php endif; ?>
+                            </div>
                             <br />
                             <div class="pull-left">
                                 <?php
@@ -150,7 +158,11 @@ $lockerName = $locker->getLockerName();
                                        data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
                                        data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
                                        data-carrier-logo='<?php echo $carrierLogo; ?>'
-                                       data-method-cost="<?php echo $costSum; ?>"/>
+                                       data-method-cost="<?php echo $costSum; ?>"
+                                       data-method-cost-formatted="<?php echo $formattedCost; ?>"
+                                       data-carrier-additional=""
+                                       data-carrier-pointcode=""
+                                />
 
                             <?php echo $method['carrier_title'] ?>
                             <br/>
