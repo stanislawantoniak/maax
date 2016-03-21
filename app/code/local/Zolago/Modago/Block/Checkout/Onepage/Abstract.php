@@ -2,38 +2,16 @@
 /**
  * Abstract for all steps
  */
-abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
-    extends Mage_Checkout_Block_Onepage_Abstract
-{
-
-	protected $inpostLocker = null;
+abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 	/**
-	 * Placebo function
-	 * todo: fix it when inpost locker object will be created
-	 * 
 	 * @return Varien_Object
 	 */
 	public function getInpostLocker() {
-		if (is_null($this->inpostLocker)) {
-			$locker = new Varien_Object();
-			/** @var Mage_Checkout_Model_Session $checkoutSession */
-			$checkoutSession = Mage::getSingleton('checkout/session');
-			$shippingPointCode = $checkoutSession->getShippingPointCode();
-			
-			if (!empty($shippingPointCode)) {
-				$locker->setId(1);
-				$locker->setLockerName($shippingPointCode);
-				$locker->setStreet("Łęczycka");
-				$locker->setStreetNumber(55);
-				$locker->setPostcode("95-100");
-				$locker->setCity("Warszawa");
-				$locker->setCountryId($this->getStoreDefaultCountryId());
-				$locker->setDetails("(przy markecie Biedronka -> {$shippingPointCode})");
-			}
-			$this->inpostLocker = $locker;
-		}
-		return $this->inpostLocker;
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+		$locker = $helper->getInpostLocker();
+		return $locker;
 	}
 
 	public function getDeliveryDays() {

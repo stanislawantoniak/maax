@@ -1,5 +1,39 @@
 <?php
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
+
+	protected $inpostLocker = null;
+
+	/**
+	 * Retrieve InPost Locker object for current checkout session
+	 * 
+	 * @return Varien_Object
+	 */
+	public function getInpostLocker() {
+		if (is_null($this->inpostLocker)) {
+			/** @var Mage_Checkout_Model_Session $checkoutSession */
+			$checkoutSession = Mage::getSingleton('checkout/session');
+			$inpostCode = $checkoutSession->getInpostCode();
+
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel("ghinpost/locker");
+			$locker->loadByLockerName($inpostCode);
+			
+			// TODO: remove it when DB populated by cron & api
+			if (!$locker->getId()) {
+				$locker->setId(1);
+				$locker->setLockerName($inpostCode);
+				$locker->setStreet("Łęczycka");
+				$locker->setStreetNumber(55);
+				$locker->setPostcode("95-100");
+				$locker->setCity("Warszawa");
+				$locker->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
+				$locker->setDetails("(przy markecie Biedronka -> {$inpostCode})");
+			}
+			$this->inpostLocker = $locker;
+		}
+		return $this->inpostLocker;
+	}
+	
     public function getPaymentFromSession() {
 	    return Mage::getSingleton('checkout/session')->getPayment();
     }
