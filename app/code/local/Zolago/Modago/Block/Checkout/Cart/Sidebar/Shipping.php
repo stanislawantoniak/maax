@@ -18,7 +18,8 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         foreach ($qRates as $cCode => $cRates) {
 
             foreach ($cRates as $rate) {
-
+                Mage::log($rate->getData(),null, "123.log");
+                ;
                 /* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
                 $vId = $rate->getUdropshipVendor();
 
@@ -31,14 +32,16 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
-                    'method_title' => $rate->getData('method_title')
+                    'method_title' => $rate->getData('method_title'),
+                    'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
                 );
                 $allMethodsByCode[$rate->getCode()][] = array(
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
                     'method_title' => $rate->getData('method_title'),
-                    'cost' => $rate->getPrice()
+                    'cost' => $rate->getPrice(),
+                    'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
                 );
 
             }

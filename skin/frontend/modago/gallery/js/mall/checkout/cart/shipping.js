@@ -1,7 +1,7 @@
 jQuery(document).ready(function () {
 
 
-    setTotals();
+    updateTotals();
     jQuery("[data-select-shipping-method-trigger=1]").click(function (e) {
         setShippingMethod(e.target);
         if (jQuery(e.target).is("a")) {
@@ -28,34 +28,33 @@ jQuery(document).ready(function () {
 
 });
 
-function setTotals(){
+function updateTotals() {
     var content = jQuery("#cart-shipping-methods");
 
     var methodRadio = content.find("input[name=_shipping_method]:checked");
+    var shippingCost;
 
-    //shipping total
-    var shippingCost = jQuery(methodRadio).attr("data-method-cost");
-    var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
-    jQuery("#product_summary").find("span.val_delivery_cost").closest("li").find("span.price").html(shippingCostFormatted);
+    if (jQuery.type(methodRadio.val()) !== "undefined") {
+        //shipping total
+        shippingCost = jQuery(methodRadio).attr("data-method-cost");
+        var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
+        jQuery("#product_summary").find("span.val_delivery_cost").closest("li").find("span.price").html(shippingCostFormatted);
 
-
-    console.log(Mall.reg.get("quote_products_total"));
-    console.log(Mall.reg.get("quote_discount_total"));
-    console.log(shippingCost);
-
-
-
+    } else {
+        shippingCost = 0; //not selected yet
+    }
     //Grand total
-    var totalSumm = parseInt( parseInt(Mall.reg.get("quote_products_total")) + parseInt(shippingCost) +  - parseInt(Mall.reg.get("quote_discount_total")) );
-    jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSumm));
+    var totalSum = parseInt(parseInt(Mall.reg.get("quote_products_total")) + parseInt(shippingCost) + -parseInt(Mall.reg.get("quote_discount_total")));
+    jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSum));
 }
 
 function appendSelectedCartShipping(selectedMethodData) {
     console.log(selectedMethodData);
     var shippingMethodSelectedContainer = jQuery(".shipping-method-selected");
 
-    shippingMethodSelectedContainer.find('[data-item="name"]').html(selectedMethodData["name"]);
+    //shippingMethodSelectedContainer.find('[data-item="name"]').html(selectedMethodData["name"]);
     shippingMethodSelectedContainer.find('[data-item="method"]').html(selectedMethodData["method"]);
+    shippingMethodSelectedContainer.find('[data-item="description"]').html(selectedMethodData["description"]);
     shippingMethodSelectedContainer.find('[data-item="logo"]').html(selectedMethodData["logo"]);
 
     shippingMethodSelectedContainer.find('[data-item="additional"]').html(selectedMethodData["additional"]);
@@ -80,8 +79,9 @@ function setShippingMethod(target) {
     console.log(jQuery(methodRadio).attr("data-carrier-method"));
 
     selectedMethodData["logo"] = jQuery(methodRadio).attr("data-carrier-logo");
-    selectedMethodData["name"] = jQuery(methodRadio).attr("data-carrier-name");
+    //selectedMethodData["name"] = jQuery(methodRadio).attr("data-carrier-name");
     selectedMethodData["method"] = jQuery(methodRadio).attr("data-carrier-method");
+    selectedMethodData["description"] = jQuery(methodRadio).attr("data-carrier-description");
     selectedMethodData["additional"] = jQuery(target).attr("data-carrier-additional");
 
     var pointCode = (jQuery(target).attr("data-carrier-pointcode") !== "undefined") ? jQuery(target).attr("data-carrier-pointcode") : "";
@@ -110,7 +110,7 @@ function setShippingMethod(target) {
         console.log(response);
     });
 
-    setTotals();
+    updateTotals();
 }
 
 
