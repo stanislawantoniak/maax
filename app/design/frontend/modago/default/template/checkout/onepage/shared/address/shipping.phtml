@@ -102,7 +102,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 				<input id="shipping_postcode"   name="shipping[postcode]"  value="<?php echo $this->escapeHtml($locker->getPostcode()); ?>" type="hidden"/>
 				<input id="shipping_city"       name="shipping[city]"      value="<?php echo $this->escapeHtml($locker->getCity()); ?>" type="hidden"/>
 				<input id="orders_someone_else" name="shipping[different_shipping_address]" type="checkbox" class="hidden"/>
-				<input id="inpost_locker_name"  name="inpost[locker_name]" value="<?php echo $locker->getLockerName(); ?>" type="hidden"/>
+				<input id="inpost_locker_name"  name="inpost[name]" value="<?php echo $locker->getName(); ?>" type="hidden"/>
 				<div class="row inpost-info">
 					<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
 						<strong><?php echo $helper->__("Locker InPost"); ?></strong>
@@ -129,15 +129,15 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 						<fieldset>
 							<div class="form-group clearfix border-top">
 								<div class="row">
-									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 account-telephone_for_locker">
-										<input id="account-telephone_for_locker"
-											   name="account[telephone_for_locker]"
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 telephone-for-locker">
+										<input id="telephone_for_locker"
+											   name="inpost[telephone]"
 											   value="<?php echo $this->escapeHtml($shippingAddress->getTelephone()); ?>"
 											   type="tel"
 											   class="form-control phone hint validate-telephone"
 											   required="true"/>
 									</div>
-									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 account-telephone_for_locker_comment">
+									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 telephone-for-locker-comment">
 										<?php echo $helper->__("The phone number is required to receive package from locker."); ?><br/>
 										<?php echo $helper->__("We do not use it in any other way without your permission!"); ?>
 									</div>
