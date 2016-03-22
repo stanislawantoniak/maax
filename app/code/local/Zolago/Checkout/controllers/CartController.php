@@ -136,9 +136,19 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
         return $item;
     }
 
-    public function deliveryDetailsAction(){
-        $block = $this->getLayout()->createBlock('Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map')
-            ->setTemplate('checkout/cart/sidebar/shipping/map.phtml')->toHtml();
+
+    public function deliveryDetailsAction()
+    {
+        $shippingMethodCode = $this->getRequest()->getParam("shipping_method_code", "");
+
+        $block = "";
+        switch ($shippingMethodCode) {
+            case Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getShippingCodeInpost(): //TODO Hardcoded inpost
+                $block = $this->getLayout()->createBlock('Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost')
+                    ->setTemplate('checkout/cart/sidebar/shipping/map.phtml')->toHtml();
+                break;
+        }
+
         $this->getResponse()->setBody($block);
     }
 }

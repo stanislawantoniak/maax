@@ -5,6 +5,10 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 {
 
 
+    public static function getShippingCodeInpost(){
+        return "udtiership_2";
+    }
+
     public function getItems()
     {
         $rates = array();

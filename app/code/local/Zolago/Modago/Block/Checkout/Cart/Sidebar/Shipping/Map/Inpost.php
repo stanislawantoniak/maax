@@ -1,6 +1,9 @@
 <?php
 
-class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map
+/**
+ * Class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map
+ */
+class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
     extends Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 {
 

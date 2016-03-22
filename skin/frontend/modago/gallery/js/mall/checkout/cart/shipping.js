@@ -44,7 +44,7 @@
         },
 
         getSelectedShipping: function () {
-            return this.content.find("radio[name=_shipping_method]:checked");
+            return jQuery(Mall.Cart.Shipping.content).find("input[name=_shipping_method]:checked");
         },
         handleShippingMethodSelect: function (e) {
             Mall.Cart.Shipping.setShippingMethod(e.target);
@@ -56,10 +56,11 @@
         },
         populateShippingPointSelect: function () {
             //1. Get block
+            var shippingMethodCode= Mall.Cart.Shipping.getSelectedShipping().val();
 
             jQuery.ajax({
                 url: "/checkout/cart/deliveryDetails",
-                //data: formData
+                data: {shipping_method_code: shippingMethodCode}
             }).done(function (block) {
                 //console.log(block);
                 jQuery("#select_inpost_point .modal-body").html(block);
