@@ -4,7 +4,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map
     extends Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 {
 
-    public function getBuildingData()
+    public function getPopulateData()
     {
         $lockers = array();
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
