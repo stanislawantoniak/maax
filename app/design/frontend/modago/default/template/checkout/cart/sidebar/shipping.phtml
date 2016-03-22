@@ -24,11 +24,14 @@ $cost = $items->cost;
 $sessionShippingMethod = $this->getData("shipping_method");
 
 
+/* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
-$lockerName = $locker->getLockerName();
-//Zend_Debug::dump($locker->getData());
+
+$lockerRender = $this->getLockerRender($locker);
+
+
 
 $discountTotal = 0;
 $productsPriceTotal = 0;
@@ -60,7 +63,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     </script>
     <div class="shipping-collect-inpost">
         <?php if($lockerId): ?>
-                <input type="hidden" name="inpost_code" value="<?php echo $lockerName; ?>" required="required" />
+                <input type="hidden" name="shipping_point_code" value="<?php echo $locker->getName(); ?>" required="required" />
         <?php endif; ?>
     </div>
     <div class="shipping-collect">
@@ -74,10 +77,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
         <?php if (empty($sessionShippingMethod)): ?>
             <div class="shipping-method-selected-container">
-
                 <div data-item="method"></div>
-
-
                 <div class="shipping-data-additional">
                     <div data-item="additional"></div>
                     <div data-item="description"></div>
@@ -108,14 +108,15 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                 ?>
                 <?php if (in_array($method['code'], $sessionShippingMethod)): ?>
                     <div class="shipping-method-selected-container">
-<!--                        <div data-item="name">--><?php //echo $this->escapeHtml($method['carrier_title']); ?><!--</div>-->
                         <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
 
 
                         <div class="shipping-data-additional">
                             <div data-item="additional">
-                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false && $lockerId): ?>
-                                    <?php echo $lockerName; ?>
+                                <?php
+
+                                if (strpos(strtolower($method["method_title"]), 'inpost') !== false && $lockerId): ?>
+                                    <?php echo $lockerRender; ?>
                                 <?php endif; ?>
                             </div>
                             <div data-item="description"><?php echo $daysInTransit; ?></div>
@@ -188,15 +189,9 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                                        data-carrier-pointcode=""
                                 />
 
-<!--                            --><?php //echo $method['carrier_title'] ?>
-<!--                            <br/>-->
                             <?php echo $method['method_title'] ?>
                             <br />
                             <?php echo $daysInTransit; ?>
-                            <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
-                                <br />
-                                <div class="inpost-code-holder"><?php echo $lockerName; ?></div>
-                            <?php endif; ?>
                         </div>
 
                         <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
@@ -233,12 +228,12 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 
             <div class="modal-body">
                 <p>
-                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="ALK01A" data-carrier-additional="ALK01A" href="">
+                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="ALK01A" data-carrier-additional="Słowackiego 131<br>87-700 Aleksandrów Kujawski<br>(PM przy biurze usług ubezpieczeniowych , po lewej stronie od wejścia.)" href="">
 						ALK01A</a>
                 </p>
                 <p>
-                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="MarketNettoUstka" data-carrier-additional="Sprzymierzeńców 20, Ustka" href="">
-                        MarketNettoUstka, Sprzymierzeńców 20, Ustka</a>
+                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="WAW193" data-carrier-additional="Barkocińska 6<br>03-543 Warszawa<br>(Przy markecie Biedronka)" href="">
+                        WAW193</a>
                 </p>
             </div>
         </div>
