@@ -93,4 +93,17 @@
 			</ghinpost>
 		</carriers>
 	</default>
+	<crontab>
+		<jobs>
+			<ghinpost_update_all_lockers>
+				<schedule>
+					<!-- Run 3:00 everyday  -->
+					<cron_expr>3 0 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>ghinpost/observer::updateAllLockers</model>
+				</run>
+			</ghinpost_update_all_lockers>
+		</jobs>
+	</crontab>
 </config>
