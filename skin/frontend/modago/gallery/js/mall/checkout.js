@@ -24,20 +24,17 @@
 			init: function () {
 				this.attachCopyTelephoneNumber();
 			},
-
+			// Copy telephone functionality START
 			attachCopyTelephoneNumber:  function() {
 				jQuery("#shipping_telephone, #account_telephone").on('change input keypress keydown', {self: this}, this.copyTelephoneNumber);
 				jQuery("#telephone_for_locker").on('keypress keydown', {state: 0, self: this}, this.setAllowCopyTelephoneFlag);
 			},
-
 			getAllowCopyTelephoneFlag: function() {
 				return this.allowCopyTelephone;
 			},
-
 			setAllowCopyTelephoneFlag: function(event) {
 				event.data.state.allowCopyTelephone = event.data.state;
 			},
-
 			/**
 			 * Copy shipping telephone number to
 			 * InPost telephone number
@@ -48,11 +45,47 @@
 				if (self.getAllowCopyTelephoneFlag()) {
 					jQuery("#telephone_for_locker").val(a);
 				}
-			}
+			},
+			// Copy telephone functionality END
+			
+			// Common
+			getStreet: function() {
+				var value = jQuery("#inpost-locker-street").html();
+				return value;
+			},
+			getBuildingNumber: function() {
+				var value = jQuery("#inpost-locker-building-number").html();
+				return value;
+			},
+			getPostcode: function() {
+				var value = jQuery("#inpost-locker-postcode").html();
+				return value;
+			},
+			getTown: function() {
+				var value = jQuery("#inpost-locker-town").html();
+				return value;
+			},
+			getLocationDescription: function() {
+				var value = jQuery("#inpost-locker-location-description").html();
+				return value;
+			},
 		};
 	};
 
-
+	Mall.Checkout.prototype.getInPost = function () {
+		return this.InPost;
+	},
+		
+	Mall.Checkout.prototype.getInPostData = function() {
+		var data = {
+			inpost_locker_street: this.getInPost().getStreet(),
+			inpost_locker_building_number: this.getInPost().getBuildingNumber(),
+			inpost_locker_postcode: this.getInPost().getPostcode(),
+			inpost_locker_town: this.getInPost().getTown(),
+			inpost_locker_location_description: this.getInPost().getLocationDescription()
+		};
+		return data;
+	},
 	
 	/**
 	 * @param string

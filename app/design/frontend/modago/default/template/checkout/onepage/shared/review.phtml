@@ -196,9 +196,9 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 							<dl>
 								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $inpostLogo; ?>"/></dd>
-								<dd>{{inpost_locker_street}} {{inpost_locker_street_number}}</dd>
-								<dd>{{inpost_locker_zip_code}} {{inpost_locker_city}}</dd>
-								<dd>{{inpost_locker_details}}</dd>
+								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
+								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
+								<dd>({{inpost_locker_location_description}})</dd>
 							</dl>
 						</div>
 					<?php endif; ?>
