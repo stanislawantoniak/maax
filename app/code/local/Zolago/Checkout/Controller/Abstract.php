@@ -128,7 +128,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 
         $onepage = $this->getOnepage();
-
+		$quote = $this->_getCheckoutSession()->getQuote();
 
         /**
         shipping_method[vendor_id]:udtiership_1
@@ -140,14 +140,17 @@ abstract class Zolago_Checkout_Controller_Abstract
             if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
                 throw new Mage_Core_Exception($shippingMethodResponse['message']);
             }
+			Mage::log($shippingMethod, null, "1413.og");
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
+
 		$checkoutSession = $this->_getCheckoutSession();
-		if($inpostCode = $request->getParam("inpost_code")){
-			$checkoutSession->setInpostCode($inpostCode);
+		if($shippingPointCode = $request->getParam("shipping_point_code")){
+			$checkoutSession->setShippingPointCode($shippingPointCode);
 		} else {
-			$checkoutSession->unsInpostCode();
+			$checkoutSession->setShippingPointCode();
 		}
+		$quote->setTotalsCollectedFlag(false)->collectTotals()->save();
     }
 	
 	/**
@@ -156,6 +159,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 	 */
 	public function importPostData(){
 		$request = $this->getRequest();
+
 		$onepage = $this->getOnepage();
 
 		/**

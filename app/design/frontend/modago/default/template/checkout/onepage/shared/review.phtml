@@ -56,22 +56,22 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 						<div class="row">
 							<dl>
 								<dd>
-									<span class="lb"><?php echo $this->__('Summary value'); ?>:</span> 
+									<span class="lb XXX-0"><?php echo $this->__('Summary value'); ?>:</span>
 									<span><?php echo Mage::helper('core')->formatPrice($total); ?></span>
 								</dd>
 								<dd>
-									<span class="lb"><?php echo $this->__('Shipping cost'); ?>:</span> 
+									<span class="lb XXX-3"><?php echo $this->__('Shipping cost'); ?>:</span>
 									<span class="total_shipping"></span>
 								</dd>
 								<?php if($_totalDiscount):?>
 								<dd>
-									<span class="lb"><?php echo $_totalDiscount->getTitle(); ?>:</span> 
+									<span class="lb XX-1"><?php echo $_totalDiscount->getTitle(); ?>:</span>
 									<span class="total_discount" data-price="<?php echo ($_totalDiscount->getValue() * -1);?>"><?php echo Mage::helper('core')->formatPrice($_totalDiscount->getValue()); ?></span>
 								</dd>
 								<?php endif;?>
 								<dt>
 									<strong>
-										<span class="lb"><?php echo $helper->__('To pay'); ?>:</span>
+										<span class="lb XX-2"><?php echo $helper->__('To pay'); ?>:</span>
 										<span class="total_value"></span>
 									</strong>
 								</dt>

@@ -15,6 +15,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar extends Mage_Checkout_Block_Cart
      */
     public function getShippingTotal()
     {
+
         return $this->getParentBlock()->getShippingTotal();
     }
 	
