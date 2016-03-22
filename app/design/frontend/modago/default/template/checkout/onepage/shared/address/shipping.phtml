@@ -107,11 +107,11 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 					<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
 						<strong><?php echo $helper->__("Locker InPost"); ?></strong>
 						<br/>
-						<span id="inpost-locker-street"><?php echo $locker->getStreet(); ?></span> <span id="inpost-locker-street-number"><?php echo $locker->getStreetNumber(); ?></span>
+						<span id="inpost-locker-street"><?php echo $locker->getStreet(); ?></span> <span id="inpost-locker-building-number"><?php echo $locker->getBuildingNumber(); ?></span>
 						<br/>
-						<span id="inpost-locker-zip-code"><?php echo $locker->getPostcode(); ?></span> <span id="inpost-locker-city"><?php echo $locker->getCity(); ?></span>
+						<span id="inpost-locker-postcode"><?php echo $locker->getPostcode(); ?></span> <span id="inpost-locker-town"><?php echo $locker->getTown(); ?></span>
 						<br/>
-						<span id="inpost-locker-details"><?php echo $locker->getDetails(); ?></span>
+						<span id="inpost-locker-details"><?php echo $locker->getLocationDescription(); ?></span>
 					</div>
 					<div class="col-xs-5 col-sm-6 col-md-6 col-lg-6 text-right">
 						<div class="figure-button-wrapper">
