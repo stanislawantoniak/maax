@@ -18,9 +18,41 @@
 			  <dd>{{telephone_caption}} {{telephone}}</dd>\
 		  </dl>';
 
-    };
-    
-	
+		this.InPost = {
+			allowCopyTelephone: 1,
+
+			init: function () {
+				this.attachCopyTelephoneNumber();
+			},
+
+			attachCopyTelephoneNumber:  function() {
+				jQuery("#shipping_telephone, #account_telephone").on('change input keypress keydown', {self: this}, this.copyTelephoneNumber);
+				jQuery("#telephone_for_locker").on('keypress keydown', {state: 0, self: this}, this.setAllowCopyTelephoneFlag);
+			},
+
+			getAllowCopyTelephoneFlag: function() {
+				return this.allowCopyTelephone;
+			},
+
+			setAllowCopyTelephoneFlag: function(event) {
+				event.data.state.allowCopyTelephone = event.data.state;
+			},
+
+			/**
+			 * Copy shipping telephone number to
+			 * InPost telephone number
+			 */
+			copyTelephoneNumber: function (event) {
+				var self = event.data.self;
+				var a = jQuery(this).val();
+				if (self.getAllowCopyTelephoneFlag()) {
+					jQuery("#telephone_for_locker").val(a);
+				}
+			}
+		};
+	};
+
+
 	
 	/**
 	 * @param string
@@ -55,6 +87,7 @@
 	 * @returns {undefined}
 	 */
     Mall.Checkout.prototype.init = function(stepIndex){
+		this.InPost.init();
 		this.go(stepIndex || 0);
 	}
 	
