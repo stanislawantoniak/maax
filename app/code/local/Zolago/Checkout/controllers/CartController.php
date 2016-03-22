@@ -135,4 +135,10 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
 
         return $item;
     }
+
+    public function deliveryDetailsAction(){
+        $block = $this->getLayout()->createBlock('Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map')
+            ->setTemplate('checkout/cart/sidebar/shipping/map.phtml')->toHtml();
+        $this->getResponse()->setBody($block);
+    }
 }

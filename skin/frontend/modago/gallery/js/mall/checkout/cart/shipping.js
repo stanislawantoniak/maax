@@ -11,13 +11,17 @@
             Mall.Cart.Shipping.updateTotals();
 
             var shippingMethodSelectTrigger = jQuery("[data-select-shipping-method-trigger=1]");
-            shippingMethodSelectTrigger.on("click", function (e) {
+            //shippingMethodSelectTrigger.on("click", function (e) {
+            //    self.handleShippingMethodSelect(e);
+            //});
+            jQuery(document).delegate("[data-select-shipping-method-trigger=1]", "click" , function(e){
                 self.handleShippingMethodSelect(e);
             });
 
 
             jQuery("[data-select-shipping-method-trigger=0]").click(function (e) {
-                jQuery("#select_inpost_point").modal("show");
+                //1. populate popup
+                Mall.Cart.Shipping.populateShippingPointSelect();
             });
 
 
@@ -49,6 +53,20 @@
                 e.preventDefault();
                 jQuery("#select_inpost_point").modal("hide");
             }
+        },
+        populateShippingPointSelect: function () {
+            //1. Get block
+
+            jQuery.ajax({
+                url: "/checkout/cart/deliveryDetails",
+                //data: formData
+            }).done(function (block) {
+                //console.log(block);
+                jQuery("#select_inpost_point .modal-body").html(block);
+                jQuery("#select_inpost_point").modal("show");
+            });
+
+
         },
         updateTotals: function () {
             var content = jQuery("#cart-shipping-methods");
@@ -114,13 +132,13 @@
 
 
             var formData = jQuery("#cart-shipping-methods-form").serializeArray();
-            console.log(formData);
+            //console.log(formData);
 
             jQuery.ajax({
                 url: jQuery("#cart-shipping-methods-form").attr("action"),
                 data: formData
             }).done(function (response) {
-                console.log(response);
+                //console.log(response);
             });
 
             Mall.Cart.Shipping.updateTotals();
