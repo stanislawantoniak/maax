@@ -7,13 +7,14 @@
  */
 $checkoutSession = Mage::getSingleton('checkout/session');
 $sessionShippingMethod = $checkoutSession->getData("shipping_method");
-//Zend_Debug::dump($sessionShippingMethod);
+
 $inpostCode = $checkoutSession->getData("inpost_code");
 
 
-$shippingBlock = $this->getChild('shipping')
+$shippingBlock = $this->getChild('checkout_cart_shipping')
         ->setData("shipping_method", $sessionShippingMethod)
-        ->setData("inpost_code", $inpostCode);
+        ->setData("inpost_code", $inpostCode)
+        ;
 ?>
 
 <?php
@@ -28,6 +29,7 @@ $shippingBlock = $this->getChild('shipping')
         $_couponLabel = $_ruleModel->getStoreLabel();
         $_couponDescription = $_ruleModel->getDescription();
     }
+    
 ?>
 <div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
@@ -36,20 +38,19 @@ $shippingBlock = $this->getChild('shipping')
             <header>
                 <h2><?php echo $this->__("Your shopping"); ?></h2>
             </header>
-            <ul id="product_summary">
-                <?php echo $this->getChildHtml('totals'); ?>
-            </ul>        
+
         <?php endif; ?>
         <?php if (empty($sessionShippingMethod)): ?>
             <header>
                 <h2><?php echo $this->__("Wybierz opcję dostawy"); ?></h2>
             </header>        
         <?php endif; ?>
+        <div class="col-sidebar-cart-summary clearfix">
+            <?php echo $this->getChildHtml('checkout_cart_shipping'); ?>
+        </div>
         <!--            Select Shipping-->
 
-        <div class="col-sidebar-cart-summary clearfix">
-            <?php echo $this->getChildHtml('shipping'); ?>
-        </div>
+
         
         
         <div class="col-sidebar-cart-summary clearfix">

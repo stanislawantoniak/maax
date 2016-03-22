@@ -1726,9 +1726,11 @@
                 var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
+
                     jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     });
+                    console.log(inputs);
                     this.content.find("form .shipping-collect").html(inputs);
 
                     var pInputs = '';

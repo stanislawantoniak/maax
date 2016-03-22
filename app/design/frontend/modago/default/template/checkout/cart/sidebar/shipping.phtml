@@ -23,14 +23,25 @@ $cost = $items->cost;
 
 $sessionShippingMethod = $this->getData("shipping_method");
 
-//Zend_Debug::dump($sessionShippingMethod);
 
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
 $lockerName = $locker->getLockerName();
-//Zend_Debug::dump($lockerId);
+//Zend_Debug::dump($locker->getData());
+
+$discountTotal = 0;
+$productsPriceTotal = 0;
+foreach ($this->getQuote()->getAllVisibleItems() as $item) {
+    $discountTotal += $item->getDiscountAmount();
+    $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
+}
+
 ?>
+
+<ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+    <?php echo $this->getChildHtml('totals'); ?>
+</ul>
 
 
 <?php if(!empty($rates)): ?>
@@ -42,6 +53,9 @@ $lockerName = $locker->getLockerName();
             Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
             Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
+
+            Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
+            Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
         })();
     </script>
     <div class="shipping-collect-inpost">
@@ -56,79 +70,129 @@ $lockerName = $locker->getLockerName();
                 <?php endforeach; ?>
         <?php endif; ?>
     </div>
-    
-    
-        
-    <div class="shipping-method-selected row col-md-12">
-        <?php foreach ($methods as $method): ?>
+
+    <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+        <?php if (empty($sessionShippingMethod)): ?>
+            <div class="shipping-method-selected-container">
+
+                <div data-item="method"></div>
+
+
+                <div class="shipping-data-additional">
+                    <div data-item="additional"></div>
+                    <div data-item="description"></div>
+                    <br />
+                    <div class="pull-left"><div data-item="logo"></div></div>
+                    <?php if (count($methods) > 1): ?>
+                        <div class="pull-right">
+                            <a class="button button-third large pull-right" id="change-shipping-type">
+                                <?php echo $helper->__("Change"); ?>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <br />
+            <?php else: ?>
+
+            <?php foreach ($methods as $method): ?>
                 <?php
+
                 $formattedCost = '';
                 if (isset($cost[$method['code']])) {
                     $costSum = array_sum($cost[$method['code']]);
                     $formattedCost = Mage::helper('core')->currency($costSum, true, false);
                 }
+
+                $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("czas dostawy %s dni", $method["days_in_transit"]) : "";
                 ?>
-                <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>           
-                    <div>
-                        <div data-item="name"><?php echo $this->escapeHtml($method['carrier_title']); ?></div>
-                        <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>                               
-                        
+                <?php if (in_array($method['code'], $sessionShippingMethod)): ?>
+                    <div class="shipping-method-selected-container">
+<!--                        <div data-item="name">--><?php //echo $this->escapeHtml($method['carrier_title']); ?><!--</div>-->
+                        <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
+
+
                         <div class="shipping-data-additional">
-                            <div data-item="additional"></div>
+                            <div data-item="additional">
+                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false && $lockerId): ?>
+                                    <?php echo $lockerName; ?>
+                                <?php endif; ?>
+                            </div>
+                            <div data-item="description"><?php echo $daysInTransit; ?></div>
                             <br />
-                            <div class="pull-left">                                
-                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
-                                        <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
+                            <div class="pull-left">
+                                <?php
+                                //TODO change after udtiership-inpost mapping imaplementation
+                                if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                    <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
                                 <?php else: ?>
                                     <div data-item="logo">
-                                        <figure class="logo-courier pull-right">
-                                            <div class="shipment-icon">
-                                                <i class="fa fa-truck fa-3x"></i>
-                                            </div>
-                                        </figure> 
+                                        <figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>
                                     </div>
-                                <?php endif; ?>                                
-                            </div> 
-                            <div class="pull-right">
-                                <a class="button button-third large pull-right" id="change-shipping-type">
-                                    <?php echo $helper->__("Change"); ?>
-                                </a>
-                            </div>                        
+                                <?php endif; ?>
+                            </div>
+                            <?php if (count($methods) > 1): ?>
+                                <div class="pull-right">
+                                    <a class="button button-third large pull-right" id="change-shipping-type">
+                                        <?php echo $helper->__("Change"); ?>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <br />
                 <?php endif; ?>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+            <?php endif; ?>
     </div>
-    <div class="shipping-method-selector row col-md-12" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+    <div class="shipping-method-selector" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+
         <?php foreach ($methods as $method): ?>
             <?php
-
+            //Zend_Debug::dump($method);
             $formattedCost = '';
             if (isset($cost[$method['code']])) {
                 $costSum = array_sum($cost[$method['code']]);
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
-            } ?>
+            }
+
+            if(strpos(strtolower($method["method_title"]), 'inpost') !== false){
+                $carrierLogo = '<img  src="'.$inpostLogo.'" height="52px"/>';
+            } else {
+                //Truck icon
+                $carrierLogo = '<figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>';
+            }
+            $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("czas dostawy %s dni", $method["days_in_transit"]) : "";
+
+            ?>
             <div class="panel panel-default panel-color">
                 <div class="panel-body">
                     <dl>
                         <div class="pull-left">
-                            <input type="radio"
-                                   value="<?php echo $method['code']; ?>"
-                                   <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
-                                   name="_shipping_method"
-                                   data-carrier-inpost="<?php echo (int)(strpos(strtolower($method["method_title"]), 'inpost') !== false); ?>"
-                                   required="required"
-                                   class="shipping-method"
-                                   data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
-                                   data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
-                                   data-method-cost="<?php echo $costSum; ?>"/>
 
+                                <input type="radio"
+                                    <?php if(count($methods) == 1): ?> style="display: none;visibility: hidden; height: 0;" <?php endif; ?>
+                                       value="<?php echo $method['code']; ?>"
+                                       <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod) || (count($methods) == 1)): ?>checked<?php endif; ?>
+                                       name="_shipping_method"
+                                       required="required"
+                                       class="shipping-method uniform"
+                                       data-select-shipping-method-trigger="<?php echo (int)(strpos(strtolower($method["method_title"]), 'inpost') == false); ?>"
+                                       data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
+                                       data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
+                                       data-carrier-description="<?php echo $daysInTransit; ?>"
+                                       data-carrier-logo='<?php echo $carrierLogo; ?>'
+                                       data-method-cost="<?php echo $costSum; ?>"
+                                       data-method-cost-formatted="<?php echo $formattedCost; ?>"
+                                       data-carrier-additional=""
+                                       data-carrier-pointcode=""
+                                />
 
-                            <?php echo $method['carrier_title'] ?>
-                            <br/>
+<!--                            --><?php //echo $method['carrier_title'] ?>
+<!--                            <br/>-->
                             <?php echo $method['method_title'] ?>
-
+                            <br />
+                            <?php echo $daysInTransit; ?>
                             <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
                                 <br />
                                 <div class="inpost-code-holder"><?php echo $lockerName; ?></div>
@@ -159,8 +223,7 @@ $lockerName = $locker->getLockerName();
 </fieldset>
 
 
-
-<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -170,10 +233,12 @@ $lockerName = $locker->getLockerName();
 
             <div class="modal-body">
                 <p>
-                    <a class="select-inpost-code" data-inpost-address="Pl. Dąbrowskiego 1, Ustka" href="">BiedronkaUstka, Pl. Dąbrowskiego 1, Ustka</a>
+                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="BiedronkaUstka" data-carrier-additional="Pl. Dąbrowskiego 1, Ustka" href="">
+                        BiedronkaUstka, Pl. Dąbrowskiego 1, Ustka</a>
                 </p>
                 <p>
-                    <a class="select-inpost-code" data-inpost-address="Sprzymierzeńców 20, Ustka" href="">MarketNettoUstka, Sprzymierzeńców 20, Ustka</a>
+                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="MarketNettoUstka" data-carrier-additional="Sprzymierzeńców 20, Ustka" href="">
+                        MarketNettoUstka, Sprzymierzeńców 20, Ustka</a>
                 </p>
             </div>
         </div>
@@ -183,10 +248,16 @@ $lockerName = $locker->getLockerName();
     #change-shipping-type {
       bottom: -22px; position: relative;  
     }
-    .shipping-data-additional img {
+    .shipping-data-additional img,
+    .shipping-data-additional figure
+    {
         padding: 5px 7px; border: 1px solid lightgray;
     }
-    .shipping-method-selected {
+    .shipping-data-additional figure {
+        width: 84px;
+        text-align: center;
+    }
+    .shipping-method-selected-container {
         margin-bottom: 40px;
     }
 </style>
