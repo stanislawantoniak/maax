@@ -115,7 +115,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                             <div data-item="additional">
                                 <?php
 
-                                if (strpos(strtolower($method["method_title"]), 'inpost') !== false && $lockerId): ?>
+                                if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost() && $lockerId): ?>
                                     <?php echo $lockerRender; ?>
                                 <?php endif; ?>
                             </div>
@@ -124,7 +124,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                             <div class="pull-left">
                                 <?php
                                 //TODO change after udtiership-inpost mapping imaplementation
-                                if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()): ?>
                                     <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
                                 <?php else: ?>
                                     <div data-item="logo">
@@ -157,7 +157,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
 
-            if(strpos(strtolower($method["method_title"]), 'inpost') !== false){
+            if($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()){
                 $carrierLogo = '<img  src="'.$inpostLogo.'" height="52px"/>';
             } else {
                 //Truck icon
@@ -178,13 +178,14 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                                        name="_shipping_method"
                                        required="required"
                                        class="shipping-method uniform"
-                                       data-select-shipping-method-trigger="<?php echo (int)(strpos(strtolower($method["method_title"]), 'inpost') == false); ?>"
+                                       data-select-shipping-method-trigger="<?php echo (int)($method["delivery_type"]!==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()); ?>"
                                        data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
                                        data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
                                        data-carrier-description="<?php echo $daysInTransit; ?>"
                                        data-carrier-logo='<?php echo $carrierLogo; ?>'
                                        data-method-cost="<?php echo $costSum; ?>"
                                        data-method-cost-formatted="<?php echo $formattedCost; ?>"
+                                       data-carrier-delivery-type="<?php echo $method["delivery_type"]; ?>"
                                        data-carrier-additional=""
                                        data-carrier-pointcode=""
                                 />

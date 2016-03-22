@@ -56,17 +56,18 @@
         },
         populateShippingPointSelect: function () {
             //1. Get block
-            var shippingMethodCode= Mall.Cart.Shipping.getSelectedShipping().val();
+            var deliveryType= Mall.Cart.Shipping.getSelectedShipping().attr("data-carrier-delivery-type");
 
             jQuery.ajax({
                 url: "/checkout/cart/deliveryDetails",
                 type: "POST",
-                data: {shipping_method_code: shippingMethodCode}
+                data: {delivery_type: deliveryType}
             }).done(function (block) {
                 //console.log(block);
                 jQuery("#select_inpost_point .modal-body").html(block);
                 jQuery("#select_inpost_point").modal("show");
             });
+
 
 
         },
