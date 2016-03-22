@@ -192,10 +192,6 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                             <?php echo $method['method_title'] ?>
                             <br />
                             <?php echo $daysInTransit; ?>
-                            <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
-                                <br />
-                                <div class="inpost-code-holder"><?php echo $locker->getName(); ?></div>
-                            <?php endif; ?>
                         </div>
 
                         <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
