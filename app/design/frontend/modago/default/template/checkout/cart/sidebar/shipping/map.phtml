@@ -3,6 +3,12 @@
 
 <?php $populateData = $this->getPopulateData(); ?>
 
+<?php $populateMapData = $this->getPopulateMapData(); ?>
+
+<script type="text/javascript">
+    var mapData = '<?php echo $populateMapData; ?>';
+    
+</script>
 <?php foreach ($populateData as $lockerName => $lockerInfo): ?>
     <p>
         <a data-select-shipping-method-trigger="1"
@@ -12,3 +18,7 @@
         </a>
     </p>
 <?php endforeach; ?>
+
+    <div id="map-container" style="width: 300px; height: 300px;" class="col-md-7 col-sm-12 col-xs-12">
+        <div id="map"></div>
+    </div>

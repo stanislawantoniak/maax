@@ -4,7 +4,13 @@
     Mall.Cart.Shipping = {
         form_id: "cart-shipping-methods-form",
         content: "#cart-shipping-methods",
-
+        markerClusterer: null,
+        map: null,
+        infowindow: null,
+        markers: [],
+        gmarkers: [],        
+        defaultCenterLang: 52.42997,
+        defaultCenterLat: 19.46633,
         init: function () {
             var self = this;
 
@@ -14,7 +20,7 @@
             //shippingMethodSelectTrigger.on("click", function (e) {
             //    self.handleShippingMethodSelect(e);
             //});
-            jQuery(document).delegate("[data-select-shipping-method-trigger=1]", "click" , function(e){
+            jQuery(document).delegate("[data-select-shipping-method-trigger=1]", "click", function (e) {
                 self.handleShippingMethodSelect(e);
             });
 
@@ -35,14 +41,12 @@
                 jQuery(".shipping-method-selected").slideUp();
             });
         },
-
         getVendors: function () {
             return Mall.reg.get("vendors");
         },
         getVendorCosts: function () {
             return Mall.reg.get("vendor_costs");
         },
-
         getSelectedShipping: function () {
             return jQuery(Mall.Cart.Shipping.content).find("input[name=_shipping_method]:checked");
         },
@@ -56,20 +60,145 @@
         },
         populateShippingPointSelect: function () {
             //1. Get block
-            var deliveryType= Mall.Cart.Shipping.getSelectedShipping().attr("data-carrier-delivery-type");
+            var deliveryType = Mall.Cart.Shipping.getSelectedShipping().attr("data-carrier-delivery-type");
 
             jQuery.ajax({
                 url: "/checkout/cart/deliveryDetails",
                 type: "POST",
                 data: {delivery_type: deliveryType}
-            }).done(function (block) {
-                //console.log(block);
-                jQuery("#select_inpost_point .modal-body").html(block);
+            }).done(function (mapData) {
+                console.log(mapData);
+                console.log(jQuery.parseJSON(mapData));
+
+//            map
+                var initMap = Mall.Cart.Shipping.initializeMap(jQuery.parseJSON(mapData));
+                google.maps.event.addDomListener(window, 'load', initMap);
+//            map            
                 jQuery("#select_inpost_point").modal("show");
             });
 
 
 
+        },
+        initializeMap: function (data) {
+            console.log(data);
+
+
+            var mapOptions = {
+                zoom: 6,
+                center: new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                },
+                panControl: true,
+                panControlOptions: {
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                },
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: google.maps.ZoomControlStyle.LARGE,
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                },
+                scaleControl: true,
+                streetViewControl: false
+            };
+
+
+            Mall.Cart.Shipping.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            Mall.Cart.Shipping.infowindow = new google.maps.InfoWindow({
+                //pixelOffset: new google.maps.Size(0, 5),
+                buttons: {close: {show: 0}}
+            });
+
+
+            //I will show all the stores on the map first
+            Mall.Cart.Shipping.refreshMap(data);
+
+
+        },
+        refreshMap: function (data) {
+
+            //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
+            var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
+
+//            Mall.Cart.Shipping.markers = [];
+//            if (Mall.Cart.Shipping.markerClusterer) {
+//                Mall.Cart.Shipping.markerClusterer.clearMarkers();
+//            }
+
+            var markerImage = new google.maps.MarkerImage(imageUrl, new google.maps.Size(40, 40));
+
+            //setMarkers
+            for (var i = 0; i < data.length; i++) {
+                var pos = data[i];
+                console.log(pos);
+
+                var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
+                var marker = new google.maps.Marker({
+                    id: pos.id,
+                    position: posLatLng,
+                    map: Mall.Cart.Shipping.map,
+                    icon: markerImage,
+                    html: pos.name,
+                    latitude:pos.latitude,
+                    longitude: pos.longitude
+                });
+
+                var contentString = " ";
+
+                google.maps.event.addListener(marker, "click", function () {
+                    Mall.Cart.Shipping.infowindow.setContent(this.html);
+                    Mall.Cart.Shipping.infowindow.open(Mall.Cart.Shipping.map, this);
+                    console.log(this.latitude);
+                    console.log(this.longitude);
+                });
+
+
+                Mall.Cart.Shipping.map.setZoom(5);
+                Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat));
+
+                Mall.Cart.Shipping.markers.push(marker);
+                Mall.Cart.Shipping.gmarkers.push(marker);
+
+            }
+            //--setMarkers
+            var clusterStyles = [
+                {
+                    textColor: 'white',
+                    url: '/js/gh/storemap/cluster_icons/circle1.png',
+                    textSize: 14,
+                    backgroundPosition: '1px 0px',
+                    height: 40,
+                    width: 40
+                },
+                {
+                    textColor: 'white',
+                    url: '/js/gh/storemap/cluster_icons/circle2.png',
+                    textSize: 18,
+                    backgroundPosition: '1px 0px',
+                    height: 60,
+                    width: 60
+                },
+                {
+                    textColor: 'white',
+                    url: '/js/gh/storemap/cluster_icons/circle2.png',
+                    textSize: 18,
+                    backgroundPosition: '1px 0px',
+                    height: 60,
+                    width: 60
+                }
+            ];
+            var markerClusterOptions = {
+                maxZoom: 6,
+                gridSize: 20,
+                styles: clusterStyles
+            };
+
+            Mall.Cart.Shipping.markerClusterer = new MarkerClusterer(Mall.Cart.Shipping.map, Mall.Cart.Shipping.markers, markerClusterOptions);
         },
         updateTotals: function () {
             var content = jQuery("#cart-shipping-methods");
@@ -108,7 +237,7 @@
             var selectedMethodData = [];
 
             var vendors = Mall.Cart.Shipping.getVendors(),
-                content = jQuery(Mall.Cart.Shipping.content);
+                    content = jQuery(Mall.Cart.Shipping.content);
 
             var methodRadio = content.find("input[name=_shipping_method]:checked");
             var shipping = methodRadio.val();
