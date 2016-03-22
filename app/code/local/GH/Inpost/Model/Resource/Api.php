@@ -42,7 +42,7 @@ class GH_Inpost_Model_Resource_Api extends Mage_Core_Model_Resource_Db_Abstract 
 							// New locker if don't exist
 							$locker = Mage::getModel("ghinpost/locker");
 						}
-						$locker->setData($data);
+						$locker->addData($data);
 						$locker->save();
 						$updatesIds[] = $locker->getId();
 					}
@@ -75,19 +75,18 @@ class GH_Inpost_Model_Resource_Api extends Mage_Core_Model_Resource_Db_Abstract 
 		$processed = array();
 		foreach ($data as $key => $value) {
 			$fieldName = $this->mapName($key);
-			if (!empty($fieldName) && !empty($value)) {
+			if (!empty($fieldName) && !(is_array($value) && empty($value))) {
 				$processed[$fieldName] = trim($value);
-				if ($fieldName == 'payment_available') {
-					$processed[$fieldName] = $processed[$fieldName] == 't' ?
-						GH_Inpost_Model_Locker::PAYMENT_AVAILABLE :
-						GH_Inpost_Model_Locker::PAYMENT_NOT_AVAILABLE;
-				}
-				if ($fieldName == 'payment_type') {
-					$processed[$fieldName] = (int)$processed[$fieldName];
-				}
 			}
 		}
-		$processed['is_active'] = 1;
+		if (isset($processed['payment_available'])) {
+			$processed['payment_available'] = (string)($processed['payment_available'] == 't' ?
+				GH_Inpost_Model_Locker::PAYMENT_AVAILABLE :
+				GH_Inpost_Model_Locker::PAYMENT_NOT_AVAILABLE);
+		} else {
+			$processed['payment_available'] = GH_Inpost_Model_Locker::PAYMENT_NOT_AVAILABLE;
+		}
+		$processed['is_active'] = "1";
 		return $processed;
 	}
 

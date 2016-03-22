@@ -12,6 +12,5 @@ class GH_Inpost_Model_Observer {
 		/** @var GH_Inpost_Model_Resource_Api $res */
 		$res = Mage::getResourceModel("ghinpost/api");
 		$res->updateAllLockers();
-		return $this;
 	}
 }

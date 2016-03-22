@@ -80,6 +80,17 @@ class GH_Inpost_Model_Locker extends Mage_Core_Model_Abstract {
 		return parent::_beforeSave();
 	}
 
+	/**
+	 * Better performance on mass single object save
+	 * 
+	 * @return bool
+	 */
+	public function hasDataChanges() {
+		$res = $this->getResource();
+		$return = $res->hasDataChanged($this);
+		return $return;
+	}
+
 
 }
 
