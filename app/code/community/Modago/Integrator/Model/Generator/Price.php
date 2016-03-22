@@ -58,7 +58,7 @@ class Modago_Integrator_Model_Generator_Price
     protected function _getHeader()
     {
         if (!$this->_header) {
-            $this->_header = '<mall><merchant>' . $this->getExternalId() . '</merchant>';
+            $this->_header = '<mall><version>'.Mage::helper('modagointegrator')->getModuleVersion().'</version><merchant>' . $this->getExternalId() . '</merchant>';
         }
         return $this->_header;
     }

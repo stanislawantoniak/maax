@@ -404,7 +404,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function processCollectedProducts() {
 
-		//var_export($this->_collectedProdutcs);
+		$oldStore = Mage::app()->getStore();
 		if(!$this->_canBeHandled){
 			return;
 		}
@@ -413,7 +413,7 @@ class Zolago_Solrsearch_Model_Observer {
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
 	
 		foreach($this->_collectedProdutcs as $storeId=>$products){
-			
+			Mage::app()->setCurrentStore($storeId);
 			$stores = array();
 			$childsIds = array();
 			$parentIdsFlat = array();
@@ -448,6 +448,7 @@ class Zolago_Solrsearch_Model_Observer {
                     $product['store_ids'] = $stores[$product['entity_id']];
                 }
             }
+			Mage::app ()->setCurrentStore ( $oldStore );
             $this->_pushMultipleProducts($productData, $storeId);
 		}
 		

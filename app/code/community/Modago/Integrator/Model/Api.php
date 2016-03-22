@@ -9,7 +9,8 @@ class Modago_Integrator_Model_Api
     protected $_soap;
     protected $_key;
     protected $_connection;
-
+    protected $_helper;
+    protected $_orderIntegrator;
 
     /**
      * get database connection for transactions
@@ -47,9 +48,23 @@ class Modago_Integrator_Model_Api
      * @return Modago_Integrator_Helper_Api
      */
     protected function _getHelper() {
-        return  Mage::helper('modagointegrator/api');
+        if (!$this->_helper) {
+            $this->_helper = Mage::helper('modagointegrator/api');
+        }
+        return $this->_helper;
     }
 
+    /**
+     * get order integrator
+     *
+     * @return Modago_Integrator_Model_Order
+     */
+    protected function _getOrderIntegrator() {
+        if (!$this->_orderIntegrator) {
+            $this->_orderIntegrator = Mage::getModel('modagointegrator/order');
+        }
+        return $this->_orderIntegrator;
+    }
     /**
      * prepare and return soap client
      *
@@ -74,37 +89,37 @@ class Modago_Integrator_Model_Api
             $client = $this->_getSoapClient();
             $this->_key = $this->_getHelper()->getKey($client);
             if ($this->_key == -1) {
-                Mage::throwException(Mage::helper('modagointegrator')->__('Token error'));
+                Mage::throwException($this->_getHelper()->__('Token error'));
             }
         }
         return $this->_key;
 
     }
 
-    
+
     /**
      * set order as collected
      *
-     * @param 
-     * @return 
+     * @param
+     * @return
      */
-     public function setOrderAsCollected($orderId) {
-         $helper = Mage::helper('modagointegrator/api');
-         $client = $this->_getSoapClient();
-         $key = $this->_getKey();
-         $ret = $client->setOrderAsCollected($key,array($orderId));         
-         if (empty($ret->status)) {
-             if (!empty($ret->message)) {
-                 $message = $helper->__('Error: setting order %s as collected failed (%s)',$orderId,$helper->translate($ret->message));
-             } else {
+    public function setOrderAsCollected($orderId) {
+        $helper = $this->_getHelper();
+        $client = $this->_getSoapClient();
+        $key = $this->_getKey();
+        $ret = $client->setOrderAsCollected($key,array($orderId));
+        if (empty($ret->status)) {
+            if (!empty($ret->message)) {
+                $message = $helper->__('Error: setting order %s as collected failed (%s)',$orderId,$helper->translate($ret->message));
+            } else {
                 $message = $helper->__('Error: wrong response from API server');
-             }
-             $helper->log($message);
-             Mage::throwException($message);
-         } else {
-             $helper->log($helper->__('Success: order set as collected (%s)',$orderId));
-         }
-     }
+            }
+            $helper->log($message);
+            Mage::throwException($message);
+        } else {
+            $helper->log($helper->__('Success: order set as collected (%s)',$orderId));
+        }
+    }
 
     /**
      * confirm messages
@@ -116,7 +131,7 @@ class Modago_Integrator_Model_Api
             return;
         }
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+        $helper = $this->_getHelper();
         $key = $this->_getKey();
         $client = $this->_getSoapClient();
         $ret = $client->setChangeOrderMessageConfirmation($key, $list);
@@ -135,7 +150,7 @@ class Modago_Integrator_Model_Api
 
 
     public function getChangeOrderMessage($orderId) {
-        return $this->_getChangeOrderMessage($orderId);        
+        return $this->_getChangeOrderMessage($orderId);
     }
     /**
      * get list of changed orders
@@ -143,8 +158,8 @@ class Modago_Integrator_Model_Api
      * @return stdClass
      */
     protected function _getChangeOrderMessage($orderId = '') {
+        $helper = $this->_getHelper();
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
         $size = $this->_getHelper()->getBatchSize();
@@ -171,9 +186,16 @@ class Modago_Integrator_Model_Api
         return $ret;
     }
 
+    /**
+     * get orders from api
+     *
+     * @param array $list
+     * @return array
+     */
+
     public function _getOrdersById(array $list) {
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+        $helper = $this->_getHelper();
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
         $ret = $client->getOrdersByID($key, $list);
@@ -199,14 +221,27 @@ class Modago_Integrator_Model_Api
     }
 
     /**
-     * create new order
+     * get order from local system by api order id
      *
      * @param string $orderId
-     * @return bool
+     * @param array $status
      */
-    protected function _createNewOrder($orderId) {
-        /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+    protected function _findLocalOrder($orderId,$status) {
+        /* @var $localOrder Mage_Sales_Model_Order */
+        $collection = Mage::getModel("sales/order")->getCollection();
+        $collection->addFieldToFilter("modago_order_id", $orderId);
+        $collection->addFieldToFilter("state", array("nin"=> $status));
+        $localOrder = $collection->getFirstItem();
+
+        return (!empty($localOrder->getId()))? $localOrder:false;
+    }
+
+    /**
+     * try to create new order if not exists
+     *
+     * @param string $orderId
+     */
+    protected function _getLocalOrder($orderId) {
         $details = $this->_getOrdersById(array($orderId)); // one by one
         if (empty($details->status)) { // error
             return false;
@@ -214,30 +249,54 @@ class Modago_Integrator_Model_Api
         if (empty($details->orderList)) {
             return false;
         }
-        $integratorOrders = Mage::getModel('modagointegrator/order');
-        foreach ($details->orderList as $item) {
-            try {
+        $orderList = $this->_createOrders($details->orderList,false);
+        return isset($orderList[$orderId])? $orderList[$orderId]:false;
+    }
+
+    /**
+     * create orders from list
+     *
+     * @param array $orderList
+     * @param bool $notification if true set status problem in api
+     * @return array
+     */
+    protected function _createOrders($orderList,$notification = true) {
+        $helper = $this->_getHelper();
+        $integratorOrders = $this->_getOrderIntegrator();
+        $orders = array();
+        try {
+            foreach ($orderList as $item) {
                 $item = current($item);
                 /** @var Modago_Integrator_Model_Order $integratorOrders */
-                $orderId = $integratorOrders->createOrder($item);
-                $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
-            } catch (Exception $e) {
-                Mage::logException($e);
-                $helper->log($helper->__('Error: %s' , $e->getMessage()));
-                return false;
-            }
-            try {
-                if ($problems = $integratorOrders->getProductProblemList()) {
-                    $message = $helper->__('Products out of stocks (%s)',implode(',',$problems));
-                    $this->_setOrderReservation($item->order_id,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$message);
+                if ($order = $integratorOrders->createOrder($item,$notification)) {
+                    $orderId = $order->getIncrementId();
+                    $helper->log($helper->__('Success: order %s (%s) was created', $orderId, $item->order_id));
+                    $orders[$item->order_id] = $order;
                 }
-            } catch (Exception $xt) {
-                Mage::logException($xt);
-                $helper->log($helper->__('Error: %s', $xt->getMessage()));
-                // no lock, only log
             }
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $helper->log($helper->__('Error: %s' , $e->getMessage()));
         }
-
+        return $orders;
+    }
+    /**
+     * create new order
+     *
+     * @param string $orderId
+     * @return bool
+     */
+    protected function _createNewOrder($orderId) {
+        /** @var Modago_Integrator_Helper_Api $helper */
+        $helper = $this->_getHelper();
+        $details = $this->_getOrdersById(array($orderId)); // one by one
+        if (empty($details->status)) { // error
+            return false;
+        }
+        if (empty($details->orderList)) {
+            return false;
+        }
+        $this->_createOrders($details->orderList);
         return true;
     }
 
@@ -250,7 +309,7 @@ class Modago_Integrator_Model_Api
      * @param string $message
      */
     protected function _setOrderReservation($orderId,$status,$message) {
-        $helper = Mage::helper('modagointegrator/api');
+        $helper = $this->_getHelper();
         $client = $this->_getSoapClient();
         $key = $this->_getKey();
         $ret = $client->setOrderReservation($key,$orderId,$status,$message) ;
@@ -276,24 +335,18 @@ class Modago_Integrator_Model_Api
     protected function _changeOrderInvoiceAddress($orderId)
     {
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+        $helper = $this->_getHelper();
 
         /* @var $localOrder Mage_Sales_Model_Order */
-        $collection = Mage::getModel("sales/order")->getCollection();
-        $collection->addFieldToFilter("modago_order_id", $orderId);
-        $collection->addFieldToFilter("state", array("neq"=> Mage_Sales_Model_Order::STATE_CANCELED));
-
-        $localOrder = $collection->getFirstItem();
+        if (!$localOrder = $this->_findLocalOrder($orderId,array(Mage_Sales_Model_Order::STATE_CANCELED))) {
+            $this->_getLocalOrder($orderId);
+            return true; // new order has changed invoice address
+        }
         $localOrderId = $localOrder->getId();
         $localIncrementOrderId = $localOrder->getIncrementId();
 
-        if (is_null($localOrderId)) {
-            $helper->log($helper->__("Error: order %s not found.", $orderId));
-            return false;
-        }
 
         $details = $this->_getOrdersById(array($orderId));
-        Mage::log($details, null, "api_invoice_b_as_sh.log");
 
         if (empty($details->status)) { // error
             return false;
@@ -318,7 +371,7 @@ class Modago_Integrator_Model_Api
                 return false;
             }
 
-            if($invoiceRequired == 0 || empty($address)){
+            if($invoiceRequired == 0 || empty($address)) {
                 $orderAddress->setFirstname($shippingAddress->delivery_first_name);
                 $orderAddress->setLastname($shippingAddress->delivery_last_name);
 
@@ -357,7 +410,7 @@ class Modago_Integrator_Model_Api
         return true;
     }
 
-    
+
     /**
      * set params for address
      *
@@ -379,24 +432,16 @@ class Modago_Integrator_Model_Api
     protected function _changeOrderDeliveryAddress($orderId)
     {
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
-
-        /* @var $localOrder Mage_Sales_Model_Order */
-        $collection = Mage::getModel("sales/order")->getCollection();
-        $collection->addFieldToFilter("modago_order_id", $orderId);
-        $collection->addFieldToFilter("state", array("neq"=> Mage_Sales_Model_Order::STATE_CANCELED));
-
-        $localOrder = $collection->getFirstItem();
-        $localOrderId = $localOrder->getId();
-        $localIncrementOrderId = $localOrder->getIncrementId();
-
-        if (is_null($localOrderId)) {
-            $helper->log($helper->__("Error: order %s not found.", $orderId));
-            return false;
+        $helper = $this->_getHelper();
+        if (!$localOrder = $this->_findLocalOrder($orderId,array(Mage_Sales_Model_Order::STATE_CANCELED))) {
+            $this->_getLocalOrder($orderId);
+            return true; // new order has changed delivery address
         }
 
+        $localIncrementOrderId = $localOrder->getIncrementId();
+
+
         $details = $this->_getOrdersById(array($orderId));
-        Mage::log($details, null, "api_delivery_b_as_sh.log");
 
         if (empty($details->status)) { // error
             return false;
@@ -483,17 +528,15 @@ class Modago_Integrator_Model_Api
      */
     protected function _cancelOrder($orderId)
     {
-
-
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+        $helper = $this->_getHelper();
 
         $collection = Mage::getModel("sales/order")->getCollection();
         $collection->addFieldToFilter("modago_order_id", $orderId);
 
         if ($collection->getSize() <= 0) {
             $helper->log($helper->__("Error: order %s not found.", $orderId));
-            return false;
+            return true; // no order - no cancel
         }
 
         $canceled = array();
@@ -508,6 +551,10 @@ class Modago_Integrator_Model_Api
                 $order->load($collectionItem->getId());
 
                 if ($order->canCancel()) {
+                    // change increment id
+                    $incrementId = $order->getIncrementId();
+                    $number = sprintf('%s_%s_canceled',$incrementId,date('YmdHis'));
+                    $order->setIncrementId($number);
                     $order->cancel();
                     $order->setStatus('canceled');
                     $order->save();
@@ -539,8 +586,6 @@ class Modago_Integrator_Model_Api
             return false;
         }
     }
-
-
     /**
      * @param $order
      * @return string
@@ -548,7 +593,7 @@ class Modago_Integrator_Model_Api
     public function cantBeCanceledReason($order)
     {
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator');
+        $helper = $this->_getHelper();
 
         $orderIncrementId = $order->getData("increment_id");
         $state = $order->getState();
@@ -580,26 +625,36 @@ class Modago_Integrator_Model_Api
 
     }
 
+
+    /**
+     * change order status
+     */
+    protected function _statusChange($orderId) {
+        $helper = $this->_getHelper();
+        if (!$localOrder = $this->_findLocalOrder($orderId,array(Mage_Sales_Model_Order::STATE_CANCELED))) {
+            if ($this->_getLocalOrder($orderId)) {
+                $helper->log($helper->__("Success: status changed %s (%s)", $order->getIncrementId(), $orderId));
+            }
+        }
+        return true;
+
+    }
+    /**
+     * payment data changed
+     */
+
     protected function _paymentOrder($orderId) {
         /** @var Modago_Integrator_Helper_Api $helper */
-        $helper = Mage::helper('modagointegrator/api');
+        $helper = $this->_getHelper();
 
-        $collection = Mage::getModel("sales/order")->getCollection();
-        $collection->addFieldToFilter("modago_order_id", $orderId);
-        $collection->addFieldToFilter("state",array(
-                                          'nin'=>array(
-                                              Mage_Sales_Model_Order::STATE_CANCELED,
-                                              Mage_Sales_Model_Order::STATE_CLOSED,
-                                              Mage_Sales_Model_Order::STATE_COMPLETE)
-                                      ));
-
-        if(!$collection->getSize()) {
-            $helper->log($helper->__("Error: order %s not found.", $orderId));
-            return false;
+        if (!$order = $this->_findLocalOrder($orderId,array(
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                Mage_Sales_Model_Order::STATE_CLOSED,
+                Mage_Sales_Model_Order::STATE_COMPLETE)
+                                            )) {
+            $this->_getLocalOrder($orderId);
+            return true; // new order has right payment
         }
-
-        /** @var Mage_Sales_Model_Order $order */
-        $order = $collection->getFirstItem();
         if($order->getId() && $order->getData('modago_order_id') == $orderId) {
             //get order from api
             $apiResponse = $this->_getOrdersById(array($orderId));
@@ -674,6 +729,7 @@ class Modago_Integrator_Model_Api
                     $this->rollback();
                     throw $xt;
                 }
+                break;
             case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_DELIVERY_DATA_CHANGED:
                 if ($this->_changeOrderDeliveryAddress($item->orderID)) {
                     $confirmMessages[] = $item->messageID;
@@ -689,10 +745,21 @@ class Modago_Integrator_Model_Api
                     $confirmMessages[] = $item->messageID;
                 }
                 break;
-
+            case Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_STATUS_CHANGED:
+                if($this->_statusChange($item->orderID)) {
+                    $confirmMessages[] = $item->messageID;
+                }
+                break;
             default:
                 $confirmMessages[] = $item->messageID;
                 // ignore item
+            }
+        }
+        // notifications
+        $integratorOrders = $this->_getOrderIntegrator();
+        if ($problems = $integratorOrders->getProductProblemList()) {
+            foreach ($problems as $orderId => $problem) {
+                $this->_setOrderReservation($orderId,Modago_Integrator_Model_System_Source_Message_Type::MESSAGE_RESERVATION_STATUS_PROBLEM,$problem);
             }
         }
         $this->_confirmMessages($confirmMessages);
@@ -703,7 +770,7 @@ class Modago_Integrator_Model_Api
     public function run() {
         try {
             /** @var Modago_Integrator_Helper_Data $helper */
-            $helper = Mage::helper('modagointegrator');
+            $helper = $this->_getHelper();
 
             if (!$this->_getHelper()->isEnabled()) {
                 $msg = $helper->__('Configuration error. Integration is disabled');
@@ -723,7 +790,7 @@ class Modago_Integrator_Model_Api
             }
             $foreachMsgData = $ret->list->message;
             $this->processOrders($foreachMsgData);
-            $msg = Mage::helper('modagointegrator')->__('End process');
+            $msg = $helper->__('End process');
             $this->_finish($msg);
         } catch (Exception $e) {
             Mage::logException($e);
@@ -731,7 +798,5 @@ class Modago_Integrator_Model_Api
             return $this->_finish($msg);
         }
     }
-
-
 
 }

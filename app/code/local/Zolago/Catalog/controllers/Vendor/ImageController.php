@@ -7,6 +7,11 @@ class Zolago_Catalog_Vendor_ImageController
     const PRODUCT_IMAGE_ENABLE = 0;
     const PRODUCT_IMAGE_DISABLE = 1;
 
+
+    const ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_TOO_BIG = 1;
+    const ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_WRONG_FORMAT = 2;
+    const ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_DEFINED_BY_CODE = 3;
+
     /**
      * Index
      */
@@ -620,19 +625,23 @@ class Zolago_Catalog_Vendor_ImageController
     {
         $productId = $this->getRequest()->getParam("product", null);
         $product = Mage::getModel("catalog/product")->load($productId);
+        $result = array();
 
         $_helper = Mage::helper("zolagocatalog");
         /* @var $_helperGHCommon GH_Common_Helper_Data */
         $_helperGHCommon = Mage::helper('ghcommon');
-        $file = $_FILES["vendor_image_upload"];
-        $size = $file["size"];
+        $file = isset($_FILES["vendor_image_upload"]) ? $_FILES["vendor_image_upload"] : array();
+        $size = !empty($file) ? $file["size"] : 1000000;
+
 
         $maxUploadFileSize = $_helperGHCommon->getMaxUploadFileSize();
-        if ($size >= $maxUploadFileSize) { //5MB
+        if (empty($file) || ($size >= $maxUploadFileSize)) { //5MB
             $result = array(
-                'error' => $_helper->__("File too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1))
+                'error' => $_helper->__("Files are too large. File must be less than %sMB.", round($maxUploadFileSize / (1024 * 1024), 1)),
+                "type" => self::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_TOO_BIG
             );
         } else {
+
             try {
                 $uploader = new Mage_Core_Model_File_Uploader('vendor_image_upload');
                 $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
@@ -644,48 +653,33 @@ class Zolago_Catalog_Vendor_ImageController
                 $result = $uploader->save(Mage::getSingleton('catalog/product_media_config')->getBaseTmpMediaPath());
 
                 $imagePath = $result["path"] . $result["file"];
+
+                $label = $product->getName();
                 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-                $product->addImageToMediaGallery($imagePath, null, false, true);
+                $product->addImageToMediaGallery($imagePath, null, false, false, $label);
                 $product->save();
-
-
-                /*Set label*/
-                $_product = Mage::getModel("catalog/product")->load($productId);
-                $gallery = $_product->getData('media_gallery');
-                if (isset($gallery['images']) && count($gallery['images']) > 1) {
-                    if (isset($gallery['images'][count($gallery['images']) - 1])) {
-                        $lastImage = $gallery['images'][count($gallery['images']) - 1];
-                        $lastImage['label'] = $_product->getName();
-                        $lastImage['disabled'] = 0;
-                        array_push($gallery['images'], $lastImage);
-                        $_product->setData('media_gallery', $gallery);
-                        $_product->save();
-                    }
-                }
-                /*Set label*/
-
 
                 $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
             } catch (Exception $e) {
-                Mage::log($e->getCode());
-                if($e->getCode() == 0){
+                if ($e->getCode() == 0) {
                     $result = array(
                         'error' => $_helper->__("Disallowed file type. Please upload jpg, jpeg, gif or png."),
+                        "type" => self::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_WRONG_FORMAT,
                         'errorcode' => $e->getCode());
                 } else {
                     $result = array(
                         'error' => $_helper->__("An error occurred"),
+                        "type" => self::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_DEFINED_BY_CODE,
                         'errorcode' => $e->getCode());
                 }
 
             }
         }
 
+
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
-
-
 }
 
 

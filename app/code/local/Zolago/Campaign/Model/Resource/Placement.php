@@ -83,18 +83,14 @@ class Zolago_Campaign_Model_Resource_Placement extends Mage_Core_Model_Resource_
 
 
     /**
-     * NOTE: refactoring in progress, Use collections on placement
-     * @see Zolago_Campaign_Model_Resource_Placement_Collection::addPlacementForCategory()
-     *
      * @param $categoryId
      * @param $vendorId
      * @param array $bannerTypes
-     * @param bool $notExpired
-     * @param bool $currentWebsite
+     * @param bool|FALSE $notExpired
+     * @param $websiteId
      * @return array
-     * @throws Mage_Core_Exception
      */
-    public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array(), $notExpired = FALSE, $currentWebsite = true)
+    public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array(), $notExpired = FALSE, $websiteId)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
         $select = $this->getReadConnection()->select();
@@ -128,13 +124,13 @@ class Zolago_Campaign_Model_Resource_Placement extends Mage_Core_Model_Resource_
                 'banner_caption' => 'banner_content.caption'
             )
         );
-        if($currentWebsite){
-            $select->joinLeft(
-                array('campaign_website' => 'zolago_campaign_website'),
-                'campaign_website.campaign_id=campaign.campaign_id',
-                array("campaign_website" => "campaign_website.website_id")
-            );
-        }
+
+        $select->joinLeft(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array("campaign_website" => "campaign_website.website_id")
+        );
+
 
         $select->where("campaign_placement.category_id=?", $categoryId);
         //$select->where("campaign.vendor_id=campaign_placement.vendor_id");
@@ -143,9 +139,9 @@ class Zolago_Campaign_Model_Resource_Placement extends Mage_Core_Model_Resource_
             $select->where("banner.type in(?)", $bannerTypes);
         }
 
-        if($currentWebsite){
-            $select->where("campaign_website.website_id=?", Mage::app()->getWebsite()->getId());
-        }
+
+        $select->where("campaign_website.website_id IN(?)", $websiteId);
+
 
         if($notExpired){
             $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
