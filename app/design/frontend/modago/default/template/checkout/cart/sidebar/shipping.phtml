@@ -60,7 +60,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     </script>
     <div class="shipping-collect-inpost">
         <?php if($lockerId): ?>
-                <input type="hidden" name="inpost_code" value="<?php echo $lockerName; ?>" required="required" />
+                <input type="hidden" name="shipping_point_code" value="<?php echo $lockerName; ?>" required="required" />
         <?php endif; ?>
     </div>
     <div class="shipping-collect">
