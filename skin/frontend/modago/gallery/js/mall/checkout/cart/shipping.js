@@ -60,6 +60,7 @@
 
             jQuery.ajax({
                 url: "/checkout/cart/deliveryDetails",
+                type: "POST",
                 data: {shipping_method_code: shippingMethodCode}
             }).done(function (block) {
                 //console.log(block);
@@ -137,6 +138,7 @@
 
             jQuery.ajax({
                 url: jQuery("#cart-shipping-methods-form").attr("action"),
+                type: "POST",
                 data: formData
             }).done(function (response) {
                 //console.log(response);
