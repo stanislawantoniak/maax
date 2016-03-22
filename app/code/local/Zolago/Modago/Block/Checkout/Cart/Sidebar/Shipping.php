@@ -149,4 +149,24 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         return $qRates;
     }
 
+
+    /**
+     * @param GH_Inpost_Model_Locker $locker
+     * @return string
+     */
+    public function getLockerRender(GH_Inpost_Model_Locker $locker)
+    {
+        $result = "";
+        if ($locker->getId()) {
+            $lockerDataLines = array(
+                $locker->getStreet() . " ". $locker->getBuildingNumber(),
+                $locker->getPostcode() . " " . $locker->getTown(),
+                "(" . $locker->getLocationDescription() . ")"
+            );
+            $result = implode("<br />", $lockerDataLines);
+        }
+
+        return $result;
+    }
+
 } 
