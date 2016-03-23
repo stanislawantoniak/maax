@@ -15,7 +15,7 @@
         .inpost-info {
           margin-bottom: 10px;
         }
-        .account-telephone_for_locker {
+        .telephone-for-locker {
           @media(min-width: $screen-sm-min) {
             max-width: 100%;
           }
@@ -52,6 +52,18 @@
       dd {
         word-wrap: break-word;
         max-width: 130px;
+        &.location-description {
+          @include min-screen($screen-sm-min) {
+            width: 100%;
+            max-width: 100%;
+          }
+        }
+      }
+      @include max-screen($screen-sm-max) {
+        dd {
+          width: 50%;
+          max-width: 50%;
+        }
       }
       .delivery-type-logo {
         img, .truck {

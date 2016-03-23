@@ -1464,6 +1464,7 @@
             doSave: true,
             _self_form_id: "co-shippingpayment",
 			_sidebarAddressesTemplate: "",
+			_sidebarDeliverypaymentTemplate: "",
 	        _previous_payment: false,
 	        _previous_provider: false,
 	        _payment_is_dotpay: false,
@@ -1625,6 +1626,7 @@
 
 			onPrepare: function(checkoutObject){
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
+				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				var self = this;
 
 				this.validate.init();
@@ -1718,6 +1720,15 @@
 					this.getSidebarAddresses(), 
 					this.getSidebarAddressesTemplate()
 				);
+				// Prepare delivery payment sidebar
+				var deliverypayment = checkout.getDeliveryAndPayment();
+				var inpostData = checkout.getInPostData();
+				jQuery().extend(deliverypayment, inpostData);
+				checkout.prepareDeliverypaymentSidebar(
+					deliverypayment,
+					this.getSidebarDeliverypayment(),
+					this.getSidebarDeliverypaymentTemplate()
+				);
 				jQuery(window).trigger("resize");
 				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SHIPPING_PAYMENT);
 			},
@@ -1755,6 +1766,14 @@
 			
 			getSidebarAddressesTemplate: function(){
 				return this._sidebarAddressesTemplate;
+			},
+
+			getSidebarDeliverypayment: function(){
+				return this.content.find(".sidebar-deliverypayment");
+			},
+
+			getSidebarDeliverypaymentTemplate: function(){
+				return this._sidebarDeliverypaymentTemplate;
 			},
 			
 			getSelectedShipping: function(){
@@ -1960,6 +1979,8 @@
 		
 				// Prepare delivery payment sidebar
 				var deliverypayment = checkout.getDeliveryAndPayment();
+				var inpostData = checkout.getInPostData();
+				jQuery().extend(deliverypayment, inpostData);
 				checkout.prepareDeliverypaymentSidebar(
 					deliverypayment,
 					this.getSidebarDeliverypayment(), 

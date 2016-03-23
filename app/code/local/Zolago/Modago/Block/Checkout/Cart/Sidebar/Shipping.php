@@ -3,7 +3,12 @@
 class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
-
+    /**
+     * @return string
+     */
+    public static function getDeliveryTypeInpost(){
+        return "ghinpost";
+    }
 
     public function getItems()
     {
@@ -18,8 +23,6 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         foreach ($qRates as $cCode => $cRates) {
 
             foreach ($cRates as $rate) {
-                Mage::log($rate->getData(),null, "123.log");
-                ;
                 /* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
                 $vId = $rate->getUdropshipVendor();
 
@@ -28,13 +31,26 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 }
                 $rates[$vId][$cCode][] = $rate;
                 $vendors[$vId] = $vId;
+
+                $deliveryType = "";
+                $codeParts = explode("_",$rate->getCode());
+                if(count($codeParts) > 1 && isset($codeParts[0]) &&  $codeParts[0] == "udtiership"){
+                    $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($codeParts[1]);
+                    if($deliveryTypeModel->getId()){
+                        $deliveryType = $deliveryTypeModel->getDeliveryCode();
+                    }
+                }
+
+
                 $methodsByCode[$rate->getCode()] = array(
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
                     'method_title' => $rate->getData('method_title'),
                     'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
+                    "delivery_type" => $deliveryType
                 );
+
                 $allMethodsByCode[$rate->getCode()][] = array(
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
@@ -42,6 +58,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                     'method_title' => $rate->getData('method_title'),
                     'cost' => $rate->getPrice(),
                     'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
+                    "delivery_type" => $deliveryType
                 );
 
             }
@@ -110,6 +127,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
             foreach ($qRates as $cRates) {
                 foreach ($cRates as $rate) {
                     $vId = $rate->getUdropshipVendor();
+
                     if (!$vId) {
                         continue;
                     }
@@ -147,6 +165,26 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         }
 
         return $qRates;
+    }
+
+
+    /**
+     * @param GH_Inpost_Model_Locker $locker
+     * @return string
+     */
+    public function getLockerRender(GH_Inpost_Model_Locker $locker)
+    {
+        $result = "";
+        if ($locker->getId()) {
+            $lockerDataLines = array(
+                $locker->getStreet() . " ". $locker->getBuildingNumber(),
+                $locker->getPostcode() . " " . $locker->getTown(),
+                "(" . $locker->getLocationDescription() . ")"
+            );
+            $result = implode("<br />", $lockerDataLines);
+        }
+
+        return $result;
     }
 
 } 

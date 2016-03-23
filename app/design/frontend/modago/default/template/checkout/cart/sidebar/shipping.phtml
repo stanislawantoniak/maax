@@ -24,11 +24,14 @@ $cost = $items->cost;
 $sessionShippingMethod = $this->getData("shipping_method");
 
 
+/* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 $lockerId = $locker->getId();
-$lockerName = $locker->getLockerName();
-//Zend_Debug::dump($locker->getData());
+
+$lockerRender = $this->getLockerRender($locker);
+
+
 
 $discountTotal = 0;
 $productsPriceTotal = 0;
@@ -37,7 +40,8 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
 }
 
-?>
+
+$inpostPoints = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData(); ?>
 
 <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
     <?php echo $this->getChildHtml('totals'); ?>
@@ -56,28 +60,30 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+
+            Mall.reg.set("inpost_points",jQuery.parseJSON('<?php echo $inpostPoints; ?>'));
         })();
     </script>
-    <div class="shipping-collect-inpost">
-        <?php if($lockerId): ?>
-                <input type="hidden" name="inpost_code" value="<?php echo $lockerName; ?>" required="required" />
-        <?php endif; ?>
-    </div>
-    <div class="shipping-collect">
-        <?php if(!empty($sessionShippingMethod)): ?>
-            <?php foreach($sessionShippingMethod as $vendorId => $methodCode): ?>
-                <input type="hidden" name="shipping_method[<?php echo $vendorId; ?>]" value="<?php echo $methodCode; ?>" required="required" />
+
+        <div class="shipping-collect">
+            <?php if (!empty($sessionShippingMethod)): ?>
+                <?php foreach ($sessionShippingMethod as $vendorId => $methodCode): ?>
+                    <input type="hidden"
+                           name="shipping_method[<?php echo $vendorId; ?>]"
+                           value="<?php echo $methodCode; ?>" required="required"/>
                 <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+                <?php if ($lockerId): ?>
+                    <input type="hidden" name="shipping_point_code"
+                           data-id="<?php echo $lockerId; ?>"
+                           value="<?php echo $locker->getName(); ?>" required="required"/>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
 
     <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
         <?php if (empty($sessionShippingMethod)): ?>
             <div class="shipping-method-selected-container">
-
                 <div data-item="method"></div>
-
-
                 <div class="shipping-data-additional">
                     <div data-item="additional"></div>
                     <div data-item="description"></div>
@@ -108,14 +114,15 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                 ?>
                 <?php if (in_array($method['code'], $sessionShippingMethod)): ?>
                     <div class="shipping-method-selected-container">
-<!--                        <div data-item="name">--><?php //echo $this->escapeHtml($method['carrier_title']); ?><!--</div>-->
                         <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
 
 
                         <div class="shipping-data-additional">
                             <div data-item="additional">
-                                <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false && $lockerId): ?>
-                                    <?php echo $lockerName; ?>
+                                <?php
+
+                                if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost() && $lockerId): ?>
+                                    <?php echo $lockerRender; ?>
                                 <?php endif; ?>
                             </div>
                             <div data-item="description"><?php echo $daysInTransit; ?></div>
@@ -123,7 +130,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                             <div class="pull-left">
                                 <?php
                                 //TODO change after udtiership-inpost mapping imaplementation
-                                if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
+                                if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()): ?>
                                     <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
                                 <?php else: ?>
                                     <div data-item="logo">
@@ -156,7 +163,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
 
-            if(strpos(strtolower($method["method_title"]), 'inpost') !== false){
+            if($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()){
                 $carrierLogo = '<img  src="'.$inpostLogo.'" height="52px"/>';
             } else {
                 //Truck icon
@@ -177,26 +184,21 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
                                        name="_shipping_method"
                                        required="required"
                                        class="shipping-method uniform"
-                                       data-select-shipping-method-trigger="<?php echo (int)(strpos(strtolower($method["method_title"]), 'inpost') == false); ?>"
+                                       data-select-shipping-method-trigger="<?php echo (int)($method["delivery_type"]!==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()); ?>"
                                        data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
                                        data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
                                        data-carrier-description="<?php echo $daysInTransit; ?>"
                                        data-carrier-logo='<?php echo $carrierLogo; ?>'
                                        data-method-cost="<?php echo $costSum; ?>"
                                        data-method-cost-formatted="<?php echo $formattedCost; ?>"
+                                       data-carrier-delivery-type="<?php echo $method["delivery_type"]; ?>"
                                        data-carrier-additional=""
                                        data-carrier-pointcode=""
                                 />
 
-<!--                            --><?php //echo $method['carrier_title'] ?>
-<!--                            <br/>-->
                             <?php echo $method['method_title'] ?>
                             <br />
                             <?php echo $daysInTransit; ?>
-                            <?php if (strpos(strtolower($method["method_title"]), 'inpost') !== false): ?>
-                                <br />
-                                <div class="inpost-code-holder"><?php echo $lockerName; ?></div>
-                            <?php endif; ?>
                         </div>
 
                         <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
@@ -223,27 +225,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 </fieldset>
 
 
-<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section"><?php echo $this->__("Select Paczkomat"); ?></h2>
-            </div>
 
-            <div class="modal-body">
-                <p>
-                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="BiedronkaUstka" data-carrier-additional="Pl. Dąbrowskiego 1, Ustka" href="">
-                        BiedronkaUstka, Pl. Dąbrowskiego 1, Ustka</a>
-                </p>
-                <p>
-                    <a data-select-shipping-method-trigger="1" data-carrier-pointcode="MarketNettoUstka" data-carrier-additional="Sprzymierzeńców 20, Ustka" href="">
-                        MarketNettoUstka, Sprzymierzeńców 20, Ustka</a>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
 <style>
     #change-shipping-type {
       bottom: -22px; position: relative;  
@@ -260,6 +242,23 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     .shipping-method-selected-container {
         margin-bottom: 40px;
     }
+    .delivery-marker-window {
+        max-width: 160px;
+    }
 </style>
 
+<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"></h2>
+            </div>
+
+            <div class="modal-body">
+                <div id="map_delivery_cluster" style="height: 500px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
