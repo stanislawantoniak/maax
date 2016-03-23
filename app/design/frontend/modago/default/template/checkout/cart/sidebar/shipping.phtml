@@ -40,7 +40,8 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
 }
 
-?>
+
+$inpostPoints = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData(); ?>
 
 <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
     <?php echo $this->getChildHtml('totals'); ?>
@@ -59,6 +60,8 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+
+            Mall.reg.set("inpost_points",jQuery.parseJSON('<?php echo $inpostPoints; ?>'));
         })();
     </script>
 
@@ -239,7 +242,23 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     .shipping-method-selected-container {
         margin-bottom: 40px;
     }
+    .delivery-marker-window {
+        max-width: 160px;
+    }
 </style>
 
+<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"></h2>
+            </div>
 
+            <div class="modal-body">
+                <div id="map_delivery_cluster" style="height: 500px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
