@@ -26,6 +26,10 @@
                 jQuery("#select_inpost_point").modal("show");
             });
 
+            jQuery(".shipping_method_link").click(function (e) {
+                e.preventDefault();
+                jQuery(this).find("input[name=_shipping_method]").prop("checked", true);
+            });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();

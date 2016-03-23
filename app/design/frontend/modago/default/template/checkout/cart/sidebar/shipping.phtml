@@ -177,10 +177,11 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("czas dostawy %s dni", $method["days_in_transit"]) : "";
 
             ?>
-            <div class="panel panel-default panel-color">
-                <div class="panel-body">
-                    <dl>
-                        <div class="pull-left">
+            <a href="" class="shipping_method_link">
+                <div class="panel panel-default panel-color">
+                    <div class="panel-body">
+                        <dl>
+                            <div class="pull-left">
 
                                 <input type="radio"
                                     <?php if(count($methods) == 1): ?> style="display: none;visibility: hidden; height: 0;" <?php endif; ?>
@@ -201,15 +202,16 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                        data-carrier-pointcode=""
                                 />
 
-                            <?php echo $method['method_title'] ?>
-                            <br />
-                            <?php echo $daysInTransit; ?>
-                        </div>
+                                <?php echo $method['method_title'] ?>
+                                <br />
+                                <?php echo $daysInTransit; ?>
+                            </div>
 
-                        <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
-                    </dl>
+                            <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
+                        </dl>
+                    </div>
                 </div>
-            </div>
+            </a>
         <?php endforeach; ?>
     </div>      
     
