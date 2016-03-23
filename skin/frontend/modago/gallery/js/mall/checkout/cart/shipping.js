@@ -10,6 +10,7 @@
             Mall.Cart.Shipping.updateTotals();
 
             jQuery(document).delegate("[data-select-shipping-method-trigger=1]", "click", function (e) {
+                clearSearchOnMap();
                 self.handleShippingMethodSelect(e);
             });
 
@@ -497,10 +498,6 @@ function searchOnMap(q) {
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
-    var form = jQuery("#search_by_map_form");
-    form.find("[name=search_by_map]").val("");
-    hideLabel("a.stores-map-show-all");
-    hideLabel(".the-nearest-stores");
     _makeMapRequest(0)
 }
 

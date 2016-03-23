@@ -8,7 +8,10 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
         $result = array();
 
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
-        $collection->addFieldToFilter("town", array("eq" => $town));
+        if(!empty($town)){
+            $collection->addFieldToFilter("town", array("eq" => $town));
+        }
+
 
 
         $lockers = array();
