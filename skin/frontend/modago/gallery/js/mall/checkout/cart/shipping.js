@@ -147,7 +147,6 @@
             //setMarkers
             for (var i = 0; i < data.length; i++) {
                 var pos = data[i];
-                //console.log(pos);
 
                 var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
                 var marker = new google.maps.Marker({
