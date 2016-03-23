@@ -250,6 +250,21 @@ abstract class Zolago_Checkout_Controller_Abstract
 		shipping[save_in_address_book]:1
 		 */
 		$shipping = $request->getParam("shipping");
+		// If there is locker InPost 
+		// we need to setup correct shipping address
+		$inpost = $request->getParam("inpost");
+		if (isset($inpost['name'])) {
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel('ghinpost/locker');
+			$locker->loadByLockerName($inpost['name']);
+			$shippingAddressFromLocker = $locker->getShippingAddress();
+			$shipping = array_merge($shipping, $shippingAddressFromLocker);
+			if (isset($inpost['telephone'])) {
+				$shipping['telephone'] = $inpost['telephone'];
+			} else {
+				throw new Mage_Core_Exception("Telephone number for InPost is required");
+			}
+		}
 		if(is_array($shipping)){
 			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
 			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){

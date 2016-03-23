@@ -91,6 +91,16 @@ class GH_Inpost_Model_Locker extends Mage_Core_Model_Abstract {
 		return $return;
 	}
 
-
+	/**
+	 * Retrieve shipping address info
+	 * 
+	 * @return array
+	 */
+	public function getShippingAddress() {
+		$data['street'][]	= $this->getStreet() . ' ' . $this->getBuildingNumber();
+		$data['postcode']	= $this->getPostcode();
+		$data['city']		= $this->getTown();
+		return $data;
+	}
 }
 
