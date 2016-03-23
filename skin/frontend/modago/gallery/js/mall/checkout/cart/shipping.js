@@ -23,7 +23,6 @@
 
             jQuery("[data-select-shipping-method-trigger=0]").click(function (e) {
                 //1. populate popup
-                //Mall.Cart.Shipping.initializeMap();
                 jQuery("#select_inpost_point").modal("show");
             });
 
@@ -42,6 +41,10 @@
                 //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
                 Mall.Cart.Shipping.initializeMap();
                 Mall.Cart.Shipping.resizeMap();
+                var shippingPointCode = jQuery("[name=shipping_point_code]").val();
+                if (jQuery.type(shippingPointCode) !== "undefined") {
+                    Mall.Cart.Shipping.showMarkerWindow(shippingPointCode);
+                }
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
                 //Clear markers
@@ -94,6 +97,7 @@
             google.maps.event.addDomListener(window, 'load', mapData);
             google.maps.event.addDomListener(window, "resize", Mall.Cart.Shipping.resizingMap());
 
+
             var mapOptions = {
                 zoom: 6,
                 center: new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat),
@@ -130,15 +134,24 @@
 
 
         },
+        showMarkerWindow: function (name) {
+            jQuery(Mall.Cart.Shipping.gmarkers).each(function (i, item) {
+                if (name == item.name) {
+                    google.maps.event.trigger(Mall.Cart.Shipping.gmarkers[i], "click");
+                    return false;
+                }
+            });
+
+        },
         refreshMap: function (data) {
 
             //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
             var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
 
 //            Mall.Cart.Shipping.markers = [];
-//            if (Mall.Cart.Shipping.markerClusterer) {
-//                Mall.Cart.Shipping.markerClusterer.clearMarkers();
-//            }
+            if (Mall.Cart.Shipping.markerClusterer) {
+                Mall.Cart.Shipping.markerClusterer.clearMarkers();
+            }
 
             var markerImage = new google.maps.MarkerImage(imageUrl, new google.maps.Size(40, 40));
 
@@ -149,10 +162,11 @@
                 var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
                 var marker = new google.maps.Marker({
                     id: pos.id,
+                    name: pos.name,
                     position: posLatLng,
                     map: Mall.Cart.Shipping.map,
                     icon: markerImage,
-                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">Wybierz: ' + pos.name + '</a>',
+                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">Wybierz: ' + pos.name + '</a>',
                     latitude: pos.latitude,
                     longitude: pos.longitude
                 });
@@ -163,8 +177,10 @@
                     Mall.Cart.Shipping.infowindow.setContent(this.html);
                     Mall.Cart.Shipping.infowindow.open(Mall.Cart.Shipping.map, this);
 
-                    Mall.Cart.Shipping.map.setCenter(this.getPosition()); // set map center to marker position
-                    Mall.Cart.Shipping.smoothZoom(Mall.Cart.Shipping.map, 10, Mall.Cart.Shipping.map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+                    // set map center to marker position
+                    Mall.Cart.Shipping.map.setCenter(this.getPosition());
+                    //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+                    Mall.Cart.Shipping.smoothZoom(Mall.Cart.Shipping.map, 15, Mall.Cart.Shipping.map.getZoom());
                 });
 
                 //
@@ -175,6 +191,7 @@
                 Mall.Cart.Shipping.gmarkers.push(marker);
 
             }
+
             //--setMarkers
             var clusterStyles = [
                 {
@@ -220,7 +237,7 @@
                     Mall.Cart.Shipping.smoothZoom(map, max, cnt + 1);
                 });
                 setTimeout(function () {
-                    map.setZoom(cnt)
+                    Mall.Cart.Shipping.map.setZoom(cnt)
                 }, 80);
             }
         },
@@ -273,13 +290,14 @@
             selectedMethodData["additional"] = jQuery(target).attr("data-carrier-additional");
 
             var pointCode = (jQuery(target).attr("data-carrier-pointcode") !== "undefined") ? jQuery(target).attr("data-carrier-pointcode") : "";
+            var pointId = (jQuery(target).attr("data-carrier-pointid") !== "undefined") ? jQuery(target).attr("data-carrier-pointid") : "";
 
             if (jQuery.type(shipping) !== "undefined") {
                 var inputs = '';
                 jQuery.each(vendors, function (i, vendor) {
                     inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                 });
-                inputs += '<input type="hidden" name="shipping_point_code" value="' + pointCode + '"  />';
+                inputs += '<input type="hidden" data-id="' + pointId + '" name="shipping_point_code" value="' + pointCode + '"  />';
 
                 content.find("form .shipping-collect").html(inputs);
             }

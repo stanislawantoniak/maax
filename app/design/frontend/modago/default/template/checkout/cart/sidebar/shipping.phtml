@@ -61,18 +61,21 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
         })();
     </script>
-    <div class="shipping-collect-inpost">
-        <?php if($lockerId): ?>
-                <input type="hidden" name="shipping_point_code" value="<?php echo $locker->getName(); ?>" required="required" />
-        <?php endif; ?>
-    </div>
-    <div class="shipping-collect">
-        <?php if(!empty($sessionShippingMethod)): ?>
-            <?php foreach($sessionShippingMethod as $vendorId => $methodCode): ?>
-                <input type="hidden" name="shipping_method[<?php echo $vendorId; ?>]" value="<?php echo $methodCode; ?>" required="required" />
+
+        <div class="shipping-collect">
+            <?php if (!empty($sessionShippingMethod)): ?>
+                <?php foreach ($sessionShippingMethod as $vendorId => $methodCode): ?>
+                    <input type="hidden"
+                           name="shipping_method[<?php echo $vendorId; ?>]"
+                           value="<?php echo $methodCode; ?>" required="required"/>
                 <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+                <?php if ($lockerId): ?>
+                    <input type="hidden" name="shipping_point_code"
+                           data-id="<?php echo $lockerId; ?>"
+                           value="<?php echo $locker->getName(); ?>" required="required"/>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
 
     <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
         <?php if (empty($sessionShippingMethod)): ?>
