@@ -311,9 +311,9 @@
         },
         resizingMap: function () {
             if (Mall.Cart.Shipping.map == null) return;
-            var center = Mall.Cart.Shipping.map.getCenter();
+
             google.maps.event.trigger(Mall.Cart.Shipping.map, "resize");
-            Mall.Cart.Shipping.map.setCenter(center);
+            Mall.Cart.Shipping.map.setCenter(Mall.Cart.Shipping.map.getCenter());
         },
         smoothZoom: function (map, max, cnt) {
             if (cnt >= max) {
