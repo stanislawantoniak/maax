@@ -156,8 +156,13 @@
             //1. Get block
             var deliveyType = Mall.Cart.Shipping.getSelectedShipping().attr("data-carrier-delivery-type");
 
+            var inpostPoints = Mall.reg.get("inpost_points");
 
-            var mapData = Mall.reg.get("inpost_points");
+            if(inpostPoints.length == 0){
+                return;
+            }
+
+            var mapData = jQuery.parseJSON(Mall.reg.get("inpost_points"));
 
             google.maps.event.addDomListener(window, 'load', mapData);
             google.maps.event.addDomListener(window, "resize", Mall.Cart.Shipping.resizingMap());
