@@ -33,12 +33,9 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 $vendors[$vId] = $vId;
 
                 $deliveryType = "";
-                $codeParts = explode("_",$rate->getCode());
-                if(count($codeParts) > 1 && isset($codeParts[0]) &&  $codeParts[0] == "udtiership"){
-                    $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($codeParts[1]);
-                    if($deliveryTypeModel->getId()){
-                        $deliveryType = $deliveryTypeModel->getDeliveryCode();
-                    }
+                $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
+                if ($deliveryTypeModel->getId()) {
+                    $deliveryType = $deliveryTypeModel->getDeliveryCode();
                 }
 
 

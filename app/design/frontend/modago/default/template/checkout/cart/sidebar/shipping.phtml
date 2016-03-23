@@ -39,8 +39,14 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     $discountTotal += $item->getDiscountAmount();
     $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
 }
+ ?>
 
+<?php
+$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+//krumo($inPostData);
+$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
+
 
 <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
     <?php echo $this->getChildHtml('totals'); ?>
@@ -59,20 +65,25 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+
+            Mall.reg.set("inpost_points",'<?php echo $inPostPoints; ?>');
         })();
     </script>
-    <div class="shipping-collect-inpost">
-        <?php if($lockerId): ?>
-                <input type="hidden" name="shipping_point_code" value="<?php echo $locker->getName(); ?>" required="required" />
-        <?php endif; ?>
-    </div>
-    <div class="shipping-collect">
-        <?php if(!empty($sessionShippingMethod)): ?>
-            <?php foreach($sessionShippingMethod as $vendorId => $methodCode): ?>
-                <input type="hidden" name="shipping_method[<?php echo $vendorId; ?>]" value="<?php echo $methodCode; ?>" required="required" />
+
+        <div class="shipping-collect">
+            <?php if (!empty($sessionShippingMethod)): ?>
+                <?php foreach ($sessionShippingMethod as $vendorId => $methodCode): ?>
+                    <input type="hidden"
+                           name="shipping_method[<?php echo $vendorId; ?>]"
+                           value="<?php echo $methodCode; ?>" required="required"/>
                 <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+                <?php if ($lockerId): ?>
+                    <input type="hidden" name="shipping_point_code"
+                           data-id="<?php echo $lockerId; ?>"
+                           value="<?php echo $locker->getName(); ?>" required="required"/>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
 
     <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
         <?php if (empty($sessionShippingMethod)): ?>
@@ -236,7 +247,26 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     .shipping-method-selected-container {
         margin-bottom: 40px;
     }
+    .delivery-marker-window {
+        max-width: 160px;
+    }
 </style>
 
+<div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"></h2>
+            </div>
 
+            <div class="modal-body">
+                <div id="map_delivery_cluster_additional" class="col-md-12"></div>
+                <div class="col-md-12">
+                    <div id="map_delivery_cluster" style="height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
