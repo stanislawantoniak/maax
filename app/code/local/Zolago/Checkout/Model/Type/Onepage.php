@@ -250,7 +250,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
     /**
      * Save checkout shipping address
-	 * Modificaton: removed quote save
+	 * Modification: removed quote save
      *
      * @param   array $data
      * @param   int $customerAddressId

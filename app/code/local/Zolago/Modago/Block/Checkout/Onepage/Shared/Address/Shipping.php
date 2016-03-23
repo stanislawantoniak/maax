@@ -81,7 +81,11 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Address_Shipping
 	}
 
 	public function getSameAsBilling() {
-		$sameAsBilling = (int)$this->getShippingAddress()->getSameAsBilling();
-		return $sameAsBilling;
+		$object = $this->getInpostLocker();
+		if (!$object->getId()) {
+			$sameAsBilling = (int)$this->getShippingAddress()->getSameAsBilling();
+			return $sameAsBilling;
+		}
+		return 0;
 	}
 } 
