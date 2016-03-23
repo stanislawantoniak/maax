@@ -8,7 +8,7 @@
         map: null,
         infowindow: null,
         markers: [],
-        gmarkers: [],        
+        gmarkers: [],
         defaultCenterLang: 52.42997,
         defaultCenterLat: 19.46633,
         init: function () {
@@ -38,12 +38,12 @@
                 jQuery(".shipping-method-selected").slideUp();
             });
 
-            jQuery('#select_inpost_point').on('show.bs.modal', function() {
+            jQuery('#select_inpost_point').on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
                 Mall.Cart.Shipping.initializeMap();
                 Mall.Cart.Shipping.resizeMap();
             });
-            jQuery('#select_inpost_point').on('hide.bs.modal', function() {
+            jQuery('#select_inpost_point').on('hide.bs.modal', function () {
                 //Clear markers
                 Mall.Cart.Shipping.markers = [];
                 Mall.Cart.Shipping.gmarkers = [];
@@ -81,8 +81,6 @@
             }
         },
         populateShippingPointSelect: function () {
-
-
 
 
         },
@@ -154,8 +152,8 @@
                     position: posLatLng,
                     map: Mall.Cart.Shipping.map,
                     icon: markerImage,
-                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="'+pos.name+'" data-carrier-additional="'+pos.additional+'" href="">Wybierz: '+pos.name+'</a>',
-                    latitude:pos.latitude,
+                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">Wybierz: ' + pos.name + '</a>',
+                    latitude: pos.latitude,
                     longitude: pos.longitude
                 });
 
@@ -164,10 +162,9 @@
                 google.maps.event.addListener(marker, "click", function () {
                     Mall.Cart.Shipping.infowindow.setContent(this.html);
                     Mall.Cart.Shipping.infowindow.open(Mall.Cart.Shipping.map, this);
-                    console.log(this);
 
-                    //Mall.Cart.Shipping.map.setZoom(6);
-                    Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(this.latitude, this.longitude));
+                    Mall.Cart.Shipping.map.setCenter(this.getPosition()); // set map center to marker position
+                    Mall.Cart.Shipping.smoothZoom(Mall.Cart.Shipping.map, 10, Mall.Cart.Shipping.map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
                 });
 
                 //
@@ -213,6 +210,20 @@
 
             Mall.Cart.Shipping.markerClusterer = new MarkerClusterer(Mall.Cart.Shipping.map, Mall.Cart.Shipping.markers, markerClusterOptions);
         },
+        smoothZoom: function (map, max, cnt) {
+            if (cnt >= max) {
+                return;
+            }
+            else {
+                y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+                    google.maps.event.removeListener(y);
+                    Mall.Cart.Shipping.smoothZoom(map, max, cnt + 1);
+                });
+                setTimeout(function () {
+                    map.setZoom(cnt)
+                }, 80);
+            }
+        },
         updateTotals: function () {
             var content = jQuery("#cart-shipping-methods");
 
@@ -223,7 +234,7 @@
                 //shipping total
                 shippingCost = jQuery(methodRadio).attr("data-method-cost");
                 var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
-                jQuery("#product_summary").find("span.val_delivery_cost").closest("li").find("span.price").html(shippingCostFormatted);
+                jQuery('#product_summary li[data-target="val_delivery_cost"]').find("span.price").html(shippingCostFormatted);
 
             } else {
                 shippingCost = 0; //not selected yet
@@ -250,7 +261,7 @@
             var selectedMethodData = [];
 
             var vendors = Mall.Cart.Shipping.getVendors(),
-                    content = jQuery(Mall.Cart.Shipping.content);
+                content = jQuery(Mall.Cart.Shipping.content);
 
             var methodRadio = content.find("input[name=_shipping_method]:checked");
             var shipping = methodRadio.val();
