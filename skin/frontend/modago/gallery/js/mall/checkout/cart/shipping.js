@@ -26,18 +26,6 @@
                 jQuery("#select_inpost_point").modal("show");
             });
 
-            jQuery(".shipping_method_link").click(function (e) {
-                e.preventDefault();
-                jQuery(this).find("input[name=_shipping_method]").prop("checked", true);
-
-                if(jQuery(this).find("input[name=_shipping_method]").attr("data-select-shipping-method-trigger") == 1){
-                    Mall.Cart.Shipping.setShippingMethod(e.target);
-                }
-                if(jQuery(this).find("input[name=_shipping_method]").attr("data-select-shipping-method-trigger") == 0){
-                    //1. populate popup
-                    jQuery("#select_inpost_point").modal("show");
-                }
-            });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
