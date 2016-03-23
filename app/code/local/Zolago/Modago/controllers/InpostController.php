@@ -11,7 +11,8 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
         $collection->addFieldToFilter("town", array("eq" => $town));
 
 
-        $lockers = array();        
+        $lockers = array();
+        $streets = array();
 
         foreach ($collection as $locker) {
             /* @var $locker GH_Inpost_Model_Locker */
@@ -34,7 +35,17 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 "latitude" => $locker->getLatitude(),
                 "additional" => htmlentities(implode("<br />", $additional))
             );
+            $streets[$locker->getName()] = (string)$locker->getStreet(). " " . (string)$locker->getBuildingNumber();
         }
-        echo json_encode($lockers, JSON_HEX_APOS);
+        if (!empty($lockers)) {
+            $result["map_points"] = $lockers;
+        }
+
+        if (!empty($streets)) {
+            $result["filters"] = $streets;
+        }
+
+
+        echo json_encode($result, JSON_HEX_APOS);
     }
 }

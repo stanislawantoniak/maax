@@ -511,16 +511,31 @@ function _makeMapRequest(q) {
         type: "POST",
         data: {town: q},
         success: function (data) {
+            console.log(data);
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
-            refreshMap(data);
-            buildStoresList(data);
+
+            refreshMap(data.map_points);
+            constructShippingPointSelect(data.map_points);
+            //buildStoresList(data);
         },
         error: function (response) {
             console.log(response);
         }
     });
 }
+
+function constructShippingPointSelect(map_points) {
+    var options = [],
+        map_point_long_name;
+    jQuery(map_points).each(function (i, map_point) {
+        map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
+        options.push('<option value="' + map_point.name + '">' + map_point_long_name + '</option>');
+    });
+
+    jQuery("[name=shipping_select_street]").html(options.join(""));
+}
+
 function clearClusters(e) {
     e.preventDefault();
     e.stopPropagation();
