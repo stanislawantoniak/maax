@@ -14,8 +14,9 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
 
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
 
-        if ($collection->count() == 0)
+        if ($collection->count() == 0) {
             return $result;
+        }
 
         $lockers = array();
         $filters = array();
@@ -42,11 +43,13 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
                 "additional" => htmlentities(implode("<br />", $additional))
             );
         }
-        if (!empty($lockers))
+        if (!empty($lockers)) {
             $result["map_points"] = json_encode($lockers, JSON_HEX_APOS);
+        }
 
-        if (!empty($filters))
+        if (!empty($filters)) {
             $result["filters"] = $filters;
+        }
 
 
         return $result;
