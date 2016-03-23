@@ -215,7 +215,7 @@
                 return;
             }
             else {
-                y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+                var y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
                     google.maps.event.removeListener(y);
                     Mall.Cart.Shipping.smoothZoom(map, max, cnt + 1);
                 });
