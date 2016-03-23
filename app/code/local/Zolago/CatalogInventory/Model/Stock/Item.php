@@ -11,6 +11,7 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 	protected $posStockStatus = null;
 	protected $posIsInStock = null;
 	protected $posQty = null;
+	protected $_helper = null;
 
     /**
      * Adding stock data to product
@@ -31,71 +32,39 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 		$product->setIsInStock($this->getIsInStock());
 		/** @var Mage_CatalogInventory_Model_Stock_Status $stockStatusModel */
 		$stockStatusModel = Mage::getSingleton('cataloginventory/stock_status');
-        $stockStatusModel->assignProduct($product, $this->getStockId(), $this->getStockStatusInPos());
+        $stockStatusModel->assignProduct($product, $this->getStockId());
 
         if ($this->getAlwaysInStock()) {
             $product->setIsSalable(true);
         }
         return $this;
     }
-
-	/**
-	 * Retrieve stock_status
-	 *
-	 * @return int
-	 * @throws Mage_Core_Exception
-	 */
-    public function getStockStatusInPos()
-    {
-        if ($this->isFlagUsePos()) {
-			if (!is_null($this->posStockStatus)) {
-				return $this->posStockStatus;
-			}
-            $productId = $this->getProductId();
-			$websiteId = Mage::app()->getWebsite()->getId(); //todo czy id brac z produkt ?
-
-            $resource = $this->getResource();
-            $posStockTable = $resource->getTable("zolagopos/stock");
-            $select = $resource->getReadConnection()->select()
-                ->from(array("pos_stock" => $posStockTable),
-                    array(
-                        'product_id',
-                        "qty" => new Zend_Db_Expr("SUM(pos_stock.qty)")
-                    )
-                )
-                ->joinLeft(
-                    array('pos' => $resource->getTable("zolagopos/pos")),
-                    "pos.pos_id = pos_stock.pos_id",
-                    array()
-                )
-                ->joinLeft(
-                    array('pos_website' => $resource->getTable("zolagopos/pos_vendor_website")),
-                    "pos_website.pos_id = pos.pos_id",
-                    array()
-                )
-                ->where("pos_stock.product_id=?", $productId)
-                ->where('pos_website.website_id=?', $websiteId)
-                ->where("pos.is_active = ?", Zolago_Pos_Model_Pos::STATUS_ACTIVE)
-                ->group("pos_stock.product_id");
-
-            $result = $resource->getReadConnection()->fetchRow($select);
-
-			if (empty($result)) {
-				// check for children
-				/** @var Zolago_CatalogInventory_Model_Resource_Stock_Status $model */
-				$model = Mage::getResourceModel("zolago_cataloginventory/stock_status");
-				$result = $model->getProductStatus($productId, $websiteId, Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID, true);
-				$result = current($result);
-			}
-
-			$this->posQty			= isset($result["qty"]) ? $result["qty"] : 0;
-            $this->posStockStatus	= (int)($this->posQty > 0);
-			$this->posIsInStock		= $this->posStockStatus;
-			return $this->posStockStatus;
-        }
-        return $this->getStockStatus();
+    
+    /**
+     * set helper
+     */
+     public function setHelper($helper) {
+         $this->_helper = $helper;
+     }
+    /**
+     * get helper
+     * @param 
+     * @return 
+     */
+     protected function _getHelper() {
+         if (!$this->_helper) {
+             $this->_helper = Mage::helper('zolagocataloginventory');
+         }
+         return $this->_helper;
+     }
+    /**
+     * get actual website id
+     *
+     * @return int
+     */
+    protected function _getWebsiteId() {	
+        return $this->_getHelper()->getWebsiteId();
     }
-
 	/**
 	 * Wrapper for flag
 	 *
@@ -127,19 +96,25 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 	}
 
 	public function getQty() {
+        $website = $this->_getWebsiteId();	    
 		if (!$this->isFlagUsePos()) {
 			return parent::getQty();
 		}
-		$this->getStockStatusInPos(); // get and set posQty
-		return $this->posQty;
+        $qty = $this->getData('website_qty');
+        return isset($qty[$website])? $qty[$website]:0;
 	}
 
 	public function getIsInStock() {
 		if (!$this->isFlagUsePos()) {
 			return parent::getIsInStock();
 		}
-		$this->getStockStatusInPos(); // get and set posIsInStock
-		return $this->posIsInStock;
+        if (!$this->getManageStock()) {
+            return true;
+        }
+
+        $website = $this->_getWebsiteId();	    
+		$instock = $this->getInStock();
+		return empty($instock[$website])? false:true;		
 	}
 
 	public function getStockStatus() {

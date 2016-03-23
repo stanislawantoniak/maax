@@ -139,4 +139,13 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return Mage::helper('zolagomodago')->__("No stock info");
 	}
+	
+    /**
+     * get actual website id
+     * @return int
+     */
+
+	public function getWebsiteId() {
+	    return Mage::app()->getWebsite()->getId();
+	}
 }

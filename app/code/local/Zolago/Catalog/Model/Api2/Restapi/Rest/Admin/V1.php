@@ -215,7 +215,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         /*  @var $zcSDItemModel Zolago_CatalogInventory_Model_Resource_Stock_Item */
-        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
+        $zcSDItemModel = Mage::getResourceModel('zolagocataloginventory/stock_item');
         $zcSDItemModel->saveCatalogInventoryStockItem($cataloginventoryStockItem);
 
         //reindex
