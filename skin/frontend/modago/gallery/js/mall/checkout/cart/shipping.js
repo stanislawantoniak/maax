@@ -39,18 +39,14 @@
 
             jQuery('#select_inpost_point').on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
-                
+
                 resizeMap();
-//                var shippingPointCode = jQuery("[name=shipping_point_code]").val();
-//                if (jQuery.type(shippingPointCode) !== "undefined") {
-//                    Mall.Cart.Shipping.showMarkerWindow(shippingPointCode);
-//                }
+                var shippingPointCode = jQuery("[name=shipping_point_code]").val();
+                if (jQuery.type(shippingPointCode) !== "undefined") {
+                    showMarkerWindow(shippingPointCode);
+                }
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
-                //Clear markers
-                //Mall.Cart.Shipping.markers = [];
-                //Mall.Cart.Shipping.gmarkers = [];
-                //Mall.Cart.Shipping.markerClusterer = null;
             });
 
         },
@@ -152,15 +148,15 @@
         },
 
 
-        showMarkerWindow: function (name) {
-            jQuery(Mall.Cart.Shipping.gmarkers).each(function (i, item) {
-                if (name == item.name) {
-                    google.maps.event.trigger(Mall.Cart.Shipping.gmarkers[i], "click");
-                    return false;
-                }
-            });
-
-        }
+        //showMarkerWindow: function (name) {
+        //    jQuery(Mall.Cart.Shipping.gmarkers).each(function (i, item) {
+        //        if (name == item.name) {
+        //            google.maps.event.trigger(Mall.Cart.Shipping.gmarkers[i], "click");
+        //            return false;
+        //        }
+        //    });
+        //
+        //}
     }
 })();
 
@@ -236,13 +232,13 @@ var gmarkers = [];
 var smallScreen = 768;
 var middleScreen = 992;
 
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(successFunction);
-}
+// if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(successFunction);
+// }
 // Get the latitude and the longitude;
-function successFunction(position) {
-    window.geoposition = position;
-}
+// function successFunction(position) {
+//     window.geoposition = position;
+// }
 
 
 function initialize() {
@@ -289,21 +285,22 @@ function initialize() {
     //I will show all the stores on the map first
     refreshMap();
     buildStoresList();
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                //If you allow to see your location, you will see all the nearest stores
-                gmarkers = [];
-                showPosition(position);
-            },
-            function (error) {
-                //If you deny to see your location, you will see all the stores
-                if (error.code == error.PERMISSION_DENIED){}
-
-            });
-    } else {
-        //Your browser doesn't support GEO location, you will see all the stores
-    }
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(
+    //         function (position) {
+    //             //If you allow to see your location, you will see all the nearest stores
+    //             gmarkers = [];
+    //             showPosition(position);
+    //         },
+    //         function (error) {
+    //             //If you deny to see your location, you will see all the stores
+    //             if (error.code == error.PERMISSION_DENIED) {
+    //             }
+    //
+    //         });
+    // } else {
+    //     //Your browser doesn't support GEO location, you will see all the stores
+    // }
 
 }
 
@@ -327,10 +324,10 @@ function showPosition(position) {
     }
 
     refreshMap(closestStores);
-    buildStoresList(closestStores,position);
+    buildStoresList(closestStores, position);
 }
 
-function calculateTheNearestStores(position,minDistance, fallback) {
+function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
     //console.log(minDistance);
@@ -343,7 +340,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
         if (dist < minDistance) {
             data[i].distance = dist;
             closestStores.push(data[i]);
-            if(fallback && closestStores.length >= 3){
+            if (fallback && closestStores.length >= 3) {
                 break;
             }
 
@@ -353,6 +350,7 @@ function calculateTheNearestStores(position,minDistance, fallback) {
     function sortByDirection(a, b) {
         return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
     }
+
     closestStores.sort(sortByDirection);
 
     return closestStores;
@@ -403,7 +401,7 @@ function refreshMap(filteredData) {
             }
             //$screen-md: 992px
             if (window.innerWidth <= middleScreen) {
-                
+
             }
 
             infowindow.open(map, this);
@@ -452,18 +450,17 @@ function smoothZoom(map, max, cnt) {
 }
 function formatInfoWindowContent(pos) {
     return '<div class="delivery-marker-window">' +
-            '<div class="info_window_text"><p></p>' +
-            '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
-            '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
-            '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
-            '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>'
-            '</div>' +
-            '</div>';
+        '<div class="info_window_text"><p></p>' +
+        '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
+        '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
+        '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
+        '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>'
+    '</div>' +
+    '</div>';
 }
 
 
-
-function buildStoresList(filteredData,position) {
+function buildStoresList(filteredData, position) {
     if (typeof filteredData !== "undefined")
         data = filteredData;
 
@@ -486,14 +483,14 @@ function buildStoresList(filteredData,position) {
                 "<p>" + pos.postcode + " " + pos.city + "</p>";
 
 
-            list +="<div>" + pos.time_opened + "</div>" +
+            list += "<div>" + pos.time_opened + "</div>" +
                 "</div>" +
 
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
                 "<div class='buttons'>";
 
 
-            list +="</div>" +
+            list += "</div>" +
                 "</div>" +
 
                 "</div>" +
@@ -504,19 +501,17 @@ function buildStoresList(filteredData,position) {
     searchByMapList.html(list);
 }
 
-function showMarkerWindow(link) {
-    var markernumber = jQuery(link).data("markernumber");
+function showMarkerWindow(name) {
     jQuery(gmarkers).each(function (i, item) {
-        if (markernumber == item.id) {
+        if (name == item.name) {
             google.maps.event.trigger(gmarkers[i], "click");
             return false;
         }
     });
-
 }
 
 
-function searchOnMap(q) {    
+function searchOnMap(q) {
     _makeMapRequest(q);
 }
 function clearSearchOnMap() {
@@ -528,7 +523,7 @@ function clearSearchOnMap() {
 }
 
 function _makeMapRequest(q) {
-    
+
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
@@ -576,10 +571,10 @@ function Haversine(lat1, lon1, lat2, lon2) {
 }
 //--GEO helpers
 
-function showLabel(label){
+function showLabel(label) {
     jQuery(label).removeClass("hidden");
 }
-function hideLabel(label){
+function hideLabel(label) {
     jQuery(label).addClass("hidden");
 }
 
