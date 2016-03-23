@@ -154,7 +154,7 @@
                     position: posLatLng,
                     map: Mall.Cart.Shipping.map,
                     icon: markerImage,
-                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="'+pos.name+'" data-carrier-additional="'+pos.name+'" href="">'+pos.name+'</a>',
+                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="'+pos.name+'" data-carrier-additional="'+pos.name+'" href="">Wybierz: '+pos.name+'</a>',
                     latitude:pos.latitude,
                     longitude: pos.longitude
                 });
@@ -164,11 +164,15 @@
                 google.maps.event.addListener(marker, "click", function () {
                     Mall.Cart.Shipping.infowindow.setContent(this.html);
                     Mall.Cart.Shipping.infowindow.open(Mall.Cart.Shipping.map, this);
+                    console.log(this);
+
+                    //Mall.Cart.Shipping.map.setZoom(6);
+                    Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(this.latitude, this.longitude));
                 });
 
                 //
-                Mall.Cart.Shipping.map.setZoom(6);
-                Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat));
+                //Mall.Cart.Shipping.map.setZoom(6);
+                //Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat));
 
                 Mall.Cart.Shipping.markers.push(marker);
                 Mall.Cart.Shipping.gmarkers.push(marker);
@@ -202,8 +206,8 @@
                 }
             ];
             var markerClusterOptions = {
-                maxZoom: 6,
-                gridSize: 20,
+                maxZoom: 13,
+                gridSize: 35,
                 styles: clusterStyles
             };
 
