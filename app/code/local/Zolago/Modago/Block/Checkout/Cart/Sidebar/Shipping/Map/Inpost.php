@@ -9,16 +9,25 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
 
     public static function getPopulateMapData()
     {
-        $result = "";
-        $lockers = array();
+        $result = array();
+
+
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
-        //$collection->setPageSize(10);
+
+        if ($collection->count() == 0)
+            return $result;
+
+        $lockers = array();
+        $filters = array();
+
         foreach ($collection as $locker) {
             /* @var $locker GH_Inpost_Model_Locker */
+            $filters[$locker->getTown()][$locker->getPostcode()][$locker->getName()] = $locker->getData();
+
             $additional = array(
                 $locker->getStreet() . " " . $locker->getBuildingNumber(),
                 $locker->getPostcode() . " " . $locker->getTown(),
-                $locker->getLocationDescription()
+                "(" . $locker->getLocationDescription() . ")"
             );
             $lockers[] = array(
                 "id" => $locker->getId(),
@@ -33,9 +42,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
                 "additional" => htmlentities(implode("<br />", $additional))
             );
         }
-        if (!empty($lockers)) {
-            $result = json_encode($lockers, JSON_HEX_APOS);
-        }
+        if (!empty($lockers))
+            $result["map_points"] = json_encode($lockers, JSON_HEX_APOS);
+
+        if (!empty($filters))
+            $result["filters"] = $filters;
+
 
         return $result;
     }
