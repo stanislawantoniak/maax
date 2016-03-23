@@ -154,7 +154,7 @@
                     position: posLatLng,
                     map: Mall.Cart.Shipping.map,
                     icon: markerImage,
-                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="'+pos.name+'" data-carrier-additional="'+pos.name+'" href="">Wybierz: '+pos.name+'</a>',
+                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="'+pos.name+'" data-carrier-additional="'+pos.additional+'" href="">Wybierz: '+pos.name+'</a>',
                     latitude:pos.latitude,
                     longitude: pos.longitude
                 });
