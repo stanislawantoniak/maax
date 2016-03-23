@@ -136,20 +136,4 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
         return $item;
     }
 
-
-    public function deliveryDetailsAction()
-    {
-        $deliveryType = $this->getRequest()->getParam("delivery_type", "");
-
-        $result = "";
-        switch ($deliveryType) {
-            case Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost(): //TODO Hardcoded inpost
-//                $block = $this->getLayout()->createBlock('Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost')
-//                    ->setTemplate('checkout/cart/sidebar/shipping/map.phtml')->toHtml();
-                $result = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-                break;
-        }
-
-        $this->getResponse()->setBody($result);
-    }
 }

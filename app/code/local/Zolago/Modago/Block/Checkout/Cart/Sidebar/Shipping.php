@@ -3,8 +3,9 @@
 class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
-
-
+    /**
+     * @return string
+     */
     public static function getDeliveryTypeInpost(){
         return "ghinpost";
     }
@@ -49,7 +50,6 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                     'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
                     "delivery_type" => $deliveryType
                 );
-                Mage::log(explode("_",$rate->getCode()), null, "11.log");
 
                 $allMethodsByCode[$rate->getCode()][] = array(
                     'vendor_id' => $vId,

@@ -16,10 +16,6 @@
 
             Mall.Cart.Shipping.updateTotals();
 
-            var shippingMethodSelectTrigger = jQuery("[data-select-shipping-method-trigger=1]");
-            //shippingMethodSelectTrigger.on("click", function (e) {
-            //    self.handleShippingMethodSelect(e);
-            //});
             jQuery(document).delegate("[data-select-shipping-method-trigger=1]", "click", function (e) {
                 self.handleShippingMethodSelect(e);
             });
@@ -27,7 +23,8 @@
 
             jQuery("[data-select-shipping-method-trigger=0]").click(function (e) {
                 //1. populate popup
-                Mall.Cart.Shipping.populateShippingPointSelect();
+                //Mall.Cart.Shipping.initializeMap();
+                jQuery("#select_inpost_point").modal("show");
             });
 
 
@@ -40,6 +37,31 @@
                 jQuery(".shipping-method-selector").slideDown();
                 jQuery(".shipping-method-selected").slideUp();
             });
+
+            jQuery('#select_inpost_point').on('show.bs.modal', function() {
+                //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
+                Mall.Cart.Shipping.initializeMap();
+                Mall.Cart.Shipping.resizeMap();
+            });
+            jQuery('#select_inpost_point').on('hide.bs.modal', function() {
+                //Clear markers
+                Mall.Cart.Shipping.markers = [];
+                Mall.Cart.Shipping.gmarkers = [];
+                Mall.Cart.Shipping.markerClusterer = null;
+            });
+
+        },
+        resizeMap: function () {
+            if (Mall.Cart.Shipping.map == null) return;
+            setTimeout(function () {
+                Mall.Cart.Shipping.resizingMap();
+            }, 400);
+        },
+        resizingMap: function () {
+            if (Mall.Cart.Shipping.map == null) return;
+            var center = Mall.Cart.Shipping.map.getCenter();
+            google.maps.event.trigger(Mall.Cart.Shipping.map, "resize");
+            Mall.Cart.Shipping.map.setCenter(center);
         },
         getVendors: function () {
             return Mall.reg.get("vendors");
@@ -59,30 +81,20 @@
             }
         },
         populateShippingPointSelect: function () {
-            //1. Get block
-            var deliveryType = Mall.Cart.Shipping.getSelectedShipping().attr("data-carrier-delivery-type");
 
-            jQuery.ajax({
-                url: "/checkout/cart/deliveryDetails",
-                type: "POST",
-                data: {delivery_type: deliveryType}
-            }).done(function (mapData) {
-                console.log(mapData);
-                console.log(jQuery.parseJSON(mapData));
-
-//            map
-                var initMap = Mall.Cart.Shipping.initializeMap(jQuery.parseJSON(mapData));
-                google.maps.event.addDomListener(window, 'load', initMap);
-//            map            
-                jQuery("#select_inpost_point").modal("show");
-            });
 
 
 
         },
-        initializeMap: function (data) {
-            console.log(data);
+        initializeMap: function () {
+            //1. Get block
+            var deliveyType = Mall.Cart.Shipping.getSelectedShipping().attr("data-carrier-delivery-type");
 
+
+            var mapData = Mall.reg.get("inpost_points");
+
+            google.maps.event.addDomListener(window, 'load', mapData);
+            google.maps.event.addDomListener(window, "resize", Mall.Cart.Shipping.resizingMap());
 
             var mapOptions = {
                 zoom: 6,
@@ -107,7 +119,7 @@
             };
 
 
-            Mall.Cart.Shipping.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            Mall.Cart.Shipping.map = new google.maps.Map(document.getElementById('map_delivery_cluster'), mapOptions);
 
             Mall.Cart.Shipping.infowindow = new google.maps.InfoWindow({
                 //pixelOffset: new google.maps.Size(0, 5),
@@ -115,8 +127,8 @@
             });
 
 
-            //I will show all the stores on the map first
-            Mall.Cart.Shipping.refreshMap(data);
+            //I will show all the points on the map first
+            Mall.Cart.Shipping.refreshMap(mapData);
 
 
         },
@@ -135,7 +147,7 @@
             //setMarkers
             for (var i = 0; i < data.length; i++) {
                 var pos = data[i];
-                console.log(pos);
+                //console.log(pos);
 
                 var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
                 var marker = new google.maps.Marker({
@@ -143,7 +155,7 @@
                     position: posLatLng,
                     map: Mall.Cart.Shipping.map,
                     icon: markerImage,
-                    html: pos.name,
+                    html: '<a data-select-shipping-method-trigger="1" data-carrier-pointcode="'+pos.name+'" data-carrier-additional="'+pos.name+'" href="">'+pos.name+'</a>',
                     latitude:pos.latitude,
                     longitude: pos.longitude
                 });
@@ -153,12 +165,10 @@
                 google.maps.event.addListener(marker, "click", function () {
                     Mall.Cart.Shipping.infowindow.setContent(this.html);
                     Mall.Cart.Shipping.infowindow.open(Mall.Cart.Shipping.map, this);
-                    console.log(this.latitude);
-                    console.log(this.longitude);
                 });
 
-
-                Mall.Cart.Shipping.map.setZoom(5);
+                //
+                Mall.Cart.Shipping.map.setZoom(6);
                 Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat));
 
                 Mall.Cart.Shipping.markers.push(marker);
