@@ -624,6 +624,7 @@ class Zolago_Catalog_Vendor_ImageController
     public function uploadProductImageAction()
     {
         $productId = $this->getRequest()->getParam("product", null);
+        /** @var Zolago_Catalog_Model_Product $product */
         $product = Mage::getModel("catalog/product")->load($productId);
         $result = array();
 
@@ -657,6 +658,9 @@ class Zolago_Catalog_Vendor_ImageController
                 $label = $product->getName();
                 Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
                 $product->addImageToMediaGallery($imagePath, null, false, false, $label);
+
+                //fixes url change on product save problem (task: re#1922)
+                $product->setExcludeUrlRewrite(true);
                 $product->save();
 
                 $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
