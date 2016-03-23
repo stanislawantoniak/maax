@@ -39,9 +39,10 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
     $discountTotal += $item->getDiscountAmount();
     $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
 }
+ ?>
 
+<?php $inPostPoints = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData(); ?>
 
-$inpostPoints = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData(); ?>
 
 <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
     <?php echo $this->getChildHtml('totals'); ?>
@@ -61,7 +62,7 @@ $inpostPoints = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::g
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
-            Mall.reg.set("inpost_points",jQuery.parseJSON('<?php echo $inpostPoints; ?>'));
+            Mall.reg.set("inpost_points",'<?php echo $inPostPoints; ?>');
         })();
     </script>
 
@@ -256,7 +257,10 @@ $inpostPoints = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::g
             </div>
 
             <div class="modal-body">
-                <div id="map_delivery_cluster" style="height: 500px;"></div>
+                <div id="map_delivery_cluster_additional" class="col-md-12"></div>
+                <div class="col-md-12">
+                    <div id="map_delivery_cluster" style="height: 500px;"></div>
+                </div>
             </div>
         </div>
     </div>
