@@ -177,14 +177,14 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 		<section class="main bg-w opened-panel-group sidebar-deliverypayment">
 			<header>
 				<h2 class="open">
-					<?php echo $helper->__('Delivery and payment'); ?>
+					<?php echo $helper->__('Delivery'); ?>
 					<i class="bullet-strzalka-up visible-xs"></i>
 				</h2>
 			</header>
 			<div class="panel-group">
 				<div class="row">
 					<?php if(!$locker->getId()): ?>
-					<div class="col-md-12 col-sm-4 delivery-type delivery-type-short">
+					<div class="col-md-12 col-sm-12 delivery-type delivery-type-short">
 						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
 							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
@@ -192,13 +192,13 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 						</dl>
 					</div>
 					<?php else: ?>
-						<div class="col-md-12 col-sm-4 delivery-type">
+						<div class="col-md-12 col-sm-12 delivery-type">
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 							<dl>
 								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $inpostLogo; ?>"/></dd>
 								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
 								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
-								<dd>({{inpost_locker_location_description}})</dd>
+								<dd class="location-description ">{{inpost_locker_location_description}}</dd>
 							</dl>
 						</div>
 					<?php endif; ?>
@@ -209,7 +209,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-12  col-sm-4">
+					<div class="col-md-12 col-sm-12">
 						<h4><?php echo $helper->__('Payment type'); ?>:</h4>
 						<dl>
 							<dd>{{payment_method}}</dd>
