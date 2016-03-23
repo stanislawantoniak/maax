@@ -14,7 +14,7 @@ $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::get
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
 <script type="text/javascript">
-    var data = '<?php echo $inPostPoints; ?>';
+    var inPostPoints = '<?php echo $inPostPoints; ?>';
 </script>
 <script type="text/javascript" src="<?php echo Mage::getBaseUrl("link", true); ?>/skin/frontend/modago/gallery/js/mall/checkout/cart/shipping.js"></script>
 

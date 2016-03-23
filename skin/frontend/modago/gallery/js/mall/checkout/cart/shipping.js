@@ -4,13 +4,6 @@
     Mall.Cart.Shipping = {
         form_id: "cart-shipping-methods-form",
         content: "#cart-shipping-methods",
-        markerClusterer: null,
-        map: null,
-        infowindow: null,
-        markers: [],
-        gmarkers: [],
-        defaultCenterLang: 52.42997,
-        defaultCenterLat: 19.46633,
         init: function () {
             var self = this;
 
@@ -145,18 +138,7 @@
             });
 
             Mall.Cart.Shipping.updateTotals();
-        },
-
-
-        //showMarkerWindow: function (name) {
-        //    jQuery(Mall.Cart.Shipping.gmarkers).each(function (i, item) {
-        //        if (name == item.name) {
-        //            google.maps.event.trigger(Mall.Cart.Shipping.gmarkers[i], "click");
-        //            return false;
-        //        }
-        //    });
-        //
-        //}
+        }
     }
 })();
 
@@ -279,7 +261,7 @@ function initialize() {
         //pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
-    data = jQuery.parseJSON(data);
+    data = jQuery.parseJSON(inPostPoints);
 
 
     //I will show all the stores on the map first
