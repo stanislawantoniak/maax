@@ -619,7 +619,7 @@
 .vendor-image {
 	list-style-type: none;
 	/*height: 110px;*/
-    /*padding: 0 5px;*/
+    padding: 0 5px;
 }
 .vendor-image li {
     display: block;
@@ -693,7 +693,15 @@
 	top: 50%;
 	left: 50%;
 	z-index: 1;
+	background: white;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	margin-left: -10px;
+	margin-top: -10px;
+	border-radius: 5px;
 }
+
 #vendorImageZoom .modal-body {
     text-align: center;
 }
@@ -715,18 +723,11 @@
     position: absolute;
     top: 0;
     right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
     filter: alpha(opacity=0);
     opacity: 0;
-    outline: none;
-    background: white;
-    cursor: pointer;
-    display: block;
-    /*width: 10px;*/
-    margin-top: 0px;
+	width:1px;
+	height:1px;
+	pointer-events:none;
 }
 
 .vendor-image .mass-thumb-image .icon-ban-circle {
