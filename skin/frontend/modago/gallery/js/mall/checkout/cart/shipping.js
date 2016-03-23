@@ -182,11 +182,7 @@
                     //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
                     Mall.Cart.Shipping.smoothZoom(Mall.Cart.Shipping.map, 15, Mall.Cart.Shipping.map.getZoom());
                 });
-
-                //
-                //Mall.Cart.Shipping.map.setZoom(6);
-                //Mall.Cart.Shipping.map.setCenter(new google.maps.LatLng(Mall.Cart.Shipping.defaultCenterLang, Mall.Cart.Shipping.defaultCenterLat));
-
+                
                 Mall.Cart.Shipping.markers.push(marker);
                 Mall.Cart.Shipping.gmarkers.push(marker);
 
