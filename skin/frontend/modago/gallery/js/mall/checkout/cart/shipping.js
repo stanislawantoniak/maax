@@ -14,6 +14,12 @@
                 self.handleShippingMethodSelect(e);
             });
 
+            jQuery("[name=shipping_select_point]").change(function () {
+                var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
+                Mall.Cart.Shipping.setShippingMethod(shipping_select_point);
+                jQuery("#select_inpost_point").modal("hide");
+            })
+
 
             jQuery("[data-select-shipping-method-trigger=0]").click(function (e) {
                 //1. populate popup
@@ -57,7 +63,7 @@
         handleShippingMethodSelect: function (e) {
             Mall.Cart.Shipping.setShippingMethod(e.target);
 
-            if (jQuery(e.target).is("a")) {
+            if (jQuery(e.target).is("a") || jQuery(e.target).is("option")) {
                 e.preventDefault();
                 jQuery("#select_inpost_point").modal("hide");
             }
@@ -527,10 +533,10 @@ function constructShippingPointSelect(map_points) {
         map_point_long_name;
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
-        options.push('<option value="' + map_point.name + '">' + map_point_long_name + '</option>');
+        options.push('<option data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
-    jQuery("[name=shipping_select_street]").html(options.join(""));
+    jQuery("[name=shipping_select_point]").html(options.join(""));
 }
 
 function clearClusters(e) {
