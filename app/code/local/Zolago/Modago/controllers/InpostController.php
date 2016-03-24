@@ -1,29 +1,25 @@
 <?php
 
-/**
- * Class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map
- */
-class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
-    extends Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
+class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
 {
-
-    public static function getPopulateMapData()
+    public function getPopulateMapDataAction()
     {
+        $town = $this->getRequest()->getParam("town", "");
         $result = array();
 
-
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
-
-        if ($collection->count() == 0) {
-            return $result;
+        if(!empty($town)){
+            $collection->addFieldToFilter("town", array("eq" => $town));
         }
 
+
+
         $lockers = array();
-        $filters = array();
+        $streets = array();
 
         foreach ($collection as $locker) {
             /* @var $locker GH_Inpost_Model_Locker */
-            $filters[$locker->getTown()][$locker->getPostcode()][$locker->getName()] = $locker->getData();
+            
 
             $additional = array(
                 $locker->getStreet() . " " . $locker->getBuildingNumber(),
@@ -42,17 +38,17 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
                 "latitude" => $locker->getLatitude(),
                 "additional" => htmlentities(implode("<br />", $additional))
             );
+            $streets[$locker->getName()] = (string)$locker->getStreet(). " " . (string)$locker->getBuildingNumber();
         }
         if (!empty($lockers)) {
-            $result["map_points"] = json_encode($lockers, JSON_HEX_APOS);
+            $result["map_points"] = $lockers;
         }
 
-        if (!empty($filters)) {
-            $result["filters"] = $filters;
+        if (!empty($streets)) {
+            $result["filters"] = $streets;
         }
 
 
-        return $result;
+        echo json_encode($result, JSON_HEX_APOS);
     }
-
 }

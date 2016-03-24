@@ -43,7 +43,7 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 
 <?php
 $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-//krumo($inPostData);
+
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
 
@@ -67,6 +67,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
             Mall.reg.set("inpost_points",'<?php echo $inPostPoints; ?>');
+
+            var data = '<?php echo $inPostPoints; ?>';
         })();
     </script>
 
@@ -177,11 +179,10 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("czas dostawy %s dni", $method["days_in_transit"]) : "";
 
             ?>
-            <a href="" class="shipping_method_link" data-select-shipping-method-trigger="<?php echo (int)($method["delivery_type"]!==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()); ?>">
-                <div class="panel panel-default panel-color">
-                    <div class="panel-body">
-                        <dl>
-                            <div class="pull-left">
+            <div class="panel panel-default panel-color data_shipping_item">
+                <div class="panel-body">
+                    <dl>
+                        <div class="pull-left">
 
                                 <input type="radio"
                                     <?php if(count($methods) == 1): ?> style="display: none;visibility: hidden; height: 0;" <?php endif; ?>
@@ -202,16 +203,15 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                        data-carrier-pointcode=""
                                 />
 
-                                <?php echo $method['method_title'] ?>
-                                <br />
-                                <?php echo $daysInTransit; ?>
-                            </div>
+                            <?php echo $method['method_title'] ?>
+                            <br />
+                            <?php echo $daysInTransit; ?>
+                        </div>
 
-                            <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
-                        </dl>
-                    </div>
+                        <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
+                    </dl>
                 </div>
-            </a>
+            </div>
         <?php endforeach; ?>
     </div>      
     
@@ -252,6 +252,9 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
     .delivery-marker-window {
         max-width: 160px;
     }
+    .data_shipping_item {
+        cursor: pointer;
+    }
 </style>
 
 <div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
@@ -263,9 +266,20 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             </div>
 
             <div class="modal-body">
-                <div id="map_delivery_cluster_additional" class="col-md-12"></div>
-                <div class="col-md-12">
-                    <div id="map_delivery_cluster" style="height: 500px;"></div>
+                <div class="row">
+                    <p>
+                        <select name="shipping_select_city">
+                            <option value="">--wybierz miasto--</option>
+                            <?php foreach ($inPostData["filters"] as $city => $value): ?>
+                                <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="shipping_select_point"></select>
+                    </p>
+
+                </div>
+                <div class="row">
+                    <div id="map_delivery" style="height: 500px;"></div>
                 </div>
             </div>
         </div>
