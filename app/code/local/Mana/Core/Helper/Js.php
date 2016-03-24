@@ -51,6 +51,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
             $xpath .= $this->_getActionsXPath($config);
 
         }
+        Mage::log($xpath, null, "12312321.log");
         foreach ($layoutXPath->query($xpath) as $element) {
             $onDemandInsertPlace = $element;
             break;
