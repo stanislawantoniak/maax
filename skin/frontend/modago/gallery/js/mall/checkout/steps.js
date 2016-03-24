@@ -803,8 +803,8 @@
 			},
 
 			getNewsletterAgreement: function() {
-				if(this.content.find("input[name='agreement[newsletter]']").length) {
-					return this.content.find("input[name='agreement[newsletter]']").is(":checked");
+				if(this.content.find("input[type=checkbox][name='agreement[newsletter]']").length) {
+					return this.content.find("input[type=checkbox][name='agreement[newsletter]']").is(":checked");
 				}
 				return null;
 			},
@@ -815,20 +815,49 @@
 					billing = adressBook.getSelectedBilling(),
 					shipping = adressBook.getSelectedShipping(),
 					invoice = adressBook.getNeedInvoice(),
-					useBillingForShipping;
-				
-				// No invoice neededd same shiping and billing
-				if(!invoice){
-					billing = shipping;
+					useBillingForShipping = billing.getId() == shipping.getId(),
+					inpost = this.checkout.getInPost(),
+					inpostName = inpost.getName(),
+					telephoneForLocker = inpost.getTelephoneForLocker(),
+					data = [];
+
+				data.push({"name": "form_key", "value": this.getFormKey()});
+
+				if (!inpostName) {
+					// No invoice needed same shipping and billing
+					if(!invoice){
+						billing = shipping;
+					}
+
+					data.push({"name": "billing_address_id", "value": billing.getId()});
+					data.push({"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0});
+					
+					// Push billing data
+					jQuery.each(billing.getData(), function (idx) {
+						data.push({name: 'billing[' + idx + "]", value: this});
+					});
+
+					if (!useBillingForShipping) {
+						// Push shipping address id
+						data.push({"name": "shipping_address_id", "value": shipping.getId()});
+						// Push shipping data
+						jQuery.each(shipping.getData(), function (idx) {
+							data.push({name: 'shipping[' + idx + "]", value: this});
+						});
+					}
+				} else {
+					if (invoice) {
+						// Push billing data
+						jQuery.each(billing.getData(), function (idx) {
+							data.push({name: 'billing[' + idx + "]", value: this});
+						});
+						data.push({"name": "billing[use_for_shipping]", "value": 0});
+					}
+					data.push({name: 'shipping[same_as_billing]', value: invoice ? 0 : 1});
+					data.push({name: 'shipping[save_in_address_book]', value: 0});
+					data.push({name: 'inpost[name]', value: inpostName});
+					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
 				}
-				
-				useBillingForShipping = billing.getId()==shipping.getId();
-				
-				var data = [
-					{"name": "form_key", "value": this.getFormKey()},
-					{"name": "billing_address_id", "value": billing.getId()},
-					{"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0}
-				];
 
 				var newsletterAgreement = this.getNewsletterAgreement();
 				if(newsletterAgreement !== null) {
@@ -837,21 +866,6 @@
 						value: newsletterAgreement ? 1 : 0
 					});
 				}
-				
-				// Push billing data
-				jQuery.each(billing.getData(), function(idx){
-					data.push({name: 'billing['+idx+"]", value: this});
-				});
-				
-				if(!useBillingForShipping){
-					// Push shipping address id
-					data.push({"name": "shipping_address_id", "value": shipping.getId()});
-					// Push shipping data
-					jQuery.each(shipping.getData(), function(idx){
-						data.push({name: 'shipping['+idx+"]", value: this});
-					});
-				}
-				
 				
 				data.push({name: "method", value: this.checkout.getMethod()});
 				

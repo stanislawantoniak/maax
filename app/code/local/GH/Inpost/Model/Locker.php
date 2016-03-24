@@ -100,7 +100,19 @@ class GH_Inpost_Model_Locker extends Mage_Core_Model_Abstract {
 		$data['street'][]	= $this->getStreet() . ' ' . $this->getBuildingNumber();
 		$data['postcode']	= $this->getPostcode();
 		$data['city']		= $this->getTown();
+		$data['country_id']	= $this->getCountryId();
+		$data['region_id']	= $this->getRegionId();
+		$data['region']		= $this->getRegion();
 		return $data;
+	}
+
+	/**
+	 * For now Paczkomaty only in Poland
+	 *
+	 * @return string
+	 */
+	public function getCountryId() {
+		return 'PL';
 	}
 }
 
