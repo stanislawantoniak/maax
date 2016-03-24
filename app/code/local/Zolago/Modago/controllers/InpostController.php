@@ -26,6 +26,17 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 $locker->getPostcode() . " " . $locker->getTown(),
                 "(" . $locker->getLocationDescription() . ")"
             );
+
+            $additionalHtml = htmlentities(implode("<br />", $additional));
+
+            $details = array(
+                "<b>".$locker->getStreet() . " " . $locker->getBuildingNumber()."</b>",
+                $locker->getPostcode() . " " . $locker->getTown(),
+                "(" . $locker->getLocationDescription() . ")",
+                (!empty($locker->getPaymentPointDescription()) ? "<span><i class='fa fa-credit-card fa-1x'></i> ".$locker->getPaymentPointDescription()."</span>" : ""),
+                '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="'.$locker->getId().'" data-carrier-pointcode="'.$locker->getName().'" data-carrier-additional="'.$additionalHtml.'" href="">wybierz ten adres</a></div>'
+            );
+
             $lockers[] = array(
                 "id" => $locker->getId(),
                 "name" => $locker->getName(),
@@ -36,7 +47,8 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 "location_description" => htmlentities((string)$locker->getLocationDescription()),
                 "longitude" => $locker->getLongitude(),
                 "latitude" => $locker->getLatitude(),
-                "additional" => htmlentities(implode("<br />", $additional))
+                "additional" => $additionalHtml,
+                "point_details" => htmlentities(implode("<br />", $details))
             );
             $streets[$locker->getName()] = (string)$locker->getStreet(). " " . (string)$locker->getBuildingNumber();
         }
