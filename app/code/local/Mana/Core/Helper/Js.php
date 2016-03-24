@@ -44,6 +44,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         foreach ($this->_getFileConfig() as $name => $fileConfig) {
             /* @var $config array */
             /* @var $options array */
+            Mage::log($fileConfig, null, "processFiles.log");
             extract($fileConfig);
 
             if ($xpath) {
