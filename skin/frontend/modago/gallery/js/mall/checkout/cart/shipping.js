@@ -1,3 +1,8 @@
+var xsScreen = 480;
+var smallScreen = 768;
+var middleScreen = 992;
+
+
 (function () {
     "use strict";
 
@@ -71,7 +76,20 @@
                 //    showMarkerWindow(shippingPointCode);
                 //}
             });
-
+            
+            jQuery(".map_delivery_container").slideToggle();
+            jQuery(".map_delivery_container_show").click(function(e){
+                e.preventDefault();
+                resizeMap();
+                jQuery(this).text('schowaj mapę');
+                if (jQuery('.map_delivery_container').is(':visible')) {
+                    jQuery(this).text('pokaż mapę');
+                } else {
+                    jQuery(this).text('schowaj mapę');
+                }
+                jQuery(".map_delivery_container").slideToggle();
+            });
+            
 
         },
 
@@ -242,8 +260,7 @@ var closestStores = [];
 var gmarkers = [];
 
 
-var smallScreen = 768;
-var middleScreen = 992;
+
 
 // if (navigator.geolocation) {
 //     navigator.geolocation.getCurrentPosition(successFunction);
@@ -550,7 +567,7 @@ function _makeMapRequest(q) {
             data = jQuery.parseJSON(data);
 
             refreshMap(data.map_points);
-            jQuery("#map_delivery").css({"visibility": "visible"});
+            jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
         },
@@ -621,7 +638,8 @@ jQuery(document).ready(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
         jQuery(".shipping_select_point_data").html("");
         searchOnMap(enteredSearchValue);
-    })
+        
+    });
 });
 
 
