@@ -266,7 +266,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 <div class="row">
                     <p>
                         <select name="shipping_select_city">
-                            <option>--wybierz miasto--</option>
+                            <option value="">--wybierz miasto--</option>
                             <?php foreach ($inPostData["filters"] as $city => $value): ?>
                                 <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
                             <?php endforeach; ?>

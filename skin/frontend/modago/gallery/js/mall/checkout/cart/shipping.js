@@ -415,8 +415,8 @@ function refreshMap(filteredData) {
     //--setMarkers
 
     var markerClusterOptions = {
-        maxZoom: 6,
-        gridSize: 7,
+        maxZoom: 8,
+        gridSize: 20,
         styles: clusterStyles
     };
 
@@ -508,7 +508,7 @@ function clearSearchOnMap() {
 }
 
 function _makeMapRequest(q) {
-
+console.log(q);
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
@@ -532,7 +532,7 @@ function constructShippingPointSelect(map_points) {
     var options = [],
         map_point_long_name;
 
-    options.push('<option>--wybierz paczkomat--</option>');
+    options.push('<option value="">--wybierz paczkomat--</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
