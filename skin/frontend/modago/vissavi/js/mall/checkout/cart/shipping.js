@@ -131,8 +131,8 @@
             selectedMethodData["description"] = jQuery(methodRadio).attr("data-carrier-description");
             selectedMethodData["additional"] = jQuery(target).attr("data-carrier-additional");
 
-            var pointCode = (jQuery(target).attr("data-carrier-pointcode") !== "undefined") ? jQuery(target).attr("data-carrier-pointcode") : "";
-            var pointId = (jQuery(target).attr("data-carrier-pointid") !== "undefined") ? jQuery(target).attr("data-carrier-pointid") : "";
+            var pointCode = (jQuery.type(jQuery(target).attr("data-carrier-pointcode")) !== "undefined") ? jQuery(target).attr("data-carrier-pointcode") : "";
+            var pointId = (jQuery.type(jQuery(target).attr("data-carrier-pointid")) !== "undefined") ? jQuery(target).attr("data-carrier-pointid") : "";
 
             if (jQuery.type(shipping) !== "undefined") {
                 var inputs = '';
