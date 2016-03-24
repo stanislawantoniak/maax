@@ -235,50 +235,24 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
 
 
-<style>
-    #change-shipping-type {
-      bottom: -22px; position: relative;  
-    }
-    .shipping-data-additional img,
-    .shipping-data-additional figure
-    {
-        padding: 5px 7px; border: 1px solid lightgray;
-    }
-    .shipping-data-additional figure {
-        width: 84px;
-        text-align: center;
-    }
-    .shipping-method-selected-container {
-        margin-bottom: 40px;
-    }
-    .delivery-marker-window {
-        max-width: 160px;
-    }
-    .data_shipping_item {
-        cursor: pointer;
-    }
-    .shipping_select_point_data {
-        margin: 20px 0;
-    }
-</style>
-
 <div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section"></h2>
+                <h2 class="title_section">Wybierz paczkomat</h2>
             </div>
 
             <div class="modal-body">
-                <div class="col-lg-12">
-                    <div class="col-lg-6">
+                <div class="col-md-12 no-padding">
+                    <div class="col-md-6 no-padding">
 
-                        <div class="col-lg-12 no-padding">
-                            <div class="col-lg-6">
+                        <div class="col-sm-10 row no-padding clearfix">
+                            
+                            <div class="col-sm-6 col-md-6">
                                 <div class="gui-form-control">
                                     <label for="name" class="gui-label">Miasto</label>
-                                    <select name="shipping_select_city"  style="width: 100%" class="select2">
+                                    <select name="shipping_select_city" style="width: 100%;"  class="select2">
                                         <option value="">Wybierz miasto</option>
                                         <?php foreach ($inPostData["filters"] as $city => $value): ?>
                                             <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
@@ -287,25 +261,26 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                 </div>
 
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-sm-6 col-md-6">
                                 <div class="gui-form-control">
                                     <label for="name" class="gui-label">Adres</label>
-                                    <select class="select2"  style="width: 100%"  name="shipping_select_point" data-default="">
+                                    <select class="select2" style="width: 100%;"   name="shipping_select_point" data-default="">
                                         <option value="">Najpierw wybierz miasto</option>
                                     </select>
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="col-lg-12 no-padding">
-                            <div class="col-lg-12">
+                        <div class="col-sm-10 row no-padding clearfix">
+                            <div class="col-md-12">
                                 <!--Selected Point here-->
                                 <div class="shipping_select_point_data"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="col-lg-12">
-                            <div id="map_delivery" style="visibility:hidden;height: 500px;"></div>
+                    <div class="col-md-6 col-sm-12 no-padding">
+                        <div class="col-md-12">
+                            <div id="map_delivery" style="visibility:hidden;height: 350px;"></div>
                         </div>
                     </div>
                 </div>

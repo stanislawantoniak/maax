@@ -7,10 +7,11 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
         $town = $this->getRequest()->getParam("town", "");
         $result = array();
 
+        /* @var $collection GH_Inpost_Model_Resource_Locker_Collection */
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
         $collection->addFieldToFilter("town", array("eq" => $town));
-
-
+        $collection->addFieldToFilter("is_active", GH_Inpost_Model_Locker::PAYMENT_AVAILABLE);
+        $collection->addOrder("street", "ASC");
 
         $lockers = array();
         $streets = array();
@@ -27,13 +28,19 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
 
             $additionalHtml = htmlentities(implode("<br />", $additional));
 
-            $details = array(
-                "<b>".$locker->getStreet() . " " . $locker->getBuildingNumber()."</b>",
-                $locker->getPostcode() . " " . $locker->getTown(),
-                "(" . $locker->getLocationDescription() . ")",
-                (!empty($locker->getPaymentPointDescription()) ? "<span><i class='fa fa-credit-card fa-1x'></i> ".$locker->getPaymentPointDescription()."</span>" : ""),
-                '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="'.$locker->getId().'" data-carrier-pointcode="'.$locker->getName().'" data-carrier-additional="'.$additionalHtml.'" href="">wybierz ten adres</a></div>'
-            );
+            $details = 
+                    '<div class="row">'
+                        . '<div class="col-sm-6">'
+                            . '<div><b>' . $locker->getStreet() . ' ' . $locker->getBuildingNumber() . '</b></div>'
+                            . "<div>" . $locker->getPostcode() . " " . $locker->getTown() . "</div>"
+                            . "<div>(" . $locker->getLocationDescription() . ")</div>" 
+                            . ( !empty($locker->getPaymentPointDescription()) ? "<div><span><i class='fa fa-credit-card fa-1x'></i> " . $locker->getPaymentPointDescription() . "</span></div>" : "")
+                        . '</div>' 
+                        .'<div class="col-sm-6">'
+                            . '<a class="button button-third reverted large" data-select-shipping-method-trigger="1" data-carrier-pointid="' . $locker->getId() . '" data-carrier-pointcode="' . $locker->getName() . '" data-carrier-additional="' . $additionalHtml . '" href="">wybierz</a>'
+                        . '</div>'
+                    . '</div>'
+            ;
 
             $lockers[] = array(
                 "id" => $locker->getId(),
@@ -46,7 +53,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 "longitude" => $locker->getLongitude(),
                 "latitude" => $locker->getLatitude(),
                 "additional" => $additionalHtml,
-                "point_details" => htmlentities(implode("<br />", $details))
+                "point_details" => htmlentities($details)
             );
             $streets[$locker->getName()] = (string)$locker->getStreet(). " " . (string)$locker->getBuildingNumber();
         }

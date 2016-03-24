@@ -22,7 +22,8 @@
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
                 console.log(shipping_select_point.attr("data-carrier-pointcode"));
 
-                jQuery(".shipping_select_point_data").html(shipping_select_point.attr("data-carrier-point-detail"));
+                jQuery(".shipping_select_point_data")
+                    .html("<div class='shipping_select_point_data_container'>"+shipping_select_point.attr("data-carrier-point-detail")+"</div>");
                 showMarkerOnMap(shipping_select_point.attr("data-carrier-pointcode"));
 
             });
