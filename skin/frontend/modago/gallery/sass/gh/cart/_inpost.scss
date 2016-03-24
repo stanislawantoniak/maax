@@ -47,10 +47,18 @@
         }
 
         .map_delivery_container_show {            
-            text-decoration: underline;
-            margin-bottom: 20px;
+            text-decoration: underline;   
+            display: none;
+            @media(max-width: $screen-xs) {
+                display: block;
+            }
         }
-        
+        .map_delivery_container_show_up {
+            @media(max-width: $screen-xs) {
+             margin-bottom:20px;
+          }
+        }
+
 
         .gui-label {
             color: $gray;

@@ -36,7 +36,7 @@ var middleScreen = 992;
             jQuery(".data_shipping_item").click(function(){
                 jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
             });
-            jQuery(".map_delivery_container_show").hide();
+            
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
@@ -77,7 +77,7 @@ var middleScreen = 992;
                 //}
             });
             
-            jQuery(".map_delivery_container").slideToggle();
+            
             jQuery(".map_delivery_container_show").click(function(e){
                 e.preventDefault();
                 resizeMap();
@@ -568,7 +568,7 @@ function _makeMapRequest(q) {
 
             refreshMap(data.map_points);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
-            jQuery(".map_delivery_container_show").show();
+            
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
         },
@@ -584,7 +584,7 @@ function constructShippingPointSelect(map_points) {
 
     options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
-        map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
+        map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-point-detail="' + map_point.point_details + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
