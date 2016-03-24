@@ -1,3 +1,12 @@
+<script type="text/javascript" src="//maps.google.com/maps/api/js"></script>
+<?php
+$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+
+$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+?>
+<script type="text/javascript">
+    var inPostPoints = '<?php echo $inPostPoints; ?>';
+</script>
 <?php
 $_items = $this->getItems();
 ?>
