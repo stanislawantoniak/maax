@@ -20,7 +20,10 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
-;
+                console.log(shipping_select_point.attr("data-carrier-point-detail"));
+
+                jQuery(".shipping_select_point_data").html(shipping_select_point.attr("data-carrier-point-detail"));
+
             });
 
             jQuery(".data_shipping_item").click(function(){
@@ -555,7 +558,7 @@ function constructShippingPointSelect(map_points) {
     options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
-        options.push('<option data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
+        options.push('<option data-carrier-point-detail="' + map_point.point_details + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
     jQuery("select[name=shipping_select_point]")
@@ -607,6 +610,7 @@ function hideLabel(label) {
 jQuery(document).ready(function () {
     jQuery("[name=shipping_select_city]").change(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
+        jQuery(".shipping_select_point_data").html("");
         searchOnMap(enteredSearchValue);
     })
 });
