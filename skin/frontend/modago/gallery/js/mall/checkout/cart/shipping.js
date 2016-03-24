@@ -9,7 +9,11 @@
 
             Mall.Cart.Shipping.updateTotals();
 
-            jQuery(document).delegate("[data-select-shipping-method-trigger=1]", "click", function (e) {
+            jQuery(document).delegate("input[data-select-shipping-method-trigger=1]", "change", function (e) {
+                clearSearchOnMap();
+                self.handleShippingMethodSelect(e);
+            });
+            jQuery(document).delegate("a[data-select-shipping-method-trigger=1]", "click", function (e) {
                 clearSearchOnMap();
                 self.handleShippingMethodSelect(e);
             });
@@ -18,10 +22,16 @@
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
                 Mall.Cart.Shipping.setShippingMethod(shipping_select_point);
                 jQuery("#select_inpost_point").modal("hide");
+            });
+
+            jQuery(".data_shipping_item").click(function(){
+                console.log("hello");
+                jQuery(this).find("input[name=_shipping_method]")
+                    .prop("checked",true).change();
             })
 
 
-            jQuery("[data-select-shipping-method-trigger=0]").click(function (e) {
+            jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
                 jQuery("#select_inpost_point").modal("show");
             });
@@ -508,13 +518,13 @@ function clearSearchOnMap() {
 }
 
 function _makeMapRequest(q) {
-console.log(q);
+//console.log(q);
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
         data: {town: q},
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
 
