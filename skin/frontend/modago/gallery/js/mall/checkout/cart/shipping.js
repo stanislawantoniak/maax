@@ -145,7 +145,7 @@
             //console.log(formData);
 
             jQuery.ajax({
-                url: jQuery("#cart-shipping-methods-form").attr("action"),
+                url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
                 data: formData
             }).done(function (response) {
