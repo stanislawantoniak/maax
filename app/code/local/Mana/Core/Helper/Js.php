@@ -25,7 +25,6 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         Mana_Core_Profiler::start(__METHOD__);
 
         $layoutXml = $layout->getNode();
-
         $layoutDom = new DOMDocument('1.0');
         $layoutNode = $layoutDom->importNode(dom_import_simplexml($layoutXml), true);
         $layoutDom->appendChild($layoutNode);
@@ -41,21 +40,17 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
 
         $onDemandInsertPlace = null;
         $xpath = '';
-        Mage::log($this->_getFileConfig(), null, "processFiles.log");
         foreach ($this->_getFileConfig() as $name => $fileConfig) {
             /* @var $config array */
             /* @var $options array */
-            Mage::log($name, null, "processFiles.log");
             extract($fileConfig);
 
             if ($xpath) {
                 $xpath .= ' | ';
             }
-            Mage::log($config, null, "processFiles.log");
             $xpath .= $this->_getActionsXPath($config);
 
         }
-        Mage::log($xpath, null, "processFiles.log");
         foreach ($layoutXPath->query($xpath) as $element) {
             $onDemandInsertPlace = $element;
             break;
