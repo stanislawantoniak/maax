@@ -36,7 +36,7 @@ var middleScreen = 992;
             jQuery(".data_shipping_item").click(function(){
                 jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
             });
-
+            jQuery(".map_delivery_container_show").hide();
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
@@ -568,6 +568,7 @@ function _makeMapRequest(q) {
 
             refreshMap(data.map_points);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
+            jQuery(".map_delivery_container_show").show();
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
         },
