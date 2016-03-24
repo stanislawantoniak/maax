@@ -1238,7 +1238,10 @@
 					password,
 					billingData,
 					stepData = [],
-                    telephone;
+					accountTelephone,
+					inpost = this.checkout.getInPost(),
+					inpostName = inpost.getName(),
+					telephoneForLocker = inpost.getTelephoneForLocker();
 
                 if (!parseInt(jQuery("#customer_logged_in").val(), 10)) {
                     password = form.find("#account_password").val();
@@ -1249,38 +1252,38 @@
                 }
 
 				// set billing data
-                if (jQuery("#orders_someone_else").is(":checked")) {
-                    form.find("[name='billing[firstname]']").val(form.find("[name='shipping[firstname]']").val());
-                    form.find("[name='billing[lastname]']").val(form.find("[name='shipping[lastname]']").val());
-                } else {
-                    form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());
-                    form.find("[name='billing[lastname]']").val(form.find("[name='account[lastname]']").val());
-                }
-
-				// copy shipping data if order will be delivered to myself
-				if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
-					form.find("#shipping_firstname").val(form.find("#account_firstname").val());
-					form.find("#shipping_lastname").val(form.find("#account_lastname").val());
-					form.find("#shipping_telephone").val(form.find("#account_telephone").val());
+				if (jQuery("input[name='shipping[different_shipping_address]']").is(":checked")) {
+					form.find("input[name='billing[firstname]']").val(form.find("input[name='shipping[firstname]']").val());
+					form.find("input[name='billing[lastname]']").val(form.find("input[name='shipping[lastname]']").val());
+				} else {
+					form.find("input[name='billing[firstname]']").val(form.find("input[name='account[firstname]']").val());
+					form.find("input[name='billing[lastname]']").val(form.find("input[name='account[lastname]']").val());
+					form.find("input[name='shipping[firstname]']").val(form.find("input[name='account[firstname]']").val());
+					form.find("input[name='shipping[lastname]']").val(form.find("input[name='account[lastname]']").val());
+					if (!inpostName) {
+						form.find("input[name='shipping[telephone]']").val(form.find("input[name='account[telephone]']").val());
+					} else {
+						form.find("input[name='shipping[telephone]']").val(form.find("input[name='inpost[telephone]']").val());
+					}
 				}
 
-                // copy phone
-                telephone = form.find("#account_telephone").val();
-				form.find("#billing_telephone").val(telephone);
-                if (!form.find("#orders_someone_else").is(":checked")) {
-                    form.find("#shipping_telephone").val(telephone);
-                }
+				// copy phone
+				accountTelephone = form.find("input[name='account[telephone]']").val();
+				form.find("input[name='billing[telephone]']").val(accountTelephone);
+				if (!form.find("input[name='shipping[different_shipping_address]']").is(":checked")) {
+					form.find("input[name='shipping[telephone]']").val(accountTelephone);
+				}
 
-                //use_for_shipping
-                if(!form.find("input[name='billing[need_invoice]']").is(":checked")){ // if is not visible
-                    form.find("[name='billing[use_for_shipping]']").val(1);
-                } else { // is visible
-                    if(form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
-                        form.find("[name='billing[use_for_shipping]']").val(1);
-                    } else {// is not checked
-                        form.find("[name='billing[use_for_shipping]']").val(0);
-                    }
-                }
+				//use_for_shipping
+				if (!form.find("input[name='billing[need_invoice]']").is(":checked")) { // if is not visible
+					form.find("[name='billing[use_for_shipping]']").val(1);
+				} else { // is visible
+					if (form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
+						form.find("[name='billing[use_for_shipping]']").val(1);
+					} else {// is not checked
+						form.find("[name='billing[use_for_shipping]']").val(0);
+					}
+				}
 
 				stepData = form.serializeArray();
 				// fill billing data with shipping
