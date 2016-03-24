@@ -371,9 +371,18 @@
       </action>
     </reference>
     <reference name="head">
-        <action method="addJs">
-            <name>gmaps/markerclusterer.js</name>
-        </action>
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
+
+      <action method="addCss">
+        <stylesheet>js/select2/css/select2.min.css</stylesheet>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>js/select2/js/select2.min.js</name>
+      </action>
+
       <action method="removeItem">
         <type>js</type>
         <script>varien/weee.js</script>

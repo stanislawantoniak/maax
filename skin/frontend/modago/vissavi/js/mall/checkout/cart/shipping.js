@@ -21,8 +21,7 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
-                Mall.Cart.Shipping.setShippingMethod(shipping_select_point);
-                jQuery("#select_inpost_point").modal("hide");
+                ;
             });
 
             jQuery(".data_shipping_item").click(function(){
@@ -36,6 +35,19 @@
                 jQuery("#select_inpost_point").modal("show");
             });
 
+            jQuery("[name=shipping_select_city]").select2({
+                placeholder: "Wybierz miasto",
+                dropdownParent: jQuery("#select_inpost_point")
+            });
+            jQuery("[name=shipping_select_point]").select2({
+                placeholder: "Wybierz paczkomat",
+                dropdownParent: jQuery("#select_inpost_point")
+            });
+
+            jQuery("[name=shipping_select_city]").val("").select2("val", "");
+
+
+            jQuery("[name=shipping_select_point]").attr("disabled", true).val("").select2();
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
@@ -56,8 +68,7 @@
                     showMarkerWindow(shippingPointCode);
                 }
             });
-            jQuery('#select_inpost_point').on('hide.bs.modal', function () {
-            });
+
 
         },
 
@@ -152,7 +163,7 @@
             //console.log(formData);
 
             jQuery.ajax({
-                url: jQuery("#cart-shipping-methods-form").attr("action"),
+                url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
                 data: formData
             }).done(function (response) {
@@ -283,7 +294,7 @@ function initialize() {
         //pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
-    data = jQuery.parseJSON(inPostPoints);
+    data = []; //No city no points
 
 
     //I will show all the stores on the map first
@@ -534,6 +545,7 @@ function _makeMapRequest(q) {
             data = jQuery.parseJSON(data);
 
             refreshMap(data.map_points);
+            jQuery("#map_delivery").css({"visibility": "visible"});
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
         },
@@ -547,13 +559,17 @@ function constructShippingPointSelect(map_points) {
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="">--wybierz paczkomat--</option>');
+    options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
-    jQuery("[name=shipping_select_point]").html(options.join(""));
+    jQuery("select[name=shipping_select_point]")
+        .html(options.join(""))
+        .attr("disabled", false)
+        .val("")
+        .select2({dropdownParent: jQuery("#select_inpost_point")});
 }
 
 function clearClusters(e) {
@@ -596,44 +612,8 @@ function hideLabel(label) {
 }
 
 jQuery(document).ready(function () {
-    var enteredSearchValue;
-//    jQuery(document).on("keyup", "input[name=search_by_map]", function (e) {
-//        e.preventDefault();
-//
-//        enteredSearchValue = jQuery.trim(jQuery(this).val());
-//
-//        if(enteredSearchValue.length > 0){
-//            hideLabel(".the-nearest-stores");
-//            showLabel("a.stores-map-show-all");
-//        }
-//        else {
-//            hideLabel("a.stores-map-show-all");
-//        }
-//        if (enteredSearchValue.length >= 0 && e.which !== 13) {
-//            searchOnMap(enteredSearchValue);
-//        }
-//    });
-//
-//    jQuery("#search_by_map_form").submit(function (e) {
-//        e.preventDefault();
-//        console.log(jQuery("input[name=search_by_map]").val());
-//        if (jQuery.trim(jQuery("input[name=search_by_map]").val()).length > 0) {
-//
-//            hideLabel(".the-nearest-stores");
-//            searchOnMap();
-//        }
-//    })
-
     jQuery("[name=shipping_select_city]").change(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
         searchOnMap(enteredSearchValue);
     })
 });
-
-
-
-
-
-
-
-
