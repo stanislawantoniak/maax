@@ -140,7 +140,8 @@
                     inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                 });
                 inputs += '<input type="hidden" data-id="' + pointId + '" name="shipping_point_code" value="' + pointCode + '"  />';
-
+                console.log(inputs);
+                console.log(content.find("form .shipping-collect"));
                 content.find("form .shipping-collect").html(inputs);
             }
 
