@@ -378,9 +378,6 @@
         <name>gmaps/markerclusterer.js</name>
       </action>
       <action method="addCss">
-        <stylesheet>../../../frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css</stylesheet>
-      </action>
-      <action method="addCss">
         <stylesheet>js/select2/css/select2.min.css</stylesheet>
       </action>
       <action method="addItem">
