@@ -10,6 +10,20 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         return "ghinpost";
     }
 
+
+    public function getUdropShippingMethods()
+    {
+        $shipping = Mage::getModel('udropship/shipping')->getCollection();
+        $shipping->getSelect()->join(
+            array('udropship_shipping_method' => "udropship_shipping_method"),
+            "main_table.shipping_id = udropship_shipping_method.shipping_id",
+            array(
+                'method_code' => 'udropship_shipping_method.method_code',
+            )
+        );
+        return $shipping;
+    }
+
     public function getItems()
     {
         $rates = array();
@@ -19,6 +33,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         $qRates = $this->getRates();
         $allMethodsByCode = array();
         $vendors = array();
+
+        $daysInTransitData = array();
+        $shipping = $this->getUdropShippingMethods();
+        foreach($shipping as $shippingItem){
+            $daysInTransitData[$shippingItem->getMethodCode()] = $shippingItem->getDaysInTransit();
+        }
 
         foreach ($qRates as $cCode => $cRates) {
 
@@ -44,7 +64,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
                     'method_title' => $rate->getData('method_title'),
-                    'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
+                    'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
                     "delivery_type" => $deliveryType
                 );
 
@@ -54,7 +74,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                     'carrier_title' => $rate->getData('carrier_title'),
                     'method_title' => $rate->getData('method_title'),
                     'cost' => $rate->getPrice(),
-                    'days_in_transit' => Mage::getModel('udropship/shipping')->load($rate->getMethod())->getDaysInTransit(),
+                    'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
                     "delivery_type" => $deliveryType
                 );
 

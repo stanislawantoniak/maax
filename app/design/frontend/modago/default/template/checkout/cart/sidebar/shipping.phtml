@@ -1,5 +1,6 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
 
+<script type="text/javascript" src="//maps.google.com/maps/api/js"></script>
 
 
 <?php
@@ -43,9 +44,14 @@ foreach ($this->getQuote()->getAllVisibleItems() as $item) {
 
 <?php
 $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-//krumo($inPostData);
+
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
+
+<script type="text/javascript">
+    var inPostPoints = '<?php echo $inPostPoints; ?>';
+</script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
 
 <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
@@ -66,7 +72,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
-            Mall.reg.set("inpost_points",'<?php echo $inPostPoints; ?>');
+
+            var inPostPoints = '<?php echo $inPostPoints; ?>';
         })();
     </script>
 
@@ -177,7 +184,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("czas dostawy %s dni", $method["days_in_transit"]) : "";
 
             ?>
-            <div class="panel panel-default panel-color">
+            <div class="panel panel-default panel-color data_shipping_item">
                 <div class="panel-body">
                     <dl>
                         <div class="pull-left">
@@ -250,6 +257,9 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
     .delivery-marker-window {
         max-width: 160px;
     }
+    .data_shipping_item {
+        cursor: pointer;
+    }
 </style>
 
 <div class="modal fade bs-example-modal-lg" id="select_inpost_point" tabindex="-1" role="dialog" aria-hidden="true">
@@ -261,9 +271,22 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             </div>
 
             <div class="modal-body">
-                <div id="map_delivery_cluster_additional" class="col-md-12"></div>
-                <div class="col-md-12">
-                    <div id="map_delivery_cluster" style="height: 500px;"></div>
+                <div class="row">
+                    <p>
+                        <select name="shipping_select_city">
+                            <option value="">--wybierz miasto--</option>
+                            <?php foreach ($inPostData["filters"] as $city => $value): ?>
+                                <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="shipping_select_point">
+                            <option value="">--wybierz paczkomat--</option>
+                        </select>
+                    </p>
+
+                </div>
+                <div class="row">
+                    <div id="map_delivery" style="height: 500px;"></div>
                 </div>
             </div>
         </div>
