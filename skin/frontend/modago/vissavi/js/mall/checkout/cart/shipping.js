@@ -25,6 +25,7 @@
             });
 
             jQuery(".data_shipping_item").click(function(){
+                console.log("data_shipping_item");
                 jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
             });
 
