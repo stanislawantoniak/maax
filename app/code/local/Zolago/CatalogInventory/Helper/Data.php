@@ -146,6 +146,10 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
      */
 
 	public function getWebsiteId() {
-	    return Mage::app()->getWebsite()->getId();
+	    $websiteId = Mage::app()->getWebsite()->getId();
+	    if ($store = Mage::app()->getRequest()->getParam('store',null)) {
+	        $websiteId = Mage::getModel('core/store')->load($store)->getWebsiteId();
+	    }
+	    return $websiteId;
 	}
 }

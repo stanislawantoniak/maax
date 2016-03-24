@@ -74,7 +74,39 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 		// todo make set registry flag in some front event
 		return 1;//$this->hasFlagUsePos();
 	}
+	
+    /**
+     * override setData (is_in_stock by website)
+     */
+    public function setData($key,$value = null) {
+        if ($key == 'is_in_stock') {
+            $this->setIsInStock($value);
+        }
+        return parent::setData($key,$value);
+    }
+    /**
+     * override addData (is in stock by website)
+     */
 
+	public function addData(array $arr) {
+	    if (isset($arr['is_in_stock'])) {
+	        $this->setIsInStock($arr['is_in_stock']);
+	    }
+	    return parent::addData($arr);
+	}
+	
+	
+    /**
+     * set is_in_stock by website
+     * @param int $value
+     */
+
+	public function setIsInStock($value) {
+	    $instock = $this->getInStock();
+	    $websiteId = $this->_getWebsiteId();
+	    $instock[$websiteId] = $value;
+	    $this->setInStock($instock);
+	}
 	/**
 	 * Override for compatibility
 	 *
@@ -88,9 +120,6 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 		}
 		if ($key == 'is_in_stock') {
 			return $this->getIsInStock();
-		}
-		if ($key == 'stock_status') {
-			return $this->getStockStatus();
 		}
 		return parent::getData($key, $index);
 	}
@@ -115,19 +144,10 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
         $website = $this->_getWebsiteId();	    
 		$instock = $this->getInStock();
 		return empty($instock[$website])? false:true;		
-	}
-
-	public function getStockStatus() {
-		if (!$this->isFlagUsePos()) {
-			return parent::getStockStatus();
-//			return $this->_getData('stock_status');
-		}
-		if (is_null($this->posStockStatus)) {
-			$stockStatus = $this->getStockStatusInPos(); // get and set posQty, posIsInStock ans posStockStatus
-			if ($this->getProduct() && $this->getProduct()->getId()) {
-				$this->getProduct()->setIsSalable($stockStatus);
-			}
-		}
-		return $this->posQty;
+	}	
+	protected function _afterSave() {
+	    $model = Mage::getResourceModel('zolagocataloginventory/stock_website');
+	    $model->saveStockWebsite($this);
+	    return parent::_afterSave();
 	}
 }

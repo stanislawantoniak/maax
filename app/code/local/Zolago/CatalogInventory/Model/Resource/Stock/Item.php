@@ -27,7 +27,7 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
                   ->join(
                       array('pos' => $resource->getTable("zolagopos/pos")),
                       "pos.pos_id = pos_stock.pos_id",
-                      array('pos_id')
+                      array('pos_id','name')
                   )
                   ->join(
                       array('pos_website' => $resource->getTable("zolagopos/pos_vendor_website")),
@@ -46,9 +46,16 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
         $out = array();
         $sum = array();
         $instock = array();
+        $pos = array();
+        $websitePos = array();
         if ($result) {
             foreach ($result as $item) {
                 $sum[$item['pos_id']] = $item['qty'];
+                $pos[$item['pos_id']] = array(
+                    'name' => $item['name'],
+                    'qty'  => $item['qty']
+                );
+                $websitePos[$item['website_id']][] = $item['pos_id'];
                 if (!isset($out[$item['website_id']])) {
                     $out[$item['website_id']] = 0;
                 }
@@ -59,6 +66,8 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
         $out[0] = array_sum($sum); // admin website
         $object->setWebsiteQty($out);
         $object->setInStock($instock);
+        $object->setPosQty($pos);
+        $object->setWebsitePos($websitePos);
         return parent::_afterLoad($object);
     }
     /**
