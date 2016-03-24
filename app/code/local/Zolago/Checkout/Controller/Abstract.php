@@ -259,11 +259,16 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$locker->loadByLockerName($inpost['name']);
 			$shippingAddressFromLocker = $locker->getShippingAddress();
 			$shipping = array_merge($shipping, $shippingAddressFromLocker);
-			if (isset($inpost['telephone'])) {
+			if (isset($inpost['telephone']) && !empty($inpost['telephone'])) {
 				$shipping['telephone'] = $inpost['telephone'];
+				$checkoutSession = $onepage->getCheckout();
+				$checkoutSession->setLastTelephoneForLocker($inpost['telephone']);
 			} else {
 				throw new Mage_Core_Exception("Telephone number for InPost is required");
 			}
+			$customer = $onepage->getQuote()->getCustomer();
+			$shipping['firstname']	= $customer->getFirstname();
+			$shipping['lastname']	= $customer->getLastname();
 		}
 		if(is_array($shipping)){
 			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);

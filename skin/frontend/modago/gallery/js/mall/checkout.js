@@ -49,6 +49,14 @@
 			// Copy telephone functionality END
 			
 			// Common
+			getName: function() {
+				var value = jQuery("input[name='inpost[name]']").val();
+				return value;
+			},
+			getTelephoneForLocker: function() {
+				var value = jQuery("input[name='inpost[telephone]']").val();
+				return value;
+			},
 			getStreet: function() {
 				var value = jQuery("#inpost-locker-street").html();
 				return value;

@@ -14,10 +14,17 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 		return $locker;
 	}
 
-	public function getDeliveryDays() {
-		return "1-2"; // TODO
+	public function getLastTelephoneForLocker() {
+		$shippingAddress = $this->getQuote()->getShippingAddress();
+		$tel = $shippingAddress->getTelephone();
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		if ($checkoutSession->getLastTelephoneForLocker()) {
+			$tel = $checkoutSession->getLastTelephoneForLocker();
+		}
+		return $tel;
 	}
-
+	
 	/**
 	 * @return bool
 	 */
@@ -60,7 +67,12 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 	 * @return string
 	 */
     public function getStoreDefaultCountryId() {
-        return Mage::app()->getStore()->getConfig("general/country/default");
+		$countryId = Mage::app()->getStore()->getConfig("general/country/default");
+		$locker = $this->getInpostLocker();
+		if ($locker->getId()) {
+			$countryId = $locker->getCountryId();
+		}
+        return $countryId;
     }
 
     /**

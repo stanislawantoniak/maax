@@ -94,10 +94,6 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 	<div id="inpost-wrapper" class="panel panel-default inpost-wrapper">
 		<div class="panel-body">
 			<div class="form-group">
-
-				<input id="shipping_firstname"  name="shipping[firstname]" value="<?php echo $this->escapeHtml($shippingAddress->getFirstname()); ?>" type="hidden"/>
-				<input id="shipping_lastname"   name="shipping[lastname]"  value="<?php echo $this->escapeHtml($shippingAddress->getLastname()); ?>" type="hidden"/>
-				<input id="shipping_telephone"  name="shipping[telephone]" value="<?php echo $this->escapeHtml($shippingAddress->getTelephone()); ?>" type="hidden"/>
 				<input id="orders_someone_else" name="shipping[different_shipping_address]" type="checkbox" class="hidden"/>
 				<input id="inpost_locker_name"  name="inpost[name]" value="<?php echo $locker->getName(); ?>" type="hidden"/>
 				<div class="row inpost-info">
@@ -129,7 +125,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 telephone-for-locker">
 										<input id="telephone_for_locker"
 											   name="inpost[telephone]"
-											   value="<?php echo $this->escapeHtml($shippingAddress->getTelephone()); ?>"
+											   value="<?php echo $this->escapeHtml($this->getLastTelephoneForLocker()); ?>"
 											   type="tel"
 											   class="form-control phone hint validate-telephone"
 											   required="true"/>
