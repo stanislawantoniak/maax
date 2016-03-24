@@ -1,6 +1,3 @@
-<script type="text/javascript" src="//maps.google.com/maps/api/js"></script>
-
-
 <?php
 /** @var Zolago_DropshipSplit_Block_Cart $this */
 $_items = $this->getItems();
@@ -8,15 +5,6 @@ $_items = $this->getItems();
 $_helper = Mage::helper("zolagocheckout");
 $basketDataLayer = $_helper->getBasketDataLayer();
  ?>
-<?php
-$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-
-$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
-?>
-<script type="text/javascript">
-    var inPostPoints = '<?php echo $inPostPoints; ?>';
-</script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
 <?php if (!empty($basketDataLayer)): ?>
 	<script>
