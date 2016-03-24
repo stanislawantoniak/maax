@@ -25,10 +25,8 @@
             });
 
             jQuery(".data_shipping_item").click(function(){
-                console.log("hello");
-                jQuery(this).find("input[name=_shipping_method]")
-                    .prop("checked",true).change();
-            })
+                jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
+            });
 
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
