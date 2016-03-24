@@ -26,14 +26,19 @@
 			},
 			// Copy telephone functionality START
 			attachCopyTelephoneNumber:  function() {
+				var from1 = jQuery("#shipping_telephone").val(),
+					from2 = jQuery("#account_telephone").val(),
+					to = jQuery("#telephone_for_locker").val(),
+					state = (to == (from1 ? from1 : from2));
+				this.setAllowCopyTelephoneFlag(state);
 				jQuery("#shipping_telephone, #account_telephone").on('change input keypress keydown', {self: this}, this.copyTelephoneNumber);
-				jQuery("#telephone_for_locker").on('keypress keydown', {state: 0, self: this}, this.setAllowCopyTelephoneFlag);
+				jQuery("#telephone_for_locker").on('keypress keydown', {self: this}, function(event) {event.data.self.setAllowCopyTelephoneFlag(0)});
 			},
 			getAllowCopyTelephoneFlag: function() {
 				return this.allowCopyTelephone;
 			},
-			setAllowCopyTelephoneFlag: function(event) {
-				event.data.state.allowCopyTelephone = event.data.state;
+			setAllowCopyTelephoneFlag: function(state) {
+				this.allowCopyTelephone = state;
 			},
 			/**
 			 * Copy shipping telephone number to
@@ -42,8 +47,9 @@
 			copyTelephoneNumber: function (event) {
 				var self = event.data.self;
 				var a = jQuery(this).val();
+				jQuery(this).valid();
 				if (self.getAllowCopyTelephoneFlag()) {
-					jQuery("#telephone_for_locker").val(a);
+					jQuery("#telephone_for_locker").val(a).valid();
 				}
 			},
 			// Copy telephone functionality END
