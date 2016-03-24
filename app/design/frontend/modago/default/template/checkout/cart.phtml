@@ -16,7 +16,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 <script type="text/javascript">
     var inPostPoints = '<?php echo $inPostPoints; ?>';
 </script>
-<script type="text/javascript" src="<?php echo Mage::getBaseUrl("link", true); ?>/skin/frontend/modago/gallery/js/mall/checkout/cart/shipping.js"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
 <?php if (!empty($basketDataLayer)): ?>
 	<script>
