@@ -23,6 +23,7 @@
 
 			init: function () {
 				this.attachCopyTelephoneNumber();
+				this.attachValidation();
 			},
 			// Copy telephone functionality START
 			attachCopyTelephoneNumber:  function() {
@@ -53,7 +54,14 @@
 				}
 			},
 			// Copy telephone functionality END
-			
+
+			attachValidation: function() {
+				jQuery('#telephone_for_locker').parents('form').validate(Mall.validate.getOptions({
+					ignore: ":hidden",
+					rules: {}
+				}));
+			},
+
 			// Common
 			getName: function() {
 				var value = jQuery("input[name='inpost[name]']").val();
