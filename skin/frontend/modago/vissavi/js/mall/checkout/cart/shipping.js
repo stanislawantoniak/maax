@@ -11,6 +11,7 @@
 
             jQuery(document).delegate("input[data-select-shipping-method-trigger=1]", "change", function (e) {
                 clearSearchOnMap();
+                console.log("change input");
                 self.handleShippingMethodSelect(e);
             });
             jQuery(document).delegate("a[data-select-shipping-method-trigger=1]", "click", function (e) {
@@ -70,6 +71,7 @@
             return jQuery(Mall.Cart.Shipping.content).find("input[name=_shipping_method]:checked");
         },
         handleShippingMethodSelect: function (e) {
+            console.log("handleShippingMethodSelect");
             Mall.Cart.Shipping.setShippingMethod(e.target);
 
             if (jQuery(e.target).is("a") || jQuery(e.target).is("option")) {
@@ -118,7 +120,10 @@
                 content = jQuery(Mall.Cart.Shipping.content);
 
             var methodRadio = content.find("input[name=_shipping_method]:checked");
+
+            console.log(methodRadio);
             var shipping = methodRadio.val();
+            console.log(shipping);
 
 
             selectedMethodData["logo"] = jQuery(methodRadio).attr("data-carrier-logo");
