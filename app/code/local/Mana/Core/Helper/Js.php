@@ -25,7 +25,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
         Mana_Core_Profiler::start(__METHOD__);
 
         $layoutXml = $layout->getNode();
-        Mage::log($layoutXml, null, "processFiles.log");
+
         $layoutDom = new DOMDocument('1.0');
         $layoutNode = $layoutDom->importNode(dom_import_simplexml($layoutXml), true);
         $layoutDom->appendChild($layoutNode);
@@ -49,6 +49,7 @@ class Mana_Core_Helper_Js extends Mage_Core_Helper_Abstract {
             if ($xpath) {
                 $xpath .= ' | ';
             }
+            Mage::log($config, null, "processFiles.log");
             $xpath .= $this->_getActionsXPath($config);
 
         }
