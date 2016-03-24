@@ -416,20 +416,18 @@ function refreshMap(filteredData) {
             if (window.innerWidth <= middleScreen) {
 
             }
-
             infowindow.open(map, this);
 
         });
 
-        //Show all stores case
+        //Selected city case
         if (typeof filteredData !== "undefined") {
             if (window.innerWidth < smallScreen) {
-                map.setZoom(5);
-                map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
+                map.setZoom(10);
             } else {
-                map.setZoom(6);
-                map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
+                map.setZoom(10);
             }
+            map.setCenter(new google.maps.LatLng(filteredData[0].latitude,filteredData[0].longitude));
         }
 
         markers.push(marker);
@@ -440,7 +438,7 @@ function refreshMap(filteredData) {
 
     var markerClusterOptions = {
         maxZoom: 8,
-        gridSize: 20,
+        gridSize: 22,
         styles: clusterStyles
     };
 
