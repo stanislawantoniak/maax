@@ -264,13 +264,16 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
             <div class="modal-body">
                 <div class="row">
-                    <select name="shipping_select_city">
-                        <option>--wybierz miasto--</option>
-                        <?php foreach ($inPostData["filters"] as $city => $value): ?>
-                            <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <select name="shipping_select_point"></select>
+                    <p>
+                        <select name="shipping_select_city">
+                            <option>--wybierz miasto--</option>
+                            <?php foreach ($inPostData["filters"] as $city => $value): ?>
+                                <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="shipping_select_point"></select>
+                    </p>
+
                 </div>
                 <div class="row">
                     <div id="map_delivery" style="height: 500px;"></div>
