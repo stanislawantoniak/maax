@@ -10,19 +10,20 @@
             Mall.Cart.Shipping.updateTotals();
 
             jQuery(document).delegate("input[data-select-shipping-method-trigger=1]", "change", function (e) {
-                clearSearchOnMap();
+               // clearSearchOnMap();
                 self.handleShippingMethodSelect(e);
             });
             jQuery(document).delegate("a[data-select-shipping-method-trigger=1]", "click", function (e) {
-                clearSearchOnMap();
+                //clearSearchOnMap();
                 self.handleShippingMethodSelect(e);
             });
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
-                console.log(shipping_select_point.attr("data-carrier-point-detail"));
+                console.log(shipping_select_point.attr("data-carrier-pointcode"));
 
                 jQuery(".shipping_select_point_data").html(shipping_select_point.attr("data-carrier-point-detail"));
+                showMarkerOnMap(shipping_select_point.attr("data-carrier-pointcode"));
 
             });
 
@@ -64,10 +65,10 @@
                 //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
 
                 resizeMap();
-                var shippingPointCode = jQuery("[name=shipping_point_code]").val();
-                if (jQuery.type(shippingPointCode) !== "undefined") {
-                    showMarkerWindow(shippingPointCode);
-                }
+                //var shippingPointCode = jQuery("[name=shipping_point_code]").val();
+                //if (jQuery.type(shippingPointCode) !== "undefined") {
+                //    showMarkerWindow(shippingPointCode);
+                //}
             });
 
 
@@ -255,7 +256,7 @@ var middleScreen = 992;
 function initialize() {
 
     var mapOptions = {
-        zoom: 6,
+        zoom: 8,
         center: new google.maps.LatLng(defaultCenterLang, defaultCenterLat),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: false,
@@ -392,6 +393,7 @@ function refreshMap(filteredData) {
         var posLatLng = new google.maps.LatLng(pos.latitude, pos.longitude);
         var marker = new google.maps.Marker({
             id: pos.id,
+            name: pos.name,
             position: posLatLng,
             map: map,
             icon: markerImage,
@@ -414,20 +416,18 @@ function refreshMap(filteredData) {
             if (window.innerWidth <= middleScreen) {
 
             }
-
             infowindow.open(map, this);
 
         });
 
-        //Show all stores case
+        //Selected city case
         if (typeof filteredData !== "undefined") {
             if (window.innerWidth < smallScreen) {
-                map.setZoom(5);
-                map.setCenter(new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile));
+                map.setZoom(10);
             } else {
-                map.setZoom(6);
-                map.setCenter(new google.maps.LatLng(defaultCenterLang, defaultCenterLat));
+                map.setZoom(10);
             }
+            map.setCenter(new google.maps.LatLng(filteredData[0].latitude,filteredData[0].longitude));
         }
 
         markers.push(marker);
@@ -438,7 +438,7 @@ function refreshMap(filteredData) {
 
     var markerClusterOptions = {
         maxZoom: 8,
-        gridSize: 20,
+        gridSize: 22,
         styles: clusterStyles
     };
 
@@ -510,6 +510,14 @@ function buildStoresList(filteredData, position) {
         list += "</ul>";
     }
     searchByMapList.html(list);
+}
+function showMarkerOnMap(name) {
+    jQuery(gmarkers).each(function (i, item) {
+        if (name == item.name) {
+            google.maps.event.trigger(gmarkers[i], "click");
+            return false;
+        }
+    });
 }
 
 function showMarkerWindow(name) {
