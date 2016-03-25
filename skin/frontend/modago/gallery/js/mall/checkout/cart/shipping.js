@@ -192,14 +192,6 @@ var middleScreen = 992;
 })();
 
 
-jQuery(document).ready(function () {
-    Mall.Cart.Shipping.init();
-
-    jQuery("#cart-buy").on('click', function (e) {
-        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
-    });
-
-});
 
 function resizeMap() {
     if (map === null)
@@ -415,13 +407,16 @@ function refreshMap(filteredData) {
             position: posLatLng,
             map: map,
             icon: markerImage,
-            html: formatInfoWindowContent(pos)
+            html: formatInfoWindowContent(pos),
+            details: formatDetailsContent(pos)
         });
 
         var contentString = " ";
 
         google.maps.event.addListener(marker, "click", function () {
+            console.log(marker);
             infowindow.setContent(this.html);
+            jQuery(".shipping_select_point_data").html(marker.details);
             //$screen-sm: 768px
             if (window.innerWidth >= smallScreen) {
                 map.setCenter(this.getPosition()); // set map center to marker position
@@ -477,15 +472,36 @@ function smoothZoom(map, max, cnt) {
         }, 80);
     }
 }
+
+function formatDetailsContent(pos) {
+    var payment_point_description = "";
+    if(pos.payment_point_description.length > 0){
+        payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+    }
+
+    return '<div class="shipping_select_point_data_container">' +
+                '<div class="row">' +
+                    '<div class="col-sm-6">' +
+                        '<div><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
+                        '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
+                        '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>' +
+                    '<div class="col-sm-6">' +
+                        '<a class="button button-third reverted large" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
+                    '</div>' +
+                '</div>'
+            '</div>';
+}
+
 function formatInfoWindowContent(pos) {
     return '<div class="delivery-marker-window">' +
-        '<div class="info_window_text"><p></p>' +
-        '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
-        '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
-        '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
-        '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>'
-    '</div>' +
-    '</div>';
+                '<div class="info_window_text">' +
+                    '<p></p>' +
+                    '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
+                    '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
+                    '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
+                    '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>' +
+                '</div>' +
+            '</div>';
 }
 
 
@@ -635,11 +651,13 @@ function hideLabel(label) {
 }
 
 jQuery(document).ready(function () {
+    Mall.Cart.Shipping.init();
+
     jQuery("[name=shipping_select_city]").change(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
         jQuery(".shipping_select_point_data").html("");
         searchOnMap(enteredSearchValue);
-        
+
     });
 });
 

@@ -49,6 +49,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 'building_number' => (string)$locker->getBuildingNumber(),
                 "postcode" => $locker->getPostcode(),
                 'town' => (string)$locker->getTown(),
+                "payment_point_description" => (string)$locker->getPaymentPointDescription(),
                 "location_description" => htmlentities((string)$locker->getLocationDescription()),
                 "longitude" => $locker->getLongitude(),
                 "latitude" => $locker->getLatitude(),
