@@ -102,17 +102,9 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         unset($dataStockItem);
 
 
-        //Calculate sum
-        $dataSum = array();
-        foreach ($data as $sku => $_) {
-            $qty = array_sum((array)$_);
-            $dataSum[$skuIdAssoc[$sku]] = $qty;
-        }
         unset($_);
         self::allocateProductByPOS($vendorId,$dataAllocateToPOS);
 
-
-        return $dataSum;
     }
 
     /**

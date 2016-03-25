@@ -3,7 +3,7 @@
  * stock website
  */
 class Zolago_CatalogInventory_Model_Stock_Website
-    extend Mage_Core_Model_Abstract {
+    extends Mage_Core_Model_Abstract {
 
 
     protected function _construct() {
