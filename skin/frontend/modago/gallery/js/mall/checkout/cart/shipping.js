@@ -25,14 +25,14 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
-                console.log(selectedPoint);
-                console.log(selectedPoint.val());
+                //console.log(selectedPoint);
+                //console.log(selectedPoint.val());
                 if (typeof selectedPoint.val() !== "undefined"
                     && selectedPoint.val().length > 0) {
                     jQuery(".shipping_select_point_data")
                         .html("<div class='shipping_select_point_data_container'>" + selectedPoint.attr("data-carrier-point-detail") + "</div>");
 
-                    console.log(selectedPoint.val());
+                    //console.log(selectedPoint.val());
 
                     showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
                 }
@@ -411,6 +411,10 @@ function refreshMap(filteredData) {
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(40, 40));
 
+    console.log(data.length);
+
+
+
     //setMarkers
     for (var i = 0; i < data.length; i++) {
         var pos = data[i];
@@ -429,9 +433,11 @@ function refreshMap(filteredData) {
 
         var clickedMarker = "";
 
-        var zoomOnShowCity = 10,
-            zoomOnShowCityMobile = 10,
-            zoomOnShowPoint = 12;
+        var zoomOnShowCity = 11,
+            zoomOnShowCityMobile = 11,
+
+            zoomOnShowPoint = 13,
+            zoomOnShowPointBigCities = 15;
 
         google.maps.event.addListener(marker, "click", function () {
             //this - clicked marker
@@ -439,12 +445,10 @@ function refreshMap(filteredData) {
             infowindow.setContent(this.html);
 
             /*
-             Jeśli kliknie się w dowolny paczkomat na mapie ikonka się zmienia z kółeczka na dziubek,
+             Jeśli kliknie się w dowolny paczkomat na mapie
              szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
              */
             jQuery(".shipping_select_point_data").html(this.details);
-
-            console.log(clickedMarker.name);
 
             jQuery("select[name=shipping_select_point]")
                 .val(clickedMarker.name)
@@ -453,6 +457,12 @@ function refreshMap(filteredData) {
             ;
 
             //$screen-sm: 768px
+
+            if(data.length > 10){
+                zoomOnShowPoint = zoomOnShowPointBigCities;
+            }
+
+            console.log("zoomOnShowPoint: " + zoomOnShowPoint);
             if (window.innerWidth >= Mall.Breakpoint.sm) {
                 map.setCenter(clickedMarker.getPosition()); // set map center to marker position
                 smoothZoom(map, zoomOnShowPoint, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
@@ -486,7 +496,7 @@ function refreshMap(filteredData) {
 
     var markerClusterOptions = {
         maxZoom: 12,
-        gridSize: 35,
+        gridSize: 20,
         styles: clusterStyles
     };
 
@@ -643,11 +653,24 @@ function constructShippingPointSelect(map_points) {
         options.push('<option data-carrier-point-detail="' + map_point.point_details + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
+    //Jeśli w mieście jest tylko jeden paczkomat,
+    // niech wybiera go automatycznie
+    if(map_points.length === 1){
+        jQuery("select[name=shipping_select_point]")
+            .html(options.join(""))
+            .attr("disabled", false)
+            .val(map_points[0].name);
+
+            showMarkerOnMap(map_points[0].name);
+    } else {
+        jQuery("select[name=shipping_select_point]")
+            .html(options.join(""))
+            .attr("disabled", false)
+            .val("");
+    }
     jQuery("select[name=shipping_select_point]")
-        .html(options.join(""))
-        .attr("disabled", false)
-        .val("")
         .select2({dropdownParent: jQuery("#select_inpost_point")});
+
 }
 
 function clearClusters(e) {
