@@ -25,14 +25,9 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
-                //console.log(selectedPoint);
-                //console.log(selectedPoint.val());
+                console.log(selectedPoint.val());
                 if (typeof selectedPoint.val() !== "undefined"
                     && selectedPoint.val().length > 0) {
-                    jQuery(".shipping_select_point_data")
-                        .html("<div class='shipping_select_point_data_container'>" + selectedPoint.attr("data-carrier-point-detail") + "</div>");
-
-                    //console.log(selectedPoint.val());
 
                     showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
                 }
@@ -363,7 +358,6 @@ function showPosition(position) {
     refreshMap(closestStores);
     buildStoresList(closestStores, position);
 }
-
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
@@ -392,7 +386,6 @@ function calculateTheNearestStores(position, minDistance, fallback) {
 
     return closestStores;
 }
-
 //--GEO
 
 
@@ -520,9 +513,15 @@ function smoothZoom(map, max, cnt) {
 
 function formatDetailsContent(pos) {
     var payment_point_description = "";
-    if(typeof (pos.payment_point_description) !== "undefined" && pos.payment_point_description.length > 0){
+    if(typeof (pos.payment_point_description) !== "undefined"
+        && pos.payment_point_description.length > 0
+    ){
         payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
     }
+    var pos_additional =
+        '<div>' + pos.street + ' ' + pos.building_number + '</div>' +
+        '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
+        '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>';
 
     return '<div class="shipping_select_point_data_container">' +
                 '<div class="row">' +
@@ -531,19 +530,31 @@ function formatDetailsContent(pos) {
                         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
                         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>' +
                     '<div class="col-sm-6">' +
-                        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
+                        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a>' +
                     '</div>' +
                 '</div>'
             '</div>';
 }
 
 function formatInfoWindowContent(pos) {
+    var payment_point_description = "";
+    if(typeof (pos.payment_point_description) !== "undefined"
+        && pos.payment_point_description.length > 0
+    ){
+        payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+    }
+
+    var pos_additional =
+        '<div>' + pos.street + ' ' + pos.building_number + '</div>' +
+        '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
+        '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>';
+
     return '<div class="delivery-marker-window">' +
                 '<div class="info_window_text">' +
                     '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
                     '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
                     '<div class="additional-store-information">' + pos.location_description + '</div>' +
-                    '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a></div>' +
+                    '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a></div>' +
                 '</div>' +
             '</div>';
 }
@@ -598,15 +609,6 @@ function showMarkerOnMap(name) {
     });
 }
 
-function showMarkerWindow(name) {
-    jQuery(gmarkers).each(function (i, item) {
-        if (name == item.name) {
-            google.maps.event.trigger(gmarkers[i], "click");
-            return false;
-        }
-    });
-}
-
 
 function searchOnMap(q) {
     _makeMapRequest(q);
@@ -650,7 +652,7 @@ function constructShippingPointSelect(map_points) {
     options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
-        options.push('<option data-carrier-point-detail="' + map_point.point_details + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
+        options.push('<option data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
     //Jeśli w mieście jest tylko jeden paczkomat,

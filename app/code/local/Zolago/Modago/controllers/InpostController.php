@@ -20,41 +20,17 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
             /* @var $locker GH_Inpost_Model_Locker */
             $townName = (string)ucwords(strtolower($locker->getTown()));
 
-            $additional = array(
-                $locker->getStreet() . " " . $locker->getBuildingNumber(),
-                $locker->getPostcode() . " " . $townName,
-                "(" . $locker->getLocationDescription() . ")"
-            );
-
-            $additionalHtml = htmlentities(implode("<br />", $additional));
-
-            $details =
-                    '<div class="row">'
-                        . '<div class="col-sm-6">'
-                            . '<div><b>' . $locker->getStreet() . ' ' . $locker->getBuildingNumber() . '</b></div>'
-                            . "<div>" . $locker->getPostcode() . " " . $townName . "</div>"
-                            . "<div>(" . $locker->getLocationDescription() . ")</div>"
-                            . ( !empty($locker->getPaymentPointDescription()) ? "<div><span><i class='fa fa-credit-card fa-1x'></i> " . $locker->getPaymentPointDescription() . "</span></div>" : "")
-                        . '</div>'
-                        .'<div class="col-sm-6">'
-                            . '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' . $locker->getId() . '" data-carrier-pointcode="' . $locker->getName() . '" data-carrier-additional="' . $additionalHtml . '" href="">wybierz</a>'
-                        . '</div>'
-                    . '</div>'
-            ;
-
             $lockers[] = array(
                 "id" => $locker->getId(),
                 "name" => $locker->getName(),
                 'street' => (string)$locker->getStreet(),
                 'building_number' => (string)$locker->getBuildingNumber(),
-                "postcode" => $locker->getPostcode(),
+                "postcode" => (string)$locker->getPostcode(),
                 'town' => $townName,
                 "payment_point_description" => (string)$locker->getPaymentPointDescription(),
                 "location_description" => htmlentities((string)$locker->getLocationDescription()),
                 "longitude" => $locker->getLongitude(),
-                "latitude" => $locker->getLatitude(),
-                "additional" => $additionalHtml,
-                "point_details" => htmlentities($details)
+                "latitude" => $locker->getLatitude()
             );
 
             $streets[$locker->getName()] = (string)$locker->getStreet(). " " . (string)$locker->getBuildingNumber();
