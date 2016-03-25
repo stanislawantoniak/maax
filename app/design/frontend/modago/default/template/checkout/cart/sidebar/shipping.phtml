@@ -54,10 +54,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
 
-<ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
-    <?php echo $this->getChildHtml('totals'); ?>
-</ul>
-
 
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">
@@ -90,6 +86,16 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
         </div>
 
     <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+
+
+            <header>
+                <h2><?php echo $this->__("Your shopping"); ?></h2>
+            </header>
+
+
+        <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+            <?php echo $this->getChildHtml('totals'); ?>
+        </ul>
         <?php if (empty($sessionShippingMethod)): ?>
             <div class="shipping-method-selected-container">
                 <div data-item="method"></div>
@@ -162,7 +168,9 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             <?php endif; ?>
     </div>
     <div class="shipping-method-selector" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
-
+        <header>
+            <h2><?php echo $this->__("Wybierz opcję dostawy"); ?></h2>
+        </header>
         <?php foreach ($methods as $method): ?>
             <?php
             //Zend_Debug::dump($method);

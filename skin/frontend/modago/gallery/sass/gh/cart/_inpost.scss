@@ -1,4 +1,19 @@
+
+
+
 #shopping-cart {
+  #cart-shipping-methods {
+    header {
+      margin-bottom: 30px;
+      h2 {
+        font-size: 18px;
+        font-family: latoregular, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+      }
+    }
+  }
   #change-shipping-type {
     bottom: -22px;
     position: relative;
