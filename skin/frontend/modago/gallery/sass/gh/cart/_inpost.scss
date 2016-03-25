@@ -1,6 +1,3 @@
-
-
-
 #shopping-cart {
   #cart-shipping-methods {
     header {
@@ -13,7 +10,31 @@
         text-transform: uppercase;
       }
     }
+
+    .data_shipping_item {
+      .panel-body {
+        padding: 0 15px 0 15px;
+
+        .form-radio {
+          .shipping-with-description {
+            .label-wrapper {
+              font-size: 14px;
+              margin-top: -5px;
+
+              .shipping-description {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+
+
+      }
+
+    }
+
   }
+
   #change-shipping-type {
     bottom: -22px;
     position: relative;
@@ -33,11 +54,18 @@
 
   .data_shipping_item {
     cursor: pointer;
+    border-color: transparent;
+    box-shadow: none;
+
+    .data_shipping_item_radio {
+      float: left;
+      line-height: 25px;
+    }
   }
 
   //Modal content
   #select_inpost_point {
-    @media (max-width: $screen-xs){
+    @media (max-width: $screen-xs) {
       .modal-dialog {
         width: 92%;
         margin: 40px auto;
@@ -53,6 +81,7 @@
           padding: 20px 0;
           border-top: 1px solid $gray;
           border-bottom: 1px solid $gray;
+          font-size: 13px;
 
           .button-third {
             &.reverted {
@@ -61,6 +90,9 @@
               border: 2px solid #1e1e1e;
               box-shadow: inset 1px 1px 0 0 #1e1e1e;
               color: #FFFFFF;
+              &:hover {
+                background: #515151;
+              }
             }
             margin: 20px 0 0 0;
           }
@@ -78,7 +110,6 @@
           }
         }
       }
-
 
       .delivery-marker-window {
         max-width: 200px;
@@ -98,6 +129,23 @@
 
       .gui-label {
         color: $gray;
+      }
+
+      a.btn_black {
+        display: -moz-inline-stack;
+        display: inline-block;
+        vertical-align: middle;
+        zoom: 1;
+        background: #000;
+        line-height: 22px;
+        height: 22px;
+        width: 72px;
+        border: none;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        text-transform: uppercase;
+        float: left;
       }
     }
 

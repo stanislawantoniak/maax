@@ -516,12 +516,12 @@ function formatDetailsContent(pos) {
 
     return '<div class="shipping_select_point_data_container">' +
                 '<div class="row">' +
-                    '<div class="col-sm-6">' +
+                    '<div class="col-sm-9">' +
                         '<div><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
                         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
                         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>' +
-                    '<div class="col-sm-6">' +
-                        '<a class="button button-third reverted large" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
+                    '<div class="col-sm-3">' +
+                        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
                     '</div>' +
                 '</div>'
             '</div>';
@@ -533,7 +533,7 @@ function formatInfoWindowContent(pos) {
                     '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
                     '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
                     '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
-                    '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>' +
+                    '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a></div>' +
                 '</div>' +
             '</div>';
 }
