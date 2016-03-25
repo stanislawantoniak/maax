@@ -1,8 +1,3 @@
-var xsScreen = 480;
-var smallScreen = 768;
-var middleScreen = 992;
-
-
 (function () {
     "use strict";
 
@@ -24,11 +19,13 @@ var middleScreen = 992;
             });
 
             jQuery("[name=shipping_select_point]").change(function () {
-                var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
+                var shippingSelectPoint = jQuery("[name=shipping_select_point] option:selected");
 
-                jQuery(".shipping_select_point_data")
-                    .html("<div class='shipping_select_point_data_container'>"+shipping_select_point.attr("data-carrier-point-detail")+"</div>");
-                showMarkerOnMap(shipping_select_point.attr("data-carrier-pointcode"));
+                if (typeof shippingSelectPoint.val() !== "undefined" && shippingSelectPoint.val().length > 0) {
+                    jQuery(".shipping_select_point_data")
+                        .html("<div class='shipping_select_point_data_container'>" + shippingSelectPoint.attr("data-carrier-point-detail") + "</div>");
+                    showMarkerOnMap(shippingSelectPoint.attr("data-carrier-pointcode"));
+                }
             });
 
             jQuery(".data_shipping_item").click(function(){
@@ -285,7 +282,7 @@ function initialize() {
         streetViewControl: false
     };
 
-    if (window.innerWidth < smallScreen) {
+    if (window.innerWidth < Mall.Breakpoint.sm) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
@@ -409,11 +406,12 @@ function refreshMap(filteredData) {
             details: formatDetailsContent(pos)
         });
 
-        var contentString = " ";
+
         var clickedMarker = "";
 
-        var zoomOnShowCity = 10;
-        var zoomOnShowPoint = 12;
+        var zoomOnShowCity = 10,
+            zoomOnShowCityMobile = 10,
+            zoomOnShowPoint = 12;
 
         google.maps.event.addListener(marker, "click", function () {
             //this - clicked marker
@@ -430,7 +428,7 @@ function refreshMap(filteredData) {
                 .select2({dropdownParent: jQuery("#select_inpost_point")});
 
             //$screen-sm: 768px
-            if (window.innerWidth >= smallScreen) {
+            if (window.innerWidth >= Mall.Breakpoint.sm) {
                 map.setCenter(clickedMarker.getPosition()); // set map center to marker position
                 smoothZoom(map, zoomOnShowPoint, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
@@ -438,7 +436,7 @@ function refreshMap(filteredData) {
                 map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
             }
             //$screen-md: 992px
-            if (window.innerWidth <= middleScreen) {
+            if (window.innerWidth <= Mall.Breakpoint.md) {
 
             }
             infowindow.open(map, clickedMarker);
@@ -447,10 +445,10 @@ function refreshMap(filteredData) {
 
         //Selected city case
         if (typeof filteredData !== "undefined") {
-            if (window.innerWidth < smallScreen) {
+            if (window.innerWidth < Mall.Breakpoint.sm) {
                 map.setZoom(zoomOnShowCity);
             } else {
-                map.setZoom(zoomOnShowCity);
+                map.setZoom(zoomOnShowCityMobile);
             }
             map.setCenter(new google.maps.LatLng(filteredData[0].latitude,filteredData[0].longitude));
         }
@@ -507,7 +505,6 @@ function formatDetailsContent(pos) {
 function formatInfoWindowContent(pos) {
     return '<div class="delivery-marker-window">' +
                 '<div class="info_window_text">' +
-                    '<p></p>' +
                     '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
                     '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
                     '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
