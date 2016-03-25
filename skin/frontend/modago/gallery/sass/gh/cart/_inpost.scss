@@ -15,9 +15,7 @@
   .shipping-method-selected-container {
     margin-bottom: 40px;
   }
-  .delivery-marker-window {
-    max-width: 200px;
-  }
+
   .data_shipping_item {
     cursor: pointer;
   }
@@ -60,6 +58,9 @@
       }
 
 
+      .delivery-marker-window {
+        max-width: 200px;
+      }
       .map_delivery_container_show {
         text-decoration: underline;
         display: none;
