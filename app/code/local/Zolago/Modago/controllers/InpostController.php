@@ -28,16 +28,16 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
 
             $additionalHtml = htmlentities(implode("<br />", $additional));
 
-            $details = 
+            $details =
                     '<div class="row">'
-                        . '<div class="col-sm-6">'
+                        . '<div class="col-sm-9">'
                             . '<div><b>' . $locker->getStreet() . ' ' . $locker->getBuildingNumber() . '</b></div>'
                             . "<div>" . $locker->getPostcode() . " " . $townName . "</div>"
-                            . "<div>(" . $locker->getLocationDescription() . ")</div>" 
+                            . "<div>(" . $locker->getLocationDescription() . ")</div>"
                             . ( !empty($locker->getPaymentPointDescription()) ? "<div><span><i class='fa fa-credit-card fa-1x'></i> " . $locker->getPaymentPointDescription() . "</span></div>" : "")
-                        . '</div>' 
-                        .'<div class="col-sm-6">'
-                            . '<a class="button button-third reverted large" data-select-shipping-method-trigger="1" data-carrier-pointid="' . $locker->getId() . '" data-carrier-pointcode="' . $locker->getName() . '" data-carrier-additional="' . $additionalHtml . '" href="">wybierz</a>'
+                        . '</div>'
+                        .'<div class="col-sm-9">'
+                            . '<a class="btn btn_black" data-select-shipping-method-trigger="1" data-carrier-pointid="' . $locker->getId() . '" data-carrier-pointcode="' . $locker->getName() . '" data-carrier-additional="' . $additionalHtml . '" href="">wybierz</a>'
                         . '</div>'
                     . '</div>'
             ;
