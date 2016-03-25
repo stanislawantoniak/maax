@@ -19,11 +19,13 @@
             });
 
             jQuery("[name=shipping_select_point]").change(function () {
-                var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
+                var shippingSelectPoint = jQuery("[name=shipping_select_point] option:selected");
 
-                jQuery(".shipping_select_point_data")
-                    .html("<div class='shipping_select_point_data_container'>"+shipping_select_point.attr("data-carrier-point-detail")+"</div>");
-                showMarkerOnMap(shipping_select_point.attr("data-carrier-pointcode"));
+                if (typeof shippingSelectPoint.val() !== "undefined" && shippingSelectPoint.val().length > 0) {
+                    jQuery(".shipping_select_point_data")
+                        .html("<div class='shipping_select_point_data_container'>" + shippingSelectPoint.attr("data-carrier-point-detail") + "</div>");
+                    showMarkerOnMap(shippingSelectPoint.attr("data-carrier-pointcode"));
+                }
             });
 
             jQuery(".data_shipping_item").click(function(){
@@ -408,7 +410,7 @@ function refreshMap(filteredData) {
         var clickedMarker = "";
 
         var zoomOnShowCity = 10,
-            zoomOnShowCityMobile = 13,
+            zoomOnShowCityMobile = 10,
             zoomOnShowPoint = 12;
 
         google.maps.event.addListener(marker, "click", function () {
@@ -503,7 +505,6 @@ function formatDetailsContent(pos) {
 function formatInfoWindowContent(pos) {
     return '<div class="delivery-marker-window">' +
                 '<div class="info_window_text">' +
-                    '<p></p>' +
                     '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
                     '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
                     '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
