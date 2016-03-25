@@ -13,6 +13,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
 
 
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
+        $collection->addFieldToFilter("type", GH_Inpost_Model_Locker::TYPE_PACK_MACHINE);
         $collection->addFieldToFilter("is_active", GH_Inpost_Model_Locker::STATUS_ACTIVE);
         $collection->addOrder("town", "ASC");
 
