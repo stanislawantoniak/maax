@@ -24,43 +24,60 @@
 
   //Modal content
   #select_inpost_point {
-    .shipping_select_point_data {
-      margin: 20px 0;
-      .shipping_select_point_data_container {
+    .modal-body {
+      overflow: hidden !important;
+      .shipping_select_point_data {
         margin: 20px 0;
-        padding: 20px 0;
-        border-top: 1px solid $gray;
-        border-bottom: 1px solid $gray;
+        .shipping_select_point_data_container {
+          margin: 20px 0;
+          padding: 20px 0;
+          border-top: 1px solid $gray;
+          border-bottom: 1px solid $gray;
 
-        .button-third {
-          &.reverted {
-            width: 200px;
-            background: #1e1e1e;
-            border: 2px solid #1e1e1e;
-            box-shadow: inset 1px 1px 0 0 #1e1e1e;
-            color: #FFFFFF;
+          .button-third {
+            &.reverted {
+              width: 200px;
+              background: #1e1e1e;
+              border: 2px solid #1e1e1e;
+              box-shadow: inset 1px 1px 0 0 #1e1e1e;
+              color: #FFFFFF;
+            }
+            margin: 20px 0 0 0;
           }
-          margin: 20px 0 0 0;
         }
       }
-    }
 
-    .map_delivery_container_show {
-      text-decoration: underline;
-      display: none;
-      @media(max-width: $screen-xs) {
-        display: block;
+      .main_container {
+        @media(max-width: $screen-xs) {
+          padding: 0;
+        }
+
+        .map_filter_container {
+          @media(max-width: $screen-xs) {
+            padding: 0;
+          }
+        }
+      }
+
+
+      .map_delivery_container_show {
+        text-decoration: underline;
+        display: none;
+        @media(max-width: $screen-xs) {
+          display: block;
+        }
+      }
+      .map_delivery_container_show_up {
+        @media(max-width: $screen-sm) {
+          margin-bottom: 20px;
+        }
+      }
+
+      .gui-label {
+        color: $gray;
       }
     }
-    .map_delivery_container_show_up {
-      @media(max-width: $screen-sm) {
-        margin-bottom: 20px;
-      }
-    }
 
-    .gui-label {
-      color: $gray;
-    }
   }
 
 }
