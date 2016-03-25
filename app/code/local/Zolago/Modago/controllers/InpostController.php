@@ -37,7 +37,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                             . ( !empty($locker->getPaymentPointDescription()) ? "<div><span><i class='fa fa-credit-card fa-1x'></i> " . $locker->getPaymentPointDescription() . "</span></div>" : "")
                         . '</div>'
                         .'<div class="col-sm-9">'
-                            . '<a class="btn btn_black" data-select-shipping-method-trigger="1" data-carrier-pointid="' . $locker->getId() . '" data-carrier-pointcode="' . $locker->getName() . '" data-carrier-additional="' . $additionalHtml . '" href="">wybierz</a>'
+                            . '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' . $locker->getId() . '" data-carrier-pointcode="' . $locker->getName() . '" data-carrier-additional="' . $additionalHtml . '" href="">wybierz</a>'
                         . '</div>'
                     . '</div>'
             ;

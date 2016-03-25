@@ -189,18 +189,18 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("czas dostawy %s dni", $method["days_in_transit"]) : "";
 
             ?>
-            <div class="panel panel-default panel-color data_shipping_item">
+            <div class="panel panel-default data_shipping_item">
                 <div class="panel-body">
-                    <dl>
-                        <div class="pull-left">
 
+                        <div class="pull-left">
+                            <div class="form-group form-radio">
                                 <input type="radio"
                                     <?php if(count($methods) == 1): ?> style="display: none;visibility: hidden; height: 0;" <?php endif; ?>
                                        value="<?php echo $method['code']; ?>"
                                        <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod) || (count($methods) == 1)): ?>checked<?php endif; ?>
                                        name="_shipping_method"
                                        required="required"
-                                       class="shipping-method uniform"
+                                       class="shipping-method css-radio"
                                        data-select-shipping-method-trigger="<?php echo (int)($method["delivery_type"]!==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()); ?>"
                                        data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']); ?>"
                                        data-carrier-method="<?php echo $this->escapeHtml($method['method_title']); ?>"
@@ -213,13 +213,20 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                        data-carrier-pointcode=""
                                 />
 
-                            <?php echo $method['method_title'] ?>
-                            <br />
-                            <?php echo $daysInTransit; ?>
+                                <label class="css-label shipping-with-description clearfix">
+                                    <span class="pull-left label-wrapper">
+                                        <?php echo $method['method_title'] ?>
+                                        <div class="shipping-description">
+                                            <?php echo $daysInTransit; ?>
+                                        </div>
+                                    </span>
+
+                                </label>
+                            </div>
                         </div>
 
                         <div class="pull-right"><strong><?php echo $formattedCost; ?> </strong></div>
-                    </dl>
+
                 </div>
             </div>
         <?php endforeach; ?>

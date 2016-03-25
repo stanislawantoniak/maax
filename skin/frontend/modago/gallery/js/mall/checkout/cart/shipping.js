@@ -521,7 +521,7 @@ function formatDetailsContent(pos) {
                         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
                         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>' +
                     '<div class="col-sm-3">' +
-                        '<a class="btn btn_black" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
+                        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
                     '</div>' +
                 '</div>'
             '</div>';
@@ -533,7 +533,7 @@ function formatInfoWindowContent(pos) {
                     '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
                     '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
                     '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
-                    '<div><a class="btn btn_black" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a></div>' +
+                    '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a></div>' +
                 '</div>' +
             '</div>';
 }
