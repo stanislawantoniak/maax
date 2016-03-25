@@ -37,7 +37,13 @@
             jQuery(".data_shipping_item").click(function(){
                 jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
             });
-            
+
+            if(Mall.getIsBrowserMobile()){
+                jQuery('#select_inpost_point .select2').on('select2:open', function (e) {
+                    jQuery('.select2-search input').prop('focus',false);
+                });
+            }
+
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
