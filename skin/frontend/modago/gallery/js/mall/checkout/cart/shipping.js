@@ -1,3 +1,8 @@
+var xsScreen = 480;
+var smallScreen = 768;
+var middleScreen = 992;
+
+
 (function () {
     "use strict";
 
@@ -20,17 +25,16 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
-                console.log(shipping_select_point.attr("data-carrier-pointcode"));
 
-                jQuery(".shipping_select_point_data").html(shipping_select_point.attr("data-carrier-point-detail"));
+                jQuery(".shipping_select_point_data")
+                    .html("<div class='shipping_select_point_data_container'>"+shipping_select_point.attr("data-carrier-point-detail")+"</div>");
                 showMarkerOnMap(shipping_select_point.attr("data-carrier-pointcode"));
-
             });
 
             jQuery(".data_shipping_item").click(function(){
                 jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
             });
-
+            
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
@@ -70,7 +74,20 @@
                 //    showMarkerWindow(shippingPointCode);
                 //}
             });
-
+            
+            
+            jQuery(".map_delivery_container_show").click(function(e){
+                e.preventDefault();
+                resizeMap();
+                jQuery(this).text('schowaj mapę');
+                if (jQuery('.map_delivery_container').is(':visible')) {
+                    jQuery(this).text('pokaż mapę');
+                } else {
+                    jQuery(this).text('schowaj mapę');
+                }
+                jQuery(".map_delivery_container").slideToggle();
+            });
+            
 
         },
 
@@ -173,14 +190,6 @@
 })();
 
 
-jQuery(document).ready(function () {
-    Mall.Cart.Shipping.init();
-
-    jQuery("#cart-buy").on('click', function (e) {
-        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
-    });
-
-});
 
 function resizeMap() {
     if (map === null)
@@ -241,8 +250,7 @@ var closestStores = [];
 var gmarkers = [];
 
 
-var smallScreen = 768;
-var middleScreen = 992;
+
 
 // if (navigator.geolocation) {
 //     navigator.geolocation.getCurrentPosition(successFunction);
@@ -397,35 +405,52 @@ function refreshMap(filteredData) {
             position: posLatLng,
             map: map,
             icon: markerImage,
-            html: formatInfoWindowContent(pos)
+            html: formatInfoWindowContent(pos),
+            details: formatDetailsContent(pos)
         });
 
         var contentString = " ";
+        var clickedMarker = "";
+
+        var zoomOnShowCity = 10;
+        var zoomOnShowPoint = 12;
 
         google.maps.event.addListener(marker, "click", function () {
+            //this - clicked marker
+            clickedMarker = this;
             infowindow.setContent(this.html);
+
+            /*
+             Jeśli kliknie się w dowolny paczkomat na mapie ikonka się zmienia z kółeczka na dziubek,
+             szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
+             */
+            jQuery(".shipping_select_point_data").html(this.details);
+            jQuery("select[name=shipping_select_point]")
+                .val(clickedMarker.name)
+                .select2({dropdownParent: jQuery("#select_inpost_point")});
+
             //$screen-sm: 768px
             if (window.innerWidth >= smallScreen) {
-                map.setCenter(this.getPosition()); // set map center to marker position
-                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+                map.setCenter(clickedMarker.getPosition()); // set map center to marker position
+                smoothZoom(map, zoomOnShowPoint, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
-                map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
+                map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
             }
             //$screen-md: 992px
             if (window.innerWidth <= middleScreen) {
 
             }
-            infowindow.open(map, this);
+            infowindow.open(map, clickedMarker);
 
         });
 
         //Selected city case
         if (typeof filteredData !== "undefined") {
             if (window.innerWidth < smallScreen) {
-                map.setZoom(10);
+                map.setZoom(zoomOnShowCity);
             } else {
-                map.setZoom(10);
+                map.setZoom(zoomOnShowCity);
             }
             map.setCenter(new google.maps.LatLng(filteredData[0].latitude,filteredData[0].longitude));
         }
@@ -437,8 +462,8 @@ function refreshMap(filteredData) {
     //--setMarkers
 
     var markerClusterOptions = {
-        maxZoom: 8,
-        gridSize: 22,
+        maxZoom: 10,
+        gridSize: 35,
         styles: clusterStyles
     };
 
@@ -459,15 +484,36 @@ function smoothZoom(map, max, cnt) {
         }, 80);
     }
 }
+
+function formatDetailsContent(pos) {
+    var payment_point_description = "";
+    if(typeof (pos.payment_point_description) !== "undefined" && pos.payment_point_description.length > 0){
+        payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+    }
+
+    return '<div class="shipping_select_point_data_container">' +
+                '<div class="row">' +
+                    '<div class="col-sm-6">' +
+                        '<div><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
+                        '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
+                        '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>' +
+                    '<div class="col-sm-6">' +
+                        '<a class="button button-third reverted large" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos.additional + '" href="">wybierz</a>' +
+                    '</div>' +
+                '</div>'
+            '</div>';
+}
+
 function formatInfoWindowContent(pos) {
     return '<div class="delivery-marker-window">' +
-        '<div class="info_window_text"><p></p>' +
-        '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
-        '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
-        '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
-        '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>'
-    '</div>' +
-    '</div>';
+                '<div class="info_window_text">' +
+                    '<p></p>' +
+                    '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
+                    '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
+                    '<div class="additional-store-information"><p>' + pos.location_description + '</p></div>' +
+                    '<div><a class="button button-third small" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos.additional + '" href="">wybierz ten adres</a></div>' +
+                '</div>' +
+            '</div>';
 }
 
 
@@ -549,7 +595,8 @@ function _makeMapRequest(q) {
             data = jQuery.parseJSON(data);
 
             refreshMap(data.map_points);
-            jQuery("#map_delivery").css({"visibility": "visible"});
+            jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
+            
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
         },
@@ -565,7 +612,7 @@ function constructShippingPointSelect(map_points) {
 
     options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
-        map_point_long_name = map_point.street + " " + map_point.building_number + " (" + map_point.postcode + ")";
+        map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-point-detail="' + map_point.point_details + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
@@ -616,11 +663,14 @@ function hideLabel(label) {
 }
 
 jQuery(document).ready(function () {
+    Mall.Cart.Shipping.init();
+
     jQuery("[name=shipping_select_city]").change(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
         jQuery(".shipping_select_point_data").html("");
         searchOnMap(enteredSearchValue);
-    })
+
+    });
 });
 
 

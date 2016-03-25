@@ -60,7 +60,11 @@ class GH_Inpost_Model_Locker extends Mage_Core_Model_Abstract {
 	const PAYMENT_TYPE_CASH				= 1; 				// możliwość zapłaty za przesyłkę gotówką
 	const PAYMENT_TYPE_CC				= 2; 				// możliwość zapłaty za przesyłkę kartą płatniczą
 	const PAYMENT_TYPE_CASH_AND_CC		= 3; 				// możliwość zapłaty za przesyłkę gotówką bądź kartą płatniczą
-	
+
+
+	const STATUS_ACTIVE				= 1;
+	const STATUS_INACTIVE			= 0;
+
 	protected function _construct() {
 		$this->_init('ghinpost/locker');
 		parent::_construct();
