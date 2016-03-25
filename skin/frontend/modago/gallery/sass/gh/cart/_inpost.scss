@@ -63,6 +63,24 @@
     }
   }
 
+  .button-third {
+    &.reverted {
+      width: 200px;
+      background: #1e1e1e;
+      border: 2px solid #1e1e1e;
+      box-shadow: inset 1px 1px 0 0 #1e1e1e;
+      color: #FFFFFF;
+      padding: 3px;
+      text-transform: uppercase;
+      &:hover {
+        background: #515151;
+        box-shadow: inset 1px 1px 0 0 #515151;
+        border-color: #515151;
+      }
+    }
+    margin: 20px 0 0 0;
+  }
+
   //Modal content
   #select_inpost_point {
     @media (max-width: $screen-xs) {
@@ -83,19 +101,7 @@
           border-bottom: 1px solid $gray;
           font-size: 13px;
 
-          .button-third {
-            &.reverted {
-              width: 200px;
-              background: #1e1e1e;
-              border: 2px solid #1e1e1e;
-              box-shadow: inset 1px 1px 0 0 #1e1e1e;
-              color: #FFFFFF;
-              &:hover {
-                background: #515151;
-              }
-            }
-            margin: 20px 0 0 0;
-          }
+
         }
       }
 
