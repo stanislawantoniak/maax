@@ -404,11 +404,12 @@ function refreshMap(filteredData) {
             details: formatDetailsContent(pos)
         });
 
-        var contentString = " ";
+
         var clickedMarker = "";
 
-        var zoomOnShowCity = 10;
-        var zoomOnShowPoint = 12;
+        var zoomOnShowCity = 10,
+            zoomOnShowCityMobile = 13,
+            zoomOnShowPoint = 12;
 
         google.maps.event.addListener(marker, "click", function () {
             //this - clicked marker
@@ -445,7 +446,7 @@ function refreshMap(filteredData) {
             if (window.innerWidth < Mall.Breakpoint.sm) {
                 map.setZoom(zoomOnShowCity);
             } else {
-                map.setZoom(zoomOnShowCity);
+                map.setZoom(zoomOnShowCityMobile);
             }
             map.setCenter(new google.maps.LatLng(filteredData[0].latitude,filteredData[0].longitude));
         }
