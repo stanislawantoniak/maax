@@ -414,16 +414,17 @@ function refreshMap(filteredData) {
         var contentString = " ";
 
         google.maps.event.addListener(marker, "click", function () {
-            console.log(marker);
+            //this - clicked marker
             infowindow.setContent(this.html);
 
             /*
              Jeśli kliknie się w dowolny paczkomat na mapie ikonka się zmienia z kółeczka na dziubek,
              szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
              */
-            jQuery(".shipping_select_point_data").html(marker.details);
+
+            jQuery(".shipping_select_point_data").html(this.details);
             jQuery("select[name=shipping_select_point]")
-                .val(marker.name)
+                .val(this.name)
                 .select2({dropdownParent: jQuery("#select_inpost_point")});
 
             //$screen-sm: 768px
