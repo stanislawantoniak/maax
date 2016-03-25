@@ -64,8 +64,12 @@
   }
 
   .button-third {
+    margin: 20px 0 0 0;
     &.reverted {
       width: 200px;
+      @media (min-width: $screen-sm) {
+        width: 100%;
+      }
       background: #1e1e1e;
       border: 2px solid #1e1e1e;
       box-shadow: inset 1px 1px 0 0 #1e1e1e;
@@ -78,7 +82,6 @@
         border-color: #515151;
       }
     }
-    margin: 20px 0 0 0;
   }
 
   //Modal content
