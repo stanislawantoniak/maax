@@ -58,7 +58,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">
     <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">
-    <div class="data-validate"></div>
+
     <script type="text/javascript">
         (function(){
             Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
@@ -67,6 +67,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+
+            Mall.reg.set("validation_please_select_shipping", "<?php echo Mage::helper("zolagocheckout")->__("Please select shipping");?>");
         })();
     </script>
 
@@ -91,6 +93,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             <header>
                 <h2><?php echo $this->__("Your shopping"); ?></h2>
             </header>
+
 
 
         <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
@@ -171,6 +174,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
         <header>
             <h2><?php echo $this->__("Wybierz opcję dostawy"); ?></h2>
         </header>
+        <div class="data-validate"></div>
         <?php foreach ($methods as $method): ?>
             <?php
             //Zend_Debug::dump($method);

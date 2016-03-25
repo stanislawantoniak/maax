@@ -21,6 +21,9 @@
             jQuery("#change-shipping-type").click(function () {
                 jQuery(".shipping-method-selector").slideDown();
                 jQuery(".shipping-method-selected").slideUp();
+
+                //Clear selected shipping
+                jQuery("[name=_shipping_method]").prop("checked", false);
             });
 
             jQuery("[name=shipping_select_point]").change(function () {
@@ -82,10 +85,44 @@
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 resizeMap();
             });
+            jQuery('#select_inpost_point').on('hide.bs.modal', function () {
+                console.log("hide model");
+            });
 
             if(Mall.getIsBrowserMobile()){
                 jQuery(".map_delivery_container").hide();
             }
+
+            jQuery("#cart-shipping-methods-form").validate({
+                ignore: "",
+
+                rules: {
+                    '_shipping_method': {
+                        required: true
+                    }
+
+                },
+                messages: {
+                    _shipping_method: {required:Mall.reg.get("validation_please_select_shipping")},
+
+                },
+                invalidHandler: function (form, validator) {
+                    if (!validator.numberOfInvalids()) {
+                        return true;
+                    }
+
+                },
+                errorPlacement: function(error, element) {
+                    console.log(error);
+                    jQuery('#cart-shipping-methods-form .data-validate').append(error);
+                }
+            });
+            jQuery("#cart-buy").on('click', function() {
+                if(!jQuery("#cart-shipping-methods-form").valid()){
+                    return false;
+                }
+                jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
+            });
 
             jQuery(document).delegate(".map_delivery_container_show",
                 "click",
