@@ -25,14 +25,9 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
-                //console.log(selectedPoint);
-                //console.log(selectedPoint.val());
+                console.log(selectedPoint.val());
                 if (typeof selectedPoint.val() !== "undefined"
                     && selectedPoint.val().length > 0) {
-                    jQuery(".shipping_select_point_data")
-                        .html("<div class='shipping_select_point_data_container'>" + selectedPoint.attr("data-carrier-point-detail") + "</div>");
-
-                    //console.log(selectedPoint.val());
 
                     showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
                 }
@@ -363,7 +358,6 @@ function showPosition(position) {
     refreshMap(closestStores);
     buildStoresList(closestStores, position);
 }
-
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
@@ -392,7 +386,6 @@ function calculateTheNearestStores(position, minDistance, fallback) {
 
     return closestStores;
 }
-
 //--GEO
 
 
@@ -590,15 +583,6 @@ function buildStoresList(filteredData, position) {
     searchByMapList.html(list);
 }
 function showMarkerOnMap(name) {
-    jQuery(gmarkers).each(function (i, item) {
-        if (name == item.name) {
-            google.maps.event.trigger(gmarkers[i], "click");
-            return false;
-        }
-    });
-}
-
-function showMarkerWindow(name) {
     jQuery(gmarkers).each(function (i, item) {
         if (name == item.name) {
             google.maps.event.trigger(gmarkers[i], "click");
