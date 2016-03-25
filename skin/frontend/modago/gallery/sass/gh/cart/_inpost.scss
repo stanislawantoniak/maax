@@ -28,7 +28,6 @@
           }
         }
 
-
       }
 
     }
@@ -88,7 +87,7 @@
   #select_inpost_point {
     @media (max-width: $screen-xs) {
       .modal-dialog {
-        width: 92%;
+        width: 90%;
         margin: 40px auto;
       }
     }
@@ -97,27 +96,39 @@
       overflow-x: hidden !important;
       .shipping_select_point_data {
         margin: 20px 0;
+        padding-left: 8px;
         .shipping_select_point_data_container {
           margin: 20px 0;
           padding: 20px 0;
           border-top: 1px solid $gray;
           border-bottom: 1px solid $gray;
-          font-size: 13px;
-
+          font-size: 14px;
 
         }
       }
 
       .main_container {
-        @media(max-width: $screen-xs) {
+        padding: 0;
+        .main_container_column {
           padding: 0;
-        }
 
-        .map_filter_container {
-          @media(max-width: $screen-xs) {
-            padding: 0;
+          .map_filter_container {
+            @media(min-width: $screen-sm) {
+              padding-left: 0;
+            }
+          }
+          .gui-form-control-wrapper {
+            padding-left: 8px;
+          }
+
+          .map_delivery_container {
+            padding-left: 0;
           }
         }
+        .map_delivery_container_wrapper {
+          margin: 0 -15px 0 -8px;
+        }
+
       }
 
       .delivery-marker-window {
