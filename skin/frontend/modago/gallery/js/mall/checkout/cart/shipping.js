@@ -1,8 +1,3 @@
-var xsScreen = 480;
-var smallScreen = 768;
-var middleScreen = 992;
-
-
 (function () {
     "use strict";
 
@@ -285,7 +280,7 @@ function initialize() {
         streetViewControl: false
     };
 
-    if (window.innerWidth < smallScreen) {
+    if (window.innerWidth < Mall.Breakpoint.sm) {
         //mapOptions.zoom = 5;
         //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
@@ -430,7 +425,7 @@ function refreshMap(filteredData) {
                 .select2({dropdownParent: jQuery("#select_inpost_point")});
 
             //$screen-sm: 768px
-            if (window.innerWidth >= smallScreen) {
+            if (window.innerWidth >= Mall.Breakpoint.sm) {
                 map.setCenter(clickedMarker.getPosition()); // set map center to marker position
                 smoothZoom(map, zoomOnShowPoint, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
@@ -438,7 +433,7 @@ function refreshMap(filteredData) {
                 map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
             }
             //$screen-md: 992px
-            if (window.innerWidth <= middleScreen) {
+            if (window.innerWidth <= Mall.Breakpoint.md) {
 
             }
             infowindow.open(map, clickedMarker);
@@ -447,7 +442,7 @@ function refreshMap(filteredData) {
 
         //Selected city case
         if (typeof filteredData !== "undefined") {
-            if (window.innerWidth < smallScreen) {
+            if (window.innerWidth < Mall.Breakpoint.sm) {
                 map.setZoom(zoomOnShowCity);
             } else {
                 map.setZoom(zoomOnShowCity);
