@@ -25,11 +25,15 @@
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
-
+                console.log(selectedPoint);
+                console.log(selectedPoint.val());
                 if (typeof selectedPoint.val() !== "undefined"
                     && selectedPoint.val().length > 0) {
                     jQuery(".shipping_select_point_data")
                         .html("<div class='shipping_select_point_data_container'>" + selectedPoint.attr("data-carrier-point-detail") + "</div>");
+
+                    console.log(selectedPoint.val());
+
                     showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
                 }
             });
@@ -59,10 +63,19 @@
                 dropdownParent: jQuery("#select_inpost_point")
             });
 
-            jQuery("[name=shipping_select_city]").val("").select2("val", "");
+            jQuery("[name=shipping_select_city]")
+                .val("")
+                .select2({
+                dropdownParent: jQuery("#select_inpost_point")
+            });;
 
 
-            jQuery("[name=shipping_select_point]").attr("disabled", true).val("").select2();
+            jQuery("[name=shipping_select_point]")
+                .attr("disabled", true)
+                .val("")
+                .select2({
+                    dropdownParent: jQuery("#select_inpost_point")
+                });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
@@ -430,9 +443,14 @@ function refreshMap(filteredData) {
              szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
              */
             jQuery(".shipping_select_point_data").html(this.details);
+
+            console.log(clickedMarker.name);
+
             jQuery("select[name=shipping_select_point]")
                 .val(clickedMarker.name)
-                .select2({dropdownParent: jQuery("#select_inpost_point")});
+                .select2("destroy")
+                .select2({dropdownParent: jQuery("#select_inpost_point")})
+            ;
 
             //$screen-sm: 768px
             if (window.innerWidth >= Mall.Breakpoint.sm) {
