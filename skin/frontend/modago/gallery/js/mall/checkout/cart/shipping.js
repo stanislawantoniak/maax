@@ -25,12 +25,10 @@ var middleScreen = 992;
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var shipping_select_point = jQuery("[name=shipping_select_point] option:selected");
-                console.log(shipping_select_point.attr("data-carrier-pointcode"));
 
                 jQuery(".shipping_select_point_data")
                     .html("<div class='shipping_select_point_data_container'>"+shipping_select_point.attr("data-carrier-point-detail")+"</div>");
                 showMarkerOnMap(shipping_select_point.attr("data-carrier-pointcode"));
-
             });
 
             jQuery(".data_shipping_item").click(function(){
@@ -414,6 +412,9 @@ function refreshMap(filteredData) {
         var contentString = " ";
         var clickedMarker = "";
 
+        var zoomOnShowCity = 10;
+        var zoomOnShowPoint = 12;
+
         google.maps.event.addListener(marker, "click", function () {
             //this - clicked marker
             clickedMarker = this;
@@ -431,10 +432,10 @@ function refreshMap(filteredData) {
             //$screen-sm: 768px
             if (window.innerWidth >= smallScreen) {
                 map.setCenter(clickedMarker.getPosition()); // set map center to marker position
-                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+                smoothZoom(map, zoomOnShowPoint, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
-                map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
+                map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
             }
             //$screen-md: 992px
             if (window.innerWidth <= middleScreen) {
@@ -447,9 +448,9 @@ function refreshMap(filteredData) {
         //Selected city case
         if (typeof filteredData !== "undefined") {
             if (window.innerWidth < smallScreen) {
-                map.setZoom(10);
+                map.setZoom(zoomOnShowCity);
             } else {
-                map.setZoom(10);
+                map.setZoom(zoomOnShowCity);
             }
             map.setCenter(new google.maps.LatLng(filteredData[0].latitude,filteredData[0].longitude));
         }
@@ -461,7 +462,7 @@ function refreshMap(filteredData) {
     //--setMarkers
 
     var markerClusterOptions = {
-        maxZoom: 12,
+        maxZoom: 10,
         gridSize: 35,
         styles: clusterStyles
     };
@@ -486,7 +487,7 @@ function smoothZoom(map, max, cnt) {
 
 function formatDetailsContent(pos) {
     var payment_point_description = "";
-    if(pos.payment_point_description.length > 0){
+    if(typeof (pos.payment_point_description) !== "undefined" && pos.payment_point_description.length > 0){
         payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
     }
 

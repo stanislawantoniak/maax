@@ -10,7 +10,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
         /* @var $collection GH_Inpost_Model_Resource_Locker_Collection */
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
         $collection->addFieldToFilter("town", array("eq" => $town));
-        $collection->addFieldToFilter("is_active", GH_Inpost_Model_Locker::PAYMENT_AVAILABLE);
+        $collection->addFieldToFilter("is_active", GH_Inpost_Model_Locker::STATUS_ACTIVE);
         $collection->addOrder("street", "ASC");
 
         $lockers = array();
@@ -18,11 +18,11 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
 
         foreach ($collection as $locker) {
             /* @var $locker GH_Inpost_Model_Locker */
-            
+            $townName = (string)ucwords(strtolower($locker->getTown()));
 
             $additional = array(
                 $locker->getStreet() . " " . $locker->getBuildingNumber(),
-                $locker->getPostcode() . " " . $locker->getTown(),
+                $locker->getPostcode() . " " . $townName,
                 "(" . $locker->getLocationDescription() . ")"
             );
 
@@ -32,7 +32,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                     '<div class="row">'
                         . '<div class="col-sm-6">'
                             . '<div><b>' . $locker->getStreet() . ' ' . $locker->getBuildingNumber() . '</b></div>'
-                            . "<div>" . $locker->getPostcode() . " " . $locker->getTown() . "</div>"
+                            . "<div>" . $locker->getPostcode() . " " . $townName . "</div>"
                             . "<div>(" . $locker->getLocationDescription() . ")</div>" 
                             . ( !empty($locker->getPaymentPointDescription()) ? "<div><span><i class='fa fa-credit-card fa-1x'></i> " . $locker->getPaymentPointDescription() . "</span></div>" : "")
                         . '</div>' 
@@ -48,7 +48,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 'street' => (string)$locker->getStreet(),
                 'building_number' => (string)$locker->getBuildingNumber(),
                 "postcode" => $locker->getPostcode(),
-                'town' => (string)$locker->getTown(),
+                'town' => $townName,
                 "payment_point_description" => (string)$locker->getPaymentPointDescription(),
                 "location_description" => htmlentities((string)$locker->getLocationDescription()),
                 "longitude" => $locker->getLongitude(),
@@ -56,6 +56,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
                 "additional" => $additionalHtml,
                 "point_details" => htmlentities($details)
             );
+
             $streets[$locker->getName()] = (string)$locker->getStreet(). " " . (string)$locker->getBuildingNumber();
         }
         if (!empty($lockers)) {
