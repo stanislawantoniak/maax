@@ -66,25 +66,25 @@
                 //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
 
                 resizeMap();
-                //var shippingPointCode = jQuery("[name=shipping_point_code]").val();
-                //if (jQuery.type(shippingPointCode) !== "undefined") {
-                //    showMarkerWindow(shippingPointCode);
-                //}
             });
-            
-            
-            jQuery(".map_delivery_container_show").click(function(e){
-                e.preventDefault();
-                resizeMap();
-                jQuery(this).text('schowaj mapę');
-                if (jQuery('.map_delivery_container').is(':visible')) {
-                    jQuery(this).text('pokaż mapę');
-                } else {
+
+            if(Mall.getIsBrowserMobile()){
+                jQuery(".map_delivery_container").hide();
+            }
+
+            jQuery(document).delegate(".map_delivery_container_show",
+                "click",
+                function (e) {
+                    e.preventDefault();
+                    resizeMap();
                     jQuery(this).text('schowaj mapę');
-                }
-                jQuery(".map_delivery_container").slideToggle();
+                    if (jQuery('.map_delivery_container').is(':visible')) {
+                        jQuery(this).text('pokaż mapę');
+                    } else {
+                        jQuery(this).text('schowaj mapę');
+                    }
+                    jQuery(".map_delivery_container").slideToggle();
             });
-            
 
         },
 
@@ -596,6 +596,11 @@ function _makeMapRequest(q) {
             
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
+
+            if(Mall.getIsBrowserMobile()){
+                jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
+                    .html('<a href="" class="map_delivery_container_show">pokaż mapę</a>');
+            }
         },
         error: function (response) {
             console.log(response);

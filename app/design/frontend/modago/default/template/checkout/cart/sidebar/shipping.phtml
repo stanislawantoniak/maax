@@ -244,11 +244,10 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             </div>
 
             <div class="modal-body">
-                <div class="col-md-12">
+                <div class="col-md-12 main_container">
                     <div class="col-md-6 no-padding">
 
-                        <div class="col-sm-10 col-md-12 row  clearfix">
-                            
+                        <div class="col-sm-10 col-md-12 row clearfix map_filter_container">
                             <div class="col-sm-6 col-md-6">
                                 <div class="gui-form-control">
                                     <label for="name" class="gui-label">Miasto</label>
@@ -271,17 +270,17 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                             </div>
                             
                         </div>
-                        <div class="col-sm-10 col-md-12 row  clearfix">
+                        <div class="col-sm-10 col-md-12 row clearfix map_filter_container">
                             <div class="col-md-12">
                                 <!--Selected Point here-->
                                 <div class="shipping_select_point_data"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12 no-padding">
-<!--                        <div class="col-md-12 map_delivery_container_show_up">-->
-<!--                            <a href="" class="map_delivery_container_show visible-xs">pokaż mapę</a>-->
-<!--                        </div>                        -->
+                    <div class="col-md-6 col-sm-12 no-padding map_delivery_container_wrapper">
+                        <div class="col-md-12 map_delivery_container_show_up">
+                            <!--pokaż mapę link place-->
+                        </div>
                         <div class="col-md-12 map_delivery_container">
                             <div id="map_delivery" style="visibility:hidden;height: 350px;"></div>
                         </div>
