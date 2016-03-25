@@ -23,7 +23,7 @@
   //Modal content
   #select_inpost_point {
     .modal-body {
-      overflow: hidden !important;
+      overflow-x: hidden !important;
       .shipping_select_point_data {
         margin: 20px 0;
         .shipping_select_point_data_container {

@@ -18,13 +18,19 @@
                 self.handleShippingMethodSelect(e);
             });
 
-            jQuery("[name=shipping_select_point]").change(function () {
-                var shippingSelectPoint = jQuery("[name=shipping_select_point] option:selected");
+            jQuery("#change-shipping-type").click(function () {
+                jQuery(".shipping-method-selector").slideDown();
+                jQuery(".shipping-method-selected").slideUp();
+            });
 
-                if (typeof shippingSelectPoint.val() !== "undefined" && shippingSelectPoint.val().length > 0) {
+            jQuery("[name=shipping_select_point]").change(function () {
+                var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
+
+                if (typeof selectedPoint.val() !== "undefined"
+                    && selectedPoint.val().length > 0) {
                     jQuery(".shipping_select_point_data")
-                        .html("<div class='shipping_select_point_data_container'>" + shippingSelectPoint.attr("data-carrier-point-detail") + "</div>");
-                    showMarkerOnMap(shippingSelectPoint.attr("data-carrier-pointcode"));
+                        .html("<div class='shipping_select_point_data_container'>" + selectedPoint.attr("data-carrier-point-detail") + "</div>");
+                    showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
                 }
             });
 
@@ -57,14 +63,9 @@
             }
 
 
-            jQuery("#change-shipping-type").click(function () {
-                jQuery(".shipping-method-selector").slideDown();
-                jQuery(".shipping-method-selected").slideUp();
-            });
-
             jQuery('#select_inpost_point').on('show.bs.modal', function () {
-                //Must wait until the render of the modal appear, thats why we use the resizeMap and NOT resizingMap!! ;-)
-
+                //Must wait until the render of the modal appear,
+                // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 resizeMap();
             });
 
@@ -460,7 +461,7 @@ function refreshMap(filteredData) {
     //--setMarkers
 
     var markerClusterOptions = {
-        maxZoom: 10,
+        maxZoom: 12,
         gridSize: 35,
         styles: clusterStyles
     };
