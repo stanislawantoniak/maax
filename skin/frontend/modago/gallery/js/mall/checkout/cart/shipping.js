@@ -412,24 +412,25 @@ function refreshMap(filteredData) {
         });
 
         var contentString = " ";
+        var clickedMarker = "";
 
         google.maps.event.addListener(marker, "click", function () {
             //this - clicked marker
+            clickedMarker = this;
             infowindow.setContent(this.html);
 
             /*
              Jeśli kliknie się w dowolny paczkomat na mapie ikonka się zmienia z kółeczka na dziubek,
              szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
              */
-
             jQuery(".shipping_select_point_data").html(this.details);
             jQuery("select[name=shipping_select_point]")
-                .val(this.name)
+                .val(clickedMarker.name)
                 .select2({dropdownParent: jQuery("#select_inpost_point")});
 
             //$screen-sm: 768px
             if (window.innerWidth >= smallScreen) {
-                map.setCenter(this.getPosition()); // set map center to marker position
+                map.setCenter(clickedMarker.getPosition()); // set map center to marker position
                 smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
                 map.setCenter(this.getPosition());
@@ -439,7 +440,7 @@ function refreshMap(filteredData) {
             if (window.innerWidth <= middleScreen) {
 
             }
-            infowindow.open(map, this);
+            infowindow.open(map, clickedMarker);
 
         });
 
@@ -460,8 +461,8 @@ function refreshMap(filteredData) {
     //--setMarkers
 
     var markerClusterOptions = {
-        maxZoom: 8,
-        gridSize: 22,
+        maxZoom: 12,
+        gridSize: 35,
         styles: clusterStyles
     };
 
