@@ -292,8 +292,7 @@ function resizingMap(point) {
     var center = map.getCenter();
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
-    console.log(point);
-    console.log(typeof point);
+
     if(typeof point !== "undefined"){
         showMarkerOnMap(point);
     }
@@ -348,13 +347,13 @@ var gmarkersNameRelation = [];
 
 
 
-// if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(successFunction);
-// }
-// Get the latitude and the longitude;
-// function successFunction(position) {
-//     window.geoposition = position;
-// }
+ //if (navigator.geolocation) {
+ //    navigator.geolocation.getCurrentPosition(successFunction);
+ //}
+ ////Get the latitude and the longitude;
+ //function successFunction(position) {
+ //    window.geoposition = position;
+ //}
 
 
 function initialize() {
@@ -397,10 +396,9 @@ function initialize() {
     });
     data = []; //No city no points
 
-
     //I will show all the stores on the map first
-    refreshMap();
-    buildStoresList();
+    //refreshMap();
+    //buildStoresList();
     // if (navigator.geolocation) {
     //     navigator.geolocation.getCurrentPosition(
     //         function (position) {
@@ -506,7 +504,6 @@ function refreshMap(filteredData) {
             html: formatInfoWindowContent(pos),
             details: formatDetailsContent(pos)
         });
-        console.log(marker);
 
 
 
@@ -674,21 +671,11 @@ function buildStoresList(filteredData, position) {
     searchByMapList.html(list);
 }
 function showMarkerOnMap(name) {
-
-    //jQuery(gmarkers).each(function (i, item) {
-    //    if (name == item.name) {
-    //        console.log(i);
-    //        google.maps.event.trigger(gmarkers[i], "click");
-    //        return false;
-    //    }
-    //});
-
     markerId = parseInt(gmarkersNameRelation[name]);
 
     if(typeof gmarkers[markerId] !== "undefined"){
         google.maps.event.trigger(gmarkers[markerId], "click");
     }
-
 }
 
 
