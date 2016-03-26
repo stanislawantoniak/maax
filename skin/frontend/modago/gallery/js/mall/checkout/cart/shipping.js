@@ -86,7 +86,13 @@
                 resizeMap();
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
-                console.log("hide model");
+                //If inPost selected but paczkomat not selected
+                if (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
+                    && (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) == "undefined")
+                ) {
+                    //Clear selected shipping
+                    jQuery("[name=_shipping_method]").prop("checked", false);
+                }
             });
 
             if(Mall.getIsBrowserMobile()){
@@ -214,7 +220,10 @@
                 jQuery.each(vendors, function (i, vendor) {
                     inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                 });
-                inputs += '<input type="hidden" data-id="' + pointId + '" name="shipping_point_code" value="' + pointCode + '"  />';
+                if (jQuery.type(pointId) !== "undefined") {
+                    inputs += '<input type="hidden" data-id="' + pointId + '" name="shipping_point_code" value="' + pointCode + '"  />';
+                }
+
 
                 content.find("form .shipping-collect").html(inputs);
             }

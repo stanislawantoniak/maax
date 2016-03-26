@@ -1,4 +1,13 @@
 #shopping-cart {
+  #cart-shipping-methods-form {
+    .data-validate {
+      label.error {
+        margin-top: -25px;
+        margin-bottom: 20px;
+        padding: 10px 0 0px 0px !important;
+      }
+    }
+  }
   #cart-shipping-methods {
     header {
       margin-bottom: 30px;
