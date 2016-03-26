@@ -46,7 +46,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
 <script type="text/javascript">
     var inPostPoints = jQuery.parseJSON('<?php echo $inPostPoints; ?>');
-    var implementMap = (jQuery("input[data-select-shipping-method-trigger=0]").length > 0) ? true : false;
+    var implementMap = (jQuery("input[data-select-shipping-method-trigger=0]").length > 0);
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
@@ -301,7 +301,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                             <!--pokaż mapę link place-->
                         </div>
                         <div class="col-md-12 map_delivery_container">
-                            <div id="map_delivery" style="visibility:hidden;height: 400px;"></div>
+                            <div id="map_delivery" style="visibility:hidden;height: 350px;"></div>
                         </div>
                     </div>
                 </div>
