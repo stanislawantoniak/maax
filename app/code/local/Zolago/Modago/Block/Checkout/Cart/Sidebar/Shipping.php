@@ -25,10 +25,10 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
             )
         );
         $shipping->getSelect()->join(
-        array('website_table' => $model->getResource()->getTable('udropship/shipping_website')),
-        'main_table.shipping_id = website_table.shipping_id',
-        array("website_table.website_id")
-        )->where("website_table.website_id=?",Mage::app()->getWebsite()->getId());
+            array('website_table' => $model->getResource()->getTable('udropship/shipping_website')),
+            'main_table.shipping_id = website_table.shipping_id',
+            array("website_table.website_id")
+        )->where("website_table.website_id IN(?)", array(0, Mage::app()->getWebsite()->getId()));
 
         return $shipping;
     }
