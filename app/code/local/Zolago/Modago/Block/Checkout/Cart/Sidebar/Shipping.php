@@ -10,9 +10,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         return "ghinpost";
     }
 
-
+    /**
+     * @return object
+     */
     public function getUdropShippingMethods()
     {
+        $model = Mage::getModel('udropship/shipping');
         $shipping = Mage::getModel('udropship/shipping')->getCollection();
         $shipping->getSelect()->join(
             array('udropship_shipping_method' => "udropship_shipping_method"),
@@ -21,6 +24,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 'method_code' => 'udropship_shipping_method.method_code',
             )
         );
+        $shipping->getSelect()->join(
+        array('website_table' => $model->getResource()->getTable('udropship/shipping_website')),
+        'main_table.shipping_id = website_table.shipping_id',
+        array("website_table.website_id")
+        )->where("website_table.website_id=?",Mage::app()->getWebsite()->getId());
+
         return $shipping;
     }
 
@@ -36,8 +45,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         $daysInTransitData = array();
         $shipping = $this->getUdropShippingMethods();
+        $shippingMethods = array();
+
         foreach($shipping as $shippingItem){
             $daysInTransitData[$shippingItem->getMethodCode()] = $shippingItem->getDaysInTransit();
+            $shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
+
         }
 
         foreach ($qRates as $cCode => $cRates) {
@@ -59,24 +72,27 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 }
 
 
-                $methodsByCode[$rate->getCode()] = array(
-                    'vendor_id' => $vId,
-                    'code' => $rate->getCode(),
-                    'carrier_title' => $rate->getData('carrier_title'),
-                    'method_title' => $rate->getData('method_title'),
-                    'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
-                    "delivery_type" => $deliveryType
-                );
+                if(isset($shippingMethods[$rate->getMethod()])){
+                    $methodsByCode[$rate->getCode()] = array(
+                        'vendor_id' => $vId,
+                        'code' => $rate->getCode(),
+                        'carrier_title' => $rate->getData('carrier_title'),
+                        'method_title' => $rate->getData('method_title'),
+                        'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
+                        "delivery_type" => $deliveryType
+                    );
 
-                $allMethodsByCode[$rate->getCode()][] = array(
-                    'vendor_id' => $vId,
-                    'code' => $rate->getCode(),
-                    'carrier_title' => $rate->getData('carrier_title'),
-                    'method_title' => $rate->getData('method_title'),
-                    'cost' => $rate->getPrice(),
-                    'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
-                    "delivery_type" => $deliveryType
-                );
+                    $allMethodsByCode[$rate->getCode()][] = array(
+                        'vendor_id' => $vId,
+                        'code' => $rate->getCode(),
+                        'carrier_title' => $rate->getData('carrier_title'),
+                        'method_title' => $rate->getData('method_title'),
+                        'cost' => $rate->getPrice(),
+                        'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
+                        "delivery_type" => $deliveryType
+                    );
+                }
+
 
             }
             unset($cRates);
