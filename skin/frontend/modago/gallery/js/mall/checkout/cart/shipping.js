@@ -94,7 +94,8 @@
             jQuery('#select_inpost_point').on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
-                resizeMap();
+                var sessionPoint = jQuery("[name=shipping_point_code]");
+                resizeMap(sessionPoint.val());
 
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
@@ -277,22 +278,24 @@
 
 
 
-function resizeMap() {
+function resizeMap(point) {
     if (map === null)
         return;
     setTimeout(function () {
-        resizingMap();
+        resizingMap(point);
     }, 400);
 }
-function resizingMap() {
+function resizingMap(point) {
     if (map === null)
         return;
 
     var center = map.getCenter();
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
-    if(jQuery("[name=shipping_point_code]").val()){
-        showMarkerOnMap(jQuery("[name=shipping_point_code]").val());
+    console.log(point);
+    console.log(typeof point);
+    if(typeof point !== "undefined"){
+        showMarkerOnMap(point);
     }
 
 
@@ -557,7 +560,7 @@ function refreshMap(filteredData) {
 
     var markerClusterOptions = {
         maxZoom: 10,
-        gridSize: 16,
+        gridSize: 14,
         styles: clusterStyles
     };
 
@@ -682,7 +685,10 @@ function showMarkerOnMap(name) {
 
     markerId = parseInt(gmarkersNameRelation[name]);
 
-    google.maps.event.trigger(gmarkers[markerId], "click")
+    if(typeof gmarkers[markerId] !== "undefined"){
+        google.maps.event.trigger(gmarkers[markerId], "click");
+    }
+
 }
 
 
@@ -715,11 +721,10 @@ function _makeMapRequest(q, markerToShow) {
                     .html('<a href="" class="map_delivery_container_show">pokaż mapę</a>');
             }
 
-            //if(markerToShow){
+            if(markerToShow){
                 //Show session point
-
-                //showMarkerOnMap(markerToShow);
-            //}
+                showMarkerOnMap(markerToShow);
+            }
 
         },
         error: function (response) {
