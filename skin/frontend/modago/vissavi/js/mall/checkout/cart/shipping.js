@@ -16,6 +16,7 @@
             jQuery(document).delegate("a[data-select-shipping-method-trigger=1]",
                 "click",
                 function (e) {
+                    console.log("Hello");
                     self.handleShippingMethodSelect(e);
                 });
 
@@ -41,31 +42,12 @@
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
             }
 
-            self.implementMapSelections();
-        },
-
-        getVendors: function () {
-            return Mall.reg.get("vendors");
-        },
-        getVendorCosts: function () {
-            return Mall.reg.get("vendor_costs");
-        },
-        getSelectedShipping: function () {
-            return jQuery(Mall.Cart.Shipping.content).find("input[name=_shipping_method]:checked");
-        },
-        handleShippingMethodSelect: function (e) {
-            Mall.Cart.Shipping.setShippingMethod(e.target);
-
-            if (jQuery(e.target).is("a") || jQuery(e.target).is("option")) {
-                e.preventDefault();
-                jQuery("#select_inpost_point").modal("hide");
+            if (implementMap){
+                handleGeoLocation();
             }
-        },
-        implementMapSelections: function () {
-            if (!implementMap)
-                return;
 
-            handleGeoLocation();
+
+
 
             jQuery("[name=shipping_select_point]").change(function () {
                 var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
@@ -124,6 +106,27 @@
                 }
             });
             self.attachShowHideMapOnMobile();
+        },
+
+        getVendors: function () {
+            return Mall.reg.get("vendors");
+        },
+        getVendorCosts: function () {
+            return Mall.reg.get("vendor_costs");
+        },
+        getSelectedShipping: function () {
+            return jQuery(Mall.Cart.Shipping.content).find("input[name=_shipping_method]:checked");
+        },
+        handleShippingMethodSelect: function (e) {
+            Mall.Cart.Shipping.setShippingMethod(e.target);
+
+            if (jQuery(e.target).is("a") || jQuery(e.target).is("option")) {
+                e.preventDefault();
+                jQuery("#select_inpost_point").modal("hide");
+            }
+        },
+        implementMapSelections: function () {
+
 
         },
         attachShowOnMapSavedInSessionPoint: function(){
