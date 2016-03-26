@@ -8,7 +8,7 @@
             var self = this;
 
             Mall.Cart.Shipping.updateTotals();
-
+            handleGeoLocation();
             jQuery(document).delegate("input[data-select-shipping-method-trigger=1]",
                 "change",
                 function (e) {
@@ -347,13 +347,33 @@ var gmarkersNameRelation = [];
 
 
 
-//if (navigator.geolocation) {
-//    navigator.geolocation.getCurrentPosition(successFunction);
-//}
-////Get the latitude and the longitude;
-//function successFunction(position) {
-//    window.geoposition = position;
-//}
+
+//Get the latitude and the longitude;
+function successFunction(position) {
+    window.geoposition = position;
+}
+
+function handleGeoLocation(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successFunction);
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                //If you allow to see your location, you will see all the nearest stores
+                showPosition(position);
+            },
+            function (error) {
+                //If you deny to see your location, you will see all the stores
+                if (error.code == error.PERMISSION_DENIED) {
+                }
+
+            });
+    } else {
+        //Your browser doesn't support GEO location, you will see all the stores
+    }
+}
 
 
 function initialize() {
@@ -395,27 +415,6 @@ function initialize() {
         buttons: {close: {show: 0}}
     });
     data = []; //No city no points
-
-    //I will show all the stores on the map first
-    //refreshMap();
-    //buildStoresList();
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(
-    //         function (position) {
-    //             //If you allow to see your location, you will see all the nearest stores
-    //             gmarkers = [];
-    //             showPosition(position);
-    //         },
-    //         function (error) {
-    //             //If you deny to see your location, you will see all the stores
-    //             if (error.code == error.PERMISSION_DENIED) {
-    //             }
-    //
-    //         });
-    // } else {
-    //     //Your browser doesn't support GEO location, you will see all the stores
-    // }
-
 }
 
 //GEO
@@ -423,6 +422,7 @@ function showPosition(position) {
 
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
+    console.log(closestStores.length);
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
@@ -430,43 +430,48 @@ function showPosition(position) {
         showLabel(".the-nearest-stores");
         showLabel("a.stores-map-show-all");
     }
+
     if (closestStores.length <= 0) {
-        closestStores = data;
+        closestStores = inPostPoints;
     } else {
         showLabel(".the-nearest-stores");
         showLabel("a.stores-map-show-all");
     }
-
-    refreshMap(closestStores);
+    closestStores.sort(sortByDirection);
+    closestStores = closestStores.slice(0,3);
+    console.log(closestStores.slice(0,3));
     buildStoresList(closestStores, position);
 }
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
+
     //console.log(minDistance);
-    for (var i = 0; i < data.length; i++) {
-        pos = data[i];
+    for (var i = 0; i < inPostPoints.length; i++) {
+        pos = inPostPoints[i];
         // get the distance between user's location and this point
-        var dist = Haversine(data[i].latitude, data[i].longitude, position.coords.latitude, position.coords.longitude);
-        //console.log(dist);
+        var dist = Haversine(inPostPoints[i].latitude, inPostPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+
         // check if this is the shortest distance so far
         if (dist < minDistance) {
-            data[i].distance = dist;
-            closestStores.push(data[i]);
+            inPostPoints[i].distance = dist;
+            closestStores.push(inPostPoints[i]);
+
             if (fallback && closestStores.length >= 3) {
                 break;
             }
 
         }
     }
-    //sort by distance
-    function sortByDirection(a, b) {
-        return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
-    }
 
-    closestStores.sort(sortByDirection);
+
+
 
     return closestStores;
+}
+//sort by distance
+function sortByDirection(a, b) {
+    return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
 }
 //--GEO
 
@@ -592,8 +597,7 @@ function formatDetailsContent(pos) {
         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
         '<div>(' + pos.location_description + ')</div>';
 
-    return '<div class="shipping_select_point_data_container">' +
-        '<div class="row">' +
+    return '<div class="row">' +
         '<div class="col-sm-6">' +
         '<div><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
@@ -602,8 +606,7 @@ function formatDetailsContent(pos) {
         '<div class="col-sm-6">' +
         '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a>' +
         '</div>' +
-        '</div>'
-    '</div>';
+        '</div>';
 }
 
 function formatInfoWindowContent(pos) {
@@ -630,43 +633,19 @@ function formatInfoWindowContent(pos) {
 }
 
 
-function buildStoresList(filteredData, position) {
-    if (typeof filteredData !== "undefined")
-        data = filteredData;
-
-    var searchByMapList = jQuery(".search-by-map-list-container");
+function buildStoresList(points, position) {
+    var searchByMapList = jQuery(".nearest_stores_container");
 
     var list = "";
     var pos, posId;
 
-    if (data.length > 0) {
-        list += "<ul class='search-by-map-list-html'>";
-        for (var i = 0; i < data.length; i++) {
-            pos = data[i];
+    if (points.length > 0) {
+        list += "<h3>Najbliższe</h3>";
+        for (var i = 0; i < points.length; i++) {
+            pos = points[i];
             posId = pos.id;
-            list += "<li data-id='" + posId + "'>" +
-                "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
-
-                "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
-                "<p><b>" + pos.name + "</b></p>" +
-                "<p>" + pos.street + "</p>" +
-                "<p>" + pos.postcode + " " + pos.city + "</p>";
-
-
-            list += "<div>" + pos.time_opened + "</div>" +
-                "</div>" +
-
-                "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
-                "<div class='buttons'>";
-
-
-            list += "</div>" +
-                "</div>" +
-
-                "</div>" +
-                "</li>";
+            list += formatDetailsContent(pos);
         }
-        list += "</ul>";
     }
     searchByMapList.html(list);
 }
