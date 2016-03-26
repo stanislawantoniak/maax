@@ -63,13 +63,14 @@
                 console.log(selectedPoint.val());
                 if (typeof selectedPoint.val() !== "undefined"
                     && selectedPoint.val().length > 0) {
-
                     showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
                 }
             });
 
             jQuery(".data_shipping_item").click(function(){
-                jQuery(this).find("input[name=_shipping_method]").prop("checked",true).change();
+                jQuery(this).find("input[name=_shipping_method]")
+                    .prop("checked",true)
+                    .change();
             });
 
             if(Mall.getIsBrowserMobile()){
@@ -130,6 +131,22 @@
             if(Mall.getIsBrowserMobile()){
                 jQuery(".map_delivery_container").hide();
             }
+
+            //Show on map session paczkomat
+            var sessionPoint = jQuery("[name=shipping_point_code]");
+            var sessionPointTown, sessionPointName;
+            if(sessionPoint.val()){
+                sessionPointName = sessionPoint.val();
+                sessionPointTown = sessionPoint.attr("data-town");
+
+
+                jQuery(".shipping_select_point_data").html("");
+                jQuery("[name=shipping_select_city]")
+                    .val(sessionPointTown)
+                    .select2({dropdownParent: jQuery("#select_inpost_point")});
+                searchOnMap(sessionPointTown, sessionPointName);
+            }
+            //Show on map session paczkomat
 
 
 
@@ -217,6 +234,7 @@
 
             var pointCode = (jQuery(target).attr("data-carrier-pointcode") !== "undefined") ? jQuery(target).attr("data-carrier-pointcode") : "";
             var pointId = (jQuery(target).attr("data-carrier-pointid") !== "undefined") ? jQuery(target).attr("data-carrier-pointid") : "";
+            var pointTown = (jQuery(target).attr("data-carrier-town") !== "undefined") ? jQuery(target).attr("data-carrier-town") : "";
 
             if (jQuery.type(shipping) !== "undefined") {
                 var inputs = '';
@@ -224,7 +242,7 @@
                     inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                 });
                 if (jQuery.type(pointId) !== "undefined") {
-                    inputs += '<input type="hidden" data-id="' + pointId + '" name="shipping_point_code" value="' + pointCode + '"  />';
+                    inputs += '<input type="hidden" data-id="' + pointId + '" data-town="' + pointTown + '" name="shipping_point_code" value="' + pointCode + '"  />';
                 }
 
 
@@ -580,7 +598,7 @@ function formatDetailsContent(pos) {
                         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+
                     '</div>' +
                     '<div class="col-sm-6">' +
-                        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a>' +
+                        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a>' +
                     '</div>' +
                 '</div>'
             '</div>';
@@ -651,6 +669,7 @@ function buildStoresList(filteredData, position) {
     searchByMapList.html(list);
 }
 function showMarkerOnMap(name) {
+    console.log("showMarkerOnMap: " + name);
     jQuery(gmarkers).each(function (i, item) {
         if (name == item.name) {
             google.maps.event.trigger(gmarkers[i], "click");
@@ -660,14 +679,14 @@ function showMarkerOnMap(name) {
 }
 
 
-function searchOnMap(q) {
-    _makeMapRequest(q);
+function searchOnMap(q, markerToShow) {
+    _makeMapRequest(q, markerToShow);
 }
 function clearSearchOnMap() {
     _makeMapRequest(0)
 }
 
-function _makeMapRequest(q) {
+function _makeMapRequest(q, markerToShow) {
 //console.log(q);
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
@@ -688,6 +707,11 @@ function _makeMapRequest(q) {
                 jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
                     .html('<a href="" class="map_delivery_container_show">pokaż mapę</a>');
             }
+
+            if(typeof (markerToShow) !== "undefined"){
+                showMarkerOnMap(markerToShow);
+            }
+
         },
         error: function (response) {
             console.log(response);
@@ -702,7 +726,7 @@ function constructShippingPointSelect(map_points) {
     options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
-        options.push('<option data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
+        options.push('<option data-carrier-town="' + map_point.town + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
 
     //Jeśli w mieście jest tylko jeden paczkomat,
