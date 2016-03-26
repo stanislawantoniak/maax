@@ -20,7 +20,6 @@ $cost = $items->cost;
 
 
 $sessionShippingMethod = $this->getData("shipping_method");
-//krumo($sessionShippingMethod);
 
 /* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
@@ -47,6 +46,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
 <script type="text/javascript">
     var inPostPoints = jQuery.parseJSON('<?php echo $inPostPoints; ?>');
+    var implementMap = (jQuery("input[data-select-shipping-method-trigger=0]").length > 0) ? true : false;
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
