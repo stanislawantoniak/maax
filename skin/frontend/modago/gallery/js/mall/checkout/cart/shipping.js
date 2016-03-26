@@ -95,6 +95,7 @@
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 resizeMap();
+
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
@@ -290,6 +291,10 @@ function resizingMap() {
     var center = map.getCenter();
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
+    if(jQuery("[name=shipping_point_code]").val()){
+        showMarkerOnMap(jQuery("[name=shipping_point_code]").val());
+    }
+
 
 }
 var clusterStyles = [
@@ -552,7 +557,7 @@ function refreshMap(filteredData) {
 
     var markerClusterOptions = {
         maxZoom: 10,
-        gridSize: 20,
+        gridSize: 16,
         styles: clusterStyles
     };
 
@@ -713,7 +718,7 @@ function _makeMapRequest(q, markerToShow) {
             //if(markerToShow){
                 //Show session point
 
-                showMarkerOnMap(markerToShow);
+                //showMarkerOnMap(markerToShow);
             //}
 
         },
