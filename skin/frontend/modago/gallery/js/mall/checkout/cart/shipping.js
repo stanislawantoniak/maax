@@ -783,11 +783,3 @@ jQuery(document).ready(function () {
 
     });
 });
-
-
-
-
-
-
-
-
