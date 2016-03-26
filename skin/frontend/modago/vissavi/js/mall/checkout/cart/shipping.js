@@ -6,9 +6,8 @@
         content: "#cart-shipping-methods",
         init: function () {
             var self = this;
+            self.updateTotals();
 
-            Mall.Cart.Shipping.updateTotals();
-            handleGeoLocation();
             jQuery(document).delegate("input[data-select-shipping-method-trigger=1]",
                 "change",
                 function (e) {
@@ -32,84 +31,17 @@
                 jQuery("[name=_shipping_method]").prop("checked", false);
             });
 
-            jQuery("[name=shipping_select_point]").change(function () {
-                var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
-
-                if (typeof selectedPoint.val() !== "undefined"
-                    && selectedPoint.val().length > 0) {
-                    showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
-                }
-            });
-
             jQuery(".data_shipping_item").click(function(){
                 jQuery(this).find("input[name=_shipping_method]")
                     .prop("checked",true)
                     .change();
             });
 
-            if(Mall.getIsBrowserMobile()){
-                jQuery('#select_inpost_point .select2').on('select2:open', function (e) {
-                    jQuery('.select2-search input').prop('focus',false);
-                });
-            }
-
-
-            jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
-                //1. populate popup
-                jQuery("#select_inpost_point").modal("show");
-            });
-
-            jQuery("[name=shipping_select_city]").select2({
-                placeholder: "Wybierz miasto",
-                dropdownParent: jQuery("#select_inpost_point")
-            });
-            jQuery("[name=shipping_select_point]").select2({
-                placeholder: "Wybierz paczkomat",
-                dropdownParent: jQuery("#select_inpost_point")
-            });
-
-            jQuery("[name=shipping_select_city]")
-                .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });;
-
-
-            jQuery("[name=shipping_select_point]")
-                .attr("disabled", true)
-                .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });
-
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
             }
 
-            //Show on map session paczkomat
-            self.attachShowOnMapSavedInSessionPoint();
-            //Show on map session paczkomat
-
-
-            jQuery('#select_inpost_point').on('show.bs.modal', function () {
-                //Must wait until the render of the modal appear,
-                // that's why we use the resizeMap and NOT resizingMap!! ;-)
-                var sessionPoint = jQuery("[name=shipping_point_code]");
-                resizeMap(sessionPoint.val());
-
-            });
-            jQuery('#select_inpost_point').on('hide.bs.modal', function () {
-                //If inPost selected but paczkomat not selected
-                if (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
-                    && (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) == "undefined")
-                ) {
-                    //Clear selected shipping
-                    jQuery("[name=_shipping_method]").prop("checked", false);
-                }
-            });
-
-            self.attachShowHideMapOnMobile();
-
+            self.implementMapSelections();
         },
 
         getVendors: function () {
@@ -128,6 +60,71 @@
                 e.preventDefault();
                 jQuery("#select_inpost_point").modal("hide");
             }
+        },
+        implementMapSelections: function () {
+            if (!implementMap)
+                return;
+
+            handleGeoLocation();
+
+            jQuery("[name=shipping_select_point]").change(function () {
+                var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
+
+                if (typeof selectedPoint.val() !== "undefined"
+                    && selectedPoint.val().length > 0) {
+                    showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
+                }
+            });
+            if (Mall.getIsBrowserMobile()) {
+                jQuery('#select_inpost_point .select2').on('select2:open', function (e) {
+                    jQuery('.select2-search input').prop('focus', false);
+                });
+            }
+            jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
+                //1. populate popup
+                jQuery("#select_inpost_point").modal("show");
+            });
+            jQuery("[name=shipping_select_city]").select2({
+                placeholder: "Wybierz miasto",
+                dropdownParent: jQuery("#select_inpost_point")
+            });
+            jQuery("[name=shipping_select_point]").select2({
+                placeholder: "Wybierz paczkomat",
+                dropdownParent: jQuery("#select_inpost_point")
+            });
+            jQuery("[name=shipping_select_city]")
+                .val("")
+                .select2({
+                    dropdownParent: jQuery("#select_inpost_point")
+                });
+            jQuery("[name=shipping_select_point]")
+                .attr("disabled", true)
+                .val("")
+                .select2({
+                    dropdownParent: jQuery("#select_inpost_point")
+                });
+            //Show on map session paczkomat
+            self.attachShowOnMapSavedInSessionPoint();
+            //Show on map session paczkomat
+
+            jQuery('#select_inpost_point').on('show.bs.modal', function () {
+                //Must wait until the render of the modal appear,
+                // that's why we use the resizeMap and NOT resizingMap!! ;-)
+                var sessionPoint = jQuery("[name=shipping_point_code]");
+                resizeMap(sessionPoint.val());
+
+            });
+            jQuery('#select_inpost_point').on('hide.bs.modal', function () {
+                //If inPost selected but paczkomat not selected
+                if (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
+                    && (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) == "undefined")
+                ) {
+                    //Clear selected shipping
+                    jQuery("[name=_shipping_method]").prop("checked", false);
+                }
+            });
+            self.attachShowHideMapOnMobile();
+
         },
         attachShowOnMapSavedInSessionPoint: function(){
             var sessionPoint = jQuery("[name=shipping_point_code]");
@@ -786,11 +783,3 @@ jQuery(document).ready(function () {
 
     });
 });
-
-
-
-
-
-
-
-
