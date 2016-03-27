@@ -95,15 +95,19 @@
             });
             jQuery("[name=shipping_select_city]")
                 .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });
+                .trigger("change")
+                //.select2({
+                //    dropdownParent: jQuery("#select_inpost_point")
+                //})
+            ;
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });
+                .trigger("change")
+                //.select2({
+                //    dropdownParent: jQuery("#select_inpost_point")
+                //})
+            ;
             //Show on map session paczkomat
             self.attachShowOnMapSavedInSessionPoint();
             //Show on map session paczkomat
@@ -136,7 +140,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point")});
+                    .trigger("change");
                 searchOnMap(sessionPointTown, sessionPoint.val());
             }
         },
@@ -430,7 +434,7 @@ function showPosition(position) {
     }
 
     if (closestStores.length <= 0) {
-        closestStores = inPostPoints;
+        //closestStores = inPostPoints;
     } else {
         showLabel(".the-nearest-stores");
         showLabel("a.stores-map-show-all");
@@ -461,10 +465,6 @@ function calculateTheNearestStores(position, minDistance, fallback) {
 
         }
     }
-
-
-
-
     return closestStores;
 }
 //sort by distance
@@ -529,8 +529,9 @@ function refreshMap(filteredData) {
 
             jQuery("select[name=shipping_select_point]")
                 .val(this.name)
-                .select2("destroy")
-                .select2({dropdownParent: jQuery("#select_inpost_point")});
+
+                //.select2({dropdownParent: jQuery("#select_inpost_point")})
+            ;
 
             if(data.length > 10){
                 zoomOnShowPoint = zoomOnShowPointBigCities;
@@ -678,6 +679,7 @@ function _makeMapRequest(q, markerToShow) {
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
 
+            console.log(closestStores)
             refreshMap(data.map_points);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
 
@@ -719,23 +721,25 @@ function constructShippingPointSelect(map_points) {
         jQuery("select[name=shipping_select_point]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val(map_points[0].name);
+            .val(map_points[0].name)
+            .trigger("change");
 
         showMarkerOnMap(map_points[0].name);
     } else {
         jQuery("select[name=shipping_select_point]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val("");
+            .val("")
+            .trigger("change");
     }
 
 
 
 
 
-
-    jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point")});
+    //
+    //jQuery("select[name=shipping_select_point]")
+    //    .select2({dropdownParent: jQuery("#select_inpost_point")});
 
 }
 
