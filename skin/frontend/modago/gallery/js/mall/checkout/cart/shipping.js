@@ -93,17 +93,15 @@
                 placeholder: "Wybierz paczkomat",
                 dropdownParent: jQuery("#select_inpost_point")
             });
+
             jQuery("[name=shipping_select_city]")
                 .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });
+                .trigger("change");
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });
+                .trigger("change");
+
             //Show on map session paczkomat
             self.attachShowOnMapSavedInSessionPoint();
             //Show on map session paczkomat
@@ -136,7 +134,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point")});
+                    .trigger("change");
                 searchOnMap(sessionPointTown, sessionPoint.val());
             }
         },
@@ -259,7 +257,7 @@
 
 
             var formData = jQuery("#cart-shipping-methods-form").serializeArray();
-            //console.log(formData);
+
 
             jQuery.ajax({
                 url: "/checkout/singlepage/saveBasketShipping/",
@@ -352,25 +350,25 @@ function successFunction(position) {
 }
 
 function handleGeoLocation(){
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successFunction);
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                //If you allow to see your location, you will see all the nearest stores
-                showPosition(position);
-            },
-            function (error) {
-                //If you deny to see your location, you will see all the stores
-                if (error.code == error.PERMISSION_DENIED) {
-                }
-
-            });
-    } else {
-        //Your browser doesn't support GEO location, you will see all the stores
-    }
+    //if (navigator.geolocation) {
+    //    navigator.geolocation.getCurrentPosition(successFunction);
+    //}
+    //
+    //if (navigator.geolocation) {
+    //    navigator.geolocation.getCurrentPosition(
+    //        function (position) {
+    //            //If you allow to see your location, you will see all the nearest stores
+    //            showPosition(position);
+    //        },
+    //        function (error) {
+    //            //If you deny to see your location, you will see all the stores
+    //            if (error.code == error.PERMISSION_DENIED) {
+    //            }
+    //
+    //        });
+    //} else {
+    //    //Your browser doesn't support GEO location, you will see all the stores
+    //}
 }
 
 
@@ -420,7 +418,7 @@ function showPosition(position) {
 
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
-    console.log(closestStores.length);
+
     //Try to find in 100 km
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
@@ -430,21 +428,20 @@ function showPosition(position) {
     }
 
     if (closestStores.length <= 0) {
-        closestStores = inPostPoints;
+        //closestStores = inPostPoints;
     } else {
         showLabel(".the-nearest-stores");
         showLabel("a.stores-map-show-all");
     }
     closestStores.sort(sortByDirection);
     closestStores = closestStores.slice(0,3);
-    console.log(closestStores.slice(0,3));
-    buildStoresList(closestStores, position);
+
+    return closestStores;
 }
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
 
-    //console.log(minDistance);
     for (var i = 0; i < inPostPoints.length; i++) {
         pos = inPostPoints[i];
         // get the distance between user's location and this point
@@ -461,10 +458,6 @@ function calculateTheNearestStores(position, minDistance, fallback) {
 
         }
     }
-
-
-
-
     return closestStores;
 }
 //sort by distance
@@ -478,7 +471,7 @@ function refreshMap(filteredData) {
 
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
-    var imageUrl = "/js/gh/storemap/cluster_icons/circle4.png";
+    var imageUrl = "/js/gh/storemap/cluster_icons/circle5.png";
     //var imageSelectedUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,d20005,d20005&ext=.png';
     var imageSelectedUrl = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png";
 
@@ -492,10 +485,6 @@ function refreshMap(filteredData) {
 
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(40, 40));
-
-    console.log(data.length);
-
-
 
     //setMarkers
     for (var i = 0; i < data.length; i++) {
@@ -528,9 +517,7 @@ function refreshMap(filteredData) {
             infowindow.setContent(this.html);
 
             jQuery("select[name=shipping_select_point]")
-                .val(this.name)
-                .select2("destroy")
-                .select2({dropdownParent: jQuery("#select_inpost_point")});
+                .val(this.name);
 
             if(data.length > 10){
                 zoomOnShowPoint = zoomOnShowPointBigCities;
@@ -652,11 +639,12 @@ function buildStoresList(points, position) {
     searchByMapList.html(list);
 }
 function showMarkerOnMap(name) {
-    markerId = parseInt(gmarkersNameRelation[name]);
-
-    if(typeof gmarkers[markerId] !== "undefined"){
-        google.maps.event.trigger(gmarkers[markerId], "click");
-    }
+    jQuery(gmarkers).each(function (i, item) {
+        if (name == item.name) {
+            google.maps.event.trigger(gmarkers[i], "click");
+            return false;
+        }
+    });
 }
 
 
@@ -666,21 +654,58 @@ function searchOnMap(q, markerToShow) {
 function clearSearchOnMap() {
     _makeMapRequest(0)
 }
-
+function toObject(arr) {
+    var rv = {};
+    for (var i = 0; i < arr.length; ++i)
+        rv[i] = arr[i];
+    return rv;
+}
+function merge_options(obj1,obj2){
+    var obj3 = {};
+    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    return obj3;
+}
 function _makeMapRequest(q, markerToShow) {
+
 
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
         data: {town: q},
         success: function (data) {
-            //console.log(data);
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
 
-            refreshMap(data.map_points);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
 
+
+            ////////////////////
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        //If you allow to see your location, you will see all the nearest stores
+                        nearestPoints = showPosition(position);
+                        if(nearestPoints.length > 0){
+                            for (var i = 0; i < nearestPoints.length; i++) {
+                                data.map_points.push(nearestPoints[i]);
+                            }
+                            buildStoresList(nearestPoints, position);
+                        }
+                        refreshMap(data.map_points);
+
+                    },
+                    function (error) {
+                        //If you deny to see your location, you will see all the stores
+                        if (error.code == error.PERMISSION_DENIED) {
+                        }
+
+                    });
+            } else {
+                //Your browser doesn't support GEO location, you will see all the stores
+                refreshMap(data.map_points);
+            }
+            ////////////////////
             constructShippingPointSelect(data.map_points);
             //buildStoresList(data);
 
@@ -719,24 +744,17 @@ function constructShippingPointSelect(map_points) {
         jQuery("select[name=shipping_select_point]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val(map_points[0].name);
+            .val(map_points[0].name)
+            .trigger("change");
 
         showMarkerOnMap(map_points[0].name);
     } else {
         jQuery("select[name=shipping_select_point]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val("");
+            .val("")
+            .trigger("change");
     }
-
-
-
-
-
-
-    jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point")});
-
 }
 
 function clearClusters(e) {

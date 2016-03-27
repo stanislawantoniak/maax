@@ -79,7 +79,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 <?php if ($lockerId): ?>
                     <input type="hidden" name="shipping_point_code"
                            data-id="<?php echo $lockerId; ?>"
-                           data-town="<?php echo $locker->getTown(); ?>"
+                           data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
                            value="<?php echo $locker->getName(); ?>" required="required"/>
                 <?php endif; ?>
             <?php endif; ?>
