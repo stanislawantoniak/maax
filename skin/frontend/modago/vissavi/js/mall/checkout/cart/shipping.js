@@ -298,6 +298,8 @@ function resizingMap(point) {
 
     if(typeof point !== "undefined"){
         showMarkerOnMap(point);
+        jQuery("select[name=shipping_select_point]")
+            .val(point).change();
     }
 
 
