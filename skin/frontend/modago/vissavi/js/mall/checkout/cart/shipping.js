@@ -463,7 +463,7 @@ function calculateTheNearestStores(position, minDistance, fallback) {
     for (var i = 0; i < inPostPoints.length; i++) {
         pos = inPostPoints[i];
         // get the distance between user's location and this point
-        var dist = Haversine(inPostPoints[i].latitude, inPostPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+        var dist = MapsHelper.Haversine(inPostPoints[i].latitude, inPostPoints[i].longitude, position.coords.latitude, position.coords.longitude);
 
         // check if this is the shortest distance so far
         if (dist < minDistance) {
@@ -764,24 +764,7 @@ function Deg2Rad(deg) {
     return deg * Math.PI / 180;
 }
 
-// Get Distance between two lat/lng points using the Haversine function
-// First published by Roger Sinnott in Sky & Telescope magazine in 1984 (“Virtues of the Haversine”)
-//
-function Haversine(lat1, lon1, lat2, lon2) {
-    var R = 6372.8; // Earth Radius in Kilometers
 
-    var dLat = Deg2Rad(lat2 - lat1);
-    var dLon = Deg2Rad(lon2 - lon1);
-
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(Deg2Rad(lat1)) * Math.cos(Deg2Rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-
-    // Return Distance in Kilometers
-    return d;
-}
 //--GEO helpers
 
 function showLabel(label) {
