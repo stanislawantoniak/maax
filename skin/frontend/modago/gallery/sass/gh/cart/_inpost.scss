@@ -103,7 +103,7 @@
 
     .modal-body {
       overflow-x: hidden !important;
-      .shipping_select_point_data,
+      .shipping_select_point_data
       {
         margin: 20px 0;
         padding-left: 8px;
@@ -135,6 +135,11 @@
             padding-left: 0;
           }
 
+        }
+        .nearest_stores_container_link {
+            text-decoration: underline;
+            padding-left: 2px;
+            color: #000;
         }
       }
 
