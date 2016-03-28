@@ -437,65 +437,6 @@ function initialize() {
     data = []; //No city no points
 }
 
-//GEO
-function showPosition(position) {
-
-    //Try to find in 30 km
-    var closestStores = calculateTheNearestStores(position, minDist, false);
-    console.log(closestStores.length);
-    //Try to find in 100 km
-    if (closestStores.length <= 0) {
-        closestStores = calculateTheNearestStores(position, minDistFallBack, true);
-    } else {
-        showLabel(".the-nearest-stores");
-        showLabel("a.stores-map-show-all");
-    }
-
-    if (closestStores.length <= 0) {
-        closestStores = inPostPoints;
-    } else {
-        showLabel(".the-nearest-stores");
-        showLabel("a.stores-map-show-all");
-    }
-    closestStores.sort(sortByDirection);
-    closestStores = closestStores.slice(0,3);
-    
-    buildStoresList(closestStores, position);
-}
-function calculateTheNearestStores(position, minDistance, fallback) {
-    // find the closest location to the user's location
-    var pos;
-
-    //console.log(minDistance);
-    for (var i = 0; i < inPostPoints.length; i++) {
-        pos = inPostPoints[i];
-        // get the distance between user's location and this point
-        var dist = MapsHelper.Haversine(inPostPoints[i].latitude, inPostPoints[i].longitude, position.coords.latitude, position.coords.longitude);
-
-        // check if this is the shortest distance so far
-        if (dist < minDistance) {
-            inPostPoints[i].distance = dist;
-            closestStores.push(inPostPoints[i]);
-
-            if (fallback && closestStores.length >= 3) {
-                break;
-            }
-
-        }
-    }
-
-
-
-
-    return closestStores;
-}
-//sort by distance
-function sortByDirection(a, b) {
-    return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
-}
-//--GEO
-
-
 function refreshMap(filteredData) {
 
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
@@ -588,6 +529,61 @@ function refreshMap(filteredData) {
 
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
+
+//GEO
+function showPosition(position) {
+
+    //Try to find in 30 km
+    var closestStores = calculateTheNearestStores(position, minDist, false);
+    
+    //Try to find in 100 km
+    if (closestStores.length <= 0) {
+        closestStores = calculateTheNearestStores(position, minDistFallBack, true);
+    } 
+
+    if (closestStores.length <= 0) {
+        closestStores = inPostPoints;
+    } 
+    closestStores.sort(sortByDirection);
+    closestStores = closestStores.slice(0,3);
+    
+    buildStoresList(closestStores, position);
+}
+function calculateTheNearestStores(position, minDistance, fallback) {
+    // find the closest location to the user's location
+    var pos;
+
+    //console.log(minDistance);
+    for (var i = 0; i < inPostPoints.length; i++) {
+        pos = inPostPoints[i];
+        // get the distance between user's location and this point
+        var dist = MapsHelper.Haversine(inPostPoints[i].latitude, inPostPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+
+        // check if this is the shortest distance so far
+        if (dist < minDistance) {
+            inPostPoints[i].distance = dist;
+            closestStores.push(inPostPoints[i]);
+
+            if (fallback && closestStores.length >= 3) {
+                break;
+            }
+
+        }
+    }
+
+
+
+
+    return closestStores;
+}
+//sort by distance
+function sortByDirection(a, b) {
+    return ((a.distance < b.distance) ? -1 : ((a.distance > b.distance) ? 1 : 0));
+}
+//--GEO
+
+
+
 // the smooth zoom function
 function smoothZoom(map, max, cnt) {
 
@@ -765,21 +761,7 @@ function clearClusters(e) {
     markerClusterer.clearMarkers();
 }
 
-//GEO helpers
-// Convert Degress to Radians
-function Deg2Rad(deg) {
-    return deg * Math.PI / 180;
-}
 
-
-//--GEO helpers
-
-function showLabel(label) {
-    jQuery(label).removeClass("hidden");
-}
-function hideLabel(label) {
-    jQuery(label).addClass("hidden");
-}
 
 jQuery(document).ready(function () {
     Mall.Cart.Shipping.init();
