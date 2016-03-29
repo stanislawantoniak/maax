@@ -56,8 +56,12 @@
     width: 84px;
     text-align: center;
   }
-  .shipping-method-selected-container {
-    margin-bottom: 40px;
+  
+  .shipping-method-selected {
+      margin-bottom: 27px;
+      .shipping-method-selected-container {
+          margin-bottom: 40px;
+      } 
   }
 
   .data_shipping_item {
@@ -71,9 +75,9 @@
     }
   }
 
-  .button-third {
-    margin: 20px 0 0 0;
+  .button-third {    
     &.reverted {
+     margin: 20px 0 0 0;
       width: 170px;
       @media (min-width: $screen-sm) {
         width: 100%;
