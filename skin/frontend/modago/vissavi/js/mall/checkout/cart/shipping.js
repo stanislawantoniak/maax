@@ -488,12 +488,11 @@ function refreshMap(filteredData) {
             infowindow.setContent(this.html);
 
             jQuery("select[name=shipping_select_point]")
-                .val(this.name)
-                //.select2("destroy")
-//                .select2({
-//                    dropdownParent: jQuery("#select_inpost_point")
-//        })
-        ;
+                    .val(this.name)
+                    .select2({
+                        dropdownParent: jQuery("#select_inpost_point")
+                    })
+                    ;
 
 
             if(data.length > 10){
