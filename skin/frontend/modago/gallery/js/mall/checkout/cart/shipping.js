@@ -83,9 +83,7 @@
         implementMapSelections: function () {
             var self = this;
             if (jQuery("input[data-select-shipping-method-trigger=0]").length == 0)
-                return;
-
-            handleGeoLocation();
+                return;            
 
             jQuery("[name=shipping_select_point]")
                     .select2({dropdownParent: jQuery("#select_inpost_point")})
@@ -104,6 +102,7 @@
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
                 jQuery("#select_inpost_point").modal("show");
+                handleGeoLocation();
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: "Wybierz miasto",
@@ -122,10 +121,7 @@
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
-                resizeMap(sessionPoint.val());
-                //Show on map session paczkomat
-                //self.attachShowOnMapSavedInSessionPoint();
-                //Show on map session paczkomat
+                resizeMap(sessionPoint.val());                
 
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
@@ -505,7 +501,7 @@ function showPosition(position) {
     } 
 
     if (closestStores.length <= 0) {
-        closestStores = inPostPoints;
+        //closestStores = inPostPoints;
     } 
     closestStores.sort(sortByDirection);
     closestStores = closestStores.slice(0,3);
@@ -560,6 +556,7 @@ function calculateTheNearestStores(position, minDistance, fallback) {
 
         }
     }
+    
     return closestStores;
 }
 //sort by distance
