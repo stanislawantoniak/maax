@@ -319,10 +319,6 @@
 					<solr_search>
 						<type>disabled</type>
 					</solr_search>
-					<zolagosolrsearch>
-						<class>zolagosolrsearch/observer</class>
-						<method>catalogruleApplyAfter</method>
-					</zolagosolrsearch>
 				</observers>
 			</catalogrule_after_apply>
 			<end_process_event_catalog_product_catalog_reindex_price>
