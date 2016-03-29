@@ -13,6 +13,7 @@
 /downloader/
 /app/etc/solrbridge.conf
 .idea
+
 .idea/
 .sass-cache
 listingrev2
