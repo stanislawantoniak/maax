@@ -430,9 +430,9 @@ function refreshMap(filteredData) {
                 jQuery("select[name=shipping_select_point]")
                         .select2({
                             dropdownParent: jQuery("#select_inpost_point")
-                        });
-                jQuery("select[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
+                        });                
             }
+            jQuery("[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
 
 
             if(data.length > 10){
