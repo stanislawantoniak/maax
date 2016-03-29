@@ -443,8 +443,9 @@ function refreshMap(filteredData) {
     //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
     var imageUrl = "/js/gh/storemap/cluster_icons/circle4.png";
     //var imageSelectedUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,d20005,d20005&ext=.png';
-    var imageSelectedUrl = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png";
-
+    //var imageSelectedUrl = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png";
+    var imageUrl = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png";
+    
     if (typeof filteredData !== "undefined")
         data = filteredData;
 
@@ -496,11 +497,11 @@ function refreshMap(filteredData) {
             }
             map.setCenter(this.getPosition());
             map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
-            for (var i=0; i<gmarkers.length; i++) {
-                gmarkers[i].setIcon(imageUrl);
-            }
-            this.setIcon(imageSelectedUrl);
-            //infowindow.open(map, this);
+//            for (var i=0; i<gmarkers.length; i++) {
+//                gmarkers[i].setIcon(imageUrl);
+//            }
+//            this.setIcon(imageSelectedUrl);
+            infowindow.open(map, this);
 
         });
 
