@@ -130,15 +130,16 @@
                 .select2({
                     dropdownParent: jQuery("#select_inpost_point .modal-dialog")
                 });
-            //Show on map session paczkomat
-            self.attachShowOnMapSavedInSessionPoint();
-            //Show on map session paczkomat
+            
 
             jQuery('#select_inpost_point').on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
                 resizeMap(sessionPoint.val());
+                //Show on map session paczkomat
+                //self.attachShowOnMapSavedInSessionPoint();
+                //Show on map session paczkomat
 
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
@@ -313,6 +314,10 @@ function resizingMap(point) {
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
 
+
+    //Show on map session paczkomat
+    Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
+    //Show on map session paczkomat
     if(typeof point !== "undefined"){
         showMarkerOnMap(point);
     }
@@ -500,10 +505,7 @@ function refreshMap(filteredData) {
             }
             map.setCenter(this.getPosition());
             map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
-//            for (var i=0; i<gmarkers.length; i++) {
-//                gmarkers[i].setIcon(imageUrl);
-//            }
-//            this.setIcon(imageSelectedUrl);
+
             infowindow.open(map, this);
 
         });
@@ -573,10 +575,6 @@ function calculateTheNearestStores(position, minDistance, fallback) {
 
         }
     }
-
-
-
-
     return closestStores;
 }
 //sort by distance
