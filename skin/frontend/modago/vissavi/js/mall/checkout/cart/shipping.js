@@ -87,12 +87,13 @@
 
             handleGeoLocation();
 
-            jQuery("[name=shipping_select_point]").change(function () {
-                var selectedPoint = jQuery("[name=shipping_select_point] option:selected");
-
-                if (typeof selectedPoint.val() !== "undefined"
-                    && selectedPoint.val().length > 0) {
-                    showMarkerOnMap(selectedPoint.attr("data-carrier-pointcode"));
+            jQuery("[name=shipping_select_point]")
+                    .select2({dropdownParent: jQuery("#select_inpost_point")})
+                    .change(function () {
+                var el = jQuery(this), val = el.val();
+                el.addClass("onchange_shipping_select_point");
+                if (typeof val !== "undefined" && val.length > 0) {
+                    showMarkerOnMap(val);
                 }
             });
 
@@ -115,15 +116,7 @@
                 placeholder: "Wybierz miasto",
                 dropdownParent: jQuery("#select_inpost_point")
             });
-            jQuery("[name=shipping_select_point]").select2({
-                placeholder: "Wybierz paczkomat",
-                dropdownParent: jQuery("#select_inpost_point")
-            });
-            jQuery("[name=shipping_select_city]")
-                .val("")
-                .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
-                });
+
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
@@ -299,31 +292,6 @@
 
 
 
-function resizeMap(point) {
-    if (map === null)
-        return;
-    setTimeout(function () {
-        resizingMap(point);
-    }, 400);
-}
-function resizingMap(point) {
-    if (map === null)
-        return;
-
-    var center = map.getCenter();
-    google.maps.event.trigger(map, "resize");
-    map.setCenter(center);
-
-
-    //Show on map session paczkomat
-    Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
-    //Show on map session paczkomat
-    if(typeof point !== "undefined"){
-        showMarkerOnMap(point);
-    }
-
-
-}
 var clusterStyles = [
     {
         textColor: 'white',
@@ -368,37 +336,6 @@ var closestStores = [];
 
 var gmarkers = [];
 var gmarkersNameRelation = [];
-
-
-
-
-
-//Get the latitude and the longitude;
-function successFunction(position) {
-    window.geoposition = position;
-}
-
-function handleGeoLocation(){
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successFunction);
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                //If you allow to see your location, you will see all the nearest stores
-                showPosition(position);
-            },
-            function (error) {
-                //If you deny to see your location, you will see all the stores
-                if (error.code == error.PERMISSION_DENIED) {
-                }
-
-            });
-    } else {
-        //Your browser doesn't support GEO location, you will see all the stores
-    }
-}
 
 
 function initialize() {
@@ -492,12 +429,14 @@ function refreshMap(filteredData) {
             jQuery(".shipping_select_point_data").html(this.details);
             infowindow.setContent(this.html);
 
-            jQuery("select[name=shipping_select_point]")
-                    .val(this.name)
-                    .select2({
-                        dropdownParent: jQuery("#select_inpost_point")
-                    })
-                    ;
+            jQuery("select[name=shipping_select_point]").val(this.name);
+            if (!jQuery("select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
+                jQuery("select[name=shipping_select_point]")
+                        .select2({
+                            dropdownParent: jQuery("#select_inpost_point")
+                        });
+                jQuery("select[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
+            }
 
 
             if(data.length > 10){
@@ -536,6 +475,31 @@ function refreshMap(filteredData) {
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 
+
+function resizeMap(point) {
+    if (map === null)
+        return;
+    setTimeout(function () {
+        resizingMap(point);
+    }, 400);
+}
+function resizingMap(point) {
+    if (map === null)
+        return;
+
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+
+
+    //Show on map session paczkomat
+    Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
+    //Show on map session paczkomat
+    if(typeof point !== "undefined"){
+        showMarkerOnMap(point);
+    }
+
+}
 //GEO
 function showPosition(position) {
 
@@ -555,6 +519,34 @@ function showPosition(position) {
     
     buildStoresList(closestStores, position);
 }
+
+//Get the latitude and the longitude;
+function successFunction(position) {
+    window.geoposition = position;
+}
+
+function handleGeoLocation(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successFunction);
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                //If you allow to see your location, you will see all the nearest stores
+                showPosition(position);
+            },
+            function (error) {
+                //If you deny to see your location, you will see all the stores
+                if (error.code == error.PERMISSION_DENIED) {
+                }
+
+            });
+    } else {
+        //Your browser doesn't support GEO location, you will see all the stores
+    }
+}
+
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
