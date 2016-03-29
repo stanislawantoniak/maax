@@ -113,22 +113,22 @@
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: "Wybierz miasto",
-                dropdownParent: jQuery("#select_inpost_point .modal-body")
+                dropdownParent: jQuery("#select_inpost_point .modal-dialog")
             });
             jQuery("[name=shipping_select_point]").select2({
                 placeholder: "Wybierz paczkomat",
-                dropdownParent: jQuery("#select_inpost_point .modal-body")
+                dropdownParent: jQuery("#select_inpost_point .modal-dialog")
             });
             jQuery("[name=shipping_select_city]")
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point .modal-body")
+                    dropdownParent: jQuery("#select_inpost_point .modal-dialog")
                 });
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point .modal-body")
+                    dropdownParent: jQuery("#select_inpost_point .modal-dialog")
                 });
             //Show on map session paczkomat
             self.attachShowOnMapSavedInSessionPoint();
@@ -163,7 +163,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point .modal-body")});
+                    .select2({dropdownParent: jQuery("#select_inpost_point .modal-dialog")});
                 searchOnMap(sessionPointTown, sessionPoint.val());
             }
         },        
@@ -755,7 +755,7 @@ function constructShippingPointSelect(map_points) {
     }
 
     jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point .modal-body")});
+        .select2({dropdownParent: jQuery("#select_inpost_point .modal-dialog")});
 }
 
 function clearClusters(e) {
