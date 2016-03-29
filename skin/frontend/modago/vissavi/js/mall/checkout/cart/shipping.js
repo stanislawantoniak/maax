@@ -106,22 +106,22 @@
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: "Wybierz miasto",
-                dropdownParent: jQuery("#select_inpost_point")
+                dropdownParent: jQuery("#select_inpost_point .modal-body")
             });
             jQuery("[name=shipping_select_point]").select2({
                 placeholder: "Wybierz paczkomat",
-                dropdownParent: jQuery("#select_inpost_point")
+                dropdownParent: jQuery("#select_inpost_point .modal-body")
             });
             jQuery("[name=shipping_select_city]")
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
+                    dropdownParent: jQuery("#select_inpost_point .modal-body")
                 });
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
+                    dropdownParent: jQuery("#select_inpost_point .modal-body")
                 });
             //Show on map session paczkomat
             self.attachShowOnMapSavedInSessionPoint();
@@ -156,7 +156,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point")});
+                    .select2({dropdownParent: jQuery("#select_inpost_point .modal-body")});
                 searchOnMap(sessionPointTown, sessionPoint.val());
             }
         },        
@@ -482,8 +482,12 @@ function refreshMap(filteredData) {
 
             jQuery("select[name=shipping_select_point]")
                 .val(this.name)
-                .select2("destroy")
-                .select2({dropdownParent: jQuery("#select_inpost_point")});
+                //.select2("destroy")
+//                .select2({
+//                    dropdownParent: jQuery("#select_inpost_point")
+//        })
+        ;
+
 
             if(data.length > 10){
                 zoomOnShowPoint = zoomOnShowPointBigCities;
@@ -546,8 +550,7 @@ function showPosition(position) {
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
-
-    //console.log(minDistance);
+    
     for (var i = 0; i < inPostPoints.length; i++) {
         pos = inPostPoints[i];
         // get the distance between user's location and this point
@@ -690,8 +693,7 @@ function _makeMapRequest(q, markerToShow) {
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
         data: {town: q},
-        success: function (data) {
-            //console.log(data);
+        success: function (data) {            
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
 
@@ -746,7 +748,7 @@ function constructShippingPointSelect(map_points) {
     }
 
     jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point")});
+        .select2({dropdownParent: jQuery("#select_inpost_point .modal-body")});
 }
 
 function clearClusters(e) {
