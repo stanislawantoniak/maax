@@ -88,12 +88,14 @@
             jQuery("[name=shipping_select_point]")
                     .select2({dropdownParent: jQuery("#select_inpost_point")})
                     .change(function () {
-                var el = jQuery(this), val = el.val();
-                el.addClass("onchange_shipping_select_point");
-                if (typeof val !== "undefined" && val.length > 0) {
-                    showMarkerOnMap(val);
-                }
-            });
+                        var el = jQuery(this), val = el.val();
+                        el.addClass("onchange_shipping_select_point");
+                        if (typeof val !== "undefined" && val.length > 0) {
+                            showMarkerOnMap(val);
+                        }
+                        
+                        jQuery(".nearest_stores_container_list").hide();
+                    });
             if (Mall.getIsBrowserMobile()) {
                 jQuery('#select_inpost_point .select2').on('select2:open', function (e) {
                     jQuery('.select2-search input').prop('focus', false);
@@ -204,7 +206,7 @@
                 "click",
                 function (e) {
                     e.preventDefault();
-                    resizeMap();
+                    resizeMapMobile();
                     jQuery(this).text('schowaj mapę');
                     if (jQuery('.map_delivery_container').is(':visible')) {
                         jQuery(this).text('pokaż mapę');
@@ -464,6 +466,23 @@ function refreshMap(filteredData) {
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 
+function resizeMapMobile(){
+    if (map === null)
+        return;
+    setTimeout(function () {
+        resizingMapMobile();
+    }, 200);
+}
+
+function resizingMapMobile() {
+    if (map === null)
+        return;
+
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+
+}
 
 function resizeMap(point) {
     if (map === null)

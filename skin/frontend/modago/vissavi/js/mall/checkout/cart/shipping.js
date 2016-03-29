@@ -211,7 +211,7 @@
                 "click",
                 function (e) {
                     e.preventDefault();
-                    resizeMap();
+                    resizeMapMobile();
                     jQuery(this).text('schowaj mapę');
                     if (jQuery('.map_delivery_container').is(':visible')) {
                         jQuery(this).text('pokaż mapę');
@@ -471,6 +471,23 @@ function refreshMap(filteredData) {
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 
+function resizeMapMobile(){
+    if (map === null)
+        return;
+    setTimeout(function () {
+        resizingMapMobile();
+    }, 200);
+}
+
+function resizingMapMobile() {
+    if (map === null)
+        return;
+
+    var center = map.getCenter();
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(center);
+
+}
 
 function resizeMap(point) {
     if (map === null)
