@@ -437,7 +437,7 @@ function refreshMap(filteredData) {
             map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
 
             infowindow.open(map, this);
-
+            jQuery(".nearest_stores_container_list").hide();
         });
 
         //Selected city case
