@@ -182,7 +182,7 @@
         }
       }
       .map_delivery_container_show_up {
-        @media(max-width: $screen-sm) {
+        @media(max-width: $screen-md) {
             margin: 20px 0;
             padding-left: 15px;
         }
