@@ -1,3 +1,5 @@
+/* global inPostPoints */
+
 (function () {
     "use strict";
 
@@ -323,7 +325,7 @@ var defaultCenterLatMobile = 18.8979594;
 
 var minDist = 30; //km
 var minDistFallBack = 100; //km
-var closestStores = [];
+var nearestStores = [];
 
 var gmarkers = [];
 var gmarkersNameRelation = [];
@@ -371,13 +373,8 @@ function initialize() {
 }
 
 function refreshMap(filteredData) {
-
-    //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png';
-    //var imageUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png';
-    var imageUrl = "/js/gh/storemap/cluster_icons/circle4.png";
-    //var imageSelectedUrl = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,d20005,d20005&ext=.png';
-    //var imageSelectedUrl = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png";
-    var imageUrl = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=ffffff,000000,000000&ext=.png";
+    
+    var imageUrl = "/js/gh/gmap/icons/gmap_marker_black.png";
     
     if (typeof filteredData !== "undefined")
         data = filteredData;
@@ -499,7 +496,6 @@ function resizingMap(point) {
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
 
-
     //Show on map session paczkomat
     Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
     //Show on map session paczkomat
@@ -510,7 +506,7 @@ function resizingMap(point) {
 }
 //GEO
 function showPosition(position) {
-
+    console.log("showPosition");
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
     
@@ -518,14 +514,11 @@ function showPosition(position) {
     if (closestStores.length <= 0) {
         closestStores = calculateTheNearestStores(position, minDistFallBack, true);
     } 
-
-    if (closestStores.length <= 0) {
-        //closestStores = inPostPoints;
-    } 
     closestStores.sort(sortByDirection);
     closestStores = closestStores.slice(0,3);
     
-    buildStoresList(closestStores, position);
+    buildStoresList(closestStores, position);    
+    nearestStores = closestStores;
 }
 
 //Get the latitude and the longitude;
@@ -558,6 +551,7 @@ function handleGeoLocation(){
 function calculateTheNearestStores(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
+    var closestStores = [];
     
     for (var i = 0; i < inPostPoints.length; i++) {
         pos = inPostPoints[i];
@@ -569,10 +563,9 @@ function calculateTheNearestStores(position, minDistance, fallback) {
             inPostPoints[i].distance = dist;
             closestStores.push(inPostPoints[i]);
 
-            if (fallback && closestStores.length >= 3) {
-                break;
-            }
-
+//            if (fallback && closestStores.length >= 3) {
+//                break;
+//            }
         }
     }
     
@@ -652,6 +645,7 @@ function formatInfoWindowContent(pos) {
 
 
 function buildStoresList(points, position) {
+    console.log("buildStoresList");
     var searchByMapList = jQuery(".nearest_stores_container");
 
     var list = "";
@@ -701,8 +695,14 @@ function _makeMapRequest(q, markerToShow) {
         success: function (data) {            
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
-
-            refreshMap(data.map_points);
+//            console.log(nearestStores);
+            var pointsOnMap = data.map_points;
+            if(nearestStores.length > 0){
+                for(var j = 0; j<nearestStores.length; j++){
+                    pointsOnMap.push(nearestStores[j]);
+                }
+            }
+            refreshMap(pointsOnMap);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
 
             constructShippingPointSelect(data.map_points);            
@@ -733,8 +733,6 @@ function constructShippingPointSelect(map_points) {
         map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-town="' + map_point.town + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
     });
-
-
 
     //Jeśli w mieście jest tylko jeden paczkomat,
     // niech wybiera go automatycznie
