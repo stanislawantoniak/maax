@@ -23,7 +23,7 @@ $locker				= $this->getInpostLocker();
     <input type="hidden" name="billing[telephone]"  value="<?php echo $this->escapeHtml($billingAddress->getTelephone()); ?>" id="billing_telephone" />
     <input type="hidden" name="billing[fax]" value="<?php echo $this->escapeHtml($billingAddress->getFax()); ?>">
 	<input type="hidden" name="billing[use_for_shipping]"     value="0">
-	<input type="hidden" name="billing[save_in_address_book]" value="<?php if($locker->getId()): ?>0<?php else: ?>1<?php endif; ?>">
+	<input type="hidden" name="billing[save_in_address_book]" value="1">
 	<input type="hidden" name="billing_address_id"            value="">
     <legend><?php echo $this->__("Billing address:"); ?></legend>
     <div class="form-group form-checkbox small">
