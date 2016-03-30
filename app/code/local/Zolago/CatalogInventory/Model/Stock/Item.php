@@ -121,7 +121,14 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 		if ($key == 'is_in_stock') {
 			return $this->getIsInStock();
 		}
-		return parent::getData($key, $index);
+		$out =  parent::getData($key, $index);
+		if (isset($out['qty'])) {
+            $out['qty'] = $this->getQty();
+        }
+        if (isset($out['is_in_stock'])) {
+            $out['is_in_stock'] = $this->getIsInStock();
+        }
+		return $out;
 	}
 
 	public function getQty() {

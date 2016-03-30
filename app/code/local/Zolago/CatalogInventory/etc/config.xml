@@ -21,16 +21,13 @@
             </zolagocataloginventory_resource>
             <cataloginventory_resource>
                 <rewrite>
-                    <stock_status>Zolago_CatalogInventory_Model_Resource_Stock_Status</stock_status>
                     <stock_item>Zolago_CatalogInventory_Model_Resource_Stock_Item</stock_item>
                     <indexer_stock_default>Zolago_CatalogInventory_Model_Resource_Indexer_Stock_Default</indexer_stock_default>
-                    <indexer_stock_configurable>Zolago_CatalogInventory_Model_Resource_Indexer_Stock_Configurable</indexer_stock_configurable>
                 </rewrite>
             </cataloginventory_resource>
             <cataloginventory>
                 <rewrite>
                     <stock_item>Zolago_CatalogInventory_Model_Stock_Item</stock_item>
-                    <stock_status>Zolago_CatalogInventory_Model_Stock_Status</stock_status>
                 </rewrite>
             </cataloginventory>
         </models>

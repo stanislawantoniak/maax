@@ -12,7 +12,7 @@ class Zolago_CatalogInventory_Model_Resource_Indexer_Stock_Configurable
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return Varien_Db_Select
      */
-    protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
+    protected function _sgetStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $adapter  = $this->_getWriteAdapter();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
