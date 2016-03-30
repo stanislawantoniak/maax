@@ -50,7 +50,7 @@ class Zolago_CatalogInventory_Model_Resource_Indexer_Stock_Default
         // add limitation of status
         $condition = $adapter->quoteInto('=?', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
-        $nonull = $adapter->getCheckSql('zcisw.is_in_stock is NULL',0,1);
+        $nonull = $adapter->quoteInto('IFNULL (zcisw.is_in_stock,?)',0);
         if ($this->_isManageStock()) {
             $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
                 1, $nonull);

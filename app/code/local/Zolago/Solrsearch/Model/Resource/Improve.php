@@ -66,7 +66,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         array_walk($entityIds, function($item) {
             return (int)$item;
         });
-
+        $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
         $tabel = $this->getTable('catalog/product_index_eav');
         $select = $this->getReadConnection()->select();
         $select->from(array("index"=>$tabel), array("entity_id", "attribute_id", "value"));
@@ -83,7 +83,29 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                         ->addIdFilter($children)
                         ->addAttributeToSelect('size')
                         ->addAttributeToSelect('parent_id');
-        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
+        // stocks by website
+        $cond = array(
+            'stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 1 AND stock_website.is_in_stock = 1',
+            'stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 0');
+        if (Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK)) {
+            $cond[] = 'stock_item.use_config_manage_stock = 1 AND stock_website.is_in_stock=1';            
+        } else {
+            $cond[] = 'stock_item.use_config_manage_stock = 1';            
+        }
+            
+        $_subproducts->getSelect()
+            ->join(
+                array('stock_item' => $this->getTable('cataloginventory/stock_item')),
+                'entity_id = stock_item.product_id',
+                array()
+            )
+            ->joinLeft(
+                array('stock_website' => $this->getTable('zolagocataloginventory/stock_website')),
+                'entity_id = stock_website.product_id AND stock_website.website_id = '.$websiteId,
+                array()
+            )
+            ->where('('.implode(') OR (',$cond).')');
+//        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
         foreach ($_subproducts as $_subproduct) {
             if ($_subproduct->getSize()) {
                 $availableSizes[$childrenFeatParent[$_subproduct->getId()]][(int)$_subproduct->getSize()] = (int)$_subproduct->getSize();
@@ -927,7 +949,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 array("request_path")
             );
         }
-        Mage::log((string)$select);
         return $adapter->fetchAll($select);
     }
 
