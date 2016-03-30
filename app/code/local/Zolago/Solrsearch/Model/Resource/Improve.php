@@ -874,26 +874,12 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		// Join stocks index.
         if(isset($extraJoins[self::JOIN_STOCK])) {
 			$select->joinLeft(
-				array('link' => $this->getTable("catalog/product_super_link")),
-				"link.parent_id = product.entity_id",
-				array()
-			);
-			$select->joinLeft(
-				array('stock' => $this->getTable("zolagopos/stock")),
-				"stock.product_id = link.product_id",
-				array()
-			);
-			$select->joinLeft(
-				array('pos' => $this->getTable("zolagopos/pos")),
-				"pos.pos_id = stock.pos_id AND pos.is_active = " . Zolago_Pos_Model_Pos::STATUS_ACTIVE,
-				array()
-			);
-			$select->joinLeft(
-				array('pvw' => $this->getTable("zolagopos/pos_vendor_website")),
-				"pvw.pos_id = pos.pos_id AND pvw.website_id = " . (int)$websiteId,
-				array()
-			);
-			$select->columns('IF(SUM(IF(IFNULL(pvw.website_id, 0), stock.qty, 0)) > 0, 1, 0) AS stock_status');
+			    array('stock_status' => $this->getTable("cataloginventory/stock_status")),
+			    "stock_status.product_id = product.entity_id AND ".$adapter->quoteInto("stock_status.website_id = ?",$websiteId),
+			    array()
+            );
+			    
+			$select->columns('IFNULL(stock_status.stock_status,0) AS stock_status');
 			$select->group('product.entity_id');
         }
         // Join price data
@@ -925,7 +911,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             $tableName = array('price_index' => $this->getTable('catalog/product_index_price'));
 
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
-            $select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
+            $select->where('price_index.price > 0'); // We don't need product with price zero in solr
         }
 
         if(isset($extraJoins[self::JOIN_URL])) {
@@ -941,7 +927,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 array("request_path")
             );
         }
-
+        Mage::log((string)$select);
         return $adapter->fetchAll($select);
     }
 
