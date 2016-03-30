@@ -372,7 +372,7 @@ function initialize() {
     data = []; //No city no points
 }
 
-function refreshMap(filteredData) {
+function refreshMap(filteredData, nearestStores) {
     
     var imageUrl = "/js/gh/gmap/icons/gmap_marker_black.png";
     
@@ -386,8 +386,17 @@ function refreshMap(filteredData) {
 
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(40, 40));
+        //console.log("refreshMap data_length "+data.length);
+        
+        //console.log(nearestStores);
+    //setMarkers    
+    //Join nearest stores (if GEO localization on)
+    if (nearestStores.length > 0) {
+        for (var k = 0; k < nearestStores.length; k++) {
+            data.push(nearestStores[k]);
+        }
+    }
 
-    //setMarkers
     for (var i = 0; i < data.length; i++) {
         var pos = data[i];
 
@@ -395,6 +404,8 @@ function refreshMap(filteredData) {
         var marker = new google.maps.Marker({
             id: pos.id,
             name: pos.name,
+            town: pos.town,
+            nearest: pos.nearest,
             position: posLatLng,
             map: map,
             icon: markerImage,
@@ -416,6 +427,19 @@ function refreshMap(filteredData) {
              */
             jQuery(".shipping_select_point_data").html(this.details);
             infowindow.setContent(this.html);
+
+
+            //Refresh markers and "City", "Address" filters 
+            //if nearest store marker clicked, but the city is different from selected
+            if (this.nearest === 1 && jQuery("select[name=shipping_select_city]").val() !== this.town) {
+                jQuery("select[name=shipping_select_city]")
+                        .val(this.town)
+                        .select2({
+                            dropdownParent: jQuery("#select_inpost_point")
+                        });
+                jQuery(".shipping_select_point_data").html("");
+                searchOnMap(this.town, this.name);
+            }
 
             jQuery("select[name=shipping_select_point]").val(this.name);
             if (!jQuery("select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
@@ -506,7 +530,7 @@ function resizingMap(point) {
 }
 //GEO
 function showPosition(position) {
-    console.log("showPosition");
+    //console.log("showPosition");
     //Try to find in 30 km
     var closestStores = calculateTheNearestStores(position, minDist, false);
     
@@ -536,6 +560,8 @@ function handleGeoLocation(){
             function (position) {
                 //If you allow to see your location, you will see all the nearest stores
                 showPosition(position);
+                    //Show on map session paczkomat
+                Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
             },
             function (error) {
                 //If you deny to see your location, you will see all the stores
@@ -561,6 +587,7 @@ function calculateTheNearestStores(position, minDistance, fallback) {
         // check if this is the shortest distance so far
         if (dist < minDistance) {
             inPostPoints[i].distance = dist;
+            inPostPoints[i].nearest = 1;
             closestStores.push(inPostPoints[i]);
 
 //            if (fallback && closestStores.length >= 3) {
@@ -638,14 +665,14 @@ function formatInfoWindowContent(pos) {
         '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
         '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
         '<div class="additional-store-information">' + pos.location_description + '</div>' +
-        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a></div>' +
+        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a></div>' +
         '</div>' +
         '</div>';
 }
 
 
 function buildStoresList(points, position) {
-    console.log("buildStoresList");
+    //console.log("buildStoresList");
     var searchByMapList = jQuery(".nearest_stores_container");
 
     var list = "";
@@ -687,25 +714,23 @@ function searchOnMap(q, markerToShow) {
 }
 
 function _makeMapRequest(q, markerToShow) {
-
+    //console.log("_makeMapRequest");
+    //console.log(q);
+    
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
         data: {town: q},
-        success: function (data) {            
+        success: function (responce) {            
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
-            data = jQuery.parseJSON(data);
-//            console.log(nearestStores);
+            data = jQuery.parseJSON(responce);
+            
             var pointsOnMap = data.map_points;
-            if(nearestStores.length > 0){
-                for(var j = 0; j<nearestStores.length; j++){
-                    pointsOnMap.push(nearestStores[j]);
-                }
-            }
-            refreshMap(pointsOnMap);
+            
+            constructShippingPointSelect(pointsOnMap);
+            refreshMap(pointsOnMap, nearestStores);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
-
-            constructShippingPointSelect(data.map_points);            
+                        
 
             if(Mall.getIsBrowserMobile()){
                 jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
@@ -767,8 +792,11 @@ jQuery(document).ready(function () {
 
     jQuery("[name=shipping_select_city]").change(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
-        jQuery(".shipping_select_point_data").html("");
-        searchOnMap(enteredSearchValue);
+
+        if (enteredSearchValue !== "undefined") {
+            jQuery(".shipping_select_point_data").html("");            
+            searchOnMap(enteredSearchValue);
+        }
 
     });
 });
