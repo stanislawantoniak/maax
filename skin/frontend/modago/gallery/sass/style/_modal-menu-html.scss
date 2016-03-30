@@ -9,9 +9,10 @@
   .modal-content {
     ul {
       margin-left: 10px;
+      overflow: hidden;
       li {
         list-style: initial;
-        margin-left: 10px;
+        margin-left: 15px;
       }
     }
   }
