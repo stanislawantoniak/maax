@@ -182,10 +182,15 @@
         }
       }
       .map_delivery_container_show_up {
-        @media(max-width: $screen-md) {
-            margin: 20px 0;
-            padding-left: 15px;
-        }
+          @media(max-width: $screen-md) {
+              margin-bottom: 20px;
+              padding-left: 15px;
+          }
+          &:not(:empty){            
+              @media(max-width: $screen-md) {
+                  margin-top: 20px;
+              }
+          }
       }
 
       .gui-label {
