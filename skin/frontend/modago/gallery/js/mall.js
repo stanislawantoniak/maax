@@ -654,6 +654,9 @@ var Mall = {
     //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
     //to our format: 99-999
     postcodeTransform: function(str) {
+        if(typeof str === "undefined"){
+            return "";
+        }
         var strTrans = str.replace(/\D/g,"");//remove spaces
         strTrans = strTrans.match(/.*?([0-9]{2}).?([0-9]{3}).*?/i);
         if (strTrans == null) {

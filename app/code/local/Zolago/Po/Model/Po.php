@@ -515,10 +515,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    }
    
    public function needInvoice() {
-	   return (int)$this->getBillingAddress()->getNeedInvoice();
-   }
-   
-   /**
+        $billingAddress = $this->getBillingAddress();
+        return (!empty($billingAddress) ? (int) $billingAddress->getNeedInvoice() : 0);
+    }
+
+    /**
     * @return Zolago_Pos_Model_Pos
     */
    public function getDefaultPos() {
