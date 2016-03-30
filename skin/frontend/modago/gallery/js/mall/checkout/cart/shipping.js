@@ -638,7 +638,7 @@ function formatInfoWindowContent(pos) {
         '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
         '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
         '<div class="additional-store-information">' + pos.location_description + '</div>' +
-        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a></div>' +
+        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a></div>' +
         '</div>' +
         '</div>';
 }
@@ -687,7 +687,8 @@ function searchOnMap(q, markerToShow) {
 }
 
 function _makeMapRequest(q, markerToShow) {
-
+console.log("_makeMapRequest");
+console.log(q);
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
@@ -695,7 +696,8 @@ function _makeMapRequest(q, markerToShow) {
         success: function (data) {            
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(data);
-//            console.log(nearestStores);
+            console.log(data);
+            console.log(nearestStores);
             var pointsOnMap = data.map_points;
             if(nearestStores.length > 0){
                 for(var j = 0; j<nearestStores.length; j++){
@@ -767,8 +769,12 @@ jQuery(document).ready(function () {
 
     jQuery("[name=shipping_select_city]").change(function () {
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
-        jQuery(".shipping_select_point_data").html("");
-        searchOnMap(enteredSearchValue);
+
+        if (enteredSearchValue !== "undefined") {
+            jQuery(".shipping_select_point_data").html("");
+            console.log(enteredSearchValue);
+            searchOnMap(enteredSearchValue);
+        }
 
     });
 });
