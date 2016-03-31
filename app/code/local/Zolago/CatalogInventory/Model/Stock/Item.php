@@ -82,6 +82,9 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
         if ($key == 'is_in_stock') {
             $this->setIsInStock($value);
         }
+        if ($key == 'qty') {
+            $this->setQty($value);
+        }
         return parent::setData($key,$value);
     }
     /**
@@ -91,6 +94,9 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 	public function addData(array $arr) {
 	    if (isset($arr['is_in_stock'])) {
 	        $this->setIsInStock($arr['is_in_stock']);
+	    }
+	    if (isset($arr['qty'])) {
+	        $this->setQty($arr['qty']);
 	    }
 	    return parent::addData($arr);
 	}
@@ -106,6 +112,7 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 	    $websiteId = $this->_getWebsiteId();
 	    $instock[$websiteId] = $value;
 	    $this->setInStock($instock);
+	    return $this;
 	}
 	/**
 	 * Override for compatibility
@@ -130,6 +137,25 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
         }
 		return $out;
 	}
+	
+    /**
+     * set qty for specified website
+     * @param int $value
+     * @return Zolago_CatalogInventory_Model_Stock_Item
+     */
+
+	public function setQty($value) {
+	    $qty = $this->getWebsiteQty();
+	    $websiteId = $this->_getWebsiteId();
+	    $qty[$websiteId] = $value;
+	    $this->setWebsiteQty($qty);	    
+	    return $this;
+	}
+	
+    /**
+     * override function (qty by website)
+     * @return int
+     */
 
 	public function getQty() {
         $website = $this->_getWebsiteId();	    
@@ -139,6 +165,12 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
         $qty = $this->getData('website_qty');
         return isset($qty[$website])? $qty[$website]:0;
 	}
+
+	
+    /**
+     * override function (is_in_stock by website)
+     * @return bool
+     */
 
 	public function getIsInStock() {
 		if (!$this->isFlagUsePos()) {
@@ -152,6 +184,11 @@ class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Sto
 		$instock = $this->getInStock();
 		return empty($instock[$website])? false:true;		
 	}	
+	
+    /**
+     * save stocks by website
+     */
+
 	protected function _afterSave() {
 	    $model = Mage::getResourceModel('zolagocataloginventory/stock_website');
 	    $model->saveStockWebsite($this);

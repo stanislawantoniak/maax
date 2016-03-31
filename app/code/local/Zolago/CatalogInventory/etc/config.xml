@@ -23,11 +23,13 @@
                 <rewrite>
                     <stock_item>Zolago_CatalogInventory_Model_Resource_Stock_Item</stock_item>
                     <indexer_stock_default>Zolago_CatalogInventory_Model_Resource_Indexer_Stock_Default</indexer_stock_default>
+                    <stock_item_collection>Zolago_CatalogInventory_Model_Resource_Stock_Item_Collection</stock_item_collection>
                 </rewrite>
             </cataloginventory_resource>
             <cataloginventory>
                 <rewrite>
                     <stock_item>Zolago_CatalogInventory_Model_Stock_Item</stock_item>
+                    <stock>Zolago_CatalogInventory_Model_Stock</stock>
                 </rewrite>
             </cataloginventory>
         </models>
