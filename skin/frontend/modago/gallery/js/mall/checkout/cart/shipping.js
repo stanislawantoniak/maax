@@ -666,8 +666,7 @@ function formatInfoWindowContent(pos) {
 
     var pos_additional =
         '<div>' + pos.street + ' ' + pos.building_number + '</div>' +
-        '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
-        '<div>(' + pos.location_description + ')</div>'+ payment_point_description+ '</div>';
+        '<div>' + pos.postcode + ' ' + pos.town + '</div>';
 
     return '<div class="delivery-marker-window">' +
         '<div class="info_window_text">' +
