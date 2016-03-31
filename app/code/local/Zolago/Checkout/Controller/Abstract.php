@@ -119,41 +119,65 @@ abstract class Zolago_Checkout_Controller_Abstract
 				setBody($helper->jsonEncode($newResponse));
 	}
 
+
+	/**
+	 * METHOD IMPLEMENTED WHEN WE SELECT SHIPPING IN CART ONLY!!!
+	 * We know for sure in cart if customer logged in or not (Mage_Checkout_Model_Type_Onepage::METHOD_CUSTOMER)
+	 * but we don't know if if customer guest (Mage_Checkout_Model_Type_Onepage::METHOD_GUEST) or he is a new customer (Mage_Checkout_Model_Type_Onepage::METHOD_REGISTER)
+	 * so in CART we suppose that he is a guest
+	 * but if he will enter a password on the 1st checkout step
+	 * then checkout method will be switched to Mage_Checkout_Model_Type_Onepage::METHOD_REGISTER
+	 * @return string
+	 */
+	public function getCheckoutMethodForCart()
+	{
+		//Mage::log($onepage, null, "importPostShippingData_1.log");
+		if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+			return Mage_Checkout_Model_Type_Onepage::METHOD_CUSTOMER;
+		}
+		return Mage_Checkout_Model_Type_Onepage::METHOD_GUEST;
+	}
+
     /**
      * Save post shipping (got from /checkout/cart/ page) data to quote
      * @throws Mage_Core_Exception
      */
-    public function importPostShippingData(){
+    public function importPostShippingData() {
         $request = $this->getRequest();
 
 
         $onepage = $this->getOnepage();
-		$quote = $this->_getCheckoutSession()->getQuote();
 
+        $method	= $this->getCheckoutMethodForCart(); // checkout method
+
+		$methodResponse = $onepage->saveCheckoutMethod($method);
+		if(isset($methodResponse['error']) && $methodResponse['error']==1){
+			throw new Mage_Core_Exception($methodResponse['message']);
+		}
         /**
-        shipping_method[vendor_id]:udtiership_1
+          shipping_method[vendor_id]:udtiership_1
          */
-
-        if($shippingMethod = $request->getParam("shipping_method")){
+        if ($shippingMethod = $request->getParam("shipping_method")) {
 
             $shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
-            if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
+            if (isset($shippingMethodResponse['error']) && $shippingMethodResponse['error'] == 1) {
                 throw new Mage_Core_Exception($shippingMethodResponse['message']);
             }
-			Mage::log($shippingMethod, null, "1413.og");
+
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
 
-		$checkoutSession = $this->_getCheckoutSession();
-		if($shippingPointCode = $request->getParam("shipping_point_code")){
-			$checkoutSession->setShippingPointCode($shippingPointCode);
-		} else {
-			$checkoutSession->setShippingPointCode();
-		}
-		$quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+        $checkoutSession = $this->_getCheckoutSession();
+
+        if ($shippingPointCode = $request->getParam("shipping_point_code")) {
+            $checkoutSession->setShippingPointCode($shippingPointCode);
+        } else {
+            $checkoutSession->setShippingPointCode();
+        }
+        $onepage->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
     }
-	
-	/**
+
+    /**
 	 * Save post data to quote
 	 * @throws Mage_Core_Exception
 	 */
