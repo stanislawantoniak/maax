@@ -10,16 +10,7 @@
             var self = this;
             self.updateTotals();
 
-            jQuery(document).delegate("input[data-select-shipping-method-trigger=1]",
-                "change",
-                function (e) {
-                    self.handleShippingMethodSelect(e);
-                });
-            jQuery(document).delegate("a[data-select-shipping-method-trigger=1]",
-                "click",
-                function (e) {
-                    self.handleShippingMethodSelect(e);
-                });
+            self.handleShippingMethodSelect();
 
             //Validation
             self.attachShippingFormValidation();
@@ -74,13 +65,20 @@
             var totalSum = parseInt(parseInt(Mall.reg.get("quote_products_total")) + parseInt(shippingCost) + -parseInt(Mall.reg.get("quote_discount_total")));
             jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSum));
         },
-        handleShippingMethodSelect: function (e) {
-            Mall.Cart.Shipping.setShippingMethod(e.target);
-
-            if (jQuery(e.target).is("a") || jQuery(e.target).is("option")) {
-                e.preventDefault();
-                jQuery("#select_inpost_point").modal("hide");
-            }
+        handleShippingMethodSelect: function () {
+            jQuery(document).delegate("input[data-select-shipping-method-trigger=1]",
+                "change",
+                function (e) {
+                    Mall.Cart.Shipping.setShippingMethod(this);
+                });
+            jQuery(document).delegate("a[data-select-shipping-method-trigger=1]",
+                "click",
+                function (e) {
+                    Mall.Cart.Shipping.setShippingMethod(this);
+                    e.preventDefault();
+                    jQuery("#select_inpost_point").modal("hide");
+                    showMarkerOnMap(jQuery(e.target).attr("data-carrier-pointcode"));
+                });
         },
         implementMapSelections: function () {
             var self = this;
