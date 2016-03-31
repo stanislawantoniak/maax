@@ -525,7 +525,12 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         return $this;
 		
 	}
-	
+
+
+    public function getInpostLocker(){
+        $onepageShipping = new Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping();
+        return $onepageShipping->getInpostLocker();
+    }
 	
     /**
      * Prepare quote for customer registration and customer order submit
@@ -535,10 +540,15 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
     protected function _prepareNewCustomerQuote()
     {
         $quote      = $this->getQuote();
+
         $billing    = $quote->getBillingAddress();
         $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
-		Mage::log("Prepare for new customer");
+
+        /* @var $locker GH_Inpost_Model_Locker */
+        $locker = $this->getInpostLocker();
+        
+        $lockerId = $locker->getId();
 
 		// Customer should be new object - even presitance
 		
@@ -546,13 +556,18 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 		
         /* @var $customer Mage_Customer_Model_Customer */
         $customerBilling = $billing->exportCustomerAddress();
-
-        $customer->addAddress($customerBilling);
+        if(!$lockerId){
+            $customer->addAddress($customerBilling);
+        }
+        
         $billing->setCustomerAddress($customerBilling);
         $customerBilling->setIsDefaultBilling(true);
         if ($shipping && !$shipping->getSameAsBilling()) {
             $customerShipping = $shipping->exportCustomerAddress();
-            $customer->addAddress($customerShipping);
+            if(!$lockerId){
+                $customer->addAddress($customerShipping);
+            }
+
             $shipping->setCustomerAddress($customerShipping);
             $customerShipping->setIsDefaultShipping(true);
         } else {
@@ -569,7 +584,52 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $quote->setCustomer($customer)
             ->setCustomerId(true);
     }
-	
+
+    /**
+     * Prepare quote for customer order submit
+     *
+     * @return Mage_Checkout_Model_Type_Onepage
+     */
+    protected function _prepareCustomerQuote()
+    {
+        $quote      = $this->getQuote();
+        $billing    = $quote->getBillingAddress();
+        $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
+
+        /* @var $locker GH_Inpost_Model_Locker */
+        $locker = $this->getInpostLocker();
+        $lockerId = $locker->getId();
+
+        $customer = $this->getCustomerSession()->getCustomer();
+        if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
+            $customerBilling = $billing->exportCustomerAddress();
+            if(!$lockerId){
+               $customer->addAddress($customerBilling); 
+            }           
+
+
+            $billing->setCustomerAddress($customerBilling);
+        }
+        if ($shipping && !$shipping->getSameAsBilling() &&
+            (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
+            $customerShipping = $shipping->exportCustomerAddress();
+            if(!$lockerId){
+                $customer->addAddress($customerShipping);
+            }
+            $shipping->setCustomerAddress($customerShipping);
+        }
+
+        if (isset($customerBilling) && !$customer->getDefaultBilling()) {
+            $customerBilling->setIsDefaultBilling(true);
+        }
+        if ($shipping && isset($customerShipping) && !$customer->getDefaultShipping()) {
+            $customerShipping->setIsDefaultShipping(true);
+        } else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
+            $customerBilling->setIsDefaultShipping(true);
+        }
+        $quote->setCustomer($customer);
+    }
+
 	/**
      * Override true flag in getter quote method - original method name not logged in...
      *
@@ -581,7 +641,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 			// Logged user - force customer method
             $this->getQuote()->setCheckoutMethod(self::METHOD_CUSTOMER);
         }else{
-			// Metho name is not inited
+			// Method name is not init
 			// OR
 			// Not logged user and current method = customer
 			if(!$this->getQuote()->getCheckoutMethod(true) || 

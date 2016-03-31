@@ -855,6 +855,7 @@
 					}
 					data.push({name: 'shipping[same_as_billing]', value: invoice ? 0 : 1});
 					data.push({name: 'shipping[save_in_address_book]', value: 0});
+                    data.push({name: 'shipping[telephone]', value: telephoneForLocker});
 					data.push({name: 'inpost[name]', value: inpostName});
 					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
 				}
