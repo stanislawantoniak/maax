@@ -564,6 +564,13 @@ function showPosition(position) {
     
     buildStoresList(closestStores, position);    
     nearestStores = closestStores;
+
+    if (jQuery("[name=shipping_select_city]").val().length === 0) {
+        refreshMap([], nearestStores);
+        jQuery("#map_delivery")
+            .css({"visibility": "visible", "display": "block"});
+    }
+
 }
 
 //Get the latitude and the longitude;
