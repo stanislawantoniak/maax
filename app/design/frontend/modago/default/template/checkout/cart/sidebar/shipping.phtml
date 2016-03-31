@@ -101,7 +101,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 <div class="shipping-data-additional">
                     <div data-item="additional"></div>
                     <div data-item="description"></div>
-                    <br />
                     <div class="pull-left"><div data-item="logo"></div></div>
                     <?php if (count($methods) > 1): ?>
                         <div class="pull-right">
@@ -140,7 +139,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                 <?php endif; ?>
                             </div>
                             <div data-item="description"><?php echo $daysInTransit; ?></div>
-                            <br />
+
                             <div class="pull-left">
                                 <?php
                                 //TODO change after udtiership-inpost mapping imaplementation

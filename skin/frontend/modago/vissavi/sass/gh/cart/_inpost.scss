@@ -56,12 +56,16 @@
     width: 84px;
     text-align: center;
   }
-  
+
   .shipping-method-selected {
-      margin-bottom: 27px;
-      .shipping-method-selected-container {
-          margin-bottom: 40px;
-      } 
+    margin-bottom: 10px;
+    .shipping-method-selected-container {
+      margin-bottom: 40px;
+
+      [data-item="description"] {
+        margin-bottom: 5px;
+      }
+    }
   }
 
   .data_shipping_item {
@@ -75,9 +79,9 @@
     }
   }
 
-  .button-third {    
+  .button-third {
     &.reverted {
-     margin: 20px 0 0 0;
+      margin: 20px 0 0 0;
       width: 170px;
       @media (min-width: $screen-sm) {
         width: 100%;
@@ -141,9 +145,9 @@
 
         }
         .nearest_stores_container_link {
-            text-decoration: underline;
-            padding-left: 2px;
-            color: #000;
+          text-decoration: underline;
+          padding-left: 2px;
+          color: #000;
         }
       }
 
@@ -182,15 +186,15 @@
         }
       }
       .map_delivery_container_show_up {
+        @media(max-width: $screen-md) {
+          margin-bottom: 20px;
+          padding-left: 15px;
+        }
+        &:not(:empty){
           @media(max-width: $screen-md) {
-              margin-bottom: 20px;
-              padding-left: 15px;
+            margin-top: 20px;
           }
-          &:not(:empty){            
-              @media(max-width: $screen-md) {
-                  margin-top: 20px;
-              }
-          }
+        }
       }
 
       .gui-label {
@@ -217,4 +221,9 @@
 
   }
 
+}
+
+
+#discount_voucher {
+  margin-bottom: 30px !important;
 }

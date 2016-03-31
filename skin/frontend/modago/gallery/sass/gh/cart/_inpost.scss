@@ -58,9 +58,13 @@
   }
   
   .shipping-method-selected {
-      margin-bottom: 27px;
+      margin-bottom: 10px;
       .shipping-method-selected-container {
           margin-bottom: 40px;
+
+        [data-item="description"] {
+          margin-bottom: 5px;
+        }
       } 
   }
 
@@ -217,4 +221,9 @@
 
   }
 
+}
+
+
+#discount_voucher {
+  margin-bottom: 30px !important;
 }
