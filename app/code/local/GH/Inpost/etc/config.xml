@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<GH_Inpost>
-			<version>0.0.5</version>
+			<version>0.0.6</version>
 		</GH_Inpost>
 	</modules>
 	<global>
@@ -37,6 +37,16 @@
 				</setup>
 			</ghinpost_setup>
 		</resources>
+		<fieldsets>
+			<sales_convert_quote_address>
+				<inpost_locker_name><to_order>*</to_order></inpost_locker_name>
+			</sales_convert_quote_address>
+			<sales_convert_order>
+				<inpost_locker_name>
+					<to_udpo>*</to_udpo>
+				</inpost_locker_name>
+			</sales_convert_order>
+		</fieldsets>
 	</global>
 	<frontend>
 		<translate>
