@@ -164,6 +164,10 @@ abstract class Zolago_Checkout_Controller_Abstract
                 throw new Mage_Core_Exception($shippingMethodResponse['message']);
             }
 
+			//Save sales_flat_quote_address.udropship_shipping_details
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
+			//Save sales_flat_quote_address.udropship_shipping_details
+
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
 
@@ -283,7 +287,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$locker->loadByLockerName($inpost['name']);
 			$shippingAddressFromLocker = $locker->getShippingAddress();
 			$shipping = array_merge($shipping, $shippingAddressFromLocker);
-			if (isset($shipping['telephone']) && !empty($shipping['telephone'])) {				
+			if (isset($shipping['telephone']) && !empty($shipping['telephone'])) {
 				$checkoutSession = $onepage->getCheckout();
 				$checkoutSession->setLastTelephoneForLocker($shipping['telephone']);
 			} else {
@@ -309,10 +313,12 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
 				throw new Mage_Core_Exception($shippingMethodResponse['message']);
 			}
-
+			//Save sales_flat_quote_address.udropship_shipping_details
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
+			//Save sales_flat_quote_address.udropship_shipping_details
 			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
 		}
-		
+
 		/**
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
@@ -334,6 +340,41 @@ abstract class Zolago_Checkout_Controller_Abstract
 			collectTotals()->
 			save();
 		
+	}
+
+
+	/**
+	 * @param $shippingMethod
+	 * @throws Zend_Json_Exception
+	 */
+	public function setUdropshipShippingDetailsToAddress($shippingMethod)
+	{
+		$quote = Mage::getModel("checkout/cart")->getQuote();
+		$address = $quote->getShippingAddress();
+
+		$details = $address->getUdropshipShippingDetails();
+		$details = $details ? Zend_Json::decode($details) : array();
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+		$locker = $helper->getInpostLocker();
+
+		foreach ($shippingMethod as $vId => $code) {
+			$r = $address->getShippingRateByCode($code);
+			if (!$r) {
+				continue;
+			}
+			$details['methods'][$vId] = array(
+				'code' => $code,
+				'cost' => $r->getCost(),
+				'price' => $r->getPrice(),
+				'carrier_title' => $r->getCarrierTitle(),
+				'method_title' => $r->getMethodTitle(),
+				'gh_inpost_locker' => $locker->getId()
+			);
+		}
+
+		$address->setUdropshipShippingDetails(Zend_Json::encode($details));
 	}
 	
 	/**
