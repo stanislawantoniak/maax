@@ -96,7 +96,10 @@
                         showMarkerOnMap(val);
                     }
 
-                    jQuery(".nearest_stores_container_link").click();
+
+                    jQuery(".nearest_stores_container_list").hide();
+                    jQuery(".nearest_stores_container_link").text('pokaż najbliższe');
+
                 });
             if (Mall.getIsBrowserMobile()) {
                 jQuery('#select_inpost_point .select2').on('select2:open', function (e) {
@@ -463,7 +466,9 @@ function refreshMap(filteredData, nearestStores) {
             map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
 
             infowindow.open(map, this);
-            jQuery(".nearest_stores_container_link").click();
+
+            jQuery(".nearest_stores_container_list").hide();
+            jQuery(".nearest_stores_container_link").text('pokaż najbliższe');
         });
 
         //Selected city case
