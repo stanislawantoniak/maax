@@ -104,7 +104,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
                                                 <input name="shipping[lastname]" type="hidden" value="<?php echo $locker->getName(); ?>" class="form-control lastName hint" id="shipping_lastname" title=""  required="true" />
 						<br/>
 						<span id="inpost-locker-street"><?php echo $locker->getStreet(); ?></span> <span id="inpost-locker-building-number"><?php echo $locker->getBuildingNumber(); ?></span>
-                                                <input name="shipping[street][]" type="hidden" value="<?php echo $locker->getStreet(); ?> <?php echo $locker->getBuildingNumber(); ?> (<?php echo $locker->getName(); ?>)" class="form-control street" id="shipping_street" title=""  required="true" />
+                                                <input name="shipping[street][]" type="hidden" value="<?php echo $locker->getStreet(); ?> <?php echo $locker->getBuildingNumber(); ?>" class="form-control street" id="shipping_street" title=""  required="true" />
 						<br/>
 						<span id="inpost-locker-postcode"><?php echo $locker->getPostcode(); ?></span> <span id="inpost-locker-town"><?php echo $locker->getTown(); ?></span>
                                                 <input name="shipping[postcode]" type="hidden" value="<?php echo $this->escapeHtml($locker->getPostcode()); ?>" class="form-control zipcode validate-postcodeWithReplace" required="true" id="shipping_postcode" title="" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>" />

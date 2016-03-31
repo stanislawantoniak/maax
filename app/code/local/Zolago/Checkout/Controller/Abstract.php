@@ -370,10 +370,11 @@ abstract class Zolago_Checkout_Controller_Abstract
 				'price' => $r->getPrice(),
 				'carrier_title' => $r->getCarrierTitle(),
 				'method_title' => $r->getMethodTitle(),
-				'gh_inpost_locker' => $locker->getId()
+				'inpost_locker_name' => $locker->getName()
 			);
 		}
 
+		$address->setData("inpost_locker_name", $locker->getName());
 		$address->setUdropshipShippingDetails(Zend_Json::encode($details));
 	}
 	
