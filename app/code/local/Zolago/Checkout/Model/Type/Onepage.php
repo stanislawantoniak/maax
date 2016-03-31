@@ -547,6 +547,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 
         /* @var $locker GH_Inpost_Model_Locker */
         $locker = $this->getInpostLocker();
+        
         $lockerId = $locker->getId();
 
 		// Customer should be new object - even presitance
@@ -555,7 +556,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 		
         /* @var $customer Mage_Customer_Model_Customer */
         $customerBilling = $billing->exportCustomerAddress();
-        $customer->addAddress($customerBilling);
+        if(!$lockerId){
+            $customer->addAddress($customerBilling);
+        }
+        
         $billing->setCustomerAddress($customerBilling);
         $customerBilling->setIsDefaultBilling(true);
         if ($shipping && !$shipping->getSameAsBilling()) {
@@ -599,7 +603,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customer = $this->getCustomerSession()->getCustomer();
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             $customerBilling = $billing->exportCustomerAddress();
-            $customer->addAddress($customerBilling);
+            if(!$lockerId){
+               $customer->addAddress($customerBilling); 
+            }           
 
 
             $billing->setCustomerAddress($customerBilling);
