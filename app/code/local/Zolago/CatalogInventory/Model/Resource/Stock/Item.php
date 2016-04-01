@@ -52,9 +52,9 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
             foreach ($result as $item) {
                 $sum[$item['pos_id']] = $item['qty'];
                 $pos[$item['pos_id']] = array(
-                    'name' => $item['name'],
-                    'qty'  => $item['qty']
-                );
+                                            'name' => $item['name'],
+                                            'qty'  => $item['qty']
+                                        );
                 $websitePos[$item['website_id']][] = $item['pos_id'];
                 if (!isset($out[$item['website_id']])) {
                     $out[$item['website_id']] = 0;
@@ -99,6 +99,43 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
         }
 
         return $this;
+    }
+
+    /**
+     * update is_in_stock by website
+     * @param array productIds
+     * @return $this
+     */
+    public function updateAvailability($productIds) {
+        if (empty($productIds)) {
+            return $this;
+        }        
+        $resource = Mage::getSingleton('core/resource');
+        $adapter = $resource->getConnection('core_write');
+        // clear all status
+        $query = sprintf('UPDATE %s SET is_in_stock = 0 WHERE product_id IN (%s)',
+            $this->getTable('zolagocataloginventory/stock_website'),
+            implode(',',$productIds));
+        $adapter->query($query);
+        // update new availability
+        $queryString = 'INSERT INTO %s (website_id,product_id,is_in_stock) '.
+                    'SELECT * FROM (SELECT pos_website.website_id,stock_pos.product_id,IF(SUM(IFNULL(stock_pos.qty,0))>0,1,0) as is_in_stock '.
+                    'FROM %s as stock_pos  '.
+                    'INNER JOIN %s as pos ON pos.pos_id = stock_pos.pos_id '.
+                    'INNER JOIN %s as pos_website ON pos_website.pos_id = stock_pos.pos_id '.
+                    'WHERE pos.is_active = %s '.
+                        'AND stock_pos.product_id IN (%s) '.                         
+                    'GROUP BY stock_pos.product_id,pos_website.website_id) as subselect '.
+                    'ON DUPLICATE KEY UPDATE is_in_stock = subselect.is_in_stock';
+        $query = sprintf($queryString,
+            $this->getTable('zolagocataloginventory/stock_website'),
+            $this->getTable('zolagopos/stock'),
+            $this->getTable('zolagopos/pos'),
+            $this->getTable('zolagopos/pos_vendor_website'),
+            Zolago_Pos_Model_Pos::STATUS_ACTIVE,
+            implode(',',$productIds)
+        );
+        $adapter->query($query);
     }
 
 }

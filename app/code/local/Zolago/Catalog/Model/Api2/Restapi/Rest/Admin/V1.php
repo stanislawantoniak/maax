@@ -230,12 +230,18 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $qty = $val->getQty();
             if (!isset($tmpStock[$website][$id])) {
                 // new availability
-                if ($qty) {
+                if ($qty > 0) {
                     $isInStock[$id][$website] = 1;
                     $productsIdsForSolrAndVarnishBan[$id] = $id;
+                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                                   "product_id" => $id,
+                               ));
+               
                 }
             } else {
-                unset($tmpStock[$website][$id]);
+                if ($qty > 0) {
+                    unset($tmpStock[$website][$id]);
+                }
             }
         }
         // removed availability
@@ -243,6 +249,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             foreach ($prodList as $id => $dummy) {
                 $productsIdsForSolrAndVarnishBan[$id] = $id;
                 $isInStock[$id][$websiteId] = 0;
+                Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                              "product_id" => $id,
+                ));
             }
         }
 
