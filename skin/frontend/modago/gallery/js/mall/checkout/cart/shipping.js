@@ -603,10 +603,6 @@ function calculateTheNearestStores(position, minDistance, fallback) {
             inPostPoints[i].distance = dist;
             inPostPoints[i].nearest = 1;
             closestStores.push(inPostPoints[i]);
-
-//            if (fallback && closestStores.length >= 3) {
-//                break;
-//            }
         }
     }
     
