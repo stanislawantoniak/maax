@@ -92,7 +92,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                     $data[$sku][$stockId] = $posStockConverter - $minimalStockPOS - $reservedOnPOStock;
 
                     //Allocate Product STOCK by POS
-                    if (isset($data[$sku][$stockId])) {
+                    if (isset($data[$sku][$stockId]) && isset($skuIdAssoc[$sku])) {
                         $dataAllocateToPOS[$skuIdAssoc[$sku]][$stockId] = $data[$sku][$stockId];
                     }
 
