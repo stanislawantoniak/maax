@@ -528,12 +528,23 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
              if ($pos->getId() 
                  && $pos->getIsActive()
                  && $pos->isAssignedToVendor($this)) {
-
-                     return $id;
+                     return (int)$id;
              } 
          }
          return null;
      }
+
+	/**
+	 * @return Zolago_Pos_Model_Resource_Pos_Collection
+	 */
+	public function getAllVendorPOSes() {
+		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
+		$collection = Mage::getResourceModel("zolagopos/pos_collection");
+		$collection->addVendorFilter((int)$this->getId());
+		$collection->addActiveFilter();
+		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
+		return $collection;
+	}
      
     /**
      * overriding getStatus for staging and vendor sites allowed
@@ -561,4 +572,13 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         return $status;
      }
 
+	/**
+	 * @param Mage_Core_Model_Website|int $website
+	 * @return Zolago_Pos_Model_Resource_Pos_Collection
+	 */
+	public function getVendorPOSesPerWebsite($website) {
+		$collection = $this->getAllVendorPOSes();
+		$collection->addFilterVendorPosPerWebsite($this->getId(), $website);
+		return $collection;
+	}
 }

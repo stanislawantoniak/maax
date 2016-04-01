@@ -138,8 +138,49 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     protected function _multiUpdate($data)
     {
         $json = json_encode($data);
-        Mage::log(microtime() . " " . $json, 0, 'converter_stock_test.log');
         return $json;
+    }
+    protected static function _prepareIsInStock($skus) {
+        $resource = Mage::getSingleton('core/resource');
+        $collection = Mage::getModel('zolagocataloginventory/stock_website')->getCollection();
+        $collection->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->join(array('e' => $resource->getTableName('catalog/product')),
+                'e.entity_id = main_table.product_id',
+                array())
+            ->where('e.sku',array('in',$skus))
+            ->columns(
+                array(
+                    'product_id'=>'main_table.product_id',
+                    'website_id'=>'main_table.website_id',
+                    'is_in_stock' => 'main_table.is_in_stock',
+                    'unique_id' => 'concat(main_table.product_id,"_",main_table.website_id)'
+                )
+            );
+        $collection->setRowIdFieldName('unique_id');
+        return $collection;
+    }    
+    protected static function _getItemCollection($skus) {	
+        $resource = Mage::getSingleton('core/resource');
+        $collection = Mage::getModel('zolagopos/stock')->getCollection();
+        $collection->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->join(array('e' => $resource->getTableName('catalog/product')),
+                'e.entity_id = main_table.product_id',
+                array())
+            ->join(array('website' => $resource->getTableName('zolagopos/pos_vendor_website')),
+                'website.pos_id = main_table.pos_id',
+                array())
+            ->join(array('pos' => $resource->getTableName('zolagopos/pos')),
+                'pos.pos_id = main_table.pos_id',
+                array())
+             ->where('pos.is_active = ?', Zolago_Pos_Model_Pos::STATUS_ACTIVE)
+             ->where('e.sku',array('in',$skus))
+             ->group('main_table.product_id')
+             ->group('website.website_id')
+                        
+             ->columns(array('qty' => 'sum(main_table.qty)','product_id' => 'main_table.product_id','website' => 'website.website_id'));
+         return $collection;
     }
 
     /**
@@ -154,88 +195,69 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         if (empty($stockBatch)) {
             return;
         }
+
+
         $skuS = array();
-        foreach ($stockBatch as $stockBatchItem) {
-            $skuS = array_merge($skuS, array_keys($stockBatchItem));
-        }
 
-        $stockId = 1;
-        $availableStockByMerchant = array();
-        //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
+        $stockId = Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
+
+
+        $tmpStock = array();
+        // collect sku
+        foreach ($stockBatch as $merchant => $stockData) { 
+            $productIds = array_keys($stockData);
+            $skuS = array_merge($skuS, $productIds);
+        }
+        // save old values
+        $collection = self::_prepareIsInStock($skuS);
+        foreach ($collection as $val) {
+            if ($val->getIsInStock()) {
+                $tmpStock[$val->getWebsiteId()][$val->getProductId()] = 1;
+            }
+        }    
         foreach ($stockBatch as $merchant => $stockData) {
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
-            $availableStockByMerchant = $s + $availableStockByMerchant;
+            Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); // save qty into pos            
         }
-        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
-        if (empty($availableStockByMerchant)) {
-            return;
-        }
-
-        $productIdsSkuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
-        //2. calculate stock on open orders (reservation)
-
-        /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
-        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
-        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS); //reservation
-
-
-        $availableStockByMerchantOnOpenOrders = array();
-        foreach ($availableStockByMerchant as $sku => $availableStockByMerchantQty) {
-            //$productIdsSkuAssoc[$sku] product_id
-            //$openOrdersQty[$sku] products qty on open orders
-            if (isset($productIdsSkuAssoc[$sku])) {
-                $qtyOnOpenOrders = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku]['qty'] : 0;
-                $availableStockByMerchantOnOpenOrders[$productIdsSkuAssoc[$sku]] = (($availableStockByMerchantQty - $qtyOnOpenOrders) > 0 ) ? ($availableStockByMerchantQty - $qtyOnOpenOrders) : 0;
-            }
-        }
-        unset($qtyOnOpenOrders);
-        unset($availableStockByMerchantQty);
-
-        /*Prepare data to insert*/
-        if (empty($availableStockByMerchantOnOpenOrders)) {
-            return;
-        }
-
+        // find changed products
+        $isInStock = array();
+        $collection = self::_getItemCollection($skuS);
+        $productsIdsForSolrAndVarnishBan = array();        
         $productsIds = array();
-
-        $productsIdsForSolrAndVarnishBan = array();
-
-        $cataloginventoryStockItem = array();
-        if (!empty($availableStockByMerchantOnOpenOrders)) {
-            $collection = Mage::getResourceModel('cataloginventory/stock_item_collection');
-            $productIds = array_keys($availableStockByMerchantOnOpenOrders);
-            $collection->addProductsFilter($productIds);
-            $stocks = array();
-            foreach ($collection as $val) {
-                $stocks[$val->getProductId()] = (int) $val->getIsInStock();
-            }            
-            foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
-                $is_in_stock = ($qty > 0) ? 1 : 0;
-                $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
-
-                $productsIds[$id] = $id;
-                if ($stocks[$id] != $is_in_stock) {
-                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
-                        "product_id" => $id,
-                        "qty" => $qty,
-                        "is_in_stock" => $is_in_stock,
-                        "stock_id" => $stockId
-                    ));
+        foreach ($collection as $val) {            
+            $id = $val->getProductId();
+            $productsIds[$id] = $id;
+            $website = $val->getWebsite();
+            $qty = $val->getQty();
+            if (!isset($tmpStock[$website][$id])) {
+                // new availability
+                if ($qty > 0) {
+                    $isInStock[$id][$website] = 1;
                     $productsIdsForSolrAndVarnishBan[$id] = $id;
-                };
+                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                                   "product_id" => $id,
+                               ));
+               
+                }
+            } else {
+                if ($qty > 0) {
+                    unset($tmpStock[$website][$id]);
+                }
             }
         }
-        if (empty($cataloginventoryStockItem)) {
-            return;
-        }
-        if (empty($productsIds)) {
-            return;
+        // removed availability
+        foreach ($tmpStock as $websiteId => $prodList) {
+            foreach ($prodList as $id => $dummy) {
+                $productsIdsForSolrAndVarnishBan[$id] = $id;
+                $isInStock[$id][$websiteId] = 0;
+                Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                              "product_id" => $id,
+                ));
+            }
         }
 
-        /*  @var $zcSDItemModel Zolago_CatalogInventory_Model_Resource_Stock_Item */
-        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
-        $zcSDItemModel->saveCatalogInventoryStockItem($cataloginventoryStockItem);
-
+        /*  @var $zcSDItemModel Zolago_CatalogInventory_Model_Resource_Stock_Website */
+        $zcSDItemModel = Mage::getResourceModel('zolagocataloginventory/stock_website');
+        $zcSDItemModel->saveCatalogInventoryStock($isInStock);
         //reindex
         Mage::getResourceModel('cataloginventory/indexer_stock')
             ->reindexProducts($productsIds);
@@ -400,6 +422,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //Save price
         $model->savePriceValues($insert, $ids);
     }
+
 
 
 }
