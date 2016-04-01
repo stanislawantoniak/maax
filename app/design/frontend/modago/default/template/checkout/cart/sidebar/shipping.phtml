@@ -30,14 +30,16 @@ $lockerRender = $this->getLockerRender($locker);
 
 $quote = $this->getQuote();
 
-$grandTotal = $quote->getGrandTotal();
 
-$discountTotal = 0;
-$productsPriceTotal = 0;
-foreach ($quote->getAllVisibleItems() as $item) {
-    $discountTotal += $item->getDiscountAmount();
-    $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
-}
+/**
+ * Totals
+ */
+$totals = $quote->getTotals();
+$productsPriceTotal = $totals["subtotal"]->getValue(); //Wartość produktów
+$discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() : 0); //Zniżka
+$shippingTotal = $totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
+$grandTotal = $totals["grand_total"]->getValue(); //Suma
+
  ?>
 
 <?php

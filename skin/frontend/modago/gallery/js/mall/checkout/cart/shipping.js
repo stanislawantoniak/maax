@@ -62,7 +62,7 @@
                 shippingCost = 0; //not selected yet
             }
             //Grand total
-            var totalSum = parseFloat(parseFloat(Mall.reg.get("quote_products_total")) + parseFloat(shippingCost) + -parseFloat(Mall.reg.get("quote_discount_total")));
+            var totalSum = parseFloat(parseFloat(Mall.reg.get("quote_products_total")) + parseFloat(shippingCost) + parseFloat(Mall.reg.get("quote_discount_total")));
             jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSum));
         },
         handleShippingMethodSelect: function () {
