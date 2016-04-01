@@ -28,9 +28,13 @@ $lockerId = $locker->getId();
 
 $lockerRender = $this->getLockerRender($locker);
 
+$quote = $this->getQuote();
+
+$grandTotal = $quote->getGrandTotal();
+
 $discountTotal = 0;
 $productsPriceTotal = 0;
-foreach ($this->getQuote()->getAllVisibleItems() as $item) {
+foreach ($quote->getAllVisibleItems() as $item) {
     $discountTotal += $item->getDiscountAmount();
     $productsPriceTotal += $item->getQty() * $item->getPriceInclTax();
 }
@@ -60,6 +64,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
             Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
 
+            Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
