@@ -43,7 +43,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function zolagoCatalogConverterStockSaveBefore(Varien_Event_Observer $observer) {
-		$this->collectProducts($observer->getEvent()->getProductId());
+		$this->collectProducts($observer->getEvent()->getProductId(),true);
 	}
 
 	/**
