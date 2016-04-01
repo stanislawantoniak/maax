@@ -1759,7 +1759,6 @@
                     jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     });
-                    console.log(inputs);
                     this.content.find("form .shipping-collect").html(inputs);
 
                     var pInputs = '';
