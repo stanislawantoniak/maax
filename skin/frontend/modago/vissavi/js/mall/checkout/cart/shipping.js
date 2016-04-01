@@ -96,7 +96,7 @@
 
 
                     jQuery(".nearest_stores_container_list").hide();
-                    jQuery(".nearest_stores_container_link").text(Mall.translate.get("shipping_map_show_nearest_link"));
+                    jQuery(".nearest_stores_container_link").text('pokaż najbliższe');
 
                 });
             if (Mall.getIsBrowserMobile()) {
@@ -110,7 +110,7 @@
                 handleGeoLocation();
             });
             jQuery("[name=shipping_select_city]").select2({
-                placeholder: Mall.translate.__("shipping_map_select_city"),
+                placeholder: "Wybierz miasto",
                 dropdownParent: jQuery("#select_inpost_point")
             });
 
@@ -169,7 +169,7 @@
 
                 },
                 messages: {
-                    _shipping_method: {required: Mall.translate.__("validation_please_select_shipping")},
+                    _shipping_method: {required:Mall.reg.get("validation_please_select_shipping")},
 
                 },
                 invalidHandler: function (form, validator) {
@@ -195,11 +195,11 @@
                 "click",
                 function (e) {
                     e.preventDefault();
-                    jQuery(this).text(Mall.translate.__("shipping_map_hide_nearest_link"));
+                    jQuery(this).text('schowaj najbliższe');
                     if (jQuery('.nearest_stores_container_list').is(':visible')) {
-                        jQuery(this).text(Mall.translate.__("shipping_map_show_nearest_link"));
+                        jQuery(this).text('pokaż najbliższe');
                     } else {
-                        jQuery(this).text(Mall.translate.__("shipping_map_hide_nearest_link"));
+                        jQuery(this).text('schowaj najbliższe');
                     }
                     jQuery(".nearest_stores_container_list").slideToggle();
                 });
@@ -213,11 +213,11 @@
                 function (e) {
                     e.preventDefault();
                     resizeMapMobile();
-                    jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
+                    jQuery(this).text('schowaj mapę');
                     if (jQuery('.map_delivery_container').is(':visible')) {
-                        jQuery(this).text(Mall.translate.__("shipping_map_show_map_link"));
+                        jQuery(this).text('pokaż mapę');
                     } else {
-                        jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
+                        jQuery(this).text('schowaj mapę');
                     }
                     jQuery(".map_delivery_container").slideToggle();
                 });
@@ -272,13 +272,14 @@
 
 
             var formData = jQuery("#cart-shipping-methods-form").serializeArray();
+            //console.log(formData);
 
             jQuery.ajax({
                 url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
                 data: formData
             }).done(function (response) {
-
+                //console.log(response);
             });
 
             Mall.Cart.Shipping.updateTotals();
@@ -323,6 +324,8 @@ google.maps.event.addDomListener(window, "resize", resizingMap());
 
 var defaultCenterLang = 52.4934482;
 var defaultCenterLat = 18.8979594;
+var defaultCenterLangMobile = 51.7934482;
+var defaultCenterLatMobile = 18.8979594;
 
 var minDist = 30; //km
 var minDistFallBack = 100; //km
@@ -357,6 +360,8 @@ function initialize() {
     };
 
     if (window.innerWidth < Mall.Breakpoint.sm) {
+        //mapOptions.zoom = 5;
+        //mapOptions.center = new google.maps.LatLng(defaultCenterLangMobile, defaultCenterLatMobile);
         mapOptions.zoomControlOptions.position = google.maps.ControlPosition.RIGHT_CENTER;
         mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
         mapOptions.panControl = false;
@@ -365,6 +370,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map_delivery'), mapOptions);
 
     infowindow = new google.maps.InfoWindow({
+        //pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
     data = []; //No city no points
@@ -460,7 +466,7 @@ function refreshMap(filteredData, nearestStores) {
             infowindow.open(map, this);
 
             jQuery(".nearest_stores_container_list").hide();
-            jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
+            jQuery(".nearest_stores_container_link").text('pokaż najbliższe');
         });
 
         //Selected city case
@@ -556,7 +562,7 @@ function showPosition(position) {
     closestStores.sort(sortByDirection);
     closestStores = closestStores.slice(0,3);
 
-    buildStoresList(closestStores);
+    buildStoresList(closestStores, position);
     nearestStores = closestStores;
 
     if (jQuery("[name=shipping_select_city]").val().length === 0) {
@@ -646,7 +652,7 @@ function formatDetailsContent(pos) {
         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+
         '</div>' +
         '<div class="col-sm-6">' +
-        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">' + Mall.translate.__("shipping_map_method_select") + '</a>' +
+        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a>' +
         '</div>' +
         '</div>';
 }
@@ -668,13 +674,13 @@ function formatInfoWindowContent(pos) {
         '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
         '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
         '<div class="additional-store-information">' + pos.location_description + '</div>' +
-        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">'+Mall.translate.__("shipping_map_method_select")+'</a></div>' +
+        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">wybierz</a></div>' +
         '</div>' +
         '</div>';
 }
 
 
-function buildStoresList(points) {
+function buildStoresList(points, position) {
     var searchByMapList = jQuery(".nearest_stores_container");
 
     var list = "";
@@ -686,7 +692,7 @@ function buildStoresList(points) {
     }
     if (points.length > 0) {
         list += "<div class='nearest_stores_container_list' style='"+nearest_stores_container_list_style+"'>";
-        list += "<h3>"+Mall.translate.__("shipping_map_nearest")+"</h3>";
+        list += "<h3>Najbliższe</h3>";
         for (var i = 0; i < points.length; i++) {
             pos = points[i];
             posId = pos.id;
@@ -694,9 +700,9 @@ function buildStoresList(points) {
         }
         list += "</div>";
         if (nearest_stores_container_list_style === "") {
-            list += "<div><a class='nearest_stores_container_link' href=''>"+Mall.translate.__("shipping_map_hide_nearest_link")+"</a></div>";
+            list += "<div><a class='nearest_stores_container_link' href=''>schowaj najbliższe</a></div>";
         } else {
-            list += "<div><a class='nearest_stores_container_link' href=''>"+Mall.translate.__("shipping_map_show_nearest_link")+"</a></div>";
+            list += "<div><a class='nearest_stores_container_link' href=''>pokaż najbliższe</a></div>";
         }
 
     }
@@ -714,9 +720,9 @@ function _makeMapRequest(q, markerToShow) {
         url: "/modago/inpost/getPopulateMapData",
         type: "POST",
         data: {town: q},
-        success: function (response) {
+        success: function (responce) {
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
-            data = jQuery.parseJSON(response);
+            data = jQuery.parseJSON(responce);
 
             var pointsOnMap = data.map_points;
 
@@ -727,7 +733,7 @@ function _makeMapRequest(q, markerToShow) {
 
             if(Mall.getIsBrowserMobile()){
                 jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
-                    .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_show_map_link")+'</a>');
+                    .html('<a href="" class="map_delivery_container_show">pokaż mapę</a>');
             }
 
             if(markerToShow){
@@ -746,7 +752,7 @@ function constructShippingPointSelect(map_points) {
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="">'+Mall.translate.__("shipping_map_select_locker")+'</option>');
+    options.push('<option value="">wybierz paczkomat</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-town="' + map_point.town + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
