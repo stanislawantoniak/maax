@@ -279,12 +279,29 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		);
 		
 		// Add stock
-		$select->join(
-			array("stock"=>$this->getTable("cataloginventory/stock_item")),
-			"stock.product_id=link.product_id AND stock.stock_id=" . Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID,
-			array("is_in_stock", "qty")
+		$select->joinLeft(
+			array("stock"=>$this->getTable("zolagocataloginventory/stock_website")),
+			"stock.product_id=link.product_id AND stock.website_id = ".$websiteId,
+			array("is_in_stock" => "IFNULL (stock.is_in_stock,0)")
 		);
-				
+        $subselect = $this->getReadConnection()->select()
+            ->from(array('stock' => $this->getTable('zolagopos/stock')))
+            ->join(array('website' => $this->getTable('zolagopos/pos_vendor_website')),
+                'website.pos_id = stock.pos_id',
+                array())
+            ->join(array('pos' => $this->getTable('zolagopos/pos')),
+                'pos.pos_id = stock.pos_id',
+                array())
+             ->where('pos.is_active = ?', Zolago_Pos_Model_Pos::STATUS_ACTIVE)
+             ->where('website.website_id = ?',$websiteId)
+             ->group('stock.product_id')
+             ->reset(Zend_Db_Select::COLUMNS)
+             ->columns(array('qty' => 'sum(stock.qty)','product_id' => 'stock.product_id'));
+
+		
+        $select->joinLeft(array('qty' => $subselect),
+            'qty.product_id = link.product_id',
+            array('qty' => 'ifnull(qty.qty,0)'));
 		// Add optional pricing
 		$conds = array(
 			"sa_price.product_super_attribute_id=sa.product_super_attribute_id",
@@ -329,7 +346,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 
 		$select->where("link.parent_id IN (?)", $ids);
 		$select->order("sa.position");
-		
 		return $this->getReadConnection()->fetchAll($select);
 	}
 }

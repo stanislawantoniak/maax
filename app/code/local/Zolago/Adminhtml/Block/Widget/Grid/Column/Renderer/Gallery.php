@@ -14,27 +14,25 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
         $productId = $row->getEntityId();
         $_helper = Mage::helper("zolagocatalog");
 
-        $out .= "<div class='row'>";
+        $out .= "<div style='display:table'><div style='display:table-row'>";
 
-        $out .= "<div class='col-md-10 col-lg-10 vendor-image-container no-padding'>";
+        $out .= "<div class='vendor-image-container' style='display:table-cell'>";
         $out .= Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
         $addImageLabel = $_helper->__("Add image");
 
         $out .= "</div>";
-        $out .= "<div class='vendor-image-upload col-md-2 col-lg-2'>
+        $out .= "<div class='vendor-image-upload' style='display:table-cell;vertical-align:top'>
                     <form>
-
-                            <div class='btn btn-file' title='{$addImageLabel}'>
-                                <i class='icon icon-plus-sign'></i> {$addImageLabel}
-                                <input type='hidden' name='product' value='{$productId}' />
-                                <input type='file' multiple name='vendor_image_upload[]' />
-                            </div>
-
+                        <input type='hidden' name='product' value='{$productId}' style='cursor:pointer' />
+                        <label class='btn btn-file' title='{$addImageLabel}' style='cursor:pointer !important;'>
+                            <i class='icon icon-plus-sign'></i> {$addImageLabel}
+                            <input type='file' multiple name='vendor_image_upload[]' />
+                        </label>
                     </form>
                 </div>";
 
-        $out .= "</div>";
+        $out .= "</div></div>";
 
         return $out;
     }
