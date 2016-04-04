@@ -42,11 +42,11 @@ class Zolago_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Catalog_
 
         $ioAdapter = new Varien_Io_File();
         $ioAdapter->setAllowCreateFolders(true);
-        $distanationDirectory = dirname($this->_getConfig()->getTmpMediaPath($fileName));
+        $destinationDirectory = dirname($this->_getConfig()->getTmpMediaPath($fileName));
 
         try {
             $ioAdapter->open(array(
-                'path'=>$distanationDirectory
+                'path'=>$destinationDirectory
             ));
 
             /** @var $storageHelper Mage_Core_Helper_File_Storage_Database */

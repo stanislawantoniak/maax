@@ -52,6 +52,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$productWebsiteTable = $this->getTable('catalog/product_website');
 		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
+		$stockWebsite = $this->getTable('zolagocataloginventory/stock_website');
 		// Join price attrib
 		$priceExpression = $adapter->getCheckSql(
 			'(at_campaign_regular_id.value IS NOT NULL) AND (at_campaign_regular_id.value > 0)', 
@@ -69,7 +70,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				'(cataloginventory_stock_status.product_id=e.entity_id) AND ('.$adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).
 				    ' AND '.$adapter->quoteInto("cataloginventory_stock_status.website_id=?",$websiteId).')',
 				    array()
-		//	array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
         );
 		$this->addExpressionAttributeToSelect('is_in_stock', 
 		        new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
@@ -78,7 +78,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 
 		$select->join(
 				array('cataloginventory_stock_table' => $stockTable), 
-				"e.entity_id = cataloginventory_stock_table.product_id", 
+				"e.entity_id = cataloginventory_stock_table.product_id",
 				array()
         );
 		$this->addExpressionAttributeToSelect('politics', 
@@ -94,8 +94,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$subSelect = $adapter->select();
 		$subSelect->from(array("link_available"=>$linkTabel), array("COUNT(link_available.link_id)"));
 		$subSelect->join(
-				array("child_stock_available"=>$stockTable), 
-				"link_available.product_id=child_stock_available.product_id", 
+				array("child_stock_available"=>$stockWebsite), 
+				"link_available.product_id=child_stock_available.product_id AND ".
+                    $adapter->quoteInto('child_stock_available.website_id = ?',$websiteId).
+                " AND ".$adapter->quoteInto("child_stock_available.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK),
 				array());
 		$subSelect->where("link_available.parent_id=e.entity_id");
 		$subSelect->where("child_stock_available.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
@@ -104,10 +106,17 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		// Join child qtys
 		$subSelect = $adapter->select();
-		$subSelect->from(array("link_qty"=>$linkTabel), array("IFNULL(SUM(child_qty.qty),0)"));
+		$subSelect->from(array("link_qty"=>$linkTabel), array("IFNULL(SUM(child_stock.qty),0)"));
 		$subSelect->join(
-				array("child_qty"=>$stockTable), 
-				"link_qty.product_id=child_qty.product_id", array());
+				array("child_qty"=>$stockWebsite), 
+				"link_qty.product_id=child_qty.product_id AND ".
+				    $adapter->quoteInto("child_qty.website_id = ?",$websiteId),
+				array());
+        $subSelect->join(
+                array('child_stock' => $stockStatusTable),
+                "child_stock.product_id = link_qty.product_id AND ".
+                $adapter->quoteInto("child_stock.website_id = ?",$websiteId),
+                array());
 		$subSelect->where("link_qty.parent_id=e.entity_id");
 		$subSelect->where("child_qty.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 		

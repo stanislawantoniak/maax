@@ -6,6 +6,9 @@
  */
 class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Observer {
 
+    protected $_quoteItems = array();
+    
+
     public function customer_register_success($observer)
     {
         $active = Mage::getStoreConfig('salesmanago_tracking/general/active');
@@ -137,6 +140,11 @@ class Zolago_SalesManago_Model_Observer extends SalesManago_Tracking_Model_Obser
                 $quote = $observer->getCart()->getQuote();
             }elseif($observer->getQuoteItem()) {
                 // Case for event sales_quote_remove_item
+                $quoteItem = $observer->getQuoteItem()->getItemId();
+                if (!empty($this->_quoteItems[$quoteItem])) {
+                    return ; // event już obsłużony
+                }
+                $this->_quoteItems[$quoteItem] = $quoteItem;                                
                 $quote = $observer->getQuoteItem()->getQuote();
             }elseif($observer->getCustomer()){
                 // Case after customer register successfully
