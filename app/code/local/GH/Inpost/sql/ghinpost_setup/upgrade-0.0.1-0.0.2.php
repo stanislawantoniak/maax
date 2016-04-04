@@ -1,4 +1,5 @@
 <?php
+
 /* @var $this Mage_Core_Model_Resource_Setup */
 $this->startSetup();
 
@@ -12,7 +13,7 @@ $dropshipDeliveryType->setData(array(
 	'delivery_title' => 'Paczkomaty inPost',
 	'sort_order' => 20
 ));
-$dropshipDeliveryType->save();
+// $dropshipDeliveryType->save();
 
 if(!$dropshipDeliveryType->getId()) {
 	Mage::throwException($errorMsg);
@@ -28,7 +29,7 @@ $dropshipShipping->setData(array(
 	'vendor_ship_class' => 1,
 	'customer_ship_class' => 1
 ));
-$dropshipShipping->save();
+// $dropshipShipping->save();
 
 if(!$dropshipShipping->getId()) {
 	Mage::throwException($errorMsg);
