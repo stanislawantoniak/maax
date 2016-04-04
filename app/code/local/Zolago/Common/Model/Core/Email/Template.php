@@ -222,7 +222,7 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
     protected function _imagesToAttachments($html) {
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'); //preserve ążźćęłó etc
         $dom = new DOMDocument(null,'UTF-8');
-        $dom->loadHTML($html);
+        @$dom->loadHTML($html); //suppress warnings because this gets sometimes wrongly formatted html code and warnings prevent emails from sending
         $dom->preserveWhiteSpace = false;
 
         foreach($dom->getElementsByTagName('img') as $image) {
