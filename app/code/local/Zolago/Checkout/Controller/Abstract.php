@@ -118,13 +118,76 @@ abstract class Zolago_Checkout_Controller_Abstract
 				setHeader("content-type", "application/json")->
 				setBody($helper->jsonEncode($newResponse));
 	}
-	
+
+
 	/**
+	 * METHOD IMPLEMENTED WHEN WE SELECT SHIPPING IN CART ONLY!!!
+	 * We know for sure in cart if customer logged in or not (Mage_Checkout_Model_Type_Onepage::METHOD_CUSTOMER)
+	 * but we don't know if if customer guest (Mage_Checkout_Model_Type_Onepage::METHOD_GUEST) or he is a new customer (Mage_Checkout_Model_Type_Onepage::METHOD_REGISTER)
+	 * so in CART we suppose that he is a guest
+	 * but if he will enter a password on the 1st checkout step
+	 * then checkout method will be switched to Mage_Checkout_Model_Type_Onepage::METHOD_REGISTER
+	 * @return string
+	 */
+	public function getCheckoutMethodForCart()
+	{
+		//Mage::log($onepage, null, "importPostShippingData_1.log");
+		if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+			return Mage_Checkout_Model_Type_Onepage::METHOD_CUSTOMER;
+		}
+		return Mage_Checkout_Model_Type_Onepage::METHOD_GUEST;
+	}
+
+    /**
+     * Save post shipping (got from /checkout/cart/ page) data to quote
+     * @throws Mage_Core_Exception
+     */
+    public function importPostShippingData() {
+        $request = $this->getRequest();
+
+
+        $onepage = $this->getOnepage();
+
+        $method	= $this->getCheckoutMethodForCart(); // checkout method
+
+		$methodResponse = $onepage->saveCheckoutMethod($method);
+		if(isset($methodResponse['error']) && $methodResponse['error']==1){
+			throw new Mage_Core_Exception($methodResponse['message']);
+		}
+        /**
+          shipping_method[vendor_id]:udtiership_1
+         */
+        if ($shippingMethod = $request->getParam("shipping_method")) {
+
+            $shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
+            if (isset($shippingMethodResponse['error']) && $shippingMethodResponse['error'] == 1) {
+                throw new Mage_Core_Exception($shippingMethodResponse['message']);
+            }
+
+			//Save sales_flat_quote_address.udropship_shipping_details
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
+			//Save sales_flat_quote_address.udropship_shipping_details
+
+            $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
+        }
+
+        $checkoutSession = $this->_getCheckoutSession();
+
+        if ($shippingPointCode = $request->getParam("shipping_point_code")) {
+            $checkoutSession->setShippingPointCode($shippingPointCode);
+        } else {
+            $checkoutSession->setShippingPointCode();
+        }
+        $onepage->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
+    }
+
+    /**
 	 * Save post data to quote
 	 * @throws Mage_Core_Exception
 	 */
 	public function importPostData(){
 		$request = $this->getRequest();
+
 		$onepage = $this->getOnepage();
 
 		/**
@@ -215,6 +278,25 @@ abstract class Zolago_Checkout_Controller_Abstract
 		shipping[save_in_address_book]:1
 		 */
 		$shipping = $request->getParam("shipping");
+		// If there is locker InPost 
+		// we need to setup correct shipping address
+		$inpost = $request->getParam("inpost");
+		if (isset($inpost['name'])) {
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel('ghinpost/locker');
+			$locker->loadByLockerName($inpost['name']);
+			$shippingAddressFromLocker = $locker->getShippingAddress();
+			$shipping = array_merge($shipping, $shippingAddressFromLocker);
+			if (isset($shipping['telephone']) && !empty($shipping['telephone'])) {
+				$checkoutSession = $onepage->getCheckout();
+				$checkoutSession->setLastTelephoneForLocker($shipping['telephone']);
+			} else {
+				throw new Mage_Core_Exception("Telephone number for InPost is required");
+			}
+			$customer = $onepage->getQuote()->getCustomer();
+			$shipping['firstname']	= $customer->getFirstname();
+			$shipping['lastname']	= $customer->getLastname();
+		}
 		if(is_array($shipping)){
 			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
 			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){
@@ -231,10 +313,12 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
 				throw new Mage_Core_Exception($shippingMethodResponse['message']);
 			}
-
+			//Save sales_flat_quote_address.udropship_shipping_details
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
+			//Save sales_flat_quote_address.udropship_shipping_details
 			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
 		}
-		
+
 		/**
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
@@ -256,6 +340,42 @@ abstract class Zolago_Checkout_Controller_Abstract
 			collectTotals()->
 			save();
 		
+	}
+
+
+	/**
+	 * @param $shippingMethod
+	 * @throws Zend_Json_Exception
+	 */
+	public function setUdropshipShippingDetailsToAddress($shippingMethod)
+	{
+		$quote = Mage::getModel("checkout/cart")->getQuote();
+		$address = $quote->getShippingAddress();
+
+		$details = $address->getUdropshipShippingDetails();
+		$details = $details ? Zend_Json::decode($details) : array();
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+		$locker = $helper->getInpostLocker();
+
+		foreach ($shippingMethod as $vId => $code) {
+			$r = $address->getShippingRateByCode($code);
+			if (!$r) {
+				continue;
+			}
+			$details['methods'][$vId] = array(
+				'code' => $code,
+				'cost' => $r->getCost(),
+				'price' => $r->getPrice(),
+				'carrier_title' => $r->getCarrierTitle(),
+				'method_title' => $r->getMethodTitle(),
+				'inpost_locker_name' => $locker->getName()
+			);
+		}
+
+		$address->setData("inpost_locker_name", $locker->getName());
+		$address->setUdropshipShippingDetails(Zend_Json::encode($details));
 	}
 	
 	/**
@@ -353,6 +473,28 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$this->_prepareJsonResponse($response);
 		}
 	}
+
+
+    public function saveBasketShippingAction() {
+
+        $response = array(
+            "status"=>true,
+            "content" => array()
+        );
+
+        try{
+            $this->importPostShippingData();
+        } catch (Exception $ex) {
+            $response = array(
+                "status"=>0,
+                "content"=>$ex->getMessage()
+            );
+        }
+
+        if($this->getRequest()->isAjax()){
+            $this->_prepareJsonResponse($response);
+        }
+    }
 
 	/**
 	 * @param mixed $response

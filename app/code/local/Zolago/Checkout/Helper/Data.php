@@ -1,5 +1,30 @@
 <?php
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
+
+	protected $inpostLocker = null;
+
+	/**
+	 * Retrieve InPost Locker object for current checkout session
+	 * 
+	 * @return GH_Inpost_Model_Locker
+	 */
+	public function getInpostLocker() {
+		if (is_null($this->inpostLocker)) {
+			/** @var Mage_Checkout_Model_Session $checkoutSession */
+			$checkoutSession = Mage::getSingleton('checkout/session');
+			$inpostCode = $checkoutSession->getShippingPointCode();
+
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel("ghinpost/locker");
+			$locker->loadByLockerName($inpostCode);
+			if (!$locker->getIsActive()) {
+				$locker = Mage::getModel("ghinpost/locker");
+			}
+			$this->inpostLocker = $locker;
+		}
+		return $this->inpostLocker;
+	}
+	
     public function getPaymentFromSession() {
 	    return Mage::getSingleton('checkout/session')->getPayment();
     }

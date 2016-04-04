@@ -4,7 +4,8 @@ $_items = $this->getItems();
 /** @var Zolago_Checkout_Helper_Data $_helper */
 $_helper = Mage::helper("zolagocheckout");
 $basketDataLayer = $_helper->getBasketDataLayer();
-?>
+ ?>
+
 <?php if (!empty($basketDataLayer)): ?>
 	<script>
 		if (typeof dataLayer != "undefined") {
@@ -47,14 +48,8 @@ $basketDataLayer = $_helper->getBasketDataLayer();
                     </section>
                 </div>
             </div><!-- col-lg-3 col-md-4 || col-sm-12 col-xs-12-->
-
-            <?php echo $this->getChildHtml('zolagomodago.checkout.cart.sidebar'); ?>
-
-
-            <?php /* <aside id="aside-shopping-cart" class="main bg-w visible-xs">
-                <a href="#" id="clearAllShopping"><i class="fa-remove"></i> <?php echo $this->__("Empty cart"); ?></a>
-            </aside> */ ?>
         </form>
+        <?php echo $this->getChildHtml('zolagomodago.checkout.cart.sidebar'); ?>
     </div>
 </div>
 
@@ -66,4 +61,3 @@ $basketDataLayer = $_helper->getBasketDataLayer();
         display: inline; }
     .styledSelected {width: 80px;}
 </style>
-

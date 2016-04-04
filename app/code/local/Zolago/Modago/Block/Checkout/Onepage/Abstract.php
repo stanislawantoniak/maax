@@ -2,9 +2,28 @@
 /**
  * Abstract for all steps
  */
-abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
-    extends Mage_Checkout_Block_Onepage_Abstract
-{
+abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
+
+	/**
+	 * @return GH_Inpost_Model_Locker
+	 */
+	public function getInpostLocker() {
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+		$locker = $helper->getInpostLocker();
+		return $locker;
+	}
+
+	public function getLastTelephoneForLocker() {
+		$shippingAddress = $this->getQuote()->getShippingAddress();
+		$tel = $shippingAddress->getTelephone();
+		/** @var Mage_Checkout_Model_Session $checkoutSession */
+		$checkoutSession = Mage::getSingleton('checkout/session');
+		if ($checkoutSession->getLastTelephoneForLocker()) {
+			$tel = $checkoutSession->getLastTelephoneForLocker();
+		}
+		return $tel;
+	}
 	
 	/**
 	 * @return bool
@@ -43,14 +62,17 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 		}
 		return Mage::helper("core")->jsonEncode($addresses);
 	}
-	
 
-    /**
-     * @return type
-     */
+	/**
+	 * @return string
+	 */
     public function getStoreDefaultCountryId() {
-        return "PL";
-        Mage::app()->getStore()->getConfig("general/country/default");
+		$countryId = Mage::app()->getStore()->getConfig("general/country/default");
+		$locker = $this->getInpostLocker();
+		if ($locker->getId()) {
+			$countryId = $locker->getCountryId();
+		}
+        return $countryId;
     }
 
     /**

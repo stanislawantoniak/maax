@@ -530,7 +530,7 @@
 					margin:22px 0 25px 0px;
 					padding:0px;
 					@media (max-width: $screen-xs-max) {
-						margin: 10px 0
+						margin: 10px 0;
 					}
 				}
 			}
@@ -820,7 +820,7 @@
 			}
 		}
 		#discount_voucher {
-			margin-bottom: 36px;
+			margin-bottom: 36px;                        
 			.form-group {
 				margin-bottom:11px;
 				.info_discount_voucher {

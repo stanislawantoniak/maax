@@ -370,6 +370,29 @@
       </action>
     </reference>
     <reference name="head">
+      <block type="core/text" name="google.maps.api">
+        <action method="setText">
+          <text>
+            <![CDATA[<script type="text/javascript" src="//maps.google.com/maps/api/js"></script>]]>
+          </text>
+        </action>
+      </block>
+      <action method="addJs">
+        <name>gmaps/mapshelper.js</name>
+      </action>
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>js/select2/css/select2.min.css</stylesheet>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>js/select2/js/select2.min.js</name>
+      </action>
       <action method="removeItem">
         <type>js</type>
         <script>varien/weee.js</script>
@@ -377,13 +400,19 @@
     </reference>
     <reference name="checkout.cart">
       <!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
-      <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml">
+      <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar"
+             template="checkout/cart/sidebar.phtml">
         <block type="cms/block" name="checkout.cart.tos" as="tos">
           <action method="setBlockId">
             <blockId>shopping-cart-accept-tos</blockId>
           </action>
         </block>
-        <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
+        <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery" as="checkout_cart_shipping"
+               template="checkout/cart/sidebar/shipping.phtml">
+          <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals"
+                 template="checkout/cart/totals.phtml"/>
+        </block>
+
       </block>
     </reference>
   </checkout_cart_index>

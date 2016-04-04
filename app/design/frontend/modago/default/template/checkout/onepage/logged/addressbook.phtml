@@ -1,7 +1,10 @@
 <?php
 /* @var $this Zolago_Modago_Block_Checkout_Onepage_Logged_Addressbook */
 $formKey = Mage::getSingleton('core/session')->getFormKey();
-$_helper = Mage::helper("zolagocheckout");
+$helper = Mage::helper("zolagocheckout");
+$locker				= $this->getInpostLocker();
+$inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
+$shippingAddress	= $this->getQuote()->getShippingAddress();
 ?>
 
 <?php echo $this->getStep1Sidebar(); ?>
@@ -10,10 +13,10 @@ $_helper = Mage::helper("zolagocheckout");
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-8 col-xs-12 col-lg-pull-3 col-md-pull-4 col-sm-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
-			<h2><?php echo $this->__("Confirm shipping data")?></h2>
+			<h2><?php echo !$locker->getId() ? $helper->__("Confirm shipping data") : $helper->__("Delivery data"); ?></h2>
 		</header>
-		
-		<!-- selected address tmplate -->
+
+		<!-- selected address template -->
 		<div class="hidden" id="selected-address-template">
 			<p class="pull-right default_delivery small-no-float">{{selected_caption}}</p>
 			<dl class="pull-left" >
@@ -22,7 +25,7 @@ $_helper = Mage::helper("zolagocheckout");
 				<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
 				<dd>{{street}}</dd>
 				<dd>{{postcode}} {{city}}</dd>
-				<dd class="separator phone"><?php echo $_helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+				<dd class="separator phone"><?php echo $helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 				<dd class="action separator">
 					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
 					<span class="set-default">
@@ -34,7 +37,7 @@ $_helper = Mage::helper("zolagocheckout");
 			</dl>
 		</div>
 		
-		<!-- normal address tmplate -->
+		<!-- normal address template -->
 		<div class="panel panel-default hidden" id="normal-address-template">
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -67,6 +70,59 @@ $_helper = Mage::helper("zolagocheckout");
 		
 		<form action="<?php echo $this->getSaveUrl();?>" class="form">
 			<input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+			<?php if($locker->getId()): ?>
+			<div id="inpost-wrapper" class="panel panel-default inpost-wrapper">
+				<div class="panel-body">
+					<div class="form-group">
+						<input id="inpost_locker_name"  name="inpost[name]" value="<?php echo $locker->getName(); ?>" type="hidden"/>
+						<div class="row inpost-info">
+							<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
+								<strong><?php echo $helper->__("Locker InPost"); ?></strong>
+								<br/>
+								<span id="inpost-locker-street"><?php echo $locker->getStreet(); ?></span> <span id="inpost-locker-building-number"><?php echo $locker->getBuildingNumber(); ?></span>
+								<br/>
+								<span id="inpost-locker-postcode"><?php echo $locker->getPostcode(); ?></span> <span id="inpost-locker-town"><?php echo $locker->getTown(); ?></span>
+								<br/>
+								<span id="inpost-locker-location-description">(<?php echo $locker->getLocationDescription(); ?>)</span>
+							</div>
+							<div class="col-xs-5 col-sm-6 col-md-6 col-lg-6 text-right">
+								<div class="figure-button-wrapper">
+									<figure class="inpost-img">
+										<div><img src="<?php echo $inpostLogo; ?>"></div>
+									</figure>
+									<br/>
+									<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large change-locker"><?php echo $helper->__('Change'); ?></a>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+								<?php echo $this->__("Telephone number"); ?>
+								<fieldset>
+									<div class="form-group clearfix border-top">
+										<div class="row">
+											<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 telephone-for-locker">
+												<input id="telephone_for_locker"
+													   name="inpost[telephone]"
+													   value="<?php echo $this->escapeHtml($this->getLastTelephoneForLocker()); ?>"
+													   type="tel"
+													   class="form-control phone hint validate-telephone"
+													   required="true"/>
+											</div>
+											<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 telephone-for-locker-comment">
+												<?php echo $helper->__("The phone number is required to receive package from locker."); ?><br/>
+												<?php echo $helper->__("We do not use it in any other way without your permission!"); ?>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+			<?php else: ?>
 			<h4><?php echo $this->__("Shipping address")?>:</h4>
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -83,15 +139,14 @@ $_helper = Mage::helper("zolagocheckout");
 					</a>
 				</div>
 			</div>
+			<?php endif; ?>
 			<div id="invoice" class="form-group form-checkbox small" style="margin-left: 5px;">
 				<input type="checkbox" name="rodzaj" id="invoice_this" class="css-checkbox need_invoice">
-				<label for="invoice_this" class="css-label invoice_this">Chcę otrzymać fakturę VAT </label>
+				<label for="invoice_this" class="css-label invoice_this"><?php echo $helper->__("I want to receive an invoice"); ?></label>
 			</div>
 
-
-
 			<div id="block_invoice">
-				<h4>Dane do faktury:</h4>
+				<h4><?php echo $helper->__("Data for invoice"); ?>:</h4>
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="current-address current-addres billing clearfix">

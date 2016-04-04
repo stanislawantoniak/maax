@@ -43,7 +43,7 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
                 unset($cRates);
                 if (!empty($data)) {
                     foreach ($data as $vId => $dataItem) {
-                        $cost[$vId] = array_sum($dataItem);
+                        $cost[$vId] = min($dataItem); //get lowest costs for ajax basket
                     }
                 }
             }

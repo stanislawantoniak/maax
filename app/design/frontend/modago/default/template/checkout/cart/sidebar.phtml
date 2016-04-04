@@ -5,7 +5,16 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 13.08.2014
  */
+$checkoutSession = Mage::getSingleton('checkout/session');
+$sessionShippingMethod = $checkoutSession->getData("shipping_method");
 
+$inpostCode = $checkoutSession->getData("inpost_code");
+
+
+$shippingBlock = $this->getChild('checkout_cart_shipping')
+        ->setData("shipping_method", $sessionShippingMethod)
+        ->setData("inpost_code", $inpostCode)
+        ;
 ?>
 
 <?php
@@ -20,17 +29,22 @@
         $_couponLabel = $_ruleModel->getStoreLabel();
         $_couponDescription = $_ruleModel->getDescription();
     }
+    
 ?>
+
 <div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
-        <!--<div class="inner-cart-summary">-->
-        <header>
-            <h2><?php echo $this->__("Your shopping"); ?></h2>
-        </header>
+
         <div class="col-sidebar-cart-summary clearfix">
-            <ul id="product_summary">
-                <?php echo $this->getChildHtml('totals'); ?>
-            </ul>
+            <?php echo $this->getChildHtml('checkout_cart_shipping'); ?>
+        </div>
+        <!--Select Shipping-->
+
+
+        
+        
+        <div class="col-sidebar-cart-summary clearfix">
+            
             <div id="discount_voucher">
                 <div class="form-group clearfix">
                     <?php if (!$_hasCoupon) : ?>

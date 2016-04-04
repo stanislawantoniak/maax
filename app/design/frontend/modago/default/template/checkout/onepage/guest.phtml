@@ -13,7 +13,7 @@ $basketDataLayer = $_helper->getBasketDataLayer();
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">
-			<?php echo $this->getChildHtml("checkout.onepage.guest.address");?>
+			<?php echo $this->getChildHtml("checkout.onepage.guest.address"); /** @see checkout/onepage/shared/address.phtml */ ?>
 		</div>
 		<div class="step step-1 hidden" id="step-1">
             <?php echo $this->getChildHtml("checkout.onepage.guest.shippingpayment");?>

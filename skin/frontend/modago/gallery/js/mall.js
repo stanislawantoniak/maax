@@ -654,6 +654,9 @@ var Mall = {
     //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
     //to our format: 99-999
     postcodeTransform: function(str) {
+        if(typeof str === "undefined"){
+            return "";
+        }
         var strTrans = str.replace(/\D/g,"");//remove spaces
         strTrans = strTrans.match(/.*?([0-9]{2}).?([0-9]{3}).*?/i);
         if (strTrans == null) {
@@ -1878,10 +1881,6 @@ jQuery(document).ready(function() {
         if(Mall._current_superattribute != null) {
             jQuery("#add-to-cart").tooltip('destroy');
         }
-    });
-
-    jQuery("#cart-buy").on('click', function() {
-        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
     });
 
 
