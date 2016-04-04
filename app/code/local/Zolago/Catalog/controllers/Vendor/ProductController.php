@@ -201,6 +201,8 @@ class Zolago_Catalog_Vendor_ProductController
         }
 
         try {
+            Mage::register(Zolago_Turpentine_Model_Observer_Ban::NO_BAN_AFTER_PRODUCT_SAVE,true,true);
+
             array_walk($ids, function ($value) {
                 return (int)$value;
             });
@@ -262,6 +264,8 @@ class Zolago_Catalog_Vendor_ProductController
                 "count" => $productIdsCount,
                 "message" => $helper->__("<b>%s</b> product(s) moved to category <b>%s</b>", $productIdsCount, $attributeSetName)
             );
+
+            Mage::unregister(Zolago_Turpentine_Model_Observer_Ban::NO_BAN_AFTER_PRODUCT_SAVE);
 
 
         } catch (GH_Common_Exception $e) {
