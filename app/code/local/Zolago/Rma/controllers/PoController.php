@@ -226,13 +226,14 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $po = $rma->getPo();
             /* @var $po Zolago_Po_Model_Po */
             $rma->register();
-            $track = Mage::getModel('urma/rma_track');
-            $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
-	        $track->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT);
-            $rma->addTrack($track);
-            $rma->setCurrentTrack($track);
-            
-            // set tracking
+			// set tracking
+			if ($dhlRequest) {
+				$track = Mage::getModel('urma/rma_track');
+				$track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+				$track->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT);
+				$rma->addTrack($track);
+				$rma->setCurrentTrack($track);
+			}
         }
         if (!empty($data['comment_text'])) {
             foreach ($rmas as $rma) {
