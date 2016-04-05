@@ -40,7 +40,7 @@ $quote = $this->getQuote();
 $totals = $quote->getTotals();
 $productsPriceTotal = $totals["subtotal"]->getValue(); //Wartość produktów
 $discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() : 0); //Zniżka
-$shippingTotal = $totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
+$shippingTotal = (isset($totals["shipping"]) ? $totals["shipping"]->getAddress()->getShippingInclTax() : 0; //Delivery cost
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
  ?>
