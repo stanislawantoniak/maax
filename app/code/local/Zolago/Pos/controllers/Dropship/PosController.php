@@ -133,32 +133,8 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 
             // get products from changed poses
             if (count($changedPoses)) {
-                $select = $adapter->select()
-                    ->from(array('ps' => $posModel->getResource()->getTable('zolagopos/stock')))
-                    ->where('pos_id in (?)',$changedPoses);
-                $result = $adapter->query($select);
-                $productIds = array();
-                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                    $productIds[$row['product_id']] = $row['product_id'];
-                    Mage::dispatchEvent("zolagopos_before_change_pos_assign", array(
-                                                       "product_id" => $row['product_id'],
-                                                   ));                                   
-                }
-                if ($productIds) {	
-                    
-                    // set availability
-                    Mage::getResourceModel('zolagocataloginventory/stock_item')
-                        ->updateAvailability($productIds);
-                    // reindex
-                    Mage::getResourceModel('cataloginventory/indexer_stock')
-                        ->reindexProducts($productIds);
-                    // Varnish & Turpentine
-                    $coll = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIds);
-                    //send to solr queue & ban url in varnish
-                    Mage::dispatchEvent("zolagopos_after_change_pos_assign", array("products" => $coll));
-                }
-
-                                    
+                    $process = Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_attribute');
+                    $process->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
             }
 
 	    	$this->_getSession()->addSuccess($helper->__('Settings saved'));
