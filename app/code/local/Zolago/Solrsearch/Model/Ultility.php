@@ -382,7 +382,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		//));
 		
 		$allIds = $collecitonIds;
-//		Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
+		//Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
+		
 		// Final collection is a set with all types of products
 		$finalCollection = Mage::getModel("zolagosolrsearch/improve_collection");
 		/* @var $finalCollection Zolago_Solrsearch_Model_Improve_Collection */
@@ -411,10 +412,10 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			/* @var $item Varien_Object */
 			
 			if($item = $finalCollection->getItemById($id)){
-                //    Mage::log("Product " . $id . " added");
+				//Mage::log("Product " . $id . " added");
 				$documents .= '"add": '.json_encode(array('doc'=>$item->getData())).",";
 				//if($index==3){
-                //  Mage::log(var_export($item->getData(),1));
+				//	Mage::log(var_export($item->getData(),1));
 				//}
 				
 			}

@@ -82,14 +82,6 @@
 					</zolagosolrsearch>
 				</observers>
 			</zolagocatalog_converter_stock_save_before>
-			<zolagopos_before_change_pos_assign>
-				<observers>
-					<zolagosolrsearch>
-						<class>zolagosolrsearch/observer</class>
-						<method>zolagoCatalogConverterStockSaveBefore</method>
-					</zolagosolrsearch>
-				</observers>
-			</zolagopos_before_change_pos_assign>
 
             <catalog_converter_price_update_after>
                 <observers>
@@ -149,14 +141,6 @@
 					</zolagosolrsearch>
 				</observers>
 			</zolagocatalog_converter_stock_complete>
-			<zolagopos_after_change_pos_assign>
-				<observers>
-					<zolagosolrsearch>
-						<class>zolagosolrsearch/observer</class>
-						<method>zolagoCatalogConverterStockComplete</method>
-					</zolagosolrsearch>
-				</observers>
-			</zolagopos_after_change_pos_assign>
 			
 			<!-- Delete anywhere -->
 			<catalog_product_delete_before>

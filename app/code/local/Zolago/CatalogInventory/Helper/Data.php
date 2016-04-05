@@ -1,8 +1,10 @@
 <?php
-
 /**
- * Class Zolago_CatalogInventory_Helper_Data
- */
+ * Created by PhpStorm.
+ * User: victory
+ * Date: 6/18/14
+ * Time: 1:11 PM
+ */ 
 class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	const FLAG_IN_STOCK			= 2;
@@ -44,7 +46,7 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		$stockModel->loadByProduct($product);
-
+		
 		$minimalStock = min(
 			$stockModel->getMaxSaleQty(), 
 			max($stockModel->getQty(),0)
@@ -100,7 +102,7 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 		if($productsCheck){
 			foreach($productsCheck as $product){
 				/* @var $product Mage_Catalog_Model_Product */
-				$stockModel->loadByProduct($product); // todo poprawić to, w $item powinien byc model stock, po co ladowac jeszcze raz
+				$stockModel->loadByProduct($product);
 				$flags = array();
 				if($stockModel && $stockModel->getId()){
 					if($stockModel->getIsInStock () && $stockModel->getQty()>$itemThershold){
@@ -138,18 +140,5 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 			break;
 		}
 		return Mage::helper('zolagomodago')->__("No stock info");
-	}
-	
-    /**
-     * get actual website id
-     * @return int
-     */
-
-	public function getWebsiteId() {
-	    $websiteId = Mage::app()->getWebsite()->getId();
-	    if ($store = Mage::app()->getRequest()->getParam('store',null)) {
-	        $websiteId = Mage::getModel('core/store')->load($store)->getWebsiteId();
-	    }
-	    return $websiteId;
 	}
 }

@@ -185,75 +185,50 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
     }
 
     /**
-     * Calculate stock reserved in POs
-     *
-     * @param $vendorId
-     * @param $skus
+     * Calculate stock on open orders
+     * @param $merchant
      * @return array
      */
-    public function calculateStockOpenOrders($vendorId, $skus)
+    public function calculateStockOpenOrders($merchant, $skus)
     {
-        $res = array();
-        if (empty($skus))
-            return $res;
+        if (empty($skus)) {
+            return array();
+        }
+//        $po_open_order = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
 
+//        if (empty($po_open_order)) {
+//            return array();
+//        }
+        //$poOpenOrder = explode(',', $po_open_order);
 
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
         $select
             ->from(
-                array('po_item' => $this->getTable("udpo/po_item")),
+                array('po_item'=>$this->getTable("udpo/po_item")),
                 array(
-                    'po_item_id' => 'po_item.entity_id',
                     'sku' => 'po_item.sku',
                     'qty' => new Zend_Db_Expr('SUM(po_item.qty)')
                 )
             )
             ->join(
-                array('po' => $this->getTable("udpo/po")),
-                'po.entity_id=po_item.parent_id',
-                array(
-                    'po_id' => 'po.entity_id',
-                    'po_pos_id' => 'po.default_pos_id',
-                    'po_pos_name' => 'po.default_pos_name'
-                )
+                array('products' => $this->getTable("catalog/product")),
+                'po_item.product_id=products.entity_id',
+                array()
             )
-            ->where("po.udropship_vendor=?", (int)$vendorId)
-            ->where("po.default_pos_id IS NOT NULL")
+            ->join(
+                array('po' => 'udropship_po'),
+                'po.entity_id=po_item.parent_id',
+                array()
+            )
+            ->where("po.udropship_vendor=?", (int)$merchant)
             ->where("po_item.parent_item_id IS NULL")
             ->where("po_item.sku IN(?)", $skus)
-            ->where("po.reservation=?", 1)
-            ->group('po.default_pos_id')
+            //->where("po.udropship_status IN (?)",$poOpenOrder)
+            ->where("po.reservation=?",1)
             ->group('po_item.sku');
 
-        $result = $adapter->fetchAll($select);
-
-        if (empty($result))
-            return $res;
-
-        //Reformat query result
-        foreach ($result as $resultRow) {
-            $res[$resultRow['sku']][$resultRow['po_pos_name']] = (int)$resultRow['qty'];
-        }
-
-        return $res;
-    }
-
-    public function getPosWebsiteRelation($vendorId)
-    {
-        $adapter = $this->getReadConnection();
-        $posVendorWebsiteTable = $this->getTable("zolagopos/pos_vendor_website");
-
-        $select = $adapter->select();
-
-        $select
-            ->from(
-                array('pos_vendor_website' => $posVendorWebsiteTable),
-                array("website_id", "pos_id")
-            )
-            ->where("vendor_id=?", (int)$vendorId);
-
-        $result = $adapter->fetchAll($select);
+        $result = $adapter->fetchAssoc($select);
 
         return $result;
     }

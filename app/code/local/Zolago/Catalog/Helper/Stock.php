@@ -43,11 +43,13 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
     /**
      * @param $dataStock
-     * @param $vendorId
+     * @param $merchant
+     *
      * @return array
      */
-    public static function getAvailableStock($dataStock, $vendorId)
+    public static function getAvailableStock($dataStock, $vendor)
     {
+        //$batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_STOCK_UPDATE_LOG;
 
         if (empty($dataStock)) {
             return array();
@@ -65,35 +67,25 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         $skuS = array_keys($dataStock);
         //1. get min POS stock (calculate available stock)
         $posResourceModel = Mage::getResourceModel('zolagopos/pos');
-        $minPOSValues = $posResourceModel->getMinPOSStock($vendorId);
+        $minPOSValues = $posResourceModel->getMinPOSStock($vendor);
         $availablePos = array_keys($minPOSValues);
-
-        $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
-
-        //2. calculate stock on open orders (reservation)
-
-        /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
-        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
-        $openOrdersQty = $zcSDModel->calculateStockOpenOrders($vendorId, $skuS); //reservation
-
-
-        $dataAllocateToPOS = array();
-
+        //Mage::log(print_r($availablePos, true), 0, "minimalStockPOS.log");
         //-------Prepare data
         foreach ($dataStock as $sku => $dataStockItem) {
             $dataStockItems = (array)$dataStockItem;
             if (!empty($dataStockItems)) {
                 foreach ($dataStockItems as $stockId => $posStockConverter) {
-                    if (!in_array($stockId, $availablePos)) //no POS or it is not active
-                        continue;
+                    //Mage::log(print_r($posStockConverter, true), 0, "minimalStockPOS.log");
+                    //false if POS is not active
+                    //Mage::log(in_array($stockId, $availablePos), 0, "minimalStockPOS.log");
+                    if (in_array($stockId, $availablePos)) {
+                        $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
 
-                    $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
-                    $reservedOnPOStock = isset($openOrdersQty[$sku][$stockId]) ? (int)$openOrdersQty[$sku][$stockId] : 0;
-                    $data[$sku][$stockId] = $posStockConverter - $minimalStockPOS - $reservedOnPOStock;
-
-                    //Allocate Product STOCK by POS
-                    if (isset($data[$sku][$stockId]) && isset($skuIdAssoc[$sku])) {
-                        $dataAllocateToPOS[$skuIdAssoc[$sku]][$stockId] = $data[$sku][$stockId];
+                        //Mage::log($stockId, 0, "minimalStockPOS.log");
+                        //Mage::log($minimalStockPOS, 0, "minimalStockPOS.log");
+                        //available stock = if [POS stock from converter]>[minimal stock from POS] then [POS stock from converter] - [minimal stock from POS] else 0
+                        $data[$sku][$stockId] = ($posStockConverter > $minimalStockPOS)
+                            ? ($posStockConverter - $minimalStockPOS) : 0;
                     }
 
 
@@ -104,62 +96,16 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         unset($dataStockItem);
 
 
+        //$skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
+        $dataSum = array();
+        foreach ($data as $sku => $_) {
+                $qty = array_sum((array)$_);
+                $dataSum[$sku] = $qty;
+        }
         unset($_);
-        self::allocateProductByPOS($vendorId,$dataAllocateToPOS);
 
-    }
 
-    /**
-     * @return Zolago_Pos_Model_Resource_Pos_Collection
-     */
-    public function getVendorPOSes($vendorId) {
-        /* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
-        $collection = Mage::getResourceModel("zolagopos/pos_collection");
-        $collection->addVendorFilter((int)$vendorId);
-        $collection->addActiveFilter();
-        $collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
-        return $collection;
-    }
-
-    /**
-     * @param $vendorId
-     * @param $dataAllocateToPOS
-     */
-    public static function allocateProductByPOS($vendorId, $dataAllocateToPOS)
-    {
-        $poses = self::getVendorPOSes($vendorId);
-        $posIds = array();
-        foreach ($poses as $pos) {
-            /* @var $pos Zolago_Pos_Model_Pos */
-            $externalId = $pos->getExternalId();
-            if ($externalId = $pos->getExternalId()) {
-                $posIds[$externalId] = $pos->getId();
-            }
-        }
-        if (empty($posIds))
-            return;
-
-        $rows = array();
-
-        $table = Mage::getModel("zolagopos/stock")->getResource()->getMainTable();
-        $adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
-
-        foreach ($dataAllocateToPOS as $productId => $data) {
-            foreach ($data as $stockExternalId => $qty) {
-                $posId = isset($posIds[$stockExternalId]) ? $posIds[$stockExternalId] : FALSE;
-                if ($posId) {
-                    $adapter->insertOnDuplicate(
-                        $table,
-                        array("product_id" => (int)$productId, "pos_id" => (int)$posId, "qty" => $qty),
-                        array("product_id", 'pos_id', 'qty')
-                    );
-                }
-
-            }
-        }
-
-        if (empty($rows))
-            return;
-
+        return $dataSum;
     }
 }
