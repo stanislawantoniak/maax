@@ -1182,28 +1182,4 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$this->getIncrementId()
 		);
 	}
-
-	/**
-	 * From flat array
-	 * [0] => Zolago_Po_Model_Po_Item (item_id: Y)
-	 * [1] => Zolago_Po_Model_Po_Item (item_id: Z , getParentItemId: Y)
-	 *
-	 * Makes array
-	 * [0] => Zolago_Po_Model_Po_Item (item_id: Y, child: Zolago_Po_Model_Po_Item (item_id: Z , getParentItemId: Y))
-	 *
-	 * @return array
-	 */
-	public function getAllItemsTree() {
-		$allItems = $this->getAllItems();
-		$tree = array();
-		/** @var Zolago_Po_Model_Po_Item $poItem */
-		foreach ($allItems as $poItem) {
-			if (!$poItem->getParentItemId()) {
-				$tree[$poItem->getId()] = $poItem;
-			} else {
-				$tree[$poItem->getParentItemId()]['child'] = $poItem;
-			}
-		}
-		return $tree;
-	}
 }
