@@ -25,6 +25,7 @@ class Zolago_Mapper_Model_Queue_Product extends Zolago_Common_Model_Queue_Abstra
                 = $item->getProductId();
         }
 
+        /** @var Zolago_Mapper_Model_Resource_Index $indexer */
         $indexer = Mage::getResourceModel('zolagomapper/index');
         $fullList = array();
 
