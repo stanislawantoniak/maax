@@ -340,6 +340,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
             $track = Mage::getModel('urma/rma_track');
             $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+            $track->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT);
             $track->setTrackNumber($trackingParams['trackingNumber']);
             $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
             $track->setCarrierCode(Orba_Shipping_Model_Carrier_Dhl::CODE);
