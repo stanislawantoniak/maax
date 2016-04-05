@@ -50,6 +50,9 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @param null|string|bool|int|Mage_Core_Model_Store $store
 	 */
 	public function __construct($store = null) {
+		if(empty($store)) {
+			$store = null;
+		}
 		$this->store = Mage::app()->getStore($store);
 	}
 

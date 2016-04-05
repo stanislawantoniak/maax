@@ -8,24 +8,47 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
 
     protected function _prepareCollection()
     {
-        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
 
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         // ORIGINAL PART START
         $store = $this->_getStore();
+        $website = $store->getWebsiteId();
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('attribute_set_id')
             ->addAttributeToSelect('type_id');
-
-        if (Mage::helper('catalog')->isModuleEnabled('Mage_CatalogInventory')) {
+        if (Mage::helper('catalog')->isModuleEnabled('Mage_CatalogInventory')) {	
+            $resource = Mage::getSingleton('core/resource');
+            $readConnection = $resource->getConnection('core_read');
+                        
+            $subselect = $readConnection->select()
+            ->from(array('stock' => $resource->getTableName('zolagopos/stock')))
+            ->join(array('website' => $resource->getTableName('zolagopos/pos_vendor_website')),
+                'website.pos_id = stock.pos_id',
+                array())
+            ->join(array('pos' => $resource->getTableName('zolagopos/pos')),
+                'pos.pos_id = stock.pos_id',
+                array())
+             ->where('pos.is_active = ?', Zolago_Pos_Model_Pos::STATUS_ACTIVE)
+             ->where('website.website_id = ?',$website)
+             ->group('stock.product_id')
+             ->reset(Zend_Db_Select::COLUMNS)
+             ->columns(array('qty' => 'sum(stock.qty)','product_id' => 'stock.product_id'));
+             $collection->getSelect()->joinLeft(array('qty' => $subselect),
+                 'qty.product_id = e.entity_id',
+                 array('qty' => 'ifnull(qty.qty,0)'));
+//             $collection->getSelect()->columns(array('qty'=>'IFNULL(('.$subselect.'),0)'));
+            /*
+            
             $collection->joinField('qty',
                 'cataloginventory/stock_item',
                 'qty',
                 'product_id=entity_id',
                 '{{table}}.stock_id=1',
                 'left');
-        }
+            */
+        }	
         if ($store->getId()) {
             //$collection->setStoreId($store->getId());
             $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
@@ -124,8 +147,15 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
 
         // Finally
         $this->setCollection($collection);
+        // sort override
+        if ('qty' == $this->getParam($this->getVarNameSort())) {
+            $dir = $this->getParam($this->getVarNameDir());
+            $collection->getSelect()->order('qty.qty '.strtoupper($dir));
+            $this->setParam($this->getVarNameSort,'dummy'); // turn off default sorting functions
+        }
         Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();
-        $collection->addWebsiteNamesToResult();
+        $collection->addWebsiteNamesToResult();        
+        
         return $this;
     }
 
@@ -168,9 +198,28 @@ class Zolago_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_C
                 'options' => $this->_getAttributeOptions('description_status')
             ), 'color');
 
-        return parent::_prepareColumns();
+        $out = parent::_prepareColumns();
+        $column = $this->getColumn('qty');
+        $column->setFilterConditionCallback(array($this,'filterQty'));
+        $column->setOrderCallback(array($this,'sortQty'));
+        return $out; 
     }
 
+    public function filterQty($collection,$column) {
+        if ($value = $column->getFilter()->getValue()) {
+            if (!empty($value['from'])) {
+                $collection->getSelect()->where('qty.qty >= ?',$value['from']);
+            }
+            if (isset($value['to'])) {
+                $collection->getSelect()->where('(qty.qty is null OR qty.qty <= ?)',$value['to']);
+            }
+        }
+        return $this;        
+    }
+    public function sortQty($collection, $column) {
+        Mage::log('sortqty');
+        return $this;
+    }
     protected function _getAttributeOptions($attribute_code)
     {
         $attribute = Mage::getModel('eav/config')->getAttribute('catalog_product', $attribute_code);

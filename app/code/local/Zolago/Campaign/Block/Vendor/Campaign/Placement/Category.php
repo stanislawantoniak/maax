@@ -102,10 +102,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $categoryId = $this->getCategoryId();
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
+        $websiteId = $this->getWebsiteId();
 
         /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
         $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
-        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(), FALSE, false);
+        $placements = $modelPlacement->getCategoryPlacements($categoryId, $vendorId, array(), FALSE, $websiteId);
+
 
         $placementsByType = array();
         if (!empty($placements)) {
@@ -203,6 +205,18 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
     {
         $category = $this->getRequest()->getParam('category', null);
         return $category;
+    }
+	
+
+    public function getWebsiteId() {
+        $website = $this->getRequest()->getParam('website', null);
+        return $website;
+    }
+    
+    public function getWebsiteName() {
+        $websiteId = $this->getWebsiteId();
+        $website = Mage::getModel("core/website")->load($websiteId);
+        return $website->getName();
     }
 
     public function getCategoryName()

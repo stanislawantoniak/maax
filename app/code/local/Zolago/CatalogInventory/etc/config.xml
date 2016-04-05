@@ -2,23 +2,49 @@
 <config>
     <modules>
         <Zolago_CatalogInventory>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Zolago_CatalogInventory>
     </modules>
     <global>
         <models>
-            <zolago_cataloginventory>
+            <zolagocataloginventory>
                 <class>Zolago_CatalogInventory_Model</class>
-                <resourceModel>zolago_cataloginventory_resource</resourceModel>
-            </zolago_cataloginventory>
-            <zolago_cataloginventory_resource>
+                <resourceModel>zolagocataloginventory_resource</resourceModel>
+            </zolagocataloginventory>
+            <zolagocataloginventory_resource>
                 <class>Zolago_CatalogInventory_Model_Resource</class>
-            </zolago_cataloginventory_resource>
+                <entities>
+                    <stock_website>
+                        <table>zolago_cataloginventory_stock_website</table>
+                    </stock_website>
+                </entities>
+            </zolagocataloginventory_resource>
+            <cataloginventory_resource>
+                <rewrite>
+                    <stock>Zolago_CatalogInventory_Model_Resource_Stock</stock>
+                    <stock_item>Zolago_CatalogInventory_Model_Resource_Stock_Item</stock_item>
+                    <indexer_stock_default>Zolago_CatalogInventory_Model_Resource_Indexer_Stock_Default</indexer_stock_default>
+                    <stock_item_collection>Zolago_CatalogInventory_Model_Resource_Stock_Item_Collection</stock_item_collection>
+                </rewrite>
+            </cataloginventory_resource>
+            <cataloginventory>
+                <rewrite>
+                    <stock_item>Zolago_CatalogInventory_Model_Stock_Item</stock_item>
+                    <stock>Zolago_CatalogInventory_Model_Stock</stock>
+                </rewrite>
+            </cataloginventory>
         </models>
         <helpers>
             <zolagocataloginventory>
                 <class>Zolago_CatalogInventory_Helper</class>
             </zolagocataloginventory>
         </helpers>
+        <resources>
+            <zolagocataloginventory_setup>
+                <setup>
+                    <module>Zolago_CatalogInventory</module>
+                </setup>
+            </zolagocataloginventory_setup>
+        </resources>
     </global>
 </config>
