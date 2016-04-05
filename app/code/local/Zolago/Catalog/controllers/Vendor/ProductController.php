@@ -201,63 +201,59 @@ class Zolago_Catalog_Vendor_ProductController
         }
 
         try {
+            $time_total = microtime(true);
+
             Mage::register(Zolago_Turpentine_Model_Observer_Ban::NO_BAN_AFTER_PRODUCT_SAVE,true,true);
 
-            array_walk($ids, function ($value) {
-                return (int)$value;
-            });
+            $helper = Mage::helper("zolagocatalog");
+
+            $time_start = microtime(true);
+            //almost always attribute set is changed for configurable products so it doesn't hurt to get all related products always
+            $children = Mage::getResourceModel('catalog/product')
+                ->getRelatedProducts($ids,true);
+
+            $allIds = array_merge($ids,$children);
+            Mage::log("get related: ".(string)(microtime(true)-$time_start),null,'time.log');
+
+            $time_start = microtime(true);
+            /** @var Mage_Core_Model_Resource $resource */
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $tableName = $resource->getTableName('catalog/product');
+
+            $query = "UPDATE `".$tableName."`".
+                "SET `attribute_set_id` = '".$attributeSetMoveToId."' WHERE `entity_id` IN (".implode(",",$ids).")";
+
+            $writeConnection->query($query);
+            Mage::log("first save: ".(string)(microtime(true)-$time_start),null,'time.log');
 
             $helper = Mage::helper("zolagocatalog");
-            Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-            //1. Process products
-            $productIdsConfigurable = array();
 
-            foreach ($ids as $productId) {
-                $product = Mage::getSingleton('catalog/product')
-                    ->unsetData()
-                    ->load($productId)
-                    ->setAttributeSetId($attributeSetMoveToId)
-                    ->setDescriptionStatus(1)
-                    ->setIsMassupdate(true)
-                    ->save();
-                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-                    $productIdsConfigurable[$productId] = $productId;
-                }
-            }
 
-            //2. Process simple products as child of configurable
-            if (!empty($productIdsConfigurable)) {
-                $children = Mage::getResourceModel('catalog/product')
-                    ->getRelatedProducts($productIdsConfigurable);
+            $time_start = microtime(true);
+            Mage::getSingleton('catalog/product_action')
+                ->updateAttributes($ids, array('description_status'=>1), Mage_Core_Model_App::ADMIN_STORE_ID);
+            Mage::log("second save: ".(string)(microtime(true)-$time_start),null,'time.log');
 
-                if (!empty($children)) {
-                    foreach ($children as $child) {
-                        Mage::getSingleton('catalog/product')
-                            ->unsetData()
-                            ->load($child["product_id"])
-                            ->setAttributeSetId($attributeSetMoveToId)
-                            ->setDescriptionStatus(1)
-                            ->setIsMassupdate(true)
-                            ->save();
-                    }
-                }
-            }
-
+            $time_start = microtime(true);
             Mage::getModel("zolagomapper/queue_product")
                 ->pushProductToMapperQueue($ids);
+            Mage::log("push to mappers: ".(string)(microtime(true)-$time_start),null,'time.log');
 
+            $time_start = microtime(true);
             $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
             $attributeSetModel->load($attributeSetMoveToId);
             $attributeSetName = $attributeSetModel->getAttributeSetName();
-
-            $productIdsCount = count($ids);
+            Mage::log("load attribute set: ".(string)(microtime(true)-$time_start),null,'time.log');
 
             /*
              * clear changed ids after mass attribute set change because we don't want those items
              * to be reselected on description grid - they are not visible to vendor on his current view
              */
             $changedIds = array();
-            
+
+            $productIdsCount = count($ids);
+
             $response = array(
                 "status" => 1,
                 "changed_ids" => $changedIds,
@@ -266,6 +262,8 @@ class Zolago_Catalog_Vendor_ProductController
             );
 
             Mage::unregister(Zolago_Turpentine_Model_Observer_Ban::NO_BAN_AFTER_PRODUCT_SAVE);
+
+            Mage::log("time total: ".(string)(microtime(true)-$time_total),null,'time.log');
 
 
         } catch (GH_Common_Exception $e) {

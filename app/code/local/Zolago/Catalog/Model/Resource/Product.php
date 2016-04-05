@@ -389,20 +389,35 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
      * get child products for configurable products
      *
      * @param array $ids configurable product ids
+     * @param bool $onlyRelatedAsFlat
      * @return array
      */
-    public function getRelatedProducts($ids) {
+    public function getRelatedProducts($ids,$onlyRelatedAsFlat=false) {
         $readConnection = $this->_getReadAdapter();
         $select = $readConnection->select();
-        $select->from (
-            array('product_relation' => $this->getTable("catalog/product_relation")),
-            array(
+        if(!$onlyRelatedAsFlat) {
+            $fields = array(
                 "parent_id" => "product_relation.parent_id",
                 "product_id" => "product_relation.child_id"
-            )
+            );
+        } else {
+            $fields = array(
+                "product_id" => "product_relation.child_id"
+            );
+        }
+        $select->from (
+            array('product_relation' => $this->getTable("catalog/product_relation")),
+            $fields
         );
         $select->where("parent_id in (?)",$ids);
-        $list = $readConnection->fetchAll($select);
+
+
+        if(!$onlyRelatedAsFlat) {
+            $list = $readConnection->fetchAll($select);
+        } else {
+            $list = $readConnection->fetchCol($select);
+        }
+
         return $list;
 
     }
