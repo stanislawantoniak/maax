@@ -73,7 +73,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		]
 	 */
 	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=false) {
-
+		
 		$out = array();
 		
 		
@@ -182,7 +182,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->where("e.entity_id IN (?)", $ids);
 		
 		$results = $this->getReadConnection()->fetchAll($select);
-
+		
 		
 		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
 		

@@ -129,9 +129,9 @@
         </routers>
         <layout>
             <updates>
-                <magemonkey>
-                    <file>magemonkey.xml</file>
-                </magemonkey>
+                <!--<magemonkey>-->
+                    <!--<file>magemonkey.xml</file>-->
+                <!--</magemonkey>-->
             </updates>
         </layout>
         <events>

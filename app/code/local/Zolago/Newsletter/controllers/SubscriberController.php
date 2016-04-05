@@ -34,6 +34,7 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
             $subscriber = Mage::getModel('newsletter/subscriber')->load($id);
             $session = Mage::getSingleton('core/session');
             if($subscriber->getId() && $subscriber->getCode()) {
+                Mage::log("subscriber->confirm", null, "Zolago_Newsletter_SubscriberController.log");
                 if($subscriber->confirm($code)) {
                     $errors = false;
                     try {

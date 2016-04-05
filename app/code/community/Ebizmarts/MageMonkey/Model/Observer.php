@@ -18,6 +18,7 @@ class Ebizmarts_MageMonkey_Model_Observer
      */
     public function handleSubscriber(Varien_Event_Observer $observer)
     {
+        Mage::log("Ebizmarts_MageMonkey_Model_Observer",null,"handleSubscriber.log");
         if (!Mage::helper('monkey')->canMonkey()) {
             return $observer;
         }

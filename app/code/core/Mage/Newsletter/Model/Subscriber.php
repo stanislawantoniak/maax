@@ -469,6 +469,7 @@ class Mage_Newsletter_Model_Subscriber extends Mage_Core_Model_Abstract
      */
     public function confirm($code)
     {
+        Mage::log("confirm STEP2.1 Mage", null, "Zolago_Newsletter_SubscriberController.log");
         if($this->getCode()==$code) {
             $this->setStatus(self::STATUS_SUBSCRIBED)
                 ->setIsStatusChanged(true)
@@ -498,6 +499,7 @@ class Mage_Newsletter_Model_Subscriber extends Mage_Core_Model_Abstract
      */
     public function sendConfirmationRequestEmail()
     {
+        Mage::log("Mage_Newsletter_Model_Subscriber", null, "GH_MageMonkey_Model_Subscriber.log");
         if ($this->getImportMode()) {
             return $this;
         }

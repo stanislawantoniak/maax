@@ -11,10 +11,7 @@ $sessionShippingMethod = $checkoutSession->getData("shipping_method");
 $inpostCode = $checkoutSession->getData("inpost_code");
 
 
-$shippingBlock = $this->getChild('checkout_cart_shipping')
-        ->setData("shipping_method", $sessionShippingMethod)
-        ->setData("inpost_code", $inpostCode)
-        ;
+$shippingBlock = $this->getChild('checkout_cart_shipping');
 ?>
 
 <?php
