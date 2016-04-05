@@ -174,12 +174,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             ->join(array('pos' => $resource->getTableName('zolagopos/pos')),
                 'pos.pos_id = main_table.pos_id',
                 array())
-             ->where('pos.is_active = ?', Zolago_Pos_Model_Pos::STATUS_ACTIVE)
              ->where('e.sku',array('in',$skus))
              ->group('main_table.product_id')
              ->group('website.website_id')
                         
-             ->columns(array('qty' => 'sum(main_table.qty)','product_id' => 'main_table.product_id','website' => 'website.website_id'));
+             ->columns(array('qty' => 'sum(main_table.qty)',
+                 'product_id' => 'main_table.product_id',
+                 'website' => 'website.website_id',
+                 'is_active' => 'pos.is_active'));
          return $collection;
     }
 
@@ -228,9 +230,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $productsIds[$id] = $id;
             $website = $val->getWebsite();
             $qty = $val->getQty();
+            $isActive = $val->getIsActive();
             if (!isset($tmpStock[$website][$id])) {
                 // new availability
-                if ($qty > 0) {
+                if ($qty > 0 && $isActive) {
                     $isInStock[$id][$website] = 1;
                     $productsIdsForSolrAndVarnishBan[$id] = $id;
                     Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
@@ -239,7 +242,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                
                 }
             } else {
-                if ($qty > 0) {
+                if ($qty > 0 && $isActive) {
                     unset($tmpStock[$website][$id]);
                 }
             }
