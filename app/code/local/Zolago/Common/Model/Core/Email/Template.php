@@ -1,6 +1,10 @@
 <?php
 class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Email
 {
+
+    protected $_domAttachments = array();
+    protected $_allowedExtensions = array('jpg'=>1,'jpeg'=>1,'png'=>1,'apng'=>1,'gif'=>1,'bmp'=>1,'svg'=>1,'ico'=>1);
+
     
     /**
      * do not send email on test servers
@@ -122,6 +126,22 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
             $mail->addTo($email, '=?utf-8?B?' . base64_encode($names[$key]) . '?=');
         }
 
+        $this->setUseAbsoluteLinks(true);
+        $text = $this->getProcessedTemplate($variables, true);
+
+        //embed images start
+        $text = $this->_imagesToAttachments($text);
+        if(!empty($this->_domAttachments)) {
+            if (isset($variables['_ATTACHMENTS'])) {
+                $variables['_ATTACHMENTS'] = array_merge((array)$variables['_ATTACHMENTS'], $this->_domAttachments);
+            } else {
+                $variables['_ATTACHMENTS'] = $this->_domAttachments;
+            }
+            //cleanup
+            $this->_domAttachments = array();
+        }
+        //embed images end
+
 		////////////////////////////////////////////////////////////////////////
 		// Start changes
 		////////////////////////////////////////////////////////////////////////
@@ -150,9 +170,6 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
 		////////////////////////////////////////////////////////////////////////
 		// End changes
 		////////////////////////////////////////////////////////////////////////
-		
-        $this->setUseAbsoluteLinks(true);
-        $text = $this->getProcessedTemplate($variables, true);
 
         if($this->isPlain()) {
             $mail->setBodyText($text);
@@ -200,5 +217,51 @@ class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Ema
         }
 
         return true;
+    }
+
+    protected function _imagesToAttachments($html) {
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'); //preserve ążźćęłó etc
+        $dom = new DOMDocument(null,'UTF-8');
+        @$dom->loadHTML($html); //suppress warnings because this gets sometimes wrongly formatted html code and warnings prevent emails from sending
+        $dom->preserveWhiteSpace = false;
+
+        foreach($dom->getElementsByTagName('img') as $image) {
+            //check if image has class 'noembed' if it has then skip to the next one
+            //using array_flip + isset combo instead of in_array/array_search because it's quicker
+            $classes = $image->getAttribute('class');
+            $classes = $classes ? array_flip(explode(" ",$classes)) : array();
+            if(!isset($classes['noembed'])) {
+                $src = trim($image->getAttribute('src'));
+                //skip already embeded images
+                if(substr($src, 0, 4 ) !== "cid:") {
+                    $extensionArr = explode(".",$src);
+                    $extension = end($extensionArr);
+                    if($this->_checkImageExtensions($extension)) {
+                        if(substr($src,0,7) !== "http://" && substr($src,0,8) !== "https://") {
+                            $src = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK).$src;
+                        }
+                        $key = md5($src);
+                        $filename = $key.".".$extension;
+                        if (!isset($this->_domAttachments[$key])) {
+                            $this->_domAttachments[$key] = array(
+                                'content' => file_get_contents($src,FILE_USE_INCLUDE_PATH),
+                                'type' => Zend_Mime::TYPE_OCTETSTREAM,
+                                'disposition' => Zend_Mime::DISPOSITION_ATTACHMENT,
+                                'encoding' => Zend_Mime::ENCODING_BASE64,
+                                'filename' => $filename,
+                                'id' => $filename
+                            );
+                        }
+                        $image->setAttribute('src','cid:'.$filename);
+                    }
+                }
+            }
+        }
+
+        return $dom->saveHTML();
+    }
+
+    protected function _checkImageExtensions($ext) {
+        return isset($this->_allowedExtensions[strtolower($ext)]);
     }
 }

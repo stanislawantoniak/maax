@@ -225,7 +225,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
      * 
      * @param string $key
      * @param string $group 
-     * @param function $function
+     * @param string $function
      * @param array $params
      * @param int $ttl
      * @return mixed
