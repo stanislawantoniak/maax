@@ -62,7 +62,10 @@
                 shippingCost = 0; //not selected yet
             }
             //Grand total
-            var totalSum = parseFloat(parseFloat(Mall.reg.get("quote_products_total")) + parseFloat(shippingCost) + parseFloat(Mall.reg.get("quote_discount_total")));
+            var quote_products_total = (jQuery.type(Mall.reg.get("quote_products_total")) !== "undefined") ? Mall.reg.get("quote_products_total") :0;
+            var quote_discount_total = (jQuery.type(Mall.reg.get("quote_discount_total")) !== "undefined") ? Mall.reg.get("quote_discount_total") :0;
+
+            var totalSum = parseFloat(parseFloat(quote_products_total) + parseFloat(shippingCost) + parseFloat(quote_discount_total));
             jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSum));
         },
         handleShippingMethodSelect: function () {
