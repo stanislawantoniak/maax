@@ -66,7 +66,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         array_walk($entityIds, function($item) {
             return (int)$item;
         });
-
+        $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
         $tabel = $this->getTable('catalog/product_index_eav');
         $select = $this->getReadConnection()->select();
         $select->from(array("index"=>$tabel), array("entity_id", "attribute_id", "value"));
@@ -83,7 +83,29 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                         ->addIdFilter($children)
                         ->addAttributeToSelect('size')
                         ->addAttributeToSelect('parent_id');
-        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
+        // stocks by website
+        $cond = array(
+            'stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 1 AND stock_website.is_in_stock = 1',
+            'stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 0');
+        if (Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK)) {
+            $cond[] = 'stock_item.use_config_manage_stock = 1 AND stock_website.is_in_stock=1';
+        } else {
+            $cond[] = 'stock_item.use_config_manage_stock = 1';
+        }
+
+        $_subproducts->getSelect()
+            ->join(
+                array('stock_item' => $this->getTable('cataloginventory/stock_item')),
+                'entity_id = stock_item.product_id',
+                array()
+            )
+            ->joinLeft(
+                array('stock_website' => $this->getTable('zolagocataloginventory/stock_website')),
+                'entity_id = stock_website.product_id AND stock_website.website_id = '.$websiteId,
+                array()
+            )
+            ->where('('.implode(') OR (',$cond).')');
+//        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($_subproducts);
         foreach ($_subproducts as $_subproduct) {
             if ($_subproduct->getSize()) {
                 $availableSizes[$childrenFeatParent[$_subproduct->getId()]][(int)$_subproduct->getSize()] = (int)$_subproduct->getSize();
@@ -871,18 +893,16 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             return $adapter->fetchAll($select);
         }
 
-        // Join stocks index.
-        // @spike Mayby from regular table?
+		// Join stocks index.
         if(isset($extraJoins[self::JOIN_STOCK])) {
-            $joinCond = array(
-                            "stock_item.product_id=product.entity_id",
-                            $adapter->quoteInto("stock_item.website_id=?", $websiteId),
-                        );
-            $select->joinLeft(
-                array("stock_item"=>$this->getTable("cataloginventory/stock_status")),
-                implode(" AND ", $joinCond),
-                array("qty", "stock_status")
+			$select->joinLeft(
+			    array('stock_status' => $this->getTable("cataloginventory/stock_status")),
+			    "stock_status.product_id = product.entity_id AND ".$adapter->quoteInto("stock_status.website_id = ?",$websiteId),
+			    array()
             );
+
+			$select->columns('IFNULL(stock_status.stock_status,0) AS stock_status');
+			$select->group('product.entity_id');
         }
         // Join price data
         if(isset($extraJoins[self::JOIN_PRICE])) {
@@ -913,7 +933,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             $tableName = array('price_index' => $this->getTable('catalog/product_index_price'));
 
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
-            //$select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
+            $select->where('price_index.price > 0'); // We don't need product with price zero in solr
         }
 
         if(isset($extraJoins[self::JOIN_URL])) {
@@ -929,20 +949,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 array("request_path")
             );
         }
-        $result = $adapter->fetchAll($select);
-
-        $solrData = array();
-        if (!empty($result)) {
-            foreach ($result as $resultItem) {
-                $price = (float)$resultItem["price"];
-                if (empty($price)) {
-                    Mage::log("ID: " . $resultItem["entity_id"] . "; " . "SKU: " . $resultItem["sku"], null, "solr_zero_price.log");
-                } else {
-                    $solrData[] = $resultItem;
-                }
-            }
-        }
-        return $solrData;
+        return $adapter->fetchAll($select);
     }
 
     protected function _addTaxPercent() {

@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Pos>
-			<version>0.0.8</version>
+			<version>0.0.11</version>
 		</Zolago_Pos>
 	</modules>
 	<global>
@@ -20,6 +20,12 @@
 					<pos_vendor>
 						<table>zolago_pos_vendor</table>
 					</pos_vendor>
+					<pos_vendor_website>
+						<table>zolago_pos_vendor_website</table>
+					</pos_vendor_website>
+					<stock>
+						<table>zolago_pos_stock</table>
+					</stock>
 				</entities>
 			</zolagopos_resource>
 		</models>

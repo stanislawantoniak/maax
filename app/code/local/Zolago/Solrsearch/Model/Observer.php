@@ -43,7 +43,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function zolagoCatalogConverterStockSaveBefore(Varien_Event_Observer $observer) {
-		$this->collectProducts($observer->getEvent()->getProductId());
+		$this->collectProducts($observer->getEvent()->getProductId(),true);
 	}
 
 	/**
@@ -319,7 +319,7 @@ class Zolago_Solrsearch_Model_Observer {
 						`v`.`entity_id` = `product`.`entity_id` AND
 						`v`.`attribute_id` = '".$visibilityAttributeId."'
 					
-					WHERE `product`.`entity_id` IN(".implode(",",$productIds) .")";
+					WHERE `product`.`entity_id` IN(".implode(",",$productIds) .") AND `store`.`store_id` IS NOT NULL";
 
 			$this->_collectedProducts = array_merge($this->_collectedProducts,$readConnection->fetchAll($query));
 		}
@@ -358,18 +358,20 @@ class Zolago_Solrsearch_Model_Observer {
 	            $deleteOnly = 0;
             }
 
-            $cores = $this->getHelper()->getCoresByStoreId($product['store_id']);
-            if (is_array($cores) && !empty($cores)) {
-	            foreach ($cores as $core) {
-		            $item = clone $rawItem;
-		            $item->setProductId($product['id']);
-		            $item->setCoreName($core);
-		            $item->setStoreId($product['store_id']);
-		            $item->setDeleteOnly($deleteOnly);
-		            $item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
-		            $queueItems[$product['id'] . '_' . $core . '_' . $product['store_id'] . '_' . $deleteOnly] = $item;
-	            }
-            }
+	        if($product['store_id'] && $product['store_id'] != Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
+		        $cores = $this->getHelper()->getCoresByStoreId($product['store_id']);
+		        if (is_array($cores) && !empty($cores)) {
+			        foreach ($cores as $core) {
+				        $item = clone $rawItem;
+				        $item->setProductId($product['id']);
+				        $item->setCoreName($core);
+				        $item->setStoreId($product['store_id']);
+				        $item->setDeleteOnly($deleteOnly);
+				        $item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
+				        $queueItems[$product['id'] . '_' . $core . '_' . $product['store_id'] . '_' . $deleteOnly] = $item;
+			        }
+		        }
+	        }
         }
 
         $this->getQueue()->pushMultiple($queueItems);

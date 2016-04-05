@@ -4,8 +4,10 @@ $_helper = Mage::helper("zolagopos");?>
 	<!--=== Page Header ===-->
 	<div class="page-heading row">
 		<div class="col-lg-6">
-			<h3><?php echo $_helper->__("POS List");?></h3>
-			<span class="tageline"><?php echo Mage::helper("zolagopo")->__("Browse your POS");?></span>
+			<h3><?php echo $_helper->__("POS and warehouses");?></h3>
+			<span class="tageline">
+                <?php echo Mage::helper("zolagopo")->__("Warehouses and POS (points of sale) configuration");?>
+            </span>
 		</div>
 		<div class="main-actions align-right col-md-6">
 			<a class="btn btn-success" href="<?php echo Mage::getUrl('udropship/pos/new');?>">
@@ -14,16 +16,13 @@ $_helper = Mage::helper("zolagopos");?>
 				</a> 
 		</div>
 	</div>
-    <div class="tabbable tabbabble-custom">
+    <div class="tabbable tabbable-custom">
         <ul class="nav nav-tabs" style="margin-top:6px">
-            <li class="" style="float:left;">
-                <a name="tmp"></a>
+            <li class="active">
+                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagopos')->__('Points of sale and warehouses'); ?></a>
             </li>
-            <li class="active" style="float:left">
-                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagopos')->__('List'); ?></a>
-            </li>
-            <li class="" style="float:left;">
-                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagopos')->__('Settings'); ?></a>
+            <li class="">
+                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagopos')->__('Warehouses configuration'); ?></a>
             </li>
 
 
