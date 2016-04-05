@@ -274,28 +274,17 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		}
 		$adapter		= $select->getAdapter();
 		$linkTable		= $this->getResource()->getTable("catalog/product_super_link");
-		$posStockTable 	= $this->getResource()->getTable('zolagopos/stock');
-		$posTable 		= $this->getResource()->getTable('zolagopos/pos');
-		$posWebsiteTable 		= $this->getResource()->getTable('zolagopos/pos_vendor_website');
-		
+		$stockItemTable	= $this->getResource()->getTable('cataloginventory/stock_item');
 
 		$subSelect		= $adapter->select();
-		$subSelect->from(array("link_qty" => $linkTable), array("IFNULL(SUM(pos_stock.qty), 0)"));
-		$subSelect
-		    ->join(array('pos_stock' => $posStockTable),
-		            'pos_stock.product_id = link_qty.product_id',
-		            array()
-		        )
-		    ->join(array('pos' => $posTable),
-		            'pos.pos_id = pos_stock.pos_id',
-		            array()
-		        )
-		    ->join(array('pos_website' => $posWebsiteTable),
-		            'pos.pos_id = pos_website.pos_id',
-		            array()
-		        );
+		$subSelect->from(array("link_qty" => $linkTable), array("IFNULL(SUM(child_qty.qty), 0)"));
+		$subSelect->join(
+			array("child_qty" => $stockItemTable),
+			"link_qty.product_id = child_qty.product_id",
+			array()
+		);
 		$subSelect->where("link_qty.parent_id = e.entity_id");
-		$subSelect->where('pos.is_active = ?', Zolago_Pos_Model_Pos::STATUS_ACTIVE);
+		$subSelect->where("child_qty.is_in_stock = ?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 		$select->columns("(" . $subSelect . ") AS stock_qty");
 		return $this;
 	}
