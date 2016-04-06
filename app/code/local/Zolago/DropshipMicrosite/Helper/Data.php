@@ -47,7 +47,10 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 			case 1:
 				// Remove slash
 				// Possible bug when address is domain.com/vendorKey/vendorKey
-				$urlTmp = preg_replace("/\/".$urlKey."/", "", $urlTmp);
+				Mage::log($urlTmp);
+				Mage::log($urlKey);
+				$urlTmp = preg_replace("/\/".$urlKey."\//", "/", $urlTmp);
+				Mage::log($urlTmp);
 				
 		}
 
