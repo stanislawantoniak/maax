@@ -197,6 +197,7 @@ class Zolago_Catalog_Vendor_ProductController
             foreach ($restQuery as $key => $value) {
                 $collection->addAttributeToFilter($key, $value);
             }
+            Mage::log((string)$collection->getSelect(),null,'sql.log');
             $ids = $collection->getAllIds();
         }
 
