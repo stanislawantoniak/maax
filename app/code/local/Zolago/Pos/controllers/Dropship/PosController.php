@@ -58,67 +58,9 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 			return $this->_redirectReferer();
 		}
 		$vendor = $this->_getSession()->getVendor();
-		$posId = $this->getRequest()->getParam('problem_pos_id');
-		$websitePos = $this->getRequest()->getParam("website_pos");
-
-		
-        $websitePosNotAvailable = $this->getRequest()->getParam("website_pos_not_available", 0);
-
-		$vendorId = (int)$vendor->getId();
-
-
-
+		$posId = $this->getRequest()->getParam('problem_pos_id');		
 		try {
-
-            $posModel = Mage::getModel('zolagopos/pos');
-
-
-            $adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $posVendorWebsiteTable = $posModel->getResource()->getTable("zolagopos/pos_vendor_website");
-            
-            
-            // prepare changed poses  for reindex products
-            $select = $adapter->select()
-                ->from(array('pvw' => $posVendorWebsiteTable))
-                ->where('vendor_id = ?',$vendorId);
-            $results = $adapter->query($select);
-            // calculate diffs in pos_website
-            $diff = $websitePos;
-            while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
-                if (!isset($diff[$row['website_id']][$row['pos_id']])) {
-                    $diff[$row['website_id']][$row['pos_id']] = $row['pos_id'];    
-                } else {
-                    unset($diff[$row['website_id']][$row['pos_id']]);
-                }
-            }
-            // calculate changed poses
-            $changedPoses = array();
-            foreach ($diff as $website => $pos) {
-                foreach ($pos as $posId) {
-                    $changedPoses[$posId] = $posId;
-                }
-            }
-            // clear all assigns
-            if(empty($websitePosNotAvailable)){
-                $where = $adapter->quoteInto('vendor_id=?', $vendorId);
-                $adapter->delete($posVendorWebsiteTable, $where);
-            }
-
-            // insert assign poses
-            if (!empty($websitePos)) {
-                foreach ($websitePos as $websiteId => $poses) {
-                    foreach ($poses as $posId) {
-                        $adapter->insertOnDuplicate(
-                            $posVendorWebsiteTable,
-                            array('pos_id' => (int)$posId, "vendor_id" => $vendorId, "website_id" => (int)$websiteId),
-                            array("pos_id", 'vendor_id', "website_id")
-                        );
-                    }
-
-                }
-            }
-
-		    $pos = $posModel->load($posId);
+		    $pos = Mage::getModel('zolagopos/pos')->load($posId);
 		    if (!$pos->getId()) {
 		        Mage::throwException($helper->__('Pos does not exists'));
 		    }
@@ -130,37 +72,6 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		    }
 		    $vendor->setData('problem_pos_id',$posId);
 	    	$vendor->save();
-
-            // get products from changed poses
-            if (count($changedPoses)) {
-                $select = $adapter->select()
-                    ->from(array('ps' => $posModel->getResource()->getTable('zolagopos/stock')))
-                    ->where('pos_id in (?)',$changedPoses);
-                $result = $adapter->query($select);
-                $productIds = array();
-                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                    $productIds[$row['product_id']] = $row['product_id'];
-                    Mage::dispatchEvent("zolagopos_before_change_pos_assign", array(
-                                                       "product_id" => $row['product_id'],
-                                                   ));                                   
-                }
-                if ($productIds) {	
-                    
-                    // set availability
-                    Mage::getResourceModel('zolagocataloginventory/stock_item')
-                        ->updateAvailability($productIds);
-                    // reindex
-                    Mage::getResourceModel('cataloginventory/indexer_stock')
-                        ->reindexProducts($productIds);
-                    // Varnish & Turpentine
-                    $coll = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIds);
-                    //send to solr queue & ban url in varnish
-                    Mage::dispatchEvent("zolagopos_after_change_pos_assign", array("products" => $coll));
-                }
-
-                                    
-            }
-
 	    	$this->_getSession()->addSuccess($helper->__('Settings saved'));
         } catch (Mage_Core_Exception $xt) {
             $this->_getSession()->addError($xt->getMessage());            

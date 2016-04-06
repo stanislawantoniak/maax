@@ -29,8 +29,6 @@
 <?php else: ?>
 <?php $_readonly = '';?>
 <?php endif; ?>
-<?php $store = $this->getRequest()->getParam('store',0);?>
-<?php $website = Mage::getModel('core/store')->load($store)->getWebsiteId();?>
 <div class="entry-edit">
     <div class="entry-edit-head">
         <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Inventory') ?></h4>
@@ -53,27 +51,17 @@
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_config_manage_stock').parentNode);</script><?php endif; ?></td>
             <td class="value scope-label"><?php echo Mage::helper('adminhtml')->__('[GLOBAL]') ?></td>
         </tr>
+
 <?php if(!$this->getProduct()->isComposite()): ?>
         <tr>
-            <td class="label"><label for="inventory_qty"><?php echo Mage::helper('catalog')->__('Qty') ?></label></td>
+            <td class="label"><label for="inventory_qty"><?php echo Mage::helper('catalog')->__('Qty') ?><span class="required">*</span></label></td>
             <td class="value">
                 <?php if (!$_readonly):?>
                 <input type="hidden" id="original_inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][original_inventory_qty]" value="<?php echo $this->getFieldValue('qty')*1 ?>"/>
-                <?php endif;?>                
-                <?php $websiteQty = $this->getFieldValue('website_qty'); ?>
-                <input type="text" class="input-text required-entry validate-number disabled" disabled id="inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][qty]" value="<?php echo empty($websiteQty[$website])? 0:$websiteQty[$website]; ?>" <?php echo $_readonly;?>/>
-                <ul>
-                <?php $websitePos = $this->getFieldValue('website_pos'); ?>
-                <?php $posList = empty($websitePos[$website])? array():$websitePos[$website];?>
-                <?php $qtyList = $this->getFieldValue('pos_qty'); ?>
-                <?php foreach($posList as $posId): ?>                
-                <?php if ($item = empty($qtyList[$posId])? false:$qtyList[$posId]) :?>
-                <?php printf('<li>- %s <b>[%d]</b></li>',$item['name'],$item['qty']); ?>
-                <?php endif; ?>
-                <?php endforeach; ?>
-                </ul>
+                <?php endif;?>
+                <input type="text" class="input-text required-entry validate-number" id="inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][qty]" value="<?php echo $this->getFieldValue('qty')*1 ?>" <?php echo $_readonly;?>/>
             </td>
-            <td class="value scope-label"><?php echo Mage::helper('adminhtml')->__('[WEBSITE]') ?></td>
+            <td class="value scope-label"><?php echo Mage::helper('adminhtml')->__('[GLOBAL]') ?></td>
         </tr>
 
         <tr>
@@ -133,6 +121,7 @@
         <?php endif; ?>
 
         <?php endif; ?>
+
         <tr>
             <td class="label"><label for="inventory_backorders"><?php echo Mage::helper('catalog')->__('Backorders') ?></label></td>
             <td class="value"><select id="inventory_backorders" name="<?php echo $this->getFieldSuffix() ?>[stock_data][backorders]" class="select" <?php echo $_readonly;?>>
@@ -185,16 +174,14 @@
         </tr>
         <tr>
             <td class="label"><label for="inventory_stock_availability"><?php echo Mage::helper('catalog')->__('Stock Availability') ?></label></td>
-            <?php $is_in_stock = $this->getFieldValue('in_stock');?>
-            <?php $status = empty($is_in_stock[$website])? 0:$is_in_stock[$website]; ?>
             <td class="value"><select id="inventory_stock_availability" name="<?php echo $this->getFieldSuffix() ?>[stock_data][is_in_stock]" class="select" <?php echo $_readonly;?>>
             <?php foreach ($this->getStockOption() as $option): ?>
-                <?php $_selected = ($option['value'] == $status) ? 'selected="selected"' : '' ?>
+                <?php $_selected = ($option['value'] == $this->getFieldValue('is_in_stock')) ? 'selected="selected"' : '' ?>
                 <option value="<?php echo $option['value'] ?>" <?php echo $_selected ?>><?php echo $option['label'] ?></option>
             <?php endforeach; ?>
             </select>
             </td>
-            <td class="value scope-label"><?php echo Mage::helper('adminhtml')->__('[WEBSITE]') ?></td>
+            <td class="value scope-label"><?php echo Mage::helper('adminhtml')->__('[GLOBAL]') ?></td>
         </tr>
         </table>
     </fieldset>

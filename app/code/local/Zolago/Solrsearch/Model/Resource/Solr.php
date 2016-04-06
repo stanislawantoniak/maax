@@ -69,7 +69,7 @@ class Zolago_Solrsearch_Model_Resource_Solr extends SolrBridge_Solrsearch_Model_
 		//Mage::log("Data: " . strlen($dataArray['jsondata']));
 		Mage::log("Make push to slor DEV");
 		$returnNoOfDocuments = $this->postJsonData($dataArray['jsondata'], $updateUrl, $core);
-		Mage::log("Reindex ($core) stop / connection end ($returnNoOfDocuments)");		
+		Mage::log("Reindex ($core) stop / connection end");
 		
 	}
 	
