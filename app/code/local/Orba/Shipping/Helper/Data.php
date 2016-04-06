@@ -74,11 +74,11 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		return $canShow;
 	}
-    /**
-     * 
-     * @param 
-     * @return 
-     */
+
+	/**
+	 * @param string $carrier
+	 * @return Orba_Shipping_Model_Carrier_Dhl|Orba_Shipping_Model_Carrier_Ups|Orba_Shipping_Model_Carrier_Default|false|Mage_Core_Model_Abstract
+	 */
      public function getShippingManager($carrier) {
          switch ($carrier) {
              case Orba_Shipping_Model_Carrier_Dhl::CODE:
