@@ -326,8 +326,13 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	            /** @var Zolago_Campaign_Model_Campaign $campaign */
                 $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
                 if ($campaign) {
+	                if($campaign->getContextVendorId()) {
+		                $vendor = $campaign->getContextVendor();
+	                }
+	                if(!isset($vendor) || !$vendor->getId()) {
+		                $vendor = $campaign->getVendor();
+	                }
                     $couponImage = $campaign->getCouponImage();
-	                $vendor = $campaign->getVendor();
 	                $vendorLogo = $vendor->getLogo();
 	                $vendorName = $vendor->getVendorName();
 	                if(!$vendorLogo) {
