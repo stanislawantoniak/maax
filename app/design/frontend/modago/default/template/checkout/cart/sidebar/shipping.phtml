@@ -20,9 +20,8 @@ $cost = $items->cost;
 
 
 $checkoutSession = Mage::getSingleton('checkout/session');
-$sessionShippingMethod = $checkoutSession->getData("shipping_method");
-
-$inpostCode = $checkoutSession->getData("inpost_code");
+$sessionShippingMethod = $checkoutSession->getShippingMethod();
+$inpostCode = $checkoutSession->getInpostCode();
 
 /* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
@@ -52,8 +51,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 ?>
 
 <script type="text/javascript">
-    var inPostPoints = jQuery.parseJSON('<?php echo $inPostPoints; ?>');
-    var implementMap = (jQuery("input[data-select-shipping-method-trigger=0]").length > 0);
+    var inPostPointsData = '<?php echo $inPostPoints; ?>';
+    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON('<?php echo $inPostPoints; ?>') : [];
 
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
@@ -70,7 +69,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
     Mall.translate.add("shipping_map_hide_map_link", "<?php echo $helper->__("hide map"); ?>");
 
     Mall.translate.add("shipping_map_method_select", "<?php echo $helper->__("choose"); ?>");
-
 
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
