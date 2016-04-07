@@ -1,3 +1,14 @@
+#sidebar-secondary {
+  #cart-summary {
+    .col-sidebar-cart-summary {
+      @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+        width: 50%;
+        float: none;
+      }
+    }
+  }
+}
+
 #checkout #step-0, .customer-account-create {
 	.sidebar-second {
 		padding-left: 0;
