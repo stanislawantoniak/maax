@@ -9,7 +9,10 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
 
     public static function getPopulateMapData()
     {
-        $result = array();
+        $result = array(
+            'map_points' => "",
+            'filters' => array(),
+        );
 
 
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
@@ -54,6 +57,8 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
 
         if (!empty($filters)) {
             $result["filters"] = $filters;
+        } else {
+            $result["filters"] = array();
         }
 
 
