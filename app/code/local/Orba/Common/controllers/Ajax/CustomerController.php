@@ -57,7 +57,18 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$productId = $this->getRequest()->getParam("product_id");
 		$crosssellIds = $this->getRequest()->getParam("crosssell_ids");
 		$recentlyViewed = (bool)$this->getRequest()->getParam("recently_viewed");
-//		$categoryId = $this->getRequest()->getParam("category_id");
+		//$categoryId = $this->getRequest()->getParam("category_id");
+
+	    //customer logged in?
+	    $customerLoggedIn = Mage::helper('customer')->isLoggedIn();
+
+	    //fix for dotpay site left by customer
+	    if(!$customerLoggedIn) {
+		    $checkoutSession = Mage::getSingleton('checkout/session');
+		    if($checkoutSession->getDotpayQuoteId()) {
+			    $checkoutSession->clear();
+		    }
+	    }
 
 	    $utmData = $this->getRequest()->getParam('utm_data');
 	    if($utmData) {
@@ -72,7 +83,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		$favsProdsIds = $cacheHelper->getFavoritesProductsIds();
 
         $content = array(
-			'logged_in'			=> Mage::helper('customer')->isLoggedIn(),
+			'logged_in'			=> $customerLoggedIn,
 			'favorites_count'	=> $cacheHelper->getFavoritesCount(),
 			'cart'				=> $cacheHelper->getCart(),
 			'persistent'		=> $this->isUserPersistent(),
@@ -85,7 +96,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		}
 
 		// Customer info for contact form in product page
-		if ($productId && Mage::helper('customer')->isLoggedIn()) {
+		if ($productId && $customerLoggedIn) {
 			$content['customer_name']  = $cacheHelper->getCustomerName();
 			$content['customer_email'] = $cacheHelper->getCustomerEmail();
 		}
