@@ -4,7 +4,7 @@
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper		= Mage::helper("zolagocheckout");
 
-$items = $this->getItems();
+$items = $this->getRateItems();
 $vendors = $items->vendors;
 
 $vendorsJ = Mage::helper('core')->jsonEncode($vendors);
@@ -322,3 +322,4 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
         </div>
     </div>
 </div>
+<script type="text/javascript" src="//maps.google.com/maps/api/js?v=3&sensor=FALSE"></script>

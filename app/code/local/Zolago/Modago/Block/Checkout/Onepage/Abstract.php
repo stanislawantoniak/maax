@@ -24,7 +24,145 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 		}
 		return $tel;
 	}
-	
+
+
+	/**
+	 * @return object
+	 */
+	public function getUdropShippingMethods()
+	{
+		$model = Mage::getModel('udropship/shipping');
+		$shipping = Mage::getModel('udropship/shipping')->getCollection();
+		$shipping->getSelect()->join(
+			array('udropship_shipping_method' => "udropship_shipping_method"),
+			"main_table.shipping_id = udropship_shipping_method.shipping_id",
+			array(
+				'method_code' => 'udropship_shipping_method.method_code',
+			)
+		);
+		$shipping->getSelect()->join(
+			array('website_table' => $model->getResource()->getTable('udropship/shipping_website')),
+			'main_table.shipping_id = website_table.shipping_id',
+			array("website_table.website_id")
+		)->where("website_table.website_id IN(?)", array(0, Mage::app()->getWebsite()->getId()));
+
+		return $shipping;
+	}
+
+	public function getRateItems()
+	{
+		$rates = array();
+
+		$methodsByCode = array();
+
+		$qRates = $this->getRates();
+		$allMethodsByCode = array();
+		$vendors = array();
+
+		$daysInTransitData = array();
+		$shipping = $this->getUdropShippingMethods();
+		$shippingMethods = array();
+
+		foreach($shipping as $shippingItem){
+			$daysInTransitData[$shippingItem->getMethodCode()] = $shippingItem->getDaysInTransit();
+			$shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
+
+		}
+
+		foreach ($qRates as $cCode => $cRates) {
+
+			foreach ($cRates as $rate) {
+				/* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
+				$vId = $rate->getUdropshipVendor();
+
+				if (!$vId) {
+					continue;
+				}
+				$rates[$vId][$cCode][] = $rate;
+				$vendors[$vId] = $vId;
+
+				$deliveryType = "";
+				$deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
+				if ($deliveryTypeModel->getId()) {
+					$deliveryType = $deliveryTypeModel->getDeliveryCode();
+				}
+
+
+				if(isset($shippingMethods[$rate->getMethod()])){
+					$methodsByCode[$rate->getCode()] = array(
+						'vendor_id' => $vId,
+						'code' => $rate->getCode(),
+						'carrier_title' => $rate->getData('carrier_title'),
+						'method_title' => $rate->getData('method_title'),
+						'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
+						"delivery_type" => $deliveryType
+					);
+
+					$allMethodsByCode[$rate->getCode()][] = array(
+						'vendor_id' => $vId,
+						'code' => $rate->getCode(),
+						'carrier_title' => $rate->getData('carrier_title'),
+						'method_title' => $rate->getData('method_title'),
+						'cost' => $rate->getPrice(),
+						'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
+						"delivery_type" => $deliveryType
+					);
+				}
+
+
+			}
+			unset($cRates);
+			unset($rate);
+		}
+		$methodToFind = array();
+		$cost = array();
+
+		foreach ($allMethodsByCode as $code => $methodDataArr) {
+			foreach ($methodDataArr as $methodData) {
+				$vendorId = $methodData['vendor_id'];
+				$methodToFind[$code][$vendorId] = $vendorId;
+				$cost[$code][] = $methodData['cost'];
+			}
+		}
+
+
+		//Find intersecting method for all vendors
+		$allVendorsMethod = array();
+		foreach ($methodToFind as $method => $vendorsInMethod) {
+			$diff = array_diff($vendors, $vendorsInMethod);
+			if (empty($diff)) {
+				$allVendorsMethod[] = $method;
+			}
+		}
+
+		// array(
+		//		vendorId=>array(
+		//			method_code=>price,
+		//			....
+		//		),
+		// ...)
+		$vendorCosts = array();
+		foreach($allMethodsByCode as $rateCode=>$rateArray){
+			foreach($rateArray as $rate){
+				$vendorId = $rate['vendor_id'];
+				if(!isset($vendorCosts[$vendorId])){
+					$vendorCosts[$vendorId] = array();
+				}
+				$vendorCosts[$vendorId][$rate['code']] = (float)$rate['cost'];
+			}
+		}
+
+		return (object)array(
+			'rates' => $rates,
+			'allVendorsMethod' => $allVendorsMethod,
+			'vendors' => $vendors,
+			'methods' => $methodsByCode,
+			'cost' => $cost,
+			'vendorCosts'=> $vendorCosts
+		);
+
+	}
+
 	/**
 	 * @return bool
 	 */
