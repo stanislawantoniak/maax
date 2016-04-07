@@ -370,13 +370,6 @@
       </action>
     </reference>
     <reference name="head">
-      <block type="core/text" name="google.maps.api">
-        <action method="setText">
-          <text>
-            <![CDATA[<script type="text/javascript" src="//maps.google.com/maps/api/js"></script>]]>
-          </text>
-        </action>
-      </block>
       <action method="addJs">
         <name>gmaps/mapshelper.js</name>
       </action>

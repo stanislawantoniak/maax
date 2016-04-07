@@ -89,7 +89,7 @@
                 return;
 
             //Init map
-            google.maps.event.addDomListener(window, 'load', initialize);
+            google.maps.event.addDomListener(window, 'load', initMap);
             google.maps.event.addDomListener(window, "resize", resizingMap());
 
             jQuery("[name=shipping_select_point]")
@@ -336,7 +336,7 @@ var gmarkers = [];
 var gmarkersNameRelation = [];
 
 
-function initialize() {
+function initMap() {
 
     var mapOptions = {
         zoom: 8,
@@ -392,7 +392,7 @@ function refreshMap(filteredData, nearestStores) {
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(40, 40));
 
-    //setMarkers    
+    //setMarkers
     //Join nearest stores (if GEO localization on)
     if (nearestStores.length > 0) {
         for (var k = 0; k < nearestStores.length; k++) {
@@ -432,7 +432,7 @@ function refreshMap(filteredData, nearestStores) {
             infowindow.setContent(this.html);
 
 
-            //Refresh markers and "City", "Address" filters 
+            //Refresh markers and "City", "Address" filters
             //if nearest store marker clicked, but the city is different from selected
             if (this.nearest === 1 && jQuery("select[name=shipping_select_city]").val() !== this.town) {
                 jQuery("select[name=shipping_select_city]")
@@ -482,7 +482,7 @@ function refreshMap(filteredData, nearestStores) {
         gmarkersNameRelation[pos.name] = i;
 
     }
-    //--setMarkers    
+    //--setMarkers
     var markerClusterOptions = {
         maxZoom: 10,
         gridSize: 14,
@@ -491,7 +491,7 @@ function refreshMap(filteredData, nearestStores) {
 
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 
-    //Jeśli w mieście jest tylko jeden paczkomat, niech wybiera go automatycznie    
+    //Jeśli w mieście jest tylko jeden paczkomat, niech wybiera go automatycznie
     if(pointsCount === 1){
         showMarkerOnMap(filteredData[0].name);
     }
@@ -537,7 +537,7 @@ function resizingMap(point) {
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
 
-    //Show on map session paczkomat    
+    //Show on map session paczkomat
     if(typeof window.geoposition === "undefined"){
         Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
     }
@@ -575,7 +575,7 @@ function showPosition(position) {
 function successGeolocationFunction(position) {
     window.geoposition = position;
     showPosition(window.geoposition);
-    //Show on map session paczkomat    
+    //Show on map session paczkomat
     Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
 
 }

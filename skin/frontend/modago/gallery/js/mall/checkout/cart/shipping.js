@@ -89,7 +89,7 @@
                 return;
 
             //Init map
-            google.maps.event.addDomListener(window, 'load', initialize);
+            google.maps.event.addDomListener(window, 'load', initMap);
             google.maps.event.addDomListener(window, "resize", resizingMap());
 
             jQuery("[name=shipping_select_point]")
@@ -336,7 +336,7 @@ var gmarkers = [];
 var gmarkersNameRelation = [];
 
 
-function initialize() {
+function initMap() {
 
     var mapOptions = {
         zoom: 8,
