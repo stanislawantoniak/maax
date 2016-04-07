@@ -748,9 +748,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
         //1. Update attributes for simple visible products
-        $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $storesToUpdate);
+        $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$simpleUpdated);
-
 
 
         //1. Update attributes for configurable visible products
