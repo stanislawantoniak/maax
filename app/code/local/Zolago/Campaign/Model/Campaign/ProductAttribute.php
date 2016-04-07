@@ -39,6 +39,11 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
     {
         $productsIdsPullToSolr = array();
 
+        $store = Mage::getModel("core/store")->load($storesToUpdate[0]);
+        Mage::app()->setCurrentStore($store);
+
+        $origStore = Mage::app()->getStore();
+
         $converter = $this->initConverter();
         if (!$converter) {
             return $productsIdsPullToSolr; //Nothing updated
@@ -57,6 +62,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $collectionS->addFieldToFilter('entity_id', array('in' => $ids));
 
         if($collectionS->getSize() <= 0){
+            Mage::app()->setCurrentStore($origStore);
             return $productsIdsPullToSolr; //Nothing to update
         }
 
@@ -77,7 +83,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             unset($priceSType);
         }
         unset($_productS);
-
+        Mage::app()->setCurrentStore($origStore);
 
         //$converterBatchData[4] = array("32251-33X-L" => "A","32251-33X-M" => "A","32251-33X-S" => "A", "32251-33X-XL" => "A");
         //$converterBatchData[5] = array("1045-CZARNY-70C" => "A","1045-CZARNY-70E" => "A","1045-CZARNY-75B" => "A");
@@ -200,12 +206,20 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $productsIdsPullToSolr = array();
 
+        $origStore = Mage::app()->getStore();
+
         $converter = $this->initConverter();
 
         if (!$converter) {
             return $productsIdsPullToSolr; //Nothing to update
         }
         $ids = array_keys($salesPromoProductsData);
+
+        $store = Mage::app()
+            ->getWebsite($websiteId)
+            ->getDefaultGroup()
+            ->getDefaultStore();
+        Mage::app()->setCurrentStore($store);
 
         //1. Get collection of configurable products
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
@@ -218,6 +232,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $collection->addFieldToFilter('entity_id', array('in' => $ids));
 
         if($collection->getSize() <= 0){
+            Mage::app()->setCurrentStore($origStore);
             return $productsIdsPullToSolr; //Nothing to update
         }
 
@@ -268,7 +283,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             unset($child);
         }
 
-
+        Mage::app()->setCurrentStore($origStore);
         if (empty($converterBatchData)) {
             return $productsIdsPullToSolr;
         }
