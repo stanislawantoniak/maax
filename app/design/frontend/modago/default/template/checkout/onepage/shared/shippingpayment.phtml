@@ -8,7 +8,7 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
 $items= $this->getRateItems();
 $methods = $items->methods;
-print_r(count($methods));
+
 ?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
     <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
