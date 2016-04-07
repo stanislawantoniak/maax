@@ -831,7 +831,7 @@
 
 					data.push({"name": "billing_address_id", "value": billing.getId()});
 					data.push({"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0});
-
+					
 					// Push billing data
 					jQuery.each(billing.getData(), function (idx) {
 						data.push({name: 'billing[' + idx + "]", value: this});
@@ -1792,7 +1792,7 @@
 			getSidebarDeliverypaymentTemplate: function(){
 				return this._sidebarDeliverypaymentTemplate;
 			},
-
+			
 			getSelectedShipping: function(){
 				return this.content.find(".shipping-method:radio:checked");
 			},

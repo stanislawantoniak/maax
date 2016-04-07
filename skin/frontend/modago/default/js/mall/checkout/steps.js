@@ -803,8 +803,8 @@
 			},
 
 			getNewsletterAgreement: function() {
-				if(this.content.find("input[name='agreement[newsletter]']").length) {
-					return this.content.find("input[name='agreement[newsletter]']").is(":checked");
+				if(this.content.find("input[type=checkbox][name='agreement[newsletter]']").length) {
+					return this.content.find("input[type=checkbox][name='agreement[newsletter]']").is(":checked");
 				}
 				return null;
 			},
@@ -815,20 +815,50 @@
 					billing = adressBook.getSelectedBilling(),
 					shipping = adressBook.getSelectedShipping(),
 					invoice = adressBook.getNeedInvoice(),
-					useBillingForShipping;
-				
-				// No invoice neededd same shiping and billing
-				if(!invoice){
-					billing = shipping;
+					useBillingForShipping = billing.getId() == shipping.getId(),
+					inpost = this.checkout.getInPost(),
+					inpostName = inpost.getName(),
+					telephoneForLocker = inpost.getTelephoneForLocker(),
+					data = [];
+
+				data.push({"name": "form_key", "value": this.getFormKey()});
+
+				if (!inpostName) {
+					// No invoice needed same shipping and billing
+					if(!invoice){
+						billing = shipping;
+					}
+
+					data.push({"name": "billing_address_id", "value": billing.getId()});
+					data.push({"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0});
+					
+					// Push billing data
+					jQuery.each(billing.getData(), function (idx) {
+						data.push({name: 'billing[' + idx + "]", value: this});
+					});
+
+					if (!useBillingForShipping) {
+						// Push shipping address id
+						data.push({"name": "shipping_address_id", "value": shipping.getId()});
+						// Push shipping data
+						jQuery.each(shipping.getData(), function (idx) {
+							data.push({name: 'shipping[' + idx + "]", value: this});
+						});
+					}
+				} else {
+					if (invoice) {
+						// Push billing data
+						jQuery.each(billing.getData(), function (idx) {
+							data.push({name: 'billing[' + idx + "]", value: this});
+						});
+						data.push({"name": "billing[use_for_shipping]", "value": 0});
+					}
+					data.push({name: 'shipping[same_as_billing]', value: invoice ? 0 : 1});
+					data.push({name: 'shipping[save_in_address_book]', value: 0});
+                    data.push({name: 'shipping[telephone]', value: telephoneForLocker});
+					data.push({name: 'inpost[name]', value: inpostName});
+					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
 				}
-				
-				useBillingForShipping = billing.getId()==shipping.getId();
-				
-				var data = [
-					{"name": "form_key", "value": this.getFormKey()},
-					{"name": "billing_address_id", "value": billing.getId()},
-					{"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0}
-				];
 
 				var newsletterAgreement = this.getNewsletterAgreement();
 				if(newsletterAgreement !== null) {
@@ -837,21 +867,6 @@
 						value: newsletterAgreement ? 1 : 0
 					});
 				}
-				
-				// Push billing data
-				jQuery.each(billing.getData(), function(idx){
-					data.push({name: 'billing['+idx+"]", value: this});
-				});
-				
-				if(!useBillingForShipping){
-					// Push shipping address id
-					data.push({"name": "shipping_address_id", "value": shipping.getId()});
-					// Push shipping data
-					jQuery.each(shipping.getData(), function(idx){
-						data.push({name: 'shipping['+idx+"]", value: this});
-					});
-				}
-				
 				
 				data.push({name: "method", value: this.checkout.getMethod()});
 				
@@ -1224,7 +1239,10 @@
 					password,
 					billingData,
 					stepData = [],
-                    telephone;
+					accountTelephone,
+					inpost = this.checkout.getInPost(),
+					inpostName = inpost.getName(),
+					telephoneForLocker = inpost.getTelephoneForLocker();
 
                 if (!parseInt(jQuery("#customer_logged_in").val(), 10)) {
                     password = form.find("#account_password").val();
@@ -1235,38 +1253,38 @@
                 }
 
 				// set billing data
-                if (jQuery("#orders_someone_else").is(":checked")) {
-                    form.find("[name='billing[firstname]']").val(form.find("[name='shipping[firstname]']").val());
-                    form.find("[name='billing[lastname]']").val(form.find("[name='shipping[lastname]']").val());
-                } else {
-                    form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());
-                    form.find("[name='billing[lastname]']").val(form.find("[name='account[lastname]']").val());
-                }
-
-				// copy shipping data if order will be delivered to myself
-				if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
-					form.find("#shipping_firstname").val(form.find("#account_firstname").val());
-					form.find("#shipping_lastname").val(form.find("#account_lastname").val());
-					form.find("#shipping_telephone").val(form.find("#account_telephone").val());
+				if (jQuery("input[name='shipping[different_shipping_address]']").is(":checked")) {
+					form.find("input[name='billing[firstname]']").val(form.find("input[name='shipping[firstname]']").val());
+					form.find("input[name='billing[lastname]']").val(form.find("input[name='shipping[lastname]']").val());
+				} else {
+					form.find("input[name='billing[firstname]']").val(form.find("input[name='account[firstname]']").val());
+					form.find("input[name='billing[lastname]']").val(form.find("input[name='account[lastname]']").val());
+					form.find("input[name='shipping[firstname]']").val(form.find("input[name='account[firstname]']").val());
+					form.find("input[name='shipping[lastname]']").val(form.find("input[name='account[lastname]']").val());
+					if (!inpostName) {
+						form.find("input[name='shipping[telephone]']").val(form.find("input[name='account[telephone]']").val());
+					} else {
+						form.find("input[name='shipping[telephone]']").val(form.find("input[name='inpost[telephone]']").val());
+					}
 				}
 
-                // copy phone
-                telephone = form.find("#account_telephone").val();
-				form.find("#billing_telephone").val(telephone);
-                if (!form.find("#orders_someone_else").is(":checked")) {
-                    form.find("#shipping_telephone").val(telephone);
-                }
+				// copy phone
+				accountTelephone = form.find("input[name='account[telephone]']").val();
+				form.find("input[name='billing[telephone]']").val(accountTelephone);
+				if (!form.find("input[name='shipping[different_shipping_address]']").is(":checked")) {
+					form.find("input[name='shipping[telephone]']").val(accountTelephone);
+				}
 
-                //use_for_shipping
-                if(!form.find("input[name='billing[need_invoice]']").is(":checked")){ // if is not visible
-                    form.find("[name='billing[use_for_shipping]']").val(1);
-                } else { // is visible
-                    if(form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
-                        form.find("[name='billing[use_for_shipping]']").val(1);
-                    } else {// is not checked
-                        form.find("[name='billing[use_for_shipping]']").val(0);
-                    }
-                }
+				//use_for_shipping
+				if (!form.find("input[name='billing[need_invoice]']").is(":checked")) { // if is not visible
+					form.find("[name='billing[use_for_shipping]']").val(1);
+				} else { // is visible
+					if (form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
+						form.find("[name='billing[use_for_shipping]']").val(1);
+					} else {// is not checked
+						form.find("[name='billing[use_for_shipping]']").val(0);
+					}
+				}
 
 				stepData = form.serializeArray();
 				// fill billing data with shipping
@@ -1464,6 +1482,7 @@
             doSave: true,
             _self_form_id: "co-shippingpayment",
 			_sidebarAddressesTemplate: "",
+			_sidebarDeliverypaymentTemplate: "",
 	        _previous_payment: false,
 	        _previous_provider: false,
 	        _payment_is_dotpay: false,
@@ -1625,6 +1644,7 @@
 
 			onPrepare: function(checkoutObject){
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
+				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				var self = this;
 
 				this.validate.init();
@@ -1718,6 +1738,15 @@
 					this.getSidebarAddresses(), 
 					this.getSidebarAddressesTemplate()
 				);
+				// Prepare delivery payment sidebar
+				var deliverypayment = checkout.getDeliveryAndPayment();
+				var inpostData = checkout.getInPostData();
+				jQuery().extend(deliverypayment, inpostData);
+				checkout.prepareDeliverypaymentSidebar(
+					deliverypayment,
+					this.getSidebarDeliverypayment(),
+					this.getSidebarDeliverypaymentTemplate()
+				);
 				jQuery(window).trigger("resize");
 				Mall.Gtm.checkoutStep(Mall.Gtm.STEP_CHECKOUT_SHIPPING_PAYMENT);
 			},
@@ -1726,6 +1755,7 @@
                 var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
+
                     jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     });
@@ -1753,6 +1783,14 @@
 			
 			getSidebarAddressesTemplate: function(){
 				return this._sidebarAddressesTemplate;
+			},
+
+			getSidebarDeliverypayment: function(){
+				return this.content.find(".sidebar-deliverypayment");
+			},
+
+			getSidebarDeliverypaymentTemplate: function(){
+				return this._sidebarDeliverypaymentTemplate;
 			},
 			
 			getSelectedShipping: function(){
@@ -1958,6 +1996,8 @@
 		
 				// Prepare delivery payment sidebar
 				var deliverypayment = checkout.getDeliveryAndPayment();
+				var inpostData = checkout.getInPostData();
+				jQuery().extend(deliverypayment, inpostData);
 				checkout.prepareDeliverypaymentSidebar(
 					deliverypayment,
 					this.getSidebarDeliverypayment(), 
