@@ -10,9 +10,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function getInpostLocker() {
 		if (is_null($this->inpostLocker)) {
-			/** @var Mage_Checkout_Model_Session $checkoutSession */
-			$checkoutSession = Mage::getSingleton('checkout/session');
-			$inpostCode = $checkoutSession->getShippingPointCode();
+
+			$quote = Mage::getModel("checkout/cart")->getQuote();
+			$address = $quote->getShippingAddress();
+
+			$inpostCode = $address->getInpostLockerName();
 
 			/** @var GH_Inpost_Model_Locker $locker */
 			$locker = Mage::getModel("ghinpost/locker");

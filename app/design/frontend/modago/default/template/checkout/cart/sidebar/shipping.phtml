@@ -21,7 +21,6 @@ $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
 $sessionShippingMethod = $checkoutSession->getShippingMethod();
-$inpostCode = $checkoutSession->getInpostCode();
 
 /* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();

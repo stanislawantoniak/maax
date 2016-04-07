@@ -164,20 +164,29 @@ abstract class Zolago_Checkout_Controller_Abstract
                 throw new Mage_Core_Exception($shippingMethodResponse['message']);
             }
 
+			$shippingPointCode = $request->getParam("shipping_point_code", "");
 			//Save sales_flat_quote_address.udropship_shipping_details
-			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod, $shippingPointCode);
 			//Save sales_flat_quote_address.udropship_shipping_details
 
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);
         }
 
-        $checkoutSession = $this->_getCheckoutSession();
 
+		$quote = Mage::getModel("checkout/cart")->getQuote();
+		$address = $quote->getShippingAddress();
         if ($shippingPointCode = $request->getParam("shipping_point_code")) {
-            $checkoutSession->setShippingPointCode($shippingPointCode);
+			$address->setInpostLockerName($shippingPointCode);
+			$this->_getCheckoutSession()->setInpostLockerName($shippingPointCode);
         } else {
-            $checkoutSession->setShippingPointCode();
+			//Clear locker address in the sales_flat_quote_address
+			$address->setCity("");
+			$address->setStreet("");
+			$address->setPostcode("");
+			$address->setInpostLockerName("");
+			$this->_getCheckoutSession()->setInpostLockerName();
         }
+
         $onepage->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
     }
 
@@ -355,9 +364,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$details = $address->getUdropshipShippingDetails();
 		$details = $details ? Zend_Json::decode($details) : array();
 
-		/** @var Zolago_Checkout_Helper_Data $helper */
-		$helper = Mage::helper("zolagocheckout");
-		$locker = $helper->getInpostLocker();
 
 		foreach ($shippingMethod as $vId => $code) {
 			$r = $address->getShippingRateByCode($code);
@@ -369,12 +375,11 @@ abstract class Zolago_Checkout_Controller_Abstract
 				'cost' => $r->getCost(),
 				'price' => $r->getPrice(),
 				'carrier_title' => $r->getCarrierTitle(),
-				'method_title' => $r->getMethodTitle(),
-				'inpost_locker_name' => $locker->getName()
+				'method_title' => $r->getMethodTitle()
 			);
 		}
 
-		$address->setData("inpost_locker_name", $locker->getName());
+		//$address->setInpostLockerName($locker->getName());
 		$address->setUdropshipShippingDetails(Zend_Json::encode($details));
 	}
 	
