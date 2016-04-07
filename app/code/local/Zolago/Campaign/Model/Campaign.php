@@ -234,6 +234,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     }
 
     protected function clearInfoProductAttributes($saleCampaignIds, $storeId){
+
+        $origStore = Mage::app()->getStore();
+
+        $store = Mage::getModel("core/store")->load($storeId);
+        Mage::app()->setCurrentStore($store);
+
         $productsCollections = Mage::getResourceModel("catalog/product_collection");
         $productsCollections->joinAttribute("campaign_info_id", 'catalog_product/campaign_info_id', 'entity_id', null, 'left', $storeId);
 
@@ -248,12 +254,18 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         foreach ($productsCollections as $_product) {
             $productIds[$storeId] = $_product->getId();
         }
-
+        Mage::app()->setCurrentStore($origStore);
         return $productIds;
 
     }
 
     protected function clearSaleProductAttributes($infoCampaignIds, $storeId){
+
+        $origStore = Mage::app()->getStore();
+
+        $store = Mage::getModel('core/store')->load($storeId);
+        Mage::app()->setCurrentStore($store);
+
         $productsCollections = Mage::getResourceModel("catalog/product_collection");
         $productsCollections->joinAttribute("campaign_regular_id", 'catalog_product/campaign_regular_id', 'entity_id', null, 'left', $storeId);
         $productsCollections->addFieldToFilter("campaign_regular_id", array("in" => $infoCampaignIds));
@@ -263,6 +275,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $productsIds[] = $_product->getId();
         }
 
+        Mage::app()->setCurrentStore($origStore);
 
         if(!empty($productsIds)){
             /* @var $actionModel Zolago_Catalog_Model_Product_Action */
@@ -315,6 +328,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     protected function handleChangeWebsiteOnSaleCampaign()
     {
+        $origStore = Mage::app()->getStore();
+
         $productIdsUpdated = array();
 
         $allWebsites = Mage::app()->getWebsites();
@@ -322,7 +337,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $toRestore = array();
         foreach ($allWebsites as $_website) {
             $websiteId = $_website->getId();
-
 
             $saleCampaigns = Mage::getModel("zolagocampaign/campaign")->getCollection();
             $saleCampaigns->addFieldToFilter(
@@ -348,6 +362,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($storeIds as $storeId) {
 
+                $store = Mage::app()
+                    ->getWebsite($_website)
+                    ->getDefaultGroup()
+                    ->getDefaultStore();
+                Mage::app()->setCurrentStore($store);
+
                 $productsCollections = Mage::getResourceModel("catalog/product_collection");
                 $productsCollections->joinAttribute(
                     "campaign_regular_id",
@@ -362,6 +382,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                 if ($productsCollections->count() > 0)
                     $toRestore[$storeId] = $productsCollections->getAllIds();
+
+
+                Mage::app()->setCurrentStore($origStore);
             }
 
         }
@@ -391,6 +414,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     protected function handleChangeWebsiteOnInfoCampaign()
     {
+        $origStore = Mage::app()->getStore();
 
         $productIdsUpdated = array();
 
@@ -419,6 +443,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($storeIds as $storeId) {
 
+                $store = Mage::app()
+                    ->getWebsite($_website)
+                    ->getDefaultGroup()
+                    ->getDefaultStore();
+                Mage::app()->setCurrentStore($store);
+
                 $productsCollections = Mage::getResourceModel("catalog/product_collection");
                 $productsCollections->joinAttribute(
                     "campaign_info_id",
@@ -435,6 +465,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                     $toRestore[$storeId][$productsCollectionItem->getId()] = $intersect;
                 }
+
+                Mage::app()->setCurrentStore($origStore);
             }
 
 
