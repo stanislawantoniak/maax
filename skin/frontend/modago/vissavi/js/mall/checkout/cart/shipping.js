@@ -88,6 +88,10 @@
             if (jQuery("input[data-select-shipping-method-trigger=0]").length == 0)
                 return;
 
+            //Init map
+            google.maps.event.addDomListener(window, 'load', initialize);
+            google.maps.event.addDomListener(window, "resize", resizingMap());
+
             jQuery("[name=shipping_select_point]")
                 .select2({dropdownParent: jQuery("#select_inpost_point")})
                 .change(function () {
@@ -320,9 +324,6 @@ var clusterStyles = [
 var markerClusterer = null;
 var map = null;
 var infowindow = null;
-
-google.maps.event.addDomListener(window, 'load', initialize);
-google.maps.event.addDomListener(window, "resize", resizingMap());
 
 var defaultCenterLang = 52.4934482;
 var defaultCenterLat = 18.8979594;
