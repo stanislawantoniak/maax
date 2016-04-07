@@ -1721,7 +1721,7 @@
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
                     jQuery("button[id*='-prev']").prop("disabled", false);
                     //jQuery(this).prop("disabled", true);
-                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+                    jQuery("i.fa-spinner:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
 
 					checkoutObject.prev();
 					jQuery(window).trigger("resize");
@@ -1973,7 +1973,7 @@
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
                     jQuery("button[id*='-prev']").prop("disabled", false);
                    // jQuery(this).prop("disabled", true);
-                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+                    jQuery("i.fa-spinner:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
 
 					checkoutObject.prev();
 					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {

@@ -1,12 +1,21 @@
 // Modal (popup) for last checkout step
 // after customer submit order
 .checkout #popup-after-submit-order {
+  .modal-body {
+    overflow: hidden !important;
+  }
+
   .popup-message {
     h3 {
       font-family: $fontLight;
       text-transform: uppercase;
       padding-top: 40px;
       padding-bottom: 0px;
+    }
+    @media(max-width: $screen-xs-max) {
+      h3 {
+        font-size: 20px;
+      }
     }
     h4 {
       font-family: $fontRegular;
