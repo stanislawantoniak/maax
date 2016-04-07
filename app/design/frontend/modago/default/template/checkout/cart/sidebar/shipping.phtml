@@ -4,7 +4,7 @@
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper		= Mage::helper("zolagocheckout");
 
-$items = $this->getItems();
+$items = $this->getRateItems();
 $vendors = $items->vendors;
 
 $vendorsJ = Mage::helper('core')->jsonEncode($vendors);

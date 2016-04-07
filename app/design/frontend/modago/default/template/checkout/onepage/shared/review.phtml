@@ -9,7 +9,8 @@ $modagoHelper = Mage::helper('zolagomodago');
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
-$itemsShippingCost = $this->getItemsShippingCost();
+$items= $this->getRateItems();
+$methods = $items->methods;
 
 
 $_totalDiscount = $this->getTotalDiscount();
@@ -205,7 +206,7 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 						</div>
 					<?php endif; ?>
 				</div>
-				<?php if (count($itemsShippingCost) > 1): ?>
+				<?php if (count($methods) > 1): ?>
 				<div class="row">
 					<div class="col-sm-12">
 						<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
