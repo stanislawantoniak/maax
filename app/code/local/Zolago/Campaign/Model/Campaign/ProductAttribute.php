@@ -31,16 +31,21 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
      * Set prices from converter to simple products
      *
      * @param $salesPromoProductsData
-     * @param $ids
-     * @param $storesToUpdate
+     * @param $websiteId
      * @return array
+     * @throws Mage_Core_Exception
      */
-    public function setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $storesToUpdate)
+    public function setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId)
     {
+
+        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
+        $catalogHelper = Mage::helper('zolagocatalog');
+        $stores = $catalogHelper->getStoresForWebsites($websiteId);
+        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
+
         $productsIdsPullToSolr = array();
 
-        $store = Mage::getModel("core/store")->load($storesToUpdate[0]);
-        Mage::app()->setCurrentStore($store);
+
 
         $origStore = Mage::app()->getStore();
 
@@ -48,8 +53,14 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         if (!$converter) {
             return $productsIdsPullToSolr; //Nothing updated
         }
+        $store = Mage::app()
+            ->getWebsite($websiteId)
+            ->getDefaultGroup()
+            ->getDefaultStore();
+        Mage::app()->setCurrentStore($store);
+
         $ids = array_keys($salesPromoProductsData);
-        //1. Get collection of simple products
+        //1. Get collection of simple producsetPromoCampaignAttributesToConfigurableVisibleProductsts
         /* @var $collectionS Mage_Catalog_Model_Resource_Product_Collection */
         $collectionS = Mage::getResourceModel('zolagocatalog/product_collection');
         $collectionS->addAttributeToSelect('skuv');
