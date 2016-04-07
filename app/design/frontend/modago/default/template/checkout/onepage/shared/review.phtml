@@ -188,10 +188,12 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 			<div class="panel-group">
 				<div class="row">
 					<?php if(!$locker->getId()): ?>
-					<div class="col-md-12 col-sm-12 delivery-type delivery-type-short">
+					<div class="col-md-12 col-sm-12 delivery-type">
 						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
 							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
+							<dd>&nbsp;</dd>
+							<dd>&nbsp;</dd>
 						</dl>
 					</div>
 					<?php else: ?>
