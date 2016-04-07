@@ -97,7 +97,7 @@
 	Mall.Checkout.prototype.getInPost = function () {
 		return this.InPost;
 	},
-
+		
 	Mall.Checkout.prototype.getInPostData = function() {
 		var data = {
 			inpost_locker_street: this.getInPost().getStreet(),
