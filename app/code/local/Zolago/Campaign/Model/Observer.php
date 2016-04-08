@@ -176,7 +176,7 @@ class Zolago_Campaign_Model_Observer
                 $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
             }
         }
-        if (empty($productsIdsPullToSolr) || empty($productsIdsPullToBan))
+        if (empty($productsIdsPullToSolr))
             return;
 
         unset($websiteId);
