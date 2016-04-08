@@ -108,7 +108,6 @@ class Zolago_Campaign_Model_Observer
             /* @var $catalogHelper Zolago_Catalog_Helper_Data */
             $catalogHelper = Mage::helper('zolagocatalog');
             $storesToUpdateInfo = $catalogHelper->getStoresForWebsites($websitesToUpdateInfo);
-            //var_dump($storesToUpdateInfo);
 
             foreach ($reformattedData as $websiteId => $dataToUpdateInfo) {
                 $storesI = isset($storesToUpdateInfo[$websiteId]) ? $storesToUpdateInfo[$websiteId] : false;
@@ -184,6 +183,9 @@ class Zolago_Campaign_Model_Observer
         $indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
         /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
         $indexer->reindexEntities($productsIdsPullToSolr);
+
+        //4. Varnish & Turpentine
+        Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr);
 
         $numberQ = 20;
         if (count($productsIdsPullToSolr) > $numberQ) {

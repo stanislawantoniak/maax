@@ -740,6 +740,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
         }
 
+        //5. Varnish & Turpentine
+        Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIdsToUpdate);
 
         //5. push to solr
         Mage::dispatchEvent(
