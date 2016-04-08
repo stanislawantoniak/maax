@@ -309,7 +309,19 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	   return parent::_beforeSave();
    }
 
-    /**
+	/**
+	 * @return $this|Mage_Core_Model_Abstract
+	 */
+	protected function _afterSave() {
+		/** @see Zolago_Rma_PoController::_saveRma */
+		if ($dhlRequest = $this->getSendDlhRequestOnSave()) {
+			$this->setDhlTrackingParams($this->sendDhlRequest($dhlRequest));
+			$this->unsSendDlhRequestOnSave();
+		}
+		return parent::_afterSave();
+	}
+	
+	/**
      * @param bool $force
      * @return Zolago_Rma_Model_Rma
      */
