@@ -34,5 +34,5 @@ var Dhl = {
 		Dhl.setInfo('red',Translator.translate('Unknown error. Please reload page.'));
 		Dhl.enable();
 	}
-}
+};
 
