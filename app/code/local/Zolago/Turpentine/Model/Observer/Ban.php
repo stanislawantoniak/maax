@@ -88,6 +88,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
 
         if (self::isVarnishEnabled()) {
 
+            $originStore = Mage::app()->getStore();
             if(!is_null($store)){
                 Mage::app()->setCurrentStore($store);
             }
@@ -104,7 +105,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
             $collection->addAttributeToFilter("status", array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
 
             if(!is_null($store)){
-                Mage::app()->setCurrentStore(Mage::app()->getStore());
+                Mage::app()->setCurrentStore($originStore);
             }
         }
         return $collection;
