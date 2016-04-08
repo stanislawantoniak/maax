@@ -16,3 +16,7 @@
 "Parcel 10-20kg","Paczka 10-20kg"
 "Parcel 20-31.5kg","Paczka 20-31.5kg"
 "Cant connect to %s server","Nie można połączyć z serwerem %s"
+"Unknown error. Please reload page.","Wystąpił nieznany błąd. Przeładuj stronę i spróbuj ponownie"
+"Wrong DHL settings.","Błąd w ustawieniach DHL"
+"Error in DHL connection.Please contact Administrator.","Błąd połączenia z DHL. Skontaktuj się z administratorem"
+"Please save changed settings.","Proszę zapisać zmiany w ustawieniach."
