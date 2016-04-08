@@ -212,6 +212,13 @@ class Zolago_Campaign_Model_Observer
             $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr, $store);
             Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
         }
+        ////        //4. push to solr
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productsIdsPullToSolr
+            )
+        );
 
 
     }
