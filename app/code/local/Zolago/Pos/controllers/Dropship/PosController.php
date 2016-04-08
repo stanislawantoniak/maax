@@ -82,6 +82,12 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		$this->_redirect("*/pos",array("_fragment"=>"tab_1_2"));
     }
 
+    public function check_dhlAction() {
+        $posId = $this->getRequest()->getParam('pos_id');
+        $settings = Mage::helper('udpo')->getDhlSettings(null,$posId);
+        $mess = Mage::helper('orbashipping/carrier_dhl')->checkDhlSettings($settings);
+        echo json_encode($mess);
+    }
 
 	/**
 	 * Save Pos
