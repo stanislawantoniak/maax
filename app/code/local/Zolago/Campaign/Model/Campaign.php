@@ -382,9 +382,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
 
                 if ($productsCollections->count() > 0){
-                    $ids = $productsCollections->getAllIds();
-                    $toRestore[$storeId] = $ids;
-                    Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($ids);
+                    $toRestore[$storeId] = $productsCollections->getAllIds();
                 }
 
 
@@ -544,14 +542,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $stores = Mage::app()->getStores();
 
-        $origStore = Mage::app()->getStore();
+
         foreach ($stores as $store) {
             $productIdsSalePromotionUpdated = $this->clearSaleProductAttributes($infoCampaignIds, $store->getId());
-
-            Mage::app()->setCurrentStore($store);
-            Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIdsSalePromotionUpdated);
-            Mage::app()->setCurrentStore($origStore);
-
             $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
         }
         return $productIdsToUpdate;
@@ -580,15 +573,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $stores = Mage::app()->getStores();
 
-        $origStore = Mage::app()->getStore();
-
         foreach ($stores as $store) {
             $productIdsInfoUpdated = $this->clearInfoProductAttributes($saleCampaignIds, $store->getId());
-
-            Mage::app()->setCurrentStore($store);
-            Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIdsInfoUpdated);
-            Mage::app()->setCurrentStore($origStore);
-
 
             $products = array_merge($products, $productIdsInfoUpdated);
         }
@@ -758,8 +744,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productIdsToUpdate);
         }
 
-        //5. Varnish & Turpentine
-        Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIdsToUpdate);
 
         //5. push to solr
         Mage::dispatchEvent(
