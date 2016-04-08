@@ -74,6 +74,8 @@ class Zolago_Campaign_Model_Observer
 
         $productsIdsPullToSolr = array();
 
+        $productsIdsPullToBan = array();
+
         /* @var $modelCampaign Zolago_Campaign_Model_Campaign */
         $modelCampaign = Mage::getModel('zolagocampaign/campaign');
 
@@ -116,7 +118,7 @@ class Zolago_Campaign_Model_Observer
                     $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsInfoUpdated);
                 }
             }
-            unset($dataToUpdate);
+            unset($dataToUpdate, $websiteId);
         }
 
         //sales/promo campaign
@@ -169,14 +171,15 @@ class Zolago_Campaign_Model_Observer
         //Mage::log($salesPromoProductsData, null, "set_log_1.log");
         foreach ($salesPromoProductsData as $websiteId => $salesPromoProductsDataH) {
             $productIdsSPUpdated = $modelCampaign->setProductOptionsByCampaign($salesPromoProductsDataH, $websiteId);
+            $productsIdsPullToBan[$websiteId] = $productIdsSPUpdated;
             if (!empty($productIdsSPUpdated)) {
                 $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsSPUpdated);
             }
         }
-        if (empty($productsIdsPullToSolr)) {
+        if (empty($productsIdsPullToSolr) || empty($productsIdsPullToBan))
             return;
-        }
-//
+
+        unset($websiteId);
 //        //3. reindex
 
         //Better performance
@@ -184,8 +187,6 @@ class Zolago_Campaign_Model_Observer
         /* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
         $indexer->reindexEntities($productsIdsPullToSolr);
 
-        //4. Varnish & Turpentine
-        Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr);
 
         $numberQ = 20;
         if (count($productsIdsPullToSolr) > $numberQ) {
@@ -199,14 +200,29 @@ class Zolago_Campaign_Model_Observer
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsIdsPullToSolr);
 
         }
-//
-////        //4. push to solr
+
+        //4. push to solr
         Mage::dispatchEvent(
             "catalog_converter_price_update_after",
             array(
                 "product_ids" => $productsIdsPullToSolr
             )
         );
+
+        //5. Varnish & Turpentine
+        $origStore = Mage::app()->getStore();
+        foreach ($productsIdsPullToBan as $websiteId => $productsIdsPullToBanIds) {
+            $store = Mage::app()
+                ->getWebsite($websiteId)
+                ->getDefaultGroup()
+                ->getDefaultStore();
+            Mage::app()->setCurrentStore($store);
+
+            Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr);
+
+            Mage::app()->setCurrentStore($origStore);
+        }
+
     }
 
     static public function unsetCampaignAttributes()
