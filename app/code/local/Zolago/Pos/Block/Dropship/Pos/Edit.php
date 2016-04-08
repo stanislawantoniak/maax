@@ -78,6 +78,7 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'dhl_password',
             'dhl_ecas',
             'dhl_terminal',
+            'dhl_check_button',
         ));
         
         $ups = $form->addFieldset('ups', array('legend'=>$helper->__('UPS Settings')));

@@ -80,12 +80,14 @@ jQuery(function($){
 					$("dhl_account").up('.form-group').show();
 					$("dhl_ecas").up('.form-group').show();
 					$("dhl_terminal").up('.form-group').show();
+					$("dhl_check_button").up('.form-group').show();
 				}else{
 					$("dhl_login").up('.form-group').hide();
 					$("dhl_password").up('.form-group').hide();
 					$("dhl_account").up('.form-group').hide();
 					$("dhl_ecas").up('.form-group').hide();
 					$("dhl_terminal").up('.form-group').hide();
+					$("dhl_check_button").up('.form-group').hide();
 				}
 			},
 			enableUps: function(state){
@@ -133,4 +135,9 @@ jQuery(function($){
 			var mapTimeOpened = jQuery('<textarea>').html(jQuery('#map_time_opened').text()).text();
 			jQuery('#map_time_opened').text(mapTimeOpened);
 		});
+    Dhl.init('<?php echo Mage::getUrl('*/*/check_dhl',array('pos_id' => $this->getRequest()->getParam('pos_id')));?>');
+    jQuery('.disable_dhl').change(function() {
+        Dhl.setInfo('orange','<?php echo Mage::helper('orbashipping')->__('Please save changed settings.')?>');
+        Dhl.disable();
+    });
 </script>

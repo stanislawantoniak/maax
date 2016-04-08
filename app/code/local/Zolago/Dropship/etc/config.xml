@@ -621,6 +621,7 @@
 							<dhl_account>1</dhl_account>
 							<dhl_ecas>1</dhl_ecas>
 							<dhl_terminal>1</dhl_terminal>
+							<dhl_check>1</dhl_check>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
