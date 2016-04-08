@@ -24,7 +24,7 @@ var Dhl = {
 		});
 	},
 	setInfo: function(color,mess) {
-		this.messageField.html('<span style="color:'+color+'">'+mess+'</span>');
+		this.messageField.html(' <span style="color:'+color+'"> '+mess+'</span>');
 	},
 	success: function(data) {
 		Dhl.setInfo(data.color,data.value);
