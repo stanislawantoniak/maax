@@ -408,6 +408,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             );
             $actionModel->updateAttributesPure($productsIds, $attributesData, $storeId);
             $productIdsUpdated = array_merge($productIdsUpdated, $productsIds);
+
+            $store = Mage::getModel("core/store")->load($storeId);
+            $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
+            Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
         }
 
 
@@ -546,6 +550,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         foreach ($stores as $store) {
             $productIdsSalePromotionUpdated = $this->clearSaleProductAttributes($infoCampaignIds, $store->getId());
             $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
+
+
+            $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIdsSalePromotionUpdated, $store);
+            Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
         }
         return $productIdsToUpdate;
 
@@ -575,6 +583,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         foreach ($stores as $store) {
             $productIdsInfoUpdated = $this->clearInfoProductAttributes($saleCampaignIds, $store->getId());
+
+            $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIdsInfoUpdated, $store);
+            Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
 
             $products = array_merge($products, $productIdsInfoUpdated);
         }
@@ -921,6 +932,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $aM->updateAttributesPure($productIds, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE => (string)$value), $store);
                 $updatedIds = array_merge($updatedIds, $productIds);
             }
+
+            $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($updatedIds, $store);
+            Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
         }
         unset($productIds);
 
