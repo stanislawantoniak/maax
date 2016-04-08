@@ -210,17 +210,13 @@ class Zolago_Campaign_Model_Observer
         );
 
         //5. Varnish & Turpentine
-        $origStore = Mage::app()->getStore();
         foreach ($productsIdsPullToBan as $websiteId => $productsIdsPullToBanIds) {
             $store = Mage::app()
                 ->getWebsite($websiteId)
                 ->getDefaultGroup()
                 ->getDefaultStore();
-            Mage::app()->setCurrentStore($store);
 
-            Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr);
-
-            Mage::app()->setCurrentStore($origStore);
+            Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr, $store);
         }
 
     }

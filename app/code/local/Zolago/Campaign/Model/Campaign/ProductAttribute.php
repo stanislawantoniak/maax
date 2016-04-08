@@ -534,17 +534,13 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 'product_flag' => null
             );
 
-            $origStore = Mage::app()->getStore();
+
             foreach($updateCollector as $website => $productsIds){
                 if(!isset($stores))
                     continue;
 
                 foreach ($stores[$websiteId] as $store) {
                     $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
-
-                    Mage::app()->setCurrentStore($store);
-                    Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds);
-                    Mage::app()->setCurrentStore($origStore);
                 }
             }
         }
