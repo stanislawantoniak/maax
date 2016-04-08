@@ -328,9 +328,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     protected function handleChangeWebsiteOnSaleCampaign()
     {
-        $origStore = Mage::app()->getStore();
 
         $productIdsUpdated = array();
+
+        $origStore = Mage::app()->getStore();
 
         $allWebsites = Mage::app()->getWebsites();
 
@@ -380,8 +381,9 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $productsCollections->addAttributeToFilter("campaign_regular_id", array("in" => $saleCampaignIds));
 
 
-                if ($productsCollections->count() > 0)
+                if ($productsCollections->count() > 0){
                     $toRestore[$storeId] = $productsCollections->getAllIds();
+                }
 
 
                 Mage::app()->setCurrentStore($origStore);
@@ -392,10 +394,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if (empty($toRestore))
             return $productIdsUpdated;
 
-        foreach ($toRestore as $storeId => $productsIds) {
-            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
-            $actionModel = Mage::getSingleton('catalog/product_action');
+        /* @var $actionModel Zolago_Catalog_Model_Product_Action */
+        $actionModel = Mage::getSingleton('catalog/product_action');
 
+        foreach ($toRestore as $storeId => $productsIds) {
             $attributesData = array(
                 self::ZOLAGO_CAMPAIGN_ID_CODE => null,
                 'special_price' => '',
@@ -540,6 +542,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $stores = Mage::app()->getStores();
 
+
         foreach ($stores as $store) {
             $productIdsSalePromotionUpdated = $this->clearSaleProductAttributes($infoCampaignIds, $store->getId());
             $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
@@ -572,6 +575,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         foreach ($stores as $store) {
             $productIdsInfoUpdated = $this->clearInfoProductAttributes($saleCampaignIds, $store->getId());
+
             $products = array_merge($products, $productIdsInfoUpdated);
         }
         if (empty($products))

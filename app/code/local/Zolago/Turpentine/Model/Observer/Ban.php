@@ -81,12 +81,18 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
      * @param $productIds
      * @return Zolago_Catalog_Model_Resource_Product_Collection
      */
-    public static function collectProductsBeforeBan($productIds)
+    public static function collectProductsBeforeBan($productIds, $store)
     {
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
 
         if (self::isVarnishEnabled()) {
+
+            $origStore = Mage::app()->getStore();
+
+            if(!is_null($store)){
+                Mage::app()->setCurrentStore($store);
+            }
 
             /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable $modelZCPC */
             $parentIds = $modelZCPC = Mage::getResourceModel('catalog/product_type_configurable')
@@ -99,6 +105,10 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
             $collection->addFieldToFilter('entity_id', array('in' => $allIds));
             $collection->addAttributeToFilter("visibility", array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
             $collection->addAttributeToFilter("status", array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED));
+
+            if(!is_null($store)){
+                Mage::app()->setCurrentStore($origStore);
+            }
         }
         return $collection;
     }

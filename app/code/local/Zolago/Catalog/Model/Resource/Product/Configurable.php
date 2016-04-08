@@ -426,6 +426,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         //2. Update
+
         $options = array();
         if (!empty($dataToUpdate)) {
             /* @var $aM Zolago_Catalog_Model_Product_Action */
