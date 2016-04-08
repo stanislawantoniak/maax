@@ -172,7 +172,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                     <?php echo $helper->__("Account number");?>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="dhl_rma_account" name="dhl_rma_account" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_account'); ?>" type="text" class="form-control" size="10">
+                                    <input id="dhl_rma_account" name="dhl_rma_account" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_account'); ?>" type="text" class="form-control disable_dhl" size="10">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -180,7 +180,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                     <?php echo $helper->__("DHL login");?>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="dhl_rma_login" name="dhl_rma_login" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_login'); ?>" type="text" class="form-control" size="10">
+                                    <input id="dhl_rma_login" name="dhl_rma_login" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_login'); ?>" type="text" class="form-control disable_dhl" size="10">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -188,9 +188,18 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                     <?php echo $helper->__("DHL password");?>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="dhl_rma_password" name="dhl_rma_password" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_password'); ?>" type="password" class="form-control" size="10">
+                                    <input id="dhl_rma_password" name="dhl_rma_password" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_password'); ?>" type="password" class="form-control disable_dhl" size="10">
                                 </div>
                             </div>
+                                <div class="form-group">
+                                    <label for="dhl_check" class="col-md-3 control-label">
+                                    </label>
+                                    <div class="col-md-9">
+                                        <button type="button" id="dhl_check_button" class="btn btn-primary"><?php echo Mage::helper('zolagodropship')->__("Check DHL Settings");?></button>
+                                        <span id="dhl_check_message"></span>
+                                    </div>
+                                </div>
+
                         </div>
 
 
@@ -252,9 +261,22 @@ $upsRma = $_vendor->getData('orbaups_rma');
     jQuery(function ($) {
         var dhlRma = jQuery('#dhl_rma');
         var upsRma = jQuery('#orbaups_rma');
+        var reset = jQuery('#filter_reset');
 
         showOptions(dhlRma.val(), jQuery(".dhl_rma_options"));
         showOptions(upsRma.val(), jQuery(".ups_rma_options"));
+
+
+        Dhl.init('/udropship/vendor_settings/check_rma_dhl');
+        jQuery('.disable_dhl').change(function() {
+            Dhl.setInfo('orange','<?php echo Mage::helper('orbashipping')->__('Please save changed settings.')?>');
+            Dhl.disable();
+        });
+        reset.click(function() {
+            Dhl.setInfo('green','');
+            Dhl.enable();
+            return true;
+        });
 
 
         dhlRma.change(function () {

@@ -162,4 +162,7 @@
     <zolago-common-processing-dot-dot-dot translate="message" module="zolagocommon">
         <message>Processing...</message>
     </zolago-common-processing-dot-dot-dot>
+    <dhl_unknown_error translate="message" module="orbashipping">
+        <message>Unknown error. Please reload page.</message>
+    </dhl_unknown_error>
 </jstranslator>

@@ -5,7 +5,7 @@ class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 	/**
 	 * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
 	 */
-	public function getVendorCollection() {
+	public function getVendorCollection($addDummies=true) {
 		if(!$this->hasData("vendor_collection")){
             $localVendorId = Mage::helper('udropship/data')->getLocalVendorId();
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
@@ -27,8 +27,10 @@ class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 			foreach($collection as $vendor){
 				$helper->loadCustomData($vendor);
 			}
-			
-			$this->addDummyVendorsToCollection($collection);
+
+			if($addDummies) {
+				$this->addDummyVendorsToCollection($collection);
+			}
 			
 			$this->setData("vendor_collection", $collection);
 		}

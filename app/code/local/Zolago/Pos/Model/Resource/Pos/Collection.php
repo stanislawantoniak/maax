@@ -75,30 +75,4 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 		return $this;
 	}
 
-
-	/**
-	 * @param Zolago_Dropship_Model_Vendor|int $vendor
-	 * @param Mage_Core_Model_Website|int $website
-	 * @return $this
-	 */
-	public function addFilterVendorPosPerWebsite($vendor, $website) {
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
-			$vendor = $vendor->getId();
-		}
-		if ($website instanceof Mage_Core_Model_Website) {
-			$website->getId();
-		}
-
-		$condition = array(
-			"main_table.pos_id = pos_vendor_website.pos_id",
-			$this->getConnection()->quoteInto("pos_vendor_website.vendor_id = ?", $vendor),
-			$this->getConnection()->quoteInto("pos_vendor_website.website_id = ?", $website),
-		);
-		$this->getSelect()->join(
-			array("pos_vendor_website"=>$this->getTable('zolagopos/pos_vendor_website')),
-			implode(" AND ", $condition),
-			array()
-		);
-		return $this;
-	}
 }

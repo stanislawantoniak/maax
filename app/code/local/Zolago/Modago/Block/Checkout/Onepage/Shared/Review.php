@@ -96,6 +96,11 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
         return Mage::getStoreConfig('checkout/options/checkout_order_deactivate');
     }
     
+    public function getWaitForExternalGTMTags() {
+        $value = Mage::getStoreConfig('checkout/options/checkout_wait_for_tags');
+        return is_numeric($value) ? $value : 0;
+    }
+    
     
     //{{{ 
     /**

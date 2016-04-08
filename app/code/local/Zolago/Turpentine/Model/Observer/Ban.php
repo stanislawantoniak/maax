@@ -4,6 +4,8 @@
  */
 class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_Observer_Ban
 {
+    const NO_BAN_AFTER_PRODUCT_SAVE = 'no_ban_after_product_save';
+
     /**
      * @param $eventObject
      */
@@ -110,5 +112,12 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
     {
         /** @var Nexcessnet_Turpentine_Helper_Varnish $helperVarnish */
         return $helperVarnish = Mage::helper('turpentine/varnish')->getVarnishEnabled();
+    }
+
+    public function banProductPageCache( $eventObject ) {
+        $noBan = Mage::registry(self::NO_BAN_AFTER_PRODUCT_SAVE);
+        if($noBan !== true) {
+            parent::banProductPageCache($eventObject);
+        }
     }
 }

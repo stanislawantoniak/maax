@@ -68,6 +68,17 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $return = $this->_sendMessage('getMyShipments',$message);
         return $return;
     }
+    /**
+     * shipments count
+     */
+    public function getMyShipmentsCount($from,$to) {
+        $message = new StdClass();
+        $message->authData = $this->_auth;
+        $message->createdFrom = $from;
+        $message->createdTo = $to;
+        $return = $this->_sendMessage('getMyShipmentsCount',$message);
+        return $return;
+    }
 
     protected function _prepareShipmentOrderInfo() {
         $shipper = new StdClass();

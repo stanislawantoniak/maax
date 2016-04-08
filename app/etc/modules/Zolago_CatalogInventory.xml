@@ -6,7 +6,7 @@
             <codePool>local</codePool>
             <depends>
                 <Mage_CatalogInventory/>
-				<Unirgy_Dropship/>
+
             </depends>
         </Zolago_CatalogInventory>
     </modules>
