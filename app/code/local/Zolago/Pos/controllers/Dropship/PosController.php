@@ -149,7 +149,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 			Mage::logException($e);
 			return $this->_redirectReferer();
 		}
-		return $this->_redirect("*/*");
+		return $this->_redirect("udropship/pos/edit/", array('pos_id' => $pos->getId()));
 		
 	}
 
