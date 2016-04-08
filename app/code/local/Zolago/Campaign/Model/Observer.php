@@ -202,7 +202,24 @@ class Zolago_Campaign_Model_Observer
         }
 
         //4. push to solr
-        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $productsIdsPullToSolr));
+        //5. Varnish & Turpentine
+        foreach ($productsIdsPullToBan as $websiteId => $productsIdsPullToBanIds) {
+            $store = Mage::app()
+                ->getWebsite($websiteId)
+                ->getDefaultGroup()
+                ->getDefaultStore();
+
+            $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr, $store);
+            Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
+        }
+        ////        //4. push to solr
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productsIdsPullToSolr
+            )
+        );
+
 
     }
 
