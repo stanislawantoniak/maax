@@ -541,6 +541,9 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
                 foreach ($stores[$websiteId] as $store) {
                     $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
+
+                    $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
+                    Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
                 }
             }
         }
