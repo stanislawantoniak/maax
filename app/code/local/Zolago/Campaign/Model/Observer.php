@@ -209,9 +209,9 @@ class Zolago_Campaign_Model_Observer
                 ->getDefaultGroup()
                 ->getDefaultStore();
 
-            Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr, $store);
+            $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsPullToSolr, $store);
         }
-        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $productsIdsPullToSolr));
+        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
 
     }
 
