@@ -93,12 +93,17 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
 
     /**
      * Get relation size-price for store
-     * @param $store
+     * @param $storeId
      * @param $productIds
      * @return array
      */
-    public function getUsedSizePriceRelations($store, $productIds)
+    public function getUsedSizePriceRelations($storeId, $productIds)
     {
+
+        $origStore = Mage::app()->getStore();
+
+        $store = Mage::getModel("core/store")->load($storeId);
+        Mage::app()->setCurrentStore($store);
 
         $sizePriceRelations = array();
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
@@ -108,7 +113,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             'entity_id',
             null,
             'left',
-            $store
+            $storeId
         );
         $collection->joinAttribute(
             'size',
@@ -116,7 +121,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             'entity_id',
             null,
             'left',
-            $store
+            $storeId
         );
         $collection->joinAttribute(
             'skuv',
@@ -157,6 +162,7 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "price" => $product->getPrice() //Simple product price
             );
         }
+        Mage::app()->setCurrentStore($origStore);
 
         return $sizePriceRelations;
 

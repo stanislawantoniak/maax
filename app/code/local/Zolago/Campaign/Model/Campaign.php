@@ -234,6 +234,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     }
 
     protected function clearInfoProductAttributes($saleCampaignIds, $storeId){
+
+        $origStore = Mage::app()->getStore();
+
+        $store = Mage::getModel("core/store")->load($storeId);
+        Mage::app()->setCurrentStore($store);
+
         $productsCollections = Mage::getResourceModel("catalog/product_collection");
         $productsCollections->joinAttribute("campaign_info_id", 'catalog_product/campaign_info_id', 'entity_id', null, 'left', $storeId);
 
@@ -248,12 +254,18 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         foreach ($productsCollections as $_product) {
             $productIds[$storeId] = $_product->getId();
         }
-
+        Mage::app()->setCurrentStore($origStore);
         return $productIds;
 
     }
 
     protected function clearSaleProductAttributes($infoCampaignIds, $storeId){
+
+        $origStore = Mage::app()->getStore();
+
+        $store = Mage::getModel('core/store')->load($storeId);
+        Mage::app()->setCurrentStore($store);
+
         $productsCollections = Mage::getResourceModel("catalog/product_collection");
         $productsCollections->joinAttribute("campaign_regular_id", 'catalog_product/campaign_regular_id', 'entity_id', null, 'left', $storeId);
         $productsCollections->addFieldToFilter("campaign_regular_id", array("in" => $infoCampaignIds));
@@ -263,6 +275,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $productsIds[] = $_product->getId();
         }
 
+        Mage::app()->setCurrentStore($origStore);
 
         if(!empty($productsIds)){
             /* @var $actionModel Zolago_Catalog_Model_Product_Action */
@@ -315,14 +328,16 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     protected function handleChangeWebsiteOnSaleCampaign()
     {
+
         $productIdsUpdated = array();
+
+        $origStore = Mage::app()->getStore();
 
         $allWebsites = Mage::app()->getWebsites();
 
         $toRestore = array();
         foreach ($allWebsites as $_website) {
             $websiteId = $_website->getId();
-
 
             $saleCampaigns = Mage::getModel("zolagocampaign/campaign")->getCollection();
             $saleCampaigns->addFieldToFilter(
@@ -348,6 +363,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($storeIds as $storeId) {
 
+                $store = Mage::app()
+                    ->getWebsite($_website)
+                    ->getDefaultGroup()
+                    ->getDefaultStore();
+                Mage::app()->setCurrentStore($store);
+
                 $productsCollections = Mage::getResourceModel("catalog/product_collection");
                 $productsCollections->joinAttribute(
                     "campaign_regular_id",
@@ -360,8 +381,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $productsCollections->addAttributeToFilter("campaign_regular_id", array("in" => $saleCampaignIds));
 
 
-                if ($productsCollections->count() > 0)
+                if ($productsCollections->count() > 0){
                     $toRestore[$storeId] = $productsCollections->getAllIds();
+                }
+
+
+                Mage::app()->setCurrentStore($origStore);
             }
 
         }
@@ -369,10 +394,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if (empty($toRestore))
             return $productIdsUpdated;
 
-        foreach ($toRestore as $storeId => $productsIds) {
-            /* @var $actionModel Zolago_Catalog_Model_Product_Action */
-            $actionModel = Mage::getSingleton('catalog/product_action');
+        /* @var $actionModel Zolago_Catalog_Model_Product_Action */
+        $actionModel = Mage::getSingleton('catalog/product_action');
 
+        foreach ($toRestore as $storeId => $productsIds) {
             $attributesData = array(
                 self::ZOLAGO_CAMPAIGN_ID_CODE => null,
                 'special_price' => '',
@@ -391,6 +416,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
     protected function handleChangeWebsiteOnInfoCampaign()
     {
+        $origStore = Mage::app()->getStore();
 
         $productIdsUpdated = array();
 
@@ -419,6 +445,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
             foreach ($storeIds as $storeId) {
 
+                $store = Mage::app()
+                    ->getWebsite($_website)
+                    ->getDefaultGroup()
+                    ->getDefaultStore();
+                Mage::app()->setCurrentStore($store);
+
                 $productsCollections = Mage::getResourceModel("catalog/product_collection");
                 $productsCollections->joinAttribute(
                     "campaign_info_id",
@@ -435,6 +467,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                     $toRestore[$storeId][$productsCollectionItem->getId()] = $intersect;
                 }
+
+                Mage::app()->setCurrentStore($origStore);
             }
 
 
@@ -508,6 +542,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $stores = Mage::app()->getStores();
 
+
         foreach ($stores as $store) {
             $productIdsSalePromotionUpdated = $this->clearSaleProductAttributes($infoCampaignIds, $store->getId());
             $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
@@ -540,6 +575,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         foreach ($stores as $store) {
             $productIdsInfoUpdated = $this->clearInfoProductAttributes($saleCampaignIds, $store->getId());
+
             $products = array_merge($products, $productIdsInfoUpdated);
         }
         if (empty($products))
@@ -748,9 +784,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
         $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
         //1. Update attributes for simple visible products
-        $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $storesToUpdate);
+        $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$simpleUpdated);
-
 
 
         //1. Update attributes for configurable visible products
