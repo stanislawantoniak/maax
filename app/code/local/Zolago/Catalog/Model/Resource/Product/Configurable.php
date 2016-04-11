@@ -378,7 +378,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     {
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
-        $coll->setStore(1);
+        $coll->setStore($storeId);
         $coll->addFieldToFilter('entity_id', array('in' => $ids));
         $coll->addAttributeToSelect("price");
         $coll->addAttributeToSelect("msrp", "left");
