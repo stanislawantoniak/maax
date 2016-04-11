@@ -91,6 +91,60 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
     }
 
 
+    public function getPriceAndMSRP($storeId, $productIds)
+    {
+        $result = array();
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+
+
+        $attributePrice = Mage::getResourceModel('catalog/product')
+            ->getAttribute('price');
+        $attributePriceId = $attributePrice->getAttributeId();
+
+        $attributeMSRP = Mage::getResourceModel('catalog/product')
+            ->getAttribute('msrp');
+        $attributeMSRPId = $attributeMSRP->getAttributeId();
+
+
+        $collection->getSelect()
+            ->columns('
+             conv(floor(rand() * 99999999999999), 20, 36) as unique_id')
+
+
+            ->joinInner(
+                array("at_udropship_vendor" => 'catalog_product_entity_int'),
+                "e.entity_id = at_udropship_vendor.entity_id",
+                array("udropship_vendor" => "at_udropship_vendor.value")
+            )
+            ->joinLeft(
+                array("at_msrp" => 'catalog_product_entity_decimal'),
+                "e.entity_id = at_msrp.entity_id",
+                array("msrp" => "at_msrp.value")
+            )
+            ->joinLeft(
+                array("at_price" => 'catalog_product_entity_decimal'),
+                "e.entity_id = at_price.entity_id",
+                array("price" => "at_price.value", "at_price.store_id" => "store_id")
+            )
+            ->where("at_msrp.attribute_id=?", $attributeMSRPId)
+            ->where("at_price.attribute_id=?", $attributePriceId)
+            ->where("at_msrp.store_id=?", $storeId)
+            ->where("at_price.store_id=?", $storeId)
+            ->where("e.entity_id IN(?)", $productIds);
+        $collection->setRowIdFieldName('unique_id');
+
+        foreach ($collection as $product) {
+            $result[$product->getId()] = array(
+                "id" => $product->getId(),      //Product id
+                "sku" => $product->getSku(),    //Product sku
+                "price" => $product->getPrice(), //Product msrp
+                "msrp" => $product->getMsrp(), //Product msrp,
+                "udropship_vendor" => $product->getUdropshipVendor()
+            );
+        }
+
+        return $result;
+    }
     /**
      * Get relation size-price for store
      * @param $storeId

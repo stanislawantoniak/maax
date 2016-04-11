@@ -427,31 +427,76 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         //2. Update
 
+
+        if (empty($dataToUpdate)) {
+            return;
+        }
+
         $options = array();
-        if (!empty($dataToUpdate)) {
-            /* @var $aM Zolago_Catalog_Model_Product_Action */
-            $aM = Mage::getSingleton('catalog/product_action');
 
-            foreach ($dataToUpdate as $website => $data) {
-                $price = $data["price"];
-                $options = array_merge($options, $data["options"]);
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
 
-                if (!isset($stores[$website]))
-                    continue;
+        foreach ($dataToUpdate as $website => $data) {
+            $price = $data["price"];
+            $options = array_merge($options, $data["options"]);
 
-                foreach ($price as $value => $productIds) {
-                    foreach ($stores[$website] as $store) {
-                        $aM->updateAttributesPure($productIds, array("price" => (string)$value), $store);
+            if (!isset($stores[$website]))
+                continue;
 
-                        $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIds, $store);
-                        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
-                    }
+            foreach ($price as $value => $productIds) {
+                foreach ($stores[$website] as $store) {
+                    $aM->updateAttributesPure($productIds, array("price" => (string)$value), $store);
                 }
             }
         }
 
+
         if (!empty($options))
             $this->insertProductOptions($options);
+
+        //Update Sale/Promo flag
+        unset($parentIds);
+        $procent = 5;
+        $saleFlag = array();
+        foreach ($recoverOptionsProducts as $websiteId => $parentIds) {
+            Mage::log($websiteId, null, "PPP_1.log");
+
+            $firstStore = array_values($stores[$websiteId])[0];
+            //Mage::log($firstStore, null, "PPP_1.log");
+            //Mage::log("----------------------", null, "PPP_1.log");
+
+                $priceAndMSRP = $configModel->getPriceAndMSRP($firstStore, $parentIds);
+                //Mage::log($firstStore, null, "xxx.log");
+                //Mage::log($priceAndMSRP, null, "xxx.log");
+                //Mage::log("------------------------", null, "xxx.log");
+//                if (empty($priceAndMSRP)) {
+//                    continue;
+//                }
+
+                foreach ($priceAndMSRP as $priceAndMSRPItem) {
+                    if ($priceAndMSRPItem["msrp"] < $priceAndMSRPItem["price"]) {
+                        $saleFlag[$firstStore][] = $priceAndMSRPItem["id"];
+                    }
+                }
+
+        }
+        Mage::log($saleFlag, null, "PPP.log");
+
+
+
+
+        unset($website);
+        //Push to ban
+        foreach ($dataToUpdate as $website => $data) {
+            if (!isset($stores[$website]))
+                continue;
+
+            foreach ($stores[$website] as $store) {
+                $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIds, $store);
+                Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
+            }
+        }
 
     }
 
