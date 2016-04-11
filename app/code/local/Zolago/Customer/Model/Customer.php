@@ -25,7 +25,10 @@ class Zolago_Customer_Model_Customer extends Mage_Customer_Model_Customer
 		/** @var $mailer Mage_Core_Model_Email_Template_Mailer */
 		$mailer = Mage::getModel('core/email_template_mailer');
 		$emailInfo = Mage::getModel('core/email_info');
-		$emailInfo->addTo($this->getEmail(), $this->getName());
+		$name = $this->getName();
+		$email = $this->getEmail();
+		
+		$emailInfo->addTo($email,empty($name)? $email:$name);
 		$mailer->addEmailInfo($emailInfo);
 
 		// Set all required params and send emails
@@ -88,6 +91,15 @@ class Zolago_Customer_Model_Customer extends Mage_Customer_Model_Customer
 			return true;
 		}
 		return $errors;
+	}
+	
+    /**
+     * add trim to getName
+     */
+
+	
+	public function getName() {
+	    return trim(parent::getName());
 	}
 
 }
