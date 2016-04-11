@@ -366,13 +366,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
     }
 
+    public static $_vendorAutomaticStrikeoutPricePercent;
+
+
+
     /**
      * @param $storeId
      * @param $ids
      */
     public function updateSalePromoFlagForStore($storeId, $ids)
     {
-        $procent = 5;
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->setStore(1);
@@ -391,10 +394,21 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         foreach ($coll as $_product) {
 
+            if(isset(self::$_vendorAutomaticStrikeoutPricePercent[$_product->getUdropshipVendor()])){
+                $percent = self::$_vendorAutomaticStrikeoutPricePercent[$_product->getUdropshipVendor()];
+            } else {
+                $_vendor = Mage::getModel("udropship/vendor")->load($_product->getUdropshipVendor());
+
+                $percent = Mage::helper("zolagocatalog")->getAutomaticStrikeoutPricePercent($_vendor);
+                self::$_vendorAutomaticStrikeoutPricePercent[$_product->getUdropshipVendor()] =$percent;
+
+            }
+
+            Mage::log($percent, null, "111111.log");
             if (!empty($_product->getCampaignRegularId())) {
                 continue;
             }
-            if ($_product->getMsrp() - $_product->getPrice() >= ($_product->getPrice() * ($procent / 100))) {
+            if ($_product->getMsrp() - $_product->getPrice() >= ($_product->getPrice() * ($percent / 100))) {
                 if ($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
                     $setFlagSale[$storeId][] = $_product->getId();
                 }

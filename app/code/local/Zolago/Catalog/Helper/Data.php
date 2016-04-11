@@ -210,6 +210,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
 		if (empty($vPercent)) {
 			$percent = Mage::getStoreConfig('catalog/price/automatic_strikeout_price_percent');
 		}
+        Mage::log($percent, null, "qqq.log");
 		return (float)$percent;
 	}
 }
