@@ -6,6 +6,11 @@
         </Zolago_Catalog>
     </modules>
     <default>
+		<catalog>
+			<price>
+				<strikeout_price_percent>5</strikeout_price_percent>
+			</price>
+		</catalog>
         <zolagocatalog>
             <config>
                 <group>config</group>

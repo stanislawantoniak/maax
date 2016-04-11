@@ -1,6 +1,26 @@
 <?xml version="1.0"?>
 <config>
     <sections>
+		<catalog translate="label" module="catalog">
+			<groups>
+				<price translate="label">
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<strikeout_price_percent translate="label comment">
+							<label>Strikeout price percent</label>
+							<comment><![CDATA[When difference between effective price and msrp is >= % show strikeout price]]>.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</strikeout_price_percent>
+					</fields>
+				</price>
+			</groups>
+		</catalog>
         <zolagocatalog translate="label" module="zolagocatalog">
             <label>Converter update settings</label>
             <tab>service</tab>
