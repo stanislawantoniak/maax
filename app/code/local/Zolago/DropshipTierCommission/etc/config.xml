@@ -24,7 +24,15 @@
                 </rewrite>
             </udtiercom>
         </blocks>
-
+		<udropship>
+			<vendor>
+				<fields>
+					<terminal_percent_for_charge_sale_commission>
+						<hide_modules>Unirgy_DropshipTierCommission</hide_modules>
+					</terminal_percent_for_charge_sale_commission>
+				</fields>
+			</vendor>
+		</udropship>
     </global>    
     <adminhtml>
 		<translate>
@@ -37,4 +45,11 @@
 			</modules>
 		</translate>    
     </adminhtml>
+	<default>
+		<udropship>
+			<tiercom>
+				<terminal_percent_for_charge_sale_commission>5</terminal_percent_for_charge_sale_commission>
+			</tiercom>
+		</udropship>
+	</default>
 </config>
