@@ -52,6 +52,7 @@
         <checkout>
             <options>
                 <checkout_order_deactivate>0</checkout_order_deactivate>
+	            <checkout_wait_for_tags>500</checkout_wait_for_tags>
             </options>
         </checkout>
     </default>
