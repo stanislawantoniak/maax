@@ -142,5 +142,21 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         return is_null($cp);
     }
 
-
+	/**
+	 * Retrieve terminal percent
+	 *
+	 * Note: Prowizja dla wyprzedaży wyliczana dla produktów,
+	 * które mają cenę sprzedaży mniejszą o n-procent od ceny przekreślonej
+	 *
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @param $store
+	 * @return float
+	 */
+	public function getTerminalPercentForChargeSaleCommission(Zolago_Dropship_Model_Vendor $vendor, $store = null) {
+		$percent = $vPercent = $vendor->getTerminalPercentForChargeSaleCommission();
+		if (empty($vPercent)) {
+			$percent = Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_sale_commission', $store);
+		}
+		return (float)$percent;
+	}
 }
