@@ -201,4 +201,15 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
 
      }
 
+	/**
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @return float
+	 */
+	public function getAutomaticStrikeoutPricePercent(Zolago_Dropship_Model_Vendor $vendor) {
+		$percent = $vPercent = $vendor->getAutomaticStrikeoutPricePercent();
+		if (empty($vPercent)) {
+			$percent = Mage::getStoreConfig('catalog/price/automatic_strikeout_price_percent');
+		}
+		return (float)$percent;
+	}
 }

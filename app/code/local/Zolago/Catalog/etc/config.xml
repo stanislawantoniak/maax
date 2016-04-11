@@ -8,7 +8,7 @@
     <default>
 		<catalog>
 			<price>
-				<strikeout_price_percent>5</strikeout_price_percent>
+				<automatic_strikeout_price_percent>5</automatic_strikeout_price_percent>
 			</price>
 		</catalog>
         <zolagocatalog>
@@ -177,6 +177,19 @@
                 </observers>
             </adminhtml_store_edit_form_prepare_form>
         </events>
+		<udropship>
+			<vendor>
+				<fields>
+					<automatic_strikeout_price_percent>
+						<label>Automatic strikeout price by percent</label>
+						<note>When difference between effective price and msrp is >= % show strikeout price. Leave empty for use default</note>
+						<type>text</type>
+						<fieldset>vendor_info</fieldset>
+						<position>1</position>
+					</automatic_strikeout_price_percent>
+				</fields>
+			</vendor>
+		</udropship>
     </global>
     <frontend>
         <routers>
