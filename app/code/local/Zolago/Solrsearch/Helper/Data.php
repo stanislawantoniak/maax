@@ -659,7 +659,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return string
 	 */
 	public function getQueryText() {
-		return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText();
+		return addslashes(Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getQueryText());
 	}
 
 	/**
