@@ -206,7 +206,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return float
 	 */
 	public function getAutomaticStrikeoutPricePercent(Zolago_Dropship_Model_Vendor $vendor) {
-		$percent = $vPercent = $vendor->getAutomaticStrikeoutPricePercent();
+		$percent = $vPercent = $vendor->getTerminalPercentForChargeLowerCommission();
 		if (empty($vPercent)) {
 			$percent = Mage::getStoreConfig('catalog/price/automatic_strikeout_price_percent');
 		}
