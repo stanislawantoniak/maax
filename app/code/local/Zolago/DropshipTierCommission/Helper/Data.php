@@ -57,9 +57,10 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         }
 
         /// sale flag
+		/** @var Zolago_Catalog_Model_Resource_Product_Collection $saleProducts */
         $saleProducts = Mage::getResourceModel('zolagocatalog/product_collection');
         $saleProducts->addIdFilter($allIds);
-        $saleProducts->addProductFlagAttributeToSelect($po->getStore()->getId());
+        $saleProducts->addProductFlagAttributeToSelect(Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE, $po->getStore()->getId());
         $saleItems = array();
         foreach ($saleProducts as $product) {
             $id = $product->getData('entity_id');
@@ -152,10 +153,10 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 	 * @param $store
 	 * @return float
 	 */
-	public function getTerminalPercentForChargeSaleCommission(Zolago_Dropship_Model_Vendor $vendor, $store = null) {
-		$percent = $vPercent = $vendor->getTerminalPercentForChargeSaleCommission();
+	public function getTerminalPercentForChargeLowerCommission(Zolago_Dropship_Model_Vendor $vendor, $store = null) {
+		$percent = $vPercent = $vendor->getTerminalPercentForChargeLowerCommission();
 		if (empty($vPercent)) {
-			$percent = Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_sale_commission', $store);
+			$percent = Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_lower_commission', $store);
 		}
 		return (float)$percent;
 	}

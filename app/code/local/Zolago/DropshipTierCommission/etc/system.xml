@@ -5,23 +5,25 @@
             <groups>
                 <tiercom translate="label">
                     <fields>
+						<!-- For backward capability name of this field is not changed. @see re#1961 -->
+						<!-- should be lower_commission_percent -->
                         <sale_commission_percent>
-                            <label>Default SALE Commission Percent</label>
+                            <label>Default lower commission percent</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </sale_commission_percent>
-						<terminal_percent_for_charge_sale_commission translate="label comment">
-							<label>Terminal percent for charge sale commission</label>
+						<terminal_percent_for_charge_lower_commission translate="label comment">
+							<label>Terminal percent for charge lower commission</label>
 							<comment><![CDATA[Commission for the sale will be calculated for products which have a lower selling price of n-percent strikeout price]]></comment>
 							<frontend_type>text</frontend_type>
 							<sort_order>110</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
-						</terminal_percent_for_charge_sale_commission>
+						</terminal_percent_for_charge_lower_commission>
                     </fields>
                 </tiercom>
             </groups>

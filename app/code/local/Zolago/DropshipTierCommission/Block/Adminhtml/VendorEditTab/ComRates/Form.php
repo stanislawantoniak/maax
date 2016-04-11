@@ -42,15 +42,15 @@ class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form 
         // Added
         $fieldset->addField('sale_commission_percent', 'text', array(
             'name'      => 'sale_commission_percent',
-            'label'     => $hlp->__('Default Commission Percent for product with flag SALE'),
+            'label'     => $hlp->__('Default lower commission percent for products'),
             'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/sale_commission_percent'))
         ));
 
-		$fieldset->addField('terminal_percent_for_charge_sale_commission', 'text', array(
-			'name'      => 'terminal_percent_for_charge_sale_commission',
-			'label'     => $hlp->__('Terminal percent for charge sale commission'),
+		$fieldset->addField('terminal_percent_for_charge_lower_commission', 'text', array(
+			'name'      => 'terminal_percent_for_charge_lower_commission',
+			'label'     => $hlp->__('Terminal percent for charge lower commission'),
 			'after_element_html' => '<br />' . $hlp->__('Default value: %.2F. Commission for the sale will be calculated for products which have a lower selling price of n-percent strikeout price. Leave empty for default',
-					Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_sale_commission'))
+					Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_lower_commission'))
 		));
 
 		// Fieldset #2
