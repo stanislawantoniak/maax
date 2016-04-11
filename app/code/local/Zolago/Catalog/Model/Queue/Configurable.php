@@ -27,10 +27,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             return 0;
         }
         $this->_collection->setPageSize($limit);
-
-        //$this->_collection->setLockRecords();
         $this->_execute();
-        //$this->_collection->setDoneRecords();
 
         return count($this->_collection);
     }
@@ -85,8 +82,10 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //1. Set attributes price, msrp, options
         $productsIdsPullToSolrForWebsite = $zolagoCatalogProductConfigurableModel->updateConfigurableProductsValues($configurableProducts);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
-        //$zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
 
+
+        //2. set SALE/PROMO FLAG
+        $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
 
         //2. reindex products
         //to avoid long queries make number of queries
