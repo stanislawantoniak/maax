@@ -379,14 +379,15 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->setStore($storeId);
+
+        $coll->addAttributeToSelect("price", "left");                   //WEBSITE
+        $coll->addAttributeToSelect("msrp", "left");                    //WEBSITE
+        $coll->addAttributeToSelect("campaign_regular_id", "left");     //WEBSITE
+        $coll->addAttributeToSelect("udropship_vendor", "left");        //GLOBALNY
+        $coll->addAttributeToSelect("is_new", "left");                  //GLOBALNY
+
         $coll->addFieldToFilter('entity_id', array('in' => $ids));
-        //$coll->addAttributeToSelect("entity_id");
-        $coll->addAttributeToSelect("price", "left");
-        $coll->addAttributeToSelect("msrp", "left");
-        $coll->addAttributeToSelect("campaign_regular_id", "left");
-        $coll->addAttributeToSelect("udropship_vendor", "left");
-        $coll->addAttributeToSelect("is_new", "left");
-        $coll->addAttributeToSelect("status");
+
 
         $setFlagEmpty = array();
         $setFlagPromo = array();
