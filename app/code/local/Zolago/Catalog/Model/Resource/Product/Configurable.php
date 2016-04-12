@@ -397,9 +397,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         $data = $coll->getData();
 
-        if (empty($data)) {
+        if (empty($data))
             return;
-        }
+
         foreach ($data as $_product) {
 
             if (isset(self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]])) {
