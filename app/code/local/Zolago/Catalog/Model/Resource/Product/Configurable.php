@@ -404,7 +404,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
             }
 
-            Mage::log($percent, null, "111111.log");
             if (!empty($_product->getCampaignRegularId())) {
                 continue;
             }
