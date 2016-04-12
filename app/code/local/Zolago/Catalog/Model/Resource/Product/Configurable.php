@@ -405,9 +405,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             }
 
             if (!empty($_product->getCampaignRegularId())) {
+                // przypadek dotyczy tylko sytuacji gdy produkt nie jest w kampanii promo/sale
                 continue;
             }
-            if ($_product->getMsrp() - $_product->getPrice() >= ($_product->getPrice() * ($percent / 100))) {
+            if (
+                (float)$_product->getPrice() > 0
+                &&
+                (float) $_product->getMsrp()
+                &&
+                $_product->getMsrp() - $_product->getPrice() >= ($_product->getPrice() * ($percent / 100))
+            ) {
                 if ($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
                     $setFlagSale[$storeId][] = $_product->getId();
                 }
