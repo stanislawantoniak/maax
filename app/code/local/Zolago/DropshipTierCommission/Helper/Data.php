@@ -50,29 +50,33 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
         $locale = Mage::app()->getLocale();
         $allIds = array();
         foreach ($products as $item) {
+            /** @var Zolago_Po_Model_Po_Item $item */
             if ($this->canSetCommission($item)) {
                 $id = $item->getProductId();
                 $allIds[] = $id;
             }
         }
-
-        /// sale flag
-		/** @var Zolago_Catalog_Model_Resource_Product_Collection $saleProducts */
-        $saleProducts = Mage::getResourceModel('zolagocatalog/product_collection');
-        $saleProducts->addIdFilter($allIds);
-        $saleProducts->addProductFlagAttributeToSelect(Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE, $po->getStore()->getId());
-        $saleItems = array();
-        foreach ($saleProducts as $product) {
-            $id = $product->getData('entity_id');
-            $saleItems[$id] = $id;
-        }
+		
+		$terminalPercent = $this->getTerminalPercentForChargeLowerCommission($vendor);
+		$lowerCommissionItems = array();
         foreach ($products as $item) {
             if ($this->canSetCommission($item)) {
                 $id = $item->getProductId();
-                $product = Mage::getModel('catalog/product')->load($id);
+                $product = $item->getProduct();
                 $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
                     ->getParentIdsByChild($id);
                 $parentId = isset($parentIds[0]) ? $parentIds[0] : 0;
+
+				// Retrieve items for lower commission (previously sales item)
+				// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
+				// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
+				// attribute 'charge_lower_commission' is now for logic with lower commission 
+				if ($product->getChargeLowerCommission() >= $terminalPercent) {
+					$lowerCommissionItems[$id] = $id;
+					if (!empty($parentId)) {
+						$lowerCommissionItems[$parentId] = $parentId;
+					}
+				}
 
                 if (!empty($parentId)) {
                     //get from parent
@@ -89,7 +93,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                     }
                     unset($catPId);
                     // override if product is in sale
-                    if (!empty($saleItems[$parentId])) {
+                    if (!empty($lowerCommissionItems[$parentId])) {
                         $commission = !empty($defaultSaleVendorCommissionPercent) ? $defaultSaleVendorCommissionPercent : $defaultSaleCommissionPercent;
 
                         foreach ($categoriesP as $catPId) {
@@ -115,7 +119,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 
                     unset($catSId);
                     // override if product is in sale
-                    if (!empty($saleItems[$id])) {
+                    if (!empty($lowerCommissionItems[$id])) {
                         $commission = !empty($defaultSaleVendorCommissionPercent) ? $defaultSaleVendorCommissionPercent : $defaultSaleCommissionPercent;
 
                         foreach ($categoriesS as $catSId) {
