@@ -413,7 +413,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 &&
                 (float) $_product->getMsrp()
                 &&
-                $_product->getMsrp() - $_product->getPrice() >= ($_product->getPrice() * ($percent / 100))
+                (float)$_product->getMsrp() - (float)$_product->getPrice() >= ((float)$_product->getPrice() * (float)($percent / 100))
             ) {
                 if ($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
                     $setFlagSale[$storeId][] = $_product->getId();
