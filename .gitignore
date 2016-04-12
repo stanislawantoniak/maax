@@ -1,3 +1,4 @@
+robots.txt
 /var/*
 /media/*
 /app/etc/local.xml
