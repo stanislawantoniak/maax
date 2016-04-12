@@ -69,14 +69,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
 
-
+    /**
+     * @param $listUpdatedProducts
+     * @return array
+     */
     public function getConfigurableSimpleRelation($listUpdatedProducts)
     {
 
         if (empty($listUpdatedProducts))
             return array();
 
-        $listUpdatedProducts = implode(',', $listUpdatedProducts);
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
         $select
@@ -87,7 +89,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     'simple_product' => 'product_relation.child_id'
                 )
             )
-            ->where("product_relation.child_id IN({$listUpdatedProducts})");
+            ->where("product_relation.child_id IN(?)", $listUpdatedProducts);
 
         $result = $adapter->fetchAssoc($select);
 
