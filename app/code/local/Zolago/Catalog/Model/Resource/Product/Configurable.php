@@ -380,49 +380,55 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->setStore($storeId);
         $coll->addFieldToFilter('entity_id', array('in' => $ids));
-        $coll->addAttributeToSelect("price");
+        //$coll->addAttributeToSelect("entity_id");
+        $coll->addAttributeToSelect("price", "left");
         $coll->addAttributeToSelect("msrp", "left");
         $coll->addAttributeToSelect("campaign_regular_id", "left");
+        $coll->addAttributeToSelect("udropship_vendor", "left");
+        $coll->addAttributeToSelect("is_new", "left");
         $coll->addAttributeToSelect("status");
-
-
-        //$coll->addAttributeToFilter("campaign_regular_id", array("eq" => ""));
 
         $setFlagEmpty = array();
         $setFlagPromo = array();
         $setFlagSale = array();
 
-        foreach ($coll as $_product) {
+        $data = $coll->getData();
 
-            if(isset(self::$_vendorAutomaticStrikeoutPricePercent[$_product->getUdropshipVendor()])){
-                $percent = self::$_vendorAutomaticStrikeoutPricePercent[$_product->getUdropshipVendor()];
+        if (empty($data)) {
+            return;
+        }
+        foreach ($data as $_product) {
+
+            if (isset(self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]])) {
+                $percent = self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]];
             } else {
-                $_vendor = Mage::getModel("udropship/vendor")->load($_product->getUdropshipVendor());
+                $_vendor = Mage::getModel("udropship/vendor")->load($_product["udropship_vendor"]);
 
                 $percent = Mage::helper("zolagocatalog")->getAutomaticStrikeoutPricePercent($_vendor);
-                self::$_vendorAutomaticStrikeoutPricePercent[$_product->getUdropshipVendor()] =$percent;
+                self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]] = $percent;
 
             }
 
-            if (!empty($_product->getCampaignRegularId())) {
+            if (!empty($_product["campaign_regular_id"])) {
                 // przypadek dotyczy tylko sytuacji gdy produkt nie jest w kampanii promo/sale
                 continue;
             }
             if (
-                (float)$_product->getPrice() > 0
+                (float)$_product["price"] > 0
                 &&
-                (float) $_product->getMsrp()
+                (float)$_product["msrp"]
                 &&
-                (float)$_product->getMsrp() - (float)$_product->getPrice() >= ((float)$_product->getPrice() * (float)($percent / 100))
+                (float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["price"] * (float)($percent / 100))
             ) {
-                if ($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
-                    $setFlagSale[$storeId][] = $_product->getId();
+
+                if (empty((int)$_product["is_new"])) {
+                    $setFlagSale[$storeId][] = $_product["entity_id"];
+                } else {
+                    $setFlagPromo[$storeId][] = $_product["entity_id"];
                 }
-                if ($_product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_DISABLED) {
-                    $setFlagPromo[$storeId][] = $_product->getId();
-                }
+
             } else {
-                $setFlagEmpty[$storeId][] = $_product->getId();
+                $setFlagEmpty[$storeId][] = $_product["entity_id"];
             }
 
         }
@@ -431,8 +437,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
 
-        if(!empty($setFlagSale)){
-            foreach($setFlagSale as $storeId => $productIds){
+        if (!empty($setFlagSale)) {
+            foreach ($setFlagSale as $storeId => $productIds) {
                 $aM->updateAttributesPure($productIds,
                     array("product_flag" => Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE),
                     $storeId
@@ -441,8 +447,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         unset($storeId, $productIds);
-        if(!empty($setFlagPromo)){
-            foreach($setFlagPromo as $storeId => $productIds){
+        if (!empty($setFlagPromo)) {
+            foreach ($setFlagPromo as $storeId => $productIds) {
                 $aM->updateAttributesPure($productIds,
                     array("product_flag" => Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION),
                     $storeId
@@ -451,8 +457,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         unset($storeId, $productIds);
-        if(!empty($setFlagEmpty)){
-            foreach($setFlagEmpty as $storeId => $productIds){
+        if (!empty($setFlagEmpty)) {
+            foreach ($setFlagEmpty as $storeId => $productIds) {
                 $aM->updateAttributesPure($productIds,
                     array("product_flag" => null),
                     $storeId
