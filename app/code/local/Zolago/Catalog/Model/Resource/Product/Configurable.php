@@ -990,14 +990,14 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function updateConfigurableProductsValues($parentIds){
         $productsIdsPullToSolr = array();
-
+        Mage::log($parentIds, null, "qqq.log");
         //1. Filter valid campaign products
 
         //1.1. Get collection of configurable products NOT IN SALE or PROMOTION
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToSelect('skuv');
-        $collection->addAttributeToSelect('product_flag');
+        $collection->addAttributeToSelect('campaign_regular_id');
         $collection->addAttributeToSelect('price');
 
         $collection->addAttributeToSelect(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_MSRP_CODE);
@@ -1018,7 +1018,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         //Do not update campaign products
         foreach ($collection as $_product) {
-            if ($_product->getProductFlag())
+            if ((int)$_product->getCampaignRegularId() > 0)
                 unset($parentProductIds[$_product->getId()]);
         }
         $parentProductIds = array_values($parentProductIds);
