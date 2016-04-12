@@ -69,14 +69,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
 
-
+    /**
+     * @param $listUpdatedProducts
+     * @return array
+     */
     public function getConfigurableSimpleRelation($listUpdatedProducts)
     {
 
         if (empty($listUpdatedProducts))
             return array();
 
-        $listUpdatedProducts = implode(',', $listUpdatedProducts);
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
         $select
@@ -87,7 +89,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     'simple_product' => 'product_relation.child_id'
                 )
             )
-            ->where("product_relation.child_id IN({$listUpdatedProducts})");
+            ->where("product_relation.child_id IN(?)", $listUpdatedProducts);
 
         $result = $adapter->fetchAssoc($select);
 
@@ -363,6 +365,123 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             $insert = array_unique($insert);
             $this->_insertProductOptions($insert);
 
+        }
+    }
+
+    public static $_vendorAutomaticStrikeoutPricePercent;
+
+
+
+    /**
+     * @param $storeId
+     * @param $ids
+     */
+    public function updateSalePromoFlagForStore($storeId, $ids)
+    {
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->setStore($storeId);
+
+        $coll->addAttributeToSelect("price", "left");                   //WEBSITE
+        $coll->addAttributeToSelect("msrp", "left");                    //WEBSITE
+        $coll->addAttributeToSelect("campaign_regular_id", "left");     //WEBSITE
+        $coll->addAttributeToSelect("udropship_vendor", "left");        //GLOBALNY
+        $coll->addAttributeToSelect("is_new", "left");                  //GLOBALNY
+
+        $coll->addFieldToFilter('entity_id', array('in' => $ids));
+
+
+        $setFlagEmpty = array();
+        $setFlagPromo = array();
+        $setFlagSale = array();
+
+        $data = $coll->getData();
+
+        if (empty($data))
+            return;
+
+        foreach ($data as $_product) {
+
+            if (isset(self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]])) {
+                $percent = self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]];
+            } else {
+                $_vendor = Mage::getModel("udropship/vendor")->load($_product["udropship_vendor"]);
+
+                $percent = Mage::helper("zolagocatalog")->getAutomaticStrikeoutPricePercent($_vendor);
+                self::$_vendorAutomaticStrikeoutPricePercent[$_product["udropship_vendor"]] = $percent;
+
+            }
+
+            if (!empty($_product["campaign_regular_id"])) {
+                // przypadek dotyczy tylko sytuacji gdy produkt nie jest w kampanii promo/sale
+                continue;
+            }
+            if (
+                (float)$_product["price"] > 0
+                &&
+                (float)$_product["msrp"]
+                &&
+                (float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["price"] * (float)($percent / 100))
+            ) {
+                $isNew = (bool)$_product["is_new"];
+                if (!$isNew) {
+                    $setFlagSale[$storeId][] = $_product["entity_id"];
+                } else {
+                    $setFlagPromo[$storeId][] = $_product["entity_id"];
+                }
+
+            } else {
+                $setFlagEmpty[$storeId][] = $_product["entity_id"];
+            }
+
+        }
+
+
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+
+        if (!empty($setFlagSale)) {
+            foreach ($setFlagSale as $storeId => $productIds) {
+                $aM->updateAttributesPure($productIds,
+                    array("product_flag" => Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE),
+                    $storeId
+                );
+            }
+        }
+
+        unset($storeId, $productIds);
+        if (!empty($setFlagPromo)) {
+            foreach ($setFlagPromo as $storeId => $productIds) {
+                $aM->updateAttributesPure($productIds,
+                    array("product_flag" => Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION),
+                    $storeId
+                );
+            }
+        }
+
+        unset($storeId, $productIds);
+        if (!empty($setFlagEmpty)) {
+            foreach ($setFlagEmpty as $storeId => $productIds) {
+                $aM->updateAttributesPure($productIds,
+                    array("product_flag" => null),
+                    $storeId
+                );
+            }
+        }
+    }
+
+
+    public function updateSalePromoFlag($ids)
+    {
+        $websites = Mage::app()->getWebsites();
+        foreach ($websites as $website) {
+
+            $defaultStoreId = Mage::app()
+                ->getWebsite($website->getId())
+                ->getDefaultGroup()
+                ->getDefaultStoreId();
+
+            $this->updateSalePromoFlagForStore($defaultStoreId, $ids);
         }
     }
 
@@ -873,14 +992,14 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function updateConfigurableProductsValues($parentIds){
         $productsIdsPullToSolr = array();
-
+        Mage::log($parentIds, null, "qqq.log");
         //1. Filter valid campaign products
 
         //1.1. Get collection of configurable products NOT IN SALE or PROMOTION
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToSelect('skuv');
-        $collection->addAttributeToSelect('product_flag');
+        $collection->addAttributeToSelect('campaign_regular_id');
         $collection->addAttributeToSelect('price');
 
         $collection->addAttributeToSelect(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_MSRP_CODE);
@@ -901,7 +1020,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         //Do not update campaign products
         foreach ($collection as $_product) {
-            if ($_product->getProductFlag())
+            if ((int)$_product->getCampaignRegularId() > 0)
                 unset($parentProductIds[$_product->getId()]);
         }
         $parentProductIds = array_values($parentProductIds);

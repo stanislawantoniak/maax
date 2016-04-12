@@ -27,10 +27,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             return 0;
         }
         $this->_collection->setPageSize($limit);
-
-        //$this->_collection->setLockRecords();
         $this->_execute();
-        //$this->_collection->setDoneRecords();
 
         return count($this->_collection);
     }
@@ -88,7 +85,17 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
 
 
-        //2. reindex products
+        //2. set SALE/PROMO FLAG
+        $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
+		
+		// And set percent (diff between price and strikeout price)
+		// for charge lower commission (catalog product attribute 'charge_lower_commission')
+		// @see Zolago_DropshipTierCommission_Helper_Data::_processPoCommission()
+		/** @var Zolago_Catalog_Model_Resource_Product $productRes */
+		$productRes = Mage::getResourceModel('zolagocatalog/product');
+		$productRes->updateChargeLowerCommission($listProductsIds);
+
+        //3. reindex products
         //to avoid long queries make number of queries
         $numberQ = 100;
         if (count($productsIdsPullToSolr) > $numberQ) {
@@ -103,7 +110,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         }
 
-        //3. put products to solr queue
+        //4. put products to solr queue
         //catalog_converter_price_update_after
         Mage::dispatchEvent(
             "catalog_converter_price_update_after",
@@ -112,7 +119,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             )
         );
 
-        //4. Varnish & Turpentine
+        //5. Varnish & Turpentine
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->addFieldToFilter('entity_id', array('in' => $productsIdsPullToSolr));
