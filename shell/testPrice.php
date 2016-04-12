@@ -1,5 +1,5 @@
 <?php
-require_once 'shell/abstract.php';
+require_once 'abstract.php';
 
 class Modago_Test_Shell extends Mage_Shell_Abstract
 {
