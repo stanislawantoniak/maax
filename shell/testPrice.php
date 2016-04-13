@@ -5,13 +5,11 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 {
     public function run()
     {
-        $priceBatch = $this->generateBatch(0);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
-        $vi::updatePricesConverter($priceBatch);
-
-        $priceBatch = $this->generateBatch(1);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
-        $vi::updatePricesConverter($priceBatch);
+        for ($i = 0; $i < 5; $i++) {
+            $priceBatch = $this->generateBatch($i);
+            $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
+            $vi::updatePricesConverter($priceBatch);
+        }
 
         $timeStart = microtime(true);
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
@@ -33,7 +31,7 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 
         $collection->addAttributeToSelect("udropship_vendor");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-        $collection->addFieldToFilter('udropship_vendor', array('eq' => 25));
+        $collection->addFieldToFilter('udropship_vendor', array('eq' => 8)); //Levis 5474 simple products
 
         $select = $collection->getSelect();
         $select->limit(1000, $offset);
