@@ -5,20 +5,13 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 {
     public function run()
     {
-        for ($i = 0; $i < 5; $i++) {
+
+        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
+
+        for ($i = 0; $i <= 5; $i++) {
             $priceBatch = $this->generateBatch($i);
-            $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
             $vi::updatePricesConverter($priceBatch);
         }
-
-        $timeStart = microtime(true);
-        Zolago_Catalog_Model_Observer::processConfigurableQueue();
-        $timeEnd = microtime(true);
-
-        $timeExecution = $timeEnd - $timeStart;
-        Mage::log("Execution time (TOTAL): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
-
-        echo "Execution time (TOTAL): {$timeExecution} seconds";
 
     }
 
@@ -31,23 +24,24 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 
         $collection->addAttributeToSelect("udropship_vendor");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-        $collection->addFieldToFilter('udropship_vendor', array('eq' => 8)); //Levis 5474 simple products
+
+        //Jeansdom (Levis) 5474 simple products
+        $collection->addFieldToFilter('udropship_vendor', array('eq' => 8));
 
         $select = $collection->getSelect();
-        $select->limit(1000, $offset);
+        $select->limit(1000, 1000*$offset);
 
         $data = $collection->getData();
 
 
         foreach ($data as $_product) {
-            $priceA = rand(10, 50);
+            $priceA = rand(200, 300);
             $priceMSRP = $priceA + 0.2 * $priceA;
             $priceBatch[$_product["sku"]] = array(
                 "A" => $priceA,
                 "salePriceBefore" => $priceMSRP
             );
         }
-
         return $priceBatch;
     }
 
