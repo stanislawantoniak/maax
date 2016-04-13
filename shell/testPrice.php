@@ -5,28 +5,25 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 {
     public function run()
     {
-        $priceBatch = $this->generateBatch(0);
+
         $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
+
+        $priceBatch = $this->generateBatch(0);
         $vi::updatePricesConverter($priceBatch);
 
         $priceBatch = $this->generateBatch(1);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
         $priceBatch = $this->generateBatch(2);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
         $priceBatch = $this->generateBatch(3);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
         $priceBatch = $this->generateBatch(4);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
         $priceBatch = $this->generateBatch(5);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
         $timeStart = microtime(true);
@@ -54,7 +51,7 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
         $collection->addFieldToFilter('udropship_vendor', array('eq' => 8));
 
         $select = $collection->getSelect();
-        $select->limit(1000, $offset);
+        $select->limit(1000, 1000*$offset);
 
         $data = $collection->getData();
 
@@ -68,7 +65,7 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
             );
         }
 
-        Mage::log($priceBatch, null, "priceBatch_{$offset}.log");
+        Mage::log($priceBatch, null, "priceBatch___{$offset}.log");
         return $priceBatch;
     }
 
