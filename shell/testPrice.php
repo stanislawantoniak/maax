@@ -52,7 +52,7 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
             );
         }
 
-        Mage::log($priceBatch, null, "priceBatch___{$offset}.log");
+        Mage::log($priceBatch, null, "priceBatch_______{$offset}.log");
         return $priceBatch;
     }
 
