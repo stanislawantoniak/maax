@@ -459,6 +459,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $dataToUpdate = array();
 
         //1. Collect data before update
+        unset($parentIds);
         foreach ($recoverOptionsProducts as $websiteId => $parentIds) {
             if (empty($parentIds)) {
                 //Nothing to recover
