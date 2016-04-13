@@ -69,27 +69,27 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
 
 
 
-            "25-1BC11829938M" => array(
+            "8-LAK1PC" => array(
                 "A" => $a+5,
                 "B" => $b,
                 "salePriceBefore" => $c+5
             ),
-            "25-1BC11829936K" => array(
+            "8-LAK1PB" => array(
                 "A" => $a+5,
                 "B" => $b,
                 "salePriceBefore" => $c+5
             ),
-            "25-1BC11829940F" => array(
+            "28-LAK1PE" => array(
                 "A" => $a+5,
                 "B" => $b,
                 "salePriceBefore" => $c+5
             ),
-            "25-1BC11829942H" => array(
+            "8-LAK1PD" => array(
                 "A" => $a+2,
                 "B" => $b,
                 "salePriceBefore" => $c+2
             ),
-            "25-1BC11829944J" => array(
+            "8-LAK1PF" => array(
                 "A" => $a+5,
                 "B" => $b,
                 "salePriceBefore" => $c+5
