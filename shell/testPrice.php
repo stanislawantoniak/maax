@@ -35,7 +35,7 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 
 
         foreach ($data as $_product) {
-            $priceA = rand(10, 50);
+            $priceA = rand(200, 300);
             $priceMSRP = $priceA + 0.2 * $priceA;
             $priceBatch[$_product["sku"]] = array(
                 "A" => $priceA,
