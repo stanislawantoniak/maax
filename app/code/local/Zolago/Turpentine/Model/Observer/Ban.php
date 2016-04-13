@@ -81,7 +81,7 @@ class Zolago_Turpentine_Model_Observer_Ban extends Nexcessnet_Turpentine_Model_O
      * @param $productIds
      * @return Zolago_Catalog_Model_Resource_Product_Collection
      */
-    public static function collectProductsBeforeBan($productIds)
+    public static function collectProductsBeforeBan($productIds,$store = null)
     {
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
