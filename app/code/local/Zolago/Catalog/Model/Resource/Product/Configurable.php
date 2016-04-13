@@ -811,10 +811,10 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
             foreach ($parentProductIds as $parentProductId) {
                 if (!in_array($parentProductId, $productsInCampaign)) {
-                    $recoverOptionsProducts[$website->getId()] = $parentProductIds;
+                    $recoverOptionsProducts[$website->getId()] = $parentProductId;
                 }
                 if (!in_array($parentProductId, $productsMSRPManual)) {
-                    $recoverOptionsProducts[$website->getId()] = $parentProductIds;
+                    $recoverOptionsProducts[$website->getId()] = $parentProductId;
                     $recoverMSRP[$website->getId()] = $parentProductIds;
                 }
             }
