@@ -449,7 +449,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         /* @var $configResourceModel   Zolago_Catalog_Model_Resource_Product_Configurable */
         $configResourceModel = Mage::getResourceModel('zolagocatalog/product_configurable');
         foreach ($recoverOptionsProducts as $websiteId => $parentIdsPerWebsite) {
-            $parentIds = array_merge($parentIdsPerWebsite,$parentIds);
+            $parentIds = array_merge($parentIds,$parentIdsPerWebsite);
         }
         $superAttributes = $configResourceModel->getSuperAttributes($parentIds);
 
@@ -459,6 +459,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $dataToUpdate = array();
 
         //1. Collect data before update
+        unset($parentIds);
         foreach ($recoverOptionsProducts as $websiteId => $parentIds) {
             if (empty($parentIds)) {
                 //Nothing to recover
