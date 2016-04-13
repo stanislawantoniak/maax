@@ -11,11 +11,6 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
             $vi::updatePricesConverter($priceBatch);
         }
 
-
-        $priceBatch = $this->generateBatch(1);
-        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
-        $vi::updatePricesConverter($priceBatch);
-
         $timeStart = microtime(true);
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
         $timeEnd = microtime(true);
