@@ -58,13 +58,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         unset($productId);
         unset($queueId);
 
-
-        $storeId = array();
-        $allStores = Mage::app()->getStores();
-        foreach ($allStores as $_eachStoreId => $val) {
-            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-            $storeId[] = $_storeId;
-        }
         /* @var $zolagoCatalogProductConfigurableModel Zolago_Catalog_Model_Resource_Product_Configurable */
         $zolagoCatalogProductConfigurableModel = Mage::getResourceModel('zolagocatalog/product_configurable');
 
@@ -79,23 +72,43 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         $productsIdsPullToSolr = array();
 
+        Mage::log("-------------------------------", null, "processConfigurableQueue.log") ;
+        $timeStart = microtime(true);
         //1. Set attributes price, msrp, options
         $productsIdsPullToSolrForWebsite = $zolagoCatalogProductConfigurableModel->updateConfigurableProductsValues($configurableProducts);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
+        $timeEnd = microtime(true);
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (updateConfigurableProductsValues): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+
         $zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
 
 
         //2. set SALE/PROMO FLAG
+        $timeStart = microtime(true);
         $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
+        $timeEnd = microtime(true);
+
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (updateSalePromoFlag): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+
 		
 		// And set percent (diff between price and strikeout price)
 		// for charge lower commission (catalog product attribute 'charge_lower_commission')
 		// @see Zolago_DropshipTierCommission_Helper_Data::_processPoCommission()
 		/** @var Zolago_Catalog_Model_Resource_Product $productRes */
 		$productRes = Mage::getResourceModel('zolagocatalog/product');
-		$productRes->updateChargeLowerCommission($listProductsIds);
+
+        $timeStart = microtime(true);
+        $productRes->updateChargeLowerCommission($listProductsIds);
+        $timeEnd = microtime(true);
+
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (updateChargeLowerCommission): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
 
         //3. reindex products
+
+        $timeStart = microtime(true);
         //to avoid long queries make number of queries
         $numberQ = 100;
         if (count($productsIdsPullToSolr) > $numberQ) {
@@ -110,16 +123,27 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         }
 
+        $timeEnd = microtime(true);
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (REINDEX): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+
+
         //4. put products to solr queue
         //catalog_converter_price_update_after
+        $timeStart = microtime(true);
         Mage::dispatchEvent(
             "catalog_converter_price_update_after",
             array(
                 "product_ids" => $productsIdsPullToSolr
             )
         );
+        $timeEnd = microtime(true);
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (PUSH TO SOLR): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+
 
         //5. Varnish & Turpentine
+        $timeStart = microtime(true);
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->addFieldToFilter('entity_id', array('in' => $productsIdsPullToSolr));
@@ -132,6 +156,11 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             "catalog_converter_queue_configurable_complete",
             array("products" => $coll)
         );
+
+        $timeEnd = microtime(true);
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (Varnish & Turpentine): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+
     }
 
 

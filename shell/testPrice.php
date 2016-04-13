@@ -5,102 +5,52 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 {
     public function run()
     {
-        $a = 105;
-        $b = 140;
-        $c = 150;
-
-        $priceBatch = array(
-            "10-04B216A-5-010" => array(
-                "A" => $a,
-                "B" => $b,
-                "salePriceBefore" => $c
-            ),
-            "10-04B216A-5-011" => array(
-                "A" => $a,
-                "B" => $b,
-                "salePriceBefore" => $c
-            ),
-            "10-04B216A-5-012" => array(
-                "A" => $a,
-                "B" => $b,
-                "salePriceBefore" => $c
-            ),
-            "10-04B216A-5-013" => array(
-                "A" => $a,
-                "B" => $b,
-                "salePriceBefore" => $c
-            ),
-
-
-
-            "10-04B279-5-011" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "10-04B279-5-016" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "10-04B279-5-014" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "10-04B279-5-015" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "10-04B279-5-012" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "10-04B279-5-013" => array(
-                "A" => $a+2,
-                "B" => $b,
-                "salePriceBefore" => $c+2
-            ),
-
-
-
-
-
-
-            "25-1BC11829938M" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "25-1BC11829936K" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "25-1BC11829940F" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            ),
-            "25-1BC11829942H" => array(
-                "A" => $a+2,
-                "B" => $b,
-                "salePriceBefore" => $c+2
-            ),
-            "25-1BC11829944J" => array(
-                "A" => $a+5,
-                "B" => $b,
-                "salePriceBefore" => $c+5
-            )
-        );
-
+        $priceBatch = $this->generateBatch(0);
         $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
+        $priceBatch = $this->generateBatch(1);
+        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
+        $vi::updatePricesConverter($priceBatch);
 
+        $timeStart = microtime(true);
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
+        $timeEnd = microtime(true);
+
+        $timeExecution = $timeEnd - $timeStart;
+        Mage::log("Execution time (TOTAL): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+
+        echo "Execution time (TOTAL): {$timeExecution} seconds";
+
+    }
+
+
+    public function generateBatch($offset)
+    {
+        $priceBatch = array();
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+        $collection->setStore(1);
+
+        $collection->addAttributeToSelect("udropship_vendor");
+        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+        $collection->addFieldToFilter('udropship_vendor', array('eq' => 25));
+
+        $select = $collection->getSelect();
+        $select->limit(1000, $offset);
+
+        $data = $collection->getData();
+
+
+        foreach ($data as $_product) {
+            $priceA = rand(10, 50);
+            $priceMSRP = $priceA + 0.2 * $priceA;
+            $priceBatch[$_product["sku"]] = array(
+                "A" => $priceA,
+                "salePriceBefore" => $priceMSRP
+            );
+        }
+
+        return $priceBatch;
     }
 
 }
