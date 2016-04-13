@@ -807,16 +807,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 ->getDefaultStore();
 
             $productsInCampaign = $this->productsInCampaign($defaultStore, $parentProductIds);
-            //$productsMSRPManual = $this->productsMSRPManual($defaultStore, $parentProductIds);
+            $productsMSRPManual = $this->productsMSRPManual($defaultStore, $parentProductIds);
 
             foreach ($parentProductIds as $parentProductId) {
                 if (!in_array($parentProductId, $productsInCampaign)) {
                     $recoverOptionsProducts[$website->getId()] = $parentProductIds;
                 }
-                //if (!in_array($parentProductId, $productsMSRPManual)) {
+                if (!in_array($parentProductId, $productsMSRPManual)) {
                     $recoverOptionsProducts[$website->getId()] = $parentProductIds;
                     $recoverMSRP[$website->getId()] = $parentProductIds;
-                //}
+                }
             }
         }
 
