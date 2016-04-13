@@ -10,22 +10,27 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
         $c = 180;
 
         $priceBatch = array(
-            "10-04B216A-5-010" => array(
+            "8-MMM2FA" => array(
                 "A" => $a-1,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-04B216A-5-011" => array(
+            "8-MMM2FC" => array(
                 "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-04B216A-5-012" => array(
+            "8-MMM2FB" => array(
                 "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-04B216A-5-013" => array(
+            "8-MMM2F9" => array(
+                "A" => $a,
+                "B" => $b,
+                "salePriceBefore" => $c
+            ),
+            "8-MMM147" => array(
                 "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
