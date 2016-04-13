@@ -13,14 +13,14 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
             $vi::updatePricesConverter($priceBatch);
         }
 
-        $timeStart = microtime(true);
-        Zolago_Catalog_Model_Observer::processConfigurableQueue();
-        $timeEnd = microtime(true);
-
-        $timeExecution = $timeEnd - $timeStart;
-        Mage::log("Execution time (TOTAL): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
-
-        echo "Execution time (TOTAL): {$timeExecution} seconds";
+//        $timeStart = microtime(true);
+//        Zolago_Catalog_Model_Observer::processConfigurableQueue();
+//        $timeEnd = microtime(true);
+//
+//        $timeExecution = $timeEnd - $timeStart;
+//        Mage::log("Execution time (TOTAL): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
+//
+//        echo "Execution time (TOTAL): {$timeExecution} seconds";
 
     }
 
