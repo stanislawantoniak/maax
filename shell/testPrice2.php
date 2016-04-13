@@ -5,7 +5,7 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
 {
     public function run()
     {
-        $a = 118.60;
+        $a = 118.90;
         $b = 140;
         $c = 180;
 
