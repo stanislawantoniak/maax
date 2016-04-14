@@ -600,6 +600,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         //2. Update
         unset($websiteId, $defaultStoreId);
         $options = array();
+
+        $ids = array();
         if (!empty($dataToUpdate)) {
             /* @var $aM Zolago_Catalog_Model_Product_Action */
             $aM = Mage::getSingleton('catalog/product_action');
@@ -612,8 +614,19 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
                 foreach ($data as $value => $productIds) {
                     $aM->updateAttributesPure($productIds, array("msrp" => (string)$value), $defaultStoreId);
+                    $ids = array_merge($ids, $productIds);
                 }
             }
+
+            //set null to attribute for default store id (required for good quote calculation)
+            $aM->updateAttributesPure(
+                $ids,
+                array(
+                    'product_flag' => null,
+                    'msrp' => null
+                ),
+                Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID
+            );
         }
     }
 
