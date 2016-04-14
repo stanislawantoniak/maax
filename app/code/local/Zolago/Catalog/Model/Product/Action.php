@@ -75,11 +75,4 @@ class Zolago_Catalog_Model_Product_Action extends Mage_Catalog_Model_Product_Act
         return $this;
     }
 
-    public function reindexAfterMassAttributeChange(){
-        // register mass action indexer event
-        Mage::getSingleton('index/indexer')->processEntityAction(
-            $this, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
-        );
-    }
-
 }
