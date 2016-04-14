@@ -138,7 +138,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         }
         elseif (empty($campaignRegularId) && $productFlag) {
             Mage::log("CONDITION : 3", null, "11.log");
-            Mage::log("CONDITION : 3 MSRP ".$msrp, null, "11.log");
+            Mage::log("CONDITION : 3 MSRP ".(float)$product->getData('msrp'), null, "11.log");
             Mage::log("CONDITION : 3 PRICE ".$price, null, "11.log");
             $returnPrice = $msrp > $price ? $msrp : $finalPrice;
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
