@@ -162,6 +162,6 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 		if (empty($vPercent)) {
 			$percent = Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_lower_commission', $store);
 		}
-		return (float)$percent;
+		return (float)str_replace(",", ".", $percent);
 	}
 }
