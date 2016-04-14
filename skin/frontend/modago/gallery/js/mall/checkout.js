@@ -309,7 +309,13 @@
 						);
 					} :
 					function() {
-						document.location = Mall.Checkout.redirect;
+						if(typeof Mall.Checkout.waitForExternalGTMTags != 'undefined' && Mall.Checkout.waitForExternalGTMTags) {
+							setTimeout(function() {
+								document.location = Mall.Checkout.redirect;
+							},Mall.Checkout.waitForExternalGTMTags);
+						} else {
+							document.location = Mall.Checkout.redirect;
+						}
 					};
 
 			if (dl && redirect && typeof dataLayer != "undefined") {

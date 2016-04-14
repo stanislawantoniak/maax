@@ -106,6 +106,10 @@
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
+				<name>js/dhl.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
 				<name>js/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js</name>
 			</action>
 			<action method="addItem">

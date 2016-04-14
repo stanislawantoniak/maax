@@ -1,3 +1,4 @@
+robots.txt
 /var/*
 /media/*
 /app/etc/local.xml
@@ -102,3 +103,4 @@ skin/frontend/modago/puma/images/sprites/radio-*
 sonar-project.properties
 magmi/conf/
 lib/mPDF/ttfontdata
+rest.php

@@ -51,8 +51,14 @@ class Zolago_Campaign_Helper_SalesRule extends Mage_Core_Helper_Abstract
 
             $allAvailableInCategories = $this->getAllAvailableInCategories();
 
+			$origStore = Mage::app()->getStore();
             /** @var Mage_Core_Model_Website $website */
             foreach (Mage::app()->getWebsites() as $website) {
+				$store = Mage::app()
+					->getWebsite($website)
+					->getDefaultGroup()
+					->getDefaultStore();
+				Mage::app()->setCurrentStore($store);
 
                 // Campaign is assigned for website
                 /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
@@ -89,6 +95,7 @@ class Zolago_Campaign_Helper_SalesRule extends Mage_Core_Helper_Abstract
                 }
                 $this->_productsCollection[$website->getId()] = $data;
             }
+			Mage::app()->setCurrentStore($origStore);
         }
         return $this->_productsCollection;
     }

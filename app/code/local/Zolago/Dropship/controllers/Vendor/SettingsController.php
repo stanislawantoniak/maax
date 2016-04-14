@@ -33,6 +33,37 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
         $this->_renderPage(null, "vendorsettings_shipping");
     }
 
+    /**
+     * ajax dhl check
+     */
+
+    public function check_dhlAction()
+    {
+        try {
+            $vendor = Mage::getSingleton('udropship/session')->getVendor();
+            $settings = Mage::helper('udpo')->getDhlSettings($vendor,null);
+            $mess = Mage::helper('orbashipping/carrier_dhl')->checkDhlSettings($settings);
+        } catch (Exception $xt) {
+            $mess = array(
+                        'color' => 'red',
+                        'value' => $xt->getMessage(),
+                    );
+        }
+        echo json_encode($mess);
+    }
+    public function check_rma_dhlAction() {
+        try {
+            $vendorId = Mage::getSingleton('udropship/session')->getVendor()->getId();
+            $settings = Mage::helper('orbashipping/carrier_dhl')->getDhlRmaSettings($vendorId);
+            $mess = Mage::helper('orbashipping/carrier_dhl')->checkDhlSettings($settings);
+        } catch (Exception $xt) {
+            $mess = array(
+                        'color' => 'red',
+                        'value' => $xt->getMessage(),
+                    );
+        }
+        echo json_encode($mess);
+    }
     public function rmaAction()
     {
         if (Mage::helper('udropship')->isUdpoActive()) {
@@ -58,7 +89,7 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
         $param = $request->getPost();
 
         if ($request->isPost()) {
-	        $errorData = array();
+            $errorData = array();
             try {
                 /** @var Zolago_Dropship_Model_Vendor $vendor */
                 $vendor = $session->getVendor();
@@ -88,23 +119,23 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                             'administrator_telephone_mobile'
                         ) as $key) {
                         if (array_key_exists($key, $param) && $vendor->getData($key) != $param[$key]) {
-							$errorData[$key] = $param[$key];
+                            $errorData[$key] = $param[$key];
                             $vendor->setData($key, $param[$key]);
                         }
                     }
 
                     Mage::dispatchEvent('udropship_vendor_preferences_save_before',
-                        array('vendor' => $vendor, 'post_data' => &$param)
-                    );
+                                        array('vendor' => $vendor, 'post_data' => &$param)
+                                       );
                     $vendor->save();
 
                 }
 
                 $session->addSuccess(Mage::helper('udropship')->__('Settings has been saved'));
             } catch (Exception $e) {
-	            if(count($errorData)) {
-		            $session->setData('vendorSettings', $errorData);
-	            }
+                if(count($errorData)) {
+                    $session->setData('vendorSettings', $errorData);
+                }
                 $session->addError($e->getMessage());
             }
         }
@@ -138,8 +169,8 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
 
                 Mage::dispatchEvent('udropship_vendor_preferences_save_before',
-                    array('vendor' => $v, 'post_data' => &$p)
-                );
+                                    array('vendor' => $v, 'post_data' => &$p)
+                                   );
                 $v->save();
 
 
@@ -190,8 +221,8 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
                 }
 
                 Mage::dispatchEvent('udropship_vendor_preferences_save_before',
-                    array('vendor' => $v, 'post_data' => &$p)
-                );
+                                    array('vendor' => $v, 'post_data' => &$p)
+                                   );
                 $v->save();
 
 

@@ -426,6 +426,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
         //2. Update
+
         $options = array();
         if (!empty($dataToUpdate)) {
             /* @var $aM Zolago_Catalog_Model_Product_Action */
@@ -441,6 +442,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 foreach ($price as $value => $productIds) {
                     foreach ($stores[$website] as $store) {
                         $aM->updateAttributesPure($productIds, array("price" => (string)$value), $store);
+
+                        $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productIds, $store);
+                        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
                     }
                 }
             }

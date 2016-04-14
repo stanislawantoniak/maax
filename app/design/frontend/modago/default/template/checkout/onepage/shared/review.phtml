@@ -8,7 +8,9 @@ $modagoHelper = Mage::helper('zolagomodago');
 
 $_totalDiscount = $this->getTotalDiscount();
 $_coupon = $this->getCoupon();
-$checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
+$checkoutOrderDeactivate = $this->isCheckOutBlocked();
+$waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
+?>
 <div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
 	<?php $_items = $this->getItems(); ?>
@@ -252,3 +254,8 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked(); ?>
 	<div id="checkout-review-info-cod"><?php echo $this->getCheckoutReviewInfoCod(); ?></div>
 	<div id="checkout-review-info"><?php echo $this->getCheckoutReviewInfo(); ?></div>
 </div>
+<script>
+	jQuery(document).ready(function() {
+		Mall.Checkout.waitForExternalGTMTags = <?php echo $waitForExternalGTMTags; ?>;
+	});
+</script>

@@ -30,6 +30,11 @@
             <ghfeedexport>
                 <class>GH_FeedExport_Helper</class>
             </ghfeedexport>
+            <feedexport>
+                <rewrite>
+                    <eval>GH_FeedExport_Helper_Eval</eval>
+                </rewrite>
+            </feedexport>
         </helpers>
     </global>
 </config>
