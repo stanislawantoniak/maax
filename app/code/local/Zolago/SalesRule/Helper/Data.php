@@ -372,6 +372,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          if (empty($ids)) {
              return false;
          }
+		 /** @var Zolago_Customer_Model_Customer $customer */
          $customer = Mage::getModel('customer/customer')->load($customer_id);
          $store = $customer->getStore();
          $oldStore = Mage::app()->getStore();
@@ -415,11 +416,12 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	         }
 
           }
+		 /** @var Zolago_Common_Helper_Data $helper */
          $helper = Mage::helper('zolagocommon');
          $sender = Mage::getStoreConfig('promo/promotions_mail_settings/mail_identity');
          $helper->sendEmailTemplate(
              $customer->getEmail(),             
-             $customer->getEmail(),
+             empty($customer->getName()) ? $customer->getEmail() : $customer->getName(),
              $template,
              $data,
              $store->getId(),
