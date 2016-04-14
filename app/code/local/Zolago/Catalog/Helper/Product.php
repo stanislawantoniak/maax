@@ -112,7 +112,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         $productFlag = (int)$product->getData('product_flag');
         Mage::log("product_id: ". $product->getId(), null, "11.log");
         Mage::log("FLAG: ".$productFlag, null, "11.log");
-        Mage::log($product->getData('msrp'), null, "11.log");
+
         //Strike out price can appear only when product has promo or sale flag
         //which means when a product is included in campaign.
         if (empty($campaignRegularId) && !$productFlag)
@@ -124,7 +124,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         $specialPrice = (float)$product->getSpecialPrice();
         $finalPrice = (float)$product->getFinalPrice($qty);
         $msrp = (float)$product->getData('msrp');
-
+        Mage::log("MSRP: " . $msrp, null, "11.log");
 
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
         //When MSRP price is chosen - then MSRP field is displayed as striked out (if it is bigger than special price)
