@@ -40,7 +40,7 @@
                 <product_attributes>
                     <campaign_regular_id/>
                     <campaign_strikeout_price_type/>
-                    <msrp/>
+                    <product_flag/>
                 </product_attributes>
             </item>
         </quote>

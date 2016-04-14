@@ -109,8 +109,10 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
     public function getStrikeoutPrice($product, $qty=null) {
 
         $campaignRegularId = (int)$product->getData('campaign_regular_id');
-        $productFlag = (int)$product->getProductFlag();
-
+        $productFlag = (int)$product->getData('product_flag');
+        Mage::log("product_id: ". $product->getId(), null, "11.log");
+        Mage::log("FLAG: ".$productFlag, null, "11.log");
+        Mage::log($product->getData("msrp"), null, "11.log");
         //Strike out price can appear only when product has promo or sale flag
         //which means when a product is included in campaign.
         if (empty($campaignRegularId) && !$productFlag)
@@ -123,19 +125,26 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         $finalPrice = (float)$product->getFinalPrice($qty);
         $msrp = (float)$product->getData('msrp');
 
+
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
         //When MSRP price is chosen - then MSRP field is displayed as striked out (if it is bigger than special price)
         if ($campaignRegularId && Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_PREVIOUS_PRICE == $strikeoutType) {
+            Mage::log("CONDITION : 1", null, "11.log");
             return $price > $specialPrice ? $price : $finalPrice;
         } elseif ($campaignRegularId && Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
+            Mage::log("CONDITION : 2", null, "11.log");
             $returnPrice = $msrp > $specialPrice ? $msrp : $finalPrice;
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         }
         elseif (empty($campaignRegularId) && $productFlag) {
+            Mage::log("CONDITION : 3", null, "11.log");
+            Mage::log("CONDITION : 3 MSRP ".(float)$product->getData('msrp'), null, "11.log");
+            Mage::log("CONDITION : 3 PRICE ".$price, null, "11.log");
             $returnPrice = $msrp > $price ? $msrp : $finalPrice;
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         }
         else {
+            Mage::log("CONDITION : 4", null, "11.log");
             return $finalPrice;
         }
     }
