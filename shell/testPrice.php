@@ -42,8 +42,6 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
                 "salePriceBefore" => $priceMSRP
             );
         }
-
-        Mage::log($priceBatch, null, "priceBatch_______{$offset}.log");
         return $priceBatch;
     }
 

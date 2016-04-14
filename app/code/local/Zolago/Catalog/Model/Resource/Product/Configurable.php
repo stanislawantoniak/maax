@@ -826,23 +826,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             //recover options
             /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
             $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-
-            $timeStart = microtime(true);
             $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
-
-            $timeEnd = microtime(true);
-            $timeExecution = $timeEnd - $timeStart;
-            Mage::log("Execution time (updateConfigurableProductsValues - set PRICE): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
-
-
-            $ts = microtime(true);
             $configurableRModel->recoverProductMSRPBasedOnSimples($recoverMSRP);
-
-            $te = microtime(true);
-            $te = $te - $ts;
-            Mage::log("Execution time (updateConfigurableProductsValues - set MSRP): {$te} seconds", null, "processConfigurableQueue.log") ;
-
-
         }
 
         return $productsIdsPullToSolr;
