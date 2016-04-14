@@ -487,7 +487,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 		foreach ($data as $product) {
 			$msrp  = ((float)$product['msrp']);
 			$price = ((float)$product['price']);
-			$diff = round(($msrp - $price) / $msrp, 4) * 100;
+			$diff = round(($msrp - $price) / $price, 4) * 100;
 			$percentDiff[(string)$diff][] = $product['entity_id'];
 		}
 		

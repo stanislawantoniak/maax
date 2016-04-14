@@ -59,29 +59,44 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 		
 		$terminalPercent = $this->getTerminalPercentForChargeLowerCommission($vendor);
 		$lowerCommissionItems = array();
-        foreach ($products as $item) {
-            if ($this->canSetCommission($item)) {
-                $id = $item->getProductId();
-                $product = $item->getProduct();
-                $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
-                    ->getParentIdsByChild($id);
-                $parentId = isset($parentIds[0]) ? $parentIds[0] : 0;
+		$parentIds = array();
+		foreach ($products as $item) {
+			/** @var Zolago_Po_Model_Po_Item $item */
+			if ($this->canSetCommission($item)) {
+				$id = $item->getProductId();
+				/** @var Zolago_Catalog_Model_Product $product */
+				// Load product for specific store for correct attribute (charge_lower_commission) value
+				// for some reason getAttributeRawValue don't work, if you know why/how tell me
+				$product = Mage::getModel('catalog/product')->setStoreId($po->getStore()->getId())->load($id);
+				$parentIds[$id] = Mage::getResourceSingleton('catalog/product_type_configurable')->getParentIdsByChild($id);
+				$parentId = isset($parentIds[$id][0]) ? $parentIds[$id][0] : 0;
 
 				// Retrieve items for lower commission (previously sales item)
 				// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
 				// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
 				// attribute 'charge_lower_commission' is now for logic with lower commission 
-				if ($product->getChargeLowerCommission() >= $terminalPercent) {
+				$chargeLowerCommission = $product->getChargeLowerCommission();
+				if ($chargeLowerCommission >= $terminalPercent) {
+					// Remember for this product
 					$lowerCommissionItems[$id] = $id;
 					if (!empty($parentId)) {
+						// Force for parent
 						$lowerCommissionItems[$parentId] = $parentId;
 					}
 				}
+			}
+		}
+
+		/** @var Zolago_Catalog_Model_Resource_Product $res */
+		$res = Mage::getResourceModel('catalog/product');
+        foreach ($products as $item) {
+            if ($this->canSetCommission($item)) {
+                $id = $item->getProductId();
+                $parentId = isset($parentIds[$id][0]) ? $parentIds[$id][0] : 0;
 
                 if (!empty($parentId)) {
                     //get from parent
-                    $productP = Mage::getModel('catalog/product')->load($parentId);
-                    $categoriesP = $productP->getCategoryIds();
+                    $categoriesP = $res->getCategoryIds(Mage::getModel('catalog/product')->setId($parentId));
                     $commission = !empty($defaultVendorCommissionPercent) ? $defaultVendorCommissionPercent : $defaultCommissionPercent;
 
                     foreach ($categoriesP as $catPId) {
@@ -105,7 +120,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
                         }
                     }
                 } else {
-                    $categoriesS = $product->getCategoryIds();
+                    $categoriesS = $res->getCategoryIds(Mage::getModel('catalog/product')->setId($id));
 
                     $commission = !empty($defaultVendorCommissionPercent) ? $defaultVendorCommissionPercent : $defaultCommissionPercent;
 
