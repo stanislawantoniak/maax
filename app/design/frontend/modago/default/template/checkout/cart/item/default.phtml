@@ -137,7 +137,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                     <div class="cena"><?php
                         Mage::log("PR_ID: ". $_item->getProduct()->getId(), null, "11.log");
                         Mage::log("STRIKEOUT: ". $_item->getProduct()->getStrikeoutPrice(), null, "11.log");
-                        Mage::log("MSRP price: ". $_item->getProduct()->getMsrp(), null, "11.log");
+                        Mage::log("MSRP price: ". $_item->getProduct()->getData('msrp'), null, "11.log");
 
                         if($_item->getProduct()->getStrikeoutPrice() != $_item->getProduct()->getFinalPrice()) : ?><span class="stara_cena" style="padding-top: 5px;"><?php echo Mage::helper('core')->currency($_item->getProduct()->getStrikeoutPrice(), true, false); ?></span><?php endif; ?>
                         <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
