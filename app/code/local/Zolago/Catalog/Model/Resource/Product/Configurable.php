@@ -373,17 +373,42 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     }
 
 
+    /**
+     *
+     *
+     * jako sprzedawca chcę żeby cena, cena przekreślona i flaga była ustawiana automatycznie
+     * 1. przypadek dotyczy tylko sytuacji gdy produkt nie jest w kampanii promo/sale
+     * 2. jeśli ustawiona cena jest mniejsza co najmniej o procent z konfiguracji (np. 10%) to ustawiamy cena przekreślona = cena srp z produktu, flaga = wyprzedaż
+     * 3. w zasadzie to powinno ustawić poprawnie cenę przekreśloną i flagę
+     *
+     * @param $ids
+     * @throws Mage_Core_Exception
+     */
     public function updateSalePromoFlag($ids)
     {
         $websites = Mage::app()->getWebsites();
         foreach ($websites as $website) {
 
-            $defaultStoreId = Mage::app()
+            $updateIds = array();
+            $defaultStore = Mage::app()
                 ->getWebsite($website->getId())
                 ->getDefaultGroup()
-                ->getDefaultStoreId();
+                ->getDefaultStore();
 
-            $this->updateSalePromoFlagForStore($defaultStoreId, $ids);
+            $defaultStoreId = $defaultStore->getId();
+
+            $productsInCampaign = $this->productsInCampaign($defaultStore, $ids);
+
+            foreach ($ids as $parentProductId) {
+                if (!in_array($parentProductId, $productsInCampaign)) {
+                    $updateIds[] = $parentProductId;
+                }
+            }
+            if (empty($updateIds))
+                continue;
+
+            //Set product_flag SALE/PROMO for products not in campaign ONLY!!!
+            $this->updateSalePromoFlagForStore($defaultStoreId, $updateIds);
         }
     }
 
@@ -780,12 +805,13 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      * @param $parentIds
      * @return array
      */
-    public function updateConfigurableProductsValues($parentIds){
+    public function updateConfigurableProductsValues($parentIds)
+    {
         $productsIdsPullToSolr = array();
 
         $parentProductIds = $parentIds;
 
-        if(empty($parentProductIds)){
+        if (empty($parentProductIds)) {
             return $productsIdsPullToSolr; //Nothing to update
         }
         $productsIdsPullToSolr = $parentProductIds;
@@ -821,29 +847,17 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
 
-        //4. Recover options for configurable products
-        if (!empty($recoverOptionsProducts)) {
-            //recover options
-            /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
-            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-
-            $timeStart = microtime(true);
-            $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
-
-            $timeEnd = microtime(true);
-            $timeExecution = $timeEnd - $timeStart;
-            Mage::log("Execution time (updateConfigurableProductsValues - set PRICE): {$timeExecution} seconds", null, "processConfigurableQueue.log") ;
-
-
-            $ts = microtime(true);
-            $configurableRModel->recoverProductMSRPBasedOnSimples($recoverMSRP);
-
-            $te = microtime(true);
-            $te = $te - $ts;
-            Mage::log("Execution time (updateConfigurableProductsValues - set MSRP): {$te} seconds", null, "processConfigurableQueue.log") ;
-
-
+        if (empty($recoverOptionsProducts) || empty($recoverMSRP)) {
+            return $productsIdsPullToSolr;
         }
+
+        //4. Recover options for configurable products
+        //recover options
+        /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
+        $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+        $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
+        $configurableRModel->recoverProductMSRPBasedOnSimples($recoverMSRP);
+
 
         return $productsIdsPullToSolr;
     }

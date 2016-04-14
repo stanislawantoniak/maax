@@ -25,7 +25,7 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
         $collection->addAttributeToSelect("udropship_vendor");
         $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
-        //Jeansdom (Levis) 5474 simple products
+        //Jeansdom (Levis and Mustang) 5474 simple products
         $collection->addFieldToFilter('udropship_vendor', array('eq' => 8));
 
         $select = $collection->getSelect();
@@ -35,15 +35,13 @@ class Modago_Test_Shell extends Mage_Shell_Abstract
 
 
         foreach ($data as $_product) {
-            $priceA = rand(200, 300);
+            $priceA = rand(400, 500);
             $priceMSRP = $priceA + 0.2 * $priceA;
             $priceBatch[$_product["sku"]] = array(
                 "A" => $priceA,
                 "salePriceBefore" => $priceMSRP
             );
         }
-
-        Mage::log($priceBatch, null, "priceBatch_______{$offset}.log");
         return $priceBatch;
     }
 
