@@ -94,6 +94,6 @@ $rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
 	<?php endif; ?>
 </div>
 <script>
-    Mall.setQueryText('<?php echo $helperZSS->getQueryText(); // Fix for Varnish ?>');
+    Mall.setQueryText('<?php echo addslashes($helperZSS->getQueryText()); // Fix for Varnish ?>');
     Mall.Navigation.currentCategoryId.push('<?php echo $currentCategory->getId();?>');
 </script>
