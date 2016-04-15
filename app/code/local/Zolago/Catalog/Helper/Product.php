@@ -107,39 +107,19 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
      * @return float
      */
     public function getStrikeoutPrice($product, $qty=null) {
-        $parent = null;
-        if ($product->getData('type_id') == "simple") {
-            $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
-            $parentId = $parentIds[0];
-            $parent = Mage::getModel("catalog/product")->load($parentId);
-        }
-
-        if($parent){
-            $campaignRegularId = (int)$parent->getData('campaign_regular_id');
-            $productFlag = (int)$parent->getProductFlag();
-            $strikeoutType = $parent->getData('campaign_strikeout_price_type');
-            $specialPrice = (float)$parent->getSpecialPrice();
-            $product = Mage::getModel("catalog/product")->load($product->getId());
-        } else {
-            $campaignRegularId = (int)$product->getData('campaign_regular_id');
-            $productFlag = (int)$product->getProductFlag();
-            $strikeoutType = $product->getData('campaign_strikeout_price_type');
-            $specialPrice = (float)$product->getSpecialPrice();
-        }
-
-
+        $campaignRegularId = (int)$product->getData('campaign_regular_id');
+        $productFlag = (int)$product->getProductFlag();
         //Strike out price can appear only when product has promo or sale flag
         //which means when a product is included in campaign.
         if (empty($campaignRegularId) && !$productFlag)
             return (float)$product->getFinalPrice($qty);
 
 
+        $strikeoutType = $product->getData('campaign_strikeout_price_type');
         $price = (float)$product->getPrice();
+        $specialPrice = (float)$product->getSpecialPrice();
         $finalPrice = (float)$product->getFinalPrice($qty);
         $msrp = (float)$product->getData('msrp');
-
-        //krumo($finalPrice,$msrp);
-        //var_dump(Mage::app()->getStore()->getId());
 
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
         //When MSRP price is chosen - then MSRP field is displayed as striked out (if it is bigger than special price)
