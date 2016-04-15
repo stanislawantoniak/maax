@@ -135,7 +135,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 <?php endif; ?><!-- inclusive price starts here -->
                 <?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
                     <div class="cena"><?php
-                        Mage::log('ID: '.$_item->getChildProduct()->getId(), null, "strike.log");
+                        Mage::log('ID: '.$_item->getProduct()->getId(), null, "strike.log");
                         Mage::log('STRIKE_OUT: '.$_item->getProduct()->getStrikeoutPrice(), null, "strike.log");
                         Mage::log('FINAL: '.$_item->getProduct()->getFinalPrice(), null, "strike.log");
 
