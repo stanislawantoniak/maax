@@ -63,10 +63,11 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 	    $customerLoggedIn = Mage::helper('customer')->isLoggedIn();
 
 	    //fix for dotpay site left by customer
-	    if(!$customerLoggedIn) {
+	    if(0 && !$customerLoggedIn) {
 		    $checkoutSession = Mage::getSingleton('checkout/session');
 		    if($checkoutSession->getDotpayQuoteId()) {
 			    $checkoutSession->clear();
+			    $checkoutSession->setDotpayQuoteId(null);
 		    }
 	    }
 

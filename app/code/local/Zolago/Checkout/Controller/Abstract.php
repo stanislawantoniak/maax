@@ -93,11 +93,14 @@ abstract class Zolago_Checkout_Controller_Abstract
 		// Part for tag manager script and GA
 		if ($success) {
 			$session = $this->getOnepage()->getCheckout();
-			$orderIds = array($session->getLastOrderId());
+			$orderId = $session->getLastOrderId();
 			/** @var GH_GTM_Block_Gtm $block */
 			$block = Mage::app()->getLayout()->createBlock('ghgtm/gtm','google_tag_manager');
-			$block->setOrderIds($orderIds);
+			$block->setOrderIds(array($orderId));
 			$newResponse['dataLayer'] = $block->getRawDataLayer();
+			$session->clear();
+			$session->setSuccessId($orderId);
+			$session->save();
 		}
 
 		/* clear salesmanago cart event id after successful checkout */
@@ -425,23 +428,13 @@ abstract class Zolago_Checkout_Controller_Abstract
     public function successAction()
     {
         $session = $this->getOnepage()->getCheckout();
-        if (!$session->getLastSuccessQuoteId()) {
+        if (!$session->getSuccessId()) {
             $this->_redirect('checkout/cart');
             return;
         }
-
-        $lastQuoteId = $session->getLastQuoteId();
-        $lastOrderId = $session->getLastOrderId();
-        $lastRecurringProfiles = $session->getLastRecurringProfileIds();
-        if (!$lastQuoteId || (!$lastOrderId && empty($lastRecurringProfiles))) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-
-        $session->clear();
         $this->loadLayout();
         $this->_initLayoutMessages('checkout/session');
-        Mage::dispatchEvent('checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId)));
         $this->renderLayout();
+        
     }
 }
