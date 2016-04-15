@@ -109,15 +109,12 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
     public function getStrikeoutPrice($product, $qty=null) {
 
 
-        if($product->getTypeId() == "simple"){
-            $parentIds = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($product->getId());
-            if(!$parentIds)
-                $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
-            if(isset($parentIds[0])){
+
+        $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
                 $parent = Mage::getModel('catalog/product')->load($parentIds[0]);
                 // do stuff here
-            }
-        }
+
+
 
 
 
