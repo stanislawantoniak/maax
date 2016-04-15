@@ -130,6 +130,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
 
         Mage::log('msrp: '.$msrp, null, "strike.log");
         Mage::log('price: '.$price, null, "strike.log");
+        Mage::log('final_price: '.$finalPrice, null, "strike.log");
 
 
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
