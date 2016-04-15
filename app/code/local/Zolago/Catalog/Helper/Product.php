@@ -111,6 +111,10 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         $campaignRegularId = (int)$product->getData('campaign_regular_id');
         $productFlag = (int)$product->getData('product_flag');
 
+        Mage::log('campaign_regular_id: '.$campaignRegularId, null, "strike.log");
+        Mage::log('product_flag: '.$productFlag, null, "strike.log");
+
+
         //Strike out price can appear only when product has promo or sale flag
         //which means when a product is included in campaign.
         if (empty($campaignRegularId) && !$productFlag)
@@ -127,16 +131,20 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
         //When MSRP price is chosen - then MSRP field is displayed as striked out (if it is bigger than special price)
         if ($campaignRegularId && Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_PREVIOUS_PRICE == $strikeoutType) {
+            Mage::log('RES_1: ', null, "strike.log");
             return $price > $specialPrice ? $price : $finalPrice;
         } elseif ($campaignRegularId && Zolago_Campaign_Model_Campaign_Strikeout::STRIKEOUT_TYPE_MSRP_PRICE == $strikeoutType) {
             $returnPrice = $msrp > $specialPrice ? $msrp : $finalPrice;
+            Mage::log('RES_2: ', null, "strike.log");
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         }
         elseif (empty($campaignRegularId) && $productFlag) {
             $returnPrice = $msrp > $price ? $msrp : $finalPrice;
+            Mage::log('RES_3: ', null, "strike.log");
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         }
         else {
+            Mage::log('RES_4: ', null, "strike.log");
             return $finalPrice;
         }
     }
