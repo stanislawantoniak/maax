@@ -2,6 +2,7 @@
 /**
  * Catalog product model
  *
+ * @method string getChargeLowerCommission()
  *
  * @category    Zolago
  * @package     Zolago_Catalog

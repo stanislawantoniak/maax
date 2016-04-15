@@ -54,7 +54,7 @@ class Aoe_Scheduler_Shell_Scheduler extends Mage_Shell_Abstract {
     }
 
     public function tierCommissionActionHelp() {
-        return "use ex: php -f shell/devtest -action tierCommission -poid 26";
+        return "use ex: php shell/devtest.php -action tierCommission -poid 100";
     }
 
     public function testCheckProductAction() {

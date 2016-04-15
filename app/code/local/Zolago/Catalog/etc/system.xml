@@ -10,7 +10,7 @@
 					<fields>
 						<automatic_strikeout_price_percent translate="label comment">
 							<label>Automatic strikeout price by percent</label>
-							<comment><![CDATA[When difference between effective price and msrp is >= % show strikeout price]]>.</comment>
+							<comment><![CDATA[When difference between effective price and msrp is >= % show strikeout price]]></comment>
 							<frontend_type>text</frontend_type>
 							<sort_order>2</sort_order>
 							<show_in_default>1</show_in_default>
