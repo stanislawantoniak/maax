@@ -40,7 +40,7 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <?php echo Mage::helper("zolagodropship")->__("DHL account");?>
                                     </label>
                                     <div class="col-md-9">
-                                        <input id="dhl_account" name="dhl_account" value="<?php echo $_vendor->getDhlAccount(); ?>" type="text" class="form-control" size="10">
+                                        <input id="dhl_account" name="dhl_account" value="<?php echo $_vendor->getDhlAccount(); ?>" type="text" class="form-control disable_dhl" size="10">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -48,7 +48,7 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <?php echo Mage::helper("zolagodropship")->__("DHL login");?>
                                     </label>
                                     <div class="col-md-9">
-                                        <input id="dhl_login" name="dhl_login" value="<?php echo $_vendor->getDhlLogin(); ?>" type="text" class="form-control" size="10">
+                                        <input id="dhl_login" name="dhl_login" value="<?php echo $_vendor->getDhlLogin(); ?>" type="text" class="form-control disable_dhl" size="10">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -56,7 +56,7 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <?php echo Mage::helper("zolagodropship")->__("DHL password");?>
                                     </label>
                                     <div class="col-md-9">
-                                        <input id="dhl_password" name="dhl_password" value="<?php echo $_vendor->getDhlPassword(); ?>" type="password" class="form-control" size="10">
+                                        <input id="dhl_password" name="dhl_password" value="<?php echo $_vendor->getDhlPassword(); ?>" type="password" class="form-control disable_dhl" size="10">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -73,6 +73,14 @@ $useUps = $_vendor->getData('use_orbaups');
                                     </label>
                                     <div class="col-md-9">
                                         <input id="dhl_terminal" name="dhl_terminal" value="<?php echo $_vendor->getDhlTerminal(); ?>" type="text" class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_check" class="col-md-3 control-label">
+                                    </label>
+                                    <div class="col-md-9">
+                                        <button type="button" id="dhl_check_button" class="btn btn-primary"><?php echo Mage::helper('zolagodropship')->__("Check DHL Settings");?></button>
+                                        <span id="dhl_check_message"></span>
                                     </div>
                                 </div>
 
@@ -291,11 +299,22 @@ $useUps = $_vendor->getData('use_orbaups');
     jQuery(function ($) {
         var dhlRma = jQuery('#use_dhl');
         var upsRma = jQuery('#use_orbaups');
+        var reset = jQuery('#filter_reset');
 
         showOptions(dhlRma.val(), jQuery(".use_dhl_options"));
         showOptions(upsRma.val(), jQuery(".use_orbaups_options"));
+        
+        Dhl.init('/udropship/vendor_settings/check_dhl');
 
-
+        jQuery('.disable_dhl').change(function() {
+            Dhl.setInfo('orange','<?php echo Mage::helper('orbashipping')->__('Please save changed settings.')?>');
+            Dhl.disable();
+        });
+        reset.click(function() {
+            Dhl.setInfo('green',''); 
+            Dhl.enable();
+            return true;
+        });
         dhlRma.change(function () {
             var valueDhl = $(this).val();
             showOptions(valueDhl, jQuery(".use_dhl_options"));
@@ -304,7 +323,7 @@ $useUps = $_vendor->getData('use_orbaups');
             var valueUps = $(this).val();
             showOptions(valueUps, jQuery(".use_orbaups_options"));
         })
-
+        
         function showOptions(value, options) {
             if (value == 1) {
                 options.show();

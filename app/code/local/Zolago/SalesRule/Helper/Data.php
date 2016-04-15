@@ -326,8 +326,13 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	            /** @var Zolago_Campaign_Model_Campaign $campaign */
                 $campaign = Mage::getModel("zolagocampaign/campaign")->load($campaignId);
                 if ($campaign) {
+	                if($campaign->getContextVendorId()) {
+		                $vendor = $campaign->getContextVendor();
+	                }
+	                if(!isset($vendor) || !$vendor->getId()) {
+		                $vendor = $campaign->getVendor();
+	                }
                     $couponImage = $campaign->getCouponImage();
-	                $vendor = $campaign->getVendor();
 	                $vendorLogo = $vendor->getLogo();
 	                $vendorName = $vendor->getVendorName();
 	                if(!$vendorLogo) {
@@ -367,6 +372,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          if (empty($ids)) {
              return false;
          }
+		 /** @var Zolago_Customer_Model_Customer $customer */
          $customer = Mage::getModel('customer/customer')->load($customer_id);
          $store = $customer->getStore();
          $oldStore = Mage::app()->getStore();
@@ -387,7 +393,6 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
          );
          $addedFiles = $addedLogos = array();
          foreach ($list as $item) {
-
              $name = $item['ruleItem']->getPromoImage();
              if ($name && !in_array($name, $addedFiles)) {
                  $this->_resizePromotionImage($name,280);
@@ -411,16 +416,21 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 	         }
 
           }
+		 /** @var Zolago_Common_Helper_Data $helper */
          $helper = Mage::helper('zolagocommon');
          $sender = Mage::getStoreConfig('promo/promotions_mail_settings/mail_identity');
          $helper->sendEmailTemplate(
-             $customer->getEmail(),
-             '',
+             $customer->getEmail(),             
+             empty($customer->getName()) ? $customer->getEmail() : $customer->getName(),
              $template,
              $data,
              $store->getId(),
              $sender
          );
+         foreach ($list as $item) {
+             $item->setData('newsletter_sent',1);
+             $item->save();
+         }
          Mage::app()->setCurrentStore($oldStore);
          $this->_changeDesign($oldArea,$oldPack,$oldTheme);
          return true;             
@@ -488,7 +498,7 @@ class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
                     if (!$this->sendPromotionEmail($customerId, array_values($sendData))) {
                         //if mail sending failed
                         unset($dataAssign[$email]);
-                    } else {
+                    } else {                        
                         $sendCount ++;
                     }
                 }

@@ -362,8 +362,9 @@
                     <logo>
                         <fieldset>vendor_info</fieldset>
                     </logo>
+					<!-- For backward capability name of this field is not changed. @see re#1961 -->
+					<!-- should be lower_commission_percent -->
                     <sale_commission_percent>
-                        <label>SALE Commission Percentage</label>
                         <fieldset>statement</fieldset>
                         <hide_modules>Unirgy_DropshipTierCommission</hide_modules>
                         <position>11</position>
@@ -621,6 +622,7 @@
 							<dhl_account>1</dhl_account>
 							<dhl_ecas>1</dhl_ecas>
 							<dhl_terminal>1</dhl_terminal>
+							<dhl_check>1</dhl_check>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>

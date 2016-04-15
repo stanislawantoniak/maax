@@ -42,7 +42,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
         /** @var Mage_Core_Model_Email_Info $emailInfo */
 		$emailInfo = Mage::getModel('core/email_info');
-		$emailInfo->addTo($email, $name);
+		$emailInfo->addTo($email, empty($name)? $email:$name);
 		$emailInfo->addBcc($bcc);
 		$mailer->addEmailInfo($emailInfo);
 
@@ -225,7 +225,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
      * 
      * @param string $key
      * @param string $group 
-     * @param function $function
+     * @param string $function
      * @param array $params
      * @param int $ttl
      * @return mixed

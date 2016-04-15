@@ -1,6 +1,6 @@
 <?php /* @var $this Zolago_Modago_Block_Brands_Vendor */ ?>
 <?php
-$vendors = $this->getVendorCollection();
+$vendors = $this->getVendorCollection(false);
 ?>
 <?php if (count($vendors) > 0) : ?>
 <div id="popular-brands" class="col-sm-12 vendor-logo-container">
@@ -8,7 +8,10 @@ $vendors = $this->getVendorCollection();
         <div class="vendor-logo-items">
             <?php $n = 1; ?>
 
-            <?php for ($i = 1; $i <= 10; $i++): ?>
+            <?php $needMore = true; ?>
+            <?php $needed = 104; //amount of logos to fill whole promotions page bg ?>
+            <?php $added = 1; ?>
+            <?php while($needMore): ?>
                 <?php foreach ($vendors as $v): ?>
                     <div
                         class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item">
@@ -50,9 +53,17 @@ $vendors = $this->getVendorCollection();
                     <?php endif; ?>
 
                     <?php $n++; ?>
+                    <?php
+                    if($added != $needed) {
+                        $added++;
+                    } else {
+                        $needMore = false;
+                        break;
+                    }
+                    ?>
                 <?php endforeach; ?>
 
-            <?php endfor; ?>
+            <?php endwhile; ?>
         </div>
     </div>
 </div>

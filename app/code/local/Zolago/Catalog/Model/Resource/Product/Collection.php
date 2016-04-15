@@ -107,12 +107,19 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 	   return $select;
    }
 
-    public function addProductFlagAttributeToSelect($storeId = null) {
+	/**
+	 * For product flag @see Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE
+	 * 
+	 * @param $productFlag
+	 * @param null $storeId
+	 * @return $this
+	 */
+    public function addProductFlagAttributeToSelect($productFlag, $storeId = null) {
         if (!empty($storeId)) {
             $this->setStoreId($storeId);
             $this->addStoreFilter($storeId);
         }
-        $this->addAttributeToFilter('product_flag',Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE);
+        $this->addAttributeToFilter('product_flag', $productFlag);
         return $this;
     }
 
