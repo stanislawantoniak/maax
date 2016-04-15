@@ -110,6 +110,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
 
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
         Mage::log($parentIds, null, "strike.log");
+        $parentId = 0;
         if(!empty($parentIds) && isset($parentIds[0])){
             $parentId = $parentIds[0];
             $parent = Mage::getModel("catalog/product")->load($parentId);
