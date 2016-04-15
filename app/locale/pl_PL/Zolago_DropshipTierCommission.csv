@@ -11,3 +11,4 @@
 "Marketing charges enabled","Czy obowiązują opłaty marketingowe"
 "Terminal percent for charge lower commission","Graniczny procent naliczania obniżonej prowizji"
 "Commission for the sale will be calculated for products which have a lower selling price of n-percent strikeout price","Prowizja dla wyprzedaży będzie wyliczana dla produktów, które mają cenę sprzedaży mniejszą o n-procent od ceny przekreślonej"
+"Default value: %.2F. Commission for the sale will be calculated for products which have a lower selling price of n-percent strikeout price. Leave empty for default","Domyślne: %.2F. Prowizja dla wyprzedaży będzie wyliczana dla produktów, które mają cenę sprzedaży mniejszą o n-procent od ceny przekreślonej. Pozostaw puste aby użyć wartości domyślnej"
