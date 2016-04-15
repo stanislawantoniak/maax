@@ -46,12 +46,12 @@
 			 * InPost telephone number
 			 */
 			copyTelephoneNumber: function (event) {
-				var self = event.data.self;
-				var a = jQuery(this).val();
-				jQuery(this).valid();
-				if (self.getAllowCopyTelephoneFlag()) {
-					jQuery("#telephone_for_locker").val(a).valid();
-				}
+				//var self = event.data.self;
+				//var a = jQuery(this).val();
+				//jQuery(this).valid();
+				//if (self.getAllowCopyTelephoneFlag()) {
+				//	jQuery("#telephone_for_locker").val(a).valid();
+				//}
 			},
 			// Copy telephone functionality END
 

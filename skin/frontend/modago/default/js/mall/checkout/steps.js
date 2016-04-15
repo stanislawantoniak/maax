@@ -1272,7 +1272,7 @@
 				accountTelephone = form.find("input[name='account[telephone]']").val();
 				form.find("input[name='billing[telephone]']").val(accountTelephone);
 				if (!form.find("input[name='shipping[different_shipping_address]']").is(":checked")) {
-					form.find("input[name='shipping[telephone]']").val(accountTelephone);
+					//form.find("input[name='shipping[telephone]']").val(accountTelephone);
 				}
 
 				//use_for_shipping
