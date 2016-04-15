@@ -108,8 +108,21 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
      */
     public function getStrikeoutPrice($product, $qty=null) {
 
-        $campaignRegularId = (int)$product->getData('campaign_regular_id');
-        $productFlag = (int)$product->getData('product_flag');
+
+        if($product->getTypeId() == "simple"){
+            $parentIds = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($product->getId());
+            if(!$parentIds)
+                $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+            if(isset($parentIds[0])){
+                $parent = Mage::getModel('catalog/product')->load($parentIds[0]);
+                // do stuff here
+            }
+        }
+
+
+
+        $campaignRegularId = (int)$parent->getData('campaign_regular_id');
+        $productFlag = (int)$parent->getData('product_flag');
 
         Mage::log('product_id: '.$product->getId(), null, "strike.log");
         Mage::log('campaign_regular_id: '.$campaignRegularId, null, "strike.log");
@@ -122,7 +135,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
             return (float)$product->getFinalPrice($qty);
 
 
-        $strikeoutType = $product->getData('campaign_strikeout_price_type');
+        $strikeoutType = $parent->getData('campaign_strikeout_price_type');
         $price = (float)$product->getPrice();
         $specialPrice = (float)$product->getSpecialPrice();
         $finalPrice = (float)$product->getFinalPrice($qty);
