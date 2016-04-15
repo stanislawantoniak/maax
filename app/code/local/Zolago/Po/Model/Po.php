@@ -845,15 +845,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         }
     }
 
-    public function addItemWithTierCommission(Unirgy_DropshipPo_Model_Po_Item $item)
-    {
-        $this->addItem($item);
-        if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
-            Mage::helper("udtiercom")->processPo($this);
-        }
-        return $this;
-    }
-
     /**
      * @param $ids int|array
      * @param $vendor Zolago_Dropship_Model_Vendor
