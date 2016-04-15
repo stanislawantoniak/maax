@@ -146,7 +146,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         elseif (empty($campaignRegularId) && $productFlag) {
             $returnPrice = $msrp > $price ? $msrp : $finalPrice;
             Mage::log('RES_3: '.$returnPrice, null, "strike.log");
-            return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
+            return $returnPrice > $price ? $returnPrice : $price;
         }
         else {
             Mage::log('RES_4: ', null, "strike.log");
