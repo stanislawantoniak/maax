@@ -726,8 +726,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
     
     /**
      * check if we are in search context
-     *
+     *     
      * @return bool
+     * @todo zmienić tą funkcję bo to jakaś katastrofa
      */
      public function isSearchContext() {
         $request = Mage::app()->getRequest();
@@ -735,6 +736,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
             $request->getModuleName() == "search" &&
             $request->getControllerName() == "index" &&
             $request->getActionName() == "index"
+        ) | (
+            $request->getModuleName() == "orbacommon" &&
+            $request->getControllerName() == "ajax_listing" &&
+            $request->getActionName() == "get_blocks" &&
+            $request->getParam('q',false)
         );
      }
 
