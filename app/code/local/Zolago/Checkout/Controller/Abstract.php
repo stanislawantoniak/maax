@@ -255,7 +255,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		billing[vat_id]:1
 		 */
 		$billing = $request->getParam("billing");
-		$billingAddressId = $billing["entity_id"];
+		$billingAddressId = isset($billing["entity_id"]) ? $billing["entity_id"] : 0;
 		if(is_array($billing)){
 			$billingResponse = $onepage->saveBilling($billing, $billingAddressId);
 			if(isset($billingResponse['error']) && $billingResponse['error']==1){
