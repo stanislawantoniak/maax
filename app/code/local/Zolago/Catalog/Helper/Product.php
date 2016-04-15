@@ -111,6 +111,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         $campaignRegularId = (int)$product->getData('campaign_regular_id');
         $productFlag = (int)$product->getData('product_flag');
 
+        Mage::log('product_id: '.$product->getId(), null, "strike.log");
         Mage::log('campaign_regular_id: '.$campaignRegularId, null, "strike.log");
         Mage::log('product_flag: '.$productFlag, null, "strike.log");
 
@@ -126,6 +127,9 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         $specialPrice = (float)$product->getSpecialPrice();
         $finalPrice = (float)$product->getFinalPrice($qty);
         $msrp = (float)$product->getData('msrp');
+
+        Mage::log('msrp: '.$msrp, null, "strike.log");
+        Mage::log('price: '.$price, null, "strike.log");
 
 
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
