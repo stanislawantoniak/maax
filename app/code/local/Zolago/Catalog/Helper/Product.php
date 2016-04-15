@@ -108,14 +108,10 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
      */
     public function getStrikeoutPrice($product, $qty=null) {
 
-
         $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
-        $parent = Mage::getModel('catalog/product')->load($parentIds[0]);
-        // do stuff here
-
-
-        $campaignRegularId = (int)$parent->getData('campaign_regular_id');
-        $productFlag = (int)$parent->getData('product_flag');
+        Mage::log($parentIds, null, "strike.log");
+        $campaignRegularId = (int)$product->getData('campaign_regular_id');
+        $productFlag = (int)$product->getData('product_flag');
 
         Mage::log('product_id: '.$product->getId(), null, "strike.log");
         Mage::log('campaign_regular_id: '.$campaignRegularId, null, "strike.log");
@@ -128,7 +124,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
             return (float)$product->getFinalPrice($qty);
 
 
-        $strikeoutType = $parent->getData('campaign_strikeout_price_type');
+        $strikeoutType = $product->getData('campaign_strikeout_price_type');
         $price = (float)$product->getPrice();
         $specialPrice = (float)$product->getSpecialPrice();
         $finalPrice = (float)$product->getFinalPrice($qty);
@@ -136,7 +132,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
 
         Mage::log('msrp: '.$msrp, null, "strike.log");
         Mage::log('price: '.$price, null, "strike.log");
-        Mage::log('final_price: '.$finalPrice, null, "strike.log");
+        Mage::log('price: '.$price, null, "strike.log");
 
 
         //When previous price is chosen then standard price striked out (if it is bigger than special price)
