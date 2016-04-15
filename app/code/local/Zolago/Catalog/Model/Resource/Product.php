@@ -438,4 +438,75 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         return $this->_getReadAdapter()->fetchAll($select);
     }
 
+	/**
+	 * Update attribute 'charge_lower_commission' for future commission processing
+	 * @see Zolago_DropshipTierCommission_Helper_Data::_processPoCommission()
+	 * 
+	 * @param $ids
+	 * @return $this
+	 * @throws Mage_Core_Exception
+	 */
+	public function updateChargeLowerCommission($ids) {
+		if (!is_array($ids)) {
+			$ids = array($ids);
+		}
+	
+		$websites = Mage::app()->getWebsites();
+		/** @var Mage_Core_Model_Website $website */
+		foreach ($websites as $website) {
+			$defaultStoreId = (int)Mage::app()
+				->getWebsite($website->getId())
+				->getDefaultGroup()
+				->getDefaultStoreId();
+
+			$this->updateChargeLowerCommissionForStore($defaultStoreId, $ids);
+		}
+		return $this;
+	}
+
+	/**
+	 * Update attribute 'charge_lower_commission' for future commission processing
+	 * for specific store
+	 * 
+	 * @param $storeId
+	 * @param $ids
+	 * @return $this
+	 */
+	public function updateChargeLowerCommissionForStore($storeId, $ids) {
+		/** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+		$coll = Mage::getResourceModel('zolagocatalog/product_collection');
+		$coll->setStore($storeId);
+		$coll->addAttributeToSelect("price", "left");                   //WEBSITE
+		$coll->addAttributeToSelect("msrp", "left");                    //WEBSITE
+		$coll->addFieldToFilter('entity_id', array('in' => $ids));
+		
+		$data = $coll->getData();
+		
+		$percentDiff = array();
+
+		foreach ($data as $product) {
+			$msrp  = ((float)$product['msrp']);
+			$price = ((float)$product['price']);
+			if (!$price || !$msrp) {
+				$diff = 0;
+			} else {
+				$diff = round(($msrp - $price) / $price, 4) * 100;
+			}
+			$percentDiff[(string)$diff][] = $product['entity_id'];
+		}
+		
+		/* @var $aM Zolago_Catalog_Model_Product_Action */
+		$aM = Mage::getSingleton('catalog/product_action');
+
+		if(!empty($percentDiff)) {
+			foreach ($percentDiff as $diff => $ids) {
+				$aM->updateAttributesPure($ids,
+					array("charge_lower_commission" => $diff),
+					$storeId
+				);
+			}
+		}
+		
+		return $this;
+	}
 }

@@ -26,6 +26,10 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	 */
 	public function getProduct() {
 		if (!$this->getData('product')) {
+			// Check if
+			// ->setStoreId($po->getStore()->getId())
+			// will not break something
+			// NOTE: set store before load make correct attribute value loading 
             $product = Mage::getModel('catalog/product')->load($this->getProductId());
             $this->setData('product', $product);
         }

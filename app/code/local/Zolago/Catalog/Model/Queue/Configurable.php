@@ -27,10 +27,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             return 0;
         }
         $this->_collection->setPageSize($limit);
-
-        //$this->_collection->setLockRecords();
         $this->_execute();
-        //$this->_collection->setDoneRecords();
 
         return count($this->_collection);
     }
@@ -61,13 +58,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         unset($productId);
         unset($queueId);
 
-
-        $storeId = array();
-        $allStores = Mage::app()->getStores();
-        foreach ($allStores as $_eachStoreId => $val) {
-            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-            $storeId[] = $_storeId;
-        }
         /* @var $zolagoCatalogProductConfigurableModel Zolago_Catalog_Model_Resource_Product_Configurable */
         $zolagoCatalogProductConfigurableModel = Mage::getResourceModel('zolagocatalog/product_configurable');
 
@@ -82,13 +72,27 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         $productsIdsPullToSolr = array();
 
+
         //1. Set attributes price, msrp, options
         $productsIdsPullToSolrForWebsite = $zolagoCatalogProductConfigurableModel->updateConfigurableProductsValues($configurableProducts);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
+
+
         $zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
 
 
-        //2. reindex products
+        //2. set SALE/PROMO FLAG
+        $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
+
+		
+		// And set percent (diff between price and strikeout price)
+		// for charge lower commission (catalog product attribute 'charge_lower_commission')
+		// @see Zolago_DropshipTierCommission_Helper_Data::_processPoCommission()
+		/** @var Zolago_Catalog_Model_Resource_Product $productRes */
+		$productRes = Mage::getResourceModel('zolagocatalog/product');
+        $productRes->updateChargeLowerCommission($listProductsIds);
+
+        //3. reindex products
         //to avoid long queries make number of queries
         $numberQ = 100;
         if (count($productsIdsPullToSolr) > $numberQ) {
@@ -103,7 +107,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         }
 
-        //3. put products to solr queue
+
+        //4. put products to solr queue
         //catalog_converter_price_update_after
         Mage::dispatchEvent(
             "catalog_converter_price_update_after",
@@ -112,7 +117,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             )
         );
 
-        //4. Varnish & Turpentine
+
+        //5. Varnish & Turpentine
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->addFieldToFilter('entity_id', array('in' => $productsIdsPullToSolr));
@@ -125,6 +131,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             "catalog_converter_queue_configurable_complete",
             array("products" => $coll)
         );
+
     }
 
 

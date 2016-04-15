@@ -255,6 +255,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
 
     }
     protected function _addFieldsToFieldset($keys,$fieldset) {
+		/** @var Zolago_Dropship_Helper_Tabs $helper */
         $helper = Mage::helper('zolagodropship/tabs');
         foreach ($keys as $key) {
             $helper->addKeyToFieldset($key,$fieldset);
@@ -273,6 +274,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             'vendor_type',
             'max_shipping_days',
             'max_shipping_time',
+            'automatic_strikeout_price_percent',
             'external_id',
             'super_vendor_id',
             'statements_calendar',

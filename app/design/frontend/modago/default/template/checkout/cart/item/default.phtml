@@ -28,6 +28,8 @@
 /** @var $this Mage_Checkout_Block_Cart_Item_Renderer_Configurable */
 
 $_item = $this->getItem(); /** @var $_item Mage_Sales_Model_Quote_Item */
+
+
 $_helper = Mage::helper("zolagocataloginventory");
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
