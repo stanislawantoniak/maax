@@ -361,49 +361,6 @@ define([
         put(node, content);
     };
 
-    /**
-     * @param {mixed} value
-     * @param {object} item
-     * @param {object} node
-     * @returns {string}
-     */
-    var rendererStatus = function (item, value, node, options) {
-
-        value = parseInt(value);
-        var icon = '';
-        var label = '';
-        switch (value) {
-            case 1:
-                icon = "ania-icon-enabled";
-                label = "enabled";
-                break;
-            case 2:
-                icon = "ania-icon-new";
-                label = "new";
-                break;
-            default:
-                icon = "ania-icon-wrong";
-                label = "wrong";
-                break;
-        }
-
-        node.className = node.className + " " + "status-" + label;
-        node.title = this.options[value] || "";
-
-        jQuery(node).tooltip({
-            container: "body",
-            trigger: "hover",
-            animation: false,
-            placement: "top",
-            delay: {"show": 0, "hide": 0}
-        });
-        var content = put("div");
-        put(content, "p", {
-            innerHTML: "<i class='" + icon + "'></i>"
-        });
-        put(node, content);
-    };
-
     var rendererDescriptionStatus = function (item, value, node, options) {
 
         // @see Zolago_Catalog_Model_Product_Source_Description
@@ -569,8 +526,6 @@ define([
                 if (childColumn.options) {
                     if (column.field == "description_status") {
                         childColumn.renderCell = rendererDescriptionStatus;
-                    } else if (column.field == "status") {
-                        childColumn.renderCell = rendererStatus;
                     } else if (column.field == "is_in_stock") {
 						childColumn.renderCell = rendererIsInStock;
 					} else {
