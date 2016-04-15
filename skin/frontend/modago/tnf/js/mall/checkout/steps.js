@@ -1662,7 +1662,13 @@
 					return false;
                 });
 
-
+                jQuery(document).on('click', "#sidebar-deliverypayment-change", function (e) {
+                    e.preventDefault();
+                    if (jQuery("#co-shippingpayment").validate().checkForm()) {
+                        jQuery("#co-shippingpayment").submit();
+                    }
+                    window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
+                });
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
                     return false;
