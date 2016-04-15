@@ -535,25 +535,37 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             );
 
 
+            $toQueue = array();
+
             foreach($updateCollector as $website => $productsIds){
                 if(!isset($stores))
                     continue;
 
                 foreach ($stores[$websiteId] as $store) {
                     $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
-
-                    $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
-                    Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
                 }
+                $toQueue = array_merge($toQueue, $productIds);
             }
+
+            if(!empty($toQueue)){
+                $productRelationTable = $this->getResource()->getTableName('catalog_product_relation');
+                $readConnection = $this->getResource()->getConnection('core_read');
+                $productsIdsLine = implode(",",$toQueue);
+                $query = "SELECT child_id,parent_id FROM {$productRelationTable} WHERE parent_id IN({$productsIdsLine})";
+                $result = $readConnection->fetchCol($query);
+                Zolago_Catalog_Helper_Configurable::queue($result);
+            }
+
+
         }
 
         //3.2. Recover options for configurable products
         if (!empty($recoverOptionsProducts)) {
             //recover options
             /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
-            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
-            $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
+            //$configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+            //$configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
+
         }
 
         //4.1 Delete products with status 2
