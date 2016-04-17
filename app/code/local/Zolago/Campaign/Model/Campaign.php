@@ -704,27 +704,18 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         //2. Recover products from INFO campaigns
         if (!empty($reformattedDataInfo)) {
 
-            /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
-            $zolagocatalogHelper = Mage::helper('zolagocatalog');
-            $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
-
-            if(empty($stores))
-                return;
-
-
-
-
             //Recover campaign_info_id attribute
             foreach ($reformattedDataInfo as $websiteId => $dataToUpdateInfo) {
-                $storesI = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
-                if ($storesI) {
-                    $productIdsInfoUpdated = $this->recoverInfoCampaignsToProduct($dataToUpdateInfo, $storesI, $productsToDeleteFromTable);
-                    $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsInfoUpdated);
-                }
+                $defaultWebsiteStoreId = Mage::app()
+                    ->getWebsite($websiteId)
+                    ->getDefaultGroup()
+                    ->getDefaultStore()
+                    ->getId();
+
+                $productIdsInfoUpdated = $this->recoverInfoCampaignsToProduct($dataToUpdateInfo, $defaultWebsiteStoreId, $productsToDeleteFromTable);
+                $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsInfoUpdated);
             }
         }
-
-
 
 
         //3. Recover products from SALE and PROMOTION campaigns
@@ -784,23 +775,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             return $productsIdsPullToSolr;
         }
 
-        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-        $catalogHelper = Mage::helper('zolagocatalog');
-        $stores = $catalogHelper->getStoresForWebsites($websiteId);
-        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
-
-        if (!$storesToUpdate) {
-            return $productsIdsPullToSolr;
-        }
-
         $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
         //1. Update attributes for simple visible products
         $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$simpleUpdated);
 
-
         //1. Update attributes for configurable visible products
-        //Mage::log("Update attributes for configurable visible products----------------", null, "set_log_2.log");
         $configurableUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToConfigurableVisibleProducts($salesPromoProductsData,$websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$configurableUpdated);
 
