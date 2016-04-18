@@ -5,7 +5,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 	/**
 	 * 1. Is logged - move onepage for logged
 	 * 2. Has no guest flag - move login
-	 * 3. Else dipslay guest chekcout
+	 * 3. Else display guest checkout
 	 * 
 	 * @return type
 	 */

@@ -191,7 +191,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
 	/**
      * Specify quote shipping method
-	 * Modificaton: removed quote save
+	 * Modification: removed quote save
      *
      * @param   string $shippingMethod
      * @return  array
