@@ -26,6 +26,7 @@
           <order>Zolago_Sales_Model_Order</order>
             <order_address>Zolago_Sales_Model_Order_Address</order_address>
             <quote_address>Zolago_Sales_Model_Quote_Address</quote_address>
+            <service_quote>Zolago_Sales_Model_Service_Quote</service_quote>
         </rewrite>
       </sales>
     </models>

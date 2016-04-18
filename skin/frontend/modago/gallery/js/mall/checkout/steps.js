@@ -820,7 +820,7 @@
 					inpostName = inpost.getName(),
 					telephoneForLocker = inpost.getTelephoneForLocker(),
 					data = [];
-
+console.log(inpostName);
 				data.push({"name": "form_key", "value": this.getFormKey()});
 
 				if (!inpostName) {
@@ -1288,7 +1288,7 @@
 
 				stepData = form.serializeArray();
 				// fill billing data with shipping
-				if (!this.getIsNeedInvoice()) {
+				if (!this.getIsNeedInvoice() && !inpostName) {
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}

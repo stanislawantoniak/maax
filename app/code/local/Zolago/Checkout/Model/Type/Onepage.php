@@ -334,6 +334,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid data.'));
         }
 
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $locker = $helper->getInpostLocker();
+
         $address = $this->getQuote()->getBillingAddress();
         /* @var $addressForm Mage_Customer_Model_Form */
         $addressForm = Mage::getModel('customer/form');
@@ -362,7 +366,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             // emulate request object
             $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
             $addressErrors  = $addressForm->validateData($addressData);
-            if ($addressErrors !== true) {
+            if ($addressErrors !== true && !$locker) {
                 return array('error' => 1, 'message' => array_values($addressErrors));
             }
             $addressForm->compactData($addressData);
@@ -385,7 +389,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 
         // validate billing address
         if (($validateRes = $address->validate()) !== true) {
-            return array('error' => 1, 'message' => $validateRes);
+            //return array('error' => 1, 'message' => $validateRes);
         }
 
         $address->implodeStreetAddress();
