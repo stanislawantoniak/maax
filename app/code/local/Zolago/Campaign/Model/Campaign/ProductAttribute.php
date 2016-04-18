@@ -514,6 +514,11 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         }
 
         if(!empty($updateCollector)){
+            $websiteIdsToUpdate = array_keys($dataToUpdate);
+            /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
+            $zolagocatalogHelper = Mage::helper('zolagocatalog');
+            $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
+
             /* @var $actionModel Zolago_Catalog_Model_Product_Action */
             $actionModel = Mage::getSingleton('catalog/product_action');
 
@@ -530,26 +535,28 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             );
 
 
-            $toRecalculatePrices = array();
-
-            foreach($updateCollector as $website => $productsIds){
-                $defaultWebsiteStoreId = Mage::app()
-                    ->getWebsite($website)
+            foreach ($updateCollector as $website => $productsIds) {
+                $defaultWebsiteStore = Mage::app()
+                    ->getWebsite($websiteId)
                     ->getDefaultGroup()
                     ->getDefaultStore()
                     ->getId();
+                $defaultWebsiteStoreId = $defaultWebsiteStore->getId();
 
                 $actionModel->updateAttributesPure($productsIds, $attributesData, $defaultWebsiteStoreId);
-                $toRecalculatePrices = array_merge($toRecalculatePrices, $productIds);
-            }
 
-            //3.2. Recover options for configurable products
-            //(push to 	zolagocatalog_process_configurable_queue)
-            if(!empty($toRecalculatePrices)){
-                $childrenIds = Mage::getResourceModel("zolagocatalog/product")
-                    ->getRelatedProducts($toRecalculatePrices,true);
-                Zolago_Catalog_Helper_Configurable::queue($childrenIds);
+                $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $defaultWebsiteStore);
+                Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
+
             }
+        }
+
+        //3.2. Recover options for configurable products
+        if (!empty($recoverOptionsProducts)) {
+            //recover options
+            /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
+            $configurableRModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+            $configurableRModel->recoverProductPriceAndOptionsBasedOnSimples($recoverOptionsProducts);
         }
 
         //4.1 Delete products with status 2

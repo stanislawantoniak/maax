@@ -727,6 +727,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $productIdsSalePromotionUpdated = $productAttributeCampaignModel->unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable);
         $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
 
+        //3.2. set SALE/PROMO FLAG
+        /* @var $zolagoCatalogProductConfigurableModel Zolago_Catalog_Model_Resource_Product_Configurable */
+        $zolagoCatalogProductConfigurableModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+        $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($productIdsToUpdate);
 
         //4. reindex
         // Better performance
