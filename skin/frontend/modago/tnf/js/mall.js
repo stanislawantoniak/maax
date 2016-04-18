@@ -118,10 +118,11 @@ var Mall = {
             data: {
 				"product_id": Mall.reg.get("varnish_product_id"),
 				"category_id": Mall.reg.get("varnish_category_id"),
-	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0
-                ,"crosssell_ids": jQuery('#complementary_product .like').map(function() {
+	            "recently_viewed": recentlyViewed.find('.rwd-carousel').length && !recentlyViewed.find('.rwd-wrapper').length ? 1 : 0,
+                "crosssell_ids": jQuery('#complementary_product .like').map(function() {
                     return jQuery(this).attr("data-idproduct");
-                }).get()
+                }).get(),
+	            "utm_data": Mall.reg.get('utm_data')
 			},
             error: function(jqXhr, status, error) {
                 // do nothing at the moment
@@ -653,6 +654,9 @@ var Mall = {
     //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
     //to our format: 99-999
     postcodeTransform: function(str) {
+        if(typeof str === "undefined"){
+            return "";
+        }
         var strTrans = str.replace(/\D/g,"");//remove spaces
         strTrans = strTrans.match(/.*?([0-9]{2}).?([0-9]{3}).*?/i);
         if (strTrans == null) {
@@ -1827,7 +1831,7 @@ Mall.Utm = {
 							this.setUtmsUpdate();
 							return;
 						}
-
+						
 					}
 				} catch (e) {
 					//catches json parse error which means that cookie has wrong value so we need to create new one
@@ -1861,8 +1865,9 @@ Mall.Utm = {
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
 	Mall.Utm.init();
-	Mall.createInlineSvgs();
-
+	if (Mall.reg.get('store_code') != 'default') {
+		Mall.createInlineSvgs();
+	}
     Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -1912,10 +1917,6 @@ jQuery(document).ready(function() {
         if(Mall._current_superattribute != null) {
             jQuery("#add-to-cart").tooltip('destroy');
         }
-    });
-
-    jQuery("#cart-buy").on('click', function() {
-        jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
     });
 
 
@@ -1977,9 +1978,7 @@ jQuery(document).ready(function() {
 
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
-			if(jQuery(".rwd-color").length) {
-
-			} else {
+			if(!jQuery("#rwd-color, .rwd-color").length) {
 				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})
 			}
 		},200);

@@ -22,7 +22,7 @@ $billingAddress = $quote->getBillingAddress();
 					<div class="row">
 						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_firstname"><?php echo $this->__("First name"); ?></label>
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="text" value="<?php echo $this->escapeHtml($quote->getCustomerFirstname()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" />
+							<input type="text" value="<?php echo $this->escapeHtml($quote->getCustomerFirstname()); ?>" <?php if ($this->isCustomerLoggedIn() && $quote->getCustomerFirstname()) : ?>readonly<?php endif; ?> class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" />
 						</div>
 					</div>
 
@@ -31,7 +31,7 @@ $billingAddress = $quote->getBillingAddress();
 					<div class="row">
 						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_lastname"><?php echo $this->__("Last name"); ?></label>
 						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="text" value="<?php echo $this->escapeHtml($quote->getCustomerLastname()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" />
+							<input type="text" value="<?php echo $this->escapeHtml($quote->getCustomerLastname()); ?>" <?php if ($this->isCustomerLoggedIn() && $quote->getCustomerFirstname()) : ?>readonly<?php endif; ?> class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" />
 						</div>
 					</div>
 				</div>

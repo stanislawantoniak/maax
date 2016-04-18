@@ -831,7 +831,7 @@
 
 					data.push({"name": "billing_address_id", "value": billing.getId()});
 					data.push({"name": "billing[use_for_shipping]", "value": useBillingForShipping ? 1 : 0});
-
+					
 					// Push billing data
 					jQuery.each(billing.getData(), function (idx) {
 						data.push({name: 'billing[' + idx + "]", value: this});
@@ -1272,7 +1272,7 @@
 				accountTelephone = form.find("input[name='account[telephone]']").val();
 				form.find("input[name='billing[telephone]']").val(accountTelephone);
 				if (!form.find("input[name='shipping[different_shipping_address]']").is(":checked")) {
-					form.find("input[name='shipping[telephone]']").val(accountTelephone);
+					//form.find("input[name='shipping[telephone]']").val(accountTelephone);
 				}
 
 				//use_for_shipping
@@ -1662,7 +1662,13 @@
 					return false;
                 });
 
-
+                jQuery(document).on('click', "#sidebar-deliverypayment-change", function (e) {
+                    e.preventDefault();
+                    if (jQuery("#co-shippingpayment").validate().checkForm()) {
+                        jQuery("#co-shippingpayment").submit();
+                    }
+                    window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
+                });
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
                     return false;
@@ -1721,7 +1727,7 @@
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
                     jQuery("button[id*='-prev']").prop("disabled", false);
                     //jQuery(this).prop("disabled", true);
-                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+                    jQuery("i.fa-spinner:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
 
 					checkoutObject.prev();
 					jQuery(window).trigger("resize");
@@ -1792,7 +1798,7 @@
 			getSidebarDeliverypaymentTemplate: function(){
 				return this._sidebarDeliverypaymentTemplate;
 			},
-
+			
 			getSelectedShipping: function(){
 				return this.content.find(".shipping-method:radio:checked");
 			},
@@ -1973,7 +1979,7 @@
                     jQuery("button[id$='-submit'],button[target$='-submit']").prop("disabled", false);
                     jQuery("button[id*='-prev']").prop("disabled", false);
                    // jQuery(this).prop("disabled", true);
-                    jQuery("i.fa-spinner").removeClass('fa fa-spinner fa-spin');
+                    jQuery("i.fa-spinner:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
 
 					checkoutObject.prev();
 					if(jQuery('.default_pay.selected-payment').find('.panel.panel-default').find('.panel-body').find('.panel').is(':visible')) {

@@ -5,6 +5,10 @@ $formKey	= Mage::getSingleton('core/session')->getFormKey();
 $helper		= Mage::helper("zolagocheckout");
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+
+$items= $this->getRateItems();
+$methods = $items->methods;
+
 ?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
     <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
@@ -31,11 +35,13 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 					{{billing}}
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<button class="button button-third large pull-right prev-button-address"><?php echo $helper->__('Change'); ?></button>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="button button-third large pull-right prev-button-address"><?php echo $helper->__('Change'); ?></button>
+					</div>
 				</div>
-			</div>
+
 		</section>
 		<section class="main bg-w opened-panel-group hidden-sm hidden-xs sidebar-deliverypayment">
 			<header>
@@ -47,10 +53,12 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 			<div class="panel-group">
 				<div class="row">
 					<?php if(!$locker->getId()): ?>
-					<div class="col-md-12 col-sm-4 delivery-type delivery-type-short">
+					<div class="col-md-12 col-sm-4 delivery-type">
 						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
 							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
+							<dd>&nbsp;</dd>
+							<dd>&nbsp;</dd>
 						</dl>
 					</div>
 					<?php else: ?>
@@ -65,11 +73,13 @@ $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 						</div>
 					<?php endif; ?>
 				</div>
+				<?php if (count($methods) > 1): ?>
 				<div class="row">
 					<div class="col-sm-12">
-						<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
+						<a id="sidebar-deliverypayment-change" href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
 					</div>
 				</div>
+				<?php endif; ?>
 			</div>
 		</section>
 	</div>

@@ -97,7 +97,7 @@
 	Mall.Checkout.prototype.getInPost = function () {
 		return this.InPost;
 	},
-
+		
 	Mall.Checkout.prototype.getInPostData = function() {
 		var data = {
 			inpost_locker_street: this.getInPost().getStreet(),
@@ -673,7 +673,7 @@
 		
 		// Bind click
 		sidebar.find(".prev-button-address").click(function(){
-            jQuery("i").removeClass('fa fa-spinner fa-spin');
+            jQuery("i:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
             jQuery("button").prop("disabled", false);
 			self.go(0); // Address is always 1st step
 			jQuery(window).trigger("resize");
@@ -704,7 +704,7 @@
 		
 		// Bind click
 		sidebar.find(".prev-button-deliverypaymnet").click(function(){
-            jQuery("i").removeClass('fa fa-spinner fa-spin');
+            jQuery("i:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
             jQuery("button").prop("disabled", false);
 			self.go(1);
 			return false;

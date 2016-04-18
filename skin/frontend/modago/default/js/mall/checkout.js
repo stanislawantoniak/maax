@@ -18,9 +18,96 @@
 			  <dd>{{telephone_caption}} {{telephone}}</dd>\
 		  </dl>';
 
-    };
-    
-	
+		this.InPost = {
+			allowCopyTelephone: 1,
+
+			init: function () {
+				this.attachCopyTelephoneNumber();
+				this.attachValidation();
+			},
+			// Copy telephone functionality START
+			attachCopyTelephoneNumber:  function() {
+				var from1 = jQuery("#shipping_telephone").val(),
+					from2 = jQuery("#account_telephone").val(),
+					to = jQuery("#telephone_for_locker").val(),
+					state = (to == (from1 ? from1 : from2));
+				this.setAllowCopyTelephoneFlag(state);
+				jQuery("#shipping_telephone, #account_telephone").on('change input keypress keydown', {self: this}, this.copyTelephoneNumber);
+				jQuery("#telephone_for_locker").on('keypress keydown', {self: this}, function(event) {event.data.self.setAllowCopyTelephoneFlag(0)});
+			},
+			getAllowCopyTelephoneFlag: function() {
+				return this.allowCopyTelephone;
+			},
+			setAllowCopyTelephoneFlag: function(state) {
+				this.allowCopyTelephone = state;
+			},
+			/**
+			 * Copy shipping telephone number to
+			 * InPost telephone number
+			 */
+			copyTelephoneNumber: function (event) {
+				//var self = event.data.self;
+				//var a = jQuery(this).val();
+				//jQuery(this).valid();
+				//if (self.getAllowCopyTelephoneFlag()) {
+				//	jQuery("#telephone_for_locker").val(a).valid();
+				//}
+			},
+			// Copy telephone functionality END
+
+			attachValidation: function() {
+				jQuery('#telephone_for_locker').parents('form').validate(Mall.validate.getOptions({
+					ignore: ":hidden",
+					rules: {}
+				}));
+			},
+
+			// Common
+			getName: function() {
+				var value = jQuery("input[name='inpost[name]']").val();
+				return value;
+			},
+			getTelephoneForLocker: function() {
+				var value = jQuery("input[name='inpost[telephone]']").val();
+				return value;
+			},
+			getStreet: function() {
+				var value = jQuery("#inpost-locker-street").html();
+				return value;
+			},
+			getBuildingNumber: function() {
+				var value = jQuery("#inpost-locker-building-number").html();
+				return value;
+			},
+			getPostcode: function() {
+				var value = jQuery("#inpost-locker-postcode").html();
+				return value;
+			},
+			getTown: function() {
+				var value = jQuery("#inpost-locker-town").html();
+				return value;
+			},
+			getLocationDescription: function() {
+				var value = jQuery("#inpost-locker-location-description").html();
+				return value;
+			},
+		};
+	};
+
+	Mall.Checkout.prototype.getInPost = function () {
+		return this.InPost;
+	},
+		
+	Mall.Checkout.prototype.getInPostData = function() {
+		var data = {
+			inpost_locker_street: this.getInPost().getStreet(),
+			inpost_locker_building_number: this.getInPost().getBuildingNumber(),
+			inpost_locker_postcode: this.getInPost().getPostcode(),
+			inpost_locker_town: this.getInPost().getTown(),
+			inpost_locker_location_description: this.getInPost().getLocationDescription()
+		};
+		return data;
+	},
 	
 	/**
 	 * @param string
@@ -55,6 +142,7 @@
 	 * @returns {undefined}
 	 */
     Mall.Checkout.prototype.init = function(stepIndex){
+		this.InPost.init();
 		this.go(stepIndex || 0);
 	}
 	
@@ -585,7 +673,7 @@
 		
 		// Bind click
 		sidebar.find(".prev-button-address").click(function(){
-            jQuery("i").removeClass('fa fa-spinner fa-spin');
+            jQuery("i:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
             jQuery("button").prop("disabled", false);
 			self.go(0); // Address is always 1st step
 			jQuery(window).trigger("resize");
@@ -616,7 +704,7 @@
 		
 		// Bind click
 		sidebar.find(".prev-button-deliverypaymnet").click(function(){
-            jQuery("i").removeClass('fa fa-spinner fa-spin');
+            jQuery("i:not(.popup-spinner)").removeClass('fa fa-spinner fa-spin');
             jQuery("button").prop("disabled", false);
 			self.go(1);
 			return false;

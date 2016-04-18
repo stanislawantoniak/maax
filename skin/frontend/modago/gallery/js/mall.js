@@ -1243,7 +1243,7 @@ Mall.Cookie = {
 		}
 		document.cookie = cname + "=" + cvalue + "; " + expires;
 	}
-}
+};
 
 // callbacks
 
@@ -1764,6 +1764,39 @@ Mall.refresh = function() {
     location.reload();
 };
 
+Mall.createInlineSvgs = function() {
+	jQuery('img[src$=".svg"]').each(function(){
+		var $img = jQuery(this);
+		var imgID = $img.attr('id');
+		var imgClass = $img.attr('class');
+		var imgURL = $img.attr('src');
+
+		jQuery.get(imgURL, function(data) {
+			// Get the SVG tag, ignore the rest
+			var $svg = jQuery(data).find('svg');
+
+			// Add replaced image's ID to the new SVG
+			if(typeof imgID !== 'undefined') {
+				$svg = $svg.attr('id', imgID);
+			}
+			// Add replaced image's classes to the new SVG
+			if(typeof imgClass !== 'undefined') {
+				$svg = $svg.attr('class', imgClass+' replaced-svg');
+			}
+
+			// Remove any invalid XML tags as per http://validator.w3.org
+			$svg = $svg.removeAttr('xmlns:a');
+
+			$svg.find('path').css('fill','');
+
+			// Replace image with new SVG
+			$img.replaceWith($svg);
+
+		}, 'xml');
+
+	});
+};
+
 Mall.debug = {
 	isOn: false,
 	on: function() {
@@ -1832,6 +1865,9 @@ Mall.Utm = {
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
 	Mall.Utm.init();
+	if (Mall.reg.get('store_code') != 'default') {
+		Mall.createInlineSvgs();
+	}
     Mall.CustomEvents.init(300);
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -1942,9 +1978,7 @@ jQuery(document).ready(function() {
 
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
-			if(jQuery("#rwd-color").length) {
-
-			} else {
+			if(!jQuery("#rwd-color, .rwd-color").length) {
 				jQuery("#product-options .size-box .size .size-label").css({width: "auto", "margin-right": "10px"})
 			}
 		},200);
