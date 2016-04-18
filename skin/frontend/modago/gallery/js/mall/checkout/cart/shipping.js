@@ -51,9 +51,9 @@
 
             var methodRadio = content.find("input[name=_shipping_method]:checked");
             var shippingCost;
-            console.log(jQuery.type(methodRadio.val()));
+
             if (jQuery.type(methodRadio.val()) !== "undefined") {
-                console.log("11");
+
                 //shipping total
                 shippingCost = jQuery(methodRadio).attr("data-method-cost");
                 var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");

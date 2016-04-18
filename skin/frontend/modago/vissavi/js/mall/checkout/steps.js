@@ -1662,12 +1662,22 @@
 					return false;
                 });
 
+                var step1Form = this.content.find("form");
                 jQuery(document).on('click', "#sidebar-deliverypayment-change", function (e) {
                     e.preventDefault();
                     if (jQuery("#co-shippingpayment").validate().checkForm()) {
-                        jQuery("#co-shippingpayment").submit();
+                        //simple submit
+                        var saveUrl = step1Form.attr("action");
+                        jQuery.ajax({
+                            "method": "POST",
+                            "url": saveUrl,
+                            "data": self.collect()
+                        }).done(function(){
+                            window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
+                        });
+                    } else {
+                        window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
                     }
-                    window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
                 });
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
