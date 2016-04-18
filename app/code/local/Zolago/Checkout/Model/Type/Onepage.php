@@ -550,13 +550,15 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         
         $lockerId = $locker->getId();
 
-		// Customer should be new object - even presitance
+		// Customer should be new object - even persistence
 		
         $customer = Mage::getModel('customer/customer');
 		
         /* @var $customer Mage_Customer_Model_Customer */
         $customerBilling = $billing->exportCustomerAddress();
-        if(!$lockerId){
+        $needInvoice = $billing->getNeedInvoice();
+
+        if(!$lockerId || $needInvoice){
             $customer->addAddress($customerBilling);
         }
         
