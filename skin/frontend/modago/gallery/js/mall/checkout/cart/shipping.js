@@ -53,6 +53,7 @@
             var shippingCost;
 
             if (jQuery.type(methodRadio.val()) !== "undefined") {
+
                 //shipping total
                 shippingCost = jQuery(methodRadio).attr("data-method-cost");
                 var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
