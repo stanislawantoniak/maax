@@ -38,11 +38,11 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
     public function setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId)
     {
 
-        $defaultWebsiteStoreId = Mage::app()
-            ->getWebsite($websiteId)
-            ->getDefaultGroup()
-            ->getDefaultStore()
-            ->getId();
+        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
+        $catalogHelper = Mage::helper('zolagocatalog');
+        $stores = $catalogHelper->getStoresForWebsites($websiteId);
+        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
+
 
         $productsIdsPullToSolr = array();
 
@@ -167,20 +167,22 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $newSimplePricePriceWithPercent = $newSimplePrice - $newSimplePrice * ((int)$priceSSimple / 100);
 
 
-            $aM->updateAttributesPure(
-                array($productSId),
-                array(
-                    'special_price' => $newSimplePricePriceWithPercent,
+            foreach ($storesToUpdate as $storeId) {
+                $aM->updateAttributesPure(
+                    array($productSId),
+                    array(
+                        'special_price' => $newSimplePricePriceWithPercent,
 
-                    'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
-                    'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
-                    'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
-                    'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : '',
+                        'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
+                        'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
+                        'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
+                        'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : '',
 
-                    'product_flag' => $productFlag
-                ),
-                $defaultWebsiteStoreId
-            );
+                        'product_flag' => $productFlag
+                    ),
+                    $storeId
+                );
+            }
 
             //unset($storeId);
             $productsIdsPullToSolr[] = $productSId;
