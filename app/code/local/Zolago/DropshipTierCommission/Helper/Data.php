@@ -68,7 +68,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 				$parentId = isset($parentIds[$id][0]) ? $parentIds[$id][0] : 0;
 
 				// Here price for configurable
-				$price = (float)$item->getBaseRowTotalInclTax();
+				$price = (float)$item->getBasePriceInclTax();
 				if ($price) {
 					$msrp = (float)Mage::getResourceModel('catalog/product')->getAttributeRawValue($id, 'msrp', $po->getStore()->getId());
 					if ($msrp) {
