@@ -783,6 +783,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             return $productsIdsPullToSolr;
         }
 
+        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
+        $catalogHelper = Mage::helper('zolagocatalog');
+        $stores = $catalogHelper->getStoresForWebsites($websiteId);
+        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
+
+        if (!$storesToUpdate) {
+            return $productsIdsPullToSolr;
+        }
+
         $productAttributeCampaignModel = Mage::getModel("zolagocampaign/campaign_productAttribute");
         //1. Update attributes for simple visible products
         $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId);

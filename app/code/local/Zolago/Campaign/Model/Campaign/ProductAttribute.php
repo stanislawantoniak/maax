@@ -346,19 +346,15 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
     /**
      * @param $salesPromoProductsData
      * @param $finalSpecialPricesForChildren
-     * @param $skuSizeRelation
-     * @param $websiteId
-     * @return array
-     * @throws Mage_Core_Exception
+     * @param $storesToUpdate
      */
     public function setSpecialPriceToConfigurableByChildren($salesPromoProductsData,$finalSpecialPricesForChildren, $skuSizeRelation, $websiteId){
         $productsIdsPullToSolr = array();
-
-        $defaultWebsiteStoreId = Mage::app()
-            ->getWebsite($websiteId)
-            ->getDefaultGroup()
-            ->getDefaultStore()
-            ->getId();
+        $configurableIds = array_keys($finalSpecialPricesForChildren);
+        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
+        $catalogHelper = Mage::helper('zolagocatalog');
+        $stores = $catalogHelper->getStoresForWebsites($websiteId);
+        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
 
         $pricesData = array();
 
@@ -408,10 +404,12 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
 
-        if (!empty($dataToUpdate)) {
-            foreach ($dataToUpdate as $attributeName => $data) {
-                foreach ($data as $value => $idsToUpdate) {
-                    $aM->updateAttributesPure($idsToUpdate, array($attributeName => $value), $defaultWebsiteStoreId);
+        if(!empty($dataToUpdate)){
+            foreach($dataToUpdate as $attributeName => $data){
+                foreach($data as $value => $idsToUpdate){
+                    foreach ($storesToUpdate as $storeId) {
+                        $aM->updateAttributesPure($idsToUpdate,array($attributeName => $value),$storeId);
+                    }
                 }
             }
         }
@@ -546,7 +544,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
                     $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
                     Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
-
                 }
             }
         }
