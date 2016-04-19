@@ -1,4 +1,4 @@
-var UnirgyModal = Class.create({
+var ZolagoOsModal = Class.create({
     initialize: function() {
         this.curModal = this.skipNextClick = this.stickyModal = false
         Event.observe(document.body, 'click', this.onSomeWhereClick.bindAsEventListener(this))
@@ -192,13 +192,13 @@ var UnirgyModal = Class.create({
     }
 });
 
-var UnirgyModalSingleton
+var ZolagoOsModalSingleton
 
 function unirgyGetModal() {
-    if (!UnirgyModalSingleton) {
-        UnirgyModalSingleton = new UnirgyModal()
+    if (!ZolagoOsModalSingleton) {
+        ZolagoOsModalSingleton = new ZolagoOsModal()
     }
-    return UnirgyModalSingleton
+    return ZolagoOsModalSingleton
 }
 
 function unirgyShowThisModal(modalId, mode) {
