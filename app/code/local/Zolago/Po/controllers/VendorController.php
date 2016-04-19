@@ -869,7 +869,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 );
 
                 $item->addData($itemSData);
-                $po->addItemWithTierCommission($item);
+				$po->addItem($item);
+				if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
+					Mage::helper("udtiercom")->processPo($this);
+				}
                 Mage::register('vendor_add_item_to_po_before', true, true);
             } else if (!empty($parentId)) {
                 $productP = Mage::getModel('catalog/product')->load($parentId);
@@ -926,7 +929,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     )
                 );
 
-                $po->addItemWithTierCommission($item);
+				$po->addItem($item);
 
 
                 //simple
@@ -957,7 +960,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     ->setData('parent_item_id', $item->getOrderItem()->getId())
                     ->save();
 
-                $po->addItemWithTierCommission($child);
+				$po->addItem($child);
+
+				// Process for simple and configurable at once
+				if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
+					Mage::helper("udtiercom")->processPo($po);
+				}
 
                 $item
                     ->getOrderItem()

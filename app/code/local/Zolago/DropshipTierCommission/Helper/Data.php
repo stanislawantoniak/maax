@@ -64,24 +64,26 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 			/** @var Zolago_Po_Model_Po_Item $item */
 			if ($this->canSetCommission($item)) {
 				$id = $item->getProductId();
-				/** @var Zolago_Catalog_Model_Product $product */
-				// Load product for specific store for correct attribute (charge_lower_commission) value
-				// for some reason getAttributeRawValue don't work, if you know why/how tell me
-				$product = Mage::getModel('catalog/product')->setStoreId($po->getStore()->getId())->load($id);
 				$parentIds[$id] = Mage::getResourceSingleton('catalog/product_type_configurable')->getParentIdsByChild($id);
 				$parentId = isset($parentIds[$id][0]) ? $parentIds[$id][0] : 0;
 
-				// Retrieve items for lower commission (previously sales item)
-				// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
-				// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
-				// attribute 'charge_lower_commission' is now for logic with lower commission 
-				$chargeLowerCommission = $product->getChargeLowerCommission();
-				if ($chargeLowerCommission >= $terminalPercent) {
-					// Remember for this product
-					$lowerCommissionItems[$id] = $id;
-					if (!empty($parentId)) {
-						// Force for parent
-						$lowerCommissionItems[$parentId] = $parentId;
+				// Here price for configurable
+				$price = (float)$item->getBasePriceInclTax();
+				if ($price) {
+					$msrp = (float)Mage::getResourceModel('catalog/product')->getAttributeRawValue($id, 'msrp', $po->getStore()->getId());
+					if ($msrp) {
+						// Retrieve items for lower commission (previously sales item)
+						// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
+						// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
+						$diff = round(round(($msrp - $price) / $price, 4) * 100, 4);
+						if ($diff >= $terminalPercent) {
+							// Remember for this product
+							$lowerCommissionItems[$id] = $id;
+							if (!empty($parentId)) {
+								// Force for parent
+								$lowerCommissionItems[$parentId] = $parentId;
+							}
+						}
 					}
 				}
 			}
