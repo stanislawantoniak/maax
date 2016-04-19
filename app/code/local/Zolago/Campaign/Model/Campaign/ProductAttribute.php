@@ -513,6 +513,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             }
         }
 
+        unset($websiteId);
         if(!empty($updateCollector)){
             $websiteIdsToUpdate = array_keys($dataToUpdate);
             /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
@@ -535,10 +536,10 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             );
 
             Mage::log($updateCollector, null, "unsetPromoCampaignAttributesToVisibleProducts_2.log");
-            foreach($updateCollector as $website => $productsIds){
+            foreach($updateCollector as $websiteId => $productsIds){
                 if(!isset($stores))
                     continue;
-
+                Mage::log("WEBSITE_ID: {$websiteId}", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log")
                 foreach ($stores[$websiteId] as $storeId) {
                     Mage::log("STORE_ID: {$storeId}", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
                     Mage::log($productsIds, null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
