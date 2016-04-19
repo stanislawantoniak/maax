@@ -704,16 +704,20 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         //2. Recover products from INFO campaigns
         if (!empty($reformattedDataInfo)) {
 
+            /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
+            $zolagocatalogHelper = Mage::helper('zolagocatalog');
+            $stores = $zolagocatalogHelper->getStoresForWebsites($websiteIdsToUpdate);
+
+            if(empty($stores))
+                return;
+
             //Recover campaign_info_id attribute
             foreach ($reformattedDataInfo as $websiteId => $dataToUpdateInfo) {
-                $defaultWebsiteStoreId = Mage::app()
-                    ->getWebsite($websiteId)
-                    ->getDefaultGroup()
-                    ->getDefaultStore()
-                    ->getId();
-
-                $productIdsInfoUpdated = $this->recoverInfoCampaignsToProduct($dataToUpdateInfo, $defaultWebsiteStoreId, $productsToDeleteFromTable);
-                $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsInfoUpdated);
+                $storesI = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
+                if ($storesI) {
+                    $productIdsInfoUpdated = $this->recoverInfoCampaignsToProduct($dataToUpdateInfo, $storesI, $productsToDeleteFromTable);
+                    $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsInfoUpdated);
+                }
             }
         }
 
