@@ -39,7 +39,7 @@
 
 var unirgyProductGallery<?php echo $_product->getId()?>;
 unirgyDomLoaded(function() {
-    unirgyProductGallery<?php echo $_product->getId()?> = new UnirgyProductGallery(<?php echo $this->getGalleryImagesJson()?>, {
+    unirgyProductGallery<?php echo $_product->getId()?> = new ZolagoOsProductGallery(<?php echo $this->getGalleryImagesJson()?>, {
         imageSwitchDuration: .2,
         containerId: 'zoom-wrapper-<?php echo $_product->getId()?>',
         isProductPage: true,
