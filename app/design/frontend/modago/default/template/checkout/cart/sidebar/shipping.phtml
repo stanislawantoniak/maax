@@ -20,7 +20,8 @@ $cost = $items->cost;
 
 
 $checkoutSession = Mage::getSingleton('checkout/session');
-$sessionShippingMethod = $checkoutSession->getShippingMethod();
+
+$sessionShippingMethod = "";
 
 /* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
@@ -30,8 +31,20 @@ $lockerId = $locker->getId();
 $lockerRender = $this->getLockerRender($locker);
 
 $quote = $this->getQuote();
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
 
 
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+    $sessionShippingMethod = $methodSelectedData;
+}
+
+$customer = Mage::getSingleton('customer/session')->getCustomer();
+
+$address = $checkoutSession->getQuote()->getShippingAddress();
+
+$details = $address->getUdropshipShippingDetails();
+$details = $details ? Zend_Json::decode($details) : array();
+$inpostCode = $address->getData("inpost_locker_name");
 /**
  * Totals
  */
@@ -85,13 +98,13 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
     </script>
 
         <div class="shipping-collect">
-            <?php if (!empty($sessionShippingMethod)): ?>
-                <?php foreach ($sessionShippingMethod as $vendorId => $methodCode): ?>
+            <?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>
+                <?php foreach ($selectedShipping["methods"] as $vendorId => $methodSelected): ?>
                     <input type="hidden"
                            name="shipping_method[<?php echo $vendorId; ?>]"
-                           value="<?php echo $methodCode; ?>" required="required"/>
+                           value="<?php echo $methodSelected; ?>" required="required"/>
                 <?php endforeach; ?>
-                <?php if ($lockerId): ?>
+                <?php if (isset($selectedShipping["shipping_point_code"])): ?>
                     <input type="hidden" name="shipping_point_code"
                            data-id="<?php echo $lockerId; ?>"
                            data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
@@ -142,7 +155,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
                 $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("ships within %s days", $method["days_in_transit"]) : "";
                 ?>
-                <?php if (in_array($method['code'], $sessionShippingMethod)): ?>
+                <?php if ($method['code'] ==$sessionShippingMethod): ?>
                     <div class="shipping-method-selected-container">
                         <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
 
@@ -212,7 +225,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                 <input type="radio"
                                     <?php if(count($methods) == 1): ?> style="display: none;visibility: hidden; height: 0;" <?php endif; ?>
                                        value="<?php echo $method['code']; ?>"
-                                       <?php if(!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod) || (count($methods) == 1)): ?>checked<?php endif; ?>
+                                       <?php if($method['code']==$sessionShippingMethod || (count($methods) == 1)): ?>checked<?php endif; ?>
                                        name="_shipping_method"
                                        required="required"
                                        class="shipping-method css-radio"

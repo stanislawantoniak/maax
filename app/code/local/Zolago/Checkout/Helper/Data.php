@@ -3,6 +3,44 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	protected $inpostLocker = null;
 
+
+	public function getSelectedShipping(){
+		$checkoutSession = Mage::getSingleton('checkout/session');
+
+		//1. Get shipping from session
+		$shipping_method_session = $checkoutSession->getData("shipping_method");
+		$inpostCode = $checkoutSession->getData("inpost_locker_name");
+
+		if(!empty($shipping_method_session)){
+			return array(
+				"methods" => $shipping_method_session,
+				"shipping_point_code" => $inpostCode
+			);
+		}
+
+
+		//2. Get shpping from quote
+		$address = $checkoutSession->getQuote()->getShippingAddress();
+		$details = $address->getUdropshipShippingDetails();
+		$details = $details ? Zend_Json::decode($details) : array();
+		$inpostCode = $address->getData("inpost_locker_name");
+		$methods = array();
+		if(!empty($details) && isset($details["methods"])){
+			foreach($details["methods"] as $vendorId => $methodData){
+				$methods[$vendorId] = $methodData["code"];
+			}
+
+			return array(
+				"methods" => $methods,
+				"shipping_point_code" => $inpostCode
+			);
+		}
+		return array(
+			"methods" => array(),
+			"shipping_point_code" => ""
+		);
+
+	}
 	/**
 	 * Retrieve InPost Locker object for current checkout session
 	 * 
@@ -11,8 +49,9 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getInpostLocker() {
 		if (is_null($this->inpostLocker)) {
 
+			$selectedShipping = $this->getSelectedShipping();
 			$checkoutSession = Mage::getSingleton('checkout/session');
-			$inpostCode = $checkoutSession->getData("inpost_locker_name");
+			$inpostCode = $selectedShipping['shipping_point_code'];
 
 			/** @var GH_Inpost_Model_Locker $locker */
 			$locker = Mage::getModel("ghinpost/locker");
