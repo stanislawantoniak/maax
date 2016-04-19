@@ -72,7 +72,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
         );
         $select->where("products.sku IN(?)", $skuS);
-        //Mage::log(microtime() . " priceMarginValues: ". $select, 0, 'converter_profilerPriceBatch.log');
+
         try {
             $assoc = $readConnection->fetchAll($select);
         } catch (Exception $e) {

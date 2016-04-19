@@ -106,17 +106,15 @@ class Zolago_Campaign_Model_Observer
 
         //set attributes
         if (!empty($reformattedData)) {
-
-            /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-            $catalogHelper = Mage::helper('zolagocatalog');
-            $storesToUpdateInfo = $catalogHelper->getStoresForWebsites($websitesToUpdateInfo);
-
             foreach ($reformattedData as $websiteId => $dataToUpdateInfo) {
-                $storesI = isset($storesToUpdateInfo[$websiteId]) ? $storesToUpdateInfo[$websiteId] : false;
-                if ($storesI) {
-                    $productIdsInfoUpdated = $modelCampaign->setInfoCampaignsToProduct($dataToUpdateInfo, $storesI);
-                    $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsInfoUpdated);
-                }
+                $defaultWebsiteStoreId = Mage::app()
+                    ->getWebsite($websiteId)
+                    ->getDefaultGroup()
+                    ->getDefaultStore()
+                    ->getId();
+
+                $productIdsInfoUpdated = $modelCampaign->setInfoCampaignsToProduct($dataToUpdateInfo, $defaultWebsiteStoreId);
+                $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productIdsInfoUpdated);
             }
             unset($dataToUpdate, $websiteId);
         }

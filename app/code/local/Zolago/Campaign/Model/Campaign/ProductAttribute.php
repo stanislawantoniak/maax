@@ -38,14 +38,13 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
     public function setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId)
     {
 
-        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-        $catalogHelper = Mage::helper('zolagocatalog');
-        $stores = $catalogHelper->getStoresForWebsites($websiteId);
-        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
+        $defaultWebsiteStoreId = Mage::app()
+            ->getWebsite($websiteId)
+            ->getDefaultGroup()
+            ->getDefaultStore()
+            ->getId();
 
         $productsIdsPullToSolr = array();
-
-
 
         $origStore = Mage::app()->getStore();
 
@@ -168,22 +167,21 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             $newSimplePricePriceWithPercent = $newSimplePrice - $newSimplePrice * ((int)$priceSSimple / 100);
 
 
-            foreach ($storesToUpdate as $storeId) {
-                $aM->updateAttributesPure(
-                    array($productSId),
-                    array(
-                        'special_price' => $newSimplePricePriceWithPercent,
+            $aM->updateAttributesPure(
+                array($productSId),
+                array(
+                    'special_price' => $newSimplePricePriceWithPercent,
 
-                        'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
-                        'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
-                        'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
-                        'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : '',
+                    'campaign_strikeout_price_type' => $dataSimpleProduct['campaign_strikeout_price_type'],
+                    'campaign_regular_id' => $dataSimpleProduct['campaign_id'],
+                    'special_from_date' => !empty($dataSimpleProduct['date_from']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_from'])) : '',
+                    'special_to_date' => !empty($dataSimpleProduct['date_to']) ? date('Y-m-d', strtotime($dataSimpleProduct['date_to'])) : '',
 
-                        'product_flag' => $productFlag
-                    ),
-                    $storeId
-                );
-            }
+                    'product_flag' => $productFlag
+                ),
+                $defaultWebsiteStoreId
+            );
+
             //unset($storeId);
             $productsIdsPullToSolr[] = $productSId;
             $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataSimpleProduct['campaign_id']), $productSId);
@@ -346,15 +344,19 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
     /**
      * @param $salesPromoProductsData
      * @param $finalSpecialPricesForChildren
-     * @param $storesToUpdate
+     * @param $skuSizeRelation
+     * @param $websiteId
+     * @return array
+     * @throws Mage_Core_Exception
      */
     public function setSpecialPriceToConfigurableByChildren($salesPromoProductsData,$finalSpecialPricesForChildren, $skuSizeRelation, $websiteId){
         $productsIdsPullToSolr = array();
-        $configurableIds = array_keys($finalSpecialPricesForChildren);
-        /* @var $catalogHelper Zolago_Catalog_Helper_Data */
-        $catalogHelper = Mage::helper('zolagocatalog');
-        $stores = $catalogHelper->getStoresForWebsites($websiteId);
-        $storesToUpdate = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
+
+        $defaultWebsiteStoreId = Mage::app()
+            ->getWebsite($websiteId)
+            ->getDefaultGroup()
+            ->getDefaultStore()
+            ->getId();
 
         $pricesData = array();
 
@@ -396,7 +398,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
             /* @var $resourceModel Zolago_Campaign_Model_Resource_Campaign */
             $resourceModel = Mage::getResourceModel('zolagocampaign/campaign');
-            //TODO uncomment after test
+
             $resourceModel->setCampaignProductAssignedToCampaignFlag(array($dataConfigurableProduct['campaign_id']), $parentProdId);
             $productsIdsPullToSolr[$parentProdId] = $parentProdId;
 
@@ -404,12 +406,10 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
 
-        if(!empty($dataToUpdate)){
-            foreach($dataToUpdate as $attributeName => $data){
-                foreach($data as $value => $idsToUpdate){
-                    foreach ($storesToUpdate as $storeId) {
-                        $aM->updateAttributesPure($idsToUpdate,array($attributeName => $value),$storeId);
-                    }
+        if (!empty($dataToUpdate)) {
+            foreach ($dataToUpdate as $attributeName => $data) {
+                foreach ($data as $value => $idsToUpdate) {
+                    $aM->updateAttributesPure($idsToUpdate, array($attributeName => $value), $defaultWebsiteStoreId);
                 }
             }
         }
@@ -535,16 +535,19 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             );
 
 
-            foreach($updateCollector as $website => $productsIds){
-                if(!isset($stores))
-                    continue;
+            foreach ($updateCollector as $website => $productsIds) {
+                $defaultWebsiteStore = Mage::app()
+                    ->getWebsite($websiteId)
+                    ->getDefaultGroup()
+                    ->getDefaultStore()
+                    ->getId();
+                $defaultWebsiteStoreId = $defaultWebsiteStore->getId();
 
-                foreach ($stores[$websiteId] as $store) {
-                    $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
+                $actionModel->updateAttributesPure($productsIds, $attributesData, $defaultWebsiteStoreId);
 
-                    $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
-                    Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
-                }
+                $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $defaultWebsiteStore);
+                Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
+
             }
         }
 
