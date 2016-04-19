@@ -329,19 +329,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
 		}
 
-		$quote = Mage::getModel("checkout/cart")->getQuote();
-		$address = $quote->getShippingAddress();
-		if ($shippingPointCode = $request->getParam("shipping_point_code")) {
-			$address->setInpostLockerName($shippingPointCode);
-			$this->_getCheckoutSession()->setInpostLockerName($shippingPointCode);
-		} else {
-			//Clear locker address in the sales_flat_quote_address
-			$address->setCity("");
-			$address->setStreet("");
-			$address->setPostcode("");
-			$address->setInpostLockerName("");
-			$this->_getCheckoutSession()->setInpostLockerName();
-		}
 		/**
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
