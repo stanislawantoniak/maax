@@ -100,14 +100,6 @@
                     </ghapi>
                 </observers>
             </udropship_adminhtml_vendor_tabs_after>
-            <udropship_adminhtml_vendor_edit_prepare_form>
-                <observers>
-                    <udvacation>
-                        <class>ghapi/observer</class>
-                        <method>udropship_adminhtml_vendor_edit_prepare_form</method>
-                    </udvacation>
-                </observers>
-            </udropship_adminhtml_vendor_edit_prepare_form>
         </events>
     </adminhtml>
     <default>

@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once "app/code/community/ZolagoOs/Dropship/controllers/VendorController.php";
+require_once "app/code/community/ZolagoOs/OmniChannel/controllers/VendorController.php";
 
 /**
  * Adminhtml downloadable product edit

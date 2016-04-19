@@ -972,15 +972,6 @@
 		</routers>
 	</admin>
 	<adminhtml>
-		<events>
-		    <udropship_adminhtml_vendor_edit_prepare_form>
-		        <observers>
-		            <udvacation>
-		                <type>disabled</type>
-		            </udvacation>
-		        </observers>
-		    </udropship_adminhtml_vendor_edit_prepare_form>
-        </events>
 		<translate>
 			<modules>
 				<Zolago_Dropship>

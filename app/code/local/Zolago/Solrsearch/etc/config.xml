@@ -432,10 +432,6 @@
                     <model>zolagosolrsearch/observer::cronCleanupQueue</model>
                 </run>
             </zolagosolrsearch_cleanup_queue>
-            <udvacation_process>
-                <schedule><cron_expr>21 0 * * *</cron_expr></schedule>
-                <run><model>udvacation/observer::processVacations</model></run>
-            </udvacation_process>
             <udpayout_process_standard>
                 <schedule><cron_expr>8 3 * * *</cron_expr></schedule>
                 <run><model>udpayout/observer::processStandard</model></run>

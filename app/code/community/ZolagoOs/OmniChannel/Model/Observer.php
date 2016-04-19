@@ -625,8 +625,8 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     {
         Mage::helper('usimpleup')->removeFiles('
 app/etc/modules/ZolagoOs_OmniChannel.xml
-app/code/community/ZolagoOs/Dropship/
-app/code/community/ZolagoOs/DropshipHelper/
+app/code/community/ZolagoOs/OmniChannel/
+app/code/community/ZolagoOs/OmniChannelHelper/
 app/design/adminhtml/default/default/layout/udropship.xml
 app/design/adminhtml/default/default/template/udropship/
 app/design/frontend/base/default/layout/udropship.xml

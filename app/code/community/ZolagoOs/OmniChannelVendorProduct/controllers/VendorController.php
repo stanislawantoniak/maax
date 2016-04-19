@@ -3,7 +3,7 @@
   
  */
 
-require_once "app/code/community/ZolagoOs/Dropship/controllers/VendorController.php";
+require_once "app/code/community/ZolagoOs/OmniChannel/controllers/VendorController.php";
 
 class ZolagoOs_OmniChannelVendorProduct_VendorController extends ZolagoOs_OmniChannel_VendorController
 {
