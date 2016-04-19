@@ -539,7 +539,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             foreach($updateCollector as $websiteId => $productsIds){
                 if(!isset($stores))
                     continue;
-                Mage::log("WEBSITE_ID: {$websiteId}", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log")
+                Mage::log("WEBSITE_ID: {$websiteId}", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
                 foreach ($stores[$websiteId] as $storeId) {
                     Mage::log("STORE_ID: {$storeId}", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
                     Mage::log($productsIds, null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
