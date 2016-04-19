@@ -52,7 +52,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 <script type="text/javascript">
     var inPostPointsData = '<?php echo $inPostPoints; ?>';
     var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON('<?php echo $inPostPoints; ?>') : [];
-
+    Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
     Mall.translate.add("shipping_map_select_city", "<?php echo $helper->__("Select City"); ?>");
