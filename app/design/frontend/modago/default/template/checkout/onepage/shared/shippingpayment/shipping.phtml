@@ -21,7 +21,9 @@ $sessionShippingMethod = "";
 foreach($selectedShipping["methods"] as $vid => $methodSelected){
     $sessionShippingMethod = $methodSelected;
 }
-$inpostCode = $address->getData("inpost_locker_name");
+/* @var $locker GH_Inpost_Model_Locker  */
+$locker		= $this->getInpostLocker();
+$lockerId = $locker->getId();
 ?>
 
 
@@ -36,6 +38,12 @@ $inpostCode = $address->getData("inpost_locker_name");
 		})();
     </script>
     <div class="shipping-collect"></div>
+    <?php if (isset($selectedShipping["shipping_point_code"])): ?>
+        <input type="text" name="_shipping_point_code"
+               data-id="<?php echo $lockerId; ?>"
+               data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
+               value="<?php echo $locker->getName(); ?>" required="required"/>
+    <?php endif; ?>
 	<?php foreach($methods as $method): ?>
     <?php
     $formattedCost = '';

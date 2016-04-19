@@ -38,13 +38,6 @@ foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
 
-$customer = Mage::getSingleton('customer/session')->getCustomer();
-
-$address = $checkoutSession->getQuote()->getShippingAddress();
-
-$details = $address->getUdropshipShippingDetails();
-$details = $details ? Zend_Json::decode($details) : array();
-$inpostCode = $address->getData("inpost_locker_name");
 /**
  * Totals
  */
