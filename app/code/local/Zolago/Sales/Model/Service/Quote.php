@@ -32,7 +32,7 @@ class Zolago_Sales_Model_Service_Quote extends Mage_Sales_Model_Service_Quote {
         $helper = Mage::helper("zolagocheckout");
         $locker = $helper->getInpostLocker();
 
-        if ($addressValidation !== true && !$locker) {
+        if ($addressValidation !== true && !$locker->getId()) {
             Mage::throwException(
                 Mage::helper('sales')->__('Please check billing address information. %s', implode(' ', $addressValidation))
             );

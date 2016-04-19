@@ -1271,9 +1271,6 @@
 				// copy phone
 				accountTelephone = form.find("input[name='account[telephone]']").val();
 				form.find("input[name='billing[telephone]']").val(accountTelephone);
-				if (!form.find("input[name='shipping[different_shipping_address]']").is(":checked")) {
-					//form.find("input[name='shipping[telephone]']").val(accountTelephone);
-				}
 
 				//use_for_shipping
 				if (!form.find("input[name='billing[need_invoice]']").is(":checked")) { // if is not visible
@@ -1288,7 +1285,7 @@
 
 				stepData = form.serializeArray();
 				// fill billing data with shipping
-				if (!this.getIsNeedInvoice()  && !inpostName) {
+				if (!this.getIsNeedInvoice() && !inpostName) {
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
