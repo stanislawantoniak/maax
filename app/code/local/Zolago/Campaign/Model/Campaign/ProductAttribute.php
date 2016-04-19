@@ -513,6 +513,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             }
         }
 
+        unset($websiteId);
         if(!empty($updateCollector)){
             $websiteIdsToUpdate = array_keys($dataToUpdate);
             /* @var $zolagocatalogHelper Zolago_Catalog_Helper_Data */
@@ -535,13 +536,15 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
             );
 
 
-            foreach($updateCollector as $website => $productsIds){
+            foreach($updateCollector as $websiteId => $productsIds){
                 if(!isset($stores))
                     continue;
 
-                foreach ($stores[$websiteId] as $store) {
-                    $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
+                foreach ($stores[$websiteId] as $storeId) {
 
+                    $actionModel->updateAttributesPure($productsIds, $attributesData, $storeId);
+
+                    $store = Mage::getModel("core/store")->load($storeId);
                     $col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
                     Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
                 }
