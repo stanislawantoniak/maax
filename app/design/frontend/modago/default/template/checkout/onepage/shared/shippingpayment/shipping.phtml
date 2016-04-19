@@ -14,12 +14,14 @@ $vednorCosts = $items->vendorCosts;
 $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
-
 $checkoutSession = Mage::getSingleton('checkout/session');
-$sessionShippingMethod = $checkoutSession->getData("shipping_method");
-
-$inpostCode = $checkoutSession->getData("inpost_code");
-
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+$address = $checkoutSession->getQuote()->getShippingAddress();
+$sessionShippingMethod = "";
+foreach($selectedShipping["methods"] as $vid => $methodSelected){
+    $sessionShippingMethod = $methodSelected;
+}
+$inpostCode = $address->getData("inpost_locker_name");
 ?>
 
 
@@ -47,7 +49,7 @@ $inpostCode = $checkoutSession->getData("inpost_code");
                         <div style="">
                             <input type="radio"
                                    value="<?php echo $method['code']; ?>"
-                                   <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
+                                   <?php if (!empty($sessionShippingMethod) && $method['code']==$sessionShippingMethod): ?>checked<?php endif; ?>
                                    name="_shipping_method"
                                    required="required"
                                    class="shipping-method"

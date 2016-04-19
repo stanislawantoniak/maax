@@ -165,9 +165,9 @@ abstract class Zolago_Checkout_Controller_Abstract
                 throw new Mage_Core_Exception($shippingMethodResponse['message']);
             }
 
-			$shippingPointCode = $request->getParam("shipping_point_code", "");
+
 			//Save sales_flat_quote_address.udropship_shipping_details
-			$this->setUdropshipShippingDetailsToAddress($shippingMethod, $shippingPointCode);
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
 			//Save sales_flat_quote_address.udropship_shipping_details
 
             $this->_getCheckoutSession()->setShippingMethod($shippingMethod);

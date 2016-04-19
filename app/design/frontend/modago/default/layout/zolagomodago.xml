@@ -386,6 +386,10 @@
         <type>skin_js</type>
         <name>js/select2/js/select2.min.js</name>
       </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>js/select2/js/i18n/pl.js</name>
+      </action>
       <action method="removeItem">
         <type>js</type>
         <script>varien/weee.js</script>

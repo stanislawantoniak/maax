@@ -93,7 +93,7 @@
             google.maps.event.addDomListener(window, "resize", resizingMap());
 
             jQuery("[name=shipping_select_point]")
-                .select2({dropdownParent: jQuery("#select_inpost_point")})
+                .select2({dropdownParent: jQuery("#select_inpost_point"),language: Mall.reg.get("localeCode")})
                 .change(function () {
                     var el = jQuery(this), val = el.val();
                     el.addClass("onchange_shipping_select_point");
@@ -118,14 +118,16 @@
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: Mall.translate.__("shipping_map_select_city"),
-                dropdownParent: jQuery("#select_inpost_point")
+                dropdownParent: jQuery("#select_inpost_point"),
+                language: Mall.reg.get("localeCode")
             });
 
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
+                    dropdownParent: jQuery("#select_inpost_point"),
+                    language: Mall.reg.get("localeCode")
                 });
 
 
@@ -158,7 +160,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point")});
+                    .select2({dropdownParent: jQuery("#select_inpost_point"), language: Mall.reg.get("localeCode")});
 
                 searchOnMap(sessionPointTown, sessionPoint.val());
             }
@@ -438,7 +440,8 @@ function refreshMap(filteredData, nearestStores) {
                 jQuery("select[name=shipping_select_city]")
                     .val(this.town)
                     .select2({
-                        dropdownParent: jQuery("#select_inpost_point")
+                        dropdownParent: jQuery("#select_inpost_point"),
+                        language: Mall.reg.get("localeCode")
                     });
                 jQuery(".shipping_select_point_data").html("");
 
@@ -449,7 +452,8 @@ function refreshMap(filteredData, nearestStores) {
             if (!jQuery("select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
                 jQuery("select[name=shipping_select_point]")
                     .select2({
-                        dropdownParent: jQuery("#select_inpost_point")
+                        dropdownParent: jQuery("#select_inpost_point"),
+                        language: Mall.reg.get("localeCode")
                     });
             }
             jQuery("[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
@@ -773,7 +777,7 @@ function constructShippingPointSelect(map_points) {
     }
 
     jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point")});
+        .select2({dropdownParent: jQuery("#select_inpost_point"), language: Mall.reg.get("localeCode")});
 }
 
 function clearClusters(e) {
