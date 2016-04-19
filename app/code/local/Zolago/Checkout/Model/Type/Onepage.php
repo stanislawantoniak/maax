@@ -366,7 +366,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             // emulate request object
             $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
             $addressErrors  = $addressForm->validateData($addressData);
-            if ($addressErrors !== true && !$locker) {
+            if ($addressErrors !== true && !$locker->getId()) {
                 return array('error' => 1, 'message' => array_values($addressErrors));
             }
             $addressForm->compactData($addressData);
@@ -388,9 +388,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
 
         // validate billing address
-        if (($validateRes = $address->validate()) !== true) {
+        /*if (($validateRes = $address->validate()) !== true) {
             //return array('error' => 1, 'message' => $validateRes);
-        }
+        }*/
 
         $address->implodeStreetAddress();
 
