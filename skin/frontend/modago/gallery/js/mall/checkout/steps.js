@@ -820,7 +820,7 @@
 					inpostName = inpost.getName(),
 					telephoneForLocker = inpost.getTelephoneForLocker(),
 					data = [];
-console.log(inpostName);
+
 				data.push({"name": "form_key", "value": this.getFormKey()});
 
 				if (!inpostName) {
@@ -1271,9 +1271,6 @@ console.log(inpostName);
 				// copy phone
 				accountTelephone = form.find("input[name='account[telephone]']").val();
 				form.find("input[name='billing[telephone]']").val(accountTelephone);
-				if (!form.find("input[name='shipping[different_shipping_address]']").is(":checked")) {
-					//form.find("input[name='shipping[telephone]']").val(accountTelephone);
-				}
 
 				//use_for_shipping
 				if (!form.find("input[name='billing[need_invoice]']").is(":checked")) { // if is not visible
