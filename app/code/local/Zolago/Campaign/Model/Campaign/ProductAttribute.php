@@ -483,7 +483,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
      * @return array
      */
     public function unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable = array()){
-
+        Mage::log($dataToUpdate, null, "unsetPromoCampaignAttributesToVisibleProducts.log");
         $productIdsToUpdate = array();
 
         $updateCollector = array();
@@ -534,7 +534,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 'product_flag' => null
             );
 
-
+            Mage::log($updateCollector, null, "unsetPromoCampaignAttributesToVisibleProducts_2.log");
             foreach($updateCollector as $website => $productsIds){
                 if(!isset($stores))
                     continue;
@@ -549,6 +549,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         }
 
         //3.2. Recover options for configurable products
+        Mage::log($recoverOptionsProducts, null, "unsetPromoCampaignAttributesToVisibleProducts_3.log");
         if (!empty($recoverOptionsProducts)) {
             //recover options
             /* @var $configurableRModel Zolago_Catalog_Model_Resource_Product_Configurable */
