@@ -45,9 +45,9 @@ class GH_Statements_Model_Observer
         }
 
         // Collection of active vendors who have statement calendar
-        /* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
+        /* @var $collection ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection */
         $vendorsCollection = Mage::getResourceModel('udropship/vendor_collection');
-        $vendorsCollection->addStatusFilter(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+        $vendorsCollection->addStatusFilter(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE);
         $vendorsCollection->addFieldToFilter('statements_calendar', array('neq' => null));
 
         foreach($vendorsCollection as $vendor) {
@@ -462,7 +462,7 @@ class GH_Statements_Model_Observer
         $orderShipmentsCollection
         ->addFieldToFilter('statement_id',array('null' => true))
         ->addFieldToFilter('udropship_vendor',$statement->getVendorId())
-        ->addFieldToFilter('udropship_status',array('neq'=>Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED));
+        ->addFieldToFilter('udropship_status',array('neq'=>ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED));
 
         //prepare arrays to load orders shipments trackings
         $ordersShipmentsIds = array();
@@ -489,8 +489,8 @@ class GH_Statements_Model_Observer
             ->addFieldToFilter('shipped_date', array('lteq' => $yesterday))
             ->addFieldToFilter('parent_id',array('in'=>$ordersShipmentsIds))
             ->addFieldToFilter('udropship_status',array('in'=>array(
-                                   Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
-                                   Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+                                   ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED,
+                                   ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED,
                                    Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
                                )));
 
@@ -548,8 +548,8 @@ class GH_Statements_Model_Observer
                 ->addFieldToFilter('main_table.shipped_date', array('notnull' => true))
                 ->addFieldToFilter('main_table.shipped_date', array('lteq' => $yesterday))
 			    ->addFieldToFilter('main_table.udropship_status',array('in'=>array(
-				    Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED,
-				    Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED,
+				    ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED,
+				    ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED,
 				    Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED
 			    )))
 			    ->getSelect()
@@ -673,7 +673,7 @@ class GH_Statements_Model_Observer
         // Zwroty o statusie zamknięte-zrealizowane, które mają kwotę do zwrotu lub o typie zwrot nieodebranej niezależnie od kwoty do zwrotu
         // Te które nie zostały dotąd ujęte w rozliczeniu
 
-        /** @var Unirgy_Rma_Model_Mysql4_Rma_Item_Collection $rmaItemsColl  */
+        /** @var ZolagoOs_Rma_Model_Mysql4_Rma_Item_Collection $rmaItemsColl  */
         $rmaItemsColl = Mage::getResourceModel('urma/rma_item_collection');
         $rmaItemsColl->addFieldToFilter('main_table.statement_id', array('null' => true));
         $rmaItemsColl->getSelect()

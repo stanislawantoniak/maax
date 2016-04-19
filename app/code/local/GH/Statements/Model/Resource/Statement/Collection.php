@@ -14,7 +14,7 @@ class GH_Statements_Model_Resource_Statement_Collection
      * @return $this
      */
     public function addVendorFilter($vendor) {
-        if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+        if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
             $vendor = $vendor->getId();
         }
         $this->addFieldToFilter('main_table.vendor_id',(int)$vendor);

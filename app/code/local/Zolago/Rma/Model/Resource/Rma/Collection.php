@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Rma_Model_Resource_Rma_Collection extends Unirgy_Rma_Model_Mysql4_Rma_Collection
+class Zolago_Rma_Model_Resource_Rma_Collection extends ZolagoOs_Rma_Model_Mysql4_Rma_Collection
 {
 	
 	protected $_productJoined;

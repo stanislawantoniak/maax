@@ -16,7 +16,7 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
     protected function _prepareCollection()
     {
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
         $collection = Mage::getResourceModel("zolagopos/pos_collection");
         /* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
         $collection->addVendorFilter($vendor);

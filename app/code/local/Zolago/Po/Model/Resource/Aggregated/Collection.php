@@ -19,11 +19,11 @@ class Zolago_Po_Model_Resource_Aggregated_Collection
 		return $this;
 	}
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor | int $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor | int $vendor
 	 * @return \Zolago_Po_Model_Resource_Aggregated_Collection
 	 */
 	public function addVendorFilter($vendor) {
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		$this->addFieldToFilter("vendor_id", $vendor);

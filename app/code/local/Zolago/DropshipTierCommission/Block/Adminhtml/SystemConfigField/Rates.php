@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipTierCommission_Block_Adminhtml_SystemConfigField_Rates extends Unirgy_DropshipTierCommission_Block_Adminhtml_SystemConfigField_Rates
+class Zolago_DropshipTierCommission_Block_Adminhtml_SystemConfigField_Rates extends ZolagoOs_OmniChannelTierCommission_Block_Adminhtml_SystemConfigField_Rates
 {
     public function __construct()
     {

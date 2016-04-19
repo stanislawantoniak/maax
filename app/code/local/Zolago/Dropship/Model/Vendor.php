@@ -22,7 +22,7 @@
  *
  * @method Zolago_Dropship_Model_Vendor setLastIntegration(string $date)
  */
-class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
+class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
 {
 
     const VENDOR_TYPE_BRANDSHOP = 2;
@@ -490,7 +490,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
             $where .= ' OR vendor_name=:username';
         }
         $collection->getSelect()
-            ->where('status not in (?)', array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_DISABLED, Unirgy_Dropship_Model_Source::VENDOR_STATUS_REJECTED))
+            ->where('status not in (?)', array(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_DISABLED, ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_REJECTED))
             ->where($where)
             ->order($order);
         $collection->addBindParam('username', $username);
@@ -547,14 +547,14 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
             return $status;
         }
         if (!Mage::app()->getWebsite()->getVendorSitesAllowed()) {
-            if ($status == Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE) {
-                $status = Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE;
+            if ($status == ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE) {
+                $status = ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE;
             }
             return $status;
         }
         if (Mage::app()->getWebsite()->getIsPreviewWebsite()) {
-            if ($status == Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE) {
-                $status = Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE;
+            if ($status == ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE) {
+                $status = ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE;
             }
             return $status;
         }

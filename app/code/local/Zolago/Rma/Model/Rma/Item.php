@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Rma_Model_Rma_Item extends Unirgy_Rma_Model_Rma_Item
+class Zolago_Rma_Model_Rma_Item extends ZolagoOs_Rma_Model_Rma_Item
 {
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipSplit_Block_Cart_Vendor extends Unirgy_DropshipSplit_Block_Cart_Vendor
+class Zolago_DropshipSplit_Block_Cart_Vendor extends ZolagoOs_OmniChannelSplit_Block_Cart_Vendor
 {
 	/**
 	 * @return string | null

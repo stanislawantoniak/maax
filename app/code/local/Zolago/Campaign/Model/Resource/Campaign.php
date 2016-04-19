@@ -1290,7 +1290,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
 
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
         $collection = Mage::getResourceModel("zolagocampaign/campaign_collection");
         $collection->getSelect()
             ->join(

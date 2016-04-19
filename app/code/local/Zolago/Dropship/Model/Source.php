@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
+class Zolago_Dropship_Model_Source extends ZolagoOs_OmniChannel_Model_Source
 {
     const VENDOR_TYPE_BRANDSHOP = 2;
     const VENDOR_TYPE_STANDARD = 1;
@@ -96,13 +96,13 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
 
     /**
      * @param bool $canAsk
-     * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
+     * @return ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection
      */
     public function getCanAskVendors($canAsk = true)
     {
         /** @var Zolago_Dropship_Model_Vendor $modelUdv */
         $modelUdv = Mage::getModel('udropship/vendor');
-        /** @var Unirgy_Dropship_Model_Mysql4_Vendor_Collection $vendors */
+        /** @var ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection $vendors */
         $vendors = $modelUdv->getCollection()
             ->setItemObjectClass('Varien_Object')
             ->addFieldToSelect(array('vendor_name'))
@@ -113,13 +113,13 @@ class Zolago_Dropship_Model_Source extends Unirgy_Dropship_Model_Source
         return $vendors;
     }
     /**
-     * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
+     * @return ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection
      */
     public function getCanAskBrandshops()
     {
         /** @var Zolago_Dropship_Model_Vendor $modelUdv */
         $modelUdv = Mage::getModel('udropship/vendor');
-        /** @var Unirgy_Dropship_Model_Mysql4_Vendor_Collection $vendors */
+        /** @var ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection $vendors */
         $vendors = $modelUdv->getCollection()
             ->setItemObjectClass('Varien_Object')
             ->addFieldToSelect(array('vendor_name'))

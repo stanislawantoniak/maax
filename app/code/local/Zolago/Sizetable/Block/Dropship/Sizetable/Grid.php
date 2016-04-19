@@ -14,7 +14,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Grid extends Mage_Adminhtml_Bloc
 	
 	protected function _prepareCollection(){
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagosizetable/sizetable_collection");
 		/* @var $collection Zolago_Sizetable_Model_Resource_Sizetable_Collection */
 		$collection->addVendorFilter($vendor);

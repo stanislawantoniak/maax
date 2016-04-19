@@ -22,7 +22,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return string
 	 */
 	public function getCacheKeyForSearch($params = array()) {
-		/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
+		/** @var ZolagoOs_OmniChannelMicrosite_Helper_Data $micrositeHelper */
 		$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
 		/** @var Zolago_Dropship_Model_Vendor|false $vendor */
 		$vendor = $micrositeHelper->getCurrentVendor();

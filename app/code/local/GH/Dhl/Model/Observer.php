@@ -12,7 +12,7 @@ class GH_Dhl_Model_Observer
     public function udropship_adminhtml_vendor_tabs_after($observer)
     {
         $block = $observer->getBlock();
-        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs
+        if (!$block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs
             || !Mage::app()->getRequest()->getParam('id', 0)
         ) {
             return;
@@ -25,7 +25,7 @@ class GH_Dhl_Model_Observer
             ->setVendorId(Mage::app()->getRequest()->getParam('id'))
             ->toHtml();
 
-        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+        if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $block->addTab('ghdhl_section', array(
                 'label' => Mage::helper('ghdhl')->__('DHL Account Access settings'),
                 'content' => $ghDHLBlock

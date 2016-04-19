@@ -169,7 +169,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Vendor
+     * @return ZolagoOs_OmniChannel_Model_Vendor
      */
     protected function _getVendor() {
         return $this->_getSession()->getVendor();
@@ -705,7 +705,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $item->addData($itemData);
 
             Mage::helper("udropship")->addVendorSkus($po);
-            if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
+            if(Mage::helper("core")->isModuleEnabled('ZolagoOs_OmniChannelTierCommission')) {
                 Mage::helper("udtiercom")->processPo($po);
             }
 
@@ -1200,7 +1200,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
             return $this->_redirectReferer();
         }
-        /* @var $po Unirgy_DropshipPo_Model_Po */
+        /* @var $po ZolagoOs_OmniChannelPo_Model_Po */
 
         $pos = Mage::getModel("zolagopos/pos")->load($posId);
         /* @var $pos Zolago_Pos_Model_Pos */
@@ -1357,7 +1357,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $udpo->setForceStatusChangeFlag(true);
                 }
                 // set cancel params
-                if ($poStatus == Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED) {
+                if ($poStatus == ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED) {
                     $udpo->setFullCancelFlag($r->getParam('full_cancel'));
                     $udpo->setNonshippedCancelFlag($r->getParam('nonshipped_cancel'));
                 }
@@ -1526,7 +1526,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $shipment Mage_Sales_Model_Order_Shipment */
             if($shipment->getId() && $shipment->getUdpoId()==$udpo->getId()) {
                 $udpoHlp = Mage::helper('udpo');
-                /* @var $udpoHlp Unirgy_DropshipPo_Helper_Data */
+                /* @var $udpoHlp ZolagoOs_OmniChannelPo_Helper_Data */
                 $udpoHlp->cancelShipment($shipment, true);
                 $udpo->getStatusModel()->processCancelShipment($udpo);
                 $this->_getSession()->addSuccess($_helper->__("Shipping canceled."));

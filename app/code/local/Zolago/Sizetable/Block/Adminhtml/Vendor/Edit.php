@@ -2,7 +2,7 @@
 /**
  * js for size table settings
  */
-class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit extends Unirgy_Dropship_Block_Adminhtml_Vendor_Edit {
+class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit extends ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit {
       
     public function getFormScripts()
     {

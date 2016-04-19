@@ -74,7 +74,7 @@ class Zolago_SalesRule_Model_Observer {
      */
     public function udpoPoItemSaveBefore(Varien_Event_Observer $observer) {
         $item = $observer->getEvent()->getPoItem();
-        /* @var $item Unirgy_DropshipPo_Model_Po_Item */
+        /* @var $item ZolagoOs_OmniChannelPo_Model_Po_Item */
         if($item->isObjectNew()) {
             if (Mage::registry('vendor_add_item_to_po_before')) {
                 $item->setDoResetDiscountInfo(true);
@@ -91,10 +91,10 @@ class Zolago_SalesRule_Model_Observer {
      * Discount can be changed by on of the paramters:
      *	- discount_amount
      *  - price_incl_tax
-     * @param Unirgy_DropshipPo_Model_Po_Item $item
+     * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
      * @return bool
      */
-    protected function _hasDiscountChanged(Unirgy_DropshipPo_Model_Po_Item $item) {
+    protected function _hasDiscountChanged(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
         return
             (round($item->getData("discount_amount"), 2) !== round($item->getOrigData("discount_amount"), 2)) ||
             (round($item->getData("price_incl_tax"), 2) !== round($item->getOrigData("price_incl_tax"), 2));
@@ -106,7 +106,7 @@ class Zolago_SalesRule_Model_Observer {
      */
     public function udpoPoItemSaveAfter(Varien_Event_Observer $observer) {
         $item = $observer->getEvent()->getPoItem();
-        /* @var $item Unirgy_DropshipPo_Model_Po_Item */
+        /* @var $item ZolagoOs_OmniChannelPo_Model_Po_Item */
         if($item->getDoUpdateDiscountInfo()) {
             Mage::getResourceSingleton('zolagosalesrule/relation')->updateForPoItem($item);
             $item->setDoUpdateDiscountInfo(null);

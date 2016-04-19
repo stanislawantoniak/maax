@@ -1,9 +1,9 @@
 <?php
-class Zolago_Dropship_Helper_Item extends Unirgy_Dropship_Helper_Item {
+class Zolago_Dropship_Helper_Item extends ZolagoOs_OmniChannel_Helper_Item {
 	public function initPoTotals($po, $extendedTotals = false)
     {
         $hlp = Mage::helper('udropship');
-        $isTierCom = $hlp->isModuleActive('Unirgy_DropshipTierCommission');
+        $isTierCom = $hlp->isModuleActive('ZolagoOs_OmniChannelTierCommission');
         $vendor = $hlp->getVendor($po->getUdropshipVendor());
         $order = $po->getOrder();
         $statement = Mage::getModel('udropship/vendor_statement')->setVendor($vendor)->setVendorId($vendor->getId());

@@ -56,7 +56,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<GH_Marketing before="Unirgy_Dropship">GH_Marketing_Dropship</GH_Marketing>
+						<GH_Marketing before="ZolagoOs_OmniChannel">GH_Marketing_Dropship</GH_Marketing>
 					</modules>
 				</args>
 			</udropship>

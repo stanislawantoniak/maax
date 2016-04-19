@@ -1,10 +1,10 @@
 <?php
 
-require_once Mage::getConfig()->getModuleDir('controllers', 'Unirgy_DropshipVendorAskQuestion') 
+require_once Mage::getConfig()->getModuleDir('controllers', 'ZolagoOs_OmniChannelVendorAskQuestion') 
 		. DS . "CustomerController.php";
 
 
-class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_DropshipVendorAskQuestion_CustomerController
+class Zolago_DropshipVendorAskQuestion_CustomerController extends ZolagoOs_OmniChannelVendorAskQuestion_CustomerController
 {
     public function postAction()
     {

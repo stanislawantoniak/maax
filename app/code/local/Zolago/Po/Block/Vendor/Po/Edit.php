@@ -107,10 +107,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param ZolagoOs_OmniChannelPo_Model_Po $po
 	 * @return string
 	 */
-	public function getCurrentStatus(Unirgy_DropshipPo_Model_Po $po) {
+	public function getCurrentStatus(ZolagoOs_OmniChannelPo_Model_Po $po) {
 		return Mage::helper("udpo")->getPoStatusName($this->getPo()->getUdropshipStatus());
 	}
 	
@@ -123,10 +123,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param ZolagoOs_OmniChannelPo_Model_Po $po
 	 * @return Zolago_Pos_Model_Pos
 	 */
-	public function getPos(Unirgy_DropshipPo_Model_Po $po) {
+	public function getPos(ZolagoOs_OmniChannelPo_Model_Po $po) {
 		return $po->getPos();
 	}
 	
@@ -168,10 +168,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
 	 */
-	public function	getItemRedener(Unirgy_DropshipPo_Model_Po_Item $item) {
+	public function	getItemRedener(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
 		$orderItem = $item->getOrderItem();
 		$type=$orderItem->getProductType();
 		return $this->_getRendererByType($type)->
@@ -300,7 +300,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$collection =  Mage::getResourceModel('sales/order_shipment_collection')->
 				addAttributeToFilter('udpo_id', $_po->getId())->
 				addAttributeToFilter("udropship_status", 
-					array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+					array("nin"=>array(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED))
 		);
 		
 		$collection->setOrder("created_at", "DESC");
@@ -368,7 +368,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function getAllMessagesCount(Zolago_Po_Model_Po $po) {
 		if(!$this->hasData('all_messages_count')){
 			$collection = Mage::getResourceModel('udqa/question_collection');
-			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			/* @var $collection ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question_Collection */
 			$collection->addApprovedAnswersFilter();
 			$collection->addVendorFilter($this->getVendor());
 			$collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));
@@ -384,7 +384,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function getUnreadMessagesCount(Zolago_Po_Model_Po $po) {
 		if(!$this->hasData('unread_messages_count')){
 			$collection = Mage::getResourceModel('udqa/question_collection');
-			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			/* @var $collection ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question_Collection */
 			$collection->addApprovedAnswersFilter();
 			$collection->addVendorFilter($this->getVendor());
             $collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));

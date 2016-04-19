@@ -366,12 +366,12 @@
 					<!-- should be lower_commission_percent -->
                     <sale_commission_percent>
                         <fieldset>statement</fieldset>
-                        <hide_modules>Unirgy_DropshipTierCommission</hide_modules>
+                        <hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
                         <position>11</position>
                         <default>0</default>
                     </sale_commission_percent>
                     <marketing_charges_enabled>
-                        <hide_modules>Unirgy_DropshipTierCommission</hide_modules>
+                        <hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
                         <default>0</default>
                     </marketing_charges_enabled>
 
@@ -931,7 +931,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_Dropship before="Unirgy_Dropship">Zolago_Dropship</Zolago_Dropship>
+						<Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
                     </modules>
 				</args>
 			</udropship>
@@ -965,7 +965,7 @@
 			<udropshipadmin>
 				<args>
 					<modules>
-						<Zolago_Dropship before="Unirgy_Dropship">Zolago_Dropship</Zolago_Dropship>
+						<Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
 					</modules>
 				</args>
 			</udropshipadmin>

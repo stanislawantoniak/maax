@@ -6,14 +6,14 @@ class Zolago_Pos_Model_Observer {
 	public function udpoOrderSaveBefore($observer) { // After
 		$udpos = $observer->getUdpos();
 		foreach($udpos as $udpo){
-			/* @var $udpo Unirgy_DropshipPo_Model_Po */
+			/* @var $udpo ZolagoOs_OmniChannelPo_Model_Po */
 			$this->_assignPosToPo($udpo);
 		}
 		
 	}
 	
 	protected function _assignPosToPo($udpo) {
-		/* @var $udpo Unirgy_DropshipPo_Model_Po */
+		/* @var $udpo ZolagoOs_OmniChannelPo_Model_Po */
 		if(!$udpo->getId() && !$udpo->getDefaultPosId()){
 			$vendor = $udpo->getVendor();
 			$bestPos = $this->_getBestPosByVendor($vendor);
@@ -31,7 +31,7 @@ class Zolago_Pos_Model_Observer {
 	 */
 	protected function _getBestPosByVendor($vendor)
 	{
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
@@ -53,7 +53,7 @@ class Zolago_Pos_Model_Observer {
 
 	public function getVendorPOSes($vendorId){
 		$vendor = Mage::getModel("udropship/vendor")->load($vendorId);
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
@@ -67,7 +67,7 @@ class Zolago_Pos_Model_Observer {
 		/* @var $vendor Zolago_Po_Model_Po */
 		$collection = Mage::getModel("zolagopo/po")->getCollection();
 		$collection->addFieldToFilter("default_pos_id", array("null" => TRUE));
-		$collection->addFieldToFilter("udropship_status", array("nin" => array(Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED)));
+		$collection->addFieldToFilter("udropship_status", array("nin" => array(ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED)));
 		$collection->setPageSize(self::ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT);
 
 

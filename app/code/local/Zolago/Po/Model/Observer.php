@@ -413,7 +413,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param ZolagoOs_OmniChannelPo_Model_Po $po
 	 * @param string $comment
 	 */
 	protected function _logEvent($po, $comment) {
@@ -453,7 +453,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $cancel = array();
         foreach ($order_collection as $order) {            
 			$collection = Mage::getResourceModel("udpo/po_collection");
-			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+			/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 			$collection->addFieldToFilter("order_id", $order->getId());
     		$collection->addFieldToFilter("udropship_status", 
 					array("nin"=>Zolago_Po_Model_Po_Status::STATUS_CANCELED)
@@ -461,7 +461,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             if (!count($collection)) {
                 // check date of canceled
     			$collection = Mage::getResourceModel("udpo/po_collection");
-		    	/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+		    	/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 	    		$collection->addFieldToFilter("order_id", $order->getId());
                 $collection->addFieldToFilter("updated_at",array('lt'=>date('Y-m-d H:i:s',$time-24*3600)));
                 if (!count($collection)) {

@@ -20,7 +20,7 @@ class Zolago_Operator_Model_Resource_Operator_Collection
      * vendor filter
      */
     public function addVendorFilter($vendor) {
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		$this->addFieldToFilter('vendor_id',$vendor);
