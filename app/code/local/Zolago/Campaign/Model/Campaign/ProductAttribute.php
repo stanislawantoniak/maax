@@ -539,11 +539,14 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 if(!isset($stores))
                     continue;
 
-                foreach ($stores[$websiteId] as $store) {
-                    $actionModel->updateAttributesPure($productsIds, $attributesData, $store);
+                foreach ($stores[$websiteId] as $storeId) {
+                    Mage::log("STORE_ID: {$storeId}", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
+                    Mage::log($productsIds, null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
+                    $actionModel->updateAttributesPure($productsIds, $attributesData, $storeId);
 
                     //$col = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIds, $store);
                     //Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $col));
+                    Mage::log("--------------------------", null, "unsetPromoCampaignAttributesToVisibleProducts_4.log");
                 }
             }
         }
