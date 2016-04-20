@@ -1,22 +1,15 @@
 <?php
+
 /**
-  
+ * Class Zolago_DropshipSplit_Model_Carrier
  */
+class Zolago_DropshipSplit_Model_Carrier extends Unirgy_DropshipSplit_Model_Carrier {
 
-class ZolagoOs_OmniChannelSplit_Model_Carrier
-    extends Mage_Shipping_Model_Carrier_Abstract
-    implements Mage_Shipping_Model_Carrier_Interface
-{
-
-    protected $_code = 'udsplit';
-
-    protected $_methods = array();
-    protected $_allowedMethods = array();
 
     public function collectRates(Mage_Shipping_Model_Rate_Request $request)
     {
         #return Mage::helper('udsplit/protected')->collectRates($this, $request);
-      
+
         if (!$this->getConfigFlag('active')) {
             return false;
         }
@@ -112,133 +105,133 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
                             continue;
                         }
 
-                    foreach ($vMethods[$udMethod->getId()] as $vMethod) {
+                        foreach ($vMethods[$udMethod->getId()] as $vMethod) {
 
-                        $_isSkippedShipping = new Varien_Object(array('result'=>false));
-                        Mage::dispatchEvent('udropship_vendor_shipping_check_skipped', array(
-                            'shipping'=>$udMethod,
-                            'address'=>$address,
-                            'vendor'=>$vendor,
-                            'request'=>$req,
-                            'result'=>$_isSkippedShipping
-                        ));
+                            $_isSkippedShipping = new Varien_Object(array('result'=>false));
+                            Mage::dispatchEvent('udropship_vendor_shipping_check_skipped', array(
+                                'shipping'=>$udMethod,
+                                'address'=>$address,
+                                'vendor'=>$vendor,
+                                'request'=>$req,
+                                'result'=>$_isSkippedShipping
+                            ));
 
-                        if ($_isSkippedShipping->getResult()) {
-                            continue;
-                        }
-
-                        if ($freeMethods
-                            && Mage::getStoreConfigFlag('carriers/udropship/free_shipping_allowed', $request->getStoreId())
-                            && Mage::getStoreConfigFlag('carriers/udropship/freeweight_allowed', $request->getStoreId())
-                            && $this->isRuleFreeshipping($req)
-                            && in_array($udMethod->getShippingCode(), $freeMethods)
-                        ) {
-                            $rate->setPrice(0);
-                            $rate->setIsFwFreeShipping(true);
-                        }
-
-                        $rate->setPrice($this->getMyMethodPrice($rate->getPrice(), $req, $udMethod->getShippingCode()));
-
-                        $rate->setUdsIsSkip(false);
-                        Mage::dispatchEvent('udropship_process_vendor_carrier_single_rate_result', array(
-                            'vendor_method'=>$vMethod,
-                            'udmethod'=>$udMethod,
-                            'address'=>$address,
-                            'vendor'=>$vendor,
-                            'request'=>$req,
-                            'rate'=>$rate,
-                        ));
-
-                        if ($rate->getUdsIsSkip()) {
-                            continue;
-                        }
-
-                        $vendorCode = $vendor->getCarrierCode();
-                        if ($req->getForcedCarrierFlag()) {
-                            $ecCode = $ocCode = $rate->getCarrier();
-                        } else {
-                            $ecCode = !empty($vMethod['est_carrier_code'])
-                                ? $vMethod['est_carrier_code']
-                                : (!empty($vMethod['carrier_code']) ? $vMethod['carrier_code'] : $vendorCode);
-                            $ocCode = !empty($vMethod['carrier_code']) ? $vMethod['carrier_code'] : $vendorCode;
-                        }
-                        $oldEstCode = null;
-                        $resultKey = sprintf('%s-%s', $vId, $udMethod->getShippingCode());
-                        if (!empty($resultRates[$resultKey])) {
-                            $oldEstCode = $resultRates[$resultKey]->getUdEstCarrier();
-                            if (Mage::helper('udropship')->isUdsprofileActive()
-                                && $resultRates[$resultKey]->getUdsprofileSortOrder()<$vMethod['sort_order']
-                            ) {
+                            if ($_isSkippedShipping->getResult()) {
                                 continue;
                             }
-                        }
-                        if ($ecCode!=$rate->getCarrier()) {
-                            if (!$wildcardUsed && $vendor->getUseRatesFallback()
-                                && !Mage::helper('udropship')->isUdsprofileActive()
+
+                            if ($freeMethods
+                                && Mage::getStoreConfigFlag('carriers/udropship/free_shipping_allowed', $request->getStoreId())
+                                && Mage::getStoreConfigFlag('carriers/udropship/freeweight_allowed', $request->getStoreId())
+                                && $this->isRuleFreeshipping($req)
+                                && in_array($udMethod->getShippingCode(), $freeMethods)
                             ) {
-                                if ($oldEstCode==$ecCode) {
+                                $rate->setPrice(0);
+                                $rate->setIsFwFreeShipping(true);
+                            }
+
+                            $rate->setPrice($this->getMyMethodPrice($rate->getPrice(), $req, $udMethod->getShippingCode()));
+
+                            $rate->setUdsIsSkip(false);
+                            Mage::dispatchEvent('udropship_process_vendor_carrier_single_rate_result', array(
+                                'vendor_method'=>$vMethod,
+                                'udmethod'=>$udMethod,
+                                'address'=>$address,
+                                'vendor'=>$vendor,
+                                'request'=>$req,
+                                'rate'=>$rate,
+                            ));
+
+                            if ($rate->getUdsIsSkip()) {
+                                continue;
+                            }
+
+                            $vendorCode = $vendor->getCarrierCode();
+                            if ($req->getForcedCarrierFlag()) {
+                                $ecCode = $ocCode = $rate->getCarrier();
+                            } else {
+                                $ecCode = !empty($vMethod['est_carrier_code'])
+                                    ? $vMethod['est_carrier_code']
+                                    : (!empty($vMethod['carrier_code']) ? $vMethod['carrier_code'] : $vendorCode);
+                                $ocCode = !empty($vMethod['carrier_code']) ? $vMethod['carrier_code'] : $vendorCode;
+                            }
+                            $oldEstCode = null;
+                            $resultKey = sprintf('%s-%s', $vId, $udMethod->getShippingCode());
+                            if (!empty($resultRates[$resultKey])) {
+                                $oldEstCode = $resultRates[$resultKey]->getUdEstCarrier();
+                                if (Mage::helper('udropship')->isUdsprofileActive()
+                                    && $resultRates[$resultKey]->getUdsprofileSortOrder()<$vMethod['sort_order']
+                                ) {
                                     continue;
-                                } elseif ($oldEstCode!=$ocCode && $ocCode==$rate->getCarrier()) {
-                                    $ecCode = $ocCode;
-                                } elseif (!$oldEstCode && $vendorCode==$rate->getCarrier()) {
-                                    $ecCode = $vendorCode;
+                                }
+                            }
+                            if ($ecCode!=$rate->getCarrier()) {
+                                if (!$wildcardUsed && $vendor->getUseRatesFallback()
+                                    && !Mage::helper('udropship')->isUdsprofileActive()
+                                ) {
+                                    if ($oldEstCode==$ecCode) {
+                                        continue;
+                                    } elseif ($oldEstCode!=$ocCode && $ocCode==$rate->getCarrier()) {
+                                        $ecCode = $ocCode;
+                                    } elseif (!$oldEstCode && $vendorCode==$rate->getCarrier()) {
+                                        $ecCode = $vendorCode;
+                                    } else {
+                                        continue;
+                                    }
                                 } else {
                                     continue;
                                 }
-                            } else {
+                            }
+                            if ('**estimate**' == $ocCode) {
+                                $ocCode = $ecCode;
+                            }
+                            if ($wildcardUsed && $ecCode!=$ocCode) {
                                 continue;
                             }
-                        }
-                        if ('**estimate**' == $ocCode) {
-                            $ocCode = $ecCode;
-                        }
-                        if ($wildcardUsed && $ecCode!=$ocCode) {
-                            continue;
-                        }
-                        if ($ecCode!=$rate->getCarrier()) {
-                            continue;
-                        }
-                        if (Mage::helper('udropship')->isUdsprofileActive()) {
-                            $codeToCompare = $vMethod['carrier_code'].'_'.$vMethod['method_code'];
-                            if (!empty($vMethod['est_use_custom'])) {
-                                $codeToCompare = $vMethod['est_carrier_code'].'_'.$vMethod['est_method_code'];
-                            }
-                            if ($codeToCompare!=$rate->getCarrier().'_'.$rate->getMethod()) {
+                            if ($ecCode!=$rate->getCarrier()) {
                                 continue;
                             }
-                        }
-                        if ($ocCode!=$ecCode) {
-                            $ocMethod = $udMethod->getSystemMethods($ocCode);
                             if (Mage::helper('udropship')->isUdsprofileActive()) {
-                                $ocMethod = $vMethod['method_code'];
+                                $codeToCompare = $vMethod['carrier_code'].'_'.$vMethod['method_code'];
+                                if (!empty($vMethod['est_use_custom'])) {
+                                    $codeToCompare = $vMethod['est_carrier_code'].'_'.$vMethod['est_method_code'];
+                                }
+                                if ($codeToCompare!=$rate->getCarrier().'_'.$rate->getMethod()) {
+                                    continue;
+                                }
                             }
-                            if (empty($ocMethod)) {
-                                continue;
+                            if ($ocCode!=$ecCode) {
+                                $ocMethod = $udMethod->getSystemMethods($ocCode);
+                                if (Mage::helper('udropship')->isUdsprofileActive()) {
+                                    $ocMethod = $vMethod['method_code'];
+                                }
+                                if (empty($ocMethod)) {
+                                    continue;
+                                }
+                                $methodNames = $hl->getCarrierMethods($ocCode);
+                                $rate
+                                    ->setCarrier($ocCode)
+                                    ->setMethod($ocMethod)
+                                    ->setCarrierTitle($carrierNames[$ocCode])
+                                    ->setMethodTitle($methodNames[$ocMethod])
+                                ;
                             }
-                            $methodNames = $hl->getCarrierMethods($ocCode);
-                            $rate
-                                ->setCarrier($ocCode)
-                                ->setMethod($ocMethod)
-                                ->setCarrierTitle($carrierNames[$ocCode])
-                                ->setMethodTitle($methodNames[$ocMethod])
-                            ;
-                        }
-                        $rate->setPriority(@$vMethod['priority'])
-                            ->setUdEstCarrier($ecCode)
-                            ->setUdVendorMethod($vMethod)
-                            ->setUdVid($vId)
-                            ->setUdropshipShippingId($udMethod->getShippingId());
+                            $rate->setPriority(@$vMethod['priority'])
+                                ->setUdEstCarrier($ecCode)
+                                ->setUdVendorMethod($vMethod)
+                                ->setUdVid($vId)
+                                ->setUdropshipShippingId($udMethod->getShippingId());
 
-                        if (Mage::helper('udropship')->isUdsprofileActive()) {
-                            $rate->setUdsprofileSortOrder($vMethod['sort_order']);
-                        }
+                            if (Mage::helper('udropship')->isUdsprofileActive()) {
+                                $rate->setUdsprofileSortOrder($vMethod['sort_order']);
+                            }
 
-                        if ($wildcardUsed) {
-                            $resultKey .= $rate->getCarrier().'_'.$rate->getMethod();
+                            if ($wildcardUsed) {
+                                $resultKey .= $rate->getCarrier().'_'.$rate->getMethod();
+                            }
+                            $resultRates[$resultKey] = $rate;
+                            break;
                         }
-                        $resultRates[$resultKey] = $rate;
-                        break;
-                    }
                     }
                     foreach ($smArray as $udMethod) {
                         $udMethod->resetProfile();
@@ -387,7 +380,8 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
             $result->append($hlp->errorResult('udsplit'));
         }
 
-        $address->setUdropshipShippingDetails(Zend_Json::encode($details));
+        //Do not set setUdropshipShippingDetails by default
+        //$address->setUdropshipShippingDetails(Zend_Json::encode($details));
         $address->setShippingMethod('udsplit_total');
         $address->setShippingDescription($this->getConfigData('title'));
         $address->setShippingAmount($price);
@@ -396,65 +390,5 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
         Mage::dispatchEvent('udropship_carrier_collect_after', array('request'=>$request, 'result'=>$result, 'address'=>$address, 'details'=>$details));
 
         return $result;
-    }
-
-    public function getShippingPrice($baseShipping, $vId, $address, $type)
-    {
-        return Mage::helper('udropship')->getShippingPrice($baseShipping, $vId, $address, $type);
-    }
-
-    public function getMyMethodPrice($cost, $request, $method='')
-    {
-#if ($_SERVER['REMOTE_ADDR']=='24.20.46.76') { echo "<pre>"; print_r($this->_rawRequest->debug()); exit; }
-        $freeMethods = explode(',', Mage::getStoreConfig('carriers/udropship/free_method', $request->getStoreId()));
-        $freeShippingSubtotal = $this->getConfigData('free_shipping_subtotal');
-        if ($freeShippingSubtotal === null || $freeShippingSubtotal === '') {
-            $freeShippingSubtotal = false;
-        }
-        if (in_array($method, $freeMethods)
-            && Mage::getStoreConfigFlag('carriers/udropship/free_shipping_allowed', $request->getStoreId())
-            && Mage::getStoreConfigFlag('carriers/udropship/free_shipping_enable', $request->getStoreId())
-            && $freeShippingSubtotal!==false
-            && $freeShippingSubtotal <= $request->getPackageValueWithDiscount()
-        ) {
-            $price = '0.00';
-        } else {
-            $price = $this->getFinalPriceWithHandlingFee($cost);
-        }
-        return $price;
-    }
-
-    public function getAllowedMethods()
-    {
-        if (empty($this->_allowedMethods)) {
-            $this->_allowedMethods = array('total'=>'Total');
-        }
-        return $this->_allowedMethods;
-    }
-
-    protected function _getAllMethods()
-    {
-
-    }
-
-    public function getUseForAllProducts()
-    {
-        return true;
-    }
-
-    public function isRuleFreeshipping($request)
-    {
-        $isFreeshipping = true;
-        foreach ($request->getAllItems() as $item) {
-            if ($item->getFreeShipping()!==true && $item->getTotalQty()>$item->getFreeShipping()) {
-                $isFreeshipping = false;
-                break;
-            }
-        }
-        $address = Mage::helper('udropship/item')->getAddress($request->getAllItems());
-        if ($address instanceof Varien_Object && $address->getFreeShipping() === true) {
-            $isFreeshipping = true;
-        }
-        return $isFreeshipping;
     }
 }
