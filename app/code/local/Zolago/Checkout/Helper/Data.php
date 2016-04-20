@@ -12,14 +12,20 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		$inpostCode = $checkoutSession->getData("inpost_locker_name");
 
 		if(!empty($shipping_method_session)){
+//			Zend_Debug::dump(array(
+//				"source" => "session",
+//				"methods" => $shipping_method_session,
+//				"shipping_point_code" => $inpostCode
+//			));
 			return array(
+				"source" => "session",
 				"methods" => $shipping_method_session,
 				"shipping_point_code" => $inpostCode
 			);
 		}
 
 
-		//2. Get shpping from quote
+		//2. Get shipping from quote
 		$address = $checkoutSession->getQuote()->getShippingAddress();
 		$details = $address->getUdropshipShippingDetails();
 		$details = $details ? Zend_Json::decode($details) : array();
@@ -29,8 +35,15 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 			foreach($details["methods"] as $vendorId => $methodData){
 				$methods[$vendorId] = $methodData["code"];
 			}
-
+//			Zend_Debug::dump(array(
+//				"source" => "quota",
+//				"methods" => $methods,
+//				"shipping_point_code" => $inpostCode
+//			));
+			$checkoutSession->setData("inpost_locker_name",$inpostCode);
+			$checkoutSession->setShippingMethod($methods);
 			return array(
+				"source" => "quota",
 				"methods" => $methods,
 				"shipping_point_code" => $inpostCode
 			);
