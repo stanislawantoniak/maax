@@ -81,6 +81,9 @@ class ZolagoOs_OmniChannelMicrosite_Helper_Protected
 	protected function _getFrontendVendor($useUrl = false) {
 		$url = null;
 		if (!$useUrl) {
+    		if (empty($_SERVER["HTTP_HOST"])) {
+	    		return false;
+            }
 			$this->_origBaseUrl = Mage::getStoreConfig("web/unsecure/base_link_url");
 			$url = parse_url($this->_origBaseUrl);
 			$this->_parsedBaseUrl = $url;
@@ -89,10 +92,10 @@ class ZolagoOs_OmniChannelMicrosite_Helper_Protected
 			$url = parse_url($useUrl);
 			$httpHost = $url["host"];
 		}
+   		if (empty($httpHost)) {
+       		return false;
+        }
 
-		if (empty($httpHost)) {
-			return false;
-		}
 
 		$level = Mage::getStoreConfig("udropship/microsite/subdomain_level");
 		if ($level == 1) {

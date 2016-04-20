@@ -134,7 +134,6 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product_GalleryCfgContent e
                     }
                 }
                 } catch (Exception $e) {
-                    var_dump($value);
                     die("$e");
                 }
                 return $images;
