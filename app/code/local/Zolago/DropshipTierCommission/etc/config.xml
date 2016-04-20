@@ -28,7 +28,7 @@
 			<vendor>
 				<fields>
 					<terminal_percent_for_charge_lower_commission>
-						<hide_modules>Unirgy_DropshipTierCommission</hide_modules>
+						<hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
 					</terminal_percent_for_charge_lower_commission>
 				</fields>
 			</vendor>

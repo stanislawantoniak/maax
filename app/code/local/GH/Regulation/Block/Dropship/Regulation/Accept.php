@@ -50,13 +50,13 @@ class GH_Regulation_Block_Dropship_Regulation_Accept extends Mage_Core_Block_Tem
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Vendor
+     * @return ZolagoOs_OmniChannel_Model_Vendor
      * @throws Exception
      */
     public function getVendor()
     {
         $id = $this->getRequest()->getParam('id', false);
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
         $vendor = Mage::getModel('udropship/vendor')->load($id);
 
         return $vendor;

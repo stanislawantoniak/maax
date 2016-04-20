@@ -337,7 +337,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	}
 
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->_getSession()->getVendor();

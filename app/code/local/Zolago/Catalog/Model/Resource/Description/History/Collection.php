@@ -12,12 +12,12 @@ class Zolago_Catalog_Model_Resource_Description_History_Collection extends Mage_
     }
 
     /**
-     * @param Unirgy_Dropship_Model_Vendor|int $vendor
+     * @param ZolagoOs_OmniChannel_Model_Vendor|int $vendor
      * @return Zolago_Banner_Model_Resource_Banner_Collection
      */
     public function addVendorFilter($vendor)
     {
-        if ($vendor instanceof Unirgy_Dropship_Model_Vendor) {
+        if ($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor) {
             $vendor = $vendor->getId();
         }
         $this->addFieldToFilter('main_table.vendor_id', (int)$vendor);

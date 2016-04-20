@@ -23,10 +23,10 @@ class Zolago_Po_Block_Vendor_Po_Grid_Column_Renderer_Products
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return string
 	 */
-	protected function _getFormattedPrice(Unirgy_DropshipPo_Model_Po_Item $item) {
+	protected function _getFormattedPrice(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
 		return Mage::helper('core')->currency(
 			$item->getPriceInclTax() + (-1 * $item->getDiscountAmount() / $item->getQty()), 
 			true, 

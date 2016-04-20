@@ -1,4 +1,4 @@
-var UnirgySlider = Class.create({
+var ZolagoOsSlider = Class.create({
     initialize: function(options) {
         this.options = {
             moveDuration: .5,

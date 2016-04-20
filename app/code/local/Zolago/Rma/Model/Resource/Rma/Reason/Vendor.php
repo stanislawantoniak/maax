@@ -8,12 +8,12 @@ class Zolago_Rma_Model_Resource_Rma_Reason_Vendor extends Mage_Core_Model_Resour
 	/**
 	 * Return all vendors with no pointed reason bind
 	 * @param Zolago_Rma_Model_Rma_Reason $reason
-	 * @param Unirgy_Dropship_Model_Mysql4_Vendor_Collection $collection
+	 * @param ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection $collection
 	 * @return Zolago_Rma_Model_Resource_Rma_Reason_Vendor
 	 */
 	public function addUnbindRmaReasonFilterToVendorCollection(
 			Zolago_Rma_Model_Rma_Reason $reason, 
-			Unirgy_Dropship_Model_Mysql4_Vendor_Collection $collection) {
+			ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection $collection) {
 		
 		$subselect = $this->getReadConnection()->select();
 	

@@ -396,7 +396,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		/** @var Zolago_Dropship_Model_Vendor $_vendor */
 		$array = array();
 
-		/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
+		/** @var ZolagoOs_OmniChannelMicrosite_Helper_Data $micrositeHelper */
 		$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
 		$_vendor = $micrositeHelper->getCurrentVendor();
 

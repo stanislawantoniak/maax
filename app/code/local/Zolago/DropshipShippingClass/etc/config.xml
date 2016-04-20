@@ -10,7 +10,7 @@
             <udshipclassadmin>
                 <args>
                     <modules>
-                        <Zolago_DropshipShippingClass before="Unirgy_DropshipShippingClass_Adminhtml">Zolago_DropshipShippingClass_Adminhtml</Zolago_DropshipShippingClass>
+                        <Zolago_DropshipShippingClass before="ZolagoOs_OmniChannelShippingClass_Adminhtml">Zolago_DropshipShippingClass_Adminhtml</Zolago_DropshipShippingClass>
                     </modules>
                 </args>
             </udshipclassadmin>

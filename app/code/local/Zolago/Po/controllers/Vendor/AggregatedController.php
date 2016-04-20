@@ -5,7 +5,7 @@ class Zolago_Po_Vendor_AggregatedController
 	
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	protected function _getVendor() {
 		return $this->_getSession()->getVendor();

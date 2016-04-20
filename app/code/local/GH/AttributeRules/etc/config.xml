@@ -72,7 +72,7 @@
             <udropship>
                 <args>
                     <modules>
-                        <GH_AttributeRules before="Unirgy_Dropship">GH_AttributeRules</GH_AttributeRules>
+                        <GH_AttributeRules before="ZolagoOs_OmniChannel">GH_AttributeRules</GH_AttributeRules>
                     </modules>
                 </args>
             </udropship>

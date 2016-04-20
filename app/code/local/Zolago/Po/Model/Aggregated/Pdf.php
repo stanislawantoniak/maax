@@ -173,7 +173,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
         foreach ($collection as $po) {
             $shipmentCollection = $po->getShipmentsCollection();
             foreach ($shipmentCollection as $ship) {
-                if ($ship->getUdropshipStatus() != Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                if ($ship->getUdropshipStatus() != ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED) {
                     $date = $ship->getCreatedAt();
                     if (!isset($this->_totals['date_start']) ||
                             ($date < $this->_totals['date_start'])) {
@@ -218,7 +218,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
                 }
                 $shipmentCollection = $po->getShipmentsCollection();
                 foreach ($shipmentCollection as $ship) {
-                    if ($ship->getUdropshipStatus() != Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                    if ($ship->getUdropshipStatus() != ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED) {
                         $this->_addShip($ship,$po,$page,$counter);
                         if ($counter++>15) {
                             $counter = 0;

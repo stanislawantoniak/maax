@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipSplit_Block_Cart extends Unirgy_DropshipSplit_Block_Cart
+class Zolago_DropshipSplit_Block_Cart extends ZolagoOs_OmniChannelSplit_Block_Cart
 {
     protected $_htmlBlock = 'udsplit/cart_vendor';	
     
@@ -37,7 +37,7 @@ class Zolago_DropshipSplit_Block_Cart extends Unirgy_DropshipSplit_Block_Cart
 	public function getItemHtml(Mage_Sales_Model_Quote_Item $item)
     {
 	    $vendorsKey = 'checkoutVendors';
-        if ($item instanceof Unirgy_DropshipSplit_Model_Cart_Vendor) {
+        if ($item instanceof ZolagoOs_OmniChannelSplit_Model_Cart_Vendor) {
 	        if(!is_null(Mage::registry($vendorsKey)) && is_array(Mage::registry($vendorsKey)) && Mage::registry($vendorsKey)) {
 		        $vendors = Mage::registry($vendorsKey);
 		        Mage::unregister($vendorsKey);

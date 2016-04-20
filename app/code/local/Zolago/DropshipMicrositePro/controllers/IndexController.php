@@ -1,8 +1,8 @@
 <?php
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipMicrositePro") . DS . "IndexController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannelMicrositePro") . DS . "IndexController.php";
 
 class Zolago_DropshipMicrositePro_IndexController 
-	extends Unirgy_DropshipMicrositePro_IndexController
+	extends ZolagoOs_OmniChannelMicrositePro_IndexController
 {
     public function indexAction()
     {

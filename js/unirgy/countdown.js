@@ -1,4 +1,4 @@
-var UnirgyCountdown = Class.create({
+var ZolagoOsCountdown = Class.create({
     initialize: function(options) {
         this.dayValue = 24*60*60*1000
         this.hourValue = 60*60*1000

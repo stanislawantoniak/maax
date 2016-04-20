@@ -3,7 +3,7 @@
 /**
  * Class Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid
  */
-class Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid extends Unirgy_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid
+class Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid extends ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid
 {
 
 

@@ -1,4 +1,0 @@
-===== 1.0.1 =====
-  * Fixed status filter for CE1.8
-
-===== 1.0 - Initial release =====

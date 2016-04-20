@@ -307,7 +307,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	}
 	
 	/**
-	 * @return Unirgy_Rma_Model_Rma
+	 * @return ZolagoOs_Rma_Model_Rma
 	 */
 	protected function _initLastRma() {
 		if(!Mage::registry("current_rma")){
@@ -319,7 +319,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 			// If not use latest rma
 			}else{
 				$collection = Mage::getResourceModel('urma/rma_collection');
-				/* @var $collection Unirgy_Rma_Model_Mysql4_Rma_Collection */
+				/* @var $collection ZolagoOs_Rma_Model_Mysql4_Rma_Collection */
 				$collection->addFieldToFilter("customer_id", Mage::getSingleton('customer/session')->getCustomerId());
 				$collection->setOrder("created_at", "desc")->getSelect()->limit(1);
 

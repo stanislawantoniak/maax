@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
+class Zolago_Dropship_Model_Session extends ZolagoOs_OmniChannel_Model_Session
 {
 	/**
 	 * @var Zolago_Operator_Model_Operator

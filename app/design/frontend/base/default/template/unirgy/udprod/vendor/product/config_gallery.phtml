@@ -112,7 +112,7 @@ $cfgSuf = '_'.$cfgAttrId.'_'.$cfgAttrVal;
 <script type="text/javascript">
 //<![CDATA[
 (function () {
-var UnirgyProductGallery = Class.create(Product.Gallery, {
+var ZolagoOsProductGallery = Class.create(Product.Gallery, {
     initialize : function($super, containerId, uploader, imageTypes, cfgMainImgId, cfgAdditionalImgId, cfgAttrId, cfgAttrVal) {
         this.hasImagesValues = <?php if ($_block->isCfgUploadImagesSimple()) {echo 'true';} else {echo 'false';} ?>;
         this.containerId = containerId, this.container = $(this.containerId);
@@ -334,7 +334,7 @@ var UnirgyProductGallery = Class.create(Product.Gallery, {
         }
     }
 });
-window['<?php echo $_block->getJsObjectName(); ?>'] = new UnirgyProductGallery('<?php echo $_block->getHtmlId() ?>', window['<?php echo $_block->getUploader()->getJsObjectName() ?>'], <?php echo $_block->getImageTypesJson() ?>, 'cfg_qc_main_image<?php echo $cfgSuf?>', 'cfg_qc_additional_images<?php echo $cfgSuf?>', '<?php echo $cfgAttrId?>', '<?php echo $cfgAttrVal?>');
+window['<?php echo $_block->getJsObjectName(); ?>'] = new ZolagoOsProductGallery('<?php echo $_block->getHtmlId() ?>', window['<?php echo $_block->getUploader()->getJsObjectName() ?>'], <?php echo $_block->getImageTypesJson() ?>, 'cfg_qc_main_image<?php echo $cfgSuf?>', 'cfg_qc_additional_images<?php echo $cfgSuf?>', '<?php echo $cfgAttrId?>', '<?php echo $cfgAttrVal?>');
 }).defer();
 //]]>
 </script>

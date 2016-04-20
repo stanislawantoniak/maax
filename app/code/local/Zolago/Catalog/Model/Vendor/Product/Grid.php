@@ -516,7 +516,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	}
 
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->_getSession()->getVendor();

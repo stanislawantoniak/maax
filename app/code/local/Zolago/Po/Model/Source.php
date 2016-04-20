@@ -1,5 +1,5 @@
 <?php
-class Zolago_Po_Model_Source extends Unirgy_DropshipPo_Model_Source
+class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
 {
     const UDPO_STATUS_PAYMENT = 12;
 	
@@ -59,9 +59,9 @@ class Zolago_Po_Model_Source extends Unirgy_DropshipPo_Model_Source
 
         case 'udropship/purchase_order/autoinvoice_shipment':
             $options = array(
-                Unirgy_DropshipPo_Model_Source::AUTOINVOICE_SHIPMENT_NO => $hlp->__('No'),
-                Unirgy_DropshipPo_Model_Source::AUTOINVOICE_SHIPMENT_YES => $hlp->__('Yes'),
-                Unirgy_DropshipPo_Model_Source::AUTOINVOICE_SHIPMENT_ORDER => $hlp->__('Trigger whole order invoice'),
+                ZolagoOs_OmniChannelPo_Model_Source::AUTOINVOICE_SHIPMENT_NO => $hlp->__('No'),
+                ZolagoOs_OmniChannelPo_Model_Source::AUTOINVOICE_SHIPMENT_YES => $hlp->__('Yes'),
+                ZolagoOs_OmniChannelPo_Model_Source::AUTOINVOICE_SHIPMENT_ORDER => $hlp->__('Trigger whole order invoice'),
             );
             break;
         

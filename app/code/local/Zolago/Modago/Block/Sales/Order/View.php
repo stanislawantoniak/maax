@@ -24,7 +24,7 @@ class Zolago_Modago_Block_Sales_Order_View extends Mage_Sales_Block_Order_View {
 
     //{{{ 
     /**
-     * @param Unirgy_DropshipPo_Model_SalesOrder
+     * @param ZolagoOs_OmniChannelPo_Model_SalesOrder
      * @return 
      */
     public function getPoListByOrder($order) {

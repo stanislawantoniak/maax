@@ -292,7 +292,7 @@ class GH_Regulation_Dropship_VendorController
         $key      = $req->getParam('key', false); // Token
 
         // If no vendor ID maybe vendor is logged in
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         if (!$vendor->getId()) {
             /** @var Zolago_Dropship_Model_Vendor $vendor */

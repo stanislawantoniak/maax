@@ -1,5 +1,5 @@
 <?php
-class Zolago_Po_Block_Adminhtml_Po_Grid extends Unirgy_DropshipPo_Block_Adminhtml_Po_Grid
+class Zolago_Po_Block_Adminhtml_Po_Grid extends ZolagoOs_OmniChannelPo_Block_Adminhtml_Po_Grid
 {
 
     protected function _prepareColumns()
