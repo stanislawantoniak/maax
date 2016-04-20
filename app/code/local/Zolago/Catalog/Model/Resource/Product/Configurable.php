@@ -280,6 +280,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function updateSalePromoFlagForStore($storeId, $ids)
     {
+        Mage::log("STORE_ID: {$storeId}",null, "updateSalePromoFlagForStore.log");
+        Mage::log($ids,null, "updateSalePromoFlagForStore.log");
         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
         $coll = Mage::getResourceModel('zolagocatalog/product_collection');
         $coll->setStore($storeId);
