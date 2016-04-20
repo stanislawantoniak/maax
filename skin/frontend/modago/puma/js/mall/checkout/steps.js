@@ -327,6 +327,12 @@
                         }
                     }).always(function () {
                         self.unlockButton(e.target);
+						// Save changes (like next btn)
+						jQuery.ajax({
+							"method": "POST",
+							"url": self.content.find("form").attr("action"),
+							"data": self.collect()
+						});
                     });
                 });
 
@@ -742,7 +748,13 @@
 					var listBlock = self.content.find(".panel-adresses." + type);
 
 					self._rollAddressList(type, listBlock, false);
-				}
+					// Save changes (like next btn)
+					jQuery.ajax({
+						"method": "POST",
+						"url": self.content.find("form").attr("action"),
+						"data": self.collect()
+					});
+				};
 				
 				// If address has no invoice and is choosed as billing - set need invoice
 				if(type=="billing" && address.getData("need_invoice")!="1"){
@@ -1659,27 +1671,21 @@
 					return false;
                 });
 
-                var step1Form = this.content.find("form");
-                jQuery(document).on('click', "#sidebar-deliverypayment-change", function (e) {
-                    e.preventDefault();
-                    if (jQuery("#co-shippingpayment").validate().checkForm()) {
-                        //simple submit
-                        var saveUrl = step1Form.attr("action");
-                        jQuery.ajax({
-                            "method": "POST",
-                            "url": saveUrl,
-                            "data": self.collect()
-                        }).done(function(){
-                            window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
-                        });
-                    } else {
-                        window.location = jQuery("#sidebar-deliverypayment-change").attr("href");
-                    }
-                });
                 this.content.find("#view_default_pay").on('click', function (e) {
                     self.handleChangePaymentMethodClick(e);
                     return false;
                 });
+
+				// Save changes (like next btn)
+				jQuery(document).on('change', 'input[name*="payment"]', function (e) {
+					if (jQuery("#co-shippingpayment").validate().checkForm() && self.checkout.getActiveStep().code == 'shippingpayment') {
+						jQuery.ajax({
+							"method": "POST",
+							"url": self.content.find("form").attr("action"),
+							"data": self.collect()
+						});
+					}
+				});
 
                 //////////////////////
                 var default_pay_bank = jQuery('.default_pay input[name="payment[method]"]');
