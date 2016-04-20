@@ -141,8 +141,15 @@
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
-                if (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
-                    && (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) == "undefined")
+                if (
+                    (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
+                        && (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) == "undefined")
+                    )
+                    ||
+                    (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) !== "undefined"
+                        && jQuery("#cart-shipping-methods input[name=shipping_point_code]").val().length == 0
+                    )
+
                 ) {
                     //Clear selected shipping
                     jQuery("[name=_shipping_method]").prop("checked", false);
