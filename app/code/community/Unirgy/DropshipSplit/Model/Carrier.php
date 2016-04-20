@@ -399,7 +399,7 @@ class Unirgy_DropshipSplit_Model_Carrier
             $result->append($hlp->errorResult('udsplit'));
         }
 
-        $address->setUdropshipShippingDetails(Zend_Json::encode($details));
+        //$address->setUdropshipShippingDetails(Zend_Json::encode($details));
         $address->setShippingMethod('udsplit_total');
         $address->setShippingDescription($this->getConfigData('title'));
         $address->setShippingAmount($price);
