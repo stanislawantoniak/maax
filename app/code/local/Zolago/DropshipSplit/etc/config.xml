@@ -20,11 +20,11 @@
 			</udsplit>		
 		</blocks>
 		<models>
-			<udsplit>
-				<rewrite>
-					<carrier>Zolago_DropshipSplit_Model_Carrier</carrier>
-				</rewrite>
-			</udsplit>
+			<!--<udsplit>-->
+				<!--<rewrite>-->
+					<!--<carrier>Zolago_DropshipSplit_Model_Carrier</carrier>-->
+				<!--</rewrite>-->
+			<!--</udsplit>-->
 		</models>
 	</global>
 	<!--<default>-->
