@@ -11,6 +11,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     }
 
 
+
     /**
      * @return array
      */

@@ -14,12 +14,16 @@ $vednorCosts = $items->vendorCosts;
 $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
-
 $checkoutSession = Mage::getSingleton('checkout/session');
-$sessionShippingMethod = $checkoutSession->getData("shipping_method");
-
-$inpostCode = $checkoutSession->getData("inpost_code");
-
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+$address = $checkoutSession->getQuote()->getShippingAddress();
+$sessionShippingMethod = "";
+foreach($selectedShipping["methods"] as $vid => $methodSelected){
+    $sessionShippingMethod = $methodSelected;
+}
+/* @var $locker GH_Inpost_Model_Locker  */
+$locker		= $this->getInpostLocker();
+$lockerId = $locker->getId();
 ?>
 
 
@@ -34,6 +38,12 @@ $inpostCode = $checkoutSession->getData("inpost_code");
 		})();
     </script>
     <div class="shipping-collect"></div>
+    <?php if (isset($selectedShipping["shipping_point_code"])): ?>
+        <input type="text" name="_shipping_point_code"
+               data-id="<?php echo $lockerId; ?>"
+               data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
+               value="<?php echo $locker->getName(); ?>" required="required"/>
+    <?php endif; ?>
 	<?php foreach($methods as $method): ?>
     <?php
     $formattedCost = '';
@@ -47,7 +57,7 @@ $inpostCode = $checkoutSession->getData("inpost_code");
                         <div style="">
                             <input type="radio"
                                    value="<?php echo $method['code']; ?>"
-                                   <?php if (!empty($sessionShippingMethod) && in_array($method['code'], $sessionShippingMethod)): ?>checked<?php endif; ?>
+                                   <?php if (!empty($sessionShippingMethod) && $method['code']==$sessionShippingMethod): ?>checked<?php endif; ?>
                                    name="_shipping_method"
                                    required="required"
                                    class="shipping-method"

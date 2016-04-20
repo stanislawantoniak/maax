@@ -104,12 +104,26 @@
 
   //Modal content
   #select_inpost_point {
-    @media (max-width: $screen-xs) {
-      .modal-dialog {
+    .modal-dialog.modal-lg {
+      @media(max-width:767px) {
+        margin: 30px auto;
+      }
+      width: 1150px;
+      @media(max-width: $screen-md-max) {
+        width: 90%;
+      }
+      @media(max-width: 450px) {
+        width: 85%;
+      }
+      &.wide {
+        width: 950px;
+      }
+      @media (max-width: $screen-xs) {
         width: 90%;
         margin: 40px auto;
       }
     }
+
 
     .modal-body {
       overflow-x: hidden !important;

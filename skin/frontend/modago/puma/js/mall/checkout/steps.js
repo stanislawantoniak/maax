@@ -1772,12 +1772,14 @@
 
             collect: function () {
                 var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
+                var _shipping_point_code = this.content.find("form input[name=_shipping_point_code]").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
 
                     jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     });
+                    inputs += '<input type="hidden" name="shipping_point_code" value="' + _shipping_point_code + '"  />';
                     this.content.find("form .shipping-collect").html(inputs);
 
                     var pInputs = '';
