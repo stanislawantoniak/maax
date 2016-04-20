@@ -373,11 +373,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 				continue;
 			}
 			$details['methods'][$vId] = array(
-//				'code' => $code,
-//				'cost' => $rate->getCost(),
-//				'price' => $rate->getPrice(),
-//				'carrier_title' => $rate->getCarrierTitle(),
-//				'method_title' => $rate->getMethodTitle()
 				'code' => $code,
 				'cost' => (float)$rate->getCost(),
 				'price' => (float)$rate->getPrice(),
@@ -390,7 +385,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			);
 		}
 
-		//$address->setInpostLockerName($locker->getName());
+		
 		$address->setUdropshipShippingDetails(Zend_Json::encode($details));
 	}
 	
