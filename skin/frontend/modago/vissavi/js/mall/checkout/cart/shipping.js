@@ -93,7 +93,7 @@
             google.maps.event.addDomListener(window, "resize", resizingMap());
 
             jQuery("[name=shipping_select_point]")
-                .select2({dropdownParent: jQuery("#select_inpost_point")})
+                .select2({dropdownParent: jQuery("#select_inpost_point"),language: Mall.reg.get("localeCode")})
                 .change(function () {
                     var el = jQuery(this), val = el.val();
                     el.addClass("onchange_shipping_select_point");
@@ -118,14 +118,16 @@
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: Mall.translate.__("shipping_map_select_city"),
-                dropdownParent: jQuery("#select_inpost_point")
+                dropdownParent: jQuery("#select_inpost_point"),
+                language: Mall.reg.get("localeCode")
             });
 
             jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point")
+                    dropdownParent: jQuery("#select_inpost_point"),
+                    language: Mall.reg.get("localeCode")
                 });
 
 
@@ -135,11 +137,14 @@
                 var sessionPoint = jQuery("[name=shipping_point_code]");
                 resizeMap(sessionPoint.val());
 
+                jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
+
             });
             jQuery('#select_inpost_point').on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
                 if (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
-                    && (typeof(jQuery("#cart-shipping-methods input[name=shipping_point_code]").val()) == "undefined")
+                    && (jQuery("#cart-shipping-methods input[name=shipping_point_code]").val().length == 0)
+
                 ) {
                     //Clear selected shipping
                     jQuery("[name=_shipping_method]").prop("checked", false);
@@ -158,7 +163,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point")});
+                    .select2({dropdownParent: jQuery("#select_inpost_point"), language: Mall.reg.get("localeCode")});
 
                 searchOnMap(sessionPointTown, sessionPoint.val());
             }
@@ -392,7 +397,7 @@ function refreshMap(filteredData, nearestStores) {
     var markerImage = new google.maps.MarkerImage(imageUrl,
         new google.maps.Size(40, 40));
 
-    //setMarkers    
+    //setMarkers
     //Join nearest stores (if GEO localization on)
     if (nearestStores.length > 0) {
         for (var k = 0; k < nearestStores.length; k++) {
@@ -432,13 +437,14 @@ function refreshMap(filteredData, nearestStores) {
             infowindow.setContent(this.html);
 
 
-            //Refresh markers and "City", "Address" filters 
+            //Refresh markers and "City", "Address" filters
             //if nearest store marker clicked, but the city is different from selected
             if (this.nearest === 1 && jQuery("select[name=shipping_select_city]").val() !== this.town) {
                 jQuery("select[name=shipping_select_city]")
                     .val(this.town)
                     .select2({
-                        dropdownParent: jQuery("#select_inpost_point")
+                        dropdownParent: jQuery("#select_inpost_point"),
+                        language: Mall.reg.get("localeCode")
                     });
                 jQuery(".shipping_select_point_data").html("");
 
@@ -449,7 +455,8 @@ function refreshMap(filteredData, nearestStores) {
             if (!jQuery("select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
                 jQuery("select[name=shipping_select_point]")
                     .select2({
-                        dropdownParent: jQuery("#select_inpost_point")
+                        dropdownParent: jQuery("#select_inpost_point"),
+                        language: Mall.reg.get("localeCode")
                     });
             }
             jQuery("[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
@@ -482,7 +489,7 @@ function refreshMap(filteredData, nearestStores) {
         gmarkersNameRelation[pos.name] = i;
 
     }
-    //--setMarkers    
+    //--setMarkers
     var markerClusterOptions = {
         maxZoom: 10,
         gridSize: 14,
@@ -491,7 +498,7 @@ function refreshMap(filteredData, nearestStores) {
 
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 
-    //Jeśli w mieście jest tylko jeden paczkomat, niech wybiera go automatycznie    
+    //Jeśli w mieście jest tylko jeden paczkomat, niech wybiera go automatycznie
     if(pointsCount === 1){
         showMarkerOnMap(filteredData[0].name);
     }
@@ -537,7 +544,7 @@ function resizingMap(point) {
     google.maps.event.trigger(map, "resize");
     map.setCenter(center);
 
-    //Show on map session paczkomat    
+    //Show on map session paczkomat
     if(typeof window.geoposition === "undefined"){
         Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
     }
@@ -575,7 +582,7 @@ function showPosition(position) {
 function successGeolocationFunction(position) {
     window.geoposition = position;
     showPosition(window.geoposition);
-    //Show on map session paczkomat    
+    //Show on map session paczkomat
     Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
 
 }
@@ -773,7 +780,7 @@ function constructShippingPointSelect(map_points) {
     }
 
     jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point")});
+        .select2({dropdownParent: jQuery("#select_inpost_point"), language: Mall.reg.get("localeCode")});
 }
 
 function clearClusters(e) {
