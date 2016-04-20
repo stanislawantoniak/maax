@@ -387,7 +387,8 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
             $result->append($hlp->errorResult('udsplit'));
         }
 
-        $address->setUdropshipShippingDetails(Zend_Json::encode($details));
+        //Do not set setUdropshipShippingDetails by default
+        //$address->setUdropshipShippingDetails(Zend_Json::encode($details));
         $address->setShippingMethod('udsplit_total');
         $address->setShippingDescription($this->getConfigData('title'));
         $address->setShippingAmount($price);
