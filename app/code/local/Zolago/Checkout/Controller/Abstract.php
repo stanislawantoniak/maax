@@ -147,6 +147,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 
         $onepage = $this->getOnepage();
+		$quote = $onepage->getQuote();
 
         $method	= $this->getCheckoutMethodForCart(); // checkout method
 
@@ -202,7 +203,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		/**
 		method:guest | register | customer
 		 */
-		$method	= $request->getParam("method"); // chekcout method
+		$method	= $request->getParam("method"); // checkout method
 		if($method && $method!=$this->getOnepage()->getCheckoutMehod()){
 			$methodResponse = $onepage->saveCheckoutMethod($method);
 			if(isset($methodResponse['error']) && $methodResponse['error']==1){
@@ -365,22 +366,27 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$details = $address->getUdropshipShippingDetails();
 		$details = $details ? Zend_Json::decode($details) : array();
 
-
+		$hl = Mage::helper('udropship');
 		foreach ($shippingMethod as $vId => $code) {
-			$r = $address->getShippingRateByCode($code);
-			if (!$r) {
+			$vendor = $hl->getVendor($vId);
+			$rate = $address->getShippingRateByCode($code);
+			if (!$rate) {
 				continue;
 			}
 			$details['methods'][$vId] = array(
 				'code' => $code,
-				'cost' => $r->getCost(),
-				'price' => $r->getPrice(),
-				'carrier_title' => $r->getCarrierTitle(),
-				'method_title' => $r->getMethodTitle()
+				'cost' => (float)$rate->getCost(),
+				'price' => (float)$rate->getPrice(),
+				'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
+				'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
+				'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
+				'carrier_title' => $rate->getCarrierTitle(),
+				'method_title' => $rate->getMethodTitle(),
+				'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
 			);
 		}
 
-		//$address->setInpostLockerName($locker->getName());
+
 		$address->setUdropshipShippingDetails(Zend_Json::encode($details));
 	}
 	
