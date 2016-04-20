@@ -51,7 +51,7 @@ class Zolago_Pos_Model_Observer {
 
 	}
 
-	public function getVendorPOSes($vendorId){
+	public static function getVendorPOSes($vendorId){
 		$vendor = Mage::getModel("udropship/vendor")->load($vendorId);
 		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
