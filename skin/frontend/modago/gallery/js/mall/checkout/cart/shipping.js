@@ -134,8 +134,8 @@
             jQuery('#select_inpost_point').on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
-                var sessionPoint = jQuery("[name=shipping_point_code]");
-                resizeMap(sessionPoint.val());
+                var sessionPoint = jQuery("[name=shipping_point_code]").val();
+                resizeMap(sessionPoint);
 
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
 
