@@ -95,7 +95,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 <?php foreach ($selectedShipping["methods"] as $vendorId => $methodSelected): ?>
                     <input type="hidden"
                            name="shipping_method[<?php echo $vendorId; ?>]"
-                           value="<?php echo $methodSelected; ?>" required="required"/>
+                           value="<?php echo $methodSelected; ?>" />
                 <?php endforeach; ?>
                 <?php if (isset($selectedShipping["shipping_point_code"])): ?>
                     <input type="hidden" name="shipping_point_code"
