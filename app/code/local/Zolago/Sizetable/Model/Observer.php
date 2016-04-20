@@ -12,13 +12,13 @@ class Zolago_Sizetable_Model_Observer
     public function udropship_adminhtml_vendor_tabs_after($observer)
     {
         $block = $observer->getBlock();
-        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs
+        if (!$block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs
             || !Mage::app()->getRequest()->getParam('id', 0)
         ) {
             return;
         }
 
-        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+        if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $block->addTab('sizetable_brand', array(
                 'label' => Mage::helper('zolagosizetable')->__('Size table brand settings'),
                 'content' => Mage::app()->getLayout()->createBlock(

@@ -91,7 +91,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
 				$track->setNextCheck(date('Y-m-d H:i:s', $time));
-				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
+				$track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING);
 				$track->save();
 		    
 		}
@@ -264,7 +264,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			}elseif($custSession->getCustomerId()){
 				$data['customer_id'] = $custSession->getCustomerId();
 			}
-		}elseif($author instanceof Unirgy_Dropship_Model_Vendor){
+		}elseif($author instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$data['vendor_id'] = $author->getId();
 		}elseif($author instanceof Zolago_Operator_Model_Operator){
 			$data['vendor_id'] = $author->getVendor()->getId();

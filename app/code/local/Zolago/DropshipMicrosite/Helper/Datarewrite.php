@@ -7,7 +7,7 @@
  * a sa roznice w generowaniu url'i w porownaniu z oryginalem
  */
 
-class Zolago_DropshipMicrosite_Helper_Datarewrite extends Unirgy_DropshipMicrosite_Helper_Data {
+class Zolago_DropshipMicrosite_Helper_Datarewrite extends ZolagoOs_OmniChannelMicrosite_Helper_Data {
 
     public function sendVendorSignupEmail($registration)
     {

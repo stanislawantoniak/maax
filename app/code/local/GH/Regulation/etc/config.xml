@@ -136,7 +136,7 @@
             <udropship>
                 <args>
                     <modules>
-                        <GH_Regulation before="Unirgy_Dropship">GH_Regulation_Dropship</GH_Regulation>
+                        <GH_Regulation before="ZolagoOs_OmniChannel">GH_Regulation_Dropship</GH_Regulation>
                     </modules>
                 </args>
             </udropship>

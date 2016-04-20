@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Catalog_Controller_Ajax extends Unirgy_Dropship_Controller_VendorAbstract {
+class Zolago_Catalog_Controller_Ajax extends ZolagoOs_OmniChannel_Controller_VendorAbstract {
     
     /**
      * Sets "flash message"

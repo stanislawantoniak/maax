@@ -93,21 +93,21 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 */
-	protected function _getOptionsByPoItem(Unirgy_DropshipPo_Model_Po_Item $item) {
+	protected function _getOptionsByPoItem(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
 		return $item->getOrderItem()->getProductOptions();
 	}
 	
 	/**
 	 * @param Mage_Sales_Model_Order $order
 	 * @param bool $canceled canceled po included
-	 * @return Unirgy_DropshipPo_Model_Mysql4_Po_Collection
+	 * @return ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection
 	 */
 	public function getPoCollection(Mage_Sales_Model_Order $order,$canceled = false) {
 		if(!isset($this->_cache[$order->getId()][$canceled])){
 			$collection = Mage::getResourceModel("udpo/po_collection");
-			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+			/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 			$collection->addFieldToFilter("order_id", $order->getId());
 			if (!$canceled) {
     			$collection->addFieldToFilter("udropship_status", 
@@ -120,12 +120,12 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor | array $vendorA
-	 * @param Unirgy_Dropship_Model_Vendor | array $vendorB
+	 * @param ZolagoOs_OmniChannel_Model_Vendor | array $vendorA
+	 * @param ZolagoOs_OmniChannel_Model_Vendor | array $vendorB
 	 * @return int
 	 */
 	protected function _sortByVendor($a, $b) {
-		if($a instanceof Unirgy_Dropship_Model_Vendor && $b instanceof Unirgy_Dropship_Model_Vendor){ 
+		if($a instanceof ZolagoOs_OmniChannel_Model_Vendor && $b instanceof ZolagoOs_OmniChannel_Model_Vendor){ 
 			return strcmp($a->getVendorName(), $b->getVendorName());
 		}
 		return strcmp($a['vendor']->getVendorName(), $b['vendor']->getVendorName());

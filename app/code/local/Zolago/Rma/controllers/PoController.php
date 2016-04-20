@@ -12,7 +12,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
          */
         $this->_viewAction();
     }
-    protected function _canViewRma(Unirgy_Rma_Model_Rma $rma)
+    protected function _canViewRma(ZolagoOs_Rma_Model_Rma $rma)
     {
         $customerId = Mage::getSingleton('customer/session')->getCustomerId();
         if ($rma->getId() && $rma->getCustomerId() && ($rma->getCustomerId() == $customerId)) {

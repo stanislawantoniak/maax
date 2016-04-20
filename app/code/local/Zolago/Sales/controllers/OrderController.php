@@ -1,8 +1,8 @@
 <?php
-require_once Mage::getConfig()->getModuleDir('controllers', 'Unirgy_Rma') .
+require_once Mage::getConfig()->getModuleDir('controllers', 'ZolagoOs_Rma') .
 		DS . "OrderController.php";
 
-class Zolago_Sales_OrderController extends Unirgy_Rma_OrderController
+class Zolago_Sales_OrderController extends ZolagoOs_Rma_OrderController
 {
     /**
      * Customer order history (overwrite title)

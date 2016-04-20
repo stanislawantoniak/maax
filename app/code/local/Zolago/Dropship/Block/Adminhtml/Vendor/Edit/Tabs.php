@@ -3,7 +3,7 @@
  * adding tabs groups in admin interface
  */
 class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends	
-    Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs {
+    ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs {
 
     protected $_sections = array();
 

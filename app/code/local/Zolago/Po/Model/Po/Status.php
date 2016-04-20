@@ -393,7 +393,7 @@ class Zolago_Po_Model_Po_Status
 
 		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
 		$hlp = Mage::helper("udpo");
-		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
+		/* @var $hlp ZolagoOs_OmniChannelPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
 

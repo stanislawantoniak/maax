@@ -37,10 +37,10 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         return self::UPS_HEADER;
     }
 
-    public function isEnabledForVendor(Unirgy_Dropship_Model_Vendor $vendor) {
+    public function isEnabledForVendor(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
         return (bool)(int)$vendor->getUseUps();
     }
-    public function isEnabledForRma(Unirgy_Dropship_Model_Vendor $vendor) {
+    public function isEnabledForRma(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
         return (bool)(int)$vendor->getUpsRma();
     }
     public function isEnabledForPos(Zolago_Pos_Model_Pos $pos) {
@@ -170,7 +170,7 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         $canShow = false;
         if ($track->getCarrierCode() == Zolago_Ups_Helper_Data::UPS_CARRIER_CODE
                 && $track->getNumber()
-                && $shipment->getUdropshipStatus() != Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                && $shipment->getUdropshipStatus() != ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED) {
             $canShow = true;
         }
 
@@ -202,16 +202,16 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         switch ($code) {
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_DELIVERED:
             $status = $this->__('Delivered');
-            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
+            $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
             $track->setDeliveredDate(Varien_Date::now());
-            $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+            $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);
             break;
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_EXCEPTION:
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE:
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_NOT_AVAILABLE_2:
             $status = $this->__('Canceled');
-            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
-            $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
+            $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_CANCELED);
+            $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED);
             break;
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_BILLING_RECEIVED:
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_TRANSIT:
@@ -220,9 +220,9 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_WAREHOUSING:
         case Orba_Shipping_Helper_Carrier_Ups::UPS_STATUS_OUT_FOR_DELIVERY:
             $status = $this->__('Shipped');
-            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
+            $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
             $track->setShippedDate(Varien_Date::now());
-            $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED);
+            $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED);
             break;
         default:
             break;
@@ -309,9 +309,9 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
                                     switch ($event->Status->Type) {
                                     case Orba_Shipping_Helper_Carrier_Ups::UPS_TYPE_DELIVERED:
                                         $status = $this->__('Delivered');
-                                        $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
+                                        $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
                                         $track->setDeliveredDate(date('Y-m-d H:i:s',strtotime($event->Date.$event->Time)));
-                                        $track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+                                        $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);
                                         break;
                                     default:
                                         ;

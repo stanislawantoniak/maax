@@ -5,7 +5,7 @@
             <active>true</active>
             <codePool>local</codePool>
 			<depends>
-				<Unirgy_Rma/>
+				<ZolagoOs_Rma/>
 			</depends>
         </Zolago_Sales>
     </modules>

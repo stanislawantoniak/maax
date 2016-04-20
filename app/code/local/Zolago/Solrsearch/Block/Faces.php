@@ -1204,7 +1204,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Vendor|null
+     * @return ZolagoOs_OmniChannel_Model_Vendor|null
      */
     public function getVendor() {
         if(!$this->hasData("vendor")) {

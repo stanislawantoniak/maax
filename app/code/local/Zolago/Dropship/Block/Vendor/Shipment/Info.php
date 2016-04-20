@@ -1,5 +1,5 @@
 <?php
-class Zolago_Dropship_Block_Vendor_Shipment_Info extends Unirgy_Dropship_Block_Vendor_Shipment_Info
+class Zolago_Dropship_Block_Vendor_Shipment_Info extends ZolagoOs_OmniChannel_Block_Vendor_Shipment_Info
 {
 	public function getCarriers(){
         return array_intersect_key(parent::getCarriers(), array_flip($this->getAllowedKeys()));

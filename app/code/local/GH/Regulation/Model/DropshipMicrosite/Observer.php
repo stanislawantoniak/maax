@@ -3,7 +3,7 @@
 /**
  * Class GH_Regulation_Model_DropshipMicrosite_Observer
  */
-class GH_Regulation_Model_DropshipMicrosite_Observer extends Unirgy_DropshipMicrosite_Model_Observer
+class GH_Regulation_Model_DropshipMicrosite_Observer extends ZolagoOs_OmniChannelMicrosite_Model_Observer
 {
 
     /**
@@ -75,9 +75,9 @@ class GH_Regulation_Model_DropshipMicrosite_Observer extends Unirgy_DropshipMicr
             if ((!Mage::helper('udropship')->isModuleActive('udmspro')
                     || Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation')
                     || !$vendor->getSendConfirmationEmail()
-                ) && $vendor->getStatus() != Unirgy_Dropship_Model_Source::VENDOR_STATUS_REJECTED
+                ) && $vendor->getStatus() != ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_REJECTED
             ) {
-                if($vendor->getStatus() != Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE){
+                if($vendor->getStatus() != ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE){
                     $vendor->setPassword($this->_vendorPassword);
                     //Email with password should not be send on REGISTRATION stage in any case
                     //Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);

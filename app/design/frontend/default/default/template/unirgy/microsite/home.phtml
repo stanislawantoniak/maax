@@ -7,7 +7,7 @@ $storeCode = Mage::app()->getStore()->getCode();
 <h1 class="vendor-name">
 <?php echo $this->htmlEscape(Mage::helper('umicrosite')->getLandingPageTitle($_vendor)) ?>
 </h1>
-<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorRatings')):?>
+<?php if (Mage::helper('udropship')->isModuleActive('ZolagoOs_OmniChannelVendorRatings')):?>
     <?php echo Mage::helper('udratings')->getReviewsSummaryHtml($_vendor);?>
 <?php endif ?>
 <div class="generic-box vendor-description">

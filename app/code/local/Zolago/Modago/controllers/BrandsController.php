@@ -1,8 +1,8 @@
 <?php
 
-require_once Mage::getConfig()->getModuleDir('controllers', "Unirgy_DropshipMicrosite") . DS . "IndexController.php";
+require_once Mage::getConfig()->getModuleDir('controllers', "ZolagoOs_OmniChannelMicrosite") . DS . "IndexController.php";
 
-class Zolago_Modago_BrandsController extends Unirgy_DropshipMicrosite_IndexController
+class Zolago_Modago_BrandsController extends ZolagoOs_OmniChannelMicrosite_IndexController
 {
     public function indexAction()
     {

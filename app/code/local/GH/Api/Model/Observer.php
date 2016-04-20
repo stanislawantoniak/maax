@@ -14,13 +14,13 @@ class GH_Api_Model_Observer
         $id = $observer->getEvent()->getId();
         $v = Mage::helper('udropship')->getVendor($id);
 
-        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs
+        if (!$block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs
             || !Mage::app()->getRequest()->getParam('id', 0)
         ) {
             return;
         }
 
-        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+        if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $ghApiBlock = Mage::app()
                 ->getLayout()
                 ->createBlock('ghapi/adminhtml_dropship_settings_ghapi_form', 'vendor.ghapi.form')

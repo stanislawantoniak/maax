@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
+class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer {
 
     /**
      * Clear afetr laod quote better performance
@@ -38,7 +38,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
 
     public function cronCollectTracking()
     {
-        $statusFilter = array(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING,Unirgy_Dropship_Model_Source::TRACK_STATUS_READY,Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
+        $statusFilter = array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY,ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
         $time = Mage::getModel('core/date')->timestamp();
         $now = date('Y-m-d H:i:s', $time);
 
@@ -149,7 +149,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
                 && Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
                 && !$track->getWebApi()) {
             $track->setNextCheck(date('Y-m-d H:i:s', $time));
-            $track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
+            $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING);
         }
 
         return $this;
@@ -164,12 +164,12 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
         $id = $observer->getEvent()->getId();
         $v = Mage::helper('udropship')->getVendor($id);
 
-        if (!$block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs)
+        if (!$block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs)
             return;
 
 
         //Addresses
-        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+        if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $addressBlock = Mage::app()
                 ->getLayout()
                 ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_addresses', 'vendor.address.form')
@@ -186,7 +186,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
 
         if (!Mage::app()->getRequest()->getParam('id', 0))
             return;
-        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+        if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $websitesBlock = Mage::app()
                 ->getLayout()
                 ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_websites', 'vendor.websites.form')
@@ -201,7 +201,7 @@ class Zolago_Dropship_Model_Observer extends Unirgy_Dropship_Model_Observer {
             $block->addTabToSection('websites_allowed_section','vendor_rights',10);
         }
         //Couriers
-        if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
+        if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $courierBlock = Mage::app()
                             ->getLayout()
                             ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_couriers', 'vendor.courier.form')

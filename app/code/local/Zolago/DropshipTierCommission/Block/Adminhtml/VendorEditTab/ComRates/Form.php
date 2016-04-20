@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @see Unirgy_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form
- *      in: app/code/community/Unirgy/DropshipTierCommission/Block/Adminhtml/VendorEditTab/ComRates/Form.php
+ * @see ZolagoOs_OmniChannelTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form
+ *      in: app/code/community/ZolagoOs/OmniChannelTierCommission/Block/Adminhtml/VendorEditTab/ComRates/Form.php
  * Class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form
  */
 class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form extends Mage_Adminhtml_Block_Widget_Form

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelPayout>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <ZolagoOs_OmniChannel />
+            </depends>
+        </ZolagoOs_OmniChannelPayout>
+        <ZolagoOs_OmniChannelPo>
+            <depends>
+                <ZolagoOs_OmniChannelPayout />
+            </depends>
+        </ZolagoOs_OmniChannelPo>
+        <ZolagoOs_OmniChannelTierCommission>
+            <depends>
+                <ZolagoOs_OmniChannelPayout />
+            </depends>
+        </ZolagoOs_OmniChannelTierCommission>
+    </modules>
+</config>

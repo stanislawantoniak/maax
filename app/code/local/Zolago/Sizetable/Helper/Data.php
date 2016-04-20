@@ -18,7 +18,7 @@ class Zolago_Sizetable_Helper_Data extends Mage_Core_Helper_Abstract{
     }
 
 	public function getBrands($vendor,$storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID,$firstEmpty = false) {
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		$mid = Mage::getSingleton("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY,'manufacturer')->getAttributeId();

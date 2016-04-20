@@ -1,8 +1,8 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipMicrosite") . DS . "VendorController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannelMicrosite") . DS . "VendorController.php";
 
-class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite_VendorController
+class Zolago_DropshipMicrosite_VendorController extends ZolagoOs_OmniChannelMicrosite_VendorController
 {
     protected function _getSession()
     {
@@ -34,10 +34,10 @@ class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite
         }
         $action = $r->getActionName();
         $session = Mage::getSingleton('udropship/session');
-        if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorPortalUrl')) {
-            Mage::getConfig()->setNode('global/models/core/rewrite/url', 'Unirgy_DropshipVendorPortalUrl_Model_Url');
+        if (Mage::helper('udropship')->isModuleActive('ZolagoOs_OmniChannelVendorPortalUrl')) {
+            Mage::getConfig()->setNode('global/models/core/rewrite/url', 'ZolagoOs_OmniChannelVendorPortalUrl_Model_Url');
         } else {
-            Mage::getConfig()->setNode('global/models/core/rewrite/url', 'Unirgy_Dropship_Model_Url');
+            Mage::getConfig()->setNode('global/models/core/rewrite/url', 'ZolagoOs_OmniChannel_Model_Url');
         }
 
     }

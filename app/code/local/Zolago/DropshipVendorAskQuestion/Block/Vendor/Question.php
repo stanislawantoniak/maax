@@ -29,7 +29,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Session
+	 * @return ZolagoOs_OmniChannel_Model_Session
 	 */
 	protected function _getSession(){
 		return Mage::getSingleton('udropship/session');

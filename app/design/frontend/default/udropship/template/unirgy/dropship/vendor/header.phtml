@@ -1,21 +1,4 @@
 <?php
-/**
- * Unirgy LLC
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://www.unirgy.com/LICENSE-M1.txt
- *
- * @category   Unirgy
- * @package    Unirgy_Dropship
- * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
- * @license    http:///www.unirgy.com/LICENSE-M1.txt
- */
-?>
-<?php
 $_allowedLocale = array(
 	"pl_PL"=>$this->__("PL"),
 	"en_US"=>$this->__("EN")
@@ -23,11 +6,11 @@ $_allowedLocale = array(
 $_session = Mage::getSingleton('udropship/session');
 $_currentLocale = Mage::app()->getLocale()->getLocaleCode();
 $_isUdpo = Mage::helper('udropship')->isUdpoActive();
-$_isUdreport = Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorReport');
+$_isUdreport = Mage::helper('udropship')->isModuleActive('ZolagoOs_OmniChannelVendorReport');
 $_dashboardUrl = $_isUdpo ? $this->getUrl('udpo/vendor') : $this->getUrl('udropship/vendor');
 $_dashboardText = $_isUdpo ? $this->__("Orders"): $this->__("Dashboard");
 $_active = $this->getActivePage();
-$_isUrmaActive = Mage::helper('udropship')->isModuleActive('Unirgy_Rma');
+$_isUrmaActive = Mage::helper('udropship')->isModuleActive('ZolagoOs_Rma');
 $_isUstockPoActive = Mage::helper('udropship')->isModuleActive('ustockpo')
      && $_session->isLoggedIn() && $_session->getVendor()->getDistributorId();
 $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
@@ -96,11 +79,11 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 		<?php if($_session->isAllowed("udropship/vendor/preferences") && $_session->isLoggedIn() ):?>
         <li <?php if ($_active=='preferences'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/preferences')?>"><?php echo $this->__('Settings')?></a></li>
         <?php endif;?>
-		<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipBatch')): ?>
+		<?php if (Mage::helper('udropship')->isModuleActive('ZolagoOs_OmniChannelBatch')): ?>
 			<li <?php if ($_active=='importstock'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udbatch/vendor_batch/importStock') ?>" ><?php echo $this->__('Import Stock')?></a></li>
 			<li <?php if ($_active=='importorders'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udbatch/vendor_batch/importOrders') ?>" ><?php echo $this->__('Import Tracking')?></a></li>
         <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('modules/Unirgy_DropshipMulti') && $_session->isLoggedIn() ): ?>
+<?php if (Mage::helper('udropship')->isModuleActive('modules/ZolagoOs_OmniChannelMulti') && $_session->isLoggedIn() ): ?>
         <li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udmulti/vendor_product')?>"><?php echo $this->__('Stock And Price')?></a></li>
 <?php elseif($_session->isAllowed("udropship/vendor/product") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/product')?>"><?php echo $this->__('Stock')?></a></li>
@@ -135,7 +118,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
     <li <?php if ($_active=='udrudpo'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udreport/vendor/udpo')?>"><?php echo $this->__('Advanced PO Report')?></a></li>
     <?php endif ?>
 <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipManualLabel')
+<?php if (Mage::helper('udropship')->isModuleActive('ZolagoOs_OmniChannelManualLabel')
 	&& $_session->isAllowed("umanlabel")
     && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='umanlabels'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('umanlabel/vendor')?>"><?php echo $this->__('Manual Labels')?></a></li>
@@ -145,7 +128,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 			<?php echo $this->__('Customer Questions')?></a>
 		</li>
 <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipMicrosite')
+<?php if (Mage::helper('udropship')->isModuleActive('ZolagoOs_OmniChannelMicrosite')
     && $_session->isLoggedIn()
 	&& $_session->isAllowed("umicrosite")
     && $_session->getVendor()->getShowProductsMenuItem()): ?>

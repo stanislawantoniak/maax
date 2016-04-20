@@ -358,7 +358,7 @@
             <udpo>
                 <args>
                     <modules>
-                        <Zolago_Po before="Unirgy_DropshipPo">Zolago_Po</Zolago_Po>
+                        <Zolago_Po before="ZolagoOs_OmniChannelPo">Zolago_Po</Zolago_Po>
                     </modules>
                 </args>
             </udpo>
@@ -419,7 +419,7 @@
             <udpoadmin>
                 <args>
                     <modules>
-                        <Zolago_Po before="Unirgy_DropshipPo_Adminhtml">Zolago_Po_Adminhtml</Zolago_Po>
+                        <Zolago_Po before="ZolagoOs_OmniChannelPo_Adminhtml">Zolago_Po_Adminhtml</Zolago_Po>
                     </modules>
                 </args>
             </udpoadmin>

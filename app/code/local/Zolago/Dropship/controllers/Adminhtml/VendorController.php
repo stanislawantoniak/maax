@@ -1,9 +1,9 @@
 <?php
-require_once Mage::getModuleDir('controllers', "Unirgy_Dropship") . DS . "Adminhtml". DS . "VendorController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannel") . DS . "Adminhtml". DS . "VendorController.php";
 /**
  * new functions for admin_vendor controller
  */
-class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminhtml_VendorController {	
+class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Adminhtml_VendorController {	
     
     /**
      * Brandshop settings grid
@@ -34,7 +34,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $vendorId = $request->getParam('id');
 
         try {
-            /* @var $vendor Unirgy_Dropship_Model_Vendor */
+            /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
             $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
             $docs = Mage::helper("ghregulation")->getDocumentsToAccept($vendor);
             if (empty($docs)) {
@@ -72,7 +72,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends Unirgy_Dropship_Adminht
         $vendorId = $request->getParam('id');
 
         try {
-            /* @var $vendor Unirgy_Dropship_Model_Vendor */
+            /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
             $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
             $vendor->setConfirmation(null);
             $password = Mage::helper('udmspro')->processRandomPattern('[AN*6]');

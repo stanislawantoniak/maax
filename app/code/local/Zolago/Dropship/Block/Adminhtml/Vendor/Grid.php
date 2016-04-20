@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Block_Adminhtml_Vendor_Grid extends Unirgy_Dropship_Block_Adminhtml_Vendor_Grid {
+class Zolago_Dropship_Block_Adminhtml_Vendor_Grid extends ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Grid {
     protected function _prepareColumns()
     {
         $hlp = Mage::helper('udropship');

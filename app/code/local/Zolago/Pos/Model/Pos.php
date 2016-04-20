@@ -27,12 +27,12 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
 
 
     /**
-     * @param Unirgy_Dropship_Model_Vendor|int $vendor
+     * @param ZolagoOs_OmniChannel_Model_Vendor|int $vendor
      * @return boolean
      */
     public function isAssignedToVendor($vendor)
     {
-        if ($vendor instanceof Unirgy_Dropship_Model_Vendor) {
+        if ($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor) {
             $vendor = $vendor->getId();
         }
         return $this->getResource()->isAssignedToVendor($this, $vendor);
@@ -40,7 +40,7 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
 
 
     /**
-     * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
+     * @return ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection
      */
     public function getVendorCollection()
     {

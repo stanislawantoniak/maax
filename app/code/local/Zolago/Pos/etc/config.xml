@@ -77,7 +77,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_Pos before="Unirgy_Dropship">Zolago_Pos_Dropship</Zolago_Pos>
+						<Zolago_Pos before="ZolagoOs_OmniChannel">Zolago_Pos_Dropship</Zolago_Pos>
 					</modules>
 				</args>
 			</udropship>

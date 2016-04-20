@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Review_Model_Review  extends Unirgy_DropshipVendorRatings_Model_Review
+class Zolago_Review_Model_Review  extends ZolagoOs_OmniChannelVendorRatings_Model_Review
 {
 	/**
 	 * @param Mage_Core_Model_Abstract $object

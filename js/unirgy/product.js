@@ -1,4 +1,4 @@
-var UnirgyProductConfig = Class.create(Product.Config, {
+var ZolagoOsProductConfig = Class.create(Product.Config, {
     initialize: function($super, config, frontOptions) {
         this.frontOptions = {
             onlyLeftLimit: 20,
