@@ -47,5 +47,6 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
 
 
         echo json_encode($result, JSON_HEX_APOS);
+        exit;
     }
 }
