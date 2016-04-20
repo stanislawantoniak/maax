@@ -13,38 +13,6 @@ class ZolagoOs_OmniChannel_Helper_Protected
 	final public static function validateLicense($module)
 	{
 	    return true;
-		static $_licenseIsValid;
-		if( !empty($_licenseIsValid[$module]) )
-		{
-			return true;
-		}
-
-		if( $module != "ZolagoOs_OmniChannel" || Mage::getConfig()->getNode("modules/ZolagoOs_SimpleLicense") )
-		{
-			$key = "VN29643YBOFNSD86R2VOEWYEIF" . microtime(true);
-			ZolagoOs_SimpleLicense_Helper_Protected::obfuscate($key);
-			$hash = ZolagoOs_SimpleLicense_Helper_Protected::validateModuleLicense($module);
-			if( sha1($key . $module) !== $hash )
-			{
-				Mage::throwException("Invalid response from validation method");
-			}
-
-			$_licenseIsValid[$module] = true;
-			return true;
-		}
-
-		if( !ioncube_license_matches_server() )
-		{
-			Mage::throwException("Invalid ionCube license for ZolagoOs_OmniChannel. Allowed servers: " . ioncube_licensed_servers());
-		}
-
-		if( ioncube_license_has_expired() )
-		{
-			Mage::throwException("ionCube license for ZolagoOs_OmniChannel has expired");
-		}
-
-		$_licenseIsValid[$module] = true;
-		return true;
 	}
 
 	public function prepareQuoteItems($items)

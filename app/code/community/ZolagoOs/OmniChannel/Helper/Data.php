@@ -60,20 +60,6 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         if (isset($this->_isActive[$storeId])) {
             return $this->_isActive[$storeId];
         }
-        if (!extension_loaded('ionCube Loader')) {
-            return ($this->_isActive[$storeId] = false);
-        }
-        if ($this->isModuleActive('ZolagoOs_SimpleLicense')) {
-            try {
-                ZolagoOs_OmniChannel_Helper_Protected::validateLicense('ZolagoOs_OmniChannel');
-            } catch (ZolagoOs_SimpleLicense_Exception $e) {
-                return ($this->_isActive[$storeId] = false);
-            }
-        } else {
-            if (!Mage::helper('udropship/protected')->validateLicense('ZolagoOs_OmniChannel')) {
-                return ($this->_isActive[$storeId] = false);
-            }
-        }
         $udropship = Mage::getStoreConfigFlag('carriers/udropship/active', $store);
         $udsplit = Mage::getStoreConfigFlag('carriers/udsplit/active', $store);
         return ($this->_isActive[$storeId] = $udropship || $udsplit);
