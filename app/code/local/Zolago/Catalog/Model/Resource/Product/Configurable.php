@@ -323,7 +323,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 &&
                 (float)$_product["msrp"]
                 &&
-                (float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["msrp"] * (float)($percent / 100)
+                ((float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["msrp"] * (float)($percent / 100))
                 )
             ) {
                 $isNew = (bool)$_product["is_new"];
