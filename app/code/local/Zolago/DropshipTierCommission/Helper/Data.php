@@ -5,14 +5,12 @@ class Zolago_DropshipTierCommission_Helper_Data extends ZolagoOs_OmniChannelTier
 
     public function processPo($po)
     {
-        $this->_processPoCommission($po);
+//        $this->_processPoCommission($po);
 //        $this->_processPoTransactionFee($po); // removed fixed rates
     }
-
-    /**
-     * @param $po Zolago_Po_Model_Po
-     */
-    protected function _processPoCommission($po)
+	
+	
+    public function processPoCommission($po)
     {
         $tierRates = $this->getGlobalTierComConfig();
 
@@ -56,7 +54,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends ZolagoOs_OmniChannelTier
                 $allIds[] = $id;
             }
         }
-		
+
 		$terminalPercent = $this->getTerminalPercentForChargeLowerCommission($vendor);
 		$lowerCommissionItems = array();
 		$parentIds = array();
@@ -64,38 +62,34 @@ class Zolago_DropshipTierCommission_Helper_Data extends ZolagoOs_OmniChannelTier
 			/** @var Zolago_Po_Model_Po_Item $item */
 			if ($this->canSetCommission($item)) {
 				Mage::log($item->getdata(), null, 'commission.log');
-				
+
 				$id = $item->getProductId();
 				$parentIds[$id] = Mage::getResourceSingleton('catalog/product_type_configurable')->getParentIdsByChild($id);
 				$parentId = isset($parentIds[$id][0]) ? $parentIds[$id][0] : 0;
 
-				/** @var Zolago_Catalog_Model_Product $product */
-				$product = Mage::getModel("zolagocatalog/product")->setStoreId($po->getStore()->getId())->load($id);
-				if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
+				// Here price for configurable
+				$price = (float)$item->getBasePriceInclTax();
+				Mage::log("price: " . $price, null, 'commission.log');
 
-					// Here price from simple product
-					$price = (float)$product->getFinalPrice();
-					Mage::log("price: " . $price, null, 'commission.log');
+				if ($price) {
+					// msrp price is from configurable - business decision
+					$msrp = (float)Mage::getResourceModel('catalog/product')->getAttributeRawValue($parentId ? $parentId : $id, 'msrp', $po->getStore()->getId());
+					Mage::log("msrp for product id: " . $parentId ? $parentId : $id, null, 'mylog.log');
+					Mage::log("msrp: " . $msrp, null, 'commission.log');
 
-					if ($price && $parentId) {
-						// msrp price is from configurable - business decision
-						$msrp = (float)Mage::getResourceModel('catalog/product')->getAttributeRawValue($parentId, 'msrp', $po->getStore()->getId());
-						Mage::log("msrp: " . $msrp, null, 'commission.log');
+					if ($msrp) {
+						// Retrieve items for lower commission (previously sales item)
+						// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
+						// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
+						$diff = round(round(($msrp - $price) / $price, 4) * 100, 4);
+						Mage::log("diff: " . $diff, null, 'commission.log');
 
-						if ($msrp) {
-							// Retrieve items for lower commission (previously sales item)
-							// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
-							// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
-							$diff = round(round(($msrp - $price) / $price, 4) * 100, 4);
-							Mage::log("diff: " . $diff, null, 'commission.log');
-
-							if ($diff >= $terminalPercent) {
-								// Remember for this product
-								$lowerCommissionItems[$id] = $id;
-								if (!empty($parentId)) {
-									// Force for parent
-									$lowerCommissionItems[$parentId] = $parentId;
-								}
+						if ($diff >= $terminalPercent) {
+							// Remember for this product
+							$lowerCommissionItems[$id] = $id;
+							if (!empty($parentId)) {
+								// Force for parent
+								$lowerCommissionItems[$parentId] = $parentId;
 							}
 						}
 					}
