@@ -58,7 +58,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         if (!empty($ids)) {
             $collection->addAttributeToFilter('entity_id', $ids);
         }
-        Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
+        //Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
 
         Mage::app()->setCurrentStore($oldStore);
 
