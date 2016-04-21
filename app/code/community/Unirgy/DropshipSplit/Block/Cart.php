@@ -80,7 +80,7 @@ class Unirgy_DropshipSplit_Block_Cart extends Mage_Checkout_Block_Cart
             foreach ($cRates as $rate) {
                 $vId = $rate->getUdropshipVendor();
                 if (!$vId
-                    //|| !in_array($rate->getMethod(), $shippingMethodIds)
+                    || !in_array($rate->getMethod(), $shippingMethodIds)
                 ) {
                     continue;
                 }
