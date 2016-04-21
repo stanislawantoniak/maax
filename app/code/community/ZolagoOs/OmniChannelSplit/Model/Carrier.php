@@ -276,6 +276,8 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
         $cost = 0;
         $price = 0;
         $details = $address->getUdropshipShippingDetails();
+        $originalDetails = $details;
+
         $methodCodes = array();
         if ($details && ($details = Zend_Json::decode($details)) && !empty($details['methods'])) {
             foreach ($details['methods'] as $vId=>$rate) {
@@ -388,7 +390,10 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
         }
 
         //Do not set setUdropshipShippingDetails by default
-        //$address->setUdropshipShippingDetails(Zend_Json::encode($details));
+        if(!empty($originalDetails)){
+            $address->setUdropshipShippingDetails(Zend_Json::encode($details));
+        }
+
         $address->setShippingMethod('udsplit_total');
         $address->setShippingDescription($this->getConfigData('title'));
         $address->setShippingAmount($price);
