@@ -74,14 +74,14 @@ class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommi
 				if ($price) {
 					// msrp price is from configurable - business decision
 					$msrp = (float)Mage::getResourceModel('catalog/product')->getAttributeRawValue($parentId ? $parentId : $id, 'msrp', $po->getStore()->getId());
-					Mage::log("msrp for product id: " . $parentId ? $parentId : $id, null, 'mylog.log');
+					Mage::log("msrp for product id: " . ($parentId ? $parentId : $id), null, 'commission.log');
 					Mage::log("msrp: " . $msrp, null, 'commission.log');
 
 					if ($msrp) {
 						// Retrieve items for lower commission (previously sales item)
 						// now attribute 'product_flag' (FLAG_SALE|FLAG_PROMOTION)
 						// @see Zolago_Catalog_Model_Product_Source_Flag is only for user on front
-						$diff = round(round(($msrp - $price) / $price, 4) * 100, 4);
+						$diff = round(round(($msrp - $price) / $msrp, 4) * 100, 4);
 						Mage::log("diff: " . $diff, null, 'commission.log');
 
 						if ($diff >= $terminalPercent) {
