@@ -289,7 +289,7 @@ class Unirgy_DropshipSplit_Model_Carrier
         $price = 0;
         $details = $address->getUdropshipShippingDetails();
         $originalDetails = $details;
-        Mage::log($details, null, "12345.log");
+
         $methodCodes = array();
         if ($details && ($details = Zend_Json::decode($details)) && !empty($details['methods'])) {
             foreach ($details['methods'] as $vId=>$rate) {
