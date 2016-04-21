@@ -24,6 +24,7 @@ class Unirgy_DropshipSplit_Block_Cart extends Mage_Checkout_Block_Cart
      */
     public function getUdropShippingMethodsPerActualWebsite()
     {
+        $ids = array();
         $model = Mage::getModel('udropship/shipping');
         $shipping = Mage::getModel('udropship/shipping')->getCollection();
         $shipping->getSelect()->reset(Zend_Db_Select::COLUMNS);
@@ -31,7 +32,7 @@ class Unirgy_DropshipSplit_Block_Cart extends Mage_Checkout_Block_Cart
             array('udropship_shipping_method' => "udropship_shipping_method"),
             "main_table.shipping_id = udropship_shipping_method.shipping_id",
             array(
-                'shipping_id' => 'udropship_shipping_method.shipping_id',
+                'method' => 'udropship_shipping_method.method_code',
             )
         );
         $shipping->getSelect()->join(
@@ -40,7 +41,10 @@ class Unirgy_DropshipSplit_Block_Cart extends Mage_Checkout_Block_Cart
             array()
         )->where("website_table.website_id IN(?)", array(0, Mage::app()->getWebsite()->getId()));
 
-        return $shipping->getAllIds();
+        foreach($shipping as $shippingItem){
+            $ids[] = $shippingItem->getMethod();
+        }
+        return $ids;
     }
 
 
@@ -76,7 +80,7 @@ class Unirgy_DropshipSplit_Block_Cart extends Mage_Checkout_Block_Cart
             foreach ($cRates as $rate) {
                 $vId = $rate->getUdropshipVendor();
                 if (!$vId
-                    || !in_array($rate->getMethod(), $shippingMethodIds)
+                    //|| !in_array($rate->getMethod(), $shippingMethodIds)
                 ) {
                     continue;
                 }
