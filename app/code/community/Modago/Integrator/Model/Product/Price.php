@@ -38,7 +38,32 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         return $helper->getIntegrationStore();
     }
 
+    /**
+     * Get product collection by store id
+     * @param int $store_id
+     * @return Mage_Catalog_Model_Resource_Product_Collection|Object
+     */
+    function getProductCollectionByStoreId($store_id, $type = null, $ids = array())
+    {
+        $oldStore = Mage::app()->getStore();
+        Mage::app()->setCurrentStore($store_id);
 
+        $collection = Mage::getResourceModel('catalog/product_collection');
+        $collection
+            ->addMinimalPrice()
+            ->addFinalPrice()
+            ->addTaxPercents()
+        ;
+        $collection->addAttributeToFilter('type_id', $type);
+        if (!empty($ids)) {
+            $collection->addAttributeToFilter('entity_id', $ids);
+        }
+        Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
+
+        Mage::app()->setCurrentStore($oldStore);
+
+        return $collection;
+    }
     /**
      * @param $res
      * @return mixed
@@ -82,21 +107,10 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
         if (empty($parentChildRelation) || empty($childrenIds)) {
             return $res;
         }
-        
-        $this->_getHelper()->saveOldStore();
-        $collection = Mage::getResourceModel('catalog/product_collection');
-        $collection->setStore($this->_integrationStore);
-        $collection->addFinalPrice();
-        $collection->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
-        $collection->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
-        
-        //Collect prices for used children
-        $collectionUsedSimple = Mage::getResourceModel('catalog/product_collection');
-        $collectionUsedSimple->setStore($this->_integrationStore);
-        $collectionUsedSimple->addFinalPrice();
-        $collectionUsedSimple->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-        $collectionUsedSimple->addAttributeToFilter('entity_id', array('in' => $childrenIds));
-        
+
+        $collection = $this->getProductCollectionByStoreId($this->_integrationStore, Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        $collectionUsedSimple = $this->getProductCollectionByStoreId($this->_integrationStore, Mage_Catalog_Model_Product_Type::TYPE_SIMPLE, $childrenIds);
+
         $pricesUsedSimple = array();
         $finalPricesUsedSimple = array();
         foreach ($collectionUsedSimple as $collectionUsedSimpleItem) {
@@ -180,7 +194,7 @@ class Modago_Integrator_Model_Product_Price extends Mage_Core_Model_Abstract
             }
         }
         
-        $this->_getHelper()->restoreOldStore();
+
 
         return $res;
     }
