@@ -51,13 +51,12 @@ $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
 <?php
 $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
 
 <script type="text/javascript">
     var inPostPointsData = '<?php echo $inPostPoints; ?>';
-    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON('<?php echo $inPostPoints; ?>') : [];
+    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
 
     var sessionPointName = '<?php echo $locker->getName(); ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
