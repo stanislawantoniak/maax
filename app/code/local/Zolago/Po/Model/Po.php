@@ -71,7 +71,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return boolean
 	 */
-	public function isAllowed(ZolagoOs_OmniChannel_Model_Vendor $vendor = null, 
+	public function isAllowed(ZolagoOs_OmniChannel_Model_Vendor $vendor = null,
 		Zolago_Operator_Model_Operator $operator = null) {
 		
 		if($operator instanceof Zolago_Operator_Model_Operator){

@@ -870,7 +870,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 $item->addData($itemSData);
 				$po->addItem($item);
-				if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
+				if(Mage::helper("core")->isModuleEnabled('ZolagoOs_OmniChannelTierCommission')) {
 					Mage::helper("udtiercom")->processPo($this);
 				}
                 Mage::register('vendor_add_item_to_po_before', true, true);
@@ -963,7 +963,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				$po->addItem($child);
 
 				// Process for simple and configurable at once
-				if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
+				if(Mage::helper("core")->isModuleEnabled('ZolagoOs_OmniChannelTierCommission')) {
 					Mage::helper("udtiercom")->processPo($po);
 				}
 
