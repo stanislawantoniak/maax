@@ -17,7 +17,7 @@ class Zolago_Operator_Model_Observer {
         /* @var $session Zolago_Dropship_Model_Session */
         $session = Mage::getSingleton("udropship/session");
         // Apply only for dropship conntrollers
-        if(!($controller instanceof Unirgy_Dropship_Controller_VendorAbstract)) {
+        if(!($controller instanceof ZolagoOs_OmniChannel_Controller_VendorAbstract)) {
             return;
         }
         $request = $controller->getRequest();

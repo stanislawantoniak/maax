@@ -1,5 +1,5 @@
 <?php
-class Zolago_Dropship_Model_Pdf_Shipment extends Unirgy_Dropship_Model_Pdf_Shipment {
+class Zolago_Dropship_Model_Pdf_Shipment extends ZolagoOs_OmniChannel_Model_Pdf_Shipment {
 
 	protected function insertOrder(&$page, $order, $putOrderId = true)
     {

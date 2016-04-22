@@ -1,6 +1,6 @@
 <?php
 
-class GH_Marketing_Model_Source extends Unirgy_Dropship_Model_Source_Abstract
+class GH_Marketing_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstract
 {
 
 

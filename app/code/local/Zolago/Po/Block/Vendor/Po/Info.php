@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Po_Block_Vendor_Po_Info extends Unirgy_DropshipPo_Block_Vendor_Po_Info
+class Zolago_Po_Block_Vendor_Po_Info extends ZolagoOs_OmniChannelPo_Block_Vendor_Po_Info
 {
         
     public function getCarriers()

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelTierCommission>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <ZolagoOs_OmniChannel />
+            </depends>
+        </ZolagoOs_OmniChannelTierCommission>
+        <ZolagoOs_OmniChannelVendorReport>
+            <depends>
+                <ZolagoOs_OmniChannelTierCommission />
+            </depends>
+        </ZolagoOs_OmniChannelVendorReport>
+    </modules>
+</config>

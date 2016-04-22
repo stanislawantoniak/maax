@@ -72,7 +72,7 @@
       <sales>
         <args>
           <modules>
-            <Zolago_Sales before="Unirgy_Rma">Zolago_Sales</Zolago_Sales>
+            <Zolago_Sales before="ZolagoOs_Rma">Zolago_Sales</Zolago_Sales>
           </modules>
         </args>
       </sales>

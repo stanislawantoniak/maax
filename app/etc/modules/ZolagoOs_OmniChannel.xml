@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_OmniChannel>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Adminhtml />
+                <Mage_Catalog />
+                <Mage_CatalogInventory />
+                <Mage_Sales />
+            </depends>
+        </ZolagoOs_OmniChannel>
+
+        <ZolagoOs_OmniChannelHelper>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ZolagoOs_OmniChannelHelper>
+
+        <Mage_CatalogInventory>
+            <depends>
+                <ZolagoOs_OmniChannelHelper />
+            </depends>
+        </Mage_CatalogInventory>
+        <Mage_Cron>
+            <depends>
+                <ZolagoOs_OmniChannelHelper />
+            </depends>
+        </Mage_Cron>
+    </modules>
+</config>

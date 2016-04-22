@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipTierCommission_Helper_Data extends Unirgy_DropshipTierCommission_Helper_Data
+class Zolago_DropshipTierCommission_Helper_Data extends ZolagoOs_OmniChannelTierCommission_Helper_Data
 {
 
     public function processPo($po)

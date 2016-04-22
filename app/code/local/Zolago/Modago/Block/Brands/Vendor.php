@@ -3,16 +3,16 @@
 class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 {
 	/**
-	 * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
+	 * @return ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection
 	 */
 	public function getVendorCollection($addDummies=true) {
 		if(!$this->hasData("vendor_collection")){
             $localVendorId = Mage::helper('udropship/data')->getLocalVendorId();
 			$collection = Mage::getResourceModel('udropship/vendor_collection');
-			/* @var $collection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
-			$status = array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE);
+			/* @var $collection ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection */
+			$status = array(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE);
 			if (Mage::app()->getWebsite()->getIsPreviewWebsite()) {
-			    $status[] = Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE;
+			    $status[] = ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE;
 			}
 			$collection->addStatusFilter($status);			
             $collection->addFieldToFilter('vendor_type', Zolago_Dropship_Model_Vendor::VENDOR_TYPE_BRANDSHOP);
@@ -76,26 +76,26 @@ class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * @return string
 	 */
-	public function getVendorName(Unirgy_Dropship_Model_Vendor $vendor) {
+	public function getVendorName(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
 		return $vendor->getVendorName();
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * @return string | null
 	 */
-	public function getVendorMarkUrl(Unirgy_Dropship_Model_Vendor $vendor) {
+	public function getVendorMarkUrl(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
 		return $vendor->getFileUrl('logo');
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * @return string | null
 	 */
-	public function getVendorResizedLogoUrl(Unirgy_Dropship_Model_Vendor $vendor, 
+	public function getVendorResizedLogoUrl(ZolagoOs_OmniChannel_Model_Vendor $vendor, 
 			$width=130, $height=74) {
         /* @var $zolagodropship Zolago_Dropship_Helper_Data */
 		$zolagodropship = Mage::helper("zolagodropship");
@@ -104,10 +104,10 @@ class Zolago_Modago_Block_Brands_Vendor extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * @return string
 	 */
-	public function getVendorBaseUrl(Unirgy_Dropship_Model_Vendor $vendor) {
+	public function getVendorBaseUrl(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
 		return Mage::helper("umicrosite")->getVendorBaseUrl($vendor);
 	}
 

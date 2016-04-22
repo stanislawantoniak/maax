@@ -1,6 +1,6 @@
 <?php
 class Zolago_Po_Model_Resource_Po_Collection 
-	extends Unirgy_DropshipPo_Model_Mysql4_Po_Collection
+	extends ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection
 {
 	
 	protected $_vendorId;
@@ -72,7 +72,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 	}
 
 	public function addVendorFilter($vendor) {
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		$this->_vendorId = $vendor;

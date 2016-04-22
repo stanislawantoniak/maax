@@ -1,21 +1,4 @@
 <?php
-/**
- * Unirgy LLC
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://www.unirgy.com/LICENSE-M1.txt
- *
- * @category   Unirgy
- * @package    Unirgy_DropshipPo
- * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
- * @license    http:///www.unirgy.com/LICENSE-M1.txt
- */
-?>
-<?php
 $_hlp = Mage::helper('udropship');
 $_poHlp = Mage::helper('udpo');
 $_udpos = Mage::helper('core')->decorateArray($_poHlp->getVendorPoCollection(), '');
@@ -492,11 +475,11 @@ function validatePoSubmit(id)
 function _validatePoSubmit(id)
 {
     switch ($('change_status-'+id).value) {
-        case '<?php echo Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED ?>':
+        case '<?php echo ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED ?>':
             return confirm('<?php echo $_hlp->__('This will cancel purchase order and all shipments (if possible).') ?>');
-        case '<?php echo Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED ?>':
+        case '<?php echo ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_SHIPPED ?>':
             return confirm('<?php echo $_hlp->__('This will mark as shipped purchase order and all shipments (if possible).') ?>');
-        case '<?php echo Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED ?>':
+        case '<?php echo ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED ?>':
             return confirm('<?php echo $_hlp->__('This will mark as shipped purchase order and all shipments (if possible).') ?>');
         default:
             return true;
@@ -543,11 +526,11 @@ function initShipmentForm(udpoId, shipmentId) {
 function validateShipmentSubmit(id)
 {
     switch ($('change_status-'+id).value) {
-        case '<?php echo Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED ?>':
+        case '<?php echo ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED ?>':
             return confirm('<?php echo $_hlp->__('This will cancel shipment (if possible).') ?>');
-        case '<?php echo Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED ?>':
+        case '<?php echo ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED ?>':
             return confirm('<?php echo $_hlp->__('This will mark shipment as shipped (and if possible change PO status as well).') ?>');
-        case '<?php echo Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED ?>':
+        case '<?php echo ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED ?>':
             return confirm('<?php echo $_hlp->__('This will mark shipment as delivered (and if possible change PO status as well).') ?>');
         default:
             return true;
@@ -568,7 +551,7 @@ function useLabelShippingAmountChanged(cb)
 function udpoStatusChanged(sel)
 {
     var id=sel.id.replace(/[^0-9]/g, '');
-    if (sel.value=='<?php echo Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED ?>') {
+    if (sel.value=='<?php echo ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED ?>') {
         $$('full-cancel-'+id+' input').invoke('enable');
         $('full-cancel-'+id).show();
     } else {

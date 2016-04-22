@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
+class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
 {
 	const TRACK_SINGLE = 1;
 	protected $trackingHelperPath = 'orbashipping/carrier_tracking';
@@ -55,27 +55,27 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	}
 
 	/**
-	 * @param Unirgy_Rma_Model_Rma_Track | string $tracking
+	 * @param ZolagoOs_Rma_Model_Rma_Track | string $tracking
 	 */
 	public function getTrackingStatusName($tracking)
 	{
-		if ($tracking instanceof Unirgy_Rma_Model_Rma_Track) {
+		if ($tracking instanceof ZolagoOs_Rma_Model_Rma_Track) {
 			$tracking = $tracking->getUdropshipStatus();
 		}
 		switch ($tracking) {
-			case Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED:
+			case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_CANCELED:
 				return $this->__("Canceled");
 				break;
-			case Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED:
+			case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED:
 				return $this->__("Delivered");
 				break;
-			case Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING:
+			case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING:
 				return $this->__("Pending");
 				break;
-			case Unirgy_Dropship_Model_Source::TRACK_STATUS_READY:
+			case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY:
 				return $this->__("Ready");
 				break;
-			case Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED:
+			case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED:
 				return $this->__("Shipped");
 				break;
 			case Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED:
@@ -131,7 +131,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	//{{{
 	/**
 	 *
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * @param bool $rmaMode
 	 * @return array
 	 */
@@ -226,20 +226,20 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 				foreach ($result as $trackId => $status) {
 					foreach ($trackIds[$trackId] as $track) {
 
-						if (in_array($status, array(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING, Unirgy_Dropship_Model_Source::TRACK_STATUS_READY, Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED))) {
+						if (in_array($status, array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED))) {
 							$repeatIn = Mage::getStoreConfig('udropship/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
 							if ($repeatIn <= 0) {
 								$repeatIn = 12;
 							}
 							$repeatIn = $repeatIn * 60 * 60;
 							$track->setNextCheck(date('Y-m-d H:i:s', $time + $repeatIn))->save();
-							if ($status == Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING) continue;
+							if ($status == ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING) continue;
 						}
 						$track->setUdropshipStatus($status);
 
 						if ($track->dataHasChangedFor('udropship_status')) {
 							switch ($status) {
-								case Unirgy_Dropship_Model_Source::TRACK_STATUS_READY:
+								case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY:
 									Mage::helper('udropship')->addShipmentComment(
 										$track->getShipment(),
 										$this->__('Tracking ID %s was picked up from %s', $trackId, $v->getVendorName())
@@ -247,7 +247,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 									$track->getShipment()->save();
 									break;
 
-								case Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED:
+								case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED:
 									Mage::helper('udropship')->addShipmentComment(
 										$track->getShipment(),
 										$this->__('Tracking ID %s was delivered to customer', $trackId)
@@ -279,7 +279,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	}
 
 
-	public function getProductStatusForVendor(Unirgy_Dropship_Model_Vendor $vendor)
+	public function getProductStatusForVendor(ZolagoOs_OmniChannel_Model_Vendor $vendor)
 	{
 		$status = Mage_Catalog_Model_Product_Status::STATUS_DISABLED;
 
@@ -490,7 +490,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 	 */
 	public function getCurrentVendorRootCategory()
 	{
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$vendor = Mage::helper("umicrosite")->getCurrentVendor();
 		$vendorRootCategoryId = false; //VENDOR ROOT CATEGORY for current website
 
@@ -505,7 +505,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data
 		return $vendorRootCategoryId;
 	}
 
-    public function addAdminhtmlVersion($module='Unirgy_Dropship')
+    public function addAdminhtmlVersion($module='ZolagoOs_OmniChannel')
     {
         $layout = Mage::app()->getLayout();
         $version = (string)Mage::getConfig()->getNode("modules/{$module}/version");

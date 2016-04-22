@@ -80,7 +80,7 @@
       <udropship>
         <args>
           <modules>
-            <Orba_Shipping before="Unirgy_Dropship">Orba_Shipping_Dropship</Orba_Shipping>
+            <Orba_Shipping before="ZolagoOs_OmniChannel">Orba_Shipping_Dropship</Orba_Shipping>
           </modules>
         </args>
       </udropship>

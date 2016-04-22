@@ -189,7 +189,7 @@
             <urma>
                 <args>
                     <modules>
-                        <Zolago_Rma before="Unirgy_Rma">Zolago_Rma</Zolago_Rma>
+                        <Zolago_Rma before="ZolagoOs_Rma">Zolago_Rma</Zolago_Rma>
                     </modules>
                 </args>
             </urma>
@@ -228,7 +228,7 @@
             <urmaadmin>
                 <args>
                     <modules>
-                        <zolagorma before="Unirgy_Rma_Adminhtml">Zolago_Rma_Adminhtml</zolagorma>
+                        <zolagorma before="ZolagoOs_Rma_Adminhtml">Zolago_Rma_Adminhtml</zolagorma>
                     </modules>
                 </args>
             </urmaadmin>

@@ -77,7 +77,7 @@
             <udropship>
                 <args>
                     <modules>
-                        <GH_Statements before="Unirgy_Dropship">GH_Statements_Dropship</GH_Statements>
+                        <GH_Statements before="ZolagoOs_OmniChannel">GH_Statements_Dropship</GH_Statements>
                     </modules>
                 </args>
             </udropship>

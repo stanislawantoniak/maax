@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Rma_Model_Resource_Rma_Comment_Collection extends Unirgy_Rma_Model_Mysql4_Rma_Comment_Collection
+class Zolago_Rma_Model_Resource_Rma_Comment_Collection extends ZolagoOs_Rma_Model_Mysql4_Rma_Comment_Collection
 {
     public function setCreatedAtOrder($direction='desc')
     {

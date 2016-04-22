@@ -1,7 +1,7 @@
 <?php
 
 class Zolago_DropshipVendorRatings_Model_Resource_Review_Product_Collection 
-	extends Unirgy_DropshipVendorRatings_Model_Mysql4_Review_Product_Collection {
+	extends ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Review_Product_Collection {
 
 	protected function _joinFields() {
 		$reviewTable = Mage::getSingleton('core/resource')->getTableName('review/review');

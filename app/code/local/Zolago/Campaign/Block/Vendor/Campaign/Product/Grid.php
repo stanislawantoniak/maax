@@ -30,7 +30,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $campaignId = $this->getRequest()->getParam("id");
 
         $vendor = $this->getVendor();
-        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        /* @var $udropshipHelper ZolagoOs_OmniChannel_Helper_Data */
         $udropshipHelper = Mage::helper("udropship");
         $localVendor = $udropshipHelper->getLocalVendorId();
 

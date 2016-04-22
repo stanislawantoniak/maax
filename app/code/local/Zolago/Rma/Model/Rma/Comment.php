@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
+class Zolago_Rma_Model_Rma_Comment extends ZolagoOs_Rma_Model_Rma_Comment
 {
 	
 	const CUSTOMER	= "customer";
@@ -15,7 +15,7 @@ class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
 	);
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVednor() {
 		$vendorId = $this->getVendorId();

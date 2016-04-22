@@ -167,7 +167,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     }
 
     public function getRmaSection() {
-        if($this->isModuleActive('Unirgy_Rma') && $this->isAllowed("urma/vendor")) {
+        if($this->isModuleActive('ZolagoOs_Rma') && $this->isAllowed("urma/vendor")) {
             return array(
                        "active" => $this->isActive("urma") || $this->isActive("urmas"),
                        "icon"	 => "icon-exclamation-sign",
@@ -495,7 +495,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
      * Get witch page is currently active.
      * This should be specified in action function in controller
      * NOTE: This is set as second parameter in function _renderPage from udropship
-     * @see Unirgy_Dropship_Controller_VendorAbstract::renderPage()
+     * @see ZolagoOs_OmniChannel_Controller_VendorAbstract::renderPage()
      *
      * @return null|string
      */
@@ -518,14 +518,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
         return $this->getSession()->isLoggedIn();
     }
     /**
-     * @return Unirgy_Dropship_Model_Vendor
+     * @return ZolagoOs_OmniChannel_Model_Vendor
      */
     public function getVendor() {
         return $this->getSession()->getVendor();
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Session
+     * @return ZolagoOs_OmniChannel_Model_Session
      */
     public function getSession() {
         return Mage::getSingleton('udropship/session');

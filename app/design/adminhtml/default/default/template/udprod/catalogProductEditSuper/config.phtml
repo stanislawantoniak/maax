@@ -120,7 +120,7 @@
 </div>
 <?php echo $this->getGridHtml() ?>
 <script type="text/javascript">
-var UnirgyProductConfigurable = Class.create(Product.Configurable, {
+var ZolagoOsProductConfigurable = Class.create(Product.Configurable, {
     initialize: function($super, attributes, links, idPrefix, grid, readonly) {
         this.onUpdateIdentifyImage = this.updateIdentifyImage.bindAsEventListener(this);
         $super(attributes, links, idPrefix, grid, readonly)
@@ -198,7 +198,7 @@ var UnirgyProductConfigurable = Class.create(Product.Configurable, {
         this.updateSaveInput();
     }
 })
-var superProduct = new UnirgyProductConfigurable(<?php echo $this->getAttributesJson() ?>,<?php echo $this->getLinksJson() ?>,'<?php echo $this->getHtmlId() ?>_',<?php echo $this->getGridJsObject() ?>, <?php echo ( $this->isReadonly() ? 'true' : 'false'); ?>);
+var superProduct = new ZolagoOsProductConfigurable(<?php echo $this->getAttributesJson() ?>,<?php echo $this->getLinksJson() ?>,'<?php echo $this->getHtmlId() ?>_',<?php echo $this->getGridJsObject() ?>, <?php echo ( $this->isReadonly() ? 'true' : 'false'); ?>);
 superProduct.createEmptyUrl = '<?php echo $this->getNewEmptyProductUrl() ?>';
 superProduct.createNormalUrl = '<?php echo $this->getNewProductUrl() ?>';
 superProduct.createQuickUrl = '<?php echo $this->getQuickCreationUrl() ?>';

@@ -24,7 +24,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	}
 	
 	/**
-	 * @return Unirgy_DropshipPo_Model_Mysql4_Po_Item_Collection
+	 * @return ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Item_Collection
 	 */
 	public function getItemsCollection() {
 		return $this->getPo()->getAllItems();
@@ -63,7 +63,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return int | null
 	 */
 	public function getPosQty(Zolago_Po_Model_Po_Item $item){

@@ -82,14 +82,14 @@
             <umicrosite>
                 <args>
                     <modules>
-                        <udmspro before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrositePro</udmspro>
+                        <udmspro before="ZolagoOs_OmniChannelMicrosite">Zolago_DropshipMicrositePro</udmspro>
                     </modules>
                 </args>
             </umicrosite>
 			<udmspro>
 				<args>
 					<modules>
-						<udmspro before="Unirgy_DropshipMicrositePro">Zolago_DropshipMicrositePro</udmspro>
+						<udmspro before="ZolagoOs_OmniChannelMicrositePro">Zolago_DropshipMicrositePro</udmspro>
 					</modules>
 				</args>
 			</udmspro>

@@ -3,7 +3,7 @@
 /**
  * Class Zolago_Rma_Block_Adminhtml_Rma_Grid
  */
-class Zolago_Rma_Block_Adminhtml_Rma_Grid extends Unirgy_Rma_Block_Adminhtml_Rma_Grid
+class Zolago_Rma_Block_Adminhtml_Rma_Grid extends ZolagoOs_Rma_Block_Adminhtml_Rma_Grid
 {
 
     protected function _prepareColumns()
