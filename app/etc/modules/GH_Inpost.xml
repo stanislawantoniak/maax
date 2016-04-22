@@ -5,8 +5,8 @@
             <active>true</active>
             <codePool>local</codePool>
             <depends>
-                <Unirgy_Dropship/>
-                <Unirgy_DropshipTierShipping />
+                <ZolagoOs_OmniChannel/>
+                <ZolagoOs_OmniChannelTierShipping />
             </depends>
         </GH_Inpost>
     </modules>
