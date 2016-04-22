@@ -711,9 +711,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             if(empty($stores))
                 return;
 
-
-
-
             //Recover campaign_info_id attribute
             foreach ($reformattedDataInfo as $websiteId => $dataToUpdateInfo) {
                 $storesI = isset($stores[$websiteId]) ? $stores[$websiteId] : false;
@@ -725,8 +722,6 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
 
 
-
-
         //3. Recover products from SALE and PROMOTION campaigns
 
         //3.1. Recover (set to null) attributes campaign_regular_id, special_price,special_from_date,special_to_date,campaign_strikeout_price_type,product_flag
@@ -736,6 +731,10 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $productIdsSalePromotionUpdated = $productAttributeCampaignModel->unsetPromoCampaignAttributesToVisibleProducts($dataToUpdate, $productsToDeleteFromTable);
         $productIdsToUpdate = array_merge($productIdsToUpdate, $productIdsSalePromotionUpdated);
 
+        //3.2. set SALE/PROMO FLAG
+        /* @var $zolagoCatalogProductConfigurableModel Zolago_Catalog_Model_Resource_Product_Configurable */
+        $zolagoCatalogProductConfigurableModel = Mage::getResourceModel('zolagocatalog/product_configurable');
+        $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($productIdsToUpdate);
 
         //4. reindex
         // Better performance
@@ -798,9 +797,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         $simpleUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToSimpleVisibleProducts($salesPromoProductsData, $websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$simpleUpdated);
 
-
         //1. Update attributes for configurable visible products
-        //Mage::log("Update attributes for configurable visible products----------------", null, "set_log_2.log");
         $configurableUpdated = $productAttributeCampaignModel->setPromoCampaignAttributesToConfigurableVisibleProducts($salesPromoProductsData,$websiteId);
         $productsIdsPullToSolr = array_merge($productsIdsPullToSolr,$configurableUpdated);
 
