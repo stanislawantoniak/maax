@@ -1,9 +1,19 @@
-<?php $address = $this->getItem()->getShippingAddress(); ?>
+<?php
+
+/* @var $po ZolagoOs_OmniChannelPo_Model_Po */
+$po = $this->getItem();
+$address = $this->getItem()->getShippingAddress();
+$inpostLockerName = $po->getInpostLockerName();
+?>
 <div class="sales-order-top col-md-6 col-sm-6 col-xs-12 sales-order-hide">
 	<div class="sales-order-info">
 		<div class="order-info-address">
 			<span class="order-top-title"><?php echo $this->__("Shipping address"); ?></span>
-			<span class="order-top-txt"><?php echo $this->escapeHtml($address->getFirstname().' '.$address->getMiddlename().' '.$address->getLastname()); ?></span>
+			<?php if($inpostLockerName): ?>
+				<span class="order-top-txt"><?php echo $inpostLockerName; ?></span>
+			<?php else: ?>
+				<span class="order-top-txt"><?php echo $this->escapeHtml($address->getFirstname().' '.$address->getMiddlename().' '.$address->getLastname()); ?></span>
+			<?php endif; ?>
 			<span class="order-top-txt order-top-address"><?php echo implode('<br />',$address->getStreet()); ?></span>
 			<span class="order-top-txt"><?php echo $this->escapeHtml($address->getPostcode().' '.$address->getCity()); ?></span>
 			<span class="order-top-txt"><?php echo $this->__('tel').': '.$this->escapeHtml($address->getTelephone()); ?></span>
