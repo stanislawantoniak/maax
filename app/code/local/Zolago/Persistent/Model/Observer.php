@@ -67,10 +67,14 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 		$checkoutSession->setData("inpost_locker_name",$shippingPointCode);
 
 		$shippingMethodPerVendor = array();
-		foreach($details["methods"] as $_vendorId => $vendorRate){
-			$shippingMethodPerVendor[$_vendorId] = $vendorRate["code"];
+		if(isset($details["methods"])){
+			foreach($details["methods"] as $_vendorId => $vendorRate){
+				$shippingMethodPerVendor[$_vendorId] = $vendorRate["code"];
+			}
+			$checkoutSession->setShippingMethod($shippingMethodPerVendor);
 		}
-		$checkoutSession->setShippingMethod($shippingMethodPerVendor);
+
+
 	    $quote = $checkoutSession->getQuote();
 
 		$addressNew = $quote->getShippingAddress();
