@@ -1,7 +1,7 @@
 <?php
 
 class Zolago_DropshipVendorProduct_Model_Observer 
-	extends Unirgy_DropshipVendorProduct_Model_Observer
+	extends ZolagoOs_OmniChannelVendorProduct_Model_Observer
 {
     /**
 	 * Clear afetr laod quote better performance

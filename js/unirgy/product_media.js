@@ -1,4 +1,4 @@
-var UnirgyProductGallery = Class.create({
+var ZolagoOsProductGallery = Class.create({
     initialize: function(images, options) {
         this.options = {
             imageSwitchDuration: .5,

@@ -1,11 +1,11 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipVendorAskQuestion") . DS . "Adminhtml" . DS . "IndexController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannelVendorAskQuestion") . DS . "Adminhtml" . DS . "IndexController.php";
 
 /**
- * Class Unirgy_DropshipVendorAskQuestion_Adminhtml_IndexController
+ * Class ZolagoOs_OmniChannelVendorAskQuestion_Adminhtml_IndexController
  */
-class Zolago_DropshipVendorAskQuestion_Adminhtml_IndexController extends Unirgy_DropshipVendorAskQuestion_Adminhtml_IndexController {
+class Zolago_DropshipVendorAskQuestion_Adminhtml_IndexController extends ZolagoOs_OmniChannelVendorAskQuestion_Adminhtml_IndexController {
 
     /**
      * Acl check for this controller

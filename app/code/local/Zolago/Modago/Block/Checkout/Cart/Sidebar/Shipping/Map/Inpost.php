@@ -41,18 +41,18 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost
             $lockers[] = array(
                 "id" => $locker->getId(),
                 "name" => $locker->getName(),
-                'street' => (string)$locker->getStreet(),
-                'building_number' => (string)$locker->getBuildingNumber(),
-                "postcode" => $locker->getPostcode(),
-                'town' => $townName,
+                'street' => htmlentities((string)$locker->getStreet()),
+                'building_number' => htmlentities((string)$locker->getBuildingNumber()),
+                "postcode" => (string)$locker->getPostcode(),
+                'town' => htmlentities($townName),
                 "location_description" => htmlentities((string)$locker->getLocationDescription()),
-                "longitude" => $locker->getLongitude(),
-                "latitude" => $locker->getLatitude(),
+                "longitude" => (string)$locker->getLongitude(),
+                "latitude" => (string)$locker->getLatitude(),
                 "additional" => htmlentities(implode("<br />", $additional))
             );
         }
         if (!empty($lockers)) {
-            $result["map_points"] = json_encode($lockers, JSON_HEX_APOS);
+            $result["map_points"] = json_encode($lockers,JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP);
         }
 
         if (!empty($filters)) {

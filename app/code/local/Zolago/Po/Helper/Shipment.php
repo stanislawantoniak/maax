@@ -53,7 +53,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 
     /**
      * Set PO
-     * @param Unirgy_DropshipPo_Model_Po
+     * @param ZolagoOs_OmniChannelPo_Model_Po
      * @return void
      */
     public function setUdpo($udpo) {
@@ -62,7 +62,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
     
     /**
      * Get PO if set
-     * @return Unirgy_DropshipPo_Model_Po
+     * @return ZolagoOs_OmniChannelPo_Model_Po
      */
     public function getUdpo() {
         if (empty($this->_udpo)) {
@@ -259,8 +259,8 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
         $store = $udpo->getOrder()->getStore();
         $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
 
-        $poStatusShipped = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED;
-        $poStatusDelivered = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED;
+        $poStatusShipped = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_SHIPPED;
+        $poStatusDelivered = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED;
         
         $poStatus = $this->getPoStatus();        
 
@@ -270,7 +270,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      }
      
     /**
-     * @param Unirgy_Dropship_Model_Vendor
+     * @param ZolagoOs_OmniChannel_Model_Vendor
      * @return void
      */
      public function setVendor($vendor) {
@@ -278,7 +278,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      }
 
     /**
-     * @return Unirgy_Dropship_Model_Vendor
+     * @return ZolagoOs_OmniChannel_Model_Vendor
      */
      public function getVendor() {
          if (empty($this->_vendor)) {
@@ -321,9 +321,9 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      */
     public function processSetStatus() {
 
-        $poStatusShipped   = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED;
-        $poStatusDelivered = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED;
-        $poStatusCanceled  = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED;
+        $poStatusShipped   = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_SHIPPED;
+        $poStatusDelivered = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED;
+        $poStatusCanceled  = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED;
 
         $udpo = $this->getUdpo();
         

@@ -39,10 +39,10 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return Zolago_SalesRule_Model_Resource_Relation
 	 */
-	public function updateForPoItem(Unirgy_DropshipPo_Model_Po_Item $item) {
+	public function updateForPoItem(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
 		
 		$orderItemId = $item->getOrderItemId();
 		$poItemId = $item->getId();
@@ -56,10 +56,10 @@ class Zolago_SalesRule_Model_Resource_Relation extends Mage_Core_Model_Resource_
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return Zolago_SalesRule_Model_Resource_Relation
 	 */
-	public function resetDiscountInfo(Unirgy_DropshipPo_Model_Po_Item $item) {
+	public function resetDiscountInfo(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
 		$poItemId = $item->getId();
 		// Remove all old entries
 		$this->_getWriteAdapter()->delete(

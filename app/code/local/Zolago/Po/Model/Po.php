@@ -19,7 +19,7 @@
  * @method string getInpostLockerName()
  * @method Zolago_Po_Model_Po setInpostLockerName(string $lockerName)
  */
-class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
+class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
@@ -73,11 +73,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $venndor
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return boolean
 	 */
-	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, 
+	public function isAllowed(ZolagoOs_OmniChannel_Model_Vendor $vendor = null,
 		Zolago_Operator_Model_Operator $operator = null) {
 		
 		if($operator instanceof Zolago_Operator_Model_Operator){
@@ -165,7 +165,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$collection->clear();
 		
 		$collection->addAttributeToFilter("udropship_status", 
-			array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+			array("nin"=>array(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED))
 		);
 		$collection->setOrder("created_at", "DESC");
 		
@@ -222,7 +222,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		try{
 			$transaction->beginTransaction();
 			$collection = $this->getItemsCollection() ;
-			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Item_Collection */
+			/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Item_Collection */
 
 			$newModel = Mage::getModel("zolagopo/po");
 			/* @var $newModel Zolago_Po_Model_Po */
@@ -297,10 +297,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			// Process comments
 			////////////////////////////////////////////////////////////////////
 			$comments = $newModel->getCommentsCollection();
-			/* @var $comments Unirgy_DropshipPo_Model_Mysql4_Po_Comment_Collection */
+			/* @var $comments ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Comment_Collection */
 			
 			foreach($this->getCommentsCollection() as $comment){
-				/* @var $comment Unirgy_DropshipPo_Model_Po_Comment */
+				/* @var $comment ZolagoOs_OmniChannelPo_Model_Po_Comment */
 				$tmpComment = clone $comment;
 				$tmpComment->setId(null);
 				$tmpComment->setParentId(null);
@@ -419,10 +419,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	
 	/**
 	 * 
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return type
 	 */
-	public function calcuateItemPrice(Unirgy_DropshipPo_Model_Po_Item $item, $inclTax=true) {
+	public function calcuateItemPrice(ZolagoOs_OmniChannelPo_Model_Po_Item $item, $inclTax=true) {
 		return $inclTax ? $item->getPriceInclTax() : $item->getPriceExclTax();
 	}
 	
@@ -1120,12 +1120,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $orderStatusChange = array();
 
         $completePos = array(
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED,
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED
         );
         $cancelPos = array(
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED
         );
         $poStatuses = array();
         if ($orderPos->getSize() > 0) {
@@ -1141,11 +1141,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 
         if (empty($diffCompleteStatuses)) {
             $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
-            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED;
+            $orderStatusChange['udropship_status'] = ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED;
         }
         if (empty($diffCancelStatuses)) {
             $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
-            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
+            $orderStatusChange['udropship_status'] = ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED;
         }
 
         //Mage::log($orderStatusChange, null, 'order.log');

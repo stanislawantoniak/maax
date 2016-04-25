@@ -2,9 +2,9 @@
 /**
  * Zolago_Dropship_IndexController
  */
-require_once Mage::getModuleDir('controllers', "Unirgy_Dropship") . DS . "IndexController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannel") . DS . "IndexController.php";
 
-class Zolago_Dropship_IndexController extends Unirgy_Dropship_IndexController {
+class Zolago_Dropship_IndexController extends ZolagoOs_OmniChannel_IndexController {
 
     public function indexAction()
     {

@@ -5,8 +5,8 @@
             <active>true</active>
             <codePool>local</codePool>            
 			<depends>
-				<Unirgy_DropshipMicrosite />
-				<Unirgy_DropshipMicrositePro />
+				<ZolagoOs_OmniChannelMicrosite />
+				<ZolagoOs_OmniChannelMicrositePro />
 			</depends>
         </Zolago_DropshipMicrositePro>
     </modules>

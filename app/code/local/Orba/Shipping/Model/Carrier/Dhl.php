@@ -163,9 +163,9 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     /**
      * fill charge fields 
      *
-     * @param Mage_Sales_Model_Order_Shipment_Track|Unirgy_Rma_Model_Rma_Track $track
+     * @param Mage_Sales_Model_Order_Shipment_Track|ZolagoOs_Rma_Model_Rma_Track $track
      * @param int $rate dhl parcel rate
-     * @param Unirgy_Dropship_Model_Vendor $vendor
+     * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
      * @param float $packageValue total value 
      * @param bool $isCod shipment with COD
      */

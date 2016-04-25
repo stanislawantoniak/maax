@@ -14,7 +14,7 @@ class Zolago_Banner_Block_Vendor_Banner_Grid extends Mage_Adminhtml_Block_Widget
 
 	protected function _prepareCollection(){
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagobanner/banner_collection");
 		$collection->addVendorFilter($vendor);
 

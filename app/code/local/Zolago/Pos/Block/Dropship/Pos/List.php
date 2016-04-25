@@ -29,7 +29,7 @@ class Zolago_Pos_Block_Dropship_Pos_List extends Mage_Core_Block_Template {
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Session
+	 * @return ZolagoOs_OmniChannel_Model_Session
 	 */
 	protected function _getSession(){
 		return Mage::getSingleton('udropship/session');

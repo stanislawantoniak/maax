@@ -6,7 +6,7 @@ class Zolago_Campaign_Helper_LandingPage extends Mage_Core_Helper_Abstract
     /**
      * Get vendor data by vendor_id
      * @param $vendorId
-     * @return bool|Unirgy_Dropship_Model_Vendor|Zolago_Dropship_Model_Vendor
+     * @return bool|ZolagoOs_OmniChannel_Model_Vendor|Zolago_Dropship_Model_Vendor
      */
     protected function _getVendorData($vendorId)
     {

@@ -1,11 +1,11 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', 'Unirgy_Rma') . "/VendorController.php";
+require_once Mage::getModuleDir('controllers', 'ZolagoOs_Rma') . "/VendorController.php";
 
 /**
  * @method Zolago_Dropship_Model_Session _getSession()
  */
-class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
+class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 {
 
     public function indexAction() {
@@ -293,7 +293,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                          save();
 
 
-                /* @var $model Unirgy_Rma_Model_Rma_Comment */
+                /* @var $model ZolagoOs_Rma_Model_Rma_Comment */
 
                 Mage::dispatchEvent("zolagorma_rma_comment_added", array(
                                         "rma"		=> $rma,
@@ -417,7 +417,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                              "pkg_num"				=> 1,
                              "int_label_image"		=> null, // what is this ?
                              "label_render_options"	=> null, // what is this ?
-                             "udropship_status"		=> Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING,
+                             "udropship_status"		=> ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,
                              "next_check"			=> null, // what is this ?
                              "master_tracking_id"	=> null, // what is this ?
                              "package_count"			=> null, // what is this ?

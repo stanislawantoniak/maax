@@ -5,7 +5,7 @@
             <active>true</active>
             <codePool>local</codePool>
             <depends>
-            	<Unirgy_DropshipVendorAskQuestion/>
+            	<ZolagoOs_OmniChannelVendorAskQuestion/>
             </depends>
         </Zolago_DropshipVendorAskQuestion>
     </modules>

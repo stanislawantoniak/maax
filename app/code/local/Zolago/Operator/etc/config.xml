@@ -53,7 +53,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_Operator before="Unirgy_Dropship">Zolago_Operator_Dropship</Zolago_Operator>
+						<Zolago_Operator before="ZolagoOs_OmniChannel">Zolago_Operator_Dropship</Zolago_Operator>
 					</modules>
 				</args>
 			</udropship>

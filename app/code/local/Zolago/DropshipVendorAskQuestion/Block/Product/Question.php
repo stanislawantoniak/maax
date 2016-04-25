@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends Unirgy_DropshipVendorAskQuestion_Block_Product_Question
+class Zolago_DropshipVendorAskQuestion_Block_Product_Question extends ZolagoOs_OmniChannelVendorAskQuestion_Block_Product_Question
 {
 	protected $po;
 

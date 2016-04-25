@@ -66,22 +66,22 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	}
 	
 	/**
-	 * @param Unirgy_Rma_Model_Rma_Track $tracking
+	 * @param ZolagoOs_Rma_Model_Rma_Track $tracking
 	 * @return string
 	 */
-	public function getTrackingStatusName(Unirgy_Rma_Model_Rma_Track $tracking) {
+	public function getTrackingStatusName(ZolagoOs_Rma_Model_Rma_Track $tracking) {
 		return Mage::helper("zolagodropship")->getTrackingStatusName($tracking);
 	}
 	
 	/**
-	 * @return Unirgy_Rma_Model_Mysql4_Rma_Track_Collection
+	 * @return ZolagoOs_Rma_Model_Mysql4_Rma_Track_Collection
 	 */
 	public function getVendorTrackingCollection() {
 		return $this->getRma()->getVendorTracksCollection();
 	}
 	
 	/**
-	 * @return Unirgy_Rma_Model_Mysql4_Rma_Track_Collection
+	 * @return ZolagoOs_Rma_Model_Mysql4_Rma_Track_Collection
 	 */
 	public function getCustomerTrackingCollection() {
 		return $this->getRma()->getCustomerTracksCollection();
@@ -112,7 +112,7 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->getRma()->getVendor();

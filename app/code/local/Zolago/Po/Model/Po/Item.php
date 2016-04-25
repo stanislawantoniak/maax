@@ -6,7 +6,7 @@
  * @method string getName()
  * @method float getQty()
  */
-class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
+class Zolago_Po_Model_Po_Item extends ZolagoOs_OmniChannelPo_Model_Po_Item
 {
 	/**
 	 * @return array
@@ -124,6 +124,10 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 					$this->setData($field, $orderItem->getData($field));
 				}
 			}
+
+		   /** @var Zolago_DropshipTierCommission_Helper_Data $hlp */
+		   $hlp = Mage::helper("udtiercom");
+		   $hlp->processPoCommission($this->getPo());
 	   }
 	   
 	   

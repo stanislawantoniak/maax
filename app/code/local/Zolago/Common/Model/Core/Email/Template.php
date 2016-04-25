@@ -1,5 +1,5 @@
 <?php
-class Zolago_Common_Model_Core_Email_Template  extends Unirgy_Dropship_Model_Email
+class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Model_Email
 {
 
     protected $_domAttachments = array();

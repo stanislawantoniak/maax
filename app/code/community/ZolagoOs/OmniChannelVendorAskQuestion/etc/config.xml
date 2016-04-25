@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<!--
+/**
+  
+ */
+
+-->
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelVendorAskQuestion>
+            <version>1.1.0</version>
+        </ZolagoOs_OmniChannelVendorAskQuestion>
+    </modules>
+
+    <global>
+        <models>
+            <udqa>
+                <class>ZolagoOs_OmniChannelVendorAskQuestion_Model</class>
+                <resourceModel>udqa_mysql4</resourceModel>
+            </udqa>
+            <udqa_mysql4>
+                <class>ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4</class>
+                <entities>
+                    <question>
+                        <table>udqa_question</table>
+                    </question>
+                </entities>
+            </udqa_mysql4>
+        </models>
+
+        <resources>
+            <udqa_setup>
+                <setup>
+                    <module>ZolagoOs_OmniChannelVendorAskQuestion</module>
+                    <class>Mage_Sales_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </udqa_setup>
+            <udqa_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </udqa_write>
+            <udqa_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </udqa_read>
+        </resources>
+
+        <blocks>
+            <udqa>
+                <class>ZolagoOs_OmniChannelVendorAskQuestion_Block</class>
+            </udqa>
+        </blocks>
+
+        <helpers>
+            <udqa>
+                <class>ZolagoOs_OmniChannelVendorAskQuestion_Helper</class>
+            </udqa>
+        </helpers>
+
+        <udropship>
+            <vendor>
+                <fields>
+                </fields>
+            </vendor>
+        </udropship>
+
+        <template>
+            <email>
+                <udqa_general_admin_customer_email_template module="udqa">
+                    <label>Admin Vendor Answer Notification</label>
+                    <file>udqa_admin_customer.html</file>
+                    <type>html</type>
+                </udqa_general_admin_customer_email_template>
+                <udqa_general_admin_vendor_email_template module="udqa">
+                    <label>Admin Customer Question Notification</label>
+                    <file>udqa_admin_vendor.html</file>
+                    <type>html</type>
+                </udqa_general_admin_vendor_email_template>
+                <udqa_general_customer_email_template module="udqa">
+                    <label>Vendor Answer Customer Notification</label>
+                    <file>udqa_customer.html</file>
+                    <type>html</type>
+                </udqa_general_customer_email_template>
+                <udqa_general_vendor_email_template module="udqa">
+                    <label>Customer Question Vendor Notification</label>
+                    <file>udqa_vendor.html</file>
+                    <type>html</type>
+                </udqa_general_vendor_email_template>
+            </email>
+        </template>
+
+        <events>
+        </events>
+
+    </global>
+
+    <frontend>
+        <routers>
+            <udqa>
+                <use>standard</use>
+                <args>
+                    <module>ZolagoOs_OmniChannelVendorAskQuestion</module>
+                    <frontName>udqa</frontName>
+                </args>
+            </udqa>
+        </routers>
+        <layout>
+            <updates>
+                <udqa>
+                    <file>udqa.xml</file>
+                </udqa>
+            </updates>
+        </layout>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <udqa>
+                        <type>singleton</type>
+                        <class>udqa/observer</class>
+                        <method>controller_action_layout_load_before</method>
+                    </udqa>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
+        <secure_url>
+            <udqa_vendor>/udqa/vendor/</udqa_vendor>
+        </secure_url>
+    </frontend>
+
+    <admin>
+        <routers>
+            <udqaadmin>
+                <use>admin</use>
+                <args>
+                    <module>ZolagoOs_OmniChannelVendorAskQuestion_Adminhtml</module>
+                    <frontName>udqaadmin</frontName>
+                </args>
+            </udqaadmin>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <udqa>
+                </udqa>
+            </updates>
+        </layout>
+        <events>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <udqa>
+                        <class>udqa/observer</class>
+                        <method>core_block_abstract_to_html_before</method>
+                    </udqa>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <udropship_adminhtml_vendor_tabs_after>
+                <observers>
+                    <udqa>
+                        <class>udqa/observer</class>
+                        <method>udropship_adminhtml_vendor_tabs_after</method>
+                    </udqa>
+                </observers>
+            </udropship_adminhtml_vendor_tabs_after>
+        </events>
+    </adminhtml>
+
+    <default>
+        <udqa>
+            <general>
+                <product_info_tabbed>0</product_info_tabbed>
+                <default_question_status>0</default_question_status>
+                <default_answer_status>0</default_answer_status>
+                <admin_email_identity>general</admin_email_identity>
+                <send_admin_notifications>1</send_admin_notifications>
+                <admin_customer_email_template>udqa_general_admin_customer_email_template</admin_customer_email_template>
+                <admin_vendor_email_template>udqa_general_admin_vendor_email_template</admin_vendor_email_template>
+                <send_admin_notifications_copy>0</send_admin_notifications_copy>
+                <send_vendor_notifications>1</send_vendor_notifications>
+                <send_customer_notifications>1</send_customer_notifications>
+                <customer_email_identity>general</customer_email_identity>
+                <customer_email_template>udqa_general_customer_email_template</customer_email_template>
+                <vendor_email_identity>general</vendor_email_identity>
+                <vendor_email_template>udqa_general_vendor_email_template</vendor_email_template>
+            </general>
+        </udqa>
+    </default>
+
+    <crontab>
+        <jobs>
+        </jobs>
+    </crontab>
+</config>

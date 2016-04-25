@@ -20,7 +20,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		if($vendor===null){
 			$vendor	= Mage::helper("umicrosite")->getCurrentVendor();
 		}
-		if(!$vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if(!$vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			return $url;
 		}
 		
@@ -91,10 +91,10 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 	}
 	
 	protected function _getVendorUrl($_vendor=null, $forceInsecure = FALSE) {
-		if(!($_vendor instanceof Unirgy_Dropship_Model_Vendor)){
+		if(!($_vendor instanceof ZolagoOs_OmniChannel_Model_Vendor)){
 			$_vendor	= Mage::helper('umicrosite')->getCurrentVendor();
 		}
-		if(!($_vendor instanceof Unirgy_Dropship_Model_Vendor)){
+		if(!($_vendor instanceof ZolagoOs_OmniChannel_Model_Vendor)){
 			return Mage::getUrl("/");
 		}
 		
@@ -152,7 +152,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 
 	
     /**
-     * @param Unirgy_Dropship_Model_Vendor $vendor
+     * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
      * @param int                          $websiteId
      * @return int $rootCategoryConfigId     
      */
@@ -186,7 +186,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 	/**
 	 * Get Root Category Id or False
 	 * 
-	 * @param Unirgy_Dropship_Model_Vendor	$vendor		Vendor Object
+	 * @param ZolagoOs_OmniChannel_Model_Vendor	$vendor		Vendor Object
 	 * @param int							$websiteId	Website Id
 	 * 
 	 * @return int $rootCategoryId Root Category Id of Vendor

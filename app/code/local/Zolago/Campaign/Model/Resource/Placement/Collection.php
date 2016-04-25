@@ -171,11 +171,11 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
      * Filtering vendors
      * Param can by model, id or array of ids
      *
-     * @param int|array|Unirgy_Dropship_Model_Vendor $vendor
+     * @param int|array|ZolagoOs_OmniChannel_Model_Vendor $vendor
      * @return $this
      */
     public function addVendorFilter($vendor) {
-        if($vendor instanceof Unirgy_Dropship_Model_Vendor) {
+        if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor) {
             $vendor = $vendor->getId();
         }
         if (!is_array($vendor)) {
@@ -213,7 +213,7 @@ class Zolago_Campaign_Model_Resource_Placement_Collection extends Mage_Core_Mode
      * NOTE: if $websiteId === true use current website
      *
      * @param Mage_Catalog_Model_Category|int|array $category
-     * @param int|array|Unirgy_Dropship_Model_Vendor $vendor
+     * @param int|array|ZolagoOs_OmniChannel_Model_Vendor $vendor
      * @param string|array $bannerTypeFilter
      * @param bool|int|array|Mage_Core_Model_Website $website
      * @return $this

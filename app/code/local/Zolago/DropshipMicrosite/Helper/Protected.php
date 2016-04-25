@@ -1,5 +1,5 @@
 <?php
-class Zolago_DropshipMicrosite_Helper_Protected extends Unirgy_DropshipMicrosite_Helper_Protected {
+class Zolago_DropshipMicrosite_Helper_Protected extends ZolagoOs_OmniChannelMicrosite_Helper_Protected {
 
 	protected $_getFrontedVendorCache = null;
 

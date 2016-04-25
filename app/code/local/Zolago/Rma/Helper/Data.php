@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
+class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
 
     const RMA_CUSTOMER_SUFFIX = '_for_customer';
     const RMA_STATIC_PDF_PATH = 'rma/static';
@@ -146,7 +146,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
      * tracking rma
      */
     public function rmaTracking() {
-        $statusFilter = array(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING, Unirgy_Dropship_Model_Source::TRACK_STATUS_READY, Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
+        $statusFilter = array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
         $res = Mage::getSingleton('core/resource');
         $conn = $res->getConnection('sales_read');
 

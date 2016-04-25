@@ -203,7 +203,10 @@ class Modago_Integrator_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getIntegrationStore()
     {
-        return $this->getConfig('integration_store');
+        if (!$storeId = $this->getConfig('integration_store')) {
+            $storeId = Mage::app()->getDefaultStoreView()->getId();
+        }
+        return $storeId;    
     }
 
     /**

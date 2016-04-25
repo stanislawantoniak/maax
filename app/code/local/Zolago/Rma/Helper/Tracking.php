@@ -59,7 +59,7 @@ class Zolago_Rma_Helper_Tracking extends Orba_Shipping_Helper_Carrier_Tracking {
             ->addData($data)
             ->setSkipSettingName(true)
             ->save();
-            /* @var $model Unirgy_Rma_Model_Rma_Comment */
+            /* @var $model ZolagoOs_Rma_Model_Rma_Comment */
 
             Mage::dispatchEvent("zolagorma_rma_comment_added", array(
                                     "rma"		=> $rma,
@@ -89,7 +89,7 @@ class Zolago_Rma_Helper_Tracking extends Orba_Shipping_Helper_Carrier_Tracking {
                 $status = $_track->getUdropshipStatus();
                 $creator = $_track->getTrackCreator();
                 if ($creator == Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER) {
-                    if ($status == Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING) {
+                    if ($status == ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING) {
                         $shipped = false;
                     } else {
                         $track = $_track;

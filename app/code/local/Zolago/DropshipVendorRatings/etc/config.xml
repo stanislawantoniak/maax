@@ -19,7 +19,7 @@
             <udratingsadmin>
                 <args>
                     <modules>
-                        <Zolago_DropshipVendorRatings before="Unirgy_DropshipVendorRatings_Adminhtml">Zolago_DropshipVendorRatings_Adminhtml</Zolago_DropshipVendorRatings>
+                        <Zolago_DropshipVendorRatings before="ZolagoOs_OmniChannelVendorRatings_Adminhtml">Zolago_DropshipVendorRatings_Adminhtml</Zolago_DropshipVendorRatings>
                     </modules>
                 </args>
             </udratingsadmin>

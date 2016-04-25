@@ -1,5 +1,5 @@
 <?php
-class Zolago_Dropship_Model_Resource_Vendor extends Unirgy_Dropship_Model_Mysql4_Vendor
+class Zolago_Dropship_Model_Resource_Vendor extends ZolagoOs_OmniChannel_Model_Mysql4_Vendor
 {
 	
 	/**

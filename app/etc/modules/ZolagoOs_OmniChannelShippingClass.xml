@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelShippingClass>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <ZolagoOs_OmniChannel />
+            </depends>
+        </ZolagoOs_OmniChannelShippingClass>
+    </modules>
+</config>
+

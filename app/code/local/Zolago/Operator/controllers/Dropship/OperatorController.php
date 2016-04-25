@@ -157,7 +157,7 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 		// Email changed or insert new one
 		////////////////////////////////////////////////////////////////////////
 		$vendorCollection = Mage::getResourceModel('udropship/vendor_collection');
-		/* @var $vendorCollection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
+		/* @var $vendorCollection ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection */
 		
 		$vendorCollection->addFieldToFilter("email", $email);
 		if($vendorCollection->count()>0){

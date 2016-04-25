@@ -103,7 +103,7 @@
 			<udropshipadmin>
 				<args>
 					<modules>
-						<Zolago_Sizetable_Adminhtml before="Unirgy_Dropship">Zolago_Sizetable</Zolago_Sizetable_Adminhtml>
+						<Zolago_Sizetable_Adminhtml before="ZolagoOs_OmniChannel">Zolago_Sizetable</Zolago_Sizetable_Adminhtml>
 					</modules>
 				</args>
 			</udropshipadmin>
@@ -121,7 +121,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_Sizetable before="Unirgy_Dropship">Zolago_Sizetable_Dropship</Zolago_Sizetable>
+						<Zolago_Sizetable before="ZolagoOs_OmniChannel">Zolago_Sizetable_Dropship</Zolago_Sizetable>
 					</modules>
 				</args>
 			</udropship>
