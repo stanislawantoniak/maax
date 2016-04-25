@@ -98,8 +98,10 @@
 				<active>1</active>
 				<model>ghinpost/carrier</model>
 				<title>inPost</title>
+				<api>https://api.paczkomaty.pl/</api>				
+				
 <!--				<sallowspecific>1</sallowspecific>
-				<specificcountry>PL</specificcountry>-->
+				<specificcountry>PL</specificcountry>-->                
 			</ghinpost>
 		</carriers>
 	</default>
