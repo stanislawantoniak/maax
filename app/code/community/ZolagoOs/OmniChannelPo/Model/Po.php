@@ -537,14 +537,14 @@ class ZolagoOs_OmniChannelPo_Model_Po extends Mage_Sales_Model_Abstract
 
 
     public function getShippingMethodInfo(){
-        return $this->getUdropshipMethodInfoByMethod();
+        return $this->getOmniChannelMethodInfoByMethod();
     }
 
 
     /**
      * @return Varien_Object
      */
-    public function getUdropshipMethodInfoByMethod()
+    public function getOmniChannelMethodInfoByMethod()
     {
         $udropshipMethod = $this->getUdropshipMethod(); // PO udropship_method (example udtiership_1)
         $storeId = $this->getStoreId();
