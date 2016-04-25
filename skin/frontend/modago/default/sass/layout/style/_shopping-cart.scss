@@ -325,12 +325,6 @@
 	aside {
 		margin-bottom: 12px;
 	}
-	.col-sidebar-cart-summary {
-		@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-			width:40%;
-			float:left;
-		}
-	}
 	#cart-summary {
 		padding:24px 15px;
 		@media (max-width: $screen-md-max) {
@@ -375,7 +369,7 @@
 			}
 		}
 		#discount_voucher {
-			margin-bottom: 36px;
+			//margin-bottom: 36px;
 			.form-group {
 				margin-bottom:11px; 
 				.info_discount_voucher {

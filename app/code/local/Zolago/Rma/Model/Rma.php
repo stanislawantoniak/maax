@@ -1,12 +1,12 @@
 <?php
 /**
- * @method Unirgy_DropshipPo_Model_Mysql4_Po getResource()
+ * @method ZolagoOs_OmniChannelPo_Model_Mysql4_Po getResource()
  * @method string getPaymentChannelOwner()
  * @method Zolago_Rma_Model_Rma setPaymentChannelOwner($owner)
  * @method string getIncrementId()
  * @method string getCreatedAt() TIMESTAMP
  */
-class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
+class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
 {
 	
     const RMA_TYPE_STANDARD = '1';

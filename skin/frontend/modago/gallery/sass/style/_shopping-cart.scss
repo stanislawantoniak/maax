@@ -102,7 +102,7 @@
 					@media (max-width: $screen-xs-max) {
 						font-size: 18px;
 						text-align: center;
-						margin: 10px 0
+						margin: 10px 0;
 					}
 				}
 			}
@@ -419,7 +419,7 @@
 			width:40%;
 			float:left;
 		}
-	}
+                }
 	#cart-summary {
 		padding:24px 15px;
 		@media (max-width: $screen-md-max) {

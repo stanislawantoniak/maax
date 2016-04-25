@@ -9,7 +9,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Session
+     * @return ZolagoOs_OmniChannel_Model_Session
      */
     protected function _getSession()
     {
@@ -38,7 +38,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = $vendor->getId();
 
-        /* @var $vendor Unirgy_Dropship_Model_Vendor */
+        /* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
         $campaignBank = $campaign->getCampaigns($websiteId);
 

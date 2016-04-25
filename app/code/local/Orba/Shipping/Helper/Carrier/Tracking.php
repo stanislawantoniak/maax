@@ -162,15 +162,15 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
                 $shipmentStatus = (int)$shipment->getUdropshipStatus();
                 $poOrderId = $shipment->getUdpoId();
 
-                /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
+                /*@var $poOrder  ZolagoOs_OmniChannelPo_Model_Po */
                 $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
 
-                if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
+                if($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED){
                     Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
                 }
-                if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
+                if($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED){
 
-                    $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+                    $poOrder->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);
 
                     try {
                         $poOrder->save();
@@ -187,14 +187,14 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
             $shipmentStatus = (int)$shipment->getUdropshipStatus();
             $poOrderId = $shipment->getUdpoId();
 
-            /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
+            /*@var $poOrder  ZolagoOs_OmniChannelPo_Model_Po */
             $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
-            if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
+            if($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED){
                 Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
             }
-            if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
+            if($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED){
 
-                $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
+                $poOrder->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);
 
                 try {
                     $poOrder->save();

@@ -1,11 +1,11 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipShippingClass") . DS . "Adminhtml" . DS . "VendorController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannelShippingClass") . DS . "Adminhtml" . DS . "VendorController.php";
 
 /**
  * Class Zolago_DropshipShippingClass_Adminhtml_VendorController
  */
-class Zolago_DropshipShippingClass_Adminhtml_VendorController extends Unirgy_DropshipShippingClass_Adminhtml_VendorController {
+class Zolago_DropshipShippingClass_Adminhtml_VendorController extends ZolagoOs_OmniChannelShippingClass_Adminhtml_VendorController {
 
     /**
      * Acl check for this controller

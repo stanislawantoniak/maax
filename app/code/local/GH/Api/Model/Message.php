@@ -40,7 +40,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 			return false;
 		} elseif(!$this->isNoticeMessageActive($po->getVendor(), $message)) {
             return false;
-        } elseif(!($po instanceof Unirgy_DropshipPo_Model_Po)) {
+        } elseif(!($po instanceof ZolagoOs_OmniChannelPo_Model_Po)) {
 			Mage::throwException('Message could not be added because of wrong PO object');
 		} else {
             $this->unsetData();

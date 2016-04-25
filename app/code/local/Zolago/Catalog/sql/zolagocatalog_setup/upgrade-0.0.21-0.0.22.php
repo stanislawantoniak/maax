@@ -33,7 +33,7 @@ $partSize = 10000;
 $model = Mage::getResourceModel('zolagocatalog/product_configurable');
 $table = $model->getValueTable('catalog/product','int');
 $brandshopId = Mage::getSingleton('eav/config')->getAttribute(Zolago_Catalog_Model_Product::ENTITY,$attributeBrandshopCode)->getAttributeId();
-$vendorId = Mage::getSingleton('eav/config')->getAttribute(Zolago_Catalog_Model_Product::ENTITY,Unirgy_Dropship_Model_Vendor::ENTITY)->getAttributeId();
+$vendorId = Mage::getSingleton('eav/config')->getAttribute(Zolago_Catalog_Model_Product::ENTITY,ZolagoOs_OmniChannel_Model_Vendor::ENTITY)->getAttributeId();
 $conn = $installer->getConnection();
 $counter = $conn
            ->select()

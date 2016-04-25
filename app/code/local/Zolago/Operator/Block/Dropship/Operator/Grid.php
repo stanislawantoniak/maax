@@ -14,7 +14,7 @@ class Zolago_Operator_Block_Dropship_Operator_Grid extends Mage_Adminhtml_Block_
 	
 	protected function _prepareCollection(){
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 		$collection->addVendorFilter($vendor);
 		$this->setCollection($collection);

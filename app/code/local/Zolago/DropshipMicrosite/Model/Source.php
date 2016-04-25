@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipMicrosite_Model_Source extends Unirgy_Dropship_Model_Source_Abstract
+class Zolago_DropshipMicrosite_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstract
 {
 
     public function toOptionHash($selector = false)

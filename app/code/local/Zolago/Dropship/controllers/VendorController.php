@@ -1,8 +1,8 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_Dropship") . DS . "VendorController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannel") . DS . "VendorController.php";
 
-class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController {
+class Zolago_Dropship_VendorController extends ZolagoOs_OmniChannel_VendorController {
 	/**
 	 * Index
 	 */
@@ -76,7 +76,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 				}
 
 				//only active vendor can reset password
-				if($vendor->getStatus() == Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE){
+				if($vendor->getStatus() == ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE){
 					$vendor->setPassword($password)->unsRandomHash()->save();
 					$session->loginById($vendor->getId());
 					$session->addSuccess($hlp->__('Your password has been reset.'));
@@ -90,7 +90,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 			} elseif (($email = $r->getParam('email'))) {
 				$vendor = Mage::getModel('zolagodropship/vendor')->load($email, 'email');
 				//only active vendor can reset password
-				if($vendor->getStatus() == Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE){
+				if($vendor->getStatus() == ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE){
 					$hlp->sendPasswordResetEmail($email);
 					$session->addSuccess($hlp->__('Thank you, password reset instructions have been sent to the email you have provided, if a vendor with such email exists.'));
 					$this->_redirect('*/*/login');

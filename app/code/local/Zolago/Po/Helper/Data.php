@@ -1,5 +1,5 @@
 <?php
-class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
+class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 {
 	const DEFAULT_PO_IMAGE_WIDTH = 53;
 	const DEFAULT_PO_IMAGE_HEIGHT = 69;
@@ -284,7 +284,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 
         if ($po->getResendNotificationFlag()) {
             foreach ($po->getShipmentsCollection() as $_shipment) {
-                if ($_shipment->getUdropshipStatus()!=Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                if ($_shipment->getUdropshipStatus()!=ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED) {
                     $shipments[] = $_shipment;
                     break;
                 }
@@ -498,20 +498,20 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		return $return;
 	}
 	/**
-	 * @param Unirgy_DropshipPo_Model_Mysql4_Po_Collection|array $collection
-	 * @param Unirgy_Dropship_Model_Vendor | int $vendor
+	 * @param ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection|array $collection
+	 * @param ZolagoOs_OmniChannel_Model_Vendor | int $vendor
 	 * @return boolean
 	 * @throws Mage_Core_Exception
 	 */
 	public function createAggregated($collection, $vendor) {
 		
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		
 		if(is_array($collection)){
 			$collection = Mage::getResourceModel('udpo/po_collection');
-			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+			/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 			$collection->addFieldToFilter("entity_id", array("in"=>$collection));
 		}
 		
@@ -565,14 +565,14 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 	}
 	/**
 	 * Add operator filter if session is in operator mode
-	 * @return Unirgy_DropshipPo_Model_Mysql4_Po_Collection
+	 * @return ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection
 	 */
 	public function getVendorPoCollection() {
 		$collection = parent::getVendorPoCollection();
 		if($this->_condJoined){
 			return $collection;
 		}
-		/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+		/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 		$session = Mage::getSingleton('udropship/session');
 		/* @var $session Zolago_Dropship_Model_Session */
 		if($session->isOperatorMode()){

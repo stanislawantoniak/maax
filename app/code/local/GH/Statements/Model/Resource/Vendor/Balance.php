@@ -471,7 +471,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $activeVendorsToRecalculateBalance = array();
         $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
         $vendorsCollection->addFieldToFilter("vendor_id", array("in", $vendorsToRecalculateBalance));
-        $vendorsCollection->addFieldToFilter("status", array("in" => array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE, Unirgy_Dropship_Model_Source::VENDOR_STATUS_INACTIVE)));
+        $vendorsCollection->addFieldToFilter("status", array("in" => array(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE, ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE)));
 
         foreach ($vendorsCollection as $vendorsCollectionItem) {
             $activeVendorsToRecalculateBalance[] = $vendorsCollectionItem->getVendorId();
@@ -557,7 +557,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         //fetch not active vendors
         $notActiveVendors = array();
         $vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
-        $vendorsCollection->addFieldToFilter("status", array("neq" => array(Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE)));
+        $vendorsCollection->addFieldToFilter("status", array("neq" => array(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE)));
 
         if ($vendorsCollection->getSize() == 0)
             return;

@@ -5,8 +5,8 @@
             <active>true</active>
             <codePool>local</codePool>
             <depends>
-            	<Unirgy_Dropship/>
-            	<Unirgy_DropshipVendorProduct/>
+            	<ZolagoOs_OmniChannel/>
+            	<ZolagoOs_OmniChannelVendorProduct/>
             	<Zolago_Common/>
             </depends>
         </Zolago_Dropship>

@@ -18,7 +18,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 		return Mage::registry('current_rma');
 	}
 	/**
-	 * @return Unirgy_Rma_Model_Rma_Track
+	 * @return ZolagoOs_Rma_Model_Rma_Track
 	 */
 	public function getTrack() {
 		return Mage::registry('current_track');
@@ -103,20 +103,20 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @param Unirgy_Rma_Model_Rma_Item $rmaItem
+	 * @param ZolagoOs_Rma_Model_Rma_Item $rmaItem
 	 * @return string
 	 */
-	public function getRmaItemThumb(Unirgy_Rma_Model_Rma_Item $rmaItem, $width=60, $height=null) {
+	public function getRmaItemThumb(ZolagoOs_Rma_Model_Rma_Item $rmaItem, $width=60, $height=null) {
 		return $rmaItem->getProductThumbHelper()->
 			resize($width, $height)->
 			keepFrame(false);
 	}
 
     /**
-     * @param Unirgy_Rma_Model_Rma_Item $rmaItem
+     * @param ZolagoOs_Rma_Model_Rma_Item $rmaItem
      * @param int $width
      */
-    public function getRmaItemThumbHeight(Unirgy_Rma_Model_Rma_Item $rmaItem, $width=60) {
+    public function getRmaItemThumbHeight(ZolagoOs_Rma_Model_Rma_Item $rmaItem, $width=60) {
         /** @var Mage_Catalog_Helper_Image $thumb */
         $thumb = $rmaItem->getProductThumbHelper();
         $w = $thumb->getOriginalWidth();

@@ -2,9 +2,9 @@
 /**
  * my coupons front controller
  */
-require_once Mage::getConfig()->getModuleDir('controllers', "Unirgy_DropshipMicrosite") . DS . "IndexController.php";
+require_once Mage::getConfig()->getModuleDir('controllers', "ZolagoOs_OmniChannelMicrosite") . DS . "IndexController.php";
     
-class Zolago_SalesRule_IndexController extends Unirgy_DropshipMicrosite_IndexController {
+class Zolago_SalesRule_IndexController extends ZolagoOs_OmniChannelMicrosite_IndexController {
 
     /**
      * index

@@ -1,8 +1,8 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', 'Unirgy_DropshipVendorAskQuestion') . "/VendorController.php";
+require_once Mage::getModuleDir('controllers', 'ZolagoOs_OmniChannelVendorAskQuestion') . "/VendorController.php";
 
-class Zolago_DropshipVendorAskQuestion_VendorController extends Unirgy_DropshipVendorAskQuestion_VendorController
+class Zolago_DropshipVendorAskQuestion_VendorController extends ZolagoOs_OmniChannelVendorAskQuestion_VendorController
 {
 	public function questionEditAction() {
 		$id = $this->getRequest()->getParam('id');

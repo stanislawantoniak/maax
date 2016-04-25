@@ -1,6 +1,6 @@
 <?php
 // http://zolago01.dev/index.php/sales/po/saveRma/po_id/106
-class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
+class Zolago_Rma_Model_ServicePo extends ZolagoOs_Rma_Model_ServiceOrder
 {
     public function __construct($po)
     {

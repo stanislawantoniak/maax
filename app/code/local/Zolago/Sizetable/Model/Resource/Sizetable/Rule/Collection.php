@@ -8,11 +8,11 @@ class Zolago_Sizetable_Model_Resource_Sizetable_Rule_Collection
     }
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor|int $vendor
 	 * @return Zolago_Sizetable_Model_Resource_Sizetable_Rule_Collection
 	 */
 	public function addVendorFilter($vendor){
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		$this->addFieldToFilter(

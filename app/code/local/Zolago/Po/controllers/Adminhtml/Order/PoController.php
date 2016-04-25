@@ -1,11 +1,11 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipPo") . DS . "Adminhtml" . DS . "Order" .DS . "PoController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannelPo") . DS . "Adminhtml" . DS . "Order" .DS . "PoController.php";
 
 /**
  * Class Zolago_Po_Adminhtml_Order_PoController
  */
-class Zolago_Po_Adminhtml_Order_PoController extends Unirgy_DropshipPo_Adminhtml_Order_PoController {
+class Zolago_Po_Adminhtml_Order_PoController extends ZolagoOs_OmniChannelPo_Adminhtml_Order_PoController {
 
     /**
      * Acl check for this controller

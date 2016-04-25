@@ -1,11 +1,11 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_Rma") . DS . "Adminhtml" . DS . "Order" .DS . "RmaController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_Rma") . DS . "Adminhtml" . DS . "Order" .DS . "RmaController.php";
 
 /**
  * Class Zolago_Rma_Adminhtml_Order_RmaController
  */
-class Zolago_Rma_Adminhtml_Order_RmaController extends Unirgy_Rma_Adminhtml_Order_RmaController {
+class Zolago_Rma_Adminhtml_Order_RmaController extends ZolagoOs_Rma_Adminhtml_Order_RmaController {
 
     /**
      * Acl check for this controller

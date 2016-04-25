@@ -1,11 +1,11 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipVendorRatings") . DS . "Adminhtml" . DS . "RatingController.php";
+require_once Mage::getModuleDir('controllers', "ZolagoOs_OmniChannelVendorRatings") . DS . "Adminhtml" . DS . "RatingController.php";
 
 /**
  * Class Zolago_DropshipVendorRatings_Adminhtml_RatingController
  */
-class Zolago_DropshipVendorRatings_Adminhtml_RatingController extends Unirgy_DropshipVendorRatings_Adminhtml_RatingController {
+class Zolago_DropshipVendorRatings_Adminhtml_RatingController extends ZolagoOs_OmniChannelVendorRatings_Adminhtml_RatingController {
 
     /**
      * Acl check for this controller

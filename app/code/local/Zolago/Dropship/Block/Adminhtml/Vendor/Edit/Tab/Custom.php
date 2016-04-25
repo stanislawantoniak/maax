@@ -48,27 +48,6 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom extends Mage_Adminh
                             ));
 
 
-        $fieldset->addType('vacation_mode', Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_dependSelect'));
-        $fieldset->addField('vacation_mode', 'vacation_mode', array(
-                            'name'      => 'vacation_mode',
-                            'label'     => $hlp->__('Vacation Mode'),
-                            'options'   => Mage::getSingleton('udvacation/source')->setPath('vacation_mode')->toOptionHash(),
-                            'field_config' => array(
-                                'depend_fields' => array(
-                                    'vacation_end' => '1,2',
-                                )
-                            )
-                        ));
-        $fieldset->addField('vacation_end', 'date', array(
-                            'name'      => 'vacation_end',
-                            'image' => Mage::getDesign()->getSkinUrl('images/grid-cal.gif'),
-                            'input_format' => Varien_Date::DATE_INTERNAL_FORMAT,
-                            'format' => Varien_Date::DATE_INTERNAL_FORMAT,
-                            'label'     => $hlp->__('Vacation Ends At'),
-                        ));
-
-
-
         $fieldset->addField('custom_data_combined', 'textarea', array(
                                 'name'      => 'custom_data_combined',
                                 'label'     => $hlp->__('Custom Data'),

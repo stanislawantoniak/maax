@@ -101,7 +101,7 @@ class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
-     * @return Unirgy_DropshipPo_Model_Mysql4_Po_Collection $poList
+     * @return ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection $poList
      */
     public function getPoListByOrder() {
         $collection = Mage::getResourceModel('udpo/po_collection');

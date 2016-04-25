@@ -3,7 +3,7 @@
 /**
  * Class Zolago_CatalogInventory_Model_Stock_Item
  */
-class Zolago_CatalogInventory_Model_Stock_Item extends Unirgy_Dropship_Model_Stock_Item {
+class Zolago_CatalogInventory_Model_Stock_Item extends ZolagoOs_OmniChannel_Model_Stock_Item {
 
     /**
      * Data from POS for override values when usePos flag is ON

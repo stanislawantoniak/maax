@@ -15,7 +15,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 	
 	protected function _prepareCollection(){
 		$collection = Mage::getModel('udqa/question')->getCollection();
-		/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+		/* @var $collection ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question_Collection */
 		$collection->
 				joinProducts()->
 				joinVendors();
@@ -53,7 +53,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 	}
 
     /**
-     * @param $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection
+     * @param $collection ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question_Collection
      * @param $column Mage_Adminhtml_Block_Widget_Grid_Column
      * @return $this
      */

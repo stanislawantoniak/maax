@@ -77,7 +77,7 @@
             <udqa>
                 <args>
                     <modules>
-                        <Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">Zolago_DropshipVendorAskQuestion</Zolago_DropshipVendorAskQuestion>
+                        <Zolago_DropshipVendorAskQuestion before="ZolagoOs_OmniChannelVendorAskQuestion">Zolago_DropshipVendorAskQuestion</Zolago_DropshipVendorAskQuestion>
                     </modules>
                 </args>
             </udqa>
@@ -123,7 +123,7 @@
             <udqaadmin>
                 <args>
                     <modules>
-                        <Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">Zolago_DropshipVendorAskQuestion_Adminhtml</Zolago_DropshipVendorAskQuestion>
+                        <Zolago_DropshipVendorAskQuestion before="ZolagoOs_OmniChannelVendorAskQuestion">Zolago_DropshipVendorAskQuestion_Adminhtml</Zolago_DropshipVendorAskQuestion>
                     </modules>
                 </args>
             </udqaadmin>

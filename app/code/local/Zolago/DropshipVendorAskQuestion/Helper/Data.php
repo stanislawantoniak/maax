@@ -5,7 +5,7 @@
  * @package    Zolago_DropshipVendorAskQuestion
  */
 
-class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendorAskQuestion_Helper_Data
+class Zolago_DropshipVendorAskQuestion_Helper_Data extends ZolagoOs_OmniChannelVendorAskQuestion_Helper_Data
 {
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON = "udqa/general/customer_new_question_confirmation";
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY = "udqa/general/vendor_email_identity";
@@ -170,7 +170,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
     {
         $store = Mage::helper('udqa')->getStore($question);
         return !$question->getIsVendorAgentsNotified()
-        && $question->getQuestionStatus() == Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED
+        && $question->getQuestionStatus() == ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED
         && Mage::getStoreConfigFlag(
             'udqa/general/send_vendor_agent_notifications', $store
         );
@@ -179,7 +179,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
     /**
      * store from question not from default
      *
-     * @param Unirgy_DropshipVendorAskQuestion_Model_Question $question
+     * @param ZolagoOs_OmniChannelVendorAskQuestion_Model_Question $question
      * @return Mage_Core_Model_Store
      */
 

@@ -59,7 +59,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $campaign = $this->_initModel($campaignId);
         $vendor = $this->_getSession()->getVendor();
 
-        /* @var $udropshipHelper Unirgy_Dropship_Helper_Data */
+        /* @var $udropshipHelper ZolagoOs_OmniChannel_Helper_Data */
         $udropshipHelper = Mage::helper("udropship");
         $localVendor = $udropshipHelper->getLocalVendorId();
 

@@ -338,7 +338,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         if (empty($this->_vendors)) {
             $_helper = Mage::helper('udropship');
             $collection = Mage::getModel('udropship/vendor')->getCollection()
-                          ->addFieldToFilter('status',Unirgy_Dropship_Model_Source::VENDOR_STATUS_ACTIVE)
+                          ->addFieldToFilter('status',ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE)
                           ->addFieldToFilter('vendor_id',array('in' => array($vendorCheck)));
             foreach ($collection as $vendor) {
                 $_helper->loadCustomData($vendor,'root_category');

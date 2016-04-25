@@ -135,4 +135,5 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
 
         return $item;
     }
+
 }

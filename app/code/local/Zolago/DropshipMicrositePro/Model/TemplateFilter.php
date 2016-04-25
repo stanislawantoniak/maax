@@ -1,5 +1,5 @@
 <?php
-class Zolago_DropshipMicrositePro_Model_TemplateFilter extends Unirgy_DropshipMicrositePro_Model_TemplateFilter
+class Zolago_DropshipMicrositePro_Model_TemplateFilter extends ZolagoOs_OmniChannelMicrositePro_Model_TemplateFilter
 {
 
     public function skinDirective($construction) {

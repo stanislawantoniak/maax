@@ -1,8 +1,8 @@
 <?php
 
-require_once(Mage::getModuleDir('Block', 'Unirgy_Rma'). DS . 'Block' . DS . 'Adminhtml' . DS . 'SystemConfigFormField' . DS . 'OptionsDefinition.php');
+require_once(Mage::getModuleDir('Block', 'ZolagoOs_Rma'). DS . 'Block' . DS . 'Adminhtml' . DS . 'SystemConfigFormField' . DS . 'OptionsDefinition.php');
 class Zolago_Rma_Block_Adminhtml_SystemConfigFormField_OptionsDefinition 
-	extends Unirgy_Rma_Block_Adminhtml_SystemConfigFormField_OptionsDefinition
+	extends ZolagoOs_Rma_Block_Adminhtml_SystemConfigFormField_OptionsDefinition
 {
     protected $_element = null;
 

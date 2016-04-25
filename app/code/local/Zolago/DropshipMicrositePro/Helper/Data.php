@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipMicrositePro_Helper_Data extends Unirgy_DropshipMicrositePro_Helper_Data {
+class Zolago_DropshipMicrositePro_Helper_Data extends ZolagoOs_OmniChannelMicrositePro_Helper_Data {
 
     public function sendVendorConfirmationEmail($vendor)
     {
