@@ -9,6 +9,14 @@ class Zolago_Modago_Block_Sales_Order_Shipment extends Mage_Core_Block_Template 
         $this->setTemplate('sales/order/shipment.phtml');
         parent::_construct();
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getShippingMethodInfo() {
+		return $this->getItem()->getShippingMethodInfo();
+	}
+
 	public function getCarrierTitle() {
 		$code = $this->getItem()->getData('current_carrier');
 		if ($carrier = Mage::getSingleton('shipping/config')->getCarrierInstance($code)) {

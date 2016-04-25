@@ -29,6 +29,10 @@ $status = $po->getUdropshipStatus();
 $sendDate = $this->getSendDate();
 $deliveryDate = $this->getDeliveryDate();
 $shipmentDate = $this->getShipmentDate();
+
+$shippingMethodInfo = $this->getShippingMethodInfo();
+$shippingMethodTitle = $shippingMethodInfo->getUdropshipMethodTitle();
+
 $iconTruck = '<i class="fa fa-truck fa-2x"></i>';
 $iconTruckOk = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><i class="fa fa-check-circle fa-stack-1x" style="color:#FFF;margin-left:5px;margin-top:-3px;"></i></span>';
 $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><i class="fa fa-times-circle fa-stack-1x" style="color:#FFF;margin-left:5px;margin-top:-3px;"></i></span>';
@@ -50,7 +54,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruck; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '. $shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Planned send date'); ?>: <?php echo $_helper->__("24h from date of payment"); ?></span>
 		<?php elseif(
 				$paid &&
@@ -66,7 +70,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruck; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '.$shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 
@@ -79,7 +83,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruck; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '.$shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 		<?php elseif(
@@ -91,7 +95,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruck; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '.$shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 		<?php elseif(
@@ -103,7 +107,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruck; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '.$shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
@@ -119,7 +123,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruckOk; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '.$shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
 			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
 			<?php if ($trackingUrl && $tracking) : ?>
@@ -134,7 +138,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<?php echo $iconTruckBad; ?>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Delivery method').': '.$shippingMethodTitle; ?></span>
 			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
 			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
 			<?php if ($trackingUrl && $tracking) : ?>
