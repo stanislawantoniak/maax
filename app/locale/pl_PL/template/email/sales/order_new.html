@@ -80,15 +80,15 @@
                             </div>
                             <div class="lowerMarginWhite"
                                  style="border-top:25px solid white;border-bottom:10px solid white;border-left:35px solid white;border-right:35px solid white;font-family:'Arial','Helvetica',sans-serif;font-size:13px;">
-
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Dziękujemy za złożenie zamówienia w naszej galerii handlowej. Twoje zamówienie zostało przekazane do {{if isMoreVendors}}sklepów{{else}}sklepu{{/if}} {{var vendorNameList}}
+                                 <h1 style="font-weight:normal;font-size:21px;border-bottom:15px solid white;font-family:'Arial','Helvetica',sans-serif">Dziękujemy za zamówienie!</h1>
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Dziękujemy za złożenie zamówienia w naszej galerii handlowej. Twoje zamówienie zostało przekazane do {{if isMoreVendors}}sprzedawców{{else}}sprzedawcy{{/if}} {{var vendorNameList}}.
                                 </div>
                                 <span class="spacer">&nbsp;</span>
 
                                 <!--START SEKCJA PLATNOSCI ONLIE-->
-                                {{depend order.isPaymentDotpay()}}
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                {{depend order.firstPo().isPaymentDotpay()}}
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Czekamy jeszcze na potwierdzenie przyjęcia wpłaty od operatora systemu płatności. Proces ten trwa zazwyczaj do kilku minut. Zamówienie trafi do realizacji, jak tylko odnotujemy płatność. O statusie płatności zostaniesz poinformowany w osobnym mailu.
                                 </div>
                                 <span class="spacer">&nbsp;</span>
@@ -97,8 +97,8 @@
                                 <!--END SEKCJA PLATNOSCI ONLIE-->
 
                                 <!--START SEKCJA COD-->
-                                {{depend order.isCod()}}
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                {{depend order.firstPo().isCod()}}
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
                                     W momencie wysłania paczki, dostaniesz maila od sklepu ze szczegółowymi informacjami dotyczącymi przesyłki. Za zamówienie zapłacisz przy odbiorze.
                                 </div>
                                 <span class="spacer">&nbsp;</span>
@@ -106,35 +106,29 @@
                                 <!--END SEKCJA COD-->
 
                                 <!--START SEKCJA PRZELEW TRADYCYJNY-->
-                                {{depend order.isPaymentBanktransfer()}}
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Prosimy o dokonanie przelewu w wysokości {{var order.getFormattedGrandTotalInclTax()}} na następujące konto, wpisując sam numer zamówienia jako tytuł przelewu:
+                                {{depend order.firstPo().isPaymentBanktransfer()}}
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Prosimy o dokonanie przelewu w wysokości <strong>{{var order.getFormattedGrandTotalInclTax()}}</strong> na następujące konto, wpisując numer zamówienia jako tytuł przelewu:
                                 </div>
-                                <span class="spacer">&nbsp;</span>
 
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Odbiorca: Modago Sklep
+                                <div style="border-bottom:5px solid white;line-height: 1.4em;margin:0;padding:0">
+                                  <strong>Odbiorca:</strong> Modago Sklep
                                 </div>
-                                <span class="spacer">&nbsp;</span>
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Adres: Barkocińska 6, 02-776 Warszawa
+                                <div style="border-bottom:5px solid white;line-height: 1.4em;margin:0;padding:0">
+                                   <strong>Adres:</strong> Barkocińska 6, 02-776 Warszawa
                                 </div>
-                                <span class="spacer">&nbsp;</span>
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    Nr konta: {{config path='payment/banktransfer/account_number'}}
+                                <div style="border-bottom:5px solid white;line-height: 1.4em;margin:0;padding:0">
+                                   <strong> Nr konta:</strong> {{config path='payment/banktransfer/account_number'}}
                                 </div>
-                                <span class="spacer">&nbsp;</span>
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                <div style="border-bottom:5px solid white;line-height: 1.4em;margin:0;padding:0">
                                     <strong>Bank:</strong> Pekao S.A.
                                 </div>
-                                <span class="spacer">&nbsp;</span>
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
                                     <strong>Tytuł przelewu:</strong> {{var order.getIncrementId()}}
                                 </div>
-                                <span class="spacer">&nbsp;</span>
-                                <span class="spacer">&nbsp;</span>
 
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Zamówienie trafi do realizacji, jak tylko wpłynie płatność. Produkty rezerwowane są na tydzień. Jeśli w tym czasie nie odnotujemy wpłaty, zamówienie zostanie anulowane.
                                 </div>
                                 <span class="spacer">&nbsp;</span>
@@ -142,11 +136,11 @@
                                 <!--END SEKCJA PRZELEW TRADYCYJNY-->
 
                                 {{if customerIsGuest}}
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Jeśli chcesz na bieżąco śledzić stan realizacji zamówienia, stwórz konto w naszym serwisie. Wystarczy, że podasz hasło do logowania: <a href="{{store url="customer/account/login/"}}" style="text-decoration:none">załóż konto, by śledzić stan realizacji zamówienia.</a>
                                 </div>
                                 {{else}}
-                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                <div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Stan realizacji tego zamówienia możesz śledzić w swoim koncie, klikając w ten link: <a href="{{store url="sales/order/process/"}}" style="text-decoration:none">sprawdź stan zamówienia.</a>
                                 </div>
                                 {{/if}}
@@ -154,32 +148,33 @@
 
 
                                 <h2 style="font-size:15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
-                                    <strong>ZAMÓWIENIE NR. {{var order.getIncrementId()}}</strong>
+                                   ZAMÓWIENIE NR. {{var order.getIncrementId()}}
                                 </h2>
                                 <span class="spacer">&nbsp;</span>
 
                                 {{block type='zolagomodago/sales_order_email_new' template='sales/order/email/new.phtml' order=$order}}
 
                                 <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
-                                    <strong>Adres dostawy:</strong>
+                                    Adres dostawy:
                                 </h2>
 
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    {{var order.getShippingAddress().format('html')}}
+                                    {{if order.firstPo().getInpostLockerName()}}Paczkomat InPost {{var order.firstPo().getInpostLockerName()}}<br>{{/if}}
+                                    {{var order.firstPo().getShippingAddress().format('html')}}
                                 </div>
 
-                                {{depend order.getBillingAddress().getNeedInvoice()}}
+                                {{depend order.firstPo().needInvoice()}}
                                 <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
-                                    <strong>Dane do faktury:</strong>
+                                    Dane do faktury:
                                 </h2>
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-                                    {{var order.getBillingAddress().format('html')}}
+                                    {{var order.firstPo().getBillingAddress().format('html')}}
                                 </div>
                                 {{/depend}}
 
                                 <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
                                     Dziękujemy za zakupy i zapraszamy ponownie!<br/>
-                                    Zespól Modago.pl
+                                    Zespól Modago.pl<br/><br/>
                                 </div>
 
                             </div>
@@ -187,9 +182,14 @@
                     </tr>
                     </tbody>
                 </table>
-                <div style="background-color:#e5e5e5;direction:ltr;color:#777;font-size:11px;border:10px solid #E5E5E5;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif;text-align:center">&copy;
-                    2014 <a href='{{store url=""}}' style="text-decoration:none;color:#777">Modago.pl</a>
-                </div>
+                                                                 <div style="background-color:#e5e5e5;direction:ltr;color:#777;font-size:11px;border:10px solid #e5e5e5;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif; text-align:left; max-width:580px">&copy;
+					              2016 <a target="_blank" style="text-decoration:none;color:#777" href="http://modago.pl">Modago.pl</a>
+
+
+                                                    <p>Ta wiadomość została wysłana przez internetową galerię handlową Modago.pl należącą do Zolago Group Sp.z o.o. z siedzibą w Warszawie, ul. Barkocińska 6, 03-543 Warszawa. Firma wpisana jest do rejestru przedsiębiorców KRS przez Sąd Rejonowy dla m.st. Warszawy XII Wydział Gospodarczy pod numerem KRS 0000457797, NIP: 527-269-26-64, REGON: 146630877, kapitał zakładowy: 200 000 PLN</p>
+
+                                                    <p>Nie odpisuj na tego maila, został on wysłany przez automat.</p>
+				</div>
             </div>
         </div>
     </center>

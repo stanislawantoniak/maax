@@ -98,8 +98,7 @@
 				<active>1</active>
 				<model>ghinpost/carrier</model>
 				<title>inPost</title>
-<!--				<sallowspecific>1</sallowspecific>
-				<specificcountry>PL</specificcountry>-->
+				<tracking_url>https://inpost.pl/pl/pomoc/znajdz-przesylke?parcel=%s</tracking_url>
 			</ghinpost>
 		</carriers>
 	</default>
