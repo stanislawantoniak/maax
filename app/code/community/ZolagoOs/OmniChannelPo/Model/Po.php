@@ -537,14 +537,14 @@ class ZolagoOs_OmniChannelPo_Model_Po extends Mage_Sales_Model_Abstract
 
 
     public function getShippingMethodInfo(){
-        return $this->getUdropshipMethodInfoByMethod();
+        return $this->getOmniChannelMethodInfoByMethod();
     }
 
 
     /**
      * @return Varien_Object
      */
-    public function getUdropshipMethodInfoByMethod()
+    public function getOmniChannelMethodInfoByMethod()
     {
         $udropshipMethod = $this->getUdropshipMethod(); // PO udropship_method (example udtiership_1)
         $storeId = $this->getStoreId();
@@ -559,6 +559,12 @@ class ZolagoOs_OmniChannelPo_Model_Po extends Mage_Sales_Model_Abstract
                     "udropship_method_title" => "IF(udropship_shipping_title_store.title IS NOT NULL, udropship_shipping_title_store.title, udropship_shipping_title_default.title)"
                 )
             );
+        $collection->getSelect()->join(
+            array('udtiership_delivery_type' => $collection->getTable('udtiership/delivery_type')),
+            "udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
+            array("delivery_code")
+        );
+
         $collection->getSelect()->joinLeft(
             array('udropship_shipping_title_default' => $collection->getTable('udropship/shipping_title')),
             "main_table.shipping_id = udropship_shipping_title_default.shipping_id AND udropship_shipping_title_default.store_id=0",
