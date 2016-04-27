@@ -128,7 +128,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		
 		$this->_logEvent($po, $text);
 
-        Mage::log("Zolago: poChangePos", null, "operator.log");
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();
