@@ -109,20 +109,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		}
 		return implode("\n", $items);
 	}
-
-
-	/**
-	 * PO created directly from order (no split)
-	 * @param type $observer
-	 */
-	public function poCreatedFromOrder($observer) {
-		$po = $observer->getEvent()->getData('po');
-		/* @var $po Zolago_Po_Model_Po */
-		// Send email
-        Mage::log("Zolago: poCreatedFromOrder", null, "operator.log");
-		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
-		Mage::helper('udropship')->processQueue();
-	}
+	
 	
 	/**
 	 * Change pos
