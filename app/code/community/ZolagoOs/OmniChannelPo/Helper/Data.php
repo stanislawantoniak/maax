@@ -919,7 +919,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 		$order = $po->getOrder();
 		$store = $order->getStore();
 		$pos = $po->getPos();
-		if ($pos->getId()) {
+		if (!$pos->getId()) {
 			/**
 			 * No correct POS so don't send email
 			 * Leave it for cron
