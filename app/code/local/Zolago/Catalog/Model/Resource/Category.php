@@ -145,6 +145,29 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
     }
 
     /**
+     * Get related category id
+     * @param $id
+     * @return string
+     */
+
+    public function getRelatedId($id) {
+        $attributeId = $this->_getRelatedCategoryAttributeId();
+
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+
+        $select->from (
+            array('attribute' => $this->getTable('catalog_category_entity_int')),
+            array('attribute.value')
+        )
+            ->where('attribute.value IS NOT NULL')
+            ->where('attribute.value > 0')
+            ->where('attribute.attribute_id = ?',$attributeId)
+            ->where('entity_id=?',$id)
+            ->distinct();
+        return $adapter->fetchOne($select);
+    }
+    /**
      * Get "is_active" attribute identifier
      *
      * @return int

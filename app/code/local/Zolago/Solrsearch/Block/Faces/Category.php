@@ -61,13 +61,29 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
      * @return 
      */
 
-    public function getFilterCollection($categoryId) {
+    public function getFilterCollection($categoryId)
+    {
         if (!$this->hasData('all_filter_collection')) {
             $result = $this->_getAttributeCodesForFilter();
-            $this->setData('all_filter_collection',$result);
+            $this->setData('all_filter_collection', $result);
         }
-        $result = $this->getData('all_filter_collection');        
-        return isset($result[$categoryId])? $result[$categoryId]:array();
+        $result = $this->getData('all_filter_collection');
+
+        $collection = array();
+        if (isset($result[$categoryId])) {
+            $collection = $result[$categoryId];
+        } else {
+            //try to get filters from related category
+            if (!$this->hasData('category_related_' . $categoryId)) {
+                $this->setData('category_related_' . $categoryId, Mage::getResourceModel("zolagocatalog/category")->getRelatedId($categoryId));
+            }
+            $related = $this->getData('category_related_' . $categoryId);
+
+            if (isset($result[$related]))
+                $collection = $result[$related];
+
+        }
+        return $collection;
     }
     
     
@@ -185,7 +201,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 
 	/**
 	 * @param array $data
-	 * @param bool $show_brothers if true solr gets two querys (first about current category, second about brothers), if false is only one query
+	 * @param bool $show_brothers if true solr gets two queries (first about current category, second about brothers), if false is only one query
 	 * @return array
 	 */
     public function processCategoryData($data,$show_brothers = true)
