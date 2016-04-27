@@ -645,6 +645,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 $data = $this->_prepareMultiValues(Zolago_Solrsearch_Model_Solr::FLAGS_CODE, $data);
             }
             ksort($data);
+
+            if(empty($data))
+                return null;
+
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
