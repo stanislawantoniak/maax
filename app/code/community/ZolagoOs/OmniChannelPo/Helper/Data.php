@@ -1122,7 +1122,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		$identity = $store->getConfig('udropship/vendor/vendor_email_identity');
 
-		$data['_BCC'] = $vendor->getNewOrderCcEmails();
+
 		if (($emailField = $store->getConfig('udropship/vendor/vendor_notification_field'))) {
 			$email = $vendor->getData($emailField) ? $vendor->getData($emailField) : $vendor->getEmail();
 		} else {
@@ -1131,19 +1131,23 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 		Mage::log("Zolago: _sendNewPoNotificationEmail", null, "operator.log");
 		Mage::log("Email:", $email, null, "operator.log");
 		Mage::log("data:", null, "operator.log");
-		Mage::log($data['_BCC'], null, "operator.log");
 
 //        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
 		/* @var $helper Zolago_Common_Helper_Data */
 		$helper = Mage::helper("zolagocommon");
-		$helper->sendEmailTemplate(
-			$email,
-			$vendor->getVendorName(),
-			$template,
-			$data,
-			true,
-			$identity
-		);
+
+		$emails = array_unique(array_merge(array($email), $vendor->getNewOrderCcEmails()));
+		foreach ($emails as $email) {
+			$helper->sendEmailTemplate(
+				$email,
+				$vendor->getVendorName(),
+				$template,
+				$data,
+				true,
+				$identity
+			);
+		}
+
 
 		$hlp->unassignVendorSkus($po);
 
