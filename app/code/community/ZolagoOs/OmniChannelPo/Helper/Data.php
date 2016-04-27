@@ -937,9 +937,9 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 		$oldEmail = $newEmail = $vendor->getData($emailField);
 		Mage::log("old email: " . $oldEmail, null, "operator.log");
 		if($pos && $pos->getId()){
-			$newEmail = $pos->getEmail();
+			$newEmail = !empty($pos->getEmail()) ? $pos->getEmail() : $newEmail;
 		}
-		Mage::log($newEmail, null, "operator.log");
+		Mage::log("new email: " . $newEmail, null, "operator.log");
 		// Replace vendor email to pos email & send mail & restore origin
 		$vendor->setData($emailField, $newEmail);
 		$vendor->setData("po", $po);

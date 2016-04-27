@@ -41,7 +41,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
         if($po && $po->getId()) {
             foreach($po->getAllowedOperators() as $operator) {
                 $new[] = $operator->getEmail();
-				Mage::log("AllowedOperators" . $operator->getEmail(), null, 'operator.log');
+				Mage::log("AllowedOperators: " . $operator->getEmail(), null, 'operator.log');
             }
         }
         $old = parent::getNewOrderCcEmails();

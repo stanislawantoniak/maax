@@ -58,10 +58,10 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 				$collection->walk("afterLoad");
 				/** @var Zolago_Operator_Model_Operator $operator */
 				foreach($collection as $operator) {
-					Mage::log("operatorId" . $operator->getId(), null, 'operator.log');
+					Mage::log("operatorId: " . $operator->getId() . " " . $operator->getEmail(), null, 'operator.log');
 					if($this->isAllowed(null, $operator)){
 						$operators[] = $operator;
-						Mage::log("operator is allowed " . $operator->getId(), null, 'operator.log');
+						Mage::log("operatorId: " . $operator->getId() . " " . $operator->getEmail() . " is allowed", null, 'operator.log');
 					}
 				}
 			}
