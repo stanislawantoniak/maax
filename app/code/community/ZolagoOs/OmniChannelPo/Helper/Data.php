@@ -1131,7 +1131,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 		Mage::log("Zolago: _sendNewPoNotificationEmail", null, "operator.log");
 		Mage::log("Email:", $email, null, "operator.log");
 		Mage::log("data:", null, "operator.log");
-		Mage::log($data, null, "operator.log");
+		Mage::log($data['_BCC'], null, "operator.log");
 
 //        Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
 		/* @var $helper Zolago_Common_Helper_Data */
