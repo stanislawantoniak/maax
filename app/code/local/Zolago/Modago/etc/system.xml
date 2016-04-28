@@ -138,7 +138,7 @@
                     <show_in_store>1</show_in_store>
                     <sort_order>21</sort_order>
                     <fields>
-                        <title translate="label">
+                        <vendor_landing_page_title translate="label">
                             <label>Title</label>
                             <frontend_type>text</frontend_type>
                             <comment>Use {{vendor}} to define vendor name.</comment>
@@ -146,8 +146,8 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </title>
-                        <description translate="label">
+                        </vendor_landing_page_title>
+                        <vendor_landing_page_description translate="label">
                             <label>Description</label>
                             <frontend_type>textarea</frontend_type>
                             <comment>Use {{vendor}} to define vendor name.</comment>
@@ -155,7 +155,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </description>
+                        </vendor_landing_page_description>
                     </fields>
                 </head_vendor>
                 <popular_brands translate="label">
