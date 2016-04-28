@@ -8,10 +8,9 @@ class Orba_Shipping_Helper_Packstation_Inpost extends Orba_Shipping_Helper_Carri
     protected $_inpostClient;
     protected $_inpostLogin;
     protected $_inpostPassword;
-    protected $_inpostDir;
 
-    const INPOST_DIR		= 'inpost';
-    const INPOST_FILE_EXT	= 'pdf';
+    const FILE_DIR		= 'inpost';
+    const FILE_EXT	= 'pdf';
 
     const INPOST_HEADER				= 'INPOST Tracking Info';
 /*    const DHL_STATUS_DELIVERED	= 'DOR';

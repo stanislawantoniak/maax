@@ -78,7 +78,6 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
                 $post = $this->_encodeParams($data);
                 curl_setopt($c,CURLOPT_POST,true);
                 curl_setopt($c,CURLOPT_POSTFIELDS,$post);
-                Mage::log($post);
             }
             curl_setopt($c,CURLOPT_URL,$url);
             $result = $this->_prepareResult(curl_exec($c));

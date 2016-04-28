@@ -6,6 +6,8 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
 
 	const USER_NAME_COMMENT		= 'API';
 	
+	protected $_fileDir;
+	
     /**
      * @var tracking helper
      */
@@ -71,6 +73,46 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
 			->setUsername($userName);
 		$commentModel->save();
 	}
+
+    public function getFileDir()
+    {
+        if ($this->_fileDir === null) {
+            $this->_fileDir = $this->setFileDir();
+        }
+
+        return $this->_fileDir;
+    }
+
+    public function setFileDir()
+    {
+        if ($this->_fileDir === null) {
+            $ioAdapter = new Varien_Io_File();
+            $this->_fileDir = Mage::getBaseDir('media') . DS . static::FILE_DIR . DS;
+            $ioAdapter->checkAndCreateFolder($this->_fileDir);
+        }
+
+        return $this->_fileDir;
+    }
+
+
+    public function getIsFileAvailable($trackNumber)
+    {
+        $file = false;
+        if ($this->_fileDir === null) {
+            $this->setFileDir();
+            $file = $this->getIsFileAvailable($trackNumber);
+        } else {
+            $this->setFileDir();
+            if (count($trackNumber)) {
+                $ioAdapter = new Varien_Io_File();
+                $fileLocation = $this->_fileDir . $trackNumber . '.' . static::FILE_EXT;
+                if ($ioAdapter->fileExists($fileLocation)) {
+                    $file = $fileLocation;
+                }
+            }
+        }
+        return $file;
+    }
 	
 
 

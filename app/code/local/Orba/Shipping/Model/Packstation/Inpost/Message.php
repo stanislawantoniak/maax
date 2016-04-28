@@ -61,10 +61,11 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $udpo = $settings['udpo'];
         $pack->addChild('id',$udpo->getIncrementId());
         $pack->addChild('senderEmail',$email);
-        $pack->addChild('boxMachineName',$settings['lockerName']);
+        $pack->addChild('boxMachineName',$udpo->getInpostLockerName());
         $pack->addChild('packType',$settings['size']);
+        $pack->addChild('addresseeEmail',$udpo->getCustomerEmail());
+        $pack->addChild('phoneNum',$settings['phoneNumber']);
         $data['content'] = $this->_xmlMessage->asXML();
-        Mage::log($data); 
         return $data;
      }
 }

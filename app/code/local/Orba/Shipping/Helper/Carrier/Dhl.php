@@ -9,10 +9,9 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
     protected $_dhlLogin;
     protected $_dhlPassword;
     protected $_dhlAccount;
-    protected $_dhlDir;
 
-    const DHL_DIR		= 'dhl';
-    const DHL_FILE_EXT	= 'pdf';
+    const FILE_DIR		= 'dhl';
+    const FILE_EXT	= 'pdf';
 
     const DHL_STATUS_DELIVERED	= 'DOR';
     const DHL_STATUS_RETURNED	= 'ZWN';
@@ -201,45 +200,6 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         return date('Y-m-d H:i:s', $time+$repeatIn);
     }
 
-    public function getDhlFileDir()
-    {
-        if ($this->_dhlDir === null) {
-            $this->_dhlDir = $this->setDhlFileDir();
-        }
-
-        return $this->_dhlDir;
-    }
-
-    public function setDhlFileDir()
-    {
-        if ($this->_dhlDir === null) {
-            $ioAdapter = new Varien_Io_File();
-            $this->_dhlDir = Mage::getBaseDir('media') . DS . self::DHL_DIR . DS;
-            $ioAdapter->checkAndCreateFolder($this->_dhlDir);
-        }
-
-        return $this->_dhlDir;
-    }
-
-
-    public function getIsDhlFileAvailable($trackNumber)
-    {
-        $dhlFile = false;
-        if ($this->_dhlDir === null) {
-            $this->setDhlFileDir();
-            $dhlFile = $this->getIsDhlFileAvailable($trackNumber);
-        } else {
-            $this->setDhlFileDir();
-            if (count($trackNumber)):
-                    $ioAdapter = new Varien_Io_File();
-            $dhlFileLocation = $this->_dhlDir . $trackNumber . '.' . self::DHL_FILE_EXT;
-            if ($ioAdapter->fileExists($dhlFileLocation)) {
-                $dhlFile = $dhlFileLocation;
-            }
-            endif;
-        }
-        return $dhlFile;
-    }
 
 
     /**

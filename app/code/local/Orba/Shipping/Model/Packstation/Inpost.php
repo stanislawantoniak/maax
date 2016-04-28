@@ -14,7 +14,6 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
         $pos = $udpo->getDefaultPos();
         $shipmentSettings = array(
                                 'size' => $size,
-                                'lockerName' => $udpo->getInpostLockerName(),
                                 'pos' => $pos,
                                 'udpo' => $udpo,
                                 
@@ -82,13 +81,24 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
             $client->setShipmentSettings($settings);
             $dispatchPointName = $this->_getDispatchPointName();
             $settings['dispatchPointName'] = $dispatchPointName;
+            $receiverAddress = $this->_receiverAddress;
+            $settings['phoneNumber'] = $receiverAddress['telephone'];
             $inpostResult = $this->getClient()->createDeliveryPacks($settings);
-            $message = print_r($inpostResult,1);
+            if (empty($inpostResult['pack']['packcode'])) {
+                if ($inpostResult['error']) {
+                    $error = $inpostResult['error'];
+                } else {
+                    $error = Mage::helper('orbashipping')->__('Cant create package');
+                }
+                Mage::throwException($error);
+            }
+            $code = $inpostResult['pack']['packcode'];
+            $message = 'OK';
         } catch (Exception $xt) {
             $message = $xt->getMessage();
         }
         $result = array(
-                      'shipmentId' => 0,
+                      'shipmentId' => $code,
                       'message' => $message
                   );
         return $result;

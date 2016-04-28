@@ -74,7 +74,17 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 */
 	public function getLetterUrl(Mage_Sales_Model_Order_Shipment_Track $tracking, Zolago_Po_Model_Po $po) {
 		if($this->isLetterable($tracking)){
-			return $this->getUrl('orbashipping/dhl/lp', array(
+		    switch ($tracking->getCarrierCode()) {
+		        case Orba_Shipping_Model_Carrier_Dhl::CODE:
+		            $url = 'orbashipping/dhl/lp';
+		            break;
+                case  Orba_Shipping_Model_Packstation_Inpost::CODE:
+                    $url = 'orbashipping/inpost/lp';
+                    break;
+                default:
+                    Mage::throwException('Wrong carrier code');
+		    }
+			return $this->getUrl($url, array(
 					'trackId'		=> $tracking->getId(), 
 					'trackNumber'	=> $tracking->getNumber(), 
 					'vId'			=> $po->getVendor()->getId(), 
@@ -93,6 +103,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function isLetterable(Mage_Sales_Model_Order_Shipment_Track $tracking) {
 		switch ($tracking->getCarrierCode()) {
 			case Orba_Shipping_Model_Carrier_Dhl::CODE:
+			case Orba_Shipping_Model_Packstation_Inpost::CODE:
 				return true;
 			break;
 		}
