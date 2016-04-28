@@ -7,54 +7,6 @@ class GH_FeedExport_Helper_Eval extends Mirasvit_FeedExport_Helper_Eval
 {
 
     /**
-     * @param $value
-     * @param $formatterLine
-     * @return mixed|string
-     */
-    public function execute($value, $formatterLine)
-    {
-        $formatter = explode(' ', $formatterLine);
-        $method = $formatter[0];
-
-        array_shift($formatter);
-        $args = $formatter;
-        if (!is_array($args)) {
-            $args = array();
-        }
-
-        if (function_exists($method)) {
-            foreach ($args as $key => $arg) {
-                if (!is_numeric($arg)) {
-                    $args[$key] = "'".$arg."'";
-                }
-            }
-
-            if($method == "str_replace"){
-                $cmd = 'return '.$method.'(';
-
-                if (count($args)) {
-                    $cmd .= implode(',', $args).'';
-                }
-                $cmd .= ',"'.addslashes($value).'");';
-            } else {
-                $cmd = 'return '.$method.'("'.addslashes($value).'"';
-                if (count($args)) {
-                    $cmd .= ','.implode(',', $args).'';
-                }
-                $cmd .= ');';
-            }
-            $value = @eval($cmd);
-        } elseif (method_exists($this, $method)) {
-            array_unshift($args, $value);
-            $value = call_user_func_array(array($this, $method), $args);
-        } else {
-            $value .= $formatterLine;
-        }
-
-        return $value;
-    }
-
-    /**
      * Custom formatter to encode url "query" part
      * @param $value
      * @return string
