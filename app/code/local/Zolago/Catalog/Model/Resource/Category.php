@@ -117,56 +117,39 @@ class Zolago_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource
 
         return $data;
     }
-    
-    /**
-     * get related ids of category list
-     *
-     * @param array $ids
-     * @return array
-     */
 
-    public function getRelatedIds($ids) {
-        $attributeId = $this->_getRelatedCategoryAttributeId();
+	/**
+	 * get related ids of category list
+	 * Id $asKeyValue = true then pairs like
+	 * array(<category_id> => <related_category_id>)
+	 *
+	 * @param array $ids
+	 * @param bool $asKeyValue
+	 * @return array
+	 */
+	public function getRelatedIds($ids, $asKeyValue = false) {
+		$attributeId = $this->_getRelatedCategoryAttributeId();
 
 		$adapter = $this->getReadConnection();
 		$select = $adapter->select();
-		
-		$select->from (
-		    array('attribute' => $this->getTable('catalog_category_entity_int')),
-		    array('attribute.value')
-        )
-        ->where('attribute.value IS NOT NULL')
-        ->where('attribute.value > 0')
-        ->where('attribute.attribute_id = ?',$attributeId)
-        ->where('entity_id IN (?)',$ids)
-        ->distinct();
-        
-        return $adapter->fetchCol($select);
-    }
 
-    /**
-     * Get related category id
-     * @param $id
-     * @return string
-     */
+		$cols = array('attribute.value');
+		if ($asKeyValue) $cols = array('entity_id', 'attribute.value');
 
-    public function getRelatedId($id) {
-        $attributeId = $this->_getRelatedCategoryAttributeId();
+		$select->from(
+			array('attribute' => $this->getTable('catalog_category_entity_int')),
+			$cols
+		)
+			->where('attribute.value IS NOT NULL')
+			->where('attribute.value > 0')
+			->where('attribute.attribute_id = ?', $attributeId)
+			->where('entity_id IN (?)', $ids)
+			->distinct();
 
-        $adapter = $this->getReadConnection();
-        $select = $adapter->select();
-
-        $select->from (
-            array('attribute' => $this->getTable('catalog_category_entity_int')),
-            array('attribute.value')
-        )
-            ->where('attribute.value IS NOT NULL')
-            ->where('attribute.value > 0')
-            ->where('attribute.attribute_id = ?',$attributeId)
-            ->where('entity_id=?',$id)
-            ->distinct();
-        return $adapter->fetchOne($select);
-    }
+		if ($asKeyValue) return $adapter->fetchPairs($select);
+		return $adapter->fetchCol($select);
+	}
+	
     /**
      * Get "is_active" attribute identifier
      *

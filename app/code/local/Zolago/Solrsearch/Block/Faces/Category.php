@@ -41,13 +41,40 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 
     protected function _getAttributeCodesForFilter() {
         $lambda = function() {
-            $collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
-            /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
-            $collection->joinAttributeCode();
-            $result = array();
-            foreach ($collection as $item) {
-                $result[$item->getCategoryId()][] = $item->getAttributeCode();
-            }
+			$collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
+			/* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+			$collection->joinAttributeCode();
+			$result = array();
+			$catIds = array();
+			foreach ($collection as $item) {
+				$categoryId = $item->getCategoryId();
+				$catIds[] = $categoryId;
+				$result[$categoryId][] = $item->getAttributeCode();
+			}
+			// Fallback for related categories
+			/** @var Zolago_Catalog_Model_Category $category */
+			$category = Mage::getModel('catalog/category');
+			$catTree = $category->getTreeModel()->load();
+			/** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
+			$collection = $catTree->getCollection();
+			$collection->addFieldToFilter('entity_id', array('nin'=> $catIds));
+			$diffCategories = $collection->getData();
+
+			$diffCatIds = array();
+			foreach ($diffCategories as $category) {
+				$diffCatIds[] = (int)$category['entity_id'];
+			}
+
+			/** @var Zolago_Catalog_Model_Resource_Category $res */
+			$res = Mage::getResourceModel("zolagocatalog/category");
+			$data = $res->getRelatedIds($diffCatIds, true);
+			foreach ($data as $categoryId => $relatedToId) {
+				if (isset($result[$relatedToId])) {
+					// Make copy for related category
+					$result[$categoryId] = $result[$relatedToId];
+				}
+			}
+			ksort($result);
             return serialize($result);
         };
         $out = Mage::helper('zolagocommon')->getCache('attribute_codes_for_filter',self::CACHE_GROUP,$lambda,array());
@@ -58,9 +85,8 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
      * returns list of attributes used in filters by category id
      *
      * @param int $categoryId
-     * @return 
+     * @return array
      */
-
     public function getFilterCollection($categoryId)
     {
         if (!$this->hasData('all_filter_collection')) {
@@ -68,22 +94,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
             $this->setData('all_filter_collection', $result);
         }
         $result = $this->getData('all_filter_collection');
-
-        $collection = array();
-        if (isset($result[$categoryId])) {
-            $collection = $result[$categoryId];
-        } else {
-            //try to get filters from related category
-            if (!$this->hasData('category_related_' . $categoryId)) {
-                $this->setData('category_related_' . $categoryId, Mage::getResourceModel("zolagocatalog/category")->getRelatedId($categoryId));
-            }
-            $related = $this->getData('category_related_' . $categoryId);
-
-            if (isset($result[$related]))
-                $collection = $result[$related];
-
-        }
-        return $collection;
+		return isset($result[$categoryId])? $result[$categoryId]:array();
     }
     
     
