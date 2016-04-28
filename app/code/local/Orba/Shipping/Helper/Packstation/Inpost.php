@@ -36,8 +36,8 @@ class Orba_Shipping_Helper_Packstation_Inpost extends Orba_Shipping_Helper_Carri
     /**
      * Initialize INPOST Web API Client
      *
-     * @param array $inpostSettings Array('login' => 'value', 'password' => 'value')
-     *
+     * @param array|bool $inpostSettings Array('login' => 'value', 'password' => 'value')
+     * @return Orba_Shipping_Model_Packstation_Client_Inpost
      */
     public function startClient($inpostSettings = false)
     {

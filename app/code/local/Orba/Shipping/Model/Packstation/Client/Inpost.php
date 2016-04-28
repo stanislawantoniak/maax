@@ -59,10 +59,27 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
             $posName);
         return $this->_sendMessage('getdispatchpoints',$data,'POST');
     }
-    /**
-     * send message to server
-     */
 
+	/**
+	 * Get retrieve array list with machines
+	 * 
+	 * @return array|mixed
+	 */
+	public function getListMachines() {
+		$method = 'listmachines_xml';
+		$return = $this->_sendMessage($method, array(), 'GET');
+		return $return;
+	}
+	
+	/**
+	 * Send message to server
+	 * 
+	 * @param $method
+	 * @param $data
+	 * @param string $type
+	 * @return array|mixed
+	 * @throws Mage_Core_Exception
+	 */
     protected function _sendMessage($method,$data,$type = 'GET') {
         if (!$url = $this->getParam('api')) {
             Mage::throwException(Mage::helper('ghinpost')->__('Api Inpost not configured'));
@@ -72,7 +89,8 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
             curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
             if ($type == 'GET') {
                 $data['do'] = $method;
-                $url .= $this->_encodeParams($data);
+                $url .= '?' . $this->_encodeParams($data);
+                curl_setopt($c, CURLOPT_HTTPGET, true);
             } else {
                 $url .= '?'.$this->_encodeParams(array('do'=>$method));
                 $post = $this->_encodeParams($data);
@@ -81,7 +99,11 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
                 Mage::log($post);
             }
             curl_setopt($c,CURLOPT_URL,$url);
-            $result = $this->_prepareResult(curl_exec($c));
+			
+			$data = curl_exec($c);
+			if (curl_errno($c) > 0) Mage::throwException(curl_error($c));
+			$result = $this->_prepareResult($data);
+			curl_close($c);
         } catch (Exception $xt) {
             $result = $this->_prepareErrorMessage($xt);
         }
@@ -105,7 +127,7 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
      * prepare inpost answer
      */
     protected function _prepareResult($data) {
-        $xml = simplexml_load_string($data);
+		$xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
         $result = json_decode($json,true); // victorias trick
         return $result;
