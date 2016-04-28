@@ -136,7 +136,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
                 $shipment->setDeleteOnFailedLabelRequestFlag(true);
                 $shipment->setCreatedByVendorFlag(true);
             } else {
-                Mage::throwException("Cannot create shipment");
+                Mage::throwException(Mage::helper("zolagopo")->__("Cannot create shipment"));
             }
             $this->_shipment = $shipment;
         }

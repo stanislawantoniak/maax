@@ -476,4 +476,23 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
             return true;
         }
     }
+    
+    /**
+     * Prepare shipping modal
+     */
+     protected function _getShippingModal() {
+         $po = $this->getPo();
+         $shippingMethod = $po->getUdropshipMethod();
+         $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
+         switch ($methodCode) {
+             case 'ghinpost':
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
+                 break;
+             default: // carrier
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
+                 break;
+         }
+         $block->setParentBlock($this);
+         return $block->toHtml();
+     }
 }

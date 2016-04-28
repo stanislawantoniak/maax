@@ -1245,6 +1245,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     protected function _addShipping($carrier,$udpo,$shipment) {
         $session = $this->_getSession();
         $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
+        
         $r = $this->getRequest();
         $settings = $shippingManager->prepareSettings($r,$shipment,$udpo);
 
@@ -1294,7 +1295,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $number = $this->getRequest()->getParam('tracking_id');
         return $number;
     }
-
+    
     /**
      * @return void
      * @throws Mage_Core_Exception

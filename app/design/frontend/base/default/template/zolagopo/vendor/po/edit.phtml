@@ -609,10 +609,12 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Shipping modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping")->
+    echo $this->_getShippingModal();
+    /*
+    	echo $this->getChild("vendor_po_edit_shipping")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
-	
+	*/
 /*******************************************************************************
  *	Comment modal
  *******************************************************************************/
