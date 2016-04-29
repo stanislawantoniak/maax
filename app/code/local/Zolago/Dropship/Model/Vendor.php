@@ -29,7 +29,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
     const VENDOR_TYPE_STANDARD = 1;
 
     /**
-     * Overide fuction to add additional email address bases od vendor operators
+     * Override function to add additional email address bases od vendor operators
      * @return array
      */
     public function getNewOrderCcEmails() {

@@ -157,7 +157,6 @@ class ZolagoOs_OmniChannelPo_Model_Observer
                 && !$po->getData('is_vendor_notified')
             ) {
                 $po->setData('is_vendor_notified', 1);
-                Mage::log("DropshipPo Model: sendNewPoNotificationEmail", null, "operator.log");
                 Mage::helper('udpo')->sendNewPoNotificationEmail($po);
                 $po->getResource()->saveAttribute($po, 'is_vendor_notified');
             }
