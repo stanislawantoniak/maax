@@ -145,7 +145,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
 			$ioAdapter			= new Varien_Io_File();
 			$fileName			= $out->createShipmentResult->shipmentTrackingNumber.'.pdf';
 			$fileContent		= base64_decode($out->createShipmentResult->label->labelContent);
-			$fileLocation		= Mage::helper('orbashipping/carrier_dhl')->getDhlFileDir() . $fileName;
+			$fileLocation		= Mage::helper('orbashipping/carrier_dhl')->getFileDir() . $fileName;
 			$result = @$ioAdapter->filePutContent($fileLocation, $fileContent);
 			if (!$result) {
     		    Mage::throwException(Mage::helper('orbashipping')->__('Print label error'));

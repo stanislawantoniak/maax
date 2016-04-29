@@ -36,7 +36,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
      * @return string
      */
     public function getRmaDocument(Zolago_Rma_Model_Rma_Track $track) {
-        return $this->getDhlFileDir() . $track->getTrackNumber() . '.pdf';
+        return $this->getFileDir() . $track->getTrackNumber() . '.pdf';
     }
     public function isEnabledForVendor(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
         return (bool)(int)$vendor->getUseDhl();
