@@ -164,6 +164,9 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 					'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 					'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
 				);
+				// Add MSRP only if exist
+				if ($msrp = (double)number_format($product->getMsrp(),2,'.','')) $_product['msrp_incl_tax'] = $msrp;
+
 				$children = $item->getChildren();
 				if (!empty($children) && isset($children[0])) {
 					$_product['variant'] = $children[0]->getProduct()->getAttributeText('size');

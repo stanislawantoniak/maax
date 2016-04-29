@@ -47,21 +47,22 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	 */
 	public function getAllowedOperators() {
 		if(!$this->hasData("allowed_operators")){
-			$opreators = array();
+			$operators = array();
 			// Must have post
 			if($this->getPos() instanceof Zolago_Pos_Model_Pos){
-				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 				/* @var $collection Zolago_Operator_Model_Resource_Operator_Collection */
+				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 				$collection->addVendorFilter($this->getVendor());
 				$collection->addActiveFilter();
 				$collection->walk("afterLoad");
-				foreach($collection as $operator){
+				/** @var Zolago_Operator_Model_Operator $operator */
+				foreach($collection as $operator) {
 					if($this->isAllowed(null, $operator)){
-						$opreators[] = $operator;
+						$operators[] = $operator;
 					}
 				}
 			}
-			$this->setData("allowed_operators", $opreators);
+			$this->setData("allowed_operators", $operators);
 		}
 		return $this->getData("allowed_operators");
 	}

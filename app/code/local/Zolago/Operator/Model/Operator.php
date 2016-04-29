@@ -1,6 +1,8 @@
 <?php
 /**
  * vendor operators
+ * 
+ * @method Zolago_Operator_Model_Resource_Operator getResource()
  */
 class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	
