@@ -96,6 +96,7 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
             $message = 'OK';
         } catch (Exception $xt) {
             $message = $xt->getMessage();
+            $code = 0;
         }
         $result = array(
                       'shipmentId' => $code,

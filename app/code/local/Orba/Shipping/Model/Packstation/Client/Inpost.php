@@ -97,8 +97,7 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
                 curl_setopt($c,CURLOPT_POST,true);
                 curl_setopt($c,CURLOPT_POSTFIELDS,$post);
             }
-            curl_setopt($c,CURLOPT_URL,$url);
-			
+            curl_setopt($c,CURLOPT_URL,$url);			
 			$data = curl_exec($c);
 			if (curl_errno($c) > 0) Mage::throwException(curl_error($c));
 			$result = $this->_prepareResult($data);
@@ -131,42 +130,15 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
         $result = json_decode($json,true); // victorias trick
         return $result;
     }
-
-
+    
+    
     /**
-     * Process DHL Web API Shipments Result
-     *
-     * @param string $method
-     * @param object $dhlResult
-     *
-     * @return array $result Default: array('shipmentId' => false, 'message' => '');
+     * get labels
      */
-    public function processDhlShipmentsResult($method, $dhlResult)
-    {
-        $result = array(
-                      'shipmentId'	=> false,
-                      'message'		=> ''
-                  );
-        $helper = Mage::helper('zolagopo');
-        if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
-            //Dhl Error Scenario
-            Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$dhlResult['error']);
-            $result['shipmentId']	= false;
-            $result['message']		= $helper->__('DHL Service Error: %s',$dhlResult['error']);
-        }
-        elseif (property_exists($dhlResult, 'createShipmentsResult') && property_exists($dhlResult->createShipmentsResult, 'item')) {
-            $item = $dhlResult->createShipmentsResult->item;
-            $result['shipmentId']	= $item->shipmentId;
-            $result['message']		= $helper->__('Tracking ID: %s ', $item->shipmentId);
-        }
-        else {
-            Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: ' .$method);
-            $result['shipmentId']	= false;
-            $result['message']		= $helper->__('DHL Service Error: %s', $method);
-        }
 
-        return $result;
+
+    public function getLabels($track) {
     }
 
-
 }
+
