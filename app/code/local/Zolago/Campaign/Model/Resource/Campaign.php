@@ -228,10 +228,11 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $write = $this->_getWriteAdapter();
 
         try {
-            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE),
+            $write->update($table,
+                array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE),
                 array(
-                    '`product_id` in (?)' => $productIds,
-                    '`campaign_id` = ?' => $campaignId
+                    'product_id IN (?)' => $productIds,
+                    'campaign_id=?' => $campaignId
                 )
             );
         } catch (Exception $e) {
