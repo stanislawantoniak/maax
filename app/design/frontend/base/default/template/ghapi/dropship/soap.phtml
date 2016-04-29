@@ -17,6 +17,7 @@ $_helper = Mage::helper("ghapi");
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_shipment');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_reservation');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_categories');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_update_products');?>
 		</form>
 	</div>
 </div>
@@ -152,5 +153,31 @@ jQuery(function ($) {
         doSoapAjax(params,'get_categories');
     }
     //--getCategories
+
+	//updateProductsPricesStocks
+	jQuery('#soap_update_products_type').change(function () {
+		jQuery('#soap_update_products_price, #soap_update_products_stock').slideToggle(200);
+	});
+
+	jQuery('#update_products_action').click(function(){updateProducts(); });
+	jQuery('#soap_update_products_token, #soap_update_products_type, #soap_update_products_sku, .price-x, #soap_update_products_pos, #soap_update_products_qty').keypress(function (e) { if (e.which == 13) { updateProducts(); return false;} });
+
+	function updateProducts(){
+		var token  = jQuery('#soap_update_products_token').val(),
+			type   = jQuery('#soap_update_products_type').val(),
+			sku    = jQuery('#soap_update_products_sku').val(),
+			posId  = jQuery('#soap_update_products_pos').val(),
+			qty    = jQuery('#soap_update_products_qty').val(),
+			params = {
+				action : 'updateProductsPricesStocks',
+				token  : token,
+				type   : type,
+				data   : {}
+			};
+		params.data[sku]        = {};
+		params.data[sku][posId] = qty;
+		doSoapAjax(params,'update_products');
+	}
+	//--updateProductsPricesStocks
 });
 </script>
