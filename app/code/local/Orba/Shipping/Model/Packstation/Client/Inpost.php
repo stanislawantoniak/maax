@@ -22,7 +22,15 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
     protected function _construct() {
         $this->_init('orbashipping/packstation_client_inpost');
     }
+    
+    /**
+     * api url
+     */
 
+
+    protected function _getApiUrl() {
+        return Mage::getStoreConfig('carriers/ghinpost/api');
+    }
 
     /**
      * transform array to http
@@ -46,7 +54,8 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
              $this->getAuth('password'),
              $pos
         ); 
-        return $this->_sendMessage('createdispatchpoint',$data,'POST');
+        $result = $this->_sendMessage('createdispatchpoint',$data,'POST');
+        return $this->_prepareResult($result);
     }
     /**
      * get dispatch point
@@ -57,7 +66,8 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
             $this->getAuth('username'),
             $this->getAuth('password'),
             $posName);
-        return $this->_sendMessage('getdispatchpoints',$data,'POST');
+       $result = $this->_sendMessage('getdispatchpoints',$data,'POST');
+       return $this->_prepareResult($result);
     }
 
 	/**
@@ -67,8 +77,8 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
 	 */
 	public function getListMachines() {
 		$method = 'listmachines_xml';
-		$return = $this->_sendMessage($method, array(), 'GET');
-		return $return;
+		$return = $this->_sendMessage($method, array(), 'GET');		
+		return $this->_prepareResult($return);
 	}
 	
 	/**
@@ -82,7 +92,9 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
 	 */
     protected function _sendMessage($method,$data,$type = 'GET') {
         if (!$url = $this->getParam('api')) {
-            Mage::throwException(Mage::helper('ghinpost')->__('Api Inpost not configured'));
+            if (!$url = $this->_getApiUrl()) {
+                Mage::throwException(Mage::helper('ghinpost')->__('Api Inpost not configured'));
+            }
         }
         try {
             $c = curl_init();
@@ -100,7 +112,7 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
             curl_setopt($c,CURLOPT_URL,$url);			
 			$data = curl_exec($c);
 			if (curl_errno($c) > 0) Mage::throwException(curl_error($c));
-			$result = $this->_prepareResult($data);
+			$result = $data;
 			curl_close($c);
         } catch (Exception $xt) {
             $result = $this->_prepareErrorMessage($xt);
@@ -119,7 +131,8 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
             $this->getAuth('password'),
             $settings                                  
             ); 
-        return $this->_sendMessage('createdeliverypacks',$data,'POST');
+        $result = $this->_sendMessage('createdeliverypacks',$data,'POST');
+        return $this->_prepareResult($result);
      }
     /**
      * prepare inpost answer
@@ -133,12 +146,62 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
     
     
     /**
-     * get labels
+     * labels to print
      */
-
-
-    public function getLabels($track) {
+    public function getLabels($tracking) {
+        if (empty($tracking)) {
+            return false;
+        }
+        if (!is_array($tracking)) {
+            $tracking = array($tracking);
+        }
+        $codes = array();
+        foreach ($tracking as $track) {
+            $codes[] = $track->getNumber();
+        }
+        $message = Mage::getModel('orbashipping/packstation_inpost_message');
+        $data = $message->getStickerMessage(
+            $this->getAuth('username'),
+            $this->getAuth('password'),
+            $codes
+        );        
+        $out['data'] = $this->_sendMessage('getsticker', $data,'POST');
+        $out['numbers'] = $codes;
+        return $out;
     }
+
+    
+    /**
+     * format results
+     */
+     public function processLabelsResult($method,$data) {
+         try {
+             $xml = simplexml_load_string($data['data']);
+         } catch (Exception $x) {
+             // if there is no xml - means ok
+             $xml = false;
+         }
+         if ($xml === false) { // ok
+             $result = array (
+                 'status' => true,
+                 'labelData' => $data['data'],
+                 'labelName' => implode('_',$data['numbers']).'.'.Orba_Shipping_Helper_Packstation_Inpost::FILE_EXT,
+                 'message' => 'Shipment ID: ' . implode(',',$data['numbers']),
+             );
+         } else {
+             $tmp = $this->_prepareResult($xml);             
+             if (!empty($tmp['error'])) {
+                 $error = $tmp['error'];
+             } else {
+                 $error = 'INPOST Service error '.implode(',',$data['numbers']);
+             }
+             $result = array(
+                 'status' => false,
+                 'message' => $error
+             );
+         }
+         return $result;
+     }
 
 }
 

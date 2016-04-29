@@ -81,7 +81,6 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
 		$trackModel		= Mage::getModel('sales/order_shipment_track')->load($trackId);
 		$udpoModel		= Mage::getModel('udpo/po')->load($udpoId);
 		
-//		$dhlSettings	= Mage::helper('udpo')->getDhlSettings($vendorModel, $posId);
         $settings = $this->_getSettings();
 		$client		= $this->_getHelper()->startClient($settings);
 		$result		= $client->getLabels($trackModel);

@@ -68,4 +68,20 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $data['content'] = $this->_xmlMessage->asXML();
         return $data;
      }
+     
+    /**
+     * params for get stickers
+     */
+     public function getStickerMessage($email,$password,$packcodes,$labelType = '') {
+         $data = array();
+         $data['email'] = $email;
+         $data['password'] = $password;
+         foreach ($packcodes as $key => $code) {
+             $data[sprintf('packcodes[%s]',$key)] = $code;
+         }
+         $data['labelType'] = $labelType;
+         $data['labelFormat'] = '';
+         return $data;
+     }
+
 }

@@ -31,7 +31,6 @@ class Orba_Shipping_Helper_Packstation_Inpost extends Orba_Shipping_Helper_Carri
         return self::INPOST_HEADER;
     }
 
-
     /**
      * Initialize INPOST Web API Client
      *
@@ -46,7 +45,7 @@ class Orba_Shipping_Helper_Packstation_Inpost extends Orba_Shipping_Helper_Carri
                 $this->_inpostPassword	= $inpostSettings['password'];
             }
             $inpostClient = Mage::getModel('orbashipping/packstation_client_inpost');
-            $inpostClient->setAuth($this->_inpostLogin, $this->_inpostPassword);
+            $inpostClient->setAuth($this->_inpostLogin, $this->_inpostPassword);            
             $this->_inpostClient = $inpostClient;
         }
 
