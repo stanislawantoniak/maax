@@ -168,14 +168,30 @@ jQuery(function ($) {
 			sku    = jQuery('#soap_update_products_sku').val(),
 			posId  = jQuery('#soap_update_products_pos').val(),
 			qty    = jQuery('#soap_update_products_qty').val(),
+			priceA = jQuery('#price-a').val(),
+			priceB = jQuery('#price-b').val(),
+			priceC = jQuery('#price-c').val(),
+			priceZ = jQuery('#price-z').val(),
+			msrp   = jQuery('#price-salePriceBefore').val(),
+			market = jQuery('#price-marketPrice').val(),
 			params = {
 				action : 'updateProductsPricesStocks',
 				token  : token,
 				type   : type,
 				data   : {}
 			};
-		params.data[sku]        = {};
-		params.data[sku][posId] = qty;
+
+		params.data[sku] = {};
+		if (type == 'price') {
+			params.data[sku]['A'] = priceA;
+			params.data[sku]['B'] = priceB;
+			params.data[sku]['C'] = priceC;
+			params.data[sku]['Z'] = priceZ;
+			params.data[sku]['salePriceBefore'] = msrp;
+			params.data[sku]['marketPrice'] = market;
+		} else { // stock
+			params.data[sku][posId] = qty;
+		}
 		doSoapAjax(params,'update_products');
 	}
 	//--updateProductsPricesStocks

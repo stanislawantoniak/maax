@@ -189,6 +189,22 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
         $client->getCategories($token);
     }
 
+	/**
+	 * Prepare test for updateProductsPricesStocks
+	 *
+	 * @param GH_Api_Block_Dropship_Answer $block
+	 */
+	public function _prepareUpdateProductsPricesStocks($block) {
+		$client   = $this->_getClient($block);
+		/** @var Mage_Core_Controller_Request_Http $request */
+		$request  = $this->getRequest();
+		$token    = $request->get('token');
+		$type     = $request->get('type');
+		$data     = $request->get('data');
+
+		$client->getUpdateProductsPricesStocks($token, $type, $data); // todo
+	}
+
     /**
      * Ajax function from testing soap
      */
@@ -222,6 +238,9 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
              case 'getCategories':
                  $this->_prepareGetCategories($block);
                  break;
+			 case 'updateProductsPricesStocks':
+				 $this->_prepareUpdateProductsPricesStocks($block);
+				 break;
              default:
                  $block->setSoapRequest('error');
                  $block->setSoapResponse('error');
