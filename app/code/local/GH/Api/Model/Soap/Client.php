@@ -141,14 +141,15 @@ class GH_Api_Model_Soap_Client  {
 	 * test for getUpdateProductsPricesStocks
 	 *
 	 * @param $token
-	 * @param $type
 	 * @param $data
 	 */
-	public function updateProductsPricesStocks($token, $type, $data) {
+	public function updateProductsPricesStocks($token, $data) {
+        Mage::log($data, null, "qqq.log");
 		$obj = new StdClass();
 		$obj->sessionToken = trim($token);
-		$obj->type = trim($type);
-		$obj->data = $data;
+		//$obj->type = trim($type);
+		$obj->productPricesUpdateList = $data;
+        $obj->productStockUpdateList = $data;
 		$this->_query('updateProductsPricesStocks', $obj);
 		/** @see GH_Api_Model_Soap::updateProductsPricesStocks() */
 	}

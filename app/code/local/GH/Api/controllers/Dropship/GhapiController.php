@@ -200,10 +200,21 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 		/** @var Mage_Core_Controller_Request_Http $request */
 		$request  = $this->getRequest();
 		$token    = $request->get('token');
-		$type     = $request->get('type');
 		$data     = $request->get('data');
 
-		$client->updateProductsPricesStocks($token, $type, $data);
+
+        $update = array(
+            "ProductPricesUpdate" => array("data" => array()),
+            "ProductStockUpdate" => array("data" => array())
+        );
+        foreach($data as $dataItemSku => $dataItem){
+            $update["productPricesUpdateList"]["data"][$dataItemSku] = $dataItem;
+        }
+        foreach($data as $dataItemSku => $dataItem){
+            $update["productPricesUpdateList"]["data"][$dataItemSku] = $dataItem;
+        }
+
+		$client->updateProductsPricesStocks($token, $update);
 	}
 
     /**
