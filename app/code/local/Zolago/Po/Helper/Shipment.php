@@ -167,40 +167,8 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
 		        if($trackType !== false) {
 			        $track->setTrackType($trackType);
 		        }
-
-		        switch($title) {
-			        case 'DHL':
-						/** @var Orba_Shipping_Helper_Carrier_Dhl $_dhlHlp */
-						$_dhlHlp = Mage::helper('orbashipping/carrier_dhl');
-
-
-                        if(isset($requestData['shipping_source_account'])){
-                            $shipping_source_account = $requestData['shipping_source_account'];
-
-                            $track->setData("shipping_source_account",$shipping_source_account);
-                        }
-				        $weight = $_dhlHlp->getDhlParcelWeightByKey($requestData['specify_orbadhl_rate_type']);
-						$track->setWeight($weight);
-						if(isset($requestData['specify_orbadhl_size'])) {
-							$dimensions = $_dhlHlp->getDhlParcelDimensionsByKey($requestData['specify_orbadhl_size']);
-							$track
-								->setWidth($dimensions[0])
-								->setHeight($dimensions[1])
-								->setLength($dimensions[2]);
-						} else {
-							$track
-								->setWidth(0)
-								->setHeight(0)
-								->setLength(0);
-						}
-                        if(isset($requestData['gallery_shipping_source']) && $requestData['gallery_shipping_source'] == 1) {
-                            $track->setGalleryShippingSource(1);
-                        }
-
-				        break;
-			        default:
-				        break;
-		        }
+                $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+                $manager->processTrack($track,$requestData);
 	        }
 
             $this->_track = $track;

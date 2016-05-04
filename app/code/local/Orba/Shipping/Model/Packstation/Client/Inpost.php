@@ -202,6 +202,22 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
          }
          return $result;
      }
+     
+    /**
+     * cancel package
+     */
+     public function cancelPack($number) {
+         $data = array (	
+             'email' => $this->getAuth('username'),
+             'password' => $this->getAuth('password'),
+             'packcode' => $number             
+         );
+         $result = $this->_sendMessage('cancelpack',$data,'POST');
+         if ($result !== '1') {
+            $result = $this->_prepareResult($result);
+         }
+         return $result;
+     }
 
 }
 
