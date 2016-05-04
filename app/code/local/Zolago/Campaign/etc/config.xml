@@ -131,7 +131,7 @@
             </zolagocampaign_unset_campaign_attributes>
             <zolagocampaign_attach_products_to_campaigns>
                 <schedule>
-                    <cron_expr>0 1 * * *</cron_expr>
+                    <cron_expr>7 1,9,11,13,15,17,19 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocampaign/observer::attachProductsToCampaignBySalesRule</model>

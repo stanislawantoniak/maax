@@ -1309,7 +1309,6 @@ class ZolagoOs_OmniChannel_Helper_Protected
 		Mage::dispatchEvent("udropship_order_save_after", array( "order" => $order, "shipments" => $shipments ));
 		foreach( $shipments as $shipment )
 		{
-            Mage::log("Dropship Protected: sendVendorNotification", null, "operator.log");
 			$hlp->sendVendorNotification($shipment);
 		}
 		$hlp->processQueue();

@@ -400,7 +400,6 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     */
     public function sendVendorNotification($shipment)
     {
-        Mage::log("Dropship Helper: sendVendorNotification", null, "operator.log");
         $vendor = $this->getVendor($shipment->getUdropshipVendor());
         $method = $vendor->getNewOrderNotifications();
 
