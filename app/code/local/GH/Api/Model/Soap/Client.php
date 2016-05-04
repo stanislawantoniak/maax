@@ -147,7 +147,7 @@ class GH_Api_Model_Soap_Client  {
 	public function updateProductsPricesStocks($token, $type, $data) {
 		$obj = new StdClass();
 		$obj->sessionToken = trim($token);
-		$obj->type = $type;
+		$obj->type = trim($type);
 		$obj->data = $data;
 		$this->_query('updateProductsPricesStocks', $obj);
 		/** @see GH_Api_Model_Soap::updateProductsPricesStocks() */

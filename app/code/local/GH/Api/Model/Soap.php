@@ -367,7 +367,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     }
 	
 	public function updateProductsPricesStocks($request) {
-		$token = $request->token;
+		$token = $request->sessionToken;
 		$type = $request->type;
 		$data = $request->data;
 		$obj = new StdClass();

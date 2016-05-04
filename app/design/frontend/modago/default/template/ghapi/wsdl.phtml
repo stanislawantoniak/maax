@@ -48,6 +48,20 @@
 				<xsd:element name="status" type="xsd:boolean"/>
 			</xsd:all>
 		</xsd:complexType>
+		<xsd:element name="updateProductsPricesStocks">
+			<xsd:complexType>
+				<xsd:all>
+					<xsd:element name="sessionToken" type="xsd:string"/>
+					<xsd:element name="products" type="tns:productDataList"/>
+				</xsd:all>
+			</xsd:complexType>
+		</xsd:element>
+		<xsd:complexType name="updateProductsPricesStocksResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
 			<xsd:complexType name="messageItem">
 				<xsd:all>
 					<xsd:element name="messageID" type="xsd:int"/>
@@ -70,6 +84,11 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		<xsd:complexType name="orderIDList">
+			<xsd:sequence>
+				<xsd:element name="ID" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:complexType name="productDataList">
 			<xsd:sequence>
 				<xsd:element name="ID" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
 			</xsd:sequence>
@@ -261,6 +280,12 @@
   <message name="setOrderShipmentResponse">
       <part name="setOrderShipmentResponse" type="tns:statusResponse"/>
   </message>
+	<message name="updateProductsPricesStocksRequest">
+		<part name="updateProductsPricesStocksRequest" type="tns:updateProductsPricesStocks"/>
+	</message>
+	<message name="updateProductsPricesStocksResponse">
+		<part name="updateProductsPricesStocksResponse" type="tns:statusResponse"/>
+	</message>
   <message name="setOrderReservationRequest">
 	  <part name="setOrderReservationRequest" type="tns:setOrderReservation"/>
   </message>
@@ -298,6 +323,10 @@
          <input message="tns:getOrdersByIDRequest"/>
          <output message="tns:getOrdersByIDResponse"/>
       </operation>
+	  <operation name="updateProductsPricesStocks">
+		  <input message="tns:updateProductsPricesStocksRequest"/>
+		  <output message="tns:updateProductsPricesStocksResponse"/>
+	  </operation>
 	  <operation name="setOrderReservation">
 		  <input message="tns:setOrderReservationRequest"/>
 		  <output message="tns:setOrderReservationResponse"/>
@@ -388,6 +417,19 @@
                use="literal"/>
          </output>
       </operation>
+	  <operation name="updateProductsPricesStocks">
+		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>updateProductsPricesStocks"/>
+		  <input>
+		  <soap:body
+			  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+			  use="literal"/>
+		  </input>
+		  <output>
+			  <soap:body
+				  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+				  use="literal"/>
+		  </output>
+	  </operation>
 	  <operation name="setOrderReservation">
 		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>setOrderReservation"/>
 		  <input>
