@@ -368,41 +368,44 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 	
 	public function updateProductsPricesStocks($request) {
 		$token = $request->sessionToken;
-		$type = $request->type;
-		$data = $request->data;
+		$priceData = $request->productsPricesUpdateList;
+		$stockData = $request->productsStocksUpdateList;
 		$obj = new StdClass();
-		
+		$message = 'ok';
+		$status = true;
+
 		try {
 			$user = $this->getUserByToken($token); // Do loginBySessionToken
 			$vendor = $user->getVendor();
 			$vendorId = $vendor->getId();
-			
-			// Check if type is valid
-			$this->getHelper()->validateProductsUpdateType($type);
-			
-			// Check if is sth to prepare
-			if (empty($data)) Mage::throwException('error_empty_update_products_data');
-			
-			// Prepare data - from SKUV to SKU
-			$batch = array();
-			foreach ($data as $skuV => $item) {
-				$sku = $vendorId . "-" . $skuV;
-				$batch[$sku] = $item;
-			}
-			$this->getHelper()->validateSkus($batch);
 
-			// push it
+			// Check if is sth to prepare
+			if (empty($priceData) && empty($stockData)) Mage::throwException('error_empty_product_update_list');
+
+			// Prepare data - from SKUV to SKU
+			$priceBatch = $this->getHelper()->prepareSku($priceData, $vendorId);
+			$stockBatch = $this->getHelper()->prepareSku($stockData, $vendorId);
+
+			$this->getHelper()->validateSkus(array_merge($priceBatch, $stockBatch), $vendorId);
+
+			if (!empty($priceBatch)) {
+				$this->getHelper()->validatePrices($priceBatch);
+			}
+			if (!empty($stockBatch)) {
+				$this->getHelper()->validatePoses($stockBatch);
+				$this->getHelper()->validateQtys($stockBatch);
+			}
+
+			// update it
 			/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
 			$restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-			if ($type == 'price') {
-				$restApi::updatePricesConverter($batch);
-			} else {
-				$restApi::updateStockConverter($batch);
+			if (!empty($priceBatch)) {
+				$restApi::updatePricesConverter($priceBatch);
 			}
-			
-			$message = 'ok';
-			$status = true;
-			
+			if (!empty($stockBatch)) {
+				$restApi::updateStockConverter($stockBatch);
+			}
+
 		} catch (Exception $e) {
 			$message = $e->getMessage();
 			$status = false;

@@ -200,19 +200,33 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 		/** @var Mage_Core_Controller_Request_Http $request */
 		$request  = $this->getRequest();
 		$token    = $request->get('token');
-		$data     = $request->get('data');
 
-
-        $update = array(
-            "ProductPricesUpdate" => array("data" => array()),
-            "ProductStockUpdate" => array("data" => array())
-        );
-        foreach($data as $dataItemSku => $dataItem){
-            $update["productPricesUpdateList"]["data"][$dataItemSku] = $dataItem;
-        }
-        foreach($data as $dataItemSku => $dataItem){
-            $update["productPricesUpdateList"]["data"][$dataItemSku] = $dataItem;
-        }
+		// for test
+		// todo 
+		$update = array(
+			'productsPricesUpdateList' => array(
+				'product' => array(
+					'sku' => 'tetetete',
+					'pricesTypesList' => array(
+						'priceType' => array(
+							'priceType' => 'A',
+							'priceValue' => '99.99'
+						)
+					)
+				)
+			),
+			'productsStocksUpdateList' => array(
+				'product' => array(
+					'sku' => 'tetetete',
+					'posesList' => array(
+						'pos' => array(
+							'id' => 'POS1',
+							'qty' => '99'
+						)
+					)
+				)
+			)
+		);
 
 		$client->updateProductsPricesStocks($token, $update);
 	}
@@ -221,6 +235,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
      * Ajax function from testing soap
      */
      public function testAction() {
+		 ini_set("soap.wsdl_cache_enabled", 0); // todo remove it after done
          $this->loadLayout();
          /** @var GH_Api_Block_Dropship_Answer $block */
          $block = $this->getLayout()->createBlock('ghapi/dropship_answer')->setTemplate('ghapi/dropship/soap/ajaxAnswer.phtml');

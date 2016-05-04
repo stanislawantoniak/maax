@@ -23,23 +23,24 @@ $_helper = Mage::helper("ghapi");
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="soap_update_products_type" class="col-md-3 control-label">
-				<?php echo $_helper->__("Update type"); ?>
-			</label>
+			<label class="col-md-3 control-label"><?php echo $_helper->__("Update"); ?></label>
 			<div class="col-xs-12 col-md-9 col-lg-6">
-				<select class="form-control" id="soap_update_products_type">
-					<option value="price" selected>prices</option>
-					<option value="stock">stock</option>
-				</select>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="soap_update_products_sku" class="col-md-3 control-label">
-				<?php echo $_helper->__("Product SKU"); ?>
-			</label>
-			<div class="col-md-9">
-				<input id="soap_update_products_sku" name="sku" value="" type="text" class="form-control"
-					   style="width:20%; min-width:50px;">
+				<label class="checkbox-inline">
+					<div class="checker">
+						<span>
+							<input name="type_price" type="checkbox" class="uniform update_products_type" value="1" checked>
+						</span>
+					</div>
+					<?php echo $_helper->__("Products prices"); ?>
+				</label>
+				<label class="checkbox-inline">
+					<div class="checker">
+						<span>
+							<input name="type_stock" type="checkbox" class="uniform update_products_type" value="1" checked>
+						</span>
+					</div>
+					<?php echo $_helper->__("Products stocks"); ?>
+				</label>
 			</div>
 		</div>
 
@@ -85,8 +86,18 @@ $_helper = Mage::helper("ghapi");
 		</div>
 		<!--Price end-->
 
+		<div class="form-group">
+			<label for="soap_update_products_sku" class="col-md-3 control-label">
+				<?php echo $_helper->__("Product SKU"); ?>
+			</label>
+			<div class="col-md-9">
+				<input id="soap_update_products_sku" name="sku" value="" type="text" class="form-control"
+					   style="width:20%; min-width:50px;">
+			</div>
+		</div>
+
 		<!--Stock start-->
-		<div id="soap_update_products_stock" style="display: none">
+		<div id="soap_update_products_stock">
 			<div class="form-group">
 				<label for="soap_update_products_pos" class="col-md-3 control-label">
 					<?php echo $_helper->__("POS external ID"); ?>

@@ -51,22 +51,91 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
 	/**
-	 * @param $type
+	 * @param $data
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function prepareSku($data, $vendorId) {
+		$batch = array();
+		foreach ($data as $skuV => $item) {
+			$sku = $vendorId . "-" . $skuV;
+			$batch[$sku] = $item;
+		}
+		return $batch;
+	}
+	
+	/**
+	 * Validate skus for vendor
+	 *
+	 * Throw exception if
+	 * product is not connected to vendor
+	 * product don't exist
+	 *
+	 * @param $data
+	 * @param $vendorId
 	 * @return bool
 	 * @throws Mage_Core_Exception
 	 */
-	public function validateProductsUpdateType($type) {
-		if (!in_array($type, array('price', 'stock'))) {
-			Mage::throwException('error_invalid_update_products_type');
+	public function validateSkus($data, $vendorId) {
+		$inputSkus = array();
+		foreach ($data as $sku => $item) {
+			$inputSkus[$sku] = $sku;
+		}
+
+		/* @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+		$coll = Mage::getResourceModel('zolagocatalog/product_collection');
+		$coll->addFieldToFilter('sku', array( 'in' => $inputSkus));
+		$coll->addAttributeToSelect('udropship_vendor', 'left');
+		$coll->addAttributeToSelect('skuv', 'left');
+
+		$_data = $coll->getData();
+		$allSkusFromColl = array();
+		$invalidOwnerSkus = array();
+
+		// wrong owner
+		foreach ($_data as $product) {
+			$allSkusFromColl[$product['sku']] = $product['sku'];
+			if ($product['udropship_vendor'] != $vendorId) {
+				$invalidOwnerSkus[$product['sku']] = $product['sku'];
+			}
+		}
+
+		// not existing products
+		$notExistingSkus = array_diff($inputSkus, $allSkusFromColl);
+
+		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
+		// get skuv from sku
+		foreach ($allErrorsSkus as $key => $sku) {
+			$allErrorsSkus[$key] = preg_replace('/' . preg_quote($vendorId . '-', '/') . '/', '', $sku, 1);
+		}
+		if (!empty($allErrorsSkus)) {
+			Mage::throwException('error_invalid_update_products_sku' . ' (' . implode(',', $allErrorsSkus) . ')');
+		}
+
+		return true;
+	}
+
+	public function validatePrices($data) {
+		foreach ($data as $sku => $vendor) {
+			
 		}
 		return true;
 	}
 
-	public function validateSkus($data) {
+	public function validateQtys($data) {
+		foreach ($data as $sku => $vendor) {
 
+		}
 		return true;
 	}
 
+	public function validatePoses($data) {
+		foreach ($data as $sku => $vendor) {
+
+		}
+		return true;
+	}
+	
     /**
      * @return void
      * @throws Mage_Core_Exception

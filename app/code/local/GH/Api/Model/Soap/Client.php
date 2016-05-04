@@ -144,12 +144,10 @@ class GH_Api_Model_Soap_Client  {
 	 * @param $data
 	 */
 	public function updateProductsPricesStocks($token, $data) {
-        Mage::log($data, null, "qqq.log");
 		$obj = new StdClass();
 		$obj->sessionToken = trim($token);
-		//$obj->type = trim($type);
-		$obj->productPricesUpdateList = $data;
-        $obj->productStockUpdateList = $data;
+		$obj->productsPricesUpdateList = $data['productsPricesUpdateList'];
+        $obj->productsStocksUpdateList = $data['productsStocksUpdateList'];
 		$this->_query('updateProductsPricesStocks', $obj);
 		/** @see GH_Api_Model_Soap::updateProductsPricesStocks() */
 	}

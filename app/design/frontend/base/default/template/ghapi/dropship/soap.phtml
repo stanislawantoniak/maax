@@ -155,8 +155,26 @@ jQuery(function ($) {
     //--getCategories
 
 	//updateProductsPricesStocks
-	jQuery('#soap_update_products_type').change(function () {
-		jQuery('#soap_update_products_price, #soap_update_products_stock').slideToggle(200);
+	jQuery('.update_products_type').change(function () {
+		var name = jQuery(this).attr('name');
+		if (name == 'type_price') {
+			if (jQuery(this).prop("checked")) {
+				jQuery('.price-x').removeAttr('disabled');
+			} else {
+				jQuery('.price-x').attr('disabled', 'disabled');
+			}
+		} else {
+			if (jQuery(this).prop("checked")) {
+				jQuery('#soap_update_products_pos, #soap_update_products_qty').removeAttr('disabled');
+			} else {
+				jQuery('#soap_update_products_pos, #soap_update_products_qty').attr('disabled', 'disabled');
+			}
+		}
+		if (!jQuery("input[name='type_price']").prop("checked") && !jQuery("input[name='type_stock']").prop("checked")) {
+			jQuery('#soap_update_products_sku').attr('disabled', 'disabled');
+		} else {
+			jQuery('#soap_update_products_sku').removeAttr('disabled');
+		}
 	});
 
 	jQuery('#update_products_action').click(function(){updateProducts(); });
@@ -164,7 +182,8 @@ jQuery(function ($) {
 
 	function updateProducts(){
 		var token  = jQuery('#soap_update_products_token').val(),
-			type   = jQuery('#soap_update_products_type').val(),
+			usePrice = jQuery("input[name='type_price']").prop("checked"),
+			useStock = jQuery("input[name='type_stock']").prop("checked"),
 			sku    = jQuery('#soap_update_products_sku').val(),
 			posId  = jQuery('#soap_update_products_pos').val(),
 			qty    = jQuery('#soap_update_products_qty').val(),
@@ -177,20 +196,13 @@ jQuery(function ($) {
 			params = {
 				action : 'updateProductsPricesStocks',
 				token  : token,
-				type   : type,
-				data   : {}
 			};
 
-		params.data[sku] = {};
-		if (type == 'price') {
-			params.data[sku]['A'] = priceA;
-			params.data[sku]['B'] = priceB;
-			params.data[sku]['C'] = priceC;
-			params.data[sku]['Z'] = priceZ;
-			params.data[sku]['salePriceBefore'] = msrp;
-			params.data[sku]['marketPrice'] = market;
-		} else { // stock
-			params.data[sku][posId] = qty;
+		if (usePrice) {
+			// todo
+		}
+		if (useStock) {
+			// todo
 		}
 		doSoapAjax(params,'update_products');
 	}

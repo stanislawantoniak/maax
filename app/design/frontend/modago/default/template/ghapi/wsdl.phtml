@@ -48,19 +48,6 @@
 				<xsd:element name="status" type="xsd:boolean"/>
 			</xsd:all>
 		</xsd:complexType>
-		<xsd:complexType name="updateProductsPricesStocks">
-				<xsd:all>
-					<xsd:element name="sessionToken" type="xsd:string"/>
-					<xsd:element name="productPricesUpdateList" type="tns:productPricesUpdateList" nillable="true" />
-					<xsd:element name="productStockUpdateList" type="tns:productStockUpdateList" nillable="true" />
-				</xsd:all>
-		</xsd:complexType>
-		<xsd:complexType name="updateProductsPricesStocksResponse">
-			<xsd:all>
-				<xsd:element name="message" type="xsd:string"/>
-				<xsd:element name="status" type="xsd:boolean"/>
-			</xsd:all>
-		</xsd:complexType>
 			<xsd:complexType name="messageItem">
 				<xsd:all>
 					<xsd:element name="messageID" type="xsd:int"/>
@@ -77,52 +64,88 @@
 		        </restriction>
 		    </xsd:complexContent>
 		</xsd:complexType>
-		<xsd:complexType name="productPricesUpdateList">
-			<xsd:sequence>
-				<xsd:element name="productPricesUpdateListItem" type="tns:productPricesUpdateListItem" minOccurs="0" maxOccurs="unbounded"/>
-			</xsd:sequence>
+
+		<xsd:complexType name="updateProductsPricesStocks">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="productsPricesUpdateList" type="tns:productsPricesUpdateList" nillable="true" />
+				<xsd:element name="productsStocksUpdateList" type="tns:productsStocksUpdateList" nillable="true" />
+			</xsd:all>
 		</xsd:complexType>
-		<xsd:element name="productPricesUpdateListItem">
-			<xsd:complexType>
-				<xsd:all>
-					<xsd:element name="sku" type="xsd:string"/>
-					<xsd:element name="priceTypeList" type="tns:priceTypeList"/>
-				</xsd:all>
-			</xsd:complexType>
-		</xsd:element>
-		<xsd:complexType name="priceTypeList">
+		<xsd:complexType name="updateProductsPricesStocksResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="productsPricesUpdateList">
 			<xsd:complexContent>
 				<restriction base="SOAP-ENC:Array">
 					<xsd:sequence>
-						<xsd:element name="priceTypeListItem" type="tns:priceTypeListItem" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="product" type="tns:productsPricesUpdateListItem" minOccurs="1" maxOccurs="unbounded"/>
 					</xsd:sequence>
 				</restriction>
 			</xsd:complexContent>
 		</xsd:complexType>
-		<xsd:element name="priceTypeListItem">
-			<xsd:complexType>
-				<xsd:all>
-					<xsd:element name="priceType" type="xsd:string"/>
-					<xsd:element name="priceValue" type="xsd:string"/>
-				</xsd:all>
-			</xsd:complexType>
-		</xsd:element>
-		<xsd:complexType name="productStockUpdateList">
-			<xsd:sequence>
-				<xsd:element name="productStockUpdateListItem" type="tns:productStockUpdateListItem" minOccurs="0" maxOccurs="unbounded"/>
-			</xsd:sequence>
+		<xsd:complexType name="productsPricesUpdateListItem">
+			<xsd:all>
+				<xsd:element name="sku" type="xsd:string"/>
+				<xsd:element name="pricesTypesList" type="tns:pricesTypesList"/>
+			</xsd:all>
 		</xsd:complexType>
+		<xsd:complexType name="pricesTypesList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="priceType" type="tns:pricesTypesListItem" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="pricesTypesListItem">
+			<xsd:all>
+				<xsd:element name="priceType" type="xsd:string"/>
+				<xsd:element name="priceValue" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="productsStocksUpdateList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="product" type="tns:productsStocksUpdateListItem" minOccurs="1" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="productsStocksUpdateListItem">
+			<xsd:all>
+				<xsd:element name="sku" type="xsd:string"/>
+				<xsd:element name="posesList" type="tns:posesList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="posesList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="pos" type="tns:posesListItem" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="posesListItem">
+			<xsd:all>
+				<xsd:element name="id" type="xsd:string"/>
+				<xsd:element name="qty" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
 		<xsd:complexType name="messageIDList">
 			<xsd:sequence>
 				<xsd:element name="ID" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		<xsd:complexType name="orderIDList">
-			<xsd:sequence>
-				<xsd:element name="ID" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
-			</xsd:sequence>
-		</xsd:complexType>
-		<xsd:complexType name="productDataList">
 			<xsd:sequence>
 				<xsd:element name="ID" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
 			</xsd:sequence>
