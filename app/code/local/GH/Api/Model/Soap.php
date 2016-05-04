@@ -371,56 +371,34 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 		$type = $request->type;
 		$data = $request->data;
 		$obj = new StdClass();
-		$update = array();
 		
 		try {
 			$user = $this->getUserByToken($token); // Do loginBySessionToken
 			$vendor = $user->getVendor();
+			$vendorId = $vendor->getId();
 			
-			// Prepare data
-			if ($type == 'price') {
-				$update = array(
-					'ProductPricesUpdate' => array (
-						0 => array (
-							'merchant' => $vendor->getId(),
-							'data' => array (
-								'TOT049' => array (
-									'A' => 610,
-									'B' => 610,
-									'salePriceBefore' => 1000,
-								),
-								'5768-M' => array (
-									'A' => 31.9,
-									'B' => 32.9
-								)
-							)
-						)
-					)
-				);
-			} else { // stock
-				$update = array(
-					'ProductStockUpdate' => array (
-						0 => array (
-							'merchant' => $vendor->getId(),
-							'data' => array (
-								'25768-L' => array (
-									'POS1' => 5,
-									'POS2' => 0,
-								),
-								'5768-M' => array (
-									'POS1' => 3,
-									'POS2' => 1,
-								)
-							)
-						)
-					)
-				);
+			// Check if type is valid
+			$this->getHelper()->validateProductsUpdateType($type);
+			
+			// Check if is sth to prepare
+			if (empty($data)) Mage::throwException('error_empty_update_products_data');
+			
+			// Prepare data - from SKUV to SKU
+			$batch = array();
+			foreach ($data as $skuV => $item) {
+				$sku = $vendorId . "-" . $skuV;
+				$batch[$sku] = $item;
 			}
-			
+			$this->getHelper()->validateSkus($batch);
+
 			// push it
-			/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $obj */
-			$obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-			$obj->api2($update);
+			/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
+			$restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+			if ($type == 'price') {
+				$restApi::updatePricesConverter($batch);
+			} else {
+				$restApi::updateStockConverter($batch);
+			}
 			
 			$message = 'ok';
 			$status = true;

@@ -50,6 +50,23 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
         return $d && $d->format($format) == $date;
     }
 
+	/**
+	 * @param $type
+	 * @return bool
+	 * @throws Mage_Core_Exception
+	 */
+	public function validateProductsUpdateType($type) {
+		if (!in_array($type, array('price', 'stock'))) {
+			Mage::throwException('error_invalid_update_products_type');
+		}
+		return true;
+	}
+
+	public function validateSkus($data) {
+
+		return true;
+	}
+
     /**
      * @return void
      * @throws Mage_Core_Exception
