@@ -107,6 +107,7 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 			}
 
 			// Build products array.
+			/** @var Mage_Sales_Model_Order_Item $item */
 			foreach ($order->getAllVisibleItems() as $item) {
 				$product = Mage::getModel("zolagocatalog/product")->load($item->getProductId());
 				/** @var Zolago_Catalog_Model_Product $product */
@@ -139,6 +140,9 @@ class GH_GTM_Block_Gtm extends Shopgo_GTM_Block_Gtm {
 						'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
 						'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
 					);
+					// Add MSRP only if exist
+					if ($msrp = (double)number_format($product->getMsrp(),2,'.','')) $products[$item->getSku()]['msrp_incl_tax'] = $msrp;
+
 					$children = $item->getChildrenItems();
 					if (!empty($children) && isset($children[0])) {
 						$products[$item->getSku()]['variant'] = $children[0]->getProduct()->getAttributeText('size');

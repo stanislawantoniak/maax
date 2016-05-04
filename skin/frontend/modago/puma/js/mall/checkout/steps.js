@@ -656,7 +656,7 @@
                 var deffered,
                     self = this;
 
-                if (!confirm("Are you sure?")) {
+                if (!confirm(Mall.translate.__("address-you-sure?"))) {
                     return false;
                 }
 

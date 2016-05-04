@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * Logic:
+ * When new PO is created we try to assign POS to PO
+ * We do this only when Vendor have only one POS
+ * Otherwise we left setting POS to PO for cron
+ * because we need to ask converter about qty
+ * and this take a some time
+ * 
+ * Class Zolago_Pos_Model_Observer
+ */
 class Zolago_Pos_Model_Observer {
 
 	const ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT = 100;
@@ -38,7 +49,8 @@ class Zolago_Pos_Model_Observer {
 		$collection->addActiveFilter();
 		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
 
-		if ($collection->count() == 1)
+		$count = count($collection->getData()); // faster than $collection->count()
+		if ($count == 1)
 			return $collection->getFirstItem();
 
 
@@ -52,11 +64,9 @@ class Zolago_Pos_Model_Observer {
 	}
 
 	public static function getVendorPOSes($vendorId){
-		$vendor = Mage::getModel("udropship/vendor")->load($vendorId);
-		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
-		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
-		$collection->addVendorFilter($vendor);
+		$collection = Mage::getResourceModel("zolagopos/pos_collection");
+		$collection->addVendorFilter($vendorId);
 		$collection->addActiveFilter();
 		$collection->setOrder("priority", Varien_Data_Collection::SORT_ORDER_DESC);
 		return $collection;
@@ -184,6 +194,9 @@ class Zolago_Pos_Model_Observer {
 		if (empty($qtysFromConverter))
 			return;
 
+		/** @var Zolago_Po_Helper_Data $udpoHelper */
+		$udpoHelper = Mage::helper('udpo');
+		
 		$collectionPO = Mage::getModel("udropship/po")->getCollection();
 		$collectionPO->addFieldToFilter("entity_id", array("in" => array_keys($posesToAssign)));
 
@@ -210,6 +223,7 @@ class Zolago_Pos_Model_Observer {
 				$udpo->setDefaultPosName($poses[$posesToAssign[$udpo->getId()]]);
 				$udpo->save();
 			}
+			$udpoHelper->sendVendorNotification($udpo);
 		}
 
     }
