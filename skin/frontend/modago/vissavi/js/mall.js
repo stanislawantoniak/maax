@@ -1865,7 +1865,7 @@ Mall.Utm = {
 jQuery(document).ready(function() {
 	Mall.Gtm.init();
 	Mall.Utm.init();
-	if (Mall.reg.get('store_code') != 'default') {
+	if (Mall.reg.get('package_skin') != 'modago_gallery') {
 		Mall.createInlineSvgs();
 	}
     Mall.CustomEvents.init(300);

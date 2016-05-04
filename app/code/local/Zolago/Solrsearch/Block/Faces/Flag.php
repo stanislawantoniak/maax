@@ -95,4 +95,9 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 
         return $name;
     }
+
+    // Can show filter block
+    public function getCanShow() {
+        return true;
+    }
 }

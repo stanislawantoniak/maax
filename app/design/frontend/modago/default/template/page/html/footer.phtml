@@ -3,5 +3,5 @@
 echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer-website')->toHtml(); ?>
 <script>
 	Mall.reg.set('persistent_url', '<?php echo str_replace(array('http://','https://'),array('//','//'), Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true))); ?>');
-	Mall.reg.set('store_code', '<?php echo Mage::app()->getStore()->getCode(); ?>');
+	Mall.reg.set('package_skin', '<?php echo Mage::getDesign()->getPackageName() . "_" . Mage::getDesign()->getTheme('skin'); ?>');
 </script>
