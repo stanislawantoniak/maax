@@ -195,6 +195,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 	 * @param GH_Api_Block_Dropship_Answer $block
 	 */
 	public function _prepareUpdateProductsPricesStocks($block) {
+		/** @var GH_Api_Model_Soap_Client $client */
 		$client   = $this->_getClient($block);
 		/** @var Mage_Core_Controller_Request_Http $request */
 		$request  = $this->getRequest();
@@ -202,7 +203,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 		$type     = $request->get('type');
 		$data     = $request->get('data');
 
-		$client->getUpdateProductsPricesStocks($token, $type, $data); // todo
+		$client->updateProductsPricesStocks($token, $type, $data);
 	}
 
     /**

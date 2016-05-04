@@ -137,6 +137,22 @@ class GH_Api_Model_Soap_Client  {
         $this->_query('getCategories', $obj);
     }
 
+	/**
+	 * test for getUpdateProductsPricesStocks
+	 *
+	 * @param $token
+	 * @param $type
+	 * @param $data
+	 */
+	public function updateProductsPricesStocks($token, $type, $data) {
+		$obj = new StdClass();
+		$obj->sessionToken = trim($token);
+		$obj->type = $type;
+		$obj->data = $data;
+		$this->_query('updateProductsPricesStocks', $obj);
+		/** @see GH_Api_Model_Soap::updateProductsPricesStocks() */
+	}
+
     /**
      * xml formatter
      * @param string $xml
@@ -164,10 +180,12 @@ class GH_Api_Model_Soap_Client  {
     protected function _query($name,$parameters) {
         $testFlag = (bool)Mage::getConfig()->getNode('global/test_server');
         $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'trace' => 1);
+		/** @var GH_Api_Helper_Data $helper */
+		$helper = Mage::helper('ghapi');
         if ($testFlag) {
-            $url = Mage::helper('ghapi')->prepareWsdlUri(Mage::helper('ghapi')->getWsdlTestUrl(),$params);
+            $url = $helper->prepareWsdlUri($helper->getWsdlTestUrl(), $params);
         } else {
-            $url = Mage::helper('ghapi')->getWsdlTestUrl();
+            $url = $helper->getWsdlTestUrl();
         }
         $client = new SoapClient($url,$params);
         $data = array();

@@ -365,6 +365,75 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $obj->status = $status;
         return $obj;
     }
+	
+	public function updateProductsPricesStocks($request) {
+		$token = $request->token;
+		$type = $request->type;
+		$data = $request->data;
+		$obj = new StdClass();
+		$update = array();
+		
+		try {
+			$user = $this->getUserByToken($token); // Do loginBySessionToken
+			$vendor = $user->getVendor();
+			
+			// Prepare data
+			if ($type == 'price') {
+				$update = array(
+					'ProductPricesUpdate' => array (
+						0 => array (
+							'merchant' => $vendor->getId(),
+							'data' => array (
+								'TOT049' => array (
+									'A' => 610,
+									'B' => 610,
+									'salePriceBefore' => 1000,
+								),
+								'5768-M' => array (
+									'A' => 31.9,
+									'B' => 32.9
+								)
+							)
+						)
+					)
+				);
+			} else { // stock
+				$update = array(
+					'ProductStockUpdate' => array (
+						0 => array (
+							'merchant' => $vendor->getId(),
+							'data' => array (
+								'25768-L' => array (
+									'POS1' => 5,
+									'POS2' => 0,
+								),
+								'5768-M' => array (
+									'POS1' => 3,
+									'POS2' => 1,
+								)
+							)
+						)
+					)
+				);
+			}
+			
+			// push it
+			/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $obj */
+			$obj = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+			$obj->api2($update);
+			
+			$message = 'ok';
+			$status = true;
+			
+		} catch (Exception $e) {
+			$message = $e->getMessage();
+			$status = false;
+		}
+		
+		$obj->message = $message;
+		$obj->status = $status;
+		return $obj;
+	}
 
     /**
      * @return GH_Api_Model_Message
