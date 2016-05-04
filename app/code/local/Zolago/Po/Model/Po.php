@@ -879,7 +879,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
             $list[$i]['order_total']              = $po->getGrandTotalInclTax();
             $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
             $list[$i]['order_due_amount']         = $dueAmount;
-            $list[$i]['delivery_method']          = $this->getApiDeliveryMethod();
+            $list[$i]['delivery_method']          = $po->getApiDeliveryMethod();
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
