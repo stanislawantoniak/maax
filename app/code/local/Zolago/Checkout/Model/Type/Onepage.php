@@ -609,9 +609,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customer = $this->getCustomerSession()->getCustomer();
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             $customerBilling = $billing->exportCustomerAddress();
-            if(!$lockerId){
+            //if(!$lockerId){
                $customer->addAddress($customerBilling); 
-            }           
+            //}
 
 
             $billing->setCustomerAddress($customerBilling);
