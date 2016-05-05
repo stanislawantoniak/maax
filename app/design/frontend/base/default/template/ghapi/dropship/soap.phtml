@@ -193,16 +193,51 @@ jQuery(function ($) {
 			priceZ = jQuery('#price-z').val(),
 			msrp   = jQuery('#price-salePriceBefore').val(),
 			market = jQuery('#price-marketPrice').val(),
+			product= {},
 			params = {
 				action : 'updateProductsPricesStocks',
-				token  : token,
+				token  : token
 			};
 
 		if (usePrice) {
-			// todo
+			product = {};
+			product.sku = sku;
+			product.pricesTypesList = [];
+
+			var obj = {
+				"A": priceA,
+				"B": priceB,
+				"C": priceC,
+				"Z": priceZ,
+				"salePriceBefore": msrp,
+				"marketPrice": market
+			};
+
+			for (var prop in obj) {
+				if (obj.hasOwnProperty(prop)) {
+					if (obj[prop].length)
+						product.pricesTypesList.push({
+							priceType: prop,
+							priceValue: obj[prop]
+						});
+				}
+			}
+
+			params.productsPricesUpdateList = [];
+			params.productsPricesUpdateList.push(product);
 		}
 		if (useStock) {
-			// todo
+			product = {};
+			product.sku = sku;
+			product.posesList = [];
+
+			product.posesList.push({
+				id: posId,
+				qty: qty
+			});
+
+			params.productsStocksUpdateList = [];
+			params.productsStocksUpdateList.push(product);
 		}
 		doSoapAjax(params,'update_products');
 	}
