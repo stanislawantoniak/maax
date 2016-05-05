@@ -65,6 +65,7 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $pack->addChild('packType',$settings['size']);
         $pack->addChild('addresseeEmail',$udpo->getCustomerEmail());
         $pack->addChild('phoneNum',$settings['phoneNumber']);
+        $pack->addChild('dispatchPointName',$settings['dispatchPointName']);
         $data['content'] = $this->_xmlMessage->asXML();
         return $data;
      }
