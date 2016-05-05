@@ -4,6 +4,12 @@ $modagoHelper = Mage::helper('zolagomodago');
 $formKey = Mage::getSingleton('core/session')->getFormKey();
 $quote = $this->getQuote();
 $billingAddress = $quote->getBillingAddress();
+
+
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+/* @var $locker GH_Inpost_Model_Locker  */
+$locker		= $this->getInpostLocker();
+$lockerId = $locker->getId();
 ?>
 
 <?php echo $this->getStep1Sidebar(); ?>
@@ -14,6 +20,22 @@ $billingAddress = $quote->getBillingAddress();
 		</header>
 		<form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
         <input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+
+
+			<?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>
+				<?php foreach ($selectedShipping["methods"] as $vendorId => $methodSelected): ?>
+					<input type="hidden"
+						   name="shipping_method[<?php echo $vendorId; ?>]"
+						   value="<?php echo $methodSelected; ?>" />
+				<?php endforeach; ?>
+				<?php if (isset($selectedShipping["shipping_point_code"])): ?>
+					<input type="hidden" name="shipping_point_code"
+						   data-id="<?php echo $lockerId; ?>"
+						   data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
+						   value="<?php echo $locker->getName(); ?>" />
+				<?php endif; ?>
+			<?php endif; ?>
+
             <input type="hidden" id="customer_logged_in" name="customer_logged_in" value="<?php echo (int) $this->isCustomerLoggedIn(); ?>">
 			<fieldset>
 				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
