@@ -208,68 +208,68 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 			'productsStocksUpdateList' => $productsStocksUpdateList
 		);
 
-		$update = array(
-			'productsPricesUpdateList' => array(
-				array(
-					'sku' => '05B151-4-150',
-					'pricesTypesList' => array(
-						//priceTypeItem
-						array(
-							'priceType' => 'A',
-							'priceValue' => '10'
-						),
-						//priceTypeItem
-						array(
-							'priceType' => 'B',
-							'priceValue' => '120.99'
-						)
-					)
-				),
-				array(
-					'sku' => '05B151-4-151',
-					'pricesTypesList' => array(
-						//priceTypeItem
-						array(
-							'priceType' => 'A',
-							'priceValue' => '20'
-						),
-						//priceTypeItem
-						array(
-							'priceType' => 'B',
-							'priceValue' => '150.99'
-						)
-					)
-				)
-			),
-			'productsStocksUpdateList' => array(
-				array(
-					'sku' => '05B151-4-150',
-					'posesList' => array(
-						array(
-							'id' => 'MAGAZYN',
-							'qty' => '5'
-						),
-						array(
-							'id' => 'BB',
-							'qty' => '6'
-						)
-					)
-				),
-				array(
-					'sku' => '05B151-4-151',
-					'posesList' => array(
-						array(
-							'id' => 'MAGAZYN',
-							'qty' => '7'
-						),
-						array(
-							'id' => 'BB',
-							'qty' => '8'
-						)
-					),
-				)
-			)
-		);
+//		$update = array(
+//			'productsPricesUpdateList' => array(
+//				array(
+//					'sku' => '05B151-4-150',
+//					'pricesTypesList' => array(
+//						//priceTypeItem
+//						array(
+//							'priceType' => 'A',
+//							'priceValue' => '10'
+//						),
+//						//priceTypeItem
+//						array(
+//							'priceType' => 'B',
+//							'priceValue' => '120.99'
+//						)
+//					)
+//				),
+//				array(
+//					'sku' => '05B151-4-151',
+//					'pricesTypesList' => array(
+//						//priceTypeItem
+//						array(
+//							'priceType' => 'A',
+//							'priceValue' => '20'
+//						),
+//						//priceTypeItem
+//						array(
+//							'priceType' => 'B',
+//							'priceValue' => '150.99'
+//						)
+//					)
+//				)
+//			),
+//			'productsStocksUpdateList' => array(
+//				array(
+//					'sku' => '05B151-4-150',
+//					'posesList' => array(
+//						array(
+//							'id' => 'SKLEP',
+//							'qty' => '5'
+//						),
+//						array(
+//							'id' => 'BB',
+//							'qty' => '6'
+//						)
+//					)
+//				),
+//				array(
+//					'sku' => '05B151-4-151',
+//					'posesList' => array(
+//						array(
+//							'id' => 'SKLEP',
+//							'qty' => '1'
+//						),
+//						array(
+//							'id' => 'BB',
+//							'qty' => '8'
+//						)
+//					),
+//				)
+//			)
+//		);
 		
 		$client->updateProductsPricesStocks($token, $update);
 	}
@@ -278,7 +278,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
      * Ajax function from testing soap
      */
      public function testAction() {
-		 ini_set("soap.wsdl_cache_enabled", 0); // todo remove it after done
+		 //ini_set("soap.wsdl_cache_enabled", 0); // todo remove it after done
          $this->loadLayout();
          /** @var GH_Api_Block_Dropship_Answer $block */
          $block = $this->getLayout()->createBlock('ghapi/dropship_answer')->setTemplate('ghapi/dropship/soap/ajaxAnswer.phtml');

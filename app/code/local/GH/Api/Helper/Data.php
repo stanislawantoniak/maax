@@ -174,7 +174,8 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
 		// get skuv from sku
 		foreach ($allErrorsSkus as $key => $sku) {
-			$allErrorsSkus[$key] = preg_replace('/' . preg_quote($vendorId . '-', '/') . '/', '', $sku, 1);
+			$allErrorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$allErrorsSkus = array_unique($allErrorsSkus);
 		}
 		if (!empty($allErrorsSkus)) {
 			Mage::throwException('error_invalid_update_products_sku' . ' (' . implode(',', $allErrorsSkus) . ')');
@@ -183,23 +184,65 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		return true;
 	}
 
-	public function validatePrices($data) {
-		foreach ($data as $sku => $vendor) {
-			
+	public function getSkuvFromSku($sku, $vendorId) {
+		return preg_replace('/' . preg_quote($vendorId . '-', '/') . '/', '', $sku, 1);
+	}
+
+	public function validatePrices($data, $vendorId) {
+		$errorsSkus = array();
+		foreach ($data as $sku => $item) {
+			foreach ($item as $type => $price) {
+				if ($price <= 0) {
+					$errorsSkus[] = $sku;
+				}
+			}
+		}
+		foreach ($errorsSkus as $key => $sku) {
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$errorsSkus = array_unique($errorsSkus);
+		}
+		if (!empty($errorsSkus)) {
+			Mage::throwException("error_invalid_update_products_price (". implode(',', $errorsSkus) . ')');
 		}
 		return true;
 	}
 
-	public function validateQtys($data) {
-		foreach ($data as $sku => $vendor) {
-
+	public function validateQtys($data, $vendorId) {
+		$errorsSkus = array();
+		foreach ($data as $sku => $pos) {
+			foreach ($pos as $id => $qty) {
+				if (!is_numeric($qty)) {
+					$errorsSkus[] = $sku;
+				}
+			}
+		}
+		foreach ($errorsSkus as $key => $sku) {
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$errorsSkus = array_unique($errorsSkus);
+		}
+		if (!empty($errorsSkus)) {
+			Mage::throwException("error_invalid_update_products_qty (". implode(',', $errorsSkus) . ')');
 		}
 		return true;
 	}
 
-	public function validatePoses($data) {
-		foreach ($data as $sku => $vendor) {
-
+	public function validatePoses($data, $vendorId) {
+		/** @var Zolago_Pos_Helper_Data $helper */
+		$helper = Mage::helper('zolagopos');
+		$errorsSkus = array();
+		foreach ($data as $sku => $pos) {
+			foreach ($pos as $id => $qty) {
+				if (!$helper->isValidForVendor($id, $vendorId)) {
+					$errorsSkus[] = $sku . "[POS:{$id}]";
+				}
+			}
+		}
+		foreach ($errorsSkus as $key => $sku) {
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$errorsSkus = array_unique($errorsSkus);
+		}
+		if (!empty($errorsSkus)) {
+			Mage::throwException("error_invalid_update_products_pos_id (". implode(',', $errorsSkus) . ')');
 		}
 		return true;
 	}

@@ -386,14 +386,14 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 			$priceBatch = $this->getHelper()->preparePriceBatch($priceData, $vendorId);
 			$stockBatch = $this->getHelper()->prepareStockBatch($stockData, $vendorId);
 
-			//$this->getHelper()->validateSkus(array_merge($priceBatch, $stockBatch), $vendorId); TODO reformat
+			$this->getHelper()->validateSkus(array_merge($priceBatch, isset($stockBatch[$vendorId]) ? $stockBatch[$vendorId] : array()), $vendorId);
 
 			if (!empty($priceBatch)) {
-				$this->getHelper()->validatePrices($priceBatch);
+				$this->getHelper()->validatePrices($priceBatch, $vendorId);
 			}
 			if (!empty($stockBatch)) {
-				$this->getHelper()->validatePoses($stockBatch);
-				$this->getHelper()->validateQtys($stockBatch);
+				$this->getHelper()->validatePoses($stockBatch[$vendorId], $vendorId);
+				$this->getHelper()->validateQtys($stockBatch[$vendorId], $vendorId);
 			}
 
 			// update it
