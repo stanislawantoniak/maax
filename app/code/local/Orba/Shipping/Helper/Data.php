@@ -95,4 +95,26 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
          }
          return $model;
      }
+     
+     
+    /**
+     * get shipping helper by code
+     */
+
+     public function getShippingHelper($carrier) {
+         switch ($carrier) {
+             case Orba_Shipping_Model_Carrier_Dhl::CODE:
+                 $helper = Mage::helper('orbashipping/carrier_dhl');
+                 break;
+             case Orba_Shipping_Model_Carrier_Ups::CODE:
+                 $helper = Mage::helper('orbashipping/carrier_ups');
+                 break;
+             case Orba_Shipping_Model_Packstation_Inpost::CODE:
+                 $helper = Mage::helper('orbashipping/packstation_inpost');
+                 break;
+             default:
+                 $helper = null;
+         }
+         return $helper;         
+     }
 }

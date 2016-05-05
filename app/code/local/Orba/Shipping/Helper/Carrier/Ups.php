@@ -117,23 +117,6 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
     }
 
 
-    /**
-     * Get Ups Next Check Date
-     *
-     * @param integer $storeId
-     *
-     * @return date	Date Object of Next Check
-     */
-    public function getNextUpsCheck($storeId)
-    {
-        $repeatIn = Mage::getStoreConfig('carriers/orbaups/repeat_tracking', $storeId);
-        if ($repeatIn <= 0) {
-            $repeatIn = 1;
-        }
-        $repeatIn = $repeatIn*60*60;
-        $time = Mage::getModel('core/date')->timestamp();
-        return date('Y-m-d H:i:s', $time+$repeatIn);
-    }
 
     public function getUpsFileDir()
     {
@@ -250,49 +233,42 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
                 . $this->__('Time: ') . date('Y-m-d H:i:s',strtotime($singleEvent->Date.$singleEvent->Time)) . PHP_EOL.PHP_EOL;
         }
     }
+
+    
     /**
-     * Process Single Ups Track and Trace Record
-     *
-     * @param type $track
-     * @param type $upsResult
-     *
-     * @return boolean
+     * parsing track response
      */
-    protected function _processTrackStatus($track, $upsResult) {
-        $upsMessage = array();
-        $status			= $this->__('Ready to Ship');
-        $shipmentIdMessage = '';
-        $shipment		= $track->getShipment();
-        $oldStatus = $track->getUdropshipStatus();
-        if (is_array($upsResult) && array_key_exists('error', $upsResult)) {
+     protected function _parseTrackResponse($track,$result,&$message,&$status,&$shipmentIdMessage) {
+         
+        if (is_array($result) && array_key_exists('error', $result)) {
             //Ups Error Scenario
-            Mage::helper('orbashipping/carrier_ups')->_log('UPS Service Error: ' .$upsResult['error']);
-            $upsMessage[] = 'UPS Service Error: ' .$upsResult['error'];
+            $this->_log('UPS Service Error: ' .$result['error']);
+            $message[] = 'UPS Service Error: ' .$result['error'];
         }
-        elseif (property_exists($upsResult, 'Shipment')) {
-            $number = empty($upsResult->Shipment->InquiryNumber->Value)? $upsResult->Shipment->ReferenceNumber->Value: $upsResult->Shipment->InquiryNumber->Value;
+        elseif (property_exists($result, 'Shipment')) {
+            $number = empty($result->Shipment->InquiryNumber->Value)? $result->Shipment->ReferenceNumber->Value: $result->Shipment->InquiryNumber->Value;
             $shipmentIdMessage = $this->__('Tracking ID') . ': '. $number . PHP_EOL;
-            if (!empty($upsResult->Shipment->PickupDate))  {
-                    $date = strtotime($upsResult->Shipment->PickupDate);
+            if (!empty($result->Shipment->PickupDate))  {
+                    $date = strtotime($result->Shipment->PickupDate);
                     $track->setShippedDate(date('Y-m-d H:i:s',$date));
             }
 
-            if (!empty($upsResult->Shipment->CurrentStatus->Code)) {
-                $status = $this->_parseStatusCode($upsResult->Shipment->CurrentStatus->Code,$track);
-                if (isset($upsResult->Shipment->Activity)) {
-                    if (is_array($upsResult->Shipment->Activity)) {
-                        $events = array_reverse($upsResult->Shipment->Activity);
+            if (!empty($result->Shipment->CurrentStatus->Code)) {
+                $status = $this->_parseStatusCode($result->Shipment->CurrentStatus->Code,$track);
+                if (isset($result->Shipment->Activity)) {
+                    if (is_array($result->Shipment->Activity)) {
+                        $events = array_reverse($result->Shipment->Activity);
                     } else {
-                        $events = array($upsResult->Shipment->Activity);
+                        $events = array($result->Shipment->Activity);
                     }
-                    $this->_parseActivity($events,$upsMessage);
+                    $this->_parseActivity($events,$message);
                 }
-            } elseif (!empty($upsResult->Shipment->Package)) {
+            } elseif (!empty($result->Shipment->Package)) {
             
-                if (!is_array($upsResult->Shipment->Package)) {
-                    $package = array($upsResult->Shipment->Package);
+                if (!is_array($result->Shipment->Package)) {
+                    $package = array($result->Shipment->Package);
                 } else {
-                    $package = $upsResult->Shipment->Package;
+                    $package = $result->Shipment->Package;
                 }
                 foreach ($package as $pack) {
                     if ($pack->Activity) {
@@ -301,7 +277,7 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
                         } else {
                             $events = array($pack->Activity);
                         }
-                        $this->_parseActivity($events,$upsMessage);
+                        $this->_parseActivity($events,$message);
                         foreach ($events as $event) {
                             if (isset($event->Status->Type)) {
                                 $trackingNumber = isset($event->TrackingNumber)? $event->TrackingNumber:'';
@@ -327,27 +303,9 @@ class Orba_Shipping_Helper_Carrier_Ups extends Orba_Shipping_Helper_Carrier {
         }
         else {
             //UPS Scenario: No T&T Data Recieved
-            Mage::helper('orbashipping/carrier_ups')->_log('UPS Service Error: Missing Track and Trace Data');
-            $dhlMessage[] = $this->__('UPS Service Error: Missing Track and Trace Data');
+            $this->_log('UPS Service Error: Missing Track and Trace Data');
+            $message[] = $this->__('UPS Service Error: Missing Track and Trace Data');
         }
-        if ($oldStatus != $track->getUdropshipStatus()) {
-            $this->_trackingHelper->addComment($track,$shipmentIdMessage,$upsMessage,$status);
-        }
-        if (!in_array($status, array($this->__('Delivered'), $this->__('Returned'), $this->__('Canceled')))) {
-            $track->setNextCheck(Mage::helper('orbashipping/carrier_ups')->getNextUpsCheck($shipment->getOrder()->getStoreId()));
-        }
-
-        try {
-            $track->setWebApi(true);
-            $track->save();
-            $track->getShipment()->save();
-        } catch (Exception $e) {
-            Mage::logException($e);
-            return false;
-        }
-
-        return true;
-    }
-
+     }
 
 }

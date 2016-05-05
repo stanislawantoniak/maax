@@ -218,6 +218,16 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
          }
          return $result;
      }
-
+     
+    /**
+     *  tracking
+     */
+     public function getPackStatus($number) {
+         $data = array( 
+             'packcode' => $number
+         );
+         $result = $this->_sendMessage('getpackstatus',$data);
+         return $this->_prepareResult($result);
+     }
 }
 

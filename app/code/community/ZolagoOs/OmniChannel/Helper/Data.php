@@ -1350,7 +1350,6 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function collectTracking($tracks)
     {
-        Mage::log('collectTracking',null, 'sdfsdfsdfsdf.log');
         $requests = array();
         foreach ($tracks as $track) {
             $cCode = $track->getCarrierCode();
