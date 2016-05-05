@@ -201,7 +201,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
              Mage::throwException(Mage::helper('zolagorma')->__('No tracking number'));
          }
          $ioAdapter = new Varien_Io_File();
-         $dhlFile = Mage::helper('orbashipping/carrier_dhl')->getDhlFileDir() . $number . '.pdf';
+         $dhlFile = Mage::helper('orbashipping/carrier_dhl')->getFileDir() . $number . '.pdf';
          return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
      }
     /**

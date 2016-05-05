@@ -2,8 +2,6 @@
 
 class GH_Inpost_Model_Resource_Api extends Mage_Core_Model_Resource_Db_Abstract {
 
-	const INPOST_API_URL = "http://api.paczkomaty.pl/";
-
 	protected function _construct() {
 		$this->_init('ghinpost/locker', 'id');
 	}
@@ -17,46 +15,36 @@ class GH_Inpost_Model_Resource_Api extends Mage_Core_Model_Resource_Db_Abstract 
 		try {
 			$transaction->beginTransaction();
 
-			$process = curl_init(self::INPOST_API_URL . "?do=listmachines_xml");
-			curl_setopt($process, CURLOPT_TIMEOUT, 30);
-			curl_setopt($process, CURLOPT_HTTPGET, 1);
-			curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($process);
-
-			if (curl_errno($process) > 0) {
-				Mage::log("ERROR NO:" . curl_errno($process), null, 'inpost-api.log');
-			} else {
-				curl_close($process);
-
-				// trick for xml to array
-				$xml = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
-				$json = json_encode($xml);
-				$array = json_decode($json, TRUE);
-
-				$updatesIds = array();
-				foreach ($array as $root) {
-					foreach ($root as $machines) {
-						$data = $this->processDataFromListmachines($machines);
-						$locker = $collection->getItemByColumnValue('name', $data['name']);
-						if (is_null($locker)) {
-							// New locker if don't exist
-							$locker = Mage::getModel("ghinpost/locker");
-						}
-						$locker->addData($data);
-						$locker->save();
-						$updatesIds[] = $locker->getId();
+			$settings = Mage::helper('ghinpost')->getApiSettings(null,null);
+			/** @var Orba_Shipping_Model_Packstation_Client_Inpost $client */
+			$client = Mage::getModel('orbashipping/packstation_client_inpost');
+			$client->setShipmentSettings($settings);
+			$array = $client->getListMachines();
+			
+			$updatesIds = array();
+			foreach ($array as $root) {
+				foreach ($root as $machines) {
+					$data = $this->processDataFromListmachines($machines);
+					$locker = $collection->getItemByColumnValue('name', $data['name']);
+					if (is_null($locker)) {
+						// New locker if don't exist
+						$locker = Mage::getModel("ghinpost/locker");
 					}
-				}
-				// Set not active for no longer existing lockers
-				/** @var GH_Inpost_Model_Resource_Locker_Collection $collection */
-				$collection = Mage::getResourceModel("ghinpost/locker_collection");
-				$collection->addFieldToFilter('id', array('nin' => $updatesIds));
-				foreach ($collection as $locker) {
-					/** @var GH_Inpost_Model_Locker $locker */
-					$locker->setIsActive(0);
+					$locker->addData($data);
 					$locker->save();
+					$updatesIds[] = $locker->getId();
 				}
 			}
+			// Set not active for no longer existing lockers
+			/** @var GH_Inpost_Model_Resource_Locker_Collection $collection */
+			$collection = Mage::getResourceModel("ghinpost/locker_collection");
+			$collection->addFieldToFilter('id', array('nin' => $updatesIds));
+			foreach ($collection as $locker) {
+				/** @var GH_Inpost_Model_Locker $locker */
+				$locker->setIsActive(0);
+				$locker->save();
+			}
+			
 			$transaction->commit();
 		} catch (Exception $e) {
 			$transaction->rollBack();

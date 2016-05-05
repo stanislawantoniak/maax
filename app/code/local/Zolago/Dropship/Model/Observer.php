@@ -144,8 +144,9 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
         $time = Mage::getModel('core/date')->timestamp();
         $track = $observer->getEvent()->getTrack();
         $carrierCode = $track->getCarrierCode();
+		$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
 
-        if (in_array($carrierCode,array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))
+        if (in_array($carrierCode,$allowCarriers)
                 && Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
                 && !$track->getWebApi()) {
             $track->setNextCheck(date('Y-m-d H:i:s', $time));

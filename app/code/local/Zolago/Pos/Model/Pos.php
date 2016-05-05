@@ -126,6 +126,16 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
         );
         return $address;
     }
-
+    
+    /**
+     * availability hours
+     * @return string
+     */
+    public function getAvailabilityHours() {
+        if (!$hours = $this->getMapTimeOpened()) {
+            $hours = Mage::getStoreConfig('carriers/ghinpost/open_hours');
+        }
+        return $hours;
+    }
 }
 

@@ -42,7 +42,12 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			if($aggregated->getId()){
 				$aggregated->delete();
 			}
-			
+			// Clear tracking
+            $trackList = $shipment->getAllTracks();
+            foreach ($trackList as $track) {
+                $manager = Mage::helper('orbashipping')->getShippingManager($track->getCarrierCode());
+                $manager->cancelTrack($track);
+            }
 			// Clear current carrier
 			$po->setCurrentCarrier(null);
 			$po->getResource()->saveAttribute($po, "current_carrier");
