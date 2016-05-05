@@ -53,7 +53,7 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
     protected function _getDispatchPointName() {
         $client = $this->getClient();
         $settings = $this->_settings;
-        $name = empty($settings['pos'])? '':$settings['pos']->getName();
+        $name = empty($settings['pos'])? '':(empty($settings['pos']->getExternalId())? $settings['pos']->getName():$settings['pos']->getExternalId());
         $point = $client->getDispatchPoint($name);
         if (!empty($point['error'])) {
             Mage::throwException($point['error']);
@@ -63,7 +63,11 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
             $ret = $client->createDispatchPoint($pos);
             if (empty($ret['status']) ||
                 $ret['status'] != 'OK') {
-                Mage::throwException(Mage::helper('ghinpost')->__('Cannot create dispatch point'));
+                if (!empty($ret['error'])) {
+                    Mage::throwException($ret['error']);
+                } else {
+                    Mage::throwException(Mage::helper('ghinpost')->__('Cannot create dispatch point'));
+                }
             }
         }
         return $name;        

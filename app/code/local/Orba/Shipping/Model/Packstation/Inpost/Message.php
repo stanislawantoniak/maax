@@ -31,7 +31,7 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $data['password'] = $password;
         $point = $this->_xmlMessage->addChild('dispatchPoint');
         $params = array (
-                      'name' => $pos->getName(),
+                      'name' => empty($pos->getExternalId())? $pos->getName():$pos->getExternalId(),
                       'postCode' => $pos->getPostcode(),
                       'street' => $pos->getStreet(),
                       'town' => $pos->getCity(),
