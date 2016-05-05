@@ -60,26 +60,14 @@
 							<show_in_store>0</show_in_store>
 							<comment>Value used if open hours not defined in POS</comment>
 						</open_hours>
-<!--						<sallowspecific translate="label">
-							<label>Available for specific countries only</label>
-							<frontend_type>select</frontend_type>
-							<frontend_class>shipping-applicable-country</frontend_class>
-							<source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+						<tracking_url translate="label">
+							<label>Tracking URL</label>
+							<frontend_type>text</frontend_type>
 							<sort_order>30</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>0</show_in_store>
-						</sallowspecific>
-						<specificcountry translate="label">
-							<label>Ship to Specific Countries</label>
-							<frontend_type>multiselect</frontend_type>
-							<sort_order>40</sort_order>
-							<source_model>adminhtml/system_config_source_country</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<can_be_empty>1</can_be_empty>
-						</specificcountry>-->
+						</tracking_url>
 					</fields>
 				</ghinpost>
 			</groups>

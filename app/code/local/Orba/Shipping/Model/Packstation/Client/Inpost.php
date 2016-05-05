@@ -189,7 +189,7 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
                  'message' => 'Shipment ID: ' . implode(',',$data['numbers']),
              );
          } else {
-             $tmp = $this->_prepareResult($xml);             
+             $tmp = $this->_prepareResult($data['data']);             
              if (!empty($tmp['error'])) {
                  $error = $tmp['error'];
              } else {
