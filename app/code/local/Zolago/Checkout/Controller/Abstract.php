@@ -345,6 +345,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 //			$this->_getCheckoutSession()->setInpostLockerName();
 //		}
 
+
 		/**
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
