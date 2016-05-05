@@ -24,11 +24,20 @@ $helper =
 $tracking = $this->getCurrentTracking();
 $trackingUrl = $this->getTrackingUrl();
 $carrier = $this->getCarrierTitle();
-$carrier = $carrier ? $carrier : $_helper->__("Courier");
+
+
+$shippingMethodInfo = $this->getShippingMethodInfo();
+$shippingMethodTitle = $shippingMethodInfo->getUdropshipMethodTitle();
+
+
+$carrier = $carrier ? $carrier : $shippingMethodTitle;
 $status = $po->getUdropshipStatus();
 $sendDate = $this->getSendDate();
 $deliveryDate = $this->getDeliveryDate();
 $shipmentDate = $this->getShipmentDate();
+
+
+
 $iconTruck = '<i class="fa fa-truck fa-2x"></i>';
 $iconTruckOk = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><i class="fa fa-check-circle fa-stack-1x" style="color:#FFF;margin-left:5px;margin-top:-3px;"></i></span>';
 $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><i class="fa fa-times-circle fa-stack-1x" style="color:#FFF;margin-left:5px;margin-top:-3px;"></i></span>';
