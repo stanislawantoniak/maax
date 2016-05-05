@@ -78,4 +78,20 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     public function calculateCharge($track,$rate,$vendor,$packageValue,$isCod) {
         // nothing to do
     }
+    
+    /**
+     * add additional info for track
+     */
+
+    public function processTrack($track,$data) {
+        return;
+    }
+    
+    /**
+     * cancel track 
+     */
+
+    public function cancelTrack($track) {
+        return;
+    }
 }

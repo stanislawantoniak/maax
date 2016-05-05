@@ -323,38 +323,24 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
     public function process($client,$_track) {
         $result = $client->getTrackAndTraceInfo($_track->getTrackNumber());
         //Process Single Track and Trace Object
-        $this->_processDhlTrackStatus($_track, $result);
+        $this->_processTrackStatus($_track, $result);
 
     }
 //}}}
 
-    /**
-     * Process Single Dhl Track and Trace Record
-     *
-     * @param type $track
-     * @param type $dhlResult
-     *
-     * @return boolean
-     */
-    protected function _processDhlTrackStatus($track, $dhlResult) {
-        $dhlMessage = array();
-        $status			= $this->__('Ready to Ship');
-        $shipmentIdMessage = '';
-        $shipment		= $track->getShipment();
-        $oldStatus = $track->getUdropshipStatus();
-
-        if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
+    protected function _parseTrackResponse($track,$result,&$message,&$status,&$shipmentIdMessage) {
+        if (is_array($result) && array_key_exists('error', $result)) {
             //Dhl Error Scenario
-            Mage::helper('orbashipping/carrier_dhl')->_log(Mage::helper('zolagopo')->__('DHL Service Error: %s', $dhlResult['error']));
-            $dhlMessage[] = 'DHL Service Error: ' .$dhlResult['error'];
+            Mage::helper('orbashipping/carrier_dhl')->_log(Mage::helper('zolagopo')->__('DHL Service Error: %s', $result['error']));
+            $message[] = 'DHL Service Error: ' .$result['error'];
         }
-        elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {
-            $shipmentIdMessage = $this->__('Tracking ID') . ': '. $dhlResult->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
-            $events = $dhlResult->getTrackAndTraceInfoResult->events;
+        elseif (property_exists($result, 'getTrackAndTraceInfoResult') && property_exists($result->getTrackAndTraceInfoResult, 'events') && property_exists($result->getTrackAndTraceInfoResult->events, 'item')) {
+            $shipmentIdMessage = $this->__('Tracking ID') . ': '. $result->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
+            $events = $result->getTrackAndTraceInfoResult->events;
             //DHL: Concatenate T&T Message History
             $shipped = false;
             foreach ($events->item as $singleEvent) {
-                $dhlMessage[$singleEvent->status] =
+                $message[$singleEvent->status] =
                     (!empty($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
                     . $this->__('Description: ') . $singleEvent->description . PHP_EOL
                     . $this->__('Terminal: ') . $singleEvent->terminal . PHP_EOL
@@ -404,25 +390,9 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         else {
             //DHL Scenario: No T&T Data Recieved
             Mage::helper('orbashipping/carrier_dhl')->_log('DHL Service Error: Missing Track and Trace Data');
-            $dhlMessage[] = $this->__('DHL Service Error: Missing Track and Trace Data');
-        }
-        if ($oldStatus != $track->getUdropshipStatus()) {
-            $this->_trackingHelper->addComment($track,$shipmentIdMessage,$dhlMessage,$status);
-        }
-        if (!in_array($status, array($this->__('Delivered'), $this->__('Returned'), $this->__('Canceled')))) {
-            $track->setNextCheck(Mage::helper('orbashipping/carrier_dhl')->getNextDhlCheck($shipment->getOrder()->getStoreId()));
+            $message[] = $this->__('DHL Service Error: Missing Track and Trace Data');
         }
 
-        try {
-            $track->setWebApi(true);
-            $track->save();
-            $track->getShipment()->save();
-        } catch (Exception $e) {
-            Mage::logException($e);
-            return false;
-        }
-
-        return true;
     }
 
     /**

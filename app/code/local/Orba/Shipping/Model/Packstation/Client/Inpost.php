@@ -189,7 +189,7 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
                  'message' => 'Shipment ID: ' . implode(',',$data['numbers']),
              );
          } else {
-             $tmp = $this->_prepareResult($xml);             
+             $tmp = $this->_prepareResult($data['data']);             
              if (!empty($tmp['error'])) {
                  $error = $tmp['error'];
              } else {
@@ -202,6 +202,32 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
          }
          return $result;
      }
-
+     
+    /**
+     * cancel package
+     */
+     public function cancelPack($number) {
+         $data = array (	
+             'email' => $this->getAuth('username'),
+             'password' => $this->getAuth('password'),
+             'packcode' => $number             
+         );
+         $result = $this->_sendMessage('cancelpack',$data,'POST');
+         if ($result !== '1') {
+            $result = $this->_prepareResult($result);
+         }
+         return $result;
+     }
+     
+    /**
+     *  tracking
+     */
+     public function getPackStatus($number) {
+         $data = array( 
+             'packcode' => $number
+         );
+         $result = $this->_sendMessage('getpackstatus',$data);
+         return $this->_prepareResult($result);
+     }
 }
 

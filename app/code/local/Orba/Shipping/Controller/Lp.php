@@ -29,7 +29,7 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
 			$file = $helper->getIsFileAvailable($trackNumber);
 			if (!$file) {
 				$webCall = $this->_lpCall($request);
-				if ($webCall['status']) {
+				if (!empty($webCall['status'])) {
 					$file = $helper->getIsFileAvailable($trackNumber);
 				} else {
 					$result['message'] = $webCall['message'];

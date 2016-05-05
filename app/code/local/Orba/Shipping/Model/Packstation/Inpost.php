@@ -85,8 +85,10 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
             $settings['phoneNumber'] = $receiverAddress['telephone'];
             $inpostResult = $this->getClient()->createDeliveryPacks($settings);
             if (empty($inpostResult['pack']['packcode'])) {
-                if ($inpostResult['error']) {
+                if (!empty($inpostResult['error'])) {
                     $error = $inpostResult['error'];
+                } elseif (!empty($inpostResult['pack']['error'])) {
+                    $error = $inpostResult['pack']['error'];                
                 } else {
                     $error = Mage::helper('orbashipping')->__('Cant create package');
                 }
@@ -95,6 +97,7 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
             $code = $inpostResult['pack']['packcode'];
             $message = 'OK';
         } catch (Exception $xt) {
+            Mage::logException($xt);
             $message = $xt->getMessage();
             $code = 0;
         }
@@ -119,5 +122,34 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
 
     public function calculateCharge($track,$rate,$vendor,$packageValue,$codValue) {
 
+    }
+    
+    /**
+     * cancel track by inpost api
+     */
+
+    public function cancelTrack($track) {
+        try {
+            if ($number = $track->getTrackNumber()) {
+                $shipment = $track->getShipment();
+                $po = Mage::getModel("zolagopo/po")->load($shipment->getUdpoId());
+                $vendor = $po->getVendor();
+                $pos = $po->getPos();
+                $settings = Mage::helper('ghinpost')->getApiSettings($vendor,$pos);
+                $this->setShipmentSettings($settings);
+                $client = $this->getClient();
+                $out = $client->cancelPack($number);
+                if (!$out === '1') {
+                    if (!empty($out['error'])) {
+                        $message = $out['error'];
+                    } else {
+                        $message = Mage::helper('orbashipping')->__('Cant cancel package %s',$number);
+                    }
+                    Mage::throwException($message);
+                }
+            }
+        } catch (Exception $xt) {
+            Mage::logException($xt); // if something wrong - only log exception (not break process)
+        }
     }
 }

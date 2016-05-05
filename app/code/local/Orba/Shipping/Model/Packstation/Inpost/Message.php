@@ -59,12 +59,21 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $this->_xmlMessage->addChild('autoLabels',false);
         $pack = $this->_xmlMessage->addChild('pack');    
         $udpo = $settings['udpo'];
+        $pos = $settings['pos'];
         $pack->addChild('id',$udpo->getIncrementId());
         $pack->addChild('senderEmail',$email);
         $pack->addChild('boxMachineName',$udpo->getInpostLockerName());
         $pack->addChild('packType',$settings['size']);
         $pack->addChild('addresseeEmail',$udpo->getCustomerEmail());
         $pack->addChild('phoneNum',$settings['phoneNumber']);
+        $pack->addChild('dispatchPointName',$settings['dispatchPointName']);
+        $address = $pack->addChild('senderAddress');
+        $address->addChild('name',$pos->getName());
+        $address->addChild('email',$pos->getEmail());
+        $address->addChild('phoneNum',$pos->getPhone());
+        $address->addChild('street',$pos->getStreet());
+        $address->addChild('town',$pos->getCity());
+        $address->addChild('zipCode',$pos->getPostcode());
         $data['content'] = $this->_xmlMessage->asXML();
         return $data;
      }
