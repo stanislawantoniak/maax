@@ -71,38 +71,30 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function preparePriceBatch($data, $vendorId)
 	{
+		$data = json_decode(json_encode($data), true);
 		$batch = array();
-
-		$data = (array)$data;
 
 		if (!isset($data["product"]))
 			return $batch;
 
-		if (is_object($data["product"])) {
-			$product = $data["product"];
-			foreach ($product->pricesTypesList->priceTypeItem as $priceTypeItem) {
-				$batch[$vendorId . "-" . $product->sku][$priceTypeItem->priceType] = $priceTypeItem->priceValue;
-			}
-
+		// single product
+		if (isset($data["product"]["sku"])) {
+			$data["product"] = array($data["product"]);
 		}
-		if (is_array($data["product"])) {
-			foreach ($data["product"] as $product) {
-				$sku = $vendorId . "-" . $product->sku;
+		
+		foreach ($data["product"] as $product) {
+			$sku = $vendorId . "-" . $product['sku'];
 
-				$productPricesTypesList = $product->pricesTypesList;
-				$productPricesTypesList = (array)$productPricesTypesList;
-
-
-				foreach ((array)$productPricesTypesList["priceTypeItem"] as $type) {
-
-					$batch[$sku][$type->priceType] = $type->priceValue;
-
+			foreach ($product['pricesTypesList'] as $type) {
+				if (isset($type['priceType'])){
+					$type = array($type);
 				}
-
+				foreach ($type as $item) {
+					$batch[$sku][$item['priceType']] = $item['priceValue'];
+				}
 			}
 		}
-
-
+		
 		return $batch;
 	}
 
@@ -114,27 +106,28 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function prepareStockBatch($data, $vendorId)
 	{
+		$data = json_decode(json_encode($data), true);
 		$batch = array();
-
-		$data = (array)$data;
 
 		if (!isset($data["product"]))
 			return $batch;
 
-		foreach ($data["product"] as $product) {
-			$sku = $vendorId . "-" . $product->sku;
-			$posesList = (array)$product->posesList;
+		// single product
+		if (isset($data["product"]["sku"])) {
+			$data["product"] = array($data["product"]);
+		}
 
-			if(is_array($posesList["pos"])){
-				foreach ($posesList["pos"] as $pos) {
-					$batch[$vendorId][$sku][$pos->id] = $pos->qty;
+		foreach ($data["product"] as $product) {
+			$sku = $vendorId . "-" . $product['sku'];
+
+			foreach ($product['posesList'] as $pos) {
+				if (isset($pos['id'])){
+					$pos = array($pos);
+				}
+				foreach ($pos as $item) {
+					$batch[$vendorId][$sku][$item['id']] = $item['qty'];
 				}
 			}
-			if(is_object($posesList["pos"])){
-				$batch[$vendorId][$sku][$posesList["pos"]->id] = $posesList["pos"]->qty;
-			}
-
-
 		}
 
 		return $batch;

@@ -200,41 +200,46 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 		/** @var Mage_Core_Controller_Request_Http $request */
 		$request  = $this->getRequest();
 		$token    = $request->get('token');
+		$productsPricesUpdateList = $request->get('productsPricesUpdateList');
+		$productsStocksUpdateList = $request->get('productsStocksUpdateList');
 
-		// for test
-		// todo 
+		$update = array(
+			'productsPricesUpdateList' => $productsPricesUpdateList,
+			'productsStocksUpdateList' => $productsStocksUpdateList
+		);
+
 		$update = array(
 			'productsPricesUpdateList' => array(
 				array(
 					'sku' => '05B151-4-150',
 					'pricesTypesList' => array(
-                        //priceTypeItem
+						//priceTypeItem
 						array(
 							'priceType' => 'A',
 							'priceValue' => '10'
 						),
-                        //priceTypeItem
-                        array(
-                            'priceType' => 'B',
-                            'priceValue' => '120.99'
-                        )
+						//priceTypeItem
+						array(
+							'priceType' => 'B',
+							'priceValue' => '120.99'
+						)
 					)
 				),
-                array(
-                    'sku' => '05B151-4-151',
-                    'pricesTypesList' => array(
-                        //priceTypeItem
-                        array(
-                            'priceType' => 'A',
-                            'priceValue' => '20'
-                        ),
-                        //priceTypeItem
-                        array(
-                            'priceType' => 'B',
-                            'priceValue' => '150.99'
-                        )
-                    )
-                )
+				array(
+					'sku' => '05B151-4-151',
+					'pricesTypesList' => array(
+						//priceTypeItem
+						array(
+							'priceType' => 'A',
+							'priceValue' => '20'
+						),
+						//priceTypeItem
+						array(
+							'priceType' => 'B',
+							'priceValue' => '150.99'
+						)
+					)
+				)
 			),
 			'productsStocksUpdateList' => array(
 				array(
@@ -244,28 +249,28 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 							'id' => 'MAGAZYN',
 							'qty' => '5'
 						),
-                        array(
-                            'id' => 'BB',
-                            'qty' => '6'
-                        )
+						array(
+							'id' => 'BB',
+							'qty' => '6'
+						)
 					)
 				),
-                array(
-                    'sku' => '05B151-4-151',
-                    'posesList' => array(
-                        array(
-                            'id' => 'MAGAZYN',
-                            'qty' => '7'
-                        )
-                    ),
-                    array(
-                        'id' => 'BB',
-                        'qty' => '8'
-                    )
-                )
+				array(
+					'sku' => '05B151-4-151',
+					'posesList' => array(
+						array(
+							'id' => 'MAGAZYN',
+							'qty' => '7'
+						),
+						array(
+							'id' => 'BB',
+							'qty' => '8'
+						)
+					),
+				)
 			)
 		);
-
+		
 		$client->updateProductsPricesStocks($token, $update);
 	}
 
