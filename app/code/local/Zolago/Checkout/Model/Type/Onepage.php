@@ -619,9 +619,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         if ($shipping && !$shipping->getSameAsBilling() &&
             (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
             $customerShipping = $shipping->exportCustomerAddress();
-            if(!$lockerId){
+            //if(!$lockerId){
                 $customer->addAddress($customerShipping);
-            }
+            //}
             $shipping->setCustomerAddress($customerShipping);
         }
 
