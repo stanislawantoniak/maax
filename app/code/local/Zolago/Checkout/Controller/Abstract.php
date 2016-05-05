@@ -319,18 +319,18 @@ abstract class Zolago_Checkout_Controller_Abstract
 		shipping_method[4]:udtiership_1
 		 */
 		
-//		if($shippingMethod = $request->getParam("shipping_method")){
-//			$shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
-//			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
-//				throw new Mage_Core_Exception($shippingMethodResponse['message']);
-//			}
-//			//Save sales_flat_quote_address.udropship_shipping_details
-//			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
-//			//Save sales_flat_quote_address.udropship_shipping_details
-//			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
-//		}
-//
-//
+		if($shippingMethod = $request->getParam("shipping_method")){
+			$shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
+			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
+				throw new Mage_Core_Exception($shippingMethodResponse['message']);
+			}
+			//Save sales_flat_quote_address.udropship_shipping_details
+			$this->setUdropshipShippingDetailsToAddress($shippingMethod);
+			//Save sales_flat_quote_address.udropship_shipping_details
+			$this->_getCheckoutSession()->setShippingMethod($shippingMethod);
+		}
+
+
 //		$quote = Mage::getModel("checkout/cart")->getQuote();
 //		$address = $quote->getShippingAddress();
 //		if ($shippingPointCode = $request->getParam("shipping_point_code")) {
