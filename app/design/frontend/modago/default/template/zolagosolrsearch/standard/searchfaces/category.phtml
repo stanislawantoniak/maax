@@ -23,9 +23,7 @@ $helper = Mage::helper("zolagosolrsearch");
         </h3>
 		<div class="content" id="filter_category">
 			<dl>
-			<?php $item = $this->getAllItems();
-            //Mage::log($item, null, "CCC.log");
-            ?>
+			<?php $item = $this->getAllItems(); ?>
 				<?php if (is_array($item)): ?>
 					<?php if($item['is_root_category']): ?>
 						<?php foreach($item['children'] as $child_item=>$child_val): ?>
