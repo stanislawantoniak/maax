@@ -63,7 +63,82 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return $batch;
 	}
-	
+
+	/**
+	 * @param $data
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function preparePriceBatch($data, $vendorId)
+	{
+		$batch = array();
+
+		$data = (array)$data;
+
+		if (!isset($data["product"]))
+			return $batch;
+
+		if (is_object($data["product"])) {
+			$product = $data["product"];
+			foreach ($product->pricesTypesList->priceTypeItem as $priceTypeItem) {
+				$batch[$vendorId . "-" . $product->sku][$priceTypeItem->priceType] = $priceTypeItem->priceValue;
+			}
+
+		}
+		if (is_array($data["product"])) {
+			foreach ($data["product"] as $product) {
+				$sku = $vendorId . "-" . $product->sku;
+
+				$productPricesTypesList = $product->pricesTypesList;
+				$productPricesTypesList = (array)$productPricesTypesList;
+
+
+				foreach ((array)$productPricesTypesList["priceTypeItem"] as $type) {
+
+					$batch[$sku][$type->priceType] = $type->priceValue;
+
+				}
+
+			}
+		}
+
+
+		return $batch;
+	}
+
+
+	/**
+	 * @param $data
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function prepareStockBatch($data, $vendorId)
+	{
+		$batch = array();
+
+		$data = (array)$data;
+
+		if (!isset($data["product"]))
+			return $batch;
+
+		foreach ($data["product"] as $product) {
+			$sku = $vendorId . "-" . $product->sku;
+			$posesList = (array)$product->posesList;
+
+			if(is_array($posesList["pos"])){
+				foreach ($posesList["pos"] as $pos) {
+					$batch[$sku][$pos->id] = $pos->qty;
+				}
+			}
+			if(is_object($posesList["pos"])){
+				$batch[$sku][$posesList["pos"]->id] = $posesList["pos"]->qty;
+			}
+
+
+		}
+
+		return $batch;
+	}
 	/**
 	 * Validate skus for vendor
 	 *

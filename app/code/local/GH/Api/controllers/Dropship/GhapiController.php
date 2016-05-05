@@ -205,26 +205,60 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 		// todo 
 		$update = array(
 			'productsPricesUpdateList' => array(
-				'product' => array(
-					'sku' => 'tetetete',
+				array(
+					'sku' => '05B151-4-150',
 					'pricesTypesList' => array(
-						'priceType' => array(
+                        //priceTypeItem
+						array(
 							'priceType' => 'A',
-							'priceValue' => '99.99'
-						)
+							'priceValue' => '190'
+						),
+                        //priceTypeItem
+                        array(
+                            'priceType' => 'B',
+                            'priceValue' => '120.99'
+                        )
 					)
-				)
+				),
+                array(
+                    'sku' => '05B151-4-151',
+                    'pricesTypesList' => array(
+                        //priceTypeItem
+                        array(
+                            'priceType' => 'A',
+                            'priceValue' => '200'
+                        ),
+                        //priceTypeItem
+                        array(
+                            'priceType' => 'B',
+                            'priceValue' => '150.99'
+                        )
+                    )
+                )
 			),
 			'productsStocksUpdateList' => array(
-				'product' => array(
-					'sku' => 'tetetete',
+				array(
+					'sku' => '05B151-4-150',
 					'posesList' => array(
-						'pos' => array(
-							'id' => 'POS1',
+						array(
+							'id' => 'MAGAZYN',
 							'qty' => '99'
-						)
+						),
+                        array(
+                            'id' => 'BB',
+                            'qty' => '150'
+                        )
 					)
-				)
+				),
+                array(
+                    'sku' => '05B151-4-151',
+                    'posesList' => array(
+                        array(
+                            'id' => 'MAGAZYN',
+                            'qty' => '16'
+                        )
+                    )
+                )
 			)
 		);
 

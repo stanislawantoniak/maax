@@ -383,10 +383,10 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 			if (empty($priceData) && empty($stockData)) Mage::throwException('error_empty_product_update_list');
 
 			// Prepare data - from SKUV to SKU
-			$priceBatch = $this->getHelper()->prepareSku($priceData, $vendorId);
-			$stockBatch = $this->getHelper()->prepareSku($stockData, $vendorId);
+			$priceBatch = $this->getHelper()->preparePriceBatch($priceData, $vendorId);
+			$stockBatch = $this->getHelper()->prepareStockBatch($stockData, $vendorId);
 
-			$this->getHelper()->validateSkus(array_merge($priceBatch, $stockBatch), $vendorId);
+			//$this->getHelper()->validateSkus(array_merge($priceBatch, $stockBatch), $vendorId); TODO reformat
 
 			if (!empty($priceBatch)) {
 				$this->getHelper()->validatePrices($priceBatch);
