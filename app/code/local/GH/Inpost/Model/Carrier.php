@@ -52,7 +52,7 @@ class GH_Inpost_Model_Carrier
 		return $this->getHelper()->__('Standard delivery');
 	}
 	public function isTrackingAvailable() {
-	    return true;
+	    return (!empty(Mage::getStoreConfig('carriers/ghinpost/api'))) && Mage::getStoreConfig('carriers/ghinpost/active');
 	}
 
 }
