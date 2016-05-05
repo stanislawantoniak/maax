@@ -17,6 +17,9 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
         if (Mage::helper('orbashipping/carrier_ups')->isActive()) {
             $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
         }
+        if (Mage::helper('orbashipping/packstation_inpost')->isActive()) {
+            $out[] = Orba_Shipping_Model_Packstation_Inpost::CODE;
+        }
         return $out;
     }
     //}}}

@@ -27,6 +27,39 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>0</show_in_store>
 						</title>
+						<api translate="label">
+							<label>Api address</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</api>
+						<login translate="label">
+							<label>Api login</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</login>
+						<password translate="label">
+							<label>Api password</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</password>
+						<open_hours translate="label">
+							<label>Default POS open hours</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>Value used if open hours not defined in POS</comment>
+						</open_hours>
 <!--						<sallowspecific translate="label">
 							<label>Available for specific countries only</label>
 							<frontend_type>select</frontend_type>

@@ -64,47 +64,6 @@ $_modagoHlp = Mage::helper("zolagocommon");
 								</div>
 							</div>
 						</li>
-						<?php /* <li class="form-group specify specify-carrier specify-carrier-orbadhl">
-							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package type') ?></label>
-							<div class="col-md-9">
-								<select name="specify_orbadhl_type" id="shipping-specify_orbadhl_type" class="form-control">
-									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkgtype')->toOptionHash() as $value=>$label):?>
-									<option value="<?php echo $this->escapeHtml($value);?>"><?php echo $this->escapeHtml($label);?></option>
-									<?php endforeach;?>
-								</select>
-							</div>
-						</li>
-						<li class="form-group specify specify-carrier specify-carrier-orbadhl specify-specify_orbadhl_type specify-specify_orbadhl_type-PACKAGE">
-							<label class="col-md-3 control-label"><?php echo $_hlp->__('Weight') ?></label>
-							<div class="col-md-3">
-								<input name="weight" value="<?php echo (float)$this->getRemainingWeight();?>"  type="text" class="form-control"/>
-							</div>
-							
-						</li>
-						<li class="form-group specify specify-carrier specify-carrier-orbadhl specify-specify_orbadhl_type specify-specify_orbadhl_type-PACKAGE">
-							<label class="col-md-3 control-label"><?php echo $_hlp->__('Dimensions') ?></label>
-							<div class="col-md-3">
-								<input name="specify_orbadhl_width" value="<?php echo (float)$this->getVendor()->getDefaultPkgWidth()?>"  type="text" class="form-control"/>
-								<span class="help-block"><?php echo $_hlp->__('Width (cm)') ?></span>
-							</div>
-							<div class="col-md-3">
-								<input name="specify_orbadhl_height" value="<?php echo (float)$this->getVendor()->getDefaultPkgHeight()?>" type="text" class="form-control"/>
-								<span class="help-block"><?php echo $_hlp->__('Height (cm)') ?></span>
-							</div>
-							<div class="col-md-3">
-								<input name="specify_orbadhl_length" value="<?php echo (float)$this->getVendor()->getDefaultPkgLength()?>" type="text"  class="form-control"/>
-								<span class="help-block"><?php echo $_hlp->__('Length (cm)') ?></span>
-							</div>
-						</li>
-						<li class="form-group specify specify-carrier specify-carrier-orbadhl specify-specify_orbadhl_type specify-specify_orbadhl_type-PACKAGE">
-							<label for="shipping-specify_orbadhl_custom_dim" class="col-md-3 control-label"><?php echo $_hlp->__('Non standard Package') ?></label>
-							<div class="col-md-9">
-								<label class="checkbox">
-									<input name="specify_orbadhl_custom_dim" value="0" type="hidden" />
-									<input id="shipping-specify_orbadhl_custom_dim" name="specify_orbadhl_custom_dim" value="1" type="checkbox" class="uniform" />
-								</label> 
-							</div>
-						</li> */ ?>
 						<li class="form-group specify specify-carrier specify-carrier-orbadhl">
 							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package type') ?></label>
 							<div class="col-md-9">
