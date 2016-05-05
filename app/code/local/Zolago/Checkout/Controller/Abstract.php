@@ -331,7 +331,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		}
 
 
-		$quote = Mage::getModel("checkout/cart")->getQuote();
+		$quote = $onepage->getQuote();
 		$address = $quote->getShippingAddress();
 		if ($shippingPointCode = $request->getParam("shipping_point_code")) {
 			$address->setInpostLockerName($shippingPointCode);
