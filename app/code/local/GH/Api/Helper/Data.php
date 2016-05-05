@@ -127,11 +127,11 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 
 			if(is_array($posesList["pos"])){
 				foreach ($posesList["pos"] as $pos) {
-					$batch[$sku][$pos->id] = $pos->qty;
+					$batch[$vendorId][$sku][$pos->id] = $pos->qty;
 				}
 			}
 			if(is_object($posesList["pos"])){
-				$batch[$sku][$posesList["pos"]->id] = $posesList["pos"]->qty;
+				$batch[$vendorId][$sku][$posesList["pos"]->id] = $posesList["pos"]->qty;
 			}
 
 

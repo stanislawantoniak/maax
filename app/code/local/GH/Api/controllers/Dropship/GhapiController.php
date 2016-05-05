@@ -211,7 +211,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                         //priceTypeItem
 						array(
 							'priceType' => 'A',
-							'priceValue' => '190'
+							'priceValue' => '10'
 						),
                         //priceTypeItem
                         array(
@@ -226,7 +226,7 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                         //priceTypeItem
                         array(
                             'priceType' => 'A',
-                            'priceValue' => '200'
+                            'priceValue' => '20'
                         ),
                         //priceTypeItem
                         array(
@@ -242,11 +242,11 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
 					'posesList' => array(
 						array(
 							'id' => 'MAGAZYN',
-							'qty' => '99'
+							'qty' => '5'
 						),
                         array(
                             'id' => 'BB',
-                            'qty' => '150'
+                            'qty' => '6'
                         )
 					)
 				),
@@ -255,8 +255,12 @@ class GH_Api_Dropship_GhapiController extends Zolago_Dropship_Controller_Vendor_
                     'posesList' => array(
                         array(
                             'id' => 'MAGAZYN',
-                            'qty' => '16'
+                            'qty' => '7'
                         )
+                    ),
+                    array(
+                        'id' => 'BB',
+                        'qty' => '8'
                     )
                 )
 			)
