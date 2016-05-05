@@ -13,17 +13,21 @@ class Modago_ChangeSku_Shell extends Mage_Shell_Abstract
         error_reporting(E_ALL);
         set_time_limit(36000);
 
-        $updateFilename = Mage::getBaseDir() . '/var/new-skus-luna-83.csv';
+        $fileName = $this->getArg("file");
+        $updateFilename = Mage::getBaseDir() . '/var/'.$fileName;
 
+        echo "Reading file {$updateFilename} \n";
 
         $update = array();
         $row = 1;
         if (($f = fopen($updateFilename, "r")) !== FALSE) {
-            while (($data = fgetcsv($f, 1000, ",")) !== FALSE) {
+            while (($data = fgetcsv($f, 10000, ",")) !== FALSE) {
                 $row++;
                 $update[$data[0]] = $data[1];
             }
             fclose($f);
+        } else {
+            echo "File {$fileName} does not exist or invalid \n";
         }
 
         if(!empty($update)){
@@ -46,11 +50,21 @@ class Modago_ChangeSku_Shell extends Mage_Shell_Abstract
             $writeConnection->query($query);
         }
 
-
-        echo "{$updateFilename}\n";
         echo "Done\n";
     }
-
+    /**
+     * Retrieve argument value by name or false
+     *
+     * @param string $name the argument name
+     * @return mixed
+     */
+    public function getArg($name)
+    {
+        if (isset($this->_args[$name])) {
+            return $this->_args[$name];
+        }
+        return false;
+    }
 
 }
 
