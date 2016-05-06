@@ -427,11 +427,17 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
 
 	public function cronCollectTracking()
 	{
-		$statusFilter = array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY,ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
+		$statusFilter = array(
+			ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,
+			ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY,
+			ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED
+		);
+		/** @var Zolago_Dropship_Helper_Data $helper */
+		$helper = Mage::helper('udropship'); 
 		$time = Mage::getModel('core/date')->timestamp();
 		$now = date('Y-m-d H:i:s', $time);
 
-		if (Mage::helper('udropship')->isSalesFlat()) {
+		if ($helper->isSalesFlat()) {
 
 			$res  = Mage::getSingleton('core/resource');
 			$conn = $res->getConnection('sales_read');
@@ -479,7 +485,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
 			;
 
 			try {
-				Mage::helper('udropship')->collectTracking($tracks);
+				$helper->collectTracking($tracks);
 			} catch (Exception $e) {
 				$tracksByStore = array();
 				foreach ($tracks as $track) {
@@ -507,7 +513,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
 					continue;
 				}
 				$vId = $track->getShipment()->getUdropshipVendor();
-				$v = Mage::helper('udropship')->getVendor($vId);
+				$v = $helper->getVendor($vId);
 				if (!$v->getTrackApi($cCode)) {
 					continue;
 				}
