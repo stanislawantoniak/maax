@@ -134,7 +134,10 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         $params = $this->getRequest()->getParams();
         // keep only existing filters
         $codeList = $this->getFilterCollection($category_id);
-        $codeList = array_merge($codeList,array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id'));
+        $codeList = array_merge($codeList,array(
+            //'price','flags','product_rating',
+            'campaign_info_id', 'campaign_regular_id'
+        ));
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
                 if (!in_array($key,$codeList)) {
