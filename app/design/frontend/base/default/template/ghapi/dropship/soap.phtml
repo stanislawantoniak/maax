@@ -17,6 +17,7 @@ $_helper = Mage::helper("ghapi");
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_shipment');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_reservation');?>
 			<?php echo $this->getChildHtml('ghapi_dropship_soap_categories');?>
+			<?php echo $this->getChildHtml('ghapi_dropship_soap_update_products');?>
 		</form>
 	</div>
 </div>
@@ -152,5 +153,93 @@ jQuery(function ($) {
         doSoapAjax(params,'get_categories');
     }
     //--getCategories
+
+	//updateProductsPricesStocks
+	jQuery('.update_products_type').change(function () {
+		var name = jQuery(this).attr('name');
+		if (name == 'type_price') {
+			if (jQuery(this).prop("checked")) {
+				jQuery('.price-x').removeAttr('disabled');
+			} else {
+				jQuery('.price-x').attr('disabled', 'disabled');
+			}
+		} else {
+			if (jQuery(this).prop("checked")) {
+				jQuery('#soap_update_products_pos, #soap_update_products_qty').removeAttr('disabled');
+			} else {
+				jQuery('#soap_update_products_pos, #soap_update_products_qty').attr('disabled', 'disabled');
+			}
+		}
+		if (!jQuery("input[name='type_price']").prop("checked") && !jQuery("input[name='type_stock']").prop("checked")) {
+			jQuery('#soap_update_products_sku').attr('disabled', 'disabled');
+		} else {
+			jQuery('#soap_update_products_sku').removeAttr('disabled');
+		}
+	});
+
+	jQuery('#update_products_action').click(function(){updateProducts(); });
+	jQuery('#soap_update_products_token, #soap_update_products_type, #soap_update_products_sku, .price-x, #soap_update_products_pos, #soap_update_products_qty').keypress(function (e) { if (e.which == 13) { updateProducts(); return false;} });
+
+	function updateProducts(){
+		var token  = jQuery('#soap_update_products_token').val(),
+			usePrice = jQuery("input[name='type_price']").prop("checked"),
+			useStock = jQuery("input[name='type_stock']").prop("checked"),
+			sku    = jQuery('#soap_update_products_sku').val(),
+			posId  = jQuery('#soap_update_products_pos').val(),
+			qty    = jQuery('#soap_update_products_qty').val(),
+			priceA = jQuery('#price-a').val(),
+			priceB = jQuery('#price-b').val(),
+			priceC = jQuery('#price-c').val(),
+			priceZ = jQuery('#price-z').val(),
+			msrp   = jQuery('#price-salePriceBefore').val(),
+			market = jQuery('#price-marketPrice').val(),
+			product= {},
+			params = {
+				action : 'updateProductsPricesStocks',
+				token  : token
+			};
+
+		if (usePrice) {
+			product = {};
+			product.sku = sku;
+			product.pricesTypesList = [];
+
+			var obj = {
+				"A": priceA,
+				"B": priceB,
+				"C": priceC,
+				"Z": priceZ,
+				"salePriceBefore": msrp,
+				"marketPrice": market
+			};
+
+			for (var prop in obj) {
+				if (obj.hasOwnProperty(prop)) {
+						product.pricesTypesList.push({
+							priceType: prop,
+							priceValue: obj[prop]
+						});
+				}
+			}
+
+			params.productsPricesUpdateList = [];
+			params.productsPricesUpdateList.push(product);
+		}
+		if (useStock) {
+			product = {};
+			product.sku = sku;
+			product.posesList = [];
+
+			product.posesList.push({
+				id: posId,
+				qty: qty
+			});
+
+			params.productsStocksUpdateList = [];
+			params.productsStocksUpdateList.push(product);
+		}
+		doSoapAjax(params,'update_products');
+	}
+	//--updateProductsPricesStocks
 });
 </script>
