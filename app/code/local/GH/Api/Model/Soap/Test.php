@@ -50,7 +50,12 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
         return $obj;
     }
 
-
+    public function updateProductsPricesStocks($params) {
+        $this->_begin();
+        $obj = parent::updateProductsPricesStocks($params);
+        $this->_rollback();
+        return $obj;
+    }
 
     /**
      * Show PO for given increment id (or ids)

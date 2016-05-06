@@ -46,22 +46,22 @@
           </additional_information>
         </inteligo>
         <!--mBank multiTransfer-->
-        <mbmt>
-          <method>dotpay</method>
-          <additional_information>
-            <channel>3</channel>
-            <type>4</type>
-            <is_gateway>1</is_gateway>
-          </additional_information>
-          <convertica_website>
-            <method>dotpay</method>
-            <additional_information>
-              <channel>3</channel>
-              <type>4</type>
-              <is_gateway>1</is_gateway>
-            </additional_information>
-          </convertica_website>
-        </mbmt>
+        <!--<mbmt>-->
+          <!--<method>dotpay</method>-->
+          <!--<additional_information>-->
+            <!--<channel>3</channel>-->
+            <!--<type>4</type>-->
+            <!--<is_gateway>1</is_gateway>-->
+          <!--</additional_information>-->
+          <!--<convertica_website>-->
+            <!--<method>dotpay</method>-->
+            <!--<additional_information>-->
+              <!--<channel>3</channel>-->
+              <!--<type>4</type>-->
+              <!--<is_gateway>1</is_gateway>-->
+            <!--</additional_information>-->
+          <!--</convertica_website>-->
+        <!--</mbmt>-->
         <!--Płacę z iPKO-->
         <ipko>
           <method>dotpay</method>
@@ -426,14 +426,14 @@
           </additional_information>
         </iko>
         <!--PeoPay-->
-        <peopay>
-          <method>dotpay</method>
-          <additional_information>
-            <channel>64</channel>
-            <type>4</type>
-            <is_gateway>1</is_gateway>
-          </additional_information>
-        </peopay>
+        <!--<peopay>-->
+          <!--<method>dotpay</method>-->
+          <!--<additional_information>-->
+            <!--<channel>64</channel>-->
+            <!--<type>4</type>-->
+            <!--<is_gateway>1</is_gateway>-->
+          <!--</additional_information>-->
+        <!--</peopay>-->
         <!--Idea-->
         <idea>
           <method>dotpay</method>

@@ -365,6 +365,56 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $obj->status = $status;
         return $obj;
     }
+	
+	public function updateProductsPricesStocks($request) {
+		$token = $request->sessionToken;
+		$priceData = $request->productsPricesUpdateList;
+		$stockData = $request->productsStocksUpdateList;
+		$obj = new StdClass();
+		$message = 'ok';
+		$status = true;
+
+		try {
+			$user = $this->getUserByToken($token); // Do loginBySessionToken
+			$vendor = $user->getVendor();
+			$vendorId = $vendor->getId();
+
+			// Check if is sth to prepare
+			if (empty($priceData) && empty($stockData)) Mage::throwException('error_empty_product_update_list');
+
+			// Prepare data - from SKUV to SKU
+			$priceBatch = $this->getHelper()->preparePriceBatch($priceData, $vendorId);
+			$stockBatch = $this->getHelper()->prepareStockBatch($stockData, $vendorId);
+
+			$this->getHelper()->validateSkus(array_merge($priceBatch, isset($stockBatch[$vendorId]) ? $stockBatch[$vendorId] : array()), $vendorId);
+
+			if (!empty($priceBatch)) {
+				$this->getHelper()->validatePrices($priceBatch, $vendorId);
+			}
+			if (!empty($stockBatch)) {
+				$this->getHelper()->validatePoses($stockBatch[$vendorId], $vendorId);
+				$this->getHelper()->validateQtys($stockBatch[$vendorId], $vendorId);
+			}
+
+			// update it
+			/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
+			$restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+			if (!empty($priceBatch)) {
+				$restApi::updatePricesConverter($priceBatch);
+			}
+			if (!empty($stockBatch)) {
+				$restApi::updateStockConverter($stockBatch);
+			}
+
+		} catch (Exception $e) {
+			$message = $e->getMessage();
+			$status = false;
+		}
+		
+		$obj->message = $message;
+		$obj->status = $status;
+		return $obj;
+	}
 
     /**
      * @return GH_Api_Model_Message
