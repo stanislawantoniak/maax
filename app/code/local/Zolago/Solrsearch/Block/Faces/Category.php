@@ -51,6 +51,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 				$catIds[] = $categoryId;
 				$result[$categoryId][] = $item->getAttributeCode();
 			}
+            Mage::log($result, null, "_getAttributeCodesForFilter.log");
 			// Fallback for related categories
 			/** @var Zolago_Catalog_Model_Category $category */
 			$category = Mage::getModel('catalog/category');
