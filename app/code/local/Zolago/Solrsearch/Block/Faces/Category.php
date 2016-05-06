@@ -55,8 +55,9 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 			/** @var Zolago_Catalog_Model_Category $category */
 			$category = Mage::getModel('catalog/category');
 			$catTree = $category->getTreeModel()->load();
-			/** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
+			/** @var Zolago_Catalog_Model_Resource_Category_Collection $collection */
 			$collection = $catTree->getCollection();
+            $collection->joinCategoryFilters();
 			$collection->addFieldToFilter('entity_id', array('nin'=> $catIds));
 			$diffCategories = $collection->getData();
 
@@ -64,6 +65,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 			foreach ($diffCategories as $category) {
 				$diffCatIds[] = (int)$category['entity_id'];
 			}
+            unset($category);
 
 			/** @var Zolago_Catalog_Model_Resource_Category $res */
 			$res = Mage::getResourceModel("zolagocatalog/category");
@@ -74,6 +76,19 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 					$result[$categoryId] = $result[$relatedToId];
 				}
 			}
+
+            foreach ($diffCategories as $category) {
+                if ($category["use_flag_filter"] == 1) {
+                    $result[$category['entity_id']][] = "flags";
+                }
+                if ($category["use_price_filter"] == 1) {
+                    $result[$category['entity_id']][] = "price";
+                }
+                if ($category["use_review_filter"] == 1) {
+                    $result[$category['entity_id']][] = "product_rating";
+                }
+            }
+
 			ksort($result);
             return serialize($result);
         };
@@ -134,7 +149,8 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         $params = $this->getRequest()->getParams();
         // keep only existing filters
         $codeList = $this->getFilterCollection($category_id);
-        $codeList = array_merge($codeList,array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id'));
+        $codeList = array_merge($codeList,array('campaign_info_id', 'campaign_regular_id'));
+
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
                 if (!in_array($key,$codeList)) {
