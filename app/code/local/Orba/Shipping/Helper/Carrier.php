@@ -25,31 +25,25 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
 
         Mage::log($message, null, $logFile, true);
     }
-
-    //{{{
+	
     /**
      * setting specify helper for tracking
      * @param Orba_Shipping_Helper_Carrier_Tracking $helper
-     * @return
+     * @return void
      */
     public function setTrackingHelper($helper) {
         $this->_trackingHelper = $helper;
     }
-    //}}}
-    //{{{
-    /**
-     * @param array $settings
-     * @return
-     */
 
-    //}}}
+	/**
+	 * @param bool $settings
+	 * @return null
+	 */
     public function startClient($settings = false) {
         // abstract function
         return null;
     }
 
-
-    //{{{
     /**
      * check if carrier client is active
      * @return bool
@@ -57,7 +51,7 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
     public function isActive() {
         return false; //abstract
     }
-    //}}}
+
     public function addUdpoComment($udpo, $comment, $isVendorNotified=false, $visibleToVendor=false, $userName = false)
     {
         if (!$userName) {

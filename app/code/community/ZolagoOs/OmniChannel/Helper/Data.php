@@ -1343,94 +1343,115 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         return $time;
     }
 
-    /**
-     * Poll carriers tracking API
-     *
-     * @param mixed $tracks
-     */
-    public function collectTracking($tracks)
-    {
-        $requests = array();
-        foreach ($tracks as $track) {
-            $cCode = $track->getCarrierCode();
-            if (!$cCode) {
-                continue;
-            }
-            $vId = $track->getShipment()->getUdropshipVendor();
-            $v = Mage::helper('udropship')->getVendor($vId);
-            if (!$v->getTrackApi($cCode) || !$v->getId()) {
-                continue;
-            }
-            $requests[$cCode][$vId][$track->getNumber()][] = $track;
-        }
-        foreach ($requests as $cCode=>$vendors) {
-            foreach ($vendors as $vId=>$trackIds) {
-                $v = Mage::helper('udropship')->getVendor($vId);
-                $_track = null;
-                foreach ($trackIds as $_trackId=>$_tracks) {
-                    foreach ($_tracks as $_track) break 2;
-                }
-                try {
-                    if ($_track) Mage::helper('udropship/label')->beforeShipmentLabel($v, $_track);
-                    $result = $v->getTrackApi($cCode)->collectTracking($v, array_keys($trackIds));
-                    if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
-                } catch (Exception $e) {
-                    if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
-                    $this->_processPollTrackingFailed($trackIds, $e);
-                    continue;
-                }
-#print_r($result); echo "\n";
-                $processTracks = array();
-                foreach ($result as $trackId=>$status) {
-                    foreach ($trackIds[$trackId] as $track) {
+	/**
+	 * Poll carriers tracking API
+	 *
+	 * @param mixed $tracks
+	 */
+	public function collectTracking($tracks)
+	{
+		$time = Mage::getSingleton('core/date')->timestamp();
+		$requests = array();
+		foreach ($tracks as $track) {
+			$cCode = $track->getCarrierCode();
+			if (!$cCode) {
+				continue;
+			}
+			$vId = $track->getShipment()->getUdropshipVendor();
+			$v = Mage::helper('udropship')->getVendor($vId);
+			$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
+			if (!in_array($cCode, $allowCarriers)) {
+				if (!$v->getTrackApi($cCode) || !$v->getId()) {
+					continue;
+				}
+			}
 
-                        if (in_array($status, array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY,ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED))) {
-                            $repeatIn = Mage::getStoreConfig('udropship/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
-                            if ($repeatIn<=0) {
-                                $repeatIn = 12;
-                            }
-                            $repeatIn = $repeatIn*60*60;
-                            $track->setNextCheck(date('Y-m-d H:i:s', time()+$repeatIn))->save();
-                            if ($status==ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING) continue;
-                        }
+			if (!$vId) {
+				continue;
+			}
 
-                        $track->setUdropshipStatus($status);
-                        if ($track->dataHasChangedFor('udropship_status')) {
-                            switch ($status) {
-                            case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY:
-                                Mage::helper('udropship')->addShipmentComment(
-                                    $track->getShipment(),
-                                    $this->__('Tracking ID %s was picked up from %s', $trackId, $v->getVendorName())
-                                );
-                                $track->getShipment()->save();
-                                break;
+			$requests[$cCode][$vId][$track->getNumber()][] = $track;
+		}
+		foreach ($requests as $cCode => $vendors) {
+			foreach ($vendors as $vId => $trackIds) {
+				$_track = null;
+				foreach ($trackIds as $_trackId => $_tracks) {
+					foreach ($_tracks as $_track) break 2;
+				}
+				try {
+					if ($_track) Mage::helper('udropship/label')->beforeShipmentLabel($v, $_track);
+					$helper = Mage::helper($this->trackingHelperPath);
+					$trackingManager = Mage::helper('orbashipping')->getShippingHelper($cCode);
+					if ($trackingManager) {
+						$helper->setHelper($trackingManager);
+						$result = $helper->collectTracking($trackIds);
+					} else {
+						$result = $v->getTrackApi($cCode)->collectTracking($v, array_keys($trackIds));
+					}
+					if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
+				} catch (Exception $e) {
+					if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
+					$this->_processPollTrackingFailed($trackIds, $e);
+					continue;
+				}
 
-                            case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED:
-                                Mage::helper('udropship')->addShipmentComment(
-                                    $track->getShipment(),
-                                    $this->__('Tracking ID %s was delivered to customer', $trackId)
-                                );
-                                $track->getShipment()->save();
-                                break;
-                            }
-                            if (empty($processTracks[$track->getParentId()])) {
-                                $processTracks[$track->getParentId()] = array();
-                            }
-                            $processTracks[$track->getParentId()][] = $track;
-                        }
-                    }
-                }
-                foreach ($processTracks as $_pTracks) {
-                    try {
-                        $this->processTrackStatus($_pTracks, true);
-                    } catch (Exception $e) {
-                        $this->_processPollTrackingFailed($_pTracks, $e);
-                        continue;
-                    }
-                }
-            }
-        }
-    }
+				if (!is_array($result)) continue;
+
+				$processTracks = array();
+				foreach ($result as $trackId => $status) {
+					foreach ($trackIds[$trackId] as $track) {
+
+						if (in_array($status, array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED))) {
+							$repeatIn = Mage::getStoreConfig('udropship/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
+							if ($repeatIn <= 0) {
+								$repeatIn = 12;
+							}
+							$repeatIn = $repeatIn * 60 * 60;
+							$track->setNextCheck(date('Y-m-d H:i:s', $time + $repeatIn))->save();
+							if ($status == ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING) continue;
+						}
+						$track->setUdropshipStatus($status);
+
+						if ($track->dataHasChangedFor('udropship_status')) {
+							switch ($status) {
+								case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY:
+									Mage::helper('udropship')->addShipmentComment(
+										$track->getShipment(),
+										$this->__('Tracking ID %s was picked up from %s', $trackId, $v->getVendorName())
+									);
+									$track->getShipment()->save();
+									break;
+
+								case ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED:
+									Mage::helper('udropship')->addShipmentComment(
+										$track->getShipment(),
+										$this->__('Tracking ID %s was delivered to customer', $trackId)
+									);
+									$track->setShippedDate();
+									$track->save();
+									$track->getShipment()->save();
+									break;
+							}
+							if (empty($processTracks[$track->getParentId()])) {
+								$processTracks[$track->getParentId()] = array();
+							}
+							$processTracks[$track->getParentId()][] = $track;
+						}
+					}
+				}
+
+				foreach ($processTracks as $_pTracks) {
+					try {
+						$this->processTrackStatus($_pTracks, true);
+					} catch
+					(Exception $e) {
+						$this->_processPollTrackingFailed($_pTracks, $e);
+						continue;
+					}
+				}
+			}
+		}
+	}
 
     protected function _processPollTrackingFailed($tracks, Exception $e)
     {
