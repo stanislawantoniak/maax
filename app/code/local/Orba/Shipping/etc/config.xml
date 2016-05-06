@@ -127,6 +127,11 @@
         <repeat_tracking>1</repeat_tracking>
         <volumetric_weight>5000</volumetric_weight>
       </orbaups>
+      <zolagopp>
+          <active>1</active>
+          <gateway>https://en-testwebapi.poczta-polska.pl/websrv/en.wsdl</gateway>
+          <title>Poczta Polska</title>          
+      </zolagopp>
     </carriers>
   </default>
 </config>
