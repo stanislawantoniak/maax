@@ -90,6 +90,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
      */
     public function getFilterCollection($categoryId)
     {
+        Mage::log($categoryId, null, "getFilterCollection.log");
         if (!$this->hasData('all_filter_collection')) {
             $result = $this->_getAttributeCodesForFilter();
             $this->setData('all_filter_collection', $result);
