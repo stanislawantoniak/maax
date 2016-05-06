@@ -130,6 +130,34 @@
 
         <design translate="label" module="zolagomodago">
             <groups>
+                <head_vendor translate="label">
+                    <label>HTML Head (Vendor Landing Page)</label>
+                    <frontend_type>text</frontend_type>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>21</sort_order>
+                    <fields>
+                        <vendor_landing_page_title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Use {{vendor}} to define vendor name.</comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vendor_landing_page_title>
+                        <vendor_landing_page_description translate="label">
+                            <label>Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <comment>Use {{vendor}} to define vendor name.</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vendor_landing_page_description>
+                    </fields>
+                </head_vendor>
                 <popular_brands translate="label">
                     <label>Popular brands block</label>
                     <frontend_type>text</frontend_type>

@@ -303,6 +303,8 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
                             ));
         $keys = array (
             'vendor_type_label',
+            'vendor_landing_page_title',
+            'vendor_landing_page_description',
             'marketing_store_information_title',
             'marketing_store_information',
             'marketing_brand_information_title',
@@ -314,7 +316,7 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
             'store_return_headline',
             'brandshop_info',
             'cart_slogan_one',
-            'cart_slogan_two',
+            'cart_slogan_two'
         );
         $this->_addFieldsToFieldset($keys,$fieldset);
 

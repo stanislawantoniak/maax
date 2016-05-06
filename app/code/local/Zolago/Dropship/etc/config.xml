@@ -427,11 +427,23 @@
                         <fieldset>marketing</fieldset>
                         <position>9</position>
                     </vendor_type_label>
+                    <vendor_landing_page_title>
+                        <label>Vendor page - Title</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>10</position>
+                    </vendor_landing_page_title>
+                    <vendor_landing_page_description>
+                        <label>Vendor page - Description</label>
+                        <type>wysiwyg</type>
+                        <fieldset>marketing</fieldset>
+                        <position>11</position>
+                    </vendor_landing_page_description>
                     <marketing_store_information_title>
                         <label>Vendor page - Seller information title</label>
                         <type>text</type>
                         <fieldset>marketing</fieldset>
-                        <position>10</position>
+                        <position>12</position>
                     </marketing_store_information_title>
                 	<marketing_store_information>
                         <label>Vendor page - Seller information</label>
@@ -443,13 +455,13 @@
                         <label>Vendor page - Brand information title</label>
                         <type>text</type>
                         <fieldset>marketing</fieldset>
-                        <position>12</position>
+                        <position>13</position>
                     </marketing_brand_information_title>
                     <marketing_brand_information>
                         <label>Vendor page - Brand information</label>
                         <type>wysiwyg</type>
                         <fieldset>marketing</fieldset>
-                        <position>13</position>
+                        <position>14</position>
                     </marketing_brand_information>
                 	<terms_seller_information>
                         <label>Product page - Seller information</label>
