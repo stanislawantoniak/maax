@@ -51,6 +51,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 				$catIds[] = $categoryId;
 				$result[$categoryId][] = $item->getAttributeCode();
 			}
+            Mage::log($result, null, "_getAttributeCodesForFilter.log");
 			// Fallback for related categories
 			/** @var Zolago_Catalog_Model_Category $category */
 			$category = Mage::getModel('catalog/category');
@@ -89,6 +90,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
      */
     public function getFilterCollection($categoryId)
     {
+        Mage::log($categoryId, null, "getFilterCollection.log");
         if (!$this->hasData('all_filter_collection')) {
             $result = $this->_getAttributeCodesForFilter();
             $this->setData('all_filter_collection', $result);
@@ -134,7 +136,11 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         $params = $this->getRequest()->getParams();
         // keep only existing filters
         $codeList = $this->getFilterCollection($category_id);
-        $codeList = array_merge($codeList,array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id'));
+        $codeList = array_merge($codeList,array(
+            //'price','flags','product_rating',
+            'campaign_info_id', 'campaign_regular_id'
+        ));
+
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
                 if (!in_array($key,$codeList)) {
