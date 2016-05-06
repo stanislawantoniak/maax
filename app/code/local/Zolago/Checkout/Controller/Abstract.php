@@ -340,8 +340,8 @@ abstract class Zolago_Checkout_Controller_Abstract
 //			$address->setCity("");
 //			$address->setStreet("");
 //			$address->setPostcode("");
-//			$address->setInpostLockerName("");
-//			$this->_getCheckoutSession()->setInpostLockerName();
+			$address->setInpostLockerName("");
+			$this->_getCheckoutSession()->setInpostLockerName();
 		}
 
 		/**
