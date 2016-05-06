@@ -138,6 +138,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
             //'price','flags','product_rating',
             'campaign_info_id', 'campaign_regular_id'
         ));
+
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
                 if (!in_array($key,$codeList)) {
