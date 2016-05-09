@@ -14,16 +14,17 @@ class Modago_ChangeSku_Shell extends Mage_Shell_Abstract
         set_time_limit(36000);
 
         $fileName = $this->getArg("file");
-        $updateFilename = Mage::getBaseDir() . '/var/'.$fileName;
-
-        echo "Reading file {$updateFilename} \n";
+        echo "Reading file {$fileName} \n";
 
         $update = array();
         $row = 1;
-        if (($f = fopen($updateFilename, "r")) !== FALSE) {
+        if (($f = fopen($fileName, "r")) !== FALSE) {
             while (($data = fgetcsv($f, 10000, ",")) !== FALSE) {
+                if($row>1){ //SKIP FIRST LINE (new_sku,old_sku)
+                    $update[$data[0]] = $data[1];
+                }
+
                 $row++;
-                $update[$data[0]] = $data[1];
             }
             fclose($f);
         } else {
