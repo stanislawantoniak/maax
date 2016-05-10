@@ -227,6 +227,11 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
              'packcode' => $number
          );
          $result = $this->_sendMessage('getpackstatus',$data);
+		 
+		 // uncomment for test perpouse; 
+		 //$status = Orba_Shipping_Helper_Packstation_Inpost::INPOST_STATUS_DELIVERED;
+		 //$result = "<paczkomaty><status>" . $status . "</status><statusDate>2016-04-09T15:57:03.692+02:00</statusDate></paczkomaty>";
+
          return $this->_prepareResult($result);
      }
 }
