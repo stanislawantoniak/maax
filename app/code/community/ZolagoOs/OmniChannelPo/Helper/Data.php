@@ -1435,6 +1435,16 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::helper('core')->jsonEncode(array_map('strval', $this->getAllowedPoStatuses($po, $auto)));
     }
 
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param $status
+	 * @param $save
+	 * @param bool $vendor
+	 * @param string $comment
+	 * @param null $isVendorNotified
+	 * @param null $isVisibleToVendor
+	 * @return bool
+	 */
     public function processPoStatusSave($po, $status, $save, $vendor=false, $comment='', $isVendorNotified=null, $isVisibleToVendor=null)
     {
         $allowedStatuses   =  $this->getAllowedPoStatuses($po, $vendor===false);

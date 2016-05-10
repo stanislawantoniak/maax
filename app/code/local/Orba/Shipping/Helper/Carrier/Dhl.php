@@ -312,7 +312,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         }
         return $dhlValidZip;
     }
-//{{{
+
     /**
      * Collect tracking for DHL
      * @param Zolago_Carrier_Model_Client $client
@@ -326,7 +326,6 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $this->_processTrackStatus($_track, $result);
 
     }
-//}}}
 
     protected function _parseTrackResponse($track,$result,&$message,&$status,&$shipmentIdMessage) {
         if (is_array($result) && array_key_exists('error', $result)) {
