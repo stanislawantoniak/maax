@@ -1,7 +1,7 @@
 <?php
 class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscriber
 {
-	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/subscription/confirmation_sales_rule";
+	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/zolagosubscription/confirmation_sales_rule";
 
 	protected $_mailFlag = false;
 	
