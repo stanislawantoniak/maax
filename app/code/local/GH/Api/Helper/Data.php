@@ -156,13 +156,20 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		$coll->addAttributeToSelect('udropship_vendor', 'left');
 		$coll->addAttributeToSelect('skuv', 'left');
 
+		Mage::log((string)$coll->getSelect(), null, 'wojcik_sql.log');
+
 		$_data = $coll->getData();
 		$allSkusFromColl = array();
 		$invalidOwnerSkus = array();
 
+		Mage::log($inputSkus, null, 'wojcik2.log');
+		Mage::log($_data, null, 'wojcik2.log');
+
 		// wrong owner
 		foreach ($_data as $product) {
 			$allSkusFromColl[$product['sku']] = $product['sku'];
+			Mage::log($product['udropship_vendor'] . " ? " . $vendorId, null, 'wojcik_test.log');
+
 			if ($product['udropship_vendor'] != $vendorId) {
 				$invalidOwnerSkus[$product['sku']] = $product['sku'];
 			}
