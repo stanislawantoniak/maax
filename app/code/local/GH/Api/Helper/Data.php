@@ -171,12 +171,21 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 			Mage::log($product['udropship_vendor'] . " ? " . $vendorId, null, 'wojcik_test.log');
 
 			if ($product['udropship_vendor'] != $vendorId) {
+				Mage::log("is invalid", null, 'wojcik_test.log');
 				$invalidOwnerSkus[$product['sku']] = $product['sku'];
 			}
 		}
 
 		// not existing products
 		$notExistingSkus = array_diff($inputSkus, $allSkusFromColl);
+		Mage::log("$inputSkus", null, 'wojcik4.log');
+		Mage::log($inputSkus, null, 'wojcik4.log');
+		
+		Mage::log("$allSkusFromColl", null, 'wojcik4.log');
+		Mage::log($allSkusFromColl, null, 'wojcik4.log');
+		
+		Mage::log("array diff", null, 'wojcik4.log');
+		Mage::log($notExistingSkus, null, 'wojcik4.log');
 
 		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
 		// get skuv from sku
