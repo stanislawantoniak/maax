@@ -150,6 +150,15 @@
                     <model>zolagocustomer/observer::cleanOldTokens</model>
                 </run>
             </zolagocustomer_clear_old_tokens>
+			<!-- Attach customer to customer groups depends on card type -->
+            <zolagocustomer_layalty_cards_to_groups>
+				<schedule>
+					<cron_expr>18 */2 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>zolagocustomer/observer::attachCustomersToGroupsByLoyaltyCardType</model>
+				</run>
+			</zolagocustomer_layalty_cards_to_groups>
         </jobs>
     </crontab>
 	<default>

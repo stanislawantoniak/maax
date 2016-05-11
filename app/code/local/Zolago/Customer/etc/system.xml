@@ -116,6 +116,29 @@
 						</expiration_time>
 					</fields>
 				</listing_products_cache>
+				<loyalty_card>
+					<label>Loyalty card</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1300</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<config translate="label">
+							<label>Config JSON</label>
+							<frontend_type>textarea</frontend_type>
+							<comment><![CDATA[ Example: <br />
+
+							todo
+
+							]]></comment>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</config>
+					</fields>
+				</loyalty_card>
 			</groups>
 		</customer>
 	</sections>
