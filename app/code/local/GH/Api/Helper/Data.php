@@ -156,41 +156,22 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		$coll->addAttributeToSelect('udropship_vendor', 'left');
 		$coll->addAttributeToSelect('skuv', 'left');
 
-		Mage::log((string)$coll->getSelect(), null, 'wojcik_sql.log');
-
 		$_data = $coll->getData();
 		$allSkusFromColl = array();
 		$invalidOwnerSkus = array();
 
-		Mage::log($inputSkus, null, 'wojcik2.log');
-		Mage::log($_data, null, 'wojcik2.log');
-
 		// wrong owner
 		foreach ($_data as $product) {
 			$allSkusFromColl[$product['sku']] = $product['sku'];
-			Mage::log($product['udropship_vendor'] . " ? " . $vendorId, null, 'wojcik_test.log');
-
 			if ($product['udropship_vendor'] != $vendorId) {
-				Mage::log("is invalid", null, 'wojcik_test.log');
 				$invalidOwnerSkus[$product['sku']] = $product['sku'];
 			}
 		}
 
 		// not existing products
 		$notExistingSkus = array_diff($inputSkus, $allSkusFromColl);
-		Mage::log("inputSkus", null, 'wojcik4.log');
-		Mage::log($inputSkus, null, 'wojcik4.log');
-		
-		Mage::log("allSkusFromColl", null, 'wojcik4.log');
-		Mage::log($allSkusFromColl, null, 'wojcik4.log');
-		
-		Mage::log("array diff", null, 'wojcik4.log');
-		Mage::log($notExistingSkus, null, 'wojcik4.log');
 
 		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
-		Mage::log($allErrorsSkus, null, 'wojcik4.log');
-		
-		
 		// get skuv from sku
 		foreach ($allErrorsSkus as $key => $sku) {
 			$allErrorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
@@ -208,15 +189,10 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function validatePrices($data, $vendorId) {
-		Mage::log($vendorId, null, 'wojcik_price.log');
-		Mage::log($data, null, 'wojcik_price.log');
-
 		$errorsSkus = array();
 		foreach ($data as $sku => $item) {
 			foreach ($item as $type => $price) {
-				Mage::log($item, null, 'wojcik_price.log');
 				if ($price <= 0) {
-					Mage::log("is invalid", null, 'wojcik_price.log');
 					$errorsSkus[] = $sku;
 				}
 			}
