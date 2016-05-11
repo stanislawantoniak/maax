@@ -269,7 +269,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	public function sendUnsubscriptionEmail($sid=null)
 	{
 		if (!Mage::helper("zolagonewsletter")->isModuleActive())
-			return parent::sendUnsubscriptionEmail($sid=null);
+			return parent::sendUnsubscriptionEmail();
 
 		return $this->_sendNewsletterEmail(
 			$sid,
@@ -285,7 +285,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	public function sendConfirmationRequestEmail($sid=null)
 	{
 		if (!Mage::helper("zolagonewsletter")->isModuleActive())
-			return parent::sendConfirmationRequestEmail($sid=null);
+			return parent::sendConfirmationRequestEmail();
 
 		return $this->_sendNewsletterEmail(
 			$sid,
