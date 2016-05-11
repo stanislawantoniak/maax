@@ -178,16 +178,19 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		// not existing products
 		$notExistingSkus = array_diff($inputSkus, $allSkusFromColl);
-		Mage::log("$inputSkus", null, 'wojcik4.log');
+		Mage::log("inputSkus", null, 'wojcik4.log');
 		Mage::log($inputSkus, null, 'wojcik4.log');
 		
-		Mage::log("$allSkusFromColl", null, 'wojcik4.log');
+		Mage::log("allSkusFromColl", null, 'wojcik4.log');
 		Mage::log($allSkusFromColl, null, 'wojcik4.log');
 		
 		Mage::log("array diff", null, 'wojcik4.log');
 		Mage::log($notExistingSkus, null, 'wojcik4.log');
 
 		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
+		Mage::log($allErrorsSkus, null, 'wojcik4.log');
+		
+		
 		// get skuv from sku
 		foreach ($allErrorsSkus as $key => $sku) {
 			$allErrorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
