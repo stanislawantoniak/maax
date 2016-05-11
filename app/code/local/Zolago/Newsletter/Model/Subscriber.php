@@ -35,7 +35,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	public function sendConfirmationSuccessEmail($sid=null)
 	{
 		if (!Mage::helper("zolagonewsletter")->isModuleActive())
-			return parent::sendConfirmationSuccessEmail($sid=null);
+			return parent::sendConfirmationSuccessEmail();
 
 		$couponData = null;
 		$confirmationSalesRuleId = $this->getConfirmationSalesRule();
