@@ -378,22 +378,23 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 			$user = $this->getUserByToken($token); // Do loginBySessionToken
 			$vendor = $user->getVendor();
 			$vendorId = $vendor->getId();
+			$externalId = $vendor->getExternalId();
 
 			// Check if is sth to prepare
 			if (empty($priceData) && empty($stockData)) Mage::throwException('error_empty_product_update_list');
 
 			// Prepare data - from SKUV to SKU
-			$priceBatch = $this->getHelper()->preparePriceBatch($priceData, $vendorId);
-			$stockBatch = $this->getHelper()->prepareStockBatch($stockData, $vendorId);
+			$priceBatch = $this->getHelper()->preparePriceBatch($priceData, $externalId);
+			$stockBatch = $this->getHelper()->prepareStockBatch($stockData, $externalId);
 
 			$this->getHelper()->validateSkus(array_merge($priceBatch, isset($stockBatch[$vendorId]) ? $stockBatch[$vendorId] : array()), $vendorId);
 
 			if (!empty($priceBatch)) {
-				$this->getHelper()->validatePrices($priceBatch, $vendorId);
+				$this->getHelper()->validatePrices($priceBatch, $externalId);
 			}
 			if (!empty($stockBatch)) {
-				$this->getHelper()->validatePoses($stockBatch[$vendorId], $vendorId);
-				$this->getHelper()->validateQtys($stockBatch[$vendorId], $vendorId);
+				$this->getHelper()->validatePoses($stockBatch[$vendorId], $externalId);
+				$this->getHelper()->validateQtys($stockBatch[$vendorId], $externalId);
 			}
 
 			// update it
