@@ -335,14 +335,6 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             $session->setCustomerAsLoggedIn($customer);
             $session->renewSession();
             $url = $this->_welcomeCustomer($customer);
-            $model = Mage::getModel('zolagonewsletter/inviter');
-            if($customer->getData("is_subscribed") == 0) {
-                // send invitation mail, model takes care of handling everything
-                if (Mage::helper("zolagonewsletter")->isModuleActive()){
-                    $model->sendInvitationEmail($customer->getEmail());
-                }
-
-            }
         }
         $this->_redirectSuccess($url);
         return $this;
