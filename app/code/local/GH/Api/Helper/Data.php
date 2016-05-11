@@ -208,10 +208,15 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function validatePrices($data, $vendorId) {
+		Mage::log($vendorId, null, 'wojcik_price.log');
+		Mage::log($data, null, 'wojcik_price.log');
+
 		$errorsSkus = array();
 		foreach ($data as $sku => $item) {
 			foreach ($item as $type => $price) {
+				Mage::log($item, null, 'wojcik_price.log');
 				if ($price <= 0) {
+					Mage::log("is invalid", null, 'wojcik_price.log');
 					$errorsSkus[] = $sku;
 				}
 			}
