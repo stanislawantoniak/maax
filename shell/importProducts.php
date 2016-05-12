@@ -102,7 +102,7 @@ class Modago_ImportProducts_Shell extends Mage_Shell_Abstract
             }
 
             //Create configurable
-Mage::log(implode(",", $subskus));
+            Mage::log(implode(",", $subskus));
             $firstSimple = $simples[0];
             $productConfigurable = array(
                 "name" => $configurableSku,
