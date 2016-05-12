@@ -397,7 +397,13 @@
 						);
 					} :
 					function() {
-						document.location = Mall.Checkout.redirect;
+						if(typeof Mall.Checkout.waitForExternalGTMTags != 'undefined' && Mall.Checkout.waitForExternalGTMTags) {
+							setTimeout(function() {
+								window.location = Mall.Checkout.redirect;
+							},Mall.Checkout.waitForExternalGTMTags);
+						} else {
+							window.location = Mall.Checkout.redirect;
+						}
 					};
 
 			if (dl && redirect && typeof dataLayer != "undefined") {
@@ -420,10 +426,10 @@
 							},
 							'products': dl.transactionProducts
 						}
-					},
-					'eventCallback': callback
+					}
 				};
 				dataLayer.push(measuringPurchases);
+				callback();
 			} else if(redirect){
 				callback();
 			} else {
