@@ -79,12 +79,12 @@ class Zolago_Customer_Model_Observer {
 		$dateModel = Mage::getModel('core/date');
 		$now = $dateModel->timestamp(time());
 
-		/** @var Zolago_Customer_Helper_Data $helper */
-		$helper = Mage::helper("zolagocustomer");
-		$config = $helper->getLoyaltyCardConfig();
-
 	/** @var Mage_Core_Model_Website $website */
 		foreach (Mage::app()->getWebsites() as $website) {
+			/** @var Zolago_Customer_Helper_Data $helper */
+			$helper = Mage::helper("zolagocustomer");
+			$config = $helper->getLoyaltyCardConfig($website->getDefaultStore());
+			
 			/** @var Mage_Customer_Model_Resource_Customer_Collection $coll */
 			$coll = Mage::getResourceModel("customer/customer_collection");
 			$coll->addAttributeToFilter('website_id', array("eq" => $website->getId()));
