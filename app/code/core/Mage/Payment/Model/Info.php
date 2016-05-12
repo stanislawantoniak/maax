@@ -75,6 +75,8 @@ class Mage_Payment_Model_Info extends Mage_Core_Model_Abstract
                 Mage::log($this->getMethod(), null, "payment.log");
                 $instance = Mage::helper('payment')->getMethodInstance($this->getMethod());
                 Mage::log((bool)$instance, null, "payment.log");
+                Mage::log($instance, null, "payment.log");
+                Mage::log("---------------------", null, "payment.log");
                 if ($instance) {
                     $instance->setInfoInstance($this);
                     $this->setMethodInstance($instance);
