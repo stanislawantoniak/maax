@@ -128,9 +128,16 @@
 							<label>Config JSON</label>
 							<frontend_type>textarea</frontend_type>
 							<comment><![CDATA[ Example: <br />
-
-							todo
-
+								{<br />
+								&nbsp;&nbsp;"id": 1,<br />
+								&nbsp;&nbsp;"name": "Name X",<br />
+								&nbsp;&nbsp;"customer_group_ids": 2<br />
+								},<br />
+								{<br />
+								&nbsp;&nbsp;"id": 2,<br />
+								&nbsp;&nbsp;"name": "Name Y",<br />
+								&nbsp;&nbsp;"customer_group_ids": 3<br />
+								}<br />
 							]]></comment>
 							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>

@@ -153,7 +153,8 @@
 			<!-- Attach customer to customer groups depends on card type -->
             <zolagocustomer_layalty_cards_to_groups>
 				<schedule>
-					<cron_expr>18 */2 * * *</cron_expr>
+					<!-- Run every 5 minutes -->
+					<cron_expr>*/5 * * * *</cron_expr>
 				</schedule>
 				<run>
 					<model>zolagocustomer/observer::attachCustomersToGroupsByLoyaltyCardType</model>
