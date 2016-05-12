@@ -79,7 +79,7 @@ class Zolago_Customer_Model_Observer {
 		$dateModel = Mage::getModel('core/date');
 		$now = $dateModel->timestamp(time());
 
-	/** @var Mage_Core_Model_Website $website */
+		/** @var Mage_Core_Model_Website $website */
 		foreach (Mage::app()->getWebsites() as $website) {
 			/** @var Zolago_Customer_Helper_Data $helper */
 			$helper = Mage::helper("zolagocustomer");
@@ -118,7 +118,6 @@ class Zolago_Customer_Model_Observer {
 				$loyaltyCardNumberExpire = $customer->getData('loyalty_card_number_3_expire') ? $customer->getData('loyalty_card_number_3_expire') : $loyaltyCardNumberExpire;
 
 				$expireTimestamp = $dateModel->timestamp($loyaltyCardNumberExpire);
-//				echo $now . " vs " . $expireTimestamp ."\n";
 
 				if (strlen($loyaltyCardNumber) && $loyaltyCardNumberType && ($now < $expireTimestamp)) {
 					if (isset($config[$loyaltyCardNumberType]) &&
@@ -129,15 +128,12 @@ class Zolago_Customer_Model_Observer {
 						$group = Mage::getModel("customer/group")->load($config[$loyaltyCardNumberType]['customer_group_id']);
 						if ($group->getId()) {
 							$groupId = $group->getId();
-							echo "wow set id $groupId \n";
 						}
 					}
 				}
 
-
 				$customer->setData('group_id', $groupId);
 				if ($customer->dataHasChangedFor('group_id')) {
-					echo "wow save $groupId!\n";
 					$customer->save();
 				}
 			}
