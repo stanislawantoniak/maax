@@ -129,14 +129,14 @@
 							<frontend_type>textarea</frontend_type>
 							<comment><![CDATA[ Example: <br />
 								{<br />
-								&nbsp;&nbsp;"id": 1,<br />
-								&nbsp;&nbsp;"name": "Name X",<br />
-								&nbsp;&nbsp;"customer_group_ids": 2<br />
-								},<br />
-								{<br />
-								&nbsp;&nbsp;"id": 2,<br />
-								&nbsp;&nbsp;"name": "Name Y",<br />
-								&nbsp;&nbsp;"customer_group_ids": 3<br />
+								&nbsp;&nbsp;"1": {<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"name": "Przypisz do GRUPA ID 2",<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"customer_group_id": 2<br />
+								&nbsp;&nbsp;},<br />
+								&nbsp;&nbsp;"2": {<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"name": "Przypisz do GRUPA ID 3",<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"customer_group_id": 3<br />
+								&nbsp;&nbsp;}<br />
 								}<br />
 							]]></comment>
 							<sort_order>10</sort_order>
