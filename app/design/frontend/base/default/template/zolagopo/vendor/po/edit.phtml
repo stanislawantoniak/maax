@@ -156,8 +156,8 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 
                     <?php
                     if ($this->canShowPaymentDetails()):
-                        /** @var Zolago_Payment_Helper_Data $paymentHelper */
                         $paymentHelper = Mage::helper('zolagopayment');
+                        /** @var Zolago_Payment_Helper_Data $paymentHelper */
                         $paymentDetails = $paymentHelper->getPaymentDetails($this->getPo()->getId());
                         $overpayDetails = $paymentHelper->getOverpaymentDetails($this->getPo()->getId());
 

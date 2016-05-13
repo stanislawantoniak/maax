@@ -214,4 +214,12 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 		);
 	}
 
+	/**
+	 * @param null $store
+	 * @return bool
+	 */
+	public function getConfigUseAllocation($store = null) {
+		$config = Mage::getStoreConfig('payment/config/use_allocation', $store);
+		return (bool)$config;
+	}
 }
