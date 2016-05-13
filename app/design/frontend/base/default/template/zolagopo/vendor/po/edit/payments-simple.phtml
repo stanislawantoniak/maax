@@ -23,7 +23,7 @@ $refundsDetails =$this->getData('refunds_details');
             </div>
             <div class="modal-body">
 
-				<?php if($transactionsDetails->count() > 0): ?>
+				<?php if($transactionsDetails->count() || $refundsDetails->count()): ?>
 					<table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
 						<thead>
 						<tr>
@@ -46,6 +46,19 @@ $refundsDetails =$this->getData('refunds_details');
 										->currency($transaction->getTxnAmount(), true, false); ?>
 								</td>
 							</tr>
+						<?php endforeach; ?>
+						<?php
+						/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+						foreach ($refundsDetails as $transaction): ?>
+						<tr>
+							<td><?php echo $transaction->getTxnId(); ?></td>
+							<td><?php echo $transaction->getCreatedAt(); ?></td>
+							<td><?php echo $hlpPo->__($transaction->getOrderPaymentObject()->getMethodInstance()->getTitle()); ?></td>
+							<td>
+								<?php echo Mage::helper('core')
+									->currency($transaction->getTxnAmount(), true, false); ?>
+							</td>
+						</tr>
 						<?php endforeach; ?>
 						<tr>
 							<td></td>
@@ -71,10 +84,6 @@ $refundsDetails =$this->getData('refunds_details');
 						</tr>
 						</tbody>
 					</table>
-				<?php endif; ?>
-
-				<?php if($refundsDetails->count() > 0): ?>
-					todo $refundsDetails
 				<?php endif; ?>
             </div>
             <div class="modal-footer">
