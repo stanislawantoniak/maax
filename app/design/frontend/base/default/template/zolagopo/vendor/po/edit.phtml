@@ -1,23 +1,24 @@
-<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
-<?php $_hlp					= Mage::helper("zolagopo");?>
-<?php $_po					= $this->getPo(); ?>
-<?php $_shippingMethod		= $this->getShippingMethod();?>
-<?php $_shipmentsCollection = $this->getShipmentsCollection();?>
-<?php /** @var Mage_Sales_Model_Order_Shipment $_currentShipping */
-$_currentShipping		= $this->getCustomCurrentShipping();?>
-<?php $_alerts				= $this->getAlerts($_po);?>
-<?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
-<?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
-<?php $_statusModel			= $_po->getStatusModel(); ?>
-<?php $_aggregated			= $_po->getAggregated();?>
-<?php $_isEditable			= $this->isEditable();?>
 <?php
+/* @var $this Zolago_Po_Block_Vendor_Po_Edit */ 
+$_hlp					= Mage::helper("zolagopo");
+$_po					= $this->getPo(); 
+$_shippingMethod		= $this->getShippingMethod();
+$_shipmentsCollection	= $this->getShipmentsCollection();
+/** @var Mage_Sales_Model_Order_Shipment $_currentShipping */
+$_currentShipping		= $this->getCustomCurrentShipping();
+$_alerts				= $this->getAlerts($_po);
+$_comments				= $_po->getVendorCommentsCollection();
+$_shippingStatuses		= Mage::helper('udropship')->getVendorShipmentStatuses(); 
+$_statusModel			= $_po->getStatusModel(); 
+$_aggregated			= $_po->getAggregated();
+$_isEditable			= $this->isEditable();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
+/** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
+$_tracking = $this->getCurrentTracking($_currentShipping); 
+/** @var Zolago_Payment_Helper_Data $paymentHelper */
+$paymentHelper = Mage::helper('zolagopayment');
 ?>
-<?php /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
-$_tracking = $this->getCurrentTracking($_currentShipping); ?>
-
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="row page-heading">
@@ -156,22 +157,37 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 
                     <?php
                     if ($this->canShowPaymentDetails()):
-                        $paymentHelper = Mage::helper('zolagopayment');
-                        /** @var Zolago_Payment_Helper_Data $paymentHelper */
-                        $paymentDetails = $paymentHelper->getPaymentDetails($this->getPo()->getId());
-                        $overpayDetails = $paymentHelper->getOverpaymentDetails($this->getPo()->getId());
-
-                        //if no payment details do not show Payment details button
-                        if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
-                            <div class="toolbar no-padding">
-                                <div class="btn-group">
-                                <span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
-                                    <i class="glyphicon glyphicon-pushpin"></i>
-                                    <?php echo $_hlp->__("Payment details"); ?>
-                                </span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+						if ($paymentHelper->getConfigUseAllocation($_po->getStore())): // use allocation logic
+							$paymentDetails = $paymentHelper->getAllocationPaymentDetails($_po);
+							$overpayDetails = $paymentHelper->getAllocationOverpaymentDetails($_po);
+							//if no payment details do not show Payment details button
+							if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
+								<div class="toolbar no-padding">
+									<div class="btn-group">
+									<span data-toggle="modal" data-target="#paymentsModal-allocation" class="btn btn-xs">
+										<i class="glyphicon glyphicon-pushpin"></i>
+										<?php echo $_hlp->__("Payment details"); ?>
+									</span>
+									</div>
+								</div>
+							<?php endif; ?>
+						<?php else: // simplified logic 
+							$transactionsDetails = $paymentHelper->getSimpleTransactionsDetails($_po);
+							$refundsDetails = $paymentHelper->getSimpleRefundsDetails($_po);
+							?>
+							<?php if($transactionsDetails->count() || $refundsDetails->count()):
+								if (($transactionsDetails->count()) || $returnsDetails->count()): ?>
+									<div class="toolbar no-padding">
+										<div class="btn-group">
+										<span data-toggle="modal" data-target="#paymentsModal-simple" class="btn btn-xs">
+											<i class="glyphicon glyphicon-pushpin"></i>
+											<?php echo $_hlp->__("Payment details"); ?>
+										</span>
+										</div>
+									</div>
+								<?php endif; ?>
+							<?php endif; ?>
+						<?php endif; ?>
                     <?php endif; ?>
                 </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
@@ -568,13 +584,23 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
  *    Payments modal
  *******************************************************************************/
 if ($this->canShowPaymentDetails()) {
-    if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)) {
-        echo $this->getChild("vendor_po_edit_payments")
-            ->setData('payment_details', $paymentDetails)
-            ->setData('overpay_details', $overpayDetails)
-            ->setData('po', $_po)
-            ->toHtml();
-    }
+	if ($paymentHelper->getConfigUseAllocation($_po->getStore())) {
+		if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)) {
+			echo $this->getChild("vendor_po_edit_payments_allocation")
+				->setData('payment_details', $paymentDetails)
+				->setData('overpay_details', $overpayDetails)
+				->setData('po', $_po)
+				->toHtml();
+		}
+	} else {
+		if(($transactionsDetails->count()) || $refundsDetails->count()) {
+			echo $this->getChild("vendor_po_edit_payments_simple")
+				->setData('transactions_details', $transactionsDetails)
+				->setData('refunds_details', $refundsDetails)
+				->setData('po', $_po)
+				->toHtml();
+		} 
+	}
 }
 	
 /*******************************************************************************
