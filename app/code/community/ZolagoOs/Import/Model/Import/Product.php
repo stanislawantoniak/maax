@@ -150,7 +150,7 @@ class ZolagoOs_Import_Model_Import_Product
         $productConfigurable = array(
             "name" => $configurableSkuv,
             "sku" => $configurableSku,
-            "skuv" => $simpleSku,
+            "skuv" => $configurableSkuv,
             //"price" => "0.00",
             "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
             "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
