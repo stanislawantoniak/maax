@@ -5,9 +5,9 @@
 
 require_once 'abstract.php';
 
-require_once("/var/www/orba-zolago-internal/magmi/inc/magmi_defs.php");
+require_once("../magmi/inc/magmi_defs.php");
 //Datapump include
-require_once("/var/www/orba-zolago-internal/magmi/integration/inc/magmi_datapump.php");
+require_once("../magmi/integration/inc/magmi_datapump.php");
 
 /**
  * Define a logger class that will receive all magmi logs *
