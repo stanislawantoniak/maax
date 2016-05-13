@@ -72,7 +72,7 @@ class ZolagoOs_Import_Model_Import_Product
             // "update" updates only,
             // "xcreate creates only.
             // Important: for values other than "default" profile has to be an existing magmi profile
-            $importProfile = "local";
+            $importProfile = "dev_01";
             $dp->beginImportSession($importProfile, "create", new ZolagoOs_Import_Model_ImportProductsLogger());
 
             $skusUpdated = array();
