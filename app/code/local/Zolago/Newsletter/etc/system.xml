@@ -7,6 +7,8 @@
 					<label>Newsletter Invitation Config</label>
 					<frontend_type>text</frontend_type>
 					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
 					<sort_order>2</sort_order>
 					<fields>
 						<active translate="label">
