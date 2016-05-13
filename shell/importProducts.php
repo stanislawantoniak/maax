@@ -47,6 +47,7 @@ class Modago_ImportProducts_Shell extends Mage_Shell_Abstract
 
         /*Config values*/
         $vendorId = 82;
+        $importProfile = "dev_01";
         /*Config values*/
 
         $xmlToArray = (array)$xml;
@@ -71,7 +72,7 @@ class Modago_ImportProducts_Shell extends Mage_Shell_Abstract
         // "update" updates only,
         // "xcreate creates only.
         // Important: for values other than "default" profile has to be an existing magmi profile
-        $dp->beginImportSession("local", "create", new ImportProductsLogger());
+        $dp->beginImportSession($importProfile, "create", new ImportProductsLogger());
 
         $skusUpdated = array();
         foreach ($skuBatch as $configurableSkuv => $simples) {
