@@ -19,24 +19,12 @@ class Zolago_Newsletter_Helper_Data extends Mage_Newsletter_Helper_Data
     /**
      * Get module configuration value
      *
-     * @param string $value
-     * @param string $store
-     * @return mixed Configuration setting
+     * @param $value
+     * @return mixed
      */
-    public function config($value, $store = null)
+    public function config($value)
     {
-        $store = is_null($store) ? Mage::app()->getStore() : $store;
-
-        $configScope = Mage::app()->getRequest()->getParam('store');
-        if ($configScope && ($configScope !== 'undefined') && !is_array($configScope)) {
-            if (is_array($configScope) && isset($configScope['code'])) {
-                $store = $configScope['code'];
-            } else {
-                $store = $configScope;
-            }
-        }
-
-        return Mage::getStoreConfig("newsletter/zolagosubscription/$value", $store);
+        return Mage::getStoreConfig("newsletter/zolagosubscription/$value");
     }
 
 }
