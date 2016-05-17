@@ -611,6 +611,8 @@ button.icon-btn span { text-indent:-999em; display:block; width:16px; padding:0;
 .nb-btninvoice >span{background-image: url("images/cmsmart/i-invoice.png")  !important;}
 .nb-btnship >span{background-image: url("images/cmsmart/i-ship.png")  !important;}
 .nb-btnreorder >span{background-image: url("images/cmsmart/i-reoder.png")  !important;}
+.nb-btnemail >span{background-image: url("images/cmsmart/i-email.png")  !important;padding-left: 0px !important;}
+.nb-btnemail >span>span>span {padding-left: 20px !important;}
 
 .filter-actions button {padding: 5px 7px;}
 /* SWITCHER
