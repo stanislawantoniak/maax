@@ -1435,6 +1435,16 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::helper('core')->jsonEncode(array_map('strval', $this->getAllowedPoStatuses($po, $auto)));
     }
 
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param $status
+	 * @param $save
+	 * @param bool $vendor
+	 * @param string $comment
+	 * @param null $isVendorNotified
+	 * @param null $isVisibleToVendor
+	 * @return bool
+	 */
     public function processPoStatusSave($po, $status, $save, $vendor=false, $comment='', $isVendorNotified=null, $isVisibleToVendor=null)
     {
         $allowedStatuses   =  $this->getAllowedPoStatuses($po, $vendor===false);
@@ -1443,6 +1453,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
         if ($po->getUdropshipStatus()!=$status
             && (in_array($status, $allowedStatuses) || $po->getForceStatusChangeFlag())
         ) {
+			Mage::helper('udropship')->setDesignStore($po->getOrder()->getStore());
             $oldStatus = $po->getUdropshipStatus();
             Mage::dispatchEvent(
                 'udpo_po_status_save_before',
@@ -1477,6 +1488,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
                 'udpo_po_status_save_after',
                 array('po'=>$po, 'old_status'=>$oldStatus, 'new_status'=>$status)
             );
+			Mage::helper('udropship')->setDesignStore();
             return true;
         } elseif (0 && $vendor) {
             $oldStatus = $po->getUdropshipStatus();

@@ -18,5 +18,9 @@ interface Orba_Shipping_Model_Carrier_Interface extends Mage_Shipping_Model_Carr
     public function createShipments();
     
     public function createShipmentAtOnce();
+    
+    public function processTrack($track,$data);
+    
+    public function cancelTrack($track);
 
 }
