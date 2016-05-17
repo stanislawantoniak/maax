@@ -903,6 +903,23 @@ a {
 	}
 }
 
+.fa {
+	&.fa-1_1x {
+		font-size: 1.1em;
+	}
+	&.fa-1_2x {
+		font-size: 1.2em;
+	}
+	&.fa-1_3x {
+		font-size: 1.3em;
+	}
+	&.fa-1_4x {
+		font-size: 1.4em;
+	}
+	&.fa-1_5x {
+		font-size: 1.5em;
+	}
+}
 
 [class^=ico_] {
     background:$allMap;

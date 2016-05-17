@@ -2,7 +2,6 @@
 
 class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
 {
-    const TRACK_SINGLE = 1;
     protected $trackingHelperPath = 'orbashipping/carrier_tracking';
 
 

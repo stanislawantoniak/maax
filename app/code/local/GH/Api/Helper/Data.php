@@ -50,6 +50,203 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
         return $d && $d->format($format) == $date;
     }
 
+	/**
+	 * @param $data
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function prepareSku($data, $vendorId) {
+		$batch = array();
+		foreach ($data as $skuV => $item) {
+			$sku = $vendorId . "-" . $skuV;
+			$batch[$sku] = $item;
+		}
+		return $batch;
+	}
+
+	/**
+	 * @param $data
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function preparePriceBatch($data, $vendorId)
+	{
+		$data = json_decode(json_encode($data), true);
+		$batch = array();
+
+		if (!isset($data["product"]))
+			return $batch;
+
+		// single product
+		if (isset($data["product"]["sku"])) {
+			$data["product"] = array($data["product"]);
+		}
+		
+		foreach ($data["product"] as $product) {
+			$sku = $vendorId . "-" . $product['sku'];
+
+			foreach ($product['pricesTypesList'] as $type) {
+				if (isset($type['priceType'])){
+					$type = array($type);
+				}
+				foreach ($type as $item) {
+					$batch[$sku][$item['priceType']] = $item['priceValue'];
+				}
+			}
+		}
+		
+		return $batch;
+	}
+
+
+	/**
+	 * @param $data
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function prepareStockBatch($data, $vendorId)
+	{
+		$data = json_decode(json_encode($data), true);
+		$batch = array();
+
+		if (!isset($data["product"]))
+			return $batch;
+
+		// single product
+		if (isset($data["product"]["sku"])) {
+			$data["product"] = array($data["product"]);
+		}
+
+		foreach ($data["product"] as $product) {
+			$sku = $vendorId . "-" . $product['sku'];
+
+			foreach ($product['posesList'] as $pos) {
+				if (isset($pos['id'])){
+					$pos = array($pos);
+				}
+				foreach ($pos as $item) {
+					$batch[$vendorId][$sku][$item['id']] = $item['qty'];
+				}
+			}
+		}
+
+		return $batch;
+	}
+	/**
+	 * Validate skus for vendor
+	 *
+	 * Throw exception if
+	 * product is not connected to vendor
+	 * product don't exist
+	 *
+	 * @param $data
+	 * @param $vendorId
+	 * @return bool
+	 * @throws Mage_Core_Exception
+	 */
+	public function validateSkus($data, $vendorId) {
+		$inputSkus = array();
+		foreach ($data as $sku => $item) {
+			$inputSkus[$sku] = $sku;
+		}
+
+		/* @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+		$coll = Mage::getResourceModel('zolagocatalog/product_collection');
+		$coll->addFieldToFilter('sku', array( 'in' => $inputSkus));
+		$coll->addAttributeToSelect('udropship_vendor', 'left');
+		$coll->addAttributeToSelect('skuv', 'left');
+
+		$_data = $coll->getData();
+		$allSkusFromColl = array();
+		$invalidOwnerSkus = array();
+
+		// wrong owner
+		foreach ($_data as $product) {
+			$allSkusFromColl[$product['sku']] = $product['sku'];
+			if ($product['udropship_vendor'] != $vendorId) {
+				$invalidOwnerSkus[$product['sku']] = $product['sku'];
+			}
+		}
+
+		// not existing products
+		$notExistingSkus = array_diff($inputSkus, $allSkusFromColl);
+
+		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
+		// get skuv from sku
+		foreach ($allErrorsSkus as $key => $sku) {
+			$allErrorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$allErrorsSkus = array_unique($allErrorsSkus);
+		}
+		if (!empty($allErrorsSkus)) {
+			Mage::throwException('error_invalid_update_products_sku' . ' (' . implode(',', $allErrorsSkus) . ')');
+		}
+
+		return true;
+	}
+
+	public function getSkuvFromSku($sku, $vendorId) {
+		return preg_replace('/' . preg_quote($vendorId . '-', '/') . '/', '', $sku, 1);
+	}
+
+	public function validatePrices($data, $vendorId) {
+		$errorsSkus = array();
+		foreach ($data as $sku => $item) {
+			foreach ($item as $type => $price) {
+				if ($price <= 0) {
+					$errorsSkus[] = $sku;
+				}
+			}
+		}
+		foreach ($errorsSkus as $key => $sku) {
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$errorsSkus = array_unique($errorsSkus);
+		}
+		if (!empty($errorsSkus)) {
+			Mage::throwException("error_invalid_update_products_price (". implode(',', $errorsSkus) . ')');
+		}
+		return true;
+	}
+
+	public function validateQtys($data, $vendorId) {
+		$errorsSkus = array();
+		foreach ($data as $sku => $pos) {
+			foreach ($pos as $id => $qty) {
+				if (!is_numeric($qty)) {
+					$errorsSkus[] = $sku;
+				}
+			}
+		}
+		foreach ($errorsSkus as $key => $sku) {
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$errorsSkus = array_unique($errorsSkus);
+		}
+		if (!empty($errorsSkus)) {
+			Mage::throwException("error_invalid_update_products_qty (". implode(',', $errorsSkus) . ')');
+		}
+		return true;
+	}
+
+	public function validatePoses($data, $vendorId) {
+		/** @var Zolago_Pos_Helper_Data $helper */
+		$helper = Mage::helper('zolagopos');
+		$errorsSkus = array();
+		foreach ($data as $sku => $pos) {
+			foreach ($pos as $id => $qty) {
+				if (!$helper->isValidForVendor($id, $vendorId)) {
+					$errorsSkus[] = $sku . "[POS:{$id}]";
+				}
+			}
+		}
+		foreach ($errorsSkus as $key => $sku) {
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
+			$errorsSkus = array_unique($errorsSkus);
+		}
+		if (!empty($errorsSkus)) {
+			Mage::throwException("error_invalid_update_products_pos_id (". implode(',', $errorsSkus) . ')');
+		}
+		return true;
+	}
+	
     /**
      * @return void
      * @throws Mage_Core_Exception

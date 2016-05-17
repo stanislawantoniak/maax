@@ -41,13 +41,55 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 
     protected function _getAttributeCodesForFilter() {
         $lambda = function() {
-            $collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
-            /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
-            $collection->joinAttributeCode();
-            $result = array();
-            foreach ($collection as $item) {
-                $result[$item->getCategoryId()][] = $item->getAttributeCode();
+			$collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
+			/* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+			$collection->joinAttributeCode();
+			$result = array();
+			$catIds = array();
+			foreach ($collection as $item) {
+				$categoryId = $item->getCategoryId();
+				$catIds[] = $categoryId;
+				$result[$categoryId][] = $item->getAttributeCode();
+			}
+			// Fallback for related categories
+			/** @var Zolago_Catalog_Model_Category $category */
+			$category = Mage::getModel('catalog/category');
+			$catTree = $category->getTreeModel()->load();
+			/** @var Zolago_Catalog_Model_Resource_Category_Collection $collection */
+			$collection = $catTree->getCollection();
+            $collection->joinCategoryFilters();
+			$collection->addFieldToFilter('entity_id', array('nin'=> $catIds));
+			$diffCategories = $collection->getData();
+
+			$diffCatIds = array();
+			foreach ($diffCategories as $category) {
+				$diffCatIds[] = (int)$category['entity_id'];
+			}
+            unset($category);
+
+			/** @var Zolago_Catalog_Model_Resource_Category $res */
+			$res = Mage::getResourceModel("zolagocatalog/category");
+			$data = $res->getRelatedIds($diffCatIds, true);
+			foreach ($data as $categoryId => $relatedToId) {
+				if (isset($result[$relatedToId])) {
+					// Make copy for related category
+					$result[$categoryId] = $result[$relatedToId];
+				}
+			}
+
+            foreach ($diffCategories as $category) {
+                if ($category["use_flag_filter"] == 1) {
+                    $result[$category['entity_id']][] = "flags";
+                }
+                if ($category["use_price_filter"] == 1) {
+                    $result[$category['entity_id']][] = "price";
+                }
+                if ($category["use_review_filter"] == 1) {
+                    $result[$category['entity_id']][] = "product_rating";
+                }
             }
+
+			ksort($result);
             return serialize($result);
         };
         $out = Mage::helper('zolagocommon')->getCache('attribute_codes_for_filter',self::CACHE_GROUP,$lambda,array());
@@ -58,16 +100,16 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
      * returns list of attributes used in filters by category id
      *
      * @param int $categoryId
-     * @return 
+     * @return array
      */
-
-    public function getFilterCollection($categoryId) {
+    public function getFilterCollection($categoryId)
+    {
         if (!$this->hasData('all_filter_collection')) {
             $result = $this->_getAttributeCodesForFilter();
-            $this->setData('all_filter_collection',$result);
+            $this->setData('all_filter_collection', $result);
         }
-        $result = $this->getData('all_filter_collection');        
-        return isset($result[$categoryId])? $result[$categoryId]:array();
+        $result = $this->getData('all_filter_collection');
+		return isset($result[$categoryId])? $result[$categoryId]:array();
     }
     
     
@@ -107,7 +149,8 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         $params = $this->getRequest()->getParams();
         // keep only existing filters
         $codeList = $this->getFilterCollection($category_id);
-        $codeList = array_merge($codeList,array('price','flags','product_rating', 'campaign_info_id', 'campaign_regular_id'));
+        $codeList = array_merge($codeList,array('campaign_info_id', 'campaign_regular_id'));
+
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
                 if (!in_array($key,$codeList)) {
@@ -185,7 +228,7 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 
 	/**
 	 * @param array $data
-	 * @param bool $show_brothers if true solr gets two querys (first about current category, second about brothers), if false is only one query
+	 * @param bool $show_brothers if true solr gets two queries (first about current category, second about brothers), if false is only one query
 	 * @return array
 	 */
     public function processCategoryData($data,$show_brothers = true)

@@ -31,6 +31,7 @@ $_item = $this->getItem(); /** @var $_item Mage_Sales_Model_Quote_Item */
 
 
 $_helper = Mage::helper("zolagocataloginventory");
+$_helperCheckout = Mage::helper("zolagocheckout");
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 ?>
@@ -75,7 +76,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 
         </div>
         <div class="colgroup clearfix">
-            <div class="usun"><a href="<?php echo $this->getDeleteUrl()?>" class="delet_product" title="<?php echo $this->__('Remove item')?>"><i class="fa-remove"></i></a></div>
+            <div class="usun"><a href="<?php echo $this->getDeleteUrl()?>" class="delet_product" title="<?php echo $_helperCheckout->__('Remove product')?>"><i class="fa fa-trash-o fa-1_4x"></i></a></div>
             <div class="col">
 
 
