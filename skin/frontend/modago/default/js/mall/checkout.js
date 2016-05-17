@@ -46,12 +46,12 @@
 			 * InPost telephone number
 			 */
 			copyTelephoneNumber: function (event) {
-				//var self = event.data.self;
-				//var a = jQuery(this).val();
-				//jQuery(this).valid();
-				//if (self.getAllowCopyTelephoneFlag()) {
-				//	jQuery("#telephone_for_locker").val(a).valid();
-				//}
+				var self = event.data.self;
+				var a = jQuery(this).val();
+				jQuery(this).valid();
+				if (self.getAllowCopyTelephoneFlag()) {
+					jQuery("#telephone_for_locker").val(a).valid();
+				}
 			},
 			// Copy telephone functionality END
 
@@ -397,7 +397,13 @@
 						);
 					} :
 					function() {
-						document.location = Mall.Checkout.redirect;
+						if(typeof Mall.Checkout.waitForExternalGTMTags != 'undefined' && Mall.Checkout.waitForExternalGTMTags) {
+							setTimeout(function() {
+								window.location = Mall.Checkout.redirect;
+							},Mall.Checkout.waitForExternalGTMTags);
+						} else {
+							window.location = Mall.Checkout.redirect;
+						}
 					};
 
 			if (dl && redirect && typeof dataLayer != "undefined") {
@@ -420,10 +426,10 @@
 							},
 							'products': dl.transactionProducts
 						}
-					},
-					'eventCallback': callback
+					}
 				};
 				dataLayer.push(measuringPurchases);
+				callback();
 			} else if(redirect){
 				callback();
 			} else {

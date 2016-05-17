@@ -203,6 +203,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
      * @param string $action
      */
     protected function _processMass($action) {
+		/** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("zolagopo");
         $ids = $this->_getMassIds();
         $collection = Mage::getResourceModel('zolagopo/po_collection');
@@ -265,7 +266,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 if($action == self::ACTION_PRINT_AGGREGATED) {
                     // Action not based on status
-                    $id = Mage::helper('zolagopo')->createAggregated($collection, $this->_getVendor());
+                    $id = $hlp->createAggregated($collection, $this->_getVendor());
                     $transaction->commit();
                     Mage::getSingleton('core/session')->setAggregatedPrintId($id);
                 } else {
@@ -1245,6 +1246,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     protected function _addShipping($carrier,$udpo,$shipment) {
         $session = $this->_getSession();
         $shippingManager = Mage::helper('orbashipping')->getShippingManager($carrier);
+        
         $r = $this->getRequest();
         $settings = $shippingManager->prepareSettings($r,$shipment,$udpo);
 
@@ -1294,7 +1296,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $number = $this->getRequest()->getParam('tracking_id');
         return $number;
     }
-
+    
     /**
      * @return void
      * @throws Mage_Core_Exception

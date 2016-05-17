@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Adminhtml>
-            <version>0.0.4</version>
+            <version>0.0.5</version>
         </Zolago_Adminhtml>
     </modules>
     <global>
@@ -35,6 +35,11 @@
                     <customer_edit_tabs>Zolago_Adminhtml_Block_Customer_Edit_Tabs</customer_edit_tabs>
                 </rewrite>
             </adminhtml>
+            <cmsmart_admintheme>
+                <rewrite>
+                    <adminhtml_block_sales_order_view>Zolago_Adminhtml_Block_AdminTheme_Adminhtml_Block_Sales_Order_View</adminhtml_block_sales_order_view>
+                </rewrite>
+            </cmsmart_admintheme>
         </blocks>
         <helpers>
             <zolagoadminhtml>

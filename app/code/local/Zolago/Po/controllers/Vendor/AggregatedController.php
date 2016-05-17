@@ -20,6 +20,7 @@ class Zolago_Po_Vendor_AggregatedController
 	
 	/**
 	 * @return Zolago_Po_Model_Aggregated
+	 * @throws Mage_Core_Exception
 	 */
 	protected function _registerAggregated() {
 		if(!Mage::registry('current_aggregated')){

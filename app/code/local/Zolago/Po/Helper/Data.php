@@ -142,14 +142,16 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 		$height = $this->getPoImageHeight($po);
 		$store = $po->getStore();
 		$attachments = array();
-		
+		/** @var Zolago_Common_Helper_Data $helper */
+		$helper = Mage::helper("zolagocommon");
+
 		foreach($po->getItemsCollection() as $item){
 			if(!$item->getParentItemId()){
 				$imageUrl = (string)Mage::helper("catalog/image")->
 					init($item->getProduct(), "thumbnail")->
 					resize($width, $height);
 				$attachments[] = array(
-					"filename"		=> Mage::helper("zolagocommon")->getRelativePath($imageUrl, $store),
+					"filename"		=> $helper->getRelativePath($imageUrl, $store),
 					"id"			=> basename($item->getId().".jpg"),
 					"disposition"	=> "inline"
 				);
