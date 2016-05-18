@@ -43,69 +43,27 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tab_Offline extends Mage_Adminhtml_Bl
             $attribute->unsIsVisible();
         }
 
-        $disableAutoGroupChangeAttributeName = 'disable_auto_group_change';
-        $this->_setFieldset($attributes, $fieldset, array($disableAutoGroupChangeAttributeName));
-
-
-        if (!$customer->getId()) {
-            $fieldset->removeField('created_in');
-        }
-
-
-        $customerStoreId = null;
-        if ($customer->getId()) {
-            $customerStoreId = Mage::app()->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
-        }
-
-        $prefixElement = $form->getElement('prefix');
-        if ($prefixElement) {
-            $prefixOptions = $this->helper('customer')->getNamePrefixOptions($customerStoreId);
-            if (!empty($prefixOptions)) {
-                $fieldset->removeField($prefixElement->getId());
-                $prefixField = $fieldset->addField($prefixElement->getId(),
-                    'select',
-                    $prefixElement->getData(),
-                    $form->getElement('group_id')->getId()
-                );
-                $prefixField->setValues($prefixOptions);
-                if ($customer->getId()) {
-                    $prefixField->addElementValues($customer->getPrefix());
-                }
-
-            }
-        }
-
-        $suffixElement = $form->getElement('suffix');
-        if ($suffixElement) {
-            $suffixOptions = $this->helper('customer')->getNameSuffixOptions($customerStoreId);
-            if (!empty($suffixOptions)) {
-                $fieldset->removeField($suffixElement->getId());
-                $suffixField = $fieldset->addField($suffixElement->getId(),
-                    'select',
-                    $suffixElement->getData(),
-                    $form->getElement('lastname')->getId()
-                );
-                $suffixField->setValues($suffixOptions);
-                if ($customer->getId()) {
-                    $suffixField->addElementValues($customer->getSuffix());
-                }
-            }
-        }
-
-
-
-
-        if ($customer->isReadonly()) {
-            foreach ($customer->getAttributes() as $attribute) {
-                $element = $form->getElement($attribute->getAttributeCode());
-                if ($element) {
-                    $element->setReadonly(true, true);
-                }
-            }
-        }
+        $this->_setFieldset($attributes, $fieldset);
 
         $form->setValues($customer->getData());
         $this->setForm($form);
         return $this;
     }
+
+	/**
+	 * Add in dummy way the spacer between
+	 *
+	 * @param Varien_Data_Form_Element_Abstract $element
+	 * @return string
+	 */
+	protected function _getAdditionalElementHtml($element) {
+		if (in_array($element->getData('name'), array(
+			'loyalty_card_number_1_expire',
+			'loyalty_card_number_2_expire',
+			'loyalty_card_number_3_expire'))) {
+			return "<br /><br /><br />";
+		}
+	}
+
+
 }

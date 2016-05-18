@@ -82,6 +82,7 @@
                     <product>Zolago_Catalog_Model_Resource_Product</product>
                     <category>Zolago_Catalog_Model_Resource_Category</category>
                     <category_tree>Zolago_Catalog_Model_Resource_Category_Tree</category_tree>
+                    <category_collection>Zolago_Catalog_Model_Resource_Category_Collection</category_collection>
                 </rewrite>
             </catalog_resource>
         </models>

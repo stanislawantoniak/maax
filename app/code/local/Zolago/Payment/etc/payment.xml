@@ -46,22 +46,22 @@
           </additional_information>
         </inteligo>
         <!--mBank multiTransfer-->
-        <mbmt>
-          <method>dotpay</method>
-          <additional_information>
-            <channel>3</channel>
-            <type>4</type>
-            <is_gateway>1</is_gateway>
-          </additional_information>
-          <convertica_website>
-            <method>dotpay</method>
-            <additional_information>
-              <channel>3</channel>
-              <type>4</type>
-              <is_gateway>1</is_gateway>
-            </additional_information>
-          </convertica_website>
-        </mbmt>
+        <!--<mbmt>-->
+          <!--<method>dotpay</method>-->
+          <!--<additional_information>-->
+            <!--<channel>3</channel>-->
+            <!--<type>4</type>-->
+            <!--<is_gateway>1</is_gateway>-->
+          <!--</additional_information>-->
+          <!--<convertica_website>-->
+            <!--<method>dotpay</method>-->
+            <!--<additional_information>-->
+              <!--<channel>3</channel>-->
+              <!--<type>4</type>-->
+              <!--<is_gateway>1</is_gateway>-->
+            <!--</additional_information>-->
+          <!--</convertica_website>-->
+        <!--</mbmt>-->
         <!--Płacę z iPKO-->
         <ipko>
           <method>dotpay</method>
@@ -80,6 +80,78 @@
             <is_gateway>1</is_gateway>
           </additional_information>
         </bzwbk>
+        <!--Płacę z PBS-->
+        <pbs>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>66</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </pbs>
+        <!--Płacę z Orange-->
+        <orange>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>72</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </orange>
+        <!--BLIK-->
+        <blik>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>73</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </blik>
+        <!--Banki Spółdzielcze-->
+        <bps>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>74</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </bps>
+        <!--Płacę z Plus Bank-->
+        <bplus>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>75</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </bplus>
+        <!--Getin Bank PBL-->
+        <bgetin>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>76</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </bgetin>
+        <!--Noble Pay-->
+        <noblepay>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>80</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </noblepay>
+        <!--Idea Cloud-->
+        <ideacloud>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>81</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </ideacloud>
         <!--ING klienci korporacyjni-->
         <!--<ingc>-->
         <!---->
@@ -426,14 +498,14 @@
           </additional_information>
         </iko>
         <!--PeoPay-->
-        <peopay>
-          <method>dotpay</method>
-          <additional_information>
-            <channel>64</channel>
-            <type>4</type>
-            <is_gateway>1</is_gateway>
-          </additional_information>
-        </peopay>
+        <!--<peopay>-->
+          <!--<method>dotpay</method>-->
+          <!--<additional_information>-->
+            <!--<channel>64</channel>-->
+            <!--<type>4</type>-->
+            <!--<is_gateway>1</is_gateway>-->
+          <!--</additional_information>-->
+        <!--</peopay>-->
         <!--Idea-->
         <idea>
           <method>dotpay</method>
@@ -454,15 +526,14 @@
         <!---->
         <!--</mbmr>-->
         <!--Pocztowy24-->
-        <!--<p>-->
-        <!---->
-        <!--<method>dotpay</method>-->
-        <!--<additional_information>-->
-        <!--<channel>70</channel>-->
-        <!--<type>4</type><is_gateway>1</is_gateway>-->
-        <!--</additional_information>-->
-        <!---->
-        <!--</p>-->
+        <p>
+          <method>dotpay</method>
+          <additional_information>
+            <channel>70</channel>
+            <type>4</type>
+            <is_gateway>1</is_gateway>
+          </additional_information>
+        </p>
         <!--PayPal-->
         <!--<paypal>-->
         <!---->

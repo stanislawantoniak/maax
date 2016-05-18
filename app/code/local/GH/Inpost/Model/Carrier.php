@@ -51,5 +51,8 @@ class GH_Inpost_Model_Carrier
 	protected function _getStandardTitle() {
 		return $this->getHelper()->__('Standard delivery');
 	}
+	public function isTrackingAvailable() {
+	    return (!empty(Mage::getStoreConfig('carriers/ghinpost/api'))) && Mage::getStoreConfig('carriers/ghinpost/active');
+	}
 
 }

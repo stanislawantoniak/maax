@@ -42,7 +42,7 @@ $lockerId = $locker->getId();
         <input type="text" name="_shipping_point_code"
                data-id="<?php echo $lockerId; ?>"
                data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
-               value="<?php echo $locker->getName(); ?>" required="required"/>
+               value="<?php echo $locker->getName(); ?>" />
     <?php endif; ?>
 	<?php foreach($methods as $method): ?>
     <?php
