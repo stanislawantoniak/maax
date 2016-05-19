@@ -120,6 +120,28 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $productIdsOfCampaign = array_keys($campaignProducts);
         $productsToDelete = array_diff($productIdsOfCampaign, $productIds);
+        $toInsert = array();
+        foreach ($productIds as $productId) {
+            $toInsert[] = array(
+                "campaign_id" => $campaignId,
+                "product_id" => $productId,
+                "assigned_to_campaign" => Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_UNPROCESSED
+            );
+        }
+
+        if (!empty($toInsert)) {
+            $table = $this->getTable("zolagocampaign/campaign_product");
+            try {
+                $this->_getWriteAdapter()
+                    ->insertOnDuplicate(
+                        $table,
+                        $toInsert,
+                        array('campaign_id', 'product_id', 'assigned_to_campaign')
+                    );
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+        }
 
         /**
          * Send products to recalculate
@@ -127,33 +149,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
          */
         $this->sendProductsToRecalculateThenDelete($campaign, $productsToDelete);
 
-
-        $table = $this->getTable("zolagocampaign/campaign_product");
-        $where = $this->getReadConnection()
-            ->quoteInto("campaign_id=?", $campaignId);
-        $this->_getWriteAdapter()->delete($table, $where);
-
-        $toInsert = array();
-
-        foreach ($productIds as $productId) {
-            $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
-        }
-        if (!empty($toInsert)) {
-
-            try {
-                $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
-
-            $localeTime = Mage::getModel('core/date')->timestamp(time());
-            $localeTimeF = date("Y-m-d H:i", $localeTime);
-            $model = Mage::getModel("zolagocampaign/campaign");
-            $campaign = $model->load($campaignId);
-
-            $campaign->setData('updated_at', $localeTimeF);
-            $campaign->save();
-        }
         return $this;
     }
 
@@ -233,10 +228,11 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $write = $this->_getWriteAdapter();
 
         try {
-            $write->update($table, array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE),
+            $write->update($table,
+                array('assigned_to_campaign' => self::CAMPAIGN_PRODUCTS_TO_DELETE),
                 array(
-                    '`product_id` in (?)' => $productIds,
-                    '`campaign_id` = ?' => $campaignId
+                    'product_id IN (?)' => $productIds,
+                    'campaign_id=?' => $campaignId
                 )
             );
         } catch (Exception $e) {

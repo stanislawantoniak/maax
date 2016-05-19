@@ -5,14 +5,13 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
     protected $_domAttachments = array();
     protected $_allowedExtensions = array('jpg'=>1,'jpeg'=>1,'png'=>1,'apng'=>1,'gif'=>1,'bmp'=>1,'svg'=>1,'ico'=>1);
 
-    
-    /**
-     * do not send email on test servers
-     *
-     * @param array $mail
-     * return array
-     */
 
+	/**
+	 * do not send email on test servers
+	 *
+	 * @param array $mail
+	 * @return array
+	 */
     protected function _allowSend($mail) {         
         if (((string)Mage::getConfig()->getNode('global/test_server')) == 'true') {
             $out = array();
@@ -28,6 +27,7 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
                     foreach ($item as $itemKey=>$address) {
                         if (preg_match('/'.$allowEmails.'/',$address)) {
                             $out[$key][$itemKey] = $address;
+                            Mage::log(sprintf('Email allowed to send (%s)',$address),null,'email_blocked.log');
                         } else {
                             Mage::log(sprintf('Email not allowed to send (%s)',$address),null,'email_blocked.log');
                         }

@@ -12,6 +12,8 @@
  * @method Zolago_Po_Model_Po setCustomerEmail(string $email)
  * @method int getCustomerId()
  * @method Zolago_Po_Model_Po setCustomerId(int $customerId)
+ * @method string getInpostLockerName()
+ * @method Zolago_Po_Model_Po setInpostLockerName(string $value)
  */
 class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
@@ -47,21 +49,22 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	 */
 	public function getAllowedOperators() {
 		if(!$this->hasData("allowed_operators")){
-			$opreators = array();
+			$operators = array();
 			// Must have post
 			if($this->getPos() instanceof Zolago_Pos_Model_Pos){
-				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 				/* @var $collection Zolago_Operator_Model_Resource_Operator_Collection */
+				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 				$collection->addVendorFilter($this->getVendor());
 				$collection->addActiveFilter();
 				$collection->walk("afterLoad");
-				foreach($collection as $operator){
+				/** @var Zolago_Operator_Model_Operator $operator */
+				foreach($collection as $operator) {
 					if($this->isAllowed(null, $operator)){
-						$opreators[] = $operator;
+						$operators[] = $operator;
 					}
 				}
 			}
-			$this->setData("allowed_operators", $opreators);
+			$this->setData("allowed_operators", $operators);
 		}
 		return $this->getData("allowed_operators");
 	}
@@ -863,7 +866,8 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         $coll->addPosData("external_id");
         $list = array();
         $i = 0;
-        foreach ($coll as $po) {
+		/** @var Zolago_Po_Model_Po $po */
+		foreach ($coll as $po) {
             $dueAmount = ($po->getDebtAmount() > 0)? 0:abs($po->getDebtAmount());
             /** @var Zolago_Po_Model_Po $po */
             $list[$i]['vendor_id']                = $vendor->getId();
@@ -875,11 +879,12 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
             $list[$i]['order_total']              = $po->getGrandTotalInclTax();
             $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
             $list[$i]['order_due_amount']         = $dueAmount;
-            $list[$i]['delivery_method']          = 'standard_courier'; // todo when inpost added
+            $list[$i]['delivery_method']          = $po->getApiDeliveryMethod();
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
 			$list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
+			$list[$i]['customer_id']              = $po->getCustomerId();
 
 
             $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
@@ -897,7 +902,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 //                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
             }
 
-            $list[$i]['delivery_data']['inpost_locker_id'] = ''; // todo when inpost added
+            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getInpostLockerName();
             $sa = $po->getShippingAddress();
             $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
             $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
@@ -966,6 +971,18 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		return sprintf(Mage::getStoreConfig('ghapi_options/ghapi_general/ghapi_order_email'),$orderId);
 	}
 
+	/**
+	 * Retrieve delivery method for Modago Api
+	 *
+	 * @return string standard_courier|inpost_parcel_locker
+	 */
+	public function getApiDeliveryMethod() {
+		$dMethod = 'standard_courier';
+		if (!empty($this->getInpostLockerName())) {
+			$dMethod = 'inpost_parcel_locker';
+		}
+		return $dMethod;
+	}
     /**
      * Return collection of PO for given Vendor
      * and array of ids (increment_id)

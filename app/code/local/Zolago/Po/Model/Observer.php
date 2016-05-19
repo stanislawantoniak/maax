@@ -42,7 +42,12 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			if($aggregated->getId()){
 				$aggregated->delete();
 			}
-			
+			// Clear tracking
+            $trackList = $shipment->getAllTracks();
+            foreach ($trackList as $track) {
+                $manager = Mage::helper('orbashipping')->getShippingManager($track->getCarrierCode());
+                $manager->cancelTrack($track);
+            }
 			// Clear current carrier
 			$po->setCurrentCarrier(null);
 			$po->getResource()->saveAttribute($po, "current_carrier");
@@ -109,20 +114,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		}
 		return implode("\n", $items);
 	}
-
-
-	/**
-	 * PO created directly from order (no split)
-	 * @param type $observer
-	 */
-	public function poCreatedFromOrder($observer) {
-		$po = $observer->getEvent()->getData('po');
-		/* @var $po Zolago_Po_Model_Po */
-		// Send email
-        Mage::log("Zolago: poCreatedFromOrder", null, "operator.log");
-		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
-		Mage::helper('udropship')->processQueue();
-	}
+	
 	
 	/**
 	 * Change pos
@@ -141,7 +133,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		
 		$this->_logEvent($po, $text);
 
-        Mage::log("Zolago: poChangePos", null, "operator.log");
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();
@@ -159,6 +150,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			$newStatus = $observer->getEvent()->getNewStatus();
 			// Status changed to shipped
 			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
+				/** @var Zolago_Po_Helper_Data $helper */
+				$helper = Mage::helper("zolagopo");
 				// Register for use by email template block
 				if (Mage::registry('current_po')) {
 				    Mage::unregister('current_po');
@@ -173,7 +166,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 						"vendor"=>$po->getVendor()->getId(),
 						"po"=>$po->getId()
 					)),
-					"_ATTACHMENTS" => Mage::helper("zolagopo")->getPoImagesAsAttachments($po)
+					"_ATTACHMENTS" => $helper->getPoImagesAsAttachments($po)
 				);
 				$po->sendEmailTemplate(
 					Zolago_Po_Model_Po::XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED,
