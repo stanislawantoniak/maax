@@ -181,7 +181,8 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 	width: 100%;
 	position: relative;
 	z-index: 1; /* Site sits above Slidebars */
-	background: $color_f2f1f0;
+	//background: $color_f2f1f0;
+	background: $color_fff;
 }
 
 #sb-site.open {

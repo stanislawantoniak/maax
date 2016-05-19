@@ -395,7 +395,7 @@ Mall.listing = {
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);return false;" : "Mall.wishlist.addFromSmallBlock(this);return false;";
 
 
-		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-4 col-lg-4 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+

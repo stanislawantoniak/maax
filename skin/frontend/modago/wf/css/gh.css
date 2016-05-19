@@ -748,16 +748,16 @@ html.sb-site-lock.sb-active:not(.sb-static) {
   position: relative;
   z-index: 1;
   /* Site sits above Slidebars */
-  background: #f2f1f0; }
+  background: #fff; }
 
-/* line 187, ../sass/gh/general/_menu-hamburger.scss */
+/* line 188, ../sass/gh/general/_menu-hamburger.scss */
 #sb-site.open {
   -webkit-transform: translate(242px);
   -moz-transform: translate(242px);
   -o-transform: translate(242px);
   transform: translate(242px); }
 
-/* line 196, ../sass/gh/general/_menu-hamburger.scss */
+/* line 197, ../sass/gh/general/_menu-hamburger.scss */
 .sb-open #sb-site.open {
   -webkit-transform: translate(288px);
   -moz-transform: translate(288px);
@@ -767,7 +767,7 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 /* ---------------
  * 003 - Slidebars
  */
-/* line 209, ../sass/gh/general/_menu-hamburger.scss */
+/* line 210, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar {
   height: 100%;
   overflow: hidden;
@@ -783,196 +783,196 @@ html.sb-site-lock.sb-active:not(.sb-static) {
   /* Fixes issues with translated and z-indexed elements on iOS 7. */
   -webkit-overflow-scrolling: touch;
   /* Adds smooth native scrolling for iOS & Android devices. */ }
-/* line 219, ../sass/gh/general/_menu-hamburger.scss */
+/* line 220, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar.open {
   display: block;
   -webkit-transform: translate(288px);
   -moz-transform: translate(288px);
   -o-transform: translate(288px);
   transform: translate(288px); }
-/* line 226, ../sass/gh/general/_menu-hamburger.scss */
+/* line 227, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar > header {
   position: relative;
   height: 57px; }
-/* line 229, ../sass/gh/general/_menu-hamburger.scss */
+/* line 230, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar > header a, .sb-slidebar > header a:visited {
   display: block;
   height: 57px;
   margin-left: 15px; }
-/* line 235, ../sass/gh/general/_menu-hamburger.scss */
+/* line 236, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar .sb-slidebar-inner {
   height: 100%;
   padding-top: 57px;
   margin-top: -57px; }
-/* line 239, ../sass/gh/general/_menu-hamburger.scss */
+/* line 240, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar .sb-slidebar-inner nav {
   height: 100%;
   overflow-y: auto; }
-/* line 244, ../sass/gh/general/_menu-hamburger.scss */
+/* line 245, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar a {
   cursor: pointer; }
-/* line 247, ../sass/gh/general/_menu-hamburger.scss */
+/* line 248, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar .hamburger-ico {
   width: 20px;
   height: 20px;
   margin: 0 12px; }
-/* line 251, ../sass/gh/general/_menu-hamburger.scss */
+/* line 252, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar .hamburger-ico g path, .sb-slidebar .hamburger-ico path {
   fill: #FFF; }
-/* line 255, ../sass/gh/general/_menu-hamburger.scss */
+/* line 256, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar .sb-slidebar-inner > nav > ul.sb-menu > li > a.sb-toggle-submenu {
   background-image: none; }
 
-/* line 260, ../sass/gh/general/_menu-hamburger.scss */
+/* line 261, ../sass/gh/general/_menu-hamburger.scss */
 .sb-left {
   left: 0;
   /* Set Slidebar to the left. */ }
 
-/* line 264, ../sass/gh/general/_menu-hamburger.scss */
+/* line 265, ../sass/gh/general/_menu-hamburger.scss */
 .sb-right {
   right: 0;
   /* Set Slidebar to the right. */ }
 
-/* line 268, ../sass/gh/general/_menu-hamburger.scss */
+/* line 269, ../sass/gh/general/_menu-hamburger.scss */
 html.sb-static .sb-slidebar, .sb-slidebar.sb-static {
   position: absolute;
   /* Makes Slidebars scroll naturally with the site, and unfixes them for Android Browser < 3 and iOS < 5. */ }
 
-/* line 273, ../sass/gh/general/_menu-hamburger.scss */
+/* line 274, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar.sb-active {
   display: block;
   /* Makes Slidebars visibile when open. Changed from visibility to display to allow -webkit-overflow-scrolling. */
   z-index: 1100; }
 
-/* line 278, ../sass/gh/general/_menu-hamburger.scss */
+/* line 279, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar.sb-style-overlay {
   z-index: 9999;
   /* Set z-index high to ensure it overlays any other site elements. */ }
 
 /* Slidebar widths for browsers/devices that don't support media queries. */
-/* line 283, ../sass/gh/general/_menu-hamburger.scss */
+/* line 284, ../sass/gh/general/_menu-hamburger.scss */
 .sb-slidebar {
   width: 288px; }
 
-/* line 287, ../sass/gh/general/_menu-hamburger.scss */
+/* line 288, ../sass/gh/general/_menu-hamburger.scss */
 .sb-width-thin {
   width: 288px; }
 
-/* line 291, ../sass/gh/general/_menu-hamburger.scss */
+/* line 292, ../sass/gh/general/_menu-hamburger.scss */
 .sb-width-wide {
   width: 288px; }
 
 @media (max-width: 480px) {
   /* Slidebar widths on extra small screens. */
-  /* line 296, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 297, ../sass/gh/general/_menu-hamburger.scss */
   .sb-slidebar {
     width: 288px; }
 
-  /* line 300, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 301, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-thin {
     width: 288px; }
 
-  /* line 304, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 305, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-wide {
     width: 288px; } }
 @media (min-width: 481px) {
   /* Slidebar widths on small screens. */
-  /* line 310, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 311, ../sass/gh/general/_menu-hamburger.scss */
   .sb-slidebar {
     width: 288px; }
 
-  /* line 314, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 315, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-thin {
     width: 288px; }
 
-  /* line 318, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 319, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-wide {
     width: 288px; } }
 @media (min-width: 768px) {
   /* Slidebar widths on medium screens. */
-  /* line 324, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 325, ../sass/gh/general/_menu-hamburger.scss */
   .sb-slidebar {
     width: 288px; }
 
-  /* line 328, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 329, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-thin {
     width: 288px; }
 
-  /* line 332, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 333, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-wide {
     width: 288px; } }
 @media (min-width: 992px) {
   /* Slidebar widths on large screens. */
-  /* line 338, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 339, ../sass/gh/general/_menu-hamburger.scss */
   .sb-slidebar {
     width: 288px; }
 
-  /* line 342, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 343, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-thin {
     width: 288px; }
 
-  /* line 346, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 347, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-wide {
     width: 288px; } }
 @media (min-width: 1200px) {
   /* Slidebar widths on extra large screens. */
-  /* line 352, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 353, ../sass/gh/general/_menu-hamburger.scss */
   .sb-slidebar {
     width: 288px; }
 
-  /* line 356, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 357, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-thin {
     width: 288px; }
 
-  /* line 360, ../sass/gh/general/_menu-hamburger.scss */
+  /* line 361, ../sass/gh/general/_menu-hamburger.scss */
   .sb-width-wide {
     width: 288px; } }
-/* line 365, ../sass/gh/general/_menu-hamburger.scss */
+/* line 366, ../sass/gh/general/_menu-hamburger.scss */
 .sb-hide {
   display: none; }
 
-/* line 369, ../sass/gh/general/_menu-hamburger.scss */
+/* line 370, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu {
   margin: 0px;
   padding-left: 0;
   margin-bottom: 12px; }
 
-/* line 375, ../sass/gh/general/_menu-hamburger.scss */
+/* line 376, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu li {
   width: 100%;
   padding: 0;
   margin: 0; }
 
-/* line 382, ../sass/gh/general/_menu-hamburger.scss */
+/* line 383, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu li a {
   width: 100%;
   padding: 16px 0px 16px 0;
   display: inline-block; }
 
-/* line 388, ../sass/gh/general/_menu-hamburger.scss */
+/* line 389, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu li ul {
   margin: 0px;
   padding-left: 0;
   display: none; }
 
-/* line 397, ../sass/gh/general/_menu-hamburger.scss */
+/* line 398, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu > li > ul > li > a {
   padding-left: 36px; }
 
-/* line 401, ../sass/gh/general/_menu-hamburger.scss */
+/* line 402, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu > li > ul > li:first-child > a {
   border-top: none; }
 
-/* line 405, ../sass/gh/general/_menu-hamburger.scss */
+/* line 406, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu > li > ul > li > ul > li > a {
   padding-left: 54px;
   font-size: 15px; }
 
-/* line 410, ../sass/gh/general/_menu-hamburger.scss */
+/* line 411, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu li a.sb-submenu-active + ul {
   display: block; }
 
-/* line 414, ../sass/gh/general/_menu-hamburger.scss */
+/* line 415, ../sass/gh/general/_menu-hamburger.scss */
 .sb-menu > li.separator, .sb-menu li.separator {
   height: 12px;
   display: block; }
@@ -1184,7 +1184,7 @@ html.sb-static .sb-slidebar, .sb-slidebar.sb-static {
 
 /* line 37, ../sass/gh/general/_sidebar.scss */
 .sidebar {
-  width: 185px;
+  width: 275px;
   position: relative;
   margin-bottom: 52px;
   z-index: 900; }
@@ -1253,7 +1253,7 @@ html.sb-static .sb-slidebar, .sb-slidebar.sb-static {
 
 /* line 128, ../sass/gh/general/_sidebar.scss */
 .sidebar-first.node-type-list #content-main {
-  margin-left: 205px;
+  margin-left: 275px;
   overflow: hidden; }
 @media (max-width: 767px) {
   /* line 128, ../sass/gh/general/_sidebar.scss */
@@ -3935,88 +3935,91 @@ p.text-potwierdzenie {
   #shopping-cart #select_inpost_point .modal-dialog.modal-lg {
     width: 90%;
     margin: 40px auto; } }
-/* line 128, ../sass/gh/cart/_inpost.scss */
+/* line 127, ../sass/gh/cart/_inpost.scss */
+#shopping-cart #select_inpost_point .select2-container--default .select2-results > .select2-results__options {
+  overflow-x: hidden !important; }
+/* line 131, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body {
   overflow-x: hidden !important; }
-/* line 130, ../sass/gh/cart/_inpost.scss */
+/* line 133, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .shipping_select_point_data {
   margin: 20px 0;
   padding-left: 8px; }
-/* line 134, ../sass/gh/cart/_inpost.scss */
+/* line 137, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .shipping_select_point_data .row {
   margin: 20px 0;
   padding: 20px 0;
   border-top: 1px solid #afafaf;
   border-bottom: 1px solid #afafaf;
   font-size: 14px; }
-/* line 140, ../sass/gh/cart/_inpost.scss */
+/* line 143, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .shipping_select_point_data .row > div {
   padding-left: 0; }
-/* line 146, ../sass/gh/cart/_inpost.scss */
+/* line 149, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container {
   padding-left: 8px; }
-/* line 148, ../sass/gh/cart/_inpost.scss */
+/* line 151, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container h3 {
   text-transform: uppercase;
   padding: 0;
   font-size: 15px; }
-/* line 153, ../sass/gh/cart/_inpost.scss */
+/* line 156, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container .row {
   margin: 15px 0;
   padding: 15px 0 0 0;
   border-top: 1px solid #afafaf;
   font-size: 14px; }
-/* line 158, ../sass/gh/cart/_inpost.scss */
+/* line 161, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container .row > div {
   padding-left: 0; }
-/* line 163, ../sass/gh/cart/_inpost.scss */
+/* line 166, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container .nearest_stores_container_link {
   text-decoration: underline;
   padding-left: 2px;
   color: #000; }
-/* line 170, ../sass/gh/cart/_inpost.scss */
+/* line 173, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container {
   padding: 0; }
-/* line 172, ../sass/gh/cart/_inpost.scss */
+/* line 175, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column {
   padding: 0; }
 @media (min-width: 768px) {
-  /* line 175, ../sass/gh/cart/_inpost.scss */
+  /* line 178, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column .map_filter_container {
     padding-left: 0; } }
-/* line 180, ../sass/gh/cart/_inpost.scss */
+/* line 183, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column .gui-form-control-wrapper {
   padding-left: 8px; }
-/* line 184, ../sass/gh/cart/_inpost.scss */
+/* line 187, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column .map_delivery_container {
   padding-left: 0; }
-/* line 188, ../sass/gh/cart/_inpost.scss */
+/* line 191, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .map_delivery_container_wrapper {
   margin: 0 -15px 0 -4px; }
-/* line 194, ../sass/gh/cart/_inpost.scss */
+/* line 197, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .delivery-marker-window {
   max-width: 200px; }
-/* line 197, ../sass/gh/cart/_inpost.scss */
+/* line 200, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show {
   text-decoration: underline;
   display: none; }
 @media (max-width: 480px) {
-  /* line 197, ../sass/gh/cart/_inpost.scss */
+  /* line 200, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show {
     display: block; } }
 @media (max-width: 992px) {
-  /* line 204, ../sass/gh/cart/_inpost.scss */
+  /* line 207, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show_up {
     margin-bottom: 20px;
     padding-left: 15px; } }
 @media (max-width: 992px) {
-  /* line 209, ../sass/gh/cart/_inpost.scss */
+  /* line 212, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show_up:not(:empty) {
     margin-top: 20px; } }
-/* line 216, ../sass/gh/cart/_inpost.scss */
+/* line 219, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .gui-label {
   color: #afafaf; }
-/* line 220, ../sass/gh/cart/_inpost.scss */
+/* line 223, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body a.btn_black {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4033,7 +4036,7 @@ p.text-potwierdzenie {
   text-transform: uppercase;
   float: left; }
 
-/* line 243, ../sass/gh/cart/_inpost.scss */
+/* line 246, ../sass/gh/cart/_inpost.scss */
 #discount_voucher {
   margin-bottom: 30px !important; }
 
@@ -4894,9 +4897,9 @@ body.sb-open > header .header_top {
   *zoom: 1;
   *display: inline;
   border: none;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
   outline: none;
   text-decoration: none !important;
   text-transform: uppercase; }
@@ -5060,19 +5063,19 @@ body.sb-open > header .header_top {
   border-color: #c6a662; }
 /* line 132, ../sass/gh/typography/_buttons.scss */
 .button.button-third {
-  padding: 3px 15px;
-  color: #4f4f4f;
+  padding: 5px 19px;
+  color: #fff;
   font-weight: normal;
-  font-size: 12px;
+  font-size: 14px;
   font-family: Roboto, sans-serif;
   min-width: 92px;
   text-align: center;
-  background: #fff;
-  border: 2px solid #1e1e1e;
-  box-shadow: inset 1px 1px 0 0 #e6e6e6;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px; }
+  background: #000;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 0 #000;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px; }
 /* line 144, ../sass/gh/typography/_buttons.scss */
 .button.button-third:hover, .button.button-third.hover {
   background: #1e1e1e;
@@ -6338,14 +6341,14 @@ span.checked {
 
 /* line 465, ../sass/gh/listing/_filters.scss */
 .sidebar {
-  border: 1px solid #ebebeb;
+  border: 1px solid #fff;
   border-bottom: none;
   background: #FFF;
   font-family: Roboto, sans-serif;
   font-size: 12px; }
 /* line 472, ../sass/gh/listing/_filters.scss */
 .sidebar .section {
-  border-bottom: 1px solid #d2d2d2;
+  border-bottom: 1px solid #fff;
   text-align: center;
   -webkit-backface-visibility: hidden; }
 /* line 477, ../sass/gh/listing/_filters.scss */

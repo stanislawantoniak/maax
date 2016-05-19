@@ -30,7 +30,40 @@
 	</faq_index_index>
     <solrbridge_solrsearch_category_view>
         <reference name="content">
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>  
+			<action method="unsetChild">
+				<alias>solrsearch_product_list_toolbar</alias>
+			</action>
+			<action method="unsetChild">
+				<alias>zolagosolrsearch_category_view</alias>
+			</action>
+			<action method="unsetChild">
+				<alias>solrsearch_result_title</alias>
+			</action>
+
+
+
+			<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
+				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+				<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+				<block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+
+					<block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
+						<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+						<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+					</block>
+
+
+					<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar">
+						<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+					</block>
+
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager_full" template="zolagosolrsearch/catalog/product/list/pager-full.phtml"/>
+				</block>
+				<block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
+				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+			</block>
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
         </reference>
     </solrbridge_solrsearch_category_view>
     <solrsearch_index_index>

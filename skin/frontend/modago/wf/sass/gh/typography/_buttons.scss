@@ -1,7 +1,7 @@
 .button {
 	@include inline-block;
 	border:none;
-	@include border-radius(5px);
+	@include border-radius(0px);
 	outline:none;
 	text-decoration: none!important;
 	text-transform: uppercase;
@@ -130,17 +130,17 @@
 		}
 	}
 	&.button-third {
-		padding: 3px 15px;
-		color:$gray-dark;
+		padding: 5px 19px;
+		color:$color_fff;
 		font-weight: normal;
-		font-size: 12px;
+		font-size: 14px;
 		font-family: $fontRegular;
 		min-width: 92px;
 		text-align: center;
-		background:$color_fff;
-		border:2px solid $gray-darker;
-		box-shadow: inset 1px 1px 0 0 $color_e6e6e6;
-		@include border-radius(3px);
+		background:$color_000;
+		border: 1px solid $color_000;
+		box-shadow: inset 1px 1px 0 0 $color_000;
+		@include border-radius(0px);
 		&:hover,
 		&.hover {
 

@@ -1001,11 +1001,11 @@ section#recently-viewed .recently-viewed .rwd-controls .rwd-buttons .rwd-prev.di
 #active-filters dl dd .label, #view-current-filter dl dd .label {
   display: block;
   float: left;
-  padding: 0px 6px 0 6px;
+  padding: 5px 15px;
   min-width: 60px;
   display: inline-block;
   float: left;
-  height: 21px;
+  height: 30px;
   margin: 0px 10px 7px 0px;
   position: relative; }
 /* line 42, ../sass/layout/modules/_current-filter.scss */
@@ -4184,7 +4184,6 @@ ol.breadcrumb, .brandshop-breadcrumps {
   margin: 20px 0; }
 /* line 19, ../sass/layout/override/_breadcrumb.scss */
 ol.breadcrumb li:not(:first-child):before, .brandshop-breadcrumps li:not(:first-child):before {
-  content: "\f105";
   display: inline-block;
   margin-right: 5px; }
 

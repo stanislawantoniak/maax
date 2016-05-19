@@ -35,7 +35,7 @@
 }
 
 .sidebar {
-	width:185px;
+	width:275px;
 	position:relative;
 	margin-bottom: 52px;
 	z-index: 900;
@@ -126,7 +126,7 @@
 .sidebar-first {
 	&.node-type-list {
 		#content-main {
-			margin-left: 205px;
+			margin-left: 275px;
 			overflow: hidden;
 			@media (max-width: $screen-xs-max) {
 				margin-left: 0 !important;

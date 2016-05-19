@@ -17,7 +17,7 @@ ol.breadcrumb,
 	margin:20px 0;
 	li {
 		&:not(:first-child):before {
-			content: "\f105";
+			//content: "\f105";
 			display: inline-block;
 			margin-right: 5px;
 		}
