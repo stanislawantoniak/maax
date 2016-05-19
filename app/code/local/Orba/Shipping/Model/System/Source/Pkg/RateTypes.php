@@ -1,5 +1,5 @@
 <?php
-class Orba_Shipping_Model_System_Source_PkgRateTypes {
+class Orba_Shipping_Model_System_Source_Pkg_RateTypes {
 	/* VENDOR'S DHL RATES */
 	/* those are keys from /app/code/local/Zolago/Dropship/etc/config.xml around line 320 */
 	const DHL_RATES_ENVELOPE = 'dhl_rates_envelope';

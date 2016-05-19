@@ -90,6 +90,9 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
              case Orba_Shipping_Model_Packstation_Inpost::CODE:
                  $model = Mage::getModel('orbashipping/packstation_inpost');
                  break;
+             case Orba_Shipping_Model_Post::CODE:
+                 $model = Mage::getModel('orbashipping/post');
+                 break;
              default:
                  $model = Mage::getModel('orbashipping/carrier_default');
          }

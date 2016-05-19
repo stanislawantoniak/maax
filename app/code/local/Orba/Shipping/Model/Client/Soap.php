@@ -1,8 +1,8 @@
 <?php
 /**
- * abstract carrier client
+ * abstract soap carrier client
  */
-class Orba_Shipping_Model_Carrier_Client_Abstract extends Orba_Shipping_Model_Client_Abstract {
+class Orba_Shipping_Model_Client_Soap extends Orba_Shipping_Model_Client_Abstract {
     
     /**
      * prepare soap header
@@ -28,6 +28,8 @@ class Orba_Shipping_Model_Carrier_Client_Abstract extends Orba_Shipping_Model_Cl
         } catch (Exception $xt) {
             $result = $this->_prepareErrorMessage($xt);
         }
+            Mage::log($soap->__getLastRequest());
+            Mage::log($soap->__getLastResponse());
 
         return $result;
     }

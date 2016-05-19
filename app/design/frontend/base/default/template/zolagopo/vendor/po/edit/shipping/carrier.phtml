@@ -68,7 +68,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
 							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package type') ?></label>
 							<div class="col-md-9">
 								<select name="specify_orbadhl_rate_type" id="shipping-specify_orbadhl_rate_type" class="form-control">
-									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkgRateTypes')->toOptionHash() as $value=>$label):?>
+									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkg_rateTypes')->toOptionHash() as $value=>$label):?>
 										<option
 											value="<?php echo $this->escapeHtml($value);?>"
 											data-weight="<?php echo $_dhlHlp->getDhlParcelWeightByKey($value) ?>">
@@ -82,7 +82,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
 							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Parcel size') ?></label>
 							<div class="col-md-9">
 								<select name="specify_orbadhl_size" id="shipping-specify_orbadhl_size" class="form-control" disabled>
-									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkgSizes')->toOptionHash() as $value=>$label):?>
+									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkg_sizes')->toOptionHash() as $value=>$label):?>
 										<option
 											value="<?php echo $this->escapeHtml($value);?>"
 											data-weight="<?php echo $_dhlHlp->getDhlVolumetricWeightByKey($value); ?>">
@@ -178,7 +178,7 @@ jQuery(function($){
 	}; */ ?>
 	var handleOrbadhlPkgRateType = function(){
 		orbadhlWeightByType = jQuery(this).find('option:selected').data('weight');
-		if(jQuery(this).val() == '<?php echo Orba_Shipping_Model_System_Source_PkgRateTypes::DHL_RATES_ENVELOPE ?>') {
+		if(jQuery(this).val() == '<?php echo Orba_Shipping_Model_System_Source_Pkg_RateTypes::DHL_RATES_ENVELOPE ?>') {
 			specifyOrbadhlPkgSize.hide();
 			specifyOrbadhlPkgSize.find('select').attr('disabled',true);
 		} else {
