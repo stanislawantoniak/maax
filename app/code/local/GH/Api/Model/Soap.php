@@ -439,7 +439,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 				$allNotValid[] = implode(',', $notValidSkusByPrice);
 				$allNotValid[] = implode(',', $notValidSkusByPoses);
 				$allNotValid[] = implode(',', $notValidSkusByQtys);
-				Mage::throwException("error_invalid_update_products (" . implode(',', $allNotValid) . ')');
+				Mage::throwException("error_invalid_update_products (" . implode(',', array_filter($allNotValid)) . ')');
 			}
 		} catch (Exception $e) {
 			$message = $e->getMessage();
