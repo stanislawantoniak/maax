@@ -1,0 +1,27 @@
+section.cms-section {
+	margin: 0 auto 15px;
+	max-width: 1206px;
+	padding: 30px 35px 20px;
+	background: $colorBackgroundCms;
+	border-top: 1px solid $colorBorderCms;
+	border-bottom: 1px solid $colorBorderCms;
+	.title-section {
+		h2 {
+			margin: 20px 0;
+			padding: 0;
+			position: relative;
+			display: block;
+			overflow: hidden;
+			font-size: 28px;
+			font-family: $fontBlack;
+			text-align: left;
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+	ul,ol {
+		padding-left: 17px;
+		margin: -10px 0 20px;
+	}
+}
