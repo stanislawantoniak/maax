@@ -15,5 +15,3 @@ class Orba_Shipping_Model_Carrier_Tracking implements
 		
 	}
 }
-
-?>

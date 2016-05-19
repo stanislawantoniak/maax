@@ -327,7 +327,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
      *
      * @return array $result Default: array('status' => false);
      */
-    public function processDhlLabelsResult($method, $dhlResult)
+    public function processLabelsResult($method, $dhlResult)
     {
         $result = array(
                       'status'	=> false

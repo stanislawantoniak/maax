@@ -736,5 +736,22 @@ class ZolagoOs_OmniChannelTierShipping_Helper_Data extends Mage_Core_Helper_Abst
             return Mage::app()->getStore()->getUrl('udtiership/vendor/rates');
         }
     }
+    
+    /**
+     * get shipping type code by po udropship_method
+     * @param 
+     * @return 
+     */
+     public function getCodeByPoMethod($method) {
+         $id = explode('_',$method,2);
+         $out = null;
+         if (!empty($id[1])) {
+             $model = Mage::getModel('udtiership/deliveryType')->load($id[1]);
+             if ($model->getId()) {
+                 $out = $model->getDeliveryCode();
+             }
+         }
+         return $out;
+     }
 
 }

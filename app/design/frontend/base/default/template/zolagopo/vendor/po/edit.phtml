@@ -465,8 +465,7 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 														}else{
 															noty({
 																text: response.message,
-																type: 'error',
-																timeout: 2000
+																type: 'error'
 															});
 														}
 													}).fail(function(){
@@ -609,10 +608,12 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Shipping modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping")->
+    echo $this->_getShippingModal();
+    /*
+    	echo $this->getChild("vendor_po_edit_shipping")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
-	
+	*/
 /*******************************************************************************
  *	Comment modal
  *******************************************************************************/

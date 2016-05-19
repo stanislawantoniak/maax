@@ -354,6 +354,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function getAvailableStatuses($status) {
 		$statuses = array();
+		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("udpo");
 		switch ($this->_getStatus($status)) {
 			case self::STATUS_EXPORTED:
@@ -392,8 +393,8 @@ class Zolago_Po_Model_Po_Status
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
 
 		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
+		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("udpo");
-		/* @var $hlp ZolagoOs_OmniChannelPo_Helper_Data */
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
 

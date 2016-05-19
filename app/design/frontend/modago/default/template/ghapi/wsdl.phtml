@@ -64,6 +64,82 @@
 		        </restriction>
 		    </xsd:complexContent>
 		</xsd:complexType>
+
+		<xsd:complexType name="updateProductsPricesStocks">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="productsPricesUpdateList" type="tns:productsPricesUpdateList" nillable="true" />
+				<xsd:element name="productsStocksUpdateList" type="tns:productsStocksUpdateList" nillable="true" />
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="updateProductsPricesStocksResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="productsPricesUpdateList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="product" type="tns:productsPricesUpdateListItem" minOccurs="1" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="productsPricesUpdateListItem">
+			<xsd:all>
+				<xsd:element name="sku" type="xsd:string"/>
+				<xsd:element name="pricesTypesList" type="tns:pricesTypesList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="pricesTypesList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="priceTypeItem" type="tns:pricesTypesListItem" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="pricesTypesListItem">
+			<xsd:all>
+				<xsd:element name="priceType" type="xsd:string"/>
+				<xsd:element name="priceValue" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="productsStocksUpdateList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="product" type="tns:productsStocksUpdateListItem" minOccurs="1" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="productsStocksUpdateListItem">
+			<xsd:all>
+				<xsd:element name="sku" type="xsd:string"/>
+				<xsd:element name="posesList" type="tns:posesList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="posesList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="pos" type="tns:posesListItem" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="posesListItem">
+			<xsd:all>
+				<xsd:element name="id" type="xsd:string"/>
+				<xsd:element name="qty" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
 		<xsd:complexType name="messageIDList">
 			<xsd:sequence>
 				<xsd:element name="ID" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
@@ -262,6 +338,12 @@
   <message name="setOrderShipmentResponse">
       <part name="setOrderShipmentResponse" type="tns:statusResponse"/>
   </message>
+	<message name="updateProductsPricesStocksRequest">
+		<part name="updateProductsPricesStocksRequest" type="tns:updateProductsPricesStocks"/>
+	</message>
+	<message name="updateProductsPricesStocksResponse">
+		<part name="updateProductsPricesStocksResponse" type="tns:statusResponse"/>
+	</message>
   <message name="setOrderReservationRequest">
 	  <part name="setOrderReservationRequest" type="tns:setOrderReservation"/>
   </message>
@@ -299,6 +381,10 @@
          <input message="tns:getOrdersByIDRequest"/>
          <output message="tns:getOrdersByIDResponse"/>
       </operation>
+	  <operation name="updateProductsPricesStocks">
+		  <input message="tns:updateProductsPricesStocksRequest"/>
+		  <output message="tns:updateProductsPricesStocksResponse"/>
+	  </operation>
 	  <operation name="setOrderReservation">
 		  <input message="tns:setOrderReservationRequest"/>
 		  <output message="tns:setOrderReservationResponse"/>
@@ -389,6 +475,19 @@
                use="literal"/>
          </output>
       </operation>
+	  <operation name="updateProductsPricesStocks">
+		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>updateProductsPricesStocks"/>
+		  <input>
+		  <soap:body
+			  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+			  use="literal"/>
+		  </input>
+		  <output>
+			  <soap:body
+				  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+				  use="literal"/>
+		  </output>
+	  </operation>
 	  <operation name="setOrderReservation">
 		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>setOrderReservation"/>
 		  <input>
