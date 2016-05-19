@@ -14,13 +14,13 @@
                     <frontName>modago</frontName>
                 </args>
             </zolagomodago>
-            <zolagomodago>
+            <zolagomodago_wf>
                 <use>standard</use>
                 <args>
                     <module>Zolago_Modago</module>
                     <frontName>wf</frontName>
                 </args>
-            </zolagomodago>
+            </zolagomodago_wf>
             <zolagomodago_storesmap>
                 <use>standard</use>
                 <args>
