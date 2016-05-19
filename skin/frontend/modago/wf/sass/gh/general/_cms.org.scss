@@ -1,0 +1,35 @@
+section.cms-section {
+	margin: 0 auto 15px;
+	max-width: 1206px;
+	padding: 30px 35px 20px;
+	background: $colorBackgroundCms;
+	border-top: 1px solid $colorBorderCms;
+	border-bottom: 1px solid $colorBorderCms;
+	h2 {
+		margin: 0 -35px 20px;
+		padding: 0 35px;
+		position: relative;
+		display: block;
+		height: 18px;
+		overflow: hidden;
+		font-size: 18px;
+		font-family: $fontRegular;
+		line-height: 18px;
+		text-transform: uppercase;
+		text-align: left;
+		&:before {
+			content: ' ';
+			display: block;
+			width: 18px;
+			height: 18px;
+			background: $colorAccentCms;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	}
+	ul,ol {
+		padding-left: 17px;
+		margin: -10px 0 20px;
+	}
+}
