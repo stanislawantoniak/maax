@@ -39,7 +39,9 @@
 			<action method="unsetChild">
 				<alias>solrsearch_result_title</alias>
 			</action>
-
+			<action method="unsetChild">
+				<alias>zolago_modago_home_sliderlastseen</alias>
+			</action>
 
 
 			<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
@@ -64,6 +66,7 @@
 				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
 			</block>
             <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
+			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </solrbridge_solrsearch_category_view>
     <solrsearch_index_index>
