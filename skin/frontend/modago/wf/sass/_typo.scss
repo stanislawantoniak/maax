@@ -557,7 +557,10 @@ form {
 	@include inline-block;
 	margin:0px;
 	padding:0px;
-	border-radius:0;
+	font-family: $fontOpenSS;
+	text-transform: uppercase;
+	@include border-radius($borderRadiusBtn);
+	@include transition(color 0.2s, background-color 0.2s);
 	cursor: pointer;
 	font-style: normal;
 	overflow:hidden;
@@ -565,13 +568,13 @@ form {
 	text-align:center;
 	border:none;
 	&.clearAll {
-		background:$color_fff;
+		background: $backgroundColorBtn;
 		display:inline-block;
 		height:26px;
 		line-height: 25px;
 		border:2px solid $color_aeaeae;
-		@include border-radius(3px);
-		color:$gray-dark;
+		@include border-radius($borderRadiusBtn);
+		color: $textColorBtn;
 		text-transform: uppercase;
 		font-size:12px;
 		@media (max-width: $screen-sm-min) {
@@ -592,32 +595,23 @@ form {
 		}
 	}
 	&.clear {
-		padding: 3px 15px;
-		color:$gray-dark;
+		padding: 6px 18px;
+		color:$textColorBtn;
 		min-width: 92px;
-		font-size: 12px;
-		font-family: $fontRegular;
-		font-weight: normal;
+		font-size: 13px;
+		font-family: $fontOpenSS;
+		font-weight: 400;
 		text-align: center;
-		background:$color_fff;
-		border:2px solid $gray-darker;
-		box-shadow: inset 1px 1px 0 0 $color_e6e6e6;
-		text-transform: uppercase;
-		@include border-radius(3px);
+		background: $backgroundColorBtn;
 
 		&:hover,
 		&.hover {
-			background: $gray-darker;
-			border-color:$color_2e2e2e;
-			color:$color_fff;
-			box-shadow:none;
+			background: $backgroundColorHoverBtn;
 		}
 		&:active,
 		&:focus {
 			@media(min-width:1024px){
-				background: $color_fff;
-				border-color:$color_c9ac6d;
-				color:$color_c9ac6d;
+				background: $backgroundColorFocusBtn;
 			}
 		}
 	}

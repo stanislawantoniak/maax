@@ -126,8 +126,10 @@ $validation-error: $color_e84c3d;
 // FONT
 $fontLight: Verdana,Geneva,sans-serif;
 $fontRegular: Verdana,Geneva,sans-serif;
-$fontOpen: 'Open Sans', sans-serif;
-$fontBlack: Georgia, sans-serif;
+$fontOpen: 'Open Sans';
+$fontOpenSS: 'Open Sans', sans-serif;
+$fontBlack: Georgia;
+$fontBlackSS: Georgia, sans-serif;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
 
@@ -360,3 +362,10 @@ $colorBorderSidebarSection:             #fff;
 $fontSizeBreadCrumb:                    14px;
 $fontBreadCrumb:                        $fontSizeBreadCrumb $fontOpen;
 $colorBreadCrumb:                       $color_8a8a8a;
+
+/*BUTTON STYLE*/
+$backgroundColorBtn:                    $color_262626;
+$backgroundColorHoverBtn:               $color_444;
+$backgroundColorFocusBtn:               $color_444;
+$textColorBtn:                          $color_fff;
+$borderRadiusBtn:                       0px;

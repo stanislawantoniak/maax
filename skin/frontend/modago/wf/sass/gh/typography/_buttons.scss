@@ -1,7 +1,8 @@
 .button {
 	@include inline-block;
 	border:none;
-	@include border-radius(5px);
+	@include border-radius($borderRadiusBtn);
+	@include transition(color 0.2s, background-color 0.2s);
 	outline:none;
 	text-decoration: none!important;
 	text-transform: uppercase;
@@ -130,29 +131,23 @@
 		}
 	}
 	&.button-third {
-		padding: 3px 15px;
-		color:$gray-dark;
+		padding: 6px 18px;
+		color:$textColorBtn;
 		font-weight: normal;
-		font-size: 12px;
-		font-family: $fontRegular;
+		font-size: 13px;
+		font-family: $fontOpenSS;
+		font-weight: 400;
 		min-width: 92px;
 		text-align: center;
-		background:$color_fff;
-		border:2px solid $gray-darker;
-		box-shadow: inset 1px 1px 0 0 $color_e6e6e6;
-		@include border-radius(3px);
+		background: $backgroundColorBtn;
 		&:hover,
 		&.hover {
-
-			background: $gray-darker;
-			border-color:$color_2e2e2e;
-			color:$color_fff;
-			box-shadow:none;
+			background: $backgroundColorHoverBtn;
 		}
 		&:active,
 		&.active {
 			@media(min-width:1024px){
-				background: $color_fff;
+				background: $backgroundColorHoverBtn;
 				border-color: $colorBtnThirdBorderActive;
 				color: $colorBtnThirdColorActive;
 			}
