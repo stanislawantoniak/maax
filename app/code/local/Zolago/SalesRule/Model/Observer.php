@@ -15,6 +15,44 @@
  */
 class Zolago_SalesRule_Model_Observer {
 
+	/**
+	 * Add rule condition to combine list
+	 * 
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function addRuleConditionForConfigurableProducts(Varien_Event_Observer $observer) {
+		$additional = $observer->getEvent()->getAdditional();
+		$additional->setConditions(
+			array(
+				array(
+					'value' => 'zolagosalesrule/rule_condition_product_found_configurable',
+					'label' => Mage::helper('salesrule')->__('Configurable product attribute combination')
+				)
+			)
+		);
+	}
+
+	/**
+	 * Copy sales rule product attributes to from product to quote item
+	 * for sales rule conditions purpose
+	 *
+	 * @event sales_quote_item_set_product
+	 * @param Varien_Event_Observer|Varien_Object $observer
+	 * @throws Mage_Core_Exception
+	 */
+	public function copySalesRuleAttrToQuoteItem(Varien_Object $observer) {
+		/** @var Mage_Sales_Model_Quote_Item $item */
+		$item = $observer->getEvent()->getQuoteItem();
+		/** @var Zolago_Catalog_Model_Product $product */
+		$product = $observer->getEvent()->getProduct();
+		
+		/** @var Zolago_SalesRule_Helper_Data $helper */
+		$helper = Mage::helper("zolagosalesrule");
+		$helper->copySalesRuleAttrToQuoteItem($item, $product);
+	}
+
+	
+
     /**
      * Add rule_id=>price to quote item
      * @param Varien_Event_Observer $observer

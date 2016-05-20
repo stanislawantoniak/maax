@@ -27,11 +27,17 @@ class Amasty_Rules_Model_SalesRule_Rule_Condition_Product_Combine extends Mage_S
                 $object->getProduct()->setCategoryIds($categoryIds);
             }
         }
+
+		/** @var Zolago_SalesRule_Helper_Data $helper */
+		$helper = Mage::helper("zolagosalesrule");
+		$helper->copySalesRuleAttrToQuoteItem($object, $object->getProduct());
+
         $result = @Mage_Rule_Model_Condition_Combine::validate($object);
         if ($origProduct){
             // restore original product
             $object->setProduct($origProduct);    
             $object->setSku($origSku);  
+			$helper->copySalesRuleAttrToQuoteItem($object, $object->getProduct());
 			// Override the result by configurable product
 			if(false===$result){
 				$result = @Mage_Rule_Model_Condition_Combine::validate($object);
@@ -41,4 +47,11 @@ class Amasty_Rules_Model_SalesRule_Rule_Condition_Product_Combine extends Mage_S
         return $result;       
     }
 
+	public function getNewChildSelectOptions() {
+		$conditions = parent::getNewChildSelectOptions();
+		$conditions = array_merge_recursive($conditions, array(
+			array('value'=>'zolagosalesrule/rule_condition_product_found_configurable', 'label'=>Mage::helper('salesrule')->__('Configurable product attribute combination')),
+		));
+		return $conditions;
+	}
 }
