@@ -1,4 +1,5 @@
 <?php
+<?php
 $blocks = array();
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Domyślny blok",
@@ -10,6 +11,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Reklama i promocja ",
@@ -80,6 +82,7 @@ Każdą kampanię można edytować. Na stronie edytowania można zmienić ustawi
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Reklama i promocja - Kampanie - Powierzchnia reklamowa",
@@ -116,6 +119,7 @@ Jeśli chcesz usunąć kreację, najpierw kliknij w ikonkę ołówka (edycji) na
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Reklama i promocja - Kampanie - Powierzchnia reklamowa - Strona",
@@ -149,6 +153,7 @@ Jeśli chcesz usunąć kreację, najpierw kliknij w ikonkę ołówka (edycji) na
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Reklama i promocja - Kampanie",
@@ -235,6 +240,7 @@ Produkty możesz usuwać z kampanii klikając w krzyżyk przy produkcie, na liś
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Reklama i promocja - Kampanie - Dodawanie kampanii",
@@ -284,6 +290,7 @@ Cena przekreślona w produkcie – będzie prezentowana cena zdefiniowana w prod
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-pl-udpo",
@@ -294,6 +301,7 @@ udropship-help-pl-udpo
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Zamówienia - Lista zamówień",
@@ -352,6 +360,7 @@ Jeśli otrzymasz wiadomosć od klienta, zmieni się liczba przy polu „Wiadomo�
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Zamówienia - Zbiorówki",
@@ -368,6 +377,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Zamówienia - Szczegóły zamówienia",
@@ -424,6 +434,7 @@ W momencie anulowania przepłaconego zamówienia automatycznie tworzy się nadp�
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-pl-udprod",
@@ -434,6 +445,7 @@ udropship-help-pl-udprod
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Produkty - Przegląd atrybutów",
@@ -456,6 +468,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Produkty - Zarządzanie zdjęciami",
@@ -541,6 +554,7 @@ MAPOWANIE Z PLIKU
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Produkty - Zarządzanie cenami",
@@ -615,6 +629,7 @@ Aby ponownie włączyć taki produkt, należy zmienić politykę dostępności p
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Produkty - Zarządzanie opisami produktów",
@@ -680,6 +695,7 @@ Poniżej opis wybranych, najczęściej występujących pól tabeli:
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-pl-udqa",
@@ -690,6 +706,7 @@ udropship-help-pl-udqa
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-pl-udqa-vendor",
@@ -700,6 +717,7 @@ udropship-help-pl-udqa-vendor
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Pytania klientów - Szczegóły",
@@ -718,6 +736,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Pytania klientów",
@@ -745,6 +764,7 @@ Przy każdym zapytaniu widać datę wysłania zapytania i datę odpowiedzi, o il
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Strona startowa",
@@ -757,6 +777,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - GH API",
@@ -1987,6 +2008,7 @@ procesie integracji z Galerią Modago można uzyskać kontaktując się z:</P>
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - Użytkownicy",
@@ -2019,6 +2041,7 @@ Poniżej lista możliwych ról:
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - Użytkownicy - Dodawanie Użytkownika",
@@ -2044,6 +2067,7 @@ Poniżej lista możliwych ról:
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - POS - Lista POS",
@@ -2087,6 +2111,7 @@ Jeśli chcesz ustawić inne niż domyślne ustawienie spedytora dla danego POS, 
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - POS - Dodawanie POS",
@@ -2127,6 +2152,7 @@ Jeśli chcesz ustawić inne niż domyślne ustawienie spedytora dla danego POS, 
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - Tabele rozmiarów",
@@ -2169,6 +2195,7 @@ Właściwa informacja o rozmiarach produktów potrafi znacząco zmniejszyć ilo�
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - Tabele rozmiarów - Dodawanie tabel",
@@ -2191,6 +2218,7 @@ Każdą z tabel możesz potem edytować wchodząc w jej szczegóły w poziomu li
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-pl-udropship-vendor-settings",
@@ -2201,6 +2229,7 @@ udropship-help-pl-udropship-vendor-settings
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - Ustawienia podstawowe",
@@ -2213,6 +2242,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - RMA",
@@ -2237,6 +2267,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Ustawienia - Sposoby dostawy",
@@ -2252,6 +2283,7 @@ $blocks[] = array (
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-pl-urma",
@@ -2262,6 +2294,7 @@ udropship-help-pl-urma
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - RMA - Obsługa reklamacji",
@@ -2399,6 +2432,7 @@ Jeśli uznasz że reklamacja jest uzasadniona i klient powinien odesłać produk
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - RMA - Szczegóły reklamacji",
@@ -2521,6 +2555,7 @@ Jeśli uznasz że reklamacja jest uzasadniona i klient powinien odesłać produk
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en",
@@ -2531,6 +2566,7 @@ udropship-help-en
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-campaign",
@@ -2541,6 +2577,7 @@ udropship-help-en-campaign
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-campaign-placement",
@@ -2551,6 +2588,7 @@ udropship-help-en-campaign-placement
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-campaign-placement-category",
@@ -2561,6 +2599,7 @@ udropship-help-en-campaign-placement-category
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-campaign-vendor",
@@ -2571,6 +2610,7 @@ udropship-help-en-campaign-vendor
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-campaign-vendor-edit",
@@ -2581,6 +2621,7 @@ udropship-help-en-campaign-vendor-edit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udpo",
@@ -2591,6 +2632,7 @@ udropship-help-en-udpo
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udpo-vendor",
@@ -2601,6 +2643,7 @@ udropship-help-en-udpo-vendor
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udpo-vendor-aggregated",
@@ -2611,6 +2654,7 @@ udropship-help-en-udpo-vendor-aggregated
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udpo-vendor-edit",
@@ -2621,6 +2665,7 @@ udropship-help-en-udpo-vendor-edit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udprod",
@@ -2631,6 +2676,7 @@ udropship-help-en-udprod
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udprod-vendor-attributes",
@@ -2641,6 +2687,7 @@ udropship-help-en-udprod-vendor-attributes
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udprod-vendor-image",
@@ -2651,6 +2698,7 @@ udropship-help-en-udprod-vendor-image
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udprod-vendor-price",
@@ -2661,6 +2709,7 @@ udropship-help-en-udprod-vendor-price
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udprod-vendor-product",
@@ -2671,6 +2720,7 @@ udropship-help-en-udprod-vendor-product
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udqa",
@@ -2681,6 +2731,7 @@ udropship-help-en-udqa
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udqa-vendor",
@@ -2691,6 +2742,7 @@ udropship-help-en-udqa-vendor
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udqa-vendor-questionEdit",
@@ -2701,6 +2753,7 @@ udropship-help-en-udqa-vendor-questionEdit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udqa-vendor-questions",
@@ -2711,6 +2764,7 @@ udropship-help-en-udqa-vendor-questions
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship",
@@ -2721,6 +2775,7 @@ udropship-help-en-udropship
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-ghapi",
@@ -2731,6 +2786,7 @@ udropship-help-en-udropship-ghapi
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-operator",
@@ -2741,6 +2797,7 @@ udropship-help-en-udropship-operator
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-operator-edit",
@@ -2751,6 +2808,7 @@ udropship-help-en-udropship-operator-edit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-pos",
@@ -2761,6 +2819,7 @@ udropship-help-en-udropship-pos
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-pos-edit",
@@ -2771,6 +2830,7 @@ udropship-help-en-udropship-pos-edit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-sizetable",
@@ -2781,6 +2841,7 @@ udropship-help-en-udropship-sizetable
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-sizetable-edit",
@@ -2791,6 +2852,7 @@ udropship-help-en-udropship-sizetable-edit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-vendor-settings",
@@ -2801,6 +2863,7 @@ udropship-help-en-udropship-vendor-settings
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-vendor-settings-info",
@@ -2811,6 +2874,7 @@ udropship-help-en-udropship-vendor-settings-info
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-vendor-settings-rma",
@@ -2821,6 +2885,7 @@ udropship-help-en-udropship-vendor-settings-rma
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-udropship-vendor-settings-shipping",
@@ -2831,6 +2896,7 @@ udropship-help-en-udropship-vendor-settings-shipping
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-urma",
@@ -2841,6 +2907,7 @@ udropship-help-en-urma
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-urma-vendor",
@@ -2851,6 +2918,7 @@ udropship-help-en-urma-vendor
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 $blocks[] = array (
 	"title" => "udropship-help-en-urma-vendor-edit",
@@ -2861,6 +2929,7 @@ udropship-help-en-urma-vendor-edit
 EOT
 ,
 	"is_active" => 1,
+	"stores" => 0,
 );
 
 foreach ($blocks as $blockData) {
