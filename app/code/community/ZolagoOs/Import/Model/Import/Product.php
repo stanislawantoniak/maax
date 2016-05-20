@@ -144,7 +144,7 @@ class ZolagoOs_Import_Model_Import_Product
             $dp->ingest($product);
             $skusUpdated[] = $simpleSku;
         }
-
+        $this->log($skusUpdated);
         //Create configurable
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
