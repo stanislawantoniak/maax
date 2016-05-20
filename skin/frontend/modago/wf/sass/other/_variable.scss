@@ -126,6 +126,7 @@ $validation-error: $color_e84c3d;
 // FONT
 $fontLight: Verdana,Geneva,sans-serif;
 $fontRegular: Verdana,Geneva,sans-serif;
+$fontOpen: 'Open Sans', sans-serif;
 $fontBlack: Georgia, sans-serif;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
@@ -339,11 +340,6 @@ $colorBackgroundCarrierTimePickerPseudo:#e8e7e6;
 $colorBackgroundCarrierTimePickerDisabled:#b8b8b8;
 $colorAccentCarrierTimePicker:          $colorAccentRma;
 
-/* SIDEBAR COLORS */
-$colorBorderSidebar:                    #ebebeb;
-$colorBackgroundSidebar:                $colorBackgroundBlocks;
-$colorBorderSidebarSection:             #d2d2d2;
-
 /* PRODUCT SITE COLORS */
 $colorProductBtnAddBg:                  #000;
 $colorProductBtnAdd:                    #FFF;
@@ -353,8 +349,14 @@ $colorProductExtraInfo:                 $colorFont;
 $colorProductExtraInfoBg:               #FCFCFC;
 $colorProductExtraInfoBorder:           #EBEBEB;
 
+/* SIDEBAR VARIABLES */
+$widthSidebar:                          275px;
+$marginSidebar:                         20px;
+$colorBorderSidebar:                    #fff;
+$colorBackgroundSidebar:                $colorBackgroundBlocks;
+$colorBorderSidebarSection:             #fff;
 
 /* BRADCRUMBS VARIABLES */
 $fontSizeBreadCrumb:                    14px;
-$fontBreadCrumb:                        $fontSizeBreadCrumb 'Open Sans', sans-serif;
+$fontBreadCrumb:                        $fontSizeBreadCrumb $fontOpen;
 $colorBreadCrumb:                       $color_8a8a8a;

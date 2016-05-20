@@ -1,10 +1,6 @@
 body {
-	color: $color_737373;
-	background: $color_fff;
-	line-height: 20px;
-	font-weight: 400;
-	font-style: normal;
-	font-size: 14px;
+	color: $text-color;
+	background: $body-bg;
 }
 ::-webkit-input-placeholder {
    color: $color_000 !important;
@@ -35,7 +31,7 @@ display: none;
   display: none;
   }
 
-dl, ul, ol {
+dl, ul, ol, {
 	margin-bottom: 15px;
 }
 
@@ -218,8 +214,12 @@ a.underline {
 	font-size: 14px !important;
 	font-family:$fontRegular;
 }
-
-p,.m {
+p {
+	line-height: 1.8;
+	font-size: 1em;
+	font-family: $fontOpen;
+}
+.m {
 	margin-bottom:20px;
 }
 .mx2 {
