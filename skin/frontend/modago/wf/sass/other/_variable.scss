@@ -126,7 +126,10 @@ $validation-error: $color_e84c3d;
 // FONT
 $fontLight: Verdana,Geneva,sans-serif;
 $fontRegular: Verdana,Geneva,sans-serif;
-$fontBlack: Georgia, sans-serif;
+$fontOpen: 'Open Sans';
+$fontOpenSS: 'Open Sans', sans-serif;
+$fontBlack: Georgia;
+$fontBlackSS: Georgia, sans-serif;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
 
@@ -339,11 +342,6 @@ $colorBackgroundCarrierTimePickerPseudo:#e8e7e6;
 $colorBackgroundCarrierTimePickerDisabled:#b8b8b8;
 $colorAccentCarrierTimePicker:          $colorAccentRma;
 
-/* SIDEBAR COLORS */
-$colorBorderSidebar:                    #fff;
-$colorBackgroundSidebar:                $colorBackgroundBlocks;
-$colorBorderSidebarSection:             #fff;
-
 /* PRODUCT SITE COLORS */
 $colorProductBtnAddBg:                  #000;
 $colorProductBtnAdd:                    #FFF;
@@ -353,8 +351,21 @@ $colorProductExtraInfo:                 $colorFont;
 $colorProductExtraInfoBg:               #FCFCFC;
 $colorProductExtraInfoBorder:           #EBEBEB;
 
+/* SIDEBAR VARIABLES */
+$widthSidebar:                          275px;
+$marginSidebar:                         20px;
+$colorBorderSidebar:                    #fff;
+$colorBackgroundSidebar:                $colorBackgroundBlocks;
+$colorBorderSidebarSection:             #fff;
 
 /* BRADCRUMBS VARIABLES */
 $fontSizeBreadCrumb:                    14px;
-$fontBreadCrumb:                        $fontSizeBreadCrumb 'Open Sans', sans-serif;
+$fontBreadCrumb:                        $fontSizeBreadCrumb $fontOpen;
 $colorBreadCrumb:                       $color_8a8a8a;
+
+/*BUTTON STYLE*/
+$backgroundColorBtn:                    $color_262626;
+$backgroundColorHoverBtn:               $color_444;
+$backgroundColorFocusBtn:               $color_444;
+$textColorBtn:                          $color_fff;
+$borderRadiusBtn:                       0px;

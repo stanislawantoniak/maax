@@ -35,7 +35,7 @@
 }
 
 .sidebar {
-	width:275px;
+	width: $widthSidebar;
 	position:relative;
 	margin-bottom: 52px;
 	z-index: 900;
@@ -57,19 +57,20 @@
 		h3 {
 			position:relative;
 			display:block;
-			//	     	  height:18px;
-			//	     	  overflow:hidden;
+			white-space: normal;
+
+			font-size: 1.1428em;
+			color: #000;
+			border-bottom: 1px solid $color_e6e6e6;
 
 			@if $colorAccentTitleTransparent {
-				margin: 0 0 11px;
-				padding: 0;
+				margin: 0 0 1.0714em;
+				padding: 0 0 0.7142em 0;
 			} @else {
 				margin: 0 -18px 11px;
 				padding:0 0 0 25px;
 			}
 
-
-			white-space: normal;
 			span {
 				display: block;
 				white-space: normal;
@@ -126,7 +127,7 @@
 .sidebar-first {
 	&.node-type-list {
 		#content-main {
-			margin-left: 275px;
+			margin-left: $widthSidebar+$marginSidebar;
 			overflow: hidden;
 			@media (max-width: $screen-xs-max) {
 				margin-left: 0 !important;
@@ -137,8 +138,6 @@
 .sidebar-first {
 	&.node-type-main_categories {
 		#sidebar {
-
-
 			@media (max-width: $screen-xs-max) {
 				width:100%;
 			}
