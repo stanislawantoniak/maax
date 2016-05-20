@@ -17,6 +17,9 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
      */
     public function confirmAction()
     {
+        if (!Mage::helper("zolagonewsletter")->isModuleActive())
+            return parent::confirmAction();
+
         $_helper = Mage::helper("zolagonewsletter");
         $error = $this->confirm(
             $this->__('Invalid subscription confirmation code.'),

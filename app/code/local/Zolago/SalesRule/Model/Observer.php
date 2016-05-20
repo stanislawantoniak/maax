@@ -165,6 +165,9 @@ class Zolago_SalesRule_Model_Observer {
      */
 
     public static function sendSubscriberCouponMailCron() {
+        if (!Mage::helper("zolagonewsletter")->isModuleActive())
+            return;
+
         $collection = Mage::getModel('newsletter/subscriber')
             ->getCollection()
             ->addFieldToFilter("subscriber_status", Zolago_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
@@ -199,6 +202,9 @@ class Zolago_SalesRule_Model_Observer {
      */
     public static function sendSubscriberCouponMail(Varien_Event_Observer $observer)
     {
+        if (!Mage::helper("zolagonewsletter")->isModuleActive())
+            return;
+
         /** @var Zolago_Salesrule_Helper_Data $helper */
         $model = $observer->getEvent()->getSubscriber();
         if ($model->getMailSendFlag()) {
