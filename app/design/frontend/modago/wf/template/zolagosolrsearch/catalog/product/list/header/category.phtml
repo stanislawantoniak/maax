@@ -31,8 +31,10 @@ if ($this->isContentMode() && !$vendor) return; // no header only on CMS page an
                     </div>
                     <?php if (empty($banner) && empty($bannerTextInfo)) : /* category / campaign name */?>
                     <div id="view-current-filter" >
-                        <h1 data-item="1" style="text-align:center;"><?php echo $this->getCategory()->getNameContext(); ?></h1>
-                        <p><?php echo $this->getCategory()->getDescription(); ?></p>
+                        <h1 class="category-attribute-long-name"><?php echo $this->getCategory()->getNameContext(); ?></h1>
+                        <div class="category-attribute-description">
+                            <p><?php echo $this->getCategory()->getDescription(); ?></p>
+                        </div>
                         <a href="<?php echo $moveUpUrl; ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
                     </div>
                     <?php else : /* banners */ ?>
