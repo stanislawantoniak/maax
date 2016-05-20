@@ -115,7 +115,7 @@ class ZolagoOs_Import_Model_Import_Product
      */
     public function insertConfigurable($dp, $vendorId, $configurableSkuv, $simples)
     {
-        $attributeSet = "Do przeniesienia";
+        $attributeSet = "Default";
 
         $skusUpdated = [];
         $subskus = array();
