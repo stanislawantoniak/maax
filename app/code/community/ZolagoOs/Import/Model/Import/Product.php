@@ -28,6 +28,7 @@ class ZolagoOs_Import_Model_Import_Product
 
         //1. Read file
         $fileName = $this->_getPath();
+        $this->log("READING FILE {$fileName}");
         if (empty($fileName)) {
             $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
             return $this;
