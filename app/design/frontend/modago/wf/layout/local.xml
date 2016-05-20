@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
 	<default>
+		<!--<reference name="after_body_start">-->
+			<!--<block type="cms/block" name="top_bar" as="top_bar">-->
+				<!--<action method="setBlockId">-->
+					<!--<block_id>top_bar</block_id>-->
+				<!--</action>-->
+			<!--</block>-->
+		<!--</reference>-->
 		<reference name="head">
-			<action method="addCss">
-				<stylesheet>css/font-awesome.min.css</stylesheet>
-			</action>
+			<!--<action method="addCss">-->
+				<!--<stylesheet>css/font-awesome.min.css</stylesheet>-->
+			<!--</action>-->
 			<action method="removeItem">
 				<type>skin_css</type>
 				<stylesheet>css/lato.css</stylesheet>
