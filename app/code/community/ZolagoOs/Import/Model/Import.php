@@ -43,7 +43,7 @@ abstract class ZolagoOs_Import_Model_Import
      */
     protected function _getPath()
     {
-        return (!empty($this->_getFileName())) ? $this->_getFileName() : "";
+        return $this->_getFileName();
         //return (!empty($this->_getFileName())) ? Mage::getBaseDir('var') . DS . self::DIRECTORY . DS . $this->_getFileName() : "";
     }
 
