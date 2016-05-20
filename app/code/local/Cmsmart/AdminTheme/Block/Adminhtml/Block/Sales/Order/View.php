@@ -190,10 +190,25 @@ class Cmsmart_AdminTheme_Block_Adminhtml_Block_Sales_Order_View extends Mage_Adm
          */
         $messageToCOD = Mage::helper('sales')->__('Are you sure you want to change payment to COD?');
         $this->_addButton('order_change_payment_to_cod', array(
-            'label'     => Mage::helper('sales')->__('Change Payment Method To COD'),
-            'onclick'   => "confirmSetLocation('{$messageToCOD}', '{$this->getChangeToCodUrl()}')",
-            'class'     => 'nb-btnreorder go'
+            'label' => Mage::helper('sales')->__('Change Payment Method To COD'),
+            'onclick' => "confirmSetLocation('{$messageToCOD}', '{$this->getChangeToCodUrl()}')",
+            'class' => 'nb-btnreorder go'
         ));
+
+
+        /**
+         * Change customer_email on GUEST orders
+         * @see https://www.assembla.com/spaces/d0DIm8KJer45NcacwqEsg8/tickets/new_cardwall?default_list_cardwall=milestone:9835013#ticket:2042
+         */
+        $this->_addButton('order_change_email', array(
+            'label' => Mage::helper('sales')->__('Change Order Email'),
+            'onclick' => "showOrderChangeEmailDialog('#order_change_email_dialog')",
+            'title' => $this->__('This action allowed for GUEST orders only'),
+            'class' => 'nb-btnemail go',
+            'disabled' => $order->getCustomerIsGuest() ? false : true
+        ));
+
+
     }
 
     /**

@@ -1,31 +1,28 @@
 .brandshop-breadcrumps,
 ol.breadcrumb {
 	background:none;
-	font-family: $fontRegular;
-	font-size: 11px;
+	font: $fontBreadCrumb;
 	a:link,
 	a:visited {
-		color:$color_000;
-		font-family: $fontRegular;
-		font-size: 11px;			
+		color:$colorBreadCrumb;
+		font: $fontBreadCrumb;
 	}
 	a:hover {
 		text-decoration: underline;
 	}
 	&.active {
-		color:$color_000;			
+		color:$colorBreadCrumb;
 	}
 }
 
 ol.breadcrumb{
 	li {
-		font-size: 11px;
+		font: $fontBreadCrumb;
 		text-transform: uppercase;
 		&:not(:first-child):before {
-			font-family: FontAwesome;
-			font-size: 11px;
+			font: $fontBreadCrumb;
 			text-align: right;
-			color:$color_000;
+			color:$colorBreadCrumb;
 		}
 	}
 }
