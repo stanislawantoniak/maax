@@ -2,6 +2,9 @@
 <layout>
 	<default>
 		<reference name="head">
+			<action method="addCss">
+				<stylesheet>css/font-awesome.min.css</stylesheet>
+			</action>
 			<action method="removeItem">
 				<type>skin_css</type>
 				<stylesheet>css/lato.css</stylesheet>
