@@ -1,5 +1,4 @@
 <?php
-<?php
 $blocks = array();
 $blocks[] = array (
 	"title" => "Panel vendora - Pomoc - Domyślny blok",
