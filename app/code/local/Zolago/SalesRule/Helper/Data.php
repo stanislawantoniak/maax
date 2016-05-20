@@ -1,6 +1,50 @@
 <?php
 class Zolago_SalesRule_Helper_Data extends Mage_SalesRule_Helper_Data {
 
+	protected $cache = array();
+
+	/**
+	 * @see Mage_SalesRule_Model_Observer::addProductAttributes()
+	 * 
+	 * @throws Mage_Core_Exception
+	 * @return array
+	 */
+	public function getSalesruleActiveAttributes() {
+		if (!isset($this->cache['salesrule_active_attributes'])) {
+			/** @var Mage_SalesRule_Model_Resource_Rule $res */
+			$res = Mage::getResourceModel('salesrule/rule');
+			$attributes = $res->getActiveAttributes(
+				Mage::app()->getWebsite()->getId(),
+				Mage::getSingleton('customer/session')->getCustomer()->getGroupId()
+			);
+			$this->cache['salesrule_active_attributes'] = $attributes;
+		}
+		return $this->cache['salesrule_active_attributes'];
+	}
+
+	/**
+	 * Copy sales rule attributes to item from product
+	 * 
+	 * @param $item
+	 * @param $product
+	 */
+	public function copySalesRuleAttrToQuoteItem($item, $product) {
+		$attributes = $this->getSalesruleActiveAttributes();
+
+		// copy from product to quote item
+		// note: product have already loaded attributes
+		// @see Mage_SalesRule_Model_Observer::addProductAttributes()
+		foreach ($attributes as $attribute) {
+			$code = $attribute['attribute_code'];
+			$item->setData($code, $product->getData($code));
+			if ($item->getChildren()) {
+				foreach ($item->getChildren() as $child) {
+					$this->copySalesRuleAttrToQuoteItem($child, $child->getProduct());
+				}
+			}
+		}
+	}
+	
 	public function getActiveSalesRules() {
 		$rules = Mage::getResourceModel('salesrule/rule_collection')
 			->addIsActiveFilter()
