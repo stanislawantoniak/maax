@@ -107,6 +107,7 @@
       <orbadhl>
         <active>1</active>
         <gateway>https://testowy.dhl24.com.pl/webapi</gateway>
+        <tracking_gateway>http://webapps.dhl.com.pl/app/tntwebservice/tntwebservice_v2.wsdl</tracking_gateway>
         <tracking_url><![CDATA[http://www.dhl.com.pl/sledzenieprzesylkikrajowej/szukaj.aspx?m=0&sn=%s]]></tracking_url>
         <sallowspecific>0</sallowspecific>
         <model>orbashipping/carrier_dhl</model>
