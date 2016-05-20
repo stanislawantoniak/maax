@@ -1,6 +1,10 @@
 body {
-	color: $gray-darker;
-	background: $color_f2f1f0;
+	color: $color_737373;
+	background: $color_fff;
+	line-height: 20px;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 14px;
 }
 ::-webkit-input-placeholder {
    color: $color_000 !important;
@@ -18,7 +22,7 @@ body {
    color: $color_000 !important;  
 }
 
-:placeholder {  
+:placeholder {
    color: $color_000 !important;  
 }
 ::-ms-clear {
@@ -31,7 +35,7 @@ display: none;
   display: none;
   }
 
-dl, ul, ol, {
+dl, ul, ol {
 	margin-bottom: 15px;
 }
 

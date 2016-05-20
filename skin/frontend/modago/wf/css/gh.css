@@ -234,7 +234,7 @@ div.noscroll {
 
 /* line 57, ../sass/gh/general/_global.scss */
 .latoblack {
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 
 /* line 61, ../sass/gh/general/_global.scss */
 .messages a {
@@ -747,8 +747,7 @@ html.sb-site-lock.sb-active:not(.sb-static) {
   width: 100%;
   position: relative;
   z-index: 1;
-  /* Site sits above Slidebars */
-  background: #f2f1f0; }
+  /* Site sits above Slidebars */ }
 
 /* line 187, ../sass/gh/general/_menu-hamburger.scss */
 #sb-site.open {
@@ -981,7 +980,7 @@ html.sb-static .sb-slidebar, .sb-slidebar.sb-static {
   /* line 3, ../sass/gh/general/_recently-viewed.scss */
   .recently-viewed h3.title-section {
     font-size: 14px;
-    font-family: Roboto, sans-serif; } }
+    font-family: Verdana, Geneva, sans-serif; } }
 @media (max-width: 767px) {
   /* line 8, ../sass/gh/general/_recently-viewed.scss */
   .recently-viewed h3.title-section:before {
@@ -1102,7 +1101,7 @@ html.sb-static .sb-slidebar, .sb-slidebar.sb-static {
   padding: 5px 20px;
   color: #FFF;
   font-weight: bold;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-align: center;
   border-radius: 5px;
   vertical-align: middle;
@@ -1322,7 +1321,7 @@ section.cms-section .title-section h2 {
   display: block;
   overflow: hidden;
   font-size: 28px;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   text-align: left; }
 /* line 18, ../sass/gh/general/_cms.scss */
 section.cms-section .title-section h2:first-child {
@@ -1359,7 +1358,7 @@ body.zolagomodago-index-index .benefits {
     margin: 15px -15px 0px !important; } }
 /* line 22, ../sass/gh/general/_benefits.scss */
 .benefits .benefit-item {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   display: inline-block;
   vertical-align: middle;
   width: 25%;
@@ -1413,7 +1412,7 @@ body.zolagomodago-index-index .benefits {
 /* line 83, ../sass/gh/general/_benefits.scss */
 .benefits .benefit-item .benefit-text h3 {
   font-size: 16px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   padding: 0 0 5px;
   width: 0; }
@@ -1493,7 +1492,7 @@ body.zolagomodago-index-index .benefits {
   background-image: url("../images/svg/about_promotions.svg"); }
 /* line 65, ../sass/gh/checkout/_sidebar.scss */
 #checkout #step-0 .sidebar-second .main .checkout-sidebar-second-ul .checkout-sidebar-second-li .checkout-sidebar-second-li-strong, .customer-account-create .sidebar-second .main .checkout-sidebar-second-ul .checkout-sidebar-second-li .checkout-sidebar-second-li-strong {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   padding-top: 12px; }
 @media (max-width: 830px) {
   /* line 65, ../sass/gh/checkout/_sidebar.scss */
@@ -1533,7 +1532,7 @@ body.zolagomodago-index-index .benefits {
 .node-type-shopping-cart #content-main section > header h1 {
   font-size: 24px;
   font-weight: normal;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase; }
 @media (max-width: 767px) {
   /* line 29, ../sass/gh/checkout/_shopping-cart.scss */
@@ -1582,7 +1581,7 @@ body.zolagomodago-index-index .benefits {
 /* line 89, ../sass/gh/checkout/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell .product_price {
   font-size: 16px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 92, ../sass/gh/checkout/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell .product_price span {
   font-size: 11px;
@@ -1601,7 +1600,7 @@ body.zolagomodago-index-index .benefits {
 /* line 113, ../sass/gh/checkout/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell.cell-04.td {
   font-size: 16px;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 127, ../sass/gh/checkout/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
   border-top: 1px solid #ebeaed; }
@@ -1655,7 +1654,7 @@ body.zolagomodago-index-index .benefits {
 /* line 182, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #cart-summary > header h2 {
   font-size: 18px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 185, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #cart-summary > header h2 strong {
   font-weight: bold; }
@@ -1682,7 +1681,7 @@ body.zolagomodago-index-index .benefits {
 /* line 208, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #cart-summary #product_summary li span:last-child {
   font-size: 16px;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   text-align: right; }
 /* line 217, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #cart-summary #discount_voucher .form-group input[type="text"] {
@@ -1731,7 +1730,7 @@ body.zolagomodago-index-index .benefits {
 /* line 267, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #cart-summary #sum_price .value_sum_price {
   font-size: 16px;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   text-transform: none; }
 /* line 273, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #cart-summary .form-action {
@@ -1758,10 +1757,10 @@ body.zolagomodago-index-index .benefits {
 /* line 296, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #payment-methods > header h2 {
   font-size: 18px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 299, ../sass/gh/checkout/_shopping-cart.scss */
 #sidebar-secondary #payment-methods > header h2 strong {
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 
 /* line 308, ../sass/gh/checkout/_shopping-cart.scss */
 #aside-shopping-cart a#clearAllShopping {
@@ -2671,7 +2670,7 @@ body.zolagomodago-index-index .benefits {
 /* line 4, ../sass/gh/checkout/_checkout.scss */
 #checkout section header h2 {
   font-weight: bold;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 @media (max-width: 359px) {
   /* line 4, ../sass/gh/checkout/_checkout.scss */
   #checkout section header h2 {
@@ -2679,11 +2678,11 @@ body.zolagomodago-index-index .benefits {
 /* line 15, ../sass/gh/checkout/_checkout.scss */
 #checkout #shipping-methods .panel-body dt {
   font-weight: normal;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 20, ../sass/gh/checkout/_checkout.scss */
 #checkout #shipping-methods .panel-body dd.separator strong {
   font-weight: normal;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 @media (max-width: 480px) {
   /* line 25, ../sass/gh/checkout/_checkout.scss */
   #checkout #shipping-methods .panel-body .logo-courier {
@@ -2710,12 +2709,12 @@ body.zolagomodago-index-index .benefits {
   background: #fcfcfc; }
 /* line 52, ../sass/gh/checkout/_checkout.scss */
 #checkout .panel .panel-body .top-panel h4 {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: 700;
   font-size: 14px; }
 /* line 58, ../sass/gh/checkout/_checkout.scss */
 #checkout .panel .panel-body h4.addressbook-add-new {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 16px; }
 /* line 63, ../sass/gh/checkout/_checkout.scss */
 #checkout .panel .panel-heading {
@@ -2754,7 +2753,7 @@ body.zolagomodago-index-index .benefits {
 /* line 104, ../sass/gh/checkout/_checkout.scss */
 #checkout .sidebar-second h2 {
   font-size: 18px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 18px;
   text-transform: uppercase;
   text-align: left;
@@ -2771,7 +2770,7 @@ body.zolagomodago-index-index .benefits {
 /* line 124, ../sass/gh/checkout/_checkout.scss */
 #checkout #sidebar h2 {
   font-size: 18px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 18px;
   text-transform: uppercase;
   text-align: left;
@@ -2930,7 +2929,7 @@ body.zolagomodago-index-index .benefits {
 /* line 324, ../sass/gh/checkout/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body dt {
   font-weight: normal;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 328, ../sass/gh/checkout/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body #payment-provider {
   margin-top: 12px; }
@@ -3271,7 +3270,7 @@ body.zolagomodago-index-index .benefits {
 /* line 721, ../sass/gh/checkout/_checkout.scss */
 #checkout form .form-radio label strong {
   font-weight: normal;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 725, ../sass/gh/checkout/_checkout.scss */
 #checkout form .form-radio label span {
   position: relative;
@@ -3731,7 +3730,7 @@ p.text-potwierdzenie {
   overflow: hidden !important; }
 /* line 9, ../sass/gh/checkout/_popup.scss */
 .checkout #popup-after-submit-order .popup-message h3 {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   padding-top: 40px;
   padding-bottom: 0px; }
@@ -3741,7 +3740,7 @@ p.text-potwierdzenie {
     font-size: 20px; } }
 /* line 20, ../sass/gh/checkout/_popup.scss */
 .checkout #popup-after-submit-order .popup-message h4 {
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 24, ../sass/gh/checkout/_popup.scss */
 .checkout #popup-after-submit-order .popup-spinner-wrapper {
   text-align: center;
@@ -3935,88 +3934,91 @@ p.text-potwierdzenie {
   #shopping-cart #select_inpost_point .modal-dialog.modal-lg {
     width: 90%;
     margin: 40px auto; } }
-/* line 128, ../sass/gh/cart/_inpost.scss */
+/* line 127, ../sass/gh/cart/_inpost.scss */
+#shopping-cart #select_inpost_point .select2-container--default .select2-results > .select2-results__options {
+  overflow-x: hidden !important; }
+/* line 131, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body {
   overflow-x: hidden !important; }
-/* line 130, ../sass/gh/cart/_inpost.scss */
+/* line 133, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .shipping_select_point_data {
   margin: 20px 0;
   padding-left: 8px; }
-/* line 134, ../sass/gh/cart/_inpost.scss */
+/* line 137, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .shipping_select_point_data .row {
   margin: 20px 0;
   padding: 20px 0;
   border-top: 1px solid #afafaf;
   border-bottom: 1px solid #afafaf;
   font-size: 14px; }
-/* line 140, ../sass/gh/cart/_inpost.scss */
+/* line 143, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .shipping_select_point_data .row > div {
   padding-left: 0; }
-/* line 146, ../sass/gh/cart/_inpost.scss */
+/* line 149, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container {
   padding-left: 8px; }
-/* line 148, ../sass/gh/cart/_inpost.scss */
+/* line 151, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container h3 {
   text-transform: uppercase;
   padding: 0;
   font-size: 15px; }
-/* line 153, ../sass/gh/cart/_inpost.scss */
+/* line 156, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container .row {
   margin: 15px 0;
   padding: 15px 0 0 0;
   border-top: 1px solid #afafaf;
   font-size: 14px; }
-/* line 158, ../sass/gh/cart/_inpost.scss */
+/* line 161, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container .row > div {
   padding-left: 0; }
-/* line 163, ../sass/gh/cart/_inpost.scss */
+/* line 166, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .nearest_stores_container .nearest_stores_container_link {
   text-decoration: underline;
   padding-left: 2px;
   color: #000; }
-/* line 170, ../sass/gh/cart/_inpost.scss */
+/* line 173, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container {
   padding: 0; }
-/* line 172, ../sass/gh/cart/_inpost.scss */
+/* line 175, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column {
   padding: 0; }
 @media (min-width: 768px) {
-  /* line 175, ../sass/gh/cart/_inpost.scss */
+  /* line 178, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column .map_filter_container {
     padding-left: 0; } }
-/* line 180, ../sass/gh/cart/_inpost.scss */
+/* line 183, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column .gui-form-control-wrapper {
   padding-left: 8px; }
-/* line 184, ../sass/gh/cart/_inpost.scss */
+/* line 187, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .main_container_column .map_delivery_container {
   padding-left: 0; }
-/* line 188, ../sass/gh/cart/_inpost.scss */
+/* line 191, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .main_container .map_delivery_container_wrapper {
   margin: 0 -15px 0 -4px; }
-/* line 194, ../sass/gh/cart/_inpost.scss */
+/* line 197, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .delivery-marker-window {
   max-width: 200px; }
-/* line 197, ../sass/gh/cart/_inpost.scss */
+/* line 200, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show {
   text-decoration: underline;
   display: none; }
 @media (max-width: 480px) {
-  /* line 197, ../sass/gh/cart/_inpost.scss */
+  /* line 200, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show {
     display: block; } }
 @media (max-width: 992px) {
-  /* line 204, ../sass/gh/cart/_inpost.scss */
+  /* line 207, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show_up {
     margin-bottom: 20px;
     padding-left: 15px; } }
 @media (max-width: 992px) {
-  /* line 209, ../sass/gh/cart/_inpost.scss */
+  /* line 212, ../sass/gh/cart/_inpost.scss */
   #shopping-cart #select_inpost_point .modal-body .map_delivery_container_show_up:not(:empty) {
     margin-top: 20px; } }
-/* line 216, ../sass/gh/cart/_inpost.scss */
+/* line 219, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body .gui-label {
   color: #afafaf; }
-/* line 220, ../sass/gh/cart/_inpost.scss */
+/* line 223, ../sass/gh/cart/_inpost.scss */
 #shopping-cart #select_inpost_point .modal-body a.btn_black {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4033,7 +4035,7 @@ p.text-potwierdzenie {
   text-transform: uppercase;
   float: left; }
 
-/* line 243, ../sass/gh/cart/_inpost.scss */
+/* line 246, ../sass/gh/cart/_inpost.scss */
 #discount_voucher {
   margin-bottom: 30px !important; }
 
@@ -4498,7 +4500,7 @@ body.sb-open > header .header_top {
 .header_bottom .navigation li a:link, .header_bottom .navigation li a:visited {
   font-size: 17px;
   color: #000;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: 400;
   font-style: normal;
   text-transform: uppercase;
@@ -4544,7 +4546,7 @@ body.sb-open > header .header_top {
 .top_bottom .navigation li a:link, .top_bottom .navigation li a:visited {
   font-size: 18px;
   color: #000;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: 400;
   font-style: normal;
   text-transform: uppercase;
@@ -4969,7 +4971,7 @@ body.sb-open > header .header_top {
 .button.button-primary {
   padding: 10px 15px;
   color: #FFF;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   text-align: center;
   white-space: nowrap;
   background: #d20005 !important;
@@ -5045,7 +5047,7 @@ body.sb-open > header .header_top {
   color: #fff;
   font-weight: bold;
   font-size: 16px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   min-width: 148px;
   text-align: center;
   background: #000;
@@ -5064,7 +5066,7 @@ body.sb-open > header .header_top {
   color: #4f4f4f;
   font-weight: normal;
   font-size: 12px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   min-width: 92px;
   text-align: center;
   background: #fff;
@@ -5101,7 +5103,7 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
 
 /* line 14, ../sass/gh/typography/_headers.scss */
 h1, .h1 {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 36px;
   color: #000; }
 /* line 18, ../sass/gh/typography/_headers.scss */
@@ -5111,7 +5113,7 @@ h1 a, .h1 a {
 
 /* line 23, ../sass/gh/typography/_headers.scss */
 h2, .h2 {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 35px;
   color: #020202; }
 /* line 27, ../sass/gh/typography/_headers.scss */
@@ -5208,7 +5210,7 @@ article header h1.padding-left-60, article header h2.padding-left-60, article he
   overflow: hidden;
   padding-left: 35px;
   font-size: 18px;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 18px;
   text-transform: uppercase;
   margin-left: 0;
@@ -5238,7 +5240,7 @@ article header h1.padding-left-60, article header h2.padding-left-60, article he
 
 /* line 159, ../sass/gh/typography/_headers.scss */
 h3, .h3 {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 25px;
   color: #000; }
 /* line 163, ../sass/gh/typography/_headers.scss */
@@ -5250,13 +5252,13 @@ h3 a, .h3 a {
 h3.title-section {
   text-transform: uppercase;
   font-size: 18px;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   margin-bottom: 35px;
   text-align: left; }
 
 /* line 175, ../sass/gh/typography/_headers.scss */
 h4, .h4 {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 18px;
   color: #020202; }
 /* line 179, ../sass/gh/typography/_headers.scss */
@@ -5266,7 +5268,7 @@ h4 a, .h4 a {
 
 /* line 184, ../sass/gh/typography/_headers.scss */
 h5, .h5 {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 14px;
   color: #000; }
 /* line 188, ../sass/gh/typography/_headers.scss */
@@ -5282,7 +5284,7 @@ h2.title_section, h4.title_section, h5.title_section {
   height: 18px;
   overflow: hidden;
   font-size: 18px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 18px;
   text-transform: uppercase;
   margin: 0 0 8px;
@@ -5292,7 +5294,7 @@ h2.title_section, h4.title_section, h5.title_section {
   h2.title_section, h4.title_section, h5.title_section {
     font-size: 14px;
     font-weight: normal;
-    font-family: Roboto, sans-serif; } }
+    font-family: Verdana, Geneva, sans-serif; } }
 /* line 211, ../sass/gh/typography/_headers.scss */
 h2.title_section span, h4.title_section span, h5.title_section span {
   position: absolute;
@@ -5328,15 +5330,15 @@ div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
 
 /* line 1, ../sass/gh/typography/_other.scss */
 .fontRegular {
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 
 /* line 4, ../sass/gh/typography/_other.scss */
 .fontBlack {
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 
 /* line 7, ../sass/gh/typography/_other.scss */
 .fontLight {
-  font-family: RobotoLight, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 
 /* FOOTER */
 /* line 3, ../sass/gh/footer/_footer.scss */
@@ -5815,7 +5817,7 @@ body {
 .faq-index-index .faq #searchform label {
   float: left;
   font-size: 18px;
-  font-family: RobotoLight, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 113, ../sass/gh/faq/_faq.scss */
 .faq-index-index .faq #searchform #keyword {
   float: left; }
@@ -5914,7 +5916,7 @@ body {
   margin: 0 -20px 10px;
   padding: 0 0 0 30px;
   position: relative;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 18px;
   line-height: 18px;
   text-align: left;
@@ -5933,7 +5935,7 @@ body {
 /* line 247, ../sass/gh/faq/_faq.scss */
 .faq-index-index .faq-content h3 span {
   text-transform: uppercase;
-  font-family: RobotoLight, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 252, ../sass/gh/faq/_faq.scss */
 .faq-index-index #breadcrumbs {
   margin-bottom: 4px; }
@@ -6341,7 +6343,7 @@ span.checked {
   border: 1px solid #ebebeb;
   border-bottom: none;
   background: #FFF;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 12px; }
 /* line 472, ../sass/gh/listing/_filters.scss */
 .sidebar .section {
@@ -6351,7 +6353,7 @@ span.checked {
 /* line 477, ../sass/gh/listing/_filters.scss */
 .sidebar h3 {
   font-size: 14px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 18px;
   text-transform: uppercase;
   text-align: left;
@@ -6800,7 +6802,7 @@ span.checked {
     margin-bottom: 30px; } }
 /* line 25, ../sass/gh/pages/_about.scss */
 #about .about-header .about-header-title {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 50px;
   letter-spacing: -1px; }
 @media (max-width: 991px) {
@@ -6818,7 +6820,7 @@ span.checked {
     font-size: 25px; } }
 /* line 39, ../sass/gh/pages/_about.scss */
 #about .about-header .about-header-title .about-header-logo {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   letter-spacing: 0; }
 /* line 44, ../sass/gh/pages/_about.scss */
 #about .about-header .about-header-subtitle {
@@ -6897,7 +6899,7 @@ span.checked {
   background-image: url("../images/svg/benefits_return.svg"); }
 /* line 113, ../sass/gh/pages/_about.scss */
 #about ul.about-list li.about-list-item .about-list-header {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 16px;
   margin-bottom: 20px;
   padding-top: 15px; }
@@ -6911,7 +6913,7 @@ span.checked {
     margin-bottom: 12px; } }
 /* line 125, ../sass/gh/pages/_about.scss */
 #about ul.about-list li.about-list-item .about-list-text {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 15px; }
 /* line 132, ../sass/gh/pages/_about.scss */
 #about .about-footer {
@@ -6923,7 +6925,7 @@ span.checked {
     margin-top: 40px; } }
 /* line 138, ../sass/gh/pages/_about.scss */
 #about .about-footer .about-footer-header {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 17px;
   margin-bottom: 25px; }
 @media (max-width: 479px) {
@@ -6932,7 +6934,7 @@ span.checked {
     font-size: 15px; } }
 /* line 146, ../sass/gh/pages/_about.scss */
 #about .about-footer .about-footer-text {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 14px; }
 @media (max-width: 479px) {
   /* line 146, ../sass/gh/pages/_about.scss */
@@ -6975,7 +6977,7 @@ span.checked {
     margin-bottom: 25px; } }
 /* line 183, ../sass/gh/pages/_about.scss */
 #about-register .about-register-header .about-register-header-title {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 35px;
   letter-spacing: -1px; }
 @media (max-width: 991px) {
@@ -6993,12 +6995,12 @@ span.checked {
     font-size: 20px; } }
 /* line 197, ../sass/gh/pages/_about.scss */
 #about-register .about-register-header .about-register-header-title .about-register-bold {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 40px;
   letter-spacing: 0; }
 /* line 203, ../sass/gh/pages/_about.scss */
 #about-register .about-register-header .about-register-header-subtitle {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 25px;
   margin-top: -5px; }
 @media (max-width: 991px) {
@@ -7016,7 +7018,7 @@ span.checked {
     font-size: 15px; } }
 /* line 218, ../sass/gh/pages/_about.scss */
 #about-register .about-register-header .about-register-header-text {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   margin-top: 28px; }
 /* line 222, ../sass/gh/pages/_about.scss */
 #about-register .about-register-header:before {
@@ -7172,7 +7174,7 @@ span.checked {
   font-size: 14px;
   color: #000;
   font-weight: normal;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 118, ../sass/gh/product/_seller-box.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading h4.panel-title a {
   text-align: left;
@@ -7281,7 +7283,7 @@ span.average_note_client span.note img {
 span.average_note_client span.note + span {
   font-size: 11px;
   color: #646464;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 13px; }
 
 /* line 1, ../sass/gh/product/_gallery.scss */
@@ -7908,7 +7910,7 @@ span.average_note_client span.note + span {
   margin-bottom: 15px; }
 /* line 4, ../sass/gh/product/_product.scss */
 #product-shop .product-name h1 {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   font-size: 34px; }
 @media (max-width: 767px) {
@@ -8029,7 +8031,7 @@ span.average_note_client span.note + span {
 #product-shop .price-box-bundle .price-label, #product-shop .price-box-bundle .old-price {
   font-size: 24px;
   color: #000;
-  font-family: RobotoLight, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 127, ../sass/gh/product/_product.scss */
 #product-shop .price-box-bundle .old-price {
   text-decoration: line-through; }
@@ -8037,7 +8039,7 @@ span.average_note_client span.note + span {
 #product-shop .price-box-bundle .price {
   font-size: 36px;
   color: #000;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 @media (min-width: 481px) and (max-width: 767px) {
   /* line 130, ../sass/gh/product/_product.scss */
   #product-shop .price-box-bundle .price {
@@ -8062,7 +8064,7 @@ span.average_note_client span.note + span {
   text-transform: uppercase;
   font-size: 12px;
   color: #020202;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 @media (min-width: 768px) and (max-width: 814px) {
   /* line 153, ../sass/gh/product/_product.scss */
   #product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
@@ -8103,7 +8105,7 @@ span.average_note_client span.note + span {
   line-height: 39px;
   color: #858585;
   font-size: 14px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: normal; }
 /* line 213, ../sass/gh/product/_product.scss */
 #product-shop .size-box-bundle .form-group label [type="radio"]:hover + span {
@@ -8141,7 +8143,7 @@ span.average_note_client span.note + span {
   font-size: 11px;
   color: #4f4f4f;
   text-transform: uppercase;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   background: #fff url("../images/svg/unlike.svg") 8px 8px no-repeat;
   background-size: 22px 22px; }
 /* line 256, ../sass/gh/product/_product.scss */
@@ -8241,7 +8243,7 @@ i.flag.hit, i.flag.bestseller {
 
 /* line 377, ../sass/gh/product/_product.scss */
 #product-shop h1 {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   font-size: 34px;
   margin: 0;
@@ -8279,7 +8281,7 @@ i.flag.hit, i.flag.bestseller {
 #product-shop .price-box-bundle .price-label, #product-shop .price-box-bundle .old-price {
   font-size: 24px;
   color: #000;
-  font-family: RobotoLight, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 415, ../sass/gh/product/_product.scss */
 #product-shop .price-box-bundle .old-price {
   text-decoration: line-through; }
@@ -8287,7 +8289,7 @@ i.flag.hit, i.flag.bestseller {
 #product-shop .price-box-bundle .price {
   font-size: 36px;
   color: #000;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 @media (min-width: 768px) and (max-width: 819px) {
   /* line 418, ../sass/gh/product/_product.scss */
   #product-shop .price-box-bundle .price {
@@ -8444,7 +8446,7 @@ i.flag.hit, i.flag.bestseller {
   line-height: 39px;
   color: #858585;
   font-size: 14px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: normal;
   position: absolute;
   top: 0px;
@@ -8560,7 +8562,7 @@ i.flag.hit, i.flag.bestseller {
   font-size: 11px;
   color: #4f4f4f;
   text-transform: uppercase;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   /* line 706, ../sass/gh/product/_product.scss */
   #product-shop .action-box-bundle .addLike {
@@ -8629,7 +8631,7 @@ i.flag.hit, i.flag.bestseller {
   font-size: 12px;
   color: #FFF;
   text-transform: uppercase;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: bold;
   padding-top: 0 !important;
   float: none;
@@ -8730,7 +8732,7 @@ div[itemprop="description"] + ul.list {
 /* line 19, ../sass/gh/account/_order.scss */
 .order-view #content-main section > header h2 {
   font-weight: bold;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 24, ../sass/gh/account/_order.scss */
 .order-view #content-main section > header .table-cart {
   width: 100%;
@@ -9019,7 +9021,7 @@ div[itemprop="description"] + ul.list {
   top: 5px;
   position: relative;
   font-size: 12px;
-  font-family: Roboto;
+  font-family: Verdana, Geneva, sans-serif;
   text-decoration: underline; }
 /* line 125, ../sass/gh/storesmap/_map.scss */
 .stores-map .no-padding {
@@ -9085,7 +9087,7 @@ div[itemprop="description"] + ul.list {
   display: block; }
 /* line 68, ../sass/gh/rma/_rma.scss */
 #new-rma .step-1 h5 {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   border-bottom: #bfbfbf 1px solid;
   padding: 12px 12px 11px 10px; }
 /* line 73, ../sass/gh/rma/_rma.scss */
@@ -9417,7 +9419,7 @@ div[itemprop="description"] + ul.list {
   outline: 0;
   background-color: #CD0027;
   color: #fff;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 432, ../sass/gh/rma/_rma.scss */
 #step-2 #pickup-date-form .rma-dayname {
   text-transform: uppercase; }
@@ -9448,7 +9450,7 @@ div[itemprop="description"] + ul.list {
   background-color: #cccccc; }
 /* line 465, ../sass/gh/rma/_rma.scss */
 #step-2 #pickup-time-from, #step-2 #pickup-time-to {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 14px; }
 /* line 469, ../sass/gh/rma/_rma.scss */
 #step-2 #pickup-time-from {
@@ -9695,7 +9697,7 @@ div[itemprop="description"] + ul.list {
 
 /* line 720, ../sass/gh/rma/_rma.scss */
 .sales-rma-view .title-section .headerTop h2 {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: bold;
   margin: 0 -15px 15px; }
 
@@ -9817,7 +9819,7 @@ div[itemprop="description"] + ul.list {
 
 /* line 123, ../sass/gh/rma/_po-list.scss */
 .bold {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-weight: normal; }
 
 /* line 2, ../sass/gh/rma/_list.scss */
@@ -9948,7 +9950,7 @@ div[itemprop="description"] + ul.list {
   text-decoration: underline; }
 /* line 41, ../sass/gh/rma/_page.scss */
 #rma-page .benefits .benefit-item {
-  font-family: Roboto, sans-serif !important; }
+  font-family: Verdana, Geneva, sans-serif !important; }
 /* line 43, ../sass/gh/rma/_page.scss */
 #rma-page .benefits .benefit-item .benefit-text.benefit-text-rma {
   margin-left: 5%; }

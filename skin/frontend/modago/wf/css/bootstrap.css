@@ -307,7 +307,7 @@ html {
 
 /* line 27, ../vendor/bootstrap/_scaffolding.scss */
 body {
-  font-family: Roboto;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 14px;
   line-height: 1.42857;
   color: #4f4f4f;

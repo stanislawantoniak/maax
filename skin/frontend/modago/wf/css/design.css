@@ -549,7 +549,7 @@ section.section .main {
   background-origin: padding-box;
   background-size: auto;
   color: #1e1e1e;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 11px;
   margin-bottom: 0px;
   margin-left: 0px;
@@ -644,7 +644,7 @@ section.section .main {
 /* line 35, ../sass/design/modules/_sort-criteria.scss */
 #sort-criteria ul li span, #sort-criteria ul li label {
   font-size: 12px !important;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: normal;
   color: #000; }
 /* line 41, ../sass/design/modules/_sort-criteria.scss */
@@ -781,11 +781,11 @@ section.section .main {
 
 /* line 5, ../sass/design/modules/_block-inspiration.scss */
 .block-inspiration .rwdCarousel .item .carousel-caption span {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-shadow: none; }
 /* line 8, ../sass/design/modules/_block-inspiration.scss */
 .block-inspiration .rwdCarousel .item .carousel-caption span.title-caption {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   color: #000; }
 /* line 13, ../sass/design/modules/_block-inspiration.scss */
@@ -1100,17 +1100,17 @@ body.lightbox {
 .block-complementary-product .rwdCarousel .item .price {
   color: #000;
   font-size: 20px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 18, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .label {
   color: #000;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: normal;
   font-size: 12px;
   text-align: left; }
 /* line 24, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .label + span {
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 28, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .old {
   color: #000;
@@ -1119,7 +1119,7 @@ body.lightbox {
 /* line 33, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .like {
   font-size: 11px;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   color: #000;
   margin-top: 7px !important; }
 /* line 39, ../sass/design/modules/_block-complementary-product.scss */
@@ -1134,11 +1134,11 @@ body.lightbox {
   text-decoration: line-through; }
 /* line 55, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .carousel-caption span {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-shadow: none; }
 /* line 58, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .carousel-caption span.title-caption {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   color: #000; }
 /* line 63, ../sass/design/modules/_block-complementary-product.scss */
@@ -1233,7 +1233,7 @@ body.lightbox {
   line-height: 26px;
   font-size: 11px;
   color: #959595;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: normal; }
 /* line 21, ../sass/design/modules/_block-note-product.scss */
 #note_product dl.raty_note dd .suffix {
@@ -1277,7 +1277,7 @@ body.lightbox {
 #comments .comment .header h3, #comments .comment .header h5 {
   color: #242424;
   font-size: 14px;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-weight: normal; }
 /* line 21, ../sass/design/modules/_block-comments.scss */
 #comments .comment .meta {
@@ -1457,7 +1457,7 @@ body.lightbox {
   font-size: 14px; }
 /* line 33, ../sass/design/modules/_current-search.scss */
 .current-search h1 .query-text {
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 37, ../sass/design/modules/_current-search.scss */
 .current-search h1 .query-text-iks .iks {
   border: 1px solid #ededed;
@@ -2497,7 +2497,7 @@ x-axis
   border: none !important; }
 /* line 32, ../sass/design/modules/_form_add_comment.scss */
 .review-summary-table tbody tr th {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-weight: normal;
   width: 90px;
   line-height: 25px; }
@@ -2851,7 +2851,7 @@ body[class*=vendor] #header {
 /* line 1, ../sass/design/override/_global.scss */
 b, strong {
   font-weight: normal !important;
-  font-family: RobotoBold, sans-serif !important; }
+  font-family: Georgia, sans-serif !important; }
 
 /* line 6, ../sass/design/override/_global.scss */
 .browsehappy {
@@ -2884,12 +2884,12 @@ b, strong {
 /* line 1, ../sass/design/override/_breadcrumb.scss */
 .brandshop-breadcrumps, ol.breadcrumb {
   background: none;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 11px; }
 /* line 6, ../sass/design/override/_breadcrumb.scss */
 .brandshop-breadcrumps a:link, .brandshop-breadcrumps a:visited, ol.breadcrumb a:link, ol.breadcrumb a:visited {
   color: #000;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 11px; }
 /* line 12, ../sass/design/override/_breadcrumb.scss */
 .brandshop-breadcrumps a:hover, ol.breadcrumb a:hover {
@@ -3064,7 +3064,7 @@ ol.breadcrumb li:not(:first-child):before {
 .box_listing_product .price {
   color: #fd002a;
   font-size: 20px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 27, ../sass/design/style/_list-product.scss */
 .box_listing_product .price .old {
   display: block;
@@ -3074,7 +3074,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 33, ../sass/design/style/_list-product.scss */
 .box_listing_product .price .like {
   font-size: 11px;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   color: #000; }
 /* line 37, ../sass/design/style/_list-product.scss */
 .box_listing_product .price .like .like_count {
@@ -3109,7 +3109,7 @@ ol.breadcrumb li:not(:first-child):before {
 .box_listing_product .promotion p {
   color: #4f4f4f;
   font-style: italic;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 
 /* line 75, ../sass/design/style/_list-product.scss */
 .shapes_listing {
@@ -3192,7 +3192,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 5, ../sass/design/style/_customer-account-login.scss */
 #logIn .main header h2 {
   font-weight: bold;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 12, ../sass/design/style/_customer-account-login.scss */
 #logIn .form-list {
   list-style: none; }
@@ -3244,7 +3244,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 5, ../sass/design/style/_customer-account-registered.scss */
 .node-type-customer-account-registration .main .section header h2 {
   font-weight: bold;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 
 /* line 15, ../sass/design/style/_customer-account-registered.scss */
 #form-registration label {
@@ -3283,7 +3283,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 59, ../sass/design/style/_customer-account-registered.scss */
 .sidebar-second .p h2 {
   font-size: 18px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 18px;
   text-transform: uppercase;
   text-align: left;
@@ -3385,7 +3385,7 @@ ol.breadcrumb li:not(:first-child):before {
 .checkout-shared-review #content-main section > header h1 {
   font-size: 24px;
   font-weight: normal;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase; }
 @media (max-width: 767px) {
   /* line 6, ../sass/design/style/_review-cart.scss */
@@ -3434,7 +3434,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 66, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price {
   font-size: 16px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 69, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price span {
   font-size: 11px;
@@ -3453,7 +3453,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 90, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-04.td {
   font-size: 16px;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 104, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
   border-top: 1px solid #ebeaed; }
@@ -3502,7 +3502,7 @@ ol.breadcrumb li:not(:first-child):before {
 .data-table th {
   padding: 15px 10px;
   font-weight: normal;
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   background: #fcfcfc;
   letter-spacing: -0.5px; }
 /* line 23, ../sass/design/style/_table.scss */
@@ -3524,7 +3524,7 @@ ol.breadcrumb li:not(:first-child):before {
 .order-view #content-main section > header h1 {
   font-size: 24px;
   font-weight: normal;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase; }
 @media (max-width: 767px) {
   /* line 6, ../sass/design/style/_order-view.scss */
@@ -3577,7 +3577,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 71, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .product_price {
   font-size: 16px;
-  font-family: Roboto, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 /* line 74, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .product_price span {
   font-size: 11px;
@@ -3596,7 +3596,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 96, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
   font-size: 16px;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 /* line 110, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
   border-top: 1px solid #ebeaed; }
@@ -3625,7 +3625,7 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 4, ../sass/design/style/_register.scss */
 .account-create section header h2 {
-  font-family: RobotoBold, sans-serif !important;
+  font-family: Georgia, sans-serif !important;
   line-height: normal !important;
   margin-top: -2px !important; }
 /* line 8, ../sass/design/style/_register.scss */
@@ -3769,7 +3769,7 @@ ol.breadcrumb li:not(:first-child):before {
 #promo_list .promo_item .promo_info .promo_name {
   text-align: center;
   text-transform: uppercase;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   padding: 15px 30px;
   font-size: 20px;
   height: 62px;
@@ -3889,7 +3889,7 @@ body.mypromotions-index-index #content {
   padding: 0 15px; }
 /* line 223, ../sass/design/style/_mypromotions.scss */
 #myPromotionsModal .modal-content .modal-body .promo-label {
-  font-family: RobotoBold, sans-serif, sans-serif;
+  font-family: Georgia, sans-serif, sans-serif;
   font-size: 19px;
   text-transform: uppercase;
   padding-left: 0; }
@@ -3913,7 +3913,7 @@ body.mypromotions-index-index #content {
 /* line 242, ../sass/design/style/_mypromotions.scss */
 #myPromotionsModal .modal-content .modal-body .promo-name {
   text-transform: uppercase;
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 19px;
   margin-top: 11px;
   margin-bottom: 12px;
@@ -3940,7 +3940,7 @@ body.mypromotions-index-index #content {
     width: 40%; } }
 /* line 266, ../sass/design/style/_mypromotions.scss */
 #myPromotionsModal .modal-content .modal-body .promo-code .promo-code-code span {
-  font-family: RobotoBold, sans-serif, sans-serif;
+  font-family: Georgia, sans-serif, sans-serif;
   font-size: 17px; }
 @media (max-width: 340px) {
   /* line 266, ../sass/design/style/_mypromotions.scss */
@@ -3961,7 +3961,7 @@ body.mypromotions-index-index #content {
   color: #4f4f4f;
   font-weight: normal;
   font-size: 12px;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   min-width: 92px;
   text-align: center;
   background: #fff;
@@ -4079,7 +4079,7 @@ body.mypromotions-index-index #content {
     min-height: auto; } }
 /* line 404, ../sass/design/style/_mypromotions.scss */
 .mypromotions-cms-container .mypromotions-cms .mypromotions-cms-pretitle {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 19px;
   margin-bottom: 20px; }
 @media (max-width: 767px) {
@@ -4093,7 +4093,7 @@ body.mypromotions-index-index #content {
     font-size: 15px; } }
 /* line 416, ../sass/design/style/_mypromotions.scss */
 .mypromotions-cms-container .mypromotions-cms .mypromotions-cms-title, .mypromotions-cms-container .mypromotions-cms .mypromotions-cms-newsletter-title {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 30px;
   text-transform: uppercase;
   margin-bottom: 25px; }
@@ -4108,7 +4108,7 @@ body.mypromotions-index-index #content {
     font-size: 20px; } }
 /* line 429, ../sass/design/style/_mypromotions.scss */
 .mypromotions-cms-container .mypromotions-cms .mypromotions-cms-subtitle, .mypromotions-cms-container .mypromotions-cms .mypromotions-cms-newsletter-subtitle {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   text-transform: uppercase;
   margin-bottom: 20px; }
 @media (max-width: 767px) {
@@ -4185,7 +4185,7 @@ body.mypromotions-index-index #content {
     padding-right: 15px; } }
 /* line 504, ../sass/design/style/_mypromotions.scss */
 .mypromotions-cms-container .mypromotions-cms-persistent .mypromotions-cms-persistent-title {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 27px; }
 @media (max-width: 767px) {
   /* line 504, ../sass/design/style/_mypromotions.scss */
@@ -4198,7 +4198,7 @@ body.mypromotions-index-index #content {
     font-size: 20px; } }
 /* line 515, ../sass/design/style/_mypromotions.scss */
 .mypromotions-cms-container .mypromotions-cms-persistent .mypromotions-cms-persistent-subtitle {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 25px;
   margin-bottom: 20px; }
 @media (max-width: 767px) {
@@ -4278,7 +4278,7 @@ body.mypromotions-index-index #content {
     margin-bottom: 25px; } }
 /* line 590, ../sass/design/style/_mypromotions.scss */
 #mypromotions-register-modal #mypromotions-register .mypromotions-register-header .mypromotions-register-header-title {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 35px;
   letter-spacing: -1px;
   white-space: nowrap;
@@ -4304,7 +4304,7 @@ body.mypromotions-index-index #content {
   color: #907c3d; }
 /* line 613, ../sass/design/style/_mypromotions.scss */
 #mypromotions-register-modal #mypromotions-register .mypromotions-register-header .mypromotions-register-header-subtitle {
-  font-family: RobotoLight, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 25px;
   margin-top: -5px; }
 @media (max-width: 991px) {
@@ -4322,7 +4322,7 @@ body.mypromotions-index-index #content {
     font-size: 15px; } }
 /* line 628, ../sass/design/style/_mypromotions.scss */
 #mypromotions-register-modal #mypromotions-register .mypromotions-register-header .mypromotions-register-header-text {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   margin-top: 28px; }
 /* line 634, ../sass/design/style/_mypromotions.scss */
 #mypromotions-register-modal #mypromotions-register #createAccountForm input {

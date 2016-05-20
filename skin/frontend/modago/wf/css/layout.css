@@ -3529,7 +3529,7 @@ yx-axis
   padding-top: 7px; }
 /* line 6, ../sass/layout/modules/_account_navigation.scss */
 .account-nav .active {
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 
 /* line 14, ../sass/layout/modules/_account_navigation.scss */
 .sidebar .account-nav .nav-pills li a:link, .sidebar .account-nav .nav-pills li a:visited {
@@ -3554,7 +3554,7 @@ yx-axis
   display: table-cell !important; }
 /* line 24, ../sass/layout/modules/_account-content.scss */
 .newsletter-manage-index .label-bold, .customer-account-privacy .label-bold {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-size: 13px; }
 /* line 28, ../sass/layout/modules/_account-content.scss */
 .newsletter-manage-index .form-group, .customer-account-privacy .form-group {
@@ -3591,7 +3591,7 @@ yx-axis
   width: 90%; }
 /* line 63, ../sass/layout/modules/_account-content.scss */
 .newsletter-manage-index label, .customer-account-privacy label {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-weight: normal !important; }
 
 /* line 71, ../sass/layout/modules/_account-content.scss */
@@ -3968,7 +3968,7 @@ div.steps.step-3 .rma-summary-table-container {
   padding: 20px 20px 0; }
 /* line 54, ../sass/layout/modules/_rma-summary.scss */
 div.steps.step-3 h5.legend {
-  font-family: RobotoBold, sans-serif;
+  font-family: Georgia, sans-serif;
   font-weight: normal;
   padding: 15px 0 10px; }
 /* line 59, ../sass/layout/modules/_rma-summary.scss */
@@ -5111,7 +5111,7 @@ i.flag.hit, i.flag.bestseller {
 .descripionProduct-box-bundle h3 span.average_note_client span.note + span {
   font-size: 11px;
   color: #646464;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 13px;
   float: left; }
 
@@ -5232,7 +5232,7 @@ i.flag.hit, i.flag.bestseller {
 #seller-box-bundle h3 span.average_note_client span.note + span {
   font-size: 11px;
   color: #646464;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 13px;
   float: left; }
 
@@ -5984,7 +5984,7 @@ body.checkout-guest-index .social-register {
 .selectboxit-container .selectboxit .selectboxit-text {
   color: #1e1e1e;
   text-decoration: none;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 12px;
   font-weight: normal; }
 /* line 27, ../sass/layout/style/_selector_styled.scss */
@@ -6013,7 +6013,7 @@ body.checkout-guest-index .social-register {
   box-shadow: none; }
 /* line 51, ../sass/layout/style/_selector_styled.scss */
 .selectboxit-container .selectboxit-list .selectboxit-option .selectboxit-option-anchor {
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 12px;
   font-weight: normal;
   color: #1e1e1e;
@@ -6241,7 +6241,7 @@ body.checkout-guest-index .social-register {
 #help-content .row .help-tile .help-tile-container .help-tile-content .help-tile-title {
   margin: 10px 0 20px;
   font-size: 16px;
-  font-family: RobotoBold, sans-serif; }
+  font-family: Georgia, sans-serif; }
 @media (max-width: 991px) {
   /* line 105, ../sass/layout/style/_help.scss */
   #help-content .row .help-tile .help-tile-container .help-tile-content .help-tile-title {
@@ -6253,7 +6253,7 @@ body.checkout-guest-index .social-register {
 /* line 116, ../sass/layout/style/_help.scss */
 #help-content .row .help-tile .help-tile-container .help-tile-content .help-tile-subtitle {
   margin: -10px 0 10px;
-  font-family: RobotoLight, sans-serif; }
+  font-family: Verdana, Geneva, sans-serif; }
 @media (max-width: 991px) {
   /* line 116, ../sass/layout/style/_help.scss */
   #help-content .row .help-tile .help-tile-container .help-tile-content .help-tile-subtitle {
@@ -6506,7 +6506,7 @@ body.checkout-guest-index .social-register {
 .descripionProduct-box-bundle h3 span.average_note_client span.note + span {
   font-size: 11px;
   color: #646464;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 13px;
   float: left; }
 
@@ -6628,7 +6628,7 @@ body.checkout-guest-index .social-register {
 #seller-box-bundle h3 span.average_note_client span.note + span {
   font-size: 11px;
   color: #646464;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   line-height: 13px;
   float: left; }
 
@@ -6715,7 +6715,7 @@ form .form-group [type="text"], form .form-group [type="email"], form .form-grou
   font-size: 12px;
   padding: 13px 15px 13px 15px;
   width: 100%;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   height: 42px;
   outline: none !important; }
 /* line 503, ../sass/override/_override-layout.scss */
@@ -6763,7 +6763,7 @@ form .form-group textarea, form .form-group textarea.form-control {
   color: #1e1e1e;
   font-size: 12px;
   width: 100%;
-  font-family: Roboto, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   resize: vertical;
   outline: none !important; }
 /* line 534, ../sass/override/_override-layout.scss */
