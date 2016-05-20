@@ -20,6 +20,7 @@ ol.breadcrumb {
 ol.breadcrumb{
 	li {
 		font-size: 11px;
+		text-transform: uppercase;
 		&:not(:first-child):before {
 			font-family: FontAwesome;
 			font-size: 11px;

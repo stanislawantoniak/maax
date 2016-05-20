@@ -26,7 +26,7 @@ if ($this->isContentMode() && !$vendor) return; // no header only on CMS page an
             <div class="row">
                 <div class="col-sm-12 header-panel">
                 <?php if (!empty($banner) || !empty($bannerTextInfo) || !$vendor): /* one column */?>
-                    <div id="breadcrumbs-header" style="text-transform: uppercase;">
+                    <div id="breadcrumbs-header">
                         <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
                     </div>
                     <?php if (empty($banner) && empty($bannerTextInfo)) : /* category / campaign name */?>
