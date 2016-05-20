@@ -67,6 +67,24 @@
             </zolagosalesrule_setup>
 		</resources>
 		<events>
+			<sales_quote_item_set_product>
+				<observers>
+					<zolagosalesrule>
+						<!--Copy sales rule product attributes to from product to quote item-->
+						<class>zolagosalesrule/observer</class>
+						<method>copySalesRuleAttrToQuoteItem</method>
+					</zolagosalesrule>
+				</observers>
+			</sales_quote_item_set_product>
+			<salesrule_rule_condition_combine>
+				<observers>
+					<zolagosalesrule>
+						<!--Add rule condition to combine list -->
+						<class>zolagosalesrule/observer</class>
+						<method>addRuleConditionForConfigurableProducts</method>
+					</zolagosalesrule>
+				</observers>
+			</salesrule_rule_condition_combine>
 		    <newsletter_subscriber_save_after>
 		        <observers>
 		            <zolagosalesrule>
