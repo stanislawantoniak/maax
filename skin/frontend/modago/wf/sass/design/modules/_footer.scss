@@ -61,62 +61,58 @@ input[type=button], input[type=submit],
   }
 }
 
+footer.footer {
+  /* Social links*/
+  .social {
+    text-align: center;
+  }
 
-footer.footer .social {
-  text-align: center;
+
+  .menu-social-icons {
+    li {
+      a {
+        i {
+          font-size: 18px;
+          color: $text-color;
+          background-color: transparent;
+          @include transition(all 0.2s ease-in-out);
+          font-style: normal;
+
+          display: block;
+          width: 28px;
+          height: 28px;
+
+          &.ico-twitter:before {
+            content: "\f099";
+            font-family: FontAwesome;
+          }
+
+          &:hover {
+            color: $colorLinkHover;
+          }
+        }
+      }
+    }
+  }
 }
-.menu-social-icons li a i {
-  font-size: 18px;
-  color: #a8a8a8;
-  background-color: transparent;
-  -webkit-transition: color 0.2s ease-in-out;
-  -moz-transition: color 0.2s ease-in-out;
-  -ms-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
-  transition: color 0.2s ease-in-out;
-  font-style: normal;
-}
-.menu-social-icons .ico-twitter {
-  display: block;
-  width: 28px;
-  height: 28px;
-}
-.menu-social-icons .ico-twitter:before {
-  content: "\f099";
-  font-family: FontAwesome;
-}
-.menu-social-icons .ico-facebook {
-  display: block;
-  width: 28px;
-  height: 28px;
-}
+
+
+
 .menu-social-icons .ico-facebook:before {
   content: "\f09a";
   font-family: FontAwesome;
 }
-.menu-social-icons .ico-pinterest {
-  display: block;
-  width: 28px;
-  height: 28px;
-}
+
 .menu-social-icons .ico-pinterest:before {
   content: "\f0d2";
   font-family: FontAwesome;
 }
-.menu-social-icons .ico-google-plus {
-  display: block;
-  width: 28px;
-  height: 28px;
-}
+
 .menu-social-icons .ico-google-plus:before {
   content: "\f0d5";
   font-family: FontAwesome;
 }
-.menu-social-icons .ico-envelope {
-  display: block;
-  width: 28px;
-  height: 28px;
-}
+
 .menu-social-icons .ico-envelope:before {
   content: "\f003";
   font-family: FontAwesome;
