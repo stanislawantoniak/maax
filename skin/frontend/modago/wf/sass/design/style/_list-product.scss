@@ -1,17 +1,8 @@
 #items-product {
 	.item {
         .box_listing_product {
-		border:1px solid $color_ebebeb;
+		border:1px solid $color_fff;
 		background: $color_fff;
-/*		//height:550px;
-        @include transition-property(box-shadow);
-        @include transition-duration(0.1s);
-        @include transition-timing-function(ease-in);
-        //@include transition-delay(0.2s);
-        &:hover,
-        &.hover {
-            box-shadow: 0 0 3px 2px $color_bcbaba;
-            }*/
         }
 	}
 }
@@ -19,11 +10,13 @@
     background:$color_fff;
     .name_product {
         font-size: 12px;
+        text-align: center;
     }
     .price {
         color:$color_fd002a;
         font-size: 20px;
         font-family:$fontRegular;
+        text-align: center;
         .old {
 	        display: block;
             color:$color_000;

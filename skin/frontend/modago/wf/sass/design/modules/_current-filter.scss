@@ -55,12 +55,13 @@
 	            color:$color_000;
 	            font-size: 12px;
 	            text-align: left;
-	            line-height:20px;
-	            border:1px solid $color-gray2;
+	            //line-height:20px;
+	            border:1px solid $bc-secondary;
 	            font-weight: normal;
+                border-radius: 0;
 	        }
 	            .fa {
-	                color: $color-gray1;
+	                color: $color_000;
 	                font-size: 14px;
 	            }
 	             &:hover {

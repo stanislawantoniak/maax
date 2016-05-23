@@ -179,6 +179,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	protected function _prepareListingResizedImageUrl($url) {
+		Mage::log($url, null, "1234.log");
 		return str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/product/cache/","",$url);
 	}
 
@@ -590,6 +591,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 						constrainOnly(true)->
 						keepFrame(false)->
 						resize(300, null);
+				Mage::log($model->getData(),null,"prepareAjaxProducts.log");
 			} catch (Exception $ex) {
 				Mage::logException($ex);
 			}
