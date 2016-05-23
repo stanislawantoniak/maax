@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Wf_Wf>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Wf_Wf>
+    </modules>
+</config>
