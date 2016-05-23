@@ -17,10 +17,7 @@ $_baseUrl = Mage::getUrl("/", array("_no_vendor"=>true));
     </div>
     <div class="header_top">
         <?php if (!$_isCheckout): ?>
-            <?php echo $this->getLayout()
-                ->createBlock('cms/block')
-                ->setBlockId('wf_top_bar')
-                ->toHtml(); ?>
+            <?php echo $this->getChildHtml('page.header.top_bar'); ?>
         <?php endif; ?>
 
         <div class="container-fluid clearfix">
