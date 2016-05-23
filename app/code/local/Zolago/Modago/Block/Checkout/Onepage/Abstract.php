@@ -61,7 +61,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
 		$daysInTransitData = array();
 		$shipping = $this->getUdropShippingMethods();
-		Mage::log($shipping, null, "rates.log");
+
 		$shippingMethods = array();
 
 		foreach($shipping as $shippingItem){
@@ -69,6 +69,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 			$shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
 
 		}
+		Mage::log($shippingMethods, null, "rates.log");
 		Mage::log($qRates, null, "rates2.log");
 		foreach ($qRates as $cCode => $cRates) {
 
