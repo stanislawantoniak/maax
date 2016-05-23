@@ -65,25 +65,24 @@ footer.footer {
   /* Social links*/
   .social {
     text-align: center;
-  }
 
+    .menu-social-icons {
+      li {
+        a {
+          i {
+            font-size: 18px;
+            color: $text-color;
+            background-color: transparent;
+            @include transition(all 0.2s ease-in-out);
+            font-style: normal;
 
-  .menu-social-icons {
-    li {
-      a {
-        i {
-          font-size: 18px;
-          color: $text-color;
-          background-color: transparent;
-          @include transition(all 0.2s ease-in-out);
-          font-style: normal;
+            display: block;
+            width: 28px;
+            height: 28px;
 
-          display: block;
-          width: 28px;
-          height: 28px;
-
-          &:hover {
-            color: $colorLinkHover;
+            &:hover {
+              color: $colorLinkHover;
+            }
           }
         }
       }
