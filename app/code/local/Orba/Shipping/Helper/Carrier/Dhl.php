@@ -325,7 +325,14 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         //Process Single Track and Trace Object
         $this->_processTrackStatus($_track, $result);
 
+        /* @var $client Orba_Shipping_Model_Carrier_Client_Dhl */
+        //$result = $client->getTrackAndTraceInfoV2($_track->getTrackNumber());
+        //Process Single Track and Trace Object
+        //$this->_processDhlTrackStatusV2($_track, $result);
+
     }
+
+
 
     protected function _parseTrackResponse($track,$result,&$message,&$status,&$shipmentIdMessage) {
         if (is_array($result) && array_key_exists('error', $result)) {
@@ -333,22 +340,25 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             Mage::helper('orbashipping/carrier_dhl')->_log(Mage::helper('zolagopo')->__('DHL Service Error: %s', $result['error']));
             $message[] = 'DHL Service Error: ' .$result['error'];
         }
-        elseif (property_exists($result, 'getTrackAndTraceInfoResult') && property_exists($result->getTrackAndTraceInfoResult, 'events') && property_exists($result->getTrackAndTraceInfoResult->events, 'item')) {
-            $shipmentIdMessage = $this->__('Tracking ID') . ': '. $result->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
-            $events = $result->getTrackAndTraceInfoResult->events;
+        elseif (property_exists($result, 'GetShipmentsResult') 
+            && property_exists($result->GetShipmentsResult, 'Shipment') 
+            && property_exists($result->GetShipmentsResult->Shipment, 'Events') 
+            && property_exists($result->GetShipmentsResult->Shipment->Events, 'Event')) {
+            $result = $result->GetShipmentsResult;
+            $shipmentIdMessage = $this->__('Tracking ID') . ': '. $result->Shipment->ShipmentNumber . PHP_EOL;
+            $events = $result->Shipment->Events;
             //DHL: Concatenate T&T Message History
             $shipped = false;
-            foreach ($events->item as $singleEvent) {
-                $message[$singleEvent->status] =
-                    (!empty($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
-                    . $this->__('Description: ') . $singleEvent->description . PHP_EOL
-                    . $this->__('Terminal: ') . $singleEvent->terminal . PHP_EOL
-                    . $this->__('Time: ') . $singleEvent->timestamp . PHP_EOL.PHP_EOL;
-                switch ($singleEvent->status) {
+            $event = $events->Event;
+            if (!is_array($event)) {
+                $event  = array($event);
+            }
+            foreach ($event as $singleEvent) {
+                switch ($singleEvent->Status) {
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED:
                     $status = $this->__('Delivered');
                     $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
-                    $date = date('Y-m-d',strtotime($singleEvent->timestamp));
+                    $date = date('Y-m-d',strtotime($singleEvent->Timestamp));
                     $track->setDeliveredDate($date);
                     $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);
                     $shipped = false;
@@ -375,7 +385,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                     if (!$shipped) {
                         $status = $this->__('Shipped');
                         $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
-                        $date = date('Y-m-d',strtotime($singleEvent->timestamp));
+                        $date = date('Y-m-d',strtotime($singleEvent->Timestamp));
                         $track->setShippedDate($date);
                         $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED);
                         $shipped = true;
@@ -384,6 +394,11 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 default:
                     break;
                 }
+                $message[$singleEvent->Status] =
+                    (!empty($singleEvent->ReceivedBy) ? $this->__('Received By: ') . $singleEvent->ReceivedBy . PHP_EOL : '')
+                    . $this->__('Status: ') . $status . PHP_EOL
+                    . $this->__('Terminal: ') . $singleEvent->Terminal . PHP_EOL
+                    . $this->__('Time: ') . $singleEvent->Timestamp . PHP_EOL.PHP_EOL;
             }
         }
         else {
