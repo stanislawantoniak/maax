@@ -94,7 +94,6 @@ class ZolagoOs_Import_Model_Import_Product
             /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
             $collection = Mage::getResourceModel('zolagocatalog/product_collection');
             $collection->addFieldToFilter("sku", array("in" => $skusUpdated));
-            $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
             $ids = $collection->getAllIds();
 
             /* @var $aM Zolago_Catalog_Model_Product_Action */
