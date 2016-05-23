@@ -238,6 +238,18 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
      * tracking info
      */
     public function getTrackAndTraceInfo($shipmentId) {
+        $wsdl = Mage::getStoreConfig('carriers/orbadhl/tracking_gateway');
+        $soapClient = new SoapClient($wsdl);
+        $shipments = array($shipmentId); // tu wpisujemy listę szukanych nr przesyłek
+        $remoteCallParams = array("shipmentNumbers" => $shipments);
+        $remoteCallResult = $soapClient->GetShipments($remoteCallParams);
+        return $remoteCallResult;
+    }
+
+    /**
+     * tracking info (old version)
+     */
+    public function getTrackAndTraceInfo2($shipmentId) {
         $message = new StdClass();
         $message->authData = $this->_auth;
         $message->shipmentId = $shipmentId;
