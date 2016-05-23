@@ -1,69 +1,3 @@
-#newsletter-validate-detail input[type="submit"] {
-  height: 40px;
-}
-#newsletter-validate-detail button,
-#newsletter-validate-detail input[type=button],
-#newsletter-validate-detail input[type=submit] {
-  cursor: pointer;
-  display: inline-block;
-}
-#newsletter-validate-detail button,
-.button,
-input[type=button], input[type=submit],
-.wishlist_table .add_to_cart.button,
-.btn-black,
-.btn.btn-black,
-.subscription-toggle {
-  color: #fff;
-  padding: 6px 18px;
-  display: inline-block;
-  -webkit-border-radius: 0;
-  border: none !important;
-  background-color: #262626;
-  text-transform: uppercase;
-  border-radius: 0;
-  font-size: 13px;
-  font-weight: 400;
-  -webkit-transition: color 0.2s, background-color 0.2s;
-  -moz-transition: color 0.2s, background-color 0.2s;
-  -ms-transition: color 0.2s, background-color 0.2s;
-  -o-transition: color 0.2s, background-color 0.2s;
-  transition: color 0.2s, background-color 0.2s;
-  -webkit-font-smoothing: antialiased;
-}
-#newsletter-validate-detail button[type=submit] {
-  -webkit-appearance: button;
-  cursor: pointer;
-  border: 1px solid #fff !important;
-}
-#newsletter-validate-detail input {
-  vertical-align: baseline;
-}
-#newsletter-validate-detail input[type="email"] {
-  width: 260px;
-  float: left;
-  height: 33px;
-  margin-right: 10px;
-  color: $text-color;
-  padding: 0 5px !important;
-}
-
-#newsletter-validate-detail label#newsletter-email {
-  color: #fff;
-  font-weight: 400;
-  margin: 5px 10px 0 5px;
-  height: 40px;
-}
-@media screen and (max-width: $screen-md) {
-  #newsletter-validate-detail label#newsletter-email {
-    text-align: center;
-    float: left;
-  }
-}
-#newsletter-validate-detail label.error {
-  padding: 10px 0 0 0 !important;
-}
-
 footer.footer {
   color: $color_fff;
   background-color: $backgroundColorFooter;
@@ -156,6 +90,74 @@ footer.footer {
       line-height: 1.3;
       color: #fff;
     }
+  }
+
+
+  /* Newsletter */
+  #newsletter-validate-detail input[type="submit"] {
+    height: 40px;
+  }
+  #newsletter-validate-detail button,
+  #newsletter-validate-detail input[type=button],
+  #newsletter-validate-detail input[type=submit] {
+    cursor: pointer;
+    display: inline-block;
+  }
+  #newsletter-validate-detail button,
+  .button,
+  input[type=button], input[type=submit],
+  .wishlist_table .add_to_cart.button,
+  .btn-black,
+  .btn.btn-black,
+  .subscription-toggle {
+    color: #fff;
+    padding: 6px 18px;
+    display: inline-block;
+    -webkit-border-radius: 0;
+    border: none !important;
+    background-color: #262626;
+    text-transform: uppercase;
+    border-radius: 0;
+    font-size: 13px;
+    font-weight: 400;
+    -webkit-transition: color 0.2s, background-color 0.2s;
+    -moz-transition: color 0.2s, background-color 0.2s;
+    -ms-transition: color 0.2s, background-color 0.2s;
+    -o-transition: color 0.2s, background-color 0.2s;
+    transition: color 0.2s, background-color 0.2s;
+    -webkit-font-smoothing: antialiased;
+  }
+  #newsletter-validate-detail button[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    border: 1px solid #fff !important;
+  }
+  #newsletter-validate-detail input {
+    vertical-align: baseline;
+  }
+  #newsletter-validate-detail input[type="email"] {
+    width: 260px;
+    float: left;
+    height: 33px;
+    margin-right: 10px;
+    color: $text-color;
+    padding: 0 5px !important;
+  }
+
+  #newsletter-validate-detail label#newsletter-email {
+    color: #fff;
+    font-weight: 400;
+    margin: 5px 10px 0 5px;
+    height: 40px;
+  }
+  @media screen and (max-width: $screen-md) {
+    #newsletter-validate-detail label#newsletter-email {
+      text-align: center;
+      float: left;
+    }
+  }
+  #newsletter-validate-detail label.error {
+    padding: 10px 0 0 0 !important;
   }
 }
 
