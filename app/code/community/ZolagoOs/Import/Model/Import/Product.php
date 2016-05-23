@@ -73,7 +73,7 @@ class ZolagoOs_Import_Model_Import_Product
             // "update" updates only,
             // "xcreate creates only.
             // Important: for values other than "default" profile has to be an existing magmi profile
-            $importProfile = "dev_01";
+            $importProfile = "wojcik";
             $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
 
             $skusUpdated = array();
@@ -91,21 +91,12 @@ class ZolagoOs_Import_Model_Import_Product
             //Update udropship_vendor
             // MAGMI: warning:Potential assignment problem, specific model found for select attribute => udropship_vendor(udropship/vendor_source)
 
-            /* @var $collectionConfigurable Mage_Catalog_Model_Resource_Product_Collection */
-            $collectionConfigurable = Mage::getResourceModel('zolagocatalog/product_collection');
-            $collectionConfigurable->addFieldToFilter("sku", array("in" => $skusUpdated));
-            $collectionConfigurable->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
-            $idsConfigurable = $collectionConfigurable->getAllIds();
+            /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+            $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+            $collection->addFieldToFilter("sku", array("in" => $skusUpdated));
+            $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+            $ids = $collection->getAllIds();
 
-
-            /* @var $collectionConfigurable Mage_Catalog_Model_Resource_Product_Collection */
-            $collectionSimple = Mage::getResourceModel('zolagocatalog/product_collection');
-            $collectionSimple->addFieldToFilter("sku", array("in" => $skusUpdated));
-            $collectionSimple->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-            $idsSimple = $collectionSimple->getAllIds();
-
-
-            $ids = array_merge($idsConfigurable, $idsSimple);
             /* @var $aM Zolago_Catalog_Model_Product_Action */
             $aM = Mage::getSingleton('catalog/product_action');
 
@@ -114,7 +105,6 @@ class ZolagoOs_Import_Model_Import_Product
 
             //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
             $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
-
 
         } catch (Exception $e) {
             Mage::logException($e);
@@ -154,6 +144,12 @@ class ZolagoOs_Import_Model_Import_Product
                 "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
+
+
+                //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
+                "manage_stock" => 1,
+                "qty" => 0,
+                "is_in_stock" => 0
             );
             // Now ingest item into magento
             $dp->ingest($product);
@@ -185,6 +181,12 @@ class ZolagoOs_Import_Model_Import_Product
             "ext_category" => $firstSimple->clothes_description,
             "ext_color" => $firstSimple->color,
             "ext_brand" => $firstSimple->brand,
+
+            //magazyn dla konfigurowalnych - zarządzaj stanami = nie
+            "use_config_manage_stock" => 0,
+            "manage_stock" => 0,
+            "qty" => 0,
+            "is_in_stock" => 0
 
         );
 
