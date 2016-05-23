@@ -91,14 +91,20 @@ class ZolagoOs_Import_Model_Import_Product
             //Update udropship_vendor
             // MAGMI: warning:Potential assignment problem, specific model found for select attribute => udropship_vendor(udropship/vendor_source)
 
-            /* @var $collectionS Mage_Catalog_Model_Resource_Product_Collection */
+            /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
             $collection = Mage::getResourceModel('zolagocatalog/product_collection');
             $collection->addFieldToFilter("sku", array("in" => $skusUpdated));
+            $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
             $ids = $collection->getAllIds();
 
             /* @var $aM Zolago_Catalog_Model_Product_Action */
             $aM = Mage::getSingleton('catalog/product_action');
+
+            //3a. Set additional attributes (udropship_vendor for all products)
             $aM->updateAttributesPure($ids, array('udropship_vendor' => $vendorId), 0);
+
+            //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
+            $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
 
         } catch (Exception $e) {
             Mage::logException($e);
@@ -138,7 +144,12 @@ class ZolagoOs_Import_Model_Import_Product
                 "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
-                //"description_status" => 1,
+
+
+                //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
+                "manage_stock" => 1,
+                "qty" => 0,
+                "is_in_stock" => 0
             );
             // Now ingest item into magento
             $dp->ingest($product);
@@ -164,14 +175,18 @@ class ZolagoOs_Import_Model_Import_Product
 
             "description" => $firstSimple->clothes_description,
             "short_description" => $firstSimple->description2,
-            //"description_status" => 1,
-
 
             //ext_
             "ext_productline" => $firstSimple->collection,
             "ext_category" => $firstSimple->clothes_description,
             "ext_color" => $firstSimple->color,
             "ext_brand" => $firstSimple->brand,
+
+            //magazyn dla konfigurowalnych - zarządzaj stanami = nie
+            "use_config_manage_stock" => 0,
+            "manage_stock" => 0,
+            "qty" => 0,
+            "is_in_stock" => 0
 
         );
 
