@@ -61,7 +61,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
 		$daysInTransitData = array();
 		$shipping = $this->getUdropShippingMethods();
-
 		$shippingMethods = array();
 
 		foreach($shipping as $shippingItem){
@@ -69,14 +68,12 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 			$shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
 
 		}
-		Mage::log($shippingMethods, null, "rates.log");
 
 		foreach ($qRates as $cCode => $cRates) {
 
 			foreach ($cRates as $rate) {
 				/* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
 				$vId = $rate->getUdropshipVendor();
-				Mage::log($vId, null, "rates2.log");
 
 				if (!$vId) {
 					continue;
