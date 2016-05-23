@@ -16,6 +16,10 @@ $_baseUrl = Mage::getUrl("/", array("_no_vendor"=>true));
         <?php echo $this->getChildHtml('header_menu'); ?>
     </div>
     <div class="header_top">
+        <?php if (!$_isCheckout): ?>
+            <?php echo $this->getChildHtml('page.header.top_bar'); ?>
+        <?php endif; ?>
+
         <div class="container-fluid clearfix">
             <div class="col-xs-12">
                 <?php if(!$_isCheckout):?>
