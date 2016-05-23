@@ -125,7 +125,7 @@ class ZolagoOs_Import_Model_Import_Product
             $simpleSku = $vendorId . "-" . $simpleSkuV;
             $subskus[] = $simpleSku;  //Collect simple skus for configurable
             $product = array(
-                "name" => $simpleSkuV,
+                "name" => $simpleXMLData->description,
                 "sku" => $simpleSku,
                 "skuv" => $simpleSkuV,
                 "price" => "0.00",
@@ -149,7 +149,7 @@ class ZolagoOs_Import_Model_Import_Product
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "name" => $configurableSkuv,
+            "name" => $simpleXMLData->description,
             "sku" => $configurableSku,
             "skuv" => $configurableSkuv,
             "price" => "0.00",
