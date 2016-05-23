@@ -150,8 +150,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	 * @return array|null
 	 */
 	public function getRegulationsSection() {
-		/** @var Zolago_Common_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zolagocommon");
+		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zosoutsidestore");
 		if ($this->isModuleActive('ghregulation') && 
 			$this->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_RULES) &&
 			$commonHlp->useGalleryConfiguration()
@@ -328,8 +328,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
      * @return array|null
      */
     public function getStatementsSection() {
-		/** @var Zolago_Common_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zolagocommon");
+		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zosoutsidestore");
 		if ($this->isModuleActive('ghstatements')
 			&& $this->isAllowed(Zolago_Operator_Model_Acl::RES_BILLING_AND_STATEMENTS)
 			&& $commonHlp->useGalleryConfiguration()

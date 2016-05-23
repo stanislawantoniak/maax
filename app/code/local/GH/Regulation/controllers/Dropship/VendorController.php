@@ -16,8 +16,8 @@ class GH_Regulation_Dropship_VendorController
      */
     public function acceptAction()
     {
-		/** @var Zolago_Common_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zolagocommon");
+		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zosoutsidestore");
 		if (!$commonHlp->useGalleryConfiguration()) {
 			$this->_redirect('udropship/vendor/');
 			return;
@@ -91,8 +91,8 @@ class GH_Regulation_Dropship_VendorController
      */
     public function acceptPostAction()
     {
-		/** @var Zolago_Common_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zolagocommon");
+		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zosoutsidestore");
 		if (!$commonHlp->useGalleryConfiguration()) {
 			$this->_redirect('udropship/vendor/');
 			return;
@@ -481,8 +481,8 @@ class GH_Regulation_Dropship_VendorController
 	 * @param null $title
 	 */
 	protected function _renderPage($handles = null, $active = null, $title = null) {
-		/** @var Zolago_Common_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zolagocommon");
+		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zosoutsidestore");
 		if (!$commonHlp->useGalleryConfiguration()) {
 			$this->_redirect('udropship/vendor/');
 			return;

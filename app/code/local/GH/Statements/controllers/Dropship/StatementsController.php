@@ -43,8 +43,8 @@ class GH_Statements_Dropship_StatementsController extends Zolago_Dropship_Contro
 	 * @param null|string $title
 	 */
 	protected function _renderPage($handles = null, $active = null, $title = null) {
-		/** @var Zolago_Common_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zolagocommon");
+		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zosoutsidestore");
 		if (!$commonHlp->useGalleryConfiguration()) {
 			$this->_redirect('udropship/vendor/');
 			return;
