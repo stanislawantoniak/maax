@@ -135,7 +135,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "tax_class_id" => 0,
                 "attribute_set" => $attributeSet,
                 "store" => "admin",
-                "description" => $simpleXMLData->description,
+                "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
                 //"description_status" => 1,
@@ -162,7 +162,7 @@ class ZolagoOs_Import_Model_Import_Product
             "configurable_attributes" => "size",
             "simples_skus" => implode(",", $subskus),
 
-            "description" => $firstSimple->description,
+            "description" => $firstSimple->clothes_description,
             "short_description" => $firstSimple->description2,
             //"description_status" => 1,
 
