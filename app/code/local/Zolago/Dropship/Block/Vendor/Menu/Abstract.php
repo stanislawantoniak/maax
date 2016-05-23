@@ -328,9 +328,12 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
      * @return array|null
      */
     public function getStatementsSection() {
-        if ($this->isModuleActive('ghstatements')
-                && $this->isAllowed("udropship/statements")
-           ) {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if ($this->isModuleActive('ghstatements')
+			&& $this->isAllowed(Zolago_Operator_Model_Acl::RES_BILLING_AND_STATEMENTS)
+			&& $commonHlp->useGalleryConfiguration()
+		) {
             /** @var GH_Statements_Helper_Data $helper */
             $helper = Mage::helper('ghstatements');
             // Sledzenie salda / Balance tracking

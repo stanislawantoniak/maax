@@ -144,6 +144,13 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	public function __construct() {
 		/** @var Zolago_Dropship_Model_Vendor $vendor */
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		$isGallery = $commonHlp->useGalleryConfiguration();
+		$type = self::TYPE_ALLOW;
+		if (!$isGallery) {
+			$type = self::TYPE_DENY;
+		}
 		// Set resources
 		foreach(array_keys(self::$_currentResources) as $resourceCode){
 			$this->addResource($resourceCode);
@@ -211,12 +218,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_GH_ATTRIBUTE_RULES);
 
         // Build ACL Rules - Billing and statements
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
+        $this->setRule(self::OP_ADD, $type           , self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
         // superuser
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SETTINGS);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SIZETABLE);
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES);
-        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES_DOCUMENT);
+        $this->setRule(self::OP_ADD, $type           , self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES);
+        $this->setRule(self::OP_ADD, $type           , self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES_DOCUMENT);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_POS);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_OPERATOR);
 	}
@@ -225,6 +232,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	 * @return array
 	 */
 	public static function getAllRoles() {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		$isGallery = $commonHlp->useGalleryConfiguration();
 		$_currentRoles = array(
 			self::ROLE_ORDER_OPERATOR					=> "Order operator",
 			self::ROLE_MARKETING_OFFICER				=> "Marketing officer",
@@ -234,10 +244,13 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 			self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
 			self::ROLE_PAYMENT_OPERATOR					=> "Payment manage",
 			self::ROLE_GHAPI_OPERATOR					=> "GH API Settings",
-			self::ROLE_BILLING_OPERATOR					=> "Billing and statements",
-			self::ROLE_SUPERUSER_OPERATOR				=> Mage::helper("zolagocommon")->useGalleryConfiguration() ?
-				"Configuration and regulations" : "Configuration"
 		);
+		if ($isGallery){
+			$_currentRoles[self::ROLE_SUPERUSER_OPERATOR] = "Configuration and regulations";
+			$_currentRoles[self::ROLE_BILLING_OPERATOR]   = "Billing and statements";
+		} else {
+			$_currentRoles[self::ROLE_SUPERUSER_OPERATOR] = "Configuration";
+		}
 		return $_currentRoles;
 	}
 	
