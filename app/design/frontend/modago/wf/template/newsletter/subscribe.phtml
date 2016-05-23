@@ -29,12 +29,12 @@ $_helper = Mage::helper("newsletter");
     <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
         <div class="row">
             <div class="col-sm-12 col-xs-12 col-md-6 text-right no-padding">
-                <label for="newsletter">
+                <label id="newsletter-email" for="newsletter">
                     <?php echo $_helper->__("Sign up for the newsletter and get updated on what's new:") ?>
                 </label>
             </div>
             <div class="col-sm-12 col-xs-12 col-md-6 no-padding">
-                <input name="email" type="email" id="newsletter" title="<?php echo $_helper->__('Sign up for our newsletter') ?>" placeholder="<?php echo $_helper->__('Enter your email') ?>" class="input-text required-entry validate-email" />
+                <input name="email" type="email" id="newsletter" title="<?php echo $_helper->__('Sign up for our newsletter') ?>" placeholder="<?php echo $_helper->__('Enter your email') ?>" required autocomplete="off" class="input-text" />
 
                 <button type="submit" title="<?php echo $_helper->__('Sign Up') ?>" class="button">
                     <span><span><?php echo $_helper->__('Sign Up') ?></span></span>
@@ -44,7 +44,24 @@ $_helper = Mage::helper("newsletter");
     </form>
     <script type="text/javascript">
     //<![CDATA[
-        var newsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail');
+    jQuery("#newsletter-validate-detail").validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            email: {
+                required: '<?php echo $_helper->__("This field is required") ?>',
+                email: '<?php echo $_helper->__("Please enter a valid email address") ?>'
+            }
+        },
+        errorPlacement: function(error, element) {
+            console.log(element);
+            jQuery(element).closest("div").append(error);
+        }
+    });
     //]]>
     </script>
 </div>
