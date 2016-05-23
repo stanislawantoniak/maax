@@ -144,8 +144,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	public function __construct() {
 		/** @var Zolago_Dropship_Model_Vendor $vendor */
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
-		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zosoutsidestore");
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
 		$isGallery = $commonHlp->useGalleryConfiguration();
 		$type = self::TYPE_ALLOW;
 		if (!$isGallery) {
@@ -232,8 +232,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	 * @return array
 	 */
 	public static function getAllRoles() {
-		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zosoutsidestore");
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
 		$isGallery = $commonHlp->useGalleryConfiguration();
 		$_currentRoles = array(
 			self::ROLE_ORDER_OPERATOR					=> "Order operator",

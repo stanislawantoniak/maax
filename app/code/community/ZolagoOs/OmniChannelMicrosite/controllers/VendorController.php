@@ -32,8 +32,8 @@ class ZolagoOs_OmniChannelMicrosite_VendorController extends Mage_Core_Controlle
 
     public function registerAction()
     {
-		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zosoutsidestore");
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
 		if (!$commonHlp->useGalleryConfiguration()) {
 			$this->_redirect('udropship/vendor/');
 			return;
@@ -43,8 +43,8 @@ class ZolagoOs_OmniChannelMicrosite_VendorController extends Mage_Core_Controlle
 
     public function registerPostAction()
     {
-		/** @var ZolagoOs_OutsideStore_Helper_Data $commonHlp */
-		$commonHlp = Mage::helper("zosoutsidestore");
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
 		if (!$commonHlp->useGalleryConfiguration()) {
 			$this->_redirect('udropship/vendor/');
 			return;
