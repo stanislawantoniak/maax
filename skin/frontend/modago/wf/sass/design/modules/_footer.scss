@@ -44,7 +44,8 @@ input[type=button], input[type=submit],
   float: left;
   height: 33px;
   margin-right: 10px;
-  color: grey;
+  color: $text-color;
+  padding-left: 5px;
 }
 
 #newsletter-validate-detail label {
