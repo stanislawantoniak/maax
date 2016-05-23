@@ -96,33 +96,33 @@ EOD
         'content'       =>
             <<<EOD
 <ul class="menu-social-icons">
-                                    <li>
-                                        <a href="https://twitter.com/"
-                                           class="title-toolip" title="Twitter" target="_blank">
-                                            <i class="ico-twitter"></i>
-
-                                        </a></li>
-                                    <li>
-                                        <a href="http://www.facebook.com/" class="title-toolip" title="Facebook" target="_blank">
-                                            <i class="ico-facebook"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="http://pinterest.com/" class="title-toolip" title="Pinterest" target="_blank">
-                                            <i class="ico-pinterest"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="http://plus.google.com/" class="title-toolip" title="Google +" target="_blank">
-                                            <i class="ico-google-plus"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="mailto:" class="title-toolip" title="Mail to friend">
-                                            <i class="ico-envelope"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+    <li>
+        <a href="https://twitter.com/"
+           class="title-toolip" title="Twitter" target="_blank">
+            <i class="fa fa-twitter"></i>
+        </a>
+    </li>
+    <li>
+        <a href="http://www.facebook.com/" class="title-toolip" title="Facebook" target="_blank">
+            <i class="fa fa-facebook"></i>
+        </a>
+    </li>
+    <li>
+        <a href="http://pinterest.com/" class="title-toolip" title="Pinterest" target="_blank">
+            <i class="fa fa-pinterest"></i>
+        </a>
+    </li>
+    <li>
+        <a href="http://plus.google.com/" class="title-toolip" title="Google +" target="_blank">
+            <i class="fa fa-google-plus"></i>
+        </a>
+    </li>
+    <li>
+        <a href="mailto:" class="title-toolip" title="Mail to friend">
+            <i class="fa fa-envelope-o"></i>
+        </a>
+    </li>
+</ul>
 EOD
     ,
         'is_active'     => 1,

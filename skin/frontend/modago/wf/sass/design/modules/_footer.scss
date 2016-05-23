@@ -82,11 +82,6 @@ footer.footer {
           width: 28px;
           height: 28px;
 
-          &.ico-twitter:before {
-            content: "\f099";
-            font-family: FontAwesome;
-          }
-
           &:hover {
             color: $colorLinkHover;
           }
@@ -94,28 +89,6 @@ footer.footer {
       }
     }
   }
-}
-
-
-
-.menu-social-icons .ico-facebook:before {
-  content: "\f09a";
-  font-family: FontAwesome;
-}
-
-.menu-social-icons .ico-pinterest:before {
-  content: "\f0d2";
-  font-family: FontAwesome;
-}
-
-.menu-social-icons .ico-google-plus:before {
-  content: "\f0d5";
-  font-family: FontAwesome;
-}
-
-.menu-social-icons .ico-envelope:before {
-  content: "\f003";
-  font-family: FontAwesome;
 }
 
 
