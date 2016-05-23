@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Wf_Wf>
+            <version>0.1.0</version>
+        </Wf_Wf>
+    </modules>
+    <global>
+        <models>
+            <wfwf>
+                <class>Wf_Wf_Model</class>
+                <resourceModel>wfwf_resource</resourceModel>
+            </wfwf>
+            <wfwf_resource>
+                <class>Wf_Wf_Model_Resource</class>
+            </wfwf_resource>
+        </models>
+        <blocks>
+            <wfwf>
+                <class>Wf_Wf_Block</class>
+            </wfwf>
+        </blocks>
+        <helpers>
+            <wfwf>
+                <class>Wf_Wf_Helper</class>
+            </wfwf>
+        </helpers>
+        <resources>
+            <wfwf_setup>
+                <setup>
+                    <module>Wf_Wf</module>
+                </setup>
+            </wfwf_setup>
+        </resources>
+    </global>
+</config>
