@@ -74,7 +74,7 @@ class ZolagoOs_Import_Model_Import_Product
             // "xcreate creates only.
             // Important: for values other than "default" profile has to be an existing magmi profile
             $importProfile = "wojcik";
-            $dp->beginImportSession($importProfile, "create", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
 
             $skusUpdated = array();
             foreach ($skuBatch as $configurableSkuv => $simples) {
