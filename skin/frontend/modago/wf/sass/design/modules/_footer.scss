@@ -54,7 +54,7 @@ input[type=button], input[type=submit],
   margin: 5px 10px 0 5px;
   height: 40px;
 }
-@media screen and (max-width: 992px) {
+@media screen and (max-width: $screen-md) {
   #newsletter-validate-detail label#newsletter-email {
     text-align: center;
     float: left;
