@@ -70,12 +70,13 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
 		}
 		Mage::log($shippingMethods, null, "rates.log");
-		//Mage::log($qRates, null, "rates2.log");
+
 		foreach ($qRates as $cCode => $cRates) {
 
 			foreach ($cRates as $rate) {
 				/* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
 				$vId = $rate->getUdropshipVendor();
+				Mage::log($vId, null, "rates2.log");
 
 				if (!$vId) {
 					continue;
