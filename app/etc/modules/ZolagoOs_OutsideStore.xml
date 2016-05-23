@@ -2,7 +2,7 @@
 <config>
     <modules>
         <ZolagoOs_OutsideStore>
-            <active>true</active>
+            <active>false</active>
             <codePool>community</codePool>
         </ZolagoOs_OutsideStore>
     </modules>
