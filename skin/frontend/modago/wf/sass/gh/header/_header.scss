@@ -65,7 +65,7 @@ body {
 		img {
 			width: 100%;
 			height: auto;
-			margin-top: -3px; /* fix for vissavi logo */
+			margin-top: 3px; /* fix for wf logo */
 		}
 		@include max-screen($screen-sm-max) {
 			left: 0;
@@ -694,7 +694,7 @@ body {
 
 @import "../../other/variable";
 .header_top {
-	height: 57px;
+  height: 85px;
 }
 
 /* USER MENU */
