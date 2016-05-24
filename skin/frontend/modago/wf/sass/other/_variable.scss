@@ -125,7 +125,7 @@ $validation-error: $color_e84c3d;
 
 // FONT
 $fontLight: Verdana,Geneva,sans-serif;
-$fontRegular: Verdana,Geneva,sans-serif;
+$fontRegular: Verdana,Geneva;
 $fontOpen: 'Open Sans';
 $fontOpenSS: 'Open Sans', sans-serif;
 $fontBlack: Georgia;
@@ -372,5 +372,6 @@ $borderRadiusBtn:                       0px;
 
 
 /*FOOTER*/
-$textColorFooterLink:                   $color_fff;
+$textColorFooter:                       $color_fff;
+$textColorFooterLink:                   $color_8a8a8a;
 $backgroundColorFooter:                 $color_262626;
