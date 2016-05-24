@@ -1395,7 +1395,11 @@ function initToggleSearch() {
 	toggle.on('click', function(e) {
 		e.stopPropagation();
 
+
         var contentOffset = jQuery("section#main #content").offset().left;
+        if(jQuery(window).width() >= 1206){
+            contentOffset = contentOffset+ 236;
+        }
 
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
 			dropdown.css({left: '', right: '0'});
@@ -1422,7 +1426,9 @@ function positionToggleSearch() {
 	var dropdown = jQuery('#dropdown-search');
 	var toggle = jQuery("#toggleSearch");
     var contentOffset = jQuery("section#main #content").offset().left;
-
+    if(jQuery(window).width() >= 1206){
+        contentOffset = contentOffset+ 236;
+    }
 	if (dropdown.is(":visible")) {
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
 			dropdown.css({left: '', right: '0'});
