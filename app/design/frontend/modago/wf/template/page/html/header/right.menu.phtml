@@ -11,7 +11,7 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
     <div class="header_bottom">
 <!--        <div class="container-fluid">-->
             <nav role="navigation" class="hidden-sm">
-                <div id="navigation">
+                <div id="navigation" data-target="y">
                     <?php echo Mage::helper('zolagomodago')
                         ->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
 
