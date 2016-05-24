@@ -342,6 +342,11 @@ footer.footer {
       margin-right: 10px;
       color: $text-color;
       padding: 0 5px !important;
+
+      &.error {
+        display: inline;
+        font-size: inherit;
+      }
     }
 
     .newsletter-validate-detail-label {
@@ -356,6 +361,10 @@ footer.footer {
       font-weight: 400;
       margin-right: 10px;
       height: 40px;
+    }
+
+    #newsletter-error.error {
+      padding: 10px 0 0px 0px !important;
     }
 
     @media screen and (min-width: $screen-md) {
@@ -383,6 +392,10 @@ footer.footer {
       .newsletter-validate-detail-label {
         text-align: center;
       }
+
+      #newsletter-error.error {
+        text-align: center !important;
+      }
     }
     @media screen and (max-width: $screen-xs) {
       .newsletter-validate-detail-input {
@@ -395,25 +408,14 @@ footer.footer {
       .newsletter-validate-detail-label {
         text-align: center;
       }
+      #newsletter-error.error {
+        text-align: center !important;
+      }
+
     }
 
 
-
-
-    label.error {
-      padding: 10px 0 0 0 !important;
-    }
   }
-
-
-
-
-
-
-
-
-
-
 }
 
 
