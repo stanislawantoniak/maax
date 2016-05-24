@@ -6,7 +6,7 @@ $cmsNavigationBlocks = array(
         'identifier'    => 'wf_top_bar',
         'content'       => <<<EOD
                     <div class="top-bar">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="top-bar-left">
                         <div class="top-bar-left-content">
                             <ul class="links">
@@ -15,7 +15,7 @@ $cmsNavigationBlocks = array(
                             </ul>
                         </div>
                     </div>
-                    <div class="top-bar-right">
+                    <div class="top-bar-right hidden-xs">
                         <div id="nav_menu-4" class="topbar-widget widget_nav_menu">
                             <div class="menu-right-top-menu-container">
                                 <ul id="menu-right-top-menu" class="menu">
