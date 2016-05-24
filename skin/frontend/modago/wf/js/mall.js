@@ -1395,10 +1395,12 @@ function initToggleSearch() {
 	toggle.on('click', function(e) {
 		e.stopPropagation();
 
+        var contentOffset = jQuery("section#main #content").offset().left;
+
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
 			dropdown.css({left: '', right: '0'});
 		} else {
-			dropdown.css({left: toggle.offset().left+'px', right: ''});
+			dropdown.css({left: (toggle.offset().left-contentOffset)+'px', right: ''});
 		}
 		dropdown.show();
 		toggle.parent().addClass("open");
@@ -1419,11 +1421,13 @@ function initToggleSearch() {
 function positionToggleSearch() {
 	var dropdown = jQuery('#dropdown-search');
 	var toggle = jQuery("#toggleSearch");
+    var contentOffset = jQuery("section#main #content").offset().left;
+
 	if (dropdown.is(":visible")) {
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
 			dropdown.css({left: '', right: '0'});
 		} else {
-			dropdown.css({left: toggle.offset().left+'px', right: ''});
+			dropdown.css({left: (toggle.offset().left-contentOffset)+'px', right: ''});
 		}
 	}
 }
