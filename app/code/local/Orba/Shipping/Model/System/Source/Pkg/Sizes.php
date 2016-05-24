@@ -1,5 +1,5 @@
 <?php
-class Orba_Shipping_Model_System_Source_PkgSizes {
+class Orba_Shipping_Model_System_Source_Pkg_Sizes {
 	/* VENDOR'S DHL PARCEL SIZES */
 	/* sizes in cm splitted during packages making */
 	const DHL_PARCEL_SIZE_SMALL = '20x30x15';
