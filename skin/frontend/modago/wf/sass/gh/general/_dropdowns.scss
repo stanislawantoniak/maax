@@ -62,7 +62,9 @@
 	color: $colorDropdownSearch;
 	padding:0px;
 	top:56px !important;
-	right:0 !important;
+	@include max-screen($screen-md) {
+		right:0 !important;
+	}
 	.searchDropdown {
 		width: 320px;
 		@include border-radius(0px);
