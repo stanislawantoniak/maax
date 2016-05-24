@@ -1,10 +1,10 @@
 <?php /* @var $this Zolago_Modago_Block_Page_Html_Header_Menu */?>
 
-<div class="header_bottom">
+<div class="header_bottom xxx">
     <div class="container-fluid">
         <nav role="navigation">
-            <div id="navigation">
-                <?php echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
+            <div id="navigation" data-target="x">
+                <?php //echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
                 <?php if ($this->getIsHomePage()): ?>
                     <?php echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-mobile', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
                 <?php endif; ?>

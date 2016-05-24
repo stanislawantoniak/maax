@@ -8,42 +8,66 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
 
 <!-- NAV RIGHT -->
 <div id="header_top_block_right">
-    <div id="user_menu" class="pull-right">
-        <ul class="user-navigation pull-right">
-	        <li id="link_menu" class="hidden-md hidden-lg not-open">
-		        <a href="" class="toggleMenu sb-toggle-left">
-			        <img src="<?php echo $this->getSkinUrl("images/svg/menu.svg"); ?>" class="header_icon" />
-		        </a>
-	        </li>
-	        <li id="link_search" class="not-open">
-		        <a class="dropdown-toggle" data-dropdown="#dropdown-search" id="toggleSearch">
-			        <img src="<?php echo $this->getSkinUrl("images/svg/search.svg"); ?>" class="header_icon" />
-		        </a>
-	        </li>
-<!--            <li id="link_your_account">-->
-<!--                <a href="--><?php //echo $userAccountUrl; ?><!--" data-user-account-url="--><?php //echo $userAccountUrl; ?><!--" data-user-account-url-orders="--><?php //echo $userAccountUrlOrders; ?><!--">-->
-<!--	                <img src="--><?php //echo $this->getSkinUrl("images/svg/user.svg"); ?><!--" class="header_icon" />-->
-<!--	                <span class="hidden-sm hidden-xs">--><?php //echo $this->__("Your account"); ?><!--</span>-->
-<!--                </a>-->
-<!--            </li>-->
-            <li id="link_favorites" class="hidden-md hidden-lg">
-                <a href="<?php echo $favoritesUrl; ?>">
-	                <div class="badgeHolder">
-                        <span class="badge"></span>
-                        <img src="<?php echo $this->getSkinUrl("images/svg/favourite.svg"); ?>" class="header_icon" />
-	                </div>
-                    <span class="hidden-sm hidden-xs"><?php echo $this->__("Favorites"); ?></span>
-                </a>
-            </li>
-            <li id="link_basket" class="basket-dropdown" style="position:relative;">
-                <a class="dropdown-toggle" data-dropdown="#dropdown-basket" href="<?php echo $checkoutCartUrl; ?>">
-	                <div class="badgeHolder">
-	                    <span class="badge"></span>
-		                <img src="<?php echo $this->getSkinUrl("images/svg/cart.svg"); ?>" class="header_icon" />
-	                </div>
-                    <span class="hidden-sm hidden-xs"><?php echo $this->__("Basket"); ?></span>
-                </a>
-            </li>
-        </ul>
+    <div class="header_bottom">
+<!--        <div class="container-fluid">-->
+            <nav role="navigation" class="hidden-sm">
+                <div id="navigation" data-target="y">
+                    <?php echo Mage::helper('zolagomodago')
+                        ->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
+
+                </div>
+            </nav>
+            <div id="user_menu" class="pull-right">
+                <ul class="user-navigation pull-right">
+                    <li id="link_menu" class="hidden-md hidden-lg not-open">
+                        <a href="" class="toggleMenu sb-toggle-left">
+                            <img src="<?php echo $this->getSkinUrl("images/svg/menu.svg"); ?>" class="header_icon" />
+                        </a>
+                    </li>
+                    <li id="link_search" class="not-open">
+                        <a class="dropdown-toggle" data-dropdown="#dropdown-search" id="toggleSearch">
+                            <img src="<?php echo $this->getSkinUrl("images/svg/search.svg"); ?>" class="header_icon" />
+                        </a>
+                    </li>
+                    <!--            <li id="link_your_account">-->
+                    <!--                <a href="--><?php //echo $userAccountUrl; ?><!--" data-user-account-url="--><?php //echo $userAccountUrl; ?><!--" data-user-account-url-orders="--><?php //echo $userAccountUrlOrders; ?><!--">-->
+                    <!--	                <img src="--><?php //echo $this->getSkinUrl("images/svg/user.svg"); ?><!--" class="header_icon" />-->
+                    <!--	                <span class="hidden-sm hidden-xs">--><?php //echo $this->__("Your account"); ?><!--</span>-->
+                    <!--                </a>-->
+                    <!--            </li>-->
+                    <li id="link_favorites" class="hidden-md hidden-lg">
+                        <a href="<?php echo $favoritesUrl; ?>">
+                            <div class="badgeHolder">
+                                <span class="badge"></span>
+                                <img src="<?php echo $this->getSkinUrl("images/svg/favourite.svg"); ?>" class="header_icon" />
+                            </div>
+                            <span class="hidden-sm hidden-xs"><?php echo $this->__("Favorites"); ?></span>
+                        </a>
+                    </li>
+                    <li id="link_basket" class="basket-dropdown" style="position:relative;">
+                        <a class="dropdown-toggle" data-dropdown="#dropdown-basket" href="<?php echo $checkoutCartUrl; ?>">
+                            <div class="badgeHolder">
+                                <span class="badge"></span>
+                                <img src="<?php echo $this->getSkinUrl("images/svg/cart.svg"); ?>" class="header_icon" />
+                            </div>
+                            <span class="hidden-sm hidden-xs"><?php echo $this->__("Basket"); ?></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+<!--        </div>-->
+
     </div>
+
 </div>
+
+<style>
+    #header_top_block_right nav {
+        width: 50%;
+        float: left;
+        margin-top: 4px;
+    }
+    .header_top #header_top_block_right #user_menu {
+        width: 50%;
+    }
+</style>
