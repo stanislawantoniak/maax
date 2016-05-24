@@ -97,7 +97,9 @@ body {
 			width: 70%;
 			float: left;
 			margin-top: 23px;
-
+			@include max-screen($screen-xs-max) {
+				width: 0;
+			}
 			#navigation {
 				text-align: center;
 			}
@@ -108,7 +110,9 @@ body {
 		#user_menu {
 			//width: 100%;
 			width: 30%;
-
+			@include max-screen($screen-xs-max) {
+				width: 100%;
+			}
 			@include min-screen($screen-md) {
 				margin-top: 23px;
 			}
