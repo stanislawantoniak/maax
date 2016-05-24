@@ -364,10 +364,9 @@ footer.footer {
       }
     }
 
-    @media screen and (max-width: $screen-md) {
-      .newsletter-validate-detail-label,
-      .newsletter-validate-detail-input{
-        //padding-left: 15px;
+    @media screen and (min-width: $screen-lg) {
+      label#newsletter-email {
+        line-height: 32px;
       }
     }
     @media screen and (max-width: $screen-md) {
