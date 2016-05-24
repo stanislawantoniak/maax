@@ -26,7 +26,7 @@ class Orba_Shipping_Model_Client_Soap extends Orba_Shipping_Model_Client_Abstrac
             }
             $result = $soap->$method($message);
         } catch (Exception $xt) {
-            Mage::logException($xt);
+            //Mage::logException($xt);
             $result = $this->_prepareErrorMessage($xt);
         }
         return $result;
