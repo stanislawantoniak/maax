@@ -42,35 +42,44 @@ class Orba_Shipping_Helper_Post_Tracking extends Orba_Shipping_Helper_Post {
                     if (!is_array($events)) {
                         $events = array($events);
                     }
-                    foreach (array_reverse($events) as $event) {
-                        $message[] = $this->__('Time: ').$event->czas.PHP_EOL.
+                    $lastState = false;
+                    $logMessage = array();
+                    foreach ($events as $event) {
+                        $logMessage[] = $this->__('Time: ').$event->czas.PHP_EOL.
                                      (!empty($event->jednostka->nazwa)? ($this->__('Terminal: ').$event->jednostka->nazwa.PHP_EOL):'').
                                      $this->__('Description: ').$event->nazwa.PHP_EOL.PHP_EOL;
                         switch ($event->kod) {
                             case self::PP_SHIPPING:
-                                $status = $this->__('Shipped');                        
-                                $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
-                                $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED);                                                    
+                                if (!$lastState) {
+                                    $status = $this->__('Shipped');                        
+                                    $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED);
+                                    $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED);                                                    
+                                }
                                 break;
                             case self::PP_DELIVERED:
-                                $status = $this->__('Delivered');
-                                $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
-                                $track->setDeliveredDate($event->czas);
-                                if (!$track->getShippedDate()) {
-                                    $track->setShippedDate($event->czas);
-                                }
-                                $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);                        
+                                    $status = $this->__('Delivered');
+                                    $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
+                                    $track->setDeliveredDate($event->czas);
+                                    if (!$track->getShippedDate()) {
+                                        $track->setShippedDate($event->czas);
+                                    }
+                                    $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);                        
+                                    $lastState = true;
                                 break;
                             case self::PP_RETURNED:
                             case self::PP_RETURNED_TO_SENDER:
                                 $status = $this->__('Cancelled');
                                 $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_CANCELED);
                                 $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED);                                                    
+                                $lastState = true;
                                 break;
                             default:
                                 ;
                                 
                         }
+                    }
+                    foreach (array_reverse($logMessage) as $mess) { // reverse tracking log
+                        $message[] = $mess;
                     }
                     if (!empty($result->return->danePrzesylki->dataNadania)) {
                         $track->setShippedDate($result->return->danePrzesylki->dataNadania);                                                
