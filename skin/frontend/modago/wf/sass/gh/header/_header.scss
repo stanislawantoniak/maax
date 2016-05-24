@@ -58,7 +58,11 @@ body {
 	#header_top_block_center {
 		position: absolute;
 		top: 1px;
-		width: 160px;
+		//width: 160px;
+		width: 250px;
+		@include max-screen($screen-sm-max) {
+			width: 160px;
+		}
 		z-index: 10;
 		left: 0;
 		margin-left: 0;
@@ -82,16 +86,32 @@ body {
 	}
 	#header_top_block_right {
 		width: 100%;
-		padding-left: 165px;
+		padding-left: 265px;
+		@include max-screen($screen-sm-max) {
+			padding-left: 165px;
+		}
 		position: absolute;
 		right: -10px;
 		top: 0px;
+		nav {
+			width: 70%;
+			float: left;
+			margin-top: 23px;
 
+			#navigation {
+				text-align: center;
+			}
+		}
 		@include max-screen($screen-xs-max) {
 			padding-left: 105px !important;
 		}
 		#user_menu {
-			width: 100%;
+			//width: 100%;
+			width: 30%;
+
+			@include min-screen($screen-md) {
+				margin-top: 23px;
+			}
 		}
 		.header_icon {
 			margin-top: 3px;
@@ -290,7 +310,7 @@ body {
 		&.navigation > li > a:hover,
 		&.navigation > li > a.active,
 		&.navigation > li > a.forceActive {
-			position: relative;
+			//position: relative;
 			&:before {
 				content: ' ';
 				height: 3px;
@@ -516,8 +536,10 @@ body {
 		&.navigation > li > a.active,
 		&.navigation > li > a.forceActive {
 			background: none;
+			color: $colorLinkHover;
 			&:before {
-				background: $colorAccentSiteMenuTop;
+				//background: $colorAccentSiteMenuTop;
+
 			}
 		}
 	}
@@ -693,7 +715,11 @@ body {
 
 @import "../../other/variable";
 .header_top {
-  height: 85px;
+  //height: 85px;
+	height: 132px;
+	@include max-screen($screen-sm-max) {
+		height: 85px;
+	}
 }
 
 /* USER MENU */
