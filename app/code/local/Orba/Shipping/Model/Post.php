@@ -29,7 +29,9 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         }
         $this->setShipmentSettings($settings);
     }
-
+    public function isActive() {
+        return Mage::helper('orbashipping/post')->isActive();
+    }
     public function setReceiverCustomerAddress($data) {
         $this->setReceiverAddress($data);
     }

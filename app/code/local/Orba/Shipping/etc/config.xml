@@ -130,7 +130,11 @@
       <zolagopp>
           <active>1</active>
           <gateway>https://en-testwebapi.poczta-polska.pl/websrv/en.wsdl</gateway>
+          <tracking_gateway>https://tt.poczta-polska.pl/Sledzenie/services/Sledzenie?wsdl</tracking_gateway>
+          <tracking_id>sledzeniepp</tracking_id>
+          <tracking_password>PPSA</tracking_password>
           <title>Poczta Polska</title>          
+          <model>orbashipping/post</model>
       </zolagopp>
     </carriers>
   </default>

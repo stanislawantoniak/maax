@@ -101,6 +101,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * labels to print
      */
     public function getLabels($tracking) {
+        throw new Exception('not implemented yet');
         if (empty($tracking)) {
             return false;
         }
@@ -127,6 +128,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * format results
      */
      public function processLabelsResult($method,$data) {
+         throw new Exception('not implemented yet');
          try {
              $xml = simplexml_load_string($data['data']);
          } catch (Exception $x) {
@@ -157,8 +159,10 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      
     /**
      * cancel package
+     * @tod
      */
      public function cancelPack($number) {
+         throw new Exception('not implemented yet');
          $data = array (	
              'email' => $this->getAuth('username'),
              'password' => $this->getAuth('password'),
@@ -169,22 +173,6 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
             $result = $this->_prepareResult($result);
          }
          return $result;
-     }
-     
-    /**
-     *  tracking
-     */
-     public function getPackStatus($number) {
-         $data = array( 
-             'packcode' => $number
-         );
-         $result = $this->_sendMessage('getpackstatus',$data);
-		 
-		 // uncomment for test perpouse; 
-		 //$status = Orba_Shipping_Helper_Packstation_Inpost::INPOST_STATUS_DELIVERED;
-		 //$result = "<paczkomaty><status>" . $status . "</status><statusDate>2016-04-09T15:57:03.692+02:00</statusDate></paczkomaty>";
-
-         return $this->_prepareResult($result);
      }
 }
 
