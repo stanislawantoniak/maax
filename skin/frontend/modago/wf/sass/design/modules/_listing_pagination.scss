@@ -34,8 +34,9 @@
 				height: 30px;
 				line-height: 29px;
 				&:hover {
-					border-color: $color_333333;
+					//border-color: $color_333333;
 					background-color: $color_505050;
+					color: $color_fff;
 				}
 				&.page-disabled {
 					opacity: .15;
