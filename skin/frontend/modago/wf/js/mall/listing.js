@@ -2419,10 +2419,16 @@ jQuery(document).ready(function () {
         jQuery(window).resize(function() {
 	        Mall.listing.updateFilters();
         });
-		Mall.listing.updateFilters();
+
     } else {
         Mall.listing.initShuffle();
     }
 
 	Mall.listing.positionBenefits();
+
+
+
+	if (jQuery('body.filter-sidebar').length) {
+		Mall.listing.updateFilters();
+	}
 });
