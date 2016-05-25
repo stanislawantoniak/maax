@@ -72,10 +72,12 @@
 	}
 
 	&:before {
-		//content: '';
 		display: block;
 		top: -15px;
 		left: 255px;
+		@include max-screen($screen-sm-max) {
+			left: 205px !important;
+		}
 		right: 0;
 		border: solid transparent;
 		content: " ";
