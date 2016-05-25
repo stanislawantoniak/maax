@@ -433,8 +433,9 @@ var Mall = {
     setProductsCountBadge : function(count) {
 	    var newClass = count > 9 ? 'badgeDouble' : (count > 99 ? 'badgeTriple' : 'badgeSingle');
 	    count = count == 0 ? "" : (count > 99 ? "99+" : count);
-	    var badge = jQuery("#link_basket>a>div>span.badge");
+	    var badge = jQuery("#link_basket>a>div>span.badge-number");
         console.log(count);
+        console.log(count.length);
         if(count.length > 0){
             badge.removeClass('badgeDouble badgeTriple badgeSingle').addClass(newClass).text(count);
         }
