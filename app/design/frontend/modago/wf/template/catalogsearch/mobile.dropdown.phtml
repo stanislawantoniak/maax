@@ -14,10 +14,10 @@ $_helper = Mage::helper('zolagosolrsearch');
             <div class="searchDropdown">
 
                 <form class="clearfix" role="search" action="<?php echo Mage::getUrl("search", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get">
-                    <div class="form-group">
+                    <div class="form-group input">
                         <input type="text" class="form-control" name="q" placeholder="<?php echo $_helper->__('Search...'); ?>">
                     </div>
-                    <div class="form-group styledSelected">
+                    <div class="form-group hidden styledSelected">
 						
                         <select name="scat" class="form-control  select-styled search-context">
                             <?php /* foreach($options['select_options'] as $opt) : ?>

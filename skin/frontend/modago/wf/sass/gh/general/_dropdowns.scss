@@ -74,11 +74,11 @@
 	&:before {
 		display: block;
 		top: -15px;
-		left: 255px;
+		right: 58px;
 		@include max-screen($screen-sm-max) {
 			left: 205px !important;
 		}
-		right: 0;
+
 		border: solid transparent;
 		content: " ";
 		height: 0;
@@ -102,13 +102,24 @@
 	}
 
 	.searchDropdown {
-		width: 320px;
+		width: 620px;
+		@include max-screen($screen-sm-max) {
+			width: 320px;
+		}
 		@include border-radius(0px);
 		top: 54px;
 		padding: 20px;
 		.form-group {
 			float: none;
-			width: 100% !important;
+			&.input {
+				width: 73%;
+			}
+			&.action {
+				width: 20%;
+			}
+			@include max-screen($screen-sm-max) {
+				width: 100% !important;
+			}
 			input[type="text"] {
 				height: 26px;
 				width: 100%  !important;
@@ -130,7 +141,12 @@
 		padding: 5px 10px;
 	}
 	.dropdown-panel {
-		width:320px;
+		width:600px;
+		max-width: 620px;
+		@include max-screen($screen-sm-max) {
+			width:320px;
+			max-width: 370px;
+		}
 	}
 }
 
