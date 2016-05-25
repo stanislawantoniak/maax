@@ -70,6 +70,35 @@
 	@include max-screen($screen-md) {
 		right:0 !important;
 	}
+
+	&:before {
+		//content: '';
+		display: block;
+		top: -15px;
+		left: 255px;
+		right: 0;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-color: rgba(136, 183, 213, 0);
+		border-bottom-color: #E6E6E6;
+		border-width: 7px 8px;
+		margin-left: -6px;
+	}
+
+	&:after {
+		content: "";
+		position: absolute;
+		top: -37px;
+		height: 37px;
+		width: 100%;
+		left: 10px;
+		display: block;
+	}
+
 	.searchDropdown {
 		width: 320px;
 		@include border-radius(0px);
@@ -119,6 +148,34 @@
 	}
 	@include max-screen($screen-sm-max) {
 		top:54px !important;
+	}
+
+	&:before {
+		//content: '';
+		display: block;
+		top: -15px;
+		left: auto;
+		right: 0;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-color: rgba(136, 183, 213, 0);
+		border-bottom-color: #E6E6E6;
+		border-width: 7px 8px;
+		margin-left: -6px;
+	}
+
+	&:after {
+		content: "";
+		position: absolute;
+		top: -37px;
+		height: 37px;
+		width: 100%;
+		left: 10px;
+		display: block;
 	}
 
 	a{
