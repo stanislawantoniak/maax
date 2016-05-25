@@ -2415,10 +2415,11 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
-		Mall.listing.updateFilters();
+
         jQuery(window).resize(function() {
 	        Mall.listing.updateFilters();
         });
+		Mall.listing.updateFilters();
     } else {
         Mall.listing.initShuffle();
     }
