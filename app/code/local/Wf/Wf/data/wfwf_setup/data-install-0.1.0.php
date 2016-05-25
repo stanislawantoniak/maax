@@ -12,10 +12,10 @@ $cms = array(
             <div class="wpb_wrapper">
                 <h2 class="footer-list-title">O Nas</h2>
                 <ul class="footer-list">
-                    <li><a href="/o-wojcik">O Nas</a></li>
-                    <li><a href="/">Współpraca B2B / Francyza</a></li>
-                    <li><a href="/">Znajdź sklep</a></li>
-                    <li><a href="/">Kontakt</a></li>
+                    <li><a href="{{store direct_url='' _no_vendor='1'}}">O Nas</a></li>
+                    <li><a href="{{store direct_url='' _no_vendor='1'}}">Współpraca B2B / Francyza</a></li>
+                    <li><a href="{{store direct_url='storesmap' _no_vendor='1'}}">Znajdź sklep</a></li>
+                    <li><a href="{{store direct_url='help/contact' _no_vendor='1'}}">Kontakt</a></li>
                 </ul>
             </div>
         </div>
@@ -27,10 +27,10 @@ $cms = array(
             <div class="wpb_wrapper">
                 <h2 class="footer-list-title">Zakupy</h2>
                 <ul class="footer-list">
-                    <li><a href="/">Dostawa i płatność</a></li>
-                    <li><a href="/">Czas realizacji zamówienia</a></li>
-                    <li><a href="/">Zwroty i reklamacje</a></li>
-                    <li><a href="/">Regulamin</a></li>
+                    <li><a href="{{store direct_url='' _no_vendor='1'}}">Dostawa i płatność</a></li>
+                    <li><a href="{{store direct_url='' _no_vendor='1'}}">Czas realizacji zamówienia</a></li>
+                    <li><a href="{{store direct_url='' _no_vendor='1'}}">Zwroty i reklamacje</a></li>
+                    <li><a href="{{store direct_url='' _no_vendor='1'}}">Regulamin</a></li>
                 </ul>
             </div>
         </div>
@@ -43,9 +43,9 @@ $cms = array(
             <div class="wpb_wrapper">
                 <h2 class="footer-list-title">Twoje Konto</h2>
                 <ul class="footer-list">
-                    <li><a href="/">Zaloguj się</a></li>
+                    <li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Zaloguj się</a></li>
                     <li><a href="/">Twoje zamówienia</a></li>
-                    <li><a href="/">Ulubione</a></li>
+                    <li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Ulubione</a></li>
                 </ul>
             </div>
         </div>
