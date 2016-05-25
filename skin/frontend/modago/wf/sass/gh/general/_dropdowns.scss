@@ -106,7 +106,7 @@
 
 #dropdown-basket  {  /* PANEL KOSZYKA */
 	padding:0px;
-	top:56px !important;
+	top:78px !important;
 	right:5px !important;
 	left:auto !important;
 	@include max-screen($screen-sm-max) {
@@ -114,6 +114,9 @@
 	}
 	@include max-screen($screen-sm) {
 		right:0px !important;
+	}
+	@include max-screen($screen-sm-max) {
+		top:54px !important;
 	}
 
 	a{
