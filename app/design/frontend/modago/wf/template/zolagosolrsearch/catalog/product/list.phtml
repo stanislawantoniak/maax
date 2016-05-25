@@ -79,7 +79,15 @@ $_products = $_cache['products'];
 																	class="img-responsive"/>
 															</figure>
 															<div class="name_product">
-																<?php echo $product[1]; ?>
+																<?php
+																// Make short name
+																$name = $product[1];
+																if (strlen($name) > 32) {
+																	$name = explode("\n", wordwrap($name, 33));
+																	$name = $name[0] . ' ...';
+																}
+																echo $name;
+																?>
 															</div>
 
 															<div class="price clearfix">
@@ -113,18 +121,6 @@ $_products = $_cache['products'];
 																}
 
 																?>
-																<div class="like <?php if ($product[6]): ?>liked<?php endif; ?>"
-																	 data-idproduct="<?php echo $product[0]; ?>">
-																<span class="like_count">
-																	<span>
-																		<?php echo $inMyWishlist; ?>
-																		<?php echo $plusSign; ?>
-																	</span>
-																	<?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
-																</span>
-																	<div class="icoLike"></div>
-																	<div class="toolLike"></div>
-																</div>
 															</div>
 														</a>
 													</div>
