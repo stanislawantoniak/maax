@@ -1202,7 +1202,7 @@ Mall.listing = {
 		} else {
 			var content = self.getContentBlock(),
 				containerOffset = jQuery('#sb-site').offset(),
-				leftOffset = content.offset().left + 15,
+				leftOffset = content.offset().left + 150,
                 topOffset = content.offset().top;
 
 			if(containerOffset.left != 0) {
@@ -1223,7 +1223,7 @@ Mall.listing = {
                 .addClass(self.getFiltersClassDesktop())
                 .css({
                 "left": leftOffset,
-                "top": (facetsHeight + topOffset + 15),
+                "top": (facetsHeight + topOffset + 150),
                     'height': ''
             });
             filters.find(".category_with_filters").remove();
