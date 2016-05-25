@@ -35,11 +35,13 @@
 					background-color: $color_505050;
 				}
 				&.page-disabled {
-					color: $color_c4c4c4;
-					border-color: $color_e8e8e8;
+					opacity: .15;
+					color: $color_ffffff;
+					background: $color_000000;
 					&:hover {
-						color: $color_c4c4c4;
-						border-color: $color_e8e8e8;
+						background: $color_000000;
+						color: $color_ffffff;
+						border-color: inherit;
 					}
 				}
 			}
