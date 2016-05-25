@@ -436,7 +436,9 @@ var Mall = {
 	    var badge = jQuery("#link_basket>a>div>span.badge-number");
         console.log(count);
         console.log(count.length);
-        badge.removeClass('badgeDouble badgeTriple badgeSingle').addClass(newClass).text(count);
+        if(count > 0){
+            badge.removeClass('badgeDouble badgeTriple badgeSingle').addClass(newClass).text(count);
+        }
     },
 
     setFavoritesCountBadge : function(count) {
