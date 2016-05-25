@@ -6,9 +6,9 @@
         display:inline-block;
         position:relative;
         cursor:pointer;
-        margin-left:12px;
-        margin-bottom:12px;
-        &:nth-child(3n+1) {
+        margin-left:7px;
+        margin-bottom:10px;
+        &:nth-child(5n+1) {
           margin-left: 0;
         }
         span {
