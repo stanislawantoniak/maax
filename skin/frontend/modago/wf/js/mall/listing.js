@@ -2415,6 +2415,7 @@ jQuery(document).ready(function () {
     });
     if (jQuery('body.filter-sidebar').length) {
         Mall.listing.init();
+		Mall.listing.updateFilters();
         jQuery(window).resize(function() {
 	        Mall.listing.updateFilters();
         });
