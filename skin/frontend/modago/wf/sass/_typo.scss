@@ -634,8 +634,8 @@ form {
 		&:active,
 		&:focus,
 		&.active {
-			background: $color_c6a662;
-			border-color:$color_c6a662;
+			//background: $color_c6a662;
+			//border-color:$color_c6a662;
 		}
 	}
 	&.black {
@@ -654,8 +654,8 @@ form {
 		}
 		&:active,
 		&:focus {
-			background:$color_c6a662;
-			border-color:$color_c6a662;
+			//background:$color_c6a662;
+			//border-color:$color_c6a662;
 			box-shadow: none;
 			outline:none;
 
