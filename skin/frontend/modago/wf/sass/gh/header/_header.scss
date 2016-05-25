@@ -201,7 +201,8 @@ body {
 	li {
 		padding: 0 0 0 0;
 		margin-left: 0;
-		width: 84px;
+		//width: 84px;
+		width: 40px;
 		height: 60px;
 		display: inline-block;
 		vertical-align: top;
@@ -209,7 +210,15 @@ body {
 
 		@include min-screen($screen-md-min) {
 			a:hover, &.open {
-				background-color: $colorIconHoverBgHeader;
+				//background-color: $colorIconHoverBgHeader;
+
+				color: #252525;
+				-webkit-transition: color 0.3s ease-in-out;
+				-moz-transition: color 0.3s ease-in-out;
+				-ms-transition: color 0.3s ease-in-out;
+				-o-transition: color 0.3s ease-in-out;
+				transition: color 0.3s ease-in-out;
+
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
 				}
@@ -232,9 +241,10 @@ body {
 		}
 
 		@include max-screen($screen-sm-max) {
-			width: 60px;
+			width: 40px;
+			//width: 60px;
 			&:hover, &#link_search.open {
-				background-color: $colorIconHoverBgHeader !important;
+				//background-color: $colorIconHoverBgHeader !important;
 				a svg {
 					path, g {
 						fill: $colorIconHover !important;
@@ -262,6 +272,14 @@ body {
 			@include min-screen($screen-md) {
 				padding-top: 10px !important;
 			}
+		}
+		a:hover {
+			color: #252525;
+			-webkit-transition: color 0.3s ease-in-out;
+			-moz-transition: color 0.3s ease-in-out;
+			-ms-transition: color 0.3s ease-in-out;
+			-o-transition: color 0.3s ease-in-out;
+			transition: color 0.3s ease-in-out;
 		}
 		&.no-badge {
 			a:link,
