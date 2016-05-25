@@ -29,15 +29,17 @@
 			a {
 				display: inline-block;
 				padding: 0 24px;
-				background-color: $color_ffffff;
+				background-color: $color_505050;
+				color: $color_ffffff;
 				border: 1px solid $color_afafaf;
 				text-align: center;
 				font-size: 25px;
-				color: $color_333333;
+
 				height: 30px;
 				line-height: 29px;
 				&:hover {
 					border-color: $color_333333;
+					background-color: $color_505050;
 				}
 				&.page-disabled {
 					color: $color_c4c4c4;
