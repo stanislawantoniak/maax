@@ -188,17 +188,25 @@ $colorAccentError:                      #CD0027;
 //buttons
 $colorBtnPrimary:                       #FFF;
 
-$colorBtnPrimaryBgStart:                #adadad;
-$colorBtnPrimaryBgEnd:                  #adadad;
+$colorBtnPrimaryBgStart:                #262626;
+$colorBtnPrimaryBgEnd:                  #262626;
 
-$colorBtnPrimaryBgStartHover:           #dc4348;
-$colorBtnPrimaryBgEndHover:             #dc4348;
+$colorBtnPrimaryBgStartHover:           #444;
+$colorBtnPrimaryBgEndHover:             #444;
 
 $colorBtnPrimaryBgStartActive:          #444;
 $colorBtnPrimaryBgEndActive:            #444;
 
 $colorBtnThirdBorderActive:             #444;
 $colorBtnThirdColorActive:              #444;
+
+
+$colorBtnSecondaryBgStart:                #adadad;
+$colorBtnSecondaryBgEnd:                  #adadad;
+$colorBtnSecondaryBgStartHover:           #dc4348;
+$colorBtnSecondaryBgEndHover:             #dc4348;
+$colorBtnSecondaryBgStartActive:          #dc4348;
+$colorBtnSecondaryBgEndActive:            #dc4348;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
@@ -213,6 +221,20 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 	&.disabled {
 		background: $colorBtnPrimaryBgDisabled;
 	}
+}
+
+
+@mixin secondaryButtonGradient { //covers normal + hover + active + .disabled
+  @include linearGradient($colorBtnSecondaryBgStart,$colorBtnSecondaryBgEnd);
+  &:hover,&.hover {
+    @include linearGradient($colorBtnSecondaryBgStartHover,$colorBtnSecondaryBgEndHover);
+  }
+  &:active,&:focus,&.active {
+    @include linearGradient($colorBtnSecondaryBgStartActive,$colorBtnSecondaryBgEndActive);
+  }
+  &.disabled {
+    background: $colorBtnPrimaryBgDisabled;
+  }
 }
 
 
