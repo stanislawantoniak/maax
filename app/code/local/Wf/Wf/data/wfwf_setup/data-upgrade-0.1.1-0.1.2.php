@@ -37,7 +37,12 @@ $blocksToCreate = array(
                 </li>
                 <li>
                     <a href="{{store direct_url='mypromotions' _no_vendor='1'}}">
-                        <img src="{{skin url='images/svg/promotions.svg' _no_protocol='1'}}" class="hamburger-ico ico-favourite">Twoje promocje
+                        <img src="{{skin url='images/svg/promotions.svg' _no_protocol='1'}}" class="hamburger-ico ico-favourite">Sale
+                    </a>
+                </li>
+                <li>
+                    <a href="{{store direct_url='storesmap' _no_vendor='1'}}">
+                        <img src="{{skin url='images/svg/map.svg' _no_protocol='1'}}" class="hamburger-ico ico-map-marker">Znajdź sklep
                     </a>
                 </li>
             </ul>
