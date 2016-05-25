@@ -120,15 +120,11 @@
 		border-radius: 0;
 
 		@include secondaryButtonGradient;
-		&:hover,
-		&.hover {
-			background: $color_515151;
-		}
-		&:active,
-		&:focus,
-		&.active {
-			//background: $color_c6a662;
-			//border-color:$color_c6a662;
+
+		&.medium {
+			padding: 5px 15px;
+			font-size: 14px;
+			font-weight: normal;
 		}
 	}
 	&.button-third {
