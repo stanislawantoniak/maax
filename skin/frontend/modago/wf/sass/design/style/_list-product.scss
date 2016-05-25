@@ -11,17 +11,18 @@
     .name_product {
         font-size: 12px;
         text-align: center;
+        text-transform:uppercase;
     }
     .price {
         color:$color_fd002a;
-        font-size: 20px;
+        font-size: 14px;
         font-family:$fontRegular;
         text-align: center;
         .old {
-	        display: block;
-            color:$color_000;
+            display: inline;
+            color:$colorFont;
             text-decoration:line-through;
-            font-size:15px;
+            font-size:14px;
         }
         .like {
             font-size:11px;
