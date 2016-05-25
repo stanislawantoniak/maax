@@ -7,6 +7,7 @@
 #dropdown-basket {
 	background: $colorBgDropdownCart;
 	color: $colorDropdownCart;
+	border: 1px solid $colorDropdownBorderCart;
 	/* PANEL KOSZYKA */
 	table {
 		width: 100%;
@@ -60,6 +61,7 @@
 #dropdown-search { /* PANEL WYSZUKIWANIA */
 	background: $colorBgDropdownSearch;
 	color: $colorDropdownSearch;
+	border: 1px solid $colorDropdownBorderSearch;
 	padding:0px;
 	top:78px !important;
 	@include max-screen($screen-sm-max) {
@@ -124,6 +126,7 @@
 		line-height: 19px;
 		font-size: 13px;
 		&.view_basket {
+			color: $colorHeaderSearchBtn;
 			position: absolute;
 			bottom: 35px;
 			right: 0;

@@ -159,15 +159,15 @@ $opacitySiteOverlay:                    .5;
 
 $colorShadow:                           #bbb;
 
-$colorFont:                             #000;
+$colorFont:                             #555;
 $colorLink:                             #000;
 $colorLinkHover:                        #dc4348;
 $colorLinkActive:                       #000;
 
 //icon colors
-$colorIcon:                             #000;
-$colorIconHover:                        #FFF;
-$colorIconHoverBackground:              #000;
+$colorIcon:                             #3d3d3d;
+$colorIconHover:                        #000;
+$colorIconHoverBackground:              #FFF;
 
 //icon texts colors
 $colorIconText:                         $colorIcon;
@@ -215,6 +215,9 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 	}
 }
 
+
+$colorDropdownBorder:                   #e6e6e6;
+
 /* CMS VARIABLES */
 $colorBorderCms:                        #bfbfbf;
 $colorBackgroundCms:                    $colorBackgroundBlocks;
@@ -237,7 +240,7 @@ $colorAccentBlocksHeader:               $colorAccentBlocks;
 
 $colorHeaderSearch:                     $colorFont;
 $colorHeaderSearchBg:                   $colorBgBlocksHeader;
-$colorHeaderSearchBorder:               $colorIconHeader;
+$colorHeaderSearchBorder:               #d5d5d5;
 $colorHeaderSearchBtnBg:                #000;
 $colorHeaderSearchBtn:                  #FFF;
 
@@ -261,6 +264,8 @@ $colorAccentDropdown:                   $colorAccentBlocks;
 /* CART DROPDOWN VARIABLES */
 $colorBgDropdownCart:                   $colorBgDropdown;
 $colorDropdownCart:                     $colorDropdown;
+$colorDropdownBorderCart:               $colorDropdownBorder;
+$colorDropdownBorderSearch:             $colorDropdownBorder;
 $colorAccentDropdownCart:               $colorAccentDropdown;
 
 /* SEARCH DROPDOWN VARIABLES */
