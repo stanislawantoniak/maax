@@ -30,7 +30,10 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
                     </li>
                     <li id="link_favorites" class="hidden-md hidden-lg">
                         <a href="<?php echo $favoritesUrl; ?>">
-                            <i class="fa fa-heart"></i>
+                            <div class="badgeHolder">
+                                <span class="badge badgeSingle"></span>
+                                <i class="fa fa-heart"></i>
+                            </div>
                         </a>
                     </li>
                     <li id="link_basket" class="basket-dropdown shopping-cart-widget" style="position:relative;">
