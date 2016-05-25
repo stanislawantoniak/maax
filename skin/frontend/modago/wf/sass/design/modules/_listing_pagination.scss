@@ -1,4 +1,4 @@
-#sort-criteria {
+.pagination-top {
 	.pagination-line {
 		.listing-pagination {
 			float: right;
@@ -27,24 +27,20 @@
 		}
 		.pages {
 			a {
-				display: inline-block;
-				padding: 0 24px;
-				background-color: $color_ffffff;
-				border: 1px solid $color_afafaf;
-				text-align: center;
-				font-size: 25px;
-				color: $color_333333;
-				height: 30px;
-				line-height: 29px;
+				border: none;
+				background-color: $color_505050;
+				color: $color_ffffff;
 				&:hover {
-					border-color: $color_333333;
+					background-color: $color_505050;
 				}
 				&.page-disabled {
-					color: $color_c4c4c4;
-					border-color: $color_e8e8e8;
+					opacity: .15;
+					color: $color_ffffff;
+					background: $color_000000;
 					&:hover {
-						color: $color_c4c4c4;
-						border-color: $color_e8e8e8;
+						background: $color_000000;
+						color: $color_ffffff;
+						border-color: inherit;
 					}
 				}
 			}
@@ -59,31 +55,6 @@
 		.totals {
 			margin-right: 10px;
 		}
-		.pages {
-			a {
-				border: none;
-				background-color: $color_505050;
-				color: $color_ffffff;
-				&:hover {
-					//background: $color_b08944;
-					/* Old browsers */
-					/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-					background-color: $color_505050;
-					/* W3C */
-					filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color_b08944', endColorstr='$color_705e29',GradientType=1 );
-					/* IE6-8 fallback on horizontal gradient */
-				}
-				&.page-disabled {
-					opacity: .15;
-					color: $color_ffffff;
-					background: $color_000000;
-					&:hover {
-						background: $color_000000;
-						color: $color_ffffff;
-						border-color: inherit;
-					}
-				}
-			}
-		}
+
 	}
 }
