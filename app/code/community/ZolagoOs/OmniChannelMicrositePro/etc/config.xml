@@ -228,12 +228,12 @@
                    <file>udmspro_welcome.html</file>
                </udropship_microsite_welcome_template>
                <udropship_microsite_confirmation_template module="umicrosite">
-                   <label>Dropship Vendor Confirmation Email</label>
+                   <label>ZolagoOs Vendor Confirmation Email</label>
                    <file>udmspro_confirmation.html</file>
                    <type>html</type>
                </udropship_microsite_confirmation_template>
                 <udropship_microsite_reject_template module="umicrosite">
-                    <label>Dropship Vendor Reject Email</label>
+                    <label>ZolagoOs Vendor Reject Email</label>
                     <file>udmspro_reject.html</file>
                     <type>html</type>
                 </udropship_microsite_reject_template>
