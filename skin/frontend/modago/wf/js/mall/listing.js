@@ -1223,7 +1223,7 @@ Mall.listing = {
                 .addClass(self.getFiltersClassDesktop())
                 .css({
                 "left": leftOffset,
-                "top": (facetsHeight + topOffset + 15),
+                "top": (facetsHeight + topOffset + 150),
                     'height': ''
             });
             filters.find(".category_with_filters").remove();
