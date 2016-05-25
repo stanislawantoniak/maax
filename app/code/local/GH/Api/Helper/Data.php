@@ -66,10 +66,10 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	/**
 	 * @param $data
-	 * @param $vendorId
+	 * @param $externalId
 	 * @return array
 	 */
-	public function preparePriceBatch($data, $vendorId)
+	public function preparePriceBatch($data, $externalId)
 	{
 		$data = json_decode(json_encode($data), true);
 		$batch = array();
@@ -83,7 +83,7 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		
 		foreach ($data["product"] as $product) {
-			$sku = $vendorId . "-" . $product['sku'];
+			$sku = $externalId . "-" . $product['sku'];
 
 			foreach ($product['pricesTypesList'] as $type) {
 				if (isset($type['priceType'])){
@@ -101,10 +101,10 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	/**
 	 * @param $data
-	 * @param $vendorId
+	 * @param $externalId
 	 * @return array
 	 */
-	public function prepareStockBatch($data, $vendorId)
+	public function prepareStockBatch($data, $externalId)
 	{
 		$data = json_decode(json_encode($data), true);
 		$batch = array();
@@ -118,33 +118,32 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 
 		foreach ($data["product"] as $product) {
-			$sku = $vendorId . "-" . $product['sku'];
+			$sku = $externalId . "-" . $product['sku'];
 
 			foreach ($product['posesList'] as $pos) {
 				if (isset($pos['id'])){
 					$pos = array($pos);
 				}
 				foreach ($pos as $item) {
-					$batch[$vendorId][$sku][$item['id']] = $item['qty'];
+					$batch[$externalId][$sku][$item['id']] = $item['qty'];
 				}
 			}
 		}
 
 		return $batch;
 	}
+
 	/**
-	 * Validate skus for vendor
-	 *
-	 * Throw exception if
+	 * Retrieve not valid skus
+	 * Not valid if:
 	 * product is not connected to vendor
 	 * product don't exist
 	 *
 	 * @param $data
 	 * @param $vendorId
-	 * @return bool
-	 * @throws Mage_Core_Exception
+	 * @return array
 	 */
-	public function validateSkus($data, $vendorId) {
+	public function getNotValidSkus($data, $vendorId) {
 		$inputSkus = array();
 		foreach ($data as $sku => $item) {
 			$inputSkus[$sku] = $sku;
@@ -174,77 +173,90 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
 		$allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
 		// get skuv from sku
 		foreach ($allErrorsSkus as $key => $sku) {
-			$allErrorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
-			$allErrorsSkus = array_unique($allErrorsSkus);
+			$allErrorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId)."[not existing]";
 		}
-		if (!empty($allErrorsSkus)) {
-			Mage::throwException('error_invalid_update_products_sku' . ' (' . implode(',', $allErrorsSkus) . ')');
-		}
-
-		return true;
+		$allErrorsSkus = array_unique($allErrorsSkus);
+		return $allErrorsSkus;
 	}
 
 	public function getSkuvFromSku($sku, $vendorId) {
 		return preg_replace('/' . preg_quote($vendorId . '-', '/') . '/', '', $sku, 1);
 	}
 
-	public function validatePrices($data, $vendorId) {
+	/**
+	 * Retrieve not valid skus by price
+	 * Not valid if:
+	 * price is less equal 0
+	 *
+	 * @param $data
+	 * @param $externalId
+	 * @return array
+	 */
+	public function getNotValidSkusByPrices($data, $externalId) {
 		$errorsSkus = array();
 		foreach ($data as $sku => $item) {
 			foreach ($item as $type => $price) {
 				if ($price <= 0) {
-					$errorsSkus[] = $sku;
+					$errorsSkus[$sku] = $sku;
 				}
 			}
 		}
 		foreach ($errorsSkus as $key => $sku) {
-			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
-			$errorsSkus = array_unique($errorsSkus);
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $externalId) . "[invalid price]";
 		}
-		if (!empty($errorsSkus)) {
-			Mage::throwException("error_invalid_update_products_price (". implode(',', $errorsSkus) . ')');
-		}
-		return true;
+		$errorsSkus = array_unique($errorsSkus);
+		return $errorsSkus;
 	}
 
-	public function validateQtys($data, $vendorId) {
+	/**
+	 * Retrieve not valid skus by Qtys
+	 * Not valid if:
+	 * qty is not numeric
+	 * 
+	 * @param $data
+	 * @param $externalId
+	 * @return array
+	 */
+	public function getNotValidSkusByQtys($data, $externalId) {
 		$errorsSkus = array();
 		foreach ($data as $sku => $pos) {
 			foreach ($pos as $id => $qty) {
 				if (!is_numeric($qty)) {
-					$errorsSkus[] = $sku;
+					$errorsSkus[$sku] = $sku;
 				}
 			}
 		}
 		foreach ($errorsSkus as $key => $sku) {
-			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
-			$errorsSkus = array_unique($errorsSkus);
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $externalId) . "[invalid quantity]";
 		}
-		if (!empty($errorsSkus)) {
-			Mage::throwException("error_invalid_update_products_qty (". implode(',', $errorsSkus) . ')');
-		}
-		return true;
+		$errorsSkus = array_unique($errorsSkus);
+		return $errorsSkus;
 	}
 
-	public function validatePoses($data, $vendorId) {
+	/**
+	 * Retrieve not valid skus by POSes
+	 *
+	 * @param $data
+	 * @param $externalId
+	 * @param $vendorId
+	 * @return array
+	 */
+	public function getNotValidSkusByPoses($data, $externalId, $vendorId) {
 		/** @var Zolago_Pos_Helper_Data $helper */
 		$helper = Mage::helper('zolagopos');
 		$errorsSkus = array();
 		foreach ($data as $sku => $pos) {
 			foreach ($pos as $id => $qty) {
 				if (!$helper->isValidForVendor($id, $vendorId)) {
-					$errorsSkus[] = $sku . "[POS:{$id}]";
+					$errorsSkus[$sku] = $sku;
 				}
 			}
 		}
 		foreach ($errorsSkus as $key => $sku) {
-			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $vendorId);
-			$errorsSkus = array_unique($errorsSkus);
+			$errorsSkus[$key] = $this->getSkuvFromSku($sku, $externalId) . "[invalid POS]";
 		}
-		if (!empty($errorsSkus)) {
-			Mage::throwException("error_invalid_update_products_pos_id (". implode(',', $errorsSkus) . ')');
-		}
-		return true;
+		$errorsSkus = array_unique($errorsSkus);
+		return $errorsSkus;
 	}
 	
     /**
