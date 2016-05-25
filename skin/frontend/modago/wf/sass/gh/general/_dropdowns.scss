@@ -61,7 +61,10 @@
 	background: $colorBgDropdownSearch;
 	color: $colorDropdownSearch;
 	padding:0px;
-	top:56px !important;
+	top:78px !important;
+	@include max-screen($screen-sm-max) {
+		top:54px !important;
+	}
 	@include max-screen($screen-md) {
 		right:0 !important;
 	}
