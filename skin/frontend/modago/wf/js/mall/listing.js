@@ -1203,7 +1203,7 @@ Mall.listing = {
 			var content = self.getContentBlock(),
 				containerOffset = jQuery('#sb-site').offset(),
 				leftOffset = content.offset().left + 15,
-                topOffset = content.offset().top+50;
+                topOffset = content.offset().top+72;
 
 			if(containerOffset.left != 0) {
 				leftOffset = leftOffset - containerOffset.left;
