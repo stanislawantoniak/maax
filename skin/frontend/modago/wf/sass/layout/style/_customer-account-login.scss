@@ -176,7 +176,7 @@
 			border: 1px solid $colorDropdownBorder;
 		}
 		.col-02 {
-			border-top: none;
+			border: none;
 			@media (max-width: $screen-xs-max) {
 				padding-bottom: 83px !important;
 				margin-bottom: 5px;
