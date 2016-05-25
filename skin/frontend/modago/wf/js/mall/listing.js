@@ -2419,7 +2419,6 @@ jQuery(document).ready(function () {
         jQuery(window).resize(function() {
 	        Mall.listing.updateFilters();
         });
-		jQuery(window).resize();
     } else {
         Mall.listing.initShuffle();
     }
