@@ -60,25 +60,5 @@
 		.totals {
 			margin-right: 10px;
 		}
-		.pages {
-			a {
-				border: none;
-				background-color: $color_505050;
-				color: $color_ffffff;
-				&:hover {
-					background-color: $color_505050;
-				}
-				&.page-disabled {
-					opacity: .15;
-					color: $color_ffffff;
-					background: $color_000000;
-					&:hover {
-						background: $color_000000;
-						color: $color_ffffff;
-						border-color: inherit;
-					}
-				}
-			}
-		}
 	}
 }
