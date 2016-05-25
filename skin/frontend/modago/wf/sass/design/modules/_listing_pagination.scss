@@ -1,3 +1,10 @@
+.pagination-top {
+	.pagination-line {
+		.listing-pagination {
+			float: right;
+		}
+	}
+}
 .pagination-line {
 	* {
 		list-style: none !important;
@@ -20,6 +27,42 @@
 		}
 		.pages {
 			a {
+				display: inline-block;
+				padding: 0 24px;
+				background-color: $color_505050;
+				color: $color_ffffff;
+				border: 1px solid $color_afafaf;
+				text-align: center;
+				font-size: 25px;
+
+				height: 30px;
+				line-height: 29px;
+				&:hover {
+					border-color: $color_333333;
+					background-color: $color_505050;
+				}
+				&.page-disabled {
+					color: $color_c4c4c4;
+					border-color: $color_e8e8e8;
+					&:hover {
+						color: $color_c4c4c4;
+						border-color: $color_e8e8e8;
+					}
+				}
+			}
+		}
+	}
+	&.pagination-bottom {
+		text-align: center;
+		margin-top: 35px !important;
+		.totals,.pages {
+			display: inline-block !important;
+		}
+		.totals {
+			margin-right: 10px;
+		}
+		.pages {
+			a {
 				border: none;
 				background-color: $color_505050;
 				color: $color_ffffff;
@@ -36,24 +79,6 @@
 						border-color: inherit;
 					}
 				}
-			}
-		}
-	}
-	&.pagination-bottom {
-		text-align: center;
-		margin-top: 35px !important;
-		.totals,.pages {
-			display: inline-block !important;
-		}
-		.totals {
-			margin-right: 10px;
-		}
-
-	}
-	&.pagination-top {
-		.pagination-line {
-			.listing-pagination {
-				float: right;
 			}
 		}
 	}
