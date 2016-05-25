@@ -179,7 +179,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	protected function _prepareListingResizedImageUrl($url) {
-		Mage::log($url, null, "1234.log");
 		return str_replace(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)."catalog/product/cache/","",$url);
 	}
 
@@ -403,6 +402,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		$currentCategory = $this->getCurrentCategory();
 
+
+		$store = Mage::app()->getStore();
+		$storeId = $store->getId();
+		$useCategoryContext = Mage::getStoreConfig('solrbridge/search_context/use_category_context', $storeId);
+
 		// Setup varnish context
 		if(!$currentCategory && isset($contextData['category_id'])){
 			$categoryCandidate = Mage::getModel("catalog/category")->
@@ -463,23 +467,27 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 					);
 				}
 			}
-			
-			if ($currentCategory) {
-				$rootCategory = Mage::app()->getStore()->getRootCategoryId();
-				if ($rootCategory != $currentCategory->getId()) {
 
-					$array['select_options'][] = array(
-						'text' => $this->__('This category'),
-						'value' => $currentCategory->getId(),
-						'selected' => true
-					);
 
-					$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";
+			if($useCategoryContext){
+				if ($currentCategory) {
+					$rootCategory = Mage::app()->getStore()->getRootCategoryId();
+					if ($rootCategory != $currentCategory->getId()) {
 
-					// Make "Everywhere" unselected
-					$array['select_options'][0]['selected'] = false;
+						$array['select_options'][] = array(
+							'text' => $this->__('This category'),
+							'value' => $currentCategory->getId(),
+							'selected' => true
+						);
+
+						$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";
+
+						// Make "Everywhere" unselected
+						$array['select_options'][0]['selected'] = false;
+					}
 				}
 			}
+
 		}
 		return $array;
 	}

@@ -39,7 +39,10 @@
 		margin:0px;
 		margin-top: 13px;
 		padding: 0;
-		width: 282px;
+		width: 600px;
+		@include max-screen($screen-sm-max) {
+			width: 282px;
+		}
 		.form-group {
 			float: left;
 			width:119px ;

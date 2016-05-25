@@ -1397,8 +1397,9 @@ function initToggleSearch() {
 
 
         var contentOffset = jQuery("section#main #content").offset().left;
+
         if(jQuery(window).width() >= 1206){
-            contentOffset = contentOffset+ 236;
+            contentOffset = contentOffset+470+toggle.width();
         }
 
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
@@ -1427,7 +1428,7 @@ function positionToggleSearch() {
 	var toggle = jQuery("#toggleSearch");
     var contentOffset = jQuery("section#main #content").offset().left;
     if(jQuery(window).width() >= 1206){
-        contentOffset = contentOffset+ 236;
+        contentOffset = contentOffset+470+toggle.width();
     }
 	if (dropdown.is(":visible")) {
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
