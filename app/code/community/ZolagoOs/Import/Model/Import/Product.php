@@ -11,6 +11,68 @@ require_once(MAGENTO_ROOT . DS . "magmi/integration/inc/magmi_datapump.php");
 class ZolagoOs_Import_Model_Import_Product
     extends ZolagoOs_Import_Model_Import
 {
+    protected $_simpleSkus = [];
+    protected $_configurableSkus = [];
+    protected $_vendor;
+
+    const MAGMI_IMPORT_PROFILE = "wojcik";
+
+    public function __construct()
+    {
+        $this->_vendor = $this->getExternalId();
+    }
+
+    /**
+     * @return array
+     */
+    public function getVendorId()
+    {
+        return $this->_vendor;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductSkus()
+    {
+        return array_merge($this->_simpleSkus, $this->_configurableSkus);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getSimpleSkus()
+    {
+        return $this->_simpleSkus;
+    }
+
+    /**
+     * @param mixed $simpleSkus
+     */
+    public function setSimpleSkus($simpleSkus)
+    {
+        $this->_simpleSkus = array_merge($this->_simpleSkus, array($simpleSkus));
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getConfigurableSkus()
+    {
+        return $this->_configurableSkus;
+    }
+
+    /**
+     * @param mixed $configurableSkus
+     */
+    public function setConfigurableSkus($configurableSkus)
+    {
+        $this->_configurableSkus = array_merge($this->_configurableSkus, array($configurableSkus));
+    }
+
+
     public function runImport()
     {
         $this->_import();
@@ -20,7 +82,7 @@ class ZolagoOs_Import_Model_Import_Product
     protected function _import()
     {
 
-        $vendorId = $this->getExternalId();
+        $vendorId = $this->getVendorId();
         if (empty($vendorId)) {
             $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
             return $this;
@@ -28,7 +90,7 @@ class ZolagoOs_Import_Model_Import_Product
 
         //1. Read file
         $fileName = $this->_getPath();
-        $this->log("READING FILE {$fileName}");
+        //$this->log("READING FILE {$fileName}");
         if (empty($fileName)) {
             $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
             return $this;
@@ -52,9 +114,16 @@ class ZolagoOs_Import_Model_Import_Product
 
             //Collect sku
             $skuBatch = array();
-            foreach ($xmlToArray["item"] as $productXML) {
+            if (is_array($xmlToArray["item"])) {
+                foreach ($xmlToArray["item"] as $productXML) {
+                    $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
+                }
+            }
+            if (is_object($xmlToArray["item"])) {
+                $productXML = $xmlToArray["item"];
                 $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
             }
+
 
             if (empty($skuBatch)) {
                 $this->log("No Data For Import", Zend_Log::ALERT);
@@ -73,38 +142,114 @@ class ZolagoOs_Import_Model_Import_Product
             // "update" updates only,
             // "xcreate creates only.
             // Important: for values other than "default" profile has to be an existing magmi profile
-            $importProfile = "wojcik";
+            $skusCreated = [];
+            $importProfile = self::MAGMI_IMPORT_PROFILE;
             $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
-
-            $skusUpdated = array();
             foreach ($skuBatch as $configurableSkuv => $simples) {
                 $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
-                $skusUpdated = array_merge($skusUpdated, $u);
+                $skusCreated = array_merge($u, $skusCreated);
             }
-
             /* end import session, will run post import plugins */
             $dp->endImportSession();
 
 
+            //Start update configurable with children session
+            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $this->updateRelations($dp,$skusCreated);
+            $dp->endImportSession();
+
+
             //3. Set additional attributes
+            $this->updateAdditionalAttributes();
 
-            //Update udropship_vendor
-            // MAGMI: warning:Potential assignment problem, specific model found for select attribute => udropship_vendor(udropship/vendor_source)
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
 
-            /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-            $collection = Mage::getResourceModel('zolagocatalog/product_collection');
-            $collection->addFieldToFilter("sku", array("in" => $skusUpdated));
-            $ids = $collection->getAllIds();
+    public function updateAdditionalAttributes()
+    {
+        $vendorId = $this->_vendor;
+        $skusUpdated = $this->getProductSkus();
+        $skusConfigurableUpdated = $this->getConfigurableSkus();
+        //Update udropship_vendor
+        // MAGMI: warning:Potential assignment problem, specific model
+        // found for select attribute => udropship_vendor(udropship/vendor_source)
 
-            /* @var $aM Zolago_Catalog_Model_Product_Action */
-            $aM = Mage::getSingleton('catalog/product_action');
+        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+        $collection->addFieldToFilter("sku", array("in" => $skusUpdated));
+        $ids = $collection->getAllIds();
 
-            //3a. Set additional attributes (udropship_vendor for all products)
-            $aM->updateAttributesPure($ids, array('udropship_vendor' => $vendorId), 0);
+        $collection2 = Mage::getResourceModel('zolagocatalog/product_collection');
+        $collection2->addFieldToFilter("sku", array("in" => $skusConfigurableUpdated));
+        $idsConfigurable = $collection2->getAllIds();
 
-            //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
-            $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
 
+        //3a. Set additional attributes (udropship_vendor for all products)
+        $aM->updateAttributesPure($ids, array('udropship_vendor' => $vendorId), 0);
+
+        //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
+        $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
+
+        //3c. Set additional attributes (status brandshop for configurable products)
+        $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
+    }
+
+    public function updateRelations($dp,$skusCreated)
+    {
+        $configurableSkus = array_keys($skusCreated);
+
+        $productResource = Mage::getResourceModel("zolagocatalog/product");
+
+        $readConnection = $productResource->getReadConnection();
+        $catalogProductSuperLink = $readConnection->getTableName('catalog_product_super_link');
+        $catalogProductEntity = $readConnection->getTableName('catalog_product_entity');
+        $select = $readConnection->select();
+        $select->from(
+            array("catalog_product_super_link" => $catalogProductSuperLink),
+            array(
+                "parent_id" => "parent_id",
+                "child_id"      => "product_id",
+            )
+        );
+        $select->join(
+            array("e_parent" => $catalogProductEntity),
+            "e_parent.entity_id=catalog_product_super_link.parent_id",
+            array("parent_sku"       => "e_parent.sku")
+        );
+        $select->join(
+            array("e_child" => $catalogProductEntity),
+            "e_child.entity_id=catalog_product_super_link.product_id",
+            array("child_sku" 	  => "e_child.sku")
+        );
+        $select->where("e_parent.sku IN(?)", $configurableSkus);
+
+        try {
+            $assoc = $readConnection->fetchAll($select);
+            if(empty($assoc))
+                return;
+            $children = [];
+            foreach($assoc as $assocItem){
+                $children[$assocItem["parent_sku"]][] = $assocItem["child_sku"];
+            }
+
+            foreach ($skusCreated as $skuConfigurable => $skusSimple) {
+                if(isset($children[$skuConfigurable])){
+                    $skusSimple = array_merge($skusSimple, $children[$skuConfigurable]);
+                }
+                $dp->ingest(
+                    array(
+                        "sku" => $skuConfigurable,
+                        "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+                        "configurable_attributes" => "size",
+                        "simples_skus" => implode(",", $skusSimple),
+                        "options_container" => array()
+                    )
+                );
+            }
         } catch (Exception $e) {
             Mage::logException($e);
         }
@@ -124,7 +269,7 @@ class ZolagoOs_Import_Model_Import_Product
         $attributeSet = "Default";
 
         $skusUpdated = [];
-        $subskus = array();
+        $subskus = [];
         foreach ($simples as $simpleXMLData) {
             $simpleSkuV = (string)$simpleXMLData->sku;
             $simpleSku = $vendorId . "-" . $simpleSkuV;
@@ -137,7 +282,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
                 "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
                 "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
-                "tax_class_id" => 0,
+                "tax_class_id" => 2,
                 "attribute_set" => $attributeSet,
                 "store" => "admin",
                 "description" => $simpleXMLData->clothes_description,
@@ -152,9 +297,10 @@ class ZolagoOs_Import_Model_Import_Product
             );
             // Now ingest item into magento
             $dp->ingest($product);
-            $skusUpdated[] = $simpleSku;
+            $this->setSimpleSkus($simpleSku);
         }
-        $this->log($skusUpdated);
+
+
         //Create configurable
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
@@ -166,7 +312,7 @@ class ZolagoOs_Import_Model_Import_Product
             "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
             "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
             "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-            "tax_class_id" => 0,
+            "tax_class_id" => 2,
             "attribute_set" => $attributeSet,
             "store" => "admin",
             "configurable_attributes" => "size",
@@ -201,7 +347,8 @@ class ZolagoOs_Import_Model_Import_Product
 
         // Now ingest item into magento
         $dp->ingest($productConfigurable);
-        $skusUpdated[] = $configurableSku;
+        $skusUpdated[$configurableSku] = $subskus;
+        $this->setConfigurableSkus($configurableSku);
 
         return $skusUpdated;
     }
