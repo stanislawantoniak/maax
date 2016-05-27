@@ -734,7 +734,7 @@ function searchOnMap(q, markerToShow) {
 function _makeMapRequest(q, markerToShow) {
 
     jQuery.ajax({
-        url: "/modago/inpost/getPopulateMapData",
+        url: "/wf/inpost/getPopulateMapData",
         type: "POST",
         data: {town: q},
         success: function (response) {
