@@ -92,8 +92,26 @@
         padding-left:16px;
         #slider-range {
           margin-top:10px;
+			border-radius: 0;
         }
 
+		  .ui-state-default,
+		  .ui-widget-content
+		  .ui-state-default,
+		  .ui-widget-header
+		  .ui-state-default {
+			  border: 1px solid #000;
+			  background: #000;
+			  font-weight: normal;
+			  color:  #000;
+			  border-radius: 0;
+			  &:focus {
+				  outline: none;
+			  }
+		  }
+		  .ui-widget-header {
+			  background: #000;
+		  }
         .form-horizontal {
           width:40px;
           float:left;
