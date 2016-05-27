@@ -597,9 +597,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 						init($model, 'image')->
 						keepAspectRatio(true)->
 						constrainOnly(true)->
-						keepFrame(false)->
-						resize(300, null);
-				Mage::log($model->getData(),null,"prepareAjaxProducts.log");
+						keepFrame(true)->
+						resize(400, 400);
 			} catch (Exception $ex) {
 				Mage::logException($ex);
 			}
