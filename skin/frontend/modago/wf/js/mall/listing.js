@@ -126,14 +126,15 @@ Mall.listing = {
 
     initShuffle: function() {
         jQuery(document).ready(function() {
-            jQuery('#grid')
-                .on('layout.shuffle', function() {
+            //jQuery('#grid')
+            //    .on('layout.shuffle', function() {
                     Mall.listing.hideListingOverlay();
                     Mall.listing.likePriceView();
 		            Mall.listing.placeListingFadeContainer();
 		            Mall.Footer.setContainerPadding();
-                })
-                .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+                //})
+                //.shuffle({throttleTime: 800, speed: 0, easing: 'linear' })
+			;
 	        jQuery(window).resize();
         });
     },
@@ -359,7 +360,7 @@ Mall.listing = {
 		});
 
         grid.append(eachItemsHtml);
-        grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
+        //grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
 
 		// attach events
 		this.preprocessProducts();
