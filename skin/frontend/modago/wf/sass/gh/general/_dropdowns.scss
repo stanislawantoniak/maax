@@ -63,7 +63,7 @@
 	color: $colorDropdownSearch;
 	border: 1px solid $colorDropdownBorderSearch;
 	padding:0px;
-	top:78px !important;
+	top:92px !important;
 	@include max-screen($screen-sm-max) {
 		top:54px !important;
 	}
@@ -112,10 +112,10 @@
 		.form-group {
 			float: none;
 			&.input {
-				width: 73%;
+				width: 80%;
 			}
 			&.action {
-				width: 20%;
+				width: 13%;
 			}
 			@include max-screen($screen-sm-max) {
 				width: 100% !important;
@@ -155,7 +155,7 @@
 
 #dropdown-basket  {  /* PANEL KOSZYKA */
 	padding:0px;
-	top:78px !important;
+	top:92px !important;
 	right:5px !important;
 	left:auto !important;
 	@include max-screen($screen-sm-max) {
