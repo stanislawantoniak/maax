@@ -409,11 +409,11 @@ Mall.listing = {
                     "<div class='col-price'>" + oldPrice +
                         "<span>" + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
                     "</div>"+
-                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"'>"+
-                        "<span class='like_count'>" + likeText + "</span>"+
-                        "<span class='icoLike'></span>"+
-                        "<div class='toolLike'></div>"+
-                    "</div>"+
+                    //"<div class='"+likeClass+"' data-idproduct='"+product[0]+"'>"+
+                    //    "<span class='like_count'>" + likeText + "</span>"+
+                    //    "<span class='icoLike'></span>"+
+                    //    "<div class='toolLike'></div>"+
+                    //"</div>"+
                 "</div>"+
             "</div>"+
         "</div>";
