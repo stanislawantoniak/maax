@@ -84,6 +84,9 @@
 			<action method="unsetChild">
 				<alias>zolago_modago_home_sliderlastseen</alias>
 			</action>
+			<action method="unsetChild">
+				<alias>zolagosolrsearch_search_view</alias>
+			</action>
 			<block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
 				<!--<block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">-->
 					<!--<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>-->
