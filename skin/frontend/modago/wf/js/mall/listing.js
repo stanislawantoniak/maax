@@ -1204,7 +1204,7 @@ Mall.listing = {
 				containerOffset = jQuery('#sb-site').offset(),
 				leftOffset = content.offset().left + 15,
                 topOffset = content.offset().top;
-console.log(topOffset);
+
 			if(containerOffset.left != 0) {
 				leftOffset = leftOffset - containerOffset.left;
 			}
@@ -2419,6 +2419,7 @@ jQuery(document).ready(function () {
         jQuery(window).resize(function() {
 	        Mall.listing.updateFilters();
         });
+		jQuery("#items-product").imagesLoaded(function () {Mall.listing.updateFilters();});
     } else {
         Mall.listing.initShuffle();
     }

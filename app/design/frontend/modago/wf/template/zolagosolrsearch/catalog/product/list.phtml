@@ -40,94 +40,93 @@ $_products = $_cache['products'];
 				<div class="listing-overlay" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 999; background: #F2F1F0;"></div>
 				<div id="content-main">
 					<?php echo $this->getChildHtml('solrsearch_result_title'); ?>
+					<?php echo $this->getChildHtml('solrsearch_product_list_header_search'); ?>
 					<?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
+
 					<div class="container-fluid" id="items-product">
 						<div class="row">
 							<div class="col-xs-12 col-sm-12">
 								<div class="row">
 									<div id="grid" class="shuffle--container shuffle--fluid">
 										<!-- START LIST PRODUCT -->
-										<?php //for ($i=0; $i<=4; $i++): ?>
-											<?php foreach ($_products as $product): ?>
-												<?php
-												/**
-												 * product[0] = id
-												 * product[1] = name
-												 * product[2] = url
-												 * product[3] = price
-												 * product[4] = final_price
-												 * product[5] = wishlist_count
-												 * product[6] = in_my_wishlist
-												 * product[7] = image_url
-												 * product[8] = image_ratio
-												 * product[9] = manufacturer_logo_url
-												 * product[10]= sku
-												 * product[11]= skuv
-												 */
-												?>
+										<?php foreach ($_products as $product): ?>
+											<?php
+											/**
+											 * product[0] = id
+											 * product[1] = name
+											 * product[2] = url
+											 * product[3] = price
+											 * product[4] = final_price
+											 * product[5] = wishlist_count
+											 * product[6] = in_my_wishlist
+											 * product[7] = image_url
+											 * product[8] = image_ratio
+											 * product[9] = manufacturer_logo_url
+											 * product[10]= sku
+											 * product[11]= skuv
+											 */
+											?>
 
-												<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-4 col-sm-4 col-md-4 col-lg-4 size14">
-													<div class="box_listing_product">
-														<a href="<?php echo $product[2]; ?>"
-														   data-entity="<?php echo $product[0]; ?>"
-														   data-sku="<?php echo $product[10]; ?>"
-														   data-skuv="<?php echo $product[11]; ?>">
-															<figure class="img_product" style="padding-bottom: <?php echo $product[8]; ?>%">
-																<img
-																	src="<?php echo $imgUrl . $product[7]; ?>"
-																	alt="<?php echo $product[1]; ?>"
-																	class="img-responsive"/>
-															</figure>
-															<div class="name_product">
-																<?php
-																// Make short name
-																$name = $product[1];
-																if (strlen($name) > 32) {
-																	$name = explode("\n", wordwrap($name, 33));
-																	$name = $name[0] . ' ...';
-																}
-																echo $name;
-																?>
-															</div>
+											<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-4 col-sm-4 col-md-4 col-lg-4 size14">
+												<div class="box_listing_product">
+													<a href="<?php echo $product[2]; ?>"
+													   data-entity="<?php echo $product[0]; ?>"
+													   data-sku="<?php echo $product[10]; ?>"
+													   data-skuv="<?php echo $product[11]; ?>">
+														<figure class="img_product" style="padding-bottom: <?php echo $product[8]; ?>%">
+															<img
+																src="<?php echo $imgUrl . $product[7]; ?>"
+																alt="<?php echo $product[1]; ?>"
+																class="img-responsive"/>
+														</figure>
+														<div class="name_product">
+															<?php
+															// Make short name
+															$name = $product[1];
+															if (strlen($name) > 32) {
+																$name = explode("\n", wordwrap($name, 33));
+																$name = $name[0] . ' ...';
+															}
+															echo $name;
+															?>
+														</div>
 
-															<div class="price clearfix">
-																<div class="col-price">
-																	<?php if ($product[3] != $product[4]) : ?>
-																		<span class="old">
+														<div class="price clearfix">
+															<div class="col-price">
+																<?php if ($product[3] != $product[4]) : ?>
+																	<span class="old">
                                                                     <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
                                                                 </span>
-																	<?php endif; ?>
-																	<span>
+																<?php endif; ?>
+																<span>
                                                                     <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?>
                                                                 </span>
-																</div>
-																<?php
-																// like count
-																$wishlistCount = "";
-																$inMyWishlist = "";
-																$plusSign = "";
-																if ($product[5] - 1 > 0) {
-																	$wishlistCount = $product[5];
-																	if ($product[6]) {
-																		$wishlistCount -= 1;
-																	}
-																}
-
-																if ($product[6]) {
-																	$inMyWishlist = $this->__("You");
-																	if ($product[5] > 1) {
-																		$plusSign = " + ";
-																	}
-																}
-
-																?>
 															</div>
-														</a>
-													</div>
-												</div>
-											<?php endforeach; ?>
-										<?php //endfor; ?>
+															<?php
+															// like count
+															$wishlistCount = "";
+															$inMyWishlist = "";
+															$plusSign = "";
+															if ($product[5] - 1 > 0) {
+																$wishlistCount = $product[5];
+																if ($product[6]) {
+																	$wishlistCount -= 1;
+																}
+															}
 
+															if ($product[6]) {
+																$inMyWishlist = $this->__("You");
+																if ($product[5] > 1) {
+																	$plusSign = " + ";
+																}
+															}
+
+															?>
+														</div>
+													</a>
+												</div>
+											</div>
+										<?php endforeach; ?>
 									</div>
 									<div class="col-xs-12 shuffle__sizer"></div>
 <!--									<div class="shapes_listing"></div>-->
