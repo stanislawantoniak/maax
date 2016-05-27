@@ -334,14 +334,14 @@ body {
 		&.navigation > li > a.forceActive {
 			//position: relative;
 			&:before {
-				content: ' ';
-				height: 3px;
-				width: 100%;
-				position: absolute;
-				left: 0;
-				bottom: -3px;
-				border-top-left-radius: 3px;
-				border-top-right-radius: 3px;
+				//content: ' ';
+				//height: 3px;
+				//width: 100%;
+				//position: absolute;
+				//left: 0;
+				//bottom: -3px;
+				//border-top-left-radius: 3px;
+				//border-top-right-radius: 3px;
 			}
 		}
 	}

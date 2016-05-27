@@ -29,10 +29,10 @@
 		.cb-enable {
 			padding: 5px 20px;
 			color: $colorBtnPrimary;
-			font-weight: bold;
+			//font-weight: bold;
 			font-family: $fontRegular;
 			text-align: center;
-			border-radius: 5px;
+			border-radius: $borderRadiusBtn;
 			vertical-align: middle;
 			border: none;
 			margin: 0 10px;
