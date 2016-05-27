@@ -53,7 +53,7 @@
 				<alias>zolago_modago_home_sliderlastseen</alias>
 			</action>
 
-
+			<block type="core/template" name="solrsearch_product_list_fix" template="zolagosolrsearch/catalog/product/list/fix.phtml" />
 			<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
 				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
 				<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
@@ -81,7 +81,33 @@
     </solrbridge_solrsearch_category_view>
     <solrsearch_index_index>
         <reference name="content">
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/> 
+			<action method="unsetChild">
+				<alias>zolago_modago_home_sliderlastseen</alias>
+			</action>
+			<block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
+				<!--<block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">-->
+					<!--<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>-->
+					<!--<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>-->
+					<!--<block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>-->
+				<!--</block>-->
+				<!--<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar">-->
+					<!--<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>-->
+				<!--</block>-->
+
+				<block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+					<block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">
+						<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+						<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+						<block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
+					</block>
+					<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar">
+						<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+					</block>
+					<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+				</block>
+			</block>
+			<block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
+			<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
         </reference>
     </solrsearch_index_index>
     <catalog_product_view>
