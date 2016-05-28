@@ -500,7 +500,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 
 			if ($product && $product->getId()) {
 				$options = $this->_getProductOptions($item);
-				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(40, 50);
+				$image = Mage::helper('catalog/image')
+					->init($product, 'thumbnail')
+					->resize(205, 262);
 
 				$array[] = array(
 					'name'			=> $product->getName(),
