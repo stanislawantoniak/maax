@@ -91,8 +91,12 @@
       #od_do {
         padding-left:16px;
         #slider-range {
-          margin-top:10px;
+			margin-top: 10px;
 			border-radius: 0;
+			border: 1px solid #222;
+			background: #222;
+			color: #222;
+			height: 3px;
         }
 
 		  .ui-state-default,
@@ -105,6 +109,8 @@
 			  font-weight: normal;
 			  color:  #000;
 			  border-radius: 0;
+			  width: 10px;
+			  height: 10px;
 			  &:focus {
 				  outline: none;
 			  }
@@ -131,7 +137,7 @@
             position:relative;
             top:0;
             &.black {
-              width:35px!important;
+              width:75px!important;
               height:22px!important;
               min-width: 35px;
               padding:0;
@@ -413,12 +419,22 @@ html.noscroll {
 
 #filter_price {
 
+	#zakres_min,
+	#zakres_max {
+		background: transparent;
+		border: 1px solid $body-bg;
+		width: 25px;
+		text-align: center;
+		margin: 0 3px;
+	}
 	.form-horizontal {
 
 		input {
 
-			&[type="text"],&[type="tel"] {
+			&[type="text"],
+			&[type="tel"] {
 				text-align: center;
+
 			}
 		}
 		label {
@@ -961,6 +977,14 @@ span.checked {
 			}
 			#od_do {
 				margin-top: 10px;
+				.slider-range-info {
+					height: 27px;
+					line-height: 27px;
+					margin-left: -23px;
+					label {
+						font-weight: normal;
+					}
+				}
 			}
 		}
 		.form-group {
