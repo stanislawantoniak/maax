@@ -2,12 +2,13 @@
 /* CLONE MENU */
 
 #clone_submenu {
-    background: $color_f8f7f5;
+    background: $color_fff;
     box-shadow: 0 2px 0 $color_ebebeb;
+    font-family: $fontOpen;
     .view-all-category {
         font-size: 14px;
         text-transform: lowercase;
-        color:$color_7b6c35;
+        color:$color_737373;
         text-decoration: underline;
         
     }
@@ -20,19 +21,28 @@
                 color:$color_656565;
                 text-transform: uppercase;
             }
-
+            .box [rel=category] {
+                color: $color_3d3d3d;
+                font-size: 14px;
+                text-transform: uppercase;
+                &:hover {
+                    color:$colorLinkHover;
+                    text-decoration: none;
+                }
+            }
             dl {
                 //float:left;
                 dt {
-                    color:$color_000;
+                    color:$color_3d3d3d;
                   a:link,
                   a:visited {
                     font-size:14px;
-                    font-weight: 900;
+                    font-weight: 600;
                     color:$color_000;
                   }
                   a:hover {
-                      text-decoration: underline;
+                      color:$colorLinkHover;
+                      text-decoration: none;
                   }
                 }
                 dd {
@@ -41,10 +51,11 @@
                     a:visited {
                     font-size:12px;
                     font-weight: 400;
-                    color:$color_000;
+                    color:$color_737373;
                   }
                   a:hover {
-                    text-decoration: underline;
+                      color:$colorLinkHover;
+                      text-decoration: none;
                   }
                   a {
                     &[data-description="ReadMore"] {
