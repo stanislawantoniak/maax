@@ -1210,7 +1210,7 @@ Mall.listing = {
 			if(containerOffset.left != 0) {
 				leftOffset = leftOffset - containerOffset.left;
 			}
-			console.log(topOffset);
+
 			filters
 				.removeClass(self.getFiltersClassMobile())
 				.addClass(self.getFiltersClassDesktop())
