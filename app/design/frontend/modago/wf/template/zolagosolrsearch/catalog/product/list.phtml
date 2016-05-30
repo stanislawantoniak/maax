@@ -74,6 +74,22 @@ $_products = $_cache['products'];
 													   data-entity="<?php echo $product[0]; ?>"
 													   data-sku="<?php echo $product[10]; ?>"
 													   data-skuv="<?php echo $product[11]; ?>">
+
+														<?php if($product[12] > 0 && $product[12] == 2): ?>
+															<div class="label-product">
+																<div class="listing-label type-label-2">
+																	<div class="sale"><?php echo $this->__("Sale"); ?></div>
+																</div>
+															</div>
+														<?php endif; ?>
+														<?php if($product[13] > 0 && $product[13] == 1): ?>
+															<div class="label-product">
+																<div class="listing-label type-label-1">
+																	<div class="sale"><?php echo $this->__("New"); ?></div>
+																</div>
+															</div>
+														<?php endif; ?>
+
 														<figure class="img_product" style="padding-bottom: <?php echo $product[8]; ?>%">
 															<img
 																src="<?php echo $imgUrl . $product[7]; ?>"
@@ -188,3 +204,36 @@ $_products = $_cache['products'];
 		</div>
 	</div>
 </section>
+<style>
+	.label-product {
+		text-align: center;
+		z-index: 1;
+	}
+	.label-product > div {
+		position: absolute;
+		z-index: 100;
+	}
+
+	.listing-label {
+		color: #fff;
+		border-radius: 100%;
+		width: 45px;
+		height: 45px;
+		line-height: 45px;
+		font-size: 11px;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 700;
+		display: inline-block;
+	}
+	.type-label-2 {
+		top: 7px;
+		left: 10px;
+		background: #dc4348;
+	}
+
+	.type-label-1 {
+		top: 7px;
+		right: 10px;
+		background: rgba(121, 121, 121, 0.9);
+	}
+</style>
