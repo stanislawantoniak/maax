@@ -17,6 +17,18 @@
         text-align: left;
         overflow: hidden;
         @include linearGradient($colorMainMenuSubItemGradientStart,$colorMainMenuSubItemGradientEnd);
+        @include transition(all 0.2s ease-in-out);
+
+        .menu-3columns {
+            padding: 30px 15px 20px;
+            .column-left {
+                width: auto;
+                float: none;
+            }
+            .box {
+                margin-right: 0;
+            }
+        }
     }
 
     .view-all-category {
@@ -45,7 +57,6 @@
                 }
             }
             dl {
-                //float:left;
                 dt {
                     color:$color_3d3d3d;
                   a:link,

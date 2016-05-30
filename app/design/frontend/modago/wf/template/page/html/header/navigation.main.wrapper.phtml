@@ -3,8 +3,8 @@
 <div class="header_bottom">
     <div class="container-fluid">
         <nav role="navigation">
-            <div id="navigation">
-                <?php echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
+            <div id="navigation" data-target="x">
+                <?php //echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
                 <?php if ($this->getIsHomePage()): ?>
                     <?php echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-mobile', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
                 <?php endif; ?>
@@ -13,9 +13,5 @@
         </nav>
     </div>
 </div>
-<div id="clone_submenu" class="hidden-xs clearfix">
-    <div class="container-fluid">
-
-    </div>
-</div>
+<div id="clone_submenu" class="hidden-xs hidden-sm clearfix"><div class="container-fluid clone_submenu-content"></div></div>
 <?php echo $this->getJavascript(); ?>
