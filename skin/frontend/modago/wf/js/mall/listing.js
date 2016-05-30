@@ -415,7 +415,6 @@ Mall.listing = {
                     "<figure class='img_product boxed' style='padding-bottom: " + product[8] +"%'>"+
                         "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+
-                    "<div class='logo_manufacturer' style='background-image:url(" + Mall.manufacturerImagesUrl + product[9] +")' ></div>"+
                     "<div class='name_product'>" + product[1] + "</div>"+
                 "</a>"+
                 "<div class='price clearfix'>"+
