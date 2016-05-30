@@ -78,21 +78,21 @@ $_products = $_cache['products'];
 														<?php if($product[12] > 0 && $product[12] == 1): ?>
 															<div class="label-product">
 																<div class="listing-label type-label-2">
-																	<div class="sale"><?php echo $this->__("Promotion"); ?></div>
+																	<div class="sale"><?php echo Mage::helper('zolagosolrsearch')->__("Promotion"); ?></div>
 																</div>
 															</div>
 														<?php endif; ?>
 														<?php if($product[12] > 0 && $product[12] == 2): ?>
 															<div class="label-product">
 																<div class="listing-label type-label-2">
-																	<div class="sale"><?php echo $this->__("Sale"); ?></div>
+																	<div class="sale"><?php echo Mage::helper('zolagosolrsearch')->__("Sale"); ?></div>
 																</div>
 															</div>
 														<?php endif; ?>
 														<?php if($product[13] > 0 && $product[13] == 1): ?>
 															<div class="label-product">
 																<div class="listing-label type-label-1">
-																	<div class="sale"><?php echo $this->__("New"); ?></div>
+																	<div class="sale"><?php echo Mage::helper('zolagosolrsearch')->__("New"); ?></div>
 																</div>
 															</div>
 														<?php endif; ?>
@@ -191,6 +191,10 @@ $_products = $_cache['products'];
 						Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
 						Mall.translate.add("Show more", "<?php echo Mage::helper('zolagosolrsearch')->__("Show more"); ?>");
 						Mall.translate.add("Show less", "<?php echo Mage::helper('zolagosolrsearch')->__("Show less"); ?>");
+
+						Mall.translate.add("Promotion", "<?php echo Mage::helper('zolagosolrsearch')->__("Promotion"); ?>");
+						Mall.translate.add("Sale", "<?php echo Mage::helper('zolagosolrsearch')->__("Sale"); ?>");
+						Mall.translate.add("New", "<?php echo Mage::helper('zolagosolrsearch')->__("New"); ?>");
 
 						Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>", "<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
 

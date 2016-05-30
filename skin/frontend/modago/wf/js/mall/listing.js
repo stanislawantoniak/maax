@@ -399,13 +399,13 @@ Mall.listing = {
 			promoFlagLabel = "",
 			isNewLabel = "";
 		if(product[12] > 0 && product[12] == 1){
-			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">Promocja</div></div></div>';
+			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
 		}
 		if(product[12] > 0 && product[12] == 2){
-			saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">Wyprzedaż</div></div></div>';
+			saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">'+Mall.translate.__("Sale")+'</div></div></div>';
 		}
 		if(product[13] > 0 && product[13] == 1){
-			isNewLabel = '<div class="label-product"><div class="listing-label type-label-1"><div class="sale">Nowość</div></div></div>';
+			isNewLabel = '<div class="label-product"><div class="listing-label type-label-1"><div class="sale">'+Mall.translate.__("New")+'</div></div></div>';
 		}
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-4 col-lg-4 size14'>"+
