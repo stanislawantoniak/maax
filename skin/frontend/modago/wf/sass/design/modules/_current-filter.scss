@@ -10,10 +10,10 @@
       height: 21px;
       line-height: 21px;
       color: $color-black;
-      @include border-radius(3px);
-      margin-top: 6px;
+      @include border-radius(0px);
+
       margin-right: 6px;
-      margin-bottom: 6px;
+      margin-top: 12px;
     }
     i {
       margin-left: 6px;
@@ -50,7 +50,8 @@
 			font-weight:normal;
 		 }
 	    }
-	    dd {	        
+	    dd {
+            border-radius: 0;
 	        .label {
 	            color:$color_000;
 	            font-size: 12px;
@@ -58,7 +59,7 @@
 	            //line-height:20px;
 	            border:1px solid $bc-secondary;
 	            font-weight: normal;
-                border-radius: 0;
+              border-radius: 0;
 	        }
 	            .fa {
 	                color: $color_000;
@@ -69,29 +70,13 @@
 	                    cursor:pointer;
 	                 }
 	             }
-	        
-	        &.action {
-	        	@include border-radius(3px);
-	        }
+
 	    }   
 	}
 	.actionViewFilter {
         margin-bottom: 10px;
 
 		white-space: nowrap;
-		-webkit-border-top-right-radius: 5px!important;
-		-webkit-border-bottom-right-radius: 5px!important;
-		-moz-border-radius-topright: 5px!important;
-		-moz-border-radius-bottomright: 5px!important;
-		border-top-right-radius: 5px!important;
-		border-bottom-right-radius: 5px!important;
-
-		-webkit-border-top-left-radius: 0px!important;
-		-webkit-border-bottom-left-radius: 0px!important;
-		-moz-border-radius-topleft: 0px!important;
-		-moz-border-radius-bottomleft: 0px!important;
-		border-top-left-radius: 0px!important;
-		border-bottom-left-radius: 0px!important;		
 	}
 	.backToCategory {  
 		text-decoration: underline; 
