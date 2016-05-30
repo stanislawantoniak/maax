@@ -37,7 +37,7 @@ $container-smmd:               ((950px + $grid-gutter-width)) !default; //980
 $global-image-path: "../images";
 // #{$global-image-path}
 
-$icon-font-path: "../fonts/glyphicons/";
+$icon-font-path:          "../fonts/glyphicons/";
 $icon-font-name:          "glyphicons-halflings-regular" ;
 $icon-font-svg-id:        "glyphicons_halflingsregular" ;
 
@@ -124,8 +124,8 @@ $validation-error: $color_e84c3d;
 }
 
 // FONT
-$fontLight: Verdana,Geneva,sans-serif;
-$fontRegular: Verdana,Geneva,sans-serif;
+$fontLight: Verdana, Geneva,sans-serif;
+$fontRegular: Verdana, Geneva,sans-serif;
 $fontOpen: 'Open Sans', sans-serif;
 $fontOpenSS: 'Open Sans', sans-serif;
 $fontBlack: Georgia, sans-serif;
@@ -402,3 +402,10 @@ $borderRadiusBtn:                       0px;
 $textColorFooter:                       $color_fff;
 $textColorFooterLink:                   $color_8a8a8a;
 $backgroundColorFooter:                 $color_262626;
+
+
+/* LISTING */
+$backgroundColorFlagNew:                $color_7fce25;
+$backgroundColorFlagSale:               $color_de0e59;
+$backgroundColorFlagPromotion:          $color_ec4920;
+$boxShadowListingColor:                 $color_f5f3f4;

@@ -6,12 +6,50 @@
                @media (max-width: $screen-xs-max) {
                 margin-bottom: 0px;
                }
+          &.boxed {
+            box-shadow: 0 0 1px 1px $boxShadowListingColor;
+          }
         }
         img {
             width:100%;
             height:auto;
         }
     }
+  .label-product {
+    text-align: center;
+    z-index: 1;
+
+    .listing-label {
+      color: #fff;
+      border-radius: 100%;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 11px;
+      font-family: $fontOpenSS;
+      font-weight: 700;
+      display: inline-block;
+      top: 7px;
+      position: absolute;
+      z-index: 100;
+
+      &.type-label-1 {
+        right: 20px;
+        background: $backgroundColorFlagNew;
+      }
+
+      &.type-label-2 {
+        left: 20px;
+        background: $backgroundColorFlagSale;
+      }
+
+      &.type-label-3 {
+        left: 20px;
+        background: $backgroundColorFlagPromotion;
+      }
+
+    }
+  }
   .logo_manufacturer {
 	margin: 15px 8px;
     max-width: 100px;
