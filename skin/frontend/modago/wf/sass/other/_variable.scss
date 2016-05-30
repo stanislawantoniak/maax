@@ -207,6 +207,7 @@ $colorBtnSecondaryBgStartHover:           #dc4348;
 $colorBtnSecondaryBgEndHover:             #dc4348;
 $colorBtnSecondaryBgStartActive:          #dc4348;
 $colorBtnSecondaryBgEndActive:            #dc4348;
+$colorBtnSecondaryHoverBorder:            #dc4348;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
@@ -226,11 +227,14 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
 @mixin secondaryButtonGradient { //covers normal + hover + active + .disabled
   @include linearGradient($colorBtnSecondaryBgStart,$colorBtnSecondaryBgEnd);
-  &:hover,&.hover {
+  &:hover,
+  &.hover {
     @include linearGradient($colorBtnSecondaryBgStartHover,$colorBtnSecondaryBgEndHover);
+    border-color: $colorBtnSecondaryHoverBorder;
   }
   &:active,&:focus,&.active {
     @include linearGradient($colorBtnSecondaryBgStartActive,$colorBtnSecondaryBgEndActive);
+    border-color: $colorBtnSecondaryHoverBorder;
   }
   &.disabled {
     background: $colorBtnPrimaryBgDisabled;
