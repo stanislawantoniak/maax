@@ -399,7 +399,7 @@ Mall.listing = {
 			promoFlagLabel = "",
 			isNewLabel = "";
 		if(product[12] > 0 && product[12] == 1){
-			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
+			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-3"><div class="sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
 		}
 		if(product[12] > 0 && product[12] == 2){
 			saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">'+Mall.translate.__("Sale")+'</div></div></div>';
