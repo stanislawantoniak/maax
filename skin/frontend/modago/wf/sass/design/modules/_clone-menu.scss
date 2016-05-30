@@ -2,9 +2,25 @@
 /* CLONE MENU */
 
 #clone_submenu {
-    background: $color_fff;
-    box-shadow: 0 2px 0 $color_ebebeb;
+    background-color: transparent;
     font-family: $fontOpen;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    margin-top: -5px;
+
+
+    .clone_submenu-content {
+        border: 1px solid #e6e6e6;
+        background: #fff;
+        box-shadow: 0 2px 0 $color_ebebeb;
+        //padding: 30px 15px 20px;
+        text-align: left;
+        overflow: hidden;
+    }
+
+
     .view-all-category {
         font-size: 14px;
         text-transform: lowercase;
