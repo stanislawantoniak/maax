@@ -50,8 +50,6 @@ Mall.Navigation = {
             } else {
                 var left = dropdownWidth/2;
             }
-            console.log(liOffsetTop);
-            console.log(dropdowntMarginLeft);
 
 
             if (jQuery('#nav_desc a').hasClass('active')) {
