@@ -618,13 +618,13 @@ span.checked {
 
 		label[for="filter_recommended_products_news"], .new {
 			>span {
-				background:$color_7fce25;
+				background: $backgroundColorFlagNew;
 			}
 		}
 
 		label[for="filter_recommended_products_sale"], .sale {
 			>span {
-				background:$color_de0e59;
+				background:$backgroundColorFlagSale;
 			}
 		}
 
@@ -636,7 +636,7 @@ span.checked {
 
 		label[for="filter_recommended_products_propotion"], .promotion {
 			>span {
-				background:$color_ec4920;
+				background:$backgroundColorFlagPromotion;
 			}
 		}
 	}
