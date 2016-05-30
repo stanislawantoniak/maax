@@ -399,20 +399,20 @@ Mall.listing = {
 			promoFlagLabel = "",
 			isNewLabel = "";
 		if(product[12] > 0 && product[12] == 1){
-			promoFlagLabel = '<div class="label-product"><div class="listing-label big type-label-3"><div class="sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
+			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-3"><div class="sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
 		}
 		if(product[12] > 0 && product[12] == 2){
-			saleFlagLabel = '<div class="label-product"><div class="listing-label big type-label-2"><div class="sale">'+Mall.translate.__("Sale")+'</div></div></div>';
+			saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">'+Mall.translate.__("Sale")+'</div></div></div>';
 		}
 		if(product[13] > 0 && product[13] == 1){
-			isNewLabel = '<div class="label-product"><div class="listing-label big type-label-1"><div class="sale">'+Mall.translate.__("New")+'</div></div></div>';
+			isNewLabel = '<div class="label-product"><div class="listing-label type-label-1"><div class="sale">'+Mall.translate.__("New")+'</div></div></div>';
 		}
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-4 col-lg-4 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
 					saleFlagLabel + promoFlagLabel + isNewLabel +
-                    "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
+                    "<figure class='img_product boxed' style='padding-bottom: " + product[8] +"%'>"+
                         "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+
                     "<div class='logo_manufacturer' style='background-image:url(" + Mall.manufacturerImagesUrl + product[9] +")' ></div>"+
