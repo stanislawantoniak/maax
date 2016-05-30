@@ -1204,15 +1204,13 @@ Mall.listing = {
 			var content = self.getContentBlock(),
 				containerOffset = jQuery('#sb-site').offset(),
 				leftOffset = content.offset().left + 15,
-				topOffset = jQuery("header#header-main").offset().top+4;
+				topOffset = content.offset().top +5;
 
-			if(jQuery("#clone_submenu").height() > 0){
-				topOffset = topOffset- 80;
-			}
+
 			if(containerOffset.left != 0) {
 				leftOffset = leftOffset - containerOffset.left;
 			}
-
+			console.log(topOffset);
 			filters
 				.removeClass(self.getFiltersClassMobile())
 				.addClass(self.getFiltersClassDesktop())
@@ -2427,6 +2425,9 @@ jQuery(document).ready(function () {
     } else {
         Mall.listing.initShuffle();
     }
+	jQuery(window).scroll(function() {
+		Mall.listing.positionFilters();
+	});
 
 	Mall.listing.positionBenefits();
 });

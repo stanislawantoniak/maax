@@ -1429,7 +1429,7 @@ function initToggleSearch() {
 function positionToggleSearch() {
 	var dropdown = jQuery('#dropdown-search');
 	var toggle = jQuery("#toggleSearch");
-    var contentOffset = jQuery("section#main #content").offset().left;
+    var contentOffset = (typeof jQuery("section#main #content").offset() != "undefined") ? jQuery("section#main #content").offset().left : 0;
     if(jQuery(window).width() >= 1206){
         contentOffset = contentOffset+470+toggle.width();
     }
