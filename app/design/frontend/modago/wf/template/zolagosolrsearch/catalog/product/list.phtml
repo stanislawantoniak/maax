@@ -76,7 +76,11 @@ $_products = $_cache['products'];
 													   data-skuv="<?php echo $product[11]; ?>">
 
 														<?php if($product[12] > 0 && $product[12] == 1): ?>
-															<div class="label-product"><div class="listing-label type-label-2"><div class="sale"><?php echo $this->__("Promotion"); ?></div></div></div>
+															<div class="label-product">
+																<div class="listing-label type-label-2">
+																	<div class="sale"><?php echo $this->__("Promotion"); ?></div>
+																</div>
+															</div>
 														<?php endif; ?>
 														<?php if($product[12] > 0 && $product[12] == 2): ?>
 															<div class="label-product">
