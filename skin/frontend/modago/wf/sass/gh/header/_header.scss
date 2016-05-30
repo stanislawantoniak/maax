@@ -69,8 +69,12 @@ body {
 		img {
 			width: 100%;
 			height: auto;
-			margin-top: 3px; /* fix for wf logo */
+			margin-top: 15px;
+			@include max-screen($screen-md) {
+				margin-top: 5px;
+			}
 		}
+
 		@include max-screen(470px) {
 			width: 150px;
 			top: 3px;
@@ -572,10 +576,10 @@ body {
 		li {
 			a:link,
 			a:visited {
-				font-size: 17px;
+				font-size: 14px;
 				color: $color_000;
 				font-family: $fontRegular;
-				font-weight: 400;
+				font-weight: normal;
 				font-style: normal;
 				text-transform: uppercase;
 				line-height: 45px;
