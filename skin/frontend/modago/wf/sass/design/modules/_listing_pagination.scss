@@ -12,6 +12,9 @@
 			@media(max-width: 600px) {
 				display: block;
 			}
+            @media(min-width: 810px) and (max-width: 870px) {
+              display: block;
+            }
 		}
 		.totals {
 			line-height: 30px;
