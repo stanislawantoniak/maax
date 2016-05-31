@@ -18,14 +18,13 @@
         overflow: hidden;
         @include linearGradient($colorMainMenuSubItemGradientStart,$colorMainMenuSubItemGradientEnd);
         @include transition(all 0.2s ease-in-out);
-        width: 890px;
+        width: 860px;
         .menu-3columns {
-            padding: 30px 15px 20px;
-            .column-left {
-                width: auto;
-                float: none;
+            padding: 0;
+            .menus-column {
+                margin-top: 36px;
             }
-            .box {
+            .media-column {
 
             }
         }
