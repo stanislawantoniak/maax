@@ -871,8 +871,10 @@ Mall.Slick = {
 			speed: 500,
 			dots: false,
 			arrows: true,
-			prevArrow: '<div class="boxesArrow boxesArrowPrev"><i class="fa fa-chevron-left"></i></div>',
-			nextArrow: '<div class="boxesArrow boxesArrowNext"><i class="fa fa-chevron-right"></i></div>',
+			prevArrow: '<div class="boxesArrow owl-controls boxesArrowPrev"><div class="owl-arrow owl-prev"></div></div>',
+			nextArrow: '<div class="boxesArrow owl-controls boxesArrowNext"><div class="owl-arrow owl-next"></div></div>',
+
+
 			responsive: [
 				{
 					breakpoint: Mall.Breakpoint.sm,
@@ -1040,7 +1042,7 @@ Mall.Slick = {
 		},
 		positionArrows: function() {
 			var _ = this,
-				arrows = _.slider.find('.boxesArrow').find('i');
+				arrows = _.slider.find('.boxesArrow').find('.owl-arrow');
 
 			if(arrows.length) {
 				var height = _.slider.height(),

@@ -22,8 +22,30 @@
 		</reference>
 	</default>
     <zolagomodago_index_index>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/1column.phtml</template>
+			</action>
+			<action method="addBodyClass">
+				<value>wf-home</value>
+			</action>
+		</reference>
         <reference name="content">
-            <reference name="modagohome">
+			<action method="unsetChild">
+				<alias>modagohome</alias>
+			</action>
+			<block template="cms/wfhome.phtml" name="wfhome" type="core/template">
+				<block type="zolagomodago/home_banner" name="zolago_modago_home_banners" template="home/banner/hometopwr.phtml">
+					<block type="zolagomodago/home_banner" name="zolago_modago_home_banner_smallfour" template="home/banner/smallfour.phtml"/>
+					<block type="zolagocms/component_slider" name="slider" before="-"/>
+					<block type="zolagocms/component_boxes" name="boxes" before="-"/>
+				</block>
+				<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml">
+				</block>
+				<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
+				<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+			</block>
+            <reference name="wfhome">
 				<reference name="vendor.banner">
 					 <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/> 
 				</reference>

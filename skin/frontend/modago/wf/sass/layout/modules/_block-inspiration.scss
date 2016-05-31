@@ -1,6 +1,7 @@
 .block-inspiration {
+	margin-top: 50px;
+
 	.rwdCarousel {
-	//	width: 100%;
 		@media(max-width: $screen-sm-max) {
 			padding:15px 25px;
 			.rwd-prev {
