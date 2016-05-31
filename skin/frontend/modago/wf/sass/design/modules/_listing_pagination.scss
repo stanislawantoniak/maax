@@ -42,9 +42,9 @@
 					color: $color_fff;
 				}
 				&.page-disabled {
-					opacity: .15;
-					color: $color_ffffff;
-					background: $color_000000;
+					opacity: .5;
+					//color: $color_ffffff;
+					//background: $color_000000;
 					&:hover {
 						background: $color_000000;
 						color: $color_ffffff;
