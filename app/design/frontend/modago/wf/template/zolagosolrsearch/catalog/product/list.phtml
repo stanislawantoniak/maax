@@ -53,6 +53,7 @@ $_products = $_cache['products'];
 										<?php foreach ($_products as $product): ?>
 											<?php
 											/**
+											 * @see Zolago_Solrsearch_Helper_Data::prepareAjaxProducts()
 											 * product[0] = id
 											 * product[1] = name
 											 * product[2] = url
@@ -65,6 +66,8 @@ $_products = $_cache['products'];
 											 * product[9] = manufacturer_logo_url
 											 * product[10]= sku
 											 * product[11]= skuv
+											 * product[12]= product_flag
+											 * product[13]= is_new
 											 */
 											?>
 
