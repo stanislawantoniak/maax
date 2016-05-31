@@ -167,8 +167,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$_product[9] = $this->_prepareManufacturerLogoUrl($product->getManufacturerLogoUrl());
 			$_product[10]= $product->getSku();
 			$_product[11]= $hlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor());
-			$_product[12]= (int)$product->getProductFlag();
-			$_product[13]= (int)$product->getIsNew();
 
 			$products[] = $_product;
 		}
@@ -599,8 +597,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 						init($model, 'image')->
 						keepAspectRatio(true)->
 						constrainOnly(true)->
-						keepFrame(true)->
-						resize(262, 335);
+						keepFrame(false)->
+						resize(300, null);
 			} catch (Exception $ex) {
 				Mage::logException($ex);
 			}
