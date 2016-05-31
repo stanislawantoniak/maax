@@ -44,65 +44,66 @@
         list-style: none;
             a {
                 color:$color_656565;
-                text-transform: uppercase;
             }
-            .box [rel=category] {
+        .box [rel=category] {
+            font-size: 14px;
+        }
+        .box [rel=category] {
+            color: $color_3d3d3d;
+
+            text-transform: uppercase;
+            &:hover {
+                color: $colorLinkHover;
+                text-decoration: none;
+            }
+        }
+        dl {
+            dt {
                 color: $color_3d3d3d;
-                font-size: 14px;
-                text-transform: uppercase;
-                &:hover {
-                    color:$colorLinkHover;
+                a:link,
+                a:visited {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: $color_000;
+                }
+                a:hover {
+                    color: $colorLinkHover;
                     text-decoration: none;
                 }
             }
-            dl {
-                dt {
-                    color:$color_3d3d3d;
-                  a:link,
-                  a:visited {
-                    font-size:14px;
-                    font-weight: 600;
-                    color:$color_000;
-                  }
-                  a:hover {
-                      color:$colorLinkHover;
-                      text-decoration: none;
-                  }
+            dd {
+                color: $color_000;
+
+                a {
+                    font-family: $fontOpenSS;
+                    color: $color_737373;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-size: 14px;
+                    line-height: 22px !important;
                 }
-                dd {
-                    color:$color_000;
 
-                    a {
-                        font-family: $fontOpenSS;
-                        color: $color_737373;
-                        font-weight: normal;
-                        font-style: normal;
-                        font-size: 14px;
-                        line-height: 22px !important;
-                    }
+                a:link,
+                a:visited {
 
-                    a:link,
-                    a:visited {
+                }
+                a:hover {
+                    color: $colorLinkHover;
+                    text-decoration: none;
+                }
 
-                    }
-                    a:hover {
-                        color: $colorLinkHover;
-                        text-decoration: none;
-                    }
-
-                    span.menu-label {
-                        color: #fff;
-                        background-color: #B2B2B2;
-                        padding: 3px 5px;
-                        font-size: 9px;
-                        line-height: 10px;
-                        font-weight: bold;
-                        text-transform: uppercase;
-                        margin: 0 5px;
-                    }
+                span.menu-label {
+                    color: #fff;
+                    background-color: #B2B2B2;
+                    padding: 3px 5px;
+                    font-size: 9px;
+                    line-height: 10px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    margin: 0 5px;
+                }
 
             }
-           
 
         }
     //END UL
