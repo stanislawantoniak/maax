@@ -871,9 +871,11 @@ Mall.Slick = {
 			speed: 500,
 			dots: false,
 			arrows: true,
-			prevArrow: '<div class="boxesArrow owl-controls boxesArrowPrev"><div class="owl-arrow owl-prev"></div></div>',
-			nextArrow: '<div class="boxesArrow owl-controls boxesArrowNext"><div class="owl-arrow owl-next"></div></div>',
+			prevArrow: '<div class="boxesArrow  boxesArrowPrev"><div class="owl-arrow owl-prev"></div></div>',
+			nextArrow: '<div class="boxesArrow boxesArrowNext"><div class="owl-arrow owl-next"></div></div>',
 
+            //prevArrow: '<div class="owl-prev"></div>',
+            //nextArrow: '<div class="owl-next"></div>',
 
 			responsive: [
 				{
@@ -1401,10 +1403,10 @@ function initToggleSearch() {
 		e.stopPropagation();
 
 
-        var contentOffset = jQuery("section#main #content").offset().left;
+        var contentOffset = jQuery("#header_top_block_right").offset().left;
 
         if(jQuery(window).width() >= 1206){
-            contentOffset = contentOffset+470+toggle.width();
+            contentOffset = contentOffset+450+toggle.width();
         }
 
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
@@ -1431,9 +1433,9 @@ function initToggleSearch() {
 function positionToggleSearch() {
 	var dropdown = jQuery('#dropdown-search');
 	var toggle = jQuery("#toggleSearch");
-    var contentOffset = (typeof jQuery("section#main #content").offset() != "undefined") ? jQuery("section#main #content").offset().left : 0;
+    var contentOffset = (typeof jQuery("#header_top_block_right").offset() != "undefined") ? jQuery("#header_top_block_right").offset().left : 0;
     if(jQuery(window).width() >= 1206){
-        contentOffset = contentOffset+470+toggle.width();
+        contentOffset = contentOffset+450+toggle.width();
     }
 	if (dropdown.is(":visible")) {
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
