@@ -874,9 +874,6 @@ Mall.Slick = {
 			prevArrow: '<div class="boxesArrow  boxesArrowPrev"><div class="owl-arrow owl-prev"></div></div>',
 			nextArrow: '<div class="boxesArrow boxesArrowNext"><div class="owl-arrow owl-next"></div></div>',
 
-            //prevArrow: '<div class="owl-prev"></div>',
-            //nextArrow: '<div class="owl-next"></div>',
-
 			responsive: [
 				{
 					breakpoint: Mall.Breakpoint.sm,
@@ -1758,7 +1755,7 @@ Mall.inspirationsSliderInit = function() {
 		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
 		pagination : false,
 		navigation: true,
-		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
+		navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
 		rewindNav : false,
 		itemsScaleUp:true
 	});
