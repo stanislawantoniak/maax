@@ -37,6 +37,11 @@
 	margin-bottom: 52px;
 	z-index: 900;
 	.section {
+      #filter_category {
+        dd .suffix{
+          float: right;
+        }
+      }
 		padding:11px 18px 0;
 		.content {
 			padding-top:8px;
