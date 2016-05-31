@@ -32,10 +32,10 @@ $blocks = array(
                 <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-3">
                     <dl>
                         <dt><a href="#Kolekcje" rel="category" data-description="Kolekcje">Kolekcje</a></dt>
-                        <dd><a href="/" data-description="BĄBELKI">BĄBELKI</a><span class="menu-label">NOWOŚĆ</span></dd>
+                        <dd><a href="/" data-description="BĄBELKI">BĄBELKI <span class="menu-label">NOWOŚĆ</span></a></dd>
                         <dd><a href="/" data-description="CEREMONY - POWIEW">CEREMONY - POWIEW</a></dd>
                         <dd><a href="/" data-description="CIASTECZKOWY DZIEŃ">CIASTECZKOWY DZIEŃ</a></dd>
-                        <dd><a href="/" data-description="CZAS ROZKWITU">CZAS ROZKWITU</a><span class="menu-label">NOWOŚĆ</span></dd>
+                        <dd><a href="/" data-description="CZAS ROZKWITU">CZAS ROZKWITU <span class="menu-label">NOWOŚĆ</span></a></dd>
                         <dd><a href="/" data-description="DIAMENT">DIAMENT</a></dd>
                         <dd><a href="/" data-description="DZIEWCZYNA Z GWIAZDĄ">DZIEWCZYNA Z GWIAZDĄ</a></dd>
                     </dl>
