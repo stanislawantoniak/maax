@@ -71,24 +71,36 @@
                 }
                 dd {
                     color:$color_000;
+
+                    a {
+                        font-family: $fontOpenSS;
+                        color: $color_737373;
+                        font-weight: normal;
+                        font-style: normal;
+                        font-size: 14px;
+                        line-height: 22px !important;
+                    }
+
                     a:link,
                     a:visited {
-                    font-size:12px;
-                    font-weight: 400;
-                    color:$color_737373;
-                  }
-                  a:hover {
-                      color:$colorLinkHover;
-                      text-decoration: none;
-                  }
-                  a {
-                    &[data-description="ReadMore"] {
-                        font-style:italic;
-                        text-transform:lowercase;
-                        font-size:12px;
-                        text-decoration:underline;
+
                     }
-                }
+                    a:hover {
+                        color: $colorLinkHover;
+                        text-decoration: none;
+                    }
+
+                    span.menu-label {
+                        color: #fff;
+                        background-color: #B2B2B2;
+                        padding: 3px 5px;
+                        font-size: 9px;
+                        line-height: 10px;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        margin: 0 5px;
+                    }
+
             }
            
 
