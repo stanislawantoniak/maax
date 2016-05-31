@@ -2397,6 +2397,7 @@ jQuery(document).ready(function () {
 	"use strict";
     jQuery('#toggleSearch').click(function(){
         jQuery('#sort-criteria').find('.selectboxit-container').css('pointer-events', 'none');
+		jQuery('#dropdown-search input[name=q]').focus();
     });
 
     jQuery('body').click(function (e) {
