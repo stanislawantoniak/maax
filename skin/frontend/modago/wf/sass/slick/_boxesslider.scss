@@ -1,5 +1,5 @@
 #boxesSlider {
-	margin-top: 15px;
+	//margin-top: 15px;
 	text-align: center;
 
 	position: relative;
@@ -39,13 +39,86 @@
 			top: 0;
 			cursor: pointer;
 			&.boxesArrowNext {
-				right: 9px;
+				right: 35px;
 			}
 			&.boxesArrowPrev {
-				left: 9px;
+				left: -9px;
 			}
+
+			.owl-prev {
+				position: absolute;
+				width: 45px;
+				line-height: 42px;
+				height: 45px;
+				margin-top: -22px;
+				border: 1px solid #eee;
+				border-radius: 100%;
+				@include transition(all 0.2s ease-in-out);
+
+				&:before {
+					content: "\f104";
+					position: absolute;
+					font-size: 30px;
+					font-family: FontAwesome;
+					color: #252525;
+					left: 15px;
+					top: 0px;
+					@include transition(all 0.2s ease-in-out);
+				}
+				&:after {
+					content: "";
+					position: absolute;
+					width: 88px;
+					height: 300px;
+					left: -20px;
+					top: -140px;
+				}
+
+				&:hover {
+					border-color: #252525;
+				}
+			}
+
+			.owl-next {
+				position: absolute;
+				width: 45px;
+				margin-top: -22px;
+				height: 45px;
+				line-height: 42px;
+				border: 1px solid #eee;
+				border-radius: 100%;
+				@include transition(all 0.2s ease-in-out);
+
+				&:before {
+					content: "\f105";
+					position: absolute;
+					font-size: 30px;
+					font-family: FontAwesome;
+					color: #252525;
+					left: 18px;
+					top: 0px;
+					@include transition(all 0.2s ease-in-out);
+				}
+
+				&:after {
+					content: "";
+					position: absolute;
+					width: 88px;
+					height: 300px;
+					left: -20px;
+					top: -140px;
+				}
+
+				&:hover {
+					border-color: #252525;
+				}
+			}
+
 			i {
 				transition: margin 200ms ease;
+			}
+			i.fa:before {
+				color: $color_737373;
 			}
 		}
 	}

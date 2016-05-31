@@ -8,6 +8,23 @@
 	padding-bottom: 15px;
 }
 
+.container-fluid-wide {
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 0 !important;
+	&:after {
+		content: " ";
+		display: table;
+	}
+	&:after {
+		content: " ";
+		display: table;
+		clear: both;
+	}
+}
+
+
 .node-type-list {
 	#header-main {
 		//padding-top:0;
