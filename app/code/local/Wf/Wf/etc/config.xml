@@ -24,6 +24,11 @@
             <wfwf>
                 <class>Wf_Wf_Helper</class>
             </wfwf>
+            <zolagosolrsearch>
+                <rewrite>
+                    <data>Wf_Wf_Helper_Solrsearch_Data</data>
+                </rewrite>
+            </zolagosolrsearch>
         </helpers>
         <resources>
             <wfwf_setup>
