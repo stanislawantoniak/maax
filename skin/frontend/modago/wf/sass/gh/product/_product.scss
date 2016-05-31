@@ -1,10 +1,19 @@
 #product-shop {
+	#product-price {
+		padding-left:0px;
+		margin-left:0px;
+	}
 	.product-name {
 		margin-bottom: 15px;
+		padding-bottom: 0px;
+		border-bottom: 1px solid $gray-lighter;
+		margin-left:0px;
+		padding-left:0px;
 		h1 {
 			font-family: $fontLight;
 			text-transform: uppercase;
-			font-size: 34px;
+			font-size: 22px;
+			margin-bottom:0px;
 			@media (max-width: $screen-xs-max) {
 				font-size: 22px;
 			}
@@ -26,6 +35,7 @@
 				display: none;
 			}
 		}
+
 	}
 	.scrollTo {
 		color: inherit !important;
@@ -118,6 +128,10 @@
 		}
 	}
 	.price-box-bundle {
+		.price-box {
+			margin-left:0px;
+			padding-left:0px;
+		}
 		.price-label,
 		.old-price {
 			font-size: 24px;
@@ -374,16 +388,19 @@ i.flag {
 }
 
 #product-shop {
-	h1 {
-		font-family:$fontLight;
-		text-transform:uppercase;
-		font-size:34px;
-		margin: 0;
-		padding: 0 0 15px;
-		@media (max-width: $screen-xs-max) {
-			font-size:22px;
-			margin-top:15px;
-		}
+	#delivery-and-return {
+		font-size:12px;
+		text-align:right;
+	}
+	#short-description-block {
+		margin-left:0px;
+		padding-left:0px;
+	}
+	#short-description {
+		padding-left:0px;
+		margin-left:0px;
+		color: $colorShortDescription;
+		padding-bottom:15px;
 	}
 	.short-description {
 		font-size: 12px;
@@ -400,7 +417,7 @@ i.flag {
 			display:none;
 		}
 	}
-	.price-box-bundle {
+	.price-box-bundle {		
 		position:relative;
 		margin-bottom: 16px;
 		@media (min-width: 768px) and (max-width: 819px) {
@@ -416,9 +433,9 @@ i.flag {
 			text-decoration: line-through;
 		}
 		.price {
-			font-size: 36px;
-			color:$colorFont;
-			font-family: $fontBlack;
+			font-size: 22px;
+			color:$colorAccentSite;
+			font-family: $fontLight;
 			@media (min-width: 768px) and (max-width: 819px) {
 				margin-bottom: 0;
 			}
