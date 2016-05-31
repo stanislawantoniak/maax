@@ -12,7 +12,7 @@ $cms = array(
             <div class="wpb_wrapper">
                 <h2 class="footer-list-title">O Nas</h2>
                 <ul class="footer-list">
-                    <li><a href="{{store direct_url='' _no_vendor='1'}}">O Nas</a></li>
+                    <li><a href="{{store direct_url='o-nas' _no_vendor='1'}}">O Nas</a></li>
                     <li><a href="{{store direct_url='' _no_vendor='1'}}">Współpraca B2B / Francyza</a></li>
                     <li><a href="{{store direct_url='storesmap' _no_vendor='1'}}">Znajdź sklep</a></li>
                     <li><a href="{{store direct_url='help/contact' _no_vendor='1'}}">Kontakt</a></li>
@@ -44,7 +44,7 @@ $cms = array(
                 <h2 class="footer-list-title">Twoje Konto</h2>
                 <ul class="footer-list">
                     <li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Zaloguj się</a></li>
-                    <li><a href="/">Twoje zamówienia</a></li>
+                    <li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Twoje zamówienia</a></li>
                     <li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Ulubione</a></li>
                 </ul>
             </div>
@@ -58,7 +58,7 @@ $cms = array(
                 <h2 class="footer-list-title">Kontakt</h2>
                 <p>Pracujemy Pon-Pt, w godzinach 8-16</p>
                 <p>Telefon + 48 (33) 821-94-10</p>
-                <a href="/" class="contact-us-link">Napisz do nas</a></div>
+                <a href="{{store direct_url='help/contact' _no_vendor='1'}}" class="contact-us-link">Napisz do nas</a></div>
         </div>
     </div>
 </div>
