@@ -93,9 +93,9 @@
         #slider-range {
 			margin-top: 10px;
 			border-radius: 0;
-			border: 1px solid #222;
-			background: #222;
-			color: #222;
+			border: 1px solid $colorShadow;
+			background: $colorShadow;
+			color: $colorShadow;
 			height: 3px;
         }
 
@@ -116,7 +116,9 @@
 			  }
 		  }
 		  .ui-widget-header {
-			  background: #000;
+			  background: $colorLinkActive;
+              border: 1px solid $colorLinkActive;
+              top: -0.5px;
 		  }
         .form-horizontal {
           width:40px;
@@ -678,8 +680,9 @@ span.checked {
 				font-size: 13px;
 				.suffix {
 					color: $color_b0b0b0;
-					font-size: 12px; }
-
+					font-size: 12px;
+                    float: right;
+                }
 			}
 		}
 		tr {
@@ -956,6 +959,7 @@ span.checked {
 				min-height:31px;
 				padding-top: 0;
 				padding-bottom: 11px;
+                width: 100%;
 			}
 			label {
 				cursor:pointer;
@@ -983,20 +987,24 @@ span.checked {
 		#filter_price {
 			#slider-range {
 				margin-bottom: 10px;
-				margin-left: -16px;
+				margin-left: -11px;
 				//width:147px;
-				width:100%;
+				//width:101%;
 			}
 			#od_do {
-				margin-top: 10px;
+				//margin-top: 10px;
 				.slider-range-info {
 					height: 27px;
 					line-height: 27px;
-					margin-left: -23px;
+					margin-left: -18px;
 					label {
 						font-weight: normal;
 					}
 				}
+              .filter-price-range-submit {
+                font-family: $fontRegular;
+                font-size: 13px;
+              }
 			}
 		}
 		.form-group {
