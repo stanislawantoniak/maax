@@ -45,6 +45,8 @@ $blocks = array(
                 <img src="/skin/frontend/modago/wf/images/wojcik-menu-dziewczynka.png" alt=""/>
             </div>
         </div>
+    </li>
+</ul>
 EOD
 ,
         'is_active'     => 1,
