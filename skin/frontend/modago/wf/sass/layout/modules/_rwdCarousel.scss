@@ -6,6 +6,75 @@
 	@media (max-width: $screen-sm-min) { 
 		clear:both;
 	 }
+
+
+	.owl-prev {
+		position: absolute;
+		left: 20px;
+		@media (min-width: $screen-sm-max) {
+			left: 50px;
+		}
+		top: 50%;
+		width: 45px;
+		line-height: 42px;
+		height: 45px;
+		margin-top: 28px;
+		border: 1px solid #eee;
+		border-radius: 100%;
+		@include transition(all 0.2s ease-in-out);
+	}
+	.owl-prev:before {
+		content: "\f104";
+		position: absolute;
+		font-size: 30px;
+		font-family: FontAwesome;
+		color: #252525;
+		left: 15px;
+		top: 0px;
+		@include transition(all 0.2s ease-in-out);
+	}
+	.owl-prev:after {
+		top: -20px;
+		left: -20px;
+		height: 70px;
+	}
+
+
+	.owl-next {
+		position: absolute;
+		right: 17px;
+		@media (min-width: $screen-sm-max) {
+			right: 50px;
+		}
+		top: 50%;
+		width: 45px;
+		margin-top: 28px;
+		height: 45px;
+		line-height: 42px;
+		border: 1px solid #eee;
+		border-radius: 100%;
+		@include transition(all 0.2s ease-in-out);
+	}
+
+	.owl-next:before {
+		content: "\f105";
+		position: absolute;
+		font-size: 30px;
+		font-family: FontAwesome;
+		color: #252525;
+		left: 18px;
+		top: 0px;
+		@include transition(all 0.2s ease-in-out);
+	}
+
+	.owl-next:after {
+		content: "";
+		position: absolute;
+		width: 88px;
+		height: 300px;
+		left: -20px;
+		top: -140px;
+	}
 }
 /* clearfix */
 .rwd-carousel .rwd-wrapper:after {
@@ -21,6 +90,7 @@
 	position: relative;
 	width: 100%;
 	-ms-touch-action: pan-y;
+	padding: 0 50px;
 	.rwd-wrapper{
 		display: none;
 		position: relative;
