@@ -871,8 +871,9 @@ Mall.Slick = {
 			speed: 500,
 			dots: false,
 			arrows: true,
-			prevArrow: '<div class="boxesArrow boxesArrowPrev"><i class="fa fa-chevron-left"></i></div>',
-			nextArrow: '<div class="boxesArrow boxesArrowNext"><i class="fa fa-chevron-right"></i></div>',
+			prevArrow: '<div class="boxesArrow  boxesArrowPrev"><div class="owl-arrow owl-prev"></div></div>',
+			nextArrow: '<div class="boxesArrow boxesArrowNext"><div class="owl-arrow owl-next"></div></div>',
+
 			responsive: [
 				{
 					breakpoint: Mall.Breakpoint.sm,
@@ -1040,7 +1041,7 @@ Mall.Slick = {
 		},
 		positionArrows: function() {
 			var _ = this,
-				arrows = _.slider.find('.boxesArrow').find('i');
+				arrows = _.slider.find('.boxesArrow').find('.owl-arrow');
 
 			if(arrows.length) {
 				var height = _.slider.height(),
@@ -1399,10 +1400,10 @@ function initToggleSearch() {
 		e.stopPropagation();
 
 
-        var contentOffset = jQuery("section#main #content").offset().left;
+        var contentOffset = jQuery("#header_top_block_right").offset().left;
 
         if(jQuery(window).width() >= 1206){
-            contentOffset = contentOffset+470+toggle.width();
+            contentOffset = contentOffset+450+toggle.width();
         }
 
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
@@ -1429,9 +1430,9 @@ function initToggleSearch() {
 function positionToggleSearch() {
 	var dropdown = jQuery('#dropdown-search');
 	var toggle = jQuery("#toggleSearch");
-    var contentOffset = (typeof jQuery("section#main #content").offset() != "undefined") ? jQuery("section#main #content").offset().left : 0;
+    var contentOffset = (typeof jQuery("#header_top_block_right").offset() != "undefined") ? jQuery("#header_top_block_right").offset().left : 0;
     if(jQuery(window).width() >= 1206){
-        contentOffset = contentOffset+470+toggle.width();
+        contentOffset = contentOffset+450+toggle.width();
     }
 	if (dropdown.is(":visible")) {
 		if(toggle.offset().left + 320 > jQuery(window).width()) {
@@ -1754,7 +1755,7 @@ Mall.inspirationsSliderInit = function() {
 		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
 		pagination : false,
 		navigation: true,
-		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
+		navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
 		rewindNav : false,
 		itemsScaleUp:true
 	});

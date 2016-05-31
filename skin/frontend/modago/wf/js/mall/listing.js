@@ -130,7 +130,7 @@ Mall.listing = {
             //    .on('layout.shuffle', function() {
                     Mall.listing.hideListingOverlay();
                     Mall.listing.likePriceView();
-		            Mall.listing.placeListingFadeContainer();
+		            // Mall.listing.placeListingFadeContainer();
 		            Mall.Footer.setContainerPadding();
                 //})
                 //.shuffle({throttleTime: 800, speed: 0, easing: 'linear' })
@@ -2412,6 +2412,7 @@ jQuery(document).ready(function () {
 	"use strict";
     jQuery('#toggleSearch').click(function(){
         jQuery('#sort-criteria').find('.selectboxit-container').css('pointer-events', 'none');
+		jQuery('#dropdown-search input[name=q]').focus();
     });
 
     jQuery('body').click(function (e) {
@@ -2432,9 +2433,6 @@ jQuery(document).ready(function () {
     } else {
         Mall.listing.initShuffle();
     }
-	jQuery(window).scroll(function() {
-		Mall.listing.positionFilters();
-	});
 
 	Mall.listing.positionBenefits();
 });

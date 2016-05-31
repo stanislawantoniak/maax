@@ -13,10 +13,16 @@ $_boxes = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
 $_inspirations = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION);
 $_isSliderBoxContent = $_sliders->count() ? true : false;
 
+
+//$blockBoxesHeader = $bannerHelper->__("Specially for you!");
+$blockBoxesHeader = "";
+
+
+$blockInspirationHeader = $bannerHelper->__("Collection");
 ?>
 
 <?php if ($_isSliderBoxContent): // SBC OPEN  ?>
-<div id="content" class="container-fluid">
+<div id="content" class="container-fluid-wide">
 	<div class="col-sm-12">
 		<?php endif; ?>
 		<?php // SLIDERS START ?>
@@ -81,8 +87,8 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 
 <?php // INSPIRATIONS + BOXES START ?>
 <?php if ($_boxes->count() || $_inspirations->count()): ?>
-	<section id="bottom" class="bg-w">
-		<div class="container-fluid">
+	<section id="bottom">
+		<div class="container-fluid-wide">
 			<?php // BOXES START ?>
 			<?php if ($boxesCount = $_boxes->count()) :
 				$boxesCount = $boxesCount > 3 ? 3 : $boxesCount;
@@ -90,12 +96,14 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 				<div class="col-sm-12 col-boxes">
 					<div class="row">
 						<div class="col-sm-12">
-							<section class="block-inspiration">
-								<header class="title-section">
-									<div class="inspiration-strips "></div>
-									<h2><?php echo $bannerHelper->__("Specially for you!"); ?></h2>
-								</header>
-							</section>
+							<?php if ($blockBoxesHeader): ?>
+								<section class="block-inspiration">
+									<header class="title-section">
+										<div class="inspiration-strips "></div>
+										<h2><?php echo $blockBoxesHeader; ?></h2>
+									</header>
+								</section>
+							<?php endif; ?>
 							<section id="boxesSlider" <?php /* data-boxes-mobile-unslick="1" */ ?>
 							         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 4 ? ' class="boxesSliderHasArrows"' : ''; ?>>
 								<?php foreach ($_boxes as $box):
@@ -123,10 +131,12 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 				<div class="col-sm-12 col-inspirations">
 					<div class="row">
 						<section class="block-inspiration">
-							<header class="title-section">
-								<div class="inspiration-strips "></div>
-								<h2><?php echo $bannerHelper->__("inspirations"); ?></h2>
-							</header>
+							<?php if ($blockInspirationHeader): ?>
+								<header class="title-section">
+<!--									<div class="inspiration-strips "></div>-->
+									<h2><?php echo $blockInspirationHeader; ?></h2>
+								</header>
+							<?php endif; ?>
 							<div id="rwd-inspiration" class="rwdCarousel">
 								<div class="rwd-carousel rwd-theme">
 									<?php foreach ($_inspirations as $n => $inspiration): // 2 START
