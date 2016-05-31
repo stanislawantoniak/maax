@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Wf_Wf>
-            <version>0.1.3</version>
+            <version>0.1.4</version>
         </Wf_Wf>
     </modules>
     <global>
