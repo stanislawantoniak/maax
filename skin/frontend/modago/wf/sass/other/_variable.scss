@@ -37,7 +37,7 @@ $container-smmd:               ((950px + $grid-gutter-width)) !default; //980
 $global-image-path: "../images";
 // #{$global-image-path}
 
-$icon-font-path: "../fonts/glyphicons/";
+$icon-font-path:          "../fonts/glyphicons/";
 $icon-font-name:          "glyphicons-halflings-regular" ;
 $icon-font-svg-id:        "glyphicons_halflingsregular" ;
 
@@ -53,6 +53,8 @@ $bc-primary : $gray-lighter;
 $color-black: $color_220000;
 $bc-secondary : #d9d9d9;
 $colorShortDescription:                                        $color_8a8a8a;
+
+$menuLabelBackground: #B2B2B2;
 
 
 
@@ -125,8 +127,8 @@ $validation-error: $color_e84c3d;
 }
 
 // FONT
-$fontLight: Verdana,Geneva,sans-serif;
-$fontRegular: Verdana,Geneva,sans-serif;
+$fontLight: Verdana, Geneva,sans-serif;
+$fontRegular: Verdana, Geneva,sans-serif;
 $fontOpen: 'Open Sans', sans-serif;
 $fontOpenSS: 'Open Sans', sans-serif;
 $fontBlack: Georgia, sans-serif;
@@ -208,8 +210,12 @@ $colorBtnSecondaryBgStartHover:           #dc4348;
 $colorBtnSecondaryBgEndHover:             #dc4348;
 $colorBtnSecondaryBgStartActive:          #dc4348;
 $colorBtnSecondaryBgEndActive:            #dc4348;
+$colorBtnSecondaryHoverBorder:            #dc4348;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
+
+$colorMainMenuSubItemGradientStart: #F9F9FA;
+$colorMainMenuSubItemGradientEnd: #F9F9FA;
 
 @mixin primaryButtonGradient { //covers normal + hover + active + .disabled
 	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
@@ -227,11 +233,14 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
 @mixin secondaryButtonGradient { //covers normal + hover + active + .disabled
   @include linearGradient($colorBtnSecondaryBgStart,$colorBtnSecondaryBgEnd);
-  &:hover,&.hover {
+  &:hover,
+  &.hover {
     @include linearGradient($colorBtnSecondaryBgStartHover,$colorBtnSecondaryBgEndHover);
+    border-color: $colorBtnSecondaryHoverBorder;
   }
   &:active,&:focus,&.active {
     @include linearGradient($colorBtnSecondaryBgStartActive,$colorBtnSecondaryBgEndActive);
+    border-color: $colorBtnSecondaryHoverBorder;
   }
   &.disabled {
     background: $colorBtnPrimaryBgDisabled;
@@ -389,7 +398,7 @@ $colorBorderSidebarSection:             #fff;
 /* BRADCRUMBS VARIABLES */
 $fontSizeBreadCrumb:                    14px;
 $fontBreadCrumb:                        $fontSizeBreadCrumb $fontOpen;
-$colorBreadCrumb:                       $color_8a8a8a;
+$colorBreadCrumb:                       $color_8c8c8c;
 
 /*BUTTON STYLE*/
 $backgroundColorBtn:                    $color_262626;
@@ -403,3 +412,10 @@ $borderRadiusBtn:                       0px;
 $textColorFooter:                       $color_fff;
 $textColorFooterLink:                   $color_8a8a8a;
 $backgroundColorFooter:                 $color_262626;
+
+
+/* LISTING */
+$backgroundColorFlagNew:                $color_7fce25;
+$backgroundColorFlagSale:               $color_de0e59;
+$backgroundColorFlagPromotion:          $color_ec4920;
+$boxShadowListingColor:                 $color_f5f3f4;
