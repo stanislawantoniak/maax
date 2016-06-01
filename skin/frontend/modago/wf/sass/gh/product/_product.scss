@@ -89,6 +89,13 @@ i.flag {
 	}
 }
 #product_long_box {
+	section {
+		color: $colorShortDescription;
+		font-family:$fontLight;
+		strong {
+			font-family:$fontLight !important;
+		}
+	}
 	.title_section {
 		margin-bottom:0px;
 		margin-left:0px;
@@ -101,7 +108,7 @@ i.flag {
 			a {
 				&:fistr-child {		
 					magin-left: 0 !important;
-				}
+				}			
 				color:$color_999;
 				display:inline-block;
 				margin:10px 0px -2px 0;
@@ -116,6 +123,8 @@ i.flag {
 				}
 				&:hover {
 					color:$colorLinkActive;
+					text-decoration:none;
+					cursor:pointer;
 				}
 			}
 		}

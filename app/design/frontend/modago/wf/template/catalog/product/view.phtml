@@ -58,6 +58,7 @@ $attributesData = $this->getAdditionalDataDetailed(true, false);
 
 $productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
 $brandShopProductId = $_product->getData('brandshop');
+$deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
 <div id="content" class="container-fluid">
     <div id="product_content" class="col-lg-9 col-md-9 col-sm-12">
@@ -84,14 +85,16 @@ $brandShopProductId = $_product->getData('brandshop');
                     <a class="opened" href="#description_product">Opis produktu</a>
                 </li>
                 <li>
-                    <a href="#tab_reviews">Opinie o produkcie</a>
+                    <a href="#tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
                 </li>
+                <?php if (!empty($deliveryReturn)) : ?>
                 <li>
                     <a href="#tab_delivery">Dostawa i zwroty</a>
                 </li>
+                <?php endif; ?>
             </ul>
             <section id="description_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-                <div class="main">
+                <div>
                     <div itemprop="description"><?php echo $productDescription; ?></div>
                     <?php if (!empty($attributesData)) : ?>
                         <ul class="list">
@@ -130,17 +133,29 @@ $brandShopProductId = $_product->getData('brandshop');
                 </div>
             </section>
             <!-- SECTION : OPIS PRODUKTU -->
-            <section id="tab_reviews">					
-                <!--reviews-->
+            <ul class="title_section">
+                <li>
+                    <a class="opened" name="tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
+                </li>
+            </ul>
+            <!--reviews-->
                 <?php echo $this->getChildHtml('product.review.section'); ?>
-                <!--end reviews-->
+            <!--end reviews-->
+            <?php if (!empty($deliveryReturn)) : ?>
+            <ul class="title_section">
+                <li>
+                    <a class="opened" name="tab_delivery">Dostawa i zwroty</a>
+                </li>
+            </ul>
+            
+            <section id="tab_delivery" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+                <?php echo $deliveryReturn;?>
             </section>
-            <sectopm id="tab_delivery">					
-            </section>
+            <?php endif; ?>
         </div>      
     </div>
     <div id="product_additions" class="col-lg-3 col-md-3 hidden-sm">
-    	<?php echo $this->getChildHtml('crosssell'); ?>
+        	<?php echo $this->getChildHtml('crosssell'); ?>
     </div>
 </div>
 
