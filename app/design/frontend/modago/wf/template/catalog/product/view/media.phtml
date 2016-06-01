@@ -16,13 +16,11 @@ $_zolagoCatalogBlock = Mage::getBlockSingleton('zolagocatalog/product_view');
 $nImagesForCssStyle = 5; //magic number, for less then 5 items height of box is auto
 $_images = $this->getGalleryImages();
 ?>
-
 <?php if (count($this->getGalleryImages()) > 0): ?>
     <?php $_dimensions = array(); ?>
     <?php foreach ($_images as $k => $_image): ?>
         <?php $_dimensions[$k] = @getimagesize($_image->getPath()); ?>
     <?php endforeach; ?>
-    <div id="product-gallery" class="col-lg-5 col-md-5 col-sm-6 col-xs-12 clearfix">
         <div id="wrapper-productGalleryThumbMedia">
             <a href="#" class="up"><?php echo $this->__("up"); ?></a>
             <div id="productGalleryThumbMedia" class="rwd-carousel <?php echo count($this->getGalleryImages()) < $nImagesForCssStyle ? 'auto-height' : ''; ?> ">
@@ -53,5 +51,4 @@ $_images = $this->getGalleryImages();
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
-    </div>
 <?php endif; ?>
