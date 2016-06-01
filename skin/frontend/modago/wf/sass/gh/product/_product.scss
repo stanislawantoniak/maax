@@ -290,12 +290,11 @@ i.flag {
 		}
 		.price-label,
 		.old-price {
-			font-size: 24px;
+			font-size: 20px;
 			color: $colorFont;
 			font-family: $fontLight;
-		}
-		.old-price {
-			text-decoration: line-through;
+			text-decoration: line-through;			
+			margin-right:6px;
 		}
 		.price {
 			font-size: 22px;
@@ -311,7 +310,7 @@ i.flag {
 				line-height: 1.0;
 			}
 			@media (max-width: 480px) {
-				display:block;
+				display:inline;
 				margin:0;
 				padding:0;
 				line-height: 1;
@@ -335,6 +334,10 @@ i.flag {
 		.price-box {
 			margin-left:0px;
 			padding-left:0px;
+		}
+		.price-box-line {
+/*			white-space: nowrap;	 */
+			min-width:200px;
 		}
 	}
 	.color-box-bundle,
