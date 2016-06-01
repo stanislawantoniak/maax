@@ -408,6 +408,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 		}
 		$recentlyViewedProducts = $singleton->getItemsCollection();
 
+		/** @var Mage_Core_Helper_Data $coreHelper */
+		$coreHelper = Mage::helper('core');
+
 		$recentlyViewedContent = array();
 		if ($recentlyViewedProducts->count() > 0) {
 			foreach ($recentlyViewedProducts as $product) {
@@ -419,8 +422,14 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				$recentlyViewedContent[(int)$product->getId()] = array(
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
 					'image_url' => (string)$image,
-					'redirect_url' => $product->getNoVendorContextUrl()
+					'redirect_url' => $product->getNoVendorContextUrl(),
+					'price' => $coreHelper->currency($product->getPrice(), true, false),
 				);
+				// add old price only if should be visible
+				if ($product->getStrikeoutPrice() > $product->getPrice()) {
+					$recentlyViewedContent[(int)$product->getId()]['old_price'] =
+						$coreHelper->currency($product->getStrikeoutPrice(), true, false);
+				}
 			}
 		}
 		// Cache all recently viewed
