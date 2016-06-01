@@ -1212,6 +1212,7 @@ Mall.listing = {
 				containerOffset = jQuery('#sb-site').offset(),
 				leftOffset = content.offset().left + 15,
 				topOffset = content.offset().top +5;
+			if (topOffset < 139) topOffset = 139; //ugly fix for jumping filters on header
 
 
 			if(containerOffset.left != 0) {
