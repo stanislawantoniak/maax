@@ -1,4 +1,27 @@
 .recently-viewed {
+  .no-gutter[class^=col-] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .left-col {
+
+  }
+  .right-col {
+    .prod_name {
+      min-height: 50px;
+    }
+    .wrapper-price {
+      font-size: 14px;
+      font-family:$fontRegular;
+      .old {
+        text-decoration: line-through;
+        color:$colorFont;
+      }
+      .price {
+        color:$color_fd002a;
+      }
+    }
+  }
 
 	h3.title-section {
 		@media (max-width: $screen-xs-max) {
