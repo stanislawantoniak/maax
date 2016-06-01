@@ -57,19 +57,16 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 <div id="product-name" class="col-md-12 product-name" style="overflow-x:visible;">
         <h1 itemprop="name" <?php if($flag): ?>class="product-name-with-flag"<?php endif; ?>><?php echo $productName; ?></h1>
         <meta itemprop="sku" content="<?php echo $_product->getSku() ?>"/>
-        <?php if($flag): ?>
-            <div class="product-flag"><?php echo $flagLabel; ?></div>
-        <?php endif; ?>
 </div>
 <!-- /PRODUCT NAME -->
 <!-- SHORT DESCRIPTION -->
 <div class="col-md-12" id="short-description-block">
     <div id="product_price_box" class="row">
-        <div id="product-price" class="col-lg-6">
+        <div id="product-price" class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
             <?php if ($_product->getCanShowPrice() !== false): ?>
                 <div class="price-box-bundle">
                     <div class="price-box row">
-                        <p class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <p class="price-box-line" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                             <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
                                 <meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
                             <?php endif; ?>
@@ -84,14 +81,26 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                             <?php endif; ?>
 
                             <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-	    					<span class="old-price"><?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ", "&nbsp;", Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
-		    				<span class="price"><?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?><span itemprop="price"><?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?></span> <?php echo $currencySymbol; ?><?php endif; ?></span>
+                            <span class="old-price">
+                                <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : 
+                                          echo str_replace(" ", "&nbsp;", Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false));
+    	    					    endif; 
+                                ?>
+                            </span>
+                            <span class="price">
+                                <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+                                    <span itemprop="price">
+                                        <?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?>
+                                    </span> 
+                                    <?php echo $currencySymbol; ?>
+                                <?php endif; ?>
+                            </span>
                         </p>
                     </div>
                 </div>	    				    				    			
             <?php endif; ?>        
         </div>
-        <div id="delivery-and-return" class="col-lg-6">
+        <div id="delivery-and-return" class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
             <div>
                 <?php if($deliveryHeadline): ?>
                     <?php echo $deliveryHeadline; ?>
