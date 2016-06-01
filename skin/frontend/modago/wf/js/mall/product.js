@@ -1034,9 +1034,11 @@ Mall.product = {
         initThumbsCarousel: function() {
             var productGalleryThumbMedia = this.getThumbs();
             productGalleryThumbMedia.rwdCarousel({
-                items : 1,
+                items : 4,
+				itemsDesktop : [1180,3],
                 pagination:false,
-                navigation: false,
+                navigation: true,
+				rewindNav: false,
                 touchDrag: false,
                 mouseDrag:false,
                 afterInit : function(el) {
@@ -1133,11 +1135,11 @@ Mall.product = {
         },
 
         getThumbs: function () {
-            return jQuery('#productGalleryThumbMedia');
+            return jQuery('#productGalleryThumbMedia-wf');
         },
 
         getThumbsWrapper: function() {
-            return jQuery('#wrapper-productGalleryThumbMedia');
+            return jQuery('#wrapper-productGalleryThumbMedia-wf');
         },
 
         /**
