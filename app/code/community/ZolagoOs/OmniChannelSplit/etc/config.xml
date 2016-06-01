@@ -165,7 +165,7 @@
             <udsplit>
                 <active>0</active>
                 <model>ZolagoOs_OmniChannelSplit_Model_Carrier</model>
-                <title>Drop Shipping (Split)</title>
+                <title>ZolagoOs Shipping (Split)</title>
                 <handling_type>F</handling_type>
                 <free_method>total</free_method>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>

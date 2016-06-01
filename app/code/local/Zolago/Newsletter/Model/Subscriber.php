@@ -1,7 +1,7 @@
 <?php
 class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscriber
 {
-	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/subscription/confirmation_sales_rule";
+	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/zolagosubscription/confirmation_sales_rule";
 
 	protected $_mailFlag = false;
 	
@@ -34,6 +34,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationSuccessEmail($sid=null)
 	{
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::sendConfirmationSuccessEmail();
+
 		$couponData = null;
 		$confirmationSalesRuleId = $this->getConfirmationSalesRule();
 
@@ -86,6 +89,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
      */
     public function subscribeCustomer($customer)
     {
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::subscribeCustomer($customer);
+
 	    $subscriber = $this;
 	    $confirmationNeeded = Mage::getStoreConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1;
 
@@ -262,6 +268,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendUnsubscriptionEmail($sid=null)
 	{
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::sendUnsubscriptionEmail();
+
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE),
@@ -275,6 +284,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationRequestEmail($sid=null)
 	{
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::sendConfirmationRequestEmail();
+
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE),
@@ -365,6 +377,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
      */
     public function loadByCustomer(Mage_Customer_Model_Customer $customer, $save = true)
     {
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::loadByCustomer($customer);
+
         $data = $this->getResource()->loadByCustomer($customer);
         $this->addData($data);
         if (!empty($data) && $customer->getId() && !$this->getCustomerId()) {

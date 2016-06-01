@@ -1,5 +1,5 @@
 <?php
-class Orba_Shipping_Model_System_Source_Pkgtype {
+class Orba_Shipping_Model_System_Source_Pkg_Type {
 	const TYPE_PACKAGE		= "PACKAGE";
 	const TYPE_ENVELOPE	= "ENVELOPE";
 	const TYPE_PALLET		= "PALLET";

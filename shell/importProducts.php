@@ -48,6 +48,7 @@ class Modago_ImportProducts_Shell extends Mage_Shell_Abstract
         /*Config values*/
         $vendorId = 82;
         $importProfile = "dev_01";
+
         /*Config values*/
 
         $xmlToArray = (array)$xml;

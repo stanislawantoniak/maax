@@ -167,12 +167,12 @@
         <template>
             <email>
                <udropship_microsite_signup_template  module="umicrosite">
-                   <label>Dropship Vendor Sign Up Email</label>
+                   <label>ZolagoOs Vendor Sign Up Email</label>
                    <file>umicrosite_signup.html</file>
                    <type>html</type>
                </udropship_microsite_signup_template>
                <udropship_microsite_welcome_template  module="umicrosite">
-                   <label>Dropship Vendor Welcome Email</label>
+                   <label>ZolagoOs Vendor Welcome Email</label>
                    <file>umicrosite_welcome.html</file>
                    <type>html</type>
                </udropship_microsite_welcome_template>

@@ -2,7 +2,7 @@
 /**
  * client dhl
  */
-class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier_Client_Abstract {
+class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_Soap {
 
     const ADDRESS_HOUSE_NUMBER		= '.';
     const SHIPMENT_TYPE_PACKAGE		= 'PACKAGE';

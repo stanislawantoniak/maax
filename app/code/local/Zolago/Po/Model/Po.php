@@ -635,11 +635,19 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	   }
 	   return true;
    }
-
+	
 	public function getPaymentAmount() {
-		/** @var Zolago_Payment_Model_Allocation $allocationModel */
-		$allocationModel = Mage::getModel("zolagopayment/allocation");
-		return $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+		/** @var Zolago_Payment_Helper_Data $paymentHelper */
+		$paymentHelper = Mage::helper('zolagopayment');
+
+		if ($paymentHelper->getConfigUseAllocation()) { // Sum of allocations amount
+			/** @var Zolago_Payment_Model_Allocation $allocationModel */
+			$allocationModel = Mage::getModel("zolagopayment/allocation");
+			$sum = $allocationModel->getSumOfAllocations($this->getId()); 
+		} else { // Sum of transaction for order
+			$sum = $paymentHelper->getSimplePaymentAmount($this);
+		}
+		return $sum; 
 	}
 
 	public function getDebtAmount() {
@@ -974,12 +982,20 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	/**
 	 * Retrieve delivery method for Modago Api
 	 *
-	 * @return string standard_courier|inpost_parcel_locker
+	 * @return string standard_courier|inpost_parcel_locker|polish_post
 	 */
 	public function getApiDeliveryMethod() {
-		$dMethod = 'standard_courier';
-		if (!empty($this->getInpostLockerName())) {
-			$dMethod = 'inpost_parcel_locker';
+		$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+		switch ($methodCode) {
+			case Orba_Shipping_Model_Packstation_Inpost::CODE:
+				$dMethod = 'inpost_parcel_locker'; // Paczkomaty InPost
+				break;
+			case 'zolagopp': //todo: when model ready replace it by const CODE
+				$dMethod = 'polish_post'; // Poczta Polska
+				break;
+			default:
+				$dMethod = 'standard_courier';
+				break;
 		}
 		return $dMethod;
 	}

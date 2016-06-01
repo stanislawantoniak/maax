@@ -79,7 +79,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
                 $model->addSubscriber($this->getQuote()->getCustomerEmail(),Zolago_Newsletter_Model_Subscriber::STATUS_UNCONFIRMED);
 			} elseif(isset($agreements['agreement_newsletter']) && $agreements['agreement_newsletter'] == 0) {
 				// send invitation mail, model takes care of handling everything
-				$model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
+                if (Mage::helper("zolagonewsletter")->isModuleActive()){
+                    $model->sendInvitationEmail($this->getQuote()->getCustomerEmail());
+                }
+
 			}
 			
 		} catch (Exception $ex) {
@@ -611,7 +614,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             $customerBilling = $billing->exportCustomerAddress();
             if(!$lockerId){
                $customer->addAddress($customerBilling); 
-            }           
+            }
 
 
             $billing->setCustomerAddress($customerBilling);

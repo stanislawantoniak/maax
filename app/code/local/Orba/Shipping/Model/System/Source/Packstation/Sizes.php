@@ -1,5 +1,5 @@
 <?php
-class Orba_Shipping_Model_System_Source_PackstationSizes {
+class Orba_Shipping_Model_System_Source_Packstation_Sizes {
 	/* VENDOR'S INPOST PARCEL SIZES */
 	/* sizes in cm splitted during packages making */
 	const INPOST_PARCEL_SIZE_SMALL = 'A';
