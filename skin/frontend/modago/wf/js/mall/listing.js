@@ -2412,7 +2412,6 @@ jQuery(document).ready(function () {
 	"use strict";
     jQuery('#toggleSearch').click(function(){
         jQuery('#sort-criteria').find('.selectboxit-container').css('pointer-events', 'none');
-		jQuery('#dropdown-search input[name=q]').focus();
     });
 
     jQuery('body').click(function (e) {
@@ -2433,6 +2432,9 @@ jQuery(document).ready(function () {
     } else {
         Mall.listing.initShuffle();
     }
+
+	jQuery(window).on('Mall.onResizeEnd', function() {Mall.listing.positionFilters();});
+	// jQuery(window).on('Mall.onScrollEnd', function() {Mall.listing.positionFilters();});
 
 	Mall.listing.positionBenefits();
 });
