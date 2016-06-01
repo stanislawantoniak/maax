@@ -37,5 +37,17 @@
                 </setup>
             </wfwf_setup>
         </resources>
+
     </global>
+    <frontend>
+		<translate>
+			<modules>
+				<Wf_Wf>
+					<files>
+						<default>Wf_Wf.csv</default>
+					</files>
+				</Wf_Wf>
+			</modules>
+		</translate>		
+    </frontend>
 </config>

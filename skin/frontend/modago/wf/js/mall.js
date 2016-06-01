@@ -779,7 +779,7 @@ Mall.rwdCarousel = {
 
 Mall.Breakpoint = {
 	xs: 480,
-	xssm: 600,
+	xssm: 620,
 	sm: 768,
     smmd: 810,
 	md: 992,
@@ -887,9 +887,6 @@ Mall.Slick = {
 			prevArrow: '<div class="boxesArrow  boxesArrowPrev"><div class="owl-arrow owl-prev"></div></div>',
 			nextArrow: '<div class="boxesArrow boxesArrowNext"><div class="owl-arrow owl-next"></div></div>',
 
-            //prevArrow: '<div class="owl-prev"></div>',
-            //nextArrow: '<div class="owl-next"></div>',
-
 			responsive: [
 				{
 					breakpoint: Mall.Breakpoint.sm,
@@ -936,10 +933,10 @@ Mall.Slick = {
 				} else {
 					_.options.responsive[0].settings.slidesToShow =
 						_.options.responsive[0].settings.slidesToScroll =
-							(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 3);
+							(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 2);
 					_.options.responsive[1].settings.slidesToShow =
 						_.options.responsive[1].settings.slidesToScroll =
-							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
+							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 1);
 				}
 				_.slider.slick(_.options);
 				_.resizeBoxes();
@@ -1766,12 +1763,13 @@ Mall.inspirationsSliderInit = function() {
 	rwdInspirationCarousel.rwdCarousel({
 		items : 5, //10 items above 1000px browser width
 		itemsDesktop : [1000,4], //5 items between 1000px and 901px
-		itemsDesktopSmall : [900,4], // betweem 900px and 601px
+		itemsDesktopSmall : [900,3], // between 900px and 601px
 		itemsTablet: [767,3], //2 items between 600 and 0
+        itemsTabletSmall : [619,2], //2 items between 609 and 767
 		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
 		pagination : false,
 		navigation: true,
-		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
+		navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
 		rewindNav : false,
 		itemsScaleUp:true
 	});

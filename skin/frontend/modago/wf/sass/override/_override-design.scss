@@ -64,3 +64,9 @@ ul#admin_messages{
 	margin:0;
 	padding:0;
 }
+
+.wf-home {
+	ul.messages:not(:empty) {
+		margin-bottom: 15px !important;
+	}
+}
