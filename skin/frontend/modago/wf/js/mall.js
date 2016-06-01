@@ -920,10 +920,10 @@ Mall.Slick = {
 				} else {
 					_.options.responsive[0].settings.slidesToShow =
 						_.options.responsive[0].settings.slidesToScroll =
-							(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 3);
+							(_.getBoxesAmount() < 3 ? _.getBoxesAmount : 2);
 					_.options.responsive[1].settings.slidesToShow =
 						_.options.responsive[1].settings.slidesToScroll =
-							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 2);
+							(_.getBoxesAmount() < 2 ? _.getBoxesAmount : 1);
 				}
 				_.slider.slick(_.options);
 				_.resizeBoxes();
