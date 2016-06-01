@@ -27,8 +27,8 @@
 		}
 	}
 	&.boxesSliderHasArrows {
-		padding-left: 40px;
-		padding-right: 40px;
+		//padding-left: 40px;
+		//padding-right: 40px;
 		.boxesArrow {
 			display: block;
 			color: $color-gray1;
@@ -39,10 +39,19 @@
 			top: 0;
 			cursor: pointer;
 			&.boxesArrowNext {
-				right: 35px;
+				right: 55px;
 			}
 			&.boxesArrowPrev {
-				left: -9px;
+				left: 5px;
+			}
+
+			@include max-screen($screen-sm) {
+				&.boxesArrowNext {
+					right: 82px;
+				}
+				&.boxesArrowPrev {
+					left: 35px;
+				}
 			}
 
 			.owl-prev {
@@ -54,7 +63,7 @@
 				border: 1px solid #eee;
 				border-radius: 100%;
 				@include transition(all 0.2s ease-in-out);
-
+				background: $body-bg;
 				&:before {
 					content: "\f104";
 					position: absolute;
@@ -88,7 +97,7 @@
 				border: 1px solid #eee;
 				border-radius: 100%;
 				@include transition(all 0.2s ease-in-out);
-
+				background: $body-bg;
 				&:before {
 					content: "\f105";
 					position: absolute;
