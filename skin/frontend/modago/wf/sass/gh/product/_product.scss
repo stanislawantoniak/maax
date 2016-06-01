@@ -88,7 +88,39 @@ i.flag {
 		padding-left: 0px !important;
 	}
 }
-
+#product_long_box {
+	.title_section {
+		margin-bottom:0px;
+		margin-left:0px;
+		padding-left:0px;
+		width:100%;
+		li {
+			display: inline-block;
+			list-style: ouside none none;
+			padding-right:30px;
+			a {
+				&:fistr-child {		
+					magin-left: 0 !important;
+				}
+				color:$color_999;
+				display:inline-block;
+				margin:10px 0px -2px 0;
+				text-transform: uppercase;
+				font-family: $fontBlack;
+				&.opened {
+					border-bottom: 3px solid $colorLinkActive;
+					display:block;
+					height: 36px;
+					width: 100%;
+					color: $colorLinkActive;
+				}
+				&:hover {
+					color:$colorLinkActive;
+				}
+			}
+		}
+	}
+}
 #product-shop {
 	#delivery-and-return {
 		font-size:12px;
