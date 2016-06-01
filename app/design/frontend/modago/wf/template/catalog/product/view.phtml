@@ -79,16 +79,16 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 						<!-- END:/ PRODUCT SHOP -->
             </div>
         </div>  
-        <div id="product_long_box" class="col-lg-12 col-md-12 col-sm-12">
+        <div id="product_long_box">
             <ul class="title_section">
                 <li>
-                    <a class="opened" href="#description_product">Opis produktu</a>
+                    <a class="opened" name="description_product" href="#description_product">Opis produktu</a>
                 </li>
-                <li>
+                <li class="hidden-xs">
                     <a href="#tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
-                </li>
+                </li>                
                 <?php if (!empty($deliveryReturn)) : ?>
-                <li>
+                <li class="hidden-xs">
                     <a href="#tab_delivery">Dostawa i zwroty</a>
                 </li>
                 <?php endif; ?>
@@ -154,7 +154,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
             <?php endif; ?>
         </div>      
     </div>
-    <div id="product_additions" class="col-lg-3 col-md-3 hidden-sm">
+    <div id="product_additions" class="col-lg-3 col-md-3 hidden-sm hidden-xs">
         	<?php echo $this->getChildHtml('crosssell'); ?>
     </div>
 </div>

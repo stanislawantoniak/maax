@@ -65,7 +65,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 <!-- SHORT DESCRIPTION -->
 <div class="col-md-12" id="short-description-block">
     <div id="product_price_box" class="row">
-        <div id="product-price" class="col-lg-6">
+        <div id="product-price" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <?php if ($_product->getCanShowPrice() !== false): ?>
                 <div class="price-box-bundle">
                     <div class="price-box row">
@@ -91,7 +91,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                 </div>	    				    				    			
             <?php endif; ?>        
         </div>
-        <div id="delivery-and-return" class="col-lg-6">
+        <div id="delivery-and-return" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <div>
                 <?php if($deliveryHeadline): ?>
                     <?php echo $deliveryHeadline; ?>
