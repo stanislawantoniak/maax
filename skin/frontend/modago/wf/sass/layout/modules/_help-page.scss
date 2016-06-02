@@ -24,14 +24,14 @@
 
 #contact-container {
   border-top-width: 0px;
+
+  ul.form-list {
+    padding-left: 0;
+    list-style: none;
+  }
 }
 
-ul.form-list {
-  @media(max-width: $screen-xs-max) {
-    padding-left: 0;
-  }
-  list-style: none;
-}
+
 .buttons-set button {
   margin-bottom: 20px;
   float: right;

@@ -153,3 +153,123 @@
 		}
 	}
 }
+
+
+#help-content-2  {
+	padding: 20px 0 !important;
+
+	.help-item {
+		border: 1px solid #ccc;
+		padding: 30px 0;
+		height: 250px;
+	}
+
+	.icon-box {
+		background-color: #ffffff;
+		display: block;
+		margin-bottom: 48px;
+
+		&:hover {
+			.help-item {
+				border-color: #8a8a8a;
+			}
+		}
+	}
+
+
+	@media (max-width: $screen-sm-min){
+		.help-item {
+			height: 270px;
+		}
+	}
+	@media (max-width: $screen-sm-min){
+		.help-item {
+			height: 190px;
+		}
+		.icon-box.design-2 .icon {
+			margin-bottom: 20px;
+		}
+		.icon-box .icon-content h3 {
+			text-align: center;
+		}
+	}
+	@media (min-width: $screen-sm) and (max-width: $screen-sm){
+		.help-item {
+			height: 270px;
+		}
+	}
+
+	@media (max-width: $screen-xs-min){
+		.icon-box {
+			padding: 0 5px;
+		}
+		.icon-box .icon-content h3 {
+			font-size: 14px;
+		}
+	}
+
+	ul.help-tile-list {
+		padding-left: 15px;
+		color: #000;
+	}
+
+
+	.icon-box.design-2 .icon {
+		text-align: center;
+	}
+	.icon-box .icon {
+		display: table-cell;
+		vertical-align: top;
+		padding-right: 20px;
+	}
+	.icon-box.design-2 .icon i {
+		width: 70px;
+		height: 70px;
+		line-height: 41px;
+		background-color: #ccc;
+		color: #FFF !important;
+		padding: 15px;
+		-webkit-border-radius: 100%;
+		border-radius: 100%;
+		font-size: 32px;
+	}
+	.icon-box.animation-2 .icon i {
+		@include transition(all 0.2s ease-in-out);
+	}
+
+	.icon-box .icon-content {
+		display: block;
+		vertical-align: middle;
+		line-height: 1.8;
+		padding-bottom: 10px;
+	}
+	.icon-box .icon-content h3 {
+		font-size: 18px;
+		letter-spacing: 1px;
+		margin-bottom: 0;
+		padding: 10px 0;
+	}
+	hr, hr.divider {
+		height: 1px;
+		display: inline-block;
+		background: none;
+		border-top: none;
+		border-bottom: 2px solid #e4e4e4;
+		border-left: 0;
+		border-right: 0;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		width: 98%;
+	}
+	hr.divider.short {
+		width: 35px;
+	}
+	.icon-box .icon-content .icon-text {
+		font-family: 'Open Sans', sans-serif;
+	}
+	.icon-box.animation-2:hover .icon i {
+		background-color: #3d3d3d !important;
+		border-color: #3d3d3d !important;
+	}
+
+}

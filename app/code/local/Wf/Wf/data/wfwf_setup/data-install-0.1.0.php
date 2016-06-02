@@ -44,7 +44,7 @@ $cms = array(
                 <h2 class="footer-list-title">Twoje Konto</h2>
                 <ul class="footer-list">
                     <li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Zaloguj się</a></li>
-                    <li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Twoje zamówienia</a></li>
+                    <li><a href="{{store url='sales/order/process'}}">Twoje zamówienia</a></li>
                     <li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Ulubione</a></li>
                 </ul>
             </div>
