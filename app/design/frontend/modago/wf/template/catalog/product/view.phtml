@@ -220,6 +220,20 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal"></button>
+
+			<div class="modal-body">
+				<div id="sizeTableIframeContainer">
+					<iframe id="sizeTableIframe"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 <?php echo $this->getChildHtml('zolago.page.benefits'); ?>
