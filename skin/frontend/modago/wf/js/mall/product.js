@@ -1171,7 +1171,7 @@ Mall.product = {
 					.toggleClass("hidden");
 
 
-				$el = jQuery("ul.product_list_widget li.watch_more_item");
+				var $el = jQuery("ul.product_list_widget li.watch_more_item");
 
 				if(!$el.hasClass("hidden")){
 					jQuery("a.watch_less").removeClass("hidden");
