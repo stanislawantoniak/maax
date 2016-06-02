@@ -250,7 +250,7 @@
 	}
 
   #wrapper-productGalleryThumbMedia-wf {
-    @media (max-width: 931px) {
+    @media (max-width: $screen-xs-max) {
       display: none;
     }
 
