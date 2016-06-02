@@ -274,10 +274,12 @@ var Mall = {
 			}
 			boxNotAdded = jQuery(
 				'<div class="addLike-box" id="notadded-wishlist">' + 
-					'<span class="product-context-like-count">&nbsp;' + likeText + '</span>' +
-					'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike">' + 
-						Mall.i18nValidation.__('add-to-br-favorites') +
-					'</a>' + 
+					// '<span class="product-context-like-count">&nbsp;' + likeText + '</span>' +
+					'<p>' +
+						'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike">' +
+							'<i class="i-unlike-wf">&nbsp;</i><span>' + Mall.i18nValidation.__('add-to-favorites') + '</span>' +
+						'</a>' +
+					'</p>'+
 				'</div>');
 
 			// Added box
@@ -288,16 +290,17 @@ var Mall = {
 			}
 
 			boxAdded = jQuery(
-				'<div class="addedLike-box" id="added-wishlist">' + 
-					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;">'+ 
-					likeText +
-					'<br><span>'  + Mall.i18nValidation.__("remove-from-favorites") + '</span>'+ 
-					'</a>' + 
+				'<div class="addedLike-box" id="added-wishlist">' +
+					'<p>' +
+						'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;">'+
+							'<i class="i-like-wf">&nbsp;</i><span>' + likeText + '</span>' +
+						'</a>' +
+					'</p>'+
 				'</div>');
 
 			boxLoading = jQuery(
 				'<div class="addingLike-box" id="adding-wishlist">' +
-					'<i class="fa fa-spinner fa-spin fa-2x"></i>' +
+					'<p><i class="fa fa-spinner fa-spin">&nbsp;</i></p>' +
 				'</div>'
 			);
 			
