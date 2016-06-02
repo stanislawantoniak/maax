@@ -364,6 +364,22 @@ i.flag {
 				line-height: 29px;
 			}
 		}
+		.size-box {
+			.sizes-content {
+				padding-left:15px;
+				.selectboxit-container {
+					span, .selectboxit-options a {
+						height:40px;
+						line-height: 38px;	
+					}				
+					.selectboxit-arrow-container {
+					    background: $selectMap;
+					    @include sprite($selectMap, select_wf_disabled);
+					    line-height: image-height(sprite-file($selectMap, select_wf_disabled));
+					}
+				}
+			}
+		}
 		.form-group {
 			display: inline-block;
 			label {
@@ -503,10 +519,19 @@ i.flag {
 			}
 		}
 		.view-sizing {
-			display:inline-block;
+			position:relative;
+			display:inline;
 			font-size: 14px;
-			bottom: 4px;
 			white-space: nowrap;
+			float:none;
+			padding-top:3px;
+			svg {
+				path {
+					fill:$color_999;
+				}
+				margin-right:5px;
+				margin-left:10px;
+			}
 			@media (max-width: 814px) {
 
 			}
