@@ -503,12 +503,9 @@ i.flag {
 			}
 		}
 		.view-sizing {
-			display:block;
+			display:inline-block;
 			font-size: 14px;
-			float: right;
-			position: absolute;
-			bottom: -25px;
-			left: 0px;
+			bottom: 4px;
 			white-space: nowrap;
 			@media (max-width: 814px) {
 

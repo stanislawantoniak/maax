@@ -166,7 +166,7 @@ Mall.product = {
 		var size_box = jQuery(".size-box");
 		this._size_table_template = size_box.find("a.view-sizing")[0].outerHTML;
 		this._size_label = jQuery('.size-box .size-label').text();
-		size_box.find("div.size").remove();
+		size_box.find("div").remove();
 	},
 
 	applyAdditionalRules: function(optionGroup, selector) {
@@ -176,35 +176,6 @@ Mall.product = {
 	},
 
 	createOptionGroup: function(group, useSizeboxList) {
-		if(!useSizeboxList) {
-			// insert option group
-			var groupElement = jQuery("<div/>", {
-				"class": "size"
-			}).appendTo(".size-box");
-			jQuery(".size-box").append(this._options_group_template);
-			// create label group
-			jQuery("<span/>", {
-				"class": "size-label size-label-radios",
-				"html": (this._size_label + ":")
-			}).appendTo(groupElement);
-
-			// create form group for options
-			var formGroupElement = jQuery("<div/>", {
-				class: "form-group form-radio"
-			}).appendTo(groupElement);
-
-			jQuery.each(group.options, function(index, option) {
-				Mall.product.createOption(group.id, option, formGroupElement);
-			});
-			var sizesCount = jQuery('input[type=radio][id^=size_]:not(:disabled)').length;
-
-			if (sizesCount == 1) {
-				var singleInput = jQuery('input[type=radio][id^=size_]:not(:disabled)');
-				singleInput.attr('checked', true).trigger('click');
-			}
-
-			this.applyAdditionalRules(group, formGroupElement);
-		} else { //selectbox
 
 
 
@@ -217,28 +188,19 @@ Mall.product = {
 					showSelect = true;
 				}
 			});
-
 			if (showSelect) {
-				var labelText = jQuery('.size-label').text();
 				// insert option group
 				var groupElement = jQuery("<div/>", {
 					"class": "size"
 				}).appendTo(".size-box");
 				jQuery(".size-box").append(this._options_group_template);
 				// create label group
-				jQuery("<span/>", {
-					"class": "size-label col-sm-6 col-md-6 col-xs-12",
-					"html": (this._size_label + ":")
-
-				}).appendTo(groupElement);
-
-
 				// create form group for selectbox options
-				var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
+				var formGroupElementClass = (deskTopDevice) ? ' sizes-content' : ' sizes-content form-group select-size-mobile-trigger';
 				var formGroupElement = jQuery("<div/>", {
-					class: "" + formGroupElementClass
+					class: "row " + formGroupElementClass
 				}).appendTo(groupElement);
-
+				
 				//create select part
 				var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
 				var formGroupElementSelect = jQuery("<select/>", {
@@ -250,17 +212,13 @@ Mall.product = {
 				jQuery.each(group.options, function (index, option) {
 					Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
 				});
+				jQuery(".sizes-content").append(this._size_table_template);
 
-				this.applyAdditionalRules(group, formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-				if (deskTopDevice) {
-					jQuery('div.size-box div.size a').css('position', 'relative');
-					jQuery('div.size-box div.size a').css('top', '5px');
-				}
+				
 			} else {
-				jQuery('div.size-box').remove();
+				jQuery('.size-box div').remove();
 			}
 
-		}
 
 	},
 
