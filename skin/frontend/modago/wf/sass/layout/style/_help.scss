@@ -182,12 +182,12 @@
 
 
 	@media (max-width: 991px){
-		#help-content-2 .help-item {
+		.help-item {
 			height: 270px;
 		}
 	}
 	@media (max-width: 768px){
-		#help-content-2 .help-item {
+		.help-item {
 			height: 190px;
 		}
 		.icon-box.design-2 .icon {
@@ -200,7 +200,7 @@
 
 	@media (max-width: 480px){
 
-		#help-content-2 .icon-box {
+		.icon-box {
 			padding: 0 5px;
 		}
 		.icon-box .icon-content h3 {
