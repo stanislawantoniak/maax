@@ -23,6 +23,8 @@ Mall.product = {
 			if(Mall.windowWidth() > Mall.Breakpoint.sm) {
 				Mall.product.gallery.preloadFirstImage();
 			}
+
+			Mall.product.upsell.init();
 		}
 	},
 
@@ -1160,7 +1162,26 @@ Mall.product = {
 	    }
 
     },
+	upsell: {
+		init: function() {
+			jQuery("a.watch_more, a.watch_less").click(function(e){
+				e.preventDefault();
 
+				jQuery("ul.product_list_widget li.watch_more_item")
+					.toggleClass("hidden");
+
+
+				$el = jQuery("ul.product_list_widget li.watch_more_item");
+
+				if(!$el.hasClass("hidden")){
+					jQuery("a.watch_less").removeClass("hidden");
+				}
+				if($el.hasClass("hidden")){
+					jQuery("a.watch_less").addClass("hidden");
+				}
+			})
+		},
+	},
 	sizetable: {
 		_content: "",
 		_iframe_id: "sizeTableIframe",
