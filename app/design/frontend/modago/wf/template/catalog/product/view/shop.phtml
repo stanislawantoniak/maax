@@ -196,6 +196,10 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                 <?php endif; ?>
             </div>
         </div>
+    <?php else: ?>
+                    <div class="temporary-absence-product-wrapper">
+                        <span class="temporary-absence-product"><?php echo $hlp->__("Product temporary unavailable"); ?></span>
+                    </div>
     <?php endif; ?>
     <div id="short-description-footer">
         <div id="same-collection-header">
