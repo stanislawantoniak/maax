@@ -61,14 +61,14 @@ $brandShopProductId = $_product->getData('brandshop');
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
 <div id="content" class="container-fluid">
-    <div id="product_content" class="col-lg-9 col-md-9 col-sm-12">
+    <div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
-            <div id="product-gallery" class="col-lg-6 col-md-6 col-sm-12 clearfix">
+            <div id="product-gallery" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
 					<!-- GALLERY PRODUCT -->
 						<?php echo $this->getChildHtml('media') ?>
 					<!-- END GALERY PRODUCT -->
             </div>
-            <div id="product-shop" class="col-lg-6 col-md-6 col-sm-12">
+            <div id="product-shop" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 						<?php echo
 						$this->getChild('product.shop')
 							->setReviewsCount($_reviewsCount)
@@ -220,6 +220,20 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal"></button>
+
+			<div class="modal-body">
+				<div id="sizeTableIframeContainer">
+					<iframe id="sizeTableIframe"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 <?php echo $this->getChildHtml('zolago.page.benefits'); ?>
