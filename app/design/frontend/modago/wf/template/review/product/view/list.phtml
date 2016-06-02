@@ -63,7 +63,7 @@ switch($_reviewsCount) {
                         <dl class="raty_note">
                             <dt><strong><?php echo $this->__("Avarage"); ?>:</strong><div id="average_rating" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></div></dt>
                             <?php foreach($this->getRatingsAvarage() as $k => $v) : ?>
-                                <dd><strong><?php echo $k; ?></strong> <div id ="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo $v['avg']; ?>"></div></dd>
+                                <dd><strong><?php echo $k; ?></strong> <div id="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo $v['avg']; ?>"></div></dd>
                             <?php endforeach; ?>
                         </dl>
                     </div>
@@ -78,7 +78,7 @@ switch($_reviewsCount) {
                 </div>
             </div>
             <div class="add_opinion col-md-3 col-sm-12 hidden-xs">
-                <p><?php echo $this->__("Share your review with other users"); ?><br><a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a></p>
+                <p><?php echo $this->__("Share your review with other users"); ?><br><a href="#block-review-form" class="btn button button-primary viewFormComments"><?php echo $this->__("Add your review"); ?></a></p>
             </div>
 	        <div class="visible-xs" style="text-align: center">
                 <a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a>

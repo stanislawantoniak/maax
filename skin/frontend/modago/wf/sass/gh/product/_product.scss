@@ -96,6 +96,13 @@ i.flag {
 			font-family:$fontLight !important;
 		}
 	}
+	.viewFormComments,
+	#submit-review {
+		font-family: $fontOpenSS;
+		font-size: 13px;
+		padding-left:35px;
+		padding-right:35px;
+	}
 	.title_section {
 		margin-bottom:0px;
 		margin-left:0px;
