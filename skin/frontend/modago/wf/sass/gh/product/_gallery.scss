@@ -253,12 +253,17 @@
     @media (max-width: 931px) {
       display: none;
     }
+
+    #productGalleryThumbMedia-wf.rwd-carousel {
+      padding: 10px 50px;
+    }
     #productGalleryThumbMedia-wf {
       .item {
         border: 1px solid $colorShadow;
         width: auto;
         float: left;
         margin: 5px;
+        cursor: pointer;
       }
       .rwd-controls {
         .rwd-buttons {
