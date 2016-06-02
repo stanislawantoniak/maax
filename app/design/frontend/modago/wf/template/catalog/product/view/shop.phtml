@@ -38,7 +38,7 @@ if ($_product->getTypeId() == 'configurable') { //fix for simple products
 	/** @var Zolago_Catalog_Block_Product_View_Type_Configurable $salableCount */
 	$salableCount = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getSalableCount();
 }
-$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+$sizeTableValue = '1';//$_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 $deliveryHeadline = trim($this->getStoreDeliveryHeadline());
 $returnHeadline = trim($this->getStoreReturnHeadline());
 ?>
@@ -163,17 +163,17 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                     <?php foreach ($productAttrs as $_attribute) : ?>
                         <?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
                             <?php $haveSizes = true; ?>
-                            <div class="size-box clearfix clr">
-                                <div class="size col-sm-12 col-md-12 col-xs-12">
-                                    <div class="size-label col-sm-12 col-md-12 col-xs-12"><?php echo Mage::helper('wfwf')->__("Size label"); ?></div>
-                                    <div class=" sizes-content form-group form-radio col-sm-12 col-md-12 col-xs-12">
-                                        <br/>
+                            <div class="size-box-label clearfix clr">
+                                <div class="size-label"><?php echo Mage::helper('wfwf')->__("Size label"); ?></div>
+                            </div>
+                            <div class="size-box clearfix clr">                                
+                                <div>
                                         <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
 												   data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?><?php endif; 
                                         ?></a>
-                                    </div>
                                 </div>
                             </div>
+                            
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endif; ?>

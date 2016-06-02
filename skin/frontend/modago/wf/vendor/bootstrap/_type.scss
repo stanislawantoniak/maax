@@ -282,3 +282,38 @@ address {
   font-style: normal;
   line-height: $line-height-base;
 }
+
+
+/* Form Elements */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+textarea {
+  display: block;
+  border-radius: 0;
+  padding: 10px;
+  border: 1px solid #d5d5d5;
+  -webkit-border-radius: 0px !important;
+  border-radius: 0px !important;
+  height: 39px;
+  @include box-shadow(none !important);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+textarea:focus {
+  @include box-shadow(none !important);
+  border-color: #252525;
+  outline: none !important;
+}
+input::-webkit-input-placeholder {
+  color: #737373 !important;
+}
+
+/* Form Elements */
+
+
