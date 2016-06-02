@@ -214,7 +214,7 @@ function refreshMap(filteredData) {
             //$screen-md: 992px
             if (window.innerWidth <= middleScreen) {
                 jQuery('html, body').animate({
-                    scrollTop: jQuery("#map-container").offset().top
+                    scrollTop: (jQuery("#map-container").offset().top - 120)
                 }, 1000);
             }
 
