@@ -267,39 +267,39 @@ Mall.wishlist = {
     actionsAfterAddingProductProduct: function (id, data) {
         "use strict";
 
-        // build elements
-        var likeHtml = "",
-            product;
-
-        product = this.getProduct(id);
-        if (this.getWishlistCount(id) === 1) {
-            likeHtml += Mall.translate.__("you-like-this", "You like this");
-            likeHtml += jQuery("<span/>", {
-                "class": "product-context-like-count",
-                "style": "color: #4f4f4f"
-            }).wrap("<div/>").parent().html();
-            likeHtml += "<br>";
-            likeHtml += jQuery("<span/>", {
-                html: Mall.translate.__("remove-from-favorites", "remove from favorites")
-            }).wrap("<div/>").parent().html();
-        } else {
-            likeHtml += Mall.translate.__("you-and", "You and") + " ";
-            likeHtml += jQuery("<span/>", {
-                "class": "product-context-like-count",
-                style: "color: #4f4f4f",
-                html: Mall.wishlist.getWishlistCount(id) - 1
-            }).wrap("<div/>").parent().html();
-            likeHtml += " " + Plural.get(Mall.wishlist.getWishlistCount(id) - 1
-                , [
-                    Mall.translate.__("person", "person"),
-                    Mall.translate.__("people", "people"),
-                    Mall.translate.__("people-polish-more-than-few", "osób")
-                ]) + " lubi ten produkt";
-            likeHtml += "<br>";
-            likeHtml += jQuery("<span/>", {
-                html: Mall.translate.__("remove-from-favorites", "remove from favorites")
-            }).wrap("<div/>").parent().html();
-        }
+        // // build elements
+        // var likeHtml = "",
+        //     product;
+		//
+        // product = this.getProduct(id);
+        // if (this.getWishlistCount(id) === 1) {
+        //     likeHtml += Mall.translate.__("you-like-this", "You like this");
+        //     likeHtml += jQuery("<span/>", {
+        //         "class": "product-context-like-count",
+        //         "style": "color: #4f4f4f"
+        //     }).wrap("<div/>").parent().html();
+        //     likeHtml += "<br>";
+        //     likeHtml += jQuery("<span/>", {
+        //         html: Mall.translate.__("remove-from-favorites", "remove from favorites")
+        //     }).wrap("<div/>").parent().html();
+        // } else {
+        //     likeHtml += Mall.translate.__("you-and", "You and") + " ";
+        //     likeHtml += jQuery("<span/>", {
+        //         "class": "product-context-like-count",
+        //         style: "color: #4f4f4f",
+        //         html: Mall.wishlist.getWishlistCount(id) - 1
+        //     }).wrap("<div/>").parent().html();
+        //     likeHtml += " " + Plural.get(Mall.wishlist.getWishlistCount(id) - 1
+        //         , [
+        //             Mall.translate.__("person", "person"),
+        //             Mall.translate.__("people", "people"),
+        //             Mall.translate.__("people-polish-more-than-few", "osób")
+        //         ]) + " lubi ten produkt";
+        //     likeHtml += "<br>";
+        //     likeHtml += jQuery("<span/>", {
+        //         html: Mall.translate.__("remove-from-favorites", "remove from favorites")
+        //     }).wrap("<div/>").parent().html();
+        // }
 
 	    var addingLikeBox = jQuery(".addingLike-box");
 
@@ -308,7 +308,7 @@ Mall.wishlist = {
         jQuery("#notadded-wishlist").hide();
         jQuery("#added-wishlist").removeClass("hidden");
         jQuery("#added-wishlist").show();
-        jQuery("#added-wishlist").find(".likeAdded").html(likeHtml);
+        // jQuery("#added-wishlist").find(".likeAdded").html(likeHtml);
 
 		// set products count badge
 		Mall.setFavoritesCountBadge(data.content.favorites_count);
@@ -325,39 +325,39 @@ Mall.wishlist = {
     actionsAfterRemovingProductProduct: function (id, data) {
         "use strict";
 
-        var likeHtml = "",
-            product;
-
-        product = this.getProduct(id);
-        if (this.getWishlistCount(id) === 0) {
-            likeHtml += jQuery("<span/>", {
-                "class": "product-context-like-count",
-                html: "&nbsp;"
-            }).wrap("<div/>").parent().html();
-            likeHtml += jQuery("<a/>", {
-                href: "#",
-                onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
-                "class": "addLike",
-                html: Mall.translate.__("add-to-br-favorites", "Add to<br />favorites")
-            }).wrap("<div/>").parent().html();
-        } else {
-            likeHtml += jQuery("<span/>", {
-                "class": "product-context-like-count",
-                html: Mall.wishlist.getWishlistCount(id)
-            }).wrap("<div/>").parent().html();
-            likeHtml += " " + Plural.get(this.getWishlistCount(id), [
-                 Mall.translate.__("person like", "person like"),
-                 Mall.translate.__("people likes", "people likes"),
-                 Mall.translate.__("people-polish-more-than-few likes", "osób lubi")
-            ]) + " "
-                +  Mall.translate.__("likes-this-product", "likes this product") + " ";
-            likeHtml += jQuery("<a/>", {
-                href: "#",
-                onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
-                "class": "addLike",
-                html: Mall.translate.__("add-to-br-favorites", "Add to<br />favorites")
-            }).wrap("<div/>").parent().html();
-        }
+        // var likeHtml = "",
+        //     product;
+		//
+        // product = this.getProduct(id);
+        // if (this.getWishlistCount(id) === 0) {
+        //     likeHtml += jQuery("<span/>", {
+        //         "class": "product-context-like-count",
+        //         html: "&nbsp;"
+        //     }).wrap("<div/>").parent().html();
+        //     likeHtml += jQuery("<a/>", {
+        //         href: "#",
+        //         onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
+        //         "class": "addLike",
+        //         html: Mall.translate.__("add-to-br-favorites", "Add to<br />favorites")
+        //     }).wrap("<div/>").parent().html();
+        // } else {
+        //     likeHtml += jQuery("<span/>", {
+        //         "class": "product-context-like-count",
+        //         html: Mall.wishlist.getWishlistCount(id)
+        //     }).wrap("<div/>").parent().html();
+        //     likeHtml += " " + Plural.get(this.getWishlistCount(id), [
+        //          Mall.translate.__("person like", "person like"),
+        //          Mall.translate.__("people likes", "people likes"),
+        //          Mall.translate.__("people-polish-more-than-few likes", "osób lubi")
+        //     ]) + " "
+        //         +  Mall.translate.__("likes-this-product", "likes this product") + " ";
+        //     likeHtml += jQuery("<a/>", {
+        //         href: "#",
+        //         onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
+        //         "class": "addLike",
+        //         html: Mall.translate.__("add-to-br-favorites", "Add to<br />favorites")
+        //     }).wrap("<div/>").parent().html();
+        // }
 
 	    var addingLikeBox = jQuery(".addingLike-box");
 
@@ -365,7 +365,7 @@ Mall.wishlist = {
 
         jQuery("#notadded-wishlist").show().removeClass("hidden");
         jQuery("#added-wishlist").hide();
-        jQuery("#notadded-wishlist").html(likeHtml);
+        // jQuery("#notadded-wishlist").html(likeHtml);
 
 		// set products count badge
 		Mall.setFavoritesCountBadge(data.content.favorites_count);

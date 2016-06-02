@@ -183,7 +183,6 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                 <?php endif; ?>
             <?php endif; ?>
             <div class="action-box-bundle clearfix">
-                <div id="product-likeboxes" style="display: inline-block;"></div>
                 <?php if ($isSalable): ?>
                     <button class="btn button button-primary addBasket"
                         <?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
@@ -209,6 +208,32 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
         <div id="same-product-list">
         </div>
     </div>
+
+	<div id="box-social" class="row">
+		<div class="col-lg-6">
+			<div id="product-likeboxes">
+				<div class="addLike-box" id="notadded-wishlist">
+					<!-- placebo -->
+					<span class="product-context-like-count" style="display: none"></span>
+					<p>
+						<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct(<?php echo $_product->getEntityId(); ?>);return false;" class="addLike">
+							<i class="i-unlike-wf">&nbsp;</i><span><?php echo $this->__("Add to favorites"); ?></span>
+						</a>
+					</p>
+				</div>
+			</div>
+			<div class="question">
+				<p>
+					<i class="fa fa-comment-o">&nbsp;</i><span><a href="#" data-toggle="modal" data-target="#ask_question"><?php echo Mage::helper('wfwf')->__("Ask about product"); ?></a></span>
+				</p>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="followUs hidden-xs">
+				<div class="addthis_sharing_toolbox"></div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- SHORT DESCRIPTION -->
 <?php /*

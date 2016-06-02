@@ -138,6 +138,48 @@ i.flag {
 	}
 }
 #product-shop {
+  #box-social {
+    border-top:  1px solid $gray-lighter;
+    padding-top: 10px;
+    margin-top: 50px;
+    font-family: $font-family-base;
+    color: $text-color;
+    p {
+      margin: 0;
+      font-family: $font-family-base;
+      color: $text-color;
+    }
+    .i-unlike-wf {
+      background: #fff url("../images/svg/unlike.svg") 0px 3px no-repeat;
+      background-size: 18px 18px;
+      padding-left: 24px;
+      font-size: 18px;
+    }
+    .i-like-wf {
+      background: #fff url("../images/svg/like.svg") 0px 3px no-repeat;
+      background-size: 18px 18px;
+      padding-left: 24px;
+      font-size: 18px;
+    }
+    .addingLike-box, .addedLike-box {
+      height: 32px;
+    }
+    .addingLike-box .fa-spinner {
+      margin-top: 10px;
+    }
+    .question {
+      span {
+        padding-left: 7px;
+      }
+      .fa-comment-o {
+        font-size: 17px;
+        margin-left: 1px;
+        opacity: 0.6;
+      }
+    }
+  }
+
+
 	#delivery-and-return {
 		font-size:12px;
 		text-align:right;
@@ -709,7 +751,7 @@ i.flag {
 	font-family:$fontRegular;
 	padding-top:0 !important;
 	float:none;
-	margin: -18px 0 0 10px;
+	margin: -18px 0 0 0px;
 	background: $colorProductBtnAddBg !important;
 	&:hover {
 		background: $colorProductBtnAddBg !important;
