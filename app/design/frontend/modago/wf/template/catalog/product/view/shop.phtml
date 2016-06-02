@@ -81,12 +81,11 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                             <?php endif; ?>
 
                             <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-                            <span class="old-price">
-                                <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : 
-                                          echo str_replace(" ", "&nbsp;", Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false));
-    	    					    endif; 
-                                ?>
-                            </span>
+							<?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?>
+								<span class="old-price">
+									<?php echo str_replace(" ", "&nbsp;", Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?>
+								</span>
+							<?php endif; ?>
                             <span class="price">
                                 <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
                                     <span itemprop="price">
@@ -206,7 +205,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
     </div>
 
 	<div id="box-social" class="row">
-		<div class="col-lg-6">
+		<div class="col-lg-6 col-md-7 col-sm-7 col-xs-12">
 			<div id="product-likeboxes">
 				<div class="addLike-box" id="notadded-wishlist">
 					<!-- placebo -->
@@ -224,7 +223,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 				</p>
 			</div>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-6 col-md-5 col-sm-5 hidden-xs wrapper-addthis">
 			<div class="followUs hidden-xs">
 				<div class="addthis_sharing_toolbox"></div>
 			</div>
