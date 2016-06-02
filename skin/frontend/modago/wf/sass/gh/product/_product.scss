@@ -98,7 +98,7 @@ i.flag {
 	}
 	.viewFormComments,
 	#submit-review {
-		font-family: $fontOpenSS;
+		font-family: $fontRegular;
 		font-size: 13px;
 		padding-left:35px;
 		padding-right:35px;
@@ -703,11 +703,10 @@ i.flag {
 	display:inline-block;
 	height:42px;
 	line-height: 42px;
-	font-size: 12px;
+	font-size: 13px;
 	color:$colorProductBtnAdd;
 	text-transform: uppercase;
 	font-family:$fontRegular;
-	font-weight: bold;
 	padding-top:0 !important;
 	float:none;
 	margin: -18px 0 0 10px;
