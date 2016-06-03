@@ -228,7 +228,7 @@ Mall.product = {
 				// create label group
 				jQuery("<span/>", {
 					"class": "size-label col-sm-6 col-md-6 col-xs-12",
-					"html": (this._size_label + ":")
+					"html": (this._size_label)
 
 				}).appendTo(groupElement);
 
