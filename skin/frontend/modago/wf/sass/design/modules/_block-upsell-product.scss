@@ -1,6 +1,8 @@
 .box-up-sell {
   &.product_list_widget {
 
+    padding: 0;
+
     .widgettitle {
       font-size: 1.1428em;
       color: #000;
@@ -10,10 +12,66 @@
       border-width: 0px 0px 1px 0px;
       border-style: solid;
       text-transform: uppercase;
+    }
+
+    .product_list_widget_item {
+      border-bottom: 1px solid #eee;
+      padding: 1.4285em 0;
+      line-height: 1.4285em;
+
+      .media {
+        overflow: hidden;
+        zoom: 1;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        & > .pull-left {
+          margin-right: 10px;
+        }
+
+        img {
+          max-width: 4.2857em;
+          height: auto
+        }
+      }
+
+      h4 {
+        text-transform: none;
+        font-size: 1em;
+        padding: 0;
+
+        a {
+          font-size: 1em;
+          font-family: $fontOpenSS;
+          transition: color .25s ease;
+          color: #3d3d3d;
+          cursor: pointer;
+        }
+      }
+
+      .small-coast {
+        color: #8a8a8a;
+        font-size: 1.0714em;
+        font-weight: 500;
+      }
+
+      .amount {
+        font-family: $fontOpenSS;
+      }
+
+      &.watch_more_item {
+        //display: none;
+      }
+
+    }
+
+    .watch_more_links {
+      padding-top: 20px;
 
       a.watch_more,
-      a.watch_less
-      {
+      a.watch_less {
         font-size: 14px;
         text-transform: none;
         color: $colorLink;
@@ -23,79 +81,5 @@
         }
       }
     }
-    ul {
-      padding-left: 0px;
-
-
-      li {
-        border-bottom: 1px solid #eee;
-        padding: 1.4285em 0;
-        display: inline-block;
-        line-height: 1.4285em;
-        list-style: none;
-        width: 100%;
-        @media (min-width: $screen-xs) and (max-width: $screen-sm){
-          padding-right: 30px;
-          border: none !important;
-          width: 50%;
-          float: left;
-        }
-
-        &:first-child {
-          padding-top: 0;
-        }
-
-        .media  {
-          overflow: hidden;
-          zoom: 1;
-
-          &:first-child {
-            margin-top: 0;
-          }
-
-          &>.pull-left {
-            margin-right: 10px;
-          }
-
-          img {
-            max-width: 4.2857em;
-            height: auto
-          }
-        }
-
-
-        h4 {
-          text-transform: none;
-          font-size: 1em;
-          padding: 0;
-
-          a {
-            font-size: 1em;
-            font-family: $fontOpenSS;
-            transition: color .25s ease;
-            color: #3d3d3d;
-            cursor: pointer;
-          }
-        }
-
-
-        .small-coast {
-          color: #8a8a8a;
-          font-size: 1.0714em;
-          font-weight: 500;
-        }
-
-        .amount {
-          font-family: $fontOpenSS;
-        }
-
-
-        &.watch_more_item {
-          //display: none;
-        }
-
-      }
-    }
-
   }
 }
