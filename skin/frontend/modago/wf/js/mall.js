@@ -285,9 +285,9 @@ var Mall = {
 			// Added box
 			likeText = Mall.i18nValidation.__("you-like-this");
 				
-			if(p.wishlist_count > 1){
-				likeText = this.getFavPluralText(p.wishlist_count - 1, true);
-			}
+			// if(p.wishlist_count > 1){
+			// 	likeText = this.getFavPluralText(p.wishlist_count - 1, true);
+			// }
 
 			boxAdded = jQuery(
 				'<div class="addedLike-box" id="added-wishlist">' +
