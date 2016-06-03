@@ -93,7 +93,7 @@
   .top-bar-right {
     float: right;
   }
-  @media only screen and (max-width: $screen-md){
+  @media only screen and (max-width: $screen-sm-max){
     .top-bar-right {
       display: none;
     }
