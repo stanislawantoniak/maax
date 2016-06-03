@@ -106,7 +106,7 @@ $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol()
                                 <a href="<?php echo $this->getRemoveFacesUrl("price", $range['value']); ?>"
                                    class="active-filter-label"
                                    data-input="<?php echo $range['itemId']; ?>">
-                                    <?php echo $range['formatted']; ?><i class="fa fa-times"></i>
+									<?php echo $item['value']; ?><div class="wrapper-x"><i class="fa fa-times"></i></div>
                                    </a>
                         <?php endif; ?>
                     <?php endforeach; ?>
