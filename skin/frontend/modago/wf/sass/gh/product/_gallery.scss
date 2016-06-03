@@ -208,6 +208,39 @@
 		}
 	}
 	#productGalleryBigMedia, #productGalleryBigMediaOpen {
+		.item {
+			.label-product {
+				text-align: center;
+			    z-index: 1;
+			    .flag-label {
+			    	color: #fff;
+      				border-radius: 100%;
+				    width: 60px;
+				    height: 60px;
+				    line-height: 60px;
+				    font-size: 11px;
+				    font-family: $fontOpenSS;
+				    font-weight: 700;
+				    display: inline-block;
+			        top: 7px;
+				    position: absolute;
+				    z-index: 100;
+					text-transform:capitalize;
+		    		&.type-label-new {
+				    	right: 20px;
+				        background: $backgroundColorFlagNew;
+				    }
+				    &.type-label-sale, &.type-label-bestseller {
+				        left: 20px;
+			    	    background: $backgroundColorFlagSale;
+				    }
+				    &.type-label-promotion {
+				        left: 20px;
+				        background: $backgroundColorFlagPromotion;
+			        }
+    			}
+  			}
+		}
 		width: 100%;
 		max-width:409px;
 		padding: 0;
