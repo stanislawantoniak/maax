@@ -1167,17 +1167,19 @@ Mall.product = {
 			jQuery("a.watch_more, a.watch_less").click(function(e){
 				e.preventDefault();
 
-				jQuery("ul.product_list_widget li.watch_more_item")
+				jQuery(".product_list_widget .watch_more_item")
 					.toggleClass("hidden");
 
 
-				var $el = jQuery("ul.product_list_widget li.watch_more_item");
+				var $el = jQuery(".product_list_widget .watch_more_item");
 
 				if(!$el.hasClass("hidden")){
 					jQuery("a.watch_less").removeClass("hidden");
+					jQuery("a.watch_more").addClass("hidden");
 				}
 				if($el.hasClass("hidden")){
 					jQuery("a.watch_less").addClass("hidden");
+					jQuery("a.watch_more").removeClass("hidden");
 				}
 			})
 		},
