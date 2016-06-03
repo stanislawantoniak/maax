@@ -180,6 +180,34 @@ Mall.product = {
 	createOptionGroup: function(group, useSizeboxList) {
 
 
+		if(1) {
+			// insert option group
+			var groupElement = jQuery("<div/>", {
+				"class": "size"
+			}).appendTo(".size-box");
+			jQuery(".size-box").append(this._options_group_template);
+			// create label group
+			jQuery("<span/>", {
+				"class": "size-label size-label-radios",
+				"html": (this._size_label)
+			}).appendTo(groupElement);
+
+			// create form group for options
+			var formGroupElement = jQuery("<div/>", {
+				class: "form-group form-radio"
+			}).appendTo(groupElement);
+
+			jQuery.each(group.options, function(index, option) {
+				Mall.product.createOption(group.id, option, formGroupElement);
+			});
+			var sizesCount = jQuery('input[type=radio][id^=size_]:not(:disabled)').length;
+			if (sizesCount == 1) {
+				var singleInput = jQuery('input[type=radio][id^=size_]:not(:disabled)');
+				singleInput.attr('checked', true).trigger('click');
+			}
+
+			this.applyAdditionalRules(group, formGroupElement);
+		} else { //selectbox
 
 			var deskTopDevice = !Mall.getIsBrowserMobile();
 
@@ -220,7 +248,7 @@ Mall.product = {
 			} else {
 				jQuery('.size-box div').remove();
 			}
-
+		}
 
 	},
 
