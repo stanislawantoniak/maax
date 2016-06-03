@@ -11,6 +11,10 @@ $hlp = Mage::helper('catalog');
 /** @var Zolago_Catalog_Helper_Product $productHelper */
 $productHelper = Mage::helper("zolagocatalog/product");
 
+$flag = $productHelper->getProductBestFlag($_product);
+$flagLabel = $flag ? $hlp->__($flag) : "";
+Mage::log($flag);
+Mage::log($flagLabel);
 $_helper = $this->helper('catalog/output');
 $_zolagoCatalogBlock = Mage::getBlockSingleton('zolagocatalog/product_view');
 $nImagesForCssStyle = 5; //magic number, for less then 5 items height of box is auto
@@ -27,6 +31,13 @@ $_images = $this->getGalleryImages();
 			<?php if (isset($_dimensions[$k]) && is_array($_dimensions[$k]) && isset($_dimensions[$k][0], $_dimensions[$k][1])): ?>
 				<div class="item">
 					<div>
+                        <?php if ($flag) : ?>
+                            <div class="label-product">
+                                <div class="flag-label type-label-<?php echo $flag;?>">
+                                    <div class="<?php echo $flag;?>"><?php echo $flag;?></div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 						<?php
 						$flag = $productHelper->getProductBestFlag($this->getProduct());
 						$flagLabel = $hlp->__($flag);
