@@ -1908,9 +1908,12 @@ jQuery(document).ready(function() {
 	Mall.Slick.init();
 	Mall.Footer.init();
 
-	jQuery(".header_top").headroom({
-		offset: 60
-	});
+    if (Mall.getIsBrowserMobile()) {
+        jQuery(".header_top").headroom({
+            offset: 60
+        });
+    }
+
 
 	initToggleSearch();
     Mall.disableSearchNoQuery();
