@@ -423,7 +423,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
 					'image_url' => (string)$image,
 					'redirect_url' => $product->getNoVendorContextUrl(),
-					'price' => $coreHelper->currency($product->getPrice(), true, false),
+					'price' => $coreHelper->currency($product->getFinalPrice(), true, false),
 				);
 				// add old price only if should be visible
 				if ($product->getStrikeoutPrice() > $product->getPrice()) {
