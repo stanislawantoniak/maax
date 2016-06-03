@@ -176,7 +176,11 @@
 		}
 	}
 
-
+	@media (max-width: $screen-md-min){
+		.help-item {
+			height: 310px;
+		}
+	}
 	@media (max-width: $screen-sm-min){
 		.help-item {
 			height: 270px;
