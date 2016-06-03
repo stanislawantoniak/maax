@@ -486,7 +486,7 @@ Mall.wishlist = {
                 // replace blocks
 	            if(typeof unlikingOnWishlist != 'undefined' && unlikingOnWishlist) {
 		            //remove item
-		            grid.shuffle('remove',jQuery(obj).parents('.item'));
+		            // grid.shuffle('remove',jQuery(obj).parents('.item'));
 		            //fix for footer
 		            jQuery(window).resize();
 	            } else {
