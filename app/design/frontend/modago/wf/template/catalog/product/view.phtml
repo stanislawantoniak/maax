@@ -154,10 +154,12 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
             <?php endif; ?>
         </div>      
     </div>
-    <div id="product_additions" class="col-lg-3 col-md-3 hidden-sm hidden-xs">
+<!--    <div id="product_additions" class="col-lg-3 col-md-3 hidden-sm hidden-xs">-->
         	<?php //echo $this->getChildHtml('crosssell'); ?>
-			<?php echo $this->getChildHtml('upsell'); ?>
-    </div>
+<!--    </div>-->
+	<div id="product_additions" class="col-lg-3 col-md-3">
+		<?php echo $this->getChildHtml('upsell'); ?>
+	</div>
 </div>
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
