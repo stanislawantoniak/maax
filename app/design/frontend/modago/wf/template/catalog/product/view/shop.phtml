@@ -5,7 +5,7 @@
 /** @var Zolago_Catalog_Model_Product $_product */
 $_product = $this->getProduct();
 $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
-$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();;
+$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
 
 /** @var Mage_Catalog_Helper_Output $_helper */
 $_helper = $this->helper('catalog/output');
