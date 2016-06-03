@@ -49,7 +49,7 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 														$selectedFacetValue = $campaignActiveFilterLabel;
 												}
 												?>
-												<span class="label" style="padding-right: 0px;line-height: 18px;vertical-align: middle;">
+												<span class="label label-wf">
 													<?php if (!in_array($key, array("campaign_info_id_facet", "campaign_regular_id_facet")) || empty($campaignActiveFilterLabel)): ?>
 														<?php echo $this->__($this->getFacetLabel($key)); ?>:
 													<?php endif; ?>
