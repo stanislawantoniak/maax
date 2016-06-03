@@ -1,13 +1,18 @@
 section#recently-viewed {
 	display: none;
 	.recently-viewed {
+      border-bottom: 1px solid $gray-lighter;
+      padding-bottom: 15px;
 		.rwd-item {
 			padding:0px 5px;
 		}
 		h3.title-section {
 			padding-top:0px;
-			padding-bottom:0px;
 			margin-left: -15px;
+
+          margin-bottom: 10px;
+          border-bottom: 1px solid $gray-lighter;
+          padding-bottom: 15px;
 
 			@media (max-width: $screen-xs-max) {
 				padding-left:20px;
