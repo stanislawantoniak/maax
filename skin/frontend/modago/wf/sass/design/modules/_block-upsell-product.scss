@@ -12,12 +12,17 @@
       border-width: 0px 0px 1px 0px;
       border-style: solid;
       text-transform: uppercase;
+      padding-top: 13px;
     }
 
     .product_list_widget_item {
       border-bottom: 1px solid #eee;
       padding: 1.4285em 0;
-      line-height: 1.4285em;
+      height: 115px;
+
+      @media (min-width: $screen-xs-min) and (max-width: $screen-sm-min) {
+        width: 50%;
+      }
 
       .media {
         overflow: hidden;
