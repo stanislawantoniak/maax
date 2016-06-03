@@ -3,9 +3,9 @@
   .active-filter {
     a {
       display: inline-table;
-      border: 1px solid $color-gray2;
+      border: 1px solid $bc-secondary;
       padding-left: 6px;
-      padding-right: 6px;
+      padding-right: 0;
       font-size: 12px;
       height: 21px;
       line-height: 21px;
@@ -15,11 +15,17 @@
       margin-right: 6px;
       margin-top: 12px;
     }
+    .wrapper-x {
+      background-color: $colorAccentBlocks;
+      float: right;
+      margin-left: 5px;
+    }
     i {
       margin-left: 6px;
+      margin-right: 6px;
     }
     .fa {
-      color: $color-gray1;
+      color: $color-black;
       font-size: 11px;
     }
     &:hover {
@@ -61,6 +67,11 @@
 	            font-weight: normal;
               border-radius: 0;
 	        }
+          .label-wf{
+            padding-right: 0px;
+            line-height: 18px;
+            vertical-align: middle;
+          }
 	            .fa {
 	                color: $color_000;
 	                font-size: 14px;
