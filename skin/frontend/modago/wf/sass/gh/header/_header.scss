@@ -70,7 +70,7 @@ body {
 			width: 100%;
 			height: auto;
 			margin-top: 15px;
-			@include max-screen($screen-md) {
+			@include max-screen($screen-sm-max) {
 				margin-top: 5px;
 			}
 		}
