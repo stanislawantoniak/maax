@@ -15,7 +15,7 @@ $cmsNavigationBlocks = array(
                             </ul>
                         </div>
                     </div>
-                    <div class="top-bar-right  visible-sm visible-md visible-lg">
+                    <div class="top-bar-right hidden-xs">
                         <div id="nav_menu-4" class="topbar-widget widget_nav_menu">
                             <div class="menu-right-top-menu-container">
                                 <ul id="menu-right-top-menu" class="menu">
