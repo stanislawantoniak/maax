@@ -52,7 +52,7 @@
 
         a {
           font-size: 1em;
-          font-family: $fontOpenSS;
+          font-family: $fontOpen;
           transition: color .25s ease;
           color: #3d3d3d;
           cursor: pointer;
@@ -65,7 +65,7 @@
         font-weight: 500;
 
         .amount {
-          font-family: $fontOpenSS;
+          font-family: $fontOpen;
           color: $colorProductFinalPrice;
         }
 

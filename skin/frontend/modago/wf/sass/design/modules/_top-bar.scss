@@ -36,7 +36,7 @@
       &>li {
         &:after {
           content: 'I';
-          font-family: $fontOpenSS;
+          font-family: $fontOpen;
           display: inline-block;
           width: 1px;
           height: 10px;
@@ -115,7 +115,7 @@
 
   .topbar-widget {
     display: inline-block;
-    font-family: $fontOpenSS;
+    font-family: $fontOpen;
     margin-left: 15px;
     font-size: 13px;
     font-weight: 400;
@@ -154,7 +154,7 @@
   color: #fff;
   font-size: 13px;
   text-transform: none;
-  font-family: $fontOpenSS;
+  font-family: $fontOpen;
 }
 .menu li a i {
   padding-right: 10px;

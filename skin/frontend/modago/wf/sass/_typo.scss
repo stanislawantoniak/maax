@@ -218,7 +218,7 @@ a.underline {
 p {
 	line-height: 1.8;
 	font-size: 1em;
-	font-family: $fontOpenSS;
+	font-family: $fontOpen;
 }
 .m {
 	margin-bottom:20px;
@@ -558,7 +558,7 @@ form {
 	@include inline-block;
 	margin:0px;
 	padding:0px;
-	font-family: $fontOpenSS;
+	font-family: $fontOpen;
 	text-transform: uppercase;
 	@include border-radius($borderRadiusBtn);
 	@include transition(color 0.2s, background-color 0.2s);
@@ -600,7 +600,7 @@ form {
 		color:$textColorBtn;
 		min-width: 92px;
 		font-size: 13px;
-		font-family: $fontOpenSS;
+		font-family: $fontOpen;
 		font-weight: 400;
 		text-align: center;
 		background: $backgroundColorBtn;
