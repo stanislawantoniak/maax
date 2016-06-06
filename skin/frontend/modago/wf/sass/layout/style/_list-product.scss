@@ -43,16 +43,16 @@
       &.type-label-promotion {
         background: $backgroundColorFlagPromotion;
       }
-	  .bestseller:before {
+	  .flag-bestseller:before {
 		content: "Hit";
 	  }
-	  .promotion:before {
+	  .flag-promotion:before {
 		content: "Promo";
 	  }
-	  .sale:before {
+	  .flag-sale:before {
 		content: "Sale";
 	  }
-      .new:before {
+      .flag-new:before {
 		content: "New";
 	  }
 
