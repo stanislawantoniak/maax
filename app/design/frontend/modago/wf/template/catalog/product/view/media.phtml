@@ -13,8 +13,6 @@ $productHelper = Mage::helper("zolagocatalog/product");
 
 $flag = $productHelper->getProductBestFlag($_product);
 $flagLabel = $flag ? $hlp->__($flag) : "";
-Mage::log($flag);
-Mage::log($flagLabel);
 $_helper = $this->helper('catalog/output');
 $_zolagoCatalogBlock = Mage::getBlockSingleton('zolagocatalog/product_view');
 $nImagesForCssStyle = 5; //magic number, for less then 5 items height of box is auto
@@ -34,14 +32,10 @@ $_images = $this->getGalleryImages();
                         <?php if ($flag) : ?>
                             <div class="label-product">
                                 <div class="flag-label type-label-<?php echo $flag;?>">
-                                    <div class="<?php echo $flag;?>"><?php echo $flag;?></div>
+                                    <div class="<?php echo $flag;?>"></div>
                                 </div>
                             </div>
                         <?php endif; ?>
-						<?php
-						$flag = $productHelper->getProductBestFlag($this->getProduct());
-						$flagLabel = $hlp->__($flag);
-						?>
                             <a href="#" data-flags="<?php echo $flag; ?>" data-flag-label="<?php echo $flagLabel ?>" onclick="return false;">
                                 <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(410); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" <?php if($i == 0): ?> itemprop="image" <?php endif; ?>
 								data-ratio="<?php echo number_format((float)($_dimensions[$k][1] / $_dimensions[$k][0]), 4, '.', ''); ?>"/>

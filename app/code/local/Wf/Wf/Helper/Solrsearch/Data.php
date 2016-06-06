@@ -18,7 +18,6 @@ class Wf_Wf_Helper_Solrsearch_Data extends Zolago_Solrsearch_Helper_Data {
 
         foreach ($listModel->getCollection() as $product) {
             /* @var $product Zolago_Solrsearch_Model_Catalog_Product */
-
             $_product[0] = $product->getId();
             $_product[1] = $product->getName();
 //			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
@@ -35,10 +34,10 @@ class Wf_Wf_Helper_Solrsearch_Data extends Zolago_Solrsearch_Helper_Data {
             $_product[11]= $hlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor());
             $_product[12]= (int)$product->getProductFlag();
             $_product[13]= (int)$product->getIsNew();
-
+            $_product[14]= (int)$product->getIsBestseller();
+            $_product[15] = Mage::helper('zolagocatalog/product')->getProductBestFlag($product);
             $products[] = $_product;
         }
-
         return $products;
     }
 

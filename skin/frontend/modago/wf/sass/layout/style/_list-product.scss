@@ -32,21 +32,29 @@
       top: 7px;
       position: absolute;
       z-index: 100;
+      left: 20px;
 
-      &.type-label-1 {
-        right: 20px;
+      &.type-label-new {
         background: $backgroundColorFlagNew;
       }
-
-      &.type-label-2 {
-        left: 20px;
+      &.type-label-sale, &.type-label-bestseller {
         background: $backgroundColorFlagSale;
       }
-
-      &.type-label-3 {
-        left: 20px;
+      &.type-label-promotion {
         background: $backgroundColorFlagPromotion;
       }
+	  .bestseller:before {
+		content: "Hit";
+	  }
+	  .promotion:before {
+		content: "Promo";
+	  }
+	  .sale:before {
+		content: "Sale";
+	  }
+      .new:before {
+		content: "New";
+	  }
 
     }
   }
