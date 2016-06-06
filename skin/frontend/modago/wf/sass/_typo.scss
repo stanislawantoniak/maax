@@ -1,6 +1,8 @@
 body {
 	color: $text-color;
 	background: $body-bg;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 ::-webkit-input-placeholder {
    color: $color_000 !important;

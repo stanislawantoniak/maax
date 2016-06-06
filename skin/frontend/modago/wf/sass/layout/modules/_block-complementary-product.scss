@@ -57,22 +57,7 @@
 					font-size: 1.1428em;
 					line-height: 1.4285em;
 
-					.amount {
-						color: $colorProductFinalPrice;
-					}
-
-					ins {
-						background-color: transparent;
-						text-decoration: none;
-					}
-					del {
-						font-size: 1em;
-						color: $colorProductStrikeOutPrice;
-
-						span.amount {
-							color: $colorProductStrikeOutPrice;
-						}
-					}
+					@include productPricesBlockKit;
 				}
 			}
 			img {

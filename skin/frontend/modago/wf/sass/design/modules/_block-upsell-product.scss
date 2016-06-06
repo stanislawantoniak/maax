@@ -64,25 +64,8 @@
         font-size: 1.0714em;
         font-weight: 500;
 
-        .amount {
-          font-family: $fontOpen;
-          color: $colorProductFinalPrice;
-        }
-
-        ins {
-          background-color: transparent;
-          text-decoration: none;
-        }
-        del {
-          font-size: 1em;
-          color: $colorProductStrikeOutPrice;
-
-          span.amount {
-            color: $colorProductStrikeOutPrice;
-          }
-        }
+        @include productPricesBlockKit;
       }
-
 
 
       &.watch_more_item {
