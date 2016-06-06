@@ -15,10 +15,10 @@
       font-family:$fontRegular;
       .old {
         text-decoration: line-through;
-        color:$colorFont;
+        color: $colorProductStrikeOutPrice;
       }
       .price {
-        color:$color_fd002a;
+        color:$colorProductFinalPrice;
       }
     }
   }
