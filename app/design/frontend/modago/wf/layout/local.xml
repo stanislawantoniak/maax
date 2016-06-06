@@ -77,7 +77,6 @@
 				<alias>zolago_modago_home_sliderlastseen</alias>
 			</action>
 
-			<block type="core/template" name="solrsearch_product_list_fix" template="zolagosolrsearch/catalog/product/list/fix.phtml" />
 			<block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
 				<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
 				<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
