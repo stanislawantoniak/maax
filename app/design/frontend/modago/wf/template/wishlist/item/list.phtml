@@ -36,8 +36,8 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
 
-                                    <div class="price clearfix">
-                                        <div class="col-price">
+                                    <div class="price row">
+                                        <div class="col-price col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                             <?php if ($_product->getPrice() != $_product->getFinalPrice()) : ?>
                                                 <span class="old">
                                                         <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
@@ -47,7 +47,7 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                                                     <?php echo $this->helper('core')->currency($_product->getFinalPrice(), true, false); ?>
                                                 </span>
                                         </div>
-                                        <div class="like liked"
+                                        <div class="like liked col-lg-4 text-right col-md-4 col-sm-4 col-xs-4"
                                              data-idproduct="<?php echo $_product->getId(); ?>">
 	                                        <span class="icoLike"></span>
                                             <div class="toolLike"></div>
