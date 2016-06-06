@@ -60,17 +60,16 @@ if (count($_links)): ?>
                                                 <h4 class="media-heading">
                                                     <a href="<?php echo $_link->getProductUrl() ?>"><?php echo $this->escapeHtml($_link->getName()) ?></a>
                                                 </h4>
-                                            <span class="small-coast">
-                                                <?php if ($_link->getStrikeoutPrice() > $_link->getFinalPrice()): ?>
-                                                    <del>
-                                                        <span class="amount"><?php echo Mage::helper('core')->currency($_link->getStrikeoutPrice(), true, false); ?></span>
-                                                    </del>
-                                                <?php endif; ?>
-                                                <ins>
-                                                    <span class="amount"><?php echo Mage::helper('core')->currency($_link->getFinalPrice(), true, false); ?></span>
-                                                </ins>
-
-                                            </span>
+                                                <span class="small-coast">
+                                                    <?php if ($_link->getStrikeoutPrice() > $_link->getFinalPrice()): ?>
+                                                        <del>
+                                                            <span class="amount"><?php echo Mage::helper('core')->currency($_link->getStrikeoutPrice(), true, false); ?></span>
+                                                        </del>
+                                                    <?php endif; ?>
+                                                    <ins>
+                                                        <span class="amount"><?php echo Mage::helper('core')->currency($_link->getFinalPrice(), true, false); ?></span>
+                                                    </ins>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

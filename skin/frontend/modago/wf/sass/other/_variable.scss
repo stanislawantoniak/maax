@@ -246,6 +246,26 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
   }
 }
 
+@mixin productPricesBlockKit {
+
+  .amount {
+    color: $colorProductFinalPrice;
+  }
+
+  ins {
+    background-color: transparent;
+    text-decoration: none;
+  }
+  del {
+    font-size: 1em;
+    color: $colorProductStrikeOutPrice;
+
+    span.amount {
+      color: $colorProductStrikeOutPrice;
+    }
+  }
+}
+
 
 $colorDropdownBorder:                   #e6e6e6;
 
