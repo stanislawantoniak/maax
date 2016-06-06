@@ -21,9 +21,7 @@ h1,.h1 {
 	}
 }
 h2,.h2 {
-	//font-family: $fontLight;
 	font-size: 35px;
-	//color:$color_020202;
 	a {
 		color:$color_020202;
 		text-decoration:none;
@@ -135,7 +133,7 @@ article {
 			overflow: hidden;
 			padding-left: 35px;
 			font-size: 18px;
-			font-family: $fontLight;
+			font-family: $fontRegular;
 			line-height: 18px;
 			text-transform: uppercase;
 			margin-left: 0;
@@ -176,12 +174,12 @@ h3,.h3 {
 h3.title-section {
 	text-transform: uppercase;
 	font-size: 18px;
-	font-family: $fontLight;
+	font-family: $fontRegular;
 	margin-bottom: 35px;
 	text-align: left;
 }
 h4,.h4 {
-	font-family: $fontLight;
+	font-family: $fontRegular;
 	font-size: 18px;
 	color:$color_020202;
 	a {

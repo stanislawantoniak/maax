@@ -91,7 +91,7 @@
         //padding: 0;
         text-align: center;
         text-transform: uppercase;
-        font-family: $fontLight;
+        font-family: $fontRegular;
         padding: 15px 30px;
         font-size: 20px;
         height: 62px;
@@ -241,7 +241,7 @@ body.mypromotions-index-index #content {
       }
       .promo-name {
         text-transform: uppercase;
-        font-family: $fontLight;
+        font-family: $fontRegular;
         font-size: 19px;
         margin-top: 11px;
         margin-bottom: 12px;
@@ -427,7 +427,7 @@ body.mypromotions-index-index #content {
 			}
 		}
 		.mypromotions-cms-subtitle, .mypromotions-cms-newsletter-subtitle {
-			font-family: $fontLight;
+			font-family: $fontRegular;
 			text-transform: uppercase;
 			margin-bottom: 20px;
 			@media(max-width: $screen-xs-max) {
@@ -513,7 +513,7 @@ body.mypromotions-index-index #content {
 			}
 		}
 		.mypromotions-cms-persistent-subtitle {
-			font-family: $fontLight;
+			font-family: $fontRegular;
 			font-size: 25px;
 			margin-bottom: 20px;
 			@media(max-width: $screen-xs-max) {
@@ -611,7 +611,7 @@ body.mypromotions-index-index #content {
 				}
 			}
 			.mypromotions-register-header-subtitle {
-				font-family: $fontLight;
+				font-family: $fontRegular;
 				font-size: 25px;
 				margin-top: -5px;
 				@media(max-width: $screen-sm-max) {

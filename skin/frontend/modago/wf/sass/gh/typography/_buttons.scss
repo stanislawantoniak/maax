@@ -6,7 +6,7 @@
 	outline:none;
 	text-decoration: none!important;
 	text-transform: uppercase;
-	font-family: $fontOpenSS;
+	font-family: $fontOpen;
 	&.btn-social {
 		border-radius: 0px;
 		background:$allMap;
@@ -72,7 +72,7 @@
 	&.button-primary {
 		padding: 10px 15px;
 		color:$colorBtnPrimary;
-		font-family: $fontOpenSS;
+		font-family: $fontOpen;
 		text-align: center;
 		white-space:nowrap;
 
@@ -113,7 +113,7 @@
 		color:$color_fff;
 		font-weight: bold;
 		font-size: 16px;
-		font-family: $fontOpenSS;
+		font-family: $fontOpen;
 		min-width: 148px;
 		text-align: center;
 
@@ -133,7 +133,7 @@
 		color:$textColorBtn;
 		font-weight: normal;
 		font-size: 13px;
-		font-family: $fontOpenSS;
+		font-family: $fontOpen;
 		font-weight: 400;
 		min-width: 92px;
 		text-align: center;
