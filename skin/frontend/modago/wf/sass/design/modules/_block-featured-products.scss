@@ -86,5 +86,135 @@
       }
 
     }
+
+    .owl-carousel {
+      .owl-item {
+        img {
+          transform-style: preserve-3d;
+        }
+
+        .product-block {
+          &:hover {
+            .product-info {
+              .product-name {
+                a {
+                  color: $colorLinkHover;
+                }
+              }
+            }
+          }
+
+          .product-image {
+            position: relative;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 0 auto;
+            text-align: center;
+          }
+
+
+
+          .product-info {
+            .price-box {
+              width: 100%;
+              text-align: center;
+              margin-bottom: 1.0714em;
+              display: block;
+              font-size: 1.1428em;
+              line-height: 1.4285em;
+              color: #000;
+
+            }
+
+            .product-name {
+              font-size: 14.9996004104614px;
+              a {
+                font-weight: 400;
+                color: #3d3d3d;
+                font-size: 1.0714em;
+                display: block;
+                text-transform: uppercase;
+                font-family: $fontBlack;
+                width: 100%;
+                margin-bottom: 0.7142em;
+
+                &:hover {
+                  color: $colorLinkHover;
+                }
+              }
+            }
+          }
+
+        }
+
+      }
+    }
   }
+
+  .mp-prev-carousel:before {
+    content: "\f104";
+    position: absolute;
+    font-size: 30px;
+    font-family: FontAwesome;
+    color: #252525;
+    left: 15px;
+    top: 0px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+  }
+  .mp-prev-carousel:after {
+    content: "";
+    position: absolute;
+    width: 88px;
+    height: 300px;
+    left: -20px;
+    top: -140px;
+  }
+
+  .mp-next-carousel:before {
+    content: "\f105";
+    position: absolute;
+    font-size: 30px;
+    font-family: FontAwesome;
+    color: #252525;
+    left: 18px;
+    top: 0px;
+    @include transition(all 0.2s ease-in-out);
+  }
+  .mp-next-carousel:after {
+    content: "";
+    position: absolute;
+    width: 88px;
+    height: 300px;
+    left: -20px;
+    top: -140px;
+  }
+
+  .mp-prev-carousel,
+  .mp-next-carousel {
+    color: #fff;
+    font-size: 22px;
+    width: 45px;
+    height: 45px;
+    line-height: 42px;
+    text-align: center;
+    margin-left: 0px;
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 100%;
+    top: 45%;
+
+    width: 45px;
+    line-height: 42px;
+    height: 45px;
+    //margin-top: -22px;
+    border: 1px solid #eee;
+    border-radius: 100%;
+  }
+
 }
+
