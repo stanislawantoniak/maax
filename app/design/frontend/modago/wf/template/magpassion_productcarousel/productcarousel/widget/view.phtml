@@ -135,9 +135,7 @@
                         
                         
                         <div class="product-info">
-                            <?php if ($_productcarousel->getShowproductprice() == 1): ?>
-                            <?php echo $this->getPriceHtml($_product, true) ?>
-                            <?php endif; ?>
+
                             
                             <?php if ($_productcarousel->getShowreview() == 1): ?>
                                 <?php 
@@ -157,7 +155,18 @@
                             <?php if ($_productcarousel->getShowproductname() == 1): ?>
                             <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></h2>
                             <?php endif; ?>
-                        
+                            <?php if ($_productcarousel->getShowproductprice() == 1): ?>
+                                <div class="price">
+                                    <?php if ($_product->getStrikeoutPrice() > $_product->getFinalPrice()): ?>
+                                        <del>
+                                            <span class="amount"><?php echo Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false); ?></span>
+                                        </del>
+                                    <?php endif; ?>
+                                    <ins>
+                                        <span class="amount"><?php echo Mage::helper('core')->currency($_product->getFinalPrice(), true, false); ?></span>
+                                    </ins>
+                                </div>
+                            <?php endif; ?>
                         
                             <div class="actions">
                             <?php if ($_productcarousel->getShowproductaddtocart() == 1): ?>
@@ -285,9 +294,6 @@
                         
                         
                         <div class="product-info">
-                            <?php if ($_productcarousel->getShowproductprice() == 1): ?>
-                            <?php echo $this->getPriceHtml($_product, true) ?>
-                            <?php endif; ?>
                             
                             <?php if ($_productcarousel->getShowreview() == 1): ?>
                                 <?php 
@@ -307,7 +313,9 @@
                             <?php if ($_productcarousel->getShowproductname() == 1): ?>
                             <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></h2>
                             <?php endif; ?>
-                        
+                            <?php if ($_productcarousel->getShowproductprice() == 1): ?>
+                                <?php echo $this->getPriceHtml($_product, true) ?>
+                            <?php endif; ?>
                         
                             <div class="actions">
                             <?php if ($_productcarousel->getShowproductaddtocart() == 1): ?>

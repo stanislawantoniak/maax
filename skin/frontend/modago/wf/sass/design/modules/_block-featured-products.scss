@@ -122,19 +122,35 @@
 
 
           .product-info {
-            .price-box {
+            .price {
               width: 100%;
               text-align: center;
               margin-bottom: 1.0714em;
               display: block;
               font-size: 1.1428em;
               line-height: 1.4285em;
-              color: #000;
 
+              .amount {
+                color: $colorProductFinalPrice;
+              }
+
+              ins {
+                background-color: transparent;
+                text-decoration: none;
+              }
+              del {
+                font-size: 1em;
+                color: $colorProductStrikeOutPrice;
+
+                span.amount {
+                  color: $colorProductStrikeOutPrice;
+                }
+              }
             }
 
             .product-name {
-              font-size: 14.9996004104614px;
+              font-size: 15px;
+              padding: 0;
               a {
                 font-weight: 400;
                 color: #3d3d3d;
