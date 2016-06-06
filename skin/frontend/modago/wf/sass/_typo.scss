@@ -87,6 +87,9 @@ ul, ol {
 .border-all-secondary {
 	@include bc-secondary;
 }
+a {
+	@include transition(color .25s ease);
+}
 a:link,
 a:visited {
 	color:$color_000000;
