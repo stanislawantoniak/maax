@@ -226,13 +226,25 @@
 				    position: absolute;
 				    z-index: 100;
 					text-transform:capitalize;
+					.sale:before {
+						content: "Sale";
+					}
+					.bestseller:before {
+						content: "Hit";
+					}
+					.new:before {
+						content: "New";
+					}
+					.promotion:before {
+						content: "Promo";
+					}
 		    		&.type-label-new {
-				    	right: 20px;
+				    	left: 20px;
 				        background: $backgroundColorFlagNew;
 				    }
 				    &.type-label-sale, &.type-label-bestseller {
 				        left: 20px;
-			    	    background: $backgroundColorFlagSale;
+			    	    background: $backgroundColorFlagSale;						
 				    }
 				    &.type-label-promotion {
 				        left: 20px;
