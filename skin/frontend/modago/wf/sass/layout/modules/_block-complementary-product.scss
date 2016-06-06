@@ -1,3 +1,6 @@
+#product_additions_2 {
+	padding: 0;
+}
 #complementary_product {
 	@media (max-width: $screen-xs-max) {
 		margin-top: 5px;
@@ -9,18 +12,15 @@
 }
 .block-complementary-product {
 	h2 {
-		font-size: 20px;
-		font-weight: 400;
+		font-size: 1.1428em;
 		padding-bottom: 10px;
 		margin-bottom: 20px;
 		border-bottom: 1px solid #e6e6e6;
 		text-transform: uppercase;
+		color: #000;
 	}
 	.rwdCarousel {
-	//	width: 100%;
-	//	padding:15px 55px;
 		position:relative;
-		//display: inline-block;
 		.item {
 			margin:0 20px;
 			@media (max-width: $screen-xs-max) {
@@ -56,10 +56,9 @@
 					display: block;
 					font-size: 1.1428em;
 					line-height: 1.4285em;
-					color: #000;
 
 					.amount {
-						color: #dc4348;
+						color: $colorProductFinalPrice;
 					}
 
 					ins {
@@ -68,10 +67,10 @@
 					}
 					del {
 						font-size: 1em;
-						color: #8a8a8a;
+						color: $colorProductStrikeOutPrice;
 
 						span.amount {
-							color: #8a8a8a;
+							color: $colorProductStrikeOutPrice;
 						}
 					}
 				}

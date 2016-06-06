@@ -25,31 +25,24 @@
                                 <a href="<?php echo $_item->getProductUrl(); ?>" itemprop="url">
                                     <div class="box_listing_product">
                                         <div class="img_product">
-                                            <img
-                                                src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(262); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
-                                                class="img-responsive"></div>
+                                            <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(262); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" class="img-responsive"></div>
                                         <div class="text-center product-details">
                                             <div class="product-title">
                                                 <?php echo $this->getShortProductName($_item, 42); ?>
                                             </div>
 
-
-                                            <div class="price clearfix hidden-xs like-two-line">
-                                                <div class="col-price">
-                                                        <?php if ($_item->getStrikeoutPrice() > $_item->getFinalPrice()): ?>
-                                                            <del>
-                                                                <span class="amount"><?php echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false); ?></span>
-                                                            </del>
-                                                        <?php endif; ?>
-                                                    <ins>
-                                                        <span class="amount"><?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?></span>
-                                                    </ins>
-                                                </div>
+                                            <div class="price">
+                                                <?php if ($_item->getStrikeoutPrice() > $_item->getFinalPrice()): ?>
+                                                    <del>
+                                                        <span class="amount"><?php echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false); ?></span>
+                                                    </del>
+                                                <?php endif; ?>
+                                                <ins>
+                                                    <span class="amount"><?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?></span>
+                                                </ins>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </a>
                             </h5>
                         </div>

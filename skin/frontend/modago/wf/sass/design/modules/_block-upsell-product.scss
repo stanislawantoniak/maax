@@ -1,3 +1,6 @@
+#product_additions_1 {
+  padding: 0;
+}
 .box-up-sell {
   &.product_list_widget {
 
@@ -57,15 +60,30 @@
       }
 
       .small-coast {
-        color: #8a8a8a;
+        color: $colorProductStrikeOutPrice;
         font-size: 1.0714em;
         font-weight: 500;
+
+        .amount {
+          font-family: $fontOpenSS;
+          color: $colorProductFinalPrice;
+        }
+
+        ins {
+          background-color: transparent;
+          text-decoration: none;
+        }
+        del {
+          font-size: 1em;
+          color: $colorProductStrikeOutPrice;
+
+          span.amount {
+            color: $colorProductStrikeOutPrice;
+          }
+        }
       }
 
-      .amount {
-        font-family: $fontOpenSS;
-        color:$color_fd002a;
-      }
+
 
       &.watch_more_item {
         //display: none;
