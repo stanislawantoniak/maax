@@ -2,6 +2,10 @@
   text-align: center;
   width: 100%;
 
+  .title-section {
+    margin-bottom: 20px;
+  }
+
   #featured_products_tabs {
     border: none;
 
@@ -91,6 +95,9 @@
       .owl-item {
         img {
           transform-style: preserve-3d;
+
+          display: block;
+          width: 100%;
         }
 
         .product-block {
