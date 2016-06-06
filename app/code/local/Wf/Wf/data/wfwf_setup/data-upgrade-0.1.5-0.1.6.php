@@ -7,7 +7,7 @@ $blocks = array(
         'content'       =>
             <<<EOD
 <div id="featured_products_tabs">
-  <ul>
+  <ul class="featured_products_tabs">
     <li><a href="#featured_products_tabs-1">Bestsellery</a></li>
     <li><a href="#featured_products_tabs-2">Nowości</a></li>
     <li><a href="#featured_products_tabs-3">Promocje</a></li>
