@@ -144,27 +144,27 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
         return null;
     }
 
-    /** Regulation section (visible only for vendors)
-     * @return array|null
-     */
-    public function getRegulationsSection()
-    {
-
-        if ($this->isModuleActive('ghregulation')
-                && $this->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_RULES)
-           ) {
-
-
-            return array(
-                       "label" => $this->__("Terms of cooperation"),
-                       "active" => $this->isActive(array("ghregulation")),
-                       "icon" => "icon-flag",
-                       "url" => $this->getUrl('udropship/vendor/rules'),
-                   );
-        }
-
-        return null;
-    }
+	/**
+	 * Regulation section (visible only for vendors in modago)
+	 *
+	 * @return array|null
+	 */
+	public function getRegulationsSection() {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if ($this->isModuleActive('ghregulation') && 
+			$this->isAllowed(Zolago_Operator_Model_Acl::RES_VENDOR_RULES) &&
+			$commonHlp->useGalleryConfiguration()
+		) {
+			return array(
+				"label" => $this->__("Terms of cooperation"),
+				"active" => $this->isActive(array("ghregulation")),
+				"icon" => "icon-flag",
+				"url" => $this->getUrl('udropship/vendor/rules'),
+			);
+		}
+		return null;
+	}
 
     public function getRmaSection() {
         if($this->isModuleActive('ZolagoOs_Rma') && $this->isAllowed("urma/vendor")) {
@@ -328,9 +328,12 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
      * @return array|null
      */
     public function getStatementsSection() {
-        if ($this->isModuleActive('ghstatements')
-                && $this->isAllowed("udropship/statements")
-           ) {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if ($this->isModuleActive('ghstatements')
+			&& $this->isAllowed(Zolago_Operator_Model_Acl::RES_BILLING_AND_STATEMENTS)
+			&& $commonHlp->useGalleryConfiguration()
+		) {
             /** @var GH_Statements_Helper_Data $helper */
             $helper = Mage::helper('ghstatements');
             // Sledzenie salda / Balance tracking

@@ -161,9 +161,13 @@ $colorShadow:                           #bbb;
 
 $colorFont:                             #555;
 $colorLink:                             #000;
-$colorLinkHover:                        #dc4348;
+
+$colorLinkHover:                        #000;
 $colorLinkActive:                       #000;
 
+$colorLinkHoverOnDark:                  #fff;
+
+$decorationLinkHover:                   underline;
 $colorHeader:                           #3d3d3d;
 
 //icon colors
@@ -216,6 +220,20 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 $colorMainMenuSubItemGradientStart: #F9F9FA;
 $colorMainMenuSubItemGradientEnd: #F9F9FA;
 
+
+@mixin generalLinkOnDark {
+  &:hover, &.hover {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+
+  }
+  &:active, &:focus, &.active {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+    outline: none;
+  }
+}
+
 @mixin primaryButtonGradient { //covers normal + hover + active + .disabled
 	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
 	&:hover,&.hover {
@@ -265,6 +283,53 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
     }
   }
 }
+
+@mixin productFlagLabel {
+  .label-product {
+    text-align: center;
+    z-index: 1;
+
+    .listing-label {
+      color: #fff;
+      border-radius: 100%;
+      width: 45px;
+      height: 45px;
+      line-height: 45px;
+      font-size: 12px;
+      font-family: $fontOpen;
+      font-weight: 700;
+      display: inline-block;
+      top: 7px;
+      position: absolute;
+      z-index: 100;
+      left: 20px;
+
+      &.type-label-new {
+        background: $backgroundColorFlagNew;
+      }
+      &.type-label-sale, &.type-label-bestseller {
+        background: $backgroundColorFlagSale;
+      }
+      &.type-label-promotion {
+        background: $backgroundColorFlagPromotion;
+      }
+      .flag-bestseller:before {
+        content: "Hit";
+      }
+      .flag-promotion:before {
+        content: "Promo";
+      }
+      .flag-sale:before {
+        content: "Sale";
+      }
+      .flag-new:before {
+        content: "New";
+      }
+
+    }
+  }
+}
+
 
 
 $colorDropdownBorder:                   #e6e6e6;

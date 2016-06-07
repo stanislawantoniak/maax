@@ -489,7 +489,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	/**
 	 * @return array|int
 	 */
-	private function _getShoppingCartProducts() {
+	protected function _getShoppingCartProducts() {
 
 		/** @var Mage_Checkout_Model_Session $checkoutSession */
 		$checkoutSession = Mage::getSingleton('checkout/session');
@@ -509,9 +509,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 
 			if ($product && $product->getId()) {
 				$options = $this->_getProductOptions($item);
-				$image = Mage::helper('catalog/image')
-					->init($product, 'thumbnail')
-					->resize(80, 102);
+				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(40, 50);
 
 				$array[] = array(
 					'name'			=> $product->getName(),
@@ -530,7 +528,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @param $item
 	 * @return array
 	 */
-	private function _getProductOptions($item) {
+	protected function _getProductOptions($item) {
 		/* @var $product Mage_Catalog_Model_Product */
 		$product = $item->getProduct();
 		$options = $product->getTypeInstance(true)->getOrderOptions($product);

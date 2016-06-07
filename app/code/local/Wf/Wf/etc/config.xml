@@ -29,6 +29,11 @@
                     <data>Wf_Wf_Helper_Solrsearch_Data</data>
                 </rewrite>
             </zolagosolrsearch>
+			<orbacommon>
+				<rewrite>
+					<ajax_customer_cache>Wf_Wf_Helper_Orbacommon_Ajax_Customer_Cache</ajax_customer_cache>
+				</rewrite>
+			</orbacommon>
         </helpers>
         <resources>
             <wfwf_setup>
@@ -40,6 +45,16 @@
 
     </global>
     <frontend>
+		<!--for map-->
+		<routers>
+			<zolagomodago>
+				<use>standard</use>
+				<args>
+					<module>Zolago_Modago</module>
+					<frontName>wf</frontName>
+				</args>
+			</zolagomodago>
+		</routers>
 		<translate>
 			<modules>
 				<Wf_Wf>

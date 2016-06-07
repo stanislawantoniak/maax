@@ -565,6 +565,7 @@ body {
 		&.navigation > li > a.forceActive {
 			background: none;
 			color: $colorLinkHover;
+			font-weight: 600;
 			&:before {
 				//background: $colorAccentSiteMenuTop;
 
@@ -572,7 +573,7 @@ body {
 		}
 	}
 
-	// NAV DESKPOT
+	// NAV DESKTOP
 	//#nav_desc {
 	.navigation {
 		li {

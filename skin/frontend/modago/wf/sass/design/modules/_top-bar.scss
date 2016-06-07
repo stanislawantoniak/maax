@@ -11,23 +11,8 @@
   a {
     color: #fff;
     font-size: 13px;
-    text-transform: none;
-    -webkit-transition: none;
-    -moz-transition: none;
-    -ms-transition: none;
-    -o-transition: none;
-    transition: none;
 
-    &:hover{
-      &:hover {
-        color: $colorLinkHover;
-        text-decoration: none;
-      }
-    }
-    &:focus {
-      color: #737373;
-      text-decoration: none;
-    }
+    @include generalLinkOnDark;
   }
 
 

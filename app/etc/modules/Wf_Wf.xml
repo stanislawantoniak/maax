@@ -2,8 +2,11 @@
 <config>
     <modules>
         <Wf_Wf>
-            <active>true</active>
+            <active>false</active>
             <codePool>local</codePool>
+			<depends>
+				<Zolago_Modago/>
+			</depends>
         </Wf_Wf>
     </modules>
 </config>

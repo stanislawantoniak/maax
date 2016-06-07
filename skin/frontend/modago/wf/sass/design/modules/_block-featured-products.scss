@@ -6,6 +6,8 @@
     margin-bottom: 20px;
   }
 
+  @include productFlagLabel;
+
   #featured_products_tabs {
     border: none;
 
@@ -114,12 +116,13 @@
             max-width: 100%;
             margin: 0 auto;
             text-align: center;
+
+            box-shadow: 0 0 1px 1px #f5f3f4;
           }
-
-
 
           .product-info {
             min-height: initial;
+            margin-top: 20px;
             .price {
               width: 100%;
               text-align: center;
@@ -144,6 +147,10 @@
                 width: 100%;
                 margin-bottom: 0.7142em;
 
+                @media (max-width: $screen-xs-max) {
+                  font-size: 0.9285em;
+                }
+
                 &:hover {
                   color: $colorLinkHover;
                 }
@@ -155,44 +162,6 @@
 
       }
     }
-  }
-
-  .mp-prev-carousel:before {
-    content: "\f104";
-    position: absolute;
-    font-size: 30px;
-    font-family: FontAwesome;
-    color: #252525;
-    left: 15px;
-    top: 0px;
-    @include transition(all 0.2s ease-in-out);
-  }
-  .mp-prev-carousel:after {
-    content: "";
-    position: absolute;
-    width: 88px;
-    height: 300px;
-    left: -20px;
-    top: -140px;
-  }
-
-  .mp-next-carousel:before {
-    content: "\f105";
-    position: absolute;
-    font-size: 30px;
-    font-family: FontAwesome;
-    color: #252525;
-    left: 18px;
-    top: 0px;
-    @include transition(all 0.2s ease-in-out);
-  }
-  .mp-next-carousel:after {
-    content: "";
-    position: absolute;
-    width: 88px;
-    height: 300px;
-    left: -20px;
-    top: -140px;
   }
 
   .mp-prev-carousel,
@@ -209,13 +178,57 @@
     top: 45%;
     border: 1px solid #eee;
     border-radius: 100%;
+
+    &:hover {
+      border-color: #252525;
+    }
   }
 
   .mp-prev-carousel {
     left: -20px;
+
+    &:before {
+      content: "\f104";
+      position: absolute;
+      font-size: 30px;
+      font-family: FontAwesome;
+      color: #252525;
+      left: 15px;
+      top: 0px;
+      @include transition(all 0.2s ease-in-out);
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      width: 88px;
+      height: 300px;
+      left: -20px;
+      top: -140px;
+    }
   }
+
   .mp-next-carousel {
     right: -20px;
+
+    &:before {
+      content: "\f105";
+      position: absolute;
+      font-size: 30px;
+      font-family: FontAwesome;
+      color: #252525;
+      left: 18px;
+      top: 0px;
+      @include transition(all 0.2s ease-in-out);
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      width: 88px;
+      height: 300px;
+      left: -20px;
+      top: -140px;
+    }
   }
 
 }

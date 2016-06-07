@@ -1,4 +1,8 @@
-<?php $_session = Mage::getSingleton('udropship/session'); ?>
+<?php
+$_session = Mage::getSingleton('udropship/session');
+/** @var Zolago_Common_Helper_Data $commonHlp */
+$commonHlp = Mage::helper("zolagocommon");
+?>
     <div style="margin-top:100px;" id="login-vendor">
         <div class="panel panel-default" >
             <div class="panel-heading">
@@ -40,8 +44,9 @@
                             <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
 
                                 <a title="<?php echo $this->__('Forgot Password'); ?>" href="<?php echo Mage::helper('udropship')->getVendorForgotPasswordUrl(); ?>"><?php echo $this->__('Forgot Password') ?></a><br />
-
-                                    <a title="<?php echo $this->__('Register New Account'); ?>" href="<?php echo Mage::helper('umicrosite')->getVendorRegisterUrl(); ?>"><?php echo $this->__('Register New Account') ?></a>
+								<?php if ($commonHlp->useGalleryConfiguration()): ?>
+									<a title="<?php echo $this->__('Register New Account'); ?>" href="<?php echo Mage::helper('umicrosite')->getVendorRegisterUrl(); ?>"><?php echo $this->__('Register New Account') ?></a>
+								<?php endif; ?>
                             </div>
 
                         </div>

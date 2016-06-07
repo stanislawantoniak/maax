@@ -15,49 +15,7 @@
             height:auto;
         }
     }
-  .label-product {
-    text-align: center;
-    z-index: 1;
-
-    .listing-label {
-      color: #fff;
-      border-radius: 100%;
-      width: 60px;
-      height: 60px;
-      line-height: 60px;
-      font-size: 13px;
-      font-family: $fontOpen;
-      font-weight: 700;
-      display: inline-block;
-      top: 7px;
-      position: absolute;
-      z-index: 100;
-      left: 20px;
-
-      &.type-label-new {
-        background: $backgroundColorFlagNew;
-      }
-      &.type-label-sale, &.type-label-bestseller {
-        background: $backgroundColorFlagSale;
-      }
-      &.type-label-promotion {
-        background: $backgroundColorFlagPromotion;
-      }
-	  .flag-bestseller:before {
-		content: "Hit";
-	  }
-	  .flag-promotion:before {
-		content: "Promo";
-	  }
-	  .flag-sale:before {
-		content: "Sale";
-	  }
-      .flag-new:before {
-		content: "New";
-	  }
-
-    }
-  }
+  @include productFlagLabel;
   .logo_manufacturer {
 	margin: 15px 8px;
     max-width: 100px;
