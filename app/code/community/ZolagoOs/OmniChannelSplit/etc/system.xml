@@ -9,7 +9,7 @@
         <carriers>
             <groups>
                 <udsplit translate="label">
-                    <label>Drop Shipping (Split Rates)</label>
+                    <label>ZolagoOs Shipping (Split Rates)</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>110</sort_order>
                     <show_in_default>1</show_in_default>
