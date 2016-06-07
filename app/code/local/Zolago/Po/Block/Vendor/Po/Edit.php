@@ -222,7 +222,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 
 		$method = explode('_', $poShippingMethod, 2);
 		$carrierCode = !empty($method[0]) ? $method[0] : $_vendor->getCarrierCode();
-
 		$curShipping = $shipping->getItemByColumnValue('shipping_code', $uMethodCode);
 		$methodCode  = !empty($method[1]) ? $method[1] : '';
 
@@ -230,7 +229,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$labelMethodAllowAll = Mage::getStoreConfig('udropship/vendor/label_method_allow_all', $_order->getStoreId());
 
 		$availableMethods = array();
-			
 		if ($curShipping && $labelMethodAllowAll) {
 			$curShipping->useProfile($_vendor);
 			$_carriers = array($carrierCode=>0);
@@ -496,12 +494,17 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
          $shippingMethod = $po->getUdropshipMethod();
          $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
          switch ($methodCode) {
-             case 'ghinpost':
+             case 'ghinpost': // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
                  $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
                  break;
-             default: // carrier
+             case 'std': // carrier
                  $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
                  break;
+             case 'zolagopp': // poczta polska
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
+                 break;
+             default:
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');                 
          }
          $block->setParentBlock($this);
          return $block->toHtml();
