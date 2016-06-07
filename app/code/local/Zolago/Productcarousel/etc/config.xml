@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Productcarousel>
+            <version>0.1.0</version>
+        </Zolago_Productcarousel>
+    </modules>
+    <global>
+        <models>
+            <zolagoproductcarousel>
+                <class>Zolago_Productcarousel_Model</class>
+                <resourceModel>zolago_productcarousel_resource</resourceModel>
+            </zolagoproductcarousel>
+            <zolago_productcarousel_resource>
+                <class>Zolago_Productcarousel_Model_Resource</class>
+            </zolago_productcarousel_resource>
+        </models>
+        <blocks>
+            <zolagoproductcarousel>
+                <class>Zolago_Productcarousel_Block</class>
+            </zolagoproductcarousel>
+        </blocks>
+        <helpers>
+            <zolagoproductcarousel>
+                <class>Zolago_Productcarousel_Helper</class>
+            </zolagoproductcarousel>
+        </helpers>
+    </global>
+    <default>
+        <productcarousel>
+            <productcarousel>
+                <loadjquery>0</loadjquery>
+                <carouselupsell>0</carouselupsell>
+            </productcarousel>
+        </productcarousel>
+    </default>
+</config>

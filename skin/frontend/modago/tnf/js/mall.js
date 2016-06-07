@@ -1404,6 +1404,7 @@ function initToggleSearch() {
 		toggle.parent().addClass("open");
 		toggle.css('pointer-events','none');
         toggle.parent().toggleClass('not-open');
+		jQuery('#dropdown-search input[name=q]').focus();
 	});
 
 	jQuery(document).click(function(e){

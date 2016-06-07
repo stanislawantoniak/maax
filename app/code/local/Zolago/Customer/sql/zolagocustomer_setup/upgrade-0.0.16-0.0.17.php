@@ -30,7 +30,7 @@ $table = $installer->getConnection()
 	->addIndex($installer->getIdxName('zolagocustomer/emailtoken', array('customer_id')),
 		array('customer_id'))
 	->addForeignKey(
-		$installer->getFkName('zolagocustomer/emailtoken', 'customer_id', 'customer/entity','entity_id'),
+		$installer->getFkName('zolagocustomer/attachtoken', 'customer_id', 'customer/entity','entity_id'),
 		'customer_id', $installer->getTable('customer/entity'), 'entity_id',
 		Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
 

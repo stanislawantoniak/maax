@@ -9,11 +9,12 @@ class Zolago_Modago_IndexController extends ZolagoOs_OmniChannelMicrosite_IndexC
 
     public function indexAction()
     {
+        $route = (string)Mage::getConfig()->getNode('frontend/routers/zolagomodago/args/frontName');
 
         if (Mage::app()->getRequest()->getRouteName() == self::ROUTE_STORE_MAPS) {
             $website = Mage::app()->getWebsite();
             if ($website->getHaveSpecificDomain() && $website->getVendorId()) {
-                $this->_forward('index', "map", "modago");
+                $this->_forward('index', "map", $route);
                 return;
             } else {
                 $this->_forward('defaultNoRoute');
