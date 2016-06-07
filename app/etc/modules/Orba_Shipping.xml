@@ -4,6 +4,9 @@
         <Orba_Shipping>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <ZolagoOs_Rma/>
+            </depends>
         </Orba_Shipping>
     </modules>
 </config>

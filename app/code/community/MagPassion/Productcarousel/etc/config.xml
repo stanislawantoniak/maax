@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagPassion_Productcarousel extension
+ * 
+ * @category   	MagPassion
+ * @package		MagPassion_Productcarousel
+ * @copyright  	Copyright (c) 2014 by MagPassion (http://magpassion.com)
+ * @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+	<modules>
+		<MagPassion_Productcarousel>
+			<version>1.0.3</version>
+		</MagPassion_Productcarousel>
+	</modules>
+	<global>
+        <resources>
+			<magpassion_productcarousel_setup>
+				<setup>
+					<module>MagPassion_Productcarousel</module>
+					<class>MagPassion_Productcarousel_Model_Resource_Setup</class>
+				</setup>
+				<connection>
+                    <use>core_setup</use>
+                </connection>
+			</magpassion_productcarousel_setup>
+			<magpassion_productcarousel_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </magpassion_productcarousel_write>
+            <magpassion_productcarousel_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </magpassion_productcarousel_read>
+		</resources>
+		
+		<blocks>
+			<productcarousel>
+				<class>MagPassion_Productcarousel_Block</class>
+			</productcarousel>
+		</blocks>
+		<helpers>
+			<productcarousel>
+				<class>MagPassion_Productcarousel_Helper</class>
+			</productcarousel>
+		</helpers>
+		<models>
+			<productcarousel>
+				<class>MagPassion_Productcarousel_Model</class>
+				<resourceModel>productcarousel_resource</resourceModel>
+			</productcarousel>
+			<productcarousel_resource>
+				<class>MagPassion_Productcarousel_Model_Resource</class>
+				<entities>
+					<productcarousel>
+						<table>productcarousel_productcarousel</table>
+					</productcarousel>
+					<productcarousel_store>
+						<table>productcarousel_productcarousel_store</table>
+					</productcarousel_store>
+					<productcarousel_product>
+						<table>productcarousel_productcarousel_product</table>
+					</productcarousel_product>
+				</entities>
+			</productcarousel_resource>
+		</models>
+	</global>
+	<adminhtml>
+		<layout>
+			<updates>
+				<magpassion_productcarousel>
+					<file>magpassion_productcarousel.xml</file>
+				</magpassion_productcarousel>
+			</updates>
+		</layout>
+		<events>
+			<core_block_abstract_prepare_layout_after>
+				<observers>
+					<productcarousel>
+						<type>singleton</type>
+						<class>productcarousel/adminhtml_observer</class>
+						<method>addProductcarouselBlock</method>
+					</productcarousel>
+				</observers>
+			</core_block_abstract_prepare_layout_after>
+			<catalog_product_save_after>
+				<observers>
+					<productcarousel>
+						<type>singleton</type>
+						<class>productcarousel/adminhtml_observer</class>
+						<method>saveProductcarouselData</method>
+					</productcarousel>
+				</observers>
+			</catalog_product_save_after>
+		</events>
+	</adminhtml>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<MagPassion_Productcarousel before="Mage_Adminhtml">MagPassion_Productcarousel_Adminhtml</MagPassion_Productcarousel>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	<frontend>
+		<routers>
+			<productcarousel>
+				<use>standard</use>
+				<args>
+					<module>MagPassion_Productcarousel</module>
+					<frontName>productcarousel</frontName>
+				</args>
+			</productcarousel>
+		</routers>
+		<layout>
+			<updates>
+				<magpassion_productcarousel>
+					<file>magpassion_productcarousel.xml</file>
+				</magpassion_productcarousel>
+			</updates>
+		</layout>
+	</frontend>
+	<default>
+        <productcarousel>
+            <productcarousel>
+                    <loadjquery>1</loadjquery>
+                    <carouselupsell>0</carouselupsell>
+            </productcarousel>
+            
+        </productcarousel>
+    </default>
+</config>

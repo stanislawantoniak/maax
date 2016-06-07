@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Wf_Wf>
+            <active>true</active>
+            <codePool>local</codePool>
+			<depends>
+				<Zolago_Modago/>
+			</depends>
+        </Wf_Wf>
+    </modules>
+</config>

@@ -8,7 +8,7 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 $isBrandshop = $vendor ? $vendor->isBrandshop() : null;
 $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
  ?>
-<header data-test="4" id="header-main">
+<header id="header-main" data-target="search">
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div id="block-current-search" class="row">

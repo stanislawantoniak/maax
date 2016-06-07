@@ -4,6 +4,9 @@
         <GH_Beacon>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Zolago_Pos/>
+            </depends>            
         </GH_Beacon>
     </modules>
 </config>

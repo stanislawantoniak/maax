@@ -16,6 +16,13 @@ class GH_Regulation_Dropship_VendorController
      */
     public function acceptAction()
     {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if (!$commonHlp->useGalleryConfiguration()) {
+			$this->_redirect('udropship/vendor/');
+			return;
+		}
+
         // Hard code for polish lang - for now we do not have translated regulation
         if ($return = $this->forceSetLocalePolish()) {
             return $return;
@@ -84,6 +91,13 @@ class GH_Regulation_Dropship_VendorController
      */
     public function acceptPostAction()
     {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if (!$commonHlp->useGalleryConfiguration()) {
+			$this->_redirect('udropship/vendor/');
+			return;
+		}
+
         $req = $this->getRequest();
         $key = $req->getParam('key', false);
         $vendorId = $req->getPost('vendor', false);
@@ -348,7 +362,7 @@ class GH_Regulation_Dropship_VendorController
      *
      */
      public function rulesAction() {
-         parent::_renderPage(null,'ghregulation');         
+         $this->_renderPage(null,'ghregulation');
      }
 
     /**
@@ -461,41 +475,20 @@ class GH_Regulation_Dropship_VendorController
         return Mage::helper("ghregulation");
     }
 
-    protected function _renderPage($handles=null, $active=null, $title = null)
-    {
-        $this->_setTheme();
-        $this->loadLayout($handles);
-        $root = $this->getLayout()->getBlock('root');
-
-        if ($root) {
-            $root->addBodyClass('udropship-vendor');
-        }
-        if ($active && ($header = $this->getLayout()->getBlock('header'))) {
-            $header->setActivePage($active);
-        }
-        if (!empty($title)) {
-            $head = $this->getLayout()->getBlock('head');
-            $head->setTitle($title);
-        }
-        /*
-        if (version_compare(Mage::getVersion(), '1.4.0.0', '<')) {
-            $pager = $this->getLayout()->getBlock('shipment.grid.toolbar');
-            if (!$pager) {
-                $pager = $this->getLayout()->getBlock('product.grid.toolbar');
-            }
-            if ($pager) {
-                $pager->setTemplate('page/html/pager13.phtml');
-            }
-        }
-        */
-        $this->_initLayoutMessages('udropship/session');
-        if (is_array($this->_extraMessageStorages) && !empty($this->_extraMessageStorages)) {
-            foreach ($this->_extraMessageStorages as $ilm) {
-                $this->_initLayoutMessages($ilm);
-            }
-        }
-        $this->renderLayout();
-    }
+	/**
+	 * @param null $handles
+	 * @param null $active
+	 * @param null $title
+	 */
+	protected function _renderPage($handles = null, $active = null, $title = null) {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if (!$commonHlp->useGalleryConfiguration()) {
+			$this->_redirect('udropship/vendor/');
+			return;
+		}
+		parent::_renderPage($handles = null, $active = null, $title = null);
+	}
 
     /**
      * Hard code for polish lang - for now we do not have translated regulation

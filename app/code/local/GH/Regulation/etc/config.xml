@@ -57,12 +57,12 @@
         <template>
             <email>
                 <udropship_microsite_regulation_accepted_template  module="umicrosite">
-                    <label>Dropship Vendor Regulation Accepted Email</label>
+                    <label>ZolagoOs Vendor Regulation Accepted Email</label>
                     <file>umicrosite_regulation_accepted.html</file>
                     <type>html</type>
                 </udropship_microsite_regulation_accepted_template>
                 <udropship_microsite_regulation_confirm_template  module="umicrosite">
-                    <label>Dropship Vendor Regulation Confirm Email</label>
+                    <label>ZolagoOs Vendor Regulation Confirm Email</label>
                     <file>umicrosite_regulation_confirm.html</file>
                     <type>html</type>
                 </udropship_microsite_regulation_confirm_template>
