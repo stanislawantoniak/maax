@@ -1091,15 +1091,6 @@ Mall.product = {
          * Add flag sale/promo image to big images
          */
         flagBigMedia: function() {
-            var items = this.getBigMedia().find('.rwd-item');
-            items.each(function(i) {
-                var flags = jQuery(this).find('a');
-                var flag = flags.data('flags');
-	            var flagLabel = flags.data('flagLabel');
-	            if(flag && flagLabel) {
-		            flags.append('<div class="product-flag">' + flagLabel + '</div>');
-	            }
-            });
         },
 
         /**
