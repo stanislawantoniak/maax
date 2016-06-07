@@ -169,6 +169,10 @@
     top: 45%;
     border: 1px solid #eee;
     border-radius: 100%;
+
+    &:hover {
+      border-color: #252525;
+    }
   }
 
   .mp-prev-carousel {
