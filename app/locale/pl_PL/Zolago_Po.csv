@@ -173,7 +173,7 @@
 "Please enter valid DHL zip code","Proszę podać poprawny kod pocztowy DHL"
 "DHL Service Error", "Serwer DHL zwrócił błąd"
 "DHL Service Error: %s", "Serwer DHL zwrócił błąd: %s"
-"Service Error. Shipment Canceled. Please try again later.", "Serwer DHL zwrócił błąd. Przesyłka została anulowana. Proszę sprawdzić szczegóły błędów w historii zamówienia."
+"Service Error. Shipment Canceled. Please try again later.", "Serwer zwrócił błąd. Przesyłka została anulowana. Proszę sprawdzić szczegóły błędów w historii zamówienia."
 "Customer","Klient"
 "Shipped","Wysłane"
 "Delivered","Dostarczone"
