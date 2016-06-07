@@ -2,12 +2,12 @@
 
 <layout version="0.1.0">
 
-    <customer_account>
-        <reference name="customer_account_navigation">
-            <action method="addLink" translate="label" module="udratings"><name>udpreviews</name><path>udratings/customer/pending</path><label>My Vendor Pending Reviews</label></action>
-            <action method="addLink" translate="label" module="udratings"><name>udratings</name><path>udratings/customer</path><label>My Vendor Reviews</label></action>
-        </reference>
-    </customer_account>
+    <!--<customer_account>-->
+        <!--<reference name="customer_account_navigation">-->
+            <!--<action method="addLink" translate="label" module="udratings"><name>udpreviews</name><path>udratings/customer/pending</path><label>My Vendor Pending Reviews</label></action>-->
+            <!--<action method="addLink" translate="label" module="udratings"><name>udratings</name><path>udratings/customer</path><label>My Vendor Reviews</label></action>-->
+        <!--</reference>-->
+    <!--</customer_account>-->
 
     <udratings_customer_pending translate="label">
         <label>Customer My Account Vendor Pending Reviews</label>
