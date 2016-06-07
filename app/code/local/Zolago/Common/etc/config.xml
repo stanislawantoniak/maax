@@ -88,11 +88,4 @@
             </modules>
         </translate>
     </adminhtml>
-    <default>
-        <productcarousel>
-            <productcarousel>
-                <loadjquery>0</loadjquery>
-            </productcarousel>
-        </productcarousel>
-    </default>
 </config>
