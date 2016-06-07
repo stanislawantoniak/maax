@@ -116,8 +116,6 @@
             text-align: center;
           }
 
-
-
           .product-info {
             min-height: initial;
             .price {
@@ -157,44 +155,6 @@
     }
   }
 
-  .mp-prev-carousel:before {
-    content: "\f104";
-    position: absolute;
-    font-size: 30px;
-    font-family: FontAwesome;
-    color: #252525;
-    left: 15px;
-    top: 0px;
-    @include transition(all 0.2s ease-in-out);
-  }
-  .mp-prev-carousel:after {
-    content: "";
-    position: absolute;
-    width: 88px;
-    height: 300px;
-    left: -20px;
-    top: -140px;
-  }
-
-  .mp-next-carousel:before {
-    content: "\f105";
-    position: absolute;
-    font-size: 30px;
-    font-family: FontAwesome;
-    color: #252525;
-    left: 18px;
-    top: 0px;
-    @include transition(all 0.2s ease-in-out);
-  }
-  .mp-next-carousel:after {
-    content: "";
-    position: absolute;
-    width: 88px;
-    height: 300px;
-    left: -20px;
-    top: -140px;
-  }
-
   .mp-prev-carousel,
   .mp-next-carousel {
     color: #fff;
@@ -213,9 +173,49 @@
 
   .mp-prev-carousel {
     left: -20px;
+
+    &:before {
+      content: "\f104";
+      position: absolute;
+      font-size: 30px;
+      font-family: FontAwesome;
+      color: #252525;
+      left: 15px;
+      top: 0px;
+      @include transition(all 0.2s ease-in-out);
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      width: 88px;
+      height: 300px;
+      left: -20px;
+      top: -140px;
+    }
   }
+
   .mp-next-carousel {
     right: -20px;
+
+    &:before {
+      content: "\f105";
+      position: absolute;
+      font-size: 30px;
+      font-family: FontAwesome;
+      color: #252525;
+      left: 18px;
+      top: 0px;
+      @include transition(all 0.2s ease-in-out);
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      width: 88px;
+      height: 300px;
+      left: -20px;
+      top: -140px;
+    }
   }
 
 }
