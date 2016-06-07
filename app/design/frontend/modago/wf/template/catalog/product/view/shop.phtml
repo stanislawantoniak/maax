@@ -15,8 +15,6 @@ $hlp = Mage::helper('catalog');
 
 /** @var Zolago_Catalog_Helper_Product $productHelper */
 $productHelper = Mage::helper("zolagocatalog/product");
-$flag = $productHelper->getProductBestFlag($_product);
-$flagLabel = $flag ? $hlp->__($flag) : "";
 
 $isSalable = $_product->isSalable(); //product is salable
 // prices
@@ -55,7 +53,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 ?>
 <!-- PRODUCT NAME -->
 <div id="product-name" class="col-md-12 product-name" style="overflow-x:visible;">
-        <h1 itemprop="name" <?php if($flag): ?>class="product-name-with-flag"<?php endif; ?>><?php echo $productName; ?></h1>
+        <h1 itemprop="name"><?php echo $productName; ?></h1>
         <meta itemprop="sku" content="<?php echo $_product->getSku() ?>"/>
 </div>
 <!-- /PRODUCT NAME -->
