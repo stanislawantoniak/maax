@@ -262,6 +262,48 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	    return $this->_redirectReferer();
     }
 
+	/**
+	 * Success Registration
+	 *
+	 * @param Mage_Customer_Model_Customer $customer
+	 * @return Mage_Customer_AccountController
+	 */
+	protected function _successProcessRegistration(Mage_Customer_Model_Customer $customer)
+	{
+		$session = $this->_getSession();
+		if ($customer->isConfirmationRequired()) {
+			/** @var $app Mage_Core_Model_App */
+			$app = $this->_getApp();
+			/** @var $store  Mage_Core_Model_Store*/
+			$store = $app->getStore();
+			$customer->sendNewAccountEmail(
+				'confirmation',
+				$session->getBeforeAuthUrl(),
+				$store->getId()
+			);
+			$customerHelper = $this->_getHelper('customer');
+			$session->addSuccess($this->__('Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%s">click here</a>.',
+				$customerHelper->getEmailConfirmationUrl($customer->getEmail())));
+			$url = $this->_getUrl('*/*/index', array('_secure' => true));
+		} else {
+			$session->setCustomerAsLoggedIn($customer);
+			$session->renewSession();
+			$url = $this->_welcomeCustomer($customer);
+
+			if (Mage::helper("zolagonewsletter")->isModuleActive()) {
+				$model = Mage::getModel('zolagonewsletter/inviter');
+				if ($customer->getData("is_subscribed") == 0) {
+					// send invitation mail, model takes care of handling everything
+					$model->sendInvitationEmail($customer->getEmail());
+
+				}
+			}
+
+		}
+		$this->_redirectSuccess($url);
+		return $this;
+	}
+
 	public function editPassAction() {
 		if (!$this->_validateFormKey()) {
 			return $this->_redirectReferer();
