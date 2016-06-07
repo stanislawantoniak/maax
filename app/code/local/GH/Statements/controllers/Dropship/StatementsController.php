@@ -37,7 +37,22 @@ class GH_Statements_Dropship_StatementsController extends Zolago_Dropship_Contro
         /** @see app/design/frontend/base/default/template/ghstatements/dropship/invoices.phtml */
     }
 
-    /**
+	/**
+	 * @param null|array $handles
+	 * @param null|string $active
+	 * @param null|string $title
+	 */
+	protected function _renderPage($handles = null, $active = null, $title = null) {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if (!$commonHlp->useGalleryConfiguration()) {
+			$this->_redirect('udropship/vendor/');
+			return;
+		}
+		parent::_renderPage($handles, $active, $title);
+	}
+
+	/**
      * download pdf invoice from wfirma
      */
     public function downloadAction() {
