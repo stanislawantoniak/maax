@@ -364,8 +364,8 @@ $productHelper = Mage::helper("zolagocatalog/product");
                 <?php if ($_productcarousel->getcustomconfig()) echo $_productcarousel->getcustomconfig(); ?>
                 pagination: false,
               items : 7,
-              itemsDesktop : [1206,6],
-              itemsDesktopSmall : [979,5],
+              itemsDesktop : [1206,5],
+              itemsDesktopSmall : [979,4],
           });
           jQuery("#<?php echo $mp_wrapper?> .mp-next-carousel").click(function(){
             owl<?php echo $block_id;?>.trigger('owl.next');
