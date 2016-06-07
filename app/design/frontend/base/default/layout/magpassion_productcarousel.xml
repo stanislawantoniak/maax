@@ -19,11 +19,11 @@
                 
                 <action method="addItem" ifconfig="productcarousel/productcarousel/loadjquery"><type>skin_js</type><name>magpassion_productcarousel/js/jquery.min.js</name><params/></action>
                 <action method="addItem" ifconfig="productcarousel/productcarousel/loadjquery"><type>skin_js</type><name>magpassion_productcarousel/js/jquery.noconflict.js</name><params/></action>
-                <action method="addItem"><type>skin_js</type><name>magpassion_productcarousel/js/owl.carousel.min.js</name><params/></action>
-                
-                <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.carousel.css</stylesheet></action>
-                <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.theme.css</stylesheet></action>
-                <action method="addCss"><stylesheet>magpassion_productcarousel/css/mpslider.css</stylesheet></action>
+                <!--<action method="addItem"><type>skin_js</type><name>magpassion_productcarousel/js/owl.carousel.min.js</name><params/></action>-->
+
+                <!--<action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.carousel.css</stylesheet></action>-->
+                <!--<action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.theme.css</stylesheet></action>-->
+                <!--<action method="addCss"><stylesheet>magpassion_productcarousel/css/mpslider.css</stylesheet></action>-->
             </reference>
 	</default>
         <catalog_product_view>
