@@ -11,6 +11,12 @@
 /** @var $this Mage_Catalog_Block_Product_List_Crosssell */
 /** @var $_item Zolago_Catalog_Model_Product */
 
+/** @var Zolago_Catalog_Helper_Data $hlp */
+$hlp = Mage::helper('catalog');
+
+/** @var Zolago_Catalog_Helper_Product $productHelper */
+$productHelper = Mage::helper("zolagocatalog/product");
+
 ?>
 <?php if(count($this->getItems()) > 0) : ?>
     <div class="block-complementary-product">
@@ -25,6 +31,15 @@
                                 <a href="<?php echo $_item->getProductUrl(); ?>" itemprop="url">
                                     <div class="box_listing_product">
                                         <div class="img_product">
+                                            <?php
+                                            $flag = $productHelper->getProductBestFlag($_item);
+                                            $flagLabel = $flag ? $hlp->__($flag) : "";
+                                            ?>
+                                            <div class="label-product">
+                                                <div class="listing-label type-label-<?php echo $flag; ?>">
+                                                    <div class="flag-<?php echo $flag; ?>"></div>
+                                                </div>
+                                            </div>
                                             <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(262); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" class="img-responsive"></div>
                                         <div class="text-center product-details">
                                             <div class="product-title">
