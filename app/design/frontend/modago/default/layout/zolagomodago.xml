@@ -1009,15 +1009,6 @@
         <name>newsletter</name>
       </action>
       <action method="removeLinkByName">
-        <name>udqa</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udpreviews</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udratings</name>
-      </action>
-      <action method="removeLinkByName">
         <name>rma</name>
       </action>
       <!--Zamówienia w realizacji-->
