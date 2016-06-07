@@ -17,11 +17,17 @@ class ZolagoOs_OmniChannelMicrosite_Adminhtml_RegistrationController extends Mag
 
         $this->renderLayout();
     }
-
-    protected function _isAllowed()
-    {
-        return Mage::getSingleton('admin/session')->isAllowed('sales/udropship/vendor_registration');
-    }
+	
+	/**
+	 * Acl check for this controller
+	 *
+	 * @return bool
+	 */
+	protected function _isAllowed() {
+		return
+			Mage::getSingleton('admin/session')->isAllowed('sales/udropship/vendor_registration') ||
+			Mage::getSingleton('admin/session')->isAllowed('admin/vendors/vendor_registration');
+	}
 
     public function gridAction()
     {

@@ -7,7 +7,7 @@
             <depends>
                 <Zolago_Common/>
                 <Zolago_Dropship/>
-                
+                <Zolago_Payment/>                
             </depends>
         </GH_Statements>
     </modules>

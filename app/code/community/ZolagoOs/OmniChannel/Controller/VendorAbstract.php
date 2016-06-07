@@ -25,7 +25,13 @@ class ZolagoOs_OmniChannel_Controller_VendorAbstract extends Mage_Core_Controlle
     {
         $this->_extraMessageStorages = (array)$storages;
     }
-    protected function _renderPage($handles=null, $active=null)
+
+	/**
+	 * @param null|array $handles
+	 * @param null|string $active
+	 * @param null|string $title
+	 */
+    protected function _renderPage($handles=null, $active=null, $title = null)
     {
         $this->_setTheme();
         $this->loadLayout($handles);
@@ -34,9 +40,13 @@ class ZolagoOs_OmniChannel_Controller_VendorAbstract extends Mage_Core_Controlle
         if ($root) {
             $root->addBodyClass('udropship-vendor');
         }
-        if ($active && ($head = $this->getLayout()->getBlock('header'))) {
-            $head->setActivePage($active);
-        }
+		if ($active && ($header = $this->getLayout()->getBlock('header'))) {
+			$header->setActivePage($active);
+		}
+		if (!empty($title)) {
+			$head = $this->getLayout()->getBlock('head');
+			$head->setTitle($title);
+		}
         /*
         if (version_compare(Mage::getVersion(), '1.4.0.0', '<')) {
             $pager = $this->getLayout()->getBlock('shipment.grid.toolbar');
