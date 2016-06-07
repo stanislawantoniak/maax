@@ -100,7 +100,7 @@
 "Are you sure you want to delete product %s from campaign %s?","Czy na pewno chcesz usunąć produkt %s z kampanii %s?"
 "Below you will find details of campaign. You can make changes to your campaign settings by editing each field. You can add creation and add products.","Poniżej znajdziesz szczegóły kampanii. Możesz wprowadzić zmiany w ustawieniach kampanii edytując poszczególne pola. Możesz dodać krecje i dodać produkty."
 "NOTE! Image must have a width %spx and height %spx","UWAGA! Zdjęcie musi mieć szerokość %spx i wysokość %spx"
-"Campaign ""%s"" saved. Now you can attach creations and products to the campaign.","Kampania ""%s"" została zapisana. Możesz teraz dodać do kampanii kreacje i producty."
+"Campaign ""%s"" saved. Now you can attach creations and products to the campaign.","Kampania ""%s"" została zapisana. Możesz teraz dodać do kampanii kreacje i produkty."
 "Below is a list of sites where you can manage your ads. Enter the edit mode of the page to add or remove creatives.","Poniżej lista stron, na których możesz zarządzać reklamami. Wybierz stronę, której zawartość reklamową chcesz edytować klikając w „Edycja” przy nazwie strony."
 "Campaign has ended. Creative is not active. To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>.","Kampania się już zakończyła. Kreacja nie jest aktywna. Kreację możesz edytować z poziomu <a data-edit-val='link-edit' href='%s' target='_blank'>kampanii</a>."
 " To edit go to <a data-edit-val='link-edit' href='%s' target='_blank'>campaign</a>."," Kreację możesz edytować z poziomu <a data-edit-val='link-edit' href='%s' target='_blank'>kampanii</a>."

@@ -58,7 +58,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
 
             if ($vendorId) {
                 $posMaps = $this->getPosMapCollection($vendorId,$filterValue);
-                //Mage::log($posMaps->getData(), null, "map.log");
+
                 if($posMaps->count()){
                     foreach ($posMaps as $posMap) {
                         /* @var $posMap Zolago_Pos_Model_Pos */
@@ -80,6 +80,14 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
         }
 
         return json_encode($result, JSON_HEX_APOS);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMapDataUrl(){
+        $zolagoModagoRoute = (string)Mage::getConfig()->getNode('frontend/routers/zolagomodago/args/frontName');
+        return Mage::getUrl("{$zolagoModagoRoute}/map/getMapData");
     }
 
 
