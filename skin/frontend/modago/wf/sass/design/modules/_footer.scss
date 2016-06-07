@@ -213,9 +213,9 @@ footer.footer {
   .footer-links {
     a {
       color: $textColorFooterLink;
-      &:hover {
-        color: $colorLinkHover;
-      }
+
+      @include generalLinkOnDark;
+
       &.contact-us-link {
         margin: 10px 0;
         display: block;
