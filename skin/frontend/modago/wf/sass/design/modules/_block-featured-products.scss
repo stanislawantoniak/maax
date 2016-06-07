@@ -147,6 +147,10 @@
                 width: 100%;
                 margin-bottom: 0.7142em;
 
+                @media (max-width: $screen-xs-max) {
+                  font-size: 0.9285em;
+                }
+
                 &:hover {
                   color: $colorLinkHover;
                 }
