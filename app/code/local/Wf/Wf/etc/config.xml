@@ -45,6 +45,16 @@
 
     </global>
     <frontend>
+		<!--for map-->
+		<routers>
+			<zolagomodago>
+				<use>standard</use>
+				<args>
+					<module>Zolago_Modago</module>
+					<frontName>wf</frontName>
+				</args>
+			</zolagomodago>
+		</routers>
 		<translate>
 			<modules>
 				<Wf_Wf>
