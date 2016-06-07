@@ -6,6 +6,8 @@
     margin-bottom: 20px;
   }
 
+  @include productFlagLabel;
+
   #featured_products_tabs {
     border: none;
 
