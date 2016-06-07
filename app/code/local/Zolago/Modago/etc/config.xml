@@ -14,13 +14,6 @@
                     <frontName>modago</frontName>
                 </args>
             </zolagomodago>
-            <zolagomodago>
-                <use>standard</use>
-                <args>
-                    <module>Zolago_Modago</module>
-                    <frontName>wf</frontName>
-                </args>
-            </zolagomodago>
             <zolagomodago_storesmap>
                 <use>standard</use>
                 <args>
