@@ -2,7 +2,7 @@
 /**
  * client ups
  */
-class Orba_Shipping_Model_Carrier_Client_Ups extends Orba_Shipping_Model_Carrier_Client_Abstract {
+class Orba_Shipping_Model_Carrier_Client_Ups extends Orba_Shipping_Model_Client_Soap {
 
     /**
      * construct
