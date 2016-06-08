@@ -98,7 +98,6 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
         $orderCollection = Mage::getResourceModel("ghstatements/order_collection");
         $orderCollection->addFieldToFilter("statement_id",$statement->getId());
         $orderCollection->addFieldToFilter("charge_commission_flag", 1);
-
         if ($orderCollection->count()) {
             $this->_fillPage3byOrders($orderCollection, $page3data, $page3body);
             $this->_fillPage4byCommission($orderCollection, $page4data, $page4body);
@@ -402,7 +401,7 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
             /** @var GH_Statements_Model_Order $order */
             /** @var Zolago_Catalog_Model_Product $product */
             $product = Mage::getModel('catalog/product')->loadByAttribute('skuv', $order->getSku());
-            $_id = "order_" . $order->getPoIncrementId();
+            $_id = "order_" . $order->getId();
             $page4body[$_id] = array(
                 $order->getPoIncrementId(),                                                                              // [0] Order No.
                 "",                                                                                                      // [1] RMA No.
@@ -478,12 +477,11 @@ class GH_Statements_Helper_Vendor_Statement extends Mage_Core_Helper_Abstract {
     protected function _fillPage4byRma($rmaCollection, &$page4data, &$page4body) {
         /** @var Mage_Core_Model_Date $cd */
         $cd = Mage::getModel('core/date');
-
         foreach ($rmaCollection as $ghRma) {
             /** @var GH_Statements_Model_Rma $ghRma */
             /** @var Zolago_Catalog_Model_Product $product */
             $product = Mage::getModel('catalog/product')->loadByAttribute('skuv', $ghRma->getSku());
-            $_id = 'rma' . $ghRma->getRmaIncrementId();
+            $_id = 'rma' . $ghRma->getId();
             $page4body[$_id] = array(
                 $ghRma->getPoIncrementId(),                                                                               // [0] Order No.
                 $ghRma->getRmaIncrementId(),                                                                              // [1] RMA No.
