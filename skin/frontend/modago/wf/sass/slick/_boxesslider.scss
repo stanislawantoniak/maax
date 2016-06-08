@@ -1,0 +1,137 @@
+#boxesSlider {
+	//margin-top: 15px;
+	text-align: center;
+
+	position: relative;
+	.boxesSlide {
+		background-color: $color_fff;
+		display: inline-block;
+		vertical-align: top;
+		float: none;
+		border: 1px solid $color_dbdbdb;
+		margin: 0 5px 2px 0;
+		&.mobile {
+			margin-bottom: 10px;
+			&:nth-child(odd) {
+				margin-right: 10px;
+			}
+			&:nth-last-child(1), &:nth-last-child(2) {
+				margin-bottom: 0;
+			}
+		}
+		.boxesSlideIn {
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: center center;
+			background-color: $color_ffffff;
+		}
+	}
+	&.boxesSliderHasArrows {
+		//padding-left: 40px;
+		//padding-right: 40px;
+		.boxesArrow {
+			display: block;
+			color: $color-gray1;
+			font-size: 30px;
+			font-weight: 700;
+			position: absolute;
+			height: 100%;
+			top: 0;
+			cursor: pointer;
+			&.boxesArrowNext {
+				right: 55px;
+			}
+			&.boxesArrowPrev {
+				left: 5px;
+			}
+
+			@include max-screen($screen-sm) {
+				&.boxesArrowNext {
+					right: 82px;
+				}
+				&.boxesArrowPrev {
+					left: 35px;
+				}
+			}
+
+			.owl-prev {
+				position: absolute;
+				width: 45px;
+				line-height: 42px;
+				height: 45px;
+				margin-top: -22px;
+				border: 1px solid #eee;
+				border-radius: 100%;
+				@include transition(all 0.2s ease-in-out);
+				background: $body-bg;
+				&:before {
+					content: "\f104";
+					position: absolute;
+					font-size: 30px;
+					font-family: FontAwesome;
+					color: #252525;
+					left: 15px;
+					top: 0px;
+					@include transition(all 0.2s ease-in-out);
+				}
+				&:after {
+					content: "";
+					position: absolute;
+					width: 88px;
+					height: 300px;
+					left: -20px;
+					top: -140px;
+				}
+
+				&:hover {
+					border-color: #252525;
+				}
+			}
+
+			.owl-next {
+				position: absolute;
+				width: 45px;
+				margin-top: -22px;
+				height: 45px;
+				line-height: 42px;
+				border: 1px solid #eee;
+				border-radius: 100%;
+				@include transition(all 0.2s ease-in-out);
+				background: $body-bg;
+				&:before {
+					content: "\f105";
+					position: absolute;
+					font-size: 30px;
+					font-family: FontAwesome;
+					color: #252525;
+					left: 18px;
+					top: 0px;
+					@include transition(all 0.2s ease-in-out);
+				}
+
+				&:after {
+					content: "";
+					position: absolute;
+					width: 88px;
+					height: 300px;
+					left: -20px;
+					top: -140px;
+				}
+
+				&:hover {
+					border-color: #252525;
+				}
+			}
+
+			i {
+				transition: margin 200ms ease;
+			}
+			i.fa:before {
+				color: $color_737373;
+			}
+		}
+	}
+	.boxesArrow {
+		display: none;
+	}
+}

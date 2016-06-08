@@ -5,10 +5,10 @@
  */
 class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 {
-	const INVITATION_EMAIL_TEMPLATE_XML_PATH = "newsletter/subscription/invitation_email_template";
-	const INVITATION_EMAIL_SENDER_XML_PATH = "newsletter/subscription/invitation_email_identity";
-	const INVITATION_XML_PATH = "newsletter/subscription/invitation";
-	const INVITATION_REPEAT_XML_PATH = "newsletter/subscription/invitation_repeat";
+	const INVITATION_EMAIL_TEMPLATE_XML_PATH = "newsletter/zolagosubscription/invitation_email_template";
+	const INVITATION_EMAIL_SENDER_XML_PATH = "newsletter/zolagosubscription/invitation_email_identity";
+	const INVITATION_XML_PATH = "newsletter/zolagosubscription/invitation";
+	const INVITATION_REPEAT_XML_PATH = "newsletter/zolagosubscription/invitation_repeat";
 	protected $_invitationCode;
 	protected $_subscriberId;
 
@@ -55,6 +55,9 @@ class Zolago_Newsletter_Model_Inviter extends Zolago_Newsletter_Model_Subscriber
 	 * @return bool
 	 */
 	public function sendInvitationEmail($email) {
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return false;
+
 		if (
 			$this->getImportMode()
 			|| !$this->_getInvitationEmailTemplateId()

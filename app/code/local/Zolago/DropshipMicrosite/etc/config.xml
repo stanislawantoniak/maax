@@ -99,15 +99,6 @@
                 </observers>
             </core_locale_set_locale>
         </events>
-        <routers>
-            <umicrosite>
-                <args>
-                    <modules>
-                        <Zolago_DropshipMicrosite before="ZolagoOs_OmniChannelMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
-                    </modules>
-                </args>
-            </umicrosite>
-        </routers>
         <translate>
             <modules>
                 <Zolago_DropshipMicrosite>
@@ -118,15 +109,4 @@
             </modules>
         </translate>
     </frontend>
-    <admin>
-        <routers>
-            <umicrositeadmin>
-                <args>
-                    <modules>
-                        <Zolago_DropshipMicrosite before="ZolagoOs_OmniChannelMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
-                    </modules>
-                </args>
-            </umicrositeadmin>
-        </routers>
-    </admin>
 </config>

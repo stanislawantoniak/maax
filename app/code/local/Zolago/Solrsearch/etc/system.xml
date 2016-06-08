@@ -58,6 +58,27 @@
 		                </logs_length_hours>
 		            </fields>
 		        </settings>
+				<search_context>
+					<label>Context</label>
+					<tab>solrbridge</tab>
+					<class>separator-top</class>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<use_category_context translate="label comment" module="solrsearch">
+							<label>Use Current Category Context</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+						</use_category_context>
+					</fields>
+				</search_context>
 		    </groups>
 		</solrbridge>
     </sections>
