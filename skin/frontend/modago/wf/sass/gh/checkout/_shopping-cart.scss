@@ -212,7 +212,24 @@
 				}
 			}
 		}
+		a#applyCoupon-btn {
+			display: -moz-inline-stack;
+			display: inline-block;
+			vertical-align: middle;
+			zoom: 1;
+			background: #000;
+			line-height: normal !important;
+			height: 22px;
+			width: 72px;
+			border: none;
+			color: #fff;
+			font-size: 12px;
+			text-align: center;
+			text-transform: uppercase;
+			float: left;
+		}
 		#discount_voucher {
+			margin-bottom: 30px !important;
 			.form-group {				
 				input[type="text"] {
 					background:$allMap repeat-x;
@@ -234,7 +251,7 @@
               .coupon-errors {
                 &:not(:empty) {
                   clear: both;
-                  color: red;
+                  color: $validation-error;
                   display: block;
                   padding-top: 8px;
                 }

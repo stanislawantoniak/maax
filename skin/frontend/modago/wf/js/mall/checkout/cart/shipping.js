@@ -668,8 +668,8 @@ function formatDetailsContent(pos) {
         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+
         '</div>' +
-        '<div class="col-sm-6">' +
-        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">' + Mall.translate.__("shipping_map_method_select") + '</a>' +
+        '<div class="col-sm-6 pointselect-container">' +
+        '<a class="button button-primary pointselect" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">' + Mall.translate.__("shipping_map_method_select") + '</a>' +
         '</div>' +
         '</div>';
 }
@@ -691,7 +691,7 @@ function formatInfoWindowContent(pos) {
         '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
         '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
         '<div class="additional-store-information">' + pos.location_description + '</div>' +
-        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">'+Mall.translate.__("shipping_map_method_select")+'</a></div>' +
+        '<div><a class="button button-primary pointselect" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">'+Mall.translate.__("shipping_map_method_select")+'</a></div>' +
         '</div>' +
         '</div>';
 }
