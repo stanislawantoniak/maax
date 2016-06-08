@@ -52,7 +52,19 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         }
         return $client;
     }
-
+    
+    /**
+     * try clear envelope if needed
+     */
+    protected function _clearEnvelope() {
+        $settings = $this->_settings;
+        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date');
+        if ($lastDate != date('Y-m-d')) {
+            if ($this->getClient()->clearEnvelope($settings)) {
+                Mage::getConfig()->saveConfig('carriers/zolagopp/last_date',date('Y-m-d'));
+            }
+        }    
+    }    
     /**
      * shipments for pp
      */
@@ -64,20 +76,9 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             $client = $this->getClient();
             $client->setShipperAddress($this->_senderAddress);
             $client->setShipmentSettings($settings);
-            $postResult = $this->getClient()->createDeliveryPacks($settings);
-            Mage::log($postResult);
-/*            if (empty($inpostResult['pack']['packcode'])) {
-                if (!empty($inpostResult['error'])) {
-                    $error = $inpostResult['error'];
-                } elseif (!empty($inpostResult['pack']['error'])) {
-                    $error = $inpostResult['pack']['error'];                
-                } else {
-                    $error = Mage::helper('orbashipping')->__('Cant create package');
-                }
-                Mage::throwException($error);
-            }
-*/            
-            $code = $inpostResult['pack']['packcode'];
+            $this->_clearEnvelope();
+            $retval = $this->getClient()->createDeliveryPacks($settings);            
+            $code = empty($retval->guid)? 0:$retval->guid;
             $message = 'OK';
         } catch (Exception $xt) {
             Mage::logException($xt);
