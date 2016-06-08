@@ -64,7 +64,7 @@ class ZolagoOs_OmniChannelPo_Model_Po extends Mage_Sales_Model_Abstract
     /**
      * Retrieve the order the shipment for created for
      *
-     * @return Mage_Sales_Model_Order
+     * @return Zolago_Sales_Model_Order
      */
     public function getOrder()
     {
