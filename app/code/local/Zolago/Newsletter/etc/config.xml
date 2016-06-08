@@ -87,12 +87,12 @@
 	</global>
 	<default>
 		<newsletter>
-			<subscription>
+			<zolagosubscription>
 				<invitation>1</invitation>
 				<invitation_email_identity>support</invitation_email_identity>
 				<invitation_email_template>newsletter_subscription_invitation_email_template</invitation_email_template>
 				<invitation_repeat>0</invitation_repeat>
-			</subscription>
+			</zolagosubscription>
 		</newsletter>
 	</default>
 	<adminhtml>
