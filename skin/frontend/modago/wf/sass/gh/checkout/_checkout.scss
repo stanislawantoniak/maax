@@ -379,7 +379,7 @@
 	#content-main {
 		> .main {
 			padding:30px 30px;
-			box-shadow: 2px 2px 2px 2px #e6e6e6;
+			box-shadow: 1px 1px 1px 1px $colorDropdownBorder;
 			@media (max-width:480px) {
 				padding:30px 15px;
 			}
@@ -551,8 +551,8 @@
 		.main {
 			padding:30px 30px;
 			margin-bottom: 15px;
-			box-shadow: 2px 2px 2px 2px #e6e6e6;
-			@media (max-width:767px) {
+			box-shadow: 1px 1px 1px 1px $colorDropdownBorder;
+			@media (max-width: $screen-xs-max) {
 				padding:15px 15px;
 			}
 		}
@@ -566,10 +566,10 @@
 		header {
 			margin-left:-30px;
 			margin-bottom:15px;
-			@media (max-width:767px) {
+			@media (max-width: $screen-xs-max) {
 				margin-left:-15px;
 			}
-			@media (max-width:480px) {
+			@media (max-width: $screen-xs) {
 				margin-left:-30px;
 			}
 			&.open{
