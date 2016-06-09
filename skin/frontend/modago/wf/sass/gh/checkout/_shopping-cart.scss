@@ -927,7 +927,7 @@
     }
   }
 
-  .colgroup-02 {
+  .colgroup-02, .colgroup-01 {
     .colgroup {
       > div {
         text-align: center;
@@ -1162,7 +1162,7 @@
 
   .table-row {
     &:first-child {
-      .colgroup-02 {
+      .colgroup-02 , .colgroup-01{
         .colgroup.naglowek {
           @media (min-width: $screen-sm-min) {
             top: -50px;
@@ -1263,4 +1263,8 @@
       padding: 0 29.41px 0 29.41px !important;
     }
   }
+}
+
+.table-cart .colgroup-01 .colgroup > div {
+  text-align: left;
 }
