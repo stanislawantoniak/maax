@@ -82,7 +82,10 @@
 
 .my-account{
 	color: $color_333;
-	
+  @media (min-width: $screen-xs-min) {
+    border: 1px solid $gray-lighter;
+  }
+
 	.page-title{
 		margin-bottom: 8px;
 		h1{
@@ -127,12 +130,13 @@
 }
 
 .my-account .box-wrapper{
-	border-right: 1px solid $color-gray3;
+	//border-right: 1px solid $color-gray3;
 }
 
 .my-account .background-wrapper{
 	background: $body-bg;
 	padding: 30px 15px;
+    padding-top: 0;
 	@media (max-width: $screen-xs-max){
 		margin: 20px 8px 0 8px;
 	}
