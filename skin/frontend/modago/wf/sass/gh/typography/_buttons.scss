@@ -128,29 +128,20 @@
 			font-weight: 400;
 		}
 	}
-	&.button-third {
-		padding: 6px 18px;
-		color:$textColorBtn;
-		font-weight: normal;
-		font-size: 13px;
-		font-family: $fontOpen;
-		font-weight: 400;
-		min-width: 92px;
-		text-align: center;
-		background: $backgroundColorBtn;
-		&:hover,
-		&.hover {
-			background: $backgroundColorHoverBtn;
-		}
-		&:active,
-		&.active {
-			@media(min-width:1024px){
-				background: $backgroundColorHoverBtn;
-				border-color: $colorBtnThirdBorderActive;
-				color: $colorBtnThirdColorActive;
-			}
-		}
-	}
+  &.button-third {
+    padding: 6px 18px;
+    color: $textColorBtn;
+    font-weight: normal;
+    font-size: 13px;
+    font-family: $fontOpen;
+    font-weight: 400;
+    min-width: 92px;
+    text-align: center;
+    white-space: nowrap;
+
+    @include thirdButtonGradient;
+
+  }
 }
 .btn {
 	padding: 5px 10px;
