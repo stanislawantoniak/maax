@@ -385,11 +385,13 @@ $colorHeaderSearchBorder:               #d5d5d5;
 $colorHeaderSearchBtnBg:                #000;
 $colorHeaderSearchBtn:                  #FFF;
 
-/* CHECKOUT HEADER VARIABLES */
+/* CHECKOUT VARIABLES */
 $colorHeaderCheckoutSteps:              $colorIconHeader;
 $colorHeaderCheckoutStepsActive:        $colorAccentSite;
 $colorHeaderCheckoutStepsText:          $colorIconHeader;
 $colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
+
+$colorCheckoutFieldsTopBorder:          transparent;
 
 /* TOP MENU VARIABLES */
 $colorAccentSiteMenuTop:                $colorAccentSite;
