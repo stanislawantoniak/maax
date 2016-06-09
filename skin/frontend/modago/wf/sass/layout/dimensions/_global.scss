@@ -399,7 +399,10 @@ section {
 	}
 	.sidebar-second {
 		@media (max-width: $screen-sm-max) {
-			padding-left: 15px;
+			padding: 0 40px  0 38px;
+		}
+		@media (max-width: $screen-xs-max) {
+			padding: 0 15px  0 15px;
 		}
 	}
 }
@@ -411,7 +414,7 @@ section {
 			padding:0 28px 0 26px;
 			@media (max-width: $screen-xs-max) { 
 				padding:0 4px 0 4px;
-				margin: 10px -10px;
+				margin: 0px -10px;
 
 			}
 		}
