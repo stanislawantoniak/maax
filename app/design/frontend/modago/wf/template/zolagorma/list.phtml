@@ -8,11 +8,10 @@
 			<span><?php echo $this->__("Returns and complaints"); ?></span>
 			<span class="back-sm"><a href="<?php echo $backUrl; ?>" class="underline"><?php echo $_helper->__('back: my account'); ?>&nbsp;&gt;</a></span>
 			<span class="back-xs"><a href="<?php echo $backUrl; ?>" class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
-			<span class="rma-new-button"><a href="<?php echo $this->getUrl('sales/po/rmalist');?>" class="button button-primary"><?php echo $this->__("Create new RMA"); ?></a></span>
 		</h1>
 
 	</div>
-	<div class="background-wrapper box-wrapper rma-list">
+	<div class="background-wrapper box-wrapper rma-list <?php echo $list->getSize() ? 'rma-table' : 'no-rma-table'; ?>">
 		<?php if($list->getSize()): ?>
 			<p><?php echo $this->__("Your returns and complaints"); ?>:</p>
 			<table class="data-table rma-table">
@@ -86,6 +85,7 @@
 			<i class="glyphicon glyphicon-chevron-left"></i>
 			<?php echo $_helper->__('back') ?>
 		</a>
+		<span class="rma-new-button"><a href="<?php echo $this->getUrl('sales/po/rmalist');?>" class="button button-primary push-right"><?php echo $this->__("Create new RMA"); ?></a></span>
 		<div class="clearfix"></div>
 	</div>
 </div>
