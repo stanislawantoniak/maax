@@ -217,6 +217,15 @@ $colorBtnSecondaryHoverBorder:            #dc4348;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
+$colorBtnThirdBgStart:                    #adadad;
+$colorBtnThirdBgEnd:                      #adadad;
+$colorBtnThirdBgStartHover:               #444;
+$colorBtnThirdBgEndHover:                 #444;
+$colorBtnThirdHoverBorder:                #444;
+$colorBtnThirdBgStartActive:              #444;
+$colorBtnThirdBgEndActive:                #444;
+$colorBtnThirdBgDisabled:                 #444;
+
 $colorMainMenuSubItemGradientStart: #F9F9FA;
 $colorMainMenuSubItemGradientEnd: #F9F9FA;
 
@@ -261,6 +270,22 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
   }
   &.disabled {
     background: $colorBtnPrimaryBgDisabled;
+  }
+}
+
+@mixin thirdButtonGradient { //covers normal + hover + active + .disabled
+  @include linearGradient($colorBtnThirdBgStart,$colorBtnThirdBgEnd);
+  &:hover,
+  &.hover {
+    @include linearGradient($colorBtnThirdBgStartHover,$colorBtnThirdBgEndHover);
+    border-color: $colorBtnThirdHoverBorder;
+  }
+  &:active,&:focus,&.active {
+    @include linearGradient($colorBtnThirdBgStartActive,$colorBtnThirdBgEndActive);
+    border-color: $colorBtnThirdHoverBorder;
+  }
+  &.disabled {
+    background: $colorBtnThirdBgDisabled;
   }
 }
 
