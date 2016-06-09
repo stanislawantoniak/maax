@@ -1186,8 +1186,10 @@
 
 #aside-shopping-cart {
   padding: 15px 5px;
-  padding-top: 15px;
   margin: 0 5px 0;
+  @media (max-width: $screen-xs-max) {
+    text-align: center;
+  }
   a#clearAllShopping {
     i {
       position: relative;
@@ -1196,10 +1198,11 @@
     }
   }
   #btn_continue_shopping {
-    float: right;
+    //float: right;
     height: 28px;
     position: relative;
     top: -5px;
+    padding: 4px 15px;
   }
 }
 
