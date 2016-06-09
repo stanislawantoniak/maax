@@ -1,6 +1,9 @@
 .order-view {
 	color:$color_000;
 	#content-main {
+        #back {
+          margin-top: 10px;
+        }
 		section {
 			> header {
 				h1 {
