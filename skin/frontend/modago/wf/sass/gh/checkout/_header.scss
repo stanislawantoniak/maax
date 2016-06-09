@@ -1,4 +1,7 @@
 .checkout {
+	.header_top {
+		height: 65px;
+	}
 	#step {
 		text-align: right;
 		ol {
@@ -65,7 +68,7 @@
 	}
 	#header {
 		#logo {
-			margin-top: 2px;
+			margin-top: 8px;
 			img {
 				margin-top: -3px;
 				width: 160px;
