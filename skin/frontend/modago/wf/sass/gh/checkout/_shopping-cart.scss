@@ -48,6 +48,47 @@
       }
       .table-row {
         display: block;
+
+
+        figure {
+          border: 1px solid $color_f1f1f1;
+        }
+        .description_checked_product {
+          color: $colorFont;
+          .product_name {
+            font-size: 14px;
+            color: $color_000;
+            font-weight: 400;
+            text-transform: uppercase;
+          }
+          .product_size {
+            font-size: 12px;
+          }
+          .product_availability {
+            .icons-checked,
+            .icons-interjection {
+              font-size: 12px;
+              text-transform: none;
+            }
+
+          }
+        }
+        .product_price {
+          font-size: 16px;
+          font-family: $fontRegular;
+          span {
+            font-size: 11px;
+            color: $color_565655;
+            text-decoration: line-through;
+          }
+        }
+        .amount_product {
+          text-align: center;
+          font-size: 11px;
+          border: 1px solid $gray;
+          line-height: 22px;
+        }
+
         .table-cell {
           text-align: center;
           @media (max-width: $screen-xs-max) {
@@ -67,41 +108,7 @@
           &.cell-05 {
             text-align: left;
           }
-          figure {
-            border: 1px solid $color_f1f1f1;
-          }
-          .description_checked_product {
-            .product_name {
-              font-size: 16px;
-              color: $color_000;
-            }
-            .product_size {
-              font-size: 12px;
-            }
-            .product_availability {
-              .icons-checked,
-              .icons-interjection {
-                font-size: 12px;
-                text-transform: none;
-              }
 
-            }
-          }
-          .product_price {
-            font-size: 16px;
-            font-family: $fontRegular;
-            span {
-              font-size: 11px;
-              color: $color_565655;
-              text-decoration: line-through;
-            }
-          }
-          .amount_product {
-            text-align: center;
-            font-size: 11px;
-            border: 1px solid $gray;
-            line-height: 22px;
-          }
           &.cell-03 {
             .select-group.medium {
               .button-select {
@@ -200,10 +207,6 @@
           }
           &.cell-03 {
             padding-left: 12px;
-            //						.styledSelected {
-            //							top:12px;
-            //							width:60px;
-            //						}
             .select-group.medium {
               width: 60px;
               margin-top: 13px;
@@ -223,7 +226,7 @@
       }
 
       .table-footer-group {
-
+        color: $colorFont;
         display: block;
         .table-row {
           .table-cell {
@@ -918,14 +921,20 @@
           text-align: left;
         }
       }
-      .cena {
+      .cart-price,
+      .stara_cena {
+        font-family: $fontOpen;
+        color: $colorProductStrikeOutPrice;
+        font-size: 16px;
+        font-weight: 400;
+      }
 
-        .stara_cena {
-          vertical-align: middle;
-          font-size: 11px;
-          color: $color_565655;
-          text-decoration: line-through;
-        }
+      .stara_cena {
+        font-size: 14px;
+        vertical-align: middle;
+        text-decoration: line-through;
+        color: $colorFont;
+        padding-top: 4px;
       }
       .ilosc {
         @media (max-width: $screen-xs-max) {
@@ -949,6 +958,16 @@
       }
       .usun {
         text-align: center;
+
+        a {
+          color: #8a8a8a;
+          @include transition(all 0.2s ease-in-out);
+          &:hover {
+            color: #000;
+          }
+        }
+
+
       }
       &.naglowek {
         .cena,
@@ -1071,7 +1090,17 @@
       }
       &.naglowek {
 
-        padding-right: 15px;
+        border-left: none;
+        border-right: none;
+        border-bottom-width: 1px;
+        padding: 12px 8px 12px 0px;
+        font-size: 14px;
+        font-family: $fontRegular;
+        text-align: center;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: $colorFont;
+
         @media (min-width: $screen-sm-min) {
           position: absolute;
           top: -38px;
