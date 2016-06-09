@@ -30,19 +30,13 @@ class Zolago_Adminhtml_Model_Observer
         return Mage::helper("zolagoadminhtml");
     }
 
-    public function saveOfflineCustomerData($observer)
-    {
-        $customer = $observer->getCustomer();
-        $data = $observer->getRequest()->getPost();
-
-        if (isset($data['account_offline_data']['loyalty_card_number_1'])) {
-            $customer->setData('loyalty_card_number_1', $data['account_offline_data']['loyalty_card_number_1']);
-        }
-        if (isset($data['account_offline_data']['loyalty_card_number_2'])) {
-            $customer->setData('loyalty_card_number_2', $data['account_offline_data']['loyalty_card_number_2']);
-        }
-        if (isset($data['account_offline_data']['loyalty_card_number_3'])) {
-            $customer->setData('loyalty_card_number_3', $data['account_offline_data']['loyalty_card_number_3']);
-        }
-    }
+	public function saveOfflineCustomerData($observer) {
+		$customer = $observer->getCustomer();
+		$data = $observer->getRequest()->getPost();
+		if (isset($data['account_offline_data'])) {
+			foreach ($data['account_offline_data'] as $key => $value) {
+				$customer->setData($key, $value);
+			}
+		}
+	}
 }

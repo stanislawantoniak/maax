@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<ZolagoOs_OutsideStore>
+			<version>2.0.0</version>
+		</ZolagoOs_OutsideStore>
+	</modules>
+	<global>
+		<models>
+			<zosoutsidestore>
+				<class>ZolagoOs_OutsideStore_Model</class>
+				<resourceModel>zosoutsidestore_resource</resourceModel>
+			</zosoutsidestore>
+			<zosoutsidestore_resource>
+				<class>ZolagoOs_OutsideStore_Model_Resource</class>
+			</zosoutsidestore_resource>
+		</models>
+		<helpers>
+			<zosoutsidestore>
+				<class>ZolagoOs_OutsideStore_Helper</class>
+			</zosoutsidestore>
+		</helpers>
+	</global>
+</config>

@@ -1,0 +1,130 @@
+<?php
+/** @var GH_Api_Block_Dropship_Soap $this */
+/** @var GH_Api_Helper_Data $_helper */
+$_helper = Mage::helper("ghapi");
+?>
+<div class="widget box widget-closed">
+	<div class="widget-header">
+		<h4><i class="icon-plus"></i> <?php echo $_helper->__("Function %s", "updateProductsPricesStocks"); ?></h4>
+
+		<div class="toolbar no-padding">
+			<div class="btn-group">
+				<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
+			</div>
+		</div>
+	</div>
+	<div class="widget-content" style="padding: 10px 15px">
+		<div class="form-group">
+			<label for="soap_update_products_token" class="col-md-3 control-label">
+				<?php echo $_helper->__("Token"); ?>
+			</label>
+			<div class="col-xs-12 col-md-9 col-lg-6">
+				<input id="soap_update_products_token" name="ghapi_soap_token" value="" type="text" class="form-control ghapi-token" size="10">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label"><?php echo $_helper->__("Update"); ?></label>
+			<div class="col-xs-12 col-md-9 col-lg-6">
+				<label class="checkbox-inline">
+					<div class="checker">
+						<span>
+							<input name="type_price" type="checkbox" class="uniform update_products_type" value="1" checked>
+						</span>
+					</div>
+					<?php echo $_helper->__("Products prices"); ?>
+				</label>
+				<label class="checkbox-inline">
+					<div class="checker">
+						<span>
+							<input name="type_stock" type="checkbox" class="uniform update_products_type" value="1" checked>
+						</span>
+					</div>
+					<?php echo $_helper->__("Products stocks"); ?>
+				</label>
+			</div>
+		</div>
+
+		<!--Price start-->
+		<div class="form-group" id="soap_update_products_price">
+			<label for="soap_update_products_sku" class="col-md-3 control-label">
+				<?php echo $_helper->__("Prices types"); ?>
+			</label>
+			<div class="col-md-9">
+				<table class="table table-condensed table-striped table-bordered">
+					<tbody>
+					<tr>
+						<th><?php echo $_helper->__("Price A"); ?></th>
+						<th><?php echo $_helper->__("Price B"); ?></th>
+						<th><?php echo $_helper->__("Price C"); ?></th>
+						<th><?php echo $_helper->__("Price Z"); ?></th>
+						<th><?php echo $_helper->__("MSRP"); ?></th>
+						<th><?php echo $_helper->__("Market price"); ?></th>
+					</tr>
+					<tr class="">
+						<td>
+							<input id="price-a" type="text" class="form-control price-x"/>
+						</td>
+						<td>
+							<input id="price-b" type="text" class="form-control price-x"/>
+						</td>
+						<td>
+							<input id="price-c" type="text" class="form-control price-x"/>
+						</td>
+						<td>
+							<input id="price-z" type="text" class="form-control price-x"/>
+						</td>
+						<td>
+							<input id="price-salePriceBefore" type="text" class="form-control price-x"/>
+						</td>
+						<td>
+							<input id="price-marketPrice" type="text" class="form-control price-x"/>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!--Price end-->
+
+		<div class="form-group">
+			<label for="soap_update_products_sku" class="col-md-3 control-label">
+				<?php echo $_helper->__("Product SKU"); ?>
+			</label>
+			<div class="col-md-9">
+				<input id="soap_update_products_sku" name="sku" value="" type="text" class="form-control"
+					   style="width:20%; min-width:50px;">
+			</div>
+		</div>
+
+		<!--Stock start-->
+		<div id="soap_update_products_stock">
+			<div class="form-group">
+				<label for="soap_update_products_pos" class="col-md-3 control-label">
+					<?php echo $_helper->__("POS external ID"); ?>
+				</label>
+				<div class="col-md-9">
+					<input id="soap_update_products_pos" name="pos" value="" type="text" class="form-control"
+						   style="width:20%; min-width:50px;">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="soap_update_products_qty" class="col-md-3 control-label">
+					<?php echo $_helper->__("Quantity"); ?>
+				</label>
+				<div class="col-md-9">
+					<input id="soap_update_products_qty" name="qty" value="" type="text" class="form-control"
+						   style="width:20%; min-width:50px;">
+				</div>
+			</div>
+		</div>
+		<!--Strock end-->
+		<div class="form-group">
+			<div class="col-md-push-3 col-md-9">
+				<button id="update_products_action" type="button"
+						class="btn btn-primary"><?php echo $_helper->__('Send'); ?></button>
+			</div>
+		</div>
+		<div id="soap_ajax_answer_update_products">
+		</div>
+	</div>
+</div>

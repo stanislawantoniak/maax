@@ -74,7 +74,17 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 */
 	public function getLetterUrl(Mage_Sales_Model_Order_Shipment_Track $tracking, Zolago_Po_Model_Po $po) {
 		if($this->isLetterable($tracking)){
-			return $this->getUrl('orbashipping/dhl/lp', array(
+		    switch ($tracking->getCarrierCode()) {
+		        case Orba_Shipping_Model_Carrier_Dhl::CODE:
+		            $url = 'orbashipping/dhl/lp';
+		            break;
+                case  Orba_Shipping_Model_Packstation_Inpost::CODE:
+                    $url = 'orbashipping/inpost/lp';
+                    break;
+                default:
+                    Mage::throwException('Wrong carrier code');
+		    }
+			return $this->getUrl($url, array(
 					'trackId'		=> $tracking->getId(), 
 					'trackNumber'	=> $tracking->getNumber(), 
 					'vId'			=> $po->getVendor()->getId(), 
@@ -93,6 +103,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function isLetterable(Mage_Sales_Model_Order_Shipment_Track $tracking) {
 		switch ($tracking->getCarrierCode()) {
 			case Orba_Shipping_Model_Carrier_Dhl::CODE:
+			case Orba_Shipping_Model_Packstation_Inpost::CODE:
 				return true;
 			break;
 		}
@@ -211,7 +222,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 
 		$method = explode('_', $poShippingMethod, 2);
 		$carrierCode = !empty($method[0]) ? $method[0] : $_vendor->getCarrierCode();
-
 		$curShipping = $shipping->getItemByColumnValue('shipping_code', $uMethodCode);
 		$methodCode  = !empty($method[1]) ? $method[1] : '';
 
@@ -219,7 +229,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$labelMethodAllowAll = Mage::getStoreConfig('udropship/vendor/label_method_allow_all', $_order->getStoreId());
 
 		$availableMethods = array();
-			
 		if ($curShipping && $labelMethodAllowAll) {
 			$curShipping->useProfile($_vendor);
 			$_carriers = array($carrierCode=>0);
@@ -476,4 +485,28 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
             return true;
         }
     }
+    
+    /**
+     * Prepare shipping modal
+     */
+     protected function _getShippingModal() {
+         $po = $this->getPo();
+         $shippingMethod = $po->getUdropshipMethod();
+         $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
+         switch ($methodCode) {
+             case 'ghinpost': // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
+                 break;
+             case 'std': // carrier
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
+                 break;
+             case 'zolagopp': // poczta polska
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
+                 break;
+             default:
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');                 
+         }
+         $block->setParentBlock($this);
+         return $block->toHtml();
+     }
 }

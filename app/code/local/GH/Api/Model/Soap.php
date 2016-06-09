@@ -365,6 +365,91 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
         $obj->status = $status;
         return $obj;
     }
+	
+	public function updateProductsPricesStocks($request) {
+		$token = $request->sessionToken;
+		$priceData = $request->productsPricesUpdateList;
+		$stockData = $request->productsStocksUpdateList;
+		$obj = new StdClass();
+		$message = 'ok';
+		$status = true;
+
+		$notValidSkus        = array();
+		$notValidSkusByPrice = array();
+		$notValidSkusByPoses = array();
+		$notValidSkusByQtys  = array();
+
+		try {
+			$user = $this->getUserByToken($token); // Do loginBySessionToken
+			$vendor = $user->getVendor();
+			$vendorId = $vendor->getId();
+			$externalId = $vendor->getExternalId();
+
+			// Check if is sth to prepare
+			if (empty($priceData) && empty($stockData)) Mage::throwException('error_empty_product_update_list');
+
+			// Prepare data - from SKUV to SKU
+			$priceBatch = $this->getHelper()->preparePriceBatch($priceData, $externalId);
+			$stockBatch = $this->getHelper()->prepareStockBatch($stockData, $externalId);
+
+			$notValidSkus = $this->getHelper()->getNotValidSkus(array_merge($priceBatch, isset($stockBatch[$vendorId]) ? $stockBatch[$vendorId] : array()), $vendorId);
+
+			if (!empty($priceBatch)) {
+				$notValidSkusByPrice = $this->getHelper()->getNotValidSkusByPrices($priceBatch, $externalId);
+			}
+			if (!empty($stockBatch)) {
+				$notValidSkusByPoses = $this->getHelper()->getNotValidSkusByPoses($stockBatch[$vendorId], $externalId, $vendorId);
+				$notValidSkusByQtys = $this->getHelper()->getNotValidSkusByQtys($stockBatch[$vendorId], $externalId);
+			}
+			
+			// Remove invalid skus from batch price & stock
+			foreach ($notValidSkus as $sku => $msg) {
+				unset($priceBatch[$sku]);
+				unset($stockBatch[$externalId][$sku]);
+			}
+			// custom for price
+			if (!empty($priceBatch)) {
+				foreach ($notValidSkusByPrice as $sku => $msg) {
+					unset($priceBatch[$sku]);
+				}
+			}
+			// custom for stock
+			if (!empty($stockBatch)) {
+				foreach ($notValidSkusByPoses as $sku => $msg) {
+					unset($stockBatch[$externalId][$sku]);
+				}
+				foreach ($notValidSkusByQtys as $sku => $msg) {
+					unset($stockBatch[$externalId][$sku]);
+				}
+			}
+
+			// update it
+			/** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
+			$restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+			if (!empty($priceBatch)) {
+				$restApi::updatePricesConverter($priceBatch);
+			}
+			if (!empty($stockBatch[$externalId])) {
+				$restApi::updateStockConverter($stockBatch);
+			}
+
+			// If any error occurs make error msg about incorrect products
+			if (!empty($notValidSkus) || !empty($notValidSkusByPrice) || !empty($notValidSkusByPoses) || !empty($notValidSkusByQtys)) {
+				$allNotValid[] = implode(',', $notValidSkus);
+				$allNotValid[] = implode(',', $notValidSkusByPrice);
+				$allNotValid[] = implode(',', $notValidSkusByPoses);
+				$allNotValid[] = implode(',', $notValidSkusByQtys);
+				Mage::throwException("error_invalid_update_products (" . implode(',', array_filter($allNotValid)) . ')');
+			}
+		} catch (Exception $e) {
+			$message = $e->getMessage();
+			$status = false;
+		}
+		
+		$obj->message = $message;
+		$obj->status = $status;
+		return $obj;
+	}
 
     /**
      * @return GH_Api_Model_Message

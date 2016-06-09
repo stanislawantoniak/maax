@@ -7,7 +7,8 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
      * @return string
      */
     public static function getDeliveryTypeInpost(){
-        return "ghinpost";
+        $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
+        return $ghInpostCarrierCode;
     }
 
 

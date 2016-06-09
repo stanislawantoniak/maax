@@ -82,6 +82,7 @@
                     <product>Zolago_Catalog_Model_Resource_Product</product>
                     <category>Zolago_Catalog_Model_Resource_Category</category>
                     <category_tree>Zolago_Catalog_Model_Resource_Category_Tree</category_tree>
+                    <category_collection>Zolago_Catalog_Model_Resource_Category_Collection</category_collection>
                 </rewrite>
             </catalog_resource>
         </models>
@@ -107,6 +108,7 @@
 					<product_view_type_configurable>Zolago_Catalog_Block_Product_View_Type_Configurable</product_view_type_configurable>
                     <product_list_related>Zolago_Catalog_Block_Product_List_Related</product_list_related>
                     <product_list_crosssell>Zolago_Catalog_Block_Product_List_Crosssell</product_list_crosssell>
+                    <product_list_upsell>Zolago_Catalog_Block_Product_List_Upsell</product_list_upsell>
                 </rewrite>
 			</catalog>
         </blocks>

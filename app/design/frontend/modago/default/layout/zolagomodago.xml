@@ -241,6 +241,12 @@
       <action method="addCss">
         <stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
       </action>
+
+      <action method="addItem"><type>skin_js</type><name>magpassion_productcarousel/js/owl.carousel.min.js</name><params/></action>
+
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.carousel.css</stylesheet></action>
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.theme.css</stylesheet></action>
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/mpslider.css</stylesheet></action>
       <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
       <reference name="js_cookies">
         <action method="setCacheLifetime">
@@ -397,19 +403,15 @@
     </reference>
     <reference name="checkout.cart">
       <!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
-      <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar"
-             template="checkout/cart/sidebar.phtml">
+      <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml">
         <block type="cms/block" name="checkout.cart.tos" as="tos">
           <action method="setBlockId">
             <blockId>shopping-cart-accept-tos</blockId>
           </action>
         </block>
-        <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery" as="checkout_cart_shipping"
-               template="checkout/cart/sidebar/shipping.phtml">
-          <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals"
-                 template="checkout/cart/totals.phtml"/>
+        <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery" as="checkout_cart_shipping" template="checkout/cart/sidebar/shipping.phtml">
+          <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
         </block>
-
       </block>
     </reference>
   </checkout_cart_index>
@@ -680,34 +682,34 @@
       </action>
       <block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
     </reference>
-      <reference name="product.info">
-        <block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
-	    <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
-	    <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
-        <action method="setTemplate">
-          <template>catalog/product/view.phtml</template>
-        </action>
-        <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
-        <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
-          <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
-          <block name="udqa.product.question.mobile.product" type="udqa/product_question" template="catalog/product/question-product-mobile.phtml"/>
-        </block>
-        <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
-        <block name="udqa.product.question.product" type="udqa/product_question" template="catalog/product/question-product.phtml"/>
-        <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
-          <block name="product.review.form" type="zolagomodago/review_form"/>
-        </block>
-        <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
-        <block type="zolagomodago/catalog_product_view_shop" name="product.shop" template="catalog/product/view/shop.phtml">
-          <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
-        </block>
-        <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    <reference name="product.info">
+      <block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
+      <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
+      <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
+      <action method="setTemplate">
+        <template>catalog/product/view.phtml</template>
+      </action>
+      <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
+      <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
+        <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
+        <block name="udqa.product.question.mobile.product" type="udqa/product_question" template="catalog/product/question-product-mobile.phtml"/>
+      </block>
+      <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
+      <block name="udqa.product.question.product" type="udqa/product_question" template="catalog/product/question-product.phtml"/>
+      <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
+        <block name="product.review.form" type="zolagomodago/review_form"/>
+      </block>
+      <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
+      <block type="zolagomodago/catalog_product_view_shop" name="product.shop" template="catalog/product/view/shop.phtml">
+        <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+      </block>
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
     </reference>
-        <reference name="product.info.addto">
-          <action method="setTemplate">
-            <template>zolagowishlist/catalog/product/view/addto.phtml</template>
-          </action>
-        </reference>
+    <reference name="product.info.addto">
+      <action method="setTemplate">
+        <template>zolagowishlist/catalog/product/view/addto.phtml</template>
+      </action>
+    </reference>
     <reference name="head">
       <action method="removeItem">
         <type>js</type>
@@ -1011,15 +1013,6 @@
       </action>
       <action method="removeLinkByName">
         <name>newsletter</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udqa</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udpreviews</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udratings</name>
       </action>
       <action method="removeLinkByName">
         <name>rma</name>
@@ -1556,11 +1549,31 @@
         <block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
       </block>
       <block type="zolagopo/info" as="info" name="sales.po.info">
-        <action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
-        <action method="addLink" translate="label" module="sales"><name>invoice</name><path>*/*/invoice</path><label>Invoices</label></action>
-        <action method="addLink" translate="label" module="sales"><name>shipment</name><path>*/*/shipment</path><label>Shipments</label></action>
-        <action method="addLink" translate="label" module="sales"><name>creditmemo</name><path>*/*/creditmemo</path><label>Refunds</label></action>
-        <action method="addLink" translate="label" module="urma"><name>rma</name><path>*/*/rma</path><label>RMA</label></action>
+        <action method="addLink" translate="label" module="sales">
+          <name>view</name>
+          <path>*/*/view</path>
+          <label>Order Information</label>
+        </action>
+        <action method="addLink" translate="label" module="sales">
+          <name>invoice</name>
+          <path>*/*/invoice</path>
+          <label>Invoices</label>
+        </action>
+        <action method="addLink" translate="label" module="sales">
+          <name>shipment</name>
+          <path>*/*/shipment</path>
+          <label>Shipments</label>
+        </action>
+        <action method="addLink" translate="label" module="sales">
+          <name>creditmemo</name>
+          <path>*/*/creditmemo</path>
+          <label>Refunds</label>
+        </action>
+        <action method="addLink" translate="label" module="urma">
+          <name>rma</name>
+          <path>*/*/rma</path>
+          <label>RMA</label>
+        </action>
         <action method="setInRma">
           <status>1</status>
         </action>

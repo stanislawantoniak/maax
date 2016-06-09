@@ -116,6 +116,36 @@
 						</expiration_time>
 					</fields>
 				</listing_products_cache>
+				<loyalty_card>
+					<label>Loyalty card</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1300</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<config translate="label">
+							<label>Config JSON</label>
+							<frontend_type>textarea</frontend_type>
+							<comment><![CDATA[ Example: <br />
+								{<br />
+								&nbsp;&nbsp;"1": {<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"name": "Przypisz do GRUPA ID 2",<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"customer_group_id": 2<br />
+								&nbsp;&nbsp;},<br />
+								&nbsp;&nbsp;"2": {<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"name": "Przypisz do GRUPA ID 3",<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"customer_group_id": 3<br />
+								&nbsp;&nbsp;}<br />
+								}<br />
+							]]></comment>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</config>
+					</fields>
+				</loyalty_card>
 			</groups>
 		</customer>
 	</sections>

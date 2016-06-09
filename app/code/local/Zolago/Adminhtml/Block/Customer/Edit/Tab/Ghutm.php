@@ -21,8 +21,8 @@ class Zolago_Adminhtml_Block_Customer_Edit_Tab_Ghutm extends Mage_Adminhtml_Bloc
     public function initForm()
     {
         $form = new Varien_Data_Form();
-        $form->setHtmlIdPrefix('_account_offline_data');
-        $form->setFieldNameSuffix('account_offline_data');
+        $form->setHtmlIdPrefix('_account_ghutm_data');
+        $form->setFieldNameSuffix('account_ghutm_data');
 
         $customer = Mage::registry('current_customer');
 
