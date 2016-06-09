@@ -14,7 +14,7 @@
       margin-bottom: 30px;
       h2 {
         font-size: 18px;
-        font-family: latoregular, sans-serif;
+        font-family: $fontRegular;
         margin: 0;
         padding: 0;
         text-transform: uppercase;
@@ -81,23 +81,17 @@
     }
   }
 
-  .button-third {
-    &.reverted {
-      margin: 20px 0 0 0;
+  .pointselect-container {
+    @media (min-width: $screen-sm) {
+      text-align: right;
+      padding-right: 0;
+    }
+    .pointselect {
+      margin: 20px 0 0 0 !important;
       width: 170px;
+      padding: 6px 3px;
       @media (min-width: $screen-sm) {
         width: 100%;
-      }
-      background: #1e1e1e;
-      border: 2px solid #1e1e1e;
-      box-shadow: inset 1px 1px 0 0 #1e1e1e;
-      color: #FFFFFF;
-      padding: 3px;
-      text-transform: uppercase;
-      &:hover {
-        background: #515151;
-        box-shadow: inset 1px 1px 0 0 #515151;
-        border-color: #515151;
       }
     }
   }
@@ -196,6 +190,15 @@
 
       .delivery-marker-window {
         max-width: 200px;
+
+        .pointselect {
+          margin: 20px 0 0 0 !important;
+          width: 170px;
+          padding: 6px 3px;
+          @media (min-width: $screen-sm) {
+            width: 100%;
+          }
+        }
       }
       .map_delivery_container_show {
         text-decoration: underline;
@@ -220,29 +223,8 @@
         color: $gray;
       }
 
-      a.btn_black {
-        display: -moz-inline-stack;
-        display: inline-block;
-        vertical-align: middle;
-        zoom: 1;
-        background: #000;
-        line-height: 22px;
-        height: 22px;
-        width: 72px;
-        border: none;
-        color: #fff;
-        font-size: 12px;
-        text-align: center;
-        text-transform: uppercase;
-        float: left;
-      }
     }
 
   }
 
-}
-
-
-#discount_voucher {
-  margin-bottom: 30px !important;
 }
