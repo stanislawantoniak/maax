@@ -227,6 +227,7 @@
 
       .table-footer-group {
         color: $colorFont;
+        font-family: $fontOpen;
         display: block;
         .table-row {
           .table-cell {
@@ -443,6 +444,8 @@
   }
 
   #sidebar-secondary {
+    color: $colorFont;
+
     @media (min-width: $screen-md-min) {
       padding-left: 0px;
       margin-top: 70px;
@@ -631,6 +634,18 @@
   }
 }
 
+.value_quality_price,
+.value_quality_delivery {
+  font-weight: 500;
+  color: $colorFont;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-family: $fontOpen;
+}
+
+.value_quality_delivery {
+  position: relative;
+}
 .value_quality_price {
   @media (min-width: 380px) and (max-width: 767px) {
     white-space: nowrap;
@@ -788,7 +803,6 @@
     }
     #sum_price {
       text-transform: uppercase;
-      color: $color_000;
       .val_value_sum_price {
         font-size: 18px;
       }
@@ -1189,10 +1203,7 @@
   }
 }
 
-.value_quality_delivery {
-  position: relative;
 
-}
 
 .quality_price {
   margin-bottom: 15px;
