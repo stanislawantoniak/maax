@@ -733,7 +733,7 @@
         }
         span:last-child {
           font-size: 16px;
-          font-family: $fontBlack;
+          font-family: $fontRegular;
           text-align: right;
         }
       }
@@ -839,7 +839,7 @@
         font-size: 18px;
         font-family: $fontRegular;
         strong {
-          font-family: $fontBlack;
+          font-family: $fontRegular;
         }
       }
     }
