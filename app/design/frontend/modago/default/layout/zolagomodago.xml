@@ -241,6 +241,12 @@
       <action method="addCss">
         <stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
       </action>
+
+      <action method="addItem"><type>skin_js</type><name>magpassion_productcarousel/js/owl.carousel.min.js</name><params/></action>
+
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.carousel.css</stylesheet></action>
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.theme.css</stylesheet></action>
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/mpslider.css</stylesheet></action>
       <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
       <reference name="js_cookies">
         <action method="setCacheLifetime">
@@ -1007,15 +1013,6 @@
       </action>
       <action method="removeLinkByName">
         <name>newsletter</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udqa</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udpreviews</name>
-      </action>
-      <action method="removeLinkByName">
-        <name>udratings</name>
       </action>
       <action method="removeLinkByName">
         <name>rma</name>

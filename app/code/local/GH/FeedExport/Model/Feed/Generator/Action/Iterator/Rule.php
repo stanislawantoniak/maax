@@ -3,7 +3,16 @@
 class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Rule
 {
 
+    public function getCollection()
+    {
+        $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addStoreFilter();
 
+        Mage::app()->getStore()->setId(0);
+        $this->_rule->getConditions()->collectValidatedAttributes($collection);
+
+        return $collection;
+    }
 
     public function callback($row)
     {

@@ -9,20 +9,8 @@ ul.messages, ul.messages ul {
 ul.messages ul {
     padding-left: 0;
 }
-ul.messages >li.success-msg ul {
+ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul, ul.messages >li.success-msg ul {
 	>li {
-		background: $color_73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
-		margin-top: 10px;
-	}
-	li:last-child {
-		@include max-screen($screen-xs-max) {
-			margin-bottom: 10px;
-		}
-	}
-}
-ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul {
-	>li {
-		background: $color_e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
 		margin-top: 10px;
 	}
 	>li:last-child {
@@ -41,23 +29,36 @@ body.mypromotions-index-index {
 }
 
 ul.messages >li ul>li>span {
-    background-color: $color_deeaca;
+	background-color:$color_dff0d8;
+	color: $color_767676;
     margin-left: 20px;
     height: 100%;
     display: block;
     min-height: 50px;
     padding: 15px 30px 15px 15px;
     position: relative;
+	&:before {
+		font-family: FontAwesome;
+		font-size:22px;
+		padding-right:14px;
+		content:"\f00c";
+	}
 }
 
 ul.messages >li.error-msg ul>li>span {
-    background-color: $color_f2e6e6;
+    background-color: $color_f2dede;
+	&:before {
+		content:"\f00d";
+		font-family: FontAwesome;
+		font-size:22px;
+		padding-right:14px;
+	}
 }
 
 ul.messages ul>li>span>i {
     position: absolute;
     right: 16px;
-    top: 17px;
+    top: 23px;
     cursor: pointer;
 }
 ul#admin_messages{
