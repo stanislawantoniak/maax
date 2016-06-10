@@ -190,7 +190,7 @@ $colorAccentSite:                       #dc4348;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
 
-$colorAccentError:                      #fd002a;
+$colorAccentError:                      $colorAccentSite;
 $colorAccentValid:                      #6dab3c;
 
 //buttons
