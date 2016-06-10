@@ -66,19 +66,27 @@
             font-size: 12px;
           }
           .product_availability {
-            .fa-exclamation,
-            .fa-check {
+
+            .product_availability_sign {
               font-size: 12px;
               text-transform: none;
-              &:before {
-                margin-right: 5px;
+
+              i.fa {
+                padding-right: 3px;
+
+                &.fa-exclamation {
+                  &:before {
+                    color: $colorAccentError;
+                  }
+                }
+
+                &.fa-check {
+                  &:before {
+                    color: $colorAccentValid;
+                  }
+                }
               }
-            }
-            .fa-exclamation:before {
-              color: $colorAccentError;
-            }
-            .fa-check:before {
-              color: $colorAccentValid;
+
             }
 
           }
@@ -237,7 +245,10 @@
 
       .table-footer-group {
         color: $colorFont;
-        font-family: $fontOpen;
+
+        .quality_price {
+          font-family: $fontOpen;
+        }
         display: block;
         .table-row {
           .table-cell {
@@ -574,6 +585,7 @@
           @include inline-block;
         }
         .value_sum_price {
+          font-family: $fontOpen;
           @include inline-block;
           float: right;
           margin-right: 0px;
@@ -650,7 +662,9 @@
   color: $colorFont;
   text-transform: uppercase;
   font-size: 14px;
-  font-family: $fontOpen;
+  .price {
+    font-family: $fontOpen;
+  }
 }
 
 .value_quality_delivery {
@@ -743,7 +757,7 @@
         }
         span:last-child {
           font-size: 16px;
-          font-family: $fontRegular;
+
           text-align: right;
         }
       }
@@ -1224,6 +1238,9 @@
 .quality_price {
   margin-bottom: 15px;
   display: block;
+  .price {
+    font-family: $fontOpen;
+  }
   @media (max-width: $screen-xs-max) {
     margin-bottom: 11px;
     padding-right: 9px;
@@ -1232,7 +1249,11 @@
     margin-top: 12px;
   }
 }
-
+.val_delivery_cost {
+  .price {
+    font-family: $fontOpen;
+  }
+}
 .quality_delivery {
   @media (max-width: $screen-xs-max) {
     margin-bottom: 11px;
