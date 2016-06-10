@@ -497,7 +497,7 @@
         }
       }
       #product_summary {
-        margin: 0px 0px 8px;
+        margin: 0px 0px 15px;
         padding: 0px;
         li {
           margin-bottom: 4px;
@@ -747,7 +747,6 @@
     #product_summary {
       list-style: none;
       li {
-        text-transform: uppercase;
         span + span {
           text-transform: none;
         }
@@ -757,7 +756,6 @@
             font-size: 13px;
             text-transform: none;
           }
-          //					line-height: 0px;
         }
         span:last-child {
           font-size: 16px;
