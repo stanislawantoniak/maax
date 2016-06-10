@@ -405,7 +405,7 @@ section {
 	}
 	.sidebar-second {
 		@media (max-width: $screen-sm-max) {
-			padding: 0 40px  0 38px;
+			padding: 0 40px  0 15px;
 		}
 		@media (max-width: $screen-xs-max) {
 			padding: 0 15px  0 15px;
