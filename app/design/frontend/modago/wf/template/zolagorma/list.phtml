@@ -11,9 +11,10 @@
 		</h1>
 
 	</div>
-	<div class="background-wrapper box-wrapper rma-list <?php echo $list->getSize() ? 'rma-table' : 'no-rma-table'; ?>">
+	<div class="background-wrapper box-wrapper rma-list">
 		<?php if($list->getSize()): ?>
-			<p><?php echo $this->__("Your returns and complaints"); ?>:</p>
+			<span class="label-line-button"><?php echo $this->__("Your returns and complaints"); ?>:</span>
+			<span class="rma-new-button"><a href="<?php echo $this->getUrl('sales/po/rmalist');?>" class="button button-primary push-right"><?php echo $this->__("Create new RMA"); ?></a></span>
 			<table class="data-table rma-table">
 				<thead>
 				<tr>
@@ -78,14 +79,18 @@
 				<?php endforeach; ?>
 				</tbody>
 			</table>
+			<a id="back" class="button button-third large" href="<?php echo $backUrl; ?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
 		<?php else: ?>
 			<p class="rma-po-empty"><?php echo $this->__("You don't have active RMAs."); ?></p>
+			<a id="back" class="button button-third large" href="<?php echo $backUrl; ?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
+			<span class="rma-new-button"><a href="<?php echo $this->getUrl('sales/po/rmalist');?>" class="button button-primary push-right"><?php echo $this->__("Create new RMA"); ?></a></span>
+			<div class="clearfix"></div>
 		<?php endif; ?>
-		<a id="back" class="button button-third large" href="<?php echo $backUrl; ?>">
-			<i class="glyphicon glyphicon-chevron-left"></i>
-			<?php echo $_helper->__('back') ?>
-		</a>
-		<span class="rma-new-button"><a href="<?php echo $this->getUrl('sales/po/rmalist');?>" class="button button-primary push-right"><?php echo $this->__("Create new RMA"); ?></a></span>
-		<div class="clearfix"></div>
 	</div>
 </div>
