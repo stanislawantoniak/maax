@@ -952,7 +952,12 @@
       }
     }
   }
+  .row-subtotal {
+    @media (max-width: $screen-sm-max){
+      padding-top: 0 !important;
+    }
 
+  }
   .colgroup-02, .colgroup-01 {
     .colgroup {
       > div {
@@ -968,6 +973,7 @@
         font-size: 16px;
         font-weight: 400;
       }
+
 
       .stara_cena {
         font-size: 14px;
