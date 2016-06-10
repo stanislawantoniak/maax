@@ -161,11 +161,9 @@
 
 
 			legend {
-				font-size: 15px;
+				font-size: 16px;
 				color: #3d3d3d;
-				font-weight: 600;
-				padding-bottom: 15px;
-				margin-bottom: 20px;
+				margin-bottom: 15px;
 				letter-spacing: 1px;
 				text-transform: uppercase;
 				border-bottom: 0;
@@ -690,8 +688,6 @@
 				}
 			}
 			legend {
-				padding-bottom: 15px;
-				margin-bottom: 15px;
 				&.first {
 					@media(max-width:760px) {
 						margin-bottom: 6px;

@@ -68,9 +68,8 @@
 	}
 	#header {
 		#logo {
-			margin-top: 8px;
+			margin-top: 12px;
 			img {
-				margin-top: -3px;
 				width: 160px;
 				@include max-screen($screen-xs-max) {
 					width: 80%;
