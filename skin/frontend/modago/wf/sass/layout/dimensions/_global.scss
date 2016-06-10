@@ -417,7 +417,7 @@ section {
 .node-type-shopping-cart {
 	#content-main {
 		> .main {
-			padding:0 28px 0 26px;
+			padding:0 28px 0 0;
 			@media (max-width: $screen-xs-max) {
 				padding:0 4px 0 4px;
 				margin: 0px -10px;
