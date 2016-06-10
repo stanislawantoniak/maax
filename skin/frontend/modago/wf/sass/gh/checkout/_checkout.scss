@@ -2,7 +2,6 @@
 	section {
 		header {
 			h2 {
-				font-weight: bold;
 				font-family: $fontRegular;
 				@media (max-width:359px) {
 					font-size: 16px;
@@ -92,10 +91,10 @@
 	}
 	.staining_delivery_address {
 		text-transform: uppercase;
-		font-weight: bold;
+		//font-weight: bold;
 	}
 	.border-top {
-		border-top:1px solid $gray-lighter;
+		border-top:1px solid $colorCheckoutFieldsTopBorder;
 		&:first-child {
 			border-top:none;
 		}
@@ -158,11 +157,18 @@
 			&.no-border {
 				border: none;
 			}
+
+
+
 			legend {
-				font-size: 14px;
-				font-weight: bold;
-				color: $color_000;
-				border-color: $gray-lighter;
+				font-size: 15px;
+				color: #3d3d3d;
+				font-weight: 600;
+				padding-bottom: 15px;
+				margin-bottom: 20px;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				border-bottom: 0;
 			}
 		}
 
@@ -373,6 +379,7 @@
 	#content-main {
 		> .main {
 			padding:30px 30px;
+			border: 1px solid #EBEBEB;
 			@media (max-width:480px) {
 				padding:30px 15px;
 			}
@@ -380,7 +387,7 @@
 	}
 	section {
 		header {
-			margin-left:-30px;
+			margin-left:-35px;
 			margin-bottom:30px;
 			h2 {
 				@media (max-width:480px) {
@@ -401,6 +408,19 @@
 		margin-top:10px;
 		margin-bottom:15px;
 		padding:0;
+
+		&.fieldset-title {
+			font-size: 15px;
+			color: #3d3d3d;
+			font-weight: 400;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			border-bottom: 0;
+
+			padding-bottom: 15px;
+			margin-bottom: 20px;
+			border-bottom: 1px solid #e6e6e6;
+		}
 	}
 	h4.number_order {
 		margin-bottom: 10px;
@@ -531,7 +551,8 @@
 		.main {
 			padding:30px 30px;
 			margin-bottom: 15px;
-			@media (max-width:767px) {
+			border: 1px solid #EBEBEB;
+			@media (max-width: $screen-xs-max) {
 				padding:15px 15px;
 			}
 		}
@@ -545,10 +566,10 @@
 		header {
 			margin-left:-30px;
 			margin-bottom:15px;
-			@media (max-width:767px) {
+			@media (max-width: $screen-xs-max) {
 				margin-left:-15px;
 			}
-			@media (max-width:480px) {
+			@media (max-width: $screen-xs) {
 				margin-left:-30px;
 			}
 			&.open{

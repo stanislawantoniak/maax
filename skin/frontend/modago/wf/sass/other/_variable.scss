@@ -129,7 +129,7 @@ $validation-error: $color_e84c3d;
 // FONT
 $fontRegular: Verdana, Geneva,sans-serif;
 $fontOpen: 'Open Sans', sans-serif;
-$fontBlack: Georgia, sans-serif;
+$fontBlack: Verdana, Geneva,sans-serif;
 $line-height-base: 1.8 !default;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
@@ -190,7 +190,9 @@ $colorAccentBlocks:                     #EBEBEB;
 $colorAccentSite:                       #dc4348;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
-$colorAccentError:                      #CD0027;
+
+$colorAccentError:                      $colorAccentSite;
+$colorAccentValid:                      #6dab3c;
 
 //buttons
 $colorBtnPrimary:                       #FFF;
@@ -386,11 +388,13 @@ $colorHeaderSearchBorder:               #d5d5d5;
 $colorHeaderSearchBtnBg:                #000;
 $colorHeaderSearchBtn:                  #FFF;
 
-/* CHECKOUT HEADER VARIABLES */
+/* CHECKOUT VARIABLES */
 $colorHeaderCheckoutSteps:              $colorIconHeader;
 $colorHeaderCheckoutStepsActive:        $colorAccentSite;
 $colorHeaderCheckoutStepsText:          $colorIconHeader;
 $colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
+
+$colorCheckoutFieldsTopBorder:          transparent;
 
 /* TOP MENU VARIABLES */
 $colorAccentSiteMenuTop:                $colorAccentSite;

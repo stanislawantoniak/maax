@@ -37,6 +37,10 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 
 <div class="table-row clearfix">
     <div class="colgroup-01 clearfix">
+        <div class="colgroup naglowek">
+            <div class="product"><?php echo $this->__("Product"); ?></div>
+
+        </div>
         <div class="clearfix">
             <figure><a href="<?php echo $this->getProductUrl(); ?>"><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></a></figure>
             <div class="description_checked_product">
@@ -55,7 +59,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                         </div>
                     <?php endforeach; ?>
                 <?php endif;?>
-                <div class="product_availability"><span class="<?php if($_helper->getQuoteItemAvailableFlag($_item) == Zolago_CatalogInventory_Helper_Data::FLAG_IN_STOCK) : ?>icons-checked<?php else :?>icons-interjection<?php endif; ?>"><?php echo $_helper->getQuoteItemAvailableText($_item);?></span></div>
+                <div class="product_availability"><span class="product_availability_sign"> <?php if($_helper->getQuoteItemAvailableFlag($_item) == Zolago_CatalogInventory_Helper_Data::FLAG_IN_STOCK) : ?><i class="fa fa-check"></i><?php else :?><i class="fa fa-exclamation"></i><?php endif; ?><?php echo $_helper->getQuoteItemAvailableText($_item);?></span></div>
 
                 <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
                 <?php if ($addInfoBlock): ?>
@@ -66,7 +70,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
     </div>
     <div class="colgroup-02 clearfix">
         <div class="colgroup naglowek">
-
             <div class="cena"><?php echo $this->__("price"); ?></div>
             <div class="ilosc"><?php echo $this->__("Qty"); ?></div>
             <div class="wartosc"><?php echo $this->__("Worth"); ?></div>

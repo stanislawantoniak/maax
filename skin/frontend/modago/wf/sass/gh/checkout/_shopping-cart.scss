@@ -15,10 +15,11 @@
         }
 
         h2 {
-          font-size: 20px;
+          font-size: 30px;
           font-weight: 400;
           padding-bottom: 20px;
           text-transform: uppercase;
+          padding-top: 5px;
 
           @media (max-width: $screen-xs-max) {
             margin: 10px 0;
@@ -65,10 +66,27 @@
             font-size: 12px;
           }
           .product_availability {
-            .icons-checked,
-            .icons-interjection {
+
+            .product_availability_sign {
               font-size: 12px;
               text-transform: none;
+
+              i.fa {
+                padding-right: 3px;
+
+                &.fa-exclamation {
+                  &:before {
+                    color: $colorAccentError;
+                  }
+                }
+
+                &.fa-check {
+                  &:before {
+                    color: $colorAccentValid;
+                  }
+                }
+              }
+
             }
 
           }
@@ -120,7 +138,7 @@
           &.cell-04 {
             &.td {
               font-size: 16px;
-              font-family: $fontBlack;
+              font-family: $fontRegular;
             }
 
           }
@@ -227,7 +245,10 @@
 
       .table-footer-group {
         color: $colorFont;
-        font-family: $fontOpen;
+
+        .quality_price {
+          font-family: $fontOpen;
+        }
         display: block;
         .table-row {
           .table-cell {
@@ -448,7 +469,7 @@
 
     @media (min-width: $screen-md-min) {
       padding-left: 0px;
-      margin-top: 70px;
+      margin-top: 65px;
     }
     aside {
       margin-bottom: 12px;
@@ -476,7 +497,7 @@
         }
       }
       #product_summary {
-        margin: 0px 0px 8px;
+        margin: 0px 0px 15px;
         padding: 0px;
         li {
           margin-bottom: 4px;
@@ -564,6 +585,7 @@
           @include inline-block;
         }
         .value_sum_price {
+          font-family: $fontOpen;
           @include inline-block;
           float: right;
           margin-right: 0px;
@@ -587,6 +609,10 @@
         width: 100%;
         max-width: 225px;
         margin: 0 auto;
+        @include min-screen($screen-xs-max) {
+          width: 100%;
+          max-width: 100%;
+        }
 
       }
     }
@@ -640,7 +666,9 @@
   color: $colorFont;
   text-transform: uppercase;
   font-size: 14px;
-  font-family: $fontOpen;
+  .price {
+    font-family: $fontOpen;
+  }
 }
 
 .value_quality_delivery {
@@ -719,7 +747,6 @@
     #product_summary {
       list-style: none;
       li {
-        text-transform: uppercase;
         span + span {
           text-transform: none;
         }
@@ -729,11 +756,10 @@
             font-size: 13px;
             text-transform: none;
           }
-          //					line-height: 0px;
         }
         span:last-child {
           font-size: 16px;
-          font-family: $fontBlack;
+
           text-align: right;
         }
       }
@@ -808,7 +834,7 @@
       }
       .value_sum_price {
         font-size: 16px;
-        font-family: $fontBlack;
+        font-family: $fontRegular;
         text-transform: none;
       }
     }
@@ -839,7 +865,7 @@
         font-size: 18px;
         font-family: $fontRegular;
         strong {
-          font-family: $fontBlack;
+          font-family: $fontRegular;
         }
       }
     }
@@ -927,7 +953,7 @@
     }
   }
 
-  .colgroup-02 {
+  .colgroup-02, .colgroup-01 {
     .colgroup {
       > div {
         text-align: center;
@@ -1162,7 +1188,7 @@
 
   .table-row {
     &:first-child {
-      .colgroup-02 {
+      .colgroup-02 , .colgroup-01{
         .colgroup.naglowek {
           @media (min-width: $screen-sm-min) {
             top: -50px;
@@ -1191,6 +1217,12 @@
     }
     .panel-body {
       font-size: 14px;
+
+      .tableWrapper {
+        .table-row {
+          margin: 5px 0;
+        }
+      }
     }
   }
 }
@@ -1208,6 +1240,9 @@
 .quality_price {
   margin-bottom: 15px;
   display: block;
+  .price {
+    font-family: $fontOpen;
+  }
   @media (max-width: $screen-xs-max) {
     margin-bottom: 11px;
     padding-right: 9px;
@@ -1216,7 +1251,11 @@
     margin-top: 12px;
   }
 }
-
+.val_delivery_cost {
+  .price {
+    font-family: $fontOpen;
+  }
+}
 .quality_delivery {
   @media (max-width: $screen-xs-max) {
     margin-bottom: 11px;
@@ -1263,4 +1302,8 @@
       padding: 0 29.41px 0 29.41px !important;
     }
   }
+}
+
+.table-cart .colgroup-01 .colgroup > div {
+  text-align: left;
 }
