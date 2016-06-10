@@ -10,7 +10,11 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 	protected function _prepareLayout() {
         parent::_prepareLayout();
 
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
         if ($headBlock = $this->getLayout()->getBlock('head')) {
+			/** @var Zolago_Catalog_Model_Category $category */
             $category = $this->getCurrentCategory();
             if ($title = $category->getMetaTitle()) {
                 $headBlock->setTitle($title);
@@ -22,7 +26,17 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 $headBlock->setKeywords($keywords);
             }
             if ($this->helper('catalog/category')->canUseCanonicalTag()) {
-                $headBlock->addLinkRel('canonical', $category->getCanonicalUrl());
+				$noVendor = false;
+				if ($vendor && $vendor->getId()) {
+					$root = $vendor->getRootCategory();
+					$websiteId = (int)Mage::app()->getWebsite()->getId();
+					if (isset($root[$websiteId]) && empty($root[$websiteId])) {
+						// if empty this means vendor have root category same as gallery
+						// so canonical should be gallery link
+						$noVendor = true;
+					}
+				}
+				$headBlock->addLinkRel('canonical', $category->getCanonicalUrl($noVendor));
             }
 
             /*rewrite gh_url_rewrite*/
@@ -86,8 +100,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 				->addBodyClass('filter-sidebar');
 		}
 
-        /** @var Zolago_Dropship_Model_Vendor $vendor */
-        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
         if($vendor && $vendor->getId()) {
             $this->getLayout()
                 ->getBlock('root')
