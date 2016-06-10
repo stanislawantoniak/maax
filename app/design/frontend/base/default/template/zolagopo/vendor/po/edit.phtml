@@ -12,12 +12,13 @@ $_shippingStatuses		= Mage::helper('udropship')->getVendorShipmentStatuses();
 $_statusModel			= $_po->getStatusModel(); 
 $_aggregated			= $_po->getAggregated();
 $_isEditable			= $this->isEditable();
+$paymentHelper = Mage::helper('zolagopayment');
+$_canSplit 				= $_isEditable && $paymentHelper->getConfigUseAllocation();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
 $_tracking = $this->getCurrentTracking($_currentShipping); 
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
-$paymentHelper = Mage::helper('zolagopayment');
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -296,7 +297,7 @@ $paymentHelper = Mage::helper('zolagopayment');
 							<!-- shipping row -->
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
-									<?php if($_isEditable):?>
+									<?php if($_canSplit):?>
 									<i class="icon-checked-action"></i>
 									<span id="split-wrapper" class="inline-block">
 										<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">

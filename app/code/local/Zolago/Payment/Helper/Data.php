@@ -251,8 +251,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 	 * @return bool
 	 */
 	public function getConfigUseAllocation($store = null) {
-//		return false; // todo remove
-		$config = Mage::getStoreConfig('payment/config/use_allocation', $store);
+		$config = (bool)(!Mage::helper('core')->isModuleEnabled('ZolagoOs_OutsideStore')) || (bool)Mage::getStoreConfig('payment/config/use_allocation', $store);
 		return (bool)$config;
 	}
 
