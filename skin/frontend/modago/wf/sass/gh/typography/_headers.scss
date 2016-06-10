@@ -132,14 +132,11 @@ article {
 			//height: 18px;
 			overflow: hidden;
 			padding-left: 35px;
-			font-size: 18px;
+			font-size: 24px;
 			font-family: $fontRegular;
 			line-height: 18px;
 			text-transform: uppercase;
-			margin-left: 0;
-			margin-right: 0;
-			margin-bottom: 8px;
-			margin-top: 0px;
+			margin: 0 0 8px 0;
 			text-align: left;
 			z-index: 1;
 			&:before {
