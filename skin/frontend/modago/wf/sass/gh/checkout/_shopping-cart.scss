@@ -609,6 +609,10 @@
         width: 100%;
         max-width: 225px;
         margin: 0 auto;
+        @include min-screen($screen-xs-max) {
+          width: 100%;
+          max-width: 100%;
+        }
 
       }
     }
