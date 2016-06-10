@@ -59,7 +59,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                         </div>
                     <?php endforeach; ?>
                 <?php endif;?>
-                <div class="product_availability"><span class="<?php if($_helper->getQuoteItemAvailableFlag($_item) == Zolago_CatalogInventory_Helper_Data::FLAG_IN_STOCK) : ?>icons-checked<?php else :?>icons-interjection<?php endif; ?>"><?php echo $_helper->getQuoteItemAvailableText($_item);?></span></div>
+                <div class="product_availability"><span class="<?php if($_helper->getQuoteItemAvailableFlag($_item) == Zolago_CatalogInventory_Helper_Data::FLAG_IN_STOCK) : ?>fa fa-check<?php else :?>fa fa-exclamation<?php endif; ?>"><?php echo $_helper->getQuoteItemAvailableText($_item);?></span></div>
 
                 <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
                 <?php if ($addInfoBlock): ?>

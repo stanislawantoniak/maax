@@ -66,10 +66,19 @@
             font-size: 12px;
           }
           .product_availability {
-            .icons-checked,
-            .icons-interjection {
+            .fa-exclamation,
+            .fa-check {
               font-size: 12px;
               text-transform: none;
+              &:before {
+                margin-right: 5px;
+              }
+            }
+            .fa-exclamation:before {
+              color: $colorAccentError;
+            }
+            .fa-check:before {
+              color: $colorAccentValid;
             }
 
           }
@@ -449,7 +458,7 @@
 
     @media (min-width: $screen-md-min) {
       padding-left: 0px;
-      margin-top: 70px;
+      margin-top: 65px;
     }
     aside {
       margin-bottom: 12px;
@@ -1192,6 +1201,12 @@
     }
     .panel-body {
       font-size: 14px;
+
+      .tableWrapper {
+        .table-row {
+          margin: 5px 0;
+        }
+      }
     }
   }
 }
