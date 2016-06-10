@@ -135,10 +135,10 @@
 
 .my-account .background-wrapper{
 	background: $body-bg;
-	padding: 30px 15px;
-    padding-top: 0;
+	padding: 0 30px 30px 30px;
 	@media (max-width: $screen-xs-max){
-		margin: 20px 8px 0 0;
+		margin: 20px 0 0 0;
+        padding: 0 10px 15px 10px;
 	}
 }
 .my-account .data-table .products{
