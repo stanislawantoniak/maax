@@ -7,75 +7,90 @@ $blocks = array(
             'identifier' => 'checkout-right-column-step-1-guest',
             'content' => <<<EOD
 <div class="sidebar-second col-lg-3 col-md-4 col-sm-4 col-xs-12 col-lg-push-9 col-md-push-8 col-sm-push-8 hidden-xs">
-    <div class="main bg-w">
-        <div class="checkout-sidebar-second-list-title">
-            Kupując w&nbsp;Wojcik otrzymujesz:
-        </div>
-        <ul class="checkout-sidebar-second-ul">
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-return">
-                <div class="checkout-sidebar-second-li-strong">
-                    30 dniowy
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    darmowy zwrot
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-shipping">
-                <div class="checkout-sidebar-second-li-strong">
-                    Błyskawiczną
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    wysyłkę
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-payments">
-                <div class="checkout-sidebar-second-li-strong">
-                    Wygodne
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    formy płatności
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-safe">
-                <div class="checkout-sidebar-second-li-strong">
-                    Bezpieczne
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    zakupy
-                </div>
-            </li>
-        </ul>
-    <div class="checkout-sidebar-second-list-title">
-            Załóż konto aby&nbsp;mieć:
-        </div>
-        <ul class="checkout-sidebar-second-ul">
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-status">
-                <div class="checkout-sidebar-second-li-strong">
-                    Stały wzgląd w staus
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    zamówienia czy zwrotu
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-simple">
-                <div class="checkout-sidebar-second-li-strong">
-                    Uproszczony proces
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    składania zamówień
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-promos">
-                <div class="checkout-sidebar-second-li-strong">
-                    Dodatkowe
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    rabaty i promocje
-                </div>
-            </li>
-        </ul>
-    </div>
+	<div class="main bg-w">
+		<div class="checkout-sidebar-second-list-title">
+			Kupując w&nbsp;Wojcik otrzymujesz:
+		</div>
+		<ul class="checkout-sidebar-second-ul">
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-repeat" style=""></i></div>
+				<div class="icon-content">
+					<h3>30 dniowy</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						darmowy zwrot
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-truck" style=""></i></div>
+				<div class="icon-content">
+					<h3>Błyskawiczną</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						wysyłkę
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-credit-card" style=""></i></div>
+				<div class="icon-content">
+					<h3>Wygodne</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						formy płatności
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-lock" style=""></i></div>
+				<div class="icon-content">
+					<h3>Bezpieczne</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						zakupy
+					</div>
+				</div>
+			</li>
+		</ul>
+		<div class="checkout-sidebar-second-list-title">
+			Załóż konto aby&nbsp;mieć:
+		</div>
+		<ul class="checkout-sidebar-second-ul">
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-list-alt" style=""></i></div>
+				<div class="icon-content">
+					<h3>Stały wzgląd w staus</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						zamówienia czy zwrotu
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-cart-plus" style=""></i></div>
+				<div class="icon-content">
+					<h3>Uproszczony proces</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						składania zamówień
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-percent" style=""></i></div>
+				<div class="icon-content">
+					<h3>Dodatkowe</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						rabaty i promocje
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
 </div>
+
 EOD
         ,
             'is_active' => 1,
