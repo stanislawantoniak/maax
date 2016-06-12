@@ -131,7 +131,8 @@ article {
 			display: block;
 			//height: 18px;
 			overflow: hidden;
-			padding-left: 35px;
+			//padding-left: 35px;
+			padding-left: 0;
 			font-size: 24px;
 			font-family: $fontRegular;
 			line-height: 18px;
@@ -139,16 +140,16 @@ article {
 			margin: 0 0 8px 0;
 			text-align: left;
 			z-index: 1;
-			&:before {
-				content: ' ';
-				display: block;
-				width: 18px;
-				height: 18px;
-				background: $colorAccentTitle;
-				position: absolute;
-				left: 0px;
-				top: 0px;
-			}
+			//&:before {
+			//	content: ' ';
+			//	display: block;
+			//	width: 18px;
+			//	height: 18px;
+			//	background: $colorAccentTitle;
+			//	position: absolute;
+			//	left: 0px;
+			//	top: 0px;
+			//}
 			@media (max-width: 360px) {
 				height:auto;
 			}

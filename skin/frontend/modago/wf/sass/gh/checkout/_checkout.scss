@@ -3,7 +3,7 @@
 		header {
 			h2 {
 				font-family: $fontRegular;
-				@media (max-width:359px) {
+				@media (max-width:380px) {
 					font-size: 16px;
 				}
 			}
@@ -385,11 +385,11 @@
 	}
 	section {
 		header {
-			margin-left:-35px;
+			//margin-left:-35px;
 			margin-bottom:30px;
 			h2 {
 				@media (max-width:480px) {
-					padding-left: 45px;
+					//padding-left: 45px;
 				}
 				&:before {
 					@media (max-width:480px) {
@@ -688,6 +688,9 @@
 				}
 			}
 			legend {
+				@media (max-width:380px) {
+					font-size: 14px;
+				}
 				&.first {
 					@media(max-width:760px) {
 						margin-bottom: 6px;
