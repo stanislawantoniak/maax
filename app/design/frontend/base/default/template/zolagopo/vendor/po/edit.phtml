@@ -13,7 +13,7 @@ $_statusModel			= $_po->getStatusModel();
 $_aggregated			= $_po->getAggregated();
 $_isEditable			= $this->isEditable();
 $paymentHelper = Mage::helper('zolagopayment');
-$_canSplit 				= $_isEditable && $paymentHelper->getConfigUseAllocation();
+$_canSplit 				= $_isEditable && $paymentHelper->getConfigUseAllocation($_po->getStore());
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
