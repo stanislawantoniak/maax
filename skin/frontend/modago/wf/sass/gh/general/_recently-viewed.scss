@@ -92,42 +92,27 @@
 		.rwd-buttons {
 			.rwd-prev,
 			.rwd-next {
-				font-size: 48px;
-				background:$allMap;
+				color: $color_c2c2c2;
+				font-size: 32px;
+				top:10px;
 			}
 			.rwd-prev {
-
-				@include sprite($allMap, arrow-slider-latest-left-l);
-
-				@media (max-width: $screen-xs-max) {
-					@include sprite($allMap, arrow-rwd-slider-prev-mobile);
-
+				&:before {
+					content:"\f104";
 				}
 				&:hover {
-					@include sprite($allMap, arrow-slider-latest-left-h);
-
-					@media (max-width: $screen-xs-max) {
-						@include sprite($allMap, arrow-rwd-slider-prev-mobile-h);
-
-					}
+					
+					color: $color_8a8a8a;
 				}
 
 			}
 			.rwd-next {
-
-				@include sprite($allMap, arrow-slider-latest-right-l);
-
-				@media (max-width: $screen-xs-max) {
-					@include sprite($allMap, arrow-rwd-slider-next-mobile);
-
+				&:before {
+					content:"\f105";
 				}
+				
 				&:hover {
-					@include sprite($allMap, arrow-slider-latest-right-h);
-
-					@media (max-width: $screen-xs-max) {
-						@include sprite($allMap, arrow-rwd-slider-next-mobile-h);
-
-					}
+					color: $color_8a8a8a;
 				}
 			}
 		}
