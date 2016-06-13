@@ -9,7 +9,7 @@ $ranges = $this->getFacetPriceRanges();
 
 $key = "fq[price]";
 $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
-$iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+$iconClass = $this->isFilterRolled() ? "fa-angle-down visible-xs" : "fa-angle-up visible-xs";
 $isOptionSelected = $this->getIsRangeActive();
 
 $min = $this->getMinPriceRange();

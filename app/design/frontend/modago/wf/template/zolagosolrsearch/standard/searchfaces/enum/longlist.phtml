@@ -7,7 +7,7 @@ $key = $this->getFacetKey();
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
-    $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+    $iconClass = $this->isFilterRolled() ? "fa-angle-down visible-xs" : "fa-angle-up visible-xs";
     $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
