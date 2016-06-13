@@ -9,7 +9,7 @@ $blocks = array(
 <div class="sidebar-second col-lg-3 col-md-4 col-sm-4 col-xs-12 col-lg-push-9 col-md-push-8 col-sm-push-8 hidden-xs">
 	<div class="main bg-w">
 		<div class="checkout-sidebar-second-list-title">
-			Kupując w&nbsp;Wojcik otrzymujesz:
+			Kupując w&nbsp;{{config path="general/store_information/name"}} otrzymujesz:
 		</div>
 		<ul class="checkout-sidebar-second-ul">
 			<li class="icon-box  left-icon design-2 animation-2">
@@ -23,7 +23,7 @@ $blocks = array(
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
-				<div class="icon"><i class="fa fa-truck" style=""></i></div>
+				<div class="icon"><i class="fa fa-truck fa-mirrored" style=""></i></div>
 				<div class="icon-content">
 					<h3>Błyskawiczną</h3>
 					
@@ -68,7 +68,7 @@ $blocks = array(
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
-				<div class="icon"><i class="fa fa-cart-plus" style=""></i></div>
+				<div class="icon"><i class="fa fa-shopping-bag" style=""></i></div>
 				<div class="icon-content">
 					<h3>Uproszczony proces</h3>
 					
@@ -103,7 +103,7 @@ EOD
 <div class="sidebar-second col-lg-3 col-md-4 col-sm-4 col-xs-12 col-lg-push-9 col-md-push-8 col-sm-push-8 hidden-xs">
     <div class="main bg-w">
         <div class="checkout-sidebar-second-list-title">
-            Kupując w&nbsp;Modago otrzymujesz:
+            Kupując w&nbsp;{{config path="general/store_information/name"}} otrzymujesz:
         </div>
         <ul class="checkout-sidebar-second-ul">
             <li class="icon-box  left-icon design-2 animation-2">
@@ -117,7 +117,7 @@ EOD
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
-				<div class="icon"><i class="fa fa-truck" style=""></i></div>
+				<div class="icon"><i class="fa fa-truck fa-mirrored" style=""></i></div>
 				<div class="icon-content">
 					<h3>Błyskawiczną</h3>
 					
@@ -175,7 +175,7 @@ EOD
 				</div>
 			</li>
             <li class="icon-box  left-icon design-2 animation-2">
-				<div class="icon"><i class="fa fa-cart-plus" style=""></i></div>
+				<div class="icon"><i class="fa fa-shopping-bag" style=""></i></div>
 				<div class="icon-content">
 					<h3>Uproszczony proces</h3>
 					

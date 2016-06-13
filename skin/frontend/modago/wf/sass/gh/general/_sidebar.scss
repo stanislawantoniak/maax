@@ -83,6 +83,22 @@
 				position:absolute;
 				right:12px;
 				top:2px;
+
+				&.fa-angle-down {
+					display: none;
+					@media (max-width: $screen-sm-to-smmd-max) {
+						display: block;
+					}
+				}
+
+				&.fa-angle-up {
+					display: none;
+					@media (max-width: $screen-sm-to-smmd-max) {
+						display: block;
+					}
+				}
+
+
 			}
 			&:before {
 				content: ' ';
