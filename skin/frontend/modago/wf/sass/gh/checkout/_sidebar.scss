@@ -71,6 +71,15 @@
 						font-weight: 600;
 					}
 				}
+
+				&:hover {
+					.icon {
+						i {
+							background-color: $backgroundIconBoxIconHover !important;
+							border-color: $borderColorIconBoxIconHover !important;
+						}
+					}
+				}
 			}
 		}
 	}
