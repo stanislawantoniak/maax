@@ -16,7 +16,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-repeat" style=""></i></div>
 				<div class="icon-content">
 					<h3>30 dniowy</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						darmowy zwrot
 					</div>
@@ -26,7 +26,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-truck" style=""></i></div>
 				<div class="icon-content">
 					<h3>Błyskawiczną</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						wysyłkę
 					</div>
@@ -36,7 +36,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-credit-card" style=""></i></div>
 				<div class="icon-content">
 					<h3>Wygodne</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						formy płatności
 					</div>
@@ -46,7 +46,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-lock" style=""></i></div>
 				<div class="icon-content">
 					<h3>Bezpieczne</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						zakupy
 					</div>
@@ -61,7 +61,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-list-alt" style=""></i></div>
 				<div class="icon-content">
 					<h3>Stały wzgląd w staus</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						zamówienia czy zwrotu
 					</div>
@@ -71,7 +71,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-cart-plus" style=""></i></div>
 				<div class="icon-content">
 					<h3>Uproszczony proces</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						składania zamówień
 					</div>
@@ -81,7 +81,7 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-percent" style=""></i></div>
 				<div class="icon-content">
 					<h3>Dodatkowe</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						rabaty i promocje
 					</div>
@@ -110,7 +110,7 @@ EOD
 				<div class="icon"><i class="fa fa-repeat" style=""></i></div>
 				<div class="icon-content">
 					<h3>30 dniowy</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						darmowy zwrot
 					</div>
@@ -120,7 +120,7 @@ EOD
 				<div class="icon"><i class="fa fa-truck" style=""></i></div>
 				<div class="icon-content">
 					<h3>Błyskawiczną</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						wysyłkę
 					</div>
@@ -130,7 +130,7 @@ EOD
 				<div class="icon"><i class="fa fa-credit-card" style=""></i></div>
 				<div class="icon-content">
 					<h3>Wygodne</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						formy płatności
 					</div>
@@ -140,7 +140,7 @@ EOD
 				<div class="icon"><i class="fa fa-lock" style=""></i></div>
 				<div class="icon-content">
 					<h3>Bezpieczne</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						zakupy
 					</div>
@@ -168,7 +168,7 @@ EOD
 				<div class="icon"><i class="fa fa-percent" style=""></i></div>
 				<div class="icon-content">
 					<h3>Dodatkowe</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						rabaty i promocje
 					</div>
@@ -178,7 +178,7 @@ EOD
 				<div class="icon"><i class="fa fa-cart-plus" style=""></i></div>
 				<div class="icon-content">
 					<h3>Uproszczony proces</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						składania zamówień
 					</div>
@@ -188,7 +188,7 @@ EOD
 				<div class="icon"><i class="fa fa-percent" style=""></i></div>
 				<div class="icon-content">
 					<h3>Dodatkowe</h3>
-					<hr class="divider short">
+					
 					<div class="icon-text">
 						rabaty i promocje
 					</div>
