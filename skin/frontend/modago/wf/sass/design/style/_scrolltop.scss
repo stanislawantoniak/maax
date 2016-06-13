@@ -16,6 +16,7 @@
 	cursor: pointer;
 	z-index: 1000;
 	animation-name: bounceIn;
+		background-color: $color_fff;
 	&.show {
 		opacity: 1;
 	}

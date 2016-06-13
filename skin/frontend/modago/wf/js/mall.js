@@ -386,7 +386,7 @@ var Mall = {
 					navigationText : false,
 					afterUpdate: function(){
 						var imgHeight = rwd_recently_viewed.find('img').height()/2;
-						var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+						var imgHeightplus = rwd_recently_viewed.find('img').height()/2-20;
 						rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
 						rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
 						rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
@@ -395,7 +395,7 @@ var Mall = {
 					afterInit:function(){
 						imagesLoaded( document.querySelector('#rwd-recently-viewed'), function( instance ) {
 							var imgHeight = rwd_recently_viewed.find('img').height()/2;
-							var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+							var imgHeightplus = rwd_recently_viewed.find('img').height()/2-20;
 							rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
 							rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
 							rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
