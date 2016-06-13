@@ -361,7 +361,7 @@ var Mall = {
 					recentlyViewedContent += "   </figure>";
 					recentlyViewedContent += "  </div>";
 					recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-8 right-col no-gutter'>";
-					recentlyViewedContent += "   <p class='prod_name'>"+ title +"</p>";
+					recentlyViewedContent += "   <div class='prod_name'>"+ title +"<div class='prod_name_fade'></div></div>";
 					recentlyViewedContent += "   <span class='wrapper-price'>";
 					recentlyViewedContent += "    <span class='old'>"+oldPrice+"</span> <span class='price'>"+price+"</span>"
 					recentlyViewedContent += "   </span>";
