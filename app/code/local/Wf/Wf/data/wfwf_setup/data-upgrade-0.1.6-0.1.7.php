@@ -106,30 +106,36 @@ EOD
             Załóż konto aby&nbsp;mieć:
         </div>
         <ul class="checkout-sidebar-second-ul">
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-promos">
-                <div class="checkout-sidebar-second-li-strong">
-                    Dodatkowe
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    rabaty i promocje
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-simple">
-                <div class="checkout-sidebar-second-li-strong">
-                    Uproszczony proces
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    składania zamówień
-                </div>
-            </li>
-            <li class="checkout-sidebar-second-li checkout-sidebar-second-li-status">
-                <div class="checkout-sidebar-second-li-strong">
-                    Stały wzgląd w status
-                </div>
-                <div class="checkout-sidebar-second-li-normal">
-                    zamówienia czy zwrotu
-                </div>
-            </li>
+            <li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-percent" style=""></i></div>
+				<div class="icon-content">
+					<h3>Dodatkowe</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						rabaty i promocje
+					</div>
+				</div>
+			</li>
+            <li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-cart-plus" style=""></i></div>
+				<div class="icon-content">
+					<h3>Uproszczony proces</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						składania zamówień
+					</div>
+				</div>
+			</li>
+            <li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-percent" style=""></i></div>
+				<div class="icon-content">
+					<h3>Dodatkowe</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						rabaty i promocje
+					</div>
+				</div>
+			</li>
         </ul>
     </div>
 </div>
