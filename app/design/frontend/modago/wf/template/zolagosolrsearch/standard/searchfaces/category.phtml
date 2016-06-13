@@ -32,7 +32,7 @@ $helper = Mage::helper("zolagosolrsearch");
 							<?php endif;?>
 						<?php endforeach; ?>
 					<?php else: ?>
-					<dt><?php echo $item['text']; ?>&nbsp;<span>(<?php echo $item['total'] ?>)</span></dt>
+					<dt><?php echo $item['text']; ?>&nbsp;<span class="suffix">(<?php echo $item['total'] ?>)</span></dt>
 						<?php foreach($item['children'] as $child_item=>$child_val): ?>
 							<?php if($this->getCanShowItem($child_val['count'])): ?>
 								<dd><a data-params='<?php echo $item['params'];?>' href="<?php echo $child_val['url'] ?>" class="simpleChild"><span><?php echo $child_val['text']; ?></span>&nbsp;<span class="suffix">(<?php echo $child_val['count']; ?>)</span></a></dd>
@@ -54,7 +54,7 @@ $helper = Mage::helper("zolagosolrsearch");
                         <?php if($canShowBackToCampaign): ?>
                             <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
                         <?php else: ?>
-                            <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                            <a href="<?php echo $backUrl; ?>" class="go_back button button-fourth  medium link"><?php echo $helper->__("back to category"); ?> <?php //echo $backLabel; ?></a>
                         <?php endif; ?>
                     <?php endif; ?>
                 <?php else: ?>
