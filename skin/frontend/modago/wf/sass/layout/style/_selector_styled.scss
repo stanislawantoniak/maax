@@ -23,7 +23,7 @@
 
     }
     .selectboxit-text {
-      color: $colorFont;
+      color: $colorTextSelectboxit;
       text-decoration: none;
       font-family: $fontRegular;
       font-size: 13px;
@@ -63,13 +63,13 @@
       .selectboxit-option-anchor {
         font-size: 13px;
         font-weight: normal;
-        color: $colorFont;
+        color: $colorTextSelectboxit;
         text-decoration: none;
       }
     }
     .selectboxit-focus {
       .selectboxit-option-anchor {
-        color: $colorFont;
+        color: $colorTextSelectboxit;
         background: $color_fff;
         background-image: none;
         background-repeat: repeat-x;
@@ -77,7 +77,7 @@
     }
     .selectboxit-disabled {
       .selectboxit-option-anchor {
-        color: $colorFont;
+        color: $colorTextSelectboxit;
       }
     }
   }
