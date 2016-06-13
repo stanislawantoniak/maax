@@ -425,6 +425,18 @@ section {
 			}
 		}
 	}
+	.empty-cart {
+		#content-main {
+			> .main {
+				padding: 0 15px;
+				border: solid 1px $color_ebebeb !important;
+				@media (max-width: $screen-xs-max) {
+					padding:0 4px 0 4px;
+					margin: 0px -10px;
+				}
+			}
+		}
+	}
 	#sidebar-secondary {
 		> .main {
 			padding:0 15px;

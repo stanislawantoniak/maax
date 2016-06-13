@@ -28,11 +28,24 @@ section {
 	> .main {
 		border: solid 1px $color_ebebeb;
 	}
+
+	#shopping-cart {
+		> .main {
+			border: none;
+		}
+	}
 }
 .node-type-shopping-cart {
 	#content-main {
 		> .main {
 			border: solid 1px $color_ebebeb;
+		}
+	}
+	#shopping-cart {
+		#content-main {
+			> .main {
+				border: none;
+			}
 		}
 	}
 	#sidebar-secondary {
