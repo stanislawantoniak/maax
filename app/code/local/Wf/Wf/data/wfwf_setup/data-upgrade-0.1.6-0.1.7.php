@@ -97,6 +97,64 @@ EOD
             'stores' => 0
         ),
         array(
+        'title'         => 'Checkout | Right column | Step 1 | Logged in',
+        'identifier'    => 'checkout-right-column-step-1',
+        'content'       => <<<EOD
+<div class="sidebar-second col-lg-3 col-md-4 col-sm-4 col-xs-12 col-lg-push-9 col-md-push-8 col-sm-push-8 hidden-xs">
+    <div class="main bg-w">
+        <div class="checkout-sidebar-second-list-title">
+            Kupując w&nbsp;Modago otrzymujesz:
+        </div>
+        <ul class="checkout-sidebar-second-ul">
+            <li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-repeat" style=""></i></div>
+				<div class="icon-content">
+					<h3>30 dniowy</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						darmowy zwrot
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-truck" style=""></i></div>
+				<div class="icon-content">
+					<h3>Błyskawiczną</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						wysyłkę
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-credit-card" style=""></i></div>
+				<div class="icon-content">
+					<h3>Wygodne</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						formy płatności
+					</div>
+				</div>
+			</li>
+			<li class="icon-box  left-icon design-2 animation-2">
+				<div class="icon"><i class="fa fa-lock" style=""></i></div>
+				<div class="icon-content">
+					<h3>Bezpieczne</h3>
+					<hr class="divider short">
+					<div class="icon-text">
+						zakupy
+					</div>
+				</div>
+			</li>
+        </ul>
+    </div>
+</div>
+EOD
+    ,
+        'is_active'     => 1,
+        'stores'        => 0
+    ),
+        array(
             'title' => 'Rejestracja prawy blok',
             'identifier' => 'customer-register-right',
             'content' => <<<EOD
