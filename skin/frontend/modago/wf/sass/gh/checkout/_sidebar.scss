@@ -71,6 +71,15 @@
 						font-weight: 600;
 					}
 				}
+
+				&:hover {
+					.icon {
+						i {
+							background-color: #3d3d3d !important;
+							border-color: #3d3d3d !important;
+						}
+					}
+				}
 			}
 		}
 	}
