@@ -7,7 +7,7 @@ $customShowFlag = $this->getCustomShowFlag();
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
-    $iconClass = $this->isFilterRolled() ? "fa-angle-down visible-xs" : "fa-angle-up visible-xs";
+    $iconClass = $this->isFilterRolled() ? "fa-angle-down visible-xs visible-sm" : "fa-angle-up visible-xs visible-sm";
     $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
