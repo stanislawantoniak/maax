@@ -272,8 +272,8 @@
 		font-family: 'Open Sans', sans-serif;
 	}
 	.icon-box.animation-2:hover .icon i {
-		background-color: #3d3d3d !important;
-		border-color: #3d3d3d !important;
+		background-color: $backgroundIconBoxIconHover !important;
+		border-color: $borderColorIconBoxIconHover !important;
 	}
 
 }
