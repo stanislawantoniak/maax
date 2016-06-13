@@ -114,9 +114,7 @@ $key = $this->getFacetKey();
                 </div>
 				<div class="hidden no-result"><span><?php echo $this->__("No items found"); ?></span></div>
             </div>
-            <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
-            </div>
+
         </div>
         <?php if($isOptionSelected) : ?>
             <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">

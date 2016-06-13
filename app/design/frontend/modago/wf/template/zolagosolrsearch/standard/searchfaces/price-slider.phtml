@@ -94,9 +94,7 @@ $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol()
                 </div>
             </div><br />
 
-            <div class="action clear clearfix <?php if(!$isOptionSelected && !$this->isFilterActive("price")): ?>hidden<?php endif; ?>">
-                <a href="<?php echo $this->getRemoveAllUrl("price") ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
-            </div> 
+
         </div>
         <?php if($somethingIsActive) : ?>
             <div class="content-xs" id="filter_price_xs" data-content="xs">
