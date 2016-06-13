@@ -2431,7 +2431,6 @@ jQuery(document).ready(function () {
 
         jQuery(window).resize(function() {
 	        Mall.listing.updateFilters();
-			Mall.listing.delegateFilterEvents();
         });
 		jQuery("#items-product").imagesLoaded(function () {Mall.listing.updateFilters();});
     } else {
