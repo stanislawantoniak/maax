@@ -1,14 +1,9 @@
 <?xml version="1.0"?>
-<!--
-/**
-  
- */
- -->
 <config>
     <sections>
         <udropship>
             <tab>sales</tab>
-            <label>Drop Shipping</label>
+            <label>ZolagoOs Shipping</label>
             <frontend_type>text</frontend_type>
             <sort_order>330</sort_order>
             <show_in_default>1</show_in_default>
@@ -1009,7 +1004,7 @@
         <carriers>
             <groups>
                 <udropship translate="label">
-                    <label>Drop Shipping</label>
+                    <label>ZolagoOs Shipping</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
@@ -1162,7 +1157,7 @@
         </carriers>
         <udropship_label>
             <tab>sales</tab>
-            <label>Dropship Labels</label>
+            <label>ZolagoOs Labels</label>
             <frontend_type>text</frontend_type>
             <sort_order>331</sort_order>
             <show_in_default>1</show_in_default>

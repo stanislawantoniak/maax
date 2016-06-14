@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagPassion_ProductCarousel extension
+ * 
+ * @category   	MagPassion
+ * @package		MagPassion_ProductCarousel
+ * @copyright  	Copyright (c) 2013 by MagPassion (http://magpassion.com)
+ * @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<layout>
+    
+	<default>
+            <reference name="head">
+                <!--action method="addJs" ifconfig="productcarousel/productcarousel/loadjquery"><script>magpassion/productcarousel/jquery.min.js</script></action>
+                <action method="addJs" ifconfig="productcarousel/productcarousel/loadjquery"><script>magpassion/productcarousel/jquery.noconflict.js</script></action>
+                <action method="addJs"><script>magpassion/productcarousel/owl.carousel.min.js</script></action-->
+                
+                <action method="addItem" ifconfig="productcarousel/productcarousel/loadjquery"><type>skin_js</type><name>magpassion_productcarousel/js/jquery.min.js</name><params/></action>
+                <action method="addItem" ifconfig="productcarousel/productcarousel/loadjquery"><type>skin_js</type><name>magpassion_productcarousel/js/jquery.noconflict.js</name><params/></action>
+                <!--<action method="addItem"><type>skin_js</type><name>magpassion_productcarousel/js/owl.carousel.min.js</name><params/></action>-->
+
+                <!--<action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.carousel.css</stylesheet></action>-->
+                <!--<action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.theme.css</stylesheet></action>-->
+                <!--<action method="addCss"><stylesheet>magpassion_productcarousel/css/mpslider.css</stylesheet></action>-->
+            </reference>
+	</default>
+        <catalog_product_view>
+            <reference name="product.info.upsell">
+                <action method="setTemplate" ifconfig="productcarousel/productcarousel/carouselupsell"><template>magpassion_productcarousel/catalog/product/list/upsell.phtml</template></action>
+                <action method="setItemLimit" ifconfig="productcarousel/productcarousel/carouselupsell"><type>upsell</type><limit>10</limit></action>
+            </reference>
+        </catalog_product_view>
+</layout>

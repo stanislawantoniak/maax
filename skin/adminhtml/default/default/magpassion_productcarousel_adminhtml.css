@@ -1,0 +1,17 @@
+/**
+ * MagPassion_Productcarousel extension
+ * 
+ * @category   	MagPassion
+ * @package		MagPassion_AdvancedMenu
+ * @copyright  	Copyright (c) 2014 by MagPassion (http://magpassion.com)
+ * @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/**
+ * Edit menu item css
+ *
+ * @category	MagPassion
+ * @package		MagPassion_Productcarousel
+ * @author MagPassion
+ */
+ 
+tr.mp_tr_hide {display: none; }

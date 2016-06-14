@@ -2,7 +2,7 @@
 <config>
   <modules>
     <Orba_Shipping>
-      <version>0.0.4</version>
+      <version>0.0.5</version>
     </Orba_Shipping>
   </modules>
   <global>
@@ -107,6 +107,7 @@
       <orbadhl>
         <active>1</active>
         <gateway>https://testowy.dhl24.com.pl/webapi</gateway>
+        <tracking_gateway>http://webapps.dhl.com.pl/app/tntwebservice/tntwebservice_v2.wsdl</tracking_gateway>
         <tracking_url><![CDATA[http://www.dhl.com.pl/sledzenieprzesylkikrajowej/szukaj.aspx?m=0&sn=%s]]></tracking_url>
         <sallowspecific>0</sallowspecific>
         <model>orbashipping/carrier_dhl</model>
@@ -127,6 +128,15 @@
         <repeat_tracking>1</repeat_tracking>
         <volumetric_weight>5000</volumetric_weight>
       </orbaups>
+      <zolagopp>
+          <active>1</active>
+          <gateway>https://en-testwebapi.poczta-polska.pl/websrv/en.wsdl</gateway>
+          <tracking_gateway>https://tt.poczta-polska.pl/Sledzenie/services/Sledzenie?wsdl</tracking_gateway>
+          <tracking_id>sledzeniepp</tracking_id>
+          <tracking_password>PPSA</tracking_password>
+          <title>Poczta Polska</title>          
+          <model>orbashipping/post</model>
+      </zolagopp>
     </carriers>
   </default>
 </config>

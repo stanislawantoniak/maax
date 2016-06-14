@@ -169,7 +169,7 @@
         <template>
             <email>
                <udropship_vendor_vendor_email_template module="udropship">
-                   <label>Dropship Vendor Notification</label>
+                   <label>ZolagoOs Vendor Notification</label>
                    <file>udropship_vendor.html</file>
                    <type>html</type>
                </udropship_vendor_vendor_email_template>
@@ -179,7 +179,7 @@
                    <type>html</type>
                </udropship_vendor_shipment_comment_vendor_email_template>
                <udropship_vendor_vendor_password_template module="udropship">
-                   <label>Dropship Vendor Password Reminder</label>
+                   <label>ZolagoOs Vendor Password Reminder</label>
                    <file>udropship_password.html</file>
                    <type>html</type>
                </udropship_vendor_vendor_password_template>
@@ -1549,7 +1549,7 @@
             <sales>
                 <children>
                     <udropship module="udropship">
-                        <title>Dropship</title>
+                        <title>ZolagoOs</title>
                         <sort_order>100</sort_order>
                         <children>
                             <vendor module="udropship">
@@ -1579,7 +1579,7 @@
             <report>
                 <children>
                     <udropship module="udropship">
-                        <title>Dropship</title>
+                        <title>ZolagoOs</title>
                         <sort_order>100</sort_order>
                         <children>
                             <general module="udropship">
@@ -1604,7 +1604,7 @@
                         <sales>
                             <children>
                                 <udropship translate="title">
-                                    <title>Dropship</title>
+                                    <title>ZolagoOs</title>
                                     <sort_order>40</sort_order>
                                     <children>
                                         <vendor>
@@ -1630,7 +1630,7 @@
                         <report>
                             <children>
                                 <udropship translate="title">
-                                    <title>Dropship</title>
+                                    <title>ZolagoOs</title>
                                     <sort_order>100</sort_order>
                                     <children>
                                         <general translate="title">
@@ -1650,11 +1650,11 @@
                                 <config>
                                     <children>
                                         <udropship>
-                                            <title>Dropship</title>
+                                            <title>ZolagoOs</title>
                                             <sort_order>50</sort_order>
                                         </udropship>
                                         <udropship_label>
-                                            <title>Dropship Labels</title>
+                                            <title>ZolagoOs Labels</title>
                                             <sort_order>60</sort_order>
                                         </udropship_label>
                                     </children>
@@ -1891,7 +1891,7 @@ Limit: {{limit}} days
             <udropship>
                 <active>0</active>
                 <model>udropship/carrier</model>
-                <title>Drop Shipping</title>
+                <title>ZolagoOs Shipping</title>
                 <handling_type>F</handling_type>
                 <free_method>ground</free_method>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
