@@ -137,8 +137,6 @@
           }
           &.cell-04 {
             &.td {
-              font-size: 16px;
-              font-family: $fontRegular;
             }
 
           }
@@ -246,9 +244,6 @@
       .table-footer-group {
         color: $colorFont;
 
-        .quality_price {
-          font-family: $fontOpen;
-        }
         display: block;
         .table-row {
           .table-cell {
@@ -585,7 +580,6 @@
           @include inline-block;
         }
         .value_sum_price {
-          font-family: $fontOpen;
           @include inline-block;
           float: right;
           margin-right: 0px;
@@ -660,16 +654,7 @@
   }
 }
 
-.value_quality_price,
-.value_quality_delivery {
-  font-weight: 500;
-  color: $colorFont;
-  text-transform: uppercase;
-  font-size: 14px;
-  .price {
-    font-family: $fontOpen;
-  }
-}
+
 
 .value_quality_delivery {
   position: relative;
@@ -968,9 +953,7 @@
       }
       .cart-price,
       .stara_cena {
-        font-family: $fontOpen;
         color: $colorProductStrikeOutPrice;
-        font-size: 16px;
         font-weight: 400;
       }
 
@@ -1246,9 +1229,7 @@
 .quality_price {
   margin-bottom: 15px;
   display: block;
-  .price {
-    font-family: $fontOpen;
-  }
+
   @media (max-width: $screen-xs-max) {
     margin-bottom: 11px;
     padding-right: 9px;
@@ -1257,11 +1238,7 @@
     margin-top: 12px;
   }
 }
-.val_delivery_cost {
-  .price {
-    font-family: $fontOpen;
-  }
-}
+
 .quality_delivery {
   @media (max-width: $screen-xs-max) {
     margin-bottom: 11px;
@@ -1312,4 +1289,50 @@
 
 .table-cart .colgroup-01 .colgroup > div {
   text-align: left;
+}
+
+
+
+/**************** Twój koszyk ********************/
+#shopping-cart {
+
+  #content-main {
+    .tableWrapper {
+       &.table-cart {
+         .table-row {
+           .colgroup-02,
+           .colgroup-01 {
+             .colgroup {
+               .cart-price,
+               .stara_cena {
+                 color: $colorProductStrikeOutPrice;
+                 font-size: 16px;
+                 font-weight: 400;
+               }
+             }
+           }
+
+           .table-cell {
+             &.cell-04 {
+               &.td {
+                 font-size: 16px;
+                 font-family: $fontRegular;
+               }
+
+             }
+           }
+         }
+       }
+    }
+
+
+    .value_quality_price,
+    .value_quality_delivery {
+      font-weight: 500;
+      color: $colorFont;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+  }
+
 }
