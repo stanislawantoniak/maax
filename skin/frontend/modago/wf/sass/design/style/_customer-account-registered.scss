@@ -148,6 +148,12 @@
         padding: 0 10px 15px 10px;
 	}
 }
+.newsletter-manage-index .my-account .background-wrapper {
+  .col-md-12 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 .my-account .data-table .products{
 	@media (max-width: $screen-sm-max){
 		display:none;
