@@ -56,11 +56,11 @@ $type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 													<span class="value">
 														<?php echo $this->facetFormat($selectedFacetValue) ?>
 													</span>
-													<div class="box-with-x">
+													<span class="box-with-x">
 														<a  href="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
 															class="fa fa-times active-filter-label test"
 															data-input="<?php echo $this->getItemId($face_key, $v)?>"></a>
-													</div>
+													</span>
 												</span>
 
 												<?php if($face_key != 'price'): ?>
