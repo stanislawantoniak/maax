@@ -1275,8 +1275,8 @@ Mall.listing = {
 			filtersId = '#solr_search_facets';
 
 		//filters slide up/down
-		if(!Mall.listing.isDisplayMobile())
-			return false;
+		//if(!Mall.listing.isDisplayMobile())
+		//	return false;
 
 		jQuery(document).delegate(filtersId+' h3','click',function(e) {
 			e.preventDefault();
