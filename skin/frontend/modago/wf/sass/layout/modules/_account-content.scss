@@ -12,15 +12,6 @@
     }
 }
 
-.newsletter-manage-index {
-  #general-subscription {
-    .col-sm-12 {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
-}
-
 .newsletter-manage-index,
 .customer-account-privacy {
   .more-info-txt {
@@ -28,6 +19,10 @@
   }
   #general-subscription {
     display: table-cell !important;
+    .col-sm-12 {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   .label-bold {
