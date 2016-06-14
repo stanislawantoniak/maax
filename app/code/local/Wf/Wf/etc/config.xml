@@ -42,7 +42,15 @@
                 </setup>
             </wfwf_setup>
         </resources>
-
+		<template>
+			<email>
+				<wf_email_template module="wfwf">
+					<label>WF email template</label>
+					<file>wf_email_template.html</file>
+					<type>html</type>
+				</wf_email_template>
+			</email>
+		</template>
     </global>
     <frontend>
 		<!--for map-->
