@@ -44,7 +44,7 @@
 		.panel-body {
 			.current-addres,
 			.top-panel {
-				border-bottom: 1px solid $bc-primary;
+				border: 1px solid $bc-primary;
 				background:$panel-top;
 			}
 			.top-panel {
@@ -306,7 +306,10 @@
 	}
 	.default_pay {
 		> .panel {
+			border: none;
 			> .panel-body {
+				padding: 0;
+				border: none;
 				> .panel {
 					&:hover {
 						border-color :$bc-secondary;
@@ -323,6 +326,7 @@
 
 			> .panel-footer {
 				text-align: right;
+				padding: 15px;
 			}
 			> .panel-body {
 				dt {
@@ -430,7 +434,7 @@
 			position:relative;
 			.current-addres,
 			.top-panel {
-				margin:-15px -15px 0 -15px;
+				//margin:-15px -15px 0 -15px;
 				padding:15px;
 				-webkit-backface-visibility: hidden;
 			}
