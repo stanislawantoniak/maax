@@ -13,6 +13,14 @@
 }
 
 
+#newsletter-validate-detail button[type="submit"] {
+	color:$color_fff;
+	background-color:$color_262626;
+	&:hover {
+		background-color:$color_fff;
+		color:$color_262626;
+	}
+}
 
 
 .footer-gray-wr {
