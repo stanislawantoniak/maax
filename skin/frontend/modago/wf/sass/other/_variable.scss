@@ -196,22 +196,22 @@ $colorAccentTitleTransparent:           true; //defines margins for titles, if y
 $colorAccentError:                      $colorAccentSite;
 $colorAccentValid:                      #6dab3c;
 
-//buttons
+/***********************************************/
+/***********************************************/
+/***************  BUTTONS   ********************/
+/***********************************************/
+/***********************************************/
+//primary
 $colorBtnPrimary:                       #FFF;
-
 $colorBtnPrimaryBgStart:                #262626;
 $colorBtnPrimaryBgEnd:                  #262626;
-
 $colorBtnPrimaryBgStartHover:           #444;
 $colorBtnPrimaryBgEndHover:             #444;
-
 $colorBtnPrimaryBgStartActive:          #444;
 $colorBtnPrimaryBgEndActive:            #444;
+$colorBtnPrimaryBgDisabled:             #C5C5C5;
 
-$colorBtnThirdBorderActive:             #444;
-$colorBtnThirdColorActive:              #444;
-
-
+//secondary
 $colorBtnSecondaryBgStart:                #adadad;
 $colorBtnSecondaryBgEnd:                  #adadad;
 $colorBtnSecondaryBgStartHover:           #dc4348;
@@ -220,8 +220,10 @@ $colorBtnSecondaryBgStartActive:          #dc4348;
 $colorBtnSecondaryBgEndActive:            #dc4348;
 $colorBtnSecondaryHoverBorder:            #dc4348;
 
-$colorBtnPrimaryBgDisabled:             #C5C5C5;
 
+//third
+$colorBtnThirdBorderActive:             #444;
+$colorBtnThirdColorActive:              #444;
 $colorBtnThirdBgStart:                    #adadad;
 $colorBtnThirdBgEnd:                      #adadad;
 $colorBtnThirdBgStartHover:               #444;
@@ -231,9 +233,15 @@ $colorBtnThirdBgStartActive:              #444;
 $colorBtnThirdBgEndActive:                #444;
 $colorBtnThirdBgDisabled:                 #444;
 
-$colorMainMenuSubItemGradientStart: #F9F9FA;
-$colorMainMenuSubItemGradientEnd: #F9F9FA;
 
+//fourth
+$colorBtnFourth:               #4f4f4f;
+$colorBtnFourthBgStart:        #fff;
+$colorBtnFourthBgEnd:          #fff;
+$colorBtnFourthBgStartHover:   #fff;
+$colorBtnFourthBgEndHover:     #fff;
+$colorBtnFourthBorder:         #afafaf;
+$colorBtnFourthBorderHover:    #4f4f4f;
 
 @mixin generalLinkOnDark {
   &:hover, &.hover {
@@ -255,10 +263,25 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
 	}
 	&:active,&:focus,&.active {
 		@include linearGradient($colorBtnPrimaryBgStartActive,$colorBtnPrimaryBgEndActive);
+        outline: none;
 	}
 	&.disabled {
 		background: $colorBtnPrimaryBgDisabled;
 	}
+}
+
+@mixin fourthButtonGradient { //covers normal + hover + active + .disabled
+  @include linearGradient($colorBtnFourthBgStart,$colorBtnFourthBgEnd);
+  &:hover,&.hover {
+    @include linearGradient($colorBtnFourthBgStartHover,$colorBtnFourthBgEndHover);
+  }
+  &:active,&:focus,&.active {
+    @include linearGradient($colorBtnFourthBgStartHover,$colorBtnFourthBgEndHover);
+    outline: none;
+  }
+  &.disabled {
+    background: $colorBtnPrimaryBgDisabled;
+  }
 }
 
 
@@ -293,6 +316,10 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
     background: $colorBtnThirdBgDisabled;
   }
 }
+/***********************************************/
+
+$colorMainMenuSubItemGradientStart: #F9F9FA;
+$colorMainMenuSubItemGradientEnd: #F9F9FA;
 
 @mixin productPricesBlockKit {
 

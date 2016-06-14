@@ -37,11 +37,27 @@
 	margin-bottom: 52px;
 	z-index: 900;
 	.section {
-      #filter_category {
-        dd .suffix{
-          float: right;
-        }
-      }
+		#filter_category {
+			dt {
+				.suffix {
+					float: right;
+				}
+			}
+			dd {
+				a {
+					&:before {
+						content: "-";
+						padding: 0 5px 0 0;
+					}
+					.suffix {
+						float: right;
+					}
+				}
+			}
+			.action {
+				text-align: left;
+			}
+		}
 		padding:11px 18px 0;
 		.content {
 			padding-top:8px;
