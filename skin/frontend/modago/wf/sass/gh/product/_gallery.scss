@@ -332,8 +332,11 @@
 				height:50px;
 				margin-top: -25px;
 				&:before {
-					content: ' ';
+					margin: 24px 0 0 18px;
+					color: $color_8a8a8a;
+					font-family:'FontAwesome';
 					display: block;
+					font-size:24px;
 					top:41%;
 					z-index: 900;
 				}
@@ -344,8 +347,7 @@
 			.rwd-prev {
 				left:0px;
 				&:before {
-					@include sprite-dimensions($allMap, arrow-stage-prev);
-					margin: 18px 0 0 18px;
+					content: '\f104';					
 				}
 				@media (min-width: 361px) and (max-width:767px) {
 					left: -33px;
@@ -354,8 +356,7 @@
 			.rwd-next {
 				right:0px;
 				&:before {
-					@include sprite-dimensions($allMap, arrow-stage-next);
-					margin: 18px 0 0 18px;
+					content: '\f105';									
 				}
 				@media (min-width: 361px) and (max-width:767px) {
 					right: -37px;
