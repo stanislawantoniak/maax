@@ -274,9 +274,9 @@ jQuery.noConflict();
 
 		/* ================= end:// checkout ================= */
 		var widthWindow = $(window).innerWidth();
-		var kolumnaPrawa =  $("div.col-01").innerHeight();
-		var kolumnaLewa = $("div.col-02").innerHeight();
-		if (widthWindow >= 748) {
+		var kolumnaPrawa =  $("div.col-01").outerHeight();
+		var kolumnaLewa = $("div.col-02").outerHeight();
+		if (widthWindow >= 768) {
 			if (kolumnaLewa > kolumnaPrawa) {
 				$("div.col-01").css({'height' : kolumnaLewa});
 			} else {
@@ -288,9 +288,9 @@ jQuery.noConflict();
 			var col01 = $("div.col-01"), col02 = $("div.col-02");
 			col01.css({'height' : 'auto'});
 			col02.css({'height' : 'auto'});
-			var kolumnaPrawa =  col01.innerHeight();
-			var kolumnaLewa = col02.innerHeight();
-			if (widthWindow >= 748) {
+			var kolumnaPrawa =  col01.outerHeight();
+			var kolumnaLewa = col02.outerHeight();
+			if (widthWindow >= 768) {
 				if (kolumnaLewa > kolumnaPrawa) {
 					col01.css({'height' : kolumnaLewa});
 				} else {
