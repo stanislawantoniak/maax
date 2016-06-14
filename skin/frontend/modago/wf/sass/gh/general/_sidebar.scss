@@ -103,16 +103,10 @@
 
 				&.fa-angle-down {
 					display: none;
-					@media (max-width: $screen-sm-to-smmd-max) {
-						display: block;
-					}
 				}
 
 				&.fa-angle-up {
 					display: none;
-					@media (max-width: $screen-sm-to-smmd-max) {
-						display: block;
-					}
 				}
 
 
@@ -146,7 +140,19 @@
 		}
 	}
 }
+.filters-mobile {
+	h3 {
+		i {
+			&.fa-angle-down {
+				display: block !important;
+			}
 
+			&.fa-angle-up {
+				display: block !important;
+			}
+		}
+	}
+}
 .sidebar-first {
 	&.node-type-list {
 		#sidebar {
