@@ -1275,17 +1275,18 @@ Mall.listing = {
 			filtersId = '#solr_search_facets';
 
 		//filters slide up/down
-		//if(!Mall.listing.isDisplayMobile())
-		//	return false;
 
 		jQuery(document).delegate(filtersId+' h3','click',function(e) {
 			e.preventDefault();
 			var me = jQuery(this);
-			self._doRollSection(
-				me.parent(),
-				!me.hasClass("open"),
-				false
-			);
+			if(self.getCurrentMobileFilterState()){
+				self._doRollSection(
+					me.parent(),
+					!me.hasClass("open"),
+					false
+				);
+			}
+
 			if(self.getCurrentMobileFilterState()) {
 				self.getFilters().find('h3.open').not(me).each(function() {
 					self._doRollSection(
