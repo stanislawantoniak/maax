@@ -110,6 +110,7 @@
 			.rwd-prev {
 				&:before {
 					content:"\f104";
+                    font-family: FontAwesome;
 				}
 				&:hover {
 					
@@ -120,6 +121,7 @@
 			.rwd-next {
 				&:before {
 					content:"\f105";
+                    font-family: FontAwesome;
 				}
 				
 				&:hover {
