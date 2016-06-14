@@ -1539,31 +1539,31 @@ Mall.swipeOptions = {
  * Attaches events to products likes.
  */
 Mall.delegateLikeEvents = function() {
-	if(!Mall.getIsBrowserMobile()) {
-		jQuery(document).delegate('div.like', 'mouseenter mouseleave', function (e) {
-			if (e.type === 'mouseenter') { //hover
-				var textLike;
-				if (jQuery(this).hasClass('liked')) {
-					textLike = 'Dodane do ulubionych';
-				} else {
-					textLike = 'Dodaj do ulubionych';
-				}
-				jQuery(this).find('.toolLike').show().text(textLike);
-			} else { //hover out
-				jQuery(this).find('.toolLike').hide().text('');
-			}
-		});
-		jQuery(document).delegate('div.like.liked', 'mousedown', function(e) {
-			var textLike = 'Usunięte z ulubionych';
-			jQuery(this).find('.toolLike').text(textLike);
-		});
-	}
-	jQuery(document).delegate('div.like .icoLike', 'mousedown', function(e) {
-		jQuery(this).animate({transform: 'scale(1.2)'}, 200);
-	});
-	jQuery(document).delegate('div.like .icoLike', 'mouseup', function(e) {
-		jQuery(this).animate({transform: 'scale(1)'}, 200);
-	});
+	// if(!Mall.getIsBrowserMobile()) {
+	// 	jQuery(document).delegate('div.like', 'mouseenter mouseleave', function (e) {
+	// 		if (e.type === 'mouseenter') { //hover
+	// 			var textLike;
+	// 			if (jQuery(this).hasClass('liked')) {
+	// 				textLike = 'Dodane do ulubionych';
+	// 			} else {
+	// 				textLike = 'Dodaj do ulubionych';
+	// 			}
+	// 			jQuery(this).find('.toolLike').show().text(textLike);
+	// 		} else { //hover out
+	// 			jQuery(this).find('.toolLike').hide().text('');
+	// 		}
+	// 	});
+	// 	jQuery(document).delegate('div.like.liked', 'mousedown', function(e) {
+	// 		var textLike = 'Usunięte z ulubionych';
+	// 		jQuery(this).find('.toolLike').text(textLike);
+	// 	});
+	// }
+	// jQuery(document).delegate('div.like .icoLike', 'mousedown', function(e) {
+	// 	jQuery(this).animate({transform: 'scale(1.2)'}, 200);
+	// });
+	// jQuery(document).delegate('div.like .icoLike', 'mouseup', function(e) {
+	// 	jQuery(this).animate({transform: 'scale(1)'}, 200);
+	// });
 	jQuery(document).delegate('div.like','click',function(e) {
 		e.preventDefault();
 		var like = jQuery(this);

@@ -16,40 +16,28 @@ $blocks = array(
 				<div class="icon"><i class="fa fa-repeat" style=""></i></div>
 				<div class="icon-content">
 					<h3>30 dniowy</h3>
-					
-					<div class="icon-text">
-						darmowy zwrot
-					</div>
+					<div class="icon-text">darmowy zwrot</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-truck fa-mirrored" style=""></i></div>
 				<div class="icon-content">
 					<h3>Błyskawiczną</h3>
-					
-					<div class="icon-text">
-						wysyłkę
-					</div>
+					<div class="icon-text">wysyłkę</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-credit-card" style=""></i></div>
 				<div class="icon-content">
 					<h3>Wygodne</h3>
-					
-					<div class="icon-text">
-						formy płatności
-					</div>
+					<div class="icon-text">formy płatności</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-lock" style=""></i></div>
 				<div class="icon-content">
 					<h3>Bezpieczne</h3>
-					
-					<div class="icon-text">
-						zakupy
-					</div>
+					<div class="icon-text">zakupy</div>
 				</div>
 			</li>
 		</ul>
@@ -60,31 +48,22 @@ $blocks = array(
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-list-alt" style=""></i></div>
 				<div class="icon-content">
-					<h3>Stały wzgląd w staus</h3>
-					
-					<div class="icon-text">
-						zamówienia czy zwrotu
-					</div>
+					<h3>Wgląd w status</h3>
+					<div class="icon-text">zamówień i zwrotów</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-shopping-bag" style=""></i></div>
 				<div class="icon-content">
-					<h3>Uproszczony proces</h3>
-					
-					<div class="icon-text">
-						składania zamówień
-					</div>
+					<h3>Ułatwiony proces</h3>
+					<div class="icon-text">składania zamówień</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-percent" style=""></i></div>
 				<div class="icon-content">
 					<h3>Dodatkowe</h3>
-					
-					<div class="icon-text">
-						rabaty i promocje
-					</div>
+					<div class="icon-text">rabaty i promocje</div>
 				</div>
 			</li>
 		</ul>
@@ -110,40 +89,28 @@ EOD
 				<div class="icon"><i class="fa fa-repeat" style=""></i></div>
 				<div class="icon-content">
 					<h3>30 dniowy</h3>
-					
-					<div class="icon-text">
-						darmowy zwrot
-					</div>
+					<div class="icon-text">darmowy zwrot</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-truck fa-mirrored" style=""></i></div>
 				<div class="icon-content">
 					<h3>Błyskawiczną</h3>
-					
-					<div class="icon-text">
-						wysyłkę
-					</div>
+					<div class="icon-text">wysyłkę</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-credit-card" style=""></i></div>
 				<div class="icon-content">
 					<h3>Wygodne</h3>
-					
-					<div class="icon-text">
-						formy płatności
-					</div>
+					<div class="icon-text">formy płatności</div>
 				</div>
 			</li>
 			<li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-lock" style=""></i></div>
 				<div class="icon-content">
 					<h3>Bezpieczne</h3>
-					
-					<div class="icon-text">
-						zakupy
-					</div>
+					<div class="icon-text">zakupy</div>
 				</div>
 			</li>
         </ul>
@@ -168,30 +135,21 @@ EOD
 				<div class="icon"><i class="fa fa-percent" style=""></i></div>
 				<div class="icon-content">
 					<h3>Dodatkowe</h3>
-					
-					<div class="icon-text">
-						rabaty i promocje
-					</div>
+					<div class="icon-text">rabaty i promocje</div>
 				</div>
 			</li>
             <li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-shopping-bag" style=""></i></div>
 				<div class="icon-content">
 					<h3>Uproszczony proces</h3>
-					
-					<div class="icon-text">
-						składania zamówień
-					</div>
+					<div class="icon-text">składania zamówień</div>
 				</div>
 			</li>
             <li class="icon-box  left-icon design-2 animation-2">
 				<div class="icon"><i class="fa fa-percent" style=""></i></div>
 				<div class="icon-content">
 					<h3>Dodatkowe</h3>
-					
-					<div class="icon-text">
-						rabaty i promocje
-					</div>
+					<div class="icon-text">rabaty i promocje</div>
 				</div>
 			</li>
         </ul>
