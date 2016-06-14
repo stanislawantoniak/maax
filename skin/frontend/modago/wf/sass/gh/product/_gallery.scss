@@ -311,14 +311,25 @@
 			}
 			position:relative;
 			.view_lupa {
+				i {
+					margin-top:12px;
+				}
 				position:absolute;
 				//                top:88%;
-				bottom: 2%;
-				right:10px;
+				bottom: 4%;
+				left: 17px;
 				z-index: 900;
+				border:1px solid $color_333;
+				border-radius:100%;
+				text-align:center;
+				height:40px;
+				width:40px;
 				@media (max-width: 767px) {
 					display:none;
 				}
+			}
+			.view_lupa_plus {
+				background: transparent;
 			}
 		}
 	}
