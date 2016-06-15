@@ -128,10 +128,13 @@ $validation-error: $color_e84c3d;
 
 // FONT
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans&subset=latin);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:bold,light,regular&subset=latin-ext);
 $fontRegular: 'Open Sans', sans-serif;
 $fontOpen: $fontRegular;
+
 $fontBlack: $fontRegular;
+$fontLight: $fontRegular;
+
 $line-height-base: 1.8 !default;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */

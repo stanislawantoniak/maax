@@ -1770,7 +1770,7 @@ Mall.inspirationsSliderInit = function() {
 	}
 
 	rwdInspirationCarousel.rwdCarousel({
-		items : 5, //10 items above 1000px browser width
+		items : 6, //10 items above 1000px browser width
 		itemsDesktop : [1000,4], //5 items between 1000px and 901px
 		itemsDesktopSmall : [900,3], // between 900px and 601px
 		itemsTablet: [767,3], //2 items between 600 and 0

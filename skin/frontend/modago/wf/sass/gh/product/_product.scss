@@ -604,7 +604,7 @@ i.flag {
 					fill:$color_999;
 				}
 				margin-right:5px;
-				margin-left:10px;
+				margin-left:0;
 			}
 			@media (max-width: 814px) {
 
@@ -837,4 +837,16 @@ div[itemprop="description"] {
 	color:$colorAccentSite;
 	font-family: $fontRegular;
 	text-transform: uppercase;
+}
+
+#note_product {
+  .main {
+    padding: 0 35px 0 0 !important;
+    #no-opinion-statistics {
+      p {
+        margin-bottom: 30px;
+        color: $colorShortDescription;
+      }
+    }
+  }
 }

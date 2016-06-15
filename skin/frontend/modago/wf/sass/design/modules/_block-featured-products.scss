@@ -91,6 +91,8 @@
     }
 
     .owl-carousel {
+      padding-left: 50px;
+      padding-right: 50px;
       .owl-item {
         img {
           transform-style: preserve-3d;
@@ -185,7 +187,7 @@
   }
 
   .mp-prev-carousel {
-    left: 9px !important;
+    left: -10px !important;
 
     &:before {
       content: "\f104";
@@ -208,7 +210,7 @@
   }
 
   .mp-next-carousel {
-    right: 9px !important;
+    right: -10px !important;
 
     &:before {
       content: "\f105";
