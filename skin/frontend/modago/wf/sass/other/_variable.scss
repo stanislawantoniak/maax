@@ -128,16 +128,12 @@ $validation-error: $color_e84c3d;
 
 // FONT
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:bold,light,regular&subset=latin,latin-ext);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:bold,light,regular&subset=latin-ext);
 $fontRegular: 'Open Sans', sans-serif;
 $fontOpen: $fontRegular;
-//$fontBlack: $fontRegular;
 
-$fontBlack: 'Open Sans Bold', sans-serif;
-$fontLight: 'Open Sans Light', sans-serif;
-//$fontRegular: open_sansregular;
-//$fontLight: open_sanslight;
-//$fontBold: open_sansbold;
+$fontBlack: $fontRegular;
+$fontLight: $fontRegular;
 
 $line-height-base: 1.8 !default;
 
