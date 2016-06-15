@@ -6,7 +6,9 @@
     text-align: center;
     text-transform: uppercase;
   }
-  border-bottom:1px solid $color_ebebeb;
+  @media (max-width: $screen-xs-max) {
+	  border-bottom:1px solid $color_ebebeb;	
+  }
 }
 
 #help-contact-msg-fix{
