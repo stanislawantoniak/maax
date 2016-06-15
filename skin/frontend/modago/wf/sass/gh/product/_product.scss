@@ -838,3 +838,15 @@ div[itemprop="description"] {
 	font-family: $fontRegular;
 	text-transform: uppercase;
 }
+
+#note_product {
+  .main {
+    padding: 0 35px 0 0 !important;
+    #no-opinion-statistics {
+      p {
+        margin-bottom: 30px;
+        color: $colorShortDescription;
+      }
+    }
+  }
+}
