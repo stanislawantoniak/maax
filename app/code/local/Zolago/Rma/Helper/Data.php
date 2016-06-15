@@ -430,7 +430,7 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
             $timestamp = time()+$count*3600*24;
             if ($holidaysHelper->isPickupDay($timestamp)) {
                 if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
-                    if($params->getPostalCodeServicesResult->drPickupFrom !== "brak") {
+                    if($params->getPostalCodeServicesResult->exPickupFrom !== "brak") {
                         $dateList[$timestamp] = $params;
                     }
                 }
