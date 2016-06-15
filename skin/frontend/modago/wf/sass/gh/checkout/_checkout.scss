@@ -1,3 +1,16 @@
+body.checkout {
+
+    @include max-screen($screen-xs-max) {
+      #content {
+        padding-top: 0px;
+        padding-bottom: 25px;
+        margin-top: -17px;
+      }
+    }
+
+}
+
+
 #checkout  {
 	section {
 		header {
