@@ -565,7 +565,7 @@ body {
 		&.navigation > li > a.forceActive {
 			background: none;
 			color: $colorLinkHover;
-			text-shadow:  0.25px 0.25px 0.25px $colorLinkHover;
+			text-shadow:  0.25px 0.25px 0px;
 			&:before {
 				//background: $colorAccentSiteMenuTop;
 
