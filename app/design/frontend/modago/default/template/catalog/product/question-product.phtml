@@ -50,12 +50,16 @@ $_helper = Mage::helper('zolagoudqa');
     </div>
     <div class="row">
         <div class="col-xs-11">
-            <div class="buttons-set">
-                <p class="required" aria-required="true"><?php echo $_helper->__('* Required Fields') ?></p>
-                <button type="submit" title="<?php echo $_helper->__('Submit') ?>" class="btn button button-primary sending">
-                    <i></i>
-                    <span><span><?php echo $_helper->__('Submit') ?></span></span></button>
-            </div>
+			<div class="row" style="margin: 0 -15px 0 -15px">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<p class="required" aria-required="true"><?php echo $_helper->__('* Required Fields') ?></p>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<button type="submit" title="<?php echo $_helper->__('Submit') ?>" class="btn button button-primary sending pull-right">
+						<i></i>
+						<span><span><?php echo $_helper->__('Submit') ?></span></span></button>
+				</div>
+			</div>
         </div>
     </div>
 </form>

@@ -231,6 +231,12 @@ body.catalog-product-view {
 }
 div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
 	height: auto;
+    margin: 10px 0 0 0;
+    padding-left: 18px;
+    @media (max-width: $screen-xs-max) {
+      padding: 0;
+      margin: 0;
+    }
 	&:before {
 		@media(max-width: 360px) {
 			left: 0;
