@@ -2,6 +2,7 @@ body {
 	font-family: $fontRegular;
 	color: $text-color;
 	background: $body-bg;
+	-webkit-font-smoothing: antialiased;
 }
 ::-webkit-input-placeholder {
    color: $color_000 !important;
