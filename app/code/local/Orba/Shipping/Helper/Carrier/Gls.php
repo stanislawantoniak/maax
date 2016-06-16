@@ -8,6 +8,8 @@ class Orba_Shipping_Helper_Carrier_Gls extends Orba_Shipping_Helper_Carrier {
     protected $_glsClient;
 
     const GLS_STATUS_DELIVERED	= 'DELIVERED';
+    const GLS_STATUS_CANCELED	= 'CANCELED';
+    const GLS_STATUS_RETURNED   = 'FINAL';
     const GLS_HEADER = 'GLS tracking info';
 
 
@@ -128,6 +130,11 @@ class Orba_Shipping_Helper_Carrier_Gls extends Orba_Shipping_Helper_Carrier {
                             }
                             $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED);
                             $this->_parseActivity($trackInfo,$message);
+                            break;
+                        case Orba_Shipping_Helper_Carrier_Gls::GLS_STATUS_RETURNED:
+                            $status = $this->__('Returned');
+                            $track->setUdropshipStatus(Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED);
+                            $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED);                        
                             break;
                         default:
                             break;
