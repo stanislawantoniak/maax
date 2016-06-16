@@ -21,7 +21,6 @@ class Orba_Shipping_Model_Client_Soap extends Orba_Shipping_Model_Client_Abstrac
             $mode = $this->_getSoapMode();
             $soap = new SoapClient($wsdl, $mode);
             $header = $this->_prepareSoapHeader();
-            Mage::log($header, null, "getDateList.log");
             if ($header) {
                 $soap->__setSoapHeaders($header);
             }
