@@ -487,8 +487,9 @@ jQuery(function($){
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
             }
-console.log(zip);
+            console.log(zip);
             if(!zip.length) {
+                console.log("showInfoAboutNoPickup");
                 _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
                 return true;
             }
