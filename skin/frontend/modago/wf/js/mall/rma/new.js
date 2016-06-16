@@ -493,12 +493,15 @@ jQuery(function($){
                 _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
                 return true;
             }
+            console.log("NO showInfoAboutNoPickup");
 
+            console.log("getDateList");
             OrbaLib.Rma.getDateList({
                 //'poId': poId,
                 'zip': zip
             }, {
                 'done': function (data) {
+                    console.log(data);
                     if (data !== undefined && data.status !== undefined) {
                         if (data.status) {
                             // is at least one day for pickup
