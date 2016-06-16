@@ -37,7 +37,7 @@ body {
 }
 
 .header_top {
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		position: fixed;
 	}
 	top: 0px;
@@ -62,7 +62,7 @@ body {
 		top: 1px;
 		//width: 160px;
 		width: 250px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			width: 160px;
 		}
 		z-index: 10;
@@ -72,7 +72,7 @@ body {
 			width: 100%;
 			height: auto;
 			margin-top: 15px;
-			@include max-screen($screen-sm-max) {
+			@include max-screen($screen-xs-max) {
 				margin-top: 5px;
 			}
 		}
@@ -93,7 +93,7 @@ body {
 	#header_top_block_right {
 		width: 100%;
 		padding-left: 265px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			padding-left: 105px;
 		}
 		position: absolute;
@@ -106,6 +106,9 @@ body {
 			@include max-screen($screen-xs-max) {
 				width: 0;
 			}
+            @include min-screen($screen-sm) {
+              width: 80%
+            }
 			#navigation {
 				text-align: center;
 			}
@@ -119,8 +122,9 @@ body {
 			@include max-screen($screen-xs-max) {
 				width: 100%;
 			}
-			@include min-screen($screen-md) {
+			@include min-screen($screen-sm) {
 				margin-top: 23px;
+                width: 20%
 			}
 		}
 		.header_icon {
@@ -196,12 +200,12 @@ body {
 	top: -4px;
 	width: 100%;
 	text-align: right;
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		margin-top: -3px;
 		height: 54px !important;
 
 	}
-	@include min-screen($screen-md) {
+	@include min-screen($screen-sm) {
 		position: relative;
 	}
 	li {
@@ -240,7 +244,7 @@ body {
 			background-color: transparent;
 		}
 
-		@include min-screen($screen-md-min) {
+		@include min-screen($screen-sm-min) {
 			&#link_basket {
 				height: 61px;
 			}
@@ -262,20 +266,20 @@ body {
 			}
 		}
 		@include max-screen(410px) {
-			width: 50px;
+			width: 40px;
 		}
 		@include max-screen(360px) {
-			width: 40px;
+			width: 33px;
 			&:hover, a:hover {
 				background-color: transparent;
 			}
 		}
 		a:link,
 		a:visited {
-			@include max-screen($screen-sm-max) {
+			@include max-screen($screen-xs-max) {
 				padding-top: 16px !important;
 			}
-			@include min-screen($screen-md) {
+			@include min-screen($screen-sm-min) {
 				padding-top: 10px !important;
 			}
 		}
@@ -314,7 +318,7 @@ body {
 		padding-bottom: 2px;
 		display: block;
 		padding-top: 11px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			height: 46px;
 			padding-top: 17px;
 		}
@@ -367,6 +371,14 @@ body {
 			a:visited {
 				padding: 14px 13px 9px !important;
 			}
+          @include screen($screen-sm-min, $screen-sm-max) {
+            a:link,
+            a:visited {
+              padding-right: 8px !important;
+              padding-left: 7px !important;
+            }
+          }
+
 
 			/* === SUBMENU === */
 			ul {
@@ -586,7 +598,7 @@ body {
 				font-style: normal;
 				text-transform: uppercase;
 				line-height: 45px;
-				@media(max-width: $screen-sm-max) {
+				@media(max-width: $screen-xs-max) {
 					font-size: 15px;
 					line-height: 46px;
 				}
@@ -746,7 +758,7 @@ body {
 .header_top {
   //height: 85px;
 	height: 132px;
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		height: 85px;
 	}
 }
