@@ -166,6 +166,7 @@ $opacitySiteOverlay:                    .5;
 $colorShadow:                           #bbb;
 
 $colorFont:                             #555;
+$colorSecondFont:                       #3d3d3d;
 $colorLink:                             #000;
 
 $colorLinkHover:                        #000;
@@ -174,7 +175,7 @@ $colorLinkActive:                       #000;
 $colorLinkHoverOnDark:                  #fff;
 
 $decorationLinkHover:                   underline;
-$colorHeader:                           #3d3d3d;
+$colorHeader:                           $colorSecondFont;
 
 //icon colors
 $colorIcon:                             #3d3d3d;
