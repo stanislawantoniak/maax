@@ -493,7 +493,7 @@ jQuery(function($){
                 _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
                 return true;
             }
-            console.log("NO showInfoAboutNoPickup");
+            console.log("SKIP showInfoAboutNoPickup");
 
             console.log("getDateList");
             OrbaLib.Rma.getDateList({
