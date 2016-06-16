@@ -1947,19 +1947,19 @@ jQuery(document).ready(function() {
     if (jQuery('.messages i').length) {
         jQuery('#content').css('margin-top', '0px');
     }
-
-    jQuery(".no-size").tooltip({
-        template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
-    });
-    jQuery("#add-to-cart").tooltip({
-        template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
-    });
-    jQuery("#add-to-cart").on('mouseover', function() {
-        if(Mall._current_superattribute != null) {
-            jQuery("#add-to-cart").tooltip('destroy');
-        }
-    });
-
+    if (jQuery(".no-size").tooltip) {
+        jQuery(".no-size").tooltip({
+            template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
+        });
+        jQuery("#add-to-cart").tooltip({
+            template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
+        });
+        jQuery("#add-to-cart").on('mouseover', function() {
+            if(Mall._current_superattribute != null) {
+                jQuery("#add-to-cart").tooltip('destroy');
+            }
+        });
+    }
 
     jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {
         var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
