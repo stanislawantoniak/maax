@@ -113,7 +113,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
     <div id="short-description" class="row">
             <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
     </div>
-    <?php if ($isSalable): ?>
+
         <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 					<!--    Meta tags-->
             <?php
@@ -187,14 +187,10 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 							        id="add-to-cart"
 							        onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); 
                     ?></button>
-                <?php else: ?>
-                    <div class="temporary-absence-product-wrapper">
-                        <span class="temporary-absence-product"><?php echo $hlp->__("Product temporary<br />unavailable"); ?></span>
-                    </div>
                 <?php endif; ?>
             </div>
         </div>
-    <?php else: ?>
+	<?php if (!$isSalable): ?>
                     <div class="temporary-absence-product-wrapper">
                         <span class="temporary-absence-product"><?php echo $hlp->__("Product temporary unavailable"); ?></span>
                     </div>
