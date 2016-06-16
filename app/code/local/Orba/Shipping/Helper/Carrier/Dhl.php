@@ -240,6 +240,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         $login = $this->getDhlLogin();
         $password = $this->getDhlPassword();
         $dhlClient->setAuth($login, $password);
+
         $ret = $dhlClient->getPostalCodeServices($zip, date("Y-m-d", $timestamp));
 
         $url = Mage::getStoreConfig('carriers/orbadhl/gateway');
@@ -266,7 +267,6 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 
         } else {
             if (isset($ret['error'])) {
-                Mage::log("Check PL zip availability:" . $ret['error'], null, "getDateList.log");
                 $this->_log("Check PL zip availability:" . $ret['error'], 'dhl_zip.log');
             } else {
                 $this->_log("Check PL zip availability:error", 'dhl_zip.log');

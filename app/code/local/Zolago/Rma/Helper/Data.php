@@ -428,13 +428,9 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
         for ($count = 0; (($count <= $max) && (count($dateList)<5)); $count++) {
             // start from today
             $timestamp = time()+$count*3600*24;
-            Mage::log($holidaysHelper->isPickupDay($timestamp), null, "getDateList.log");
             if ($holidaysHelper->isPickupDay($timestamp)) {
-                Mage::log($zip, null, "getDateList.log");
-                $params = $helper->getDhlPickupParamsForDay($timestamp,$zip);
-                Mage::log($params, null, "getDateList.log");
-                if ($params) {
-                    if($params->getPostalCodeServicesResult->drPickupFrom !== "brak") {
+                if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
+                    if($params->getPostalCodeServicesResult->exPickupFrom !== "brak") {
                         $dateList[$timestamp] = $params;
                     }
                 }

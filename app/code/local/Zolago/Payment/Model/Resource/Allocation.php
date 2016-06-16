@@ -10,6 +10,10 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $this->_init('zolagopayment/allocation', "allocation_id");
     }
 
+	/**
+	 * @param $poId
+	 * @return float
+	 */
     public function getSumOfAllocations($poId) {
         $tableAllo = $this->getTable('zolagopayment/allocation');
         $select = $this->getReadConnection()->select();

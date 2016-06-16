@@ -487,21 +487,17 @@ jQuery(function($){
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
             }
-            console.log(zip);
+
             if(!zip.length) {
-                console.log("showInfoAboutNoPickup");
                 _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
                 return true;
             }
-            console.log("SKIP showInfoAboutNoPickup");
 
-            console.log("getDateList");
             OrbaLib.Rma.getDateList({
                 //'poId': poId,
                 'zip': zip
             }, {
                 'done': function (data) {
-                    console.log(data);
                     if (data !== undefined && data.status !== undefined) {
                         if (data.status) {
                             // is at least one day for pickup

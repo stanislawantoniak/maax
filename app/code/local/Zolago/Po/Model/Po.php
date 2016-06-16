@@ -635,11 +635,19 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	   }
 	   return true;
    }
-
+	
 	public function getPaymentAmount() {
-		/** @var Zolago_Payment_Model_Allocation $allocationModel */
-		$allocationModel = Mage::getModel("zolagopayment/allocation");
-		return $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+		/** @var Zolago_Payment_Helper_Data $paymentHelper */
+		$paymentHelper = Mage::helper('zolagopayment');
+
+		if ($paymentHelper->getConfigUseAllocation()) { // Sum of allocations amount
+			/** @var Zolago_Payment_Model_Allocation $allocationModel */
+			$allocationModel = Mage::getModel("zolagopayment/allocation");
+			$sum = $allocationModel->getSumOfAllocations($this->getId()); 
+		} else { // Sum of transaction for order
+			$sum = $paymentHelper->getSimplePaymentAmount($this);
+		}
+		return $sum; 
 	}
 
 	public function getDebtAmount() {
