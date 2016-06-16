@@ -5,10 +5,14 @@
     }
     .active {
         font-family: $fontBlack;
+        font-weight: bold;
     }
 }
 .sidebar {
     .account-nav {
+      &.section{
+        padding-left: 0px;
+      }
         .nav-pills {
             li {
                 a:link,
