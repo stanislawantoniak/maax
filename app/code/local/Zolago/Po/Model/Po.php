@@ -195,7 +195,6 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		$max_allowed_days = (int) $reason_vendor->getAllowedDays();
 		
 		$days_elapsed = Mage::helper('zolagorma')->getDaysElapsed($reason_vendor->getReturnReasonId(), $this);
-        Mage::log($days_elapsed, null, "rma.log");
 		
 		return ($days_elapsed < $max_allowed_days) ? true : false;
 	}
