@@ -696,8 +696,7 @@ jQuery.noConflict();
 				if(!$(this).hasClass('clickable')){
 					event.preventDefault();
 					$(this).closest('#nav_desc').find('.active').removeClass('active');
-					$(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
-					$(this).find('i').addClass('fa-caret-up');
+					$(this).find('i').toggleClass('fa-angle-up fa-angle-down');
 					$(this).addClass('active');
 				}
 
@@ -710,9 +709,8 @@ jQuery.noConflict();
 			containerCloneMenu.on('click', '.closeSubMenu', function(event) {
 				event.preventDefault();
 				$(this).closest('ul').remove();
-				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
-                $('#nav_desc a').removeClass('active');
+				$('#nav_desc a').removeClass('active');
 				if(jQuery('body').hasClass('filter-sidebar')) {
 					Mall.listing.positionFilters();
 				}
@@ -724,7 +722,6 @@ jQuery.noConflict();
 				event.preventDefault();
 				$('#clone_submenu').find('ul').remove();
 				$('#nav_desc').find('.active').removeClass('active');
-				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
 				if(jQuery('body').hasClass('filter-sidebar')) {
 					Mall.listing.positionFilters();
