@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_Import>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ZolagoOs_Import>
+    </modules>
+</config>
