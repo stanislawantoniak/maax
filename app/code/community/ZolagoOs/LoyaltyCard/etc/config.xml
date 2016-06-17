@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<ZolagoOs_LoyaltyCard>
+			<version>1.0.0</version>
+		</ZolagoOs_LoyaltyCard>
+	</modules>
+	<global>
+
+		<models>
+			<zosloyaltycard>
+				<class>ZolagoOs_LoyaltyCard_Model</class>
+				<resourceModel>zosloyaltycard_resource</resourceModel>
+			</zosloyaltycard>
+			<zosoutsidestore_resource>
+				<class>ZolagoOs_LoyaltyCard_Model_Resource</class>
+				<entities>
+					<card>
+						<table>zos_loyalty_card</table>
+					</card>
+				</entities>
+			</zosoutsidestore_resource>
+		</models>
+
+		<helpers>
+			<zosloyaltycard>
+				<class>ZolagoOs_LoyaltyCard_Helper</class>
+			</zosloyaltycard>
+		</helpers>
+
+		<resources>
+			<zosloyaltycard_setup>
+				<setup>
+					<module>ZolagoOs_LoyaltyCard</module>
+				</setup>
+			</zosloyaltycard_setup>
+		</resources>
+		
+	</global>
+</config>
