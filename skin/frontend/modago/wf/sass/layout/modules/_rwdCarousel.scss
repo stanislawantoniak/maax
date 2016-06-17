@@ -129,7 +129,7 @@
                   left: 35px;
                 }
                 @include max-screen($screen-xs-max) {
-                  left: 27px;
+                  display: none;
                 }
 				top: 50%;
 				width: 45px;
@@ -168,7 +168,7 @@
                   right: 35px;
                 }
                 @include max-screen($screen-xs-max) {
-                  right: 27px;
+                  display: none;
                 }
 				top: 50%;
 				width: 45px;
@@ -204,6 +204,15 @@
 				top: -140px;
 			}
 		}
+        .rwd-pagination {
+          display: none;
+          @include max-screen($screen-xs-max) {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+          }
+
+        }
 	}
 }
 

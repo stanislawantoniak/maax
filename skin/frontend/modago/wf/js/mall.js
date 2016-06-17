@@ -894,6 +894,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.sm,
 					settings: {
+						dots: true,
 						slidesToShow: false,
 						slidesToScroll: false
 					}
@@ -901,6 +902,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.xssm,
 					settings: {
+						dots: true,
 						slidesToShow: false,
 						slidesToScroll: false
 					}
@@ -908,6 +910,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.xs,
 					settings: {
+						dots: true,
 						slidesToShow: 1,
 						slidesToScroll: 1,
 						adaptiveHeight: true
@@ -1775,7 +1778,7 @@ Mall.inspirationsSliderInit = function() {
 		itemsDesktopSmall: [979,4],
 		itemsTablet: [768,3],
 		itemsMobile: [479,2],
-		pagination : false,
+		pagination : true,
 		navigation: true,
 		navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
 		rewindNav : false,

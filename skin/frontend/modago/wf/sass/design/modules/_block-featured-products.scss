@@ -249,8 +249,14 @@
     @include screen($screen-sm-min, $screen-sm-max) {
       top: 30% !important;
     }
-    @include max-screen(360px) {
-      top: 25% !important;
+    @include max-screen($screen-xs-max) {
+      display: none;
+    }
+  }
+  .owl-controls {
+    margin-top: 0 !important;
+    @include min-screen($screen-sm-min) {
+      display: none !important;
     }
   }
 }
