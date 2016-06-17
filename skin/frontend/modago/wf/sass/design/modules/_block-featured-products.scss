@@ -10,7 +10,10 @@
 
   #featured_products_tabs {
     border: none;
-
+    padding: 0;
+    .ui-tabs-panel {
+      padding: 1em 0;
+    }
     .tab-title {
       font-size: 18px;
       text-transform: none;
@@ -69,7 +72,7 @@
       }
 
       li > a {
-        font-size: 18px;
+        font-size: 14px;
         color: #999;
         display: inline-block;
         text-transform: none;
@@ -91,8 +94,12 @@
     }
 
     .owl-carousel {
-      padding-left: 50px;
-      padding-right: 50px;
+      padding-left: 75px;
+      padding-right: 75px;
+      @include max-screen($screen-xs-max) {
+        padding-left: 0;
+        padding-right: 0;
+      }
       .owl-item {
         img {
           transform-style: preserve-3d;
@@ -187,7 +194,10 @@
   }
 
   .mp-prev-carousel {
-    left: -10px !important;
+    left: 15px !important;
+    @include max-screen($screen-xs-max) {
+      left: 8px !important;
+    }
 
     &:before {
       content: "\f104";
@@ -210,8 +220,10 @@
   }
 
   .mp-next-carousel {
-    right: -10px !important;
-
+    right: 15px !important;
+    @include max-screen($screen-xs-max) {
+      right: 8px !important;
+    }
     &:before {
       content: "\f105";
       position: absolute;
@@ -232,6 +244,14 @@
       top: -140px;
     }
   }
-
+  .mp-navigation-midde {
+    top: 33% !important;
+    @include screen($screen-sm-min, $screen-sm-max) {
+      top: 30% !important;
+    }
+    @include max-screen(360px) {
+      top: 25% !important;
+    }
+  }
 }
 
