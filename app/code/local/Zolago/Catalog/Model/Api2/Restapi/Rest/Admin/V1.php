@@ -247,6 +247,37 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $coll));
     }
 
+
+    /**
+     * @param $skeleton
+     * @param $priceBatch
+     */
+    public static function saveExternalPriceAttributes($skeleton, $priceBatch)
+    {
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+        foreach ($skeleton as $sku => $id) {
+            $attrData = array();
+            if (!empty(isset($priceBatch[$sku]["A"]) && (float)$priceBatch[$sku]["A"]) > 0)
+                $attrData["external_price_a"] = (string)$priceBatch[$sku]["A"];
+
+            if (!empty(isset($priceBatch[$sku]["B"]) && (float)$priceBatch[$sku]["B"]) > 0)
+                $attrData["external_price_b"] = (string)$priceBatch[$sku]["B"];
+
+            if (!empty(isset($priceBatch[$sku]["C"]) && (float)$priceBatch[$sku]["C"]) > 0)
+                $attrData["external_price_c"] = (string)$priceBatch[$sku]["C"];
+
+            if (!empty(isset($priceBatch[$sku]["Z"]) && (float)$priceBatch[$sku]["Z"]) > 0)
+                $attrData["external_price_z"] = (string)$priceBatch[$sku]["Z"];
+
+            if (!empty(isset($priceBatch[$sku]["salePriceBefore"]) && (float)$priceBatch[$sku]["salePriceBefore"]) > 0)
+                $attrData["external_price_salePriceBefore"] = (string)$priceBatch[$sku]["salePriceBefore"];
+
+
+            $aM->updateAttributesPure(array($id), $attrData, 0);
+        }
+    }
+
     /**
      * @param $priceBatch
      */
@@ -264,6 +295,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         if (empty($skeleton))
             return;
 
+        self::saveExternalPriceAttributes($skeleton, $priceBatch);
 
         /* @var $model Zolago_Catalog_Model_Resource_Product */
         $model = Mage::getResourceModel('zolagocatalog/product');
