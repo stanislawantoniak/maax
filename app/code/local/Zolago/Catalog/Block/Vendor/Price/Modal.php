@@ -57,7 +57,7 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 			$reponse = null;
 
 			try{
-				$priceLabels = array("A", "B", "C", "Z", "salePriceBefore");
+				$priceLabels = $this->getPriceLabels();
 				foreach($priceLabels as $priceLabel){
 					$externalPrice = $catalogProductResourceModel->getAttributeRawValue($productId, "external_price_$priceLabel", 0);
 					if($externalPrice > 0){
@@ -216,6 +216,14 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		}
 		return null;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getPriceLabels()
+	{
+		return array("A", "B", "C", "Z", "salePriceBefore");
+	}
 	
 	/**
 	 * @param array $children
@@ -235,7 +243,7 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		$catalogProductResourceModel = Mage::getResourceModel('catalog/product');
 		foreach($collection as $product){
 			try{
-				$priceLabels = array("A", "B", "C", "Z", "salePriceBefore");
+				$priceLabels = $this->getPriceLabels();
 				foreach($priceLabels as $priceLabel){
 					$externalPrice = $catalogProductResourceModel->getAttributeRawValue($product->getId(), "external_price_$priceLabel", 0);
 					if($externalPrice > 0){
