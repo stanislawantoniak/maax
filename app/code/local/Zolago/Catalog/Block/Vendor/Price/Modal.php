@@ -40,7 +40,6 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 				$option['price'] = $this->getProduct()->getMsrp();
 			}
 		}
-		Mage::log($options, null, "prices_getMsrpSourceOptions.log");
 		return $options;
 	}
 	
@@ -116,7 +115,6 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 				$option['price'] = "";
 			}
 		}
-		Mage::log($options, null, "prices_getPriceSourceOptions.log");
 		return $options;
 	}
 	
@@ -245,7 +243,6 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 					}
 					unset($externalPrice);
 				}
-				Mage::log($converterData, null, "prices_addConverterDataToChilds.log");
 
 			}catch(Exception $e){
 
