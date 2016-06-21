@@ -15,6 +15,7 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Product extends Mage_Catalog_Model
     
     /**
      * create url key
+     * @see Mage_Catalog_Model_Attribute_Backend_Urlkey_Abstract::beforeSave()
      */
     protected function _beforeSave() {
         parent::_beforeSave();
