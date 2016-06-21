@@ -67,8 +67,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         $collectionS->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         $collectionS->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $collectionS->addAttributeToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
-        //$fakeProducts = array(1846, 1847,1848,1849,     2288,2290,2291);
-        //$ids = array_merge($ids,$fakeProducts);
+
         $collectionS->addFieldToFilter('entity_id', array('in' => $ids));
 
         if($collectionS->getSize() <= 0){
@@ -95,15 +94,14 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         unset($_productS);
         Mage::app()->setCurrentStore($origStore);
 
-        //$converterBatchData[4] = array("32251-33X-L" => "A","32251-33X-M" => "A","32251-33X-S" => "A", "32251-33X-XL" => "A");
-        //$converterBatchData[5] = array("1045-CZARNY-70C" => "A","1045-CZARNY-70E" => "A","1045-CZARNY-75B" => "A");
-
-
         //3. Request prices from converter
         $actualPricesForSimple = array();
+
         if (!empty($converterBatchData)) {
             foreach ($converterBatchData as $vendorExternalId => $vendorProductsData) {
-                $actualPricesForSimple = $actualPricesForSimple + $converter->getPriceBatch($vendorExternalId, $vendorProductsData);
+                foreach ($vendorProductsData as $skuv => $converterPriceType) {
+                    $actualPricesForSimple[$vendorExternalId][$skuv] = Mage::getResourceModel('catalog/product')->getAttributeRawValue($vendorSkuvIdRelation[$vendorExternalId][$skuv], 'external_price_' . $converterPriceType, 0);
+                }
             }
         }
 
@@ -219,11 +217,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $origStore = Mage::app()->getStore();
 
-        $converter = $this->initConverter();
-
-        if (!$converter) {
-            return $productsIdsPullToSolr; //Nothing to update
-        }
         $ids = array_keys($salesPromoProductsData);
 
         $store = Mage::app()
@@ -256,6 +249,7 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $productsData = array(); //configurable options data
         $simpleUsed = array();
+        $simpleUsed2 = array();
         $skuSizeRelation = array();
 
         $configurableProductIds = array();
@@ -287,9 +281,10 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
                 );
                 $skuSizeRelation[$productId][$_child["id"]] = $_child["size"];
 
-                $converterBatchData[$_product->getData('udropship_vendor')][$_child["skuv"]] = $priceType;
+               $converterBatchData[$_product->getData('udropship_vendor')][$_child["skuv"]] = $priceType;
 
                 $simpleUsed[$_child["sku"]] = $_child["id"];
+                $simpleUsed2[$_child["skuv"]] = $_child["id"];
             }
             unset($child);
         }
@@ -298,11 +293,16 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
         if (empty($converterBatchData)) {
             return $productsIdsPullToSolr;
         }
+
+
         //3. Get prices for related simple from converters
         $actualSpecialPricesForChildren = array();
+
         if (!empty($converterBatchData)) {
             foreach ($converterBatchData as $vendorExternalId => $vendorProductsData) {
-                $actualSpecialPricesForChildren +=  $converter->getPriceBatch($vendorExternalId, $vendorProductsData);
+                foreach($vendorProductsData as $skuv => $converterPriceType){
+                    $actualSpecialPricesForChildren[$vendorExternalId][$skuv] = Mage::getResourceModel('catalog/product')->getAttributeRawValue($simpleUsed2[$skuv], 'external_price_'.$converterPriceType, 0);
+                }
             }
         }
 
