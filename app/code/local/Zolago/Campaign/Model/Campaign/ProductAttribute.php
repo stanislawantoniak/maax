@@ -48,10 +48,6 @@ class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Mo
 
         $origStore = Mage::app()->getStore();
 
-        $converter = $this->initConverter();
-        if (!$converter) {
-            return $productsIdsPullToSolr; //Nothing updated
-        }
         $store = Mage::app()
             ->getWebsite($websiteId)
             ->getDefaultGroup()
