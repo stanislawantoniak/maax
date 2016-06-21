@@ -259,16 +259,16 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         foreach ($skeleton as $sku => $id) {
             $attrData = array();
             if (!empty(isset($priceBatch[$sku]["A"]) && (float)$priceBatch[$sku]["A"]) > 0)
-                $attrData["external_price_a"] = (string)$priceBatch[$sku]["A"];
+                $attrData["external_price_A"] = (string)$priceBatch[$sku]["A"];
 
             if (!empty(isset($priceBatch[$sku]["B"]) && (float)$priceBatch[$sku]["B"]) > 0)
-                $attrData["external_price_b"] = (string)$priceBatch[$sku]["B"];
+                $attrData["external_price_B"] = (string)$priceBatch[$sku]["B"];
 
             if (!empty(isset($priceBatch[$sku]["C"]) && (float)$priceBatch[$sku]["C"]) > 0)
-                $attrData["external_price_c"] = (string)$priceBatch[$sku]["C"];
+                $attrData["external_price_C"] = (string)$priceBatch[$sku]["C"];
 
             if (!empty(isset($priceBatch[$sku]["Z"]) && (float)$priceBatch[$sku]["Z"]) > 0)
-                $attrData["external_price_z"] = (string)$priceBatch[$sku]["Z"];
+                $attrData["external_price_Z"] = (string)$priceBatch[$sku]["Z"];
 
             if (!empty(isset($priceBatch[$sku]["salePriceBefore"]) && (float)$priceBatch[$sku]["salePriceBefore"]) > 0)
                 $attrData["external_price_salePriceBefore"] = (string)$priceBatch[$sku]["salePriceBefore"];
