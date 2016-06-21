@@ -255,8 +255,8 @@ Mall.listing = {
 			i = title.find('i'),
 			open = 'open',
 			closed = 'closed',
-			arrowUp = 'fa-chevron-up',
-			arrowDown = 'fa-chevron-down',
+			arrowUp = 'fa-angle-up',
+			arrowDown = 'fa-angle-down',
 			isMobile = this.getCurrentMobileFilterState(),
 			dataAttr = 'data-' + (isMobile ? 'xs' : 'lg') + '-rolled';
 		if(state){
@@ -1275,6 +1275,9 @@ Mall.listing = {
 			filtersId = '#solr_search_facets';
 
 		//filters slide up/down
+		if(!Mall.listing.isDisplayMobile())
+			return false;
+
 		jQuery(document).delegate(filtersId+' h3','click',function(e) {
 			e.preventDefault();
 			var me = jQuery(this);

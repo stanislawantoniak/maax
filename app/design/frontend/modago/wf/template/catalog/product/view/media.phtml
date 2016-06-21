@@ -39,7 +39,7 @@ $_images = $this->getGalleryImages();
                             <a href="#" data-flags="<?php echo $flag; ?>" data-flag-label="<?php echo $flagLabel ?>" onclick="return false;">
                                 <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(410); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" <?php if($i == 0): ?> itemprop="image" <?php endif; ?>
 								data-ratio="<?php echo number_format((float)($_dimensions[$k][1] / $_dimensions[$k][0]), 4, '.', ''); ?>"/>
-							<span class="view_lupa view_lupa_plus"></span>
+							<span class="view_lupa view_lupa_plus"><i class="fa fa-expand"></i></span>
 						</a>
 					</div>
 				</div>

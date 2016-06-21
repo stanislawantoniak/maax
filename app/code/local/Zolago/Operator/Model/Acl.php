@@ -218,7 +218,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_GH_ATTRIBUTE_RULES);
 
         // Build ACL Rules - Billing and statements
-        $this->setRule(self::OP_ADD, $type           , self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
+		if ($isGallery) {
+			$this->setRule(self::OP_ADD, $type           , self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
+		}
         // superuser
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SETTINGS);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SIZETABLE);
