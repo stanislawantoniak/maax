@@ -5,6 +5,8 @@ $installer = $this;
 
 $installer->startSetup();
 
+$installer->getConnection()->dropTable($installer->getTable('zosloyaltycard/card'));
+
 $table = $installer->getConnection()
 	->newTable($installer->getTable('zosloyaltycard/card'))
 	->addColumn("card_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
@@ -24,10 +26,10 @@ $table = $installer->getConnection()
 	->addColumn('email', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		'nullable'  => false,
 	), 'Email')
-	// cart_number
-	->addColumn('cart_number', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+	// card_number
+	->addColumn('card_number', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		'nullable'  => false,
-	), 'Loyalty cart number')
+	), 'Loyalty card number')
 	// shop_code
 	->addColumn('shop_code', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		'nullable'  => false,
@@ -46,6 +48,18 @@ $table = $installer->getConnection()
 	->addColumn('additional_data', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		'nullable'  => false,
 	), 'Serialized data')
+	// name
+	->addColumn('first_name', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+		'nullable'  => true,
+	))
+	// surname
+	->addColumn('surname', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+		'nullable'  => true,
+	))
+	// telephone number
+	->addColumn('telephone_number', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+		'nullable'  => true,
+	))
 
 	// foreign key for vendor
 	->addForeignKey(

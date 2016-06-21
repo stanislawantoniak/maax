@@ -13,6 +13,7 @@ class Zolago_Dropship_Block_Vendor_Menu_Sidebar
 		self::ITEM_HELPDESK,
 		self::ITEM_RMA,
 		self::ITEM_ADVERTISE,
+		self::ITEM_LOYALTY_CARD,
 		self::ITEM_REGULATIONS,
 		self::ITEM_SETTING,
 		self::ITEM_STATEMENTS

@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<ZolagoOs_LoyaltyCard>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</ZolagoOs_LoyaltyCard>
 	</modules>
 	<global>
@@ -12,14 +12,14 @@
 				<class>ZolagoOs_LoyaltyCard_Model</class>
 				<resourceModel>zosloyaltycard_resource</resourceModel>
 			</zosloyaltycard>
-			<zosoutsidestore_resource>
+			<zosloyaltycard_resource>
 				<class>ZolagoOs_LoyaltyCard_Model_Resource</class>
 				<entities>
 					<card>
 						<table>zos_loyalty_card</table>
 					</card>
 				</entities>
-			</zosoutsidestore_resource>
+			</zosloyaltycard_resource>
 		</models>
 
 		<helpers>
@@ -35,6 +35,43 @@
 				</setup>
 			</zosloyaltycard_setup>
 		</resources>
-		
+
+		<blocks>
+			<zosloyaltycard>
+				<class>ZolagoOs_LoyaltyCard_Block</class>
+			</zosloyaltycard>
+		</blocks>
+
 	</global>
+
+	<frontend>
+		<routers>
+			<zosloyaltycard>
+				<use>standard</use>
+				<args>
+					<module>ZolagoOs_LoyaltyCard</module>
+					<frontName>loyalty</frontName>
+				</args>
+			</zosloyaltycard>
+		</routers>
+		<layout>
+			<updates>
+				<zosloyaltycard>
+					<file>zosloyaltycard.xml</file>
+				</zosloyaltycard>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<ZolagoOs_LoyaltyCard>
+					<files>
+						<default>ZolagoOs_LoyaltyCard.csv</default>
+					</files>
+				</ZolagoOs_LoyaltyCard>
+			</modules>
+		</translate>
+		<secure_url>
+			<zos_loyalty_card>/loyalty/card/</zos_loyalty_card>
+		</secure_url>
+	</frontend>
 </config>
