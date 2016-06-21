@@ -4,7 +4,7 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->addAttribute('catalog_product', 'external_price_a', array(
+$installer->addAttribute('catalog_product', 'external_price_A', array(
 	'group'             => 'Prices',
 	'type'              => Varien_Db_Ddl_Table::TYPE_DECIMAL,
 	'backend'           => '',
@@ -25,7 +25,7 @@ $installer->addAttribute('catalog_product', 'external_price_a', array(
 	'is_configurable'   => false
 ));
 
-$installer->addAttribute('catalog_product', 'external_price_b', array(
+$installer->addAttribute('catalog_product', 'external_price_B', array(
 	'group'             => 'Prices',
 	'type'              => Varien_Db_Ddl_Table::TYPE_DECIMAL,
 	'backend'           => '',
@@ -46,7 +46,7 @@ $installer->addAttribute('catalog_product', 'external_price_b', array(
 	'is_configurable'   => false
 ));
 
-$installer->addAttribute('catalog_product', 'external_price_c', array(
+$installer->addAttribute('catalog_product', 'external_price_C', array(
 	'group'             => 'Prices',
 	'type'              => Varien_Db_Ddl_Table::TYPE_DECIMAL,
 	'backend'           => '',
@@ -66,7 +66,7 @@ $installer->addAttribute('catalog_product', 'external_price_c', array(
 	'unique'            => false,
 	'is_configurable'   => false
 ));
-$installer->addAttribute('catalog_product', 'external_price_z', array(
+$installer->addAttribute('catalog_product', 'external_price_Z', array(
 	'group'             => 'Prices',
 	'type'              => Varien_Db_Ddl_Table::TYPE_DECIMAL,
 	'backend'           => '',
