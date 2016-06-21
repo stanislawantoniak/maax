@@ -6,27 +6,6 @@
 class Zolago_Campaign_Model_Campaign_ProductAttribute extends Zolago_Campaign_Model_Campaign
 {
 
-
-    /**
-     * Initialize converter cliend
-     *
-     * @return void|Zolago_Converter_Model_Client
-     * @throws Mage_Core_Exception
-     */
-    protected function initConverter()
-    {
-        //Ping converter to get special price
-        try {
-            /* @var $converter Zolago_Converter_Model_Client */
-            $converter = Mage::getModel('zolagoconverter/client');
-            return $converter;
-        } catch (Exception $e) {
-            Mage::throwException("Converter is unavailable: check credentials");
-            return;
-        }
-    }
-
-
     /**
      * Set prices from converter to simple products
      *
