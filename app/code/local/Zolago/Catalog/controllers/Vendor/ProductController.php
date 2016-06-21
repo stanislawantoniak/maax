@@ -290,7 +290,7 @@ class Zolago_Catalog_Vendor_ProductController
             /** @var Zolago_Catalog_Model_Product $model */
             $model = Mage::getModel('catalog/product')->load($id);
             $model->setData('store_id', $storeId); // Trick
-            $model->setUrlKey($string->formatUrlKey($model->getName()));
+            $model->setUrlKey($string->formatUrlKey($model->getName().' '.$model->getSkuv()));
             $resource->saveProductAttribute($model, 'url_key');
             $url->refreshProductRewrite($id);
         }
