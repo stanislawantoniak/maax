@@ -165,12 +165,6 @@ function _prepareForm($object) {
 		"wrapper_class" => "col-md-1"
 	));
 
-	$kids = $form->addFieldset("kids", array(
-		"legend" => $helper->__("Kid/kids data"),
-		"icon_class" => "icon-double-angle-right",
-		"class" => "kids"
-	));
-
 	$count = 1;
 	if (isset($values['kids'])) {
 		$count = count($values['kids']);
@@ -178,12 +172,18 @@ function _prepareForm($object) {
 
 	for ($i = 0; $i < $count; $i++) {
 
+		$kids = $form->addFieldset("kid_{$i}", array(
+			"legend" => $helper->__("Kid data"),
+			"icon_class" => "icon-double-angle-right",
+			"class" => "kid"
+		));
+
 		$kids->addField("kids_{$i}_first_name", "text", array(
 			"name" => "kids[{$i}][first_name]",
 			"class" => "form-control",
 			"required" => true,
 			"label" => $helper->__('First name'),
-			"label_wrapper_class" => "col-md-3",
+			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3"
 		));
 
@@ -193,7 +193,7 @@ function _prepareForm($object) {
 			//"class" => "form-control",
 			"required" => true,
 			"label" => $helper->__('Sex'),
-			"label_wrapper_class" => "col-md-3",
+			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-6 radio-buttons",
 			'value' => 'M',
 			'values' => array(
@@ -204,18 +204,40 @@ function _prepareForm($object) {
 
 		$kids->addField("kids_{$i}_birthdate", "text", array(
 			"name" => "kids[{$i}][birthdate]",
-			"class" => "form-control datetimepicker col-md-2",
+			"class" => "form-control datetimepicker datetimepicker-kid-{$i} col-md-2",
 			"required" => true,
 			"label" => $helper->__('Date of birth'),
-			"label_wrapper_class" => "col-md-3",
-			"wrapper_class" => "col-md-5 datetimepicker-wrapper",
+			"label_wrapper_class" => "col-md-3 label-wrapper",
+			"wrapper_class" => "col-md-5 datetimepicker-wrapper datetimepicker-wrapper-kid-{$i}",
 			"after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>',
 		));
+
 	}
+
+	$kids = $form->addFieldset("kid_{$i}", array(
+		"legend" => $helper->__("Kid data"),
+		"icon_class" => "icon-double-angle-right",
+		"class" => "kid kid-with-add-btn"
+	));
+
+	$kids->addField('kids_add', 'label', array(
+		"class" => "form-control",
+		"label_wrapper_class" => "col-md-3",
+		"label" => $helper->__('Add another child'),
+		"wrapper_class" => "col-md-6",
+		"after_element_html" => '<div class="add-kid-wrapper"><a class="btn btn-primary add-kid-btn">'. $helper->__("Add kid") . '</a></div>',
+	));
+
 	$form->setValues($values);
 	return $form;
 }
 $form = _prepareForm($this);
+
+$values = $this->getModel()->getData();
+$count = 1;
+if (isset($values['kids'])) {
+	$count = count($values['kids']);
+}
 ?>
 
 <div class="container">
@@ -246,20 +268,66 @@ $form = _prepareForm($this);
 </div>
 <script>
 	var CardEdit = {
+		kidCount: <?php echo $count; ?>,
+		kidsData: <?php echo json_encode(isset($values['kids']) ? $values['kids'] : array()); ?>,
+		
 		init: function () {
+			this.populateKidsData();
 			this.initDatetimepicker();
+			this.initKids();
 		},
 		initDatetimepicker: function () {
 			jQuery('.datetimepicker').datetimepicker({
 				lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
-				format: 'd-m-Y'
+				format: 'd-m-Y H:i'
 			});
-			jQuery(".icon-calendar").click(function () {
+			jQuery(document).delegate(".icon-calendar", "click", function () {
 				jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
 					.datetimepicker("show")
 					.blur();
 			});
-		}
+		},
+		initKids: function () {
+			jQuery(document).delegate(".add-kid-btn",
+				"click",
+				function (e) {
+					e.preventDefault();
+					CardEdit.addKidWithAddBtn();
+					CardEdit.addNewKidFieldset(jQuery(this).parents('.widget-content'));
+				});
+		},
+		populateKidsData: function () {
+			for (var key in this.kidsData) {
+				var obj = this.kidsData[key];
+				jQuery("#kids_"+key+"_first_name").val(obj['first_name']);
+				jQuery("#kids_"+key+"_birthdate").val(obj['birthdate']);
+				if (obj['sex'] == 'M') {
+					jQuery("#kids_"+key+"_sexM").val(obj['sex']).prop('checked', true).attr('checked','checked');
+				} else {
+					jQuery("#kids_"+key+"_sexF").val(obj['sex']).prop('checked', true).attr('checked','checked');
+				}
+			}
+		},
+		addNewKidFieldset: function(where) {
+			var html = this.getKidFieldsetTemplate().find('.widget-content').html();
+			html = html.replace(/_0_/g, '_'+CardEdit.kidCount+'_');
+			html = html.replace(/\[0\]/g, '['+CardEdit.kidCount+']');
+			html = html.replace(/kid\-0/g, 'kid-'+CardEdit.kidCount);
+			where.html(html).hide().show('slow');
+			jQuery('#kids_'+CardEdit.kidCount+'_birthdate').datetimepicker({
+				lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
+				format: 'd-m-Y H:i'
+			});
+			CardEdit.kidCount++;
+		},
+		getKidFieldsetTemplate: function () {
+			return jQuery(".kid:eq(0)");
+		},
+		addKidWithAddBtn: function() {
+			var html = jQuery('.kid-with-add-btn').html();
+			jQuery('.kid-with-add-btn').removeClass('kid-with-add-btn');
+			jQuery("form .widget:last").after('<div class="widget box kid kid-with-add-btn">'+html+'</div>').hide().show('slow');
+		},
 	};
 
 	jQuery(document).ready(function () {
