@@ -36,6 +36,10 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         return Mage::getStoreConfig('carriers/zolagopp/gateway');
     }
 
+
+    public static function useBusinessPackType() {
+        return (bool)Mage::getStoreConfig('carriers/zolagopp/business_type');
+    }
     /**
      * @return array
      */
@@ -71,6 +75,55 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
     protected function _normalizePostcode($code) {
         return str_replace('-','',$code);
     }
+    
+    /**
+     * create business pack
+     */
+
+    public function _createDeliveryPackBusiness($settings) {
+        $message = Mage::getModel('orbashipping/post_message_pack_list')->getObject();
+        $data = Mage::getModel('orbashipping/post_message_pack_business')->getObject();
+        $data->adres = $this->_prepareAddress();
+        $data->gabaryt = $this->_settings['size'];
+        $data->masa = $this->_settings['weight'];
+        $data->guid = $this->_getGuid();
+        $message->przesylki[] = $data;
+        Mage::log($message);
+        $result = $this->_sendMessage('addShipment',$message);
+        Mage::log($result);
+        return $this->_prepareResult($result);
+    }
+    
+    /**
+     * set Active card
+     */
+
+    public function setActiveCard($card) {
+        $message = Mage::getModel('orbashipping/post_message_card');
+        $message->idKarta = $card;
+        $card->aktywna = true;
+        Mage::log($message);
+        $result = $this->_sendMessage('setAktywnaKarta',$card);
+        return $result;        
+    }
+    
+    /**
+     * get available cards
+     */
+
+    public function getCards() {
+        $result = $this->_sendMessage('getKarty',null);
+        return $result;
+    }
+    
+    /**
+     * password expired date
+     */
+
+    public function getPasswordExpiredDate() {
+        $result = $this->_sendMessage('getPasswordExpiredDate',null);
+        return $result;         
+    }
     /**
      * creating packs
      */
@@ -78,15 +131,34 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         if (!(int)$this->_settings['weight']) {
             Mage::throwException(Mage::helper('orbashipping')->__('No package weight'));
         }
-        $sender = $this->_shipperAddress;
-        $message = Mage::getModel('orbashipping/post_message_pack_list')->getObject();
-        $data = Mage::getModel('orbashipping/post_message_pack')->getObject();
+        if (self::useBusinessPackType()) {
+            return $this->_createDeliveryPackBusiness($settings);
+        } else {
+            return $this->_createDeliveryPackStandard($settings);
+        }
+    }
+
+    
+    /**
+     * prepare address
+     */
+    protected function _prepareAddress() {
         $address = Mage::getModel('orbashipping/post_message_address')->getObject();
+        $sender = $this->_shipperAddress;
         $address->nazwa = $sender['name'];
         $address->ulica = $sender['street'];
         $address->miejscowosc = $sender['city'];
         $address->kodPocztowy = $this->_normalizePostcode($sender['postcode']);
-        $data->adres = $address;
+        return $address;
+    }
+    /**
+     * create standard packs
+     */
+
+    protected function _createDeliveryPackStandard($settings) {
+        $message = Mage::getModel('orbashipping/post_message_pack_list')->getObject();
+        $data = Mage::getModel('orbashipping/post_message_pack')->getObject();
+        $data->adres = $this->_prepareAddress();
         $data->iloscPotwierdzenOdbioru = 1;
         $data->kategoria = $this->_settings['category'];
         $data->gabaryt = $this->_settings['size'];
