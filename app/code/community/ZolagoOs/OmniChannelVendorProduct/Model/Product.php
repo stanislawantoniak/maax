@@ -21,7 +21,8 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Product extends Mage_Catalog_Model
         parent::_beforeSave();
         $urlKey = $this->getData('url_key');
         if (empty($urlKey)) {
-            $urlKey = $this->getName().' '.$this->getSkuv();
+            $name = $this->getResource()->getAttributeRawValue($this->getEntityId(),'name',Mage::app()->getStore()->getId()); 
+            $urlKey = $name.' '.$this->getSkuv();
             $this->setData('url_key', $this->formatUrlKey($urlKey));
         }
     }
