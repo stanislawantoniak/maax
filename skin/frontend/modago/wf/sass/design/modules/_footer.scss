@@ -373,7 +373,7 @@ footer.footer {
       }
     }
 
-    @media screen and (min-width: $screen-lg) {
+    @media screen and (min-width: $screen-sm) {
       label#newsletter-email {
         line-height: 32px;
       }
