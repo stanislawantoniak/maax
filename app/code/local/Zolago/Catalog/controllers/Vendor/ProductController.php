@@ -283,16 +283,31 @@ class Zolago_Catalog_Vendor_ProductController
         /** @var Mage_Catalog_Model_Product_Url $string */
         $string = Mage::getSingleton('catalog/product_url');
         /** @var Zolago_Catalog_Model_Url $url */
-        $url = Mage::getSingleton('catalog/url');
-        $url->setShouldSaveRewritesHistory(false);
+        $url = Mage::getSingleton('catalog/url');        
+        $url->setShouldSaveRewritesHistory(true);
         $resource = $url->getResource();
+        $stores = Mage::app()->getStores();
+        $storeIds = array($storeId);
+        foreach ($stores as $store) {
+            $storeIds[] = $store->getId();
+        }
         foreach ($ids as $id) {
             /** @var Zolago_Catalog_Model_Product $model */
-            $model = Mage::getModel('catalog/product')->load($id);
-            $model->setData('store_id', $storeId); // Trick
-            $model->setUrlKey($string->formatUrlKey($model->getName().' '.$model->getSkuv()));
-            $resource->saveProductAttribute($model, 'url_key');
-            $url->refreshProductRewrite($id);
+            $refresh = false;
+            foreach ($storeIds as $sId) {
+                $model = Mage::getModel('catalog/product')->setStoreId($sId)->load($id);
+                $key = $string->formatUrlKey($model->getName().' '.$model->getSkuv());
+                if ($model->getUrlKey() == $key) {
+                    continue ;
+                }                
+                $model->setData('store_id', $sId); // Trick
+                $model->setUrlKey($key);
+                $resource->saveProductAttribute($model, 'url_key');
+                $refresh = true;
+            }
+            if ($refresh) {
+                $url->refreshProductRewrite($id);
+            }
         }
     }
 
