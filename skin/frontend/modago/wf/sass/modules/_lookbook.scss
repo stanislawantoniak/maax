@@ -1,0 +1,5 @@
+#lookbook {
+  @include min-screen($screen-lg-desktop) {
+    margin: 40px 7%;
+  }
+}
