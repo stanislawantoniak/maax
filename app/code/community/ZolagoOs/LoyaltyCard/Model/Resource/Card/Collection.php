@@ -8,6 +8,18 @@ class ZolagoOs_LoyaltyCard_Model_Resource_Card_Collection extends Mage_Core_Mode
 	}
 
 	/**
+	 * Unserialize additional_information in each item
+	 *
+	 * @return $this
+	 */
+	protected function _afterLoad() {
+		foreach ($this->_items as $item) {
+			$this->getResource()->unserializeFields($item);
+		}
+		return parent::_afterLoad();
+	}
+
+	/**
 	 * @param ZolagoOs_OmniChannel_Model_Vendor | int $vendor
 	 * @return $this
 	 */

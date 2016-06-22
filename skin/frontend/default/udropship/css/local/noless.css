@@ -84,15 +84,18 @@
 }
 
 
-#edit-campaign .form-group .radio-buttons label {
+#edit-campaign .form-group .radio-buttons label,
+#edit-card .form-group .radio-buttons label {
     position: relative;
     top: -2px;
     margin: 0 8px 0 4px;
 }
-#edit-campaign input.datetimepicker {
+#edit-campaign input.datetimepicker,
+#edit-card  input.datetimepicker {
     width: 150px;
 }
-#edit-campaign .icon-calendar {
+#edit-campaign .icon-calendar,
+#edit-card  .icon-calendar {
     cursor: pointer;
 }
 

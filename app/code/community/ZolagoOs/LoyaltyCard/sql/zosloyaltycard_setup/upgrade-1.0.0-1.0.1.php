@@ -44,8 +44,8 @@ $table = $installer->getConnection()
 	))
 	// expire_date
 	->addColumn('expire_date', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null)
-	// additional_data (serialized field)
-	->addColumn('additional_data', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+	// additional_information (serialized field)
+	->addColumn('additional_information', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		'nullable'  => false,
 	), 'Serialized data')
 	// name
