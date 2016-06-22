@@ -97,7 +97,7 @@ class GH_Common_Adminhtml_RawsqlController extends Mage_Adminhtml_Controller_Act
                 $success = true;
             } catch (Exception $ex) {
                 Mage::logException($ex);
-                $this->_getSession()->addError($e->getMessage());
+                $this->_getSession()->addError($ex->getMessage());
             }
             if ($success) {
                 $this->_getSession()->addSuccess(Mage::helper('ghcommon')->__('Query &quot;%s&quot; was deleted.', $name));
@@ -134,4 +134,35 @@ class GH_Common_Adminhtml_RawsqlController extends Mage_Adminhtml_Controller_Act
         return Mage::getSingleton('admin/session')->isAllowed('admin/system/ghcommon_sql');
     }
 
+    /**
+     * download query in csv
+     */
+    public function downloadAction() {
+        $model = $this->_getModel();
+        $queryId = $model->getId();
+        $queryData = $model->getData();
+        $filename = str_replace(' ', '_', $queryData['query_name']);
+        $filename = preg_replace('/[*\/,]/', '', $filename);
+        $filename = $queryId."_".$filename;
+        $result = $model->launchQuery();
+        $arrayToCsv = $this->_prepareCsvData($result);
+        header('Content-Type: text/csv');
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment;filename='.$filename.'.csv;');
+        $f = fopen('php://output', 'w');
+        foreach($arrayToCsv as $row){
+            fputcsv($f, $row, ',');
+        }
+        fclose($f);
+    }
+
+    /**
+     * @param array $dataArray
+     * @return array
+     */
+    protected function _prepareCsvData($dataArray){
+        $arrayKeys = array(array_keys($dataArray[0]));
+        $arrayToCsv = array_merge($arrayKeys, $dataArray);
+        return $arrayToCsv;
+    }
 }
