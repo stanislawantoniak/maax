@@ -211,7 +211,6 @@ body {
 	li {
 		padding: 0 0 0 0;
 		margin-left: 0;
-		//width: 84px;
 		width: 40px;
 		height: 60px;
 		display: inline-block;
@@ -243,7 +242,12 @@ body {
 		&#link_menu.not-open, &#link_menu.not-open:hover {
 			background-color: transparent;
 		}
-
+		&#link_account {
+			display: none;
+			@media (min-width: $screen-phone) and (max-width: $screen-tablet) {
+				display: inline-block;
+			}
+		}
 		@include min-screen($screen-sm-min) {
 			&#link_basket {
 				height: 61px;
@@ -276,20 +280,17 @@ body {
 		}
 		a:link,
 		a:visited {
+			font-size: 22px;
 			@include max-screen($screen-xs-max) {
-				padding-top: 12px !important;
+				padding-top: 8px !important;
 			}
 			@include min-screen($screen-sm-min) {
-				padding-top: 12px !important;
+				padding-top: 8px !important;
 			}
 		}
 		a:hover {
 			color: #252525;
-			-webkit-transition: color 0.3s ease-in-out;
-			-moz-transition: color 0.3s ease-in-out;
-			-ms-transition: color 0.3s ease-in-out;
-			-o-transition: color 0.3s ease-in-out;
-			transition: color 0.3s ease-in-out;
+			@include transition(color 0.3s ease-in-out);
 		}
 		&.no-badge {
 			a:link,
@@ -320,7 +321,7 @@ body {
 		padding-top: 11px;
 		@include max-screen($screen-xs-max) {
 			height: 46px;
-			padding-top: 12px;
+			padding-top: 8px;
 		}
 		&#toggleSearch {
 			//padding-top: 17px;
