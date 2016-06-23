@@ -244,7 +244,7 @@ body {
 		}
 		&#link_account {
 			display: none;
-			@media (min-width: $screen-phone) and (max-width: $screen-tablet) {
+			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
 				display: inline-block;
 			}
 		}
