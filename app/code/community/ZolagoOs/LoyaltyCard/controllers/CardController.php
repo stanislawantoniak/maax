@@ -83,6 +83,10 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 				$card->setId(null);
 			}
 			if ($card->isObjectNew()) {
+				// Set default store
+				/** @var Mage_Core_Model_Website $website */
+				$website = Mage::app()->getWebsite('base'); // ...
+				$card->setStoreId($website->getDefaultStore()->getId());
 				// Set Vendor Owner
 				$card->setVendorId($vendor->getId());
 				// Set operator
@@ -93,6 +97,10 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 				$card->setOperatorId($operatorId);
 			}
 
+			/**
+			 * @event loyalty_card_save_before
+			 * @event loyalty_card_save_after
+			 */
 			$card->save();
 			
 			$this->_getSession()->addSuccess($helper->__("Card '%s' saved", $card->getCardNumber()));

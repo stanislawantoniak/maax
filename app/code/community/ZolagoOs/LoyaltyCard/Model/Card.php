@@ -4,6 +4,7 @@
  * Class ZolagoOs_LoyaltyCard_Model_Card
  * 
  * @method string getCardId()
+ * @method string getStoreId()
  * @method string getVendorId()
  * @method string getCreatedAt()
  * @method string getUpdatedAt()
@@ -22,6 +23,7 @@
  * @method ZolagoOs_LoyaltyCard_Model_Resource_Card getResource()
  * 
  * @method $this setCardId($value)
+ * @method $this setStoreId($value)
  * @method $this setVendorId($value)
  * @method $this setCreatedAt($value)
  * @method $this setUpdatedAt($value)

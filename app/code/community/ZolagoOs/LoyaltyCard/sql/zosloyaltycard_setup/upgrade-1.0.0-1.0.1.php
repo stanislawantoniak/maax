@@ -22,6 +22,12 @@ $table = $installer->getConnection()
 		'unsigned'  => true,
 		'nullable'  => false
 	), 'Vendor ID')
+	->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
+		'unsigned'  => true,
+		'nullable'  => false,
+		'nullable'  => false,
+		'default'   => '0',
+	), 'Store ID')
 	// email
 	->addColumn('email', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
 		'nullable'  => false,
