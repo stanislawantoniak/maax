@@ -10,7 +10,7 @@ $helper = Mage::helper("zosloyaltycard");
  * Each vendor have his own skin and different business requirement for this form
  * (so now we don't need to override object block)
  *
- * @param $object
+ * @param $object ZolagoOs_LoyaltyCard_Block_Vendor_Card_Edit
  * @return Zolago_Dropship_Model_Form
  */
 function _prepareForm($object) {
@@ -67,6 +67,16 @@ function _prepareForm($object) {
 		"wrapper_class" => "col-md-1"
 	));
 
+	$general->addField("card_type", "select", array(
+		"name" => "card_type",
+		"class" => "form-control",
+		"required" => true,
+		"label" => $helper->__('Card type'),
+		"label_wrapper_class" => "col-md-3",
+		"wrapper_class" => "col-md-1",
+		'values' => Mage::getSingleton("zolagocustomer/source_loyalty_card_types")->getAllOptions(),
+	));
+
 	$general->addField("expire_date", "text", array(
 		"name" => "expire_date",
 		"class" => "form-control datetimepicker col-md-2",
@@ -77,15 +87,34 @@ function _prepareForm($object) {
 		"after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>',
 	));
 
-	// todo: change type
-	$general->addField("card_type", "text", array(
-		"name" => "card_type",
-		"class" => "form-control",
-		"required" => true,
-		"label" => $helper->__('Card type'),
-		"label_wrapper_class" => "col-md-3",
-		"wrapper_class" => "col-md-1"
-	));
+	$isNew = $object->isModelNew();
+	if (!$isNew) {
+		$general->addField('created_at', 'date', array(
+			"name" => 'created_at',
+			"class" => "form-control col-md-2",
+			"required" => false,
+			"label" => $helper->__("Created at"),
+			"label_wrapper_class" => "col-md-3",
+			"wrapper_class" => "col-md-5",
+			"readonly" => true,
+			"format" => "Y-m-d HH:mm:ss",
+			'is_wide' => true,
+			"style" => "width:150px;",
+		));
+
+		$general->addField('updated_at', 'date', array(
+			"name" => 'updated_at',
+			"class" => "form-control col-md-2",
+			"required" => false,
+			"label" => $helper->__("Updated at"),
+			"label_wrapper_class" => "col-md-3",
+			"wrapper_class" => "col-md-5",
+			"readonly" => true,
+			"format" => "Y-m-d HH:mm:ss",
+			'is_wide' => true,
+			"style" => "width:150px;",
+		));
+	}
 
 	$client = $form->addFieldset("client", array(
 		"legend" => $helper->__("Client data"),
@@ -165,10 +194,7 @@ function _prepareForm($object) {
 		"wrapper_class" => "col-md-1"
 	));
 
-	$count = 1;
-	if (isset($values['kids'])) {
-		$count = count($values['kids']);
-	}
+	$count = isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1;
 
 	for ($i = 0; $i < $count; $i++) {
 
@@ -234,10 +260,7 @@ function _prepareForm($object) {
 $form = _prepareForm($this);
 
 $values = $this->getModel()->getData();
-$count = 1;
-if (isset($values['kids'])) {
-	$count = count($values['kids']);
-}
+$count = isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1;
 ?>
 
 <div class="container">
@@ -256,30 +279,64 @@ if (isset($values['kids'])) {
 
 <div class="container z-grid">
 	<form id="edit-card" class="form-horizontal row-border" action="<?php echo $this->getSaveUrlAction(); ?>" method="POST">
-		<input type="hidden" name="card_id" value="<?php echo $card->getId();?>"/>
+		<input type="hidden" name="id" value="<?php echo $card->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $form->toHtml(); ?>
 
 		<div class="form-actions">
-			<input type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
-			<a href="<?php echo Mage::getUrl('*/*'); ?>" class="btn btn-default pull-right"><?php echo $helper->__("Cancel");?></a>
+			<div class="row">
+				<div class="col-xs-6">
+					<a class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete">
+						<i class="icon-remove"></i>&nbsp;<?php echo $helper->__("Remove card"); ?></a>
+				</div>
+				<div class="col-xs-6">
+					<input type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
+					<a href="<?php echo Mage::getUrl('*/*'); ?>" class="btn btn-default pull-right"><?php echo $helper->__("Cancel");?></a>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+				<h3><?php echo $helper->__("Are you sure?"); ?></h3>
+			</div>
+			<div class="modal-body">
+				<p><?php echo $helper->__("Do you want to delete card?"); ?></p>
+			</div>
+			<div class="modal-footer">
+				<form id="delete-card" class="form-horizontal row-border" action="<?php echo $this->getDeleteUrlAction(); ?>" method="POST">
+					<input type="hidden" name="id" value="<?php echo $card->getId();?>"/>
+					<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $helper->__("Cancel"); ?></button>
+					<input id="delete-btn" type="submit" value="<?php echo $helper->__("Delete"); ?>" class="btn btn-danger danger pull-right">
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
 	var CardEdit = {
 		kidCount: <?php echo $count; ?>,
 		kidsData: <?php echo json_encode(isset($values['kids']) ? $values['kids'] : array()); ?>,
+		dateFormat: 'Y-m-d H:i:s',
 		
 		init: function () {
 			this.populateKidsData();
 			this.initDatetimepicker();
 			this.initKids();
+			this.initDelete();
+			this.initValidation();
 		},
 		initDatetimepicker: function () {
 			jQuery('.datetimepicker').datetimepicker({
 				lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
-				format: 'd-m-Y H:i'
+				format: CardEdit.dateFormat,
 			});
 			jQuery(document).delegate(".icon-calendar", "click", function () {
 				jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
@@ -295,6 +352,15 @@ if (isset($values['kids'])) {
 					CardEdit.addKidWithAddBtn();
 					CardEdit.addNewKidFieldset(jQuery(this).parents('.widget-content'));
 				});
+		},
+		initDelete: function () {
+			jQuery("#delete-btn").click(function (e) {
+				jQuery(this).attr("disabled", true);
+				jQuery(this).parent('form').submit();
+			})
+		},
+		initValidation: function() {
+			// todo
 		},
 		populateKidsData: function () {
 			for (var key in this.kidsData) {
@@ -316,7 +382,7 @@ if (isset($values['kids'])) {
 			where.html(html).hide().show('slow');
 			jQuery('#kids_'+CardEdit.kidCount+'_birthdate').datetimepicker({
 				lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
-				format: 'd-m-Y H:i'
+				format: CardEdit.dateFormat,
 			});
 			CardEdit.kidCount++;
 		},

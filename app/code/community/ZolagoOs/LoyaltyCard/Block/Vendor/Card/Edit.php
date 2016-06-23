@@ -30,4 +30,9 @@ class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Edit extends ZolagoOs_LoyaltyCard_B
 	public function getSaveUrlAction() {
 		return $this->getUrl("loyalty/card/save", array("_secure" => true));
 	}
+
+	public function getDeleteUrlAction() {
+		return $this->getUrl("loyalty/card/delete", array("_secure" => true));
+	}
+
 }

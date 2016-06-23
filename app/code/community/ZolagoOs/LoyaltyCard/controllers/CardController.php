@@ -63,6 +63,8 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 
 		// Try save
 		$data = $this->getRequest()->getParams();
+		unset($data['id']);
+		unset($data['form_key']);
 
 		$this->_getSession()->setFormData(null);
 
@@ -107,8 +109,54 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 			Mage::logException($e);
 			return $this->_redirectReferer();
 		}
+	}
+	
+	public function deleteAction() {
+		/** @var ZolagoOs_LoyaltyCard_Helper_Data $helper */
+		$helper = Mage::helper("zosloyaltycard");
+		if (!$this->getRequest()->isPost()) {
+			return $this->_redirectReferer();
+		}
+		// Form key valid?
+		$formKey = Mage::getSingleton('core/session')->getFormKey();
+		$formKeyPost = $this->getRequest()->getParam('form_key');
+		if ($formKey != $formKeyPost) {
+			return $this->_redirectReferer();
+		}
+		$cardId = $this->getRequest()->getPost('id');
+		$card = $this->_initModel($cardId);
+		$vendor = $this->_getSession()->getVendor();
 
-		return $this->_redirect("*/*");
+		try {
+			// Existing
+			if ($card->getId()) {
+				if ($card->getVendorId() != $vendor->getId()) {
+					$this->_getSession()->addError($helper->__("Card does not exists"));
+					return $this->_redirectReferer();
+				}
+			} else {
+				$this->_getSession()->addError($helper->__("Card does not exists"));
+				return $this->_redirectReferer();
+			}
+
+			/**
+			 * @event loyalty_card_delete_before
+			 * @event loyalty_card_delete_after
+			 */
+			$card->delete();
+
+			$this->_getSession()->addSuccess($helper->__("Card '%s' deleted", $card->getCardNumber()));
+
+			return $this->_redirect("*/*");
+
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			$this->_getSession()->addError($helper->__("Some error occurred"));
+			Mage::logException($e);
+			return $this->_redirectReferer();
+		}
 	}
 
 	/**

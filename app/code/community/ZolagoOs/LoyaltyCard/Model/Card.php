@@ -73,7 +73,6 @@ class ZolagoOs_LoyaltyCard_Model_Card extends Mage_Core_Model_Abstract {
 		foreach ($desc as $key => $spec) {
 			unset($data[$key]);
 		}
-		unset($data['form_key']);
 		return $data;
 	}
 }
