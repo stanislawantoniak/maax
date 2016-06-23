@@ -222,11 +222,7 @@ body {
 				//background-color: $colorIconHoverBgHeader;
 
 				color: #252525;
-				-webkit-transition: color 0.3s ease-in-out;
-				-moz-transition: color 0.3s ease-in-out;
-				-ms-transition: color 0.3s ease-in-out;
-				-o-transition: color 0.3s ease-in-out;
-				transition: color 0.3s ease-in-out;
+				@include transition(color 0.3s ease-in-out);
 
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
