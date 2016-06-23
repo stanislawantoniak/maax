@@ -33,6 +33,7 @@
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
             }
+
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
                     url: "/checkout/singlepage/saveBasketShipping/",
@@ -40,6 +41,7 @@
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
                 });
             }
+
             self.implementMapSelections();
         },
 
@@ -207,10 +209,12 @@
                 }
             });
             jQuery("#cart-buy").on('click', function() {
-                if(!jQuery("#cart-shipping-methods-form").valid()){
+                if(!jQuery("#cart-shipping-methods-form").valid() || jQuery("#cart-buy").is(":disabled")){
                     return false;
+                } else {
+                    jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
+                    window.location = jQuery("#cart-buy").attr("href");
                 }
-                jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
             });
         },
         attachShowHideNearestPointsList: function(){
@@ -296,13 +300,19 @@
 
 
             var formData = jQuery("#cart-shipping-methods-form").serializeArray();
-
+            jQuery("#cart-buy")
+                .prop("disabled",true)
+                .find('i')
+                .addClass('fa fa-spinner fa-spin');
             jQuery.ajax({
                 url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
                 data: formData
             }).done(function (response) {
-
+                jQuery("#cart-buy")
+                    .prop("disabled", false);
+                jQuery("#cart-buy").find('i')
+                    .removeClass('fa fa-spinner fa-spin');
             });
 
             Mall.Cart.Shipping.updateTotals();

@@ -209,10 +209,12 @@
                 }
             });
             jQuery("#cart-buy").on('click', function() {
-                if(!jQuery("#cart-shipping-methods-form").valid()){
+                if(!jQuery("#cart-shipping-methods-form").valid() || jQuery("#cart-buy").is(":disabled")){
                     return false;
+                } else {
+                    jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
+                    window.location = jQuery("#cart-buy").attr("href");
                 }
-                jQuery(this).find('i').addClass('fa fa-spinner fa-spin');
             });
         },
         attachShowHideNearestPointsList: function(){
@@ -298,13 +300,19 @@
 
 
             var formData = jQuery("#cart-shipping-methods-form").serializeArray();
-
+            jQuery("#cart-buy")
+                .prop("disabled",true)
+                .find('i')
+                .addClass('fa fa-spinner fa-spin');
             jQuery.ajax({
                 url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
                 data: formData
             }).done(function (response) {
-
+                jQuery("#cart-buy")
+                    .prop("disabled", false);
+                jQuery("#cart-buy").find('i')
+                    .removeClass('fa fa-spinner fa-spin');
             });
 
             Mall.Cart.Shipping.updateTotals();
@@ -670,8 +678,8 @@ function formatDetailsContent(pos) {
         '<div>' + pos.postcode + ' ' + pos.town + '</div>' +
         '<div>(' + pos.location_description + ')</div>'+ payment_point_description+
         '</div>' +
-        '<div class="col-sm-6">' +
-        '<a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">' + Mall.translate.__("shipping_map_method_select") + '</a>' +
+        '<div class="col-sm-6 pointselect-container">' +
+        '<a class="button button-primary pointselect" data-select-shipping-method-trigger="1" data-carrier-town="' + pos.town + '" data-carrier-pointid="' +pos.id+ '" data-carrier-pointcode="' +pos.name+ '" data-carrier-additional="' + pos_additional + '" href="">' + Mall.translate.__("shipping_map_method_select") + '</a>' +
         '</div>' +
         '</div>';
 }
@@ -693,7 +701,7 @@ function formatInfoWindowContent(pos) {
         '<div class="additional-store-information"><b>' + pos.street + ' ' + pos.building_number + '</b></div>' +
         '<div class="additional-store-information"><b>' + pos.postcode + ' ' + pos.town + '</b></div>' +
         '<div class="additional-store-information">' + pos.location_description + '</div>' +
-        '<div><a class="btn button-third reverted" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">'+Mall.translate.__("shipping_map_method_select")+'</a></div>' +
+        '<div><a class="button button-primary pointselect" data-select-shipping-method-trigger="1" data-carrier-pointid="' + pos.id + '" data-carrier-pointcode="' + pos.name + '" data-carrier-town="' + pos.town + '" data-carrier-additional="' + pos_additional + '" href="">'+Mall.translate.__("shipping_map_method_select")+'</a></div>' +
         '</div>' +
         '</div>';
 }
