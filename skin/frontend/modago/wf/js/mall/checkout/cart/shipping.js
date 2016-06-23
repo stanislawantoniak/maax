@@ -304,6 +304,8 @@
                 .prop("disabled",true)
                 .find('i')
                 .addClass('fa fa-spinner fa-spin');
+
+            jQuery("#cart-buy-overlay").removeClass("hidden");
             jQuery.ajax({
                 url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
@@ -313,6 +315,8 @@
                     .prop("disabled", false);
                 jQuery("#cart-buy").find('i')
                     .removeClass('fa fa-spinner fa-spin');
+
+                jQuery("#cart-buy-overlay").addClass("hidden");
             });
 
             Mall.Cart.Shipping.updateTotals();
