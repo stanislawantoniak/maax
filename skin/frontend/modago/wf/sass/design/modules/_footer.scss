@@ -230,6 +230,9 @@ footer.footer {
     .wpb_wrapper {
       p {
         margin-bottom: 0px;
+		&.text-gray {
+			color: $textColorFooterLink;
+		}
       }
     }
   }
