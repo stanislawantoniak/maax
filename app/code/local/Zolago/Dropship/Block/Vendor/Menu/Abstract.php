@@ -10,6 +10,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     const ITEM_HELPDESK  = 'helpdesk';
     const ITEM_RMA		  = 'rma';
     const ITEM_ADVERTISE = 'advertise';
+	const ITEM_LOYALTY_CARD = 'loyalty_card';
     const ITEM_SETTING	  = 'setting';
     const ITEM_REGULATIONS = "regulation";
     const ITEM_STATEMENTS= 'statements';
@@ -49,6 +50,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                             self::ITEM_HELPDESK		=>	$this->getHelpdeskSection(),
                             self::ITEM_RMA			=>	$this->getRmaSection(),
                             self::ITEM_ADVERTISE	=>	$this->getAdvertiseSection(),
+                            self::ITEM_LOYALTY_CARD	=>	$this->getLoyaltyCardSection(),
                             self::ITEM_SETTING		=>	$this->getSettingSection(),
                             self::ITEM_REGULATIONS	=>	$this->getRegulationsSection(),
                             self::ITEM_STATEMENTS	=>	$this->getStatementsSection(),
@@ -223,6 +225,19 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 
         return null;
     }
+
+	public function getLoyaltyCardSection() {
+		if ($this->isModuleActive('ZolagoOs_LoyaltyCard') /* todo: && $this->isAllowed()*/) {
+			return array(
+				"active" => $this->isActive("zos-loyalty-card"),
+				"icon"	 => "icon-user",
+				"label"	 => $this->__('Loyalty cards'),
+				"url"	 => $this->getUrl('loyalty/card')
+			);
+			/** @see ZolagoOs_LoyaltyCard_CardController::indexAction() */
+		}
+		return null;
+	}
 
     public function getSettingSection() {
 

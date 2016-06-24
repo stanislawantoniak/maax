@@ -309,4 +309,31 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return true;
 	}
+
+	/**
+	 * todo:
+	 * 
+	 * @return bool
+	 */
+	public function useLoyaltyCardSection() {
+		return true;
+		if (!$this->useGalleryConfiguration() // For now Modago don't use loyalty card
+		&& $this->hasDedicatedLoyaltyCardEditPhtml() // Section can be shown only if for vendor dedicated skin there is edit phmtl
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * todo: 
+	 *
+	 * @return bool
+	 */
+	protected function hasDedicatedLoyaltyCardEditPhtml() {
+		if (true) {
+			return true;
+		}
+		return false;
+	}
 }
