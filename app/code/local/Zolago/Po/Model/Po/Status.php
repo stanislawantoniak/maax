@@ -393,7 +393,6 @@ class Zolago_Po_Model_Po_Status
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
 
 		$newStatus2 = $this->getPoStatusByPayment($po,$newStatus);
-		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("udpo");
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);
