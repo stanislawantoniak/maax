@@ -13,6 +13,8 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      *
      */
     protected function _construct() {
+        // include PP objects
+        $tmp = Mage::getSingleton('orbashipping/post_client_wsdl');
         $this->_init('orbashipping/post_client');
     }
 
@@ -46,8 +48,286 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
     protected function _getSoapMode() {
         $login = Mage::getStoreConfig('carriers/zolagopp/id');
         $password = Mage::helper('core')->decrypt(Mage::getStoreConfig('carriers/zolagopp/password'));
+        $classmap = array(
+									'addShipment' => 'addShipment',
+									'addShipmentResponse' => 'addShipmentResponse',
+									'przesylkaType' => 'przesylkaType',
+									'pocztexKrajowyType' => 'pocztexKrajowyType',
+									'umowaType' => 'umowaType',
+									'masaType' => 'masaType',
+									'numerNadaniaType' => 'numerNadaniaType',
+									'changePassword' => 'changePassword',
+									'changePasswordResponse' => 'changePasswordResponse',
+									'terminRodzajType' => 'terminRodzajType',
+									'uiszczaOplateType' => 'uiszczaOplateType',
+									'wartoscType' => 'wartoscType',
+									'kwotaPobraniaType' => 'kwotaPobraniaType',
+									'sposobPobraniaType' => 'sposobPobraniaType',
+									'sposobPrzekazaniaType' => 'sposobPrzekazaniaType',
+									'sposobDoreczeniaPotwierdzeniaType' => 'sposobDoreczeniaPotwierdzeniaType',
+									'iloscPotwierdzenOdbioruType' => 'iloscPotwierdzenOdbioruType',
+									'dataDlaDostarczeniaType' => 'dataDlaDostarczeniaType',
+									'razemType' => 'razemType',
+									'nazwaType' => 'nazwaType',
+									'nazwa2Type' => 'nazwa2Type',
+									'ulicaType' => 'ulicaType',
+									'numerDomuType' => 'numerDomuType',
+									'numerLokaluType' => 'numerLokaluType',
+									'miejscowoscType' => 'miejscowoscType',
+									'kodPocztowyType' => 'kodPocztowyType',
+									'paczkaPocztowaType' => 'paczkaPocztowaType',
+									'kategoriaType' => 'kategoriaType',
+									'gabarytType' => 'gabarytType',
+									'paczkaPocztowaPLUSType' => 'paczkaPocztowaPLUSType',
+									'przesylkaPobraniowaType' => 'przesylkaPobraniowaType',
+									'przesylkaNaWarunkachSzczegolnychType' => 'przesylkaNaWarunkachSzczegolnychType',
+									'przesylkaPoleconaKrajowaType' => 'przesylkaPoleconaKrajowaType',
+									'przesylkaHandlowaType' => 'przesylkaHandlowaType',
+									'przesylkaListowaZadeklarowanaWartoscType' => 'przesylkaListowaZadeklarowanaWartoscType',
+									'przesylkaFullType' => 'przesylkaFullType',
+									'errorType' => 'errorType',
+									'adresType' => 'adresType',
+									'sendEnvelope' => 'sendEnvelope',
+									'sendEnvelopeResponseType' => 'sendEnvelopeResponseType',
+									'urzadNadaniaType' => 'urzadNadaniaType',
+									'getUrzedyNadania' => 'getUrzedyNadania',
+									'getUrzedyNadaniaResponse' => 'getUrzedyNadaniaResponse',
+									'clearEnvelope' => 'clearEnvelope',
+									'clearEnvelopeResponse' => 'clearEnvelopeResponse',
+									'urzadNadaniaFullType' => 'urzadNadaniaFullType',
+									'guidType' => 'guidType',
+									'ePrzesylkaType' => 'ePrzesylkaType',
+									'eSposobPowiadomieniaType' => 'eSposobPowiadomieniaType',
+									'eKontaktType' => 'eKontaktType',
+									'urzadWydaniaEPrzesylkiType' => 'urzadWydaniaEPrzesylkiType',
+									'pobranieType' => 'pobranieType',
+									'anonymous52' => 'anonymous52',
+									'anonymous53' => 'anonymous53',
+									'przesylkaPoleconaZagranicznaType' => 'przesylkaPoleconaZagranicznaType',
+									'przesylkaZadeklarowanaWartoscZagranicznaType' => 'przesylkaZadeklarowanaWartoscZagranicznaType',
+									'krajType' => 'krajType',
+									'getUrzedyWydajaceEPrzesylki' => 'getUrzedyWydajaceEPrzesylki',
+									'getUrzedyWydajaceEPrzesylkiResponse' => 'getUrzedyWydajaceEPrzesylkiResponse',
+									'uploadIWDContent' => 'uploadIWDContent',
+									'getEnvelopeStatus' => 'getEnvelopeStatus',
+									'getEnvelopeStatusResponse' => 'getEnvelopeStatusResponse',
+									'envelopeStatusType' => 'envelopeStatusType',
+									'downloadIWDContent' => 'downloadIWDContent',
+									'downloadIWDContentResponse' => 'downloadIWDContentResponse',
+									'przesylkaShortType' => 'przesylkaShortType',
+									'addShipmentResponseItemType' => 'addShipmentResponseItemType',
+									'getKarty' => 'getKarty',
+									'getKartyResponse' => 'getKartyResponse',
+									'getPasswordExpiredDate' => 'getPasswordExpiredDate',
+									'getPasswordExpiredDateResponse' => 'getPasswordExpiredDateResponse',
+									'setAktywnaKarta' => 'setAktywnaKarta',
+									'setAktywnaKartaResponse' => 'setAktywnaKartaResponse',
+									'getEnvelopeContentFull' => 'getEnvelopeContentFull',
+									'getEnvelopeContentFullResponse' => 'getEnvelopeContentFullResponse',
+									'getEnvelopeContentShort' => 'getEnvelopeContentShort',
+									'getEnvelopeContentShortResponse' => 'getEnvelopeContentShortResponse',
+									'hello' => 'hello',
+									'helloResponse' => 'helloResponse',
+									'kartaType' => 'kartaType',
+									'telefonType' => 'telefonType',
+									'getAddressLabel' => 'getAddressLabel',
+									'getAddressLabelResponse' => 'getAddressLabelResponse',
+									'addressLabelContent' => 'addressLabelContent',
+									'getOutboxBook' => 'getOutboxBook',
+									'getOutboxBookResponse' => 'getOutboxBookResponse',
+									'getFirmowaPocztaBook' => 'getFirmowaPocztaBook',
+									'getFirmowaPocztaBookResponse' => 'getFirmowaPocztaBookResponse',
+									'getEnvelopeList' => 'getEnvelopeList',
+									'getEnvelopeListResponse' => 'getEnvelopeListResponse',
+									'envelopeInfoType' => 'envelopeInfoType',
+									'przesylkaZagranicznaType' => 'przesylkaZagranicznaType',
+									'przesylkaRejestrowanaType' => 'przesylkaRejestrowanaType',
+									'przesylkaNieRejestrowanaType' => 'przesylkaNieRejestrowanaType',
+									'anonymous94' => 'anonymous94',
+									'przesylkaBiznesowaType' => 'przesylkaBiznesowaType',
+									'gabarytBiznesowaType' => 'gabarytBiznesowaType',
+									'subPrzesylkaBiznesowaType' => 'subPrzesylkaBiznesowaType',
+									'subPrzesylkaBiznesowaPlusType' => 'subPrzesylkaBiznesowaPlusType',
+									'getAddresLabelByGuid' => 'getAddresLabelByGuid',
+									'getAddresLabelByGuidResponse' => 'getAddresLabelByGuidResponse',
+									'przesylkaBiznesowaPlusType' => 'przesylkaBiznesowaPlusType',
+									'opisType' => 'opisType',
+									'numerPrzesylkiKlientaType' => 'numerPrzesylkiKlientaType',
+									'pakietType' => 'pakietType',
+									'opakowanieType' => 'opakowanieType',
+									'typOpakowaniaType' => 'typOpakowaniaType',
+									'getPlacowkiPocztowe' => 'getPlacowkiPocztowe',
+									'getPlacowkiPocztoweResponse' => 'getPlacowkiPocztoweResponse',
+									'getGuid' => 'getGuid',
+									'getGuidResponse' => 'getGuidResponse',
+									'kierunekType' => 'kierunekType',
+									'getKierunki' => 'getKierunki',
+									'prefixKodPocztowy' => 'prefixKodPocztowy',
+									'getKierunkiResponse' => 'getKierunkiResponse',
+									'czynnoscUpustowaType' => 'czynnoscUpustowaType',
+									'miejsceOdbioruType' => 'miejsceOdbioruType',
+									'sposobNadaniaType' => 'sposobNadaniaType',
+									'getKierunkiInfo' => 'getKierunkiInfo',
+									'getKierunkiInfoResponse' => 'getKierunkiInfoResponse',
+									'kwotaTranzakcjiType' => 'kwotaTranzakcjiType',
+									'uslugiType' => 'uslugiType',
+									'idWojewodztwoType' => 'idWojewodztwoType',
+									'placowkaPocztowaType' => 'placowkaPocztowaType',
+									'anonymous124' => 'anonymous124',
+									'anonymous125' => 'anonymous125',
+									'punktWydaniaPrzesylkiBiznesowejPlus' => 'punktWydaniaPrzesylkiBiznesowejPlus',
+									'statusType' => 'statusType',
+									'terminRodzajPlusType' => 'terminRodzajPlusType',
+									'typOpakowanieType' => 'typOpakowanieType',
+									'getEnvelopeBufor' => 'getEnvelopeBufor',
+									'getEnvelopeBuforResponse' => 'getEnvelopeBuforResponse',
+									'clearEnvelopeByGuids' => 'clearEnvelopeByGuids',
+									'clearEnvelopeByGuidsResponse' => 'clearEnvelopeByGuidsResponse',
+									'zwrotDokumentowType' => 'zwrotDokumentowType',
+									'odbiorPrzesylkiOdNadawcyType' => 'odbiorPrzesylkiOdNadawcyType',
+									'potwierdzenieDoreczeniaType' => 'potwierdzenieDoreczeniaType',
+									'rodzajListType' => 'rodzajListType',
+									'potwierdzenieOdbioruType' => 'potwierdzenieOdbioruType',
+									'sposobPrzekazaniaPotwierdzeniaOdbioruType' => 'sposobPrzekazaniaPotwierdzeniaOdbioruType',
+									'doreczenieType' => 'doreczenieType',
+									'doreczenieUslugaPocztowaType' => 'doreczenieUslugaPocztowaType',
+									'doreczenieUslugaKurierskaType' => 'doreczenieUslugaKurierskaType',
+									'oczekiwanaGodzinaDoreczeniaType' => 'oczekiwanaGodzinaDoreczeniaType',
+									'oczekiwanaGodzinaDoreczeniaUslugiType' => 'oczekiwanaGodzinaDoreczeniaUslugiType',
+									'paczkaZagranicznaType' => 'paczkaZagranicznaType',
+									'setEnvelopeBuforDataNadania' => 'setEnvelopeBuforDataNadania',
+									'setEnvelopeBuforDataNadaniaResponse' => 'setEnvelopeBuforDataNadaniaResponse',
+									'lokalizacjaGeograficznaType' => 'lokalizacjaGeograficznaType',
+									'wspolrzednaGeograficznaType' => 'wspolrzednaGeograficznaType',
+									'zwrotType' => 'zwrotType',
+									'sposobZwrotuType' => 'sposobZwrotuType',
+									'listZwyklyType' => 'listZwyklyType',
+									'reklamowaType' => 'reklamowaType',
+									'getEPOStatus' => 'getEPOStatus',
+									'getEPOStatusResponse' => 'getEPOStatusResponse',
+									'statusEPOEnum' => 'statusEPOEnum',
+									'EPOType' => 'EPOType',
+									'EPOSimpleType' => 'EPOSimpleType',
+									'EPOExtendedType' => 'EPOExtendedType',
+									'zasadySpecjalneEnum' => 'zasadySpecjalneEnum',
+									'przesylkaEPOType' => 'przesylkaEPOType',
+									'przesylkaFirmowaPoleconaType' => 'przesylkaFirmowaPoleconaType',
+									'EPOInfoType' => 'EPOInfoType',
+									'awizoPrzesylkiType' => 'awizoPrzesylkiType',
+									'doreczeniePrzesylkiType' => 'doreczeniePrzesylkiType',
+									'zwrotPrzesylkiType' => 'zwrotPrzesylkiType',
+									'miejscaPozostawieniaAwizoEnum' => 'miejscaPozostawieniaAwizoEnum',
+									'podmiotDoreczeniaEnum' => 'podmiotDoreczeniaEnum',
+									'przyczynaZwrotuEnum' => 'przyczynaZwrotuEnum',
+									'getAddresLabelCompact' => 'getAddresLabelCompact',
+									'getAddresLabelCompactResponse' => 'getAddresLabelCompactResponse',
+									'getAddresLabelByGuidCompact' => 'getAddresLabelByGuidCompact',
+									'getAddresLabelByGuidCompactResponse' => 'getAddresLabelByGuidCompactResponse',
+									'ubezpieczenieType' => 'ubezpieczenieType',
+									'rodzajUbezpieczeniaType' => 'rodzajUbezpieczeniaType',
+									'kwotaUbezpieczeniaType' => 'kwotaUbezpieczeniaType',
+									'emailType' => 'emailType',
+									'mobileType' => 'mobileType',
+									'EMSType' => 'EMSType',
+									'EMSTypOpakowaniaType' => 'EMSTypOpakowaniaType',
+									'getEnvelopeBuforList' => 'getEnvelopeBuforList',
+									'getEnvelopeBuforListResponse' => 'getEnvelopeBuforListResponse',
+									'buforType' => 'buforType',
+									'createEnvelopeBufor' => 'createEnvelopeBufor',
+									'createEnvelopeBuforResponse' => 'createEnvelopeBuforResponse',
+									'moveShipments' => 'moveShipments',
+									'moveShipmentsResponse' => 'moveShipmentsResponse',
+									'updateEnvelopeBufor' => 'updateEnvelopeBufor',
+									'updateEnvelopeBuforResponse' => 'updateEnvelopeBuforResponse',
+									'getUbezpieczeniaInfo' => 'getUbezpieczeniaInfo',
+									'getUbezpieczeniaInfoResponse' => 'getUbezpieczeniaInfoResponse',
+									'ubezpieczeniaInfoType' => 'ubezpieczeniaInfoType',
+									'isMiejscowa' => 'isMiejscowa',
+									'isMiejscowaResponse' => 'isMiejscowaResponse',
+									'trasaRequestType' => 'trasaRequestType',
+									'trasaResponseType' => 'trasaResponseType',
+									'deklaracjaCelnaType' => 'deklaracjaCelnaType',
+									'szczegolyDeklaracjiCelnejType' => 'szczegolyDeklaracjiCelnejType',
+									'przesylkaPaletowaType' => 'przesylkaPaletowaType',
+									'rodzajPaletyType' => 'rodzajPaletyType',
+									'paletaType' => 'paletaType',
+									'platnikType' => 'platnikType',
+									'subPrzesylkaPaletowaType' => 'subPrzesylkaPaletowaType',
+									'getBlankietPobraniaByGuids' => 'getBlankietPobraniaByGuids',
+									'getBlankietPobraniaByGuidsResponse' => 'getBlankietPobraniaByGuidsResponse',
+									'updateAccount' => 'updateAccount',
+									'updateAccountResponse' => 'updateAccountResponse',
+									'accountType' => 'accountType',
+									'permisionType' => 'permisionType',
+									'getAccountList' => 'getAccountList',
+									'getAccountListResponse' => 'getAccountListResponse',
+									'profilType' => 'profilType',
+									'getProfilList' => 'getProfilList',
+									'getProfilListResponse' => 'getProfilListResponse',
+									'updateProfil' => 'updateProfil',
+									'updateProfilResponse' => 'updateProfilResponse',
+									'statusAccountType' => 'statusAccountType',
+									'uslugaPaczkowaType' => 'uslugaPaczkowaType',
+									'subUslugaPaczkowaType' => 'subUslugaPaczkowaType',
+									'terminPaczkowaType' => 'terminPaczkowaType',
+									'opakowaniePocztowaType' => 'opakowaniePocztowaType',
+									'uslugaKurierskaType' => 'uslugaKurierskaType',
+									'subUslugaKurierskaType' => 'subUslugaKurierskaType',
+									'createAccount' => 'createAccount',
+									'createAccountResponse' => 'createAccountResponse',
+									'createProfil' => 'createProfil',
+									'createProfilResponse' => 'createProfilResponse',
+									'terminKurierskaType' => 'terminKurierskaType',
+									'opakowanieKurierskaType' => 'opakowanieKurierskaType',
+									'zwrotDokumentowPaczkowaType' => 'zwrotDokumentowPaczkowaType',
+									'potwierdzenieOdbioruPaczkowaType' => 'potwierdzenieOdbioruPaczkowaType',
+									'sposobPrzekazaniaPotwierdzeniaOdbioruPocztowaType' => 'sposobPrzekazaniaPotwierdzeniaOdbioruPocztowaType',
+									'zwrotDokumentowKurierskaType' => 'zwrotDokumentowKurierskaType',
+									'terminZwrotDokumentowKurierskaType' => 'terminZwrotDokumentowKurierskaType',
+									'terminZwrotDokumentowPaczkowaType' => 'terminZwrotDokumentowPaczkowaType',
+									'potwierdzenieOdbioruKurierskaType' => 'potwierdzenieOdbioruKurierskaType',
+									'sposobPrzekazaniaPotwierdzeniaOdbioruKurierskaType' => 'sposobPrzekazaniaPotwierdzeniaOdbioruKurierskaType',
+									'addReklamacje' => 'addReklamacje',
+									'addReklamacjeResponse' => 'addReklamacjeResponse',
+									'getReklamacje' => 'getReklamacje',
+									'getReklamacjeResponse' => 'getReklamacjeResponse',
+									'getZapowiedziFaktur' => 'getZapowiedziFaktur',
+									'getZapowiedziFakturResponse' => 'getZapowiedziFakturResponse',
+									'addOdwolanieDoReklamacji' => 'addOdwolanieDoReklamacji',
+									'addOdwolanieDoReklamacjiResponse' => 'addOdwolanieDoReklamacjiResponse',
+									'addRozbieznoscDoZapowiedziFaktur' => 'addRozbieznoscDoZapowiedziFaktur',
+									'addRozbieznoscDoZapowiedziFakturResponse' => 'addRozbieznoscDoZapowiedziFakturResponse',
+									'reklamowanaPrzesylkaType' => 'reklamowanaPrzesylkaType',
+									'powodReklamacjiType' => 'powodReklamacjiType',
+									'reklamacjaRozpatrzonaType' => 'reklamacjaRozpatrzonaType',
+									'rozstrzygniecieType' => 'rozstrzygniecieType',
+									'getListaPowodowReklamacji' => 'getListaPowodowReklamacji',
+									'getListaPowodowReklamacjiResponse' => 'getListaPowodowReklamacjiResponse',
+									'powodSzczegolowyType' => 'powodSzczegolowyType',
+									'kategoriePowodowReklamacjiType' => 'kategoriePowodowReklamacjiType',
+									'listBiznesowyType' => 'listBiznesowyType',
+									'zamowKuriera' => 'zamowKuriera',
+									'zamowKurieraResponse' => 'zamowKurieraResponse',
+									'getEZDOList' => 'getEZDOList',
+									'getEZDOListResponse' => 'getEZDOListResponse',
+									'getEZDO' => 'getEZDO',
+									'getEZDOResponse' => 'getEZDOResponse',
+									'EZDOPakietType' => 'EZDOPakietType',
+									'EZDOPrzesylkaType' => 'EZDOPrzesylkaType',
+									'wplataCKPType' => 'wplataCKPType',
+									'getWplatyCKP' => 'getWplatyCKP',
+									'getWplatyCKPResponse' => 'getWplatyCKPResponse',
+									'globalExpresType' => 'globalExpresType',
+									'cancelReklamacja' => 'cancelReklamacja',
+									'cancelReklamacjaResponse' => 'cancelReklamacjaResponse',
+									'zalacznikDoReklamacjiType' => 'zalacznikDoReklamacjiType',
+									'addZalacznikDoReklamacji' => 'addZalacznikDoReklamacji',
+									'addZalacznikDoReklamacjiResponse' => 'addZalacznikDoReklamacjiResponse' 
+        );
+        
         $mode = array
                 (
+                    'classmap' => $classmap,
                     'soap_version' => 'SOAP_1_1',  // use soap 1.1 client
                     'trace' => 1,
                     'login' => $login,
@@ -60,7 +340,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * clear envelope
      */
     public function clearEnvelope() {
-        $message = Mage::getModel('orbashipping/post_message_clearEnvelope')->getObject();
+        $message = new clearEnvelope();
         $result = $this->_sendMessage('clearEnvelope',$message);
         if (!empty($result->retval)) {
             return true;
@@ -81,16 +361,14 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      */
 
     public function _createDeliveryPackBusiness($settings) {
-        $message = Mage::getModel('orbashipping/post_message_pack_list')->getObject();
-        $data = Mage::getModel('orbashipping/post_message_pack_business')->getObject();
+        $message = new addShipment();
+        $data = new PrzesylkaBiznesowaType();
         $data->adres = $this->_prepareAddress();
         $data->gabaryt = $this->_settings['size'];
         $data->masa = $this->_settings['weight'];
         $data->guid = $this->_getGuid();
         $message->przesylki[] = $data;
-        Mage::log($message);
         $result = $this->_sendMessage('addShipment',$message);
-        Mage::log($result);
         return $this->_prepareResult($result);
     }
     
@@ -99,10 +377,9 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      */
 
     public function setActiveCard($card) {
-        $message = Mage::getModel('orbashipping/post_message_card');
+        $message = new setAktywnaKarta();
         $message->idKarta = $card;
         $card->aktywna = true;
-        Mage::log($message);
         $result = $this->_sendMessage('setAktywnaKarta',$card);
         return $result;        
     }
@@ -143,7 +420,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * prepare address
      */
     protected function _prepareAddress() {
-        $address = Mage::getModel('orbashipping/post_message_address')->getObject();
+        $address = new adresType();
         $sender = $this->_shipperAddress;
         $address->nazwa = $sender['name'];
         $address->ulica = $sender['street'];
@@ -156,18 +433,16 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      */
 
     protected function _createDeliveryPackStandard($settings) {
-        $message = Mage::getModel('orbashipping/post_message_pack_list')->getObject();
-        $data = Mage::getModel('orbashipping/post_message_pack')->getObject();
+        $message = new addShipment();
+        $data = new paczkaPocztowaType();
         $data->adres = $this->_prepareAddress();
         $data->iloscPotwierdzenOdbioru = 1;
+        $data->guid = $this->_getGuid();
         $data->kategoria = $this->_settings['category'];
         $data->gabaryt = $this->_settings['size'];
         $data->masa = $this->_settings['weight'];
-        $data->guid = $this->_getGuid();
         $message->przesylki[] = $data;
-        Mage::log($message);
         $result = $this->_sendMessage('addShipment',$message);
-        Mage::log($result);
         return $this->_prepareResult($result);
     }
 
@@ -211,7 +486,6 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * labels to print
      */
     public function getLabels($tracking) {
-        throw new Exception('not implemented yet');
         if (empty($tracking)) {
             return false;
         }
@@ -222,13 +496,20 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         foreach ($tracking as $track) {
             $codes[] = $track->getNumber();
         }
-        $message = Mage::getModel('orbashipping/packstation_inpost_message');
-        $data = $message->getStickerMessage(
-                    $this->getAuth('username'),
-                    $this->getAuth('password'),
-                    $codes
-                );
-        $out['data'] = $this->_sendMessage('getsticker', $data,'POST');
+        $message = new getAddresLabelByGuid();
+        $message->guid = $codes;
+        $response = $this->_sendMessage('getAddresLabelByGuid',$message);
+        if (!empty($response->error)) {	
+            Mage::throwException(Mage::helper('orbashipping')->__('Service %s get label error: %s','Poczta Polska',$response['error']));
+        }
+        if (empty($response->content)) {
+            Mage::throwException(Mage::helper('orbashipping')->__('Service %s get label error: %s','Poczta Polska',
+                    Mage::helper('orbashipping')->__('Empty content')));
+        }
+        $out['data'] = '';
+        foreach ($response->content as $content) {
+            $out['data'] .= $content;
+        }
         $out['numbers'] = $codes;
         return $out;
     }
@@ -238,32 +519,12 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * format results
      */
     public function processLabelsResult($method,$data) {
-        throw new Exception('not implemented yet');
-        try {
-            $xml = simplexml_load_string($data['data']);
-        } catch (Exception $x) {
-            // if there is no xml - means ok
-            $xml = false;
-        }
-        if ($xml === false) { // ok
             $result = array (
                           'status' => true,
                           'labelData' => $data['data'],
-                          'labelName' => implode('_',$data['numbers']).'.'.Orba_Shipping_Helper_Packstation_Inpost::FILE_EXT,
+                          'labelName' => implode('_',$data['numbers']).'.'.Orba_Shipping_Helper_Post::FILE_EXT,
                           'message' => 'Shipment ID: ' . implode(',',$data['numbers']),
                       );
-        } else {
-            $tmp = $this->_prepareResult($data['data']);
-            if (!empty($tmp['error'])) {
-                $error = $tmp['error'];
-            } else {
-                $error = 'INPOST Service error '.implode(',',$data['numbers']);
-            }
-            $result = array(
-                          'status' => false,
-                          'message' => $error
-                      );
-        }
         return $result;
     }
 
