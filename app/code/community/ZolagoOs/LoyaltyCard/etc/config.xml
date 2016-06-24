@@ -86,4 +86,19 @@
 			<zos_loyalty_card>/loyalty/card/</zos_loyalty_card>
 		</secure_url>
 	</frontend>
+	<crontab>
+		<jobs>
+			<!-- Attach customer to customer groups depends on card type -->
+			<!-- and -->
+			<!-- place data from card to customers accounts -->
+			<zosloyaltycard_attach_loyalty_card_data>
+				<schedule>
+					<cron_expr>0 */2 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>zosloyaltycard/observer::attachLoyaltyCardData</model>
+				</run>
+			</zosloyaltycard_attach_loyalty_card_data>
+		</jobs>
+	</crontab>
 </config>

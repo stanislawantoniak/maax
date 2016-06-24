@@ -34,7 +34,8 @@ class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Grid extends Mage_Adminhtml_Block_W
 			"header" => $helper->__("Card number"),
 		));
 
-		// todo: change type
+		// No select, just text filter
+		// todo: renderer
 		$this->addColumn("card_type", array(
 			"type" => "text",
 			"index" => "card_type",
@@ -70,11 +71,19 @@ class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Grid extends Mage_Adminhtml_Block_W
 			"header" => $helper->__("Email"),
 		));
 
-		$this->addColumn("shop_code", array(
+//		$this->addColumn("shop_code", array(
+//			"type" => "text",
+//			"index" => "shop_code",
+//			"class" => "form-control",
+//			"header" => $helper->__("Shop code"),
+//		));
+
+		$this->addColumn("created_at", array(
 			"type" => "text",
-			"index" => "shop_code",
+			"index" => "created_at",
 			"class" => "form-control",
-			"header" => $helper->__("Shop code"),
+			"header" => $helper->__("Created at"),
+			"filter" => false,
 		));
 
 		$this->addColumn("expire_date", array(

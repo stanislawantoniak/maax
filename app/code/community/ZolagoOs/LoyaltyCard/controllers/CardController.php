@@ -65,6 +65,9 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 		$data = $this->getRequest()->getParams();
 		unset($data['id']);
 		unset($data['form_key']);
+		// read only on edit page
+		unset($data['created_at']);
+		unset($data['updated_at']);
 
 		$this->_getSession()->setFormData(null);
 

@@ -15,6 +15,7 @@ class ZolagoOs_LoyaltyCard_Model_Resource_Card_Collection extends Mage_Core_Mode
 	protected function _afterLoad() {
 		foreach ($this->_items as $item) {
 			$this->getResource()->unserializeFields($item);
+			$item->addData($item->getAdditionalInformation());
 		}
 		return parent::_afterLoad();
 	}
@@ -28,6 +29,18 @@ class ZolagoOs_LoyaltyCard_Model_Resource_Card_Collection extends Mage_Core_Mode
 			$vendor = $vendor->getId();
 		}
 		$this->addFieldToFilter('vendor_id', (int)$vendor);
+		return $this;
+	}
+
+	/**
+	 * @param Mage_Core_Model_Store|int $store
+	 * @return $this
+	 */
+	public function addStoreFilter($store) {
+		if ($store instanceof Mage_Core_Model_Store) {
+			$store = $store->getId();
+		}
+		$this->addFieldToFilter('store_id', (int)$store);
 		return $this;
 	}
 }

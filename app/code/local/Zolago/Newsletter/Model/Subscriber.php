@@ -6,8 +6,8 @@
  * @method string getSubscriberFirstname()
  * @method string getSubscriberLastname()
  *
- * @method string setSubscriberFirstname($value)
- * @method string setSubscriberLastname($value)
+ * @method $this setSubscriberFirstname($value)
+ * @method $this setSubscriberLastname($value)
  */
 class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscriber
 {
