@@ -52,6 +52,15 @@
 					</zosloyaltycard_card_save_after_attach_new_subscriber>
 				</observers>
 			</loyalty_card_save_after>
+			<loyalty_card_delete_after>
+				<observers>
+					<zosloyaltycard_card_delete_after_delete_subscription>
+						<type>singleton</type>
+						<class>zosloyaltycard/observer</class>
+						<method>deleteSubscriptionAfterDeleteLoyaltyCard</method>
+					</zosloyaltycard_card_delete_after_delete_subscription>
+				</observers>
+			</loyalty_card_delete_after>
 		</events>
 
 	</global>

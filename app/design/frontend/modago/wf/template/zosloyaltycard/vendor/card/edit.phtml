@@ -311,9 +311,11 @@ $count = isset($values['kids']) && count($values['kids']) ? count($values['kids'
 			<div class="modal-footer">
 				<form id="delete-card" class="form-horizontal row-border" action="<?php echo $this->getDeleteUrlAction(); ?>" method="POST">
 					<input type="hidden" name="id" value="<?php echo $card->getId();?>"/>
+					<input type="hidden" name="delete_type" value="" id="delete-type-input"/>
 					<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $helper->__("Cancel"); ?></button>
-					<input id="delete-btn" type="submit" value="<?php echo $helper->__("Delete"); ?>" class="btn btn-danger danger pull-right">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal"><?php echo $helper->__("Cancel"); ?></button>
+					<input id="delete-btn-only-card" data-delete-type="<?php echo ZolagoOs_LoyaltyCard_Model_Card::DELETE_ONLY_CARD;?>" type="submit" value="<?php echo $helper->__("Delete just card"); ?>" class="btn btn-danger danger pull-right delete-btn">
+					<input id="delete-btn-with-subscription" data-delete-type="<?php echo ZolagoOs_LoyaltyCard_Model_Card::DELETE_WITH_SUBSCRIPTION;?>" type="submit" value="<?php echo $helper->__("Delete card and subscription"); ?>" class="btn btn-danger danger pull-right delete-btn">
 				</form>
 			</div>
 		</div>
@@ -354,8 +356,10 @@ $count = isset($values['kids']) && count($values['kids']) ? count($values['kids'
 				});
 		},
 		initDelete: function () {
-			jQuery("#delete-btn").click(function (e) {
-				jQuery(this).attr("disabled", true);
+			jQuery(".delete-btn").click(function (e) {
+				var type = jQuery(this).attr("data-delete-type");
+				jQuery("#delete-type-input").val(type);
+				jQuery('.delete-btn').attr("disabled", true);
 				jQuery(this).parent('form').submit();
 			})
 		},

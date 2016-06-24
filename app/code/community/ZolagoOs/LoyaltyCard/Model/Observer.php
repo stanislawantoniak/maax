@@ -20,7 +20,7 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 		$subscriber = Mage::getModel('zolagonewsletter/subscriber');
 		$email = $card->getEmail();
 		$storeId = $card->getStoreId();
-		$subscriber->rawLoadByEmail($email, $storeId);
+		$subscriber = $subscriber->rawLoadByEmail($email, $storeId);
 		
 		if ($subscriber->getId()) {
 			// if exist just confirm email
@@ -197,6 +197,27 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 				if ($customer->dataHasChangedFor('group_id')) {
 					$customer->save();
 				}
+			}
+		}
+	}
+
+	public function deleteSubscriptionAfterDeleteLoyaltyCard(Varien_Event_Observer $observer) {
+		/** @var ZolagoOs_LoyaltyCard_Model_Card $card */
+		$card = $observer->getDataObject();
+		$deleteType = $card->getDeleteType();
+		if ($deleteType == ZolagoOs_LoyaltyCard_Model_Card::DELETE_WITH_SUBSCRIPTION) {
+
+			/* @var $subscriber Zolago_Newsletter_Model_Subscriber */
+			$subscriber = Mage::getModel('zolagonewsletter/subscriber');
+			$email = $card->getEmail();
+			$storeId = $card->getStoreId();
+			$subscriber->rawLoadByEmail($email, $storeId);
+
+			if ($subscriber->getId()) {
+				$subscriber->setStatus(Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED);
+				$subscriber->save();
+			} else {
+				// oh, rly?
 			}
 		}
 	}
