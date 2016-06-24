@@ -81,6 +81,9 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
                 case  Orba_Shipping_Model_Packstation_Inpost::CODE:
                     $url = 'orbashipping/inpost/lp';
                     break;
+                case Orba_Shipping_Model_Post::CODE:	
+                    $url = 'orbashipping/post/lp';
+                    break;
                 default:
                     Mage::throwException('Wrong carrier code');
 		    }
@@ -104,6 +107,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		switch ($tracking->getCarrierCode()) {
 			case Orba_Shipping_Model_Carrier_Dhl::CODE:
 			case Orba_Shipping_Model_Packstation_Inpost::CODE:
+			case Orba_Shipping_Model_Post::CODE:
 				return true;
 			break;
 		}

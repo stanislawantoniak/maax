@@ -76,13 +76,6 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             $client = $this->getClient();
             $client->setShipperAddress($this->_senderAddress);
             $client->setShipmentSettings($settings);
-            $cards = $client->getCards();
-            Mage::log($cards);
-            $card = $cards->karta[1];
-            Mage::log($card);
-            $ret = $client->setActiveCard($card);
-            Mage::log($ret);
-            $client->clearEnvelope($settings);
             $retval = $client->createDeliveryPacks($settings);            
             $code = empty($retval->guid)? 0:$retval->guid;
             $message = 'OK';
