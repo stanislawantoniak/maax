@@ -1,0 +1,82 @@
+<?php  $_hlp = Mage::helper("zolagopo");?>
+<?php $_po = $this->getPo(); ?>
+<?php $_address = $this->getAddress(); ?>
+<?php $_type = $this->getType();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocheckout");
+$locker		= $this->getInpostLocker();
+$orderId = $this->getRequest()->getParam("id", "");
+$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+?>
+<script type="text/javascript">
+	var inPostPointsData = '<?php echo $inPostPoints; ?>';
+	var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
+	var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
+	var orderId = "<?php echo $orderId; ?>";
+
+	var Inpost = [];
+	Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
+	Inpost['shipping_map_select_city'] = "<?php echo $_hlp->__("City"); ?>";
+	Inpost['shipping_map_select_locker'] = "<?php echo $_hlp->__("City"); ?>";
+	Inpost['shipping_map_nearest'] = "<?php echo $_hlp->__("City"); ?>";
+	Inpost['shipping_map_show_nearest_link'] = "<?php echo $_modagoHlp->__("show nearest"); ?>";
+	Inpost['shipping_map_hide_nearest_link'] = "<?php echo $_modagoHlp->__("hide nearest"); ?>";
+	Inpost['shipping_map_show_map_link'] = "<?php echo $_modagoHlp->__("show map"); ?>";
+	Inpost['shipping_map_hide_map_link'] = "<?php echo $_modagoHlp->__("hide map"); ?>";
+	Inpost['shipping_map_method_select'] = "<?php echo $_modagoHlp->__("choose"); ?>";
+
+	var sessionPointName = '<?php echo $locker->getName(); ?>';
+</script>
+<div class="modal fade bs-example-modal-lg" id="editShippingInpostAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content" style="overflow:hidden; padding: 0 0 20px 0";>
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $_hlp->__("Choose locker"); ?></h2>
+			</div>
+
+			<div class="modal-body">
+				<div class="col-md-12 main_container">
+					<div class="col-md-6 main_container_column">
+
+						<div class="col-sm-10 col-md-12 row clearfix map_filter_container">
+							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
+								<div class="gui-form-control">
+									<label for="name" class="gui-label"><?php echo $_hlp->__("City"); ?></label>
+									<select name="shipping_select_city" style="width: 100%;"  class="select2">
+										<option value=""><?php echo $_hlp->__("Select City"); ?></option>
+										<?php foreach ($inPostData["filters"] as $city => $value): ?>
+											<option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+
+							</div>
+							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
+								<div class="gui-form-control">
+									<label for="name" class="gui-label"><?php echo $_hlp->__("Address"); ?></label>
+									<select class="select2" style="width: 100%;"   name="shipping_select_point" data-default="">
+										<option value=""><?php echo $_hlp->__("Choose city first"); ?></option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+						<div class="col-sm-10 col-md-12 row clearfix map_filter_container">
+							<!--Selected Point here-->
+							<div class="shipping_select_point_data">
+								<div class="row">
+									<div class="col-sm-6 address_data"></div>
+									<div class="col-sm-6 confirm_button">
+										<a class="btn button-third reverted" href="javascript:void(0)">wybierz</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
