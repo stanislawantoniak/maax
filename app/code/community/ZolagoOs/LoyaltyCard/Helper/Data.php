@@ -16,4 +16,8 @@ class ZolagoOs_LoyaltyCard_Helper_Data extends Mage_Core_Helper_Abstract {
 		$config = (array)json_decode($config, true);
 		return (array)$config;
 	}
+	
+	public function saveLog($string) {
+		Mage::log($string, null, 'loyalty_card.log');
+	}
 }

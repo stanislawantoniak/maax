@@ -221,4 +221,39 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 			}
 		}
 	}
+
+	public function saveLog(Varien_Event_Observer $observer) {
+		/** @var ZolagoOs_LoyaltyCard_Model_Card $card */
+		$card = $observer->getDataObject();
+		/** @var ZolagoOs_LoyaltyCard_Helper_Data $helper */
+		$helper = Mage::helper("zosloyaltycard");
+
+		$string = PHP_EOL . 'DATE: ' . Mage::getSingleton('core/date')->gmtDate() . PHP_EOL;
+
+		/* @var $session Zolago_Dropship_Model_Session */
+		$session = Mage::getSingleton('udropship/session');
+		$vendor = $session->getVendor();
+		$operator = $session->getOperator();
+
+		if ($session->isOperatorMode()) {
+			$who = $operator->getFullname() . "(" . $operator->getEmail() . ")";
+		} else {
+			$who = $vendor->getVendorName();
+		}
+
+		$isNew = $card->isObjectNew();
+		if ($isNew) {
+			$string .= "NEW CARD INSERTED BY: {$who}" . PHP_EOL;
+		} else {
+			if (!$card->isDeleted()) {
+				$string .= "CARD UPDATED BY: {$who}" . PHP_EOL;
+			} else {
+				$string .= "CARD DELETED BY: {$who}" . PHP_EOL;
+			}
+		}
+		$string .= "CARD NUMBER: " . $card->getCardNumber() . PHP_EOL;
+		$string .= "CARD EMAIL: " . $card->getEmail() . PHP_EOL;
+		$string .= "CARD OWNER: " . $card->getFirstName() . ' ' . $card->getSurname() . PHP_EOL;
+		$helper->saveLog($string);
+	}
 }
