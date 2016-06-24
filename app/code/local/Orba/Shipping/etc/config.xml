@@ -137,6 +137,12 @@
           <title>Poczta Polska</title>          
           <model>orbashipping/post</model>
       </zolagopp>
+      <zolagogls>
+          <active>1</active>
+          <tracking_gateway><![CDATA[https://gls-group.eu/app/service/open/rest/PL/pl/rstt001]]></tracking_gateway>
+          <title>GLS</title>          
+          <model>orbashipping/carrier_gls</model>
+      </zolagogls>
     </carriers>
   </default>
 </config>

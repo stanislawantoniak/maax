@@ -392,7 +392,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
 
-		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
+		$newStatus2 = $this->getPoStatusByPayment($po,$newStatus);
 		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("udpo");
 		$po->setForceStatusChangeFlag(true);
@@ -423,7 +423,7 @@ class Zolago_Po_Model_Po_Status
 	 * @param bool $status
 	 * @return bool|int
 	 */
-	public function getPoStatusByAllocation(Zolago_Po_Model_Po $po,$status=false) {
+	public function getPoStatusByPayment(Zolago_Po_Model_Po $po,$status=false) {
 		if ($po->getId()) {
 			$status = !is_null($status) && $status !== false ? $status : $po->getUdropshipStatus();
 
@@ -432,9 +432,7 @@ class Zolago_Po_Model_Po_Status
 				|| $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
 			{
 				$grandTotal = $po->getGrandTotalInclTax();
-				/** @var Zolago_Payment_Model_Allocation $allocationModel */
-				$allocationModel = Mage::getModel("zolagopayment/allocation");
-				$sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+				$sumAmount  = $po->getPaymentAmount();
 
 				//czeka na płatność lub czeka na rezerwacje
 				if (($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)

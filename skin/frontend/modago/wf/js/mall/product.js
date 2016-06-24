@@ -990,7 +990,6 @@ Mall.product = {
                         // Horizontal center big medias
                         var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
                         var itemH = ratio * width;
-
                         var padding = ((maxHeight - itemH) / 2);
                         jQuery(this).find('a').css('padding', padding + 'px 0');
                     });
@@ -1035,6 +1034,8 @@ Mall.product = {
                     Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
                     if (items.length <= 4 ) {
                         Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
+						var paddingLeft = 38*(4-items.length);
+						Mall.product.gallery.getThumbs().find('.rwd-wrapper').css('padding-left',paddingLeft);
                     }
                 }
             });
