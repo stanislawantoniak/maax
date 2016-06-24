@@ -51,7 +51,7 @@
 
 
       li {
-        margin-right: 8px;
+        margin-right: 7px;
         font-size: 12px;
         line-height: 23px;
 
@@ -68,9 +68,18 @@
 
         a {
           font-size: 12px;
+          text-transform: uppercase;
+          @media  (max-width: 360px){
+            font-size: 11px;
+          }
+          @media  (max-width: 330px){
+            font-size: 10px;
+          }
         }
       }
-
+      li:last-child {
+        margin-right: 0;
+      }
 
     }
   }
@@ -78,7 +87,7 @@
   .top-bar-right {
     float: right;
   }
-  @media only screen and (max-width: $screen-sm-max){
+  @media only screen and (max-width: $screen-xs-max){
     .top-bar-right {
       display: none;
     }

@@ -96,6 +96,14 @@
 	}
 }
 .block-inspiration {
+  .rwd-carousel{
+    padding-left: 75px;
+    padding-right: 75px;
+    @include max-screen($screen-xs-max) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 	.rwd-controls {
 		.rwd-buttons {
 			.rwd-prev,
@@ -116,21 +124,24 @@
 
 			.owl-prev {
 				position: absolute;
-				left: 28px;
-				@media (min-width: $screen-sm-max) {
-					left: 65px;
-				}
+                left: 70px;
+                @include screen($screen-sm-min, $screen-sm-max) {
+                  left: 35px;
+                }
+                @include max-screen($screen-xs-max) {
+                  display: none;
+                }
 				top: 50%;
 				width: 45px;
 				line-height: 42px;
 				height: 45px;
 				margin-top: 28px;
-				border: 1px solid #eee;
+				border: 1px solid #252525;
 				border-radius: 100%;
 				@include transition(all 0.2s ease-in-out);
 				background: $body-bg;
 				&:hover {
-					border-color: #252525;
+					border-color: #eee;
 				}
 			}
 			.owl-prev:before {
@@ -152,21 +163,24 @@
 
 			.owl-next {
 				position: absolute;
-				right: 28px;
-				@media (min-width: $screen-sm-max) {
-					right: 65px;
-				}
+				right: 70px;
+				@include screen($screen-sm-min, $screen-sm-max) {
+                  right: 35px;
+                }
+                @include max-screen($screen-xs-max) {
+                  display: none;
+                }
 				top: 50%;
 				width: 45px;
 				margin-top: 28px;
 				height: 45px;
 				line-height: 42px;
-				border: 1px solid #eee;
+				border: 1px solid #252525;
 				border-radius: 100%;
 				@include transition(all 0.2s ease-in-out);
 				background: $body-bg;
 				&:hover {
-					border-color: #252525;
+					border-color: #eee;
 				}
 			}
 
@@ -190,6 +204,15 @@
 				top: -140px;
 			}
 		}
+        .rwd-pagination {
+          display: none;
+          @include max-screen($screen-xs-max) {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+          }
+
+        }
 	}
 }
 

@@ -6,8 +6,27 @@
 	}
 }
 
+$accountWidthSidebar: 185px;
 
 .sidebar-first {
+  .account-content {
+    #sidebar {
+      width: $accountWidthSidebar;
+      .sidebar {
+        width: $accountWidthSidebar;
+        .account-nav {
+          &.section {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+  #content-main {
+    margin-left: $accountWidthSidebar+$marginSidebar;
+  }
+
+
 	&.node-type-main_categories {
 		#sidebar {
 			@media (max-width: $screen-xs-max) {
@@ -19,10 +38,8 @@
 				box-shadow: none;
 			}
 			.section {
-				background:$color_fff;
-				border-top: 3px solid $colorAccentSidebarAccount;
-				border-left: 1px solid $colorBorderSidebarAccount;
-				border-right: 1px solid $colorBorderSidebarAccount;
+				background: inherit;
+				border: 0;
 			}
 		}
 	}
