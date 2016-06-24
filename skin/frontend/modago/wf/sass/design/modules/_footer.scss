@@ -230,6 +230,9 @@ footer.footer {
     .wpb_wrapper {
       p {
         margin-bottom: 0px;
+		&.text-gray {
+			color: $textColorFooterLink;
+		}
       }
     }
   }
@@ -373,7 +376,7 @@ footer.footer {
       }
     }
 
-    @media screen and (min-width: $screen-lg) {
+    @media screen and (min-width: $screen-sm) {
       label#newsletter-email {
         line-height: 32px;
       }

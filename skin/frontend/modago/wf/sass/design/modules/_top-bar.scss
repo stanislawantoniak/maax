@@ -68,6 +68,13 @@
 
         a {
           font-size: 12px;
+          text-transform: uppercase;
+          @media  (max-width: 360px){
+            font-size: 11px;
+          }
+          @media  (max-width: 330px){
+            font-size: 10px;
+          }
         }
       }
       li:last-child {

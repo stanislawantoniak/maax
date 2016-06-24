@@ -17,9 +17,9 @@ body {
 			top: 0px !important;
 		}
 	}
-	@media screen and (min-height: 750px) {
+	@include max-screen($screen-xs-max) {
 		.headroom--unpinned {
-			top: 0 !important;
+			top: -34px !important;
 		}
 	}
 	.headroom--top {
@@ -211,7 +211,6 @@ body {
 	li {
 		padding: 0 0 0 0;
 		margin-left: 0;
-		//width: 84px;
 		width: 40px;
 		height: 60px;
 		display: inline-block;
@@ -223,11 +222,7 @@ body {
 				//background-color: $colorIconHoverBgHeader;
 
 				color: #252525;
-				-webkit-transition: color 0.3s ease-in-out;
-				-moz-transition: color 0.3s ease-in-out;
-				-ms-transition: color 0.3s ease-in-out;
-				-o-transition: color 0.3s ease-in-out;
-				transition: color 0.3s ease-in-out;
+				@include transition(color 0.3s ease-in-out);
 
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
@@ -243,12 +238,18 @@ body {
 		&#link_menu.not-open, &#link_menu.not-open:hover {
 			background-color: transparent;
 		}
-
+		&#link_account {
+			display: none;
+			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+				display: inline-block;
+			}
+		}
 		@include min-screen($screen-sm-min) {
 			&#link_basket {
 				height: 61px;
 			}
 		}
+
 
 		@include max-screen($screen-sm-max) {
 			width: 40px;
@@ -276,20 +277,17 @@ body {
 		}
 		a:link,
 		a:visited {
+			font-size: 22px;
 			@include max-screen($screen-xs-max) {
-				padding-top: 16px !important;
+				padding-top: 8px !important;
 			}
 			@include min-screen($screen-sm-min) {
-				padding-top: 10px !important;
+				padding-top: 8px !important;
 			}
 		}
 		a:hover {
 			color: #252525;
-			-webkit-transition: color 0.3s ease-in-out;
-			-moz-transition: color 0.3s ease-in-out;
-			-ms-transition: color 0.3s ease-in-out;
-			-o-transition: color 0.3s ease-in-out;
-			transition: color 0.3s ease-in-out;
+			@include transition(color 0.3s ease-in-out);
 		}
 		&.no-badge {
 			a:link,
@@ -320,7 +318,7 @@ body {
 		padding-top: 11px;
 		@include max-screen($screen-xs-max) {
 			height: 46px;
-			padding-top: 17px;
+			padding-top: 8px;
 		}
 		&#toggleSearch {
 			//padding-top: 17px;
@@ -653,7 +651,7 @@ body {
 
 				a {
 					border-top: 1px solid $color_f7f6f7;
-					line-height: 26px;
+					line-height: 13px;
 				}
 
 				&:first-child {
@@ -908,5 +906,15 @@ body {
 	}
 	h2 {
 		background-color: $color_f2f1f0;
+	}
+}
+
+
+.header_icon_test {
+	width: 20px;
+	height: 20px;
+	margin: 0 12px;
+	g path, path {
+		fill: black;
 	}
 }
