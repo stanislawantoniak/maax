@@ -145,13 +145,17 @@ class GH_Common_Adminhtml_RawsqlController extends Mage_Adminhtml_Controller_Act
         $filename = preg_replace('/[*\/,]/', '', $filename);
         $filename = $queryId."_".$filename;
         $result = $model->launchQuery();
-        $arrayToCsv = $this->_prepareCsvData($result);
         header('Content-Type: text/csv');
         header('Content-Description: File Transfer');
         header('Content-Disposition: attachment;filename='.$filename.'.csv;');
         $f = fopen('php://output', 'w');
-        foreach($arrayToCsv as $row){
-            fputcsv($f, $row, ',');
+        if($result){
+            $arrayToCsv = $this->_prepareCsvData($result);
+            foreach($arrayToCsv as $row){
+                fputcsv($f, $row, ',');
+            }
+        }else{
+            fputcsv($f, array(Mage::helper('ghcommon')->__('No result')));
         }
         fclose($f);
     }
