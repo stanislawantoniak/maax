@@ -43,7 +43,7 @@ function _prepareForm($object) {
 	$general->addField("receipt_number", "text", array(
 		"name" => "receipt_number",
 		"class" => "form-control",
-		"required" => true,
+		"required" => false,
 		"label" => $helper->__('Receipt number'),
 		"label_wrapper_class" => "col-md-3",
 		"wrapper_class" => "col-md-3"
@@ -52,7 +52,7 @@ function _prepareForm($object) {
 	$general->addField("receipt_value", "text", array(
 		"name" => "receipt_value",
 		"class" => "form-control",
-		"required" => true,
+		"required" => false,
 		"label" => $helper->__('Receipt value'),
 		"label_wrapper_class" => "col-md-3",
 		"wrapper_class" => "col-md-2"
@@ -61,7 +61,7 @@ function _prepareForm($object) {
 	$general->addField("shop_code", "text", array(
 		"name" => "shop_code",
 		"class" => "form-control",
-		"required" => true,
+		"required" => false,
 		"label" => $helper->__('Shop code'),
 		"label_wrapper_class" => "col-md-3",
 		"wrapper_class" => "col-md-2"
@@ -80,7 +80,7 @@ function _prepareForm($object) {
 	$general->addField("expire_date", "text", array(
 		"name" => "expire_date",
 		"class" => "form-control datetimepicker col-md-2",
-		"required" => true,
+		"required" => false,
 		"label" => $helper->__('Expire date'),
 		"label_wrapper_class" => "col-md-3",
 		"wrapper_class" => "col-md-6 datetimepicker-wrapper",
@@ -179,7 +179,7 @@ function _prepareForm($object) {
 	$abode->addField("place", "text", array(
 		"name" => "place",
 		"class" => "form-control",
-		"required" => true,
+		"required" => false,
 		"label" => $helper->__('Place'),
 		"label_wrapper_class" => "col-md-3",
 		"wrapper_class" => "col-md-5"
