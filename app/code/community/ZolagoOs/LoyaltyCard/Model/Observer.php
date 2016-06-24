@@ -97,16 +97,23 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 			foreach ($customersCollection as $customer) {
 				$save = false;
 				$index = 1;
-					/** @var ZolagoOs_LoyaltyCard_Model_Card $_card */
-				foreach ($cards[$storeId][$customer->getEmail()] as $_card) {
+					/** @var ZolagoOs_LoyaltyCard_Model_Card $_card|null */
+				$customerCards = array_replace(array(null, null, null), $cards[$storeId][$customer->getEmail()]);
+				foreach ($customerCards as $_card) {
 					if ($index > 3) break;
 					$n = "loyalty_card_number_{$index}";
 					$t = "loyalty_card_number_{$index}_type";
 					$e = "loyalty_card_number_{$index}_expire";
-					$customer->setData($n, $_card->getCardNumber());
-					$customer->setData($t, $_card->getCardType());
-					$customer->setData($e, $_card->getExpireDate());
 
+					if ($_card) {
+						$customer->setData($n, $_card->getCardNumber());
+						$customer->setData($t, $_card->getCardType());
+						$customer->setData($e, $_card->getExpireDate());
+					} else {
+						$customer->setData($n, null);
+						$customer->setData($t, null);
+						$customer->setData($e, null);
+					}
 					$changed = $customer->dataHasChangedFor($n) || $customer->dataHasChangedFor($n) || $customer->dataHasChangedFor($n);
 					$save = $changed ? true : $save;
 					$index++;
