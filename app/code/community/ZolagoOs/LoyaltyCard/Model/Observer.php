@@ -142,8 +142,8 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 
 		/** @var Mage_Core_Model_Website $website */
 		foreach (Mage::app()->getWebsites() as $website) {
-			/** @var Zolago_Customer_Helper_Data $helper */
-			$helper = Mage::helper("zolagocustomer");
+			/** @var ZolagoOs_LoyaltyCard_Helper_Data $helper */
+			$helper = Mage::helper("zosloyaltycard");
 			$config = $helper->getLoyaltyCardConfig($website->getDefaultStore());
 
 			/** @var Mage_Customer_Model_Resource_Customer_Collection $coll */
