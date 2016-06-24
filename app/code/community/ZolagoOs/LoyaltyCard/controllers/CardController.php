@@ -108,7 +108,7 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 			
 			$this->_getSession()->addSuccess($helper->__("Card '%s' saved", $card->getCardNumber()));
 			
-			return $this->_redirect("*/*/edit", array('id' => $card->getId()));
+			return $this->_redirect("*/*");
 			
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
