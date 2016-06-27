@@ -47,6 +47,7 @@ class GH_GTM_Helper_Data extends Shopgo_GTM_Helper_Data {
 
 		//visitorLogged
 		$data['visitorLogged'] = $customerSession->isLoggedIn() ? 'yes' : 'no';
+		$data['tduid'] = Mage::app()->getCookie()->get("TRADEDOUBLER");
 
 		if($includeEvent) {
 			$data['event'] = 'visitorDataReady';
