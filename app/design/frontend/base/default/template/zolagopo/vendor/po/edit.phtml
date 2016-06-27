@@ -1,6 +1,6 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
 <?php $_hlp					= Mage::helper("zolagopo");?>
-<?php $_po					= $this->getPo(); ?>
+<?php $_po					= $this->getPo();?>
 <?php $_shippingMethod		= $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
 <?php /** @var Mage_Sales_Model_Order_Shipment $_currentShipping */
@@ -351,7 +351,7 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode):?>
-						<?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName()) ?>
+						<?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName(), true) ?>
 					<?php else:?>
 						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
 					<?php endif;?>

@@ -1,19 +1,25 @@
 <?php  $_hlp = Mage::helper("zolagopo");?>
 <?php $_po = $this->getPo(); ?>
-<?php $_address = $this->getAddress(); ?>
+<?php $_address = $this->getAddress();?>
 <?php $_type = $this->getType();
+//echo Mage::registry('inpost_town');
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocheckout");
-$locker		= $this->getInpostLocker();
 $orderId = $this->getRequest()->getParam("id", "");
 $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+$lockerName = $_po->getInpostLockerName();
+$lockerInfo = Mage::helper('udropship')->getLockerInfo($lockerName);
+$lockerCity = $lockerInfo[0]['town'];
 ?>
 <script type="text/javascript">
 	var inPostPointsData = '<?php echo $inPostPoints; ?>';
 	var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
 	var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
 	var orderId = "<?php echo $orderId; ?>";
+	var pachkomatLocate = "<?php echo Mage::helper('ghinpost')->__("Locker"); ?>";
+	var lockerCity = "<?php echo $lockerCity; ?>";
+	var lockerName = "<?php echo $lockerName; ?>";
 
 	var Inpost = [];
 	Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
@@ -26,21 +32,20 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 	Inpost['shipping_map_hide_map_link'] = "<?php echo $_modagoHlp->__("hide map"); ?>";
 	Inpost['shipping_map_method_select'] = "<?php echo $_modagoHlp->__("choose"); ?>";
 
-	var sessionPointName = '<?php echo $locker->getName(); ?>';
 </script>
-<div class="modal fade bs-example-modal-lg" id="editShippingInpostAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content" style="overflow:hidden; padding: 0 0 20px 0";>
+
+<div class="modal fade" id="editShippingInpostAddressModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"></button>
-				<h2 class="title_section"><?php echo $_hlp->__("Choose locker"); ?></h2>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="title_section"><?php echo $_hlp->__("Choose locker"); ?></h4>
 			</div>
 
-			<div class="modal-body">
+			<div class="modal-body" style="min-height: 200px;">
 				<div class="col-md-12 main_container">
-					<div class="col-md-6 main_container_column">
-
-						<div class="col-sm-10 col-md-12 row clearfix map_filter_container">
+					<div class="main_container_column">
+						<div class="row clearfix map_filter_container" style="min-height: 100px;">
 							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
 								<div class="gui-form-control">
 									<label for="name" class="gui-label"><?php echo $_hlp->__("City"); ?></label>
@@ -51,7 +56,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 										<?php endforeach; ?>
 									</select>
 								</div>
-
 							</div>
 							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
 								<div class="gui-form-control">
@@ -63,13 +67,13 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 							</div>
 
 						</div>
-						<div class="col-sm-10 col-md-12 row clearfix map_filter_container">
+						<div class="row clearfix map_filter_container form-group invoice-data" style="min-height: 100px;padding: 0 0 0 20px;">
 							<!--Selected Point here-->
 							<div class="shipping_select_point_data">
 								<div class="row">
-									<div class="col-sm-6 address_data"></div>
+									<div class="col-sm-6 address_data"><?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName()) ?></div>
 									<div class="col-sm-6 confirm_button">
-										<a class="btn button-third reverted" href="javascript:void(0)">wybierz</a>
+										<a class="btn btn-primary" href="javascript:void(0)"><?php echo $_hlp->__("choose"); ?></a>
 									</div>
 								</div>
 							</div>

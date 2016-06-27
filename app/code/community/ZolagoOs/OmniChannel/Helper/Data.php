@@ -3040,10 +3040,22 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
-    public function formatCustomerAddressInpost($address, $inpostLockerName)
+    public function getLockerInfo($inpostLockerName){
+        $locker = Mage::getModel('ghinpost/locker')
+            ->getCollection()
+            ->addFieldToFilter('name', $inpostLockerName);
+        $lockerData = $locker->getData();
+        return $lockerData;
+    }
+
+    public function formatCustomerAddressInpost($address, $inpostLockerName, $fullReslonse = false)
     {
-        $addressData = $address->getData();
-        $result = Mage::helper('ghinpost')->__("Locker") . ' ' . $inpostLockerName."<br/>".$addressData['street']."</br>".$addressData['postcode']." ".$addressData['city']."</br>T. ".$addressData['telephone'];
+        $lockerData = $this->getLockerInfo($inpostLockerName);
+        $result = Mage::helper('ghinpost')->__("Locker") . ' ' . $inpostLockerName."<br/>".$lockerData[0]['street']." ".$lockerData[0]['building_number']."</br>".$lockerData[0]['postcode']." ".$lockerData[0]['town'];
+        if($fullReslonse){
+            $shippingAddress = $address->getData();
+            $result .= "</br>T. ".$shippingAddress['telephone'];
+        }
         return $result;
     }
 
