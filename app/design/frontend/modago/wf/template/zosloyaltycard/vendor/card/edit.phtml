@@ -263,7 +263,7 @@ function _prepareForm($object) {
 $form = _prepareForm($this);
 
 $values = $this->getModel()->getData();
-$count  = 1 + isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1;
+$count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1);
 ?>
 
 <div class="container">
@@ -274,7 +274,7 @@ $count  = 1 + isset($values['kids']) && count($values['kids']) ? count($values['
 				<p><?php echo $helper->__("Create new card. Required fields are marked with an asterisk."); ?></p>
 			<?php else: ?>
 				<h3><?php echo $helper->__("Edit card '%s'", $card->getCardCode()); ?></h3>
-				<p><?php echo $helper->__("Below you will find details of card. You can make changes to this cart by editing each field"); ?></p>
+				<p><?php echo $helper->__("Below you will find details of card. You can make changes to this cart by editing each field."); ?></p>
 			<?php endif; ?>
 		</div>
 		<div class="col-md-6">
