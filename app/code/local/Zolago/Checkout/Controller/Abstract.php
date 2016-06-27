@@ -21,6 +21,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 	 * Then make save process
 	 */
 	public function saveOrderAction() {
+		Mage::log((int)$this->_validateFormKey(),null, "1234.log");
 		if (!$this->_validateFormKey()) {
             $this->_redirect('*/*');
             return;

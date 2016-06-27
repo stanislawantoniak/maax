@@ -127,9 +127,15 @@ $validation-error: $color_e84c3d;
 }
 
 // FONT
-$fontRegular: Verdana, Geneva,sans-serif;
-$fontOpen: 'Open Sans', sans-serif;
-$fontBlack: Georgia, sans-serif;
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:bold,light,regular&subset=latin-ext);
+$fontRegular: 'Open Sans', sans-serif;
+$fontOpen: $fontRegular;
+
+$fontBlack: $fontRegular;
+$fontLight: $fontRegular;
+
+$line-height-base: 1.8 !default;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
 
@@ -160,6 +166,7 @@ $opacitySiteOverlay:                    .5;
 $colorShadow:                           #bbb;
 
 $colorFont:                             #555;
+$colorSecondFont:                       #3d3d3d;
 $colorLink:                             #000;
 
 $colorLinkHover:                        #000;
@@ -168,7 +175,7 @@ $colorLinkActive:                       #000;
 $colorLinkHoverOnDark:                  #fff;
 
 $decorationLinkHover:                   underline;
-$colorHeader:                           #3d3d3d;
+$colorHeader:                           $colorSecondFont;
 
 //icon colors
 $colorIcon:                             #3d3d3d;
@@ -189,24 +196,26 @@ $colorAccentBlocks:                     #EBEBEB;
 $colorAccentSite:                       #dc4348;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
-$colorAccentError:                      #CD0027;
 
-//buttons
+$colorAccentError:                      $colorAccentSite;
+$colorAccentValid:                      #6dab3c;
+
+/***********************************************/
+/***********************************************/
+/***************  BUTTONS   ********************/
+/***********************************************/
+/***********************************************/
+//primary
 $colorBtnPrimary:                       #FFF;
-
 $colorBtnPrimaryBgStart:                #262626;
 $colorBtnPrimaryBgEnd:                  #262626;
-
 $colorBtnPrimaryBgStartHover:           #444;
 $colorBtnPrimaryBgEndHover:             #444;
-
 $colorBtnPrimaryBgStartActive:          #444;
 $colorBtnPrimaryBgEndActive:            #444;
+$colorBtnPrimaryBgDisabled:             #C5C5C5;
 
-$colorBtnThirdBorderActive:             #444;
-$colorBtnThirdColorActive:              #444;
-
-
+//secondary
 $colorBtnSecondaryBgStart:                #adadad;
 $colorBtnSecondaryBgEnd:                  #adadad;
 $colorBtnSecondaryBgStartHover:           #dc4348;
@@ -215,11 +224,28 @@ $colorBtnSecondaryBgStartActive:          #dc4348;
 $colorBtnSecondaryBgEndActive:            #dc4348;
 $colorBtnSecondaryHoverBorder:            #dc4348;
 
-$colorBtnPrimaryBgDisabled:             #C5C5C5;
 
-$colorMainMenuSubItemGradientStart: #F9F9FA;
-$colorMainMenuSubItemGradientEnd: #F9F9FA;
+//third
+$colorBtnThirdBorderActive:             #444;
+$colorBtnThirdColorActive:              #444;
+$colorBtnThirdBgStart:                    #adadad;
+$colorBtnThirdBgEnd:                      #adadad;
+$colorBtnThirdBgStartHover:               #444;
+$colorBtnThirdBgEndHover:                 #444;
+$colorBtnThirdHoverBorder:                #444;
+$colorBtnThirdBgStartActive:              #444;
+$colorBtnThirdBgEndActive:                #444;
+$colorBtnThirdBgDisabled:                 #444;
 
+
+//fourth
+$colorBtnFourth:               #4f4f4f;
+$colorBtnFourthBgStart:        #fff;
+$colorBtnFourthBgEnd:          #fff;
+$colorBtnFourthBgStartHover:   #fff;
+$colorBtnFourthBgEndHover:     #fff;
+$colorBtnFourthBorder:         #afafaf;
+$colorBtnFourthBorderHover:    #4f4f4f;
 
 @mixin generalLinkOnDark {
   &:hover, &.hover {
@@ -241,10 +267,25 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
 	}
 	&:active,&:focus,&.active {
 		@include linearGradient($colorBtnPrimaryBgStartActive,$colorBtnPrimaryBgEndActive);
+        outline: none;
 	}
 	&.disabled {
 		background: $colorBtnPrimaryBgDisabled;
 	}
+}
+
+@mixin fourthButtonGradient { //covers normal + hover + active + .disabled
+  @include linearGradient($colorBtnFourthBgStart,$colorBtnFourthBgEnd);
+  &:hover,&.hover {
+    @include linearGradient($colorBtnFourthBgStartHover,$colorBtnFourthBgEndHover);
+  }
+  &:active,&:focus,&.active {
+    @include linearGradient($colorBtnFourthBgStartHover,$colorBtnFourthBgEndHover);
+    outline: none;
+  }
+  &.disabled {
+    background: $colorBtnPrimaryBgDisabled;
+  }
 }
 
 
@@ -263,6 +304,26 @@ $colorMainMenuSubItemGradientEnd: #F9F9FA;
     background: $colorBtnPrimaryBgDisabled;
   }
 }
+
+@mixin thirdButtonGradient { //covers normal + hover + active + .disabled
+  @include linearGradient($colorBtnThirdBgStart,$colorBtnThirdBgEnd);
+  &:hover,
+  &.hover {
+    @include linearGradient($colorBtnThirdBgStartHover,$colorBtnThirdBgEndHover);
+    border-color: $colorBtnThirdHoverBorder;
+  }
+  &:active,&:focus,&.active {
+    @include linearGradient($colorBtnThirdBgStartActive,$colorBtnThirdBgEndActive);
+    border-color: $colorBtnThirdHoverBorder;
+  }
+  &.disabled {
+    background: $colorBtnThirdBgDisabled;
+  }
+}
+/***********************************************/
+
+$colorMainMenuSubItemGradientStart: #F9F9FA;
+$colorMainMenuSubItemGradientEnd: #F9F9FA;
 
 @mixin productPricesBlockKit {
 
@@ -360,11 +421,13 @@ $colorHeaderSearchBorder:               #d5d5d5;
 $colorHeaderSearchBtnBg:                #000;
 $colorHeaderSearchBtn:                  #FFF;
 
-/* CHECKOUT HEADER VARIABLES */
-$colorHeaderCheckoutSteps:              $colorIconHeader;
-$colorHeaderCheckoutStepsActive:        $colorAccentSite;
-$colorHeaderCheckoutStepsText:          $colorIconHeader;
-$colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
+/* CHECKOUT VARIABLES */
+$colorHeaderCheckoutSteps:              $color_ccc;
+$colorHeaderCheckoutStepsActive:        $color_000;
+$colorHeaderCheckoutStepsText:          $color_ccc;
+$colorHeaderCheckoutStepsTextActive:    $color_000;
+
+$colorCheckoutFieldsTopBorder:          transparent;
 
 /* TOP MENU VARIABLES */
 $colorAccentSiteMenuTop:                $colorAccentSite;
@@ -433,7 +496,7 @@ $colorAccentProductTitle:               $colorAccentTitle;
 $colorProductAccordionBorder:           #d9d9d9;
 $colorProductAccordion:                 #000;
 
-$colorProductFinalPrice:                 $color_fd002a;
+$colorProductFinalPrice:                 $color_dc4348;
 $colorProductStrikeOutPrice:             $color_8a8a8a;
 
 
@@ -444,7 +507,7 @@ $colorBackgroundBlocksAccount:          $colorBackgroundBlocks;
 
 /* RMA VARIABLES */
 $colorRma:                              $colorFont;
-$colorBorderRma:                        #bfbfbf;
+$colorBorderRma:                        $gray-lighter;
 $colorBackgroundRma:                    $colorBackgroundBlocksAccount;
 $colorAccentRma:                        $colorAccentSite;
 $colorRmaCancel:                        #BBB;
@@ -508,3 +571,12 @@ $backgroundColorFlagNew:                $color_7fce25;
 $backgroundColorFlagSale:               $color_de0e59;
 $backgroundColorFlagPromotion:          $color_ec4920;
 $boxShadowListingColor:                 $color_f5f3f4;
+
+
+/*ICON BOX*/
+$backgroundIconBoxIconHover:            $color_3d3d3d;
+$borderColorIconBoxIconHover:           $color_3d3d3d;
+
+
+/* selectboxit */
+$colorTextSelectboxit:                  $color_737373;

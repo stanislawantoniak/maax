@@ -6,7 +6,8 @@ $_hlp = Mage::helper("zolagopo");
 $_po =  $this->getPo();
 
 $_availableMethods =  $this->getAvailableMethods();
-
+$_sizes = Mage::getSingleton('orbashipping/system_source_post_sizes')->toOptionHash();
+$_category = Mage::getSingleton('orbashipping/system_source_post_category')->toOptionHash();
 $_modagoHlp = Mage::helper("zolagocommon");
 ?>
 <!-- Modal add letter-->
@@ -35,11 +36,12 @@ $_modagoHlp = Mage::helper("zolagocommon");
                                 </label>
 							</div>
 						</li>
+						<?php if (count($_sizes)) : ?>
 						<li class="form-group specify specify-carrier specify-c">
 							<label for="shipping-specify_post_type" class="col-md-3 control-label"><?php echo $_hlp->__('Parcel size') ?></label>
 							<div class="col-md-9">
 								<select name="specify_post_size" id="shipping-specify_post_type" class="form-control">
-									<?php foreach(Mage::getSingleton('orbashipping/system_source_post_sizes')->toOptionHash() as $value=>$label):?>
+									<?php foreach($_sizes as $value=>$label):?>
 										<option value="<?php echo $this->escapeHtml($value);?>">
 											<?php echo $this->escapeHtml($label);?>
 										</option>
@@ -47,11 +49,13 @@ $_modagoHlp = Mage::helper("zolagocommon");
 								</select>
 							</div>
 						</li>
+						<?php endif; ?>
+						<?php if (count($_category)) : ?>
 						<li class="form-group specify specify-carrier specify-c">
 							<label for="shipping-specify_post_category" class="col-md-3 control-label"><?php echo $_hlp->__('Parcel category') ?></label>
 							<div class="col-md-9">
 								<select name="specify_post_category" id="shipping-specify_post_category" class="form-control">
-									<?php foreach(Mage::getSingleton('orbashipping/system_source_post_category')->toOptionHash() as $value=>$label):?>
+									<?php foreach($_category as $value=>$label):?>
 										<option value="<?php echo $this->escapeHtml($value);?>">
 											<?php echo $this->escapeHtml($label);?>
 										</option>
@@ -59,6 +63,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
 								</select>
 							</div>
 						</li>
+						<?php endif;?>
 						<li class="form-group specify specify-carrier">
 							<label for="shipping-weight" class="col-md-3 control-label"><?php echo $_hlp->__('Weight') ?></label>
 							<div class="col-md-2">

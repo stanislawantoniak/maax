@@ -1,0 +1,94 @@
+<?php
+/**
+ * This part is for showing popup with payments details
+ * NOT connected with 'allocation' logic
+ * this means we use simplified logic for payments
+ */
+
+/** @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */
+/** @var Zolago_Po_Model_Po $po */
+$hlpPo = Mage::helper("zolagopo");
+$po = $this->getData('po');
+//$show = $this->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
+$transactionsDetails = $this->getData('transactions_details');
+$refundsDetails =$this->getData('refunds_details');
+
+?>
+<div class="modal fade" id="paymentsModal-simple">
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><?php echo $hlpPo->__("Payment details"); ?></h4>
+            </div>
+            <div class="modal-body">
+
+				<?php if($transactionsDetails->count() || $refundsDetails->count()): ?>
+					<table class="table table-striped table-bordered table-checkable table-hover foot-empty-cells">
+						<thead>
+						<tr>
+							<th><?php echo $hlpPo->__("Transaction"); ?></th>
+							<th><?php echo $hlpPo->__("Date"); ?></th>
+							<th><?php echo $hlpPo->__("Details"); ?></th>
+							<th><?php echo $hlpPo->__("Amount"); ?></th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php
+						/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+						foreach ($transactionsDetails as $transaction): ?>
+							<tr>
+								<td><?php echo $transaction->getTxnId(); ?></td>
+								<td><?php echo $transaction->getCreatedAt(); ?></td>
+								<td><?php echo $hlpPo->__($transaction->getOrderPaymentObject()->getMethodInstance()->getTitle()); ?></td>
+								<td>
+									<?php echo Mage::helper('core')
+										->currency($transaction->getTxnAmount(), true, false); ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+						<?php
+						/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+						foreach ($refundsDetails as $transaction): ?>
+						<tr>
+							<td><?php echo $transaction->getTxnId(); ?></td>
+							<td><?php echo $transaction->getCreatedAt(); ?></td>
+							<td><?php echo $hlpPo->__($transaction->getOrderPaymentObject()->getMethodInstance()->getTitle()); ?></td>
+							<td>
+								<?php echo Mage::helper('core')
+									->currency($transaction->getTxnAmount(), true, false); ?>
+							</td>
+						</tr>
+						<?php endforeach; ?>
+						<tr>
+							<td></td>
+							<td></td>
+							<td><strong><?php echo $hlpPo->__("Paid");?></strong></td>
+							<td>
+								<strong><?php echo $po->getCurrencyFormattedAmount($po->getPaymentAmount()); ?></strong>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td><strong><?php echo $hlpPo->__("Order amount");?></strong></td>
+							<td>
+								<strong><?php echo Mage::helper("core")->currency($po->getGrandTotalInclTax());?></strong>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td><strong><?php echo $po->getDebtAmount() > 0 ? $hlpPo->__("Overpaid") : $hlpPo->__("Underpaid");?>:</strong></td>
+							<td><strong><?php echo $po->getCurrencyFormattedAmount(abs($po->getDebtAmount())); ?></strong></td>
+						</tr>
+						</tbody>
+					</table>
+				<?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $hlpPo->__("Cancel"); ?></button>
+            </div>
+        </div>
+    </div>
+</div>

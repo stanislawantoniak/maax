@@ -56,8 +56,8 @@ $cms = array(
         <div class="wpb_text_column wpb_content_element ">
             <div class="wpb_wrapper">
                 <h2 class="footer-list-title">Kontakt</h2>
-                <p>Pracujemy Pon-Pt, w godzinach 8-16</p>
-                <p>Telefon + 48 (33) 821-94-10</p>
+                <p class="text-gray">Pracujemy Pon-Pt, w godzinach 8-16</p>
+                <a href="tel:+48338219410">Telefon + 48 (33) 821-94-10</a>
                 <a href="{{store direct_url='help/contact' _no_vendor='1'}}" class="contact-us-link">Napisz do nas</a></div>
         </div>
     </div>

@@ -40,7 +40,11 @@
 }
 
 #active-filters, #view-current-filter{
-	
+  @media (max-width: $screen-sm-to-smmd-max) {
+    #filters-btn {
+      margin-top: 15px;
+    }
+  }
 	h1 {
 		text-transform: uppercase;
 		@media (max-width: $screen-xs-max) {

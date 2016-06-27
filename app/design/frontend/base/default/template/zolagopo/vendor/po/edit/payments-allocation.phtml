@@ -1,4 +1,8 @@
 <?php
+/**
+ * This part is for showing popup with payments details
+ * connected with 'allocation' logic
+ */
 
 /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Payments */
 /** @var Zolago_Po_Model_Po $_po */
@@ -13,7 +17,7 @@ $allocateTooltipMsg = $_hlp->__("Allocate to the current order");
 ?>
 
 <!-- Modals comment -->
-<div class="modal fade" id="paymentsModal">
+<div class="modal fade" id="paymentsModal-allocation">
     <div class="modal-dialog" style="width: 800px;">
         <div class="modal-content">
             <div class="modal-header">

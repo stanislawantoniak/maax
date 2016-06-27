@@ -6,6 +6,9 @@
     text-align: center;
     text-transform: uppercase;
   }
+  @media (max-width: $screen-xs-max) {
+	  border-bottom:1px solid $color_ebebeb;	
+  }
 }
 
 #help-contact-msg-fix{
@@ -23,6 +26,15 @@
 }
 
 #contact-container {
+  @media (max-width: $screen-xs-max) {
+	h1 {
+		text-align:center;
+	}
+  }
+  margin-bottom:40px;
+  h1 {
+	padding:15px 0px 25px 0px;
+  }
   border-top-width: 0px;
 
   ul.form-list {

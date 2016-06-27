@@ -128,29 +128,68 @@
 			font-weight: 400;
 		}
 	}
-	&.button-third {
-		padding: 6px 18px;
-		color:$textColorBtn;
-		font-weight: normal;
-		font-size: 13px;
+	&.button-fourth {
+		padding: 10px 15px;
+		color:$colorBtnFourth;
 		font-family: $fontOpen;
-		font-weight: 400;
-		min-width: 92px;
 		text-align: center;
-		background: $backgroundColorBtn;
-		&:hover,
-		&.hover {
-			background: $backgroundColorHoverBtn;
+		white-space:nowrap;
+		border: 1px solid $colorBtnFourthBorder;
+		text-transform: none;
+
+		&:first-letter{
+			text-transform: capitalize;
 		}
-		&:active,
-		&.active {
-			@media(min-width:1024px){
-				background: $backgroundColorHoverBtn;
-				border-color: $colorBtnThirdBorderActive;
-				color: $colorBtnThirdColorActive;
+		&:hover {
+			border: 1px solid $colorBtnFourthBorderHover;
+		}
+
+		@include fourthButtonGradient;
+
+		@media (max-width: $screen-xs-max) {
+			padding: 10px 15px;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+				font-weight: bold;
 			}
 		}
+		@media (max-width: 360px) {
+			padding: 10px 10px;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+				font-weight: normal;
+			}
+		}
+		@media (max-width: 319px) {
+			padding: 10px 10px;
+		}
+		&.large {
+			padding: 10px 15px;
+			font-size: 14px;
+		}
+		&.medium {
+			padding: 5px 15px;
+			font-size: 14px;
+			font-weight: normal;
+		}
+		&.small {
+			padding: 2.5px 15px;
+			font-size: 14px;
+			font-weight: normal;
+		}
 	}
+  &.button-third {
+    padding: 6px 18px;
+    color: $textColorBtn;
+    font-weight: normal;
+    font-size: 13px;
+    font-family: $fontOpen;
+    font-weight: 400;
+    min-width: 92px;
+    text-align: center;
+    white-space: nowrap;
+
+    @include thirdButtonGradient;
+
+  }
 }
 .btn {
 	padding: 5px 10px;
