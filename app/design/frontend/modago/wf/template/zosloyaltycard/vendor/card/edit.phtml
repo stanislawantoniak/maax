@@ -83,7 +83,7 @@ function _prepareForm($object) {
 		"required" => false,
 		"label" => $helper->__('Expire date'),
 		"label_wrapper_class" => "col-md-3",
-		"wrapper_class" => "col-md-6 datetimepicker-wrapper",
+		"wrapper_class" => "col-md-3 datetimepicker-wrapper",
 		"after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>',
 	));
 
@@ -95,7 +95,7 @@ function _prepareForm($object) {
 			"required" => false,
 			"label" => $helper->__("Created at"),
 			"label_wrapper_class" => "col-md-3",
-			"wrapper_class" => "col-md-6",
+			"wrapper_class" => "col-md-3",
 			"readonly" => true,
 			"format" => "Y-MM-d HH:mm:ss",
 			'is_wide' => true,
@@ -108,7 +108,7 @@ function _prepareForm($object) {
 			"required" => false,
 			"label" => $helper->__("Updated at"),
 			"label_wrapper_class" => "col-md-3",
-			"wrapper_class" => "col-md-6",
+			"wrapper_class" => "col-md-3",
 			"readonly" => true,
 			"format" => "Y-MM-d HH:mm:ss",
 			'is_wide' => true,
@@ -145,7 +145,7 @@ function _prepareForm($object) {
 		"required" => true,
 		"label" => $helper->__('Sex'),
 		"label_wrapper_class" => "col-md-3",
-		"wrapper_class" => "col-md-7 radio-buttons",
+		"wrapper_class" => "col-md-3 radio-buttons",
 		'value' => 'M',
 		'values' => array(
 			array('value' => 'M', 'label' => $helper->__('Male')),
@@ -155,7 +155,7 @@ function _prepareForm($object) {
 
 	$client->addField("telephone_number", "text", array(
 		"name" => "telephone_number",
-		"class" => "form-control",
+		"class" => "form-control group-email-or-phone",
 		"required" => true,
 		"label" => $helper->__('Telephone number'),
 		"label_wrapper_class" => "col-md-3",
@@ -164,7 +164,7 @@ function _prepareForm($object) {
 
 	$client->addField("email", "text", array(
 		"name" => "email",
-		"class" => "form-control",
+		"class" => "form-control group-email-or-phone",
 		"required" => true,
 		"label" => $helper->__('Email'),
 		"label_wrapper_class" => "col-md-3",
@@ -220,7 +220,7 @@ function _prepareForm($object) {
 			"required" => true,
 			"label" => $helper->__('Sex'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
-			"wrapper_class" => "col-md-7 radio-buttons",
+			"wrapper_class" => "col-md-3 radio-buttons",
 			'value' => 'M',
 			'values' => array(
 				array('value' => 'M', 'label' => $helper->__('Boy')),
@@ -234,7 +234,7 @@ function _prepareForm($object) {
 			"required" => true,
 			"label" => $helper->__('Date of birth'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
-			"wrapper_class" => "col-md-6 datetimepicker-wrapper datetimepicker-wrapper-kid-{$i}",
+			"wrapper_class" => "col-md-3 datetimepicker-wrapper datetimepicker-wrapper-kid-{$i}",
 			"after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>',
 		));
 
@@ -367,7 +367,48 @@ $count = isset($values['kids']) && count($values['kids']) ? count($values['kids'
 			})
 		},
 		initValidation: function() {
-			// todo
+			/**
+			 * @see require_from_group
+			 */
+			jQuery.validator.addMethod("require_from_group_2", function(value, element, options) {
+				var validator = this;
+				var selector = options[1];
+				var validOrNot = jQuery(selector, element.form).filter(function() {
+						return validator.elementValue(this);
+					}).length >= options[0];
+				
+				return validOrNot;
+			}, "Please fill at least {0} of these fields.");
+
+			var form = jQuery("#edit-card");
+			new Zolago.formIntegrator(form);
+			form.validate({
+				rules: {
+					"telephone_number": {
+						require_from_group_2: [1, ".group-email-or-phone"],
+						required: false
+					},
+					"email": {
+						require_from_group_2: [1, ".group-email-or-phone"],
+						required: false
+					}
+				},
+				messages: {
+					telephone_number: {
+						require_from_group_2: '<?php echo Mage::helper('zolagocommon')->__("Please fill at least {0} of these fields."); ?>'
+					},
+					email: {
+						require_from_group_2: '<?php echo Mage::helper('zolagocommon')->__("Please fill at least {0} of these fields."); ?>'
+					}
+				},
+				errorPlacement: function($error, $element) {
+					if ($element.closest("div").hasClass("input-group")) {
+						$element.closest("div").parent().append($error);
+					} else {
+						$element.closest("div").append($error);
+					}
+				}
+			});
 		},
 		initViewLogic: function () {
 			if (jQuery('#card_type option').length == 2) {
