@@ -1,11 +1,12 @@
 jQuery(document).ready(function () {
 
-    if(lockerCity !== "undefined"){
+    if(typeof lockerCity !== "undefined"){
         jQuery('[name=shipping_select_city] option[value="'+lockerCity+'"]').prop('selected', true);
         _makeMapRequest(lockerCity, true);
     }
 
     jQuery("[name=shipping_select_city]").change(function () {
+        jQuery('[name=choose_inpost]').attr('disabled', 'disabled');
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
 
         if (enteredSearchValue !== "undefined") {
@@ -15,8 +16,9 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery(".confirm_button a").click(function () {
-        var inpost_name = jQuery(".confirm_button a").attr('inpost-name');
+    jQuery('[name=choose_inpost]').click(function () {
+        jQuery('[name=choose_inpost]').text(jQuery('[name=choose_inpost]').attr('data-loading-text'));
+        var inpost_name = jQuery('[name=choose_inpost]').attr('inpost-name');
 
         jQuery.ajax({
             url: "/udpo/inpost/updateInpostData",
@@ -121,6 +123,7 @@ function constructShippingPointSelect(map_points) {
 
 function prepareGroupPoints(map_points){
     jQuery("[name=shipping_select_point]").change(function () {
+        jQuery('[name=choose_inpost]').attr('disabled', 'disabled');
         jQuery(".shipping_select_point_data").css("display","none");
         var enteredSearchPointValue = jQuery("[name=shipping_select_point] option:selected").val();
 
@@ -136,8 +139,8 @@ function prepareGroupPoints(map_points){
 
 function showShippingData(map_point){
     var html_data = pachkomatLocate + " " + map_point.name + "<br/>" + map_point.street + " " + map_point.building_number + "<br/>" + map_point.postcode + " " + map_point.town;
-    jQuery(".shipping_select_point_data").css("display","block");
-    jQuery(".shipping_select_point_data .address_data").html(html_data);
-    jQuery(".shipping_select_point_data .confirm_button").css('display', 'block');
-    jQuery(".confirm_button a").attr('inpost-name', map_point.name);
+    jQuery('.shipping_select_point_data').css("display","block");
+    jQuery('.shipping_select_point_data .address_data').html(html_data);
+    jQuery('[name=choose_inpost]').removeAttr('disabled');
+    jQuery('[name=choose_inpost]').attr('inpost-name', map_point.name);
 }

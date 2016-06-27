@@ -42,10 +42,10 @@ $lockerCity = $lockerInfo[0]['town'];
 				<h4 class="title_section"><?php echo $_hlp->__("Choose locker"); ?></h4>
 			</div>
 
-			<div class="modal-body" style="min-height: 200px;">
-				<div class="col-md-12 main_container">
+			<div class="modal-body" style="min-height: 200px;padding:0;">
+				<div class="col-md-12 main_container" style="padding:0;">
 					<div class="main_container_column">
-						<div class="row clearfix map_filter_container" style="min-height: 100px;">
+						<div class="row clearfix map_filter_container" style="padding: 20px;">
 							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
 								<div class="gui-form-control">
 									<label for="name" class="gui-label"><?php echo $_hlp->__("City"); ?></label>
@@ -67,16 +67,17 @@ $lockerCity = $lockerInfo[0]['town'];
 							</div>
 
 						</div>
-						<div class="row clearfix map_filter_container form-group invoice-data" style="min-height: 100px;padding: 0 0 0 20px;">
+						 <div class="row clearfix map_filter_container form-group invoice-data" style="min-height: 100px;margin: 0 20px;">
 							<!--Selected Point here-->
 							<div class="shipping_select_point_data">
 								<div class="row">
 									<div class="col-sm-6 address_data"><?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName()) ?></div>
-									<div class="col-sm-6 confirm_button">
-										<a class="btn btn-primary" href="javascript:void(0)"><?php echo $_hlp->__("choose"); ?></a>
-									</div>
 								</div>
 							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+							<button disabled="disabled" type="submit" name="choose_inpost" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_hlp->__("Choose");?></button>
 						</div>
 					</div>
 				</div>
