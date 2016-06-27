@@ -80,7 +80,7 @@ function _prepareForm($object) {
 	$general->addField("expire_date", "text", array(
 		"name" => "expire_date",
 		"class" => "form-control datetimepicker col-md-2",
-		"required" => false,
+		"required" => true,
 		"label" => $helper->__('Expire date'),
 		"label_wrapper_class" => "col-md-3",
 		"wrapper_class" => "col-md-3 datetimepicker-wrapper",
@@ -195,19 +195,22 @@ function _prepareForm($object) {
 	));
 
 	$count = isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1;
-
-	for ($i = 0; $i < $count; $i++) {
+	/**
+	 * kid #0 is a 'template' kid for copy all fields in fieldset after
+	 * operator click in 'Add kid' btn
+	 */
+	for ($i = 0; $i <= $count; $i++) {
 
 		$kids = $form->addFieldset("kid_{$i}", array(
 			"legend" => $helper->__("Kid data"),
 			"icon_class" => "icon-double-angle-right",
-			"class" => "kid"
+			"class" => "kid" . ($i == 0 ? " hidden" : "")
 		));
 
 		$kids->addField("kids_{$i}_first_name", "text", array(
 			"name" => "kids[{$i}][first_name]",
 			"class" => "form-control",
-			"required" => true,
+			"required" => $i != 0,
 			"label" => $helper->__('First name'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-4"
@@ -217,7 +220,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_sex", "radios", array(
 			"name" => "kids[{$i}][sex]",
 			//"class" => "form-control",
-			"required" => true,
+			"required" => $i != 0,
 			"label" => $helper->__('Sex'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3 radio-buttons",
@@ -231,7 +234,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_birthdate", "text", array(
 			"name" => "kids[{$i}][birthdate]",
 			"class" => "form-control datetimepicker datetimepicker-kid-{$i} col-md-2",
-			"required" => true,
+			"required" => $i != 0,
 			"label" => $helper->__('Date of birth'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3 datetimepicker-wrapper datetimepicker-wrapper-kid-{$i}",
@@ -260,7 +263,7 @@ function _prepareForm($object) {
 $form = _prepareForm($this);
 
 $values = $this->getModel()->getData();
-$count = isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1;
+$count  = 1 + isset($values['kids']) && count($values['kids']) ? count($values['kids']) : 1;
 ?>
 
 <div class="container">
