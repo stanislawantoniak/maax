@@ -1,7 +1,8 @@
 #product_details { 
 	margin-top:25px;
 	@media (max-width: $screen-xs-max) {
-		margin-top:20px;
+		//margin-top:20px;
+		margin-top:0px;
 	}
 }
 #rwd-color {
