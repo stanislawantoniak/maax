@@ -7,7 +7,12 @@ class Wf_Wf_Block_Checkout_Cart_Sidebar_Shipping
     extends Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 {
 
-
+    /**
+     * Get carrier logo for checkout
+     * 
+     * @param $deliveryType
+     * @return string
+     */
     public function getCarrierLogo($deliveryType)
     {
         $inpostCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
