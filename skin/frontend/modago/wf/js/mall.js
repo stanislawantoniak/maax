@@ -1526,11 +1526,13 @@ Mall.swipeOptions = {
 			closeHamburgerMenu(event);
             jQuery('#link_menu').toggleClass('not-open');
 		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
-			Mall.listing.closeMobileFilters();
+            if(!jQuery(event.target).hasClass('ui-slider-handle')){
+                Mall.listing.closeMobileFilters();
+            }
 		}
-		setTimeout(function() {
-			jQuery(window).swipe("destroy");
-		},100);
+		// setTimeout(function() {
+		// 	jQuery(window).swipe("destroy");
+		// },100);
 	},
 	triggerOnTouchEnd: true,
 	excludedElements: "label, button, input, select, textarea, .noSwipe",
