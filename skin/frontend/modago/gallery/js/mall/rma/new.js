@@ -332,8 +332,8 @@ jQuery(function($){
                 jQuery('#btn-next-step-2').hide();
             } else {
                 for(var day in _dateList) {
-                    jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupFrom, 'up') );
-                    jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupTo, 'down') );
+                    jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(_dateList[day].getPostalCodeServicesResult.exPickupFrom, 'up') );
+                    jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(_dateList[day].getPostalCodeServicesResult.exPickupTo, 'down') );
                 }
             }
         },
