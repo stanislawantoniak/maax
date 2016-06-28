@@ -2,6 +2,7 @@
 	margin-top: 50px;
 
 	.rwdCarousel {
+        padding: 10px 0;
 		@media(max-width: $screen-sm-max) {
 			padding:15px;
 			.rwd-prev {

@@ -1,0 +1,102 @@
+<?php
+/**
+ * Altima Lookbook Free Extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @category   Altima
+ * @package    Altima_LookbookFree
+ * @author     Altima Web Systems http://altimawebsystems.com/
+ * @email      support@altima.net.au
+ * @copyright  Copyright (c) 2012 Altima Web Systems (http://altimawebsystems.com/)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+$helper = Mage::helper('lookbook');
+
+if ($helper->getEnabled()) :
+
+    $makets = $this->getCollection();
+    
+    $width = $helper->getMaxImageWidth();
+    $height = $helper->getMaxImageHeight();
+    $height_procent = $height/$width*100;
+    $thumb_width = intval($width/($height/100));
+
+    $effects = $helper->getEffects();
+    if (!$effects || $effects=='') $effects = 'random';
+    $navigation = ($helper->getNavigation()==1) ? 'true' : 'false';
+    $navigationHover = ($helper->getNavigationHover()==1) ? 'true' : 'false';
+    $thumbnails = ($helper->getThumbnails()==1) ? 'true' : 'false';
+    $pause = ($helper->getPause()) ? $helper->getPause() : 7000;
+    $trans_period = ($helper->getTransitionDuration()) ? $helper->getTransitionDuration() : 1500;       
+    $hotspots = array();
+    
+    if ($makets->getSize()) :
+    ?>
+<div class="container-fluid">
+    <div class="camera_wrap camera_black_skin" id="lookbook" style="max-height:<?php echo $height;?>px;">
+        <?php foreach ($makets as $image): ?>
+            <div data-thumb="<?php echo $helper->getResizedUrl($image->getData('image'), $thumb_width, 100);?>" data-src="<?php echo $helper->getResizedUrl($image->getData('image'), $width, $height);?>">
+                <?php echo base64_decode('PGRpdiBpZD0iYWR2X2xpbmsiPjxkaXY+UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vc2hvcC5hbHRpbWEubmV0LmF1L21hZ2VudG8tZXh0ZW5zaW9ucy5odG1sIiB0aXRsZT0iQWx0aW1hIFdlYiBTeXN0ZW1zIiB0YXJnZXQ9Il9ibGFuayI+QWx0aW1hPC9hPjwvZGl2PjwvZGl2Pg==');?>
+                <img src="<?php echo $helper->getResizedUrl($image->getData('image'), $width, $height);?>" alt="Slide <?php echo $image->getId();?>"/>
+                <?php if($image->getName()!='') :?>
+                    <div class="camera_caption fadeFromBottom">
+                        <?php echo $image->getName();?>
+                    </div>
+                <?php endif;?>
+            </div>
+            <?php $hotspots[] = $helper->getHotspotsWithProductDetails($image->getHotspots()); ?>
+        <?php endforeach; ?>
+    </div>
+
+</div>
+
+    <script type="text/javascript">
+     //<![CDATA[
+    		jQuery(document).ready(function(){
+                jQuery('#lookbook').camera({
+                        fx: '<?php echo $effects;?>',
+                        navigation: <?php echo $navigation;?>,
+                        navigationHover: <?php echo $navigationHover;?>,
+                     <?php if ($thumbnails=='true'): ?>
+                		pagination: false,
+            			thumbnails: true,
+                     <?php else: ?>
+                		pagination: true,
+            			thumbnails: false,
+                     <?php endif; ?>
+                        time: <?php echo $pause;?>,
+                        trans_period: <?php echo $trans_period;?>,
+                        piePosition: 'leftTop',       
+                        width: '<?php echo $width;?>px',
+                        height: '<?php echo $height_procent;?>%',
+                        onLoaded: function(){
+                            var hotspots = <?php echo json_encode($hotspots);?>;
+                            jQuery('#lookbook .cameraContent').each(function(){
+                                var ind = jQuery(this).index();
+                                jQuery.setHotspots(jQuery(this), hotspots[ind]);  
+                                if(jQuery('#lookbook .camera_thumbs_cont ul > li').length){
+                                    var thumb_length = jQuery('#lookbook .camera_thumbs_cont ul > li').length;
+                                    var thumb_width = jQuery('#lookbook .camera_thumbs_cont ul > li').outerWidth();
+                                    jQuery('#lookbook .camera_thumbs_cont ul').css('width',thumb_length*thumb_width+thumb_length*8+10);
+                                    console.log(thumb_length*thumb_width+thumb_length*8+10);
+                                }
+                            });
+                        }
+                        
+            	});    
+                
+    		});      
+     //]]>
+    </script>
+    <?php endif;?>
+<?php endif;?>
+

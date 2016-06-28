@@ -31,7 +31,7 @@ $wfFooterLinks = $this->getLayout()->createBlock('cms/block')->setBlockId('wf_fo
 $wfFooterSocialLinks = $this->getLayout()->createBlock('cms/block')->setBlockId('wf_footer_social_links')->toHtml();
 
 ?>
-<footer class="footer">
+<footer id="footer" class="footer">
     <div class="container">
         <div class="row row-fluid clearfix footer-links">
             <?php echo $wfFooterLinks; ?>
@@ -60,4 +60,17 @@ $wfFooterSocialLinks = $this->getLayout()->createBlock('cms/block')->setBlockId(
 
 
     </div>
+    <div class=" footer-gray-wr">
+        <div class="container-fluid">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="hidden-xs pull-right" id="persistent-forget-desktop"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        Mall.reg.set('persistent_url', '<?php echo str_replace(array('http://','https://'),array('//','//'), Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true))); ?>');
+        Mall.reg.set('package_skin', '<?php echo Mage::getDesign()->getPackageName() . "_" . Mage::getDesign()->getTheme('skin'); ?>');
+    </script>
 </footer>

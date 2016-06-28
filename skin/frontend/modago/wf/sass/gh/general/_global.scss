@@ -162,3 +162,12 @@ body > img[width="1"][height="1"] {
 	opacity: 0;
 	pointer-events: none;
 }
+.modal-content .modal-header {
+	padding-top:5px;
+}
+.page-title h1 {
+	padding-top:0px;
+	@media (max-width: $screen-xs-max) {
+		padding-top:15px;
+	}
+}
