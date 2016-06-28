@@ -15,16 +15,6 @@
                 <class>Wf_Wf_Model_Resource</class>
             </wfwf_resource>
         </models>
-        <blocks>
-            <wfwf>
-                <class>Wf_Wf_Block</class>
-            </wfwf>
-            <zolagomodago>
-                <rewrite>
-                    <checkout_cart_sidebar_shipping>Wf_Wf_Block_Checkout_Cart_Sidebar_Shipping</checkout_cart_sidebar_shipping>
-                </rewrite>
-            </zolagomodago>
-        </blocks>
         <helpers>
             <wfwf>
                 <class>Wf_Wf_Helper</class>
