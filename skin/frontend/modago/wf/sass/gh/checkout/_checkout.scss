@@ -336,6 +336,10 @@ body.checkout {
 
 			> .panel-footer {
 				text-align: right;
+				//border-right: 1px solid #eeedf0;
+				//border-left: 1px solid #eeedf0;
+				//border-bottom: 1px solid #eeedf0;
+				padding-top: 15px;
 			}
 			> .panel-body {
 				dt {
@@ -1010,12 +1014,25 @@ body.checkout {
 	}
 	.default_pay {
 		> .panel {
+			border: none;
 			> .panel-body {
+				padding: 0;
+
 				> .panel {
 					display:block;
+					background: #fcfcfc;
 					&:last-child {
 						margin-bottom: 0px;
 					}
+					> .panel-body {
+						padding: 15px;
+					}
+				}
+				.top-panel {
+					margin: 0;
+					padding:15px;
+					-webkit-backface-visibility: hidden;
+					border: 1px solid #eeedf0;
 				}
 			}
 		}
@@ -1055,6 +1072,12 @@ body.checkout {
 				> .panel-body {
 					> .panel {
 						display:none;
+					}
+					.panel {
+
+						&.last-item {
+							margin-bottom: 0;
+						}
 					}
 					.form-checkbox.default_pay {
 						margin-bottom: 0px;
