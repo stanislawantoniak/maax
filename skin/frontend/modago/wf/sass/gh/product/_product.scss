@@ -209,6 +209,10 @@ i.flag {
 	#delivery-and-return {
 		font-size:12px;
 		text-align:right;
+		position:absolute;
+		right:0px;
+		min-width:110px;
+		padding:0;
 	}
 	#short-description-block {
 		margin-left:0px;
@@ -385,7 +389,7 @@ i.flag {
 				line-height: 1.0;
 			}
 			@media (max-width: 480px) {
-				display:inline;
+				display:block;
 				margin:0;
 				padding:0;
 				line-height: 1;
