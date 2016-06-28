@@ -47,7 +47,7 @@
   #change-shipping-type {
     bottom: -22px;
     position: relative;
-    cursor:pointer;
+    cursor: pointer;
   }
   .shipping-data-additional img,
   .shipping-data-additional figure {
@@ -71,6 +71,11 @@
 
       [data-item="description"] {
         margin-bottom: 5px;
+      }
+
+      .checkout-logo {
+        height: 52px;
+        max-width: 84px;
       }
     }
   }
@@ -108,7 +113,7 @@
   //Modal content
   #select_inpost_point {
     .modal-dialog.modal-lg {
-      @media(max-width:767px) {
+      @media(max-width: 767px) {
         margin: 30px auto;
       }
       width: 1150px;
@@ -127,14 +132,13 @@
       }
     }
 
-    .select2-container--default .select2-results>.select2-results__options {
+    .select2-container--default .select2-results > .select2-results__options {
       overflow-x: hidden !important;
     }
 
     .modal-body {
       overflow-x: hidden !important;
-      .shipping_select_point_data
-      {
+      .shipping_select_point_data {
         margin: 20px 0;
         padding-left: 8px;
         .row {
@@ -221,7 +225,7 @@
           margin-bottom: 20px;
           padding-left: 15px;
         }
-        &:not(:empty){
+        &:not(:empty) {
           @media(max-width: $screen-md) {
             margin-top: 20px;
           }
