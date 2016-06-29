@@ -213,7 +213,7 @@ $carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($deliveryType)
 						<div class="col-md-12 col-sm-12 delivery-type">
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 							<dl>
-								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $carrierLogo; ?>"/></dd>
+								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><?php echo $carrierLogo; ?></dd>
 								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
 								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
 								<dd class="location-description ">{{inpost_locker_location_description}}</dd>
