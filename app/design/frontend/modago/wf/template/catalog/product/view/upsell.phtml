@@ -50,7 +50,7 @@ if (count($_links)): ?>
                             <div class="product_list_widget col-md-12 clearfix">
                                 <?php $_n = 1; ?>
                                 <?php foreach($_links as $_link): ?>
-                                    <div class="col-xs-12 col-sm-6 col-sm-to-smmd-4 col-md-12 product_list_widget_item firstItem <?php if($_n >3): ?>watch_more_item hidden<?php endif; ?>">
+                                    <div class="col-xs-12 col-sm-6 col-sm-to-smmd-4 col-md-12 product_list_widget_item firstItem <?php if($_n >3): ?>watch_more_item hidden<?php endif; ?> <?php if($_n == 3): ?>disappear_item<?php endif; ?>">
                                         <div class="media">
                                             <a class="pull-left"
                                                href="<?php echo $_link->getProductUrl() ?>"

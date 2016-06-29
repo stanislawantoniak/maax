@@ -1184,12 +1184,17 @@ Mall.product = {
     },
 	upsell: {
 		init: function() {
+			var scr_w=screen.width;
+			
+			if(scr_w < Mall.Breakpoint.sm){
+				jQuery(".disappear_item").addClass("hidden watch_more_item");
+			}
 			jQuery("a.watch_more, a.watch_less").click(function(e){
 				e.preventDefault();
 
 				jQuery(".product_list_widget .watch_more_item")
 					.toggleClass("hidden");
-
+				
 
 				var $el = jQuery(".product_list_widget .watch_more_item");
 
@@ -1201,7 +1206,22 @@ Mall.product = {
 					jQuery("a.watch_less").addClass("hidden");
 					jQuery("a.watch_more").removeClass("hidden");
 				}
-			})
+			});
+			jQuery(window).resize(this.resize);
+		},
+		resize: function() {
+			var scr_w=screen.width;
+			var $elem = jQuery(".product_list_widget .disappear_item");
+
+			if(scr_w < Mall.Breakpoint.sm){
+				if(!$elem.hasClass("hidden")){
+					jQuery($elem).addClass("hidden watch_more_item");
+				}
+			}else{
+				if($elem.hasClass("hidden")){
+					jQuery($elem).removeClass("hidden watch_more_item");
+				}
+			}
 		},
 	},
 	sizetable: {

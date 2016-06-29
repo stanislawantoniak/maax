@@ -303,7 +303,7 @@
 				width:100%;
 				height:auto;
 				@media (max-width: 360px) {
-					width:360px;
+					width:280px;
 				}
 				@media (max-width: 320px) {
 					width:320px;
@@ -329,7 +329,7 @@
 				}
 			}
 			.view_lupa_plus {
-				background: transparent;
+				background: rgba(255, 255, 255, 0.4) none repeat scroll 0 0;
 			}
 		}
 	}
