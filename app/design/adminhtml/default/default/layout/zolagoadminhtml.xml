@@ -10,4 +10,9 @@
             <block type="adminhtml/template" name="attribute_edit_js" template="zolagoadminhtml/catalog/product/attribute/js.phtml"></block>
         </reference>
     </adminhtml_catalog_product_attribute_edit>	
+    <adminhtml_sales_order_view_track>      
+		<reference name="content">
+			<block name="shipment_tracking" type="adminhtml/sales_order_shipment_view_tracking" template="sales/order/shipment/view/tracking.phtml"/>
+		</reference>
+    </adminhtml_sales_order_view_track>
 </layout>
