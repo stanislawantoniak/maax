@@ -336,9 +336,9 @@ body.checkout {
 
 			> .panel-footer {
 				text-align: right;
-				//border-right: 1px solid #eeedf0;
-				//border-left: 1px solid #eeedf0;
-				//border-bottom: 1px solid #eeedf0;
+				border-right: 1px solid #eeedf0;
+				border-left: 1px solid #eeedf0;
+				border-bottom: 1px solid #eeedf0;
 				padding-top: 15px;
 			}
 			> .panel-body {
@@ -1043,6 +1043,11 @@ body.checkout {
 			@media (max-width: $screen-xs) {
 				display: none;
 			}
+		}
+
+		.payment-method-panel {
+			margin-top: 0px;
+			margin-bottom: 5px;
 		}
 	}
 
