@@ -8,7 +8,7 @@
 <head>
     <?php echo $this->getChildHtml('head'); ?>
 </head>
-<body class="home <?php echo $this->getBodyClass()? ' '.$this->getBodyClass().'':'' ?>">
+<body class="not-front not-logged-in <?php if($this->getIsCheckout()):?>checkout<?php endif;?> <?php echo $this->getBodyClass()? ' '.$this->getBodyClass().'':'' ?>">
 <!--[if lt IE 9]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -16,10 +16,14 @@
     <?php echo $this->getChildHtml('after_body_start') ?>
 
     <?php echo $this->getChildHtml('header') ?>
+
+    <?php echo $this->getChildHtml('global_notices') ?>
+
     <?php echo $this->getChildHtml('before_content') ?>
     <div class="container-fluid page-messages-block">
         <div class="row">
             <div class="col-sm-12">
+                <?php /* echo  $this->getChildHtml('global_messages') */ ?>
                 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
             </div>
         </div>
