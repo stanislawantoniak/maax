@@ -3,9 +3,14 @@
 		width:100%;
 		margin-left:0px;
 		> .main {
-			padding:30px;
             padding-top: 0;
             border: none;
+			@include max-screen(768px) {
+				padding: 0px 16px;
+			}
+			@include max-screen(470px) {
+				padding: 0px 7px;
+			}
 		}
 		section {
 			> header {
@@ -30,7 +35,7 @@
 				p {
 					margin-bottom:0px;
                     margin-left:30px;
-
+					clear:both;
 				}
 			}
 			> footer {
