@@ -1526,7 +1526,7 @@ Mall.swipeOptions = {
 			closeHamburgerMenu(event);
             jQuery('#link_menu').toggleClass('not-open');
 		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
-            if(!jQuery(event.target).hasClass('ui-slider-handle')){
+            if(!jQuery(event.target).hasClass('ui-slider-handle') && jQuery(event.target).closest('.content').attr('id') !== 'filter_price'){
                 Mall.listing.closeMobileFilters();
             }
 		}

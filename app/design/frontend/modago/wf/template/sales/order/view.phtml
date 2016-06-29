@@ -26,7 +26,7 @@
 				</div>
 				<?php $_grandTotal = $this->getGrandTotal(); ?>
 				<p class="visible-xs"><?php echo $this->__('Order date') . ': ' . date('Y-m-d', strtotime($this->getOrder()->getCreatedAt())); ?></p>
-				<p><?php echo $this->__('Status') . ': ' . $this->getOrder()->getStatusLabel(); ?> <i class="fa fa-question-circle"></i></p>
+				<p><?php echo $this->__('Status') . ': ' . $this->getOrder()->getStatusLabel(); ?></p>
 				<p><?php echo $this->__('Total order value') . ': ' . Mage::helper('core')->formatPrice($_grandTotal); ?> </p>
 				<p><?php echo $this->__('Payment') . ': ' . $this->getPaymentHtml(); ?> </p>
 			</header>
