@@ -1469,7 +1469,7 @@ jQuery(window).resize(function() {
 
 Mall.Footer = {
 	footerId: '#footer',
-	footerMargin: 0,
+	footerMargin: 20,
 	containerId: '#sb-site',
 	init: function() {
 		var _ = this;
