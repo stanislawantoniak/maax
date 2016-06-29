@@ -8,7 +8,9 @@ $_shipmentsCollection	= $this->getShipmentsCollection();
 $_currentShipping		= $this->getCustomCurrentShipping();
 $_alerts				= $this->getAlerts($_po);
 $_comments				= $_po->getVendorCommentsCollection();
-$_shippingStatuses		= Mage::helper('udropship')->getVendorShipmentStatuses(); 
+/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+$udropshipHlp			= Mage::helper('udropship');
+$_shippingStatuses		= $udropshipHlp->getVendorShipmentStatuses(); 
 $_statusModel			= $_po->getStatusModel(); 
 $_aggregated			= $_po->getAggregated();
 $_isEditable			= $this->isEditable();
@@ -18,7 +20,6 @@ $_modagoHlp = Mage::helper("zolagocommon");
 $_tracking = $this->getCurrentTracking($_currentShipping); 
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
 $paymentHelper = Mage::helper('zolagopayment');
-$ghInpostCarrierCode  = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -356,7 +357,7 @@ $ghInpostCarrierCode  = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group">
-							<?php if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode):?>
+							<?php if($_po->isDeliveryInpost()):?>
 								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingInpostAddressModal"><i class="icon-pencil"></i></button>
 							<?php else:?>
 								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button>
@@ -366,10 +367,10 @@ $ghInpostCarrierCode  = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
-					<?php if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode):?>
-						<?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName(), true) ?>
+					<?php if($_po->isDeliveryInpost()):?>
+						<?php echo $udropshipHlp->formatCustomerAddressInpost($_po, true) ?>
 					<?php else:?>
-						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+						<?php echo $udropshipHlp->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
 					<?php endif;?>
 				</div>
 			</div>
@@ -395,7 +396,7 @@ $ghInpostCarrierCode  = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->needInvoice()):?>
-						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+						<?php echo $udropshipHlp->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
 					<?php else:?>
 						<small><?php echo $_hlp->__("Click pencil icon if you need an invoice.");?></small>
 					<?php endif;?>
@@ -629,7 +630,7 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
-	if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode){
+	if($_po->isDeliveryInpost()){
 		echo $this->getChild("vendor_po_edit_inpost_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
