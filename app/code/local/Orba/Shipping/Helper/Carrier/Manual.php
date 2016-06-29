@@ -66,6 +66,6 @@ class Orba_Shipping_Helper_Carrier_Manual extends Orba_Shipping_Helper_Carrier {
             break;
         }
         $newState = isset($trackingStatusList[$track->getUdropshipStatus()])? $trackingStatusList[$track->getUdropshipStatus()]: $this->__('Unknown');
-        $message[] = $this->__('Status maually changed from %s to %s',$oldState,$newState);
+        $message[] = $this->__('Track status manually changed from %s to %s',$oldState,$newState);
     }
 }

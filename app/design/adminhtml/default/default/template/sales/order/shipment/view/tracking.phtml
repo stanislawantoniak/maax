@@ -78,7 +78,7 @@
                 </select>
             </td>
             <td class="last">
-                <button class="scalable save" onclick="saveTrackingStatus('<?php echo Mage::getUrl('*/sales_order_change/track',array('shipment_id' => $this->getShipment()->getId(),'id' => $_track->getId())); ?>')"><?php echo $this->helper('sales')->__("Save");?></button>                        
+                <button class="scalable save" onclick="saveTrackingStatus('<?php echo Mage::getUrl('*/sales_order_change/track',array('shipment_id' => $this->getShipment()->getId(),'id' => $_track->getId())); ?>')"><?php echo $this->helper('orbashipping')->__("Save");?></button>                        
                 &nbsp;
                 <button onclick="deleteTrackingNumber('<?php echo $this->getRemoveUrl($_track) ?>'); return false;"><?php echo Mage::helper('sales')->__('Delete') ?></button>
             </td>
