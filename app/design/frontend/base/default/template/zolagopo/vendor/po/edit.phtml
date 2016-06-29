@@ -19,6 +19,8 @@ $_modagoHlp = Mage::helper("zolagocommon");
 /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
 $_tracking = $this->getCurrentTracking($_currentShipping); 
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
+$paymentHelper = Mage::helper('zolagopayment');
+$ghInpostCarrierCode  = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -355,14 +357,22 @@ $_tracking = $this->getCurrentTracking($_currentShipping);
 					</h4>			
 					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
-						<div class="btn-group"> 
-							<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button> 
-						</div> 
+						<div class="btn-group">
+							<?php if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode):?>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingInpostAddressModal"><i class="icon-pencil"></i></button>
+							<?php else:?>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button>
+							<?php endif;?>
+						</div>
 					</div>
 					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
-					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+					<?php if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode):?>
+						<?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName(), true) ?>
+					<?php else:?>
+						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+					<?php endif;?>
 				</div>
 			</div>
 		</div>
@@ -621,9 +631,15 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping_address")->
+	if($_po->getOmniChannelMethodInfoByMethod()->getDeliveryCode() == $ghInpostCarrierCode){
+		echo $this->getChild("vendor_po_edit_inpost_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
+	}else{
+		echo $this->getChild("vendor_po_edit_shipping_address")->
+		setAddress($_po->getShippingAddress())->
+		toHtml();
+	}
 
 /*******************************************************************************
  *	Billign address modal
