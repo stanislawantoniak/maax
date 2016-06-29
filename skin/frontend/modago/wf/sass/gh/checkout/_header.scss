@@ -2,6 +2,9 @@
 	.header_top {
 		height: 65px;
 		top: 0px !important;
+		&.headroom--unpinned {
+			top: -65px !important;
+		}
 	}
 	#step {
 		text-align: right;
