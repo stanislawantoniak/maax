@@ -28,7 +28,7 @@
     <zolagomodago_index_index>
 		<reference name="root">
 			<action method="setTemplate">
-				<template>page/1column.phtml</template>
+				<template>page/home.phtml</template>
 			</action>
 			<action method="addBodyClass">
 				<value>wf-home</value>
