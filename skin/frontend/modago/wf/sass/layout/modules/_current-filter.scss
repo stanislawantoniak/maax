@@ -38,10 +38,10 @@
           position: relative;
           .box-with-x {
             background-color: $colorAccentBlocks;
-            padding: 6px;
+            padding: 5px;
             text-align: center;
             border-top: 1px solid $bc-secondary;
-            border-bottom: 1px solid $bc-secondary;
+            border-bottom: 1px solid $colorAccentBlocks;
             margin-left: 5px;
             .fa {
               margin: 0 5px !important;

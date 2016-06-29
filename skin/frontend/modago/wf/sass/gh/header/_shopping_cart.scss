@@ -5,8 +5,11 @@
     display: inline-block;
     padding: 0;
     right: 0;
-    top: 2px;
+    top: -1px;
     text-align: center;
+    @include min-screen($screen-sm-max) {
+      top: 2px;
+    }
 
     &:before {
       content: "";
@@ -14,7 +17,7 @@
       display: block;
       z-index: 1;
       width: 14px;
-      height: 26px;
+      height: 23px;
       top: -8px;
       left: 50%;
       background-color: transparent;
@@ -48,9 +51,8 @@
       border-radius: 0px;
       font-weight: 600;
       z-index: 1;
-      font-size: 13px;
-      font-family: "Open Sans", sans-serif;
-      line-height: 16px;
+      font-size: 11px;
+      line-height: 14px;
       margin-top: -25px;
       right: 0;
       padding: 0 5px !important;
@@ -103,15 +105,4 @@
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
 }

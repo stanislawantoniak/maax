@@ -894,6 +894,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.sm,
 					settings: {
+						dots: true,
 						slidesToShow: false,
 						slidesToScroll: false
 					}
@@ -901,6 +902,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.xssm,
 					settings: {
+						dots: true,
 						slidesToShow: false,
 						slidesToScroll: false
 					}
@@ -908,6 +910,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.xs,
 					settings: {
+						dots: true,
 						slidesToShow: 1,
 						slidesToScroll: 1,
 						adaptiveHeight: true
@@ -1770,13 +1773,12 @@ Mall.inspirationsSliderInit = function() {
 	}
 
 	rwdInspirationCarousel.rwdCarousel({
-		items : 5, //10 items above 1000px browser width
-		itemsDesktop : [1000,4], //5 items between 1000px and 901px
-		itemsDesktopSmall : [900,3], // between 900px and 601px
-		itemsTablet: [767,3], //2 items between 600 and 0
-        itemsTabletSmall : [619,2], //2 items between 609 and 767
-		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
-		pagination : false,
+		items : 6, //10 items above 1000px browser width
+		itemsDesktop: [1206,5],
+		itemsDesktopSmall: [979,4],
+		itemsTablet: [768,3],
+		itemsMobile: [479,2],
+		pagination : true,
 		navigation: true,
 		navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
 		rewindNav : false,

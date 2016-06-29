@@ -176,7 +176,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	}
 	
 	/**
-	 * It can be returned when order has been delivered not later than the bigges number for allowed_days
+	 * It can be returned when order has been delivered not later than the biggest number for allowed_days
 	 * 
 	 * @return bloolean
 	 */

@@ -33,7 +33,7 @@
 						</external_id>
 						<import_products translate="label" module="zolagoosimport">
 							<label>Products import source file</label>
-							<comment><![CDATA[Import directory: var/import]]></comment>
+							<comment><![CDATA[Enter absolute path to file]]></comment>
 							<frontend_type>text</frontend_type>
 							<sort_order>20</sort_order>
 							<show_in_default>1</show_in_default>
