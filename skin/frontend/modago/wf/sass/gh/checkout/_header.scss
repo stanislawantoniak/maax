@@ -1,4 +1,7 @@
 .checkout {
+	.header_top {
+		height: 65px;
+	}
 	#step {
 		text-align: right;
 		ol {
@@ -65,9 +68,8 @@
 	}
 	#header {
 		#logo {
-			margin-top: 2px;
+			margin-top: 12px;
 			img {
-				margin-top: -3px;
 				width: 160px;
 				@include max-screen($screen-xs-max) {
 					width: 80%;
@@ -94,7 +96,7 @@
 			margin-left: -5px;
 		}
 		ol {
-			margin: 25px 0px 0px;
+			margin: 35px 0px 0px;
 			padding: 0px;
 			position: relative;
 			width: 64%;
@@ -156,7 +158,7 @@
 					}
 					span {
 						position: absolute;
-						top: -19px;
+						top: -25px;
 						left: 0px;
 						right: 0px;
 					}

@@ -55,6 +55,7 @@ class Zolago_Catalog_Model_Url extends Mage_Catalog_Model_Url {
                 unset($categories);
             
             } else {
+                $this->_rewrites = $this->getResource()->prepareRewrites($storeId, '', $productId);
                 $rootCategory = $this->getResource()->getCategory($storeRootCategoryId, $storeId);
                 $this->_refreshProductRewrite($product, $rootCategory);
 

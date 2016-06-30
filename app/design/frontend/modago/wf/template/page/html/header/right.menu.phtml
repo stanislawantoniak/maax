@@ -9,7 +9,7 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
 <!-- NAV RIGHT -->
 <div id="header_top_block_right">
     <div class="header_bottom cart-design-2 ">
-            <nav role="navigation" class="hidden-sm">
+            <nav role="navigation" class="hidden-xs">
                 <div id="navigation" data-target="y">
                     <?php echo Mage::helper('zolagomodago')
                         ->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
@@ -18,9 +18,14 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
             </nav>
             <div id="user_menu" class="pull-right">
                 <ul class="user-navigation pull-right">
-                    <li id="link_menu" class="hidden-md hidden-lg not-open">
+                    <li id="link_menu" class="hidden-sm hidden-md hidden-lg not-open">
                         <a href="" class="toggleMenu sb-toggle-left">
-                            <img src="<?php echo $this->getSkinUrl("images/svg/menu.svg"); ?>" class="header_icon" />
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </li>
+                    <li id="link_account">
+                        <a href="<?php echo $userAccountUrl; ?>">
+                            <i class="fa fa-user"></i>
                         </a>
                     </li>
                     <li id="link_search" class="not-open">
@@ -28,17 +33,14 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
                             <i class="fa fa-search"></i>
                         </a>
                     </li>
-                    <li id="link_favorites" class="hidden-md hidden-lg">
+                    <li id="link_favorites" class="hidden-sm hidden-md hidden-lg">
                         <a href="<?php echo $favoritesUrl; ?>">
-                            <div class="badgeHolder">
-                                <i class="fa fa-heart"></i>
-                            </div>
+                            <i class="fa fa-heart"></i>
                         </a>
                     </li>
                     <li id="link_basket" class="basket-dropdown shopping-cart-widget" style="position:relative;">
                         <a class="dropdown-toggle" data-dropdown="#dropdown-basket" href="<?php echo $checkoutCartUrl; ?>">
                             <div class="cart-bag">
-                                <i class="ico-sum"></i>
                                 <span class="badge-number">&nbsp;</span>
                             </div>
                         </a>

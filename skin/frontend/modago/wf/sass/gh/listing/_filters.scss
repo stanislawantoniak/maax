@@ -371,6 +371,9 @@ html.noscroll {
 			font-weight: normal;
 			a {
 				margin-left: 2px;
+				&:hover {
+					color:$color_fff;
+				}
 			}
 		}
 		&:hover {
@@ -378,6 +381,10 @@ html.noscroll {
 				background-color:$color_999;
 				border-color:$color_999;
 				color:$color_fff;
+
+				a {
+					color:$color_fff;
+				}
 			}
 
 		}

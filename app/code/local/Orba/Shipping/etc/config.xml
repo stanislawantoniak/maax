@@ -128,6 +128,21 @@
         <repeat_tracking>1</repeat_tracking>
         <volumetric_weight>5000</volumetric_weight>
       </orbaups>
+      <zolagopp>
+          <active>1</active>
+          <gateway>https://en-testwebapi.poczta-polska.pl/websrv/en.wsdl</gateway>
+          <tracking_gateway>https://tt.poczta-polska.pl/Sledzenie/services/Sledzenie?wsdl</tracking_gateway>
+          <tracking_id>sledzeniepp</tracking_id>
+          <tracking_password>PPSA</tracking_password>
+          <title>Poczta Polska</title>          
+          <model>orbashipping/post</model>
+      </zolagopp>
+      <zolagogls>
+          <active>1</active>
+          <tracking_gateway><![CDATA[https://gls-group.eu/app/service/open/rest/PL/pl/rstt001]]></tracking_gateway>
+          <title>GLS</title>          
+          <model>orbashipping/carrier_gls</model>
+      </zolagogls>
     </carriers>
   </default>
 </config>
