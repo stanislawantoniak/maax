@@ -1,16 +1,18 @@
-<?php  $_hlp = Mage::helper("zolagopo");?>
-<?php $_po = $this->getPo(); ?>
-<?php $_address = $this->getAddress();?>
-<?php $_type = $this->getType();
-//echo Mage::registry('inpost_town');
+<?php 
+/** @var Zolago_Po_Block_Vendor_Po_Edit_Inpostaddress $this */
+$_hlp = Mage::helper("zolagopo");
+$_po = $this->getPo();
+$_address = $this->getAddress();
+$_type = $this->getType();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocheckout");
 $orderId = $this->getRequest()->getParam("id", "");
 $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 $lockerName = $_po->getInpostLockerName();
-$lockerInfo = Mage::helper('udropship')->getLockerInfo($lockerName);
-$lockerCity = $lockerInfo[0]['town'];
+$lockerCity = $_po->getInpostLocker()->getTown();
+/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+$udropshipHlp = Mage::helper('udropship');
 ?>
 <script type="text/javascript">
 	var inPostPointsData = '<?php echo $inPostPoints; ?>';
@@ -71,12 +73,12 @@ $lockerCity = $lockerInfo[0]['town'];
 							<!--Selected Point here-->
 							<div class="shipping_select_point_data">
 								<div class="row">
-									<div class="col-sm-6 address_data"><?php echo Mage::helper('udropship')->formatCustomerAddressInpost($_po->getShippingAddress(), $_po->getInpostLockerName()) ?></div>
+									<div class="col-sm-6 address_data"><?php echo $udropshipHlp->formatCustomerAddressInpost($_po) ?></div>
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+							<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper('zolagocommon')->__("Cancel");?></button>
 							<button disabled="disabled" type="submit" name="choose_inpost" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_hlp->__("Choose");?></button>
 						</div>
 					</div>

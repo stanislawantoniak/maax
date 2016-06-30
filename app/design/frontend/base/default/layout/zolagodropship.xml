@@ -118,10 +118,6 @@
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
-				<name>js/plugins/inpost/address.js</name>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
 				<name>js/melon/libs/lodash.compat.min.js</name>
 			</action>
 			<action method="addItem">

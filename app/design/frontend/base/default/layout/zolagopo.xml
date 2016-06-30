@@ -38,6 +38,10 @@
 		<update handle="forms"/>
 		<reference name="head">
 			<action method="setTitle"><title>Vendor Portal</title></action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/inpost/address.js</name>
+			</action>
 			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
 		</reference>
 		<reference name="content">			
