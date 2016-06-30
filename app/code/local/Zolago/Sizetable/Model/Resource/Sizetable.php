@@ -40,7 +40,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
         $query = 'SELECT val FROM ('.implode(' UNION ',$query_list).') AS connect LIMIT 1';
         
         $results = $conn->fetchOne($query);
-		Mage::log($results, null, "sizetable.log");
+		Mage::log($results, null, "sizetable5.log");
         return $results;
 
     }
