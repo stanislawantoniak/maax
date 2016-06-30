@@ -600,7 +600,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $d = "";
         if(!empty($sizeTableContent)){
             $b = unserialize($this->_getSizeTableContent());
-
+            Mage::log($b, null, "sizetable2.log");
             $blockTable = "";
             $tableCheckIndicator = 0;
             if (isset($b["table"])) {
