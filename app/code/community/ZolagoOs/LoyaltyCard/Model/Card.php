@@ -47,7 +47,10 @@ class ZolagoOs_LoyaltyCard_Model_Card extends Mage_Core_Model_Abstract {
 	 * @var string
 	 */
 	protected $_eventPrefix = 'loyalty_card';
-	
+
+	const DELETE_ONLY_CARD         = "delete-only-card";
+	const DELETE_WITH_SUBSCRIPTION = "delete-with-subscription";
+
 	protected function _construct() {
 		$this->_init("zosloyaltycard/card");
 	}

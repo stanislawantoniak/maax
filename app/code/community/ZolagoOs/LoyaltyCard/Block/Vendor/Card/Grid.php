@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Grid
+ *
+ * @method ZolagoOs_LoyaltyCard_Model_Resource_Card_Collection getCollection()
+ */
 class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
 	public function __construct() {
@@ -35,12 +40,12 @@ class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Grid extends Mage_Adminhtml_Block_W
 		));
 
 		// No select, just text filter
-		// todo: renderer
 		$this->addColumn("card_type", array(
 			"type" => "text",
 			"index" => "card_type",
 			"class" => "form-control",
 			"header" => $helper->__("Card type"),
+			"renderer" => Mage::getConfig()->getBlockClassName("zosloyaltycard/adminhtml_grid_column_renderer_card_type"),
 		));
 
 		$this->addColumn("first_name", array(
@@ -115,5 +120,27 @@ class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Grid extends Mage_Adminhtml_Block_W
 	public function getRowUrl($item) {
 		return null;
 	}
+	
+	protected function _addColumnFilterToCollection($column) {
+		$id = $column->getId();
+		$value = $column->getFilter()->getValue();
 
+		switch ($id) {
+			case 'card_type':
+				/** @var ZolagoOs_LoyaltyCard_Helper_Data $helper */
+				$helper = Mage::helper("zosloyaltycard");
+				$config = $helper->getLoyaltyCardConfig();
+				$ids = array();
+				foreach ($config as $id => $type) {
+					if (stripos($type['name'], $value) !== FALSE) {
+						$ids[] = $id;
+					}
+				}
+				$this->getCollection()->addFieldToFilter('card_type', array('in' => $ids));
+				return $this;
+			default:
+				parent::_addColumnFilterToCollection($column);
+				return $this;
+		}
+	}
 }

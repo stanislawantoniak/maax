@@ -4,7 +4,7 @@
  * Class ZolagoOs_LoyaltyCard_CardController
  */
 class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Vendor_Abstract {
-
+	
 	public function indexAction() {
 		Mage::register('as_frontend', true);
 		$this->_renderPage(null, 'zos-loyalty-card');
@@ -108,7 +108,7 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 			
 			$this->_getSession()->addSuccess($helper->__("Card '%s' saved", $card->getCardNumber()));
 			
-			return $this->_redirect("*/*/edit", array('id' => $card->getId()));
+			return $this->_redirect("*/*");
 			
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
@@ -135,13 +135,16 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 			return $this->_redirectReferer();
 		}
 		$cardId = $this->getRequest()->getPost('id');
+		$deleteType = $this->getRequest()->getPost('delete_type');
 		$card = $this->_initModel($cardId);
 		$vendor = $this->_getSession()->getVendor();
 
 		try {
 			// Existing
 			if ($card->getId()) {
-				if ($card->getVendorId() != $vendor->getId()) {
+				if ($card->getVendorId() != $vendor->getId()
+				|| !in_array($deleteType, array(ZolagoOs_LoyaltyCard_Model_Card::DELETE_ONLY_CARD, ZolagoOs_LoyaltyCard_Model_Card::DELETE_WITH_SUBSCRIPTION))
+				) {
 					$this->_getSession()->addError($helper->__("Card does not exists"));
 					return $this->_redirectReferer();
 				}
@@ -154,6 +157,7 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 			 * @event loyalty_card_delete_before
 			 * @event loyalty_card_delete_after
 			 */
+			$card->setDeleteType($deleteType);
 			$card->delete();
 
 			$this->_getSession()->addSuccess($helper->__("Card '%s' deleted", $card->getCardNumber()));
