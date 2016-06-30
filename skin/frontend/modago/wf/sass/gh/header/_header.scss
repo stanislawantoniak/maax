@@ -761,7 +761,7 @@ body {
 	height: 132px;
 	@include max-screen($screen-xs-max) {
 		height: 85px;
-		top: -34px !important;
+		//top: -34px !important;
 	}
 }
 
