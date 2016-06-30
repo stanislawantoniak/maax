@@ -1713,7 +1713,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$session = $this->_getSession();
 
 			if ($inpostName && $po->getId() && ($po->getUdropshipVendor() == $session->getVendor()->getId())) {
-				$po->setInpostLockerName($inpostName)->save();
+
+                $locker = Mage::getModel('ghinpost/locker')->load($inpostName, 'name');
+
+                $order = Mage::getModel("sales/order")->load($po->getOrderId());
+                $order->setInpostLockerName($inpostName)
+                    ->save();
+
+                $shippingAddress = Mage::getModel('sales/order_address')->load($po->getShippingAddressId());
+
+                $shippingAddress->setStreet($locker->getStreet() . " " . $locker->getBuildingNumber())
+                    ->setCity($locker->getTown())
+                    ->setPostcode($locker->getPostcode())
+                    ->save();
+
+                $po->setInpostLockerName($inpostName)
+                    ->save();
 				
 				Mage::dispatchEvent("zolagopo_po_inpost_locker_name_change", array(
 					"po" => $po,
