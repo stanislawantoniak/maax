@@ -388,13 +388,23 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		
 		if($changeLog){
 			if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
-				$type = $hlp->__("Shipping");
+				$text = Mage::helper('zolagopo')->__("Shipping address changed (%s)", implode(", " , $changeLog));
 			}else{
-				$type = $hlp->__("Billing");
+				$text = Mage::helper('zolagopo')->__("Billing address changed (%s)", implode(", " , $changeLog));
 			}
-			$text = Mage::helper('zolagopo')->__("%s address changed (%s)", $type, implode(", " , $changeLog));
 			$this->_logEvent($po, $text);
 		}
+	}
+
+	public function poDeliveryAddressInpostChange($observer) {
+		/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+		$udropshipHlp = Mage::helper('udropship');
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		$hlp = Mage::helper("zolagopo");
+		$address = $udropshipHlp->formatCustomerAddressInpost($po, true, ', ');
+		$text = $hlp->__("InPost shipping address changed (%s)", $address);
+		$this->_logEvent($po, $text);
 	}
 	
 	/**

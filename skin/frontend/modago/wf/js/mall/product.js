@@ -1184,9 +1184,7 @@ Mall.product = {
     },
 	upsell: {
 		init: function() {
-			var scr_w=jQuery(window).width();
-			
-			if(scr_w < Mall.Breakpoint.sm){
+			if(Mall.windowWidth() < Mall.Breakpoint.md){
 				jQuery(".product_list_widget .watch_more_item")
 					.toggleClass("hidden");
 
@@ -1213,9 +1211,7 @@ Mall.product = {
 			}
 		},
 		resize: function() {
-			var scr_w=jQuery(window).width();
-
-			if(scr_w < Mall.Breakpoint.sm){
+			if(Mall.windowWidth() < Mall.Breakpoint.md){
 				if(!jQuery("a.watch_more").hasClass("hidden")){
 					jQuery(".product_list_widget .watch_more_item")
 						.toggleClass("hidden");
