@@ -84,16 +84,32 @@
 }
 
 
-#edit-campaign .form-group .radio-buttons label {
+#edit-campaign .form-group .radio-buttons label,
+#edit-card .form-group .radio-buttons label {
     position: relative;
     top: -2px;
     margin: 0 8px 0 4px;
 }
-#edit-campaign input.datetimepicker {
+#edit-campaign input.datetimepicker,
+#edit-card  input.datetimepicker {
     width: 150px;
 }
-#edit-campaign .icon-calendar {
+#edit-campaign .icon-calendar,
+#edit-card  .icon-calendar {
     cursor: pointer;
+}
+
+#edit-card .has-error.help-block {
+    margin-top: 7px;
+    margin-bottom: 10px;
+}
+
+#edit-card input[type="radio"], #edit-card input[type="checkbox"] {
+    margin: 2px 0 0 0;
+}
+
+#edit-card .radio-buttons, #edit-card .datetimepicker-wrapper {
+    width: inherit !important;
 }
 
 /*Banners*/

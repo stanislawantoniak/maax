@@ -5,6 +5,9 @@
  *
  * @method string getEmail()
  * @method string getUtmData()
+ * @method string getWebsiteId()
+ * 
+ * @method $this setWebsiteId($value)
  */
 class Zolago_Customer_Model_Customer extends Mage_Customer_Model_Customer
 {

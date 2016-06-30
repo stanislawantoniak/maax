@@ -66,3 +66,4 @@
 "Yes","Tak"
 "No","Nie"
 "Product must be set as &quot;Enabled&quot; and description accepted, in order to browse product on production website. On preview site %s product can always be browsed, no matter the status.","Aby produkt był widoczny w serwisie musi mieć ustawiony status &quot;Włączony&quot; oraz status opisu &quot;Opis Zatwierdzony&quot;. Na stronie testowej %s produkt widoczny jest zawsze, niezależnie od statusu produktu i jego opisu."
+"Please fill at least {0} of these fields.","Przynajmniej {0} pole jest wymagane."
