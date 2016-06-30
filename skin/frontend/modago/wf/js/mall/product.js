@@ -1228,6 +1228,9 @@ Mall.product = {
 						.toggleClass("hidden");
 					jQuery("a.watch_more").removeClass("hidden");
 				}
+				if(!jQuery("a.watch_less").hasClass("hidden")){
+					jQuery("a.watch_less").addClass("hidden");
+				}
 			}
 		},
 	},
