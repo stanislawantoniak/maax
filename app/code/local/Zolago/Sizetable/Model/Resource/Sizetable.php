@@ -36,12 +36,11 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
             'INNER JOIN '.$sizetable.' as s on s.sizetable_id = sr.sizetable_id '.
             'LEFT JOIN '.$sizetableScope.' as ss ON ss.sizetable_id = sr.sizetable_id AND ss.store_id = \''.$store_id.'\' '.
             ' WHERE sr.vendor_id = '.$vendor_id.' AND sr.brand_id IS NULL AND sr.attribute_set_id IS NULL';
-		Mage::log($query_list, null, "sizetableQueryList.log");
-		$conn = $res->getConnection('core_read');
+        $conn = $res->getConnection('core_read');
         $query = 'SELECT val FROM ('.implode(' UNION ',$query_list).') AS connect LIMIT 1';
         
         $results = $conn->fetchOne($query);
-		Mage::log($results, null, "sizetable00.log");
+
         return $results;
 
     }
