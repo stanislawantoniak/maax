@@ -99,6 +99,19 @@
     cursor: pointer;
 }
 
+#edit-card .has-error.help-block {
+    margin-top: 7px;
+    margin-bottom: 10px;
+}
+
+#edit-card input[type="radio"], #edit-card input[type="checkbox"] {
+    margin: 2px 0 0 0;
+}
+
+#edit-card .radio-buttons, #edit-card .datetimepicker-wrapper {
+    width: inherit !important;
+}
+
 /*Banners*/
 .widget-content div[data-type="slider"] {
     border: 1px solid #d3d3d3;
