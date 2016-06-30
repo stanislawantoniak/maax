@@ -293,3 +293,6 @@
 "You cannot cancel shipment that has been already sent","Nie można anulować przesyłki, która została już wysłana."
 "Need invoice","Wymaga faktury"
 "Price: ","Cena: "
+"Shipping address changed (%s)","Zmiana adresu dostawy (%s)"
+"Billing address changed (%s)","Zmiana adresu faktury (%s)"
+"InPost shipping address changed (%s)","Zmiana adresu dostawy InPost (%s)"
