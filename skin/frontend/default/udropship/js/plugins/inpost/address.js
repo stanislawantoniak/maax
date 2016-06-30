@@ -16,14 +16,15 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery('[name=choose_inpost]').click(function () {
-        jQuery('[name=choose_inpost]').text(jQuery('[name=choose_inpost]').attr('data-loading-text'));
-        var inpost_name = jQuery('[name=choose_inpost]').attr('inpost-name');
+    jQuery('[name=choose_inpost]').click(function (e) {
+        jQuery(this).attr("disabled", true);
+        jQuery(this).text(jQuery(this).attr('data-loading-text'));
+        var inpost_name = jQuery(this).attr('inpost-name');
 
         jQuery.ajax({
-            url: "/udpo/inpost/updateInpostData",
+            url: "/udpo/vendor/updateInpostData",
             type: "POST",
-            data: {inpostName: inpost_name, orderId: orderId},
+            data: {inpostName: inpost_name, poId: poId},
             success: function (response) {
                 location.reload();
             },
@@ -35,11 +36,13 @@ jQuery(document).ready(function () {
 });
 
 function _makeMapRequest(q, on_load) {
+	jQuery("select[name=shipping_select_point]").attr("disabled", true);
     jQuery.ajax({
         url: "/udpo/inpost/getInpostData",
         type: "POST",
         data: {town: q},
         success: function (response) {
+			jQuery("select[name=shipping_select_point]").attr("disabled", false);
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(response);
 
@@ -97,8 +100,7 @@ function constructShippingPointSelect(map_points) {
 
     //Jeśli w mieście jest tylko jeden paczkomat,
     // niech wybiera go automatycznie
-
-    if(map_points.length === 1){
+    if(typeof map_points !== "undefined" && map_points.length === 1){
         jQuery("select[name=shipping_select_point]")
             .html(options.join(""))
             .attr("disabled", false)
