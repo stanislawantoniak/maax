@@ -859,3 +859,13 @@ div[itemprop="description"] {
     }
   }
 }
+.full-view-product {
+  .path_back_to_category {
+    border-top: none !important;
+    border-bottom:1px solid $colorAccentBlocksHeader;
+    padding: 8px 0 8px 0;
+  }
+  #pbtc_link {
+    font-size: 14px;
+  }
+}
