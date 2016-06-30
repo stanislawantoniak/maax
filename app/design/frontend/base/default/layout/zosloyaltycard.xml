@@ -26,7 +26,8 @@
 		<update handle="noty"/>
 		<update handle="forms"/>
 		<reference name="content">
-			<block name="vendor.card.edit" type="zosloyaltycard/vendor_card_edit" template="zosloyaltycard/vendor/card/edit.phtml"></block>
+			<!-- for template path @see zosloyaltycard/vendor_card_abstract::getTemplateFile() -->
+			<block name="vendor.card.edit" type="zosloyaltycard/vendor_card_edit"></block>
 		</reference>
 	</zosloyaltycard_card_edit>
 </layout>

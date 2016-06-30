@@ -5,6 +5,13 @@
  */
 class ZolagoOs_LoyaltyCard_Block_Vendor_Card_Edit extends ZolagoOs_LoyaltyCard_Block_Vendor_Card_Abstract {
 
+	const TEMPLATE_PATH = "zosloyaltycard/vendor/card/edit.phtml";
+	
+	public function __construct() {
+		parent::__construct();
+		$this->setTemplate(self::TEMPLATE_PATH);
+	}
+
 	public function _prepareLayout() {
 		parent::_prepareLayout();
 		/** @see template/zosloyaltycard/vendor/card/edit.phtml */

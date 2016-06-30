@@ -227,7 +227,11 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     }
 
 	public function getLoyaltyCardSection() {
-		if ($this->isModuleActive('ZolagoOs_LoyaltyCard') /* todo: && $this->isAllowed()*/) {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if ($this->isModuleActive('ZolagoOs_LoyaltyCard')
+			&& $this->isAllowed(Zolago_Operator_Model_Acl::RES_LOYALTY_CARD)
+			&& $commonHlp->useLoyaltyCardSection()) {
 			return array(
 				"active" => $this->isActive("zos-loyalty-card"),
 				"icon"	 => "icon-user",
@@ -483,15 +487,15 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 
     /**
      *
-     * @param type $module
-     * @return type
+     * @param string $module
+     * @return bool
      */
     public function isModuleActive($module) {
         return Mage::helper('udropship')->isModuleActive($module) || Mage::helper('core')->isModuleEnabled($module);
     }
 
     /**
-     * @param strign|array $in
+     * @param string|array $in
      * @return bool
      */
     public function isActive($in) {
