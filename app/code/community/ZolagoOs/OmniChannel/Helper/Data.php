@@ -3040,24 +3040,22 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
-    public function getLockerInfo($inpostLockerName){
-        $locker = Mage::getModel('ghinpost/locker')
-            ->getCollection()
-            ->addFieldToFilter('name', $inpostLockerName);
-        $lockerData = $locker->getData();
-        return $lockerData;
-    }
-
-    public function formatCustomerAddressInpost($address, $inpostLockerName, $fullReslonse = false)
-    {
-        $lockerData = $this->getLockerInfo($inpostLockerName);
-        $result = Mage::helper('ghinpost')->__("Locker") . ' ' . $inpostLockerName."<br/>".$lockerData[0]['street']." ".$lockerData[0]['building_number']."</br>".$lockerData[0]['postcode']." ".$lockerData[0]['town'];
-        if($fullReslonse){
-            $shippingAddress = $address->getData();
-            $result .= "</br>T. ".$shippingAddress['telephone'];
-        }
-        return $result;
-    }
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param bool $fullResponse
+	 * @return string
+	 */
+	public function formatCustomerAddressInpost($po, $fullResponse = false) {
+		/** @var GH_Inpost_Model_Locker $locker */
+		$locker = $po->getInpostLocker();
+		$result = Mage::helper('ghinpost')->__("Locker") . ' ' . $locker->getName() . "<br/>"
+			. $locker->getStreet() . " " . $locker->getBuildingNumber() . "</br>"
+			. $locker->getPostcode() . " " . $locker->getTown();
+		if ($fullResponse) {
+			$result .= "</br>T. " . $po->getShippingAddress()->getTelephone();
+		}
+		return $result;
+	}
 
     public function getResizedVendorLogoUrl($v, $width, $height, $field='logo')
     {
