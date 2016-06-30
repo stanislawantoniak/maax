@@ -1184,42 +1184,52 @@ Mall.product = {
     },
 	upsell: {
 		init: function() {
-			var scr_w=screen.width;
+			var scr_w=jQuery(window).width();
 			
 			if(scr_w < Mall.Breakpoint.sm){
-				jQuery(".disappear_item").addClass("hidden watch_more_item");
-			}
-			jQuery("a.watch_more, a.watch_less").click(function(e){
-				e.preventDefault();
-
 				jQuery(".product_list_widget .watch_more_item")
 					.toggleClass("hidden");
-				
 
-				var $el = jQuery(".product_list_widget .watch_more_item");
-
-				if(!$el.hasClass("hidden")){
-					jQuery("a.watch_less").removeClass("hidden");
-					jQuery("a.watch_more").addClass("hidden");
-				}
-				if($el.hasClass("hidden")){
-					jQuery("a.watch_less").addClass("hidden");
-					jQuery("a.watch_more").removeClass("hidden");
-				}
-			});
+				jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_more").addClass("hidden");
+			}
+			jQuery("a.watch_more, a.watch_less").click(this.click);
 			jQuery(window).resize(this.resize);
 		},
+		click: function(e){
+			e.preventDefault();
+			jQuery(".product_list_widget .watch_more_item")
+					.toggleClass("hidden");
+
+			var $el = jQuery(".product_list_widget .watch_more_item");
+
+			if(!$el.hasClass("hidden")){
+				jQuery("a.watch_less").removeClass("hidden");
+				jQuery("a.watch_more").addClass("hidden");
+			}
+			if($el.hasClass("hidden")){
+				jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_more").removeClass("hidden");
+			}
+		},
 		resize: function() {
-			var scr_w=screen.width;
-			var $elem = jQuery(".product_list_widget .disappear_item");
+			var scr_w=jQuery(window).width();
 
 			if(scr_w < Mall.Breakpoint.sm){
-				if(!$elem.hasClass("hidden")){
-					jQuery($elem).addClass("hidden watch_more_item");
+				if(!jQuery("a.watch_more").hasClass("hidden")){
+					jQuery(".product_list_widget .watch_more_item")
+						.toggleClass("hidden");
 				}
+				jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_more").addClass("hidden");
 			}else{
-				if($elem.hasClass("hidden")){
-					jQuery($elem).removeClass("hidden watch_more_item");
+				if(jQuery("a.watch_more").hasClass("hidden")){
+					jQuery(".product_list_widget .watch_more_item")
+						.toggleClass("hidden");
+					jQuery("a.watch_more").removeClass("hidden");
+				}
+				if(!jQuery("a.watch_less").hasClass("hidden")){
+					jQuery("a.watch_less").addClass("hidden");
 				}
 			}
 		},
