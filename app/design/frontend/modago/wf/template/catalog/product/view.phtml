@@ -60,6 +60,27 @@ $productDescription = $_helper->productAttribute($_product, nl2br($_product->get
 $brandShopProductId = $_product->getData('brandshop');
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
+<div class="path_back_to_category visible-xs">
+	<?php if ($isVendorContent): ?>
+		<div class="col-xs-12 brandshop">
+			<a href="<?php echo $this->getVendorUrl(); ?>">
+				<?php echo $vendorContext->isBrandshop() ? $this->__("Brandshop") : $this->__("Vendor"); ?>
+				<img alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"
+					 src="<?php echo $this->getVendorLogoUrl(); ?>">
+			</a>
+		</div>
+	<?php endif; ?>
+	<div class="col-xs-12">
+		<?php if (Mage::registry('mobile_breadcrumb')): ?>
+			<?php $mobileBreadcrumb = Mage::registry('mobile_breadcrumb'); ?>
+			<a href="<?php echo $mobileBreadcrumb['link']; ?>" id="pbtc_link"><i
+					class="fa fa-angle-left"></i> <?php echo $mobileBreadcrumb['label']; ?></a>
+		<?php else: ?>
+			<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i
+					class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+		<?php endif; ?>
+	</div>
+</div>
 <div id="content" class="container-fluid">
     <div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">

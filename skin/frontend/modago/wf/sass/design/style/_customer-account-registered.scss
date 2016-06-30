@@ -153,7 +153,7 @@
 
 .my-account .background-wrapper{
 	background: $body-bg;
-	padding: 0 15px;
+	padding: 0 15px 20px;
 	@include max-screen(768px) {
 		margin: 0;
 		padding: 0 16px 15px;

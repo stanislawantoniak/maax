@@ -8,13 +8,13 @@
 }
 
 .headroom--pinned {
-	top: 0 !important;
+	top: -34px !important;
 }
 
 body {
 	@media screen and (max-height: 749px) {
 		.headroom--unpinned {
-			top: 0px !important;
+			top: 0 !important;
 		}
 	}
 	@include max-screen($screen-xs-max) {
@@ -23,9 +23,12 @@ body {
 		}
 	}
 	.headroom--top {
-		position: static !important;
-		margin-top: -80px !important;
-		transition: none !important;
+      margin-top: 0 !important;
+      @include max-screen($screen-xs-max) {
+        position: static !important;
+        margin-top: -85px !important;
+        transition: none !important;
+      }
 	}
 	&.sb-open > header {
 		margin-left: 288px;
