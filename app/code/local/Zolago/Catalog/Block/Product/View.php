@@ -583,7 +583,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		$storeId = Mage::app()->getStore()->getStoreId();
 		$attributeSetId = $_product->getData('attribute_set_id');
 		$brandId = $_product->getData( 'manufacturer');
-        Mage::log($brandId, null, "sizetable0.log");
+
 		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 
 		return $sizeTableValue;
@@ -597,11 +597,10 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
 
         $sizeTableContent = $this->_getSizeTableContent();
-        Mage::log($sizeTableContent, null, "sizetable1.log");
         $d = "";
         if(!empty($sizeTableContent)){
             $b = unserialize($this->_getSizeTableContent());
-            Mage::log($b, null, "sizetable2.log");
+
             $blockTable = "";
             $tableCheckIndicator = 0;
             if (isset($b["table"])) {
