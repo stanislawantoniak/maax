@@ -3040,6 +3040,23 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param bool $fullResponse
+	 * @return string
+	 */
+	public function formatCustomerAddressInpost($po, $fullResponse = false) {
+		/** @var GH_Inpost_Model_Locker $locker */
+		$locker = $po->getInpostLocker();
+		$result = Mage::helper('ghinpost')->__("Locker") . ' ' . $locker->getName() . "<br/>"
+			. $locker->getStreet() . " " . $locker->getBuildingNumber() . "</br>"
+			. $locker->getPostcode() . " " . $locker->getTown();
+		if ($fullResponse) {
+			$result .= "</br>T. " . $po->getShippingAddress()->getTelephone();
+		}
+		return $result;
+	}
+
     public function getResizedVendorLogoUrl($v, $width, $height, $field='logo')
     {
         $v = Mage::helper('udropship')->getVendor($v);

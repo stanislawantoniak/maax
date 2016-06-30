@@ -8,7 +8,9 @@ $_shipmentsCollection	= $this->getShipmentsCollection();
 $_currentShipping		= $this->getCustomCurrentShipping();
 $_alerts				= $this->getAlerts($_po);
 $_comments				= $_po->getVendorCommentsCollection();
-$_shippingStatuses		= Mage::helper('udropship')->getVendorShipmentStatuses(); 
+/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+$udropshipHlp			= Mage::helper('udropship');
+$_shippingStatuses		= $udropshipHlp->getVendorShipmentStatuses(); 
 $_statusModel			= $_po->getStatusModel(); 
 $_aggregated			= $_po->getAggregated();
 $_isEditable			= $this->isEditable();
@@ -354,14 +356,22 @@ $paymentHelper = Mage::helper('zolagopayment');
 					</h4>			
 					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
-						<div class="btn-group"> 
-							<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button> 
-						</div> 
+						<div class="btn-group">
+							<?php if($_po->isDeliveryInpost()):?>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingInpostAddressModal"><i class="icon-pencil"></i></button>
+							<?php else:?>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button>
+							<?php endif;?>
+						</div>
 					</div>
 					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
-					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+					<?php if($_po->isDeliveryInpost()):?>
+						<?php echo $udropshipHlp->formatCustomerAddressInpost($_po, true) ?>
+					<?php else:?>
+						<?php echo $udropshipHlp->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+					<?php endif;?>
 				</div>
 			</div>
 		</div>
@@ -386,7 +396,7 @@ $paymentHelper = Mage::helper('zolagopayment');
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->needInvoice()):?>
-						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+						<?php echo $udropshipHlp->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
 					<?php else:?>
 						<small><?php echo $_hlp->__("Click pencil icon if you need an invoice.");?></small>
 					<?php endif;?>
@@ -620,9 +630,15 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping_address")->
+	if($_po->isDeliveryInpost()){
+		echo $this->getChild("vendor_po_edit_inpost_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
+	}else{
+		echo $this->getChild("vendor_po_edit_shipping_address")->
+		setAddress($_po->getShippingAddress())->
+		toHtml();
+	}
 
 /*******************************************************************************
  *	Billign address modal
