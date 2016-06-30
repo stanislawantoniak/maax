@@ -1714,7 +1714,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 			if ($inpostName && $po->getId() && ($po->getUdropshipVendor() == $session->getVendor()->getId())) {
 				$po->setInpostLockerName($inpostName)->save();
-				// todo: add comment about change delivery address
+				
+				Mage::dispatchEvent("zolagopo_po_inpost_locker_name_change", array(
+					"po" => $po,
+					"inpost_name" => $inpostName
+				));
+				
 				$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Correctly written a new delivery address to InPost locker."));
 			} else {
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("There is no such PO"));
