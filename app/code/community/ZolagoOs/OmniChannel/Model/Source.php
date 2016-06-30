@@ -170,7 +170,6 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             $selector = false;
             $options = $this->getVendorVisiblePreferences();
             break;
-
         case 'udropship/batch/export_on_po_status':
         case 'udropship/vendor/default_shipment_status':
         case 'udropship/vendor/restrict_shipment_status':
@@ -867,5 +866,26 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             $this->_visiblePreferences = $fieldsets;
         }
         return $this->_visiblePreferences;
+    }
+    
+    /**
+     * tracking statuses list
+     */
+
+    public function getTrackingStatusList($selector = false) {
+
+            $hlp = Mage::helper('udropship');
+            $options = array (
+                self::TRACK_STATUS_READY     => $hlp->__('Ready'),
+                self::TRACK_STATUS_PENDING   => $hlp->__('Pending'),
+                self::TRACK_STATUS_CANCELED  => $hlp->__('Cancel'),
+                self::TRACK_STATUS_SHIPPED   => $hlp->__('Shipped'),
+                self::TRACK_STATUS_DELIVERED => $hlp->__('Delivered'),                
+                Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED => $hlp->__('Undelivered'),
+            );
+            if ($selector) {
+                $options = array(''=>$hlp->__('* Please select')) + $options;
+            }
+            return $options;
     }
 }
