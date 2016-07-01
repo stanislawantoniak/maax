@@ -20,3 +20,6 @@
 "Wrong DHL settings.","Błąd w ustawieniach DHL"
 "Error in DHL connection.Please contact Administrator.","Błąd połączenia z DHL. Skontaktuj się z administratorem"
 "Please save changed settings.","Proszę zapisać zmiany w ustawieniach."
+"Unknown","Nieznany"
+"Track status manually changed from %s to %s","Status przesyłki zmieniony ręcznie z %s na %s"
+"Save","Zapisz"

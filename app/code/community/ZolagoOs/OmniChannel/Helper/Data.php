@@ -3043,16 +3043,17 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @param bool $fullResponse
+	 * @param string $nl
 	 * @return string
 	 */
-	public function formatCustomerAddressInpost($po, $fullResponse = false) {
+	public function formatCustomerAddressInpost($po, $fullResponse = false, $nl = "<br/>") {
 		/** @var GH_Inpost_Model_Locker $locker */
 		$locker = $po->getInpostLocker();
-		$result = Mage::helper('ghinpost')->__("Locker") . ' ' . $locker->getName() . "<br/>"
-			. $locker->getStreet() . " " . $locker->getBuildingNumber() . "</br>"
+		$result = Mage::helper('ghinpost')->__("Locker") . ' ' . $locker->getName() . $nl
+			. $locker->getStreet() . " " . $locker->getBuildingNumber() . $nl
 			. $locker->getPostcode() . " " . $locker->getTown();
 		if ($fullResponse) {
-			$result .= "</br>T. " . $po->getShippingAddress()->getTelephone();
+			$result .= $nl . "T. " . $po->getShippingAddress()->getTelephone();
 		}
 		return $result;
 	}

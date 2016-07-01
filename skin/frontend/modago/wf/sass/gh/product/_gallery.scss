@@ -302,6 +302,7 @@
 			img {
 				width:100%;
 				height:auto;
+				display:block;
 				@media (max-width: 360px) {
 					width:270px;
 				}
