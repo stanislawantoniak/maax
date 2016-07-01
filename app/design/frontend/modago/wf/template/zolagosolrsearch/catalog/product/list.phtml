@@ -135,6 +135,16 @@ $_products = $_cache['products'];
 												<div class="clearfix visible-xxs"></div>
 											<?php endif; ?>
 
+											<?php if ($n % 6 == 0): ?>
+												<div class="clearfix visible-sm"></div>
+											<?php endif; ?>
+
+											<?php if ($n % 4 == 0): ?>
+												<div class="clearfix visible-md"></div>
+												<div class="clearfix visible-lg"></div>
+											<?php endif; ?>
+
+
 
 											<?php $n++; ?>
 										<?php endforeach; ?>
