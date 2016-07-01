@@ -1716,10 +1716,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 $locker = Mage::getModel('ghinpost/locker')->load($inpostName, 'name');
 
-                $order = Mage::getModel("sales/order")->load($po->getOrderId());
-                $order->setInpostLockerName($inpostName)
-                    ->save();
-
                 $shippingAddress = Mage::getModel('sales/order_address')->load($po->getShippingAddressId());
 
                 $shippingAddress->setStreet($locker->getStreet() . " " . $locker->getBuildingNumber())
