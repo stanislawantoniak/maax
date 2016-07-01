@@ -1728,7 +1728,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				
 				Mage::dispatchEvent("zolagopo_po_inpost_locker_name_change", array(
 					"po" => $po,
-					"inpost_name" => $inpostName
+					"inpost_name" => $inpostName,
+					"type" => Mage_Sales_Model_Order_Address::TYPE_SHIPPING
 				));
 				
 				$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Correctly written a new delivery address to InPost locker."));
