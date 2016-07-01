@@ -75,6 +75,12 @@
 	}
 	a {
 		position:relative;
+		&#toggleSearch {
+			@include min-screen($screen-sm-min) {
+				padding-top: 8px !important;
+			}
+		}
+
 	}
 }
 

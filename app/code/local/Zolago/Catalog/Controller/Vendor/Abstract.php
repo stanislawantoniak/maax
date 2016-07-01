@@ -120,13 +120,18 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
                 } else {
                     $this->_processAttributresSave(array($productId), $attributeData, $storeId, $data);
 
-                    if (in_array('status', $attributeChanged) || in_array('politics', $attributeChanged)) {
+                    if (!empty(array_intersect(array('status', 'politics', 'product_flag'), $attributeChanged))) {
                         /** @var Zolago_Turpentine_Helper_Ban $banHelper */
                         $banHelper = Mage::helper( 'turpentine/ban' );
                         /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
                         $coll = $banHelper->prepareCollectionForMultiProductBan(array($productId));
 
-                        Mage::dispatchEvent(in_array('status', $attributeChanged) ? "vendor_manual_save_status_after" : "vendor_manual_save_politics_after",
+						$eventName = "vendor_manual_save_attribute_after";
+						if (in_array('status', $attributeChanged))       $eventName = "vendor_manual_save_status_after";
+						if (in_array('politics', $attributeChanged))     $eventName = "vendor_manual_save_politics_after";
+						if (in_array('product_flag', $attributeChanged)) $eventName = "vendor_manual_save_product_flag_after";
+
+                        Mage::dispatchEvent($eventName,
                             array(
                                 "products"          => $coll,
                                 'product_ids'       => $coll->getAllIds(),

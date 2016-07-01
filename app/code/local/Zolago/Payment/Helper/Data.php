@@ -251,8 +251,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 	 * @return bool
 	 */
 	public function getConfigUseAllocation($store = null) {
-//		return false; // todo remove
-		$config = Mage::getStoreConfig('payment/config/use_allocation', $store);
+		$config = (bool)(!Mage::helper('core')->isModuleEnabled('ZolagoOs_OutsideStore')) || (bool)Mage::getStoreConfig('payment/config/use_allocation', $store);
 		return (bool)$config;
 	}
 
@@ -277,13 +276,10 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 		if (!isset($this->_cache[$key])) {
 			$sum = 0;
 			$coll = $this->getTransactionCollection($po);
+			$coll->addTxnTypeFilter(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
 			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
 			foreach ($coll as $transaction) {
-				if ($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER) {
-					$sum += $transaction->getTxnAmount();
-				} elseif ($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND) {
-					$sum -= $transaction->getTxnAmount();
-				}
+				$sum += $transaction->getTxnAmount();
 			}
 			$this->_cache[$key] = $sum;
 		}

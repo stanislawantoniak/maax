@@ -36,12 +36,11 @@
     </div>
 <?php //    <!--        Selected payment--> ?>
 
-    <?php
-    foreach ($methods as $_method):
-        $_code = $_method->getCode();
-?>
+    <?php $i = 1; ?>
+    <?php $count = count($methods); ?>
+    <?php foreach ($methods as $_method): $_code = $_method->getCode(); ?>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default payment-method-panel <?php if($i==$count): ?>last-item<?php endif;?>">
         <div class="panel-body">
                 <div class="form-group form-radio">
                     <?php if(!$oneMethod): ?>
@@ -98,7 +97,7 @@
 
         </div>
         </div>
-
+    <?php $i++; ?>
 <?php endforeach; ?>
     <input type="hidden" name="payment_emul" />
     <input type="hidden" name="payment_provider_emul" />

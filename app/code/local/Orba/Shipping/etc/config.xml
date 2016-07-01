@@ -68,6 +68,17 @@
       </modules>
     </translate>
   </global>
+  <adminhtml>
+    <translate>
+      <modules>
+        <Orba_Shipping>
+          <files>
+            <default>Orba_Shipping.csv</default>
+          </files>
+        </Orba_Shipping>
+      </modules>
+    </translate>  
+  </adminhtml>
   <frontend>
     <routers>
       <orbashipping>

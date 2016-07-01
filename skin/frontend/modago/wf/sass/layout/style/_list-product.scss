@@ -96,13 +96,16 @@
                 }
             }
         }
-        &.price-two-line {
-            .col-price {
-                span {
-                    display:inline;
-                }
+      &.price-two-line {
+        .col-price {
+          span {
+            display: inline;
+            @media (max-width: 490px) {
+              display: block;
             }
+          }
         }
+      }
         &.like-two-line {
             .like {
 	            text-align: center;
