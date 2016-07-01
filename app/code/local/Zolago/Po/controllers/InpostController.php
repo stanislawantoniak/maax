@@ -45,15 +45,4 @@ class Zolago_Po_InpostController extends Mage_Core_Controller_Front_Action
         echo json_encode($result, JSON_HEX_APOS);
         exit;
     }
-
-    public function updateInpostDataAction()
-    {
-        $inpostName = $this->getRequest()->getParam("inpostName", "");
-        $orderId = $this->getRequest()->getParam("orderId", "");
-
-        if($inpostName && $orderId){
-            $po = Mage::getModel("udpo/po")->load($orderId);
-            $po->setInpostLockerName($inpostName)->save();
-        }
-    }
 }
