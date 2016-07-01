@@ -22,7 +22,9 @@ function _prepareForm($object) {
 
 	// +10 years by default
 	if(!$object->getModel()->hasData('expire_date')) {
-		$object->getModel()->setData('expire_date', date("Y-m-d H:i:s", time() + 60*60*24*365*10));
+		$object->getModel()->setData('expire_date', date("Y-m-d", time() + 60*60*24*365*10));
+	} else {
+		$object->getModel()->setData('expire_date', date("Y-m-d", date_create($object->getModel()->getData('expire_date'))->getTimestamp()));
 	}
 	$values = $object->getModel()->getData();
 
@@ -97,7 +99,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d HH:mm:ss",
+			"format" => "Y-MM-d",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -110,7 +112,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d HH:mm:ss",
+			"format" => "Y-MM-d",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -210,7 +212,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_first_name", "text", array(
 			"name" => "kids[{$i}][first_name]",
 			"class" => "form-control",
-			"required" => $i != 0,
+			"required" => $i == 1,
 			"label" => $helper->__('First name'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-4"
@@ -220,7 +222,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_sex", "radios", array(
 			"name" => "kids[{$i}][sex]",
 			//"class" => "form-control",
-			"required" => $i != 0,
+			"required" => $i == 1,
 			"label" => $helper->__('Sex'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3 radio-buttons",
@@ -234,7 +236,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_birthdate", "text", array(
 			"name" => "kids[{$i}][birthdate]",
 			"class" => "form-control datetimepicker datetimepicker-kid-{$i} col-md-2",
-			"required" => $i != 0,
+			"required" => $i == 1,
 			"label" => $helper->__('Date of birth'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3 datetimepicker-wrapper datetimepicker-wrapper-kid-{$i}",
@@ -331,7 +333,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 	var CardEdit = {
 		kidCount: <?php echo $count; ?>,
 		kidsData: <?php echo json_encode(isset($values['kids']) ? $values['kids'] : array()); ?>,
-		dateFormat: 'Y-m-d H:i:s',
+		dateFormat: 'Y-m-d',
 		
 		init: function () {
 			this.populateKidsData();
@@ -393,7 +395,8 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 					},
 					"email": {
 						require_from_group_2: [1, ".group-email-or-phone"],
-						required: false
+						required: false,
+						email: true
 					}
 				},
 				messages: {
