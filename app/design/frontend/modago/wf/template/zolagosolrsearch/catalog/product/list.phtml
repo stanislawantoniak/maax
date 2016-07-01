@@ -106,26 +106,7 @@ $_products = $_cache['products'];
                                                                     <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?>
                                                                 </span>
 															</div>
-															<?php
-															// like count
-															$wishlistCount = "";
-															$inMyWishlist = "";
-															$plusSign = "";
-															if ($product[5] - 1 > 0) {
-																$wishlistCount = $product[5];
-																if ($product[6]) {
-																	$wishlistCount -= 1;
-																}
-															}
 
-															if ($product[6]) {
-																$inMyWishlist = $this->__("You");
-																if ($product[5] > 1) {
-																	$plusSign = " + ";
-																}
-															}
-
-															?>
 														</div>
 													</a>
 												</div>
@@ -137,12 +118,10 @@ $_products = $_cache['products'];
 
 											<?php if ($n % 6 == 0): ?>
 												<div class="clearfix visible-sm"></div>
+												<div class="clearfix visible-md"></div>
 											<?php endif; ?>
 
-											<?php if ($n % 4 == 0): ?>
-												<div class="clearfix visible-md"></div>
-												<div class="clearfix visible-lg"></div>
-											<?php endif; ?>
+
 
 
 
