@@ -212,7 +212,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_first_name", "text", array(
 			"name" => "kids[{$i}][first_name]",
 			"class" => "form-control",
-			"required" => $i != 0,
+			"required" => $i == 1,
 			"label" => $helper->__('First name'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-4"
@@ -222,7 +222,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_sex", "radios", array(
 			"name" => "kids[{$i}][sex]",
 			//"class" => "form-control",
-			"required" => $i != 0,
+			"required" => $i == 1,
 			"label" => $helper->__('Sex'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3 radio-buttons",
@@ -236,7 +236,7 @@ function _prepareForm($object) {
 		$kids->addField("kids_{$i}_birthdate", "text", array(
 			"name" => "kids[{$i}][birthdate]",
 			"class" => "form-control datetimepicker datetimepicker-kid-{$i} col-md-2",
-			"required" => $i != 0,
+			"required" => $i == 1,
 			"label" => $helper->__('Date of birth'),
 			"label_wrapper_class" => "col-md-3 label-wrapper",
 			"wrapper_class" => "col-md-3 datetimepicker-wrapper datetimepicker-wrapper-kid-{$i}",
