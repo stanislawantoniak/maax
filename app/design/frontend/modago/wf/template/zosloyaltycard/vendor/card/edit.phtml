@@ -395,7 +395,8 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 					},
 					"email": {
 						require_from_group_2: [1, ".group-email-or-phone"],
-						required: false
+						required: false,
+						email: true
 					}
 				},
 				messages: {
