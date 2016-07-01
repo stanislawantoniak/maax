@@ -22,7 +22,9 @@ function _prepareForm($object) {
 
 	// +10 years by default
 	if(!$object->getModel()->hasData('expire_date')) {
-		$object->getModel()->setData('expire_date', date("Y-m-d H:i:s", time() + 60*60*24*365*10));
+		$object->getModel()->setData('expire_date', date("Y-m-d", time() + 60*60*24*365*10));
+	} else {
+		$object->getModel()->setData('expire_date', date("Y-m-d", date_create($object->getModel()->getData('expire_date'))->getTimestamp()));
 	}
 	$values = $object->getModel()->getData();
 
@@ -97,7 +99,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d HH:mm:ss",
+			"format" => "Y-MM-d",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -110,7 +112,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d HH:mm:ss",
+			"format" => "Y-MM-d",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -331,7 +333,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 	var CardEdit = {
 		kidCount: <?php echo $count; ?>,
 		kidsData: <?php echo json_encode(isset($values['kids']) ? $values['kids'] : array()); ?>,
-		dateFormat: 'Y-m-d H:i:s',
+		dateFormat: 'Y-m-d',
 		
 		init: function () {
 			this.populateKidsData();
