@@ -353,17 +353,19 @@ Mall.listing = {
 		jQuery.each(products, function(index, item) {
             eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
 
-			if( (index+1) % 2){
+			if( (index+1) % 2 == 0){
 				eachItemsHtml.push('<div class="clearfix visible-two-listing-columns"></div>');
 			}
-			if( (index+1) % 3){
+			if( (index+1) % 3 == 0){
 				eachItemsHtml.push('<div class="clearfix visible-three-listing-columns"></div>');
 			}
-            Mall.wishlist.addProduct({
-                id: item[0],
-                       wishlist_count: item[5],
-                in_your_wishlist: item[6] ? true : false
-                    });
+
+			Mall.wishlist.addProduct({
+				id: item[0],
+				wishlist_count: item[5],
+				in_your_wishlist: item[6] ? true : false
+			});
+
 		});
 
         grid.html(eachItemsHtml);
