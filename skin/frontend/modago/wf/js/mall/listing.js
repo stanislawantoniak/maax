@@ -351,7 +351,7 @@ Mall.listing = {
 	        eachItemsHtml = [];
 
 		jQuery.each(products, function(index, item) {
-            eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
+			eachItemsHtml.push(Mall.listing.createProductEntityImprove(item));
 
 			if( (index+1) % 2 == 0){
 				eachItemsHtml.push('<div class="clearfix visible-two-listing-columns"></div>');
