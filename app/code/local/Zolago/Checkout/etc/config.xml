@@ -47,6 +47,16 @@
 				</Zolago_Checkout>
 			</modules>
 		</translate>
+		<events>
+			<payment_method_is_active>
+				<observers>
+					<is_cod_available>
+						<class>zolagocheckout/observer</class>
+						<method>paymentMethodIsActive</method>
+					</is_cod_available>
+				</observers>
+			</payment_method_is_active>
+		</events>
 	</frontend>
     <default>
         <checkout>

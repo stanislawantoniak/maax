@@ -61,6 +61,13 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
         }
         return $methods;
     }
+
+
+    protected function _canUseMethod($method)
+    {
+        Mage::log($method->getData(), null, "payment.log");
+        return $method && $method->canUseCheckout() && parent::_canUseMethod($method);
+    }
 	
 	/**
 	 * @param Mage_Payment_Model_Method_Abstract $method
