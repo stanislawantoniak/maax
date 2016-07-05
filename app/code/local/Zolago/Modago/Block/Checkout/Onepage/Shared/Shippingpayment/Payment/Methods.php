@@ -59,7 +59,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
                         $methods[] = $method;
                     } else {
                         if ($codTitle = $this->_getIsCODCompatibleWithShippingMethod($method)) {
-                            $method->setData("cod_shipping_dependent_title", $codTitle);
+                            $method->setCodShippingDependentTitle($codTitle);
                             $methods[] = $method;
                         }
 
@@ -130,6 +130,13 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
         $carrier = $info->getDeliveryCode();
 
         $storeId = Mage::app()->getStore()->getId();
+
+        $pathTitleDefault = 'payment/cashondelivery/title';
+        $codCheckoutTitleDefault = (string)Mage::getStoreConfig($pathTitleDefault, $storeId);
+        if(!in_array($carrier, array("zolagopp", "ghinpost")))
+            return $codCheckoutTitleDefault;
+
+
         $path = 'carriers/' . $carrier . '/' . "cod_allowed";
         $codAllowed = (bool)Mage::getStoreConfig($path, $storeId);
         if (!$codAllowed)
@@ -140,9 +147,6 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
 
         if (!empty($codCheckoutTitle))
             return $codCheckoutTitle;
-
-        $pathTitleDefault = 'payment/cashondelivery/title';
-        $codCheckoutTitleDefault = (string)Mage::getStoreConfig($pathTitleDefault, $storeId);
 
         return $codCheckoutTitleDefault;
     }
