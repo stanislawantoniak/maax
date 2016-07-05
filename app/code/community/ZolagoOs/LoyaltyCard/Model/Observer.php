@@ -218,7 +218,7 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 			$subscriber = Mage::getModel('zolagonewsletter/subscriber');
 			$email = $card->getEmail();
 			$storeId = $card->getStoreId();
-			$subscriber->rawLoadByEmail($email, $storeId);
+			$subscriber = $subscriber->rawLoadByEmail($email, $storeId);
 
 			if ($subscriber->getId()) {
 				$subscriber->setStatus(Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED);
