@@ -297,7 +297,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 		<div class="form-actions">
 			<div class="row">
 				<div class="col-xs-12">
-					<input type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
+					<input id="btn-save" type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
 					<a href="<?php echo Mage::getUrl('*/*'); ?>" class="btn btn-default pull-right"><?php echo $helper->__("Cancel");?></a>
 				</div>
 			</div>
@@ -334,6 +334,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 		kidCount: <?php echo $count; ?>,
 		kidsData: <?php echo json_encode(isset($values['kids']) ? $values['kids'] : array()); ?>,
 		dateFormat: 'Y-m-d',
+		validator: null,
 		
 		init: function () {
 			this.populateKidsData();
@@ -387,7 +388,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 
 			var form = jQuery("#edit-card");
 			new Zolago.formIntegrator(form);
-			form.validate({
+			this.validator = form.validate({
 				rules: {
 					"telephone_number": {
 						require_from_group_2: [1, ".group-email-or-phone"],
@@ -413,6 +414,13 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 					} else {
 						$element.closest("div").append($error);
 					}
+				}
+			});
+
+			/** Block save btn after submit */
+			form.on('submit', function (e) {
+				if (!!CardEdit.validator && !CardEdit.validator.numberOfInvalids()) {
+					jQuery('#btn-save').attr("disabled", true);
 				}
 			});
 		},
