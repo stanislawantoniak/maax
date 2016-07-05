@@ -1,0 +1,122 @@
+* {
+    margin:0; padding:0;
+    font-family: latoregular, sans-serif;
+}
+
+div {
+    display: block;
+}
+
+body {
+    display: block;
+    margin: 0px;
+    /*background-color: #F2F1F0;*/
+}
+
+head {
+    display: none;
+}
+title {
+    display: none;
+}
+link {
+    display: none;
+}
+meta {
+    display: none;
+}
+
+#header {
+    background: white;
+    border-bottom: 3px solid black;
+    display: block;
+}
+
+#header_top_block_center {
+    text-align: center;
+    display: block;
+}
+
+.logo img {
+    height: 61px;
+    display: inline;
+}
+
+.main-container {
+    display: block;
+    padding-bottom: 15px;
+    padding-top: 15px;
+
+    box-sizing: border-box;
+    color: rgb(30, 30, 30);
+
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 1206px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+@media (max-width: 1206px) {
+    .main-container {
+        padding-top: 0px
+    }
+}
+
+.main {
+    background-color:white;
+    padding: 15px;
+}
+
+h1 {
+    display: block;
+    font-size: 25px;
+    line-height: 25px;
+    font-family: latoblack, sans-serif;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+h2 {
+    display: block;
+    font-size: 14px;
+    line-height: 14px;
+    font-family: latoblack, sans-serif;
+    margin-bottom: 7px;
+    font-weight: normal;
+}
+
+.trace-container {
+    display: block;
+    padding-bottom: 15px;
+}
+
+@font-face {
+    font-family: 'latoblack';
+    src: url('lato-black-webfont.eot');
+    src: url('lato-black-webfont.eot?#iefix') format('embedded-opentype'),
+    url('lato-black-webfont.woff') format('woff'),
+    url('lato-black-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'latoregular';
+    src: url('lato-regular-webfont.eot');
+    src: url('lato-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('lato-regular-webfont.woff') format('woff'),
+    url('lato-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+strong {
+    font-family: latoblack, sans-serif;
+    font-weight: normal;
+}
+
+a {
+    color: #0000cc;
+    text-decoration: underline;
+    cursor: auto;
+}

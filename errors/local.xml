@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <config>
-    <skin>modago</skin>
+    <skin>zos</skin>
     <report>
         <action></action>
         <subject></subject>
