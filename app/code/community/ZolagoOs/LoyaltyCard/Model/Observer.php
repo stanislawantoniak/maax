@@ -79,7 +79,6 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 			$customersCollection->addFieldToFilter('is_active', 1);
 			$customersCollection->addFieldToFilter('website_id', $websiteId);
 			$customersCollection->addFieldToFilter('store_id', $storeId);
-			$customersCollection->addFieldToFilter('email', array("in" => $list));
 			$customersCollection->addAttributeToSelect(array(
 				'loyalty_card_number_1',
 				'loyalty_card_number_2',
@@ -98,7 +97,11 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 				$save = false;
 				$index = 1;
 					/** @var ZolagoOs_LoyaltyCard_Model_Card $_card|null */
-				$customerCards = array_replace(array(null, null, null), $cards[$storeId][$customer->getEmail()]);
+				if (isset($cards[$storeId][$customer->getEmail()])) {
+					$customerCards = array_replace(array(null, null, null), $cards[$storeId][$customer->getEmail()]);
+				} else {
+					$customerCards = array(null, null, null);
+				}
 				foreach ($customerCards as $_card) {
 					if ($index > 3) break;
 					$n = "loyalty_card_number_{$index}";
