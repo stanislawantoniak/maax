@@ -280,10 +280,6 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 			<?php endif; ?>
 		</div>
 		<div class="col-md-6">
-			<?php if (!$this->isModelNew()): ?>
-				<a class="btn btn-danger pull-right" style="margin: 30px 5px 0 0;" data-toggle="modal" data-target="#confirm-delete">
-					<i class="icon-remove"></i>&nbsp;<?php echo $helper->__("Remove card"); ?></a>
-			<?php endif; ?>
 		</div>
 	</div>
 </div>
@@ -296,7 +292,13 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 
 		<div class="form-actions">
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-xs-6">
+					<?php if (!$this->isModelNew()): ?>
+						<a class="btn btn-danger pull-left" style="background-color: #667799;" data-toggle="modal" data-target="#confirm-delete">
+							<i class="icon-remove"></i>&nbsp;<?php echo $helper->__("Remove card"); ?></a>
+					<?php endif; ?>
+				</div>
+				<div class="col-xs-6">
 					<input id="btn-save" type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
 					<a href="<?php echo Mage::getUrl('*/*'); ?>" class="btn btn-default pull-right"><?php echo $helper->__("Cancel");?></a>
 				</div>
