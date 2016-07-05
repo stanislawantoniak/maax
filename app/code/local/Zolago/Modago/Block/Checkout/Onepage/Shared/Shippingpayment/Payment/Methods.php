@@ -120,20 +120,23 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
      */
     protected function _getIsCODCompatibleWithShippingMethod()
     {
+        $storeId = Mage::app()->getStore()->getId();
+        $pathTitleDefault = 'payment/cashondelivery/title';
+        $codCheckoutTitleDefault = (string)Mage::getStoreConfig($pathTitleDefault, $storeId);
 
         $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
-        $methods = array_values($selectedShipping["methods"]);
+
+        $selectedMethods = $selectedShipping["methods"];
+        if (empty($selectedMethods))     //Case: no session, no quota yet
+            return $codCheckoutTitleDefault;
+
+        $methods = array_values($selectedMethods);
 
         $udropshipMethod = array_shift($methods);
 
         $info = $this->getOmniChannelMethodInfoByMethod($udropshipMethod);
         $carrier = $info->getDeliveryCode();
 
-        $storeId = Mage::app()->getStore()->getId();
-
-        $pathTitleDefault = 'payment/cashondelivery/title';
-        $codCheckoutTitleDefault = (string)Mage::getStoreConfig($pathTitleDefault, $storeId);
-        
         //COD availability defined only for Poczta Polska and inPost
         if (!in_array($carrier, array(Orba_Shipping_Model_Post::CODE, GH_Inpost_Model_Carrier::CODE)))
             return $codCheckoutTitleDefault;
@@ -187,6 +190,9 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
      */
     public function getOmniChannelMethodInfoByMethod($udropshipMethod)
     {
+        if(empty($udropshipMethod))
+            return FALSE;
+
         // udropship_method (example udtiership_1)
         $storeId = Mage::app()->getStore()->getId();
 
