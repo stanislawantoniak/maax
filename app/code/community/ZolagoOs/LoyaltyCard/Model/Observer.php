@@ -113,16 +113,20 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 						$customer->setData($t, $_card->getCardType());
 						$customer->setData($e, $_card->getExpireDate());
 					} else {
-						$customer->setData($n, null);
-						$customer->setData($t, null);
-						$customer->setData($e, null);
+						$customer->unsetData($n);
+						$customer->unsetData($t);
+						$customer->unsetData($e);
 					}
-					$changed = $customer->dataHasChangedFor($n) || $customer->dataHasChangedFor($n) || $customer->dataHasChangedFor($n);
-					$save = $changed ? true : $save;
+					if ($customer->dataHasChangedFor($n)) {
+						$customer->getResource()->saveAttribute($customer, $n);
+					}
+					if ($customer->dataHasChangedFor($t)) {
+						$customer->getResource()->saveAttribute($customer, $t);
+					}
+					if ($customer->dataHasChangedFor($e)) {
+						$customer->getResource()->saveAttribute($customer, $e);
+					}
 					$index++;
-				}
-				if ($save) {
-					$customer->save();
 				}
 			}
 		}
