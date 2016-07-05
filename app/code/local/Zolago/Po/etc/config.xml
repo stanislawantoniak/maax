@@ -203,6 +203,14 @@
                     </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_change>
+            <zolagopo_po_manually_rma>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>poManuallyRma</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_manually_rma>
             <zolagopo_po_compose>
                 <observers>
                     <zolagopo>

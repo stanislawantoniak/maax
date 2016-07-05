@@ -234,6 +234,14 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$this->_logEvent($rma, $text, false);
 		}
 	}
+
+	public function rmaCreatedManually($observer){
+		$rma = $observer->getEvent()->getData('rma');
+		/* @var $po Zolago_Po_Model_Po */
+
+		$text = Mage::helper('zolagorma')->__("Vendor has created RMA manually");
+		$this->_logEvent($rma, $text, false, $rma->getVendor());
+	}
 	
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
@@ -296,14 +304,13 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$data['is_visible_on_front'] = 1;
 		}
 		
-		
 		/* @var $commentModel Zolago_Rma_Model_Rma_Comment */
 		$commentModel->setRma($rma);
 		$commentModel->addData($data);
 		$commentModel->setAuthorName($commentModel->getAuthorName(false));
 		$commentModel->save();
 		
-		// Send email		
+		// Send email
 		if($doSendEmail){
 			if($rma->getIsNewFlag()){
 				$rma->sendEmail(true, $commentModel);
