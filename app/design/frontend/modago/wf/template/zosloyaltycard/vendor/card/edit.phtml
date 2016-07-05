@@ -26,6 +26,15 @@ function _prepareForm($object) {
 	} else {
 		$object->getModel()->setData('expire_date', date("Y-m-d", date_create($object->getModel()->getData('expire_date'))->getTimestamp()));
 	}
+	// prepare kids index for this form
+	// index from 1 because 0 is 'template kid'
+	$_kids = array(0 => array());
+	foreach ($object->getModel()->getKids() as $kid) {
+		$_kids[] = $kid;
+	}
+	unset($_kids[0]);
+	$object->getModel()->setKids($_kids);
+
 	$values = $object->getModel()->getData();
 
 	$general = $form->addFieldset("general", array(
@@ -99,7 +108,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d",
+			"format" => "Y-MM-dd",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -112,7 +121,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d",
+			"format" => "Y-MM-dd",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
