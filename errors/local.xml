@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <config>
-    <skin>zos</skin>
+    <skin>modago</skin>
+    <logo>images/logo.svg</logo>
     <report>
         <action></action>
         <subject></subject>
