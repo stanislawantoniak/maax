@@ -19,6 +19,7 @@ function _prepareForm($object) {
 
 	/** @var Zolago_Dropship_Model_Form $form */
 	$form = Mage::getModel('zolagodropship/form');
+	$isNew = $object->isModelNew();
 
 	// +10 years by default
 	if(!$object->getModel()->hasData('expire_date')) {
@@ -28,12 +29,14 @@ function _prepareForm($object) {
 	}
 	// prepare kids index for this form
 	// index from 1 because 0 is 'template kid'
-	$_kids = array(0 => array());
-	foreach ($object->getModel()->getKids() as $kid) {
-		$_kids[] = $kid;
+	if (!$isNew) {
+		$_kids = array(0 => array());
+		foreach ($object->getModel()->getKids() as $kid) {
+			$_kids[] = $kid;
+		}
+		unset($_kids[0]);
+		$object->getModel()->setKids($_kids);
 	}
-	unset($_kids[0]);
-	$object->getModel()->setKids($_kids);
 
 	$values = $object->getModel()->getData();
 
@@ -98,7 +101,6 @@ function _prepareForm($object) {
 		"after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>',
 	));
 
-	$isNew = $object->isModelNew();
 	if (!$isNew) {
 		$general->addField('created_at', 'date', array(
 			"name" => 'created_at',
