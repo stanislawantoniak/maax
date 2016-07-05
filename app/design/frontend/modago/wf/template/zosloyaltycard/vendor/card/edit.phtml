@@ -350,6 +350,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 			jQuery('.datetimepicker').datetimepicker({
 				lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
 				format: CardEdit.dateFormat,
+				timepicker: false
 			});
 			jQuery(document).delegate(".icon-calendar", "click", function () {
 				jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
