@@ -77,7 +77,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         // III. Collect values
         // 1. Customer payments (Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
         $customerPayments = $this->getCustomerPayments();
-        //Mage::log($customerPayments, null, "TEST_SALDO_PAYMENTS.log");
+        Mage::log($customerPayments, null, "TEST_SALDO_PAYMENTS.log");
         $data = $this->collectDataBeforeBalanceUpdate($customerPayments, "payment_from_client", $data, $closedBalanceMonths);
 
         // 2. Customer refunds (Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND)
@@ -306,7 +306,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
             ->where("main_table.primary = ?", 1)
             ->group("main_table.vendor_id")
             ->group("balance_month");
-        //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
+        Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
 
         //  Mage::log($results, null, "TEST_SALDO_PAYMENTS.log");
         //Reformat by vendor -> month
