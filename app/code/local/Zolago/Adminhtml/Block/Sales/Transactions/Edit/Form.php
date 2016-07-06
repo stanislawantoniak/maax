@@ -45,7 +45,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'format' => 'yyyy-MM-dd',
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'time' => false,
-            'after_element_html' => "<br /><small>" . Mage::helper('zolagopayment')->__('Allowed format: yyyy-mm-dd') . "</small>",
+            'after_element_html' => "<br /><small>" . Mage::helper('sales')->__('Allowed format: yyyy-mm-dd') . "</small>",
         ));
 
 
