@@ -295,7 +295,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
 
             //  DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
-            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month")
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
 			// Only transactions from our dotpay
 			->joinLeft(
 				array('spt' => $this->getTable('sales/payment_transaction')),
@@ -336,7 +336,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $customerRefundsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
 
             //  DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
-            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month")
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
 			// Only transactions from our dotpay
 			->joinLeft(
 				array('spt' => $this->getTable('sales/payment_transaction')),
@@ -366,7 +366,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $vendorPayoutsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
 
             //  DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
-            ->columns("vendor_id, SUM(CAST(cost AS DECIMAL(12,4)))  as amount, DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month")
+            ->columns("vendor_id, SUM(CAST(cost AS DECIMAL(12,4)))  as amount, DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
             ->group("vendor_id")
             ->group("balance_month");
         //Mage::log($vendorPayoutsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYOUTS.log");
@@ -403,7 +403,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
                 + CAST(transport_brutto AS DECIMAL (12, 4))
                 + CAST(marketing_brutto AS DECIMAL (12, 4))
                 + CAST(other_brutto AS DECIMAL (12, 4))
-            )  as amount, DATE_FORMAT(CONVERT_TZ(sale_date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month")
+            )  as amount, DATE_FORMAT(CONVERT_TZ(sale_date,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
             ->where("is_invoice_correction=?", Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_ORIGINAL)
             ->where("wfirma_invoice_number != '' ")
             ->group("vendor_id")
@@ -428,7 +428,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
                 + CAST(transport_brutto AS DECIMAL (12, 4))
                 + CAST(marketing_brutto AS DECIMAL (12, 4))
                 + CAST(other_brutto AS DECIMAL (12, 4))
-            )  as amount, DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month")
+            )  as amount, DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
             ->where("is_invoice_correction=?", Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_CORRECTION)
             ->where("wfirma_invoice_number != '' ")
             ->group("vendor_id")
