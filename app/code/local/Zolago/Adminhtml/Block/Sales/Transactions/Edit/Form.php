@@ -31,13 +31,6 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'style' => 'max-width:100px;',
         ));
 
-        $fieldset->addField('order_id', 'text', array(
-            'label' => Mage::helper('sales')->__('Order'),
-            'required' => true,
-            'name' => 'order_id',
-            'style' => 'max-width:100px;',
-        ));
-
         $fieldset->addField('date', 'date', array(
             'label' => Mage::helper('sales')->__('Date'),
             'required' => true,
@@ -47,6 +40,18 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'time' => false,
             'after_element_html' => "<br /><small>" . Mage::helper('sales')->__('Allowed format: yyyy-mm-dd') . "</small>",
         ));
+        
+        $fieldset->addField('order_id', 'select', array(
+            'label' => Mage::helper('sales')->__('Order'),
+            'required' => true,
+            'name' => 'order_id',
+            'style' => 'width:800px;',
+            "options" => Mage::getSingleton('zolagoadminhtml/sales_transactions_source')
+                ->setPath('banktransfer_orders')
+                ->toOptionHash()
+        ));
+
+
 
 
         $form->setUseContainer(true);
