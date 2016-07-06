@@ -49,8 +49,8 @@
 							   value="<?php echo $_code ?>" 
 							   type="radio" 
 							   name="payment[method]" 
-							   title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" 
-							   data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
+							   title="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
+							   data-payment-method="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
 							   data-online="<?php echo $this->getIsOnline($_method) ?>"
 							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?>
 							   class="css-radio payment-method"  />
@@ -58,7 +58,7 @@
                         <span class="no-display">
 							<input id="p_method_<?php echo $_code ?>" 
 								value="<?php echo $_code ?>" 
-								data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
+								data-payment-method="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
 								data-online="<?php echo $this->getIsOnline($_method) ?>"
 								type="radio" 
 								name="payment[method]" 
@@ -70,13 +70,7 @@
                         <?php $methodCheckoutDescription = $this->_getMethodCheckoutDescription($_method); ?>
                         <span
                             class="pull-left col-xs-8 col-sm-9 col-md-9 col-lg-10 label-wrapper<?php if (!empty($methodCheckoutDescription)): ?> payment-with-description<?php endif; ?>">
-                            <strong>
-                               <?php if ($_method->getCode() == "cashondelivery"): ?>
-                                   <?php echo $this->escapeHtml($_method->getCodShippingDependentTitle()) ?>
-                               <?php else: ?>
-                                   <?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>
-                               <?php endif; ?>
-                            </strong>
+                            <strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
 
                             <?php if (!empty($methodCheckoutDescription)): ?>
                                 <div
