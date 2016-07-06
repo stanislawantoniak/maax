@@ -55,7 +55,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
 
                 ) {
                     $this->_assignMethod($method);
-                    if ($method->getCode() !== "cashondelivery"){
+                    if ($method->getCode() !== Mage::getModel("payment/method_cashondelivery")->getCode()){
                         $methods[] = $method;
                     } else {
                         if ($codTitle = $this->_getIsCODCompatibleWithShippingMethod($method)) {
