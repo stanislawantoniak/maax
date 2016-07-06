@@ -293,7 +293,9 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $customerPaymentsCollection */
         $customerPaymentsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(main_table.created_at,'%Y-%m') AS balance_month")
+
+            //  DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month")
 			// Only transactions from our dotpay
 			->joinLeft(
 				array('spt' => $this->getTable('sales/payment_transaction')),
