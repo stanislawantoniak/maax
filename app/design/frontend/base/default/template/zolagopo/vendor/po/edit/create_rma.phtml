@@ -1,15 +1,13 @@
-<?php $_hlp = Mage::helper("zolagopo");?>
-<?php $_po = $this->getPo(); ?>
-<?php $_type = $this->getType();
+<?php $_hlp = Mage::helper("zolagopo");
+$_po = $this->getPo();
+
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
+$reasonOptions = $this->getRmaReasons();
 ?>
-<?php $reasonOptions = $this->getRmaReasons();
-?>
-<!-- Modal <?php echo $_type;?> address -->
 <div class="modal fade" id="createRma">
 	<div class="modal-dialog">
-		<form method="post" id="new-rma" action="/urma/po/createNewRma">
+		<form method="post" id="new-rma" action="<?php echo $this->getFormUrl() ;?>">
 			<input type="hidden" name="po_id" value="<?php echo $_po->getId() ?>">
 			<div class="modal-content">
 				<div class="modal-header">

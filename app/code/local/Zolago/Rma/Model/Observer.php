@@ -236,11 +236,17 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	}
 
 	public function rmaCreatedManually($observer){
+		$session = Mage::getSingleton('udropship/session');
 		$rma = $observer->getEvent()->getData('rma');
-		/* @var $po Zolago_Po_Model_Po */
-
-		$text = Mage::helper('zolagorma')->__("Vendor has created RMA manually");
-		$this->_logEvent($rma, $text, false, $rma->getVendor());
+		$vendor = $rma->getVendor();
+		$operator = $rma->getOperator();
+		if($session->isOperatorMode()){
+			$author = $operator;
+		}else{
+			$author = $vendor;
+		}
+		$text = Mage::helper('zolagorma')->__("RMA created successfully");
+		$this->_logEvent($rma, $text, false, $author);
 	}
 	
 	/**

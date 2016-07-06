@@ -1887,10 +1887,6 @@ textarea.input-lg {
   border-color: #b94a48;
 }
 
-.error.help-block {
-  color: #b94a48;
-}
-
 .has-success .help-block,
 .has-success .control-label {
   color: #468847;

@@ -131,17 +131,19 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         if($shippingCost){
             $shippingCostStatus = true;
         }
+        $hlp = Mage::helper("zolagorma");
         $request = $this->getRequest();
         $session = Mage::getSingleton('core/session');
         try {
             $this->_saveRma(false, $shippingCostStatus);
-            $session->addSuccess($this->__("Vendor has created RMA manually"));
+            $session->addSuccess($hlp->__("RMA created successfully"));
         } catch (Exception $e) {
             $session->
             addError($e->getMessage())->
             setData("rma", $request->getParam('rma'));
         }
-        $this->_redirect('udpo/vendor/edit', array('id'=>$this->getRequest()->getParam('id')));
+
+        $this->_redirect('udpo/vendor/edit', array('id'=>$this->getRequest()->getParam('po_id')));
     }
 
     protected function _saveRmaDetails()
@@ -289,10 +291,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                     "rma" => $rma
                 ));
             }else{
-                Mage::dispatchEvent("zolagopo_po_manually_rma", array(
-                    "po" => $po
-                ));
                 Mage::dispatchEvent("zolagorma_rma_created_manually", array(
+                    "po" => $po,
                     "rma" => $rma
                 ));
             }
