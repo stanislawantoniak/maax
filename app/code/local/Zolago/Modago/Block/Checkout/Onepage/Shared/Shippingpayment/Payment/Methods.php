@@ -78,7 +78,26 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
     {
         return $method && $method->canUseCheckout() && parent::_canUseMethod($method);
     }
-	
+
+    /**
+     * Return method title for payment selection page
+     *
+     * @param Mage_Payment_Model_Method_Abstract $method
+     * @return string
+     */
+    public function getMethodTitle(Mage_Payment_Model_Method_Abstract $method)
+    {
+        if ($method->getCode() == Mage::getModel("payment/method_cashondelivery")->getCode())
+            return $method->getCodShippingDependentTitle();
+
+        $form = $this->getChild('payment.method.' . $method->getCode());
+        if ($form && $form->hasMethodTitle()) {
+            return $form->getMethodTitle();
+        }
+
+        return $method->getTitle();
+    }
+
 	/**
 	 * @param Mage_Payment_Model_Method_Abstract $method
 	 * @return bool
