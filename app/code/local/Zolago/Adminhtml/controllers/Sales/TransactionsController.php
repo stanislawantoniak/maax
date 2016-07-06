@@ -50,59 +50,28 @@ class Zolago_Adminhtml_Sales_TransactionsController
 
     public function saveAction()
     {
-        $request = $this->getRequest();
-
         $orderId = $this->getRequest()->getParam('order_id');
 
         $order = Mage::getModel("sales/order")->load($orderId);
-        krumo($order->getData());
-        die("test");
+
+        $txnAmount = $this->getRequest()->getParam("txn_amount");
 
 
-        $payment = Mage::getModel("sales/order_payment")->load($orderId,"parent_id");
-        //krumo($payment->getData());
+        $transaction = Mage::getModel("sales/order_payment_transaction");
+        $transaction
+            ->setOrderPaymentObject($order->getPayment());
 
-        $model = Mage::getModel("sales/order_payment_transaction");
+        $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED;
+        $transaction
+            ->setTxnStatus($status)
+            ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
+            ->setCustomerId($order->getCustomerId())
+            ->setTxnAmount($txnAmount)
+            ->setIsClosed(1);
 
-        $helper = Mage::helper('zolagosales');
-        $data = $this->getRequest()->getParams();
-        $modelId = $this->getRequest()->getParam("id");
-
-        $this->_getSession()->setFormData(null);
-
-        try {
-
-            if ($this->getRequest()->isPost()) {
-
-                $model->load($modelId);
-                $model->addData($data);
-
-                $validErrors = $model->validate();
-
-
-                if ($validErrors === true) {
-                    $model->save();
-                } else {
-                    $this->_getSession()->setFormData($data);
-                    foreach ($validErrors as $error) {
-                        $this->_getSession()->addError($error);
-                    }
-                    return $this->_redirectReferer();
-                }
-                $this->_getSession()->addSuccess($helper->__("Bank Transfer Saved"));
-            }
-        } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-            $this->_getSession()->setFormData($data);
-            return $this->_redirectReferer();
-        } catch (Exception $e) {
-            $this->_getSession()->addError($helper->__("Some error occurred!"));
-            $this->_getSession()->setFormData($data);
-            Mage::logException($e);
-            return $this->_redirectReferer();
-        }
+        $transaction->save();
         return $this->_redirect("*/*");
-        die("test");
+
     }
 
 }
