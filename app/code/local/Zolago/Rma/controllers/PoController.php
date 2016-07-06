@@ -135,12 +135,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $session = Mage::getSingleton('core/session');
         try {
             $this->_saveRma(false, $shippingCostStatus);
+            $session->addSuccess($this->__("Vendor has created RMA manually"));
         } catch (Exception $e) {
             $session->
             addError($e->getMessage())->
             setData("rma", $request->getParam('rma'));
-
-            $this->_redirect('udpo/vendor/edit', array('id'=>$this->getRequest()->getParam('id')));
         }
         $this->_redirect('udpo/vendor/edit', array('id'=>$this->getRequest()->getParam('id')));
     }
