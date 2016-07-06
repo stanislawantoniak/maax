@@ -24,6 +24,12 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
                 'class' => 'fieldset-wide'
             )
         );
+        $fieldset->addField('txn_id', 'text', array(
+            'label' => Mage::helper('sales')->__('Transaction ID'),
+            'required' => true,
+            'name' => 'txn_id',
+            'style' => 'max-width:100px;',
+        ));
         $fieldset->addField('txn_amount', 'text', array(
             'label' => Mage::helper('sales')->__('Amount'),
             'required' => true,
