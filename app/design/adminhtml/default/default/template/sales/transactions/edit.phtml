@@ -43,10 +43,10 @@
 
     jQuery(document).ready(function () {
         jQuery("[id=order_id]").select2({
-            placeholder: "Select order",
+            placeholder: "<?php echo Mage::helper('zolagosales')->__('Select order...') ?>",
             escapeMarkup: function (markup) {
                 return markup;
-            },
+            }
 
         });
     });

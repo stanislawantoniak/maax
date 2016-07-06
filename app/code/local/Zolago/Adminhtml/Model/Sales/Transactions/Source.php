@@ -54,7 +54,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
         foreach ($collection as $collectionItem) {
             $options[$collectionItem->getEntityId()]["increment_id"] = $collectionItem->getIncrementId();
             $options[$collectionItem->getEntityId()]["date"] = date('d.m.Y', $dateModel->timestamp(strtotime($collectionItem->getCreatedAt())));
-            $options[$collectionItem->getEntityId()]["order_total"] = Mage::helper('core')->currency($collectionItem->getSubtotalInclTax(), true, false);
+            $options[$collectionItem->getEntityId()]["order_total"] = Mage::helper('core')->currency($collectionItem->getBaseGrandTotal(), true, false);
 
             $options[$collectionItem->getEntityId()]["items"][$collectionItem->getItemId()] = array(
                 "id" => $collectionItem->getProductId(),
@@ -62,7 +62,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
                 "sku" => $_resource->getAttributeRawValue($collectionItem->getProductId(),  "skuv", 0)
             );
         }
-        
+
         foreach ($options as $orderId => $option) {
             $out = "<div class='banktransfer-row'>";
             $out .= "<div class='banktransfer-item banktransfer-left'><b>" . $option["increment_id"] . "</b> </div>";
