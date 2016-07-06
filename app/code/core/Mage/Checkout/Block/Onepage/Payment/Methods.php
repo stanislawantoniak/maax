@@ -80,7 +80,7 @@ class Mage_Checkout_Block_Onepage_Payment_Methods extends Mage_Payment_Block_For
      */
     public function getMethodTitle(Mage_Payment_Model_Method_Abstract $method)
     {
-        if ($method->getCode() == "cashondelivery")
+        if ($method->getCode() == Mage::getModel("payment/method_cashondelivery")->getCode())
             return $method->getCodShippingDependentTitle();
 
         $form = $this->getChild('payment.method.' . $method->getCode());

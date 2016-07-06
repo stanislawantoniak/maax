@@ -121,7 +121,9 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
     protected function _getIsCODCompatibleWithShippingMethod()
     {
         $storeId = Mage::app()->getStore()->getId();
-        $pathTitleDefault = 'payment/cashondelivery/title';
+
+        $codCode = Mage::getModel("payment/method_cashondelivery")->getCode();
+        $pathTitleDefault = 'payment/' . $codCode . '/title';
         $codCheckoutTitleDefault = (string)Mage::getStoreConfig($pathTitleDefault, $storeId);
 
         $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
