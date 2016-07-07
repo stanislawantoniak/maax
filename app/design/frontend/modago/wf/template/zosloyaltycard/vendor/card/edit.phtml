@@ -286,7 +286,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 				<h3><?php echo $helper->__("New card"); ?></h3>
 				<p><?php echo $helper->__("Create new card. Required fields are marked with an asterisk."); ?></p>
 			<?php else: ?>
-				<h3><?php echo $helper->__("Edit card '%s'", $card->getCardCode()); ?></h3>
+				<h3><?php echo $helper->__("Edit card '%s'", $card->getCardNumber()); ?></h3>
 				<p><?php echo $helper->__("Below you will find details of card. You can make changes to this cart by editing each field."); ?></p>
 			<?php endif; ?>
 		</div>
