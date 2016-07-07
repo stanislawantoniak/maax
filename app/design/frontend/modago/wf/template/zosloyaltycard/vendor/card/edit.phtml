@@ -29,7 +29,7 @@ function _prepareForm($object) {
 	}
 	// prepare kids index for this form
 	// index from 1 because 0 is 'template kid'
-	if (!$isNew) {
+	if (!empty($object->getModel()->getKids())) {
 		$_kids = array(0 => array());
 		foreach ($object->getModel()->getKids() as $kid) {
 			$_kids[] = $kid;
