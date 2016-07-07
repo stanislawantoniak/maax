@@ -26,7 +26,7 @@ $reasonOptions = $this->getRmaReasons();
 						<?php $i=0;?>
 						<?php foreach($_po->getAllItems() as $_key=>$_item):  ?>
 							<?php if(!$_item->getOrderItem()->getParentItemId()):?>
-								<tr>
+								<tr class="product_rma_row">
 									<td class="align-center checkbox-column">
 										<div class="checker">
 											<span><input type="checkbox" class="checkRmaItem form-control uniform" name="checkRmaItem[<?php echo $_item->getEntityId() ?>]" value=""</span>
@@ -50,7 +50,7 @@ $reasonOptions = $this->getRmaReasons();
 						<?php endforeach;?>
 						</tbody>
 					</table><input type="hidden" name="validate_items" value="0"/>
-					<div style="padding: 20px 0;">
+					<div style="padding: 20px 0 35px;">
 						<div class="col-sm-6" style="padding:0;">
 							<label for="rma_shipping_cost" class="checkbox">
 								<div class="checker">
@@ -82,8 +82,6 @@ $reasonOptions = $this->getRmaReasons();
 <script type="text/javascript">
 	jQuery(function($){
 		form.data("validator").settings.ignore = "";
-
-
 		var rmaReasonOption = jQuery("[name=rma_reason]").val();
 		if(rmaReasonOption == ''){
 			jQuery(".select2-chosen").html('<?php echo $_hlp->__("Select a reason...");?>');
@@ -95,14 +93,21 @@ $reasonOptions = $this->getRmaReasons();
 		selectClass = "[name=rma_reason]",
 		select = form.find(selectClass),
 		submitClass = "[name=create_rma]",
-		submit = form.find(submitClass);
+		submit = form.find(submitClass),
+		productRowClass = ".product_rma_row",
+		productRow = form.find(productRowClass);
 
-	checkbox.click(function(e){
-		var productChecked = jQuery(this).prop('checked');
+	var validator = null;
+
+	productRow.click(function(e){
+		if(!e.toElement.hasClassName('checkRmaItem')){
+			jQuery(this).find(checkbox).click();
+		}
+		var productChecked = jQuery(this).find(checkbox).prop("checked");
 		if(productChecked){
-			jQuery(this).closest("td").find(".hidden_items_single").val(true);
+			jQuery(this).find(".hidden_items_single").val(true);
 		}else{
-			jQuery(this).closest("td").find(".hidden_items_single").val(false);
+			jQuery(this).find(".hidden_items_single").val(false);
 		}
 		validateItems();
 	});
@@ -119,18 +124,7 @@ $reasonOptions = $this->getRmaReasons();
 			});
 		}
 	});
-	submit.click(function(e){
-		e.preventDefault();
-		jQuery(".hidden_items_single").each(function(){
-			if(jQuery(this).val() == 'false'){
-				jQuery(this).remove();
-			}
-		});
-		jQuery("#new-rma").submit();
-	});
-
-
-	form.validate({
+	validator = form.validate({
 		rules: {
 			ignore: "",
 			"rma_reason":{
@@ -147,7 +141,15 @@ $reasonOptions = $this->getRmaReasons();
 			"validate_items": "<?php echo $_hlp->__("Choose at least one product");?>"
 		}
 	});
-
+	form.on("submit",(function(e) {
+		if(validator.numberOfInvalids() == 0) {
+			jQuery(".hidden_items_single").each(function () {
+				if (jQuery(this).val() == 'false') {
+					jQuery(this).remove();
+				}
+			});
+		}
+	}));
 	// Validate conditions
 	function validateItems() {
 		if(jQuery('.checkRmaItem:checkbox:checked').length == 0){
