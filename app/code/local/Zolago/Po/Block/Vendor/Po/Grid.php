@@ -33,9 +33,12 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	 * @return Zolago_Po_Block_Vendor_Po_Grid
 	 */
 	protected function _applyExternalFilters(Zolago_Po_Model_Resource_Po_Collection $collection) {
-		
+
 		// Order Date
 		if($date=$this->getFilterValueByIndex("created_at")){
+			if(isset($date['to']) && $date['to']){
+				$date['to'] = Mage::getModel('core/date')->date('d-m-Y', strtotime($date['to'].' + 1 day'));
+			}
 			$this->_applayDateFilter($collection, "main_table.created_at", $date);
 		}
 		
@@ -46,6 +49,9 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		// Max shipment date
 		if($date=$this->getFilterValueByIndex("shipment_date")){
+			if(isset($date['to']) && $date['to']){
+				$date['to'] = Mage::getModel('core/date')->date('d-m-Y', strtotime($date['to'].' + 1 day'));
+			}
 			$this->_applayDateFilter($collection, "shipment.created_at", $date);
 		}
 
