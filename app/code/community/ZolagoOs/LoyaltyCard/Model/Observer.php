@@ -79,7 +79,6 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 			$customersCollection->addFieldToFilter('is_active', 1);
 			$customersCollection->addFieldToFilter('website_id', $websiteId);
 			$customersCollection->addFieldToFilter('store_id', $storeId);
-			$customersCollection->addFieldToFilter('email', array("in" => $list));
 			$customersCollection->addAttributeToSelect(array(
 				'loyalty_card_number_1',
 				'loyalty_card_number_2',
@@ -98,7 +97,11 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 				$save = false;
 				$index = 1;
 					/** @var ZolagoOs_LoyaltyCard_Model_Card $_card|null */
-				$customerCards = array_replace(array(null, null, null), $cards[$storeId][$customer->getEmail()]);
+				if (isset($cards[$storeId][$customer->getEmail()])) {
+					$customerCards = array_replace(array(null, null, null), $cards[$storeId][$customer->getEmail()]);
+				} else {
+					$customerCards = array(null, null, null);
+				}
 				foreach ($customerCards as $_card) {
 					if ($index > 3) break;
 					$n = "loyalty_card_number_{$index}";
@@ -110,16 +113,20 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 						$customer->setData($t, $_card->getCardType());
 						$customer->setData($e, $_card->getExpireDate());
 					} else {
-						$customer->setData($n, null);
-						$customer->setData($t, null);
-						$customer->setData($e, null);
+						$customer->unsetData($n);
+						$customer->unsetData($t);
+						$customer->unsetData($e);
 					}
-					$changed = $customer->dataHasChangedFor($n) || $customer->dataHasChangedFor($n) || $customer->dataHasChangedFor($n);
-					$save = $changed ? true : $save;
+					if ($customer->dataHasChangedFor($n)) {
+						$customer->getResource()->saveAttribute($customer, $n);
+					}
+					if ($customer->dataHasChangedFor($t)) {
+						$customer->getResource()->saveAttribute($customer, $t);
+					}
+					if ($customer->dataHasChangedFor($e)) {
+						$customer->getResource()->saveAttribute($customer, $e);
+					}
 					$index++;
-				}
-				if ($save) {
-					$customer->save();
 				}
 			}
 		}
@@ -211,7 +218,7 @@ class ZolagoOs_LoyaltyCard_Model_Observer {
 			$subscriber = Mage::getModel('zolagonewsletter/subscriber');
 			$email = $card->getEmail();
 			$storeId = $card->getStoreId();
-			$subscriber->rawLoadByEmail($email, $storeId);
+			$subscriber = $subscriber->rawLoadByEmail($email, $storeId);
 
 			if ($subscriber->getId()) {
 				$subscriber->setStatus(Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED);
