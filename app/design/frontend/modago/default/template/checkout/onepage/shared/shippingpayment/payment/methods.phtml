@@ -48,8 +48,8 @@
 							   value="<?php echo $_code ?>" 
 							   type="radio" 
 							   name="payment[method]" 
-							   title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" 
-							   data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
+							   title="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
+							   data-payment-method="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
 							   data-online="<?php echo $this->getIsOnline($_method) ?>"
 							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?>
 							   class="css-radio payment-method"  />
@@ -57,7 +57,7 @@
                         <span class="no-display">
 							<input id="p_method_<?php echo $_code ?>" 
 								value="<?php echo $_code ?>" 
-								data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
+								data-payment-method="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
 								data-online="<?php echo $this->getIsOnline($_method) ?>"
 								type="radio" 
 								name="payment[method]" 
