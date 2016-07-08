@@ -43,4 +43,28 @@ class ZolagoOs_LoyaltyCard_Model_Resource_Card_Collection extends Mage_Core_Mode
 		$this->addFieldToFilter('store_id', (int)$store);
 		return $this;
 	}
+
+	/**
+	 * @param string|array $numbers
+	 * @return $this
+	 */
+	public function addCardNumberFilter($numbers) {
+		if (!is_array($numbers)) {
+			$numbers = array($numbers);
+		}
+		$this->addFieldToFilter('card_number', array("in" => $numbers));
+		return $this;
+	}
+
+	/**
+	 * @param string|array $types
+	 * @return $this
+	 */
+	public function addCardTypeFilter($types) {
+		if (!is_array($types)) {
+			$types = array($types);
+		}
+		$this->addFieldToFilter('card_type', array("in" => $types));
+		return $this;
+	}
 }
