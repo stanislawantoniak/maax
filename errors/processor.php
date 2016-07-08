@@ -214,6 +214,16 @@ class Error_Processor
     }
 
     /**
+     * Retrieve logo skin URL (custom defined field)
+     *
+     * @return string
+     */
+    public function getLogoImageUrl()
+    {
+        return $this->getSkinUrl() . $this->_config->logo;
+    }
+
+    /**
      * Retrieve base host URL without path
      *
      * @return string
@@ -333,6 +343,9 @@ class Error_Processor
             }
             if ((string)$local->skin) {
                 $this->_setSkin((string)$local->skin, $config);
+            }
+            if ((string)$local->logo) {
+                $config->logo = $local->logo;
             }
         }
         if ((string)$config->email_address == '' && (string)$config->action == 'email') {
