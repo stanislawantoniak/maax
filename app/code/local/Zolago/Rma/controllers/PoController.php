@@ -125,6 +125,26 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $this->_redirect('sales/rma/courier', array('id'=>$this->getRequest()->getParam('rma_id')));
         }
     }
+    public function createNewRmaAction(){
+        $shippingCost = $this->getRequest()->getPost('rma_shipping_cost');
+        $shippingCostStatus = false;
+        if($shippingCost){
+            $shippingCostStatus = true;
+        }
+        $hlp = Mage::helper("zolagorma");
+        $request = $this->getRequest();
+        $session = Mage::getSingleton('core/session');
+        try {
+            $this->_saveRma(false, $shippingCostStatus);
+            $session->addSuccess($hlp->__("RMA created successfully"));
+        } catch (Exception $e) {
+            $session->
+            addError($e->getMessage())->
+            setData("rma", $request->getParam('rma'));
+        }
+
+        $this->_redirect('udpo/vendor/edit', array('id'=>$this->getRequest()->getParam('po_id')));
+    }
 
     protected function _saveRmaDetails()
     {
@@ -170,7 +190,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         Mage::helper('udropship')->processQueue();
     }
-    protected function _initRma($forSave=false)
+    protected function _initRma($forSave=false, $shippingCost=true)
     {
         $rma = false;
         $rmaId = $this->getRequest()->getParam('rma_id');
@@ -188,18 +208,17 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             if (!isset($data['items_single'])) {
                 Mage::throwException($this->__('No items.'));
             }
-            $rma = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($data);
+            $rma = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($data, array(), $shippingCost);
         }
         Mage::register('current_rma', $rma);
         return $rma;
     }
 
-    protected function _saveRma()
+    protected function _saveRma($sendEmail=true, $shippingCost=true)
     {
-
-        $rmas = $this->_initRma(true);
+        $rmas = $this->_initRma(true, $shippingCost);
         $data = $this->getRequest()->getPost('rma');
-        $data['send_email'] = true;
+        $data['send_email'] = $sendEmail;
         $comment = '';
         if (empty($rmas)) {
             Mage::throwException('Return could not be created');
@@ -255,7 +274,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         $rma->setRmaReason(@$data['rma_reason']);
 
-
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
 		/** @var Mage_Core_Model_Resource_Transaction $trans */
@@ -268,11 +286,16 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $trans->addObject($rma->getPo())->save();
 
         foreach ($rmas as $rma) {
-
+            if($sendEmail){
                 Mage::dispatchEvent("zolagorma_rma_created", array(
                     "rma" => $rma
                 ));
-
+            }else{
+                Mage::dispatchEvent("zolagorma_rma_created_manually", array(
+                    "po" => $po,
+                    "rma" => $rma
+                ));
+            }
 
             $rma->save();
 
@@ -293,14 +316,14 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
                 $manager->calculateCharge($track,$type,$po->getVendor(),$rma->getTotalValue(),0);
             }
-			
-            if($rma->getCurrentTrack()) {                
+;
+            if($rma->getCurrentTrack()) {
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
 					"rma"		=> $rma,
 					"track"		=> $rma->getCurrentTrack()
 				));
             }
-			if(isset($data['customer_address_id'])){
+            if(isset($data['customer_address_id'])){
 				// Duplicate Customer address to RMA address tored in Order Address
 				$customerAddress = $this->_getCustomer()->getAddressById(
 					$data['customer_address_id']

@@ -301,13 +301,25 @@ $paymentHelper = Mage::helper('zolagopayment');
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
 									<?php if($_canSplit):?>
-									<i class="icon-checked-action"></i>
-									<span id="split-wrapper" class="inline-block">
-										<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
-											<i class=" icon-unlink"></i>
-											<?php echo $_hlp->__("Split order");?>
-										</button>
-									</span>
+										<div style="margin-bottom:10px;">
+											<i class="icon-checked-action"></i>
+											<span id="split-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
+													<i class=" icon-unlink"></i>
+													<?php echo $_hlp->__("Split order");?>
+												</button>
+											</span>
+										</div>
+									<?php endif;?>
+									<?php if($_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED || $_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED):?>
+										<div style="margin-left: 48px;">
+											<span id="create-rma-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#createRma" class="btn" id="rma">
+													<i class=" icon-exclamation-sign"></i>
+													<?php echo $_hlp->__("Create RMA");?>
+												</button>
+											</span>
+										</div>
 									<?php endif;?>
 								</td>
 								
@@ -662,6 +674,11 @@ if ($this->canShowPaymentDetails()) {
  *	Comment modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_comment");
+
+/*******************************************************************************
+ *	Create RMA modal
+ *******************************************************************************/
+echo $this->getChildHtml("vendor_po_create_rma");
 ?>
 
 <script type="text/javascript">
