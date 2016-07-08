@@ -351,16 +351,24 @@ Mall.listing = {
 	        eachItemsHtml = [];
 
 		jQuery.each(products, function(index, item) {
-            eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
-            Mall.wishlist.addProduct({
-                id: item[0],
-                       wishlist_count: item[5],
-                in_your_wishlist: item[6] ? true : false
-                    });
+			eachItemsHtml.push(Mall.listing.createProductEntityImprove(item));
+
+			if( (index+1) % 2 == 0){
+				eachItemsHtml.push('<div class="clearfix visible-two-listing-columns"></div>');
+			}
+			if( (index+1) % 3 == 0){
+				eachItemsHtml.push('<div class="clearfix visible-three-listing-columns"></div>');
+			}
+
+			Mall.wishlist.addProduct({
+				id: item[0],
+				wishlist_count: item[5],
+				in_your_wishlist: item[6] ? true : false
+			});
+
 		});
 
-        grid.append(eachItemsHtml);
-        //grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
+        grid.html(eachItemsHtml);
 
 		// attach events
 		this.preprocessProducts();
