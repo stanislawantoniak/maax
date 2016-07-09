@@ -9,6 +9,6 @@ class Zolago_Po_Block_Vendor_Po_Edit_Rma
 	}
 
 	public function getFormUrl() {
-		return $this->getUrl("urma/po/createNewRma", array("_secure"=>true));
+		return $this->getUrl("urma/vendor/createNewRma", array("_secure"=>true));
 	}
 }
