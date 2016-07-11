@@ -1,24 +1,14 @@
-<!--@subject {{var store_name}} – Newsletter subscription success @-->
-<body style="font-family: sans-serif;">
-<div>
-	<a href="{{store url=""}}"><img src="cid:logo.png" alt="{{var logo_alt}}" style="margin-bottom:10px;" border="0"/></a>
-</div>
-<div>
-	<p>
-		{{var store_name}} newsletter subscription has been successful!
-	</p>
-	{{depend use_coupon}}
-	<p>
-		Your coupon code: <strong>{{var coupon.getCode()}}</strong>
-		<br />
-		{{var rule.getDescription()}}
-	</p>
-	{{/depend}}
-</div>
-<div>
-	<p>
-		Thank you and please visit us again!<br/>
-		<a href="{{store url=""}}">{{var store.getFrontendName()}}</a> staff
-	</p>
-</div>
-</body>
+<!--@subject Newsletter subscription success @-->
+
+{{template config_path="design/email/header"}}
+{{inlinecss file="email-inline.css"}}
+
+<table cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td class="action-content">
+            <h4>You have been successfully subscribed to the newsletter.</h4>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer"}}
