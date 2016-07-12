@@ -27,7 +27,7 @@ $_vendor = $_session->getVendor();
                                     </label>
 
                                     <div class="col-xs-12 col-md-9 col-lg-6">
-                                        <input id="iaishop_vendor_api_key" name="iaishop_vendor_api_key" value="<?php //echo $_ghApiVendorUser->getApiKey(); ?>" type="text" class="form-control" size="10">
+                                        <input id="iaishop_vendor_login" name="login" value="<?php if ($_vendor->hasIaishop_login()) echo $_vendor->getIaishop_login(); ?>" type="text" class="form-control" size="10">
                                     </div>
                                 </div>
 
@@ -37,7 +37,7 @@ $_vendor = $_session->getVendor();
                                     </label>
 
                                     <div class="col-xs-12 col-md-9 col-lg-6">
-                                        <input id="iaishop_vendor_password" name="iaishop_vendor_password" value="" type="password" class="form-control" size="10">
+                                        <input id="iaishop_vendor_password" name="password" value="" type="password" class="form-control" size="10">
                                         <p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;<?php echo $_helper->__('Minimum Length - 8 characters'); ?></p>
                                     </div>
                                 </div>
@@ -57,3 +57,20 @@ $_vendor = $_session->getVendor();
     </div>
 </div>
 
+
+<script type="text/javascript">
+    jQuery(function($){
+        var form = $("#iaishop_settings");
+        new Zolago.formIntegrator(form);
+        form.validate({
+            rules: {
+                "login": {
+                    required: true
+                },
+                "password": {
+                    required: true
+                }
+            }
+        });
+    });
+</script>

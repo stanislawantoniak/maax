@@ -53,6 +53,7 @@
         </translate>
         <secure_url>
             <zosiaishop_settings>/iaishop/settings</zosiaishop_settings>
+            <zosiaishop_settings>/iaishop/settings/save</zosiaishop_settings>
         </secure_url>
     </frontend>
 </config>

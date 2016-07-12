@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @method ZolagoOS_IAIShop_Model_Session _getSession()
- */
 class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
@@ -12,4 +9,15 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
         $this->_renderPage(null, 'zolagoosiaishop');
     }
 
+
+    public function saveAction()
+    {
+        $this->getRequest()->getParam("login");
+        $this->getRequest()->getParam("password");
+
+        
+
+        $this->_getSession()->addSuccess(Mage::helper("zosiaishop")->__("Settings saved!"));
+        $this->_redirect('iaishop/settings');
+    }
 }
