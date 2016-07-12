@@ -24,7 +24,7 @@
 	<default>
 		<zosnorma>
 			<norma>
-				<disabled>1</disabled>
+				<enabled>0</enabled>
 			</norma>
 		</zosnorma>
 	</default>

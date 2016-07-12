@@ -37,6 +37,9 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $this->_redirectReferer();
     }
     public function rmaListAction() {
+        if((string)Mage::getConfig()->getNode('modules/ZolagoOs_NoRma/active') == 'true' || (string)Mage::getConfig()->getNode('modules/ZolagoOs_NoRma/active') == 1){
+            return $this->_redirect('sales/order/process');
+        }
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');

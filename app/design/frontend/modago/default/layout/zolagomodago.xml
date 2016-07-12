@@ -1030,7 +1030,7 @@
         <label>Orders history</label>
       </action>
       <!--RMA-->
-      <action method="addLink" translate="label">
+      <action method="addLink" translate="label" ifconfig="zosnorma/norma/enabled">
         <name>rma</name>
         <path>sales/rma/history/</path>
         <label>Returns and complaints</label>
@@ -1230,7 +1230,7 @@
           <label>Orders history</label>
         </action>
         <!--RMA-->
-        <action method="addLink" translate="label">
+        <action method="addLink" translate="label" ifconfig="zosnorma/norma/enabled">
           <name>rma</name>
           <path>sales/rma/history/</path>
           <label>Returns and complaints</label>
@@ -1658,7 +1658,7 @@
     </reference>
     <update handle="customer_account"/>
     <reference name="my.account.wrapper">
-      <block type="zolagorma/list" as="list" name="sales.rma.list"/>
+        <block type="zolagorma/list" as="list" name="sales.rma.list" />
     </reference>
   </sales_rma_history>
   <sales_po_rmalist>

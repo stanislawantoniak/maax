@@ -167,7 +167,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	}
 
     public function getRmaSection() {
-        if($this->isModuleActive('ZolagoOs_Rma') && $this->isAllowed("urma/vendor")) {
+        if($this->isModuleActive('ZolagoOs_Rma') && $this->isAllowed("urma/vendor") && !$this->isModuleActive('ZolagoOs_NoRma')) {
             return array(
                        "active" => $this->isActive("urma") || $this->isActive("urmas"),
                        "icon"	 => "icon-exclamation-sign",
@@ -241,12 +241,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                               "label"	 => $this->__('Shipment settings'),
                               "url"	 => $this->getUrl('udropship/vendor_settings/shipping')
                           );
-            $groupOne[] = array(
-                              "active" => $this->isActive("vendorsettings_rma"),
-                              "icon"	 => "icon-retweet",
-                              "label"	 => $this->__('RMA settings'),
-                              "url"	 => $this->getUrl('udropship/vendor_settings/rma')
-                          );
+            if(!$this->isModuleActive('ZolagoOs_NoRma')){
+                $groupOne[] = array(
+                    "active" => $this->isActive("vendorsettings_rma"),
+                    "icon"	 => "icon-retweet",
+                    "label"	 => $this->__('RMA settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/rma')
+                );
+            }
         }
 
 
