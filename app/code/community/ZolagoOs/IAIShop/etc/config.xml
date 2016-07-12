@@ -5,13 +5,17 @@
             <version>0.1.0</version>
         </ZolagoOs_IAIShop>
     </modules>
-
     <global>
         <helpers>
             <zosiaishop>
                 <class>ZolagoOs_IAIShop_Helper</class>
             </zosiaishop>
         </helpers>
+        <models>
+            <zosiaishop>
+                <class>ZolagoOs_IAIShop_Model</class>
+            </zosiaishop>
+        </models>
         <resources>
             <zosiaishop>
                 <setup>

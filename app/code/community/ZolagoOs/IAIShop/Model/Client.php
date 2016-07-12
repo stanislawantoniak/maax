@@ -68,7 +68,7 @@ class ZolagoOs_IAIShop_Model_Client
 
     public static function log($data)
     {
-        Mage::log($data, null, 'zolagoosiaishop_client.log');
+        Mage::log($data, null, 'zosiaishop_client.log');
     }
 
     public static function logException($exception)
@@ -115,12 +115,12 @@ class ZolagoOs_IAIShop_Model_Client
     }
 
     /**
-     * @return ZolagoOs_IAIShop_Helper
+     * @return ZolagoOs_IAIShop_Helper_Data
      */
     public function getHelper()
     {
         if (!$this->_helper) {
-            $this->_helper = Mage::helper('zolagoosiaishop');
+            $this->_helper = Mage::helper("zosiaishop");
         }
         return $this->_helper;
     }
