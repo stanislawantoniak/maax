@@ -21,6 +21,13 @@
 						</reasons>
 					</children>
 				</vendor_general_config>
+				<sales_management>
+					<children>
+						<urma>
+							<disabled>1</disabled>
+						</urma>
+					</children>
+				</sales_management>
 			</children>
 		</vendors>
 	</menu>
