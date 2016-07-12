@@ -14,6 +14,11 @@
                 </setup>
             </zosiaishop>
         </resources>
+        <blocks>
+            <zosiaishop>
+                <class>ZolagoOs_IAIShop_Block</class>
+            </zosiaishop>
+        </blocks>
     </global>
     <frontend>
         <routers>
