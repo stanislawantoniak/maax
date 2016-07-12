@@ -234,6 +234,20 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$this->_logEvent($rma, $text, false);
 		}
 	}
+
+	public function rmaCreatedManually($observer){
+		$session = Mage::getSingleton('udropship/session');
+		$rma = $observer->getEvent()->getData('rma');
+		$vendor = $rma->getVendor();
+		$operator = $rma->getOperator();
+		if($session->isOperatorMode()){
+			$author = $operator;
+		}else{
+			$author = $vendor;
+		}
+		$text = Mage::helper('zolagorma')->__("RMA created successfully");
+		$this->_logEvent($rma, $text, false, $author);
+	}
 	
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
@@ -296,14 +310,13 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$data['is_visible_on_front'] = 1;
 		}
 		
-		
 		/* @var $commentModel Zolago_Rma_Model_Rma_Comment */
 		$commentModel->setRma($rma);
 		$commentModel->addData($data);
 		$commentModel->setAuthorName($commentModel->getAuthorName(false));
 		$commentModel->save();
 		
-		// Send email		
+		// Send email
 		if($doSendEmail){
 			if($rma->getIsNewFlag()){
 				$rma->sendEmail(true, $commentModel);
