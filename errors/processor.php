@@ -241,6 +241,23 @@ class Error_Processor
     }
 
     /**
+     * Retrieve base host URL for logo (no server port and no path)
+     *
+     * @return string
+     */
+    public function getLogoUrl()
+    {
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } elseif (!empty($_SERVER['SERVER_NAME'])) {
+            $host = $_SERVER['SERVER_NAME'];
+        } else {
+            $host = 'localhost';
+        }
+        return 'http://' . $host;
+    }
+
+    /**
      * Retrieve base URL
      *
      * @return string
@@ -460,12 +477,12 @@ class Error_Processor
         $this->_setReportData($reportData);
 
         if (!file_exists($this->_reportDir)) {
-            @mkdir($this->_reportDir, 0750, true);
+            @mkdir($this->_reportDir, 0777, true);
         }
 
         $reportData = array_map('strip_tags', $reportData);
         @file_put_contents($this->_reportFile, serialize($reportData));
-        @chmod($this->_reportFile, 0640);
+        @chmod($this->_reportFile, 0777);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
