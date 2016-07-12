@@ -1,8 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?><?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <config>
     <modules>
         <ZolagoOs_IAIShop>
             <version>0.1.0</version>
         </ZolagoOs_IAIShop>
     </modules>
+
+    <global>
+        <resources>
+            <zosiaishop>
+                <setup>
+                    <module>ZolagoOs_IAIShop</module>
+                </setup>
+            </zosiaishop>
+        </resources>
+    </global>
+    <frontend>
+        <routers>
+            <zosiaishop>
+                <use>standard</use>
+                <args>
+                    <module>ZolagoOs_IAIShop</module>
+                    <frontName>iaishop</frontName>
+                </args>
+            </zosiaishop>
+        </routers>
+        <layout>
+            <updates>
+                <zosiaishop>
+                    <file>zosiaishop.xml</file>
+                </zosiaishop>
+            </updates>
+        </layout>
+        <secure_url>
+            <zosiaishop_settings>/iaishop/settings</zosiaishop_settings>
+        </secure_url>
+    </frontend>
 </config>
