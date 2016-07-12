@@ -132,7 +132,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         // GH API Access
         self::RES_GHAPI_OPERATOR                    => "GH API",
 		// IAI-Shop Access
-		self::RES_IAISHOP_OPERATOR                    => "IAI-Shop API",
+		self::RES_IAISHOP_OPERATOR                  => "IAI-Shop API",
         // Attribute preview
         self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
         // Price management

@@ -7,6 +7,11 @@
     </modules>
 
     <global>
+        <helpers>
+            <zosiaishop>
+                <class>ZolagoOs_IAIShop_Helper</class>
+            </zosiaishop>
+        </helpers>
         <resources>
             <zosiaishop>
                 <setup>
@@ -37,6 +42,15 @@
                 </zosiaishop>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <ZolagoOs_IAIShop>
+                    <files>
+                        <default>ZolagoOs_IAIShop.csv</default>
+                    </files>
+                </ZolagoOs_IAIShop>
+            </modules>
+        </translate>
         <secure_url>
             <zosiaishop_settings>/iaishop/settings</zosiaishop_settings>
         </secure_url>
