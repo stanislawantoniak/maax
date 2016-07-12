@@ -5,27 +5,54 @@
             <version>0.1.0</version>
         </ZolagoOs_IAIShop>
     </modules>
+
     <global>
-        <models>
-            <zolagoosiaishop>
-                <class>ZolagoOs_IAIShop_Model</class>
-            </zolagoosiaishop>
-        </models>
         <helpers>
-            <zolagoosiaishop>
+            <zosiaishop>
                 <class>ZolagoOs_IAIShop_Helper</class>
-            </zolagoosiaishop>
+            </zosiaishop>
         </helpers>
+        <resources>
+            <zosiaishop>
+                <setup>
+                    <module>ZolagoOs_IAIShop</module>
+                </setup>
+            </zosiaishop>
+        </resources>
+        <blocks>
+            <zosiaishop>
+                <class>ZolagoOs_IAIShop_Block</class>
+            </zosiaishop>
+        </blocks>
     </global>
     <frontend>
         <routers>
-            <zolagoosiaishop>
+            <zosiaishop>
                 <use>standard</use>
                 <args>
                     <module>ZolagoOs_IAIShop</module>
                     <frontName>iaishop</frontName>
                 </args>
-            </zolagoosiaishop>
+            </zosiaishop>
         </routers>
+        <layout>
+            <updates>
+                <zosiaishop>
+                    <file>zosiaishop.xml</file>
+                </zosiaishop>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <ZolagoOs_IAIShop>
+                    <files>
+                        <default>ZolagoOs_IAIShop.csv</default>
+                    </files>
+                </ZolagoOs_IAIShop>
+            </modules>
+        </translate>
+        <secure_url>
+            <zosiaishop_settings>/iaishop/settings</zosiaishop_settings>
+        </secure_url>
     </frontend>
 </config>

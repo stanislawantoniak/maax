@@ -294,6 +294,19 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                           );
         }
 
+
+        if (
+            $this->isModuleActive('ZolagoOs_IAIShop')
+            && $this->isAllowed("iaishop/settings")
+        ) {
+            $groupOne[] = array(
+                            "active" => $this->isActive("zolagoosiaishop"),
+                            "icon" => "icon-shopping-cart",
+                            "label" => $this->__('IAI-Shop settings'),
+                            "url" => $this->getUrl('iaishop/settings')
+                        );
+        }
+
         $grouped = $this->_processGroups($groupOne);
 
         if(count($grouped)) {
@@ -309,7 +322,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                                "vendorsettings_info",
                                "vendorsettings_shipping",
                                "vendorsettings_rma",
-                               "ghapi"
+                               "ghapi",
+                               "zolagoosiaishop"
                            )
                        ),
                        "icon" => "icon-wrench",
