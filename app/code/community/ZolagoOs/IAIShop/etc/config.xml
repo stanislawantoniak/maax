@@ -60,4 +60,17 @@
             <zosiaishop_settings>/iaishop/settings/save</zosiaishop_settings>
         </secure_url>
     </frontend>
+    <crontab>
+        <jobs>
+            <zosiaishop_iaishop_sync>
+                <schedule>
+                    <!-- Run evry 5 min  -->
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zosiaishop/observer::syncIAIShop</model>
+                </run>
+            </zosiaishop_iaishop_sync>
+        </jobs>
+    </crontab>
 </config>
