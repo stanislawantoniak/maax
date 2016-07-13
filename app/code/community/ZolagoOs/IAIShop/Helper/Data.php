@@ -16,9 +16,15 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->_client;
     }
 
-    public function getProducts($request)
+    public function getProducts($params)
     {
         $client = $this->getClient();
-        return $client->getProducts($request);
+        return $client->getProducts($params);
+    }
+
+    public function addOrders($params)
+    {
+        $client = $this->getClient();
+        return $client->addOrders($params);
     }
 }

@@ -11,13 +11,15 @@ class ZolagoOs_IAIShop_TestController extends Mage_Core_Controller_Front_Action
         /** @var ZolagoOs_IAIShop_Helper_Data $helper */
         $helper = Mage::helper("zosiaishop");
 
-        //dummy data
-        $request = array();
-        $request['getProducts']['params'] = array();
-        $request['getProducts']['params']['available'] = "available";
-        $request['getProducts']['params']['visible'] = "visible";
+        $params = array();
+        $response = $helper->addOrders($params);
 
-        $response = $helper->getProducts($request);
+        //dummy data
+        $params = array();
+        $params['available'] = "available";
+        $params['visible'] = "visible";        
+
+        $response = $helper->getProducts($params);
         Zend_Debug::dump($response);
 
         return;
