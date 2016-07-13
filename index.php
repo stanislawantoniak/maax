@@ -33,7 +33,7 @@ Whoops, it looks like you have an invalid PHP version.</h3></div><p>Magento supp
  Magento using PHP-CGI as a work-around.</p></div>';
     exit;
 }
-
+ini_set("soap.wsdl_cache_enabled", 0);
 /**
  * Error reporting
  */

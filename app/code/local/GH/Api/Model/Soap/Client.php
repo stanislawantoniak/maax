@@ -190,6 +190,7 @@ class GH_Api_Model_Soap_Client  {
         $data = array();
         try {
             $data = $client->$name($parameters);
+            Mage::log($data, null, "12345.log");
             if ($testFlag) {
                  @unlink($url);   
             }          
