@@ -27,7 +27,7 @@
             <zosiaishop>
                 <class>ZolagoOs_IAIShop_Block</class>
             </zosiaishop>
-        </blocks>
+        </blocks>d
     </global>
     <frontend>
         <routers>
@@ -57,6 +57,7 @@
         </translate>
         <secure_url>
             <zosiaishop_settings>/iaishop/settings</zosiaishop_settings>
+            <zosiaishop_settings>/iaishop/settings/save</zosiaishop_settings>
         </secure_url>
     </frontend>
 </config>
