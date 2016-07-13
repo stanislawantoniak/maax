@@ -298,6 +298,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
         if (
             $this->isModuleActive('ZolagoOs_IAIShop')
             && $this->isAllowed("iaishop/settings")
+            && ($this->getSession()->getVendor()->getGhapiVendorAccessAllow() == 1)
         ) {
             $groupOne[] = array(
                             "active" => $this->isActive("zolagoosiaishop"),

@@ -1,6 +1,11 @@
 <?php
+/** @var ZolagoOs_IAIShop_Block_Settings $this */
+
 $_helper = Mage::helper("zosiaishop");
 $_session = Mage::getSingleton('udropship/session');
+$data = $_session->getFormData();
+$login = isset($data['login']) ? $data['login'] : $_session->getVendor()->getIaishopLogin();
+/** @var Zolago_Dropship_Model_Vendor $_vendor */
 $_vendor = $_session->getVendor();
 ?>
 <div class="container">
@@ -14,7 +19,7 @@ $_vendor = $_session->getVendor();
         <div class="container" style="margin-top:15px;paddign: 10px">
             <div class="row">
                 <div class="col-md-12">
-                    <form id="iaishop_settings" class="form-horizontal" method="post" action="/iaishop/settings/save">
+                    <form id="iaishop_settings" class="form-horizontal" method="post" action="<?php echo $this->getFormAction();?>">
                         <div class="widget box">
                             <div class="widget-header">
                                 <h4><?php echo $_helper->__("IAI-Shop API Login Data"); ?></h4>
@@ -27,7 +32,7 @@ $_vendor = $_session->getVendor();
                                     </label>
 
                                     <div class="col-xs-12 col-md-9 col-lg-6">
-                                        <input id="iaishop_vendor_login" name="login" value="<?php if ($_vendor->hasIaishop_login()) echo $_vendor->getIaishop_login(); ?>" type="text" class="form-control" size="10">
+                                        <input id="iaishop_vendor_login" name="login" value="<?php echo $login; ?>" type="text" class="form-control" size="10">
                                     </div>
                                 </div>
 
@@ -38,9 +43,9 @@ $_vendor = $_session->getVendor();
 
                                     <div class="col-xs-12 col-md-9 col-lg-6">
                                         <input id="iaishop_vendor_password" name="password" value="" type="password" class="form-control" size="10">
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_helper->__('Leave empty for no change');?></p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 

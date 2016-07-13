@@ -5,10 +5,6 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
 
     public function indexAction()
     {
-        $vendor = Mage::getModel("udropship/vendor")->load(83);
-        Zend_Debug::dump(json_decode($vendor->getData("custom_vars_combined"))->iaishop_login);
-        Zend_Debug::dump(json_decode($vendor->getData("custom_vars_combined"))->iaishop_pass);
-        die("test");
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagoosiaishop');
     }
@@ -16,12 +12,9 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
 
     public function saveAction()
     {
-
-
-        // ACL no access
         $vendor = $this->_getSession()->getVendor();
         if (!$vendor->getData('ghapi_vendor_access_allow')) {
-            return $this->_redirect('udropship/vendor/dashboard');
+            return $this->_redirect('udropship/vendor');
         }
 
         $helper = Mage::helper('zosiaishop');
@@ -30,10 +23,16 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
         }
 
 
-        $vendor->setData('iaishop_login', $this->getRequest()->getPost('login'));
-        $vendor->setData('iaishop_pass', $this->getRequest()->getPost('password'));
+        $vendor->setIaishopLogin($this->getRequest()->getPost('login'));
+        $vendor->setIaishopPass($this->getRequest()->getPost('password'));
 
-        $vendor->save();
+        try {
+            $vendor->save();
+        } catch (Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            $this->_getSession()->setFormData($this->getRequest()->getParams());
+            return $this->_redirectReferer();
+        }
 
         $this->_getSession()->addSuccess($helper->__('Settings saved!'));
 
