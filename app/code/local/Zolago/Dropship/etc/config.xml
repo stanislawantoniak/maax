@@ -861,18 +861,27 @@
                         <fieldset>modago_salesmanago</fieldset>
                     </modago_salesmanago_login>
 
+                    <iaishop_id>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_id>
+                    <iaishop_url>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_url>
                     <iaishop_login>
                         <fieldset>iaishop_settings</fieldset>
-                        <label>Login IAI-Shop</label>
-                        <type>text</type>
-                        <position>10</position>
                     </iaishop_login>
                     <iaishop_pass>
                         <fieldset>iaishop_settings</fieldset>
-                        <label>Password IAI-Shop</label>
-                        <type>text</type>
-                        <position>20</position>
                     </iaishop_pass>
+                    <iaishop_delivery_udtiership>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_delivery_udtiership>
+                    <iaishop_delivery_ghinpost>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_delivery_ghinpost>
+                    <iaishop_delivery_zolagopp>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_delivery_zolagopp>
 
                     <!--Regulation-->
 	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->

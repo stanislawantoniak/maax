@@ -9,7 +9,6 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
         $this->_renderPage(null, 'zolagoosiaishop');
     }
 
-
     public function saveAction()
     {
         $vendor = $this->_getSession()->getVendor();
@@ -23,9 +22,13 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
         }
 
 
-        $vendor->setIaishopLogin($this->getRequest()->getPost('login'));
-        $vendor->setIaishopPass($this->getRequest()->getPost('password'));
+        $data = $this->getRequest()->getParams();
+        unset($data["form_key"]);
 
+
+        foreach ($data as $k => $v) $vendor->setData("iaishop_" . $k, $v);
+
+        
         try {
             $vendor->save();
         } catch (Exception $e) {
