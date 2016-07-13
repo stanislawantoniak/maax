@@ -861,6 +861,19 @@
                         <fieldset>modago_salesmanago</fieldset>
                     </modago_salesmanago_login>
 
+                    <iaishop_login>
+                        <fieldset>iaishop_settings</fieldset>
+                        <label>Login IAI-Shop</label>
+                        <type>text</type>
+                        <position>10</position>
+                    </iaishop_login>
+                    <iaishop_pass>
+                        <fieldset>iaishop_settings</fieldset>
+                        <label>Password IAI-Shop</label>
+                        <type>text</type>
+                        <position>20</position>
+                    </iaishop_pass>
+
                     <!--Regulation-->
 	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
 	                <regulation_accept_text_top/>
@@ -874,6 +887,7 @@
 						<!-- dynamically created -->
 						<!-- @see Zolago_Dropship_Model_Vendor::_beforeSave() -> addConfigMarketingCostTypeFields() -->
 					<!--Marketing cost for each cost type end-->
+
 				</fields>
 			</vendor>
 		</udropship>

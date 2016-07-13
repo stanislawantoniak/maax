@@ -23,7 +23,7 @@
             <zosiaishop>
                 <class>ZolagoOs_IAIShop_Block</class>
             </zosiaishop>
-        </blocks>
+        </blocks>d
     </global>
     <frontend>
         <routers>
