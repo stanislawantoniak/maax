@@ -1,18 +1,11 @@
 <?php
 /** @var ZolagoOs_IAIShop_Block_Settings $this */
-
-$_helper = Mage::helper("zosiaishop");
-$_session = Mage::getSingleton('udropship/session');
-$data = $_session->getFormData();
-$login = isset($data['login']) ? $data['login'] : $_session->getVendor()->getIaishopLogin();
-/** @var Zolago_Dropship_Model_Vendor $_vendor */
-$_vendor = $_session->getVendor();
 ?>
 <div class="container">
     <!--=== Page Header ===-->
     <div class="page-heading row">
         <div class="col-lg-6">
-            <h3><?php echo $_helper->__("IAI-Shop settings");?></h3>
+            <h3><?php echo Mage::helper("zosiaishop")->__("IAI-Shop settings");?></h3>
         </div>
     </div>
     <div class="tabbable tabbabble-custom">
@@ -20,34 +13,8 @@ $_vendor = $_session->getVendor();
             <div class="row">
                 <div class="col-md-12">
                     <form id="iaishop_settings" class="form-horizontal" method="post" action="<?php echo $this->getFormAction();?>">
-                        <div class="widget box">
-                            <div class="widget-header">
-                                <h4><?php echo $_helper->__("IAI-Shop API Login Data"); ?></h4>
-                            </div>
-                            <div class="widget-content">
-
-                                <div class="form-group">
-                                    <label for="iaishop_vendor_api_key" class="col-md-3 control-label">
-                                        <?php echo $_helper->__("API Login"); ?>
-                                    </label>
-
-                                    <div class="col-xs-12 col-md-9 col-lg-6">
-                                        <input id="iaishop_vendor_login" name="login" value="<?php echo $login; ?>" type="text" class="form-control" size="10">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iaishop_vendor_password" class="col-md-3 control-label">
-                                        <?php echo $_helper->__("API Password"); ?>
-                                    </label>
-
-                                    <div class="col-xs-12 col-md-9 col-lg-6">
-                                        <input id="iaishop_vendor_password" name="password" value="" type="password" class="form-control" size="10">
-                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_helper->__('Leave empty for no change');?></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+                        <?php echo $this->getFormHtml(); ?>
 
                         <div class="form-actions">
                             <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
@@ -60,20 +27,25 @@ $_vendor = $_session->getVendor();
         </div>
     </div>
 </div>
-
-
 <script type="text/javascript">
     jQuery(function($){
         var form = $("#iaishop_settings");
         new Zolago.formIntegrator(form);
         form.validate({
             rules: {
-                "login": {
+                "id": {
+                    required: true,
+                    number: true
+                },
+                "url": {
                     required: true
                 },
+                "login": {
+                    required: true
+                }<?php if($this->getIsNew()): ?>,
                 "password": {
                     required: true
-                }
+                }<?php endif; ?>
             }
         });
     });
