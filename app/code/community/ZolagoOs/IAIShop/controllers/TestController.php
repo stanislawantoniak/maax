@@ -13,9 +13,7 @@ class ZolagoOs_IAIShop_TestController extends Mage_Core_Controller_Front_Action
 
         $params = array();
         $response = $helper->addOrders($params);
-        krumo($response);
 
-        die("test");
         //dummy data
         $params = array();
         $params['available'] = "available";
