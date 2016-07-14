@@ -8,7 +8,8 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	 * @return boolean
 	 */
 	public function historyAction() {
-		if((string)Mage::getConfig()->getNode('modules/ZolagoOs_NoRma/active') == 'true' || (string)Mage::getConfig()->getNode('modules/ZolagoOs_NoRma/active') == 1){
+		$activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
+		if($activeNoRma){
 			return $this->_redirect('sales/order/process');
 		}
 		$session = Mage::getSingleton('customer/session');

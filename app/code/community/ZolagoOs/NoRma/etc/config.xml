@@ -22,10 +22,10 @@
 		</helpers>
 	</global>
 	<default>
-		<zosnorma>
-			<norma>
+		<urma>
+			<logic>
 				<enabled>0</enabled>
-			</norma>
-		</zosnorma>
+			</logic>
+		</urma>
 	</default>
 </config>

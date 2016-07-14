@@ -1030,7 +1030,7 @@
         <label>Orders history</label>
       </action>
       <!--RMA-->
-      <action method="addLink" translate="label" ifconfig="zosnorma/norma/enabled">
+      <action method="addLink" translate="label" ifconfig="urma/logic/enabled">
         <name>rma</name>
         <path>sales/rma/history/</path>
         <label>Returns and complaints</label>
@@ -1230,7 +1230,7 @@
           <label>Orders history</label>
         </action>
         <!--RMA-->
-        <action method="addLink" translate="label" ifconfig="zosnorma/norma/enabled">
+        <action method="addLink" translate="label" ifconfig="urma/logic/enabled">
           <name>rma</name>
           <path>sales/rma/history/</path>
           <label>Returns and complaints</label>
