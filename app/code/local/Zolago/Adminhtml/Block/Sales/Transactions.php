@@ -13,9 +13,9 @@ class Zolago_Adminhtml_Block_Sales_Transactions
         parent::__construct();
 
         $this->_addButton('add_bank_transfer', array(
-            'label'     => $this->__("Add Bank Transfer Transaction"),
-            'onclick'   => 'setLocation(\'' . $this->getAddBankTransferTransactionUrl() .'\')',
-            'class'     => 'add',
+            'label' => $this->__("Enter Bank Payment"),
+            'onclick' => 'setLocation(\'' . $this->getAddBankTransferTransactionUrl() . '\')',
+            'class' => 'add',
         ));
     }
 
