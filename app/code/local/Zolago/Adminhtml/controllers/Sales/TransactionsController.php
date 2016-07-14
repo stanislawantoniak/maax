@@ -88,6 +88,7 @@ class Zolago_Adminhtml_Sales_TransactionsController
     public function saveAction()
     {
         $orderId = $this->getRequest()->getParam('order_id');
+        $txn_id = $this->getRequest()->getParam('txn_id');
 
         $order = Mage::getModel("sales/order")->load($orderId);
 

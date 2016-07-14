@@ -24,10 +24,9 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
                 'class' => 'fieldset-wide'
             )
         );
-        $fieldset->addField('txn_key', 'text', array(
+        $fieldset->addField('txn_id', 'hidden', array(
             'label' => Mage::helper('sales')->__('Transaction ID'),
-            'required' => true,
-            'name' => 'txn_key',
+            'name' => 'txn_id',
             'style' => 'max-width:100px;',
         ));
         $fieldset->addField('txn_amount', 'text', array(
@@ -37,10 +36,10 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'style' => 'max-width:100px;',
         ));
 
-        $fieldset->addField('created_at', 'date', array(
+        $fieldset->addField('date', 'date', array(
             'label' => Mage::helper('sales')->__('Date'),
             'required' => true,
-            'name' => 'created_at',
+            'name' => 'date',
             'format' => 'yyyy-MM-dd',
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'time' => false,

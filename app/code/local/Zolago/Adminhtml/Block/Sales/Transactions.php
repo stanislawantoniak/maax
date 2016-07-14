@@ -6,6 +6,8 @@
 class Zolago_Adminhtml_Block_Sales_Transactions
     extends Mage_Adminhtml_Block_Sales_Transactions
 {
+    const PAYMENT_TYPE_BANK_TRANSFER = 'banktransfer';
+
     public function __construct()
     {
         parent::__construct();
