@@ -2,7 +2,17 @@
 
 class ZolagoOs_IAIShop_Model_Observer
 {
-    const IAISHOP_SYNC_ORDERS_BATCH = 10;
+    const IAISHOP_SYNC_ORDERS_BATCH = 100;
+
+    private $_connector = false;
+
+    private function getGHAPIConnector()
+    {
+        if (!$this->_connector) {
+            $this->_connector = new ZolagoOs_IAIShop_Model_GHAPI_Connector();
+        }
+        return $this->_connector;
+    }
 
     public function syncIAIShop()
     {
@@ -13,19 +23,20 @@ class ZolagoOs_IAIShop_Model_Observer
             return;
 
         //2. Get order's info from GH_API
+        $orders = array();
         foreach ($orderIncrementIdsByVendor as $vendorId => $orderIncrementIds) {
-            $this->getGhApiVendorOrders($vendorId, $orderIncrementIds);
-        }
-        $client = new ZolagoOs_IAIShop_Model_GHAPI_Connector();
-        $response = $client->doLogin($vendorId);
+
+            if (!empty($vendorOrders = $this->getGhApiVendorOrders($vendorId, $orderIncrementIds)))
+                $orders[$vendorId] = $vendorOrders;
+        }       
 
 
         //2. Add orders to IAI-Shop API
         /** @var ZolagoOs_IAIShop_Helper_Data $helper */
-//        $helper = Mage::helper("zosiaishop");
-//        $response = $helper->addOrders($orders);
+        $helper = Mage::helper("zosiaishop");
+        $response = $helper->addOrders($orders);
     }
-    
+
 
     /**
      * @return array
@@ -54,33 +65,32 @@ class ZolagoOs_IAIShop_Model_Observer
         return $orderIncrementIds;
     }
 
+
     public function getGhApiVendorOrders($vendorId, $orderIncrementIds)
     {
-        krumo($vendorId, $orderIncrementIds);
+        $orders = array();
+        $connector = $this->getGHAPIConnector();
+        $doLoginResponse = $connector->doLoginRequest($vendorId);
 
-        $client = new ZolagoOs_IAIShop_Model_GHAPI_Connector();
-        $vendorId = 1;
-        $password = "testtest123";
-        $apiKey = "dc893a25bdfe745862ec40ee08a5f047b1a6df547e71c74f3b771d587c99ae07";
+        if (!$doLoginResponse->status)
+            return $orders; //Can't login
 
-        $response = $client->doLogin($vendorId);
-//
-//        if (!property_exists($response, 'token')) {
-//            return;
-//        }
-//        $token = $response->token;
-//        $batchSize = 10;
-//        $messageType = "newOrder";
-//        $orderId = "";
-//        krumo($response->token);
-//
-//        $getChangeOrderMessage = $client->getChangeOrderMessage(
-//            $token,
-//            $batchSize,
-//            $messageType,
-//            $orderId
-//        );
-//
-//        krumo($getChangeOrderMessage);
+        $token = $doLoginResponse->token;
+
+        $getOrdersByIDResponse = $connector->getOrdersByIDRequest($token, $orderIncrementIds);
+
+        if (!$getOrdersByIDResponse->status)
+            return $orders; //Can't get orders info
+
+        $orderList = $getOrdersByIDResponse->orderList->order;
+
+        if (is_array($orderList)) {
+            $orders = $orderList;
+        }
+        if (is_object($orderList)) {
+            $orders[] = $orderList;
+        }
+
+        return $orders;
     }
 }

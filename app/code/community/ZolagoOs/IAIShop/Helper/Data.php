@@ -8,10 +8,12 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return ZolagoOs_IAIShop_Model_Client_Connector
      */
-    public function getClient($vendorId)
+    public function getIAIShopConnector($vendorId)
     {
         if (!$this->_client) {
-            $this->_client = Mage::getSingleton('zosiaishop/client_connector');
+            $connector = Mage::getSingleton('zosiaishop/client_connector');
+            $connector->setVendorId($vendorId);
+            $this->_client = $connector;
         }
         return $this->_client;
     }
@@ -32,8 +34,8 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
     {
         foreach ($params as $vendorId => $orders) {
             // Init IAI-Shop client for the vendor
-            $client = $this->getClient($vendorId);
-            $client->addOrders($vendorId, $orders);
+            $iaiShopConnector = $this->getIAIShopConnector($vendorId);
+            $iaiShopConnector->addOrders($orders);
         }
     }
 }

@@ -6,21 +6,50 @@
 class ZolagoOs_IAIShop_Model_GHAPI_Connector
     extends GH_Api_Model_Soap_Client
 {
+    private $_vendorId = false;
+    protected $_ghApiUser = false;
+    private $_webApiKey = false;
+    private $_password = false;
 
-    protected $_vendor = false;
-
-    private function getVendor()
+    private function setVendorId($vendorId)
     {
-        if (!$this->_vendor) {
-            $this->_vendor = Mage::getModel("zolagodropship/vendor")->load($vendorId);
+        return $this->_vendorId = $vendorId;
+    }
+
+    private function getVendorId()
+    {
+        return $this->_vendorId;
+    }
+
+    private function getGHAPIVendorUser()
+    {
+        if (!$this->_ghApiUser) {
+            $vendorId = $this->getVendorId();
+
+            /* @var $ghApiUser GH_Api_Model_User */
+            $ghApiUser = Mage::getModel('ghapi/user');
+            $this->_ghApiUser = $ghApiUser->loadByVendorId($vendorId);
         }
-        return $this->_vendor;
+        return $this->_ghApiUser;
+    }
+
+    private function getApiKey()
+    {
+        if (!$this->_webApiKey) {
+            /* @var $_ghApiVendorUser GH_Api_Model_User */
+            $_ghApiVendorUser = $this->getGHAPIVendorUser();
+            $this->_webApiKey = $_ghApiVendorUser->getApiKey();
+        }
+        return $this->_webApiKey;
     }
 
     private function getPassword()
     {
         if (!$this->_password) {
-            $this->_password = $this->getVendor();
+            /* @var $_ghApiVendorUser GH_Api_Model_User */
+            $_ghApiVendorUser = $this->getGHAPIVendorUser();
+            //$this->_password = $_ghApiVendorUser->getPassword();
+            $this->_password = "testtest123";
         }
         return $this->_password;
     }
@@ -34,34 +63,30 @@ class ZolagoOs_IAIShop_Model_GHAPI_Connector
      * @param string $apiKey
      * @return void
      */
-    public function doLogin($vendorId)
+    public function doLoginRequest($vendorId)
     {
+        $this->setVendorId($vendorId);
+
         $obj = new StdClass();
         $obj->vendorId = $vendorId;
-        $obj->password = $password;
-        $obj->webApiKey = trim($apiKey);
+        $obj->password = $this->getPassword();
+        $obj->webApiKey = $this->getApiKey();
         return $this->_query('doLogin', $obj);
     }
 
     /**
-     * GH API for getChangeOrderMessage
-     *
+     * GH API getOrdersByID
      * @param string $token
-     * @param int $batchSize
-     * @param string $messageType
-     * @param string $orderId
+     * @param array $list
      * @return void
      */
-    public function getChangeOrderMessage($token, $batchSize, $messageType, $orderId)
+    public function getOrdersByIDRequest($token, $list)
     {
         $obj = new StdClass();
         $obj->sessionToken = trim($token);
-        $obj->messageBatchSize = $batchSize;
-        $obj->messageType = $messageType;
-        $obj->orderId = $orderId;
-        return $this->_query('getChangeOrderMessage', $obj);
+        $obj->orderID = $list;
+        return $this->_query('getOrdersByID', $obj);
     }
-
 
     /**
      * soap query

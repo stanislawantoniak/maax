@@ -13,10 +13,12 @@ class ZolagoOs_IAIShop_Model_Client
 
 
     private $_vendorId = false;
+    protected $_vendor = false;
     private $_apiUrl = false;
     private $_login = false;
     private $_password = false;
     private $_systemKey = false;
+    private $_shopId = false;
 
     private $_helper;
 
@@ -25,11 +27,30 @@ class ZolagoOs_IAIShop_Model_Client
         //do nothing for now
     }
 
+    public function getVendorId()
+    {
+        return $this->_vendorId;
+    }
+
+    public function setVendorId($vendorId)
+    {
+        return $this->_vendorId = $vendorId;
+    }
+
+    private function getVendor()
+    {
+        if (!$this->_vendor) {
+            $this->_vendor = Mage::getModel("zolagodropship/vendor")->load($this->getVendorId());
+        }
+        return $this->_vendor;
+    }
+
     private function getLogin()
     {
         if (!$this->_login) {
-            $login = self::IAISHOP_PANEL_LOGIN; //DODO make as constant
-            $this->_login = $login;
+            /* @$vendor Zolago_Dropship_Model_Vendor  */
+            $vendor = $this->getVendor();
+            $this->_login = $vendor->getIaishopLogin();
         }
         return $this->_login;
     }
@@ -37,8 +58,9 @@ class ZolagoOs_IAIShop_Model_Client
     private function getPassword()
     {
         if (!$this->_password) {
-            $password = self::IAISHOP_PASS; //DODO make as constant
-            $this->_password = $password;
+            /* @$vendor Zolago_Dropship_Model_Vendor  */
+            $vendor = $this->getVendor();
+            $this->_password = $vendor->getIaishopPass();
         }
         return $this->_password;
     }
@@ -52,11 +74,24 @@ class ZolagoOs_IAIShop_Model_Client
         return $this->_systemKey;
     }
 
+    protected function getShopId()
+    {
+        if (!$this->_shopId) {
+            /* @$vendor Zolago_Dropship_Model_Vendor  */
+            $vendor = $this->getVendor();
+            $this->_shopId = $vendor->getIaishopId();
+        }
+        return $this->_shopId;
+    }
+
 
     private function getApiUrl()
     {
         if (!$this->_apiUrl) {
-            $address = 'http://' . self:: IAISHOP_SHOP_NAME . '/api/';
+            /* @$vendor Zolago_Dropship_Model_Vendor  */
+            $vendor = $this->getVendor();
+
+            $address = 'http://' . $vendor->getIaishopUrl() . '/api/';
             $this->_apiUrl = $address;
         }
         return $this->_apiUrl;
@@ -87,13 +122,13 @@ class ZolagoOs_IAIShop_Model_Client
         $binding['location'] = $address;
         $binding['trace'] = true;
         $client = new SoapClient($wsdl, $binding);
-        krumo($request);
+
 
         $request[$action]['authenticate']['system_key'] = $this->getSystemKey();
         $request[$action]['authenticate']['system_login'] = $this->getLogin();
-        krumo($request);
-        $response = $client->__call($action, $request);
 
+        $response = $client->__call($action, $request);
+        
         return $response;
     }
 
