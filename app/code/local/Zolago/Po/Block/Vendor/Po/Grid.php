@@ -146,7 +146,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"index"		=>	"customer_fullname",
 			"header"	=>	Mage::helper("zolagopo")->__("Customer"),
 		));
-		$this->addColumn("order_items", array(
+		$this->addColumn("product_names", array(
 			"type"		=>	"text",
 			"width"		=>	"400px",
 			"index"		=>	"order_items",
