@@ -51,24 +51,27 @@ class Zolago_Adminhtml_Sales_TransactionsController
     public function saveAction()
     {
         $orderId = $this->getRequest()->getParam('order_id');
-        $txn_id = $this->getRequest()->getParam('txn_id');
 
         $order = Mage::getModel("sales/order")->load($orderId);
 
         $txnAmount = $this->getRequest()->getParam("txn_amount");
         $txnId = $this->getRequest()->getParam("txn_id");
+        $date = $this->getRequest()->getParam("date");
 
-
-        $transaction = Mage::getModel("sales/order_payment_transaction");
+        if($txnId){
+            $transaction = Mage::getModel("sales/order_payment_transaction")->load($txnId);
+        }else{
+            $transaction = Mage::getModel("sales/order_payment_transaction");
+        }
         $transaction->setOrderPaymentObject($order->getPayment());
 
         $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED;
         $transaction
             ->setTxnStatus($status)
             ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
-            ->setTxnId($txnId)
             ->setCustomerId($order->getCustomerId())
             ->setTxnAmount($txnAmount)
+            ->setCreatedAt($date)
             ->setIsClosed(1);
 
         $transaction->save();
