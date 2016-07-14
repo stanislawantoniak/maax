@@ -38,7 +38,7 @@ class Zolago_Sales_Model_Order_Payment_Transaction extends Mage_Sales_Model_Orde
      * @return Mage_Sales_Model_Order_Payment_Transaction
      */
     public function setOrder($order = null)
-    {   var_dump(Mage::app()->getRequest()->getParam('txn_amount'));
+    {
         if (null === $order || $order === true) {
             if (null !== $this->_paymentObject && $this->_paymentObject->getOrder()) {
                 $this->_order = $this->_paymentObject->getOrder();
