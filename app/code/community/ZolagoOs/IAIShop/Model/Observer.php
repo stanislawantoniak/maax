@@ -68,6 +68,7 @@ class ZolagoOs_IAIShop_Model_Observer
 
     public function getGhApiVendorOrders($vendorId, $orderIncrementIds)
     {
+        //ini_set("soap.wsdl_cache_enabled", 0);
         $orders = array();
         $connector = $this->getGHAPIConnector();
         $doLoginResponse = $connector->doLoginRequest($vendorId);
