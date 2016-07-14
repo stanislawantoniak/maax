@@ -1,0 +1,162 @@
+.box_listing_product {
+    figure {
+        &.img_product {
+            margin-bottom:18px;
+	        position: relative;
+               @media (max-width: $screen-xs-max) {
+                margin-bottom: 0px;
+               }
+        }
+        img {
+            width:100%;
+            height:auto;
+        }
+    }
+  .logo_manufacturer {
+	margin: 15px 8px;
+    max-width: 100px;
+    max-height: 30px;
+	height: 30px;
+
+    display: block;
+    background-size: contain;
+	background-position: left center;
+	background-repeat: no-repeat;
+  }
+    .name_product {
+        margin-bottom:18px;
+        padding:0 8px;
+    }
+    .price {
+        margin-bottom:18px;
+        padding:0 8px;
+        position:relative;
+        .old {
+            margin-right:5px;
+        }
+        .like {
+            position:relative;
+            z-index: 900;
+            cursor: pointer;
+	        text-align: center;
+            .icoLike, &.liked .icoLike {
+	            font-size: 16px !important;
+	            display: inline-block;
+	            vertical-align: middle;
+	            width: 18px;
+	            height: 18px;
+	            background-size: contain;
+	            background-repeat: no-repeat;
+	            background-position: top left;
+	            &.fa-spinner {
+		            background-image: none !important;
+	            }
+            }
+	        .icoLike {
+		        background-image: url('../images/svg/unlike.svg');
+	            &:hover {
+		            background-image: url('../images/svg/like.svg');
+	            }
+            }
+
+	        &.liked .icoLike {
+		        background-image: url('../images/svg/like.svg');
+		        &:hover {
+			        background-image: url('../images/svg/unlike.svg');
+		        }
+	        }
+            
+            .toolLike {
+                position:absolute;
+                right:-20px;
+                top:-35px;
+                width:150px;
+                padding:5px 0;
+                display:none;
+                -webkit-transition: opacity 0.5s linear;
+                -moz-transition: opacity 0.5s linear;
+                -ms-transition: opacity 0.5s linear;
+                -o-transition: opacity 0.5s linear;
+                transition: opacity 0.5s linear;
+                &:before,
+                &:after {
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    right: 19px;
+                }
+                &:after{
+                    z-index: 1;
+                }
+            }
+        }
+        &.price-two-line {
+            .col-price {
+                span {
+                    display:block;
+                }
+            }
+        }
+        &.like-two-line {
+            .like {
+	            text-align: center;
+	            margin-top: 0 !important;
+	            margin-bottom: -5px;
+                .icoLike {
+	                display: block;
+	                margin: 0 auto;
+                }
+            }
+        }
+    }
+    .promotion {            
+            padding:5px 10px;
+            p {
+                margin:0px;
+                padding:0px;
+            }
+        }
+}
+.shapes_listing {
+    height:60px;
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    width:100%;
+    z-index: 900;
+}
+.addNewPositionListProductWrapper {
+    margin-top:-15px;
+}
+.addNewPositionListProduct {
+    &:link,
+    &:visited {
+      height:38px;
+      width:245px;
+      display:inline-block;
+      position: relative;
+      z-index: 901; 
+      outline:none;
+      
+    }    
+}
+html.is-browser-mobile {
+  .box_listing_product {
+    .price {
+      .like {
+        .icoLike {
+          background-image: url('../images/svg/unlike.svg');
+          &:hover {
+            background-image: url('../images/svg/unlike.svg');
+          }
+        }
+        &.liked .icoLike {
+          background-image: url('../images/svg/like.svg');
+          &:hover {
+            background-image: url('../images/svg/like.svg');
+          }
+        }
+      }
+    }
+  }
+}
