@@ -95,8 +95,6 @@ class Zolago_Adminhtml_Sales_TransactionsController
         $txnAmount = $this->getRequest()->getParam("txn_amount");
         $id = $this->getRequest()->getParam("txn_id");
         $txnKey = $this->getRequest()->getParam('txn_key');
-//krumo($this->getRequest()->getParams());
-//        die("test");
 
 
         $transaction = Mage::getModel("sales/order_payment_transaction")->load($id);
