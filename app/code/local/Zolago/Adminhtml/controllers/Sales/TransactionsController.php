@@ -33,11 +33,43 @@ class Zolago_Adminhtml_Sales_TransactionsController
         return $txn;
     }
 
-    public function editAction()
+    /**
+     * View Transaction Details action
+     */
+    public function viewAction()
     {
+
         $txn = $this->_initTransactionModel();
         if (!$txn) {
             return;
+        }
+        $this->_title($this->__('Sales'))
+            ->_title($this->__('Transactions'))
+            ->_title(sprintf("#%s", $txn->getTxnId()));
+
+        $this->loadLayout()
+            ->_setActiveMenu('sales/transactions')
+            ->renderLayout();
+    }
+
+    public function editAction()
+    {
+        $txn_id = $this->getRequest()->getParam('txn_id', 0);
+
+        $txn = Mage::getModel('sales/order_payment_transaction')->load(
+            $this->getRequest()->getParam('txn_id')
+        );
+        $paymentModel = Mage::getModel("sales/order_payment")->load($txn->getPaymentId());
+        if ($txn_id > 0 && $paymentModel->getMethod() !== "banktransfer") {
+            if ($paymentModel->getMethod() !== "banktransfer")
+                return $this->_redirect("*/*/view", array("txn_id" => $txn_id));
+        }
+
+
+        $txn = $this->_initTransactionModel();
+        if (!$txn->getId()) {
+            // Default values for form
+            $txn->setDefaults();
         }
         $this->_title($this->__('Sales'))
             ->_title($this->__('Transactions'))
@@ -52,29 +84,60 @@ class Zolago_Adminhtml_Sales_TransactionsController
     {
         $orderId = $this->getRequest()->getParam('order_id');
 
+
         $order = Mage::getModel("sales/order")->load($orderId);
 
         $txnAmount = $this->getRequest()->getParam("txn_amount");
-        $txnId = $this->getRequest()->getParam("txn_id");
-        $date = $this->getRequest()->getParam("date");
+        $id = $this->getRequest()->getParam("txn_id");
+        $txnKey = $this->getRequest()->getParam('txn_key');
 
-        if($txnId){
-            $transaction = Mage::getModel("sales/order_payment_transaction")->load($txnId);
-        }else{
-            $transaction = Mage::getModel("sales/order_payment_transaction");
-        }
+
+        $transaction = Mage::getModel("sales/order_payment_transaction")->load($id);
         $transaction->setOrderPaymentObject($order->getPayment());
 
         $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED;
         $transaction
             ->setTxnStatus($status)
             ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
+            ->setTxnId($txnKey)
             ->setCustomerId($order->getCustomerId())
             ->setTxnAmount($txnAmount)
-            ->setCreatedAt($date)
             ->setIsClosed(1);
 
         $transaction->save();
+        return $this->_redirect("*/*");
+
+    }
+
+
+    /**
+     * @return $this|Mage_Core_Controller_Varien_Action
+     */
+    public function rejectAction()
+    {
+        $id = $this->getRequest()->getParam('txn_id');
+
+        /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+        $transaction = Mage::getModel("sales/order_payment_transaction")->load($id);
+        $order = Mage::getModel("sales/order")->load($transaction->getOrderId());
+
+        $paymentModel = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
+        if ($id > 0 && $paymentModel->getMethod() !== "banktransfer") {
+            if ($paymentModel->getMethod() !== "banktransfer")
+                return $this->_redirect("*/*/view", array("txn_id" => $id));
+        }
+
+        if ($order->getId()) {
+            $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED;
+            $transaction->setOrderPaymentObject($order->getPayment());
+
+            $transaction
+                ->setTxnStatus($status)
+                ->setIsClosed(1);
+
+            $transaction->save();
+
+        }
         return $this->_redirect("*/*");
 
     }

@@ -36,7 +36,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit extends Mage_Adminhtml_Bloc
         $this->setChild('delete_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
-                    'label' => Mage::helper('sales')->__('Delete'),
+                    'label' => Mage::helper('sales')->__('Reject'),
                     'onclick' => 'formControl.remove();',
                     'class' => 'delete'
                 ))
@@ -70,15 +70,15 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit extends Mage_Adminhtml_Bloc
      */
     public function _getModelName()
     {
-        return Mage::helper("sales")->__("Bank Transfer");
+        return Mage::helper("sales")->__("Bank Payment");
     }
 
     public function getHeaderText()
     {
         if ($this->getIsNew()) {
-            return Mage::helper('sales')->__('Edit');
+            return Mage::helper('sales')->__('Edit Bank Payment');
         }
-        return Mage::helper('sales')->__(' Add New Bank Transfer');
+        return Mage::helper('sales')->__(' Add New Bank Payment');
     }
 
     public function getSaveUrl()
@@ -86,9 +86,9 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit extends Mage_Adminhtml_Bloc
         return $this->getUrl('*/*/save', array("_current" => true));
     }
 
-    public function getDeleteUrl()
+    public function getRejectUrl()
     {
-        return $this->getUrl('*/*/delete', array("_current" => true));
+        return $this->getUrl('*/*/reject', array("_current" => true));
     }
 
 }
