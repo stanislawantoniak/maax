@@ -6,7 +6,8 @@
 class Zolago_Adminhtml_Block_Sales_Transactions
     extends Mage_Adminhtml_Block_Sales_Transactions
 {
-    const PAYMENT_TYPE_BANK_TRANSFER = 'banktransfer';
+    const PAYMENT_TYPE_BANK_TRANSFER                = 'banktransfer';
+    const ALLOW_SET_ORDER_FOR_EXISTING_TRANSACTIONS = 'allow_set_order_for_existing_transactions';
 
     public function __construct()
     {

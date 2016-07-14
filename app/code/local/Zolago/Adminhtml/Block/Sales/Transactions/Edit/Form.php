@@ -30,6 +30,9 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'name' => 'txn_amount',
             'style' => 'max-width:100px;',
         ));
+        $fieldset->addField('allow_order', 'hidden', array(
+            'name' => 'allow_order'
+        ));
 
         $fieldset->addField('date', 'date', array(
             'label' => Mage::helper('sales')->__('Date'),
@@ -68,6 +71,10 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
         if (isset($data['cost'])) {
             $data['cost'] = number_format($data['cost'], 2, '.', '');
         }
+        if(isset($data['bank_transfer_create_at'])){
+            $data['date'] = $data['bank_transfer_create_at'];
+        }
+        $data['allow_order'] = Zolago_Adminhtml_Block_Sales_Transactions::ALLOW_SET_ORDER_FOR_EXISTING_TRANSACTIONS;
 
         return $data;
     }

@@ -84,13 +84,12 @@ class Zolago_Adminhtml_Sales_TransactionsController
     {
         $orderId = $this->getRequest()->getParam('order_id');
 
-
         $order = Mage::getModel("sales/order")->load($orderId);
 
         $txnAmount = $this->getRequest()->getParam("txn_amount");
         $id = $this->getRequest()->getParam("txn_id");
         $txnKey = $this->getRequest()->getParam('txn_key');
-
+        $date = $this->getRequest()->getParam("date");
 
         $transaction = Mage::getModel("sales/order_payment_transaction")->load($id);
         $transaction->setOrderPaymentObject($order->getPayment());
@@ -98,10 +97,12 @@ class Zolago_Adminhtml_Sales_TransactionsController
         $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED;
         $transaction
             ->setTxnStatus($status)
+            ->setBankTransferCreateAt($date)
             ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
             ->setTxnId($txnKey)
             ->setCustomerId($order->getCustomerId())
             ->setTxnAmount($txnAmount)
+            ->setOrderId($orderId)
             ->setIsClosed(1);
 
         $transaction->save();

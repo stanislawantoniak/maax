@@ -55,6 +55,9 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             $options[$collectionItem->getEntityId()]["increment_id"] = $collectionItem->getIncrementId();
             $options[$collectionItem->getEntityId()]["date"] = date('d.m.Y', $dateModel->timestamp(strtotime($collectionItem->getCreatedAt())));
             $options[$collectionItem->getEntityId()]["order_total"] = Mage::helper('core')->currency($collectionItem->getBaseGrandTotal(), true, false);
+            $options[$collectionItem->getEntityId()]["customer_firstname"] = $collectionItem->getData('customer_firstname');
+            $options[$collectionItem->getEntityId()]["customer_lastname"] = $collectionItem->getData('customer_lastname');
+            $options[$collectionItem->getEntityId()]["customer_email"] = $collectionItem->getData('customer_email');
 
             $options[$collectionItem->getEntityId()]["items"][$collectionItem->getItemId()] = array(
                 "id" => $collectionItem->getProductId(),
@@ -65,7 +68,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
 
         foreach ($options as $orderId => $option) {
             $out = "<div class='banktransfer-row'>";
-            $out .= "<div class='banktransfer-item banktransfer-left'><b>" . $option["increment_id"] . "</b> </div>";
+            $out .= "<div class='banktransfer-item banktransfer-left'><b>" . $option["increment_id"] . "</b><br> ".$option['customer_firstname']." ".$option['customer_lastname']."<br>".$option['customer_email']."</div>";
 
 
             $out .= "<div class='banktransfer-item banktransfer-center'><ul>";
