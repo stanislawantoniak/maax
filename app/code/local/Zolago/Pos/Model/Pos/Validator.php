@@ -57,8 +57,7 @@ class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Model_Validator_Abstr
 		$this->_stringLength('city','City',100);
 
 		$this->_stringLength('email','Email',100);
-
-		$this->_notEmpty('phone','Phone');
+		
 		$this->_stringLength('phone','Phone',50);
 
 		return $this->_errors;

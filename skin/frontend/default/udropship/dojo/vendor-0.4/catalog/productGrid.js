@@ -789,7 +789,7 @@ define([
         var config = {
             columnSets: processColumnSets(columns),
 
-            loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
+            loadingMessage: '<div id="spinner_block"><i class="fa fa-spinner fa-spin"></i><div>' + Translator.translate("loading-spinner-bottom") + '</div></div>',
             noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
 
             selectionMode: 'none',
