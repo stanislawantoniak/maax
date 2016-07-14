@@ -62,13 +62,16 @@ class Zolago_Adminhtml_Sales_TransactionsController
 
     public function editAction()
     {
+        $txn_id = $this->getRequest()->getParam('txn_id', 0);
+
         $txn = Mage::getModel('sales/order_payment_transaction')->load(
             $this->getRequest()->getParam('txn_id')
         );
-
         $paymentModel = Mage::getModel("sales/order_payment")->load($txn->getPaymentId());
-        if ($paymentModel->getMethod() !== "banktransfer")
-            return $this->_redirect("*/*/view", array("txn_id" => $this->getRequest()->getParam('txn_id')));
+        if ($txn_id > 0 && $paymentModel->getMethod() !== "banktransfer") {
+            if ($paymentModel->getMethod() !== "banktransfer")
+                return $this->_redirect("*/*/view", array("txn_id" => $txn_id));
+        }
 
 
         $txn = $this->_initTransactionModel();
