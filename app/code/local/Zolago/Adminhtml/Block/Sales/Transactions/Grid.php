@@ -75,6 +75,17 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
 		    'type'      => 'number'
 	    ));
 
+		$this->addColumn('action',
+			array(
+				'header'    => Mage::helper('catalog')->__('Action'),
+				'width'     => '50px',
+				'renderer'  => 'Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action',
+				'filter'    => false,
+				'getter'    => 'getId',
+				'sortable'  => false,
+				'index'     => 'stores',
+			));
+
         return $grid;
     }
 
