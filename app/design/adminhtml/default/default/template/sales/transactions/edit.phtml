@@ -33,8 +33,8 @@
             return false;
         },
         remove: function () {
-            if (window.confirm("<?php echo Mage::helper('sales')->__('Are you sure that you want to delete this bank transfer?') ?>")) {
-                window.location.href = '<?php echo $this->getDeleteUrl() ?>';
+            if (window.confirm("<?php echo Mage::helper('sales')->__('Are you sure that you want to reject this bank payment?') ?>")) {
+                window.location.href = '<?php echo $this->getRejectUrl() ?>';
             }
         }
     }

@@ -83,7 +83,7 @@ class Zolago_Adminhtml_Sales_TransactionsController
     public function saveAction()
     {
         $orderId = $this->getRequest()->getParam('order_id');
-        $txn_id = $this->getRequest()->getParam('txn_id');
+
 
         $order = Mage::getModel("sales/order")->load($orderId);
 
@@ -105,6 +105,39 @@ class Zolago_Adminhtml_Sales_TransactionsController
             ->setIsClosed(1);
 
         $transaction->save();
+        return $this->_redirect("*/*");
+
+    }
+
+
+    /**
+     * @return $this|Mage_Core_Controller_Varien_Action
+     */
+    public function rejectAction()
+    {
+        $id = $this->getRequest()->getParam('txn_id');
+
+        /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+        $transaction = Mage::getModel("sales/order_payment_transaction")->load($id);
+        $order = Mage::getModel("sales/order")->load($transaction->getOrderId());
+
+        $paymentModel = Mage::getModel("sales/order_payment")->load($transaction->getPaymentId());
+        if ($id > 0 && $paymentModel->getMethod() !== "banktransfer") {
+            if ($paymentModel->getMethod() !== "banktransfer")
+                return $this->_redirect("*/*/view", array("txn_id" => $id));
+        }
+
+        if ($order->getId()) {
+            $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED;
+            $transaction->setOrderPaymentObject($order->getPayment());
+
+            $transaction
+                ->setTxnStatus($status)
+                ->setIsClosed(1);
+
+            $transaction->save();
+
+        }
         return $this->_redirect("*/*");
 
     }
