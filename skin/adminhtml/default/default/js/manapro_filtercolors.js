@@ -14,14 +14,13 @@
 	// the following function is executed when DOM ir ready. If not use this wrapper, code inside could fail if
 	// executed when referenced DOM elements are still being loaded.
 	$(function() {
-		$('#mf_general_display').live('change', function() {
-			if ($('#mf_general_display').val() == 'colors' || $('#mf_general_display').val() == 'colors_vertical' || $('#mf_general_display').val() == 'colors_label') {
-				$('#tabs_colors').parent().show();
-			}
-			else {
-				$('#tabs_colors').parent().hide();
-			}
-		});
+        $('#mf_general_display').live('change', function() {
+            if ($('#mf_general_display').is(':checked')) {
+                $('#tabs_colors').parent().show();
+            } else {
+                $('#tabs_colors').parent().hide();
+            }
+        });
         $('#mf_colors_header_image_width').live('change', function() {
             $('td.c-color div, td.c-normal_image div, td.c-selected_image div, td.c-normal_hovered_image div, td.c-selected_hovered_image div, ' +
                 '#image_mf_colors_header_image_normal, #image_mf_colors_header_image_selected, ' +

@@ -85,8 +85,11 @@ class ManaPro_FilterAdmin_Mana_FiltersController extends Mana_Admin_Controller_C
 	public function saveAction() {
 		// data
 		$fields = $this->getRequest()->getPost('fields');
+
+        if ($fields != null) $fields["display"] = "color";
+        else $fields["display"] = "list";
+
         $useDefault = $this->getRequest()->getPost('use_default');
-        $data = array();
 		if (Mage::helper('mana_admin')->isGlobal()) {
 			$model = Mage::getModel('mana_filters/filter2')->load($this->getRequest()->getParam('id'));
 		}
