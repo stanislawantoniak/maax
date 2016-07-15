@@ -232,7 +232,7 @@
 				background: $colorAccentTitle;
 			}
 			display: block;
-			margin: 0 -20px 10px;
+			margin: 0 -20px 20px;
 			padding: 0 0 0 21px;
 			position: relative;
 			font-family: $fontRegular;
@@ -241,6 +241,8 @@
 			text-align: left;
 			text-transform: uppercase;
 			width: 100%;
+			box-shadow: none;
+
 		}
 	}
 
@@ -268,6 +270,9 @@
 			.panel-body {
 				color: $colorFaqAnswer;
 				background: $colorFaqAnswerBg;
+
+				border-left: 1px solid $colorFaqLabelBorder;
+				border-right: 1px solid $colorFaqLabelBorder;
 			}
 		}
 	}
