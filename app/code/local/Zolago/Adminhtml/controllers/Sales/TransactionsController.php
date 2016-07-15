@@ -87,7 +87,7 @@ class Zolago_Adminhtml_Sales_TransactionsController
         $order = Mage::getModel("sales/order")->load($orderId);
 
         $txnAmount = $this->getRequest()->getParam("txn_amount");
-        $id = $this->getRequest()->getParam("txn_id");
+        $id = $this->getRequest()->getParam("txn_id", 0);
         $txnKey = $this->getRequest()->getParam('txn_key');
         $date = $this->getRequest()->getParam("date");
 
@@ -95,6 +95,7 @@ class Zolago_Adminhtml_Sales_TransactionsController
         if ($this->getRequest()->isPost()) {
             try {
                 $transaction = Mage::getModel("sales/order_payment_transaction")->load($id);
+                $isNewTransaction = $transaction->isObjectNew();
                 $transaction->setOrderPaymentObject($order->getPayment());
 
                 $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED;
@@ -111,7 +112,12 @@ class Zolago_Adminhtml_Sales_TransactionsController
                 $transactionNew = $transaction->save();
 
                 $transaction->setTxnId($transactionNew->getId())->save();
-                $this->_getSession()->addSuccess($this->__('Bank has been successfully created.'));
+                if ($isNewTransaction) {
+                    $this->_getSession()->addSuccess($this->__('Bank payment has been successfully created.'));
+                } else {
+                    $this->_getSession()->addSuccess($this->__('Bank payment has been successfully changed.'));
+                }
+
             } catch (Exception $e) {
                 Mage::logException($e);
                 $this->_getSession()->addError($e->getMessage());
