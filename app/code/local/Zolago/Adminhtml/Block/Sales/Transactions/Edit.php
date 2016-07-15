@@ -78,7 +78,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit extends Mage_Adminhtml_Bloc
         if ($this->getIsNew()) {
             return Mage::helper('sales')->__('Edit Bank Payment');
         }
-        return Mage::helper('sales')->__(' Add New Bank Payment');
+        return Mage::helper('sales')->__('Add New Bank Payment');
     }
 
     public function getSaveUrl()
