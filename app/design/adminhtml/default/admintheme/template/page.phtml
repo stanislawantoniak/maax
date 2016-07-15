@@ -22,7 +22,10 @@ jQuery(function($) {
 		$('.adminhtml-dashboard-index #grid_tab_content tbody tr').attr('title', '');
 		
 	}
-	$('#accordion').accordion();
+    if(typeof $('#accordion').accordion !== "undefined"){
+        $('#accordion').accordion();
+    }
+
 	var wh = $( '.wrapper' ).height();
 	$('#accordion').css('min-height', wh);
 	jQuery('#nbclick1').click(function() {
