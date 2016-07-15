@@ -9,7 +9,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
             $actions[] = array(
                 'caption' => Mage::helper('catalog')->__('Edit'),
                 'url'     => array(
-                    'base'=>'*/*/edit',
+                    'base'=>'adminhtml/sales_transactions/edit',
                     'params'=>array('store'=>$this->getRequest()->getParam('store'))
                 ),
                 'field'   => 'txn_id'
