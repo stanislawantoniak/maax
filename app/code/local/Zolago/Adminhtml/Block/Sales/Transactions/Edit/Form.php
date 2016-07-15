@@ -48,7 +48,6 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'label' => Mage::helper('sales')->__('Order'),
             'required' => true,
             'name' => 'order_id',
-            'style' => 'width:800px;',
             "options" => Mage::getSingleton('zolagoadminhtml/sales_transactions_source')
                 ->setPath('banktransfer_orders')
                 ->toOptionHash()

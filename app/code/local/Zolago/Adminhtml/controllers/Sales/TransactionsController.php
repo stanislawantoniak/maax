@@ -111,7 +111,7 @@ class Zolago_Adminhtml_Sales_TransactionsController
                 $transactionNew = $transaction->save();
 
                 $transaction->setTxnId($transactionNew->getId())->save();
-                $this->_getSession()->addSuccess($this->__('Bank has been successfully created.'));
+                $this->_getSession()->addSuccess($this->__('Bank payment has been successfully created.'));
             } catch (Exception $e) {
                 Mage::logException($e);
                 $this->_getSession()->addError($e->getMessage());
