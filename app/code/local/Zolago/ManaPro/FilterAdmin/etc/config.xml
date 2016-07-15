@@ -11,7 +11,28 @@
 				<class>Zolago_ManaPro_FilterAdmin_Helper</class>
 			</zolagomanaprofilteradmin>
 		</helpers>
+		<blocks>
+			<zolagomanaprofilteradmin>
+				<class>Zolago_ManaPro_FilterAdmin_Block</class>
+			</zolagomanaprofilteradmin>
+			<manapro_filteradmin>
+				<rewrite>
+					<card_general>Zolago_ManaPro_FilterAdmin_Block_Card_General</card_general>
+				</rewrite>
+			</manapro_filteradmin>
+		</blocks>
 	</global>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<zolagomanaprofilteradmin before="ManaPro_FilterAdmin">Zolago_ManaPro_FilterAdmin</zolagomanaprofilteradmin>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
 	<adminhtml>
 		<translate>
 			<modules>
@@ -22,5 +43,12 @@
 				</zolagomanaprofilteradmin>
 			</modules>
 		</translate>
+		<layout>
+			<updates>
+				<manapro_filtercolors>
+					<file>zolago_manapro_filtercolors.xml</file>
+				</manapro_filtercolors>
+			</updates>
+		</layout>
 	</adminhtml>
 </config>

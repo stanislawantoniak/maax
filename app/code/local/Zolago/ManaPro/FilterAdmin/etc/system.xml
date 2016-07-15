@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <tabs>
+        <mana>
+            <label>Nothing</label>
+            <sort_order>250</sort_order>
+        </mana>
+    </tabs>
+    <sections>
+        <mana_filters translate="label" module="manapro_filteradmin">
+            <label>Layered Navigation</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </mana_filters>
+        <mana translate="label" module="mana_core">
+            <label>General</label>
+            <tab>mana</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </mana>
+    </sections>
+</config>
