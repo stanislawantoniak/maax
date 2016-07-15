@@ -7,7 +7,7 @@ $installer->startSetup();
 
 $salesAttributeSet = $installer->getTable('sales/payment_transaction');
 
-/* Add "use_sizebox_list" */
+
 $installer->getConnection()->addColumn(
     $salesAttributeSet,
     'bank_transfer_create_at',
