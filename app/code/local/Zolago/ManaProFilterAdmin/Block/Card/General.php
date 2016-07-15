@@ -1,5 +1,5 @@
 <?php
-class Zolago_ManaPro_FilterAdmin_Block_Card_General extends ManaPro_FilterAdmin_Block_Card_General
+class Zolago_ManaProFilterAdmin_Block_Card_General extends ManaPro_FilterAdmin_Block_Card_General
 {
     /**
      * @return Mage_Adminhtml_Block_Widget_Form
@@ -32,7 +32,7 @@ class Zolago_ManaPro_FilterAdmin_Block_Card_General extends ManaPro_FilterAdmin_
             'label' => $this->__('Use colors and images'),
             'name' => 'display',
             'required' => true,
-            'checked' => $this->getModel()->getData("display") == "color",
+            'checked' => $this->getModel()->getData("display") == "colors",
         ));
         $field->setRenderer($this->getLayout()->getBlockSingleton('mana_admin/crud_card_field'));
 

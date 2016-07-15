@@ -1,38 +1,29 @@
 <?php
+
 require_once Mage::getModuleDir('controllers', "ManaPro_FilterAdmin") . DS . "Mana" .DS ."FiltersController.php";
 
-class Zolago_ManaPro_FilterAdmin_Mana_FiltersController extends ManaPro_FilterAdmin_Mana_FiltersController
+class Zolago_ManaProFilterAdmin_Mana_FiltersController extends ManaPro_FilterAdmin_Mana_FiltersController
 {
-    protected function _getEntityName() {
-        return 'mana_filters/filter2';
-    }
-
-    public function editAction() {
-        die("dfgsdf");
-    }
-    public function saveAction() {
-        die("test");
-
+    public function saveAction()
+    {
         // data
         $fields = $this->getRequest()->getPost('fields');
         $useDefault = $this->getRequest()->getPost('use_default');
 
-
-        if ($fields != null) $fields["display"] = "color";
+        if ($fields != null) $fields["display"] = "colors";
         else $fields["display"] = "list";
-
 
         if (Mage::helper('mana_admin')->isGlobal()) {
             $model = Mage::getModel('mana_filters/filter2')->load($this->getRequest()->getParam('id'));
-        }
-        else {
+        } else {
             $model = Mage::getModel('mana_filters/filter2_store')->loadByGlobalId($this->getRequest()->getParam('id'),
                 Mage::helper('mana_admin')->getStore()->getId());
         }
 
         $response = new Varien_Object();
         $update = array();
-        /* @var $messages Mage_Adminhtml_Block_Messages */ $messages = $this->getLayout()->createBlock('adminhtml/messages');
+        /* @var $messages Mage_Adminhtml_Block_Messages */
+        $messages = $this->getLayout()->createBlock('adminhtml/messages');
 
         try {
             // processing
@@ -48,14 +39,12 @@ class Zolago_ManaPro_FilterAdmin_Mana_FiltersController extends ManaPro_FilterAd
             $model->save();
             Mage::dispatchEvent('m_saved', array('object' => $model));
             $messages->addSuccess($this->__('Your changes are successfully saved.'));
-        }
-        catch (Mana_Db_Exception_Validation $e) {
+        } catch (Mana_Db_Exception_Validation $e) {
             foreach ($e->getErrors() as $error) {
                 $messages->addError($error);
             }
             $response->setError(true);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $messages->addError($e->getMessage());
             $response->setError(true);
         }
@@ -64,5 +53,4 @@ class Zolago_ManaPro_FilterAdmin_Mana_FiltersController extends ManaPro_FilterAd
         $response->setUpdate($update);
         $this->getResponse()->setBody($response->toJson());
     }
-
 }
