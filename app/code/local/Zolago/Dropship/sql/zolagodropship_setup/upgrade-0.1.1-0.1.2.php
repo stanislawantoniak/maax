@@ -5,6 +5,11 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("update `cms_block` set identifier = REPLACE(identifier, 'udropship-help', 'zos-help') where identifier like 'udropship-help%'");
+$installer->run("
+update `cms_block` set identifier = REPLACE(identifier, 'udropship-help-pl-udropship', 'zolagoos-help-pl-zolagoos') where identifier like 'udropship-help-pl-%';
+update `cms_block` set identifier = REPLACE(identifier, 'udropship-help-en-udropship', 'zolagoos-help-en-zolagoos') where identifier like 'udropship-help-en-%';
+update `cms_block` set identifier = REPLACE(identifier, 'udropship-help', 'zolagoos-help') where identifier like 'udropship-help%';
+
+");
 
 $installer->endSetup();
