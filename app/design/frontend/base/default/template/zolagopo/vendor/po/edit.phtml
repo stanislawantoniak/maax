@@ -12,12 +12,14 @@ $_shippingStatuses		= Mage::helper('udropship')->getVendorShipmentStatuses();
 $_statusModel			= $_po->getStatusModel(); 
 $_aggregated			= $_po->getAggregated();
 $_isEditable			= $this->isEditable();
+$paymentHelper = Mage::helper('zolagopayment');
+$_canSplit 				= $_isEditable && $paymentHelper->getConfigUseAllocation($_po->getStore());
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
 $_tracking = $this->getCurrentTracking($_currentShipping); 
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
-$paymentHelper = Mage::helper('zolagopayment');
+$activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -296,14 +298,26 @@ $paymentHelper = Mage::helper('zolagopayment');
 							<!-- shipping row -->
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
-									<?php if($_isEditable):?>
-									<i class="icon-checked-action"></i>
-									<span id="split-wrapper" class="inline-block">
-										<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
-											<i class=" icon-unlink"></i>
-											<?php echo $_hlp->__("Split order");?>
-										</button>
-									</span>
+									<?php if($_canSplit):?>
+										<div style="margin-bottom:10px;">
+											<i class="icon-checked-action"></i>
+											<span id="split-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
+													<i class=" icon-unlink"></i>
+													<?php echo $_hlp->__("Split order");?>
+												</button>
+											</span>
+										</div>
+									<?php endif;?>
+									<?php if(!$activeNoRma && ($_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED || $_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED)):?>
+										<div style="margin-left: 48px;">
+											<span id="create-rma-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#createRma" class="btn" id="rma">
+													<i class=" icon-exclamation-sign"></i>
+													<?php echo $_hlp->__("Create RMA");?>
+												</button>
+											</span>
+										</div>
 									<?php endif;?>
 								</td>
 								
@@ -644,6 +658,13 @@ if ($this->canShowPaymentDetails()) {
  *	Comment modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_comment");
+
+/*******************************************************************************
+ *	Create RMA modal
+ *******************************************************************************/
+if(!$activeNoRma){
+	echo $this->getChildHtml("vendor_po_create_rma");
+}
 ?>
 
 <script type="text/javascript">

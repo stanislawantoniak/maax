@@ -37,6 +37,10 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $this->_redirectReferer();
     }
     public function rmaListAction() {
+        $activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
+        if($activeNoRma){
+            return $this->_redirect('sales/order/process');
+        }
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
@@ -196,7 +200,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
     protected function _saveRma()
     {
-
         $rmas = $this->_initRma(true);
         $data = $this->getRequest()->getPost('rma');
         $data['send_email'] = true;
@@ -255,7 +258,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         $rma->setRmaReason(@$data['rma_reason']);
 
-
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
 		/** @var Mage_Core_Model_Resource_Transaction $trans */
@@ -268,11 +270,10 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $trans->addObject($rma->getPo())->save();
 
         foreach ($rmas as $rma) {
-
+            
                 Mage::dispatchEvent("zolagorma_rma_created", array(
                     "rma" => $rma
                 ));
-
 
             $rma->save();
 
@@ -293,14 +294,14 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
                 $manager->calculateCharge($track,$type,$po->getVendor(),$rma->getTotalValue(),0);
             }
-			
-            if($rma->getCurrentTrack()) {                
+
+            if($rma->getCurrentTrack()) {
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
 					"rma"		=> $rma,
 					"track"		=> $rma->getCurrentTrack()
 				));
             }
-			if(isset($data['customer_address_id'])){
+            if(isset($data['customer_address_id'])){
 				// Duplicate Customer address to RMA address tored in Order Address
 				$customerAddress = $this->_getCustomer()->getAddressById(
 					$data['customer_address_id']
