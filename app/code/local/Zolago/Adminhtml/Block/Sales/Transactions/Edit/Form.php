@@ -53,9 +53,6 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
                 ->toOptionHash()
         ));
 
-
-
-
         $form->setUseContainer(true);
         $form->setValues($this->_getValues());
         $this->setForm($form);
