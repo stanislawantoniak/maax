@@ -233,7 +233,7 @@
 			}
 			display: block;
 			margin: 0 -20px 10px;
-			padding: 0 0 0 30px;
+			padding: 0 0 0 21px;
 			position: relative;
 			font-family: $fontRegular;
 			font-size: 18px;
@@ -256,6 +256,7 @@
 	.panel-group {
 		.panel.panel-default {
 			border-radius: $borderRadiusFaq;
+			box-shadow: none;
 			.panel-heading.faq-question {
 				color: $colorFaqLabel;
 				background: $colorFaqLabelBg;
