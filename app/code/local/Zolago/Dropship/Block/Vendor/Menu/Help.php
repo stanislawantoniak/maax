@@ -3,7 +3,7 @@
 class Zolago_Dropship_Block_Vendor_Menu_Help extends Mage_Core_Block_Template
 {
 
-    const PREFIX = 'udropship-help';
+    const PREFIX = 'zos-help';
 
     public function getCmsBlockHelp() {
         $keys = $this->getKeys();
