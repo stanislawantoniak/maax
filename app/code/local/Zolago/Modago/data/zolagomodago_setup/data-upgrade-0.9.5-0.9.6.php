@@ -1,4 +1,5 @@
 <?php
+// Delete modago prefix
 $newData = array (
 	array (
 		'identifier' => "modago-login-continue-normal"
@@ -7,7 +8,6 @@ $newData = array (
 		'identifier' => "modago-login-continue-checkout"
 	)
 );
-
 
 foreach ($newData as $data) {
 	$block = Mage::getModel('cms/block')->load($data['identifier']);
