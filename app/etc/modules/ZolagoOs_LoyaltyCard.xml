@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_LoyaltyCard>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ZolagoOs_LoyaltyCard>
+    </modules>
+</config>
