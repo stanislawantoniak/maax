@@ -373,7 +373,7 @@ define([
 			// Mode
 			put(sectionMode, this._generateMode("Add", "add", parentColumn.field, true));
 			put(sectionMode, this._generateMode("Set", "set", parentColumn.field));
-			//put(sectionMode, this._generateMode("Substract", "sub", parentColumn.field));
+			put(sectionMode, this._generateMode("Substract", "sub", parentColumn.field));
 			
 			// Append
 			put(form, sectionSelect);

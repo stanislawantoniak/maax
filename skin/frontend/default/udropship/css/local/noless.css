@@ -812,6 +812,9 @@ div .view_lupa {
 	height: 49px;
 	width: 49px;
 }
+.error.help-block {
+	color: #b94a48;
+}
 .fa-spin {
 	-webkit-animation: spin 2s infinite linear;
 	-moz-animation: spin 2s infinite linear;
