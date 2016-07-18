@@ -7,30 +7,30 @@
     </modules>
     <global>
         <models>
-            <zos_pickuppoint>
+            <zospickuppoint>
                 <class>ZolagoOs_PickupPoint_Model</class>
                 <resourceModel>zolagoos_pickuppoint_resource</resourceModel>
-            </zos_pickuppoint>
-            <zoos_pickuppoint_resource>
+            </zospickuppoint>
+            <zospickuppoint_resource>
                 <class>ZolagoOs_PickupPoint_Model_Resource</class>
-            </zoos_pickuppoint_resource>
+            </zospickuppoint_resource>
         </models>
         <blocks>
-            <zoos_pickuppoint>
+            <zoospickuppoint>
                 <class>ZolagoOs_PickupPoint_Block</class>
-            </zoos_pickuppoint>
+            </zoospickuppoint>
         </blocks>
         <helpers>
-            <zos_pickuppoint>
+            <zospickuppoint>
                 <class>ZolagoOs_PickupPoint_Helper</class>
-            </zos_pickuppoint>
+            </zospickuppoint>
         </helpers>
         <resources>
-            <zos_pickuppoint_setup>
+            <zospickuppoint_setup>
                 <setup>
                     <module>ZolagoOs_PickupPoint</module>
                 </setup>
-            </zos_pickuppoint_setup>
+            </zospickuppoint_setup>
         </resources>
     </global>
 </config>

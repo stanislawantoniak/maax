@@ -121,7 +121,8 @@
             }
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
-                jQuery("#select_inpost_point").modal("show");
+                jQuery("div.modal[data-carrier-points='"+jQuery(this).attr("data-carrier-delivery-type")+"']").modal("show");
+                //jQuery(this).attr("data-carrier-delivery-type").modal("show");
                 handleGeoLocation();
             });
             jQuery("[name=shipping_select_city]").select2({
