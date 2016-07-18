@@ -4,13 +4,15 @@ class ZolagoOs_OmniChannelTierCommission_Model_Observer
 {
     public function udropship_adminhtml_vendor_tabs_after($observer)
     {
-        $block = $observer->getBlock();
-        $block->addTab('udtiercom', array(
-            'label'     => Mage::helper('udtiercom')->__('Tier Commissions'),
-            'after'     => 'shipping_section',
-            'content'   => Mage::app()->getLayout()->createBlock('udtiercom/adminhtml_vendorEditTab_comRates_form', 'vendor.tiercom.form')
-                ->toHtml()
-        ));
+		if (!Mage::helper("core")->isModuleEnabled('ZolagoOs_OutsideStore')) {
+			$block = $observer->getBlock();
+			$block->addTab('udtiercom', array(
+				'label' => Mage::helper('udtiercom')->__('Tier Commissions'),
+				'after' => 'shipping_section',
+				'content' => Mage::app()->getLayout()->createBlock('udtiercom/adminhtml_vendorEditTab_comRates_form', 'vendor.tiercom.form')
+					->toHtml()
+			));
+		}
     }
     public function udropship_vendor_load_after($observer)
     {
