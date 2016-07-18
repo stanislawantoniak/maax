@@ -114,12 +114,12 @@ class ZolagoOs_Rma_Block_Adminhtml_SalesOrderViewTab_Rmas
 
     public function getTabLabel()
     {
-        return Mage::helper('urma')->__('uReturns');
+        return Mage::helper('urma')->__('Returns');
     }
 
     public function getTabTitle()
     {
-        return Mage::helper('sales')->__('uReturns');
+        return Mage::helper('sales')->__('Returns');
     }
 
     public function canShowTab()

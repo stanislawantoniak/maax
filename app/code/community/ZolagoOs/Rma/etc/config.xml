@@ -113,12 +113,12 @@
         <template>
             <email>
                 <sales_email_rma_template translate="label" module="urma">
-                   <label>New uReturn</label>
+                   <label>New Return</label>
                    <file>urma_new.html</file>
                    <type>html</type>
                 </sales_email_rma_template>
                 <sales_email_rma_comment_template translate="label" module="urma">
-                   <label>uReturn Update</label>
+                   <label>Return Update</label>
                    <file>urma_update.html</file>
                    <type>html</type>
                 </sales_email_rma_comment_template>
@@ -341,7 +341,7 @@
                                 <config>
                                     <children>
                                         <urma>
-                                            <title>uReturns</title>
+                                            <title>Returns</title>
                                             <sort_order>60</sort_order>
                                         </urma>
                                     </children>
