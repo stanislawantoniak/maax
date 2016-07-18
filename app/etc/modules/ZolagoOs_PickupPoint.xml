@@ -3,7 +3,7 @@
     <modules>
         <ZolagoOs_PickupPoint>
             <active>true</active>
-            <codePool>local</codePool>
+            <codePool>community</codePool>
         </ZolagoOs_PickupPoint>
     </modules>
 </config>

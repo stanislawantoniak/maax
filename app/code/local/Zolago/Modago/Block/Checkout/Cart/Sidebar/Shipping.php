@@ -6,11 +6,32 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     /**
      * @return string
      */
-    public static function getDeliveryTypeInpost(){
+    public static function getDeliveryTypeInpost()
+    {
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
         return $ghInpostCarrierCode;
     }
 
+    /** Is delivery method required additional locker
+     * (ex. Inpost locker name, Pick-up point)
+     * @param $deliveryType
+     * @return bool
+     */
+    public function isDeliveryPointSelectRequired($deliveryType)
+    {
+        $isDeliveryPointSelectRequired = false;
+        if (empty($deliveryType))
+            return $isDeliveryPointSelectRequired;
+
+
+        $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
+        $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+
+        if (in_array($deliveryType, array($ghInpostCarrierCode, $pickUpPointCode)))
+            $isDeliveryPointSelectRequired = true;
+
+        return $isDeliveryPointSelectRequired;
+    }
 
 
     /**
@@ -22,7 +43,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         $qRates = $this->getRates();
 
         $cost = array();
-        if(!empty($qRates)){
+        if (!empty($qRates)) {
             foreach ($qRates as $cRates) {
                 foreach ($cRates as $rate) {
                     $vId = $rate->getUdropshipVendor();
@@ -45,10 +66,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         }
         return $cost;
     }
+
     /**
      * @return mixed
      */
-    public function getRates(){
+    public function getRates()
+    {
         $q = Mage::getSingleton('checkout/session')->getQuote();
         $a = $q->getShippingAddress();
 
@@ -56,7 +79,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         /**
          * Fix rate quto query
          */
-        if(!$qRates){
+        if (!$qRates) {
             $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
             $a->setCollectShippingRates(true);
             $a->collectShippingRates();
@@ -76,7 +99,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         $result = "";
         if ($locker->getId()) {
             $lockerDataLines = array(
-                $locker->getStreet() . " ". $locker->getBuildingNumber(),
+                $locker->getStreet() . " " . $locker->getBuildingNumber(),
                 $locker->getPostcode() . " " . $locker->getTown(),
                 "(" . $locker->getLocationDescription() . ")"
             );
