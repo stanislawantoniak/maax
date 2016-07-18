@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_PickupPoint>
+            <active>true</active>
+            <codePool>local</codePool>
+        </ZolagoOs_PickupPoint>
+    </modules>
+</config>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_PickupPoint>
+            <version>0.1.0</version>
+        </ZolagoOs_PickupPoint>
+    </modules>
+    <global>
+        <models>
+            <zos_pickuppoint>
+                <class>ZolagoOs_PickupPoint_Model</class>
+                <resourceModel>zolagoos_pickuppoint_resource</resourceModel>
+            </zos_pickuppoint>
+            <zoos_pickuppoint_resource>
+                <class>ZolagoOs_PickupPoint_Model_Resource</class>
+            </zoos_pickuppoint_resource>
+        </models>
+        <blocks>
+            <zoos_pickuppoint>
+                <class>ZolagoOs_PickupPoint_Block</class>
+            </zoos_pickuppoint>
+        </blocks>
+        <helpers>
+            <zos_pickuppoint>
+                <class>ZolagoOs_PickupPoint_Helper</class>
+            </zos_pickuppoint>
+        </helpers>
+        <resources>
+            <zos_pickuppoint_setup>
+                <setup>
+                    <module>ZolagoOs_PickupPoint</module>
+                </setup>
+            </zos_pickuppoint_setup>
+        </resources>
+    </global>
+</config>
