@@ -331,7 +331,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/label/poll_tracking':
+        case 'zolagoos_label/label/poll_tracking':
         case 'poll_tracking':
             $options = array(
                 '-' => $hlp->__('* Disable tracking API polling'),
@@ -346,7 +346,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             }
             break;
 
-        case 'udropship_label/label/label_type':
+        case 'zolagoos_label/label/label_type':
         case 'label_type':
             $options = array(
                 ''=>$hlp->__('No label printing'),
@@ -361,7 +361,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/pdf/pdf_label_rotate':
+        case 'zolagoos_label/pdf/pdf_label_rotate':
         case 'pdf_label_rotate':
             $options = array(
                 '0'=>'None',
@@ -371,7 +371,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/endicia/endicia_label_type':
+        case 'zolagoos_label/endicia/endicia_label_type':
         case 'endicia_label_type':
             $options = array(
                 'Default'=>'Default',
@@ -381,7 +381,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/endicia/endicia_label_size':
+        case 'zolagoos_label/endicia/endicia_label_size':
         case 'endicia_label_size':
             $options = array(
                 '4X6'=>'4X6',
@@ -392,7 +392,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/endicia/endicia_mail_class':
+        case 'zolagoos_label/endicia/endicia_mail_class':
         case 'endicia_mail_class':
             $options = array(
                 'FirstClassMailInternational'=>'First-Class Mail International',
@@ -408,7 +408,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/endicia/endicia_mailpiece_shape':
+        case 'zolagoos_label/endicia/endicia_mailpiece_shape':
         case 'endicia_mailpiece_shape':
             $options = array(
                 'Card'=>'Card',
@@ -425,7 +425,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/endicia/endicia_insured_mail':
+        case 'zolagoos_label/endicia/endicia_insured_mail':
         case 'endicia_insured_mail':
             $options = array(
                 'OFF' => 'No Insurance',
@@ -435,7 +435,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/endicia/endicia_customs_form_type':
+        case 'zolagoos_label/endicia/endicia_customs_form_type':
         case 'endicia_customs_form_type':
             $options = array(
                 'Form2976' => 'Form 2976 (same as CN22)',
@@ -450,7 +450,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/label/dimension_units':
+        case 'zolagoos_label/label/dimension_units':
         case 'dimension_units':
             $options = array(
                 'IN'=>'Inch',
@@ -458,14 +458,14 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/pdf/pdf_page_size':
+        case 'zolagoos_label/pdf/pdf_page_size':
         case 'pdf_page_size':
             $options = array(
                 Zend_Pdf_Page::SIZE_LETTER => 'Letter',
             );
             break;
 
-        case 'udropship_label/ups/ups_pickup':
+        case 'zolagoos_label/ups/ups_pickup':
         case 'ups_pickup':
             $options = array(
                 '' => '* Default',
@@ -479,7 +479,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/ups/ups_container':
+        case 'zolagoos_label/ups/ups_container':
         case 'ups_container':
             $options = array(
                 '' => '* Default',
@@ -492,7 +492,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/ups/ups_dest_type':
+        case 'zolagoos_label/ups/ups_dest_type':
         case 'ups_dest_type':
             $options = array(
                 '' => '* Default',
@@ -501,7 +501,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/ups/ups_delivery_confirmation':
+        case 'zolagoos_label/ups/ups_delivery_confirmation':
         case 'ups_delivery_confirmation':
             $options = array(
                 '' => 'No Delivery Confirmation',
@@ -511,7 +511,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/ups/ups_shipping_method_combined':
+        case 'zolagoos_label/ups/ups_shipping_method_combined':
         case 'ups_shipping_method_combined':
             $usa = Mage::helper('usa');
             $options = array(
@@ -562,7 +562,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/fedex/fedex_payment_type':
+        case 'zolagoos_label/fedex/fedex_payment_type':
         case 'fedex_payment_type':
             $options = array(
                 'SENDER' => $hlp->__('Sender'),
@@ -570,7 +570,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/fedex/fedex_dropoff_type':
+        case 'zolagoos_label/fedex/fedex_dropoff_type':
         case 'fedex_dropoff_type':
             $options = array(
                 'REGULAR_PICKUP' => $hlp->__('Regular Pickup'),
@@ -581,15 +581,15 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/fedex/fedex_service_type':
+        case 'zolagoos_label/fedex/fedex_service_type':
         case 'fedex_service_type':
             break;
 
-        case 'udropship_label/fedex/fedex_packaging_type':
+        case 'zolagoos_label/fedex/fedex_packaging_type':
         case 'fedex_packaging_type':
             break;
 
-        case 'udropship_label/fedex/fedex_label_stock_type':
+        case 'zolagoos_label/fedex/fedex_label_stock_type':
         case 'fedex_label_stock_type':
             $options = array(
                 'PAPER_4X6' => $hlp->__('PDF: Paper 4x6'),
@@ -608,7 +608,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/fedex/fedex_signature_option':
+        case 'zolagoos_label/fedex/fedex_signature_option':
         case 'fedex_signature_option':
             $options = array(
                 'NO_SIGNATURE_REQUIRED' => 'No Signature Required',
@@ -619,7 +619,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship_label/fedex/fedex_notify_on':
+        case 'zolagoos_label/fedex/fedex_notify_on':
         case 'fedex_notify_on':
             $options = array(
                 ''  => '* None *',

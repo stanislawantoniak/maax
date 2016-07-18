@@ -21,7 +21,7 @@ class Zolago_DropshipMicrositePro_Block_Vendor_Register extends ZolagoOs_OmniCha
         $this->setForm($form);
 
         $fsIdx = 0;
-        $columnsConfig = Mage::getStoreConfig('udsignup/form/fieldsets');
+        $columnsConfig = Mage::getStoreConfig('zossignup/form/fieldsets');
         if (!is_array($columnsConfig)) {
             $columnsConfig = Mage::helper('udropship')->unserialize($columnsConfig);
             if (is_array($columnsConfig)) {

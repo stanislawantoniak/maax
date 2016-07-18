@@ -122,7 +122,7 @@ class ZolagoOs_OmniChannelMicrositePro_Helper_Data extends Mage_Core_Helper_Data
     {
         if (null === $this->_regFields) {
             $this->_regFields = array();
-            $columnsConfig = Mage::getStoreConfig('udsignup/form/fieldsets');
+            $columnsConfig = Mage::getStoreConfig('zossignup/form/fieldsets');
             if (!is_array($columnsConfig)) {
                 $columnsConfig = Mage::helper('udropship')->unserialize($columnsConfig);
                 if (is_array($columnsConfig)) {

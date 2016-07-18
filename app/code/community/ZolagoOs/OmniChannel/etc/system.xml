@@ -1155,7 +1155,7 @@
                 </udropship>
             </groups>
         </carriers>
-        <udropship_label>
+        <zolagoos_label>
             <tab>sales</tab>
             <label>ZolagoOs Labels</label>
             <frontend_type>text</frontend_type>
@@ -1382,10 +1382,10 @@
                             <source_model>udropship/source</source_model>
                             <frontend_model>udropship/adminhtml_systemConfigFormField_dependSelect</frontend_model>
                             <depend_fields>
-                                <udropship_label_fedex_fedex_thirdparty_account_number>THIRD_PARTY</udropship_label_fedex_fedex_thirdparty_account_number>
-                                <udropship_label_fedex_fedex_thirdparty_name>THIRD_PARTY</udropship_label_fedex_fedex_thirdparty_name>
-                                <udropship_label_fedex_fedex_thirdparty_company>THIRD_PARTY</udropship_label_fedex_fedex_thirdparty_company>
-                                <udropship_label_fedex_fedex_thirdparty_phone>THIRD_PARTY</udropship_label_fedex_fedex_thirdparty_phone>
+                                <zolagoos_label_fedex_fedex_thirdparty_account_number>THIRD_PARTY</zolagoos_label_fedex_fedex_thirdparty_account_number>
+                                <zolagoos_label_fedex_fedex_thirdparty_name>THIRD_PARTY</zolagoos_label_fedex_fedex_thirdparty_name>
+                                <zolagoos_label_fedex_fedex_thirdparty_company>THIRD_PARTY</zolagoos_label_fedex_fedex_thirdparty_company>
+                                <zolagoos_label_fedex_fedex_thirdparty_phone>THIRD_PARTY</zolagoos_label_fedex_fedex_thirdparty_phone>
                             </depend_fields>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
@@ -1849,6 +1849,6 @@
                     </fields>
                 </ups>
             </groups>
-        </udropship_label>
+        </zolagoos_label>
     </sections>
 </config>

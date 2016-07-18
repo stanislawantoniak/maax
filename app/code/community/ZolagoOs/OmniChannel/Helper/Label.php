@@ -101,24 +101,24 @@ class ZolagoOs_OmniChannel_Helper_Label extends Mage_Core_Helper_Abstract
             $carrierCode = !empty($method[0]) ? $method[0] : $vendor->getCarrierCode();
         }
         $vendor->usePdfCarrierCode($carrierCode);
-        if (!Mage::getStoreConfigFlag('udropship_label/general/use_global')) return $this;
-        $shipmentLabel = Mage::getStoreConfig('udropship_label/label', $storeId);
+        if (!Mage::getStoreConfigFlag('zolagoos_label/general/use_global')) return $this;
+        $shipmentLabel = Mage::getStoreConfig('zolagoos_label/label', $storeId);
         foreach ($this->_labelCfgKeys as $cfgKey) {
             $vendor->setData('__'.$cfgKey, $vendor->getData($cfgKey));
             $vendor->setData($cfgKey, @$shipmentLabel[$cfgKey]);
         }
-        $shipmentPdf = Mage::getStoreConfig('udropship_label/pdf', $storeId);
+        $shipmentPdf = Mage::getStoreConfig('zolagoos_label/pdf', $storeId);
         foreach ($this->_pdfCfgKeys as $cfgKey) {
             $vendor->setData('__'.$cfgKey, $vendor->getData($cfgKey));
             $vendor->setData($cfgKey, @$shipmentPdf[$cfgKey]);
         }
-        $shipmentEpl = Mage::getStoreConfig('udropship_label/epl', $storeId);
+        $shipmentEpl = Mage::getStoreConfig('zolagoos_label/epl', $storeId);
         foreach ($this->_eplCfgKeys as $cfgKey) {
             $vendor->setData('__'.$cfgKey, $vendor->getData($cfgKey));
             $vendor->setData($cfgKey, @$shipmentEpl[$cfgKey]);
         }
         if ($carrierCode == 'fedex') {
-            $shipmentFedex = Mage::getStoreConfig('udropship_label/fedex', $storeId);
+            $shipmentFedex = Mage::getStoreConfig('zolagoos_label/fedex', $storeId);
             foreach ($this->_fedexCfgKeys as $cfgKey) {
                 $vendor->setData('__'.$cfgKey, $vendor->getData($cfgKey));
                 if ($cfgKey == 'fedex_notify_on') {
@@ -136,13 +136,13 @@ class ZolagoOs_OmniChannel_Helper_Label extends Mage_Core_Helper_Abstract
                 $vendor->setData($cfgKey, @$shipmentFedex[$cfgKey]);
             }
         } elseif ($carrierCode == 'usps') {
-            $shipmentEndicia = Mage::getStoreConfig('udropship_label/endicia', $storeId);
+            $shipmentEndicia = Mage::getStoreConfig('zolagoos_label/endicia', $storeId);
             foreach ($this->_endiciaCfgKeys as $cfgKey) {
                 $vendor->setData('__'.$cfgKey, $vendor->getData($cfgKey));
                 $vendor->setData($cfgKey, @$shipmentEndicia[$cfgKey]);
             }
         } elseif ($carrierCode == 'ups') {
-            $shipmentUps = Mage::getStoreConfig('udropship_label/ups', $storeId);
+            $shipmentUps = Mage::getStoreConfig('zolagoos_label/ups', $storeId);
             foreach ($this->_upsCfgKeys as $cfgKey) {
                 $vendor->setData('__'.$cfgKey, $vendor->getData($cfgKey));
                 $vendor->setData($cfgKey, @$shipmentUps[$cfgKey]);
@@ -165,7 +165,7 @@ class ZolagoOs_OmniChannel_Helper_Label extends Mage_Core_Helper_Abstract
         }
         $storeId = $shipment->getOrder()->getStoreId();
         $vendor->resetPdfCarrierCode();
-        if (!Mage::getStoreConfigFlag('udropship_label/general/use_global')) return $this;
+        if (!Mage::getStoreConfigFlag('zolagoos_label/general/use_global')) return $this;
         $method = explode('_', $shipment->getUdropshipMethod(), 2);
         $vendor = Mage::helper('udropship')->getVendor($vendor);
         if (!isset($carrierCode)) {

@@ -18,7 +18,7 @@
                 </default>
             </groups>
         </web>
-        <udsignup>
+        <zossignup>
             <tab>sales</tab>
             <label>Vendor Registration</label>
             <frontend_type>text</frontend_type>
@@ -48,7 +48,7 @@
                     </fields>
                 </form>
             </groups>
-        </udsignup>
+        </zossignup>
         <udropship>
             <groups>
                 <microsite>
