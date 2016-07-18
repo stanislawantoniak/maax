@@ -127,7 +127,7 @@ class ZolagoOs_OmniChannelPo_Block_Adminhtml_SalesOrderViewTab_Udpos
     public function getRowUrl($row)
     {
         return $this->getUrl(
-            'udpoadmin/order_po/view',
+            'zospoadmin/order_po/view',
             array(
                 'udpo_id'=> $row->getId(),
                 'order_id'  => $row->getOrderId()
@@ -136,7 +136,7 @@ class ZolagoOs_OmniChannelPo_Block_Adminhtml_SalesOrderViewTab_Udpos
 
     public function getGridUrl()
     {
-        return $this->getUrl('udpoadmin/order_po/udposTab', array('_current' => true));
+        return $this->getUrl('zospoadmin/order_po/udposTab', array('_current' => true));
     }
 
     public function getTabLabel()

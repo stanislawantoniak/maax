@@ -100,13 +100,13 @@
 					</modules>
 				</args>
 			</adminhtml>
-			<udropshipadmin>
+			<zolagoosadmin>
 				<args>
 					<modules>
 						<Zolago_Sizetable_Adminhtml before="ZolagoOs_OmniChannel">Zolago_Sizetable</Zolago_Sizetable_Adminhtml>
 					</modules>
 				</args>
-			</udropshipadmin>
+			</zolagoosadmin>
 		</routers>
 	</admin>
 	<frontend>

@@ -4,7 +4,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Batch_Action extends Mage_Adminhtml_B
 {
     public function render(Varien_Object $row)
     {
-        $href = $this->getUrl('udropshipadmin/adminhtml_batch/batchLabels', array('batch_id'=>$row->getId()));
+        $href = $this->getUrl('zolagoosadmin/adminhtml_batch/batchLabels', array('batch_id'=>$row->getId()));
         return '<a href="'.$href.'">'.$this->__('Download Labels').'</a>';
     }
 }

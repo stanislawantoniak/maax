@@ -100,7 +100,7 @@ class ZolagoOs_Rma_Block_Adminhtml_SalesOrderViewTab_Rmas
     public function getRowUrl($row)
     {
         return $this->getUrl(
-            'urmaadmin/order_rma/view',
+            'rmaadmin/order_rma/view',
             array(
                 'rma_id'=> $row->getId(),
                 'order_id'  => $row->getOrderId()
@@ -109,7 +109,7 @@ class ZolagoOs_Rma_Block_Adminhtml_SalesOrderViewTab_Rmas
 
     public function getGridUrl()
     {
-        return $this->getUrl('urmaadmin/order_rma/rmas', array('_current' => true));
+        return $this->getUrl('rmaadmin/order_rma/rmas', array('_current' => true));
     }
 
     public function getTabLabel()

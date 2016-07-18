@@ -15,7 +15,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Edit extend
         $this->_updateButton('delete', 'label', Mage::helper('udqa')->__('Delete Question'));
 
         if( $this->getRequest()->getParam('vendorId', false) ) {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id' => $this->getRequest()->getParam('vendorId', false))) .'\')' );
+            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id' => $this->getRequest()->getParam('vendorId', false))) .'\')' );
         }
 
         if( $this->getRequest()->getParam('customerId', false) ) {

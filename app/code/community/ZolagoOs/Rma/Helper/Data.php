@@ -172,7 +172,7 @@ class ZolagoOs_Rma_Helper_Data extends Mage_Core_Helper_Abstract
                 'order_url'     => $ahlp->getUrl('adminhtml/sales_order/view', array(
                     'order_id'  => $urma->getOrder()->getId()
                 )),
-                'rma_url'  => $ahlp->getUrl('urmaadmin/order_rma/view', array(
+                'rma_url'  => $ahlp->getUrl('rmaadmin/order_rma/view', array(
                     'rma_id'  => $urma->getId(),
                 )),
                 'comment'      => $comment,

@@ -13,7 +13,7 @@ class ZolagoOs_Rma_Model_Observer
         ) {
             $soeBlock->addButton('create_urma', array(
                 'label'     => Mage::helper('urma')->__('Create Return'),
-                'onclick'   => 'setLocation(\'' . $soeBlock->getUrl('urmaadmin/order_rma/new') . '\')',
+                'onclick'   => 'setLocation(\'' . $soeBlock->getUrl('rmaadmin/order_rma/new') . '\')',
             ));
         }
     }

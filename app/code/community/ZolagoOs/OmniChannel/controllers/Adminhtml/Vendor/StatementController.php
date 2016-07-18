@@ -100,7 +100,7 @@ class ZolagoOs_OmniChannel_Adminhtml_Vendor_StatementController extends Mage_Adm
             echo "<span style='color:#0F0'>DONE</span>.<br/>";
         }
 
-        $redirectUrl = Mage::helper('adminhtml')->getUrl('udropshipadmin/adminhtml_vendor_statement');
+        $redirectUrl = Mage::helper('adminhtml')->getUrl('zolagoosadmin/adminhtml_vendor_statement');
         echo "<hr>".$hlp->__('All done, <a href="%s">click here</a> to be redirected to statements grid.', $redirectUrl);
         exit;
     }
@@ -151,7 +151,7 @@ class ZolagoOs_OmniChannel_Adminhtml_Vendor_StatementController extends Mage_Adm
                         Mage::getSingleton('adminhtml/session')->addSuccess($hlp->__('Statement was successfully refreshed'));
                     }
                     if ($this->getRequest()->getParam('pay_flag')) {
-                        $this->_redirect('udpayoutadmin/payout/edit', array('id'=>$statement->createPayout()->save()->getId()));
+                        $this->_redirect('zospayoutadmin/payout/edit', array('id'=>$statement->createPayout()->save()->getId()));
                         return;
                     }
                 } else {

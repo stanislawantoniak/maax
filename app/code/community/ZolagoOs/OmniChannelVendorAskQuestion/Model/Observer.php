@@ -16,7 +16,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Model_Observer
                 $block->addTab('udqa', array(
                     'label'     => Mage::helper('udqa')->__('Vendor Questions'),
                     'class'     => 'ajax',
-                    'url'       => $block->getUrl('udqaadmin/index/customerQuestions', array('_current' => true)),
+                    'url'       => $block->getUrl('zosqaadmin/index/customerQuestions', array('_current' => true)),
                     'after'     => 'reviews'
                 ));
             }
@@ -36,7 +36,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Model_Observer
                 $block->addTab('udqa', array(
                     'label'     => Mage::helper('udqa')->__('Customer Questions'),
                     'class'     => 'ajax',
-                    'url'       => $block->getUrl('udqaadmin/index/vendorQuestions', array('_current' => true)),
+                    'url'       => $block->getUrl('zosqaadmin/index/vendorQuestions', array('_current' => true)),
                     'after'     => 'products_section'
                 ));
             }

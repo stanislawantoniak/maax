@@ -18,7 +18,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Category
 	}
 	
     public function getValueElementChooserUrl($gid){
-		$url = 'udropshipadmin/adminhtml_widget/chooser'
+		$url = 'zolagoosadmin/adminhtml_widget/chooser'
 			.'/attribute/category_ids'
 			. '/form/chooser_text_'.$gid;	
         return Mage::helper('adminhtml')->getUrl($url);

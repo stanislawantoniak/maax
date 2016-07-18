@@ -1527,13 +1527,13 @@
 
     <admin>
         <routers>
-            <udropshipadmin>
+            <zolagoosadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannel</module>
                     <frontName>zolagoosadmin</frontName>
                 </args>
-            </udropshipadmin>
+            </zolagoosadmin>
         </routers>
     </admin>
 

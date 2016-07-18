@@ -278,13 +278,13 @@
 
     <admin>
         <routers>
-            <urmaadmin>
+            <rmaadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_Rma_Adminhtml</module>
-                    <frontName>urmaadmin</frontName>
+                    <frontName>rmaadmin</frontName>
                 </args>
-            </urmaadmin>
+            </rmaadmin>
         </routers>
     </admin>
 
@@ -303,7 +303,7 @@
                         <children>
                             <urma translate="title" module="urma">
                                 <title>Returns</title>
-                                <action>urmaadmin/rma</action>
+                                <action>rmaadmin/rma</action>
                                 <sort_order>500</sort_order>
                             </urma>
                         </children>
