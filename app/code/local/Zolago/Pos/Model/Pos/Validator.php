@@ -16,6 +16,7 @@ class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Model_Validator_Abstr
 		$this->_stringLength('external_id','External id',100);
 
 		$this->_notEmpty('is_active','Is active');
+		$this->_notEmpty('is_available_as_pickup_point','Is POS available as Pick-Up Point');
 
 		$this->_stringLength('client_number','Client number',100);
 
