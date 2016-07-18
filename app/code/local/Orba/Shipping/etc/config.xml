@@ -77,7 +77,7 @@
           </files>
         </Orba_Shipping>
       </modules>
-    </translate>  
+    </translate>
   </adminhtml>
   <frontend>
     <routers>
