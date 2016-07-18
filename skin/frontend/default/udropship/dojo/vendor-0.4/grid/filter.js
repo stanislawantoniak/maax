@@ -145,7 +145,7 @@ define([
 						
 						// Add calendar if needed
 						if(jQuery && jQuery.fn.datepicker && type=="datetime"){
-							jQuery(element).datepicker();
+							jQuery(element).datepicker({firstDay: 1});
 						}
 						
 						var observer = new ObserverFilter(element, grid, name + '['+_type+']', {valueType: valueType});
