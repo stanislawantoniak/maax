@@ -28,11 +28,11 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
         }
         if ($this->isChangeQuestionStatusToDefault()) {
             $this->setIsAdminQuestionNotified(0);
-            $this->setQuestionStatus(Mage::getStoreConfig('udqa/general/default_question_status'));
+            $this->setQuestionStatus(Mage::getStoreConfig('zosqa/general/default_question_status'));
         }
         if ($this->isChangeAnswerStatusToDefault()) {
             $this->setIsAdminAnswerNotified(0);
-            $this->setAnswerStatus(Mage::getStoreConfig('udqa/general/default_answer_status'));
+            $this->setAnswerStatus(Mage::getStoreConfig('zosqa/general/default_answer_status'));
         }
         return parent::_beforeSave();
     }

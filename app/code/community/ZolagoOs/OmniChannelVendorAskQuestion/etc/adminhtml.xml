@@ -34,10 +34,10 @@
                         <children>
                             <config>
                                 <children>
-                                    <udqa>
+                                    <zosqa>
                                         <title>Vendor Questions</title>
                                         <sort_order>60</sort_order>
-                                    </udqa>
+                                    </zosqa>
                                 </children>
                             </config>
                         </children>
@@ -46,7 +46,7 @@
                         <children>
                             <udropship>
                                 <children>
-                                    <udqa>
+                                    <zosqa>
                                         <title>Vendor Questions</title>
                                         <sort_order>60</sort_order>
                                         <children>
@@ -59,7 +59,7 @@
                                                 <sort_order>20</sort_order>
                                             </question_pending>
                                         </children>
-                                    </udqa>
+                                    </zosqa>
                                 </children>
                             </udropship>
                         </children>

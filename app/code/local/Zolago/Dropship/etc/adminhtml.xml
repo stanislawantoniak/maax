@@ -35,7 +35,7 @@
                         </rating>
                     </children>
                 </review>
-                <udqa module="udqa">
+                <zosqa module="udqa">
                     <title>Vendor Questions</title>
                     <sort_order>40</sort_order>
                     <children>
@@ -50,7 +50,7 @@
                             <action>zosqaadmin/index/index</action>
                         </question_all>
                     </children>
-                </udqa>
+                </zosqa>
                 <sales_management module="zolagodropship" translate="title">
                     <title>Sales management</title>
                     <sort_order>50</sort_order>
@@ -126,7 +126,7 @@
                                     </rating>
                                 </children>
                             </review>
-                            <udqa module="udqa">
+                            <zosqa module="udqa">
                                 <title>Vendor Questions</title>
                                 <sort_order>40</sort_order>
                                 <children>
@@ -139,7 +139,7 @@
                                         <sort_order>20</sort_order>
                                     </question_all>
                                 </children>
-                            </udqa>
+                            </zosqa>
                             <sales_management module="zolagodropship" translate="title">
                                 <title>Sales management</title>
                                 <sort_order>50</sort_order>

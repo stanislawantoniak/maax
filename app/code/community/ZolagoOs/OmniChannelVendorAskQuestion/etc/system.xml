@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <sections>
-        <udqa>
+        <zosqa>
             <tab>sales</tab>
             <label>Vendor Questions</label>
             <frontend_type>text</frontend_type>
@@ -165,6 +165,6 @@
                     </fields>
                 </general>
             </groups>
-        </udqa>
+        </zosqa>
     </sections>
 </config>

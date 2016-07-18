@@ -155,7 +155,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Data extends Mage_Core_Helper
     {
         $store = Mage::helper('udqa')->getStore($question);
         return !$question->getIsAdminQuestionNotified()
-            && Mage::getStoreConfigFlag('udqa/general/send_admin_notifications', $store);
+            && Mage::getStoreConfigFlag('zosqa/general/send_admin_notifications', $store);
     }
     public function notifyAdminVendor($question)
     {
@@ -168,7 +168,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Data extends Mage_Core_Helper
         $store = Mage::helper('udqa')->getStore($question);
         return !$question->getIsAdminAnswerNotified()
             && $question->getAnswerText()
-            && Mage::getStoreConfigFlag('udqa/general/send_admin_notifications', $store);
+            && Mage::getStoreConfigFlag('zosqa/general/send_admin_notifications', $store);
     }
     public function notifyAdminCustomer($question)
     {
@@ -182,7 +182,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Data extends Mage_Core_Helper
         return !$question->getIsCustomerNotified()
             && $question->getCustomerEmail()
             && $question->canCustomerViewAnswer()
-            && Mage::getStoreConfigFlag('udqa/general/send_customer_notifications', $store)
+            && Mage::getStoreConfigFlag('zosqa/general/send_customer_notifications', $store)
             || $question->getForcedCustomerNotificationFlag()
                 && $question->getCustomerEmail();
     }
@@ -198,7 +198,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Data extends Mage_Core_Helper
         return !$question->getIsVendorNotified()
             && $question->getVendorEmail()
             && $question->getQuestionStatus()==ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED
-            && Mage::getStoreConfigFlag('udqa/general/send_vendor_notifications', $store)
+            && Mage::getStoreConfigFlag('zosqa/general/send_vendor_notifications', $store)
             || $question->getForcedVendorNotificationFlag()
                 && $question->getVendorEmail();
     }

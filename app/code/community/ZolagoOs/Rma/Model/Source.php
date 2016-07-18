@@ -40,7 +40,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/fedex/fedex_dropoff_type':
+        case 'zosrma/fedex/fedex_dropoff_type':
             $options = array(
                 'REGULAR_PICKUP' => $hlp->__('Regular Pickup'),
                 'REQUEST_COURIER' => $hlp->__('Request Courier'),
@@ -50,13 +50,13 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/fedex/fedex_service_type':
+        case 'zosrma/fedex/fedex_service_type':
             break;
 
-        case 'urma/fedex/fedex_packaging_type':
+        case 'zosrma/fedex/fedex_packaging_type':
             break;
 
-        case 'urma/fedex/fedex_label_stock_type':
+        case 'zosrma/fedex/fedex_label_stock_type':
             $options = array(
                 'PAPER_4X6' => $hlp->__('PDF: Paper 4x6'),
                 'PAPER_4X8' => $hlp->__('PDF: Paper 4x8'),
@@ -74,7 +74,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/fedex/fedex_signature_option':
+        case 'zosrma/fedex/fedex_signature_option':
             $options = array(
                 'NO_SIGNATURE_REQUIRED' => 'No Signature Required',
                 'SERVICE_DEFAULT' => 'Default Appropriate Signature Option',
@@ -84,7 +84,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/fedex/fedex_notify_on':
+        case 'zosrma/fedex/fedex_notify_on':
             $options = array(
                 ''  => '* None *',
                 'shipment'  => 'Shipment',
@@ -93,7 +93,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/endicia/endicia_label_type':
+        case 'zosrma/endicia/endicia_label_type':
             $options = array(
                 'Default'=>'Default',
                 'CertifiedMail'=>'CertifiedMail',
@@ -102,7 +102,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/endicia/endicia_label_size':
+        case 'zosrma/endicia/endicia_label_size':
             $options = array(
                 '4X6'=>'4X6',
                 '4X5'=>'4X5',
@@ -111,7 +111,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
                 '6x4'=>'6x4',
             );
             break;
-        case 'urma/endicia/endicia_mail_class':
+        case 'zosrma/endicia/endicia_mail_class':
             $options = array(
                 'FirstClassMailInternational'=>'First-Class Mail International',
                 'PriorityMailInternational'=>'Priority Mail International',
@@ -125,7 +125,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
                 'Priority'=>'Priority Mail',
             );
             break;
-        case 'urma/endicia/endicia_mailpiece_shape':
+        case 'zosrma/endicia/endicia_mailpiece_shape':
             $options = array(
                 'Card'=>'Card',
                 'Letter'=>'Letter',
@@ -141,7 +141,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/endicia/endicia_insured_mail':
+        case 'zosrma/endicia/endicia_insured_mail':
             $options = array(
                 'OFF' => 'No Insurance',
                 'ON'  => 'USPS Insurance',
@@ -150,14 +150,14 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/endicia/endicia_customs_form_type':
+        case 'zosrma/endicia/endicia_customs_form_type':
             $options = array(
                 'Form2976' => 'Form 2976 (same as CN22)',
                 'Form2976A' => 'Form 2976A (same as CP72)',
             );
             break;
 
-        case 'urma/ups/ups_pickup':
+        case 'zosrma/ups/ups_pickup':
             $options = array(
                 '' => '* Default',
                 '01' => 'Daily Pickup',
@@ -170,7 +170,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/ups/ups_container':
+        case 'zosrma/ups/ups_container':
             $options = array(
                 '' => '* Default',
                 '00' => 'Customer Packaging',
@@ -182,7 +182,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/ups/ups_dest_type':
+        case 'zosrma/ups/ups_dest_type':
             $options = array(
                 '' => '* Default',
                 '01' => 'Residential',
@@ -190,7 +190,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/ups/ups_delivery_confirmation':
+        case 'zosrma/ups/ups_delivery_confirmation':
             $options = array(
                 '' => 'No Delivery Confirmation',
                 '1' => 'Delivery Confirmation',
@@ -199,7 +199,7 @@ class ZolagoOs_Rma_Model_Source extends ZolagoOs_OmniChannel_Model_Source_Abstra
             );
             break;
 
-        case 'urma/ups/ups_shipping_method_combined':
+        case 'zosrma/ups/ups_shipping_method_combined':
             $usa = Mage::helper('usa');
             $options = array(
                 'UPS CGI' => array(

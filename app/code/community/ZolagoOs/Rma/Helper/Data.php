@@ -297,7 +297,7 @@ class ZolagoOs_Rma_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getOptionsDefinition($cfgField, $store=null)
     {
-        $optDef = Mage::getStoreConfig('urma/general/'.$cfgField, $store);
+        $optDef = Mage::getStoreConfig('zosrma/general/'.$cfgField, $store);
         $optDef = Mage::helper('udropship')->unserialize($optDef);
         return $optDef;
     }

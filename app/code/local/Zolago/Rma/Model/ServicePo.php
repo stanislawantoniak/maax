@@ -79,7 +79,7 @@ class Zolago_Rma_Model_ServicePo extends ZolagoOs_Rma_Model_ServiceOrder
 
         if (empty($rmaItems)) {
             Mage::throwException(
-                Mage::getStoreConfig('urma/message/customer_no_items')
+                Mage::getStoreConfig('zosrma/message/customer_no_items')
             );
         }
 

@@ -328,10 +328,10 @@
                                 </order>
                                 <udropship>
                                     <children>
-                                        <urma>
+                                        <zosrma>
                                             <title>Returns</title>
                                             <sort_order>55</sort_order>
-                                        </urma>
+                                        </zosrma>
                                     </children>
                                 </udropship>
                             </children>
@@ -340,10 +340,10 @@
                             <children>
                                 <config>
                                     <children>
-                                        <urma>
+                                        <zosrma>
                                             <title>Returns</title>
                                             <sort_order>60</sort_order>
-                                        </urma>
+                                        </zosrma>
                                     </children>
                                 </config>
                             </children>
@@ -374,7 +374,7 @@
                 <copy_method>bcc</copy_method>
             </rma_comment>
         </sales_email>
-        <urma>
+        <zosrma>
             <message>
                 <customer_success><![CDATA[Return(s) successfully created]]></customer_success>
                 <customer_no_items><![CDATA[No items selected to return]]></customer_no_items>
@@ -421,7 +421,7 @@ Comment: {{comment}}
                 <ups_pdf_label_width>4</ups_pdf_label_width>
                 <ups_pdf_label_height>7</ups_pdf_label_height>
             </ups>
-        </urma>
+        </zosrma>
     </default>
 
 </config>

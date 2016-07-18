@@ -172,7 +172,7 @@
     </adminhtml>
 
     <default>
-        <udqa>
+        <zosqa>
             <general>
                 <product_info_tabbed>0</product_info_tabbed>
                 <default_question_status>0</default_question_status>
@@ -189,7 +189,7 @@
                 <vendor_email_identity>general</vendor_email_identity>
                 <vendor_email_template>udqa_general_vendor_email_template</vendor_email_template>
             </general>
-        </udqa>
+        </zosqa>
     </default>
 
     <crontab>

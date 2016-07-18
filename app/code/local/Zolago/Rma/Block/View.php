@@ -93,7 +93,7 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	 * @return string
 	 */
 	public function getSuccessMessage(Zolago_Rma_Model_Rma $rma) {
-		return Mage::getStoreConfig('urma/message/customer_success');
+		return Mage::getStoreConfig('zosrma/message/customer_success');
 	}
 	
 	/**

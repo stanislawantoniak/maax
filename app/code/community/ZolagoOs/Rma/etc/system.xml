@@ -116,7 +116,7 @@
                 </rma_comment>
             </groups>
         </sales_email>
-        <urma>
+        <zosrma>
             <tab>sales</tab>
             <label>Returns</label>
             <frontend_type>text</frontend_type>
@@ -735,6 +735,6 @@
                     </fields>
                 </message>
             </groups>
-        </urma>
+        </zosrma>
     </sections>
 </config>

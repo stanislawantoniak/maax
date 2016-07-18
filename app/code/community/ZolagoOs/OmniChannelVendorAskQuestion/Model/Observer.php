@@ -48,7 +48,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Model_Observer
         if ($observer->getAction()
             && $observer->getAction()->getFullActionName()=='catalog_product_view'
         ) {
-            if (Mage::getStoreConfigFlag('udqa/general/product_info_tabbed')) {
+            if (Mage::getStoreConfigFlag('zosqa/general/product_info_tabbed')) {
                 $observer->getAction()->getLayout()->getUpdate()->addHandle('udqa_catalog_product_view_tabbed');
             } else {
                 $observer->getAction()->getLayout()->getUpdate()->addHandle('udqa_catalog_product_view');

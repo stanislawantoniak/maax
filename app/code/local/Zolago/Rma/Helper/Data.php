@@ -99,7 +99,7 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
      */
     public function getOptionsDefinition($cfgField, $store = null)
     {
-        $optDef = Mage::getStoreConfig('urma/general/' . $cfgField, $store);
+        $optDef = Mage::getStoreConfig('zosrma/general/' . $cfgField, $store);
         $optDef = Mage::helper('udropship')->unserialize($optDef);
         foreach ($optDef as $k => $item) {
             $optDef[$k]['title'] = $this->__($item['title']);

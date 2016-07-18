@@ -467,7 +467,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
      * @params Varien_Event_Observer $observer
      */
      public function createReturnRma(Varien_Event_Observer $observer) {
-         $reason = Mage::getStoreConfig('urma/general/zolagorma_reason_for_returned_shipment');
+         $reason = Mage::getStoreConfig('zosrma/general/zolagorma_reason_for_returned_shipment');
          if (!$reason) {
              return;
          }

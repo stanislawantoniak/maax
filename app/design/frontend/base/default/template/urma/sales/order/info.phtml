@@ -64,7 +64,7 @@
     </dd>
 </dl>
 <p class="order-date"><?php echo $this->__('Order Date: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
-<?php if (!$this->getIsRmaPage() || $this->getIsRmaPage()=='new' && !Mage::getStoreConfigFlag('urma/general/customer_new_hide_order_info') || $this->getIsRmaPage()=='existing' && !Mage::getStoreConfigFlag('urma/general/customer_hide_order_info')): ?>
+<?php if (!$this->getIsRmaPage() || $this->getIsRmaPage()=='new' && !Mage::getStoreConfigFlag('zosrma/general/customer_new_hide_order_info') || $this->getIsRmaPage()=='existing' && !Mage::getStoreConfigFlag('zosrma/general/customer_hide_order_info')): ?>
 <?php if (!$_order->getIsVirtual()): ?>
 <div class="col2-set order-info-box">
     <div class="col-1">
@@ -125,7 +125,7 @@
                 <h2><?php echo Mage::helper('urma')->__('Instructions') ?></h2>
             </div>
             <div class="box-content">
-                <?php echo Mage::getStoreConfig('urma/message/new_instructions_html'); ?>
+                <?php echo Mage::getStoreConfig('zosrma/message/new_instructions_html'); ?>
             </div>
         </div>
     </div>

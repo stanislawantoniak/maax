@@ -25,7 +25,7 @@ class ZolagoOs_Rma_OrderController extends Mage_Sales_OrderController
         try {
             $this->_saveRma();
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::getStoreConfig('urma/message/customer_success')
+                Mage::getStoreConfig('zosrma/message/customer_success')
             );
             $this->_redirect('*/*/rma', array('order_id'=>$this->getRequest()->getParam('order_id')));
         } catch (Exception $e) {

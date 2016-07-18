@@ -23,8 +23,8 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Protected
                     'vendor_name' => $question->getVendorName(),
                     'vendor_email' => $question->getVendorEmail(),
                     'question' => $question,
-                    'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
-                    'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+                    'show_customer_info' => Mage::getStoreConfigFlag('zosqa/general/show_customer_info', $store),
+                    'show_vendor_info' => Mage::getStoreConfigFlag('zosqa/general/show_vendor_info', $store),
                 )
             );
             if ($tpl->getSentSuccess()) {
@@ -56,8 +56,8 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Protected
                     'vendor_name' => $question->getVendorName(),
                     'vendor_email' => $question->getVendorEmail(),
                     'question' => $question,
-                    'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
-                    'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+                    'show_customer_info' => Mage::getStoreConfigFlag('zosqa/general/show_customer_info', $store),
+                    'show_vendor_info' => Mage::getStoreConfigFlag('zosqa/general/show_vendor_info', $store),
                 )
             );
             if ($tpl->getSentSuccess()) {
@@ -75,7 +75,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Protected
         if (Mage::helper('udqa')->isNotifyCustomer($question)) {
             Mage::helper('udropship')->setDesignStore($store);
             $tpl = Mage::getModel('core/email_template');
-            if (Mage::getStoreConfigFlag('udqa/general/send_admin_notifications_copy', $store)) {
+            if (Mage::getStoreConfigFlag('zosqa/general/send_admin_notifications_copy', $store)) {
                 $adminIdent = $store->getConfig('udqa/general/admin_email_identity');
                 $tpl->addBcc(Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/email', $store));
             }
@@ -92,8 +92,8 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Protected
                     'vendor_name' => $question->getVendorName(),
                     'vendor_email' => $question->getVendorEmail(),
                     'question' => $question,
-                    'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
-                    'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+                    'show_customer_info' => Mage::getStoreConfigFlag('zosqa/general/show_customer_info', $store),
+                    'show_vendor_info' => Mage::getStoreConfigFlag('zosqa/general/show_vendor_info', $store),
                 )
             );
             if ($tpl->getSentSuccess()) {
@@ -111,7 +111,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Protected
         if (Mage::helper('udqa')->isNotifyVendor($question)) {
             Mage::helper('udropship')->setDesignStore($store);
             $tpl = Mage::getModel('core/email_template');
-            if (Mage::getStoreConfigFlag('udqa/general/send_admin_notifications_copy', $store)) {
+            if (Mage::getStoreConfigFlag('zosqa/general/send_admin_notifications_copy', $store)) {
                 $adminIdent = $store->getConfig('udqa/general/admin_email_identity');
                 $tpl->addBcc(Mage::getStoreConfig('trans_email/ident_' . $adminIdent . '/email', $store));
             }
@@ -128,8 +128,8 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Helper_Protected
                     'vendor_name' => $question->getVendorName(),
                     'vendor_email' => $question->getVendorEmail(),
                     'question' => $question,
-                    'show_customer_info' => Mage::getStoreConfigFlag('udqa/general/show_customer_info', $store),
-                    'show_vendor_info' => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
+                    'show_customer_info' => Mage::getStoreConfigFlag('zosqa/general/show_customer_info', $store),
+                    'show_vendor_info' => Mage::getStoreConfigFlag('zosqa/general/show_vendor_info', $store),
                 )
             );
             if ($tpl->getSentSuccess()) {

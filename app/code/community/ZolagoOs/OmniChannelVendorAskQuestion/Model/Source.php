@@ -17,8 +17,8 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Model_Source extends ZolagoOs_OmniCh
 
         switch ($this->getPath()) {
 
-            case 'udqa/general/default_question_status':
-            case 'udqa/general/default_answer_status':
+            case 'zosqa/general/default_question_status':
+            case 'zosqa/general/default_answer_status':
             case 'statuses':
                 $options = array(
                     self::UDQA_STATUS_PENDING  => $hlp->__('Pending'),
