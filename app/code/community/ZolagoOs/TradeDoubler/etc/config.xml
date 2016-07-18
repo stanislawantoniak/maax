@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<ZolagoOs_TradeDoubler>
+			<version>2.0.0</version>
+		</ZolagoOs_TradeDoubler>
+	</modules>
+	<global>
+		<helpers>
+			<zostradedoubler>
+				<class>ZolagoOs_TradeDoubler_Helper</class>
+			</zostradedoubler>
+		</helpers>
+	</global>
+	<frontend>
+		<routers>
+			<zostradedoubler>
+				<use>standard</use>
+				<args>
+					<module>ZolagoOs_TradeDoubler</module>
+					<frontName>tradedoubler</frontName>
+				</args>
+			</zostradedoubler>
+		</routers>
+	</frontend>
+</config>

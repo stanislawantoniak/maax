@@ -422,6 +422,11 @@ Comment: {{comment}}
                 <ups_pdf_label_height>7</ups_pdf_label_height>
             </ups>
         </urma>
+        <urma>
+            <logic>
+                <enabled>1</enabled>
+            </logic>
+        </urma>
     </default>
 
 </config>

@@ -73,11 +73,13 @@ class ZolagoOs_LoyaltyCard_CardController extends Zolago_Dropship_Controller_Ven
 
 		try {
 			// Remove 'empty' kids
+			$_kids = array();
 			foreach ($data['kids'] as $key => $kid) {
-				if (empty($kid['first_name']) && empty($kid['birthdate'])) {
-					unset($data['kids'][$key]);
+				if (!empty($kid['first_name']) && !empty($kid['birthdate'])) {
+					$_kids[] = $kid;
 				}
 			}
+			$data['kids'] = $_kids;
 
 			$card->addData($data);
 			
