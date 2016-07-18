@@ -226,7 +226,8 @@ $_modagoHlp = Mage::helper("zolagocommon");
 
             jQuery('.datetimepicker').datetimepicker({
                 lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
-                format: 'd-m-Y H:i'
+                format: 'd-m-Y H:i',
+                dayOfWeekStart:1
             });
             jQuery(".icon-calendar").click(function () {
                 jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
