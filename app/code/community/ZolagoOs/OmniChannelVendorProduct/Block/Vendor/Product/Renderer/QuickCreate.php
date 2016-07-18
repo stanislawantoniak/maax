@@ -183,12 +183,12 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product_Renderer_QuickCreat
 
     public function isOneColumnCfgAttrs()
     {
-        return 'one_column' == Mage::getStoreConfig('udprod/quick_create_layout/cfg_attributes');
+        return 'one_column' == Mage::getStoreConfig('zosprod/quick_create_layout/cfg_attributes');
     }
 
     public function getCfgAttrsColumnTitle()
     {
-        return Mage::getStoreConfig('udprod/quick_create_layout/cfg_attributes_title');
+        return Mage::getStoreConfig('zosprod/quick_create_layout/cfg_attributes_title');
     }
 
     protected $_columnsForm;
@@ -207,7 +207,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product_Renderer_QuickCreat
         $attributes = Mage::helper('udprod')->getQuickCreateAttributes();
         $fsIdx = 0;
         $this->_columnsForm = new Varien_Data_Form();
-        $columnsConfig = Mage::getStoreConfig('udprod/quick_create_layout/columns');
+        $columnsConfig = Mage::getStoreConfig('zosprod/quick_create_layout/columns');
         if (!is_array($columnsConfig)) {
             $columnsConfig = Mage::helper('udropship')->unserialize($columnsConfig);
             if (is_array($columnsConfig)) {

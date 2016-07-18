@@ -10,7 +10,7 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Mysql4_Product extends Mage_Catalo
             );
             $object->setCategoryIds($categoryIds);
         }
-        if (!$object->getSku() && Mage::getStoreConfigFlag('udprod/general/auto_sku')) {
+        if (!$object->getSku() && Mage::getStoreConfigFlag('zosprod/general/auto_sku')) {
             $adapter = $this->_getReadAdapter();
             $pidSuffix = $adapter->fetchOne($adapter->select()
                 ->from($this->getEntityTable(), 'max(entity_id)'));
@@ -27,12 +27,12 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Mysql4_Product extends Mage_Catalo
         } else {
             $vId = $object->getData('udropship_vendor');
         }
-        if (Mage::getStoreConfigFlag('udprod/general/prefix_sku_vid')
+        if (Mage::getStoreConfigFlag('zosprod/general/prefix_sku_vid')
             && $vId && 0 !== strpos($object->getSku(), $vId.'-')
         ) {
             $object->setSku($vId.'-'.$object->getSku());
         }
-        if (Mage::getStoreConfigFlag('udprod/general/unique_vendor_sku')
+        if (Mage::getStoreConfigFlag('zosprod/general/unique_vendor_sku')
             && $vId
             && !Mage::helper('udropship')->isUdmultiActive()
         ) {

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <sections>
-        <udprod>
+        <zosprod>
             <tab>sales</tab>
             <label>Vendor Products Edit</label>
             <frontend_type>text</frontend_type>
@@ -390,6 +390,6 @@
                     </fields>
                 </quick_create_layout>
             </groups>
-        </udprod>
+        </zosprod>
     </sections>
 </config>

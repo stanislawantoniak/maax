@@ -22,12 +22,12 @@
 				<include_not_salable>1</include_not_salable>
             </options>
 		</cataloginventory>
-        <udprod>
+        <zosprod>
             <product_description_history_changes_config>
                 <max_changes_count>5</max_changes_count>
                 <history_expiration_time>24</history_expiration_time>
             </product_description_history_changes_config>
-        </udprod>
+        </zosprod>
         <udropship>
             <vendor>
                 <vendor_mass_image_batch_size_byname>10</vendor_mass_image_batch_size_byname>

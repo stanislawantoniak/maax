@@ -12,15 +12,15 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Source extends ZolagoOs_OmniChanne
     const MEDIA_CFG_PER_OPTION_HIDDEN=2;
     public function isCfgUploadImagesSimple($store=null)
     {
-        return Mage::getStoreConfigFlag('udprod/general/cfg_upload_images_simple', $store);
+        return Mage::getStoreConfigFlag('zosprod/general/cfg_upload_images_simple', $store);
     }
     public function isMediaCfgPerOptionHidden($store=null)
     {
-        return self::MEDIA_CFG_PER_OPTION_HIDDEN==Mage::getStoreConfig('udprod/general/cfg_show_media_gallery', $store);
+        return self::MEDIA_CFG_PER_OPTION_HIDDEN==Mage::getStoreConfig('zosprod/general/cfg_show_media_gallery', $store);
     }
     public function isMediaCfgShowExplicit($store=null)
     {
-        return self::MEDIA_CFG_SHOW_EXPLICIT==Mage::getStoreConfig('udprod/general/cfg_show_media_gallery', $store);
+        return self::MEDIA_CFG_SHOW_EXPLICIT==Mage::getStoreConfig('zosprod/general/cfg_show_media_gallery', $store);
     }
     public function toOptionHash($selector=false)
     {
@@ -37,21 +37,21 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Source extends ZolagoOs_OmniChanne
             );
             break;
 
-        case 'udprod/general/cfg_show_media_gallery':
+        case 'zosprod/general/cfg_show_media_gallery':
             $options = array(
                 0 => $hlp->__('No'),
                 1 => $hlp->__('Yes'),
                 2 => $hlp->__('Yes and hide per option upload'),
             );
             break;
-        case 'udprod/quick_create_layout/cfg_attributes':
+        case 'zosprod/quick_create_layout/cfg_attributes':
             $options = array(
                 'one_column'      => $prHlp->__('One Column'),
                 'separate_column' => $prHlp->__('Separate Columns'),
             );
             break;
-        case 'udprod_unpublish_actions':
-        case 'udprod/general/unpublish_actions':
+        case 'zosprod_unpublish_actions':
+        case 'zosprod/general/unpublish_actions':
             $options = array(
                 'none'               => $prHlp->__('None'),
                 'all'                => $prHlp->__('All'),
@@ -63,9 +63,9 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Source extends ZolagoOs_OmniChanne
                 'stock_changed'      => $prHlp->__('Stock Changed'),
             );
             break;
-        case 'udprod_allowed_types':
-        case 'udprod/general/allowed_types':
-            $at = Mage::getStoreConfig('udprod/general/type_of_product');
+        case 'zosprod_allowed_types':
+        case 'zosprod/general/allowed_types':
+            $at = Mage::getStoreConfig('zosprod/general/type_of_product');
             if (is_string($at)) {
                 $at = unserialize($at);
             }
@@ -95,9 +95,9 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Source extends ZolagoOs_OmniChanne
             );
             break;
 
-        case 'udprod/template_sku/type_of_product':
+        case 'zosprod/template_sku/type_of_product':
             $selector = true;
-            $_options = Mage::getStoreConfig('udprod/general/type_of_product');
+            $_options = Mage::getStoreConfig('zosprod/general/type_of_product');
             if (!is_array($_options)) {
                 $_options = unserialize($_options);
             }
@@ -118,7 +118,7 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Source extends ZolagoOs_OmniChanne
             }
             break;
 
-        case 'udprod_backorders':
+        case 'zosprod_backorders':
             $options = array();
             foreach (Mage::getSingleton('cataloginventory/source_backorders')->toOptionArray() as $opt) {
                 $options[$opt['value']] = $opt['label'];

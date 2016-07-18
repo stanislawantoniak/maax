@@ -43,7 +43,7 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Observer
         if ($observer->getAction()
             && $observer->getAction()->getFullActionName()=='catalog_product_view'
         ) {
-            if (Mage::getStoreConfigFlag('udprod/general/use_product_zoom')) {
+            if (Mage::getStoreConfigFlag('zosprod/general/use_product_zoom')) {
                 $observer->getAction()->getLayout()->getUpdate()->addHandle('_udprod_product_zoom');
                 if ((($p = Mage::registry('current_product'))
                     || ($p = Mage::registry('product')))
@@ -76,7 +76,7 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Observer
                 Mage::getConfig()->setNode('global/models/catalog/rewrite/product_type_simple', 'ZolagoOs_OmniChannelVendorProduct_Model_ProductType_Simple15');
             }
         }
-        if (Mage::getStoreConfigFlag('udprod/general/use_product_zoom')) {
+        if (Mage::getStoreConfigFlag('zosprod/general/use_product_zoom')) {
             if (Mage::helper('udropship')->isOSPActive()) {
                 Mage::getConfig()->setNode('global/models/catalog/rewrite/product_type_configurable', 'ZolagoOs_OmniChannelVendorProduct_Model_ProductTypeConfigurableOSP');
                 Mage::getConfig()->setNode('global/blocks/catalog/rewrite/product_view_type_configurable', 'ZolagoOs_OmniChannelVendorProduct_Block_ProductViewTypeConfigurableOSP');

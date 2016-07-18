@@ -475,10 +475,10 @@
                             <children>
                                 <config>
                                     <children>
-                                        <udprod>
+                                        <zosprod>
                                             <title>Vendor Products Edit</title>
                                             <sort_order>51</sort_order>
-                                        </udprod>
+                                        </zosprod>
                                     </children>
                                 </config>
                             </children>
@@ -490,7 +490,7 @@
     </adminhtml>
 
     <default>
-        <udprod>
+        <zosprod>
             <general>
                 <use_product_zoom>0</use_product_zoom>
                 <auto_sku>1</auto_sku>
@@ -525,7 +525,7 @@
             <form>
                 <fieldsets><![CDATA[[{"title":"Enter Product Information","sort_order":"0","top_columns_def":[{"column_field":"product.name","is_required":"1","sort_order":"5"},{"column_field":"product.description","sort_order":"10"}],"bottom_columns_def":[{"column_field":"udmulti.vendor_sku","sort_order":"0"},{"column_field":"udmulti.vendor_title","use_limit_type":"1","limit_type":["simple"],"sort_order":"0"},{"column_field":"udmulti.state_descr","use_limit_type":"1","limit_type":["simple"],"sort_order":"0"},{"column_field":"udmulti.stock_qty","is_required":"1","use_limit_type":"1","limit_type":["simple"],"sort_order":"5"},{"column_field":"udmulti.state","is_required":"1","use_limit_type":"1","limit_type":["simple"],"sort_order":"10"}],"left_columns_def":[{"column_field":"udmulti.vendor_price","is_required":"1","sort_order":"0"},{"column_field":"udmulti.special_price","sort_order":"10"}],"right_columns_def":[{"column_field":"udmulti.special_from_date","sort_order":"0"},{"column_field":"udmulti.special_to_date","sort_order":"10"}],"fields_extra":{"product.name":{"use_limit_type":null,"limit_type":null},"product.description":{"use_limit_type":null,"limit_type":null},"udmulti.vendor_sku":{"use_limit_type":null,"limit_type":null},"udmulti.vendor_title":{"use_limit_type":"1","limit_type":["simple"]},"udmulti.state_descr":{"use_limit_type":"1","limit_type":["simple"]},"udmulti.stock_qty":{"use_limit_type":"1","limit_type":["simple"]},"udmulti.state":{"use_limit_type":"1","limit_type":["simple"]},"udmulti.vendor_price":{"use_limit_type":null,"limit_type":null},"udmulti.special_price":{"use_limit_type":null,"limit_type":null},"udmulti.special_from_date":{"use_limit_type":null,"limit_type":null},"udmulti.special_to_date":{"use_limit_type":null,"limit_type":null}},"required_fields":["product.name","udmulti.stock_qty","udmulti.state","udmulti.vendor_price"],"top_columns":["product.name","product.description"],"bottom_columns":["udmulti.vendor_sku","udmulti.vendor_title","udmulti.state_descr","udmulti.stock_qty","udmulti.state"],"left_columns":["udmulti.vendor_price","udmulti.special_price"],"right_columns":["udmulti.special_from_date","udmulti.special_to_date"]}]]]></fieldsets>
             </form>
-	    </udprod>
+	    </zosprod>
     </default>
 
     <crontab>

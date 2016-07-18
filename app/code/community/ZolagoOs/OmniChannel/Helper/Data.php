@@ -3277,7 +3277,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     }
     public function isShowVendorSkuColumnInProductsTab()
     {
-        return Mage::getStoreConfigFlag('udprod/general/show_vendor_sku_column');
+        return Mage::getStoreConfigFlag('zosprod/general/show_vendor_sku_column');
     }
 
     public function getVendorPortalCustomUrl()

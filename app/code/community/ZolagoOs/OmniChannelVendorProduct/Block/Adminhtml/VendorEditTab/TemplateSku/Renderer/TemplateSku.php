@@ -41,7 +41,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Adminhtml_VendorEditTab_TemplateSk
 
     public function getGlobalTemplateSkuConfig()
     {
-        $value = Mage::getStoreConfig('udprod/template_sku/value');
+        $value = Mage::getStoreConfig('zosprod/template_sku/value');
         if (is_string($value)) {
             $value = unserialize($value);
         }

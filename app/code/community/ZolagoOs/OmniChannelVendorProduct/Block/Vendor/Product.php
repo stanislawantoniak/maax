@@ -292,7 +292,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product extends Mage_Core_B
             if ('configurable' == $prod->getTypeId()) {
                 $skipInputType[] = 'gallery';
             }
-            $fieldsetsConfig = Mage::getStoreConfig('udprod/form/fieldsets');
+            $fieldsetsConfig = Mage::getStoreConfig('zosprod/form/fieldsets');
             if (!is_array($fieldsetsConfig)) {
                 $fieldsetsConfig = Mage::helper('udropship')->unserialize($fieldsetsConfig);
             }
@@ -416,7 +416,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product extends Mage_Core_B
                     $this->_addConfigurableSettings($prod, $values);
                 }
                 if ('configurable' != $prod->getTypeId()
-                    || Mage::getStoreConfigFlag('udprod/general/cfg_show_media_gallery')
+                    || Mage::getStoreConfigFlag('zosprod/general/cfg_show_media_gallery')
                 ) {
                     $cfgHideEditFields = explode(',', Mage::getStoreConfig('udropship/microsite/hide_product_attributes'));
                     if (isset($attributes['media_gallery'])
@@ -455,7 +455,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product extends Mage_Core_B
                         }
                     }
                 }
-                if (Mage::getStoreConfigFlag('udprod/general/allow_custom_options')) {
+                if (Mage::getStoreConfigFlag('zosprod/general/allow_custom_options')) {
                     $this->_addCustomOptions($prod, $values);
                 }
                 if ('downloadable' == $prod->getTypeId()) {

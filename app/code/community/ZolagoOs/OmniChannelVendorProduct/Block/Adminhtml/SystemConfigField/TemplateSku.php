@@ -57,7 +57,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Adminhtml_SystemConfigField_Templa
             ->load()
             ->toOptionHash();
         $setIds = array();
-        $_options = Mage::getStoreConfig('udprod/general/type_of_product');
+        $_options = Mage::getStoreConfig('zosprod/general/type_of_product');
         if (!is_array($_options)) {
             $_options = unserialize($_options);
         }

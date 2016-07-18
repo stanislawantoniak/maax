@@ -53,7 +53,7 @@
                 </config>
             </groups>
         </zolagocatalog>
-        <udprod translate="label" module="zolagocatalog">
+        <zosprod translate="label" module="zolagocatalog">
             <groups>
                 <product_description_history_changes_config translate="label">
                     <label>Manage products descriptions</label>
@@ -84,7 +84,7 @@
                     </fields>
                 </product_description_history_changes_config>
             </groups>
-        </udprod>
+        </zosprod>
 		<cataloginventory>
 			<groups>
 				<options>

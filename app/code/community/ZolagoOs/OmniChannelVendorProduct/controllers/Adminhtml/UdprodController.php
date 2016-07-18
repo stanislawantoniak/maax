@@ -6,7 +6,7 @@ class ZolagoOs_OmniChannelVendorProduct_Adminhtml_UdprodController extends Mage_
     {
         $typeOfProduct = $this->getRequest()->getParam('type_of_product');
         $_form = new Varien_Data_Form();
-        $tplSku = Mage::getStoreConfig('udprod/template_sku/value');
+        $tplSku = Mage::getStoreConfig('zosprod/template_sku/value');
         $tplSku = empty($tplSku) ? array() : $tplSku;
         if (!is_array($tplSku)) {
             $tplSku = unserialize($tplSku);

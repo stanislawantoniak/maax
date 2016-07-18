@@ -41,7 +41,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
 
     public function getGlobalTemplateSkuConfig()
     {
-        $value = Mage::getStoreConfig('udprod/template_sku/value');
+        $value = Mage::getStoreConfig('zosprod/template_sku/value');
         if (is_string($value)) {
             $value = unserialize($value);
         }
@@ -62,7 +62,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
     }
     protected function _getTypeOfProductConfig($vendor)
     {
-        $value = Mage::getStoreConfig('udprod/general/type_of_product');
+        $value = Mage::getStoreConfig('zosprod/general/type_of_product');
         if (is_string($value)) {
             $value = unserialize($value);
         }
@@ -324,7 +324,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
 
     public function checkUniqueVendorSku($product, $vendor)
     {
-        if (Mage::getStoreConfigFlag('udprod/general/unique_vendor_sku')
+        if (Mage::getStoreConfigFlag('zosprod/general/unique_vendor_sku')
             && Mage::helper('udropship')->isUdmultiActive()
         ) {
             $udmulti = $product->getData('udmulti');
@@ -483,7 +483,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
                             }
                             $qcMP['vendor_sku'] = $qcVsku;
                         }
-                        if (Mage::getStoreConfigFlag('udprod/general/unique_vendor_sku')) {
+                        if (Mage::getStoreConfigFlag('zosprod/general/unique_vendor_sku')) {
                             if (empty($qc['vendor_sku'])) {
                                 Mage::throwException('Vendor SKU is empty');
                             } elseif (Mage::helper('udropship/catalog')->getPidByVendorSku($qcMP['vendor_sku'], $v->getId(), $pId)) {
@@ -492,7 +492,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
                         }
                     }
 
-                    if (!$qcProd->getSku() && Mage::getStoreConfigFlag('udprod/general/auto_sku')) {
+                    if (!$qcProd->getSku() && Mage::getStoreConfigFlag('zosprod/general/auto_sku')) {
                         $__skuAuto = $__skuAuto1 = $prod->getSku().'-'.implode('-', $autogenerateOptions);
                         $__skuAutoIdx = 0;
                         while (Mage::helper('udropship/catalog')->getPidBySku($__skuAuto, $qcProd->getId())) {
@@ -1432,7 +1432,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
     public function setNeedToUnpublish($product, $action)
     {
         $v = Mage::getSingleton('udropship/session')->getVendor();
-        $unpublishActions = Mage::getStoreConfig('udprod/general/unpublish_actions');
+        $unpublishActions = Mage::getStoreConfig('zosprod/general/unpublish_actions');
         if ($v->getData('is_custom_udprod_unpublish_actions')) {
             $unpublishActions = $v->getData('udprod_unpublish_actions');
         }
@@ -1451,7 +1451,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
         if ($vendor==null) {
             $vendor = Mage::getSingleton('udropship/session')->getVendor();
         }
-        $at = Mage::getStoreConfig('udprod/general/allowed_types');
+        $at = Mage::getStoreConfig('zosprod/general/allowed_types');
         if ($vendor->getData('is_custom_udprod_allowed_types')) {
             $at = $vendor->getData('udprod_allowed_types');
         }
@@ -1464,28 +1464,28 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
 
     public function isPendingNotifyVendor()
     {
-        return Mage::getStoreConfigFlag('udprod/notification/send_pending_notifications');
+        return Mage::getStoreConfigFlag('zosprod/notification/send_pending_notifications');
     }
     public function isPendingNotifyAdmin()
     {
-        return Mage::getStoreConfigFlag('udprod/notification/send_pending_admin_notifications');
+        return Mage::getStoreConfigFlag('zosprod/notification/send_pending_admin_notifications');
     }
 
     public function isApprovedNotifyVendor()
     {
-        return Mage::getStoreConfigFlag('udprod/notification/send_approved_notifications');
+        return Mage::getStoreConfigFlag('zosprod/notification/send_approved_notifications');
     }
     public function isApprovedNotifyAdmin()
     {
-        return Mage::getStoreConfigFlag('udprod/notification/send_approved_admin_notifications');
+        return Mage::getStoreConfigFlag('zosprod/notification/send_approved_admin_notifications');
     }
     public function isFixNotifyVendor()
     {
-        return Mage::getStoreConfigFlag('udprod/notification/send_fix_notifications');
+        return Mage::getStoreConfigFlag('zosprod/notification/send_fix_notifications');
     }
     public function isFixNotifyAdmin()
     {
-        return Mage::getStoreConfigFlag('udprod/notification/send_fix_admin_notifications');
+        return Mage::getStoreConfigFlag('zosprod/notification/send_fix_admin_notifications');
     }
 
     public function sendPendingNotificationEmail($products, $vendor)

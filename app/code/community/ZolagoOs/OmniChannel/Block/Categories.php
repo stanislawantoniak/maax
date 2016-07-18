@@ -95,7 +95,7 @@ class ZolagoOs_OmniChannel_Block_Categories extends Mage_Adminhtml_Block_Catalog
 
         $children = array();
         foreach ($node->getChildren() as $child) {
-            if (!$child->getIsActive() && !Mage::getStoreConfigFlag('udprod/general/show_hidden_categories')) continue;
+            if (!$child->getIsActive() && !Mage::getStoreConfigFlag('zosprod/general/show_hidden_categories')) continue;
             if (!$this->isVendorEnabled($child->getId())) continue;
             $children[] = $this->_getNodeJson($child);
         }
