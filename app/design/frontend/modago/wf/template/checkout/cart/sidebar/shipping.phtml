@@ -94,12 +94,12 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
         <div class="shipping-collect">
             <?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>
                 <?php foreach ($selectedShipping["methods"] as $vendorId => $methodSelected): ?>
-                    <input type="hidden"
+                    <input type="text"
                            name="shipping_method[<?php echo $vendorId; ?>]"
                            value="<?php echo $methodSelected; ?>" />
                 <?php endforeach; ?>
                 <?php if (isset($selectedShipping["shipping_point_code"])): ?>
-                    <input type="hidden" name="shipping_point_code"
+                    <input type="text" name="shipping_point_code"
                            data-id="<?php echo $lockerId; ?>"
                            data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
                            value="<?php echo $locker->getName(); ?>" />
