@@ -24,13 +24,25 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
             return $isDeliveryPointSelectRequired;
 
 
-        $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
-        $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
-
-        if (in_array($deliveryType, array($ghInpostCarrierCode, $pickUpPointCode)))
+        if (in_array($deliveryType, $this->getDeliveryMethodsPointSelectRequired()))
             $isDeliveryPointSelectRequired = true;
 
         return $isDeliveryPointSelectRequired;
+    }
+
+
+    /**
+     * Delivery methods, that required additional info entrance
+     * (ex. Inpost locker name, Pick-up point)
+     *
+     * @return array
+     */
+    public function getDeliveryMethodsPointSelectRequired()
+    {
+        $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
+        $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+
+        return array($ghInpostCarrierCode, $pickUpPointCode);
     }
 
 

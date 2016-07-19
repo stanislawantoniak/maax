@@ -178,15 +178,15 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$quote = Mage::getModel("checkout/cart")->getQuote();
 		$address = $quote->getShippingAddress();
         if ($shippingPointCode = $request->getParam("shipping_point_code")) {
-			$address->setInpostLockerName($shippingPointCode);
-			$this->_getCheckoutSession()->setInpostLockerName($shippingPointCode);
+			$address->setDeliveryPointName($shippingPointCode);
+			$this->_getCheckoutSession()->setDeliveryPointName($shippingPointCode);
         } else {
 			//Clear locker address in the sales_flat_quote_address
 			$address->setCity("");
 			$address->setStreet("");
 			$address->setPostcode("");
-			$address->setInpostLockerName("");
-			$this->_getCheckoutSession()->setInpostLockerName();
+			$address->setDeliveryPointName("");
+			$this->_getCheckoutSession()->setDeliveryPointName();
         }
 
         $onepage->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
@@ -334,15 +334,15 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 		$address = $onepage->getQuote()->getShippingAddress();
 		if ($shippingPointCode = $request->getParam("shipping_point_code")) {
-			$address->setInpostLockerName($shippingPointCode);
-			$this->_getCheckoutSession()->setInpostLockerName($shippingPointCode);
+			$address->setDeliveryPointName($shippingPointCode);
+			$this->_getCheckoutSession()->setDeliveryPointName($shippingPointCode);
 		} else {
 			//Clear locker address in the sales_flat_quote_address
 //			$address->setCity("");
 //			$address->setStreet("");
 //			$address->setPostcode("");
-			$address->setInpostLockerName("");
-			$this->_getCheckoutSession()->setInpostLockerName();
+			$address->setDeliveryPointName("");
+			$this->_getCheckoutSession()->setDeliveryPointName();
 		}
 
 		/**

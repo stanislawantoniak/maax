@@ -9,13 +9,13 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		//1. Get shipping from session
 		$shipping_method_session = $checkoutSession->getData("shipping_method");
-		$inpostCode = $checkoutSession->getData("inpost_locker_name");
+		$deliveryPointName = $checkoutSession->getData("delivery_point_name");
 
 		if(!empty($shipping_method_session)){
 			return array(
 				"source" => "session",
 				"methods" => $shipping_method_session,
-				"shipping_point_code" => $inpostCode
+				"shipping_point_code" => $deliveryPointName
 			);
 		}
 
@@ -24,18 +24,18 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		$address = $checkoutSession->getQuote()->getShippingAddress();
 		$details = $address->getUdropshipShippingDetails();
 		$details = $details ? Zend_Json::decode($details) : array();
-		$inpostCode = $address->getData("inpost_locker_name");
+		$deliveryPointName = $address->getData("delivery_point_name");
 		$methods = array();
 		if(!empty($details) && isset($details["methods"])){
 			foreach($details["methods"] as $vendorId => $methodData){
 				$methods[$vendorId] = $methodData["code"];
 			}
-			$checkoutSession->setData("inpost_locker_name",$inpostCode);
+			$checkoutSession->setData("delivery_point_name",$deliveryPointName);
 			$checkoutSession->setShippingMethod($methods);
 			return array(
 				"source" => "quota",
 				"methods" => $methods,
-				"shipping_point_code" => $inpostCode
+				"shipping_point_code" => $deliveryPointName
 			);
 		}
 		return array(
@@ -53,11 +53,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		if (is_null($this->inpostLocker)) {
 
 			$selectedShipping = $this->getSelectedShipping();
-			$inpostCode = $selectedShipping['shipping_point_code'];
+			$deliveryPointName = $selectedShipping['shipping_point_code'];
 
 			/** @var GH_Inpost_Model_Locker $locker */
 			$locker = Mage::getModel("ghinpost/locker");
-			$locker->loadByLockerName($inpostCode);
+			$locker->loadByLockerName($deliveryPointName);
 			if (!$locker->getIsActive()) {
 				$locker = Mage::getModel("ghinpost/locker");
 			}
