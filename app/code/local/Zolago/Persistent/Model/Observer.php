@@ -34,7 +34,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	    $checkoutSession = Mage::getSingleton('checkout/session');
 	    $oldQuote = $checkoutSession->getQuote();
 
-		$shippingPointCode = $checkoutSession->getData("inpost_locker_name");
+		$shippingPointCode = $checkoutSession->getData("delivery_point_name");
 
 		$address = $oldQuote->getShippingAddress();
 		$details = $address->getUdropshipShippingDetails();
@@ -64,7 +64,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	    $checkoutSession->setQuoteId($newId);
 
 		/*InPost should not be lost after persistent->guest checkout*/
-		$checkoutSession->setData("inpost_locker_name",$shippingPointCode);
+		$checkoutSession->setData("delivery_point_name",$shippingPointCode);
 
 		$shippingMethodPerVendor = array();
 		if(isset($details["methods"])){
