@@ -1723,7 +1723,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     ->setPostcode($locker->getPostcode())
                     ->save();
 
-                $po->setInpostLockerName($inpostName)
+                $po->setDeliveryPointName($inpostName)
                     ->save();
 				
 				Mage::dispatchEvent("zolagopo_po_inpost_locker_name_change", array(

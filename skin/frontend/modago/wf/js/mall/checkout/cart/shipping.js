@@ -34,13 +34,14 @@
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
             }
 
-            if (typeof self.getSelectedShipping().val() !== "undefined") {
-                jQuery.ajax({
-                    url: "/checkout/singlepage/saveBasketShipping/",
-                    type: "POST",
-                    data: jQuery("#cart-shipping-methods-form").serializeArray()
-                });
-            }
+            //UNCOMMENT AFTER DEVELOPING!!!!!!!
+            //if (typeof self.getSelectedShipping().val() !== "undefined") {
+            //    jQuery.ajax({
+            //        url: "/checkout/singlepage/saveBasketShipping/",
+            //        type: "POST",
+            //        data: jQuery("#cart-shipping-methods-form").serializeArray()
+            //    });
+            //}
 
             self.implementMapSelections();
         },
@@ -114,8 +115,9 @@
             google.maps.event.addDomListener(window, 'load', initMap);
             google.maps.event.addDomListener(window, "resize", resizingMap());
 
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
             jQuery("[name=shipping_select_point]")
-                .select2({dropdownParent: jQuery("#select_inpost_point"),language: Mall.reg.get("localeCode")})
+                .select2({dropdownParent: jQuery(".carrier-points-modal[data-carrier-points='ghinpost']"),language: Mall.reg.get("localeCode")})
                 .change(function () {
                     var el = jQuery(this), val = el.val();
                     el.addClass("onchange_shipping_select_point");
@@ -129,7 +131,7 @@
 
                 });
             if (Mall.getIsBrowserMobile()) {
-                jQuery('#select_inpost_point .select2').on('select2:open', function (e) {
+                inpostModal.find('.select2').on('select2:open', function (e) {
                     jQuery('.select2-search input').prop('focus', false);
                 });
             }
@@ -141,7 +143,7 @@
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: Mall.translate.__("shipping_map_select_city"),
-                dropdownParent: jQuery("#select_inpost_point"),
+                dropdownParent: inpostModal,
                 language: Mall.reg.get("localeCode")
             });
 
@@ -149,12 +151,12 @@
                 .attr("disabled", true)
                 .val("")
                 .select2({
-                    dropdownParent: jQuery("#select_inpost_point"),
+                    dropdownParent: inpostModal,
                     language: Mall.reg.get("localeCode")
                 });
 
 
-            jQuery('#select_inpost_point').on('show.bs.modal', function () {
+            inpostModal.on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
@@ -163,7 +165,7 @@
 
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
             });
-            jQuery('#select_inpost_point').on('hide.bs.modal', function () {
+            inpostModal.on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
                 if (
                     (jQuery("#cart-shipping-methods input[data-select-shipping-method-trigger=0]:checked").length > 0
@@ -185,6 +187,7 @@
         },
         attachShowOnMapSavedInSessionPoint: function () {
             var sessionPoint = jQuery("[name=shipping_point_code]");
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
             var sessionPointTown;
             if (sessionPointName) {
                 sessionPointTown = sessionPoint.attr("data-town");
@@ -192,7 +195,7 @@
                 jQuery(".shipping_select_point_data").html("");
                 jQuery("[name=shipping_select_city]")
                     .val(sessionPointTown)
-                    .select2({dropdownParent: jQuery("#select_inpost_point"), language: Mall.reg.get("localeCode")});
+                    .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
 
                 searchOnMap(sessionPointTown, sessionPointName);
             }
@@ -475,6 +478,7 @@ function refreshMap(filteredData, nearestStores) {
             jQuery(".shipping_select_point_data").html(this.details);
             infowindow.setContent(this.html);
 
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
 
             //Refresh markers and "City", "Address" filters
             //if nearest store marker clicked, but the city is different from selected
@@ -482,7 +486,7 @@ function refreshMap(filteredData, nearestStores) {
                 jQuery("select[name=shipping_select_city]")
                     .val(this.town)
                     .select2({
-                        dropdownParent: jQuery("#select_inpost_point"),
+                        dropdownParent: inpostModal,
                         language: Mall.reg.get("localeCode")
                     });
                 jQuery(".shipping_select_point_data").html("");
@@ -490,11 +494,12 @@ function refreshMap(filteredData, nearestStores) {
                 searchOnMap(this.town, this.name);
             }
 
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
             jQuery("select[name=shipping_select_point]").val(this.name);
             if (!jQuery("select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
                 jQuery("select[name=shipping_select_point]")
                     .select2({
-                        dropdownParent: jQuery("#select_inpost_point"),
+                        dropdownParent: inpostModal,
                         language: Mall.reg.get("localeCode")
                     });
             }
@@ -818,8 +823,9 @@ function constructShippingPointSelect(map_points) {
             .val("");
     }
 
+    var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
     jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point"), language: Mall.reg.get("localeCode")});
+        .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
 }
 
 function clearClusters(e) {

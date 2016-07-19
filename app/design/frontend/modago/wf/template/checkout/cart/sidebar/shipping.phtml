@@ -1,4 +1,4 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */ ?>
 
 <?php
 /** @var Zolago_Checkout_Helper_Data $helper */
@@ -32,7 +32,7 @@ $lockerRender = $this->getLockerRender($locker);
 
 $quote = $this->getQuote();
 $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
-
+Zend_Debug::dump($selectedShipping);
 
 foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
@@ -251,34 +251,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 </form>
 </fieldset>
 
-
-
-<div class="modal fade bs-example-modal-lg" id="select_inpost_point" data-carrier-points="ghinpost" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!-- Modal Content-->
-            <?php
-                echo $this->getLayout()
-                    ->createBlock('zolagomodago/checkout_cart_sidebar_shipping_map_inpost')
-                    ->setTemplate('checkout/cart/sidebar/shipping/ghinpost.phtml')
-                    ->toHtml();
-            ?>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade bs-example-modal-lg" id="select_pickuppoint_point" data-carrier-points="zolagopickuppoint" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!-- Modal Content-->
-            <?php
-            echo $this->getLayout()
-                ->createBlock('zolagomodago/checkout_cart_sidebar_shipping_map_inpost')
-                ->setTemplate('checkout/cart/sidebar/shipping/zolagopickuppoint.phtml')
-                ->toHtml();
-            ?>
-        </div>
-    </div>
-</div>
+<?php echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
 
 <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3&sensor=FALSE"></script>

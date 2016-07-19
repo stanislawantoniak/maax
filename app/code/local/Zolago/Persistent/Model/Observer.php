@@ -79,7 +79,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 
 		$addressNew = $quote->getShippingAddress();
 		$addressNew->setUdropshipShippingDetails(Zend_Json::encode($details));
-		$addressNew->setInpostLockerName($shippingPointCode);
+		$addressNew->setDeliveryPointName($shippingPointCode);
 		$quote->setTotalsCollectedFlag(false)->collectTotals()->save();
 
 		/*InPost should not be lost after persistent->guest checkout*/

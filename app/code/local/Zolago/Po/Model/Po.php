@@ -12,8 +12,8 @@
  * @method Zolago_Po_Model_Po setCustomerEmail(string $email)
  * @method int getCustomerId()
  * @method Zolago_Po_Model_Po setCustomerId(int $customerId)
- * @method string getInpostLockerName()
- * @method Zolago_Po_Model_Po setInpostLockerName(string $value)
+ * @method string getDeliveryPointName()
+ * @method Zolago_Po_Model_Po setDeliveryPointName(string $value)
  */
 class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
@@ -910,7 +910,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 //                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
             }
 
-            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getInpostLockerName();
+            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getDeliveryPointName();
             $sa = $po->getShippingAddress();
             $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
             $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
@@ -1206,7 +1206,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	 */
 	public function getInpostLocker($force = false) {
 		if (!$this->hasData('inpost_locker') || $force) {
-			$inpostLockerName = $this->getInpostLockerName();
+			$inpostLockerName = $this->getDeliveryPointName();
 			/** @var GH_Inpost_Model_Locker $locker */
 			$locker = Mage::getModel('ghinpost/locker')->load($inpostLockerName, 'name');
 			$this->setData('inpost_locker', $locker);
