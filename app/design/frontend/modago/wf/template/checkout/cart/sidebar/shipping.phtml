@@ -32,7 +32,6 @@ $lockerRender = $this->getLockerRender($locker);
 
 $quote = $this->getQuote();
 $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
-//Zend_Debug::dump($selectedShipping);
 
 foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
@@ -99,10 +98,13 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                            value="<?php echo $methodSelected; ?>" />
                 <?php endforeach; ?>
                 <?php if (isset($selectedShipping["shipping_point_code"])): ?>
-                    <input type="hidden" name="shipping_point_code"
-                           data-id="<?php echo $lockerId; ?>"
-                           data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
-                           value="<?php echo $locker->getName(); ?>" />
+                    <?php $shippingPointCode = $this->getDeliveryPointData($methodSelected, $selectedShipping["shipping_point_code"]); ?>
+                    <?php if(!empty($shippingPointCode)): ?>
+                        <input type="hidden" name="shipping_point_code"
+                               data-id="<?php echo $shippingPointCode["id"]; ?>"
+                               data-town="<?php echo $shippingPointCode["city"]; ?>"
+                               value="<?php echo $shippingPointCode["value"]; ?>" />
+                    <?php endif; ?>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
@@ -150,18 +152,19 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
 
                         <div class="shipping-data-additional">
-                            <div data-item="additional">
-                                <?php
 
-                                if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost() && $lockerId): ?>
-                                    <?php echo $lockerRender; ?>
-                                <?php endif; ?>
-                            </div>
-                            <div data-item="description"><?php echo $daysInTransit; ?></div>
+                            <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"],$daysInTransit); ?>
 
                             <div class="pull-left">
-                                <div data-item="logo"><?php echo Mage::helper("wfwf/checkout_data")->getCarrierLogo($method["delivery_type"]); ?></div>
+                                <?php if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()): ?>
+                                    <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
+                                <?php else: ?>
+                                    <div data-item="logo">
+                                        <figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>
+                                    </div>
+                                <?php endif; ?>
                             </div>
+
                             <?php if (count($methods) > 1): ?>
                                 <div class="pull-right">
                                     <a class="button button-third large pull-right" id="change-shipping-type">
@@ -188,7 +191,13 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 $costSum = array_sum($cost[$method['code']]);
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
-            $carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($method["delivery_type"]);
+
+            if($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()){
+                $carrierLogo = '<img  src="'.$inpostLogo.'" height="52px"/>';
+            } else {
+                //Truck icon
+                $carrierLogo = '<figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>';
+            }
             $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("ships within %s days", $method["days_in_transit"]) : "";
 
             ?>

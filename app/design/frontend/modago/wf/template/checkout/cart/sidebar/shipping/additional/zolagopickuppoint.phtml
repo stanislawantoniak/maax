@@ -14,7 +14,7 @@ $collection->addFieldToFilter("is_available_as_pickup_point", 1);
 
 <div class="modal-body">
     <div class="main_container">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <select name="shipping_select_pos" style="width: 100%;" class="select2">
                 <?php foreach ($collection as $pos): ?>
                     <option value="<?php echo $pos->getId(); ?>"
@@ -28,8 +28,8 @@ $collection->addFieldToFilter("is_available_as_pickup_point", 1);
                 <?php endforeach; ?>
             </select>
         </div>
-        <div class="col-md-4">
-            <a data-select-shipping-method-trigger="1">Select</a>
+        <div class="col-md-3">
+            <a class="button button-primary" data-select-shipping-method-trigger="1" href=""><?php echo $helper->__("Choose"); ?></a>
         </div>
     </div>
 </div>
