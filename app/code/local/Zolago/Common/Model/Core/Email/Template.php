@@ -1,18 +1,66 @@
 <?php
-class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Model_Email
+
+class Zolago_Common_Model_Core_Email_Template extends ZolagoOs_OmniChannel_Model_Email
 {
 
     protected $_domAttachments = array();
-    protected $_allowedExtensions = array('jpg'=>1,'jpeg'=>1,'png'=>1,'apng'=>1,'gif'=>1,'bmp'=>1,'svg'=>1,'ico'=>1);
+    protected $_allowedExtensions = array('jpg' => 1, 'jpeg' => 1, 'png' => 1, 'apng' => 1, 'gif' => 1, 'bmp' => 1, 'svg' => 1, 'ico' => 1);
 
 
-	/**
-	 * do not send email on test servers
-	 *
-	 * @param array $mail
-	 * @return array
-	 */
-    protected function _allowSend($mail) {         
+    /**
+     * Process email template code
+     *
+     * @param   array $variables
+     * @return  string
+     */
+    public function getProcessedTemplate(array $variables = array())
+    {
+        $processor = $this->getTemplateFilter();
+        $processor->setUseSessionInUrl(false)
+            ->setPlainTemplateMode($this->isPlain());
+
+        if (!$this->_preprocessFlag) {
+            $variables['this'] = $this;
+        }
+
+        if (isset($variables['subscriber']) && ($variables['subscriber'] instanceof Mage_Newsletter_Model_Subscriber)) {
+            $processor->setStoreId($variables['subscriber']->getStoreId());
+        }
+
+        // Apply design config so that all subsequent code will run within the context of the correct store
+        $this->_applyDesignConfig();
+
+        // Populate the variables array with store, store info, logo, etc. variables
+        $variables = $this->_addEmailVariables($variables, $processor->getStoreId());
+
+        $processor
+            ->setTemplateProcessor(array($this, 'getTemplateByConfigPath'))
+            ->setIncludeProcessor(array($this, 'getInclude'))
+            ->setVariables($variables);
+
+        try {
+            // Filter the template text so that all HTML content will be present
+            $result = $processor->filter($this->getTemplateText());
+            // If the {{inlinecss file=""}} directive was included in the template, grab filename to use for inlining
+            //$this->setInlineCssFile($processor->getInlineCssFile());
+            // Now that all HTML has been assembled, run email through CSS inlining process
+            $processedResult = $this->getPreparedTemplateText($result);
+        } catch (Exception $e) {
+            $this->_cancelDesignConfig();
+            throw $e;
+        }
+        $this->_cancelDesignConfig();
+        return $processedResult;
+    }
+
+    /**
+     * do not send email on test servers
+     *
+     * @param array $mail
+     * @return array
+     */
+    protected function _allowSend($mail)
+    {
         if (((string)Mage::getConfig()->getNode('global/test_server')) == 'true') {
             $out = array();
             $allowEmails = Mage::getConfig()->getNode('global/allow_emails');
@@ -20,16 +68,16 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
                 if (!is_array($mail)) {
                     $mail = array($mail);
                 }
-                foreach ($mail as $key=>$item) {                    
+                foreach ($mail as $key => $item) {
                     if (!is_array($item)) {
                         $item = array($item);
                     }
-                    foreach ($item as $itemKey=>$address) {
-                        if (preg_match('/'.$allowEmails.'/',$address)) {
+                    foreach ($item as $itemKey => $address) {
+                        if (preg_match('/' . $allowEmails . '/', $address)) {
                             $out[$key][$itemKey] = $address;
-                            Mage::log(sprintf('Email allowed to send (%s)',$address),null,'email_blocked.log');
+                            Mage::log(sprintf('Email allowed to send (%s)', $address), null, 'email_blocked.log');
                         } else {
-                            Mage::log(sprintf('Email not allowed to send (%s)',$address),null,'email_blocked.log');
+                            Mage::log(sprintf('Email not allowed to send (%s)', $address), null, 'email_blocked.log');
                         }
                     }
                 }
@@ -41,27 +89,29 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         }
         return $out;
     }
-    
-    
+
+
     /**
      * override bcc
      */
-    
-    public function addBcc($bcc) {
+
+    public function addBcc($bcc)
+    {
         if ($ret = $this->_allowSend($bcc)) {
             return parent::addBcc($ret);
         }
         return $this;
     }
-    
+
     /**
      * add CC to email
      *
      * @param array|string $cc email
-     * @param string $name 
+     * @param string $name
      */
-    
-    public function addCc($cc,$name='') {
+
+    public function addCc($cc, $name = '')
+    {
         if (!is_array($cc)) {
             $cc = array($name => $cc);
         }
@@ -70,14 +120,14 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         }
         return $this;
     }
-    
-    
-	/**
+
+
+    /**
      * Send mail to recipient
      *
-     * @param   array|string       $email        E-mail(s)
-     * @param   array|string|null  $name         receiver name(s)
-     * @param   array              $variables    template variables
+     * @param   array|string $email E-mail(s)
+     * @param   array|string|null $name receiver name(s)
+     * @param   array $variables template variables
      * @return  boolean
      **/
     public function send($email, $name = null, array $variables = array())
@@ -118,7 +168,7 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         }
 
         if ($returnPathEmail !== null) {
-            $mailTransport = new Zend_Mail_Transport_Sendmail("-f".$returnPathEmail);
+            $mailTransport = new Zend_Mail_Transport_Sendmail("-f" . $returnPathEmail);
             Zend_Mail::setDefaultTransport($mailTransport);
         }
 
@@ -131,7 +181,7 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
 
         //embed images start
         $text = $this->_imagesToAttachments($text);
-        if(!empty($this->_domAttachments)) {
+        if (!empty($this->_domAttachments)) {
             if (isset($variables['_ATTACHMENTS'])) {
                 $variables['_ATTACHMENTS'] = array_merge((array)$variables['_ATTACHMENTS'], $this->_domAttachments);
             } else {
@@ -142,16 +192,16 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         }
         //embed images end
 
-		////////////////////////////////////////////////////////////////////////
-		// Start changes
-		////////////////////////////////////////////////////////////////////////
-		if (!empty($variables['_ATTACHMENTS'])) {
+        ////////////////////////////////////////////////////////////////////////
+        // Start changes
+        ////////////////////////////////////////////////////////////////////////
+        if (!empty($variables['_ATTACHMENTS'])) {
             foreach ((array)$variables['_ATTACHMENTS'] as $a) {
                 if (is_string($a)) {
-                    $a = array('filename'=>$a);
+                    $a = array('filename' => $a);
                 }
                 if (empty($a['content']) && (empty($a['filename']) || !is_readable($a['filename']))) {
-                    Mage::throwException('Invalid attachment data: '.print_r($a, 1));
+                    Mage::throwException('Invalid attachment data: ' . print_r($a, 1));
                 }
                 $at = $mail->createAttachment(
                     !empty($a['content']) ? $a['content'] : file_get_contents($a['filename']),
@@ -160,18 +210,18 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
                     !empty($a['encoding']) ? $a['encoding'] : Zend_Mime::ENCODING_BASE64,
                     basename($a['filename'])
                 );
-				/* @var $at Zend_Mime_Part */
-				
-				if(isset($a['id']) && !empty($a['id'])){
-					$at->id = $a['id'];
-				}
+                /* @var $at Zend_Mime_Part */
+
+                if (isset($a['id']) && !empty($a['id'])) {
+                    $at->id = $a['id'];
+                }
             }
         }
-		////////////////////////////////////////////////////////////////////////
-		// End changes
-		////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // End changes
+        ////////////////////////////////////////////////////////////////////////
 
-        if($this->isPlain()) {
+        if ($this->isPlain()) {
             $mail->setBodyText($text);
         } else {
             $mail->setBodyHTML($text);
@@ -180,7 +230,7 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         $mail->setSubject('=?utf-8?B?' . base64_encode($this->getProcessedTemplateSubject($variables)) . '?=');
         $mail->setFrom($this->getSenderEmail(), $this->getSenderName());
 
-	    $errors = array();
+        $errors = array();
 
         try {
             $to = $mail->getRecipients();
@@ -188,29 +238,28 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
             if ($testFlag == 'true') {
                 $allowEmails = Mage::getConfig()->getNode('global/allow_emails');
                 if (!empty($allowEmails)) {
-                    foreach ($to as $k=>$email) {
-                        if (!preg_match('/'.$allowEmails.'/',$email)) {
-	                        unset($to[$k]);
-	                        $errors[] = sprintf('Email not allowed to send (%s)',$email);
+                    foreach ($to as $k => $email) {
+                        if (!preg_match('/' . $allowEmails . '/', $email)) {
+                            unset($to[$k]);
+                            $errors[] = sprintf('Email not allowed to send (%s)', $email);
                         }
                     }
                 } else {
-	                $to = array();
-	                $errors[] = 'Not allowed recipient emails [test server]';
+                    $to = array();
+                    $errors[] = 'Not allowed recipient emails [test server]';
                 }
             }
-	        if(count($errors)) {
-		        foreach($errors as $error) {
-			        Mage::log($error,null,'email_blocked.log');
-		        }
-	        }
+            if (count($errors)) {
+                foreach ($errors as $error) {
+                    Mage::log($error, null, 'email_blocked.log');
+                }
+            }
 
-	        if(count($to)) {
-		        $mail->send();
-	        }
+            if (count($to)) {
+                $mail->send();
+            }
             $this->_mail = null;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->_mail = null;
             Mage::logException($e);
             return false;
@@ -219,32 +268,33 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         return true;
     }
 
-    protected function _imagesToAttachments($html) {
+    protected function _imagesToAttachments($html)
+    {
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'); //preserve ążźćęłó etc
-        $dom = new DOMDocument(null,'UTF-8');
+        $dom = new DOMDocument(null, 'UTF-8');
         @$dom->loadHTML($html); //suppress warnings because this gets sometimes wrongly formatted html code and warnings prevent emails from sending
         $dom->preserveWhiteSpace = false;
 
-        foreach($dom->getElementsByTagName('img') as $image) {
+        foreach ($dom->getElementsByTagName('img') as $image) {
             //check if image has class 'noembed' if it has then skip to the next one
             //using array_flip + isset combo instead of in_array/array_search because it's quicker
             $classes = $image->getAttribute('class');
-            $classes = $classes ? array_flip(explode(" ",$classes)) : array();
-            if(!isset($classes['noembed'])) {
+            $classes = $classes ? array_flip(explode(" ", $classes)) : array();
+            if (!isset($classes['noembed'])) {
                 $src = trim($image->getAttribute('src'));
                 //skip already embeded images
-                if(substr($src, 0, 4 ) !== "cid:") {
-                    $extensionArr = explode(".",$src);
+                if (substr($src, 0, 4) !== "cid:") {
+                    $extensionArr = explode(".", $src);
                     $extension = end($extensionArr);
-                    if($this->_checkImageExtensions($extension)) {
-                        if(substr($src,0,7) !== "http://" && substr($src,0,8) !== "https://") {
-                            $src = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK).$src;
+                    if ($this->_checkImageExtensions($extension)) {
+                        if (substr($src, 0, 7) !== "http://" && substr($src, 0, 8) !== "https://") {
+                            $src = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK) . $src;
                         }
                         $key = md5($src);
-                        $filename = $key.".".$extension;
+                        $filename = $key . "." . $extension;
                         if (!isset($this->_domAttachments[$key])) {
                             $this->_domAttachments[$key] = array(
-                                'content' => file_get_contents($src,FILE_USE_INCLUDE_PATH),
+                                'content' => file_get_contents($src, FILE_USE_INCLUDE_PATH),
                                 'type' => Zend_Mime::TYPE_OCTETSTREAM,
                                 'disposition' => Zend_Mime::DISPOSITION_ATTACHMENT,
                                 'encoding' => Zend_Mime::ENCODING_BASE64,
@@ -252,7 +302,7 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
                                 'id' => $filename
                             );
                         }
-                        $image->setAttribute('src','cid:'.$filename);
+                        $image->setAttribute('src', 'cid:' . $filename);
                     }
                 }
             }
@@ -261,7 +311,8 @@ class Zolago_Common_Model_Core_Email_Template  extends ZolagoOs_OmniChannel_Mode
         return $dom->saveHTML();
     }
 
-    protected function _checkImageExtensions($ext) {
+    protected function _checkImageExtensions($ext)
+    {
         return isset($this->_allowedExtensions[strtolower($ext)]);
     }
 }
