@@ -11,7 +11,7 @@ class ZolagoOs_OmniChannelMicrosite_Helper_Data extends Mage_Core_Helper_Abstrac
     		if (!$this->getCurrentVendor()) return '';
     		$vendor = $this->getCurrentVendor();
     	}
-    	$title = Mage::getStoreConfig('udropship/microsite/landing_page_title');
+    	$title = Mage::getStoreConfig('zolagoos/microsite/landing_page_title');
     	if ($vendor->getData('landing_page_title')) {
     		$title = $vendor->getData('landing_page_title');
     	}
@@ -144,7 +144,7 @@ class ZolagoOs_OmniChannelMicrosite_Helper_Data extends Mage_Core_Helper_Abstrac
 
     public function getDomainName()
     {
-        $level = Mage::getStoreConfig('udropship/microsite/subdomain_level');
+        $level = Mage::getStoreConfig('zolagoos/microsite/subdomain_level');
         if (!$level) {
             return '';
         }
@@ -206,7 +206,7 @@ class ZolagoOs_OmniChannelMicrosite_Helper_Data extends Mage_Core_Helper_Abstrac
 
         try {
             if ($vendor) {
-                if (Mage::getStoreConfigFlag('udropship/microsite/front_show_all_products')) {
+                if (Mage::getStoreConfigFlag('zolagoos/microsite/front_show_all_products')) {
                     $collection->addIdFilter($vendor->getAssociatedProductIds());
                     $alreadyJoined = false;
                     foreach ($collection->getSelect()->getPart(Zend_Db_Select::COLUMNS) as $column) {

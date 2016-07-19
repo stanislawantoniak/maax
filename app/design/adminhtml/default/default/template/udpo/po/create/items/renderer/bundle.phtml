@@ -78,7 +78,7 @@
         <?php endif; ?>
 
         <?php if ($_item->getParentItem()): ?>
-        <?php if (Mage::getStoreConfigFlag('udropship/purchase_order/create_po_allow_change_costs')): ?>
+        <?php if (Mage::getStoreConfigFlag('zolagoos/purchase_order/create_po_allow_change_costs')): ?>
         <td nowrap="true" id="po-item-cost-<?php echo $_item->getId()?>" class="a-center po-item-cost">
             <input style="width: 100px;" type="text" class="input-text qty-input" name="udpo[costs][<?php echo $_item->getId() ?>]" value="<?php echo $_item->getUdpoBaseCost()*1 ?>" alt="<?php echo $_item->getUdpoOrigBaseCost()*1 ?>" <?php if (!$_item->getUdpoCustomCost()): ?>disabled="disabled"<?php endif?> />
             <input onclick="udpoToggleBaseCostInput(this)" type="checkbox" <?php if (!$_item->getUdpoCustomCost()): ?> checked<?php endif?>>

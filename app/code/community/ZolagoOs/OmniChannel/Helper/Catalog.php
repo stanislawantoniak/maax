@@ -228,7 +228,7 @@ class ZolagoOs_OmniChannel_Helper_Catalog extends Mage_Core_Helper_Abstract
             }
             $pId = $read->fetchOne($select, $bind);
         } else {
-            $vSkuAttr = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+            $vSkuAttr = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
             if ($vSkuAttr && $vSkuAttr!='sku') {
                 $attrFilters = array(array(
                     'attribute' => $vSkuAttr,
@@ -267,7 +267,7 @@ class ZolagoOs_OmniChannel_Helper_Catalog extends Mage_Core_Helper_Abstract
             $bind = array(':product_id' => (string)trim($pId), ':vendor_id' => $vId);
             $vSku = $read->fetchOne($select, $bind);
         } else {
-            $vSkuAttr = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+            $vSkuAttr = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
             if ($vSkuAttr && $vSkuAttr!='sku') {
                 $attrFilters = array(array(
                     'attribute' => 'entity_id',

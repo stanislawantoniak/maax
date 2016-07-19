@@ -18,7 +18,7 @@
  -->
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <vendor>
                     <fields>
@@ -34,7 +34,7 @@
 					</fields>
 				</vendor>
             </groups>
-		</udropship>
+		</zolagoos>
 		<solrbridge>
 		    <groups>
 		        <settings>

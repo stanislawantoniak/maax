@@ -225,8 +225,8 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$curShipping = $shipping->getItemByColumnValue('shipping_code', $uMethodCode);
 		$methodCode  = !empty($method[1]) ? $method[1] : '';
 
-		$labelCarrierAllowAll = Mage::getStoreConfig('udropship/vendor/label_carrier_allow_all', $_order->getStoreId());
-		$labelMethodAllowAll = Mage::getStoreConfig('udropship/vendor/label_method_allow_all', $_order->getStoreId());
+		$labelCarrierAllowAll = Mage::getStoreConfig('zolagoos/vendor/label_carrier_allow_all', $_order->getStoreId());
+		$labelMethodAllowAll = Mage::getStoreConfig('zolagoos/vendor/label_method_allow_all', $_order->getStoreId());
 
 		$availableMethods = array();
 		if ($curShipping && $labelMethodAllowAll) {
@@ -281,7 +281,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			$curShipping->resetProfile();
 		}
 
-		$labelCarrierAllowAlways = Mage::getStoreConfig('udropship/vendor/label_carrier_allow_always', $_order->getStoreId());
+		$labelCarrierAllowAlways = Mage::getStoreConfig('zolagoos/vendor/label_carrier_allow_always', $_order->getStoreId());
 		if (!is_array($labelCarrierAllowAlways)) {
 			$labelCarrierAllowAlways = array_filter(explode(',', $labelCarrierAllowAlways));
 		}

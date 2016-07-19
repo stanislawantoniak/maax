@@ -418,7 +418,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product extends Mage_Core_B
                 if ('configurable' != $prod->getTypeId()
                     || Mage::getStoreConfigFlag('zosprod/general/cfg_show_media_gallery')
                 ) {
-                    $cfgHideEditFields = explode(',', Mage::getStoreConfig('udropship/microsite/hide_product_attributes'));
+                    $cfgHideEditFields = explode(',', Mage::getStoreConfig('zolagoos/microsite/hide_product_attributes'));
                     if (isset($attributes['media_gallery'])
                         && !in_array('media_gallery', $cfgHideEditFields)
                         && $this->isMyProduct()

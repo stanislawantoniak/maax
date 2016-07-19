@@ -451,7 +451,7 @@ function validatePoSubmit(id)
 {
     if (!$('change_status-'+id)) return true
     if (_validatePoSubmit(id)) {
-        if (<?php echo (int)Mage::getStoreConfigFlag('udropship/vendor/allow_forced_po_status_change')?>
+        if (<?php echo (int)Mage::getStoreConfigFlag('zolagoos/vendor/allow_forced_po_status_change')?>
             && $('change_status-'+id).value !== ''
             && window.allowedPoStatuses && window.allowedPoStatuses[id]
             && -1 === window.allowedPoStatuses[id].indexOf($('change_status-'+id).value)

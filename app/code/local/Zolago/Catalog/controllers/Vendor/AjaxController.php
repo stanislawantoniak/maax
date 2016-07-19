@@ -208,7 +208,7 @@ class Zolago_Catalog_Vendor_AjaxController
         $mapper->setPath($this->_getPath());
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
         $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
-        $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+        $collection->addAttributeToSelect(Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute'));
         $collection->addAttributeToSelect('name');
         return $collection;
     }

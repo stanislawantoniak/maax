@@ -265,7 +265,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
 
     public function processAfterSave($product)
     {
-        $hideFields = explode(',', Mage::getStoreConfig('udropship/microsite/hide_product_attributes'));
+        $hideFields = explode(',', Mage::getStoreConfig('zolagoos/microsite/hide_product_attributes'));
         $hideFields[] = 'udropship_vendor';
         //$hideFields[] = 'tier_price';
         $hideFields[] = 'gallery';
@@ -833,7 +833,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
             }
         }
         $hasVsAttr = false;
-        $vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+        $vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
         if ($vsAttrCode && $vsAttrCode!='sku'
             && ($hasVsAttr = Mage::helper('udropship')->checkProductAttribute($vsAttrCode))
         ) {
@@ -1245,7 +1245,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
 
     public function getHideEditFields()
     {
-        $hideFields = explode(',', Mage::getStoreConfig('udropship/microsite/hide_product_attributes'));
+        $hideFields = explode(',', Mage::getStoreConfig('zolagoos/microsite/hide_product_attributes'));
         $hideFields[] = 'udropship_vendor';
         //$hideFields[] = 'tier_price';
         $hideFields[] = 'gallery';
@@ -1313,7 +1313,7 @@ class ZolagoOs_OmniChannelVendorProduct_Helper_Data extends Mage_Core_Helper_Abs
     public function getQuickCreateAllowedAttributes()
     {
         $qcAttrCodes = array('weight','sku','name','status','price','special_price','special_from_date','special_to_date');
-        $vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+        $vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
         if ($vsAttrCode && $vsAttrCode!='sku'
             && ($hasVsAttr = Mage::helper('udropship')->checkProductAttribute($vsAttrCode))
         ) {

@@ -478,7 +478,7 @@ class ZolagoOs_OmniChannelPo_Model_Pdf_Po extends Mage_Sales_Model_Order_Pdf_Abs
     protected function getCustomTextArray($po)
     {
         if (!isset($this->_customTextArr[$po->getId()])) {
-            $customText = Mage::getStoreConfig('udropship/purchase_order/udpo_pdf_custom_text', $po->getStoreId());
+            $customText = Mage::getStoreConfig('zolagoos/purchase_order/udpo_pdf_custom_text', $po->getStoreId());
             $curVendor = Mage::helper('udropship')->getVendor($po->getUdropshipVendor());
             $vUsePSCT = $curVendor->getData('use_udpo_pdf_custom_text');
             if ($vUsePSCT==1) {

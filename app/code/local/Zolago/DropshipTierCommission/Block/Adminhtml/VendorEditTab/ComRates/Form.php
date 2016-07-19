@@ -36,21 +36,21 @@ class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form 
         $fieldset->addField('commission_percent', 'text', array(
             'name'      => 'commission_percent',
             'label'     => $hlp->__('Default Commission Percent'),
-            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/commission_percent'))
+            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('zolagoos/tiercom/commission_percent'))
         ));
 
         // Added
         $fieldset->addField('sale_commission_percent', 'text', array(
             'name'      => 'sale_commission_percent',
             'label'     => $hlp->__('Default lower commission percent for products'),
-            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/sale_commission_percent'))
+            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('zolagoos/tiercom/sale_commission_percent'))
         ));
 
 		$fieldset->addField('terminal_percent_for_charge_lower_commission', 'text', array(
 			'name'      => 'terminal_percent_for_charge_lower_commission',
 			'label'     => $hlp->__('Terminal percent for charge lower commission'),
 			'after_element_html' => '<br />' . $hlp->__('Default value: %.2F. Commission for the sale will be calculated for products which have a lower selling price of n-percent strikeout price. Leave empty for default',
-					Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_lower_commission'))
+					Mage::getStoreConfig('zolagoos/tiercom/terminal_percent_for_charge_lower_commission'))
 		));
 
 		// Fieldset #2
@@ -65,7 +65,7 @@ class Zolago_DropshipTierCommission_Block_Adminhtml_VendorEditTab_ComRates_Form 
         $fieldsetAdditional->addField('cpc_commission', 'text', array(
             'name'      => 'cpc_commission',
             'label'     => $hlp->__('CPC commission percent'),
-            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/commission_percent'))
+            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('zolagoos/tiercom/commission_percent'))
         ));
 
         if ($vendor) {

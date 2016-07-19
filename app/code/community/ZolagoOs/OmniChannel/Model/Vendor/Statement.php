@@ -380,9 +380,9 @@ class ZolagoOs_OmniChannel_Model_Vendor_Statement extends ZolagoOs_OmniChannel_M
 
         $template = $vendor->getStatementEmailTemplate();
         if (!$template) {
-            $template = Mage::getStoreConfig('udropship/statement/email_template');
+            $template = Mage::getStoreConfig('zolagoos/statement/email_template');
         }
-        $identity = Mage::getStoreConfig('udropship/statement/email_identity');
+        $identity = Mage::getStoreConfig('zolagoos/statement/email_identity');
         Mage::getModel('udropship/email')->sendTransactional(
             $template,
             $identity,

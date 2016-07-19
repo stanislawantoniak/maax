@@ -1,5 +1,5 @@
 <?php $hlp = Mage::helper('udropship') ?>
-<?php if (Mage::getStoreConfigFlag('udropship/admin/show_order_view_vendor_rates') && Mage::registry('current_order')): ?>
+<?php if (Mage::getStoreConfigFlag('zolagoos/admin/show_order_view_vendor_rates') && Mage::registry('current_order')): ?>
 <?php $vendorRates = Mage::helper('udropship/protected')->getOrderVendorRates(Mage::registry('current_order')); ?>
 <?php if (!empty($vendorRates) && is_array($vendorRates)): ?>
 <dl id="udropship_orderview_vendor_rates" style="display: none">

@@ -184,12 +184,12 @@
     </adminhtml>
 
     <default>
-        <udropship>
+        <zolagoos>
             <vendor_rating>
                 <ready_status>1,7</ready_status>
                 <customer_email_template>udropship_vendor_rating_customer_email_template</customer_email_template>
             </vendor_rating>
-	    </udropship>
+	    </zolagoos>
     </default>
 
     <crontab>

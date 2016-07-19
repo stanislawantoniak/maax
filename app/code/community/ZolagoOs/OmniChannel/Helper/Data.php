@@ -147,7 +147,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     public function getLocalVendorId($store=null)
     {
         if (is_null($this->_localVendorId)) {
-            $this->_localVendorId = Mage::getStoreConfig('udropship/vendor/local_vendor', $store);
+            $this->_localVendorId = Mage::getStoreConfig('zolagoos/vendor/local_vendor', $store);
             // can't proceed if not configured
             if (!$this->_localVendorId) {
                 #Mage::throwException('Local vendor is not set, please configure correctly');
@@ -996,7 +996,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     */
     protected function _setOriginAddress($store, $object=null)
     {
-        if (!Mage::getStoreConfig('udropship/vendor/tax_by_vendor', $store)) {
+        if (!Mage::getStoreConfig('zolagoos/vendor/tax_by_vendor', $store)) {
             return;
         }
         $origin = null;
@@ -1114,7 +1114,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $transport = null;
 
-        if (Mage::getStoreConfig('udropship/misc/mail_transport')=='sendmail') {
+        if (Mage::getStoreConfig('zolagoos/misc/mail_transport')=='sendmail') {
             $sendmail = true;
             $transport = new Zend_Mail_Transport_Sendmail();
         }
@@ -1234,7 +1234,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $fields = Mage::getConfig()->getNode('global/udropship/vendor/fields')->children();
 
-        $visible = Mage::getStoreConfig('udropship/vendor/visible_preferences');
+        $visible = Mage::getStoreConfig('zolagoos/vendor/visible_preferences');
         $visible = $visible ? explode(',', $visible) : array();
 
         $isAdmin = Mage::app()->getStore()->isAdmin();
@@ -1252,7 +1252,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $customVars = array();
 
-        $visible = Mage::getStoreConfig('udropship/vendor/visible_preferences');
+        $visible = Mage::getStoreConfig('zolagoos/vendor/visible_preferences');
         $visible = $visible ? explode(',', $visible) : array();
 
         foreach (Mage::getConfig()->getNode('global/udropship/vendor/fields')->children() as $code=>$node) {
@@ -1402,7 +1402,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
 					foreach ($trackIds[$trackId] as $track) {
 
 						if (in_array($status, array(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY, ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED))) {
-							$repeatIn = Mage::getStoreConfig('udropship/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
+							$repeatIn = Mage::getStoreConfig('zolagoos/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
 							if ($repeatIn <= 0) {
 								$repeatIn = 12;
 							}
@@ -1513,10 +1513,10 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         $mailTemplate = Mage::getModel('core/email_template');
 
         if ($order->getCustomerIsGuest()) {
-            $template = Mage::getStoreConfig('udropship/customer/tracking_email_template_guest', $storeId);
+            $template = Mage::getStoreConfig('zolagoos/customer/tracking_email_template_guest', $storeId);
             $customerName = $order->getBillingAddress()->getName();
         } else {
-            $template = Mage::getStoreConfig('udropship/customer/tracking_email_template', $storeId);
+            $template = Mage::getStoreConfig('zolagoos/customer/tracking_email_template', $storeId);
             $customerName = $order->getCustomerName();
         }
 
@@ -1617,11 +1617,11 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
                 // if new track record, set initial values
                 if (!$track->getUdropshipStatus()) {
                     $vendorId = $shipment->getUdropshipVendor();
-                    $pollTracking = Mage::getStoreConfig('udropship/customer/poll_tracking', $storeId);
+                    $pollTracking = Mage::getStoreConfig('zolagoos/customer/poll_tracking', $storeId);
                     $trackApi = Mage::helper('udropship')->getVendor($vendorId)->getTrackApi();
                     if ($pollTracking && $trackApi) {
                         $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING);
-                        $repeatIn = Mage::getStoreConfig('udropship/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
+                        $repeatIn = Mage::getStoreConfig('zolagoos/customer/repeat_poll_tracking', $track->getShipment()->getOrder()->getStoreId());
                         if ($repeatIn<=0) {
                             $repeatIn = 12;
                         }
@@ -1647,8 +1647,8 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         if (!empty($notifyTracks)) {
-            $notifyOnOld = Mage::getStoreConfig('udropship/customer/notify_on', $storeId);
-            $notifyOn = Mage::getStoreConfig('udropship/customer/notify_on_tracking', $storeId);
+            $notifyOnOld = Mage::getStoreConfig('zolagoos/customer/notify_on', $storeId);
+            $notifyOn = Mage::getStoreConfig('zolagoos/customer/notify_on_tracking', $storeId);
             if ($notifyOn) {
                 $this->sendTrackingNotificationEmail($notifyTracks);
                 $shipment->setEmailSent(true);
@@ -1685,8 +1685,8 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         if (is_null($complete)) {
-            if (Mage::getStoreConfigFlag('udropship/vendor/auto_shipment_complete', $storeId)) {
-                switch (Mage::getStoreConfigFlag('udropship/vendor/auto_shipment_complete', $storeId)) {
+            if (Mage::getStoreConfigFlag('zolagoos/vendor/auto_shipment_complete', $storeId)) {
+                switch (Mage::getStoreConfigFlag('zolagoos/vendor/auto_shipment_complete', $storeId)) {
                     case ZolagoOs_OmniChannel_Model_Source::AUTO_SHIPMENT_COMPLETE_ANY:
                         $pickedUpTracks = Mage::getModel('sales/order_shipment_track')->getCollection()
                             ->setShipmentFilter($shipment->getId())
@@ -1775,8 +1775,8 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             $this->registerShipmentItem($item, $save);
         }
 
-        $notifyOnOld = Mage::getStoreConfig('udropship/customer/notify_on', $storeId);
-        $notifyOn = Mage::getStoreConfig('udropship/customer/notify_on_shipment', $storeId);
+        $notifyOnOld = Mage::getStoreConfig('zolagoos/customer/notify_on', $storeId);
+        $notifyOn = Mage::getStoreConfig('zolagoos/customer/notify_on_shipment', $storeId);
         if (($notifyOn || $notifyOnOld==ZolagoOs_OmniChannel_Model_Source::NOTIFYON_SHIPMENT) && !$delivered) {
             $shipment->sendEmail();
             $shipment->setEmailSent(true);
@@ -1957,13 +1957,13 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('cost')
             ->addIdFilter(array_keys($data));
 
-        $vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+        $vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
         if (($hasVsAttr = $this->checkProductAttribute($vsAttrCode))) {
             $products->addAttributeToSelect($vsAttrCode);
             $vsAttr = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $vsAttrCode);
         }
 
-        if ($v->getId()==Mage::getStoreConfig('udropship/vendor/local_vendor')) {
+        if ($v->getId()==Mage::getStoreConfig('zolagoos/vendor/local_vendor')) {
             $attr = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'udropship_vendor');
             $products->getSelect()->joinLeft(
                 array('_udv'=>$attr->getBackend()->getTable()),
@@ -2060,7 +2060,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
                 break;
 
             case 'wysiwyg_allowed':
-                $flag = Mage::getStoreConfig('udropship/vendor/allow_wysiwyg') && $this->compareMageVer('1.4.0');
+                $flag = Mage::getStoreConfig('zolagoos/vendor/allow_wysiwyg') && $this->compareMageVer('1.4.0');
                 break;
 
             case 'stock_can_subtract_qty':
@@ -2106,7 +2106,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     public function assignVendorSkus($po)
     {
         $storeId = $po->getStoreId();
-        $attr = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute', $storeId);
+        $attr = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute', $storeId);
         Mage::helper('udropship')->addVendorSkus($po);
         foreach ($po->getAllItems() as $item) {
             $oItem = $item->getOrderItem();
@@ -2137,7 +2137,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     public function unassignVendorSkus($po)
     {
         $storeId = $po->getStoreId();
-        $attr = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute', $storeId);
+        $attr = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute', $storeId);
         //if ($attr && $attr!='sku') {
             foreach ($po->getAllItems() as $item) {
                 $oItem = $item->getOrderItem();
@@ -2166,7 +2166,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     public function addVendorSkus($po)
     {
         $storeId = $po->getStoreId();
-        $attr = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute', $storeId);
+        $attr = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute', $storeId);
         $productIds = array();
         $simpleSkus = array();
         foreach ($po->getAllItems() as $item) {
@@ -2250,7 +2250,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
         $pdf = Mage::getModel('udropship/pdf_shipment')
-            ->setUseFont(Mage::getStoreConfig('udropship/vendor/pdf_use_font'))
+            ->setUseFont(Mage::getStoreConfig('zolagoos/vendor/pdf_use_font'))
             ->getPdf($shipments);
         foreach ($shipments as $shipment) {
             if ($shipment->getOrder()->hasData('__orig_shipping_description')) {
@@ -2287,7 +2287,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function applyEstimateTotalPriceMethod($total, $price, $store=null)
     {
-        $totalMethod = Mage::getStoreConfig('udropship/customer/estimate_total_method', $store);
+        $totalMethod = Mage::getStoreConfig('zolagoos/customer/estimate_total_method', $store);
         if ($totalMethod=='max') {
             $total = max($total, $price);
         } else {
@@ -2321,7 +2321,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         $oShippingMethod = Mage::helper('udropship')->explodeOrderShippingMethod($order);
         $carrierNames = Mage::getSingleton('udropship/source')->getCarriers();
         $shipping = $this->getShippingMethods();
-        if ('order' == Mage::getStoreConfig('udropship/vendor/reassign_available_shipping')
+        if ('order' == Mage::getStoreConfig('zolagoos/vendor/reassign_available_shipping')
             && $oShippingMethod[0] == 'udropship' && !empty($oShippingMethod[1])
         ) {
             $oShipping = $shipping->getItemByColumnValue('shipping_code', $oShippingMethod[1]);
@@ -2433,13 +2433,13 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function isAdjustmentComment($comment, $store=null)
     {
-        $adjTrigger = Mage::getStoreConfig('udropship/statement/adjustment_trigger', $store).':';
+        $adjTrigger = Mage::getStoreConfig('zolagoos/statement/adjustment_trigger', $store).':';
         $adjTriggerQ = preg_quote($adjTrigger);
         return preg_match("#({$adjTriggerQ})\\s*([0-9.-]+)\\s*(.*)\$#m", $comment);
     }
     public function collectPoAdjustments($pos, $force=false)
     {
-        $adjTrigger = Mage::getStoreConfig('udropship/statement/adjustment_trigger').':';
+        $adjTrigger = Mage::getStoreConfig('zolagoos/statement/adjustment_trigger').':';
         $adjTriggerQ = preg_quote($adjTrigger);
         $posToCollect = array();
         foreach ($pos as $po) {
@@ -2687,13 +2687,13 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         $result = array();
         foreach ($products as $pId => $siArr) {
             foreach ($siArr as $item) {
-                if (Mage::getStoreConfig('udropship/stock/availability', $entity->getStoreId())=='local_if_in_stock') {
+                if (Mage::getStoreConfig('zolagoos/stock/availability', $entity->getStoreId())=='local_if_in_stock') {
                     $result[$item->getId()][$this->getLocalVendorId($entity->getStoreId())] = true;
                 }
                 $children = $item->getChildrenItems() ? $item->getChildrenItems() : $item->getChildren();
                 if (!empty($children)) {
                     foreach ($children as $child) {
-                        if (Mage::getStoreConfig('udropship/stock/availability', $entity->getStoreId())=='local_if_in_stock') {
+                        if (Mage::getStoreConfig('zolagoos/stock/availability', $entity->getStoreId())=='local_if_in_stock') {
                             $result[$child->getId()][$this->getLocalVendorId($entity->getStoreId())] = true;
                         }
                         if (!empty($rows[$child->getProductId()])) $result[$item->getId()][$rows[$child->getProductId()]] = true;
@@ -2708,8 +2708,8 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getVendorShipmentStatuses()
     {
-        if (Mage::getStoreConfig('udropship/vendor/is_restrict_shipment_status')) {
-            $shipmentStatuses = Mage::getStoreConfig('udropship/vendor/restrict_shipment_status');
+        if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_shipment_status')) {
+            $shipmentStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_shipment_status');
             if (!is_array($shipmentStatuses)) {
                 $shipmentStatuses = explode(',', $shipmentStatuses);
             }
@@ -3273,7 +3273,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function isShowVendorSkuColumnInStockTab()
     {
-        return Mage::getStoreConfigFlag('udropship/stock/show_vendor_sku_column');
+        return Mage::getStoreConfigFlag('zolagoos/stock/show_vendor_sku_column');
     }
     public function isShowVendorSkuColumnInProductsTab()
     {
@@ -3283,13 +3283,13 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     public function getVendorPortalCustomUrl()
     {
         return $this->isModuleActive('ZolagoOs_OmniChannelVendorPortalUrl')
-            ? Mage::getStoreConfig('udropship/admin/vendor_portal_url')
+            ? Mage::getStoreConfig('zolagoos/admin/vendor_portal_url')
             : false;
     }
 
     public function isStatementRefundsEnabled()
     {
-        return Mage::getStoreConfig('udropship/statement/enable_refunds');
+        return Mage::getStoreConfig('zolagoos/statement/enable_refunds');
     }
 
     public function getShippingPrice($baseShipping, $vId, $address, $type)

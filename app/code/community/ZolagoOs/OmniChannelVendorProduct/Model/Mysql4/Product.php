@@ -36,7 +36,7 @@ class ZolagoOs_OmniChannelVendorProduct_Model_Mysql4_Product extends Mage_Catalo
             && $vId
             && !Mage::helper('udropship')->isUdmultiActive()
         ) {
-            $vSkuAttr = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+            $vSkuAttr = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
             if ($vSkuAttr && $vSkuAttr!='sku') {
                 if (!$object->getData($vSkuAttr)) {
                     Mage::throwException('Vendor SKU attribute is empty');

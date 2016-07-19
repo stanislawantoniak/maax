@@ -15,7 +15,7 @@ class ZolagoOs_OmniChannelTierCommission_Model_Source extends ZolagoOs_OmniChann
 
         switch ($this->getPath()) {
 
-        case 'udropship/tiercom/fixed_rule':
+        case 'zolagoos/tiercom/fixed_rule':
         case 'tiercom_fixed_rates':
             $options = array(
                 'item_price' => $hlpv->__('Item Price')
@@ -25,7 +25,7 @@ class ZolagoOs_OmniChannelTierCommission_Model_Source extends ZolagoOs_OmniChann
             }
             break;
 
-        case 'udropship/tiercom/fallback_lookup':
+        case 'zolagoos/tiercom/fallback_lookup':
         case 'tiercom_fallback_lookup':
             $options = array(
                 'vendor' => $hlpv->__('Vendor First'),
@@ -36,7 +36,7 @@ class ZolagoOs_OmniChannelTierCommission_Model_Source extends ZolagoOs_OmniChann
             }
             break;
 
-        case 'udropship/tiercom/fixed_calculation_type':
+        case 'zolagoos/tiercom/fixed_calculation_type':
         case 'tiercom_fixed_calc_type':
             $options = array(
                 'flat' => $hlpv->__('Flat (per po)'),

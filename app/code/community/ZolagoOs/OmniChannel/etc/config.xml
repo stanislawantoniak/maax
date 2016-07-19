@@ -1603,7 +1603,7 @@
                     <children>
                         <sales>
                             <children>
-                                <udropship translate="title">
+                                <zolagoos translate="title">
                                     <title>ZolagoOs</title>
                                     <sort_order>40</sort_order>
                                     <children>
@@ -1624,12 +1624,12 @@
                                             <sort_order>35</sort_order>
                                         </statement>
                                     </children>
-                                </udropship>
+                                </zolagoos>
                             </children>
                         </sales>
                         <report>
                             <children>
-                                <udropship translate="title">
+                                <zolagoos translate="title">
                                     <title>ZolagoOs</title>
                                     <sort_order>100</sort_order>
                                     <children>
@@ -1642,17 +1642,17 @@
                                             <sort_order>20</sort_order>
                                         </item>
                                     </children>
-                                </udropship>
+                                </zolagoos>
                             </children>
                         </report>
                         <system>
                             <children>
                                 <config>
                                     <children>
-                                        <udropship>
+                                        <zolagoos>
                                             <title>ZolagoOs</title>
                                             <sort_order>50</sort_order>
-                                        </udropship>
+                                        </zolagoos>
                                         <zolagoos_label>
                                             <title>ZolagoOs Labels</title>
                                             <sort_order>60</sort_order>
@@ -1755,7 +1755,7 @@
     </crontab>
 
     <default>
-        <udropship>
+        <zolagoos>
             <admin>
                 <vendor_comments_receiver>general</vendor_comments_receiver>
                 <vendor_comments_subject><![CDATA[A comment from {{vendor_name}} regarding Order # {{order_id}}]]></vendor_comments_subject>
@@ -1886,9 +1886,9 @@ Tracking IDs:
 Limit: {{limit}} days
 ]]></poll_tracking_limit_exceeded_template>
             </error_notifications>
-        </udropship>
+        </zolagoos>
         <carriers>
-            <udropship>
+            <zolagoos>
                 <active>0</active>
                 <model>udropship/carrier</model>
                 <title>ZolagoOs Shipping</title>
@@ -1896,7 +1896,7 @@ Limit: {{limit}} days
                 <free_method>ground</free_method>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <min_package_weight>0.07</min_package_weight>
-            </udropship>
+            </zolagoos>
         </carriers>
         <zolagoos_label>
             <general>

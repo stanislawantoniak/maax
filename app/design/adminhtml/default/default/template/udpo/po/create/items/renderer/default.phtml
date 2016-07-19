@@ -1,5 +1,5 @@
 <?php $hlp = Mage::helper('udropship');
-$isEditCosts = Mage::getStoreConfigFlag('udropship/purchase_order/create_po_allow_change_costs') && Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/udpo_edit_cost');
+$isEditCosts = Mage::getStoreConfigFlag('zolagoos/purchase_order/create_po_allow_change_costs') && Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/udpo_edit_cost');
 $isViewCost = Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/udpo_view_cost');
 $qtyLast = !$isViewCost ? 'last' : '';
 ?>

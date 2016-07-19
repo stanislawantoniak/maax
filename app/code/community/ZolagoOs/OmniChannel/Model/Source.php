@@ -62,8 +62,8 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
 
         switch ($this->getPath()) {
 
-        case 'udropship/customer/notify_on_tracking':
-        case 'udropship/customer/notify_on_shipment':
+        case 'zolagoos/customer/notify_on_tracking':
+        case 'zolagoos/customer/notify_on_shipment':
         case 'billing_use_shipping':
         case 'yesno':
             $options = array(
@@ -80,7 +80,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship/customer/notify_on':
+        case 'zolagoos/customer/notify_on':
             $options = array(
                 0 => $hlp->__('Disable'),
                 1 => $hlp->__('When Tracking ID is added'),
@@ -89,19 +89,19 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship/customer/poll_tracking':
+        case 'zolagoos/customer/poll_tracking':
             // not used
             break;
 
-        case 'udropship/customer/estimate_error_action':
+        case 'zolagoos/customer/estimate_error_action':
             $options = array(
                 'fail' => $hlp->__('Fail estimate and show the error'),
                 'skip' => $hlp->__('Skip failed carrier call and show prices without'),
             );
             break;
 
-        case 'udropship/stock/availability':
-        case 'udropship/stock/reassign_availability':
+        case 'zolagoos/stock/availability':
+        case 'zolagoos/stock/reassign_availability':
             $options = array();
             $methods = Mage::getConfig()->getNode('global/udropship/availability_methods')->children();
             foreach ($methods as $code=>$method) {
@@ -112,15 +112,15 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             }
             break;
 
-        case 'carriers/udropship/free_method':
+        case 'carriers/zolagoos/free_method':
             $selector = false;
             $options = $this->getMethods(true, true);
             break;
 
-        case 'udropship/vendor/label_carrier_allow_always':
+        case 'zolagoos/vendor/label_carrier_allow_always':
         case 'carriers':
             $options = $this->getCarriers();
-            if (in_array($this->getPath(), array('udropship/vendor/label_carrier_allow_always'))) {
+            if (in_array($this->getPath(), array('zolagoos/vendor/label_carrier_allow_always'))) {
                 $newOptions = array();
                 foreach ($options as $cCode=>$cTitle) {
                     if (in_array($cCode, array('fedex','fedexsoap','ups','usps'))) {
@@ -140,16 +140,16 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             break;
 
         case 'vendors':
-        case 'udropship/vendor/local_vendor':
+        case 'zolagoos/vendor/local_vendor':
             $options = $this->getVendors(true);
             break;
 
-        case 'udropship/vendor/make_available_to_dropship':
+        case 'zolagoos/vendor/make_available_to_dropship':
             $selector = false;
             $options = Mage::getSingleton('sales/order_config')->getStatuses();
             break;
 
-        case 'udropship/vendor/change_order_status_after_po':
+        case 'zolagoos/vendor/change_order_status_after_po':
             $selector = false;
             $options = Mage::getSingleton('sales/order_config')->getStatuses();
             $unsetStatuses = array_unique(array_merge(
@@ -166,18 +166,18 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             $options = array('' => $hlp->__('* Do not change')) + $options;
         break;
 
-        case 'udropship/vendor/visible_preferences':
+        case 'zolagoos/vendor/visible_preferences':
             $selector = false;
             $options = $this->getVendorVisiblePreferences();
             break;
-        case 'udropship/batch/export_on_po_status':
-        case 'udropship/vendor/default_shipment_status':
-        case 'udropship/vendor/restrict_shipment_status':
-        case 'udropship/purchase_order/autoinvoice_shipment_statuses':
-        case 'udropship/pocombine/notify_on_status':
-        case 'udropship/pocombine/after_notify_status':
-        case 'udropship/vendor_rating/ready_status':
-        case 'udropship/statement/statement_shipment_status':
+        case 'zolagoos/batch/export_on_po_status':
+        case 'zolagoos/vendor/default_shipment_status':
+        case 'zolagoos/vendor/restrict_shipment_status':
+        case 'zolagoos/purchase_order/autoinvoice_shipment_statuses':
+        case 'zolagoos/pocombine/notify_on_status':
+        case 'zolagoos/pocombine/after_notify_status':
+        case 'zolagoos/vendor_rating/ready_status':
+        case 'zolagoos/statement/statement_shipment_status':
         case 'statement_shipment_status':
         case 'shipment_statuses':
         case 'initial_shipment_status':
@@ -201,12 +201,12 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             }
             break;
 
-        case 'udropship/vendor/vendor_notification_field':
+        case 'zolagoos/vendor/vendor_notification_field':
             $options = $this->getVendorVisiblePreferences();
             array_unshift($options, array('value'=>'', 'label'=>$hlp->__('* Use Vendor Email')));
             break;
 
-        case 'udropship/vendor/auto_shipment_complete':
+        case 'zolagoos/vendor/auto_shipment_complete':
             $options = array(
                 self::AUTO_SHIPMENT_COMPLETE_NO => $hlp->__('No'),
                 self::AUTO_SHIPMENT_COMPLETE_ALL => $hlp->__('When all items are shipped'),
@@ -214,7 +214,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
             
-        case 'udropship/vendor/pdf_use_font':
+        case 'zolagoos/vendor/pdf_use_font':
             $options = array(
                 '' => $hlp->__('* Magento Bundled Fonts'),
                 'TIMES' => $hlp->__('Times New Roman'),
@@ -223,14 +223,14 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship/customer/estimate_total_method':
+        case 'zolagoos/customer/estimate_total_method':
             $options = array(
                 '' => $hlp->__('Sum of order vendors estimates'),
                 'max' => $hlp->__('Maximum of order vendors estimates'),
             );
             break;
 
-        case 'udropship/misc/mail_transport':
+        case 'zolagoos/misc/mail_transport':
             $options = array(
                 '' => $hlp->__('* Automatic'),
                 'sendmail' => $hlp->__('Sendmail'),
@@ -272,9 +272,9 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship/statement/statement_shipping_in_payout':
-        case 'udropship/statement/statement_tax_in_payout':
-        case 'udropship/statement/statement_discount_in_payout':
+        case 'zolagoos/statement/statement_shipping_in_payout':
+        case 'zolagoos/statement/statement_tax_in_payout':
+        case 'zolagoos/statement/statement_discount_in_payout':
         case 'statement_shipping_in_payout':
         case 'statement_tax_in_payout':
         case 'statement_discount_in_payout':
@@ -288,11 +288,11 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             }
             break;
 
-        case 'udropship/statement/apply_commission_on_discount':
+        case 'zolagoos/statement/apply_commission_on_discount':
         case 'apply_commission_on_discount':
-        case 'udropship/statement/apply_commission_on_tax':
+        case 'zolagoos/statement/apply_commission_on_tax':
         case 'apply_commission_on_tax':
-        case 'udropship/statement/shipping_tax_in_shipping':
+        case 'zolagoos/statement/shipping_tax_in_shipping':
         case 'shipping_tax_in_shipping':
             $options = array(
                 1 => $hlp->__('Yes'),
@@ -355,7 +355,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
 //                'ZPL'=>$hlp->__('ZPL'),
             );
             break;
-        case 'udropship/label/label_size':
+        case 'zolagoos/label/label_size':
             $options = array(
                 '4X6'=>$hlp->__('4X6'),
             );
@@ -629,14 +629,14 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
             
-        case 'udropship/vendor/reassign_available_shipping':
+        case 'zolagoos/vendor/reassign_available_shipping':
             $options = array(
                 'all' => $hlp->__('All'),
                 'order' => $hlp->__('Limit by order shipping method'),
             );
             break;
 
-        case 'udropship/statement/statement_po_type':
+        case 'zolagoos/statement/statement_po_type':
         case 'statement_po_type':
             $options = array(
                 'shipment' => $hlp->__('Shipment'),
@@ -649,7 +649,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             }
             break;
 
-        case 'udropship/statement/statement_subtotal_base':
+        case 'zolagoos/statement/statement_subtotal_base':
         case 'statement_subtotal_base':
             $options = array(
                 'price' => $hlp->__('Price'),
@@ -685,7 +685,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship/customer/vendor_enable_disable_action':
+        case 'zolagoos/customer/vendor_enable_disable_action':
             $options = array(
                 'noaction' => $hlp->__('No action'),
                 'enable_disable' => $hlp->__('Enable / Disable vendor products'),
@@ -718,7 +718,7 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
             );
             break;
 
-        case 'udropship/customer/vendor_delete_action':
+        case 'zolagoos/customer/vendor_delete_action':
             $options = array(
                 'noaction' => $hlp->__('No action'),
                 'assign_local_enabled' => $hlp->__('Assign to local vendor and leave vendor products enabled'),
@@ -746,8 +746,8 @@ class ZolagoOs_OmniChannel_Model_Source extends ZolagoOs_OmniChannel_Model_Sourc
     public function toOptionArray($selector=false)
     {
         switch ($this->getPath()) {
-        case 'udropship/vendor/vendor_notification_field':
-        case 'udropship/vendor/visible_preferences':
+        case 'zolagoos/vendor/vendor_notification_field':
+        case 'zolagoos/vendor/visible_preferences':
         case 'allowed_countries':
             return $this->toOptionHash($selector);
         }

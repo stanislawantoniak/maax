@@ -408,7 +408,7 @@ jQuery().ready(function() {
     });
 
     var mapByCSVOffset = 0;
-    <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_bycsv'); ?>
+    <?php $mapByNameBatchSize= Mage::getStoreConfig('zolagoos/vendor/vendor_mass_image_batch_size_bycsv'); ?>
     var mapByCSVBatchSize = "<?php echo $mapByNameBatchSize; ?>";
     jQuery("a#dialog_by_csv_trigger, #map_csv_button").click(function(){
         jQuery("#map_form input[name='csv_file_limit']").val(mapByCSVBatchSize);
@@ -504,7 +504,7 @@ jQuery().ready(function() {
         var pidList = jQuery("#dialog_by_csv_result").data('pidlist');
         makeRedirect(pidList);
     })
-    <?php $mapByNameBatchSize= Mage::getStoreConfig('udropship/vendor/vendor_mass_image_batch_size_byname'); ?>
+    <?php $mapByNameBatchSize= Mage::getStoreConfig('zolagoos/vendor/vendor_mass_image_batch_size_byname'); ?>
     var mapByNameBatchSize = "<?php echo $mapByNameBatchSize; ?>";
     jQuery("#map-by-name").click(function (e) {
         e.preventDefault();

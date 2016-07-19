@@ -243,7 +243,7 @@ class ZolagoOs_OmniChannelPo_Adminhtml_Order_PoController extends Mage_Adminhtml
     
     protected function checkStockAvailability($order, $vendors, $noError=false)
     {
-        if (Mage::getStoreConfigFlag('udropship/stock/reassign_skip_stockcheck', $order->getStore())) {
+        if (Mage::getStoreConfigFlag('zolagoos/stock/reassign_skip_stockcheck', $order->getStore())) {
             return $this;
         }
         $items = Mage::getModel('sales/order')->load($order->getId())->getAllItems();

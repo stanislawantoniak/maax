@@ -131,7 +131,7 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
         $locale = Mage::app()->getLocale();
         $catIdsToLoad = array_unique($catIdsToLoad);
         $iCats = Mage::getResourceModel('catalog/category_collection')->addIdFilter($catIdsToLoad);
-        $subcatMatchFlag = Mage::getStoreConfigFlag('udropship/tiercom/match_subcategories');
+        $subcatMatchFlag = Mage::getStoreConfigFlag('zolagoos/tiercom/match_subcategories');
         $ratesToUse = array();
         foreach ($po->getAllItems() as $item) {
             $itemId = spl_object_hash($item);
@@ -205,7 +205,7 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
                 ) {
                     $ratesToUse[$itemId]['value'] = $locale->getNumber($v->getCommissionPercent());
                 } else {
-                    $ratesToUse[$itemId]['value'] = $locale->getNumber(Mage::getStoreConfig('udropship/tiercom/commission_percent'));
+                    $ratesToUse[$itemId]['value'] = $locale->getNumber(Mage::getStoreConfig('zolagoos/tiercom/commission_percent'));
                 }
             }
             $item->setCommissionPercent(@$ratesToUse[$itemId]['value']);
@@ -240,7 +240,7 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
         $locale = Mage::app()->getLocale();
         $catIdsToLoad = array_unique($catIdsToLoad);
         $iCats = Mage::getResourceModel('catalog/category_collection')->addIdFilter($catIdsToLoad);
-        $subcatMatchFlag = Mage::getStoreConfigFlag('udropship/tiercom/match_subcategories');
+        $subcatMatchFlag = Mage::getStoreConfigFlag('zolagoos/tiercom/match_subcategories');
         $ratesToUse = array();
         foreach ($po->getAllItems() as $item) {
             $itemId = spl_object_hash($item);
@@ -304,7 +304,7 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
             if (''!=$vendor->getTransactionFee()) {
                 $poTransFee = Mage::app()->getLocale()->getNumber($vendor->getTransactionFee());
             } else {
-                $poTransFee = Mage::app()->getLocale()->getNumber(Mage::getStoreConfig('udropship/tiercom/transaction_fee'));
+                $poTransFee = Mage::app()->getLocale()->getNumber(Mage::getStoreConfig('zolagoos/tiercom/transaction_fee'));
             }
         }
         foreach ($po->getAllItems() as $item) {
@@ -419,14 +419,14 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
         $vendor = Mage::helper('udropship')->getVendor($vendor);
         $cfgValue = $vendor->getTiercomFixedCalcType();
         if ($cfgValue=='') {
-            $cfgValue = Mage::getStoreConfig('udropship/tiercom/fixed_calculation_type');
+            $cfgValue = Mage::getStoreConfig('zolagoos/tiercom/fixed_calculation_type');
         }
         return false!==strpos($cfgValue, $type);
     }
 
     public function getGlobalTierComConfig()
     {
-        $value = Mage::getStoreConfig('udropship/tiercom/rates');
+        $value = Mage::getStoreConfig('zolagoos/tiercom/rates');
         if (is_string($value)) {
             $value = unserialize($value);
         }
@@ -435,12 +435,12 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
 
     public function getGlobalTierComFixedRule()
     {
-        return Mage::getStoreConfig('udropship/tiercom/fixed_rule');
+        return Mage::getStoreConfig('zolagoos/tiercom/fixed_rule');
     }
 
     public function getGlobalTierComFixedConfig()
     {
-        $value = Mage::getStoreConfig('udropship/tiercom/fixed_rates');
+        $value = Mage::getStoreConfig('zolagoos/tiercom/fixed_rates');
         if (is_string($value)) {
             $value = unserialize($value);
         }
@@ -452,7 +452,7 @@ class ZolagoOs_OmniChannelTierCommission_Helper_Data extends Mage_Core_Helper_Ab
     {
         if (null === $this->_topCats) {
             $cHlp = Mage::helper('udropship/catalog');
-            $topCatId = Mage::getStoreConfig('udropship/tiercom/tiered_category_parent');
+            $topCatId = Mage::getStoreConfig('zolagoos/tiercom/tiered_category_parent');
             $topCat = Mage::getModel('catalog/category')->load($topCatId);
             if (!$topCat->getId()) {
                 $topCat = $cHlp->getStoreRootCategory();

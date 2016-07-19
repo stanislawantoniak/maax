@@ -54,7 +54,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 
         $toDelete = array();
         foreach ($this->_collection as $item) {
-            $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            $skuv = $item->getData(Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute'));
             $pid = $item->getData('entity_id');
             if (!$skuv) {
                 continue;
@@ -144,7 +144,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         }
         foreach ($this->_collection as $item) {
             $updateFlag = false;
-            $skuv = $item->getData(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            $skuv = $item->getData(Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute'));
 
             $pid = $item->getData('entity_id');
             $label = $item->getData('name');

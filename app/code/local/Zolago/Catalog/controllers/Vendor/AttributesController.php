@@ -150,9 +150,9 @@ class Zolago_Catalog_Vendor_AttributesController
             $userName  = $vendor->getVendorName();
         }
 
-        $storeEmail  = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_cc_store', $store);
+        $storeEmail  = Mage::getStoreConfig('zolagoos/vendor/ask_attribute_email_cc_store', $store);
         $storeName   = $store->getFrontendName();
-        $template    = Mage::getStoreConfig('udropship/vendor/ask_attribute_email_template', $store);
+        $template    = Mage::getStoreConfig('zolagoos/vendor/ask_attribute_email_template', $store);
         $data['attributeSetName'] = $attributeSet->getAttributeSetName();
         $data['attributeCode'] = $attribute->getAttributeCode();
         $data['attributeName']  = $label;

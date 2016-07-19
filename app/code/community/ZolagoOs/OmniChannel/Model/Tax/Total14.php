@@ -4,7 +4,7 @@ class ZolagoOs_OmniChannel_Model_Tax_Total14 extends Mage_Tax_Model_Sales_Total_
 {
     protected function _setRequestVendor($store, $item, $request)
     {
-        if (Mage::getStoreConfig('udropship/vendor/tax_by_vendor', $store)) {
+        if (Mage::getStoreConfig('zolagoos/vendor/tax_by_vendor', $store)) {
             $request->setVendor(Mage::helper('udropship')->getVendor($item->getUdropshipVendor()));
         }
     }

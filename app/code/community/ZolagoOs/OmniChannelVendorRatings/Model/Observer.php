@@ -71,7 +71,7 @@ class ZolagoOs_OmniChannelVendorRatings_Model_Observer
             && $vendor->getId()
             && (!$po->getUdratingDate() || $po->getUdratingDate() == '0000-00-00 00:00:00')
         ) {
-            $readyStatuses = Mage::getStoreConfig('udropship/vendor_rating/ready_status');
+            $readyStatuses = Mage::getStoreConfig('zolagoos/vendor_rating/ready_status');
             if (!is_array($readyStatuses)) {
                 $readyStatuses = explode(',', $readyStatuses);
             }
@@ -86,7 +86,7 @@ class ZolagoOs_OmniChannelVendorRatings_Model_Observer
 
     public function cronSendPendingShipmentsEmails()
     {
-        $daysFilter = Mage::getStoreConfig('udropship/vendor_rating/notify_in_days');
+        $daysFilter = Mage::getStoreConfig('zolagoos/vendor_rating/notify_in_days');
         $pendingShipments = Mage::getResourceModel('udratings/review_shipment_collection')
             ->addNotificationDaysFilter($daysFilter)
             ->addPendingFilter();

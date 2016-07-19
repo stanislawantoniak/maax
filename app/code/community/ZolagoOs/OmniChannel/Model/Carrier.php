@@ -390,7 +390,7 @@ class ZolagoOs_OmniChannel_Model_Carrier
             return $hlpd->errorResult('udropship');
         }
 
-        $totalMethod = Mage::getStoreConfig('udropship/customer/estimate_total_method');
+        $totalMethod = Mage::getStoreConfig('zolagoos/customer/estimate_total_method');
 
         // collect prices from details
         $totals = array();

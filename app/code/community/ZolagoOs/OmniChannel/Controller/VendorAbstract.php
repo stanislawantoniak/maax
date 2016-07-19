@@ -13,7 +13,7 @@ class ZolagoOs_OmniChannel_Controller_VendorAbstract extends Mage_Core_Controlle
 
     protected function _setTheme()
     {
-        $theme = explode('/', Mage::getStoreConfig('udropship/vendor/interface_theme'));
+        $theme = explode('/', Mage::getStoreConfig('zolagoos/vendor/interface_theme'));
         if (empty($theme[0]) || empty($theme[1])) {
             $theme = 'default/default';
         }

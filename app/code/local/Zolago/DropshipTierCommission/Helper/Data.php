@@ -24,8 +24,8 @@ class Zolago_DropshipTierCommission_Helper_Data extends ZolagoOs_OmniChannelTier
         $vendor = $hlpUd->getVendor($po->getUdropshipVendor());
 
         //GLOBAL default values
-        $defaultCommissionPercent = Mage::getStoreConfig('udropship/tiercom/commission_percent');
-        $defaultSaleCommissionPercent = Mage::getStoreConfig('udropship/tiercom/sale_commission_percent');
+        $defaultCommissionPercent = Mage::getStoreConfig('zolagoos/tiercom/commission_percent');
+        $defaultSaleCommissionPercent = Mage::getStoreConfig('zolagoos/tiercom/sale_commission_percent');
 
         //vendor default values
         $defaultVendorCommissionPercent = $vendor->getCommissionPercent();
@@ -185,7 +185,7 @@ class Zolago_DropshipTierCommission_Helper_Data extends ZolagoOs_OmniChannelTier
 	public function getTerminalPercentForChargeLowerCommission(Zolago_Dropship_Model_Vendor $vendor, $store = null) {
 		$percent = $vPercent = $vendor->getTerminalPercentForChargeLowerCommission();
 		if (empty($vPercent)) {
-			$percent = Mage::getStoreConfig('udropship/tiercom/terminal_percent_for_charge_lower_commission', $store);
+			$percent = Mage::getStoreConfig('zolagoos/tiercom/terminal_percent_for_charge_lower_commission', $store);
 		}
 		return (float)str_replace(",", ".", $percent);
 	}

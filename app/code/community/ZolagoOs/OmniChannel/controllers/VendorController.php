@@ -120,7 +120,7 @@ class ZolagoOs_OmniChannel_VendorController extends ZolagoOs_OmniChannel_Control
 
     public function preferencesPostAction()
     {
-        $defaultAllowedTags = Mage::getStoreConfig('udropship/vendor/preferences_allowed_tags');
+        $defaultAllowedTags = Mage::getStoreConfig('zolagoos/vendor/preferences_allowed_tags');
         $session = Mage::getSingleton('udropship/session');
         $hlp = Mage::helper('udropship');
         $r = $this->getRequest();
@@ -250,9 +250,9 @@ class ZolagoOs_OmniChannel_VendorController extends ZolagoOs_OmniChannel_Control
             $carrier = $r->getParam('carrier');
             $carrierTitle = $r->getParam('carrier_title');
 
-            $notifyOn = Mage::getStoreConfig('udropship/customer/notify_on', $store);
-            $pollTracking = Mage::getStoreConfig('udropship/customer/poll_tracking', $store);
-            $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
+            $notifyOn = Mage::getStoreConfig('zolagoos/customer/notify_on', $store);
+            $pollTracking = Mage::getStoreConfig('zolagoos/customer/poll_tracking', $store);
+            $autoComplete = Mage::getStoreConfig('zolagoos/vendor/auto_shipment_complete', $store);
 
             $statusShipped = ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED;
             $statusDelivered = ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED;
@@ -385,8 +385,8 @@ class ZolagoOs_OmniChannel_VendorController extends ZolagoOs_OmniChannel_Control
             */
             // if tracking id added manually and new status is not current status
             $shipmentStatuses = false;
-            if (Mage::getStoreConfig('udropship/vendor/is_restrict_shipment_status')) {
-                $shipmentStatuses = Mage::getStoreConfig('udropship/vendor/restrict_shipment_status');
+            if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_shipment_status')) {
+                $shipmentStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_shipment_status');
                 if (!is_array($shipmentStatuses)) {
                     $shipmentStatuses = explode(',', $shipmentStatuses);
                 }
@@ -659,8 +659,8 @@ class ZolagoOs_OmniChannel_VendorController extends ZolagoOs_OmniChannel_Control
             }
 
             $shipmentStatuses = false;
-            if (Mage::getStoreConfig('udropship/vendor/is_restrict_shipment_status')) {
-                $shipmentStatuses = Mage::getStoreConfig('udropship/vendor/restrict_shipment_status');
+            if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_shipment_status')) {
+                $shipmentStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_shipment_status');
                 if (!is_array($shipmentStatuses)) {
                     $shipmentStatuses = explode(',', $shipmentStatuses);
                 }
@@ -723,7 +723,7 @@ class ZolagoOs_OmniChannel_VendorController extends ZolagoOs_OmniChannel_Control
             }
         }
 
-        if (Mage::getStoreConfig('udropship/vendor/ready_on_packingslip')) {
+        if (Mage::getStoreConfig('zolagoos/vendor/ready_on_packingslip')) {
             foreach ($shipments as $shipment) {
                 Mage::helper('udropship')->addShipmentComment(
                     $shipment,
@@ -744,7 +744,7 @@ class ZolagoOs_OmniChannel_VendorController extends ZolagoOs_OmniChannel_Control
             $order->setBaseShippingAmount($shipment->getBaseShippingAmount());
         }
 
-        $theme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+        $theme = explode('/', Mage::getStoreConfig('zolagoos/admin/interface_theme', 0));
         Mage::getDesign()->setArea('adminhtml')
             ->setPackageName(!empty($theme[0]) ? $theme[0] : 'default')
             ->setTheme(!empty($theme[1]) ? $theme[1] : 'default');

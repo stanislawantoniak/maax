@@ -317,14 +317,14 @@
                     <children>
                         <sales>
                             <children>
-                                <udropship>
+                                <zolagoos>
                                     <children>
                                         <payouts>
                                             <title>Payouts</title>
                                             <sort_order>53</sort_order>
                                         </payouts>
                                     </children>
-                                </udropship>
+                                </zolagoos>
                             </children>
                         </sales>
                     </children>
@@ -334,14 +334,14 @@
     </adminhtml>
 
     <default>
-        <udropship>
+        <zolagoos>
             <payout_paypal>
                 <use_ipn>0</use_ipn>
             </payout_paypal>
             <payout>
                 <payout_schedules><![CDATA[[{"code":"daily","title":"Daily","schedule":"0 7 * * *","sort_order":"0"},{"code":"biweekly","title":"Bi-Weekly","schedule":"0 7 * * 1,4","sort_order":"10"},{"code":"weekly","title":"Weekly","schedule":"0 7 * * 1","sort_order":"20"},{"code":"monthly","title":"Monthly","schedule":"0 7 1 * *","sort_order":"30"}]]]></payout_schedules>
             </payout>
-        </udropship>
+        </zolagoos>
     </default>
 
     <crontab>

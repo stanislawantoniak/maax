@@ -212,13 +212,13 @@
     </adminhtml>
 
     <default>
-        <udropship>
+        <zolagoos>
             <tiercom>
                 <match_subcategories>1</match_subcategories>
                 <fixed_calculation_type>flat_tier_rule</fixed_calculation_type>
                 <fallback_lookup>tier</fallback_lookup>
             </tiercom>
-	    </udropship>
+	    </zolagoos>
     </default>
 
     <crontab>

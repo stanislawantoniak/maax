@@ -213,8 +213,8 @@
     </adminhtml>
 
     <default>
-        <udropship>
-	    </udropship>
+        <zolagoos>
+	    </zolagoos>
     </default>
 
     <crontab>

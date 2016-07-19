@@ -9,7 +9,7 @@ class ZolagoOs_OmniChannelMicrosite_VendorController extends Mage_Core_Controlle
 
     protected function _setTheme()
     {
-        $theme = explode('/', Mage::getStoreConfig('udropship/vendor/interface_theme'));
+        $theme = explode('/', Mage::getStoreConfig('zolagoos/vendor/interface_theme'));
         if (empty($theme[0]) || empty($theme[1])) {
             $theme = 'default/default';
         }
@@ -59,15 +59,15 @@ class ZolagoOs_OmniChannelMicrosite_VendorController extends Mage_Core_Controlle
                 ->setData($data)
                 ->validate()
                 ->save();
-            if (!Mage::getStoreConfig('udropship/microsite/auto_approve')) {
+            if (!Mage::getStoreConfig('zolagoos/microsite/auto_approve')) {
                 $hlp->sendVendorSignupEmail($reg);
             }
             $hlp->sendVendorRegistration($reg);
             $session->unsRegistrationFormData();
-            if (Mage::getStoreConfig('udropship/microsite/auto_approve')) {
+            if (Mage::getStoreConfig('zolagoos/microsite/auto_approve')) {
                 $vendor = $reg->toVendor();
                 $vendor->setStatus(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE);
-                if (Mage::getStoreConfig('udropship/microsite/auto_approve')==ZolagoOs_OmniChannelMicrosite_Model_Source::AUTO_APPROVE_YES_ACTIVE
+                if (Mage::getStoreConfig('zolagoos/microsite/auto_approve')==ZolagoOs_OmniChannelMicrosite_Model_Source::AUTO_APPROVE_YES_ACTIVE
                 ) {
                     $vendor->setStatus(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE);
                 }

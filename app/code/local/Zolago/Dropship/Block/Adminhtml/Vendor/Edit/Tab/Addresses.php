@@ -216,7 +216,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Addresses extends Zolago_D
                     }
                 }
                 $vendor->setVendorShipping(Zend_Json::encode($shipping));
-                $vendor->setSendConfirmationEmail(!Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation'));
+                $vendor->setSendConfirmationEmail(!Mage::getStoreConfigFlag('zolagoos/microsite/skip_confirmation'));
             }
             $form->setValues($vendor->getData());
         }

@@ -58,7 +58,7 @@ class GH_Regulation_Dropship_VendorController
 
                 if ($vendor->getConfirmation() && $vendor->getConfirmationSent()) {
                     /* Vendor account confirmation token life time */
-                    $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+                    $confirmationTokenExpirationTime = Mage::getStoreConfig('zolagoos/microsite/confirmation_token_expiration_time');
 
                     $localeTime = Mage::getModel('core/date')->timestamp(time());
                     $secPastSinceConfirmation = $localeTime - strtotime($vendor->getRegulationConfirmRequestSentDate());
@@ -278,7 +278,7 @@ class GH_Regulation_Dropship_VendorController
 
                 if ($vendor->getConfirmationSent()) { //vendor has received confirmation email
                     /* Vendor account confirmation token life time */
-                    $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+                    $confirmationTokenExpirationTime = Mage::getStoreConfig('zolagoos/microsite/confirmation_token_expiration_time');
 
                     $localeTime = Mage::getModel('core/date')->timestamp(time());
                     $secPastSinceConfirmation = $localeTime - strtotime($vendor->getRegulationConfirmRequestSentDate());
@@ -317,7 +317,7 @@ class GH_Regulation_Dropship_VendorController
         if (!empty($fileName) || $vendorId) {
 
             /* Vendor account confirmation token life time */
-            $confirmationTokenExpirationTime = Mage::getStoreConfig('udropship/microsite/confirmation_token_expiration_time');
+            $confirmationTokenExpirationTime = Mage::getStoreConfig('zolagoos/microsite/confirmation_token_expiration_time');
 
             $localeTime = Mage::getModel('core/date')->timestamp(time());
             $secPastSinceConfirmation = $localeTime - strtotime($vendor->getRegulationConfirmRequestSentDate());

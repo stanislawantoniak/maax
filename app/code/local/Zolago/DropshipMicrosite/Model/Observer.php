@@ -35,7 +35,7 @@ class Zolago_DropshipMicrosite_Model_Observer
 				$vendor->getId(), array($product->getUdropshipVendor(), 
 				$product->getBrandshop())
 		);
-        $showAll = Mage::getStoreConfigFlag('udropship/microsite/front_show_all_products');
+        $showAll = Mage::getStoreConfigFlag('zolagoos/microsite/front_show_all_products');
         $isUdmulti = Mage::helper('udropship')->isUdmultiActive();
         $isInUdm = $product->getUdmultiStock($vendor->getId());
         if (!$isMyProduct && !($showAll && $isUdmulti && $isInUdm)) {

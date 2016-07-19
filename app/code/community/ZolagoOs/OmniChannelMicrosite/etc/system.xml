@@ -6,7 +6,7 @@
 -->
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <microsite>
                     <label>MicroSite Options</label>
@@ -182,6 +182,6 @@
                     </fields>
                 </stock>
             </groups>
-        </udropship>
+        </zolagoos>
     </sections>
 </config>

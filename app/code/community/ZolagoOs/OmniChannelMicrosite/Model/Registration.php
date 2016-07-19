@@ -23,7 +23,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Registration extends Mage_Core_Model_A
         $dhlp = Mage::helper('udropship');
         extract($this->getData());
         
-        $_isQuickRegister = Mage::getStoreConfig('udropship/microsite/allow_quick_register');
+        $_isQuickRegister = Mage::getStoreConfig('zolagoos/microsite/allow_quick_register');
 
         if (!isset($vendor_name) || !isset($telephone) || !isset($email) ||
             !isset($password) || !isset($password_confirm)
@@ -43,7 +43,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Registration extends Mage_Core_Model_A
         $collection = Mage::getModel('udropship/vendor')->getCollection()
             ->addFieldToFilter('email', $email);
         foreach ($collection as $dup) {
-            if (Mage::getStoreConfig('udropship/vendor/unique_email')) {
+            if (Mage::getStoreConfig('zolagoos/vendor/unique_email')) {
                 Mage::throwException($dhlp->__('A vendor with supplied email already exists.'));
             }
             if (Mage::helper('core')->validateHash($password, $dup->getPasswordHash())) {
@@ -59,7 +59,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Registration extends Mage_Core_Model_A
                 Mage::throwException(Mage::helper('udropship')->__('This URL Key is reserved. Please choose another.'));
             }
         }
-        if (Mage::getStoreConfig('udropship/vendor/unique_vendor_name')) {
+        if (Mage::getStoreConfig('zolagoos/vendor/unique_vendor_name')) {
             $collection = Mage::getModel('udropship/vendor')->getCollection()
                 ->addFieldToFilter('vendor_name', $vendor_name);
             foreach ($collection as $dup) {
@@ -105,7 +105,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Registration extends Mage_Core_Model_A
 
     public function toVendor()
     {
-        $vendor = Mage::getModel('udropship/vendor')->load(Mage::getStoreConfig('udropship/microsite/template_vendor'));
+        $vendor = Mage::getModel('udropship/vendor')->load(Mage::getStoreConfig('zolagoos/microsite/template_vendor'));
         $carrierCode = $this->getCarrierCode() ? $this->getCarrierCode() : $vendor->getCarrierCode();
         $vendor->getShippingMethods();
         $vendor->unsetData('vendor_name');

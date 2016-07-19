@@ -28,12 +28,12 @@
                 <history_expiration_time>24</history_expiration_time>
             </product_description_history_changes_config>
         </zosprod>
-        <udropship>
+        <zolagoos>
             <vendor>
                 <vendor_mass_image_batch_size_byname>10</vendor_mass_image_batch_size_byname>
                 <vendor_mass_image_batch_size_bycsv>10</vendor_mass_image_batch_size_bycsv>
             </vendor>
-        </udropship>
+        </zolagoos>
     </default>
     <global>
         <models>

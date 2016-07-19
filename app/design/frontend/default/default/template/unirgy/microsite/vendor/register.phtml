@@ -3,7 +3,7 @@ $_hlp = Mage::helper('umicrosite');
 $_session = Mage::getSingleton('udropship/session');
 $_carriers = Mage::getSingleton('umicrosite/source')->setPath('registration_carriers')->toOptionHash();
 $_data = $_session->getRegistrationFormData(true);
-$_isQuickRegister = Mage::getStoreConfig('udropship/microsite/allow_quick_register');
+$_isQuickRegister = Mage::getStoreConfig('zolagoos/microsite/allow_quick_register');
 $_qrRequiredSel = $_isQuickRegister ? '' : ' validate-select';
 $_qrRequired = $_isQuickRegister ? '' : ' <span class="required">*</span>';
 $_qrRequired2 = $_isQuickRegister ? '' : ' required-entry';

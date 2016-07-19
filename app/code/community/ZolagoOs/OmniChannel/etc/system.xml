@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <tab>sales</tab>
             <label>ZolagoOs Shipping</label>
             <frontend_type>text</frontend_type>
@@ -1000,7 +1000,7 @@
                     </fields>
                 </error_notifications>
             </groups>
-        </udropship>
+        </zolagoos>
         <carriers>
             <groups>
                 <udropship translate="label">

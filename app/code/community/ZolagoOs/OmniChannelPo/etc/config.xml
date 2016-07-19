@@ -472,14 +472,14 @@
                                         </actions>
                                     </children>
                                 </order>
-                                <udropship>
+                                <zolagoos>
                                     <children>
                                         <udpo>
                                             <title>Purchase Orders</title>
                                             <sort_order>55</sort_order>
                                         </udpo>
                                     </children>
-                                </udropship>
+                                </zolagoos>
                             </children>
                         </sales>
                         <report>
@@ -545,7 +545,7 @@
     </adminhtml>
 
     <default>
-        <udropship>
+        <zolagoos>
             <vendor>
                 <is_restrict_udpo_status>0</is_restrict_udpo_status>
                 <allow_forced_po_status_change>0</allow_forced_po_status_change>
@@ -606,6 +606,6 @@ Comment: {{comment}}
                 <notify_on_status>0</notify_on_status>
                 <after_notify_status>9</after_notify_status>
             </pocombine>
-	    </udropship>
+	    </zolagoos>
     </default>
 </config>

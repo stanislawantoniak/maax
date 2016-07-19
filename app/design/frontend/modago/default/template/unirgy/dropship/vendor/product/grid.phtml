@@ -2,7 +2,7 @@
 
 <?php
 $_hlp = Mage::helper('udropship');
-$showVsku = $_hlp->isShowVendorSkuColumnInStockTab() && (Mage::helper('udropship')->isUdmultiAvailable() || ($vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode));
+$showVsku = $_hlp->isShowVendorSkuColumnInStockTab() && (Mage::helper('udropship')->isUdmultiAvailable() || ($vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode));
 ?>
 <form method="get">
 <fieldset>
@@ -80,7 +80,7 @@ $showVsku = $_hlp->isShowVendorSkuColumnInStockTab() && (Mage::helper('udropship
     </div>
     <?php echo $this->getChildHtml('toolbar') ?>
     <table cellspacing="0" cellpadding="0" class="data-table">
-        <?php if (Mage::getStoreConfigFlag('udropship/vendor/show_pid_in_manage_stock')): ?>
+        <?php if (Mage::getStoreConfigFlag('zolagoos/vendor/show_pid_in_manage_stock')): ?>
         <col width="" />
         <?php endif ?>
         <?php if ($showVsku): ?>
@@ -94,7 +94,7 @@ $showVsku = $_hlp->isShowVendorSkuColumnInStockTab() && (Mage::helper('udropship
         <col width="70" />
         <thead>
             <tr>
-                <?php if (Mage::getStoreConfigFlag('udropship/vendor/show_pid_in_manage_stock')): ?>
+                <?php if (Mage::getStoreConfigFlag('zolagoos/vendor/show_pid_in_manage_stock')): ?>
                 <th><?php echo $this->__('System ID')?></th>
                 <?php endif ?>
                 <th><?php echo $this->__('System SKU')?></th>
@@ -111,7 +111,7 @@ $showVsku = $_hlp->isShowVendorSkuColumnInStockTab() && (Mage::helper('udropship
         <tbody>
     <?php foreach ($this->getProductCollection() as $_p): $_id = $_p->getEntityId(); ?>
             <tr>
-                <?php if (Mage::getStoreConfigFlag('udropship/vendor/show_pid_in_manage_stock')): ?>
+                <?php if (Mage::getStoreConfigFlag('zolagoos/vendor/show_pid_in_manage_stock')): ?>
                 <td><?php echo $this->htmlEscape($_p->getId()); ?></td>
                 <?php endif ?>
                 <td><?php echo $this->htmlEscape($_p->getSku()); ?></td>

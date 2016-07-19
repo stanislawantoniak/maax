@@ -33,7 +33,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Observer
     }
     protected function _initConfigRewrites()
     {
-        if (Mage::getStoreConfigFlag('udropship/microsite/filter_vendor_categories')) {
+        if (Mage::getStoreConfigFlag('zolagoos/microsite/filter_vendor_categories')) {
             Mage::getConfig()->setNode('global/models/catalog_resource/rewrite/category_tree', 'ZolagoOs_OmniChannelMicrosite_Model_Mysql4_CategoryTree');
             Mage::getConfig()->setNode('global/models/catalog_resource/rewrite/category_flat', 'ZolagoOs_OmniChannelMicrosite_Model_Mysql4_CategoryFlat');
         }
@@ -135,7 +135,7 @@ echo 2;
         }
         $product = $observer->getEvent()->getProduct();
         $isMyProduct = $product->getUdropshipVendor()==$vendor->getId();
-        $showAll = Mage::getStoreConfigFlag('udropship/microsite/front_show_all_products');
+        $showAll = Mage::getStoreConfigFlag('zolagoos/microsite/front_show_all_products');
         $isUdmulti = Mage::helper('udropship')->isUdmultiActive();
         $isInUdm = $product->getUdmultiStock($vendor->getId());
         if (!$isMyProduct && !($showAll && $isUdmulti && $isInUdm)) {
@@ -240,7 +240,7 @@ echo 2;
 
         if ($vendor->getRegId()) {
             if ((!Mage::helper('udropship')->isModuleActive('udmspro')
-                || Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation')
+                || Mage::getStoreConfigFlag('zolagoos/microsite/skip_confirmation')
                 || !$vendor->getSendConfirmationEmail()
                 ) && $vendor->getStatus()!=ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_REJECTED
             ) {
@@ -321,7 +321,7 @@ echo 2;
         Mage::helper('umicrosite')->resetCurrentVendor();
         Mage::helper('umicrosite')->checkPermission('adminhtml');
         if ($this->_getVendor()) {
-            $adminTheme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+            $adminTheme = explode('/', Mage::getStoreConfig('zolagoos/admin/interface_theme', 0));
             if (!empty($adminTheme[0])) {
                 Mage::getDesign()->setPackageName($adminTheme[0]);
             }
@@ -410,7 +410,7 @@ echo 2;
         if ($product && $vendor) {
             $product->setUdropshipVendor($vendor->getId());
 
-            $staging = Mage::getStoreConfig('udropship/microsite/staging_website');
+            $staging = Mage::getStoreConfig('zolagoos/microsite/staging_website');
             if ($staging || ($lw = $vendor->getLimitWebsites())) {
                 $newWebsiteIds = $product->getWebsiteIds();
                 $product->unsWebsiteIds();
@@ -436,7 +436,7 @@ echo 2;
                 }
             }
 
-            $hideFields = explode(',', Mage::getStoreConfig('udropship/microsite/hide_product_attributes'));
+            $hideFields = explode(',', Mage::getStoreConfig('zolagoos/microsite/hide_product_attributes'));
             if (in_array('visibility', $hideFields) && !$product->hasData('visibility')) {
                 $product->setData('visibility', Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH);
             }
@@ -469,7 +469,7 @@ echo 2;
     {
         if ($this->_getVendor()) {
             $form = $observer->getEvent()->getForm();
-            $hideFields = explode(',', Mage::getStoreConfig('udropship/microsite/hide_product_attributes'));
+            $hideFields = explode(',', Mage::getStoreConfig('zolagoos/microsite/hide_product_attributes'));
             $hideFields[] = 'udropship_vendor';
             foreach ($form->getElements() as $fieldset) {
                 foreach ($fieldset->getElements() as $field) {
@@ -524,7 +524,7 @@ echo 2;
     protected function _limitStoreSwitcher($block)
     {
         if ($block instanceof Mage_Adminhtml_Block_Store_Switcher && ($v = $this->_getVendor())
-            && (($staging = Mage::getStoreConfig('udropship/microsite/staging_website')) || ($lw = $v->getLimitWebsites()))
+            && (($staging = Mage::getStoreConfig('zolagoos/microsite/staging_website')) || ($lw = $v->getLimitWebsites()))
         ) {
             $block->setWebsiteIds($staging ? (array)$staging : (is_array($lw) ? $lw : explode(',', $lw)));
         }
@@ -548,7 +548,7 @@ echo 2;
         $product = $observer->getProduct();
         $refUrl = Mage::helper('core/http')->getHttpReferer();
         $vendor = Mage::helper('umicrosite')->getUrlFrontendVendor($refUrl);
-        $stickUdms = Mage::getStoreConfig('udropship/stock/stick_microsite');
+        $stickUdms = Mage::getStoreConfig('zolagoos/stock/stick_microsite');
         if ($vendor && ($vId = $vendor->getId()) && $stickUdms>0) {
             if (in_array($stickUdms, array(1,2))) {
                 $iHlp->setForcedVendorIdOption($product, $vId);
@@ -562,7 +562,7 @@ echo 2;
     {
         $iHlp = Mage::helper('udropship/item');
         $item = $observer->getItem();
-        $stickUdms = Mage::getStoreConfig('udropship/stock/stick_microsite');
+        $stickUdms = Mage::getStoreConfig('zolagoos/stock/stick_microsite');
         if ($stickUdms>0) {
             $iHlp->deleteVendorIdOption($item);
             if (in_array($stickUdms, array(2))

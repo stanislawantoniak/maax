@@ -1,6 +1,6 @@
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <vendor_rating>
                     <label>Vendor Rating Options</label>
@@ -40,6 +40,6 @@
                     </fields>
                 </vendor_rating>
             </groups>
-        </udropship>
+        </zolagoos>
     </sections>
 </config>

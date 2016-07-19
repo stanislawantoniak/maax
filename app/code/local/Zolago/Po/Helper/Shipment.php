@@ -178,8 +178,8 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
     
     public function prepareUdpoStatuses() {
         $udpoStatuses = false;
-        if (Mage::getStoreConfig('udropship/vendor/is_restrict_udpo_status')) {
-            $udpoStatuses = Mage::getStoreConfig('udropship/vendor/restrict_udpo_status');
+        if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_udpo_status')) {
+            $udpoStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_udpo_status');
             if (!is_array($udpoStatuses)) {
                 $udpoStatuses = explode(',', $udpoStatuses);
             }
@@ -225,7 +225,7 @@ class Zolago_Po_Helper_Shipment extends Mage_Core_Helper_Abstract {
      public function getShippedFlag() {
         $udpo = $this->getUdpo();
         $store = $udpo->getOrder()->getStore();
-        $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
+        $autoComplete = Mage::getStoreConfig('zolagoos/vendor/auto_shipment_complete', $store);
 
         $poStatusShipped = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_SHIPPED;
         $poStatusDelivered = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED;

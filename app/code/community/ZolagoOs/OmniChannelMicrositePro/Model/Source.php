@@ -53,7 +53,7 @@ class ZolagoOs_OmniChannelMicrositePro_Model_Source extends ZolagoOs_OmniChannel
         if (!isset($this->_vendorPreferences[$filterVisible])) {
             $hlp = Mage::helper('udropship');
 
-            $visible = Mage::getStoreConfig('udropship/vendor/visible_preferences');
+            $visible = Mage::getStoreConfig('zolagoos/vendor/visible_preferences');
             $visible = $visible ? explode(',', $visible) : false;
 
             $fieldsets = array();

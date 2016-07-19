@@ -45,13 +45,13 @@ class ZolagoOs_OmniChannelTierCommission_Block_Adminhtml_VendorEditTab_ComRates_
         $fieldset->addField('commission_percent', 'text', array(
             'name'      => 'commission_percent',
             'label'     => $hlp->__('Default Commission Percent'),
-            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/commission_percent'))
+            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('zolagoos/tiercom/commission_percent'))
         ));
 
         $fieldset->addField('transaction_fee', 'text', array(
             'name'      => 'transaction_fee',
             'label'     => $hlp->__('Fixed Flat Rate (per po) [old transaction fee]'),
-            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('udropship/tiercom/transaction_fee'))
+            'after_element_html' => $hlp->__('<br />Default value: %.2F. Leave empty to use default.', Mage::getStoreConfig('zolagoos/tiercom/transaction_fee'))
         ));
 
         $fieldset->addType('tiercom_fixed_rule', Mage::getConfig()->getBlockClassName('udropship/adminhtml_vendor_helper_form_dependSelect'));

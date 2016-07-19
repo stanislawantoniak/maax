@@ -24,7 +24,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_GridColumnFilter extends Mage_Adminhtml_
             $gridHtmlObjName = $this->getColumn()->getGrid()->getJsObjectName();
             $gridId = $this->getColumn()->getGrid()->getId();
         }
-        if (Mage::getStoreConfigFlag('udropship/vendor/autocomplete_htmlselect')) {
+        if (Mage::getStoreConfigFlag('zolagoos/vendor/autocomplete_htmlselect')) {
             $html = '<input id="_autocomplete_'.$this->_getHtmlId().'" class="input-text" name="_autocomplete_'.$this->_getHtmlName()
              .'" value="'.$this->getEscapedNameValue().'" '.$this->serialize($this->getHtmlAttributes()).'/>'."\n";
             $html .= '

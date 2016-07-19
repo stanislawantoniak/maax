@@ -46,10 +46,10 @@
 		</translate>    
     </adminhtml>
 	<default>
-		<udropship>
+		<zolagoos>
 			<tiercom>
 				<terminal_percent_for_charge_lower_commission>5</terminal_percent_for_charge_lower_commission>
 			</tiercom>
-		</udropship>
+		</zolagoos>
 	</default>
 </config>

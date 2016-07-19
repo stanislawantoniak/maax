@@ -4,7 +4,7 @@ $_hlp = Mage::helper('udropship');
 $_prHlp = Mage::helper('udprod');
 $_prSrc = Mage::getSingleton('udprod/source');
 $typeOfProductConfig = Mage::helper('udprod')->getVendorTypeOfProductConfig();
-$showVsku = $_hlp->isShowVendorSkuColumnInProductsTab() && (Mage::helper('udropship')->isUdmultiAvailable() || ($vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode));
+$showVsku = $_hlp->isShowVendorSkuColumnInProductsTab() && (Mage::helper('udropship')->isUdmultiAvailable() || ($vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode));
 ?>
 <form method="get">
 <fieldset>

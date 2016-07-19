@@ -17,7 +17,7 @@ class ZolagoOs_OmniChannelPayout_Model_Method_Paypal implements ZolagoOs_OmniCha
     }
     public function isTestMode()
     {
-        return Mage::getStoreConfig('udropship/payout_paypal/test_mode');
+        return Mage::getStoreConfig('zolagoos/payout_paypal/test_mode');
     }
 
     protected function _getSoapWsdl()
@@ -111,10 +111,10 @@ class ZolagoOs_OmniChannelPayout_Model_Method_Paypal implements ZolagoOs_OmniCha
         $soap = $this->getSoapClient();
         $soap->__setSoapHeaders(new SoapHeader('urn:ebay:api:PayPalAPI', 'RequesterCredentials', array(
             'Credentials' => array(
-                'Username' => Mage::getStoreConfig('udropship/payout_paypal/username'),
-                'Password' => Mage::getStoreConfig('udropship/payout_paypal/password'),
-                'Signature' => Mage::getStoreConfig('udropship/payout_paypal/signature'),
-                //'Subject' => Mage::getStoreConfig('udropship/payout_paypal/subject'),
+                'Username' => Mage::getStoreConfig('zolagoos/payout_paypal/username'),
+                'Password' => Mage::getStoreConfig('zolagoos/payout_paypal/password'),
+                'Signature' => Mage::getStoreConfig('zolagoos/payout_paypal/signature'),
+                //'Subject' => Mage::getStoreConfig('zolagoos/payout_paypal/subject'),
             )
         )));
 
@@ -144,7 +144,7 @@ class ZolagoOs_OmniChannelPayout_Model_Method_Paypal implements ZolagoOs_OmniCha
                     if (in_array($pt->getId(), $ptToPay)) {
                         $pt->setPaypalCorrelationId($response->CorrelationID);
                         $pt->setPaypalUniqueId($ptReq[$pt->getVendorId()]['UniqueId']);
-                        if (!Mage::getStoreConfigFlag('udropship/payout_paypal/use_ipn')) {
+                        if (!Mage::getStoreConfigFlag('zolagoos/payout_paypal/use_ipn')) {
                             $pt->afterPay();
                         } else {
                             $pt->addMessage(

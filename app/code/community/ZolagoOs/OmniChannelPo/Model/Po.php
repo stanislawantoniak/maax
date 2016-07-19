@@ -277,7 +277,7 @@ class ZolagoOs_OmniChannelPo_Model_Po extends Mage_Sales_Model_Abstract
     
     public function canCreateShipment()
     {
-        //$enableVirtual = Mage::getStoreConfig('udropship/misc/enable_virtual', $this->getStoreId());
+        //$enableVirtual = Mage::getStoreConfig('zolagoos/misc/enable_virtual', $this->getStoreId());
         foreach ($this->getAllItems() as $item) {
             if ($item->getQtyToShip()>0 && !$item->getIsVirtual()) {
                 return true;

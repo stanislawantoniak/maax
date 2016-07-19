@@ -63,7 +63,7 @@ function validatePoStatusSubmit()
 {
     if ($('comment_status').value == $('comment_status').origValue) return true
     if (_validatePoStatusSubmit()) {
-        if (<?php echo (int)Mage::getStoreConfigFlag('udropship/vendor/allow_forced_po_status_change')?>
+        if (<?php echo (int)Mage::getStoreConfigFlag('zolagoos/vendor/allow_forced_po_status_change')?>
             && window.allowedPoStatuses && -1 === window.allowedPoStatuses.indexOf($('comment_status').value)
         ) {
             if (confirm('<?php echo Mage::helper('udpo')->__('Such status change is not allowed. Please confirm forced transition') ?>')) {

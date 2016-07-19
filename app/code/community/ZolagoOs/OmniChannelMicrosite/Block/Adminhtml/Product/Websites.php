@@ -5,7 +5,7 @@ class ZolagoOs_OmniChannelMicrosite_Block_Adminhtml_Product_Websites
 {
     public function getWebsiteIds()
     {
-        $staging = Mage::getStoreConfig('udropship/microsite/staging_website');
+        $staging = Mage::getStoreConfig('zolagoos/microsite/staging_website');
         if (!($v = Mage::helper('umicrosite')->getCurrentVendor()) || !$staging) {
             if ($v && ($lw = array_filter((array)$v->getLimitWebsites()))) {
                 $res = is_array($lw) ? $lw : explode(',', $lw);

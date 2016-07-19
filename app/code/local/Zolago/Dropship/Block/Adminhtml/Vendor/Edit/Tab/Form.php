@@ -170,7 +170,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
             'name' => 'vendor_products',
         ));
 
-        if (Mage::getStoreConfigFlag('udropship/customer/allow_shipping_extra_charge')) {
+        if (Mage::getStoreConfigFlag('zolagoos/customer/allow_shipping_extra_charge')) {
             $fieldset->addField('allow_shipping_extra_charge', 'select', array(
                 'name'      => 'allow_shipping_extra_charge',
                 'label'     => $hlp->__('Allow shipping extra charge'),
@@ -220,7 +220,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtm
                     }
                 }
                 $vendor->setVendorShipping(Zend_Json::encode($shipping));
-                $vendor->setSendConfirmationEmail(!Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation'));
+                $vendor->setSendConfirmationEmail(!Mage::getStoreConfigFlag('zolagoos/microsite/skip_confirmation'));
             }
             $form->setValues($vendor->getData());
         }

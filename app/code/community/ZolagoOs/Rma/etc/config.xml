@@ -326,14 +326,14 @@
                                         </actions>
                                     </children>
                                 </order>
-                                <udropship>
+                                <zolagoos>
                                     <children>
                                         <zosrma>
                                             <title>Returns</title>
                                             <sort_order>55</sort_order>
                                         </zosrma>
                                     </children>
-                                </udropship>
+                                </zolagoos>
                             </children>
                         </sales>
                         <system>

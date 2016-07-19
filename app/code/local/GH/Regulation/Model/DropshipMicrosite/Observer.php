@@ -73,7 +73,7 @@ class GH_Regulation_Model_DropshipMicrosite_Observer extends ZolagoOs_OmniChanne
 
         if ($vendor->getRegId()) {
             if ((!Mage::helper('udropship')->isModuleActive('udmspro')
-                    || Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation')
+                    || Mage::getStoreConfigFlag('zolagoos/microsite/skip_confirmation')
                     || !$vendor->getSendConfirmationEmail()
                 ) && $vendor->getStatus() != ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_REJECTED
             ) {

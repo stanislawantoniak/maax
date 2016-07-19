@@ -280,7 +280,7 @@ class ZolagoOs_OmniChannelPayout_Model_Mysql4_Payout_Collection extends Mage_Cor
                         );
                         $pt->save();
                     } else {
-                        if (!Mage::getStoreConfigFlag('udropship/payout_paypal/use_ipn')) {
+                        if (!Mage::getStoreConfigFlag('zolagoos/payout_paypal/use_ipn')) {
                             $pt->afterPay();
                         } else {
                             $pt->addMessage(Mage::helper('udpayout')->__('Successfully send payment. Waiting for IPN to complete.'), ZolagoOs_OmniChannelPayout_Model_Payout::STATUS_PAYPAL_IPN)->setIsJustPaid(true);

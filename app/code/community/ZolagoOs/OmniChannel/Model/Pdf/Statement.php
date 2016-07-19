@@ -110,7 +110,7 @@ class ZolagoOs_OmniChannel_Model_Pdf_Statement extends ZolagoOs_OmniChannel_Mode
 
     public function logoHeight($store)
     {
-        $logoAR = Mage::getStoreConfig('udropship/admin/letterhead_logo_ratio', $store);
+        $logoAR = Mage::getStoreConfig('zolagoos/admin/letterhead_logo_ratio', $store);
         $logoAR = explode('x', $logoAR, 2);
         $height = 1;
         if (!empty($logoAR[1])) {
@@ -132,9 +132,9 @@ class ZolagoOs_OmniChannel_Model_Pdf_Statement extends ZolagoOs_OmniChannel_Mode
         // letterhead info
         $this->move(.5, .5)
             ->font('normal', 10)
-            ->text(Mage::getStoreConfig('udropship/admin/letterhead_info', $store));
+            ->text(Mage::getStoreConfig('zolagoos/admin/letterhead_info', $store));
         // letterhead logo
-        $image = Mage::getStoreConfig('udropship/admin/letterhead_logo', $store);
+        $image = Mage::getStoreConfig('zolagoos/admin/letterhead_logo', $store);
         if ($image) {
             $image = Mage::getStoreConfig('system/filesystem/media', $store) . '/udropship/' . $image;
             $image = Mage::app()->getConfig()->substDistroServerVars($image);
@@ -634,10 +634,10 @@ class ZolagoOs_OmniChannel_Model_Pdf_Statement extends ZolagoOs_OmniChannel_Mode
         $this
             ->move(.5, .5)
             ->font('normal', 10)
-            ->text(Mage::getStoreConfig('udropship/admin/letterhead_info', $store));
+            ->text(Mage::getStoreConfig('zolagoos/admin/letterhead_info', $store));
 
         // letterhead logo
-        $image = Mage::getStoreConfig('udropship/admin/letterhead_logo', $store);
+        $image = Mage::getStoreConfig('zolagoos/admin/letterhead_logo', $store);
         if ($image) {
             $image = Mage::getStoreConfig('system/filesystem/media', $store) . '/udropship/' . $image;
             $image = Mage::app()->getConfig()->substDistroServerVars($image);

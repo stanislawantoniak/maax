@@ -6,7 +6,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Preferences extends Mage_Core_Block_Temp
     {
         $hlp = Mage::helper('udropship');
 
-        $visible = Mage::getStoreConfig('udropship/vendor/visible_preferences');
+        $visible = Mage::getStoreConfig('zolagoos/vendor/visible_preferences');
         $visible = $visible ? explode(',', $visible) : false;
 
         $fieldsets = array();
@@ -326,7 +326,7 @@ EOT;
 
     public function getStatementPoTypeJs()
     {
-        $defPoType = (string)Mage::getStoreConfig('udropship/statement/statement_po_type');
+        $defPoType = (string)Mage::getStoreConfig('zolagoos/statement/statement_po_type');
         $html = '
 <script type="text/javascript">
 var switchStatementPoStatusSelect = function() {
@@ -359,7 +359,7 @@ document.observe("dom:loaded", switchStatementPoStatusSelect)
         $html = '
 <script type="text/javascript">
 var switchPayoutPoStatusSelect = function() {
-    var defStPoType = "'.(Mage::getStoreConfig('udropship/statement/statement_po_type')).'";
+    var defStPoType = "'.(Mage::getStoreConfig('zolagoos/statement/statement_po_type')).'";
     var getStPoType = function(val) {
         return val == "999" ? defStPoType : val;
     }

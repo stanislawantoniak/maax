@@ -26,7 +26,7 @@ class GH_Rewrite_Model_Rewrite_Request extends Mage_Core_Model_Url_Rewrite_Reque
             $targetUrl = $this->_request->getBaseUrl() . '/' . $storeCode . '/' . $this->_rewrite->getTargetPath();
         }
         if ($this->_rewrite->hasOption('R') || $isPermanentRedirectOption) {
-            if (Mage::helper('umicrosite')->getCurrentVendor() && Mage::getStoreConfig('udropship/microsite/subdomain_level') == 1) {
+            if (Mage::helper('umicrosite')->getCurrentVendor() && Mage::getStoreConfig('zolagoos/microsite/subdomain_level') == 1) {
                 $this->_sendRedirectHeaders("/" . Mage::helper('umicrosite')->getCurrentVendor()->getUrlKey() . $targetUrl, $isPermanentRedirectOption);
             } else {
                 $this->_sendRedirectHeaders($targetUrl, $isPermanentRedirectOption);

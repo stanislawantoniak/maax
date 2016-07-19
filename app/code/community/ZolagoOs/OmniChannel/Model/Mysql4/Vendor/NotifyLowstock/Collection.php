@@ -90,12 +90,12 @@ class ZolagoOs_OmniChannel_Model_Mysql4_Vendor_NotifyLowstock_Collection extends
     
     protected function _isLocalStock()
     {
-        return intval(Mage::getStoreConfig('udropship/stock/availability')=='local_if_in_stock');
+        return intval(Mage::getStoreConfig('zolagoos/stock/availability')=='local_if_in_stock');
     }
     
     protected function _isLocalVendor()
     {
-        return intval($this->getVendor()->getId()==Mage::getStoreConfig('udropship/vendor/local_vendor'));
+        return intval($this->getVendor()->getId()==Mage::getStoreConfig('zolagoos/vendor/local_vendor'));
     }
     
     protected function _getStockField($type)

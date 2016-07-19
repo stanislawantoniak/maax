@@ -329,12 +329,12 @@
         </template>
     </global>
     <default>
-        <udropship>
+        <zolagoos>
             <purchase_order>
                 <status_changed_shipped>udropship_purchase_order_status_changed_shipped</status_changed_shipped>
                 <zolagopo_compose>zolagopo_compose</zolagopo_compose>
             </purchase_order>
-        </udropship>
+        </zolagoos>
     </default>
     <admin>
         <fieldsets>

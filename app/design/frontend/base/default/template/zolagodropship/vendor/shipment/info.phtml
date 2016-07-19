@@ -46,8 +46,8 @@ $carrierCode = !empty($method[0]) ? $method[0] : $_vendor->getCarrierCode();
 $curShipping = $shipping->getItemByColumnValue('shipping_code', $uMethodCode);
 $methodCode  = !empty($method[1]) ? $method[1] : '';
 
-$labelCarrierAllowAll = Mage::getStoreConfig('udropship/vendor/label_carrier_allow_all', $_order->getStoreId());
-$labelMethodAllowAll = Mage::getStoreConfig('udropship/vendor/label_method_allow_all', $_order->getStoreId());
+$labelCarrierAllowAll = Mage::getStoreConfig('zolagoos/vendor/label_carrier_allow_all', $_order->getStoreId());
+$labelMethodAllowAll = Mage::getStoreConfig('zolagoos/vendor/label_method_allow_all', $_order->getStoreId());
 
 if ($curShipping && $labelMethodAllowAll) {
     $curShipping->useProfile($_vendor);
@@ -102,7 +102,7 @@ if ($curShipping && $labelMethodAllowAll) {
     $curShipping->resetProfile();
 }
 
-$labelCarrierAllowAlways = Mage::getStoreConfig('udropship/vendor/label_carrier_allow_always', $_order->getStoreId());
+$labelCarrierAllowAlways = Mage::getStoreConfig('zolagoos/vendor/label_carrier_allow_always', $_order->getStoreId());
 if (!is_array($labelCarrierAllowAlways)) {
     $labelCarrierAllowAlways = array_filter(explode(',', $labelCarrierAllowAlways));
 }
@@ -552,10 +552,10 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_udpo->getDefaultPosId());
                         <label for="comment-<?php echo $_masterId?>"><?php echo $_hlp->__('Add Comment<br/>(for retailer)') ?></label>
                         <textarea id="comment-<?php echo $_masterId?>" name="comment" class="textarea" style="width:250px; height:70px;" title="<?php echo $_hlp->__('Add Comment') ?>" ></textarea>
                     </li>
-<?php if (Mage::getStoreConfigFlag('udropship/vendor/manual_shipment_status')): ?>
+<?php if (Mage::getStoreConfigFlag('zolagoos/vendor/manual_shipment_status')): ?>
                     <li id="label_info-4-<?php echo $_masterId?>" style="display:none">
                         <label for="is_shipped-<?php echo $_masterId?>"><?php echo $_hlp->__('Mark as Shipped') ?></label>
-                        <input id="is_shipped-<?php echo $_masterId?>" name="is_shipped" value="1" title="<?php echo $_hlp->__('Mark as Shipped') ?>" type="checkbox" class="input-checkbox" <?php if (Mage::getStoreConfigFlag('udropship/vendor/auto_shipment_complete')): ?>checked="checked"<?php endif ?>/>
+                        <input id="is_shipped-<?php echo $_masterId?>" name="is_shipped" value="1" title="<?php echo $_hlp->__('Mark as Shipped') ?>" type="checkbox" class="input-checkbox" <?php if (Mage::getStoreConfigFlag('zolagoos/vendor/auto_shipment_complete')): ?>checked="checked"<?php endif ?>/>
                     </li>
 
                     <li id="tracking_id-2-<?php echo $_masterId?>">

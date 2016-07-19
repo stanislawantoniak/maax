@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <tiercom translate="label">
                     <label>Tier Commission</label>
@@ -114,6 +114,6 @@
                     </fields>
                 </tiercom>
             </groups>
-        </udropship>
+        </zolagoos>
     </sections>
 </config>

@@ -29,7 +29,7 @@ class ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Review_Shipment_Collection 
                 'rt.rel_entity_pk_value = main_table.entity_id and rt.entity_id='.Mage::helper('udratings')->myEt(),
                 array())
             ->where('rt.review_id is null');
-        $readyStatuses = Mage::getStoreConfig('udropship/vendor_rating/ready_status');
+        $readyStatuses = Mage::getStoreConfig('zolagoos/vendor_rating/ready_status');
         if (!is_array($readyStatuses)) {
             $readyStatuses = explode(',', $readyStatuses);
         }

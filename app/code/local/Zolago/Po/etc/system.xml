@@ -1,6 +1,6 @@
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <purchase_order>
                     <fields>
@@ -26,6 +26,6 @@
 					</fields>
 				</purchase_order>
             </groups>
-        </udropship>
+        </zolagoos>
     </sections>
 </config>

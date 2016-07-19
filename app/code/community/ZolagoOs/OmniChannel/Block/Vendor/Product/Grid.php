@@ -19,7 +19,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Product_Grid extends Mage_Core_Block_Tem
 
         foreach ($this->getProductCollection() as $p) {
             if (!Mage::helper('udropship')->isUdmultiAvailable()) {
-                if (($vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode)) {
+                if (($vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode)) {
                     $p->setVendorSku($p->getData($vsAttrCode));
                 }
             }
@@ -40,7 +40,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Product_Grid extends Mage_Core_Block_Tem
         }
         $param = $r->getParam('filter_vendor_sku');
         if (!is_null($param) && $param!=='') {
-            $vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+            $vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
             if (Mage::helper('udropship')->isUdmultiAvailable()) {
                 $collection->getSelect()->where('uvp.vendor_sku like ?', $param.'%');
             } elseif ($vsAttrCode && Mage::helper('udropship')->checkProductAttribute($vsAttrCode)) {
@@ -74,7 +74,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Product_Grid extends Mage_Core_Block_Tem
         if (!$v || !$v->getId()) {
             $isLocalVendor = 0;
         } else {
-            $isLocalVendor = intval($v->getId()==Mage::getStoreConfig('udropship/vendor/local_vendor'));
+            $isLocalVendor = intval($v->getId()==Mage::getStoreConfig('zolagoos/vendor/local_vendor'));
         }
         if (Mage::helper('udropship')->isUdmultiAvailable()) {
             switch ($type) {
@@ -130,7 +130,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Product_Grid extends Mage_Core_Block_Tem
                 );
                 //$collection->getSelect()->columns(array('_stock_qty'=>'IFNULL(uvp.stock_qty,cisi.qty'));
             } else {
-                if (($vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode)) {
+                if (($vsAttrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode)) {
                     $collection->addAttributeToSelect(array($vsAttrCode));
                 }
                 $collection->getSelect()->columns(array('_stock_qty'=>$this->_getStockField('qty')));

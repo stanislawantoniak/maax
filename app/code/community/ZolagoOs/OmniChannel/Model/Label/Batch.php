@@ -79,7 +79,7 @@ class ZolagoOs_OmniChannel_Model_Label_Batch extends Mage_Core_Model_Abstract
                 continue;
             }
             $storeId = $shipment->getOrder()->getStoreId();
-            $pollTracking = Mage::getStoreConfig('udropship/customer/poll_tracking', $storeId);
+            $pollTracking = Mage::getStoreConfig('zolagoos/customer/poll_tracking', $storeId);
 
             $sItemIds = array();
             foreach ($shipment->getAllItems() as $sItem) {

@@ -223,8 +223,8 @@
     </adminhtml>
 
     <default>
-        <udropship>
-	    </udropship>
+        <zolagoos>
+	    </zolagoos>
         <carriers>
             <udtiership>
                 <active>1</active>

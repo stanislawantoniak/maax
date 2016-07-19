@@ -392,7 +392,7 @@ class ZolagoOs_OmniChannel_Model_Pdf_Shipment extends Mage_Sales_Model_Order_Pdf
     protected function getCustomTextArray($shipment)
     {
         if (!isset($this->_customTextArr[$shipment->getId()])) {
-            $customText = Mage::getStoreConfig('udropship/vendor/packingslip_custom_text', $shipment->getStoreId());
+            $customText = Mage::getStoreConfig('zolagoos/vendor/packingslip_custom_text', $shipment->getStoreId());
             $curVendor = Mage::helper('udropship')->getVendor($shipment->getUdropshipVendor());
             $vUsePSCT = $curVendor->getData('use_packingslip_custom_text');
             if ($vUsePSCT==1) {

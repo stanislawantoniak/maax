@@ -82,7 +82,7 @@ class ZolagoOs_OmniChannelPayout_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getPayoutSchedules($hashType=false)
     {
-        $ps = Mage::getStoreConfig('udropship/payout/payout_schedules');
+        $ps = Mage::getStoreConfig('zolagoos/payout/payout_schedules');
         $ps = Mage::helper('udropship')->unserialize($ps);
         usort($ps, array(Mage::helper('udropship'), 'sortBySortOrder'));
         $psCodes = array();

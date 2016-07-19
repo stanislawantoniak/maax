@@ -31,7 +31,7 @@ class ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection extends Mage_Sales_Model
     
     public function addPendingBatchStatusFilter()
     {
-    	$exportOnPoStatus = Mage::getStoreConfig('udropship/batch/export_on_po_status');
+    	$exportOnPoStatus = Mage::getStoreConfig('zolagoos/batch/export_on_po_status');
     	if (!is_array($exportOnPoStatus)) {
     		$exportOnPoStatus = explode(',', $exportOnPoStatus);
     	}
@@ -40,7 +40,7 @@ class ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection extends Mage_Sales_Model
     }
     public function addPendingStockpoBatchStatusFilter()
     {
-    	$exportOnPoStatus = Mage::getStoreConfig('udropship/batch/export_on_stockpo_status');
+    	$exportOnPoStatus = Mage::getStoreConfig('zolagoos/batch/export_on_stockpo_status');
     	if (!is_array($exportOnPoStatus)) {
     		$exportOnPoStatus = explode(',', $exportOnPoStatus);
     	}
@@ -50,7 +50,7 @@ class ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection extends Mage_Sales_Model
 
     public function addPendingStockpoFilter()
     {
-    	$exportOnPoStatus = Mage::getStoreConfig('udropship/stockpo/generate_on_po_status');
+    	$exportOnPoStatus = Mage::getStoreConfig('zolagoos/stockpo/generate_on_po_status');
     	if (!is_array($exportOnPoStatus)) {
     		$exportOnPoStatus = explode(',', $exportOnPoStatus);
     	}

@@ -97,7 +97,7 @@ class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
         if ($store instanceof Mage_Core_Model_Store) {
             $store = $store->getId();
         }
-        $attrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute', $store);
+        $attrCode = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute', $store);
         if (!empty($attrCode)) {
             $attr = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attrCode);
             if ($attr->getId()) {

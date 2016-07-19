@@ -178,7 +178,7 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
             $readConnection = $this->_getReadAdapter();
             $attribute = Mage::getSingleton('eav/config')->getAttribute(
                              Mage_Catalog_Model_Product::ENTITY,
-                             Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')
+                             Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute')
                          );
             $vendor = Mage::getSingleton('eav/config')->getAttribute(
                           Mage_Catalog_Model_Product::ENTITY,
@@ -224,7 +224,7 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
                             array("type" => "parent_product.type_id")
                         );
             */
-            //$select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            //$select->where("attribute.attribute_code=?", Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute'));
             $select->where("product_varchar.attribute_id=?",$attribute->getId());
             $select->where("product_int.attribute_id=?",$vendor->getId());
             $select->where("product_relation.parent_id IN(?)", $ids);

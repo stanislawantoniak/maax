@@ -21,7 +21,7 @@ class ZolagoOs_OmniChannelTierCommission_Block_Vendor_Rates extends Mage_Core_Bl
 
     public function getGlobalTierComConfig()
     {
-        $value = Mage::getStoreConfig('udropship/tiercom/rates');
+        $value = Mage::getStoreConfig('zolagoos/tiercom/rates');
         if (is_string($value)) {
             $value = unserialize($value);
         }

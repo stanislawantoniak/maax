@@ -44,7 +44,7 @@
                     </system>
                     <sales>
                         <children>
-                            <udropship>
+                            <zolagoos>
                                 <children>
                                     <zosqa>
                                         <title>Vendor Questions</title>
@@ -61,7 +61,7 @@
                                         </children>
                                     </zosqa>
                                 </children>
-                            </udropship>
+                            </zolagoos>
                         </children>
                     </sales>
                 </children>

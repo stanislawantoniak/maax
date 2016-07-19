@@ -9,7 +9,7 @@ class ZolagoOs_OmniChannel_Model_Mysql4_Po_Collection extends Mage_Sales_Model_M
 
     public function addPendingBatchStatusFilter()
     {
-    	$exportOnPoStatus = Mage::getStoreConfig('udropship/batch/export_on_po_status');
+    	$exportOnPoStatus = Mage::getStoreConfig('zolagoos/batch/export_on_po_status');
     	if (!is_array($exportOnPoStatus)) {
     		$exportOnPoStatus = explode(',', $exportOnPoStatus);
     	}

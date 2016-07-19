@@ -145,14 +145,14 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
 
 			if($code == 'max_shipping_days'){
 
-				$maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days');
+				$maxShippingDays = Mage::getStoreConfig('zolagoos/vendor/max_shipping_days');
 
 				Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', $note . sprintf(" (Default value is: %u )", $maxShippingDays));
 
 			}
 			elseif($code == 'max_shipping_time'){
 
-				$maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time');
+				$maxShippingTime = Mage::getStoreConfig('zolagoos/vendor/max_shipping_time');
 
 				Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', $note . sprintf(" (Default value is: %s)", str_replace(',', ':', $maxShippingTime)));
 

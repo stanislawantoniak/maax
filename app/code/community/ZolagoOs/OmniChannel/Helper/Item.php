@@ -602,7 +602,7 @@ class ZolagoOs_OmniChannel_Helper_Item extends Mage_Core_Helper_Abstract
             $quote = $item->getQuote();
             $sId = $quote->getStoreId();
 
-            $specialCost = Mage::getStoreConfig('udropship/vendor/special_cost_attribute');
+            $specialCost = Mage::getStoreConfig('zolagoos/vendor/special_cost_attribute');
             if ($specialCost && ($specialCost = $product->getData($specialCost))) {
                 $baseCost = $item->getBaseCost();
                 $specialFrom = $product->getSpecialFromDate();

@@ -606,7 +606,7 @@ class ZolagoOs_OmniChannel_Model_Label_Fedex
 
     public function useV12()
     {
-        return Mage::getStoreConfigFlag('udropship/admin/fedex_use_v12');
+        return Mage::getStoreConfigFlag('zolagoos/admin/fedex_use_v12');
     }
     public function getPayourField($field)
     {

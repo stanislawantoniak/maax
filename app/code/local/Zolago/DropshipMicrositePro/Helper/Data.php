@@ -6,7 +6,7 @@ class Zolago_DropshipMicrositePro_Helper_Data extends ZolagoOs_OmniChannelMicros
     {
         $store = Mage::app()->getDefaultStoreView();
         Mage::helper('udropship')->setDesignStore($store);
-        $bcc = Mage::getStoreConfig('udropship/microsite/invitation_email_send_copy_to');
+        $bcc = Mage::getStoreConfig('zolagoos/microsite/invitation_email_send_copy_to');
         $bccList = explode(',',$bcc);
         /** @var Zolago_Common_Helper_Data $mailer */
         $mailer = Mage::helper('zolagocommon');

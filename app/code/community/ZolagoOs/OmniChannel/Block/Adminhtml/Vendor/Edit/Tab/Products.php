@@ -112,7 +112,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tab_Products extends Mage
         if (!$v || !$v->getId()) {
             $isLocalVendor = 0;
         } else {
-            $isLocalVendor = intval($v->getId()==Mage::getStoreConfig('udropship/vendor/local_vendor'));
+            $isLocalVendor = intval($v->getId()==Mage::getStoreConfig('zolagoos/vendor/local_vendor'));
         }
         if (Mage::helper('udropship')->isUdmultiAvailable()) {
             switch ($type) {

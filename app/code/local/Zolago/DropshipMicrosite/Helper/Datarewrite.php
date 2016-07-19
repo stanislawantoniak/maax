@@ -39,7 +39,7 @@ class Zolago_DropshipMicrosite_Helper_Datarewrite extends ZolagoOs_OmniChannelMi
      */
     public function sendVendorRegulationAcceptedEmail($vendor)
     {
-        $confirmationEmailSendCopyTo = Mage::getStoreConfig('udropship/microsite/confirmation_email_send_copy_to');
+        $confirmationEmailSendCopyTo = Mage::getStoreConfig('zolagoos/microsite/confirmation_email_send_copy_to');
 
         $store = Mage::app()->getDefaultStoreView();
         Mage::helper('udropship')->setDesignStore($store);

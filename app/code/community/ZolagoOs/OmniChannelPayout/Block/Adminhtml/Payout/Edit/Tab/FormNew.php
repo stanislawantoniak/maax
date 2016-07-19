@@ -36,7 +36,7 @@ class ZolagoOs_OmniChannelPayout_Block_Adminhtml_Payout_Edit_Tab_FormNew extends
             ),
         ));
 
-        if (Mage::getStoreConfigFlag('udropship/vendor/autocomplete_htmlselect')) {
+        if (Mage::getStoreConfigFlag('zolagoos/vendor/autocomplete_htmlselect')) {
             $fieldset->addField('vendor_ids', 'udropship_vendor', array(
                 'name'      => 'vendor_ids[]',
                 'label'     => $hlp->__('Vendors'),

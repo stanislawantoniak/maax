@@ -414,7 +414,7 @@ EOT;
 
     public function voidLabel($track)
     {
-        if (!Mage::getStoreConfig('udropship/vendor/void_labels')) {
+        if (!Mage::getStoreConfig('zolagoos/vendor/void_labels')) {
             return $this;
         }
 

@@ -16,7 +16,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Source extends ZolagoOs_OmniChannel_Mo
 
         switch ($this->getPath()) {
 
-        case 'udropship/microsite/subdomain_level':
+        case 'zolagoos/microsite/subdomain_level':
             $options = array(
                 0 => $hlpc->__('Disable'),
                 1 => $hlpc->__('From URL Path (domain.com/vendor)'),
@@ -27,7 +27,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Source extends ZolagoOs_OmniChannel_Mo
             );
             break;
 
-        case 'udropship/microsite/auto_approve':
+        case 'zolagoos/microsite/auto_approve':
             $options = array(
                 self::AUTO_APPROVE_NO => $hlpc->__('No'),
                 self::AUTO_APPROVE_YES => $hlpc->__('Yes'),
@@ -35,7 +35,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Source extends ZolagoOs_OmniChannel_Mo
             );
             break;
 
-        case 'udropship/stock/stick_microsite':
+        case 'zolagoos/stock/stick_microsite':
             $options = array(
                 0 => $hlpc->__('No'),
                 1 => $hlpc->__('Yes'),
@@ -53,17 +53,17 @@ class ZolagoOs_OmniChannelMicrosite_Model_Source extends ZolagoOs_OmniChannel_Mo
             );
             break;
 
-        case 'udropship/microsite/registration_carriers':
+        case 'zolagoos/microsite/registration_carriers':
             $options = Mage::getSingleton('udropship/source')->getCarriers();
             $selector = false;
             break;
 
-        case 'udropship/microsite/template_vendor':
+        case 'zolagoos/microsite/template_vendor':
             $options = Mage::getSingleton('udropship/source')->getVendors(true);
             $selector = false;
             break;
 
-        case 'udropship/microsite/registration_services': // not used
+        case 'zolagoos/microsite/registration_services': // not used
             $options = array();
             $collection = $hlp->getShippingMethods();
             foreach ($collection as $shipping) {
@@ -73,7 +73,7 @@ class ZolagoOs_OmniChannelMicrosite_Model_Source extends ZolagoOs_OmniChannel_Mo
             break;
 
         case 'limit_websites':
-        case 'udropship/microsite/staging_website':
+        case 'zolagoos/microsite/staging_website':
             $collection = Mage::getModel('core/website')->getResourceCollection();
             $options = array('' => $hlpc->__('* None'));
             foreach ($collection as $w) {
@@ -84,13 +84,13 @@ class ZolagoOs_OmniChannelMicrosite_Model_Source extends ZolagoOs_OmniChannel_Mo
         case 'carrier_code':
         case 'registration_carriers':
             $options = array();
-            $carriers = explode(',', Mage::getStoreConfig('udropship/microsite/registration_carriers'));
+            $carriers = explode(',', Mage::getStoreConfig('zolagoos/microsite/registration_carriers'));
             foreach ($carriers as $code) {
                 $options[$code] = Mage::getStoreConfig("carriers/{$code}/title");
             }
             break;
             
-        case 'udropship/microsite/hide_product_attributes':
+        case 'zolagoos/microsite/hide_product_attributes':
             $options = $this->getVisibleProductAttributes();
             break;
 

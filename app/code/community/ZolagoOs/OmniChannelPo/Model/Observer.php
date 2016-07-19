@@ -172,7 +172,7 @@ class ZolagoOs_OmniChannelPo_Model_Observer
         $sId = $order->getStoreId();
         $isMulti = Mage::helper('udropship')->isUdmultiActive();
         $localVid = Mage::helper('udropship')->getLocalVendorId($sId);
-        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('udropship/stock/availability', $sId);
+        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('zolagoos/stock/availability', $sId);
         $this->_attachVendorProducts($udpos, $order);
         $result = new Varien_Object(array(
             'oiQtyUsed' => array(),
@@ -252,7 +252,7 @@ class ZolagoOs_OmniChannelPo_Model_Observer
         $sId = $order->getStoreId();
         $isMulti = Mage::helper('udropship')->isUdmultiActive();
         $localVid = Mage::helper('udropship')->getLocalVendorId($sId);
-        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('udropship/stock/availability', $sId);
+        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('zolagoos/stock/availability', $sId);
         $vIds = $pIds = array();
         foreach ($udpos as $udpo) {
             foreach ($udpo->getAllItems() as $item) {
@@ -308,7 +308,7 @@ class ZolagoOs_OmniChannelPo_Model_Observer
         $sId = $order->getStoreId();
         $isMulti = Mage::helper('udropship')->isUdmultiActive();
         $localVid = Mage::helper('udropship')->getLocalVendorId($sId);
-        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('udropship/stock/availability', $sId);
+        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('zolagoos/stock/availability', $sId);
         $this->_attachVendorProducts(array($udpo), $order);
         $result = new Varien_Object(array(
             'oiQtyReverts' => array(),
@@ -346,7 +346,7 @@ class ZolagoOs_OmniChannelPo_Model_Observer
         $stockItem = $product && $product->getStockItem() ? $product->getStockItem() : false;
         $isMulti = Mage::helper('udropship')->isUdmultiActive();
         $localVid = Mage::helper('udropship')->getLocalVendorId($sId);
-        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('udropship/stock/availability', $sId);
+        $isLocalIfInStock = 'local_if_in_stock'==Mage::getStoreConfig('zolagoos/stock/availability', $sId);
         $vId = $revOIQty ? $oItem->getUdropshipVendor() : $item->getUdropshipVendor();
         $vp = $revOIQty ? $oItem->getVendorProduct() : $item->getVendorProduct();
         $_oiQtyRevert = $_oiQtyUsed = $_siQtyCor = $_vpQtyCor = null;

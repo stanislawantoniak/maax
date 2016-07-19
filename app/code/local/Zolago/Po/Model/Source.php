@@ -11,14 +11,14 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
 
         switch ($this->getPath()) {
 
-        case 'udropship/stockpo/generate_on_po_status':
-    	case 'udropship/batch/export_on_po_status':
-        case 'udropship/purchase_order/default_po_status':
-        case 'udropship/purchase_order/default_virtual_po_status':
-        case 'udropship/vendor/restrict_udpo_status':
-        case 'udropship/pocombine/notify_on_status':
-        case 'udropship/pocombine/after_notify_status':
-        case 'udropship/statement/statement_po_status':
+        case 'zolagoos/stockpo/generate_on_po_status':
+    	case 'zolagoos/batch/export_on_po_status':
+        case 'zolagoos/purchase_order/default_po_status':
+        case 'zolagoos/purchase_order/default_virtual_po_status':
+        case 'zolagoos/vendor/restrict_udpo_status':
+        case 'zolagoos/pocombine/notify_on_status':
+        case 'zolagoos/pocombine/after_notify_status':
+        case 'zolagoos/statement/statement_po_status':
         case 'statement_po_status':
         case 'po_statuses':
         case 'notify_by_udpo_status':
@@ -49,7 +49,7 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
             }
             break;
             
-        case 'udropship/purchase_order/po_increment_type':
+        case 'zolagoos/purchase_order/po_increment_type':
         case 'po_increment_types':
             $options = array(
                 self::UDPO_INCREMENT_NATIVE      => $hlp->__('Magento Native'),
@@ -57,7 +57,7 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
             );
             break;
 
-        case 'udropship/purchase_order/autoinvoice_shipment':
+        case 'zolagoos/purchase_order/autoinvoice_shipment':
             $options = array(
                 ZolagoOs_OmniChannelPo_Model_Source::AUTOINVOICE_SHIPMENT_NO => $hlp->__('No'),
                 ZolagoOs_OmniChannelPo_Model_Source::AUTOINVOICE_SHIPMENT_YES => $hlp->__('Yes'),
@@ -65,7 +65,7 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
             );
             break;
         
-        case 'udropship/purchase_order/shipment_increment_type':
+        case 'zolagoos/purchase_order/shipment_increment_type':
         case 'shipment_increment_types':
             $options = array(
                 self::SHIPMENT_INCREMENT_NATIVE      => $hlp->__('Magento Native'),

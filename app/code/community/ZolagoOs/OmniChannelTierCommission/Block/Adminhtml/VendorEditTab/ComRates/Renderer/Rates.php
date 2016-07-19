@@ -46,7 +46,7 @@ class ZolagoOs_OmniChannelTierCommission_Block_Adminhtml_VendorEditTab_ComRates_
 
     public function getGlobalTierComConfig()
     {
-        $value = Mage::getStoreConfig('udropship/tiercom/rates');
+        $value = Mage::getStoreConfig('zolagoos/tiercom/rates');
         if (is_string($value)) {
             $value = unserialize($value);
         }

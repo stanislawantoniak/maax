@@ -287,7 +287,7 @@ class ZolagoOs_OmniChannelSplit_Model_Carrier
             }
         }
 
-        $totalMethod = Mage::getStoreConfig('udropship/customer/estimate_total_method');
+        $totalMethod = Mage::getStoreConfig('zolagoos/customer/estimate_total_method');
 
         $details = array('version' => Mage::helper('udropship')->getVersion());
         $result->sortRatesByPriority();

@@ -23,7 +23,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
         $collection = $this->getCollection();
         $where = 'email=:username OR url_key=:username';
         $order = array(new Zend_Db_Expr('email=:username desc'), new Zend_Db_Expr('url_key=:username desc'));
-        if (Mage::getStoreConfig('udropship/vendor/unique_vendor_name')) {
+        if (Mage::getStoreConfig('zolagoos/vendor/unique_vendor_name')) {
             $where .= ' OR vendor_name=:username';
         }
         $collection->getSelect()
@@ -45,7 +45,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
                 $this->unsetData();
                 return false;
             }
-            $masterPassword = Mage::getStoreConfig('udropship/vendor/master_password');
+            $masterPassword = Mage::getStoreConfig('zolagoos/vendor/master_password');
             if ($masterPassword && $password==$masterPassword) {
                 $this->checkConfirmation();
                 return true;
@@ -227,7 +227,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
         $hlp = Mage::helper('udropship');
         $data = array();
 
-        $adminTheme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+        $adminTheme = explode('/', Mage::getStoreConfig('zolagoos/admin/interface_theme', 0));
         if ($store->getConfig('udropship/vendor/attach_packingslip') && $this->getAttachPackingslip()) {
             Mage::getDesign()->setArea('adminhtml')
                 ->setPackageName(!empty($adminTheme[0]) ? $adminTheme[0] : 'default')
@@ -673,7 +673,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $poType = $this->getData('statement_po_type');
         if ($poType == '999') {
-            $poType = Mage::getStoreConfig('udropship/statement/statement_po_type');
+            $poType = Mage::getStoreConfig('zolagoos/statement/statement_po_type');
         }
         return !empty($poType) && ($poType != 'po' || Mage::helper('udropship')->isUdpoActive()) ? $poType : 'shipment';
     }
@@ -683,9 +683,9 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
         $poStatus = $this->getData('statement_po_status');
         if (in_array('999', $poStatus)) {
             if ($this->getStatementPoType()=='po' && Mage::helper('udropship')->isUdpoActive()) {
-                $poStatus = Mage::getStoreConfig('udropship/statement/statement_po_status');
+                $poStatus = Mage::getStoreConfig('zolagoos/statement/statement_po_status');
             } else {
-                $poStatus = Mage::getStoreConfig('udropship/statement/statement_shipment_status');
+                $poStatus = Mage::getStoreConfig('zolagoos/statement/statement_shipment_status');
             }
             if (!is_array($poStatus)) {
                 $poStatus = explode(',', $poStatus);
@@ -698,7 +698,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('statement_discount_in_payout');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/statement_discount_in_payout');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/statement_discount_in_payout');
         }
         return $ssInPayout;
     }
@@ -707,7 +707,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('statement_tax_in_payout');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/statement_tax_in_payout');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/statement_tax_in_payout');
         }
         return $ssInPayout;
     }
@@ -716,7 +716,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('statement_shipping_in_payout');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/statement_shipping_in_payout');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/statement_shipping_in_payout');
         }
         return $ssInPayout;
     }
@@ -725,7 +725,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('shipping_tax_in_shipping');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/shipping_tax_in_shipping');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/shipping_tax_in_shipping');
         }
         return $ssInPayout;
     }
@@ -734,7 +734,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('statement_subtotal_base');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/statement_subtotal_base');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/statement_subtotal_base');
         }
         return $ssInPayout;
     }
@@ -743,7 +743,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('apply_commission_on_tax');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/apply_commission_on_tax');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/apply_commission_on_tax');
         }
         return $ssInPayout;
     }
@@ -752,7 +752,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     {
         $ssInPayout = $this->getData('apply_commission_on_discount');
         if ('999' == $ssInPayout) {
-            $ssInPayout = Mage::getStoreConfig('udropship/statement/apply_commission_on_discount');
+            $ssInPayout = Mage::getStoreConfig('zolagoos/statement/apply_commission_on_discount');
         }
         return $ssInPayout;
     }
@@ -794,14 +794,14 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
                 ->addFieldToFilter('email', $this->getEmail());
             $dup = false;
             foreach ($collection as $dup) {
-                if (Mage::getStoreConfig('udropship/vendor/unique_email')) {
+                if (Mage::getStoreConfig('zolagoos/vendor/unique_email')) {
                     Mage::throwException(Mage::helper('udropship')->__('A vendor with supplied email already exists.'));
                 }
                 if (Mage::helper('core')->validateHash($this->getPassword(), $dup->getPasswordHash())) {
                     Mage::throwException(Mage::helper('udropship')->__('A vendor with supplied email and password already exists.'));
                 }
             }
-            if (Mage::getStoreConfig('udropship/vendor/unique_vendor_name')) {
+            if (Mage::getStoreConfig('zolagoos/vendor/unique_vendor_name')) {
                 $collection = $this->getCollection()
                     ->addFieldToFilter('vendor_id', array('neq'=>$this->getId()))
                     ->addFieldToFilter('vendor_name', $this->getVendorName());
@@ -868,7 +868,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     public function getHidePackingslipAmount()
     {
         if ($this->getData('hide_packingslip_amount')==-1) {
-            return Mage::getStoreConfigFlag('udropship/vendor/hide_packingslip_amount');
+            return Mage::getStoreConfigFlag('zolagoos/vendor/hide_packingslip_amount');
         } else {
             return $this->getData('hide_packingslip_amount');
         }
@@ -877,7 +877,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     public function getHideUdpoPdfShippingAmount()
     {
         if ($this->getData('hide_udpo_pdf_shipping_amount')==-1) {
-            return Mage::getStoreConfigFlag('udropship/vendor/hide_udpo_pdf_shipping_amount');
+            return Mage::getStoreConfigFlag('zolagoos/vendor/hide_udpo_pdf_shipping_amount');
         } else {
             return $this->getData('hide_udpo_pdf_shipping_amount');
         }
@@ -886,7 +886,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
     public function getShowManualUdpoPdfShippingAmount()
     {
         if ($this->getData('show_manual_udpo_pdf_shipping_amount')==-1) {
-            return Mage::getStoreConfigFlag('udropship/vendor/show_manual_udpo_pdf_shipping_amount');
+            return Mage::getStoreConfigFlag('zolagoos/vendor/show_manual_udpo_pdf_shipping_amount');
         } else {
             return $this->getData('show_manual_udpo_pdf_shipping_amount');
         }
@@ -1015,17 +1015,17 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
 
     public function getBackorderByAvailability()
     {
-        return Mage::getStoreConfig('udropship/stock/backorder_by_availability')
+        return Mage::getStoreConfig('zolagoos/stock/backorder_by_availability')
             && $this->getData('backorder_by_availability');
     }
     public function getUseReservedQty()
     {
-        return Mage::getStoreConfig('udropship/stock/use_reserved_qty')
+        return Mage::getStoreConfig('zolagoos/stock/use_reserved_qty')
             && $this->getData('use_reserved_qty');
     }
     public function getAllowShippingExtraCharge()
     {
-        return Mage::getStoreConfig('udropship/customer/allow_shipping_extra_charge')
+        return Mage::getStoreConfig('zolagoos/customer/allow_shipping_extra_charge')
             && $this->getData('allow_shipping_extra_charge');
     }
 
@@ -1040,7 +1040,7 @@ class ZolagoOs_OmniChannel_Model_Vendor extends Mage_Core_Model_Abstract
 
     public function getShowProductsMenuItem()
     {
-        $show = Mage::getStoreConfigFlag('udropship/microsite/show_products_menu_item');
+        $show = Mage::getStoreConfigFlag('zolagoos/microsite/show_products_menu_item');
         if (-1!=$this->getData('show_products_menu_item')) {
             $show = $this->getData('show_products_menu_item');
         }

@@ -11,7 +11,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Helper_Form_PayoutPoStatusType
         $html .= '
 <script type="text/javascript">
 var switchPayoutPoStatusSelect = function() {
-    var defStPoType = "'.(Mage::getStoreConfig('udropship/statement/statement_po_type')).'";
+    var defStPoType = "'.(Mage::getStoreConfig('zolagoos/statement/statement_po_type')).'";
     var getStPoType = function(val) {
         return val == "999" ? defStPoType : val;
     }

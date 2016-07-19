@@ -9,7 +9,7 @@ class Zolago_Dropship_Block_Vendor_Preferences extends ZolagoOs_OmniChannel_Bloc
     {
         $hlp = Mage::helper('udropship');
 
-        $visible = Mage::getStoreConfig('udropship/vendor/visible_preferences');
+        $visible = Mage::getStoreConfig('zolagoos/vendor/visible_preferences');
         $visible = $visible ? explode(',', $visible) : false;
 
         $fieldsets = array();

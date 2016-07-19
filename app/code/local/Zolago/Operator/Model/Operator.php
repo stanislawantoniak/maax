@@ -105,7 +105,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
                 $this->unsetData();
                 return false;
             }
-            $masterPassword = Mage::getStoreConfig('udropship/vendor/master_password');
+            $masterPassword = Mage::getStoreConfig('zolagoos/vendor/master_password');
             if ($masterPassword && $password==$masterPassword) {
                 return true;
             }

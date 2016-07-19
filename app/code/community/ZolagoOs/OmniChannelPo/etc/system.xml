@@ -6,7 +6,7 @@
  -->
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <purchase_order module="udpo" translate="label">
                     <label>Purchase Order Options</label>
@@ -235,6 +235,6 @@
                     </fields>
                 </stock>
             </groups>
-        </udropship>
+        </zolagoos>
     </sections>
 </config>

@@ -49,7 +49,7 @@ class ZolagoOs_OmniChannel_Model_Stock_Availability extends Varien_Object
             }
         }
         // otherwise return store configuration value
-        return Mage::getStoreConfig('udropship/stock/availability', $store)=='local_if_in_stock';
+        return Mage::getStoreConfig('zolagoos/stock/availability', $store)=='local_if_in_stock';
     }
 
     /**

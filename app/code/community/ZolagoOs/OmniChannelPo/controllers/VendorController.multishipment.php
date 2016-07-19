@@ -87,10 +87,10 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             $carrier = $r->getParam('carrier');
             $carrierTitle = $r->getParam('carrier_title');
 
-            $notifyOn = Mage::getStoreConfig('udropship/customer/notify_on', $store);
-            $pollTracking = Mage::getStoreConfig('udropship/customer/poll_tracking', $store);
-            $poAutoComplete = Mage::getStoreConfig('udropship/vendor/auto_complete_po', $store);
-            $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
+            $notifyOn = Mage::getStoreConfig('zolagoos/customer/notify_on', $store);
+            $pollTracking = Mage::getStoreConfig('zolagoos/customer/poll_tracking', $store);
+            $poAutoComplete = Mage::getStoreConfig('zolagoos/vendor/auto_complete_po', $store);
+            $autoComplete = Mage::getStoreConfig('zolagoos/vendor/auto_shipment_complete', $store);
 
             $poStatusShipped = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_SHIPPED;
             $poStatusDelivered = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED;
@@ -247,8 +247,8 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             }
 
             $udpoStatuses = false;
-            if (Mage::getStoreConfig('udropship/vendor/is_restrict_udpo_status')) {
-                $udpoStatuses = Mage::getStoreConfig('udropship/vendor/restrict_udpo_status');
+            if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_udpo_status')) {
+                $udpoStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_udpo_status');
                 if (!is_array($udpoStatuses)) {
                     $udpoStatuses = explode(',', $udpoStatuses);
                 }
@@ -346,10 +346,10 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             $partial = $r->getParam('partial_availability');
             $partialQty = $r->getParam('partial_qty');
 
-            $notifyOn = Mage::getStoreConfig('udropship/customer/notify_on', $store);
-            $pollTracking = Mage::getStoreConfig('udropship/customer/poll_tracking', $store);
-            $poAutoComplete = Mage::getStoreConfig('udropship/vendor/auto_complete_po', $store);
-            $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
+            $notifyOn = Mage::getStoreConfig('zolagoos/customer/notify_on', $store);
+            $pollTracking = Mage::getStoreConfig('zolagoos/customer/poll_tracking', $store);
+            $poAutoComplete = Mage::getStoreConfig('zolagoos/vendor/auto_complete_po', $store);
+            $autoComplete = Mage::getStoreConfig('zolagoos/vendor/auto_shipment_complete', $store);
 
             $poStatusShipped = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_SHIPPED;
             $poStatusDelivered = ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED;
@@ -360,8 +360,8 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             $isShipped = $poStatus == $poStatusShipped || $poStatus==$poStatusDelivered || $autoComplete && ($poStatus==='' || is_null($poStatus));
 
             $udpoStatuses = false;
-            if (Mage::getStoreConfig('udropship/vendor/is_restrict_udpo_status')) {
-                $udpoStatuses = Mage::getStoreConfig('udropship/vendor/restrict_udpo_status');
+            if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_udpo_status')) {
+                $udpoStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_udpo_status');
                 if (!is_array($udpoStatuses)) {
                     $udpoStatuses = explode(',', $udpoStatuses);
                 }
@@ -568,8 +568,8 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             $udpoHlp = Mage::helper('udpo');
 
             $udpoStatuses = false;
-            if (Mage::getStoreConfig('udropship/vendor/is_restrict_udpo_status')) {
-                $udpoStatuses = Mage::getStoreConfig('udropship/vendor/restrict_udpo_status');
+            if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_udpo_status')) {
+                $udpoStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_udpo_status');
                 if (!is_array($udpoStatuses)) {
                     $udpoStatuses = explode(',', $udpoStatuses);
                 }
@@ -673,7 +673,7 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             }
         }
 
-        if (Mage::getStoreConfig('udropship/purchase_order/ready_on_pdf')) {
+        if (Mage::getStoreConfig('zolagoos/purchase_order/ready_on_pdf')) {
             $udpoHlp = Mage::helper('udpo');
             foreach ($udpos as $udpo) {
                 $udpo->addComment($this->__('%s printed purchase order pdf', $vendor->getVendorName()), false, true);
@@ -692,7 +692,7 @@ class ZolagoOs_OmniChannelPo_VendorController extends ZolagoOs_OmniChannel_Vendo
             $order->setBaseShippingAmount($udpo->getBaseShippingAmount());
         }
 
-        $theme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+        $theme = explode('/', Mage::getStoreConfig('zolagoos/admin/interface_theme', 0));
         Mage::getDesign()->setArea('adminhtml')
             ->setPackageName(!empty($theme[0]) ? $theme[0] : 'default')
             ->setTheme(!empty($theme[1]) ? $theme[1] : 'default');

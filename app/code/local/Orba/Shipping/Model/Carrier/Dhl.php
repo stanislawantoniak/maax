@@ -171,7 +171,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
      */
 
     public function calculateCharge($track,$rate,$vendor,$packageValue,$codValue) {
-        $localVendor = Mage::getModel('udropship/vendor')->load(Mage::getStoreConfig('udropship/vendor/local_vendor'));
+        $localVendor = Mage::getModel('udropship/vendor')->load(Mage::getStoreConfig('zolagoos/vendor/local_vendor'));
         $galleryChargeShipment = floatval(str_replace(',','.',$localVendor->getData($rate)));
         $chargeShipment = floatval(str_replace(',','.',$vendor->getData($rate)));
         $chargeFuelList = Mage::app()->getStore()->getConfig('carriers/orbadhl/fuel_charge');

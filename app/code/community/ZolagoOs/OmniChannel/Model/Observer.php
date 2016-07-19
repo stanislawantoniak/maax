@@ -256,7 +256,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
         $quote = $item->getQuote();
         $sId = $quote->getStoreId();
 
-        $specialCost = Mage::getStoreConfig('udropship/vendor/special_cost_attribute');
+        $specialCost = Mage::getStoreConfig('zolagoos/vendor/special_cost_attribute');
         if ($specialCost && ($specialCost = $product->getData($specialCost))) {
             $baseCost = $item->getBaseCost();
             $specialFrom = $product->getSpecialFromDate();
@@ -288,7 +288,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
         $weightType = $product->getWeightType();
         $weightTypeFlag = (null !== $weightType) && !$weightType;
 
-        if (!Mage::getStoreConfigFlag('udropship/stock/skip_bundle_limit')
+        if (!Mage::getStoreConfigFlag('zolagoos/stock/skip_bundle_limit')
             && $shipmentTypeFlag && (!$priceTypeFlag || !$weightTypeFlag)
         ) {
             $product->setShipmentType(
@@ -497,8 +497,8 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
 			}
 		}
 
-		if (0<Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit')) {
-			$limit = date('Y-m-d H:i:s', $time-24*60*60*Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit'));
+		if (0<Mage::getStoreConfig('zolagoos/error_notifications/poll_tracking_limit')) {
+			$limit = date('Y-m-d H:i:s', $time-24*60*60*Mage::getStoreConfig('zolagoos/error_notifications/poll_tracking_limit'));
 
 			$tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
 				->addAttributeToSelect('*')
@@ -532,7 +532,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     */
     public function adminhtml_controller_action_predispatch(Varien_Event_Observer $observer)
     {
-        if (Mage::getStoreConfig('udropship/admin/notifications')) {
+        if (Mage::getStoreConfig('zolagoos/admin/notifications')) {
             try {
                 Mage::getModel('udropship/feed')->checkUpdate();
             } catch (Exception $e) {
@@ -706,8 +706,8 @@ js/udropship.js
                     && ($format = $vendor->getData($customKey))
                 ) {
                     $type->setDefaultFormat($format);
-                } elseif (Mage::getStoreConfigFlag('udropship/customer/'.$flagKey, $store)
-                    && ($format = Mage::getStoreConfig('udropship/customer/'.$customKey, $store))
+                } elseif (Mage::getStoreConfigFlag('zolagoos/customer/'.$flagKey, $store)
+                    && ($format = Mage::getStoreConfig('zolagoos/customer/'.$customKey, $store))
                 ) {
                     $type->setDefaultFormat($format);
                 }
@@ -774,10 +774,10 @@ js/udropship.js
                 $runtimeAttrCodesParentNode->addChild($runtimeAttrCode);
             }
         }
-        if (Mage::getStoreConfigFlag('udropship/stock/split_bundle_by_vendors')) {
+        if (Mage::getStoreConfigFlag('zolagoos/stock/split_bundle_by_vendors')) {
             Mage::getConfig()->setNode('global/models/bundle/rewrite/product_type', 'ZolagoOs_OmniChannel_Model_BundleProductType');
         }
-        if (Mage::getStoreConfig('udropship/stock/availability')=='local_if_in_stock') {
+        if (Mage::getStoreConfig('zolagoos/stock/availability')=='local_if_in_stock') {
             if (Mage::helper('udropship')->isEE()
                 && Mage::helper('udropship')->compareMageVer('1.8.0.0', '1.13.0.0')
             ) {
@@ -841,9 +841,9 @@ js/udropship.js
     }
     public function changeOrderStatusAfterPosGenarated($order)
     {
-        $strict = Mage::getStoreConfigFlag('udropship/vendor/strict_change_order_status_after_po');
-        $cosAfterPoStatus = Mage::getStoreConfig('udropship/vendor/change_order_status_after_po');
-        $madStatuses = explode(',', Mage::getStoreConfig('udropship/vendor/make_available_to_dropship', $order->getStoreId()));
+        $strict = Mage::getStoreConfigFlag('zolagoos/vendor/strict_change_order_status_after_po');
+        $cosAfterPoStatus = Mage::getStoreConfig('zolagoos/vendor/change_order_status_after_po');
+        $madStatuses = explode(',', Mage::getStoreConfig('zolagoos/vendor/make_available_to_dropship', $order->getStoreId()));
         if ($cosAfterPoStatus
             && (in_array($order->getStatus(), $madStatuses) || !$strict)
             && $order->getStatus()!=$cosAfterPoStatus

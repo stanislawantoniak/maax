@@ -273,14 +273,14 @@
                     <children>
                         <sales>
                             <children>
-                                <udropship>
+                                <zolagoos>
                                     <children>
                                         <vendor_registration>
                                             <title>Vendor Registrations</title>
                                             <sort_order>40</sort_order>
                                         </vendor_registration>
                                     </children>
-                                </udropship>
+                                </zolagoos>
                             </children>
                         </sales>
                     </children>
@@ -497,7 +497,7 @@
     </frontend>
 
     <default>
-        <udropship>
+        <zolagoos>
             <microsite>
                 <show_products_menu_item>0</show_products_menu_item>
                 <signup_template>udropship_microsite_signup_template</signup_template>
@@ -519,6 +519,6 @@ All registrations URL: {{all_registrations_url}}
 Comments: {{comments}}
 ]]></registration_template>
             </microsite>
-        </udropship>
+        </zolagoos>
     </default>
 </config>

@@ -146,7 +146,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
     {
         $maxShippingDays = $this->getData('max_shipping_days');
         if (is_null($maxShippingDays) || $maxShippingDays=="" || $maxShippingDays < 0) {
-            $maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days', $storeId);
+            $maxShippingDays = Mage::getStoreConfig('zolagoos/vendor/max_shipping_days', $storeId);
         }
         return (int)$maxShippingDays;
     }
@@ -155,7 +155,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
     {
         $maxShippingTime = $this->getData('max_shipping_time');
         if (is_null($maxShippingTime) || $maxShippingTime=="" || $maxShippingTime==0) {
-            $maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time', $storeId);
+            $maxShippingTime = Mage::getStoreConfig('zolagoos/vendor/max_shipping_time', $storeId);
         }
         return $maxShippingTime;
     }
@@ -268,7 +268,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
         $hlp = Mage::helper('udropship');
         $data = array();
 
-        $adminTheme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+        $adminTheme = explode('/', Mage::getStoreConfig('zolagoos/admin/interface_theme', 0));
         if ($store->getConfig('udropship/vendor/attach_packingslip') && $this->getAttachPackingslip()) {
             Mage::getDesign()->setArea('adminhtml')
             ->setPackageName(!empty($adminTheme[0]) ? $adminTheme[0] : 'default')
@@ -486,7 +486,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
         $collection = $this->getCollection();
         $where = 'email=:username OR url_key=:username';
         $order = array(new Zend_Db_Expr('email=:username desc'), new Zend_Db_Expr('url_key=:username desc'));
-        if (Mage::getStoreConfig('udropship/vendor/unique_vendor_name')) {
+        if (Mage::getStoreConfig('zolagoos/vendor/unique_vendor_name')) {
             $where .= ' OR vendor_name=:username';
         }
         $collection->getSelect()
@@ -507,7 +507,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
                 $this->unsetData();
                 return false;
             }
-            $masterPassword = Mage::getStoreConfig('udropship/vendor/master_password');
+            $masterPassword = Mage::getStoreConfig('zolagoos/vendor/master_password');
             if ($masterPassword && $password==$masterPassword) {
                 return true;
             }

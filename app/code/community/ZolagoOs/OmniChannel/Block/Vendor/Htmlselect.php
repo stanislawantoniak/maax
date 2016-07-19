@@ -23,7 +23,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Htmlselect extends Varien_Data_Form_Elem
     }
     public function getElementHtml()
     {
-        if (Mage::getStoreConfigFlag('udropship/vendor/autocomplete_htmlselect')) {
+        if (Mage::getStoreConfigFlag('zolagoos/vendor/autocomplete_htmlselect')) {
             $html = '<input id="_autocomplete_'.$this->getHtmlId().'" class="input-text" name="_autocomplete_'.$this->getName()
              .'" value="'.$this->getEscapedNameValue().'" '.$this->serialize($this->getHtmlAttributes()).'/>'."\n";
             $html .= '
@@ -73,7 +73,7 @@ class ZolagoOs_OmniChannel_Block_Vendor_Htmlselect extends Varien_Data_Form_Elem
 
     public function getHtmlAttributes()
     {
-        if (Mage::getStoreConfigFlag('udropship/vendor/autocomplete_htmlselect')) {
+        if (Mage::getStoreConfigFlag('zolagoos/vendor/autocomplete_htmlselect')) {
             return array('type', 'title', 'class', 'style', 'onclick', 'onchange', 'onkeyup', 'disabled', 'readonly', 'maxlength', 'tabindex');
         } else {
             return parent::getHtmlAttributes();

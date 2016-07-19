@@ -306,7 +306,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
         );
 
         // Add skuv
-        $skuvCode  = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+        $skuvCode  = Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute');
         /** @var Mage_Eav_Model_Config $model */
         $model     = Mage::getSingleton('eav/config');
         $attribute = $model->getAttribute('catalog_product', $skuvCode);

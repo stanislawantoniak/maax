@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <sections>
-        <udropship>
+        <zolagoos>
             <groups>
                 <payout>
                     <label>Payout Options</label>
@@ -84,6 +84,6 @@
                     </fields>
                 </payout_paypal>
             </groups>
-        </udropship>
+        </zolagoos>
     </sections>
 </config>

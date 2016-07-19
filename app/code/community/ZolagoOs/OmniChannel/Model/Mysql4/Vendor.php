@@ -254,7 +254,7 @@ class ZolagoOs_OmniChannel_Model_Mysql4_Vendor extends Mage_Core_Model_Mysql4_Ab
         if (!Mage::helper('udropship')->isUdmultiAvailable()
             && $localVendorId != $vendor->getId()
         ) {
-            switch (Mage::getStoreConfig('udropship/customer/vendor_delete_action')) {
+            switch (Mage::getStoreConfig('zolagoos/customer/vendor_delete_action')) {
                 case 'assign_local_enabled':
                     $this->_resetVendorProducts($vendor);
                     break;
@@ -431,7 +431,7 @@ class ZolagoOs_OmniChannel_Model_Mysql4_Vendor extends Mage_Core_Model_Mysql4_Ab
         if (!Mage::helper('udropship')->isUdmultiAvailable()
             && $vendor->dataHasChangedFor('status')
         ) {
-            switch (Mage::getStoreConfig('udropship/customer/vendor_enable_disable_action')) {
+            switch (Mage::getStoreConfig('zolagoos/customer/vendor_enable_disable_action')) {
                 case 'enable_disable':
                     switch ($vendor->getStatus()) {
                         case ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE:

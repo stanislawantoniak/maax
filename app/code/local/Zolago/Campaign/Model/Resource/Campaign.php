@@ -968,7 +968,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             "product.entity_id = product_varchar.entity_id",
             array("type" => "product.type_id")
         );
-        $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+        $select->where("attribute.attribute_code=?", Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute'));
         $select->where("product_varchar.entity_id IN(?)", $ids);
 
         $select->where("product.visibility<>?", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);

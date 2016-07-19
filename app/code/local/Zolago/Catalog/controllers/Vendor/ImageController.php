@@ -76,7 +76,7 @@ class Zolago_Catalog_Vendor_ImageController
         if (!empty($skuvS)) {
             $collection->addAttributeToFilter("skuv", array('in' => $skuvS));
         }
-        $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+        $collection->addAttributeToSelect(Mage::getStoreConfig('zolagoos/vendor/vendor_sku_attribute'));
         $collection->addAttributeToSelect('name');
         $mapper->setCollection($collection);
         return $mapper;

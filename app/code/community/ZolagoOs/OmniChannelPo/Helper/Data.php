@@ -99,7 +99,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
         $hlp = Mage::helper('udropship');
         $hlpd = Mage::helper('udropship/protected');
         $convertor = Mage::getModel('sales/convert_order');
-        $enableVirtual = Mage::getStoreConfig('udropship/misc/enable_virtual', $order->getStoreId());
+        $enableVirtual = Mage::getStoreConfig('zolagoos/misc/enable_virtual', $order->getStoreId());
 
         $shippingMethod = Mage::helper('udropship')->explodeOrderShippingMethod($order);
 
@@ -110,7 +110,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
             $orderToPoItemMap[$poItem->getOrderItemId()] = $poItem;
         }
 
-        $shipmentIncrement = Mage::getStoreConfig('udropship/purchase_order/shipment_increment_type', $order->getStoreId());
+        $shipmentIncrement = Mage::getStoreConfig('zolagoos/purchase_order/shipment_increment_type', $order->getStoreId());
 
         if ($shipmentIncrement == ZolagoOs_OmniChannelPo_Model_Source::SHIPMENT_INCREMENT_ORDER_BASED) {
             $shipmentIncrementBase = $order->getIncrementId();
@@ -174,7 +174,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
             $vendor = $hlp->getVendor($vId);
 
             if (empty($shipments[$udpoKey])) {
-                $shipmentStatus = (int)Mage::getStoreConfig('udropship/vendor/default_shipment_status', $order->getStoreId());
+                $shipmentStatus = (int)Mage::getStoreConfig('zolagoos/vendor/default_shipment_status', $order->getStoreId());
                 if ('999' != $vendor->getData('initial_shipment_status')) {
                     $shipmentStatus = $vendor->getData('initial_shipment_status');
                 }
@@ -362,10 +362,10 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
     {
     	if ($shipment->getNoInvoiceFlag()) return false;
         if (!($udpo = $this->getShipmentPo($shipment))) return false;
-        $autoInvoiceFlag = Mage::getStoreConfig('udropship/purchase_order/autoinvoice_shipment', $udpo->getStoreId());
+        $autoInvoiceFlag = Mage::getStoreConfig('zolagoos/purchase_order/autoinvoice_shipment', $udpo->getStoreId());
         if (!$shipment->getDoInvoiceFlag()) {
 	        if (!$autoInvoiceFlag) return false;
-	        $autoInvoiceStatuses = Mage::getStoreConfig('udropship/purchase_order/autoinvoice_shipment_statuses', $udpo->getStoreId());
+	        $autoInvoiceStatuses = Mage::getStoreConfig('zolagoos/purchase_order/autoinvoice_shipment_statuses', $udpo->getStoreId());
 	        if (!is_array($autoInvoiceStatuses)) {
 	            $autoInvoiceStatuses = explode(',', $autoInvoiceStatuses);
 	        }
@@ -577,7 +577,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
     protected function _canShipItem($orderItem, $poItem, $orderToPoItemMap, $qtys=array())
     {
         $sId = $orderItem->getOrder() ? $orderItem->getOrder()->getStoreId() : null;
-        $enableVirtual = Mage::getStoreConfig('udropship/misc/enable_virtual', $sId);
+        $enableVirtual = Mage::getStoreConfig('zolagoos/misc/enable_virtual', $sId);
         if ($orderItem->getIsVirtual() && !$enableVirtual || $orderItem->getLockedDoShip()) {
             return false;
         }
@@ -896,7 +896,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
         $pdf = Mage::getModel('udpo/pdf_po')
-            ->setUseFont(Mage::getStoreConfig('udropship/vendor/pdf_use_font'))
+            ->setUseFont(Mage::getStoreConfig('zolagoos/vendor/pdf_use_font'))
             ->getPdf($udpos);
         foreach ($udpos as $udpo) {
             Mage::helper('udropship')->unassignVendorSkus($udpo);
@@ -977,7 +977,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 			}
 		}
 
-		$adminTheme = explode('/', Mage::getStoreConfig('udropship/admin/interface_theme', 0));
+		$adminTheme = explode('/', Mage::getStoreConfig('zolagoos/admin/interface_theme', 0));
 
 		if ($store->getConfig('udropship/purchase_order/attach_po_pdf') && $vendor->getAttachPoPdf()) {
 			Mage::getDesign()->setArea('adminhtml')
@@ -1511,8 +1511,8 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getVendorUdpoStatuses()
     {
-        if (Mage::getStoreConfig('udropship/vendor/is_restrict_udpo_status')) {
-            $udpoStatuses = Mage::getStoreConfig('udropship/vendor/restrict_udpo_status');
+        if (Mage::getStoreConfig('zolagoos/vendor/is_restrict_udpo_status')) {
+            $udpoStatuses = Mage::getStoreConfig('zolagoos/vendor/restrict_udpo_status');
             if (!is_array($udpoStatuses)) {
                 $udpoStatuses = explode(',', $udpoStatuses);
             }

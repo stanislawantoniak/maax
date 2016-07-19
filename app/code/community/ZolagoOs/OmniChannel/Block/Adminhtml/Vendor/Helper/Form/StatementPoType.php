@@ -8,7 +8,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Helper_Form_StatementPoType ex
     public function getAfterElementHtml()
     {
         $html = parent::getAfterElementHtml();
-        $defPoType = (string)Mage::getStoreConfig('udropship/statement/statement_po_type');
+        $defPoType = (string)Mage::getStoreConfig('zolagoos/statement/statement_po_type');
         $html .= '
 <script type="text/javascript">
 var switchStatementPoStatusSelect = function() {

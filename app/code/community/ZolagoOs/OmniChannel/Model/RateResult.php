@@ -28,7 +28,7 @@ class ZolagoOs_OmniChannel_Model_RateResult extends Mage_Shipping_Model_Rate_Res
     }
     public function sortRatesByPrice()
     {
-        if (Mage::getStoreConfigFlag('udropship/customer/allow_shipping_extra_charge')) {
+        if (Mage::getStoreConfigFlag('zolagoos/customer/allow_shipping_extra_charge')) {
             $this->sortRatesByPriority();
         } else {
             parent::sortRatesByPrice();
