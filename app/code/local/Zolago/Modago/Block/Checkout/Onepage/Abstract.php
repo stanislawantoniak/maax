@@ -4,6 +4,46 @@
  */
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
+
+	public function getDeliveryPoint(){
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+		$sessionShippingMethod = "";
+		$selectedShipping = $helper->getSelectedShipping();
+		foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+			$sessionShippingMethod = $methodSelectedData;
+		}
+
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType($sessionShippingMethod);
+		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+		$deliveryPointIdentifier = $selectedShipping['shipping_point_code'];
+
+		//TODO create renderer depends on delivery type
+		switch ($deliveryMethodCode) {
+			case 'zolagopickuppoint':
+				$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
+				$data = array(
+					"id" => $pos->getId(),
+					"city" => (string)ucwords(strtolower($pos->getCity())),
+					"value" => $pos->getId()
+				);
+				break;
+			case 'ghinpost':
+				/* @var $locker GH_Inpost_Model_Locker */
+				$locker = $this->getInpostLocker();
+
+				$data = array(
+					"id" => $locker->getId(),
+					"city" => (string)ucwords(strtolower($locker->getTown())),
+					"value" => $locker->getName()
+				);
+				break;
+		}
+
+		Zend_Debug::dump($selectedShipping);
+		$deliveryPointName = $selectedShipping['shipping_point_code'];
+	}
 	/**
 	 * @return GH_Inpost_Model_Locker
 	 */

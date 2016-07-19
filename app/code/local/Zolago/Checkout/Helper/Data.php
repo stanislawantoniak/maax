@@ -227,4 +227,49 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return $data;
 	}
+
+
+
+	/**
+	 * @param $deliveryMethod (something like udtiership_4)
+	 * @param bool $includeTitle
+	 * @return Varien_Object
+	 */
+	public function getMethodCodeByDeliveryType($deliveryMethod, $includeTitle = false){
+		$storeId = Mage::app()->getStore()->getStoreId();
+
+		$collection = Mage::getModel("udropship/shipping")->getCollection();
+		$collection->getSelect()
+			->join(
+				array('udropship_shipping_method' => $collection->getTable('udropship/shipping_method')),
+				"main_table.shipping_id = udropship_shipping_method.shipping_id",
+				array(
+					'udropship_method' => new Zend_Db_Expr('CONCAT_WS(\'_\',    udropship_shipping_method.carrier_code ,udropship_shipping_method.method_code)'),
+				)
+			);
+		$collection->getSelect()->join(
+			array('udtiership_delivery_type' => $collection->getTable('udtiership/delivery_type')),
+			"udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
+			array("delivery_code")
+		);
+
+		if($includeTitle){
+			$collection->getSelect()->joinLeft(
+				array('udropship_shipping_title_default' => $collection->getTable('udropship/shipping_title')),
+				"main_table.shipping_id = udropship_shipping_title_default.shipping_id AND udropship_shipping_title_default.store_id=0",
+				array(
+					"udropship_method_title" => "IF(udropship_shipping_title_store.title IS NOT NULL, udropship_shipping_title_store.title, udropship_shipping_title_default.title)"
+				)
+			);
+			$collection->getSelect()->joinLeft(
+				array('udropship_shipping_title_store' => $collection->getTable('udropship/shipping_title')),
+				"main_table.shipping_id = udropship_shipping_title_store.shipping_id AND udropship_shipping_title_store.store_id={$storeId}",
+				array()
+			);
+		}
+
+		$collection->getSelect()->having("udropship_method=?", $deliveryMethod);
+
+		return $collection->getFirstItem();
+	}
 }

@@ -7,6 +7,9 @@
 $helper 			= Mage::helper("zolagocheckout");
 $shippingAddress	= $this->getShippingAddress();
 $locker				= $this->getInpostLocker();
+
+$deliveryPoint = $this->getDeliveryPoint();
+
 $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 ?>
 

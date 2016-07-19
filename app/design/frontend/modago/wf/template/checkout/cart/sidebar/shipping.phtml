@@ -21,7 +21,7 @@ $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
 
-$sessionShippingMethod = "";
+
 
 /* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
@@ -31,8 +31,9 @@ $lockerId = $locker->getId();
 $lockerRender = $this->getLockerRender($locker);
 
 $quote = $this->getQuote();
-$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
 
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
 foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
