@@ -3,7 +3,8 @@ class Zolago_Turpentine_Model_Observer_Varnish extends Nexcessnet_Turpentine_Mod
     
 	/**
 	 * Do overiade cache mode
-	 * @param type $eventObject
+	 * @param mixed $eventObject
+	 * @return null
 	 */
     public function setCacheFlagHeader( $eventObject ) {
         $response = $eventObject->getResponse();
