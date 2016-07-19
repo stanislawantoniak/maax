@@ -1199,4 +1199,30 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 			$this->getIncrementId()
 		);
 	}
+
+	/**
+	 * @param bool $force
+	 * @return GH_Inpost_Model_Locker
+	 */
+	public function getInpostLocker($force = false) {
+		if (!$this->hasData('inpost_locker') || $force) {
+			$inpostLockerName = $this->getInpostLockerName();
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel('ghinpost/locker')->load($inpostLockerName, 'name');
+			$this->setData('inpost_locker', $locker);
+		}
+		return $this->getData('inpost_locker');
+	}
+	
+	public function isDeliveryInpost() {
+		if (!$this->hasData('is_delivery_inpost')) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+			/** @var GH_Inpost_Model_Carrier $model */
+			$model = Mage::getModel("ghinpost/carrier");
+			$ghInpostCarrierCode  = $model->getCarrierCode();
+			$isInpost = ($methodCode == $ghInpostCarrierCode);
+			$this->setData('is_delivery_inpost', $isInpost);
+		}
+		return $this->getData('is_delivery_inpost');
+	}
 }

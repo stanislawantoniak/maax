@@ -129,6 +129,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"converter_msrp_type",
 			"price_margin",
 			"politics",
+			"product_flag"
 		);
 	}
 	

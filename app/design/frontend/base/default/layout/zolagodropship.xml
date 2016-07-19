@@ -116,12 +116,10 @@
 				<type>skin_js</type>
 				<name>js/boostrap/bootstrap.min.js</name>
 			</action>
-			
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/melon/libs/lodash.compat.min.js</name>
 			</action>
-			
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/melon/libs/html5shiv.js</name>
