@@ -34,14 +34,14 @@
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
             }
 
-            //UNCOMMENT AFTER DEVELOPING!!!!!!!
-            //if (typeof self.getSelectedShipping().val() !== "undefined") {
-            //    jQuery.ajax({
-            //        url: "/checkout/singlepage/saveBasketShipping/",
-            //        type: "POST",
-            //        data: jQuery("#cart-shipping-methods-form").serializeArray()
-            //    });
-            //}
+
+            if (typeof self.getSelectedShipping().val() !== "undefined") {
+                jQuery.ajax({
+                    url: "/checkout/singlepage/saveBasketShipping/",
+                    type: "POST",
+                    data: jQuery("#cart-shipping-methods-form").serializeArray()
+                });
+            }
 
             self.implementMapSelections();
         },
@@ -304,10 +304,10 @@
             if (jQuery.type(shipping) !== "undefined") {
                 var inputs = '';
                 jQuery.each(vendors, function (i, vendor) {
-                    inputs += '<input type="text" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
+                    inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                 });
                 if (jQuery.type(pointId) !== "undefined") {
-                    inputs += '<input type="text" data-id="' + pointId + '" data-town="' + pointTown + '" name="shipping_point_code" value="' + pointCode + '"  />';
+                    inputs += '<input type="hidden" data-id="' + pointId + '" data-town="' + pointTown + '" name="shipping_point_code" value="' + pointCode + '"  />';
                 }
                 content.find("form .shipping-collect").html(inputs);
             }
