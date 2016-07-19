@@ -40,7 +40,7 @@ class Zolago_Pos_Model_Form_Fieldset_Maps extends Zolago_Common_Model_Form_Field
         $this->_fieldset->addField('map_phone', 'text', array(
             'name' => 'map_phone',
             'label' => $this->_helper->__('Phone'),
-            'required' => true,
+            'required' => false,
             'class' => 'validate-phone-number form-control',
             "maxlength" => 50,
             "wrapper_class" => "col-md-4",

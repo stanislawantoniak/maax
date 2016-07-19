@@ -118,7 +118,8 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 				}
 
 				if (count($validItems) && $returnAmount > 0) {
-					if(($returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
+				    $tmpValue = round(($returnAmount + $alreadyReturnedAmount),4);
+					if($tmpValue <= $po->getGrandTotalInclTax()) {
 						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
 					} else {
 						$this->_throwRefundTooMuchAmountException();
