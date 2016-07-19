@@ -85,10 +85,24 @@
             jQuery(document).delegate("a[data-select-shipping-method-trigger=1]",
                 "click",
                 function (e) {
-                    Mall.Cart.Shipping.setShippingMethod(this);
                     e.preventDefault();
-                    jQuery("#select_inpost_point").modal("hide");
-                    showMarkerOnMap(jQuery(e.target).attr("data-carrier-pointcode"));
+                    var parentModal = jQuery(this).parents(".modal");
+                    var deliveryMethod = parentModal.attr("data-carrier-points");
+                    //console.log(deliveryMethod);
+                    switch(deliveryMethod){
+                        case 'zolagopickuppoint':
+                            parentModal.modal("hide");
+                            var selectedOption = parentModal.find("[name=shipping_select_pos] option:selected");
+                            Mall.Cart.Shipping.setShippingMethod(selectedOption);
+                            break;
+                        case 'ghinpost':
+                            Mall.Cart.Shipping.setShippingMethod(this);
+                            parentModal.modal("hide");
+                            showMarkerOnMap(jQuery(e.target).attr("data-carrier-pointcode"));
+                            break;
+                    }
+                    return false;
+
                 });
         },
         implementMapSelections: function () {
@@ -287,13 +301,11 @@
             if (jQuery.type(shipping) !== "undefined") {
                 var inputs = '';
                 jQuery.each(vendors, function (i, vendor) {
-                    inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
+                    inputs += '<input type="text" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                 });
                 if (jQuery.type(pointId) !== "undefined") {
-                    inputs += '<input type="hidden" data-id="' + pointId + '" data-town="' + pointTown + '" name="shipping_point_code" value="' + pointCode + '"  />';
+                    inputs += '<input type="text" data-id="' + pointId + '" data-town="' + pointTown + '" name="shipping_point_code" value="' + pointCode + '"  />';
                 }
-
-
                 content.find("form .shipping-collect").html(inputs);
             }
 

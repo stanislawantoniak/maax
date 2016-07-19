@@ -33,4 +33,12 @@
             </zospickuppoint_setup>
         </resources>
     </global>
+    <default>
+        <carriers>
+            <zolagopickuppoint>
+                <active>0</active>
+                <cod_allowed>1</cod_allowed>
+            </zolagopickuppoint>
+        </carriers>
+    </default>
 </config>

@@ -3,6 +3,7 @@
 /**
  * Class Zolago_Pos_Model_Pos
  *
+ * @method string getName()
  * @method string getCity()
  * @method string getStreet()
  * @method string getPostcode()
@@ -13,6 +14,11 @@
  * @method string getMapLongitude()
  * @method string getMapPhone()
  * @method string getMapTimeOpened()
+ *
+ *
+ * @method int getIsAvailableAsPickupPoint()
+ *
+ *
  */
 class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
 {
