@@ -237,6 +237,10 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 $order = $rma->getOrder();
                 $orderId = $order->getId();
                 $paymentId = $rma->getOrder()->getPayment()->getId();
+                $customerAccount = NULL;
+                if($rma->getCustomerAccount()){
+                    $customerAccount = $rma->getCustomerAccount();
+                }
 
                 /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
                 $existTransaction = Mage::getModel('sales/order_payment_transaction')->getCollection()
@@ -260,6 +264,8 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                         ->setOrderId($orderId)
                         ->setParentTxnId($existTransaction->getData()[0]['txn_id'], $transaction->getTransactionId())
                         ->setCustomerId($customerId)
+                        ->setBankAccount($customerAccount)
+                        ->setRmaId($rma->getId())
                         ->setDotpayId($existTransaction->getData()[0]['dotpay_id']);
                 }else {
                     $transaction
@@ -271,6 +277,8 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                         ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
                         ->setOrderId($orderId)
                         ->setCustomerId($customerId)
+                        ->setBankAccount($customerAccount)
+                        ->setRmaId($rma->getId())
                         ->setPaymentId($paymentId);
                 }
 

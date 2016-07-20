@@ -500,7 +500,7 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
 			$sumRefunds +=  abs($existTransaction->getTxnAmount());
 		}
 
-		if($sumRefunds != $this->getRmaRefundAmountMax()) {
+		if(round($sumRefunds,4) != round($this->getRmaRefundAmountMax(),4)) {
 			return false;
 		} else {
 			$acceptedRefund = true;

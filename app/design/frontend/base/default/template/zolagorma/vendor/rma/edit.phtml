@@ -96,7 +96,7 @@ jQuery(document).ready(function() {
 										<?php echo $_helper->__("Refund disabled") ?>
 										<i class="icon-question-sign"></i>
 									</div>
-								<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaSimpleRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
+								<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && (round($_rma->getRmaSimpleRefundAmount(),4) < round($_rma->getRmaRefundAmountMax(),4))): ?>
 									<div class="btn-group" id="status-holder">
 										<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
 											<?php if($_rma->getRmaSimpleRefundAmount()): ?>
