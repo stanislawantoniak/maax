@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<menu>
+		<sales>
+			<children>
+				<udropship>
+					<children>
+						<urma>
+							<disabled>1</disabled>
+						</urma>
+					</children>
+				</udropship>
+			</children>
+		</sales>
+		<vendors>
+			<children>
+				<vendor_general_config>
+					<children>
+						<reasons>
+							<disabled>1</disabled>
+						</reasons>
+					</children>
+				</vendor_general_config>
+				<sales_management>
+					<children>
+						<urma>
+							<disabled>1</disabled>
+						</urma>
+					</children>
+				</sales_management>
+			</children>
+		</vendors>
+	</menu>
+</config>

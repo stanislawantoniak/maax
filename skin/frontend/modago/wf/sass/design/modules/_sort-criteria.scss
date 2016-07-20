@@ -2,7 +2,7 @@
 	white-space: nowrap;
 	.col-sm-12 {
 		@media(max-width: $screen-xs) {
-			padding: 0 3px;
+			padding: 0 15px;
 		}
 	}
 	ul {
@@ -22,7 +22,7 @@
 				}
 				@media(max-width: 340px) {
 					.sort-by-container {
-						margin-left: -3px;
+						margin-left: -13px;
 					}
 				}
 				label {

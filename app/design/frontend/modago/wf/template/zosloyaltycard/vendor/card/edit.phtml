@@ -19,6 +19,7 @@ function _prepareForm($object) {
 
 	/** @var Zolago_Dropship_Model_Form $form */
 	$form = Mage::getModel('zolagodropship/form');
+	$isNew = $object->isModelNew();
 
 	// +10 years by default
 	if(!$object->getModel()->hasData('expire_date')) {
@@ -26,6 +27,17 @@ function _prepareForm($object) {
 	} else {
 		$object->getModel()->setData('expire_date', date("Y-m-d", date_create($object->getModel()->getData('expire_date'))->getTimestamp()));
 	}
+	// prepare kids index for this form
+	// index from 1 because 0 is 'template kid'
+	if (!empty($object->getModel()->getKids())) {
+		$_kids = array(0 => array());
+		foreach ($object->getModel()->getKids() as $kid) {
+			$_kids[] = $kid;
+		}
+		unset($_kids[0]);
+		$object->getModel()->setKids($_kids);
+	}
+
 	$values = $object->getModel()->getData();
 
 	$general = $form->addFieldset("general", array(
@@ -89,7 +101,6 @@ function _prepareForm($object) {
 		"after_element_html" => '<label style="margin: 8px;"><i class="icon-calendar"></i></label>',
 	));
 
-	$isNew = $object->isModelNew();
 	if (!$isNew) {
 		$general->addField('created_at', 'date', array(
 			"name" => 'created_at',
@@ -99,7 +110,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d",
+			"format" => "Y-MM-dd",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -112,7 +123,7 @@ function _prepareForm($object) {
 			"label_wrapper_class" => "col-md-3",
 			"wrapper_class" => "col-md-3",
 			"readonly" => true,
-			"format" => "Y-MM-d",
+			"format" => "Y-MM-dd",
 			'is_wide' => true,
 			"style" => "width:150px;",
 		));
@@ -275,15 +286,11 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 				<h3><?php echo $helper->__("New card"); ?></h3>
 				<p><?php echo $helper->__("Create new card. Required fields are marked with an asterisk."); ?></p>
 			<?php else: ?>
-				<h3><?php echo $helper->__("Edit card '%s'", $card->getCardCode()); ?></h3>
+				<h3><?php echo $helper->__("Edit card '%s'", $card->getCardNumber()); ?></h3>
 				<p><?php echo $helper->__("Below you will find details of card. You can make changes to this cart by editing each field."); ?></p>
 			<?php endif; ?>
 		</div>
 		<div class="col-md-6">
-			<?php if (!$this->isModelNew()): ?>
-				<a class="btn btn-danger pull-right" style="margin: 30px 5px 0 0;" data-toggle="modal" data-target="#confirm-delete">
-					<i class="icon-remove"></i>&nbsp;<?php echo $helper->__("Remove card"); ?></a>
-			<?php endif; ?>
 		</div>
 	</div>
 </div>
@@ -296,8 +303,14 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 
 		<div class="form-actions">
 			<div class="row">
-				<div class="col-xs-12">
-					<input type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
+				<div class="col-xs-6">
+					<?php if (!$this->isModelNew()): ?>
+						<a class="btn btn-danger pull-left" style="background-color: #667799;" data-toggle="modal" data-target="#confirm-delete">
+							<i class="icon-remove"></i>&nbsp;<?php echo $helper->__("Remove card"); ?></a>
+					<?php endif; ?>
+				</div>
+				<div class="col-xs-6">
+					<input id="btn-save" type="submit" value="<?php echo $helper->__("Save");?>" class="btn btn-primary pull-right">
 					<a href="<?php echo Mage::getUrl('*/*'); ?>" class="btn btn-default pull-right"><?php echo $helper->__("Cancel");?></a>
 				</div>
 			</div>
@@ -334,6 +347,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 		kidCount: <?php echo $count; ?>,
 		kidsData: <?php echo json_encode(isset($values['kids']) ? $values['kids'] : array()); ?>,
 		dateFormat: 'Y-m-d',
+		validator: null,
 		
 		init: function () {
 			this.populateKidsData();
@@ -347,6 +361,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 			jQuery('.datetimepicker').datetimepicker({
 				lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
 				format: CardEdit.dateFormat,
+				timepicker: false
 			});
 			jQuery(document).delegate(".icon-calendar", "click", function () {
 				jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
@@ -387,7 +402,7 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 
 			var form = jQuery("#edit-card");
 			new Zolago.formIntegrator(form);
-			form.validate({
+			this.validator = form.validate({
 				rules: {
 					"telephone_number": {
 						require_from_group_2: [1, ".group-email-or-phone"],
@@ -413,6 +428,13 @@ $count  = 1 + (isset($values['kids']) && count($values['kids']) ? count($values[
 					} else {
 						$element.closest("div").append($error);
 					}
+				}
+			});
+
+			/** Block save btn after submit */
+			form.on('submit', function (e) {
+				if (!!CardEdit.validator && !CardEdit.validator.numberOfInvalids()) {
+					jQuery('#btn-save').attr("disabled", true);
 				}
 			});
 		},

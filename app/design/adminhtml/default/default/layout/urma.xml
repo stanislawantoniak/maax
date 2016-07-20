@@ -2,7 +2,7 @@
 <layout>
     <adminhtml_sales_order_view>
     <reference name="sales_order_tabs">
-        <action method="addTab"><name>urma_rma</name><block>urma/adminhtml_salesOrderViewTab_rmas</block></action>
+        <action method="addTab" ifconfig="urma/logic/enabled"><name>urma_rma</name><block>urma/adminhtml_salesOrderViewTab_rmas</block></action>
     </reference>
 </adminhtml_sales_order_view>
     <urmaadmin_order_rma_new>

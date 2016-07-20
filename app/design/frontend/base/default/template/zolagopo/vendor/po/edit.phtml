@@ -21,6 +21,8 @@ $_modagoHlp = Mage::helper("zolagocommon");
 /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
 $_tracking = $this->getCurrentTracking($_currentShipping); 
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
+$paymentHelper = Mage::helper('zolagopayment');
+$activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -310,7 +312,7 @@ $_tracking = $this->getCurrentTracking($_currentShipping);
 											</span>
 										</div>
 									<?php endif;?>
-									<?php if($_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED || $_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED):?>
+									<?php if(!$activeNoRma && ($_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED || $_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED)):?>
 										<div style="margin-left: 48px;">
 											<span id="create-rma-wrapper" class="inline-block">
 												<button data-toggle="modal" data-target="#createRma" class="btn" id="rma">
@@ -677,7 +679,9 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Create RMA modal
  *******************************************************************************/
-echo $this->getChildHtml("vendor_po_create_rma");
+if(!$activeNoRma){
+	echo $this->getChildHtml("vendor_po_create_rma");
+}
 ?>
 
 <script type="text/javascript">

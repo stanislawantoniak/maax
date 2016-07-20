@@ -49,6 +49,7 @@ $_products = $_cache['products'];
 							<div class="col-xs-12 col-sm-12">
 								<div class="row">
 									<div id="grid" class="shuffle--container shuffle--fluid">
+										<?php $n = 1; ?>
 										<!-- START LIST PRODUCT -->
 										<?php foreach ($_products as $product): ?>
 											<?php
@@ -98,41 +99,36 @@ $_products = $_cache['products'];
 															<div class="col-price">
 																<?php if ($product[3] != $product[4]) : ?>
 																	<span class="old">
-                                                                    <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
-                                                                </span>
+                                                                    	<?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
+                                                                	</span>
 																<?php endif; ?>
 																<span>
                                                                     <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?>
                                                                 </span>
 															</div>
-															<?php
-															// like count
-															$wishlistCount = "";
-															$inMyWishlist = "";
-															$plusSign = "";
-															if ($product[5] - 1 > 0) {
-																$wishlistCount = $product[5];
-																if ($product[6]) {
-																	$wishlistCount -= 1;
-																}
-															}
 
-															if ($product[6]) {
-																$inMyWishlist = $this->__("You");
-																if ($product[5] > 1) {
-																	$plusSign = " + ";
-																}
-															}
-
-															?>
 														</div>
 													</a>
 												</div>
 											</div>
+
+											<?php if ($n % 2 == 0): ?>
+												<div class="clearfix visible-two-listing-columns"></div>
+											<?php endif; ?>
+
+											<?php if ($n % 3 == 0): ?>
+												<div class="clearfix visible-three-listing-columns"></div>
+											<?php endif; ?>
+
+
+
+
+
+											<?php $n++; ?>
 										<?php endforeach; ?>
 									</div>
 									<div class="col-xs-12 shuffle__sizer"></div>
-<!--									<div class="shapes_listing"></div>-->
+
 								</div>
 							</div>
 						</div>

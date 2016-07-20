@@ -7,9 +7,6 @@
     right: 0;
     top: -1px;
     text-align: center;
-    @include min-screen($screen-sm-max) {
-      top: 2px;
-    }
 
     &:before {
       content: "";

@@ -56,6 +56,7 @@ class ZolagoOs_LoyaltyCard_Model_Card extends Mage_Core_Model_Abstract {
 	}
 
 	protected function _beforeSave() {
+		$this->beforeSaveValidation();
 		$date = Mage::getSingleton('core/date')->gmtDate();
 		if (!$this->hasCreatedAt()) {
 			$this->setCreatedAt($date);
@@ -65,6 +66,16 @@ class ZolagoOs_LoyaltyCard_Model_Card extends Mage_Core_Model_Abstract {
 		$this->setAdditionalInformation($this->getRawAdditionalInformation());
 
 		return parent::_beforeSave();
+	}
+
+	/**
+	 * check if card is unique (card_number + card_type)
+	 */
+	public function beforeSaveValidation() {
+		$isUnique = $this->getResource()->isUnique($this);
+		if (!$isUnique) {
+			Mage::throwException(Mage::helper("zosloyaltycard")->__("Card with such number and type already exist"));
+		}
 	}
 
 	protected function _afterLoad() {

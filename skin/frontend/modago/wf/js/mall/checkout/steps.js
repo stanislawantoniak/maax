@@ -1538,7 +1538,13 @@
 			            this._previous_provider = false;
 						jQuery('#'+this._self_form_id).valid();
 		            }
-	            }
+
+                    jQuery(".default_pay .top-panel").show();
+                    jQuery(".default_pay .panel-footer").show();
+	            } else {
+                    jQuery(".default_pay .top-panel").hide();
+                    jQuery(".default_pay .panel-footer").hide();
+                }
 
             },
 
