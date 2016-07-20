@@ -1,8 +1,8 @@
 <?php
 class Zolago_Modago_Block_Customer_Form_Login_Continue extends Mage_Cms_Block_Block{
 	
-	const BLOCK_ID_NORMAL = "modago-login-continue-normal";
-	const BLOCK_ID_CHECKOUT = "modago-login-continue-checkout";
+	const BLOCK_ID_NORMAL = "login-continue-normal";
+	const BLOCK_ID_CHECKOUT = "login-continue-checkout";
 	
 	/**
 	 * @return string

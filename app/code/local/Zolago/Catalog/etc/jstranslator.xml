@@ -54,6 +54,9 @@
     <price-loading translate="message" module="zolagocatalog">
         <message>Loading...</message>
     </price-loading>
+    <loading-spinner-bottom translate="message" module="zolagocatalog">
+        <message>loading-spinner-bottom</message>
+    </loading-spinner-bottom>
     <price-child-products translate="message" module="zolagocatalog">
         <message>Child products</message>
     </price-child-products>

@@ -103,6 +103,7 @@
 				<tracking_url>https://inpost.pl/pl/pomoc/znajdz-przesylke?parcel=%s</tracking_url>
 				<login>test@testowy.pl</login>
 				<password>WqJevQy*X7</password>
+				<cod_allowed>1</cod_allowed>
 			</ghinpost>
 		</carriers>
 	</default>

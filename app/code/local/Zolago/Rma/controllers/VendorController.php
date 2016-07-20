@@ -35,6 +35,41 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         return $this->_redirect("*/*");
     }
 
+    public function createNewRmaAction() {
+        $hlp = Mage::helper("zolagorma");
+        try {
+            $this->_saveRmaManually();
+            $this->_getSession()->addSuccess($hlp->__("RMA created successfully"));
+        } catch(Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch(Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
+        }
+    }
+
+    protected function _saveRmaManually(){
+        $shippingCost = $this->getRequest()->getPost('rma_shipping_cost');
+        $shippingCostStatus = false;
+        if($shippingCost){
+            $shippingCostStatus = true;
+        }
+        $data = $this->getRequest()->getPost('rma');
+        $poId = $this->getRequest()->getPost('po_id');
+        $po = Mage::getModel('zolagopo/po')->load($poId);
+        $rmas = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($data, array(), $shippingCostStatus);
+        foreach ($rmas as $rma) {
+            $rma->setRmaType(Zolago_Rma_Model_Rma::RMA_TYPE_RETURN);
+            $rma->save();
+
+            Mage::dispatchEvent("zolagorma_rma_created_manually", array(
+                "po" => $po,
+                "rma" => $rma
+            ));
+        }
+        $this->_redirect('udpo/vendor/edit', array('id'=>$poId));
+    }
+
 	public function makeRefundAction() {
 		$data = $this->getRequest()->getPost();
 		/** @var Zolago_Rma_Helper_Data $rmaHelper */
@@ -83,7 +118,8 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 				}
 
 				if (count($validItems) && $returnAmount > 0) {
-					if(($returnAmount + $alreadyReturnedAmount) <= $po->getGrandTotalInclTax()) {
+				    $tmpValue = round(($returnAmount + $alreadyReturnedAmount),4);
+					if($tmpValue <= $po->getGrandTotalInclTax()) {
 						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
 					} else {
 						$this->_throwRefundTooMuchAmountException();

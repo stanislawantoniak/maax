@@ -203,7 +203,6 @@
 "Items of #%s:","Produkty z #%s:"
 "Item added %s","Dodano produkt %s"
 "Item changed %s (%s)" ,"Zmieniono produkt %s (%s)"
-"%s address changed (%s)","Zmiana adresu: %s (%s)"
 "Message send to %s: %s","Wysłano wiadomość do %s: %s"
 "Changed POS (%s&rarr;%s)","Zmiana POS (%s&rarr;%s)"
 "Billing","Faktura"
@@ -254,3 +253,4 @@
 "Account created: %s, email for login: %s","Konto założone dnia: %s, email do logowania: %s"
 "Check DHL Settings","Sprawdź konfigurację DHL"
 "Automatic strikeout price by percent","Automatyczna cena przekreślona poprzez procentową różnicę"
+"RMA created successfully","RMA zostało utworzone"

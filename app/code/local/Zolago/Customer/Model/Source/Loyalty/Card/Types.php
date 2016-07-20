@@ -12,8 +12,8 @@ class Zolago_Customer_Model_Source_Loyalty_Card_Types extends Mage_Eav_Model_Ent
 	 */
 	public function getAllOptions($withEmpty = true, $defaultValues = false) {
 		if (!$this->_options) {
-			/** @var Zolago_Customer_Helper_Data $helper */
-			$helper = Mage::helper("zolagocustomer");
+			/** @var ZolagoOs_LoyaltyCard_Helper_Data $helper */
+			$helper = Mage::helper("zosloyaltycard");
 			$config = $helper->getLoyaltyCardConfig();
 
 			$options = array(array(
