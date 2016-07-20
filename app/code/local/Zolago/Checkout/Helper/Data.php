@@ -2,6 +2,9 @@
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	protected $inpostLocker = null;
+	protected $pickUpPoint = null;
+
+	protected $_deliveryMethodCode = null;
 
 
 	public function getSelectedShipping(){
@@ -44,6 +47,60 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		);
 
 	}
+
+
+
+	public function getDeliveryPointShippingAddress(){
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+		$shippingAddressFromDeliveryPoint = array();
+
+		switch ($deliveryMethodCode) {
+			case 'zolagopickuppoint':
+				/* @var $pos  Zolago_Pos_Model_Pos */
+				$pos = $helper->getPickUpPoint();
+				//Zend_Debug::dump($pos->getData());
+				$shippingAddressFromDeliveryPoint = $pos->getShippingAddress();
+				//Zend_Debug::dump($shippingAddressFromDeliveryPoint);
+				break;
+			case 'ghinpost':
+				/* @var $locker GH_Inpost_Model_Locker */
+				$locker = $helper->getInpostLocker();
+				$shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
+				break;
+		}
+
+		return $shippingAddressFromDeliveryPoint;
+	}
+
+	/**
+	 * Retrieve Pick-Up Point object for current checkout session
+	 *
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	public function getPickUpPoint() {
+		if (is_null($this->pickUpPoint)) {
+
+			$selectedShipping = $this->getSelectedShipping();
+			//Zend_Debug::dump($selectedShipping);
+			$deliveryPointName = $selectedShipping['shipping_point_code'];
+			//Zend_Debug::dump($deliveryPointName);
+			/* @var $pos  Zolago_Pos_Model_Pos */
+			$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointName);
+			//Zend_Debug::dump($pos->getData());
+			if (!$pos->getIsAvailableAsPickupPoint()) {
+				$pos = Mage::getModel("zolagopos/pos");
+			}
+			$this->pickUpPoint = $pos;
+		}
+		return $this->pickUpPoint;
+	}
+
 	/**
 	 * Retrieve InPost Locker object for current checkout session
 	 * 
@@ -229,47 +286,57 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 
-
 	/**
-	 * @param $deliveryMethod (something like udtiership_4)
 	 * @param bool $includeTitle
-	 * @return Varien_Object
+	 * @return mixed
 	 */
-	public function getMethodCodeByDeliveryType($deliveryMethod, $includeTitle = false){
+	public function getMethodCodeByDeliveryType($includeTitle = false){
+
+		$sessionShippingMethod = "";
+		$selectedShipping = $this->getSelectedShipping();
+		foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+			$sessionShippingMethod = $methodSelectedData;
+		}
+		//$sessionShippingMethod (something like udtiership_4)
 		$storeId = Mage::app()->getStore()->getStoreId();
 
-		$collection = Mage::getModel("udropship/shipping")->getCollection();
-		$collection->getSelect()
-			->join(
-				array('udropship_shipping_method' => $collection->getTable('udropship/shipping_method')),
-				"main_table.shipping_id = udropship_shipping_method.shipping_id",
-				array(
-					'udropship_method' => new Zend_Db_Expr('CONCAT_WS(\'_\',    udropship_shipping_method.carrier_code ,udropship_shipping_method.method_code)'),
-				)
+		if (is_null($this->_deliveryMethodCode)) {
+			$collection = Mage::getModel("udropship/shipping")->getCollection();
+			$collection->getSelect()
+				->join(
+					array('udropship_shipping_method' => $collection->getTable('udropship/shipping_method')),
+					"main_table.shipping_id = udropship_shipping_method.shipping_id",
+					array(
+						'udropship_method' => new Zend_Db_Expr('CONCAT_WS(\'_\',    udropship_shipping_method.carrier_code ,udropship_shipping_method.method_code)'),
+					)
+				);
+			$collection->getSelect()->join(
+				array('udtiership_delivery_type' => $collection->getTable('udtiership/delivery_type')),
+				"udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
+				array("delivery_code")
 			);
-		$collection->getSelect()->join(
-			array('udtiership_delivery_type' => $collection->getTable('udtiership/delivery_type')),
-			"udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
-			array("delivery_code")
-		);
 
-		if($includeTitle){
-			$collection->getSelect()->joinLeft(
-				array('udropship_shipping_title_default' => $collection->getTable('udropship/shipping_title')),
-				"main_table.shipping_id = udropship_shipping_title_default.shipping_id AND udropship_shipping_title_default.store_id=0",
-				array(
-					"udropship_method_title" => "IF(udropship_shipping_title_store.title IS NOT NULL, udropship_shipping_title_store.title, udropship_shipping_title_default.title)"
-				)
-			);
-			$collection->getSelect()->joinLeft(
-				array('udropship_shipping_title_store' => $collection->getTable('udropship/shipping_title')),
-				"main_table.shipping_id = udropship_shipping_title_store.shipping_id AND udropship_shipping_title_store.store_id={$storeId}",
-				array()
-			);
+			if($includeTitle){
+				$collection->getSelect()->joinLeft(
+					array('udropship_shipping_title_default' => $collection->getTable('udropship/shipping_title')),
+					"main_table.shipping_id = udropship_shipping_title_default.shipping_id AND udropship_shipping_title_default.store_id=0",
+					array(
+						"udropship_method_title" => "IF(udropship_shipping_title_store.title IS NOT NULL, udropship_shipping_title_store.title, udropship_shipping_title_default.title)"
+					)
+				);
+				$collection->getSelect()->joinLeft(
+					array('udropship_shipping_title_store' => $collection->getTable('udropship/shipping_title')),
+					"main_table.shipping_id = udropship_shipping_title_store.shipping_id AND udropship_shipping_title_store.store_id={$storeId}",
+					array()
+				);
+			}
+
+			$collection->getSelect()->having("udropship_method=?", $sessionShippingMethod);
+
+			$this->_deliveryMethodCode = $collection->getFirstItem();
 		}
 
-		$collection->getSelect()->having("udropship_method=?", $deliveryMethod);
 
-		return $collection->getFirstItem();
+		return $this->_deliveryMethodCode;
 	}
 }

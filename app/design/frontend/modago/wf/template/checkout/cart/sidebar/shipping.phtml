@@ -98,8 +98,10 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                            name="shipping_method[<?php echo $vendorId; ?>]"
                            value="<?php echo $methodSelected; ?>" />
                 <?php endforeach; ?>
-                <?php if (isset($selectedShipping["shipping_point_code"])): ?>
-                    <?php $shippingPointCode = $this->getDeliveryPointData($methodSelected, $selectedShipping["shipping_point_code"]); ?>
+                <?php
+                //Zend_Debug::dump($selectedShipping["shipping_point_code"]);
+                if (isset($methodSelected) && isset($selectedShipping["shipping_point_code"])): ?>
+                    <?php $shippingPointCode = $this->getDeliveryPointData($selectedShipping["shipping_point_code"]); ?>
                     <?php if(!empty($shippingPointCode)): ?>
                         <input type="hidden" name="shipping_point_code"
                                data-id="<?php echo $shippingPointCode["id"]; ?>"

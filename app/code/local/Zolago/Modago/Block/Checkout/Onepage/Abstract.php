@@ -5,44 +5,57 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 
-	public function getDeliveryPoint(){
+	public function getDeliveryPointCheckout(){
+
 		/** @var Zolago_Checkout_Helper_Data $helper */
 		$helper = Mage::helper("zolagocheckout");
-		$sessionShippingMethod = "";
-		$selectedShipping = $helper->getSelectedShipping();
-		foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
-			$sessionShippingMethod = $methodSelectedData;
-		}
 
-		$deliveryMethodData = $helper->getMethodCodeByDeliveryType($sessionShippingMethod);
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
 		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 
-		$deliveryPointIdentifier = $selectedShipping['shipping_point_code'];
 
-		//TODO create renderer depends on delivery type
+		$deliveryPoint = new stdClass();
+		$deliveryPoint->checkout = new stdClass();
 		switch ($deliveryMethodCode) {
 			case 'zolagopickuppoint':
-				$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
-				$data = array(
-					"id" => $pos->getId(),
-					"city" => (string)ucwords(strtolower($pos->getCity())),
-					"value" => $pos->getId()
-				);
+				/* @var $pos  Zolago_Pos_Model_Pos */
+				$pos = $helper->getPickUpPoint();
+
+				$deliveryPoint->id = $pos->getId();
+				$deliveryPoint->name = $pos->getName();
+				$deliveryPoint->delivery_point_name = $pos->getId(); //this value will be saved to PO(delivery_point_name)
+				$deliveryPoint->city = $pos->getCity();
+				$deliveryPoint->street = $pos->getStreet();
+				$deliveryPoint->buildingNumber = "";
+				$deliveryPoint->postcode = $pos->getPostcode();
+				$deliveryPoint->locationDescription = "";
+
+				$deliveryPoint->checkout->title = $helper->__("Pick-Up Point");
+				$deliveryPoint->checkout->logo = '<figure class="logo-courier"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure><br/>';
+				$deliveryPoint->checkout->additionalInfo1 = "";
+				$deliveryPoint->checkout->additionalInfo2 = "";
 				break;
 			case 'ghinpost':
 				/* @var $locker GH_Inpost_Model_Locker */
-				$locker = $this->getInpostLocker();
+				$locker = $helper->getInpostLocker();
 
-				$data = array(
-					"id" => $locker->getId(),
-					"city" => (string)ucwords(strtolower($locker->getTown())),
-					"value" => $locker->getName()
-				);
+				$deliveryPoint->id = $locker->getId();
+				$deliveryPoint->name = $locker->getName();
+				$deliveryPoint->delivery_point_name = $locker->getName(); //this value will be saved to PO(delivery_point_name)
+				$deliveryPoint->city = $locker->getTown();
+				$deliveryPoint->street = $locker->getStreet();
+				$deliveryPoint->postcode = $locker->getPostcode();
+				$deliveryPoint->buildingNumber = $locker->getBuildingNumber();
+				$deliveryPoint->locationDescription = $locker->getLocationDescription();
+
+				$deliveryPoint->checkout->title = $helper->__("Locker InPost");
+				$deliveryPoint->checkout->logo = '<figure class="inpost-img"><img src="'.$this->getSkinUrl('images/inpost/checkout-logo.png').'"></figure><br/>';
+				$deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
+				$deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
 				break;
 		}
 
-		Zend_Debug::dump($selectedShipping);
-		$deliveryPointName = $selectedShipping['shipping_point_code'];
+		return $deliveryPoint;
 	}
 	/**
 	 * @return GH_Inpost_Model_Locker
