@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <smsconfig_tab translate="label">
+            <label>SMS</label>
+            <sort_order>500</sort_order>
+        </smsconfig_tab>
+    </tabs>
+    <sections>
+        <smsconfig_section translate="label">
+            <label>Serwer SMS</label>
+            <sort_order>200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <tab>smsconfig_tab</tab>
+            <groups>
+                <konfiguracjasms translate="label">
+                    <label>Konfiguracja modułu</label>
+                    <comment>
+                        Aby sprawdzić czy podany login i hasło są właściwe, zapisz konfigurację i przejdź do zakładki Dane konta w menu SerwerSMS.
+                    </comment>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <wlaczony translate="label comment">
+                            <label>Moduł włączony</label>
+                            <comment></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                        </wlaczony>
+                        <uzytkownik translate="label comment">
+                            <label>Nazwa użytkownika</label>
+                            <comment>login w SerwerSMS.pl</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_input>text</frontend_input>
+                            <sort_order>20</sort_order>
+                        </uzytkownik>
+                        <haslo translate="label comment">
+                            <label>Hasło</label>
+                            <comment></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>30</sort_order>
+                        </haslo>
+                        <numery_admin translate="label comment">
+                            <label>Numery administratora</label>
+                            <comment>np. 500600700,600700800</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_input>text</frontend_input>
+                            <sort_order>40</sort_order>
+                        </numery_admin>
+                    </fields>
+                </konfiguracjasms>
+                <ustawieniawiadomosci>
+                    <label>Ustawienia wiadomości</label>
+                    <comment>
+                        Aby ustawić nazwę nadawcy należy wcześniej zapisać konfigurację z prawidłowym loginem oraz hasłem do serwisu www.serwersms.pl.
+                        Jeśli chcesz dodać nową nazwę przejdź do zakładki Dane konta w menu SerwerSMS.
+                    </comment>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <typsms translate="label comment">
+                            <label>SMS FULL</label>
+                            <comment>wiadomości z własną nazwą nadawcy</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>10</sort_order>
+                        </typsms>
+                        <nadawca translate="label comment">
+                            <label>Nazwa nadawcy</label>
+                            <comment>dotyczy tylko wiadomości FULL</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>serwersms_model/nadawcy</source_model>
+                            <sort_order>20</sort_order>
+                        </nadawca>
+                    </fields>
+                </ustawieniawiadomosci>
+                <powiadomienia>
+                    <label>Powiadomienia</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <zamowienie translate="label comment">
+                            <label>Nowe zamówienie</label>
+                            <comment></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                        </zamowienie>
+                        <realizacja translate="label comment">
+                            <label>Zamówienie zrealizowane</label>
+                            <comment></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                        </realizacja>
+                        <wstrzymanie translate="label comment">
+                            <label>Wstrzymanie/odblokowanie zamówienia</label>
+                            <comment></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                        </wstrzymanie>
+                        <stan_konta translate="label comment">
+                            <label>Niski stan konta SMS</label>
+                            <comment></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>40</sort_order>
+                        </stan_konta>
+                    </fields>
+                </powiadomienia>
+                <tekstysms>
+                    <label>Treści wysyłanych wiadomości</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <tekst_zamowienie translate="label comment">
+                            <label>Nowe zamówienie</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Szablon do 160 znaków.</comment>
+                        </tekst_zamowienie>
+                        <tekst_realizacja translate="label comment">
+                            <label>Zamówienie zrealizowane</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Szablon do 160 znaków.</comment>
+                        </tekst_realizacja>
+                        <tekst_wstrzymanie translate="label comment">
+                            <label>Zamówienie wstrzymane</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Szablon do 160 znaków.</comment>
+                        </tekst_wstrzymanie>
+                        <tekst_odblokowanie translate="label comment">
+                            <label>Zamówienie odblokowane</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Szablon do 160 znaków.</comment>
+                        </tekst_odblokowanie>
+                    </fields>
+                </tekstysms>
+            </groups>
+        </smsconfig_section>
+    </sections>
+</config>
