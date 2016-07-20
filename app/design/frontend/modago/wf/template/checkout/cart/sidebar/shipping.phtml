@@ -154,13 +154,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                             <div data-item="description"><?php echo $daysInTransit; ?></div>
 
                             <div class="pull-left">
-                                <?php if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()): ?>
-                                    <div data-item="logo"><img  src="<?php echo $inpostLogo; ?>" height="52px"/></div>
-                                <?php else: ?>
-                                    <div data-item="logo">
-                                        <figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>
-                                    </div>
-                                <?php endif; ?>
                                 <div data-item="logo"><?php echo Mage::helper("wfwf/checkout_data")->getCarrierLogo($method["delivery_type"]); ?></div>
                             </div>
                             <?php if (count($methods) > 1): ?>
