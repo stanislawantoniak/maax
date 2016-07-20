@@ -44,7 +44,13 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
     {
         $grid = parent::_prepareColumns();
 
-        $grid->addColumn('txn_amount', array(
+		$grid->addColumn('bank_transfer_create_at', array(
+			'header'    => 'Bank Transfer Date',
+			'index'     => 'bank_transfer_create_at',
+			'type'      => 'date',
+		));
+
+		$grid->addColumn('txn_amount', array(
             'header'    => 'Transaction amount',
             'index'     => 'txn_amount',
             'type'      => 'number',
@@ -75,6 +81,16 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
 		    'type'      => 'number'
 	    ));
 
+		$this->addColumn('action',
+			array(
+				'header'    => Mage::helper('catalog')->__('Action'),
+				'width'     => '50px',
+				'renderer'  => 'Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action',
+				'filter'    => false,
+				'getter'    => 'getId',
+				'sortable'  => false,
+				'index'     => 'stores',
+			));
         return $grid;
     }
 

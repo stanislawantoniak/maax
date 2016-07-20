@@ -19,15 +19,16 @@
     </blocks>
     <models>
       <sales>
-        <rewrite>
-          <quote>Zolago_Sales_Model_Quote</quote>
-          <order_config>Zolago_Sales_Model_Order_Config</order_config>
-          <observer>Zolago_Sales_Model_Observer</observer>
-          <order>Zolago_Sales_Model_Order</order>
-            <order_address>Zolago_Sales_Model_Order_Address</order_address>
-            <quote_address>Zolago_Sales_Model_Quote_Address</quote_address>
-            <service_quote>Zolago_Sales_Model_Service_Quote</service_quote>
-        </rewrite>
+          <rewrite>
+              <quote>Zolago_Sales_Model_Quote</quote>
+              <order_config>Zolago_Sales_Model_Order_Config</order_config>
+              <observer>Zolago_Sales_Model_Observer</observer>
+              <order>Zolago_Sales_Model_Order</order>
+              <order_address>Zolago_Sales_Model_Order_Address</order_address>
+              <quote_address>Zolago_Sales_Model_Quote_Address</quote_address>
+              <service_quote>Zolago_Sales_Model_Service_Quote</service_quote>
+              <order_payment_transaction>Zolago_Sales_Model_Order_Payment_Transaction</order_payment_transaction>
+          </rewrite>
       </sales>
     </models>
     <helpers>

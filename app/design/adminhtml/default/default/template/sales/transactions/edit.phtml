@@ -1,0 +1,86 @@
+<?php
+
+/*  @var $this Zolago_Adminhtml_Block_Sales_Transactions_Edit */
+?>
+
+<div class="content-header">
+    <h3><?php echo $this->getHeaderText() ?></h3>
+
+    <p class="content-buttons form-buttons">
+        <?php echo $this->getBackButtonHtml(); ?>
+        <?php if ($this->getIsNew()): ?>
+            <?php echo $this->getDeleteButtonHtml(); ?>
+        <?php endif; ?>
+        <?php echo $this->getSaveButtonHtml(); ?>
+    </p>
+</div>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="template_edit_form">
+    <?php echo $this->getBlockHtml('formkey') ?>
+
+    <?php /* @var $form Zolago_Payment_Block_Adminhtml_Vendor_Payment_Edit_Form */ ?>
+    <?php echo $form = $this->getChildHtml("form"); ?>
+</form>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var form = new varienForm('template_edit_form');
+    var formControl = {
+        init: function () {
+
+        },
+        save: function () {
+            form.submit();
+            return false;
+        },
+        remove: function () {
+            if (window.confirm("<?php echo Mage::helper('sales')->__('Are you sure that you want to reject this bank payment?') ?>")) {
+                window.location.href = '<?php echo $this->getRejectUrl() ?>';
+            }
+        }
+    }
+    formControl.init();
+
+
+    jQuery(document).ready(function () {
+        jQuery("[id=order_id]").select2({
+            placeholder: "<?php echo Mage::helper('zolagosales')->__('Select order...') ?>",
+            escapeMarkup: function (markup) {
+                return markup;
+            }
+
+        });
+    });
+</script>
+
+<style>
+    .select2.select2-container {
+        width: 75% !important;
+    }
+    .select2-results__option {
+        padding: 10px 5px;
+    }
+    .banktransfer-row {
+        clear: both;
+    }
+    .banktransfer-item {
+        float: left;
+        width: 32%;
+    }
+
+    .banktransfer-right {
+        text-align: right;
+    }
+
+    .banktransfer-line {
+        width: 100%;
+    }
+
+    .entry-edit fieldset li, .entry-edit .fieldset li {
+        margin: 0;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 90px;
+        overflow: hidden;
+    }
+</style>

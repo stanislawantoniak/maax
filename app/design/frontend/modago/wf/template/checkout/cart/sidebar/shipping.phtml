@@ -1,4 +1,4 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */ ?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
 
 <?php
 /** @var Zolago_Checkout_Helper_Data $helper */
@@ -161,6 +161,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                         <figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>
                                     </div>
                                 <?php endif; ?>
+                                <div data-item="logo"><?php echo Mage::helper("wfwf/checkout_data")->getCarrierLogo($method["delivery_type"]); ?></div>
                             </div>
                             <?php if (count($methods) > 1): ?>
                                 <div class="pull-right">
@@ -188,13 +189,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 $costSum = array_sum($cost[$method['code']]);
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
-
-            if($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()){
-                $carrierLogo = '<img  src="'.$inpostLogo.'" height="52px"/>';
-            } else {
-                //Truck icon
-                $carrierLogo = '<figure class="logo-courier pull-right"><div class="shipment-icon"><i class="fa fa-truck fa-3x"></i></div></figure>';
-            }
+            $carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($method["delivery_type"]);
             $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("ships within %s days", $method["days_in_transit"]) : "";
 
             ?>

@@ -5,7 +5,9 @@
 	}
 }
 
-#persistent-forget-desktop {
+#persistent-forget-desktop,
+#powered-by-info
+{
 	a {
 		color: $color_fff;
 		@include generalLinkOnDark;

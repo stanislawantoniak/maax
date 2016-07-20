@@ -286,8 +286,8 @@
             shippingMethodSelectedContainer.find('[data-item="additional"]').html(selectedMethodData["additional"]);
 
 
-            jQuery(".shipping-method-selector").slideUp();
-            jQuery(".shipping-method-selected").slideDown();
+            jQuery(".shipping-method-selector").hide();
+            jQuery(".shipping-method-selected").show();
         },
         setShippingMethod: function (target) {
             var selectedMethodData = [];

@@ -49,7 +49,7 @@ class Zolago_Modago_Block_Sales_Order_Item_Renderer_Default extends Mage_Sales_B
      */
     public function getProductThumbnail() {
         $product = $this->getItem()->getOrderItem()->getProduct();
-        return $this->helper('xmlconnect/catalog_product_image')->init($product, 'thumbnail');
+        return Mage::helper('catalog/image')->init($product, 'thumbnail');
     }
     //}}}
 
