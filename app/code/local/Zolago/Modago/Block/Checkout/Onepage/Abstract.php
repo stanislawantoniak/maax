@@ -54,6 +54,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
 
 		$deliveryPoint = new stdClass();
+		$deliveryPoint->id = NULL;
 		$deliveryPoint->checkout = new stdClass();
 		switch ($deliveryMethodCode) {
 			case 'zolagopickuppoint':

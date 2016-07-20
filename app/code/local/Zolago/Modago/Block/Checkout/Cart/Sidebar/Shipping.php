@@ -49,19 +49,18 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
 
 
-    public function getDeliveryDataAdditional($deliveryMethodCode, $deliveryPointIdentifier, $daysInTransit)
+    public function getDeliveryDataAdditional($deliveryMethodCode, $deliveryPointIdentifier)
     {
         $additionalData = "";
 
         switch ($deliveryMethodCode) {
             case 'zolagopickuppoint':
                 $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
-                $additionalData = '<div data-item="additional">' . $this->getPickUpPointRender($pos) . '</div><div data-item="description">' . $daysInTransit . '</div>';
+                $additionalData = '<div data-item="additional">' . $this->getPickUpPointRender($pos) . '</div>';
                 break;
             case 'ghinpost':
                 $locker = $this->getInpostLocker();
-
-                $additionalData = '<div data-item="additional">' . $this->getLockerRender($locker) . '</div><div data-item="description">' . $daysInTransit . '</div>';
+                $additionalData = '<div data-item="additional">' . $this->getLockerRender($locker) . '</div>';
                 break;
         }
         return $additionalData;

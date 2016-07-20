@@ -17,18 +17,11 @@ $vednorCosts = $items->vendorCosts;
 $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
-
-
 $checkoutSession = Mage::getSingleton('checkout/session');
-
-
 
 /* @var $locker GH_Inpost_Model_Locker  */
 $locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
-$lockerId = $locker->getId();
-
-$lockerRender = $this->getLockerRender($locker);
 
 $quote = $this->getQuote();
 
@@ -37,7 +30,7 @@ $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
 foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
-
+$deliveryPoint = $this->getDeliveryPointCheckout();
 /**
  * Totals
  */
@@ -153,8 +146,10 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
 
                         <div class="shipping-data-additional">
-
-                            <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"],$daysInTransit); ?>
+                            <?php if ($deliveryPoint->id): ?>
+                                <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"]); ?>
+                            <?php endif; ?>
+                            <div data-item="description"><?php echo $daysInTransit; ?></div>
 
                             <div class="pull-left">
                                 <?php if ($method["delivery_type"]==Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping::getDeliveryTypeInpost()): ?>
