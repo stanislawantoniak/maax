@@ -103,7 +103,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
                         <strong><?php echo $deliveryPoint->checkout->title; ?></strong>
 
                         <input name="shipping[firstname]" type="hidden"
-                               value="<?php echo $helper->__("Locker InPost"); ?>"
+                               value="<?php echo $deliveryPoint->checkout->title; ?>"
                                class="form-control firstName hint"
                                required="true" id="shipping_firstname" title=""/>
                         <input name="shipping[lastname]" type="hidden" value="<?php echo $deliveryPoint->name; ?>"
