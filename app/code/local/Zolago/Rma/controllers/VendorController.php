@@ -186,6 +186,93 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 
 		return $this->_redirectReferer();
 	}
+    
+    public function makeSimpleRefundAction(){
+        $rmaId = $this->getRequest()->getParam('id');
+        $amount = $this->getRequest()->getParam('refund');
+        $hlp = Mage::helper("zolagorma");
+        try {
+            $rma = Mage::getModel('urma/rma')->load($rmaId);
+            $po = $rma->getPo();
+            if(($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $rma->getPo()->isCod())) {
+                Mage::throwException($hlp->__("Refund is not possible because order was sent using COD and client didn't receive the package."));
+            } else if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
+                $customerId = $rma->getCustomerId();
+                $order = $rma->getOrder();
+                $orderId = $order->getId();
+                $paymentId = $rma->getOrder()->getPayment()->getId();
+
+                /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+                $existTransaction = Mage::getModel('sales/order_payment_transaction')->getCollection()
+                    ->addFieldToFilter('order_id', $orderId)
+                    ->addFieldToFilter('customer_id', $customerId)
+                    ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
+                    ->addFieldToFilter('payment_id', $paymentId);
+
+                /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+                $transaction = Mage::getModel("sales/order_payment_transaction");
+                $transaction->setOrderPaymentObject($order->getPayment());
+
+                if(!empty($existTransaction->getData())){
+                    $transaction
+                        ->setTxnId(uniqid())
+                        ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
+                        ->setIsClosed(0)
+                        ->setTxnAmount(-$amount)
+                        ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
+                        ->setParentId($existTransaction->getData()[0]['transaction_id'])
+                        ->setOrderId($orderId)
+                        ->setParentTxnId($existTransaction->getData()[0]['txn_id'], $transaction->getTransactionId())
+                        ->setCustomerId($customerId)
+                        ->setDotpayId($existTransaction->getData()[0]['dotpay_id']);
+                }else {
+                    $transaction
+                        ->setTxnId(uniqid())
+                        ->setTransactionId($transaction->getTransactionId())
+                        ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
+                        ->setIsClosed(0)
+                        ->setTxnAmount(-$amount)
+                        ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
+                        ->setOrderId($orderId)
+                        ->setCustomerId($customerId)
+                        ->setPaymentId($paymentId);
+                }
+
+                if($transaction->save()){
+                    $commentData = array(
+                        "parent_id" => $rma->getId(),
+                        "is_visible_on_front" => 0,
+                        "is_vendor_notified" => 0,
+                        "is_customer_notified" => 0,
+                        "is_visible_to_vendor" => 1
+                    );
+                    /* @var $vendorSession  Zolago_Dropship_Model_Session*/
+                    $vendorSession = Mage::getSingleton('udropship/session');
+                    $commentData['vendor_id'] = $vendorSession->getVendorId();
+                    if(!$po->isPaymentDotpay()) {
+                        //refund confirm
+                        $commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s",$amount);
+                    } else {
+                        //refund order
+                        $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s",$amount);
+                    }
+                    $commentModel = Mage::getModel("zolagorma/rma_comment");
+                    $commentModel->setRma($rma);
+                    $commentModel->addData($commentData);
+                    $commentModel->setAuthorName($commentModel->getAuthorName(false));
+                    $commentModel->save();
+
+                    $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$amount));
+                }
+                $this->_redirect("urma/vendor/edit", array('id' => $rmaId));
+            }
+        }catch(Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch(Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
+        }
+    }
 
 	protected function _throwRefundTooMuchAmountException() {
 		Mage::throwException(Mage::helper("zolagorma")->__("Refund could not be created - not enough money left in PO"));
