@@ -369,7 +369,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             // emulate request object
             $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
             $addressErrors  = $addressForm->validateData($addressData);
-            if ($addressErrors !== true && !empty($deliveryPointAddress)) {
+            if ($addressErrors !== true && empty($deliveryPointAddress)) {
                 return array('error' => 1, 'message' => array_values($addressErrors));
             }
             $addressForm->compactData($addressData);
@@ -564,7 +564,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customerBilling = $billing->exportCustomerAddress();
         $needInvoice = $billing->getNeedInvoice();
 
-        if(!empty($deliveryPointAddress) || $needInvoice){
+        if(empty($deliveryPointAddress) || $needInvoice){
             $customer->addAddress($customerBilling);
         }
         
@@ -572,7 +572,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customerBilling->setIsDefaultBilling(true);
         if ($shipping && !$shipping->getSameAsBilling()) {
             $customerShipping = $shipping->exportCustomerAddress();
-            if(!empty($deliveryPointAddress)){
+            if(empty($deliveryPointAddress)){
                 $customer->addAddress($customerShipping);
             }
 
@@ -611,7 +611,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customer = $this->getCustomerSession()->getCustomer();
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             $customerBilling = $billing->exportCustomerAddress();
-            if(!empty($deliveryPointAddress)){
+            if(empty($deliveryPointAddress)){
                $customer->addAddress($customerBilling); 
             }
 
@@ -621,7 +621,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         if ($shipping && !$shipping->getSameAsBilling() &&
             (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
             $customerShipping = $shipping->exportCustomerAddress();
-            if(!empty($deliveryPointAddress)){
+            if(empty($deliveryPointAddress)){
                 $customer->addAddress($customerShipping);
             }
             $shipping->setCustomerAddress($customerShipping);
