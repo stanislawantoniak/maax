@@ -136,8 +136,16 @@
             }
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
-                jQuery("div.modal[data-carrier-points='"+jQuery(this).attr("data-carrier-delivery-type")+"']").modal("show");
-                //jQuery(this).attr("data-carrier-delivery-type").modal("show");
+                var deliveryType = jQuery(this).attr("data-carrier-delivery-type");
+                var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='"+deliveryType+"']");
+
+                if (deliveryType == "zolagopickuppoint" && deliverySelectPointsModal.find("[name=shipping_select_pos] option").length == 1) {
+                    //but if there is one POS available it is selected already
+                    deliverySelectPointsModal.find('a[data-select-shipping-method-trigger="1"]').click();
+                } else {
+                    deliverySelectPointsModal.modal("show");
+                }
+
                 handleGeoLocation();
             });
             jQuery("[name=shipping_select_city]").select2({
