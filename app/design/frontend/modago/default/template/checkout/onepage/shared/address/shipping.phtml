@@ -128,7 +128,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
                         <input name="shipping[city]" type="hidden"
                                value="<?php echo $this->escapeHtml($deliveryPoint->city); ?>"
                                class="form-control city hint" id="shipping_city" title="" required="true"/>
-                        <?php if(!empty($deliveryPoint->locationDescription)): ?><span id="inpost-locker-location-description">(<?php echo $deliveryPoint->locationDescription; ?>)</span><?php endif; ?>
+                        <span id="inpost-locker-location-description"><?php if(!empty($deliveryPoint->locationDescription)): ?>(<?php echo $deliveryPoint->locationDescription; ?>)<?php endif; ?></span>
 					</div>
 					<div class="col-xs-5 col-sm-6 col-md-6 col-lg-6 text-right">
 						<div class="figure-button-wrapper">

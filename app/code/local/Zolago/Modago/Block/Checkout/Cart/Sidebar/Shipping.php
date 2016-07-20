@@ -46,44 +46,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     }
 
 
-    /**
-     * @param $deliveryMethod
-     * @param $deliveryPointIdentifier
-     * @return array
-     */
-    public function getDeliveryPointData($deliveryPointIdentifier)
-    {
-        $data = array();
 
-        /** @var Zolago_Checkout_Helper_Data $helper */
-        $helper = Mage::helper("zolagocheckout");
-
-        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-        //Zend_Debug::dump($deliveryMethodData);
-        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-
-        switch ($deliveryMethodCode) {
-            case 'zolagopickuppoint':
-                $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
-                $data = array(
-                    "id" => $pos->getId(),
-                    "city" => (string)ucwords(strtolower($pos->getCity())),
-                    "value" => $pos->getId()
-                );
-                break;
-            case 'ghinpost':
-                /* @var $locker GH_Inpost_Model_Locker */
-                $locker = $this->getInpostLocker();
-
-                $data = array(
-                    "id" => $locker->getId(),
-                    "city" => (string)ucwords(strtolower($locker->getTown())),
-                    "value" => $locker->getName()
-                );
-                break;
-        }
-        return $data;
-    }
 
 
     public function getDeliveryDataAdditional($deliveryMethodCode, $deliveryPointIdentifier, $daysInTransit)

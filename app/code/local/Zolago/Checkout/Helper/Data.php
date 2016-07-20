@@ -64,9 +64,7 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 			case 'zolagopickuppoint':
 				/* @var $pos  Zolago_Pos_Model_Pos */
 				$pos = $helper->getPickUpPoint();
-				//Zend_Debug::dump($pos->getData());
 				$shippingAddressFromDeliveryPoint = $pos->getShippingAddress();
-				//Zend_Debug::dump($shippingAddressFromDeliveryPoint);
 				break;
 			case 'ghinpost':
 				/* @var $locker GH_Inpost_Model_Locker */
