@@ -34,7 +34,6 @@
                 jQuery("#cart-shipping-methods [name=_shipping_method]").click();
             }
 
-
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
                     url: "/checkout/singlepage/saveBasketShipping/",
