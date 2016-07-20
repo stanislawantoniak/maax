@@ -143,5 +143,31 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
         }
         return $hours;
     }
+
+    /**
+     * Retrieve shipping address info
+     *
+     * @return array
+     */
+    public function getShippingAddress()
+    {
+        $data['street'][] = $this->getStreet();
+        $data['postcode'] = $this->getPostcode();
+        $data['city'] = $this->getCity();
+        $data['country_id'] = $this->getCountryId();
+        $data['region_id'] = $this->getRegionText();
+        $data['region'] = $this->getRegionText();
+        return $data;
+    }
+
+
+    /**
+     *
+     * @return string
+     */
+    public function getCountryId()
+    {
+        return 'PL';
+    }
 }
 

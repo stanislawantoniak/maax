@@ -51,14 +51,15 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
      * @param $deliveryPointIdentifier
      * @return array
      */
-    public function getDeliveryPointData($deliveryMethod, $deliveryPointIdentifier)
+    public function getDeliveryPointData($deliveryPointIdentifier)
     {
         $data = array();
 
         /** @var Zolago_Checkout_Helper_Data $helper */
         $helper = Mage::helper("zolagocheckout");
 
-        $deliveryMethodData = $helper->getMethodCodeByDeliveryType($deliveryMethod);
+        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+        //Zend_Debug::dump($deliveryMethodData);
         $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 
         switch ($deliveryMethodCode) {

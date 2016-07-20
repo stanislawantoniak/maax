@@ -289,25 +289,30 @@ abstract class Zolago_Checkout_Controller_Abstract
 		shipping[save_in_address_book]:1
 		 */
 		$shipping = $request->getParam("shipping");
-		// If there is locker InPost 
+		// If there is locker InPost or Pick-Up point etc.
 		// we need to setup correct shipping address
-		$inpost = $request->getParam("inpost");
-		if (isset($inpost['name'])) {
-			/** @var GH_Inpost_Model_Locker $locker */
-			$locker = Mage::getModel('ghinpost/locker');
-			$locker->loadByLockerName($inpost['name']);
-			$shippingAddressFromLocker = $locker->getShippingAddress();
-			$shipping = array_merge($shipping, $shippingAddressFromLocker);
+		$deliveryPointData = $request->getParam("delivery_point");
+		if (isset($deliveryPointData['name'])) {
+
+			/** @var Zolago_Checkout_Helper_Data $helper */
+			$helper = Mage::helper("zolagocheckout");
+			$deliveryPoint = $helper->getDeliveryPointShippingAddress();
+			//Zend_Debug::dump($deliveryPoint);
+			//die("test");
+
+
+			$shipping = array_merge($shipping, $deliveryPoint);
 			if (isset($shipping['telephone']) && !empty($shipping['telephone'])) {
 				$checkoutSession = $onepage->getCheckout();
 				$checkoutSession->setLastTelephoneForLocker($shipping['telephone']);
 			} else {
-				throw new Mage_Core_Exception("Telephone number for InPost is required");
+				throw new Mage_Core_Exception("Telephone number for the selected delivery method is required");
 			}
 			$customer = $onepage->getQuote()->getCustomer();
 			$shipping['firstname']	= $customer->getFirstname();
 			$shipping['lastname']	= $customer->getLastname();
 		}
+
 		if(is_array($shipping)){
 			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
 			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){
