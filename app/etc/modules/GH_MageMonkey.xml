@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <GH_MageMonkey>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Checkout/>
+                <Mage_Newsletter/>
+                <Ebizmarts_MageMonkey />
+
+            </depends>
+        </GH_MageMonkey>
+    </modules>
+</config>
