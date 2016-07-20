@@ -297,8 +297,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			/** @var Zolago_Checkout_Helper_Data $helper */
 			$helper = Mage::helper("zolagocheckout");
 			$deliveryPoint = $helper->getDeliveryPointShippingAddress();
-			//Zend_Debug::dump($deliveryPoint);
-			//die("test");
+
 
 
 			$shipping = array_merge($shipping, $deliveryPoint);

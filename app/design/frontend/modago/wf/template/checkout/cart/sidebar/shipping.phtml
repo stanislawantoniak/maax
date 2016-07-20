@@ -146,9 +146,11 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
 
                         <div class="shipping-data-additional">
-                            <?php if ($deliveryPoint->id): ?>
-                                <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"]); ?>
-                            <?php endif; ?>
+                            <div data-item="additional">
+                                <?php if ($deliveryPoint->id): ?>
+                                    <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"]); ?>
+                                <?php endif; ?>
+                            </div>
                             <div data-item="description"><?php echo $daysInTransit; ?></div>
 
                             <div class="pull-left">
@@ -160,7 +162,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                     </div>
                                 <?php endif; ?>
                             </div>
-
                             <?php if (count($methods) > 1): ?>
                                 <div class="pull-right">
                                     <a class="button button-third large pull-right" id="change-shipping-type">

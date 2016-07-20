@@ -56,11 +56,11 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         switch ($deliveryMethodCode) {
             case 'zolagopickuppoint':
                 $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
-                $additionalData = '<div data-item="additional">' . $this->getPickUpPointRender($pos) . '</div>';
+                $additionalData = $this->getPickUpPointRender($pos);
                 break;
             case 'ghinpost':
                 $locker = $this->getInpostLocker();
-                $additionalData = '<div data-item="additional">' . $this->getLockerRender($locker) . '</div>';
+                $additionalData = $this->getLockerRender($locker);
                 break;
         }
         return $additionalData;

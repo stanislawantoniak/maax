@@ -73,7 +73,7 @@ $shippingAddress	= $this->getQuote()->getShippingAddress();
 		<form action="<?php echo $this->getSaveUrl();?>" class="form">
 			<input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
 			<?php if($deliveryPoint->id): ?>
-			<div id="inpost-wrapper" class="panel panel-default inpost-wrapper">
+			<div id="inpost-wrapper" class="panel panel-default checkout-delivery-point-wrapper">
 				<div class="panel-body">
 					<div class="form-group">
 						<input id="delivery_point_name"  name="delivery_point[name]" value="<?php echo $deliveryPoint->delivery_point_name; ?>" type="hidden"/>
