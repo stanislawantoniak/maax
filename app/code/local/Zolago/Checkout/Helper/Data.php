@@ -85,12 +85,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		if (is_null($this->pickUpPoint)) {
 
 			$selectedShipping = $this->getSelectedShipping();
-			//Zend_Debug::dump($selectedShipping);
 			$deliveryPointName = $selectedShipping['shipping_point_code'];
-			//Zend_Debug::dump($deliveryPointName);
+
 			/* @var $pos  Zolago_Pos_Model_Pos */
 			$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointName);
-			//Zend_Debug::dump($pos->getData());
+
 			if (!$pos->getIsAvailableAsPickupPoint()) {
 				$pos = Mage::getModel("zolagopos/pos");
 			}
