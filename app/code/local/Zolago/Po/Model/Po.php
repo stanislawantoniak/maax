@@ -630,6 +630,11 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
     * @return boolean
     */
    public function isPaid() {
+	   $paymentHelper = Mage::helper('zolagopayment');
+
+	   if(!$paymentHelper->getConfigUseAllocation($this->getStore())){
+		   return $this->getPaymentAmount() >= $this->getGrandTotalInclTax() ? true : false;
+	   }
 	   if(!$this->isCod()){
 		   return $this->getPaymentAmount() >= $this->getGrandTotalInclTax() ? true : false;
 	   }
@@ -651,6 +656,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	}
 
 	public function getDebtAmount() {
+		Mage::log($this->getPaymentAmount(), null, "payment.log");
 		return -($this->getGrandTotalInclTax() - $this->getPaymentAmount());
 	}
 
