@@ -4,11 +4,9 @@
 $hlpPo = Mage::helper("zolagopo");
 $_po = $this->getData('po');
 
-$sumExistTransactions = $this->getSumExistTransactions();
-$totalSum = $_po->getGrandTotalInclTax();
-$totalSum = number_format($totalSum, 2, '.', '');
+$debtAmount = abs($_po->getDebtAmount());
+$debtAmount = number_format($debtAmount, 2, '.', '');
 
-$differenceSum = $totalSum - $sumExistTransactions;
 ?>
 <div class="modal fade" id="paymentsModal-pickup">
     <div class="modal-dialog" style="width: 800px;">
@@ -27,7 +25,7 @@ $differenceSum = $totalSum - $sumExistTransactions;
 							<div class="col-md-9">
 								<input id="payment-pickup-amount"
 									   name="payment_pickup_amount"
-									   value="<?php echo $totalSum; ?>"
+									   value="<?php echo $debtAmount; ?>"
 									   type="text"
 									   class="form-control" />
 							</div>

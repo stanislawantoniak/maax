@@ -88,6 +88,7 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
 
                 $amount = $this->getRequest()->getParam("payment_pickup_amount", 0);
 
+                $amount = abs($amount);
                 $debtAmount = abs($po->getDebtAmount());
 
                 if($amount > $debtAmount){
