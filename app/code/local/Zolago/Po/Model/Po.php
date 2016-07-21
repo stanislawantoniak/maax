@@ -632,11 +632,11 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
    public function isPaid() {
 	   $paymentHelper = Mage::helper('zolagopayment');
 
-	   if(!$paymentHelper->getConfigUseAllocation($this->getStore())){
-		   return round((float)$this->getPaymentAmount(), 4) >= round((float)$this->getGrandTotalInclTax(), 4) ? true : false;
+	   if (!$paymentHelper->getConfigUseAllocation($this->getStore())) {
+		   return round((float)$this->getPaymentAmount() - (float)$this->getGrandTotalInclTax(), 4) ? true : false;
 	   }
-	   if(!$this->isCod()){
-		   return round((float)$this->getPaymentAmount(), 4) >= round((float)$this->getGrandTotalInclTax(), 4) ? true : false;
+	   if (!$this->isCod()) {
+		   return round((float)$this->getPaymentAmount() - (float)$this->getGrandTotalInclTax(), 4) ? true : false;
 	   }
 	   return true;
    }
@@ -656,8 +656,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	}
 
 	public function getDebtAmount() {
-		Mage::log($this->getPaymentAmount(), null, "payment.log");
-		return -($this->getGrandTotalInclTax() - $this->getPaymentAmount());
+		return -(round((float)$this->getGrandTotalInclTax()-(float)$this->getPaymentAmount(),4));
 	}
 
 	public function getCurrencyFormattedAmount($amount) {
