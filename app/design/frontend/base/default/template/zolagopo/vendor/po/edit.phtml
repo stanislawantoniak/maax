@@ -23,6 +23,8 @@ $_tracking = $this->getCurrentTracking($_currentShipping);
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
 $paymentHelper = Mage::helper('zolagopayment');
 $activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
+
+$isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -159,6 +161,16 @@ $activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
                         <i class="icon-usd"></i>
                         <?php echo $_hlp->__("Payment"); ?>
                     </h4>
+					<div class="toolbar no-padding">
+						<div class="btn-group">
+							<?php if($isPickUpPaymentCanBeEntered): ?>
+								<!--when delivery method is pickup-point it is possible to enter payment to order-->
+								<span data-toggle="modal" data-target="#paymentsModal-pickup" class="btn btn-xs">
+									<i class="icon-money"></i>
+									<?php echo $_hlp->__("Enter Payment"); ?>
+								</span>
+							<?php endif; ?>
+
 
                     <?php
                     if ($this->canShowPaymentDetails()):
@@ -167,40 +179,40 @@ $activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
 							$overpayDetails = $paymentHelper->getAllocationOverpaymentDetails($_po);
 							//if no payment details do not show Payment details button
 							if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
-								<div class="toolbar no-padding">
-									<div class="btn-group">
+
 									<span data-toggle="modal" data-target="#paymentsModal-allocation" class="btn btn-xs">
 										<i class="glyphicon glyphicon-pushpin"></i>
 										<?php echo $_hlp->__("Payment details"); ?>
 									</span>
-									</div>
-								</div>
+
 							<?php endif; ?>
-						<?php else: // simplified logic 
+						<?php else: // simplified logic
 							$transactionsDetails = $paymentHelper->getSimpleTransactionsDetails($_po);
 							$refundsDetails = $paymentHelper->getSimpleRefundsDetails($_po);
 							?>
 							<?php if($transactionsDetails->count() || $refundsDetails->count()):
 								if (($transactionsDetails->count()) || $returnsDetails->count()): ?>
-									<div class="toolbar no-padding">
-										<div class="btn-group">
+
 										<span data-toggle="modal" data-target="#paymentsModal-simple" class="btn btn-xs">
 											<i class="glyphicon glyphicon-pushpin"></i>
 											<?php echo $_hlp->__("Payment details"); ?>
 										</span>
-										</div>
-									</div>
+
 								<?php endif; ?>
 							<?php endif; ?>
 						<?php endif; ?>
                     <?php endif; ?>
+
+						</div>
+					</div>
+
                 </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z">
 						<dt><?php echo $_hlp->__("Payment method"); ?>:</dt>
 						<dd><?php echo $this->getPaymentMethod($_po); ?></dd>
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
-						<dd><?php echo !$_po->isCod() && $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
+						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
 						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
@@ -626,7 +638,11 @@ if ($this->canShowPaymentDetails()) {
 		} 
 	}
 }
-	
+
+if ($isPickUpPaymentCanBeEntered)
+	echo $this->getChild("vendor_po_edit_payments_pickup")->setData('po', $_po)->toHtml();
+
+
 /*******************************************************************************
  *	Split modal
  *******************************************************************************/

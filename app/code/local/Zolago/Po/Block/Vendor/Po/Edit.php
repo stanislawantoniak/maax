@@ -509,4 +509,13 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
          $block->setParentBlock($this);
          return $block->toHtml();
      }
+
+	/**
+	 * @return bool
+	 */
+	public function isPickUpPaymentCanBeEntered()
+	{
+		$po = $this->getPo();
+		return Mage::helper("zolagopo")->isPickUpPaymentCanBeEntered($po);
+	}
 }

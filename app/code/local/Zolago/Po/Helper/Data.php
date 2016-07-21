@@ -6,6 +6,57 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 	
 	protected $_condJoined = false;
 
+
+	/**
+	 * @return bool
+	 */
+	public function isPickUpPaymentCanBeEntered(Zolago_Po_Model_Po $po)
+	{
+		$shippingMethod = $po->getUdropshipMethod();
+		$deliveryMethod = $this->getMethodCodeByDeliveryType($shippingMethod);
+		$deliveryMethodCode = $deliveryMethod->getDeliveryCode();
+		$zosPickupPointMethodCode = Mage::helper("zospickuppoint")->getCode();
+
+		//button "enter payment" when order is not canceled and not shipped
+		if ($deliveryMethodCode == $zosPickupPointMethodCode
+			&& !$po->isPaid()
+			&& !in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses()
+			)
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+
+	/**
+	 * @param $shippingMethod (ex. udtiership_4)
+	 * @return mixed
+	 */
+	public function getMethodCodeByDeliveryType($shippingMethod)
+	{
+		$collection = Mage::getModel("udropship/shipping")->getCollection();
+		$collection->getSelect()
+			->join(
+				array('udropship_shipping_method' => $collection->getTable('udropship/shipping_method')),
+				"main_table.shipping_id = udropship_shipping_method.shipping_id",
+				array(
+					'udropship_method' => new Zend_Db_Expr('CONCAT_WS(\'_\',    udropship_shipping_method.carrier_code ,udropship_shipping_method.method_code)'),
+				)
+			);
+		$collection->getSelect()->join(
+			array('udtiership_delivery_type' => $collection->getTable('udtiership/delivery_type')),
+			"udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
+			array("delivery_code")
+		);
+
+		$collection->getSelect()->having("udropship_method=?", $shippingMethod);
+
+		return $collection->getFirstItem();
+	}
+
     /**
      * to have payment status updated when PO is changed
      *
