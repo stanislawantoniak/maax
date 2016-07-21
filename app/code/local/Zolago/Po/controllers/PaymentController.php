@@ -99,7 +99,7 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
 
                 /** @var Zolago_Payment_Helper_Data $helper */
                 $helper = Mage::helper('zolagopayment');
-                $txnId = "PICKUP_".$helper->RandomStringForRefund();
+                $txnId = "PICKUPPOINT_".$helper->RandomStringForRefund();
 
 
                 if ($amount > 0) {
