@@ -182,6 +182,14 @@ class Zolago_Po_Model_Po_Status
             Mage::throwException(Mage::helper('ghapi')->__('Invalid status for this operation.'));
         }
     }
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function confirmPickUp(Zolago_Po_Model_Po $po)
+	{
+		$this->_processStatus($po, self::STATUS_DELIVERED);
+	}
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po

@@ -22,6 +22,28 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 		return (bool)($deliveryMethodCode == $zosPickupPointMethodCode);
 	}
 
+	public function isPickUpPointConfirmAvailable(Zolago_Po_Model_Po $po)
+	{
+		$isPickUpPointConfirmAvailable = false;
+
+		$_statusModel = $po->getStatusModel();
+
+		if ($this->isDeliveryPickUpPoint($po)
+			&& $_statusModel->isShippingAvailable($po)
+			&& $po->isPaid()
+		) {
+			$isPickUpPointConfirmAvailable = true;
+		}
+
+		return $isPickUpPointConfirmAvailable;
+	}
+
+	public function canUseCarrier(Zolago_Po_Model_Po $po)
+	{
+		return Mage::helper('orbashipping')->canPosUseCarrier($po->getDefaultPos()) ||
+		Mage::helper('orbashipping')->canVendorUseCarrier($po->getVendor());
+	}
+
 	/**
 	 * @return bool
 	 */
