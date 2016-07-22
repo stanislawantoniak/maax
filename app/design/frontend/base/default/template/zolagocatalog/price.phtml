@@ -45,12 +45,7 @@ $helper = Mage::helper("zolagocatalog");
 		</div>
 		<div class="col-xs-4 main-actions align-right" style="padding-right: 0;">
 			<form>
-				<select id="store-switcher" class="form-control"><li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="#" id="change-prices">
-                            <i class="icon icon-pencil"></i>
-                            <?php echo $helper->__("Change prices"); ?>
-                        </a>
-                    </li>
+				<select id="store-switcher" class="form-control">
 					<?php foreach($this->getAllowedStores() as $store):?>
 					<option value="<?php echo $this->escapeHtml($store["id"]);?>" <?php if($this->getCurrentStoreId()== $store["id"]):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store["name"]);?></option>
 					<?php endforeach;?>
