@@ -38,11 +38,6 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 		return $isPickUpPointConfirmAvailable;
 	}
 
-	public function canUseCarrier(Zolago_Po_Model_Po $po)
-	{
-		return Mage::helper('orbashipping')->canPosUseCarrier($po->getDefaultPos()) ||
-		Mage::helper('orbashipping')->canVendorUseCarrier($po->getVendor());
-	}
 
 	/**
 	 * @return bool
