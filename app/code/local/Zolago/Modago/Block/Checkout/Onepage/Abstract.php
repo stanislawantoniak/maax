@@ -44,6 +44,10 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 		return $data;
 	}
 
+	/**
+	 * Delivery point info constructor for checkout
+	 * @return stdClass
+	 */
 	public function getDeliveryPointCheckout(){
 
 		/** @var Zolago_Checkout_Helper_Data $helper */
