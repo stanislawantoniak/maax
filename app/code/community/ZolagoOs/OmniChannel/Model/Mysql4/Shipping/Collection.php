@@ -122,4 +122,38 @@ class ZolagoOs_OmniChannel_Model_Mysql4_Shipping_Collection extends Mage_Core_Mo
 
         return $this;
     }
+
+
+    public function joinDeliveryType()
+    {
+        $this->getSelect()
+            ->join(
+                array('udropship_shipping_method' => $this->getTable('udropship/shipping_method')),
+                "main_table.shipping_id = udropship_shipping_method.shipping_id",
+                array(
+                    'udropship_method' => new Zend_Db_Expr('CONCAT_WS(\'_\',    udropship_shipping_method.carrier_code ,udropship_shipping_method.method_code)'),
+                )
+            );
+
+        $this->getSelect()->join(
+            array('udtiership_delivery_type' => $this->getTable('udtiership/delivery_type')),
+            "udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
+            array("delivery_code")
+        );
+        return $this;
+    }
+
+
+    public function joinDeliveryTitle($storeId){
+        $this->getSelect()->joinLeft(
+            array('udropship_shipping_title_default' => $this->getTable('udropship/shipping_title')),
+            "main_table.shipping_id = udropship_shipping_title_default.shipping_id AND udropship_shipping_title_default.store_id=0",
+            array("udropship_method_title" => "IF(udropship_shipping_title_store.title IS NOT NULL, udropship_shipping_title_store.title, udropship_shipping_title_default.title)")
+        );
+        $this->getSelect()->joinLeft(
+            array('udropship_shipping_title_store' => $this->getTable('udropship/shipping_title')),
+            "main_table.shipping_id = udropship_shipping_title_store.shipping_id AND udropship_shipping_title_store.store_id={$storeId}",
+            array()
+        );
+    }
 }
