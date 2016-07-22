@@ -242,31 +242,32 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                     $customerAccount = $rma->getCustomerAccount();
                 }
 
-                /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
-                $existTransaction = Mage::getModel('sales/order_payment_transaction')->getCollection()
+                /* @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $existTransactionCollection */
+                $existTransactionCollection = Mage::getModel('sales/order_payment_transaction')->getCollection()
                     ->addFieldToFilter('order_id', $orderId)
                     ->addFieldToFilter('customer_id', $customerId)
                     ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
                     ->addFieldToFilter('payment_id', $paymentId);
-
+                /** @var Mage_Sales_Model_Order_Payment_Transaction $existTransaction */
+                $existTransaction = $existTransactionCollection->getFirstItem();
                 /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
                 $transaction = Mage::getModel("sales/order_payment_transaction");
                 $transaction->setOrderPaymentObject($order->getPayment());
 
-                if(!empty($existTransaction->getData())){
+                if($existTransaction->getId()){
                     $transaction
                         ->setTxnId(uniqid())
                         ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
                         ->setIsClosed(0)
                         ->setTxnAmount(-$amount)
                         ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
-                        ->setParentId($existTransaction->getData()[0]['transaction_id'])
+                        ->setParentId($existTransaction->getTransactionId())
                         ->setOrderId($orderId)
-                        ->setParentTxnId($existTransaction->getData()[0]['txn_id'], $transaction->getTransactionId())
+                        ->setParentTxnId($existTransaction->getTxnId(), $transaction->getTransactionId())
                         ->setCustomerId($customerId)
                         ->setBankAccount($customerAccount)
                         ->setRmaId($rma->getId())
-                        ->setDotpayId($existTransaction->getData()[0]['dotpay_id']);
+                        ->setDotpayId($existTransaction->getDotpayId());
                 }else {
                     $transaction
                         ->setTxnId(uniqid())
