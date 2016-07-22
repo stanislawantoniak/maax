@@ -20,5 +20,6 @@ class Zolago_Payment_Model_ConfirmRefund extends Zolago_Payment_Model_Abstract
                 Mage::logException($e);
             }
         }
+        return false;
     }
 }
