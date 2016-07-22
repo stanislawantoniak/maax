@@ -7,6 +7,8 @@ $_po = $this->getData('po');
 $debtAmount = abs($_po->getDebtAmount());
 $debtAmount = number_format($debtAmount, 2, '.', '');
 
+$debtAmountFormatted = Mage::helper('core')->currency($debtAmount, true, false);
+
 $currencyCode = $_po->getOrder()->getOrderCurrencyCode();
 $currency = Mage::app()->getLocale()->currency($currencyCode);
 $orderSymbolCode = $currency->getSymbol();
@@ -25,7 +27,7 @@ $orderSymbolCode = $currency->getSymbol();
 							<label for="payment_pickup_amount" class="col-md-3 control-label">
 								<?php echo $hlpPo->__("Amount"); ?>
 							</label>
-							<div class="col-md-6">
+							<div class="col-md-7">
 								<div class="input-group">
 									<input id="payment-pickup-amount"
 										   name="payment_pickup_amount"
@@ -65,7 +67,7 @@ $orderSymbolCode = $currency->getSymbol();
 					required: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
 					number: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
 					min: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
-					max: "<?php echo $hlpPo->__("Payment amount can not be more than total order sum"); ?> (<?php echo $debtAmount; ?>)"
+					max: "<?php echo $hlpPo->__("Payment amount can not be more than total order sum"); ?> - <?php echo $debtAmountFormatted; ?>"
 				}
 			}
 		});
