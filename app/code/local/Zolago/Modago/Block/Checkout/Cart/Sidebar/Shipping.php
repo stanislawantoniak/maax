@@ -46,19 +46,19 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     }
 
 
-
-
-
     public function getDeliveryDataAdditional($deliveryMethodCode, $deliveryPointIdentifier)
     {
         $additionalData = "";
 
+        $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
+        $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+
         switch ($deliveryMethodCode) {
-            case 'zolagopickuppoint':
+            case $pickUpPointCode:
                 $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
                 $additionalData = $this->getPickUpPointRender($pos);
                 break;
-            case 'ghinpost':
+            case $ghInpostCarrierCode:
                 $locker = $this->getInpostLocker();
                 $additionalData = $this->getLockerRender($locker);
                 break;

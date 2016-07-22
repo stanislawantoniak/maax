@@ -44,7 +44,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 				</a> 
 			<?php endif;?>
 
-			<?php /* Confirm realase button */ ?>
+			<?php /* Confirm release button */ ?>
 			<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
 				<a class="btn-notification btn" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-ok"></i>

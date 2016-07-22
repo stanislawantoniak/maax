@@ -336,4 +336,32 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		return $this->_deliveryMethodCode;
 	}
+
+
+	/**
+	 * Get carrier logo for checkout
+	 *
+	 * @param $deliveryType
+	 * @return string
+	 */
+	public function getCarrierLogo($deliveryType)
+	{
+		$inpostCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
+		$pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+
+		switch ($deliveryType) {
+			case $inpostCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+				$carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/inpost/checkout-logo.png') . '" />';
+				break;
+			case $pickUpPointCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+				//Truck icon
+				$carrierLogo = '<figure class="truck"><i class="fa fa-map-marker fa-3x"></i></figure>';
+				break;
+			default:
+				//Truck icon
+				$carrierLogo = '<figure class="truck"><i class="fa fa-truck fa-3x"></i></figure>';
+		}
+
+		return $carrierLogo;
+	}
 }
