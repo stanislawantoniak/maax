@@ -64,7 +64,10 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 	public function isPickUpPaymentCanBeEntered(Zolago_Po_Model_Po $po)
 	{
 		//button "enter payment" when order is not canceled and not shipped
-		if ($this->isDeliveryPickUpPoint($po)
+		$paymentHelper = Mage::helper('zolagopayment');
+		if (
+			$this->isDeliveryPickUpPoint($po)
+			&& !$paymentHelper->getConfigUseAllocation($this->getStore())
 			&& !$po->isPaid()
 			&& !in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses()
 			)
