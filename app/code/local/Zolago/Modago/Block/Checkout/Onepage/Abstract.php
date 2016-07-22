@@ -71,7 +71,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 				$deliveryPoint->locationDescription = "";
 
 				$deliveryPoint->checkout->title = $helper->__("Pick-Up Point");
-				$deliveryPoint->checkout->logo = '<figure class="truck"><i class="fa fa-truck fa-3x"></i></figure>';
+				$deliveryPoint->checkout->logo = '<figure class="truck"><i class="fa fa-map-marker fa-3x"></i></figure>';
 				$deliveryPoint->checkout->additionalInfo1 = "";
 				$deliveryPoint->checkout->additionalInfo2 = "";
 				break;
