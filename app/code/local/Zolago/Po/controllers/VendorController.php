@@ -1482,6 +1482,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     public function confirmPickUpAction() {
         try {
             $udpo = $this->_registerPo();
+            if (!$udpo->isPaid()) {
+                $this->_getSession()->addError(Mage::helper("zolagopo")->__("The order should be paid before."));
+                return $this->_redirectReferer();
+            }
+
             $udpo->getStatusModel()->confirmPickUp($udpo);
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order Pick Up has been successfully confirmed."));
         } catch (Mage_Core_Exception $e) {

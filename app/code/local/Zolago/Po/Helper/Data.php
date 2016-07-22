@@ -22,18 +22,37 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 		return (bool)($deliveryMethodCode == $zosPickupPointMethodCode);
 	}
 
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
 	public function isPickUpPointConfirmAvailable(Zolago_Po_Model_Po $po)
 	{
 		$isPickUpPointConfirmAvailable = false;
 
 		$_statusModel = $po->getStatusModel();
 
-		if ($this->isDeliveryPickUpPoint($po)
-			&& $_statusModel->isShippingAvailable($po)
-			&& $po->isPaid()
-		) {
+		if (!$this->isDeliveryPickUpPoint($po))
+			return $isPickUpPointConfirmAvailable;
+
+		if (!$po->isPaid())
+			return $isPickUpPointConfirmAvailable;
+
+		$finishedStatuses = Zolago_Po_Model_Po_Status::getFinishStatuses();
+		$poStatus = $po->getUdropshipStatus();
+
+		if (in_array($poStatus, $finishedStatuses))
+			return $isPickUpPointConfirmAvailable;
+
+
+		if ($_statusModel->isShippingAvailable($po))
 			$isPickUpPointConfirmAvailable = true;
-		}
+
+
+		if ($po->getStockConfirm())
+			$isPickUpPointConfirmAvailable = true;
+
 
 		return $isPickUpPointConfirmAvailable;
 	}
