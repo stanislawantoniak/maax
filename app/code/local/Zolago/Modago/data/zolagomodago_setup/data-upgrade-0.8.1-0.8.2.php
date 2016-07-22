@@ -1,5 +1,5 @@
 <?php
-
+/* no for standalone version
 //1. Create footer default block CMS
 $vissaviStore =  Mage::app()->getStore('vissavi')->getId();
 
@@ -331,3 +331,5 @@ foreach ($pagesToCreate as $pageData) {
 
     $currentPage->setData($pageData)->save();
 }
+
+*/
