@@ -207,3 +207,6 @@
 "RMA Document for Customer","Dokument RMA dla klienta"
 "Pdf file with regulations","PDF statyczny z instrukcją"
 "Check your DHL Account Settings","Sprawdź ustawienia konta DHL"
+"Amount to refund","Amount to refund[PL]"
+"Enter an amount to refund", "Enter an amount to refund[PL]"
+"An amount to refund can not be more than total order sum","An amount to refund can not be more than total order sum[PL]"
