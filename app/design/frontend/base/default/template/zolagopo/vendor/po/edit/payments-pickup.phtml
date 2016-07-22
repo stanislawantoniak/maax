@@ -47,3 +47,27 @@ $orderSymbolCode = $currency->getSymbol();
 		</form>
     </div>
 </div>
+<script>
+	jQuery(document).ready(function() {
+		var form = jQuery('#poPickUpAddPaymentForm');
+		form.validate({
+			ignore: "",
+			rules: {
+				payment_pickup_amount: {
+					required: true,
+					number: true,
+					min: 0.01,
+					max: <?php echo $debtAmount; ?>
+				}
+			},
+			messages: {
+				payment_pickup_amount: {
+					required: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
+					number: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
+					min: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
+					max: "<?php echo $hlpPo->__("Payment amount can not be more than total order sum"); ?> (<?php echo $debtAmount; ?>)"
+				}
+			}
+		});
+	});
+</script>
