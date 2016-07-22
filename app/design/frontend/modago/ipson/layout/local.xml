@@ -10,6 +10,9 @@
 				<stylesheet>css/fonts.css</stylesheet>
 			</action>
 		</reference>
+		<reference name="footer">
+			<block type="newsletter/subscribe" name="newsletter" as="newsletter" template="newsletter/subscribe.phtml" before="-" />
+		</reference>
 	</default>
     <zolagomodago_index_index>
         <reference name="content">

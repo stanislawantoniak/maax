@@ -175,6 +175,9 @@ $colorBackgroundBlocks:                 #FFF;
 $colorBackgroundSite:                   #F2F1F0;
 $colorBackgroundContent:                #FFF;
 
+$colorLinkHoverOnDark:                  #fff;
+$decorationLinkHover:                   none;
+
 //accents colors
 $colorAccentBlocks:                     #EBEBEB;
 $colorAccentSite:                       #CD0027;
@@ -353,3 +356,21 @@ $colorProductFlag:                      #FFF;
 $colorProductExtraInfo:                 $colorFont;
 $colorProductExtraInfoBg:               #FCFCFC;
 $colorProductExtraInfoBorder:           #EBEBEB;
+
+/*FOOTER*/
+$textColorFooter:                       #fff;
+$textColorFooterLink:                   #8a8a8a;
+$backgroundColorFooter:                 #262626;
+
+@mixin generalLinkOnDark {
+  &:hover, &.hover {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+
+  }
+  &:active, &:focus, &.active {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+    outline: none;
+  }
+}
