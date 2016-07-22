@@ -33,6 +33,10 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 
 		$_statusModel = $po->getStatusModel();
 
+		if(Mage::helper('zolagopayment')->getConfigUseAllocation($po->getStore()))
+			return $isPickUpPointConfirmAvailable;
+
+
 		if (!$this->isDeliveryPickUpPoint($po))
 			return $isPickUpPointConfirmAvailable;
 
@@ -67,7 +71,7 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 		$paymentHelper = Mage::helper('zolagopayment');
 		if (
 			$this->isDeliveryPickUpPoint($po)
-			&& !$paymentHelper->getConfigUseAllocation($this->getStore())
+			&& !$paymentHelper->getConfigUseAllocation($po->getStore())
 			&& !$po->isPaid()
 			&& !in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses()
 			)
