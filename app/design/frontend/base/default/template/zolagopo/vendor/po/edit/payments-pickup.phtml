@@ -7,6 +7,9 @@ $_po = $this->getData('po');
 $debtAmount = abs($_po->getDebtAmount());
 $debtAmount = number_format($debtAmount, 2, '.', '');
 
+$currencyCode = $_po->getOrder()->getOrderCurrencyCode();
+$currency = Mage::app()->getLocale()->currency($currencyCode);
+$orderSymbolCode = $currency->getSymbol();
 ?>
 <div class="modal fade" id="paymentsModal-pickup">
     <div class="modal-dialog" style="width: 800px;">
@@ -22,12 +25,16 @@ $debtAmount = number_format($debtAmount, 2, '.', '');
 							<label for="payment_pickup_amount" class="col-md-3 control-label">
 								<?php echo $hlpPo->__("Amount"); ?>
 							</label>
-							<div class="col-md-9">
-								<input id="payment-pickup-amount"
-									   name="payment_pickup_amount"
-									   value="<?php echo $debtAmount; ?>"
-									   type="text"
-									   class="form-control" />
+							<div class="col-md-6">
+								<div class="input-group">
+									<input id="payment-pickup-amount"
+										   name="payment_pickup_amount"
+										   value="<?php echo $debtAmount; ?>"
+										   type="text"
+										   autocomplete="off"
+										   class="form-control" />
+									<span class="input-group-addon"><i class="icon"><?php echo $orderSymbolCode; ?></i></span>
+								</div>
 							</div>
 						</li>
 					</ul>

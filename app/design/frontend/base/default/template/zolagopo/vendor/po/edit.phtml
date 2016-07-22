@@ -62,7 +62,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
 					<?php else: ?>
 
-						<?php if (!$_hlp->isPickUpPointConfirmAvailable($_po) ): ?>
+						<?php if ($_hlp->isPickUpPointConfirmAvailable($_po) ): ?>
 							<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
 								<i class="icon-ok"></i>
 								<?php echo $_hlp->__("Confirm Pick Up");?>
@@ -92,6 +92,15 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 					<i class="icon-barcode"></i>
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
+
+
+					<?php if ($_hlp->isPickUpPointConfirmAvailable($_po)): ?>
+						<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
+							<i class="icon-ok"></i>
+							<?php echo $_hlp->__("Confirm Pick Up");?>
+						</a>
+					<?php endif; ?>
+
 				<?php endif;?>
 			<?php else:?>
 				<?php /* if($_po->getStockConfirm()):?>
@@ -100,12 +109,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
 				<?php endif; */?>
-				<?php if ($_hlp->isPickUpPointConfirmAvailable($_po)): ?>
-					<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
-						<i class="icon-ok"></i>
-						<?php echo $_hlp->__("Confirm Pick Up");?>
-					</a>
-				<?php endif; ?>
+
 
 			<?php endif;?>
 				
