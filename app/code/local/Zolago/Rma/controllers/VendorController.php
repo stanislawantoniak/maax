@@ -59,7 +59,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         $po = Mage::getModel('zolagopo/po')->load($poId);
         $rmas = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($data, array(), $shippingCostStatus);
         foreach ($rmas as $rma) {
-            $rma->setRmaType(Zolago_Rma_Model_Rma::RMA_TYPE_RETURN);
+            $rma->setRmaType(Zolago_Rma_Model_Rma::RMA_TYPE_STANDARD);
             $rma->save();
 
             Mage::dispatchEvent("zolagorma_rma_created_manually", array(
