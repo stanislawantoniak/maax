@@ -1483,7 +1483,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         try {
             $udpo = $this->_registerPo();
             if (!$udpo->isPaid()) {
-                $this->_getSession()->addError(Mage::helper("zolagopo")->__("The order should be paid before."));
+                $this->_getSession()->addError(Mage::helper("zolagopo")->__("The order should be paid."));
                 return $this->_redirectReferer();
             }
 
