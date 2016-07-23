@@ -28,6 +28,7 @@ foreach ($_items as $_item){
 }
 $totalSum = number_format($totalSum, 2, '.', '');
 $differenceSum = $totalSum - $sumExistTransactions;
+$differenceInputSum = number_format($differenceSum, 2, '.', '');
 
 ?>
 <div class="modal fade" id="refundModalSimple">
@@ -57,7 +58,7 @@ $differenceSum = $totalSum - $sumExistTransactions;
 							<label for="refund" class="col-md-6 control-label"><?php echo $_hlp->__("Amount to refund");?></label>
 							<div class="col-md-3">
 								<div class="input-group">
-									<input type="text" required="required" name="refund" id="refund" value="<?php echo $totalSum; ?>" class="form-control" style="text-align: right;"/>
+									<input type="text" required="required" name="refund" id="refund" value="<?php echo $differenceInputSum; ?>" class="form-control" style="text-align: right;"/>
 									<span class="input-group-addon"><i class="icon"><?php echo $orderSymbolCode; ?></i></span>
 								</div>
 							</div>
