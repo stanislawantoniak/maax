@@ -31,27 +31,34 @@ $ipsonFooterFacebookLink = $this->getLayout()->createBlock('cms/block')->setBloc
 
 ?>
 <footer id="footer" class="footer">
-    <div class="footer-black container">
-        <div class="row row-fluid clearfix newsletter">
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="wpb_wrapper">
-                        <?php echo $this->getChildHtml("newsletter") ?>
-                        <div class="footer_facebook_link">
-                            <span></span>
+    <div class="footer_block">
+        <div class="footer-black container">
+            <div class="row row-fluid clearfix newsletter">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="wpb_wrapper">
+                            <?php echo $this->getChildHtml("newsletter") ?>
                             <?php echo $ipsonFooterFacebookLink; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row row-fluid clearfix footer-links">
-            <?php echo $ipsonFooterLinks; ?>
+    </div>
+    <div class="footer_block">
+        <div class="footer-black container">
+            <div class="row row-fluid clearfix footer-links">
+                <?php echo $ipsonFooterLinks; ?>
+            </div>
         </div>
-        <div class="row row-fluid clearfix copyright">
-            <div class="col-sm-12 ">
-                <div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_sep_color_grey vc_separator-has-text">
-                    <h5><?php echo $this->getCopyright() ?></h5>
+    </div>
+    <div class="footer_block">
+        <div class="footer-black container">
+            <div class="row row-fluid clearfix copyright">
+                <div class="col-sm-12 ">
+                    <div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_sep_color_grey vc_separator-has-text">
+                        <h5><?php echo $this->getCopyright() ?></h5>
+                    </div>
                 </div>
             </div>
         </div>

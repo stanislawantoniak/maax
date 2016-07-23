@@ -41,10 +41,11 @@ footer.footer {
   .row.footer-links
   {
     margin-bottom: 20px;
+    margin-top: 20px;
   }
 
   .row.newsletter {
-    margin: 50px 0 50px;
+    margin: 50px 0 35px;
   }
 
   .container .footer-list-title {
@@ -235,64 +236,20 @@ footer.footer {
 
   .footer_facebook_link {
     a {
+      width: 256px;
       font-size: 13px;
       font-weight: 400;
       border: 1px solid #fff !important;
       color: #fff;
       text-transform: uppercase;
-      padding: 6px 18px;
+      padding: 6px 18px 6px 18px;
       margin: 0;
       display: block;
       overflow: hidden;
-    }
-    span {
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      background: url('../images/sprites/all-s399d59bcea.png');
-      background-position: -98px -36px;
-      height: 24px;
-      width: 27px;
-    }
-  }
-
-  /* Social links*/
-  .social {
-    text-align: center;
-
-    ul.menu-social-icons {
-      margin-bottom: 0;
-      padding: 0;
-      li {
-        float: none;
-        display: inline-block;
-        margin-right: 5px;
-
-        &.lastItem {
-          margin-right: 0;
-        }
-        i {
-          width: auto;
-        }
-        a {
-          i {
-            font-size: 22px;
-            color: $text-color;
-            background-color: transparent;
-            @include transition(all 0.2s ease-in-out);
-            font-style: normal;
-
-            display: block;
-            width: 28px;
-            height: 28px;
-
-            &:hover {
-              color: $colorLinkHoverOnDark;
-            }
-          }
-        }
-      }
-
+      //&:hover {
+      //  background-color:$color_fff;
+      //  color:#262626;
+      //}
     }
   }
 
@@ -300,7 +257,6 @@ footer.footer {
   .copyright {
     h5 {
       font-weight: 300;
-      margin: 0 15px;
       line-height: 1.3;
       color: #8a8a8a;
     }
@@ -439,9 +395,19 @@ footer.footer {
 
 
   }
+
+  .fa {
+    float: left;
+    margin: 0;
+    margin-right: 10px;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .footer_block {
+    border-bottom: 1px solid #000;
+  }
 }
-
-
 
 
 .vc_separator .vc_sep_holder {
