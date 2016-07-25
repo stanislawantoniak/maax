@@ -33,7 +33,10 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
 <!--                    </li>-->
                     <li id="link_basket" class="basket-dropdown shopping-cart-widget">
                         <a class="dropdown-toggle" id="link_basket_icon" data-dropdown="#dropdown-basket" href="<?php echo $checkoutCartUrl; ?>">
-                            <i class="fa fa-shopping-cart"></i>
+                            <div class="badgeHolder">
+                                <span class="badge"></span>
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
                         </a>
                     </li>
                 </ul>
