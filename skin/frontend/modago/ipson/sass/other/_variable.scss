@@ -180,25 +180,25 @@ $decorationLinkHover:                   none;
 
 //accents colors
 $colorAccentBlocks:                     #EBEBEB;
-$colorAccentSite:                       #CD0027;
+$colorAccentSite:                       #008539;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
-$colorAccentError:                      #CD0027;
+$colorAccentError:                      #008539;
 
 //buttons
 $colorBtnPrimary:                       #FFF;
 
-$colorBtnPrimaryBgStart:                #d20005;
-$colorBtnPrimaryBgEnd:                  #b40005;
+$colorBtnPrimaryBgStart:                #008539;
+$colorBtnPrimaryBgEnd:                  #008539;
 
-$colorBtnPrimaryBgStartHover:           #de0005;
-$colorBtnPrimaryBgEndHover:             #c00005;
+$colorBtnPrimaryBgStartHover:           #008539;
+$colorBtnPrimaryBgEndHover:             #008539;
 
-$colorBtnPrimaryBgStartActive:          #b40005;
-$colorBtnPrimaryBgEndActive:            #d20005;
+$colorBtnPrimaryBgStartActive:          #008539;
+$colorBtnPrimaryBgEndActive:            #008539;
 
-$colorBtnThirdBorderActive:             #b40005;
-$colorBtnThirdColorActive:             #b40005;
+$colorBtnThirdBorderActive:             #008539;
+$colorBtnThirdColorActive:              #008539;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
@@ -263,7 +263,7 @@ $colorAccentDropdown:                   $colorAccentBlocks;
 
 /* CART DROPDOWN VARIABLES */
 $colorBgDropdownCart:                   $colorBgDropdown;
-$colorDropdownCart:                     $colorDropdown;
+$colorDropdownCart:                     #000;
 $colorAccentDropdownCart:               $colorAccentDropdown;
 
 /* SEARCH DROPDOWN VARIABLES */

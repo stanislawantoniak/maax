@@ -8,10 +8,7 @@
                 @include border-radius(0px);
                 box-shadow: none;
             	background-color: $colorHeaderSearchBg;
-            	border-top: 1px solid $colorHeaderSearchBorder;
-	            border-bottom: 1px solid $colorHeaderSearchBorder;
-	            border-left: 1px solid $colorHeaderSearchBorder;
-	            border-right: none;
+				border: 1px solid $colorHeaderSearchBorder;
 	            padding: 0 10px;
             }
         }

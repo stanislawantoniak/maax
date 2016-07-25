@@ -1,7 +1,7 @@
 .button {
 	@include inline-block;
 	border:none;
-	@include border-radius(5px);
+	@include border-radius(0px);
 	outline:none;
 	text-decoration: none!important;
 	text-transform: uppercase;
