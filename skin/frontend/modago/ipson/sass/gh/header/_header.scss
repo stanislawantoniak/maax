@@ -161,19 +161,6 @@ body {
 	.block_search {
 		float: right;
 		margin-top: 16px;
-
-	//	@include max-screen($screen-sm-max) {
-	//		margin-right: 2.925%;
-	//	}
-	//;
-	//	@include min-screen($screen-md) {
-	//		margin-right: 5px;
-	//	}
-	//;
-	//	@include min-screen($screen-lg) {
-	//		margin-right: 19px;
-	//	}
-	//;
 		margin-right: 5px;
 		.button-search {
 			border-radius: 0;
@@ -599,9 +586,8 @@ body {
 		&.navigation > li > a.active,
 		&.navigation > li > a.forceActive {
 			background: none;
-			&:before {
-				background: $colorAccentSiteMenuTop;
-			}
+			font-weight: bold;
+			letter-spacing: 0px;
 		}
 	}
 
