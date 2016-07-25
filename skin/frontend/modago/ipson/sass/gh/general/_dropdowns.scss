@@ -102,9 +102,9 @@
 
 
 
-#dropdown-basket  {  /* PANEL KOSZYKA */
+#dropdown-basket  {
 	padding:0px;
-	top:56px !important;
+	top: 75px !important;
 	right:5px !important;
 	left:auto !important;
 	@include max-screen($screen-sm-max) {

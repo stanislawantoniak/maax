@@ -162,8 +162,8 @@ $colorLinkHover:                        #000;
 $colorLinkActive:                       #000;
 
 //icon colors
-$colorIcon:                             #FFF;
-$colorIconHover:                        #2A2A2A;
+$colorIcon:                             #000;
+$colorIconHover:                        #FFF;
 $colorIconHoverBackground:              #FFF;
 
 //icon texts colors
@@ -237,9 +237,12 @@ $colorAccentBlocksHeader:               $colorBackgroundBlocks;
 
 $colorHeaderSearch:                     #2a2a2a;
 $colorHeaderSearchBg:                   #FFF;
-$colorHeaderSearchBorder:               $colorIconHeader;
-$colorHeaderSearchBtnBg:                #FFF;
+$colorHeaderSearchBorder:               #EBEBEB;
+$colorHeaderSearchBtnBg:                #EBEBEB;
 $colorHeaderSearchBtn:                  #2a2a2a;
+
+$colorHeaderUserAccountDesktopBtnBg:    #EBEBEB;
+$colorHeaderUserAccountMobileBtnBg:     #FFF;
 
 /* CHECKOUT HEADER VARIABLES */
 $colorHeaderCheckoutSteps:              $colorIconHeader;

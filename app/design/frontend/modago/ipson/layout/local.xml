@@ -16,6 +16,16 @@
 					<blockId>standalone_top_bar</blockId>
 				</action>
 			</block>
+			<block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml">
+				<block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
+			</block>
+			<!-- Varnish cache esi public block-->
+			<action method="setEsiOptions">
+				<params>
+					<access>public</access>
+				</params>
+			</action>
+
 		</reference>
 		<reference name="footer">
 			<block type="newsletter/subscribe" name="newsletter" as="newsletter" template="newsletter/subscribe.phtml" before="-" />

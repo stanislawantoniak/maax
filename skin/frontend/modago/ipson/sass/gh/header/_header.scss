@@ -56,7 +56,7 @@ body {
 	}
 	#header_top_block_left {
 		position: absolute;
-		left: 120px;
+		left: 0px;
 		top: 0px;
 		z-index: 20;
 		@include max-screen($screen-sm-max) {
@@ -66,13 +66,14 @@ body {
 	#header_top_block_center {
 		position: absolute;
 		top: 1px;
-		width: 103px;
+		width: 250px;
 		z-index: 10;
 		left:0px;
+		margin-left: 0;
 		img {
 			width: 100%;
 			height: auto;
-			margin-top: -3px; /* fix for vissavi logo */
+			margin-top: 15px;
 		}
 		@include max-screen($screen-sm-max) {
 			width: 58px;
@@ -94,7 +95,7 @@ body {
 	}
 	#header_top_block_right {
 		width: 100%;
-		padding-left: 165px;
+		padding-left: 265px;
 		position: absolute;
 		right: -10px;
 		top: 0px;
@@ -102,8 +103,30 @@ body {
 		@include max-screen($screen-xs-max) {
 			padding-left: 105px !important;
 		}
+		nav {
+			width: 70%;
+			float: left;
+			margin-top: 23px;
+			@include max-screen($screen-xs-max) {
+				width: 0;
+			}
+			@include min-screen($screen-sm) {
+				width: 80%
+			}
+			#navigation {
+				text-align: center;
+			}
+		}
 		#user_menu {
-			width: 100%;
+			//width: 60%;
+			width: auto;
+			@include max-screen($screen-xs-max) {
+				//width: 100%;
+			}
+			@include min-screen($screen-sm) {
+				margin-top: 23px;
+				//width: 60%
+			}
 		}
 		.header_icon {
 			margin-top: 3px;
@@ -133,7 +156,8 @@ body {
 		}
 	}
 	.block_search {
-		float: left;
+		float: right;
+		margin-top: 16px;
 
 		@include max-screen($screen-sm-max) {
 			margin-right: 2.925%;
@@ -144,18 +168,25 @@ body {
 		}
 	;
 		@include min-screen($screen-lg) {
-			margin-right: 12.925%;
+			margin-right: 19px;
 		}
 	;
 
 		.button-search {
 			border-radius: 0;
-			width: 29px;
-			height: 26px;
+			width: 39px;
+			height: 35px;
 			padding: 0;
 			position: relative;
-			border-left:1px solid $colorAccentBlocks;
-			background: $colorHeaderSearchBtnBg;
+			//border-left:1px solid $colorAccentBlocks;
+			border-top:1px solid $colorAccentBlocks;
+			border-bottom:1px solid $colorAccentBlocks;
+			border-right:1px solid $colorAccentBlocks;
+			background: $colorHeaderUserAccountMobileBtnBg;
+			@include min-screen($screen-lg) {
+				background: $colorHeaderUserAccountDesktopBtnBg;
+			}
+
 			&:before {
 				font-family: FontAwesome;
 				font-size: 16px;
@@ -164,9 +195,9 @@ body {
 				position: absolute;
 				top: 0;
 				left: 0;
-				width: 29px;
-				height: 26px;
-				line-height: 25px;
+				width: 39px;
+				height: 35px;
+				line-height: 32px;
 				text-align: center;
 			}
 		}
@@ -179,18 +210,18 @@ body {
 	top: -4px;
 	width: 100%;
 	text-align: right;
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		margin-top: -3px;
 		height: 54px !important;
 
 	}
-	@include min-screen($screen-md) {
+	@include min-screen($screen-sm) {
 		position: relative;
 	}
 	li {
 		padding: 0 0 0 0;
 		margin-left: 0;
-		width: 84px;
+		width: 40px;
 		height: 60px;
 		display: inline-block;
 		vertical-align: top;
@@ -198,7 +229,11 @@ body {
 
 		@include min-screen($screen-md-min) {
 			a:hover, &.open {
-				background-color: $colorIconHoverBgHeader;
+				//background-color: $colorIconHoverBgHeader;
+
+				color: #252525;
+				@include transition(color 0.3s ease-in-out);
+
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
 				}
@@ -207,23 +242,33 @@ body {
 				}
 			}
 		}
+		&#link_search {
+			width: auto !important;
+		}
 		&#link_search.not-open, &#link_search.not-open:hover {
 			background-color: transparent;
 		}
 		&#link_menu.not-open, &#link_menu.not-open:hover {
 			background-color: transparent;
 		}
-
-		@include min-screen($screen-md-min) {
+		&#link_account {
+			display: none;
+			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+				display: inline-block;
+			}
+		}
+		@include min-screen($screen-sm-min) {
 			&#link_basket {
 				height: 61px;
 			}
 		}
 
+
 		@include max-screen($screen-sm-max) {
-			width: 60px;
+			width: 40px;
+			//width: 60px;
 			&:hover, &#link_search.open {
-				background-color: $colorIconHoverBgHeader !important;
+				//background-color: $colorIconHoverBgHeader !important;
 				a svg {
 					path, g {
 						fill: $colorIconHover !important;
@@ -235,22 +280,27 @@ body {
 			}
 		}
 		@include max-screen(410px) {
-			width: 50px;
+			width: 40px;
 		}
 		@include max-screen(360px) {
-			width: 40px;
+			width: 33px;
 			&:hover, a:hover {
 				background-color: transparent;
 			}
 		}
 		a:link,
 		a:visited {
-			@include max-screen($screen-sm-max) {
-				padding-top: 16px !important;
+			font-size: 22px;
+			@include max-screen($screen-xs-max) {
+				padding-top: 8px !important;
 			}
-			@include min-screen($screen-md) {
-				padding-top: 10px !important;
+			@include min-screen($screen-sm-min) {
+				padding-top: 8px !important;
 			}
+		}
+		a:hover {
+			color: #252525;
+			@include transition(color 0.3s ease-in-out);
 		}
 		&.no-badge {
 			a:link,
@@ -279,9 +329,22 @@ body {
 		padding-bottom: 2px;
 		display: block;
 		padding-top: 11px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			height: 46px;
-			padding-top: 17px;
+			padding-top: 8px;
+		}
+		&#toggleSearch {
+			//padding-top: 17px;
+		}
+
+		&#link_basket_icon {
+			@include min-screen($screen-lg) {
+				border: 1px solid #EBEBEB;
+				padding-top: 0 !important;
+				height: 35px !important;
+				top: 11px;
+				background: $colorHeaderUserAccountDesktopBtnBg;
+			}
 		}
 	}
 
@@ -523,8 +586,8 @@ body {
 
 /* HEADER BOTTOM */
 .header_bottom {
-	//    background:$color_fff url('../images/bg-menu.png') 0 0 repeat-x;
 	background: $colorBgBlocksMenuTop;
+	border-top: 1px solid $colorAccentBlocksMenuTop;
 	border-bottom: 1px solid $colorAccentBlocksMenuTop;
 	#nav_desc {
 		&.navigation > li > a:hover,
@@ -702,13 +765,18 @@ body {
 
 #link_basket {
 	&.open a {
-		border-bottom: 4px solid $colorIconHoverBgHeader;
+		//border-bottom: 4px solid $colorIconHoverBgHeader;
 	}
 }
 
 @import "../../other/variable";
 .header_top {
-	height: 57px;
+	//height: 85px;
+	height: 132px;
+	@include max-screen($screen-xs-max) {
+		height: 85px;
+		//top: -34px !important;
+	}
 }
 
 /* USER MENU */
