@@ -107,6 +107,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		$this->_getSession()->setFormData(null);
 		$data = $this->getRequest()->getParams();
 		$data["show_on_map"] = $this->getRequest()->getParam("show_on_map",0);
+		$data["map_notes"] = $this->getRequest()->getParam("map_notes","");
 		$data["map_time_opened"] = htmlentities($this->getRequest()->getParam("map_time_opened",""));
 
 		$modelId = $this->getRequest()->getParam("pos_id");

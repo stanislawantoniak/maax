@@ -65,6 +65,7 @@ class Zolago_Modago_Block_Map extends Mage_Core_Block_Template
                         $maps[] = array(
                             "id" => $posMap->getId(),
                             "name" => $posMap->getMapName(),
+							"notes" => $posMap->getMapNotes(),
                             "city" => $posMap->getCity(),
                             "street" => $posMap->getStreet(),
                             "postcode" => $posMap->getPostcode(),
