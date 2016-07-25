@@ -123,12 +123,14 @@ body {
 		#user_menu {
 			//width: 60%;
 			width: auto;
+			padding-right: 15px;
 			@include max-screen($screen-xs-max) {
 				//width: 100%;
+				padding-right: 5px;
 			}
 			@include min-screen($screen-sm) {
 				margin-top: 23px;
-				//width: 60%
+				padding-right: 10px;
 			}
 		}
 		.header_icon {
