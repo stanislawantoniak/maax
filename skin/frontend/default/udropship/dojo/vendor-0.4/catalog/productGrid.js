@@ -411,8 +411,8 @@ define([
     };
 
 	var rendererIsInStock = function (item, value, node, options) {
-		var itemsTxt		= Translator.translate("Available together {{stock_qty}} items");
-		var variantsTxt		= Translator.translate("{{available_child_count}} variants of {{all_child_count}}");
+		var itemsTxt		= item.type_id === "simple" ? Translator.translate("Available {{stock_qty}} items") : Translator.translate("Available together {{stock_qty}} items");
+		var variantsTxt		= item.type_id === "simple" ? "" : Translator.translate("{{available_child_count}} variants of {{all_child_count}}");
 		if (item.stock_qty == 1) {
 			itemsTxt = Translator.translate("Available together {{stock_qty}} item");
 		}
