@@ -355,6 +355,7 @@ jQuery.noConflict();
 
 		init();
 		showSubMenuMobile();
+		showSubMenuFooterMobile();
 
 		$(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
@@ -636,6 +637,37 @@ jQuery.noConflict();
 
 		function showSubMenuMobile(){
 			var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a');
+
+			//aby w navigation mozna bylo dac klikalnego linka
+			//wystarczy dodac do anchor'a class="clickable"
+			mobileMenu = $(mobileMenu).filter(function( index ) {
+				return !$(this ).hasClass('clickable');
+			});
+
+			mobileMenu.on('click', function(event) {
+				event.preventDefault();
+				//$(this).closest(mobileMenu).find('.open').removeClass('open');
+				var ico = $(this).find('i');
+				if (ico.hasClass('fa-chevron-down') || ico.hasClass('fa-chevron-up')) {
+					$(this).find('i').toggleClass( 'fa-chevron-down fa-chevron-up' );
+				}
+
+
+				$(this).next('ul').toggleClass('open');
+				if($(this).closest(mobileMenu).find('.open').length > 1) {
+					$(this).closest(mobileMenu).find('.open').removeClass('open');
+					$(this).next('ul').toggleClass('open');
+				}
+
+			});
+
+
+		}
+
+// MENU FOOTER MOBILE
+
+		function showSubMenuFooterMobile(){
+			var mobileMenu = $('#nav_footer_mobile > li > a');
 
 			//aby w navigation mozna bylo dac klikalnego linka
 			//wystarczy dodac do anchor'a class="clickable"

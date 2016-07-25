@@ -20,7 +20,7 @@ $blocksToCreate = array(
 		'identifier' => 'standalone_footer_links_mobile',
 		'content' =>
 			<<<EOD
-			<ul id="nav_mobile">
+			<ul id="nav_footer_mobile">
 				<li>
 					<a href="#">
 						OBSLUGA KLIENTA <i class="fa fa-chevron-up"></i>
