@@ -26,8 +26,8 @@
 ?>
 <?php
 
-$ipsonFooterLinks = $this->getLayout()->createBlock('cms/block')->setBlockId('ipson_footer_links')->toHtml();
-$ipsonFooterFacebookLink = $this->getLayout()->createBlock('cms/block')->setBlockId('ipson_footer_facebook_link')->toHtml();
+$standaloneFooterLinksDesc = $this->getLayout()->createBlock('cms/block')->setBlockId('standalone_footer_links_desc')->toHtml();
+$standaloneFooterLinksMobile = $this->getLayout()->createBlock('cms/block')->setBlockId('standalone_footer_links_mobile')->toHtml();
 
 ?>
 <footer id="footer" class="footer">
@@ -38,7 +38,12 @@ $ipsonFooterFacebookLink = $this->getLayout()->createBlock('cms/block')->setBloc
                     <div class="row">
                         <div class="wpb_wrapper">
                             <?php echo $this->getChildHtml("newsletter") ?>
-                            <?php echo $ipsonFooterFacebookLink; ?>
+                            <div class="footer_facebook_link">
+                                <a href="#">
+                                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                                    <span>Dolacz do nas na facebooku</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -48,7 +53,12 @@ $ipsonFooterFacebookLink = $this->getLayout()->createBlock('cms/block')->setBloc
     <div class="footer_block">
         <div class="footer-black container">
             <div class="row row-fluid clearfix footer-links">
-                <?php echo $ipsonFooterLinks; ?>
+                <div class="hidden-xs">
+                    <?php echo $standaloneFooterLinksDesc; ?>
+                </div>
+                <div class="visible-xs">
+                    <?php echo $standaloneFooterLinksMobile; ?>
+                </div>
             </div>
         </div>
     </div>
