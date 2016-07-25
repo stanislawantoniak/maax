@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <StandAlone_Ipson>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <ZolagoOs_OutsideStore/>
+
+            </depends>
+        </StandAlone_Ipson>
+    </modules>
+</config>
