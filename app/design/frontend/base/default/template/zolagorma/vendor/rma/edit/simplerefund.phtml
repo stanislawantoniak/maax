@@ -59,7 +59,7 @@ $differenceInputSum = number_format($differenceSum, 2, '.', '');
 							<div class="col-md-3">
 								<div class="input-group">
 									<input type="text" required="required" name="refund" id="refund" value="<?php echo $differenceInputSum; ?>" class="form-control" style="text-align: right;"/>
-									<span class="input-group-addon"><i class="icon"><?php echo $orderSymbolCode; ?></i></span>
+									<span class="input-group-addon"><i class="icon"><?php echo ($orderSymbolCode) ? $orderSymbolCode : $currencyCode ; ?></i></span>
 								</div>
 							</div>
 						</li>
