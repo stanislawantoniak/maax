@@ -16,7 +16,7 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
                             <i class="fa fa-bars"></i>
                         </a>
                     </li>
-                    <li id="link_account">
+                    <li id="link_account"  class="hidden-sm hidden-md hidden-lg">
                         <a href="<?php echo $userAccountUrl; ?>">
                             <i class="fa fa-user"></i>
                         </a>
@@ -26,11 +26,11 @@ $checkoutCartUrl = Mage::getUrl('checkout/cart', array("_no_vendor"=>true));
                             <i class="fa fa-search"></i>
                         </a>
                     </li>
-                    <li id="link_favorites" class="hidden-sm hidden-md hidden-lg">
-                        <a href="<?php echo $favoritesUrl; ?>">
-                            <i class="fa fa-heart"></i>
-                        </a>
-                    </li>
+<!--                    <li id="link_favorites" class="hidden-sm hidden-md hidden-lg">-->
+<!--                        <a href="--><?php //echo $favoritesUrl; ?><!--">-->
+<!--                            <i class="fa fa-heart"></i>-->
+<!--                        </a>-->
+<!--                    </li>-->
                     <li id="link_basket" class="basket-dropdown shopping-cart-widget">
                         <a class="dropdown-toggle" id="link_basket_icon" data-dropdown="#dropdown-basket" href="<?php echo $checkoutCartUrl; ?>">
                             <i class="fa fa-shopping-cart"></i>

@@ -66,29 +66,32 @@ body {
 	#header_top_block_center {
 		position: absolute;
 		top: 1px;
+		//width: 160px;
 		width: 250px;
+		@include max-screen($screen-xs-max) {
+			width: 160px;
+		}
 		z-index: 10;
-		left:0px;
+		left: 0;
 		margin-left: 0;
 		img {
 			width: 100%;
 			height: auto;
 			margin-top: 15px;
+			@include max-screen($screen-xs-max) {
+				margin-top: 5px;
+			}
 		}
-		@include max-screen($screen-sm-max) {
-			width: 58px;
-			left: 0;
-			margin-left: 0;
-		}
+
 		@include max-screen(470px) {
-			width: 56px;
+			width: 150px;
 			top: 3px;
 			left: -10px;
 			margin-left: 0;
 		}
 		@include max-screen(365px) {
-			width: 56px;
-			top: 3px;
+			width: 140px;
+			top: 6px;
 			left: -10px;
 			margin-left: 0;
 		}
@@ -159,19 +162,19 @@ body {
 		float: right;
 		margin-top: 16px;
 
-		@include max-screen($screen-sm-max) {
-			margin-right: 2.925%;
-		}
-	;
-		@include min-screen($screen-md) {
-			margin-right: 5%;
-		}
-	;
-		@include min-screen($screen-lg) {
-			margin-right: 19px;
-		}
-	;
-
+	//	@include max-screen($screen-sm-max) {
+	//		margin-right: 2.925%;
+	//	}
+	//;
+	//	@include min-screen($screen-md) {
+	//		margin-right: 5px;
+	//	}
+	//;
+	//	@include min-screen($screen-lg) {
+	//		margin-right: 19px;
+	//	}
+	//;
+		margin-right: 5px;
 		.button-search {
 			border-radius: 0;
 			width: 39px;
@@ -183,7 +186,7 @@ body {
 			border-bottom:1px solid $colorAccentBlocks;
 			border-right:1px solid $colorAccentBlocks;
 			background: $colorHeaderUserAccountMobileBtnBg;
-			@include min-screen($screen-lg) {
+			@include min-screen($screen-xs-max) {
 				background: $colorHeaderUserAccountDesktopBtnBg;
 			}
 
@@ -252,10 +255,11 @@ body {
 			background-color: transparent;
 		}
 		&#link_account {
-			display: none;
-			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
-				display: inline-block;
-			}
+			//display: none;
+			//@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+			//	display: inline-block;
+			//}
+			display: inline-block;
 		}
 		@include min-screen($screen-sm-min) {
 			&#link_basket {
@@ -339,7 +343,7 @@ body {
 		}
 
 		&#link_basket_icon {
-			@include min-screen($screen-lg) {
+			@include min-screen($screen-xs-max) {
 				border: 1px solid #EBEBEB;
 				padding-top: 0 !important;
 				height: 35px !important;
