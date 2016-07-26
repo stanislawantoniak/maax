@@ -2,9 +2,13 @@
 /*
  * All variables are set in: zolagorma/vendor/rma/edit.phtml
  */
-/** @var $this Zolago_Rma_Block_Vendor_Rma_Edit_Refund */
+/** @var $this Zolago_Rma_Block_Vendor_Rma_Edit_Simple_Refund */
 /** @var $_rma Zolago_Rma_Model_Rma */
 $_rma = $this->getRma();
+$_po = $_rma->getPo();
+$currencyCode = $_po->getOrder()->getOrderCurrencyCode();
+$currency = Mage::app()->getLocale()->currency($currencyCode);
+$orderSymbolCode = $currency->getSymbol();
 $_items = $_rma->getAllItems();
 /** @var $_hlp Zolago_Rma_Helper_Data */
 $_hlp = $this->getRmaHelper();
@@ -24,6 +28,7 @@ foreach ($_items as $_item){
 }
 $totalSum = number_format($totalSum, 2, '.', '');
 $differenceSum = $totalSum - $sumExistTransactions;
+$differenceInputSum = number_format($differenceSum, 2, '.', '');
 
 ?>
 <div class="modal fade" id="refundModalSimple">
@@ -49,10 +54,13 @@ $differenceSum = $totalSum - $sumExistTransactions;
 				</div>
 				<div class="modal-body">
 					<ul class="list-unstyled">
-						<li class="form-group invoice-data">
-							<label for="shipping-address-city" class="col-md-6 control-label"><?php echo $_hlp->__("Amount to refund");?></label>
-							<div class="col-md-6">
-								<input type="text" required="required" name="refund" id="refund" value="<?php echo $totalSum; ?>" class="form-control" style="width: 100px; text-align: right;"/>
+						<li class="form-group">
+							<label for="refund" class="col-md-6 control-label"><?php echo $_hlp->__("Amount to refund");?></label>
+							<div class="col-md-3">
+								<div class="input-group">
+									<input type="text" required="required" name="refund" id="refund" value="<?php echo $differenceInputSum; ?>" class="form-control" style="text-align: right;"/>
+									<span class="input-group-addon"><i class="icon"><?php echo ($orderSymbolCode) ? $orderSymbolCode : $currencyCode ; ?></i></span>
+								</div>
 							</div>
 						</li>
 					</ul>
@@ -90,7 +98,14 @@ $differenceSum = $totalSum - $sumExistTransactions;
 					required: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
 					number: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
 					min: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
-					max: "<?php echo $_hlp->__("An amount to refund can not be more than total order sum"); ?> (<?php echo $totalSum; ?>)"
+					max: "<?php echo $_hlp->__("An amount to refund can not be more than total order sum"); ?>"
+				}
+			},
+			errorPlacement: function($error, $element) {
+				if ($element.closest("div").hasClass("input-group")) {
+					$element.closest("div").parent().append($error);
+				} else {
+					$element.closest("div").append($error);
 				}
 			}
 		});
