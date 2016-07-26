@@ -35,7 +35,7 @@ $orderSymbolCode = $currency->getSymbol();
 										   type="text"
 										   autocomplete="off"
 										   class="form-control" />
-									<span class="input-group-addon"><i class="icon"><?php echo $orderSymbolCode; ?></i></span>
+									<span class="input-group-addon"><i class="icon"><?php echo ($orderSymbolCode) ? $orderSymbolCode : $currencyCode ; ?></i></span>
 								</div>
 							</div>
 						</li>
