@@ -183,6 +183,12 @@
 	<available-together-item>
 		<message>Available together {{stock_qty}} item</message>
 	</available-together-item>
+    <available-items>
+        <message>Available {{stock_qty}} items</message>
+    </available-items>
+    <available-item>
+        <message>Available {{stock_qty}} item</message>
+    </available-item>
 	<variants-of>
 		<message>{{available_child_count}} variants of {{all_child_count}}</message>
 	</variants-of>
