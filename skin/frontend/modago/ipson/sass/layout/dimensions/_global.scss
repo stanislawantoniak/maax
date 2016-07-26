@@ -1,6 +1,7 @@
 #header {
-	padding-top: 56px;
-
+	@include max-screen($screen-xs-max) {
+		padding-top: 85px;
+	}
 }
 
 #header-main {

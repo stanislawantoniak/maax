@@ -8,24 +8,27 @@
 }
 
 .headroom--pinned {
-	top: 0 !important;
+	top: -34px !important;
 }
 
 body {
 	@media screen and (max-height: 749px) {
 		.headroom--unpinned {
-			top: -57px !important;
-		}
-	}
-	@media screen and (min-height: 750px) {
-		.headroom--unpinned {
 			top: 0 !important;
 		}
 	}
+	@include max-screen($screen-xs-max) {
+		.headroom--unpinned {
+			top: -85px !important;
+		}
+	}
 	.headroom--top {
-		position: static !important;
-		margin-top: -56px !important;
-		transition: none !important;
+		margin-top: 0 !important;
+		@include max-screen($screen-xs-max) {
+			position: static !important;
+			margin-top: -85px !important;
+			transition: none !important;
+		}
 	}
 	&.sb-open > header {
 		margin-left: 288px;
@@ -34,18 +37,12 @@ body {
 			left: 288px;
 		}
 	}
-	.headroom--not-top {
-		@media(min-width: $screen-md-min) {
-			#logo img {
-				height: 58px !important;
-				width: auto !important;
-			}
-		}
-	}
 }
 
 .header_top {
-	position: fixed;
+	@include max-screen($screen-xs-max) {
+		position: fixed;
+	}
 	top: 0px;
 	left: 0px;
 	width: 100%;
@@ -99,13 +96,12 @@ body {
 	#header_top_block_right {
 		width: 100%;
 		padding-left: 265px;
+		@include max-screen($screen-xs-max) {
+			padding-left: 105px;
+		}
 		position: absolute;
 		right: -10px;
 		top: 0px;
-
-		@include max-screen($screen-xs-max) {
-			padding-left: 105px !important;
-		}
 		nav {
 			width: 70%;
 			float: left;
@@ -120,17 +116,18 @@ body {
 				text-align: center;
 			}
 		}
+		@include max-screen($screen-xs-max) {
+			padding-left: 105px !important;
+		}
 		#user_menu {
-			//width: 60%;
-			width: auto;
-			padding-right: 15px;
+			//width: 100%;
+			width: 30%;
 			@include max-screen($screen-xs-max) {
-				//width: 100%;
-				padding-right: 5px;
+				width: 100%;
 			}
 			@include min-screen($screen-sm) {
 				margin-top: 23px;
-				padding-right: 10px;
+				width: 20%
 			}
 		}
 		.header_icon {
@@ -161,24 +158,28 @@ body {
 		}
 	}
 	.block_search {
-		float: right;
-		margin-top: 16px;
-		margin-right: 5px;
+		float: left;
+
+		@include max-screen($screen-sm-max) {
+			margin-right: 2.925%;
+		}
+	;
+		@include min-screen($screen-md) {
+			margin-right: 5%;
+		}
+	;
+		@include min-screen($screen-lg) {
+			margin-right: 12.925%;
+		}
+	;
+
 		.button-search {
 			border-radius: 0;
-			width: 39px;
-			height: 35px;
+			width: 29px;
+			height: 26px;
 			padding: 0;
 			position: relative;
-			//border-left:1px solid $colorAccentBlocks;
-			border-top:1px solid $colorAccentBlocks;
-			border-bottom:1px solid $colorAccentBlocks;
-			border-right:1px solid $colorAccentBlocks;
-			background: $colorHeaderUserAccountMobileBtnBg;
-			@include min-screen($screen-xs-max) {
-				background: $colorHeaderUserAccountDesktopBtnBg;
-			}
-
+			background: $colorHeaderSearchBtnBg;
 			&:before {
 				font-family: FontAwesome;
 				font-size: 16px;
@@ -187,9 +188,9 @@ body {
 				position: absolute;
 				top: 0;
 				left: 0;
-				width: 39px;
-				height: 35px;
-				line-height: 32px;
+				width: 29px;
+				height: 26px;
+				line-height: 25px;
 				text-align: center;
 			}
 		}
