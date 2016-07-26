@@ -8,10 +8,7 @@
                 @include border-radius(0px);
                 box-shadow: none;
             	background-color: $colorHeaderSearchBg;
-            	border-top: 1px solid $colorHeaderSearchBorder;
-	            border-bottom: 1px solid $colorHeaderSearchBorder;
-	            border-left: 1px solid $colorHeaderSearchBorder;
-	            border-right: none;
+				border: 1px solid $colorHeaderSearchBorder;
 	            padding: 0 10px;
             }
         }
@@ -41,10 +38,10 @@
 		width: 282px;
 		.form-group {
 			float: left;
-			width:119px ;
+			//width:119px ;
 			input[type="text"] {
-				height: 26px;
-				width: 119px;
+				height: 35px;
+				width: 236px;
 				padding-left: 15px;
 				float: left;
 			}

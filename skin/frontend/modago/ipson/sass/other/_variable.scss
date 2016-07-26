@@ -162,8 +162,8 @@ $colorLinkHover:                        #000;
 $colorLinkActive:                       #000;
 
 //icon colors
-$colorIcon:                             #FFF;
-$colorIconHover:                        #2A2A2A;
+$colorIcon:                             #000;
+$colorIconHover:                        #FFF;
 $colorIconHoverBackground:              #FFF;
 
 //icon texts colors
@@ -175,27 +175,30 @@ $colorBackgroundBlocks:                 #FFF;
 $colorBackgroundSite:                   #F2F1F0;
 $colorBackgroundContent:                #FFF;
 
+$colorLinkHoverOnDark:                  #fff;
+$decorationLinkHover:                   none;
+
 //accents colors
 $colorAccentBlocks:                     #EBEBEB;
-$colorAccentSite:                       #CD0027;
+$colorAccentSite:                       #008539;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
-$colorAccentError:                      #CD0027;
+$colorAccentError:                      #008539;
 
 //buttons
 $colorBtnPrimary:                       #FFF;
 
-$colorBtnPrimaryBgStart:                #d20005;
-$colorBtnPrimaryBgEnd:                  #b40005;
+$colorBtnPrimaryBgStart:                #008539;
+$colorBtnPrimaryBgEnd:                  #008539;
 
-$colorBtnPrimaryBgStartHover:           #de0005;
-$colorBtnPrimaryBgEndHover:             #c00005;
+$colorBtnPrimaryBgStartHover:           #008539;
+$colorBtnPrimaryBgEndHover:             #008539;
 
-$colorBtnPrimaryBgStartActive:          #b40005;
-$colorBtnPrimaryBgEndActive:            #d20005;
+$colorBtnPrimaryBgStartActive:          #008539;
+$colorBtnPrimaryBgEndActive:            #008539;
 
-$colorBtnThirdBorderActive:             #b40005;
-$colorBtnThirdColorActive:             #b40005;
+$colorBtnThirdBorderActive:             #008539;
+$colorBtnThirdColorActive:              #008539;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
@@ -212,6 +215,14 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 	}
 }
 
+
+/***********************************************/
+$colorDropdownBorder:                   #e6e6e6;
+$colorDropdownBBoxShadow:               #bfbfbf;
+
+$colorMainMenuSubItemGradientStart:     #fff;
+$colorMainMenuSubItemGradientEnd:       #fff;
+
 /* CMS VARIABLES */
 $colorBorderCms:                        #bfbfbf;
 $colorBackgroundCms:                    $colorBackgroundBlocks;
@@ -222,21 +233,25 @@ $colorIconHeader:                       $colorIcon;
 $colorIconHoverHeader:                  $colorIconHover;
 $colorIconHoverBgHeader:                $colorIconHoverBackground;
 
-$colorHeaderBadge:                      #FFF;
-$colorHeaderBadgeBg:                    $colorAccentSite;
+$colorHeaderBadge:                      #808080;
+$colorHeaderBadgeBorder:                #808080;
+$colorHeaderBadgeBg:                    #fff;
 
 $colorIconTextHeader:                   $colorIconText;
 $colorIconTextHoverHeader:              $colorIconTextHover;
 
 $colorBgBlocksHeader:                   $colorIconHover;
 $colorBgContentHeader:                  $colorBackgroundContent;
-$colorAccentBlocksHeader:               $colorBackgroundBlocks;
+$colorAccentBlocksHeader:               #EBEBEB;
 
 $colorHeaderSearch:                     #2a2a2a;
 $colorHeaderSearchBg:                   #FFF;
-$colorHeaderSearchBorder:               $colorIconHeader;
-$colorHeaderSearchBtnBg:                #FFF;
+$colorHeaderSearchBorder:               #EBEBEB;
+$colorHeaderSearchBtnBg:                #EBEBEB;
 $colorHeaderSearchBtn:                  #2a2a2a;
+
+$colorHeaderUserAccountDesktopBtnBg:    #EBEBEB;
+$colorHeaderUserAccountMobileBtnBg:     #FFF;
 
 /* CHECKOUT HEADER VARIABLES */
 $colorHeaderCheckoutSteps:              $colorIconHeader;
@@ -245,6 +260,9 @@ $colorHeaderCheckoutStepsText:          $colorIconHeader;
 $colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
 
 /* TOP MENU VARIABLES */
+$colorMainMenuLinks:                     #808080;
+
+
 $colorAccentSiteMenuTop:                $colorAccentSite;
 $colorAccentBlocksMenuTop:              $colorAccentBlocks;
 $colorBgBlocksMenuTop:                  $colorBackgroundBlocks;
@@ -257,7 +275,7 @@ $colorAccentDropdown:                   $colorAccentBlocks;
 
 /* CART DROPDOWN VARIABLES */
 $colorBgDropdownCart:                   $colorBgDropdown;
-$colorDropdownCart:                     $colorDropdown;
+$colorDropdownCart:                     #000;
 $colorAccentDropdownCart:               $colorAccentDropdown;
 
 /* SEARCH DROPDOWN VARIABLES */
@@ -353,3 +371,21 @@ $colorProductFlag:                      #FFF;
 $colorProductExtraInfo:                 $colorFont;
 $colorProductExtraInfoBg:               #FCFCFC;
 $colorProductExtraInfoBorder:           #EBEBEB;
+
+/*FOOTER*/
+$textColorFooter:                       #fff;
+$textColorFooterLink:                   #8a8a8a;
+$backgroundColorFooter:                 #262626;
+
+@mixin generalLinkOnDark {
+  &:hover, &.hover {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+
+  }
+  &:active, &:focus, &.active {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+    outline: none;
+  }
+}

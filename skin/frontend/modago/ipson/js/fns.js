@@ -355,6 +355,7 @@ jQuery.noConflict();
 
 		init();
 		showSubMenuMobile();
+		showSubMenuFooterMobile();
 
 		$(this).find(':disabled').next('.sbHolder').addClass('sbHolderDisabled');
 
@@ -663,6 +664,37 @@ jQuery.noConflict();
 
 		}
 
+// MENU FOOTER MOBILE
+
+		function showSubMenuFooterMobile(){
+			var mobileMenu = $('#nav_footer_mobile > li > a');
+
+			//aby w navigation mozna bylo dac klikalnego linka
+			//wystarczy dodac do anchor'a class="clickable"
+			mobileMenu = $(mobileMenu).filter(function( index ) {
+				return !$(this ).hasClass('clickable');
+			});
+
+			mobileMenu.on('click', function(event) {
+				event.preventDefault();
+				//$(this).closest(mobileMenu).find('.open').removeClass('open');
+				var ico = $(this).find('i');
+				if (ico.hasClass('fa-chevron-down') || ico.hasClass('fa-chevron-up')) {
+					$(this).find('i').toggleClass( 'fa-chevron-down fa-chevron-up' );
+				}
+
+
+				$(this).next('ul').toggleClass('open');
+				if($(this).closest(mobileMenu).find('.open').length > 1) {
+					$(this).closest(mobileMenu).find('.open').removeClass('open');
+					$(this).next('ul').toggleClass('open');
+				}
+
+			});
+
+
+		}
+
 // CLONOWANIE MENU
 
 		function cloneMenu() {
@@ -676,7 +708,10 @@ jQuery.noConflict();
 						event.preventDefault();
 						if ($(this).hasClass('children')) {
 							containerCloneMenu.html('');
-							$(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300);
+							$(this).next('ul').clone()
+								.appendTo(containerCloneMenu)
+								.css('width', '100%')
+								.slideDown(300);
 						} else {
 							containerCloneMenu.html('');
 						}
@@ -685,6 +720,15 @@ jQuery.noConflict();
 						}
 					}
 
+				});
+
+				$("html").click(function(event) {
+					if ($(event.target).closest('#nav_desc').length === 0) {
+						containerCloneMenu.html('');
+						$("#nav_desc a").find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
+						$('#nav_desc').find('.active').removeClass('active');
+						jQuery("#clone_submenu").css("top",0);
+					}
 				});
 			}
 		}

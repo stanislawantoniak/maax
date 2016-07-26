@@ -2,13 +2,14 @@
 	a {
 		.badge {
 		    background:$colorHeaderBadgeBg;
-		    @include border-radius(3px);
-		    color: $colorHeaderBadge;
+		    @include border-radius(50%);
+		    color: $colorHeaderBadge !important;
+			border: 1px solid $colorHeaderBadgeBorder;
 		    font-size: 11px;
 		    text-align: center;
 		    font-style: normal;
 		   @include max-screen($screen-sm-max) {
-		        @include border-radius(2px);
+		        @include border-radius(50%);
 		        font-size: 10px;
 		        font-style: normal;
 		   }
@@ -40,28 +41,29 @@
 		width: 24px;
 		margin: 0 auto 3px auto;
 		.badge {
-			padding: 2px 3px 1px 2px;
+			padding: 5px 7px;
 			position: absolute !important;
-			top: 0 !important;
-			right: -15px !important;
+
+			right: -20px !important;
+			top: -12px !important;
 			&.badgeSingle {
-				right: -7px !important;
+				right: -20px !important;
 			}
 			&.badgeDouble {
-				right: -12px !important;
+				right: -26px !important;
 			}
 			&.badgeTriple {
-				right: -18px !important;
+				right: -32px !important;
 			}
 
 			@include max-screen($screen-sm-max) {
-				top: -5px !important;
-				padding: 3px 3px 2px 2px;
+				top: -9px !important;
+				padding: 5px 7px;
 				&.badgeSingle {
-					right: -4px !important;
+					right: -12px !important;
 				}
 				&.badgeDouble {
-					right: -7px !important;
+					right: -13px !important;
 				}
 				&.badgeTriple {
 					right: -10px !important;

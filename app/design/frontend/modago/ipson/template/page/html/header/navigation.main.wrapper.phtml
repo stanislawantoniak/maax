@@ -1,0 +1,17 @@
+<?php /* @var $this Zolago_Modago_Block_Page_Html_Header_Menu */?>
+
+<div class="header_bottom">
+    <div class="container-fluid">
+        <nav role="navigation">
+            <div id="navigation">
+                <?php echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-desktop', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
+                <?php if ($this->getIsHomePage()): ?>
+                    <?php echo Mage::helper('zolagomodago')->getCachedCmsBlock('navigation-main-mobile', self::CACHE_GROUP, Mage::app()->getStore()->getRootCategoryId()); ?>
+                <?php endif; ?>
+                <?php echo $this->getCategoryMobile(); ?>
+            </div>
+        </nav>
+    </div>
+</div>
+<div id="clone_submenu" class="hidden-xs clearfix"><div class="container-fluid clone_submenu-content"></div></div>
+<?php echo $this->getJavascript(); ?>

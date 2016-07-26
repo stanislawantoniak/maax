@@ -8,24 +8,27 @@
 }
 
 .headroom--pinned {
-	top: 0 !important;
+	top: -34px !important;
 }
 
 body {
 	@media screen and (max-height: 749px) {
 		.headroom--unpinned {
-			top: -57px !important;
-		}
-	}
-	@media screen and (min-height: 750px) {
-		.headroom--unpinned {
 			top: 0 !important;
 		}
 	}
+	@include max-screen($screen-xs-max) {
+		.headroom--unpinned {
+			top: -85px !important;
+		}
+	}
 	.headroom--top {
-		position: static !important;
-		margin-top: -56px !important;
-		transition: none !important;
+		margin-top: 0 !important;
+		@include max-screen($screen-xs-max) {
+			position: static !important;
+			margin-top: -85px !important;
+			transition: none !important;
+		}
 	}
 	&.sb-open > header {
 		margin-left: 288px;
@@ -34,18 +37,12 @@ body {
 			left: 288px;
 		}
 	}
-	.headroom--not-top {
-		@media(min-width: $screen-md-min) {
-			#logo img {
-				height: 58px !important;
-				width: auto !important;
-			}
-		}
-	}
 }
 
 .header_top {
-	position: fixed;
+	@include max-screen($screen-xs-max) {
+		position: fixed;
+	}
 	top: 0px;
 	left: 0px;
 	width: 100%;
@@ -56,7 +53,7 @@ body {
 	}
 	#header_top_block_left {
 		position: absolute;
-		left: 120px;
+		left: 0px;
 		top: 0px;
 		z-index: 20;
 		@include max-screen($screen-sm-max) {
@@ -66,44 +63,72 @@ body {
 	#header_top_block_center {
 		position: absolute;
 		top: 1px;
-		width: 103px;
+		//width: 160px;
+		width: 250px;
+		@include max-screen($screen-xs-max) {
+			width: 160px;
+		}
 		z-index: 10;
-		left:0px;
+		left: 0;
+		margin-left: 0;
 		img {
 			width: 100%;
 			height: auto;
-			margin-top: -3px; /* fix for vissavi logo */
+			margin-top: 15px;
+			@include max-screen($screen-xs-max) {
+				margin-top: 5px;
+			}
 		}
-		@include max-screen($screen-sm-max) {
-			width: 58px;
-			left: 0;
-			margin-left: 0;
-		}
+
 		@include max-screen(470px) {
-			width: 56px;
+			width: 150px;
 			top: 3px;
 			left: -10px;
 			margin-left: 0;
 		}
 		@include max-screen(365px) {
-			width: 56px;
-			top: 3px;
+			width: 140px;
+			top: 6px;
 			left: -10px;
 			margin-left: 0;
 		}
 	}
 	#header_top_block_right {
 		width: 100%;
-		padding-left: 165px;
+		padding-left: 265px;
+		@include max-screen($screen-xs-max) {
+			padding-left: 105px;
+		}
 		position: absolute;
 		right: -10px;
 		top: 0px;
-
+		nav {
+			width: 70%;
+			float: left;
+			margin-top: 23px;
+			@include max-screen($screen-xs-max) {
+				width: 0;
+			}
+			@include min-screen($screen-sm) {
+				width: 80%
+			}
+			#navigation {
+				text-align: center;
+			}
+		}
 		@include max-screen($screen-xs-max) {
 			padding-left: 105px !important;
 		}
 		#user_menu {
-			width: 100%;
+			width: auto;
+			padding-right: 15px;
+			@include max-screen($screen-xs-max) {
+				padding-right: 5px;
+			}
+			@include min-screen($screen-sm) {
+				margin-top: 23px;
+				padding-right: 10px;
+			}
 		}
 		.header_icon {
 			margin-top: 3px;
@@ -133,29 +158,24 @@ body {
 		}
 	}
 	.block_search {
-		float: left;
-
-		@include max-screen($screen-sm-max) {
-			margin-right: 2.925%;
-		}
-	;
-		@include min-screen($screen-md) {
-			margin-right: 5%;
-		}
-	;
-		@include min-screen($screen-lg) {
-			margin-right: 12.925%;
-		}
-	;
-
+		float: right;
+		margin-top: 16px;
+		margin-right: 5px;
 		.button-search {
 			border-radius: 0;
-			width: 29px;
-			height: 26px;
+			width: 39px;
+			height: 35px;
 			padding: 0;
 			position: relative;
-			border-left:1px solid $colorAccentBlocks;
-			background: $colorHeaderSearchBtnBg;
+			//border-left:1px solid $colorAccentBlocks;
+			border-top:1px solid $colorAccentBlocks;
+			border-bottom:1px solid $colorAccentBlocks;
+			border-right:1px solid $colorAccentBlocks;
+			background: $colorHeaderUserAccountMobileBtnBg;
+			@include min-screen($screen-xs-max) {
+				background: $colorHeaderUserAccountDesktopBtnBg;
+			}
+
 			&:before {
 				font-family: FontAwesome;
 				font-size: 16px;
@@ -164,9 +184,9 @@ body {
 				position: absolute;
 				top: 0;
 				left: 0;
-				width: 29px;
-				height: 26px;
-				line-height: 25px;
+				width: 39px;
+				height: 35px;
+				line-height: 32px;
 				text-align: center;
 			}
 		}
@@ -179,18 +199,18 @@ body {
 	top: -4px;
 	width: 100%;
 	text-align: right;
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		margin-top: -3px;
 		height: 54px !important;
 
 	}
-	@include min-screen($screen-md) {
+	@include min-screen($screen-sm) {
 		position: relative;
 	}
 	li {
 		padding: 0 0 0 0;
 		margin-left: 0;
-		width: 84px;
+		width: 40px;
 		height: 60px;
 		display: inline-block;
 		vertical-align: top;
@@ -198,7 +218,11 @@ body {
 
 		@include min-screen($screen-md-min) {
 			a:hover, &.open {
-				background-color: $colorIconHoverBgHeader;
+				//background-color: $colorIconHoverBgHeader;
+
+				color: #252525;
+				@include transition(color 0.3s ease-in-out);
+
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
 				}
@@ -207,23 +231,33 @@ body {
 				}
 			}
 		}
+		&#link_search {
+			width: auto !important;
+		}
 		&#link_search.not-open, &#link_search.not-open:hover {
 			background-color: transparent;
 		}
 		&#link_menu.not-open, &#link_menu.not-open:hover {
 			background-color: transparent;
 		}
-
-		@include min-screen($screen-md-min) {
+		&#link_account {
+			display: none;
+			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+				display: inline-block;
+			}
+		}
+		@include min-screen($screen-sm-min) {
 			&#link_basket {
 				height: 61px;
 			}
 		}
 
+
 		@include max-screen($screen-sm-max) {
-			width: 60px;
+			width: 40px;
+			//width: 60px;
 			&:hover, &#link_search.open {
-				background-color: $colorIconHoverBgHeader !important;
+				//background-color: $colorIconHoverBgHeader !important;
 				a svg {
 					path, g {
 						fill: $colorIconHover !important;
@@ -235,22 +269,27 @@ body {
 			}
 		}
 		@include max-screen(410px) {
-			width: 50px;
+			width: 40px;
 		}
 		@include max-screen(360px) {
-			width: 40px;
+			width: 33px;
 			&:hover, a:hover {
 				background-color: transparent;
 			}
 		}
 		a:link,
 		a:visited {
-			@include max-screen($screen-sm-max) {
-				padding-top: 16px !important;
+			font-size: 22px;
+			@include max-screen($screen-xs-max) {
+				padding-top: 8px !important;
 			}
-			@include min-screen($screen-md) {
-				padding-top: 10px !important;
+			@include min-screen($screen-sm-min) {
+				padding-top: 8px !important;
 			}
+		}
+		a:hover {
+			color: #252525;
+			@include transition(color 0.3s ease-in-out);
 		}
 		&.no-badge {
 			a:link,
@@ -279,9 +318,23 @@ body {
 		padding-bottom: 2px;
 		display: block;
 		padding-top: 11px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			height: 46px;
-			padding-top: 17px;
+			padding-top: 8px;
+		}
+		&#toggleSearch {
+			//padding-top: 17px;
+			font-size: 22px;
+		}
+
+		&#link_basket_icon {
+			@include min-screen($screen-sm-min) {
+				border: 1px solid #EBEBEB;
+				padding-top: 0 !important;
+				height: 35px !important;
+				top: 11px;
+				background: $colorHeaderUserAccountDesktopBtnBg;
+			}
 		}
 	}
 
@@ -296,7 +349,6 @@ body {
 /* HEADER BOTTOM */
 .header_bottom {
 	#navigation {
-		margin-left:120px;
 		@include max-screen($screen-sm-max) {
 			margin-left:0px;
 		}
@@ -497,7 +549,9 @@ body {
 
 .header_top {
 	background-color: $colorBgBlocksHeader;
-	border-bottom: 1px solid $colorAccentBlocksHeader;
+	&.headroom--pinned.headroom--not-top {
+		border-bottom: 1px solid $colorAccentBlocksHeader;
+	}
 }
 
 /* USER MENU */
@@ -523,17 +577,16 @@ body {
 
 /* HEADER BOTTOM */
 .header_bottom {
-	//    background:$color_fff url('../images/bg-menu.png') 0 0 repeat-x;
 	background: $colorBgBlocksMenuTop;
+	border-top: 1px solid $colorAccentBlocksMenuTop;
 	border-bottom: 1px solid $colorAccentBlocksMenuTop;
 	#nav_desc {
 		&.navigation > li > a:hover,
 		&.navigation > li > a.active,
 		&.navigation > li > a.forceActive {
 			background: none;
-			&:before {
-				background: $colorAccentSiteMenuTop;
-			}
+			font-weight: bold;
+			letter-spacing: 0px;
 		}
 	}
 
@@ -702,13 +755,18 @@ body {
 
 #link_basket {
 	&.open a {
-		border-bottom: 4px solid $colorIconHoverBgHeader;
+		//border-bottom: 4px solid $colorIconHoverBgHeader;
 	}
 }
 
 @import "../../other/variable";
 .header_top {
-	height: 57px;
+	//height: 85px;
+	height: 132px;
+	@include max-screen($screen-xs-max) {
+		height: 85px;
+		//top: -34px !important;
+	}
 }
 
 /* USER MENU */
