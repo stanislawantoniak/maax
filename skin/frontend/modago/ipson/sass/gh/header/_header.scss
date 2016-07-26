@@ -120,14 +120,16 @@ body {
 			padding-left: 105px !important;
 		}
 		#user_menu {
-			//width: 100%;
-			width: 30%;
+			//width: 60%;
+			width: auto;
+			padding-right: 15px;
 			@include max-screen($screen-xs-max) {
-				width: 100%;
+				//width: 100%;
+				padding-right: 5px;
 			}
 			@include min-screen($screen-sm) {
 				margin-top: 23px;
-				width: 20%
+				padding-right: 10px;
 			}
 		}
 		.header_icon {
@@ -158,28 +160,24 @@ body {
 		}
 	}
 	.block_search {
-		float: left;
-
-		@include max-screen($screen-sm-max) {
-			margin-right: 2.925%;
-		}
-	;
-		@include min-screen($screen-md) {
-			margin-right: 5%;
-		}
-	;
-		@include min-screen($screen-lg) {
-			margin-right: 12.925%;
-		}
-	;
-
+		float: right;
+		margin-top: 16px;
+		margin-right: 5px;
 		.button-search {
 			border-radius: 0;
-			width: 29px;
-			height: 26px;
+			width: 39px;
+			height: 35px;
 			padding: 0;
 			position: relative;
-			background: $colorHeaderSearchBtnBg;
+			//border-left:1px solid $colorAccentBlocks;
+			border-top:1px solid $colorAccentBlocks;
+			border-bottom:1px solid $colorAccentBlocks;
+			border-right:1px solid $colorAccentBlocks;
+			background: $colorHeaderUserAccountMobileBtnBg;
+			@include min-screen($screen-xs-max) {
+				background: $colorHeaderUserAccountDesktopBtnBg;
+			}
+
 			&:before {
 				font-family: FontAwesome;
 				font-size: 16px;
@@ -188,9 +186,9 @@ body {
 				position: absolute;
 				top: 0;
 				left: 0;
-				width: 29px;
-				height: 26px;
-				line-height: 25px;
+				width: 39px;
+				height: 35px;
+				line-height: 32px;
 				text-align: center;
 			}
 		}
