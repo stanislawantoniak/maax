@@ -28,6 +28,7 @@ foreach ($_items as $_item){
 }
 $totalSum = number_format($totalSum, 2, '.', '');
 $differenceSum = $totalSum - $sumExistTransactions;
+$differenceInputSum = number_format($differenceSum, 2, '.', '');
 
 ?>
 <div class="modal fade" id="refundModalSimple">
@@ -57,8 +58,8 @@ $differenceSum = $totalSum - $sumExistTransactions;
 							<label for="refund" class="col-md-6 control-label"><?php echo $_hlp->__("Amount to refund");?></label>
 							<div class="col-md-3">
 								<div class="input-group">
-									<input type="text" required="required" name="refund" id="refund" value="<?php echo $totalSum; ?>" class="form-control" style="text-align: right;"/>
-									<span class="input-group-addon"><i class="icon"><?php echo $orderSymbolCode; ?></i></span>
+									<input type="text" required="required" name="refund" id="refund" value="<?php echo $differenceInputSum; ?>" class="form-control" style="text-align: right;"/>
+									<span class="input-group-addon"><i class="icon"><?php echo ($orderSymbolCode) ? $orderSymbolCode : $currencyCode ; ?></i></span>
 								</div>
 							</div>
 						</li>
@@ -97,7 +98,7 @@ $differenceSum = $totalSum - $sumExistTransactions;
 					required: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
 					number: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
 					min: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
-					max: "<?php echo $_hlp->__("An amount to refund can not be more than total order sum "); ?>"
+					max: "<?php echo $_hlp->__("An amount to refund can not be more than total order sum"); ?>"
 				}
 			},
 			errorPlacement: function($error, $element) {
