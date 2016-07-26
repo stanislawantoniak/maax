@@ -242,9 +242,6 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 if($rma->getCustomerAccount()){
                     $customerAccount = $rma->getCustomerAccount();
                 }
-                $currencyCode = $po->getOrder()->getOrderCurrencyCode();
-                $currency = Mage::app()->getLocale()->currency($currencyCode);
-                $orderSymbolCode = $currency->getSymbol();
                 /* @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $existTransactionCollection */
                 $existTransactionCollection = Mage::getModel('sales/order_payment_transaction')->getCollection()
                     ->addFieldToFilter('order_id', $orderId)
@@ -300,10 +297,10 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                         $commentData['vendor_id'] = $vendorSession->getVendorId();
                         if(!$po->isPaymentDotpay()) {
                             //refund confirm
-                            $commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s".$orderSymbolCode,$amount);
+                            $commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount));
                         } else {
                             //refund order
-                            $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s".$orderSymbolCode,$amount);
+                            $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount));
                         }
                         $commentModel = Mage::getModel("zolagorma/rma_comment");
                         $commentModel->setRma($rma);
@@ -311,10 +308,10 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                         $commentModel->setAuthorName($commentModel->getAuthorName(false));
                         $commentModel->save();
 
-                        $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s".$orderSymbolCode,$amount));
+                        $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s", $po->getCurrencyFormattedAmount($amount)));
                     }
                 }else{
-                    $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum "));
+                    $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
                 }
                 $this->_redirect("urma/vendor/edit", array('id' => $rmaId));
             }
