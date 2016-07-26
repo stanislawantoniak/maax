@@ -2,8 +2,8 @@
 // installation of navigation-dropdown-c- cms blocks
 $cmsNavigationBlocks = array(
 	array(
-		'title'         => 'Nawigacja rozwijana, kategoria 2',
-		'identifier'    => 'navigation-dropdown-c-4',
+		'title'         => 'Nawigacja rozwijana, kategoria 1',
+		'identifier'    => 'navigation-dropdown-c-3',
 		'content'       => <<<EOD
 <ul class="menu-3columns">
 			<li>
@@ -72,8 +72,8 @@ EOD
 		'stores'        => 0
 	),
 	array(
-		'title'         => 'Top Bar',
-		'identifier'    => 'navigation-dropdown-c-3',
+		'title'         => 'Nawigacja rozwijana, kategoria 2',
+		'identifier'    => 'navigation-dropdown-c-4',
 		'content'       => <<<EOD
 <ul class="menu-3columns">
 			<li>
