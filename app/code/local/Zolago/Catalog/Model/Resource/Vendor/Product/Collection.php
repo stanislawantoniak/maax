@@ -275,6 +275,13 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		$adapter		= $select->getAdapter();
 		$linkTable		= $this->getResource()->getTable("catalog/product_super_link");
 		$stockItemTable	= $this->getResource()->getTable('cataloginventory/stock_item');
+		$stockStatusTable = $this->getResource()->getTable('cataloginventory/stock_item');
+
+		$select->joinLeft(
+			array('cataloginventory_stock_item' => $stockStatusTable),
+			'(cataloginventory_stock_item.product_id=e.entity_id) AND ('.$adapter->quoteInto("cataloginventory_stock_item.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).')',
+			array()
+		);
 
 		$subSelect		= $adapter->select();
 		$subSelect->from(array("link_qty" => $linkTable), array("IFNULL(SUM(child_qty.qty), 0)"));
@@ -285,7 +292,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		);
 		$subSelect->where("link_qty.parent_id = e.entity_id");
 		$subSelect->where("child_qty.is_in_stock = ?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
-		$select->columns("(" . $subSelect . ") AS stock_qty");
+		$this->addExpressionAttributeToSelect('stock_qty',
+			"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), IFNULL(($stockStatusTable.qty),0))", array());
 		return $this;
 	}
 
