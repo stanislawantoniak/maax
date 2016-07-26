@@ -349,7 +349,6 @@ body {
 /* HEADER BOTTOM */
 .header_bottom {
 	#navigation {
-		margin-left:120px;
 		@include max-screen($screen-sm-max) {
 			margin-left:0px;
 		}
