@@ -15,7 +15,7 @@
         box-shadow: 0 2px 0 $colorDropdownBorder;
         text-align: left;
         overflow: hidden;
-        margin-left: 0;
+        margin: 0;
         @include linearGradient($colorMainMenuSubItemGradientStart,$colorMainMenuSubItemGradientEnd);
         @include transition(all 0.2s ease-in-out);
         width: 860px;

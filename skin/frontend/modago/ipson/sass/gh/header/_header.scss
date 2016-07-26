@@ -549,7 +549,9 @@ body {
 
 .header_top {
 	background-color: $colorBgBlocksHeader;
-	border-bottom: 1px solid $colorAccentBlocksHeader;
+	&.headroom--pinned.headroom--not-top {
+		border-bottom: 1px solid $colorAccentBlocksHeader;
+	}
 }
 
 /* USER MENU */
