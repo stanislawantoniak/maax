@@ -919,6 +919,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
             }
 
             $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getDeliveryPointName();
+            $list[$i]['delivery_data']['delivery_point_name']                          = $po->getDeliveryPointName();
             $sa = $po->getShippingAddress();
             $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
             $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
