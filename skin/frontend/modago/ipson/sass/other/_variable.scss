@@ -218,9 +218,10 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
 /***********************************************/
 $colorDropdownBorder:                   #e6e6e6;
+$colorDropdownBBoxShadow:               #bfbfbf;
 
-$colorMainMenuSubItemGradientStart: #fff;
-$colorMainMenuSubItemGradientEnd: #fff;
+$colorMainMenuSubItemGradientStart:     #fff;
+$colorMainMenuSubItemGradientEnd:       #fff;
 
 /* CMS VARIABLES */
 $colorBorderCms:                        #bfbfbf;
@@ -259,6 +260,9 @@ $colorHeaderCheckoutStepsText:          $colorIconHeader;
 $colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
 
 /* TOP MENU VARIABLES */
+$colorMainMenuLinks:                     #808080;
+
+
 $colorAccentSiteMenuTop:                $colorAccentSite;
 $colorAccentBlocksMenuTop:              $colorAccentBlocks;
 $colorBgBlocksMenuTop:                  $colorBackgroundBlocks;
