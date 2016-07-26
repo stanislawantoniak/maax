@@ -120,11 +120,9 @@ body {
 			padding-left: 105px !important;
 		}
 		#user_menu {
-			//width: 60%;
 			width: auto;
 			padding-right: 15px;
 			@include max-screen($screen-xs-max) {
-				//width: 100%;
 				padding-right: 5px;
 			}
 			@include min-screen($screen-sm) {
