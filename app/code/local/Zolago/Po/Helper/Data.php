@@ -33,6 +33,10 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 
 		$_statusModel = $po->getStatusModel();
 
+		if(Mage::helper('zolagopayment')->getConfigUseAllocation($po->getStore()))
+			return $isPickUpPointConfirmAvailable;
+
+
 		if (!$this->isDeliveryPickUpPoint($po))
 			return $isPickUpPointConfirmAvailable;
 
@@ -64,7 +68,10 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 	public function isPickUpPaymentCanBeEntered(Zolago_Po_Model_Po $po)
 	{
 		//button "enter payment" when order is not canceled and not shipped
-		if ($this->isDeliveryPickUpPoint($po)
+		$paymentHelper = Mage::helper('zolagopayment');
+		if (
+			$this->isDeliveryPickUpPoint($po)
+			&& !$paymentHelper->getConfigUseAllocation($po->getStore())
 			&& !$po->isPaid()
 			&& !in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses()
 			)
@@ -76,31 +83,14 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 	}
 
 
-
 	/**
 	 * @param $shippingMethod (ex. udtiership_4)
 	 * @return mixed
 	 */
 	public function getMethodCodeByDeliveryType($shippingMethod)
 	{
-		$collection = Mage::getModel("udropship/shipping")->getCollection();
-		$collection->getSelect()
-			->join(
-				array('udropship_shipping_method' => $collection->getTable('udropship/shipping_method')),
-				"main_table.shipping_id = udropship_shipping_method.shipping_id",
-				array(
-					'udropship_method' => new Zend_Db_Expr('CONCAT_WS(\'_\',    udropship_shipping_method.carrier_code ,udropship_shipping_method.method_code)'),
-				)
-			);
-		$collection->getSelect()->join(
-			array('udtiership_delivery_type' => $collection->getTable('udtiership/delivery_type')),
-			"udropship_shipping_method.method_code = udtiership_delivery_type.delivery_type_id",
-			array("delivery_code")
-		);
-
-		$collection->getSelect()->having("udropship_method=?", $shippingMethod);
-
-		return $collection->getFirstItem();
+		return Mage::helper("udropship")
+			->getOmniChannelMethodInfoByMethod(0, $shippingMethod);
 	}
 
     /**
