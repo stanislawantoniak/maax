@@ -32,14 +32,14 @@ class ZolagoOs_OmniChannelPayout_Block_Adminhtml_Payout_Edit_Tab_Form extends Ma
         $fieldset->addField('vendor_id', 'note', array(
             'name'      => 'vendor_id',
             'label'     => $hlp->__('Vendor'),
-            'text'      => sprintf('<a href="%s">%s</a>', $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id'=>$payout->getVendorId())), Mage::getSingleton('udropship/source')->setPath('vendors')->getOptionLabel($payout->getVendorId())),
+            'text'      => sprintf('<a href="%s">%s</a>', $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id'=>$payout->getVendorId())), Mage::getSingleton('udropship/source')->setPath('vendors')->getOptionLabel($payout->getVendorId())),
         ));
         
         $fieldset->addField('statement_id', 'note', array(
             'name'      => 'statement_id',
             'label'     => $hlp->__('Statement ID'),
             'text'      => $payout->getStatement()->getId() 
-                ? sprintf('<a href="%s">%s</a>', $this->getUrl('udropshipadmin/adminhtml_vendor_statement/edit', array('id'=>$payout->getStatement()->getId())), $payout->getStatementId()) 
+                ? sprintf('<a href="%s">%s</a>', $this->getUrl('zolagoosadmin/adminhtml_vendor_statement/edit', array('id'=>$payout->getStatement()->getId())), $payout->getStatementId())
                 : ''
         ));
 

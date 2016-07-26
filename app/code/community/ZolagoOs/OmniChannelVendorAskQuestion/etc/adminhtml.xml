@@ -12,12 +12,12 @@
                                 <question_pending module="udqa">
                                     <title>Pending Questions/Answers</title>
                                     <sort_order>10</sort_order>
-                                    <action>udqaadmin/index/pending</action>
+                                    <action>zosqaadmin/index/pending</action>
                                 </question_pending>
                                 <question_all>
                                     <title>All Questions/Answers</title>
                                     <sort_order>20</sort_order>
-                                    <action>udqaadmin/index/index</action>
+                                    <action>zosqaadmin/index/index</action>
                                 </question_all>
                             </children>
                         </udqa>

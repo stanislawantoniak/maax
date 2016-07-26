@@ -35,6 +35,6 @@ class ZolagoOs_OmniChannelPo_Block_Adminhtml_Po_Editcosts extends Mage_Adminhtml
 
     public function getBackUrl()
     {
-        return $this->getUrl('udpoadmin/order_po/view', array('udpo_id'=>$this->getPo()->getId()));
+        return $this->getUrl('zospoadmin/order_po/view', array('udpo_id'=>$this->getPo()->getId()));
     }
 }

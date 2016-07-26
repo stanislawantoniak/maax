@@ -16,13 +16,13 @@
     </global>
     <admin>
         <routers>
-            <udratingsadmin>
+            <zosratingsadmin>
                 <args>
                     <modules>
                         <Zolago_DropshipVendorRatings before="ZolagoOs_OmniChannelVendorRatings_Adminhtml">Zolago_DropshipVendorRatings_Adminhtml</Zolago_DropshipVendorRatings>
                     </modules>
                 </args>
-            </udratingsadmin>
+            </zosratingsadmin>
         </routers>
     </admin>
 </config>

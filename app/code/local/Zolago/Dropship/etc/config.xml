@@ -974,13 +974,13 @@
 	</frontend>
 	<admin>
 		<routers>
-			<udropshipadmin>
+			<zolagoosadmin>
 				<args>
 					<modules>
 						<Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
 					</modules>
 				</args>
-			</udropshipadmin>
+			</zolagoosadmin>
 		</routers>
 	</admin>
 	<adminhtml>

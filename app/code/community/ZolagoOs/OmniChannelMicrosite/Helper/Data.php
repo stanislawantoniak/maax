@@ -171,11 +171,11 @@ class ZolagoOs_OmniChannelMicrosite_Helper_Data extends Mage_Core_Helper_Abstrac
         if ($to && $subject && $template) {
             $data = $registration->getData();
             $data['store_name'] = $store->getName();
-            $data['registration_url'] = $ahlp->getUrl('umicrositeadmin/adminhtml_registration/edit', array(
+            $data['registration_url'] = $ahlp->getUrl('micrositeadmin/adminhtml_registration/edit', array(
                 'reg_id' => $registration->getId(),
                 'key' => null,
             ));
-            $data['all_registrations_url'] = $ahlp->getUrl('umicrositeadmin/adminhtml_registration', array(
+            $data['all_registrations_url'] = $ahlp->getUrl('micrositeadmin/adminhtml_registration', array(
                 'key' => null,
             ));
 

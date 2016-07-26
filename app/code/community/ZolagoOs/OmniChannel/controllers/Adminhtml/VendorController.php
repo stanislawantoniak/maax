@@ -111,7 +111,7 @@ $timer = microtime(true);
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                 if ($r->getParam('reg_id')) {
-                    $this->_redirect('umicrositeadmin/adminhtml_registration/edit', array('reg_id'=>$r->getParam('reg_id')));
+                    $this->_redirect('micrositeadmin/adminhtml_registration/edit', array('reg_id'=>$r->getParam('reg_id')));
                     return;
                 }
                 $this->_redirect('*/*/edit', array('id' => $r->getParam('id')));

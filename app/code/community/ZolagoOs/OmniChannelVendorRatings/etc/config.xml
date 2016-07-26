@@ -136,13 +136,13 @@
 
     <admin>
         <routers>
-            <udratingsadmin>
+            <zosratingsadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannelVendorRatings_Adminhtml</module>
-                    <frontName>udratingsadmin</frontName>
+                    <frontName>zosratingsadmin</frontName>
                 </args>
-            </udratingsadmin>
+            </zosratingsadmin>
         </routers>
     </admin>
 

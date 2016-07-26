@@ -34,7 +34,7 @@ class ZolagoOs_OmniChannelMicrosite_Block_Adminhtml_Vendor_Helper_Renderer_Categ
             || $expanded == true) {
             $params['expand_all'] = true;
         }
-        return $this->getUrl('umicrositeadmin/adminhtml_widget/categoriesJson', $params);
+        return $this->getUrl('micrositeadmin/adminhtml_widget/categoriesJson', $params);
     }
 
 }

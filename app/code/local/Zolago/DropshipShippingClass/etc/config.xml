@@ -7,13 +7,13 @@
     </modules>
     <admin>
         <routers>
-            <udshipclassadmin>
+            <zosshipclassadmin>
                 <args>
                     <modules>
                         <Zolago_DropshipShippingClass before="ZolagoOs_OmniChannelShippingClass_Adminhtml">Zolago_DropshipShippingClass_Adminhtml</Zolago_DropshipShippingClass>
                     </modules>
                 </args>
-            </udshipclassadmin>
+            </zosshipclassadmin>
         </routers>
     </admin>
 </config>
