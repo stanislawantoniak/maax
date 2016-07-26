@@ -104,24 +104,27 @@
 
       a {
         &:after {
-          content: '|';
+          content: 'I';
           display: inline-block;
           width: 1px;
           height: 10px;
-          color: #8a8a8a;
-          margin: 2px 12px 0;
+          margin: 1px 0px 2px 4px;
         }
-        &:last-child:after {
-          content: "";
-          margin-left: 0;
-          margin-right: 0;
-        }
+
         i {
           margin-right: 5px;
           font-size: 14px;
         }
 
       }
+      &:last-child {
+        a:after {
+          content: "";
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+
     }
   }
 

@@ -241,11 +241,10 @@ body {
 			background-color: transparent;
 		}
 		&#link_account {
-			//display: none;
-			//@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
-			//	display: inline-block;
-			//}
-			display: inline-block;
+			display: none;
+			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+				display: inline-block;
+			}
 		}
 		@include min-screen($screen-sm-min) {
 			&#link_basket {
@@ -329,7 +328,7 @@ body {
 		}
 
 		&#link_basket_icon {
-			@include min-screen($screen-xs-max) {
+			@include min-screen($screen-sm-min) {
 				border: 1px solid #EBEBEB;
 				padding-top: 0 !important;
 				height: 35px !important;
