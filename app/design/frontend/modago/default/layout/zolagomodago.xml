@@ -410,6 +410,7 @@
           </action>
         </block>
         <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery" as="checkout_cart_shipping" template="checkout/cart/sidebar/shipping.phtml">
+          <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery.additional" as="checkout_cart_shipping_additional" template="checkout/cart/sidebar/shipping/additional.phtml" />
           <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
         </block>
       </block>

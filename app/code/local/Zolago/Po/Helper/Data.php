@@ -6,6 +6,93 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 	
 	protected $_condJoined = false;
 
+
+	/**
+	 * Is PO shipping method is zospickuppoint
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function isDeliveryPickUpPoint(Zolago_Po_Model_Po $po)
+	{
+		$shippingMethod = $po->getUdropshipMethod();
+		$deliveryMethod = $this->getMethodCodeByDeliveryType($shippingMethod);
+		$deliveryMethodCode = $deliveryMethod->getDeliveryCode();
+		$zosPickupPointMethodCode = Mage::helper("zospickuppoint")->getCode();
+
+		return (bool)($deliveryMethodCode == $zosPickupPointMethodCode);
+	}
+
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function isPickUpPointConfirmAvailable(Zolago_Po_Model_Po $po)
+	{
+		$isPickUpPointConfirmAvailable = false;
+
+		$_statusModel = $po->getStatusModel();
+
+		if(Mage::helper('zolagopayment')->getConfigUseAllocation($po->getStore()))
+			return $isPickUpPointConfirmAvailable;
+
+
+		if (!$this->isDeliveryPickUpPoint($po))
+			return $isPickUpPointConfirmAvailable;
+
+		if (!$po->isPaid())
+			return $isPickUpPointConfirmAvailable;
+
+		$finishedStatuses = Zolago_Po_Model_Po_Status::getFinishStatuses();
+		$poStatus = $po->getUdropshipStatus();
+
+		if (in_array($poStatus, $finishedStatuses))
+			return $isPickUpPointConfirmAvailable;
+
+
+		if ($_statusModel->isShippingAvailable($po))
+			$isPickUpPointConfirmAvailable = true;
+
+
+		if ($po->getStockConfirm())
+			$isPickUpPointConfirmAvailable = true;
+
+
+		return $isPickUpPointConfirmAvailable;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isPickUpPaymentCanBeEntered(Zolago_Po_Model_Po $po)
+	{
+		//button "enter payment" when order is not canceled and not shipped
+		$paymentHelper = Mage::helper('zolagopayment');
+		if (
+			$this->isDeliveryPickUpPoint($po)
+			&& !$paymentHelper->getConfigUseAllocation($po->getStore())
+			&& !$po->isPaid()
+			&& !in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses()
+			)
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * @param $shippingMethod (ex. udtiership_4)
+	 * @return mixed
+	 */
+	public function getMethodCodeByDeliveryType($shippingMethod)
+	{
+		return Mage::helper("udropship")
+			->getOmniChannelMethodInfoByMethod(0, $shippingMethod);
+	}
+
     /**
      * to have payment status updated when PO is changed
      *
