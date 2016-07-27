@@ -2,6 +2,9 @@
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 	protected $inpostLocker = null;
+	protected $pickUpPoint = null;
+
+	protected $_deliveryMethodCode = null;
 
 
 	public function getSelectedShipping(){
@@ -9,13 +12,13 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		//1. Get shipping from session
 		$shipping_method_session = $checkoutSession->getData("shipping_method");
-		$inpostCode = $checkoutSession->getData("inpost_locker_name");
+		$deliveryPointName = $checkoutSession->getData("delivery_point_name");
 
 		if(!empty($shipping_method_session)){
 			return array(
 				"source" => "session",
 				"methods" => $shipping_method_session,
-				"shipping_point_code" => $inpostCode
+				"shipping_point_code" => $deliveryPointName
 			);
 		}
 
@@ -24,18 +27,18 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		$address = $checkoutSession->getQuote()->getShippingAddress();
 		$details = $address->getUdropshipShippingDetails();
 		$details = $details ? Zend_Json::decode($details) : array();
-		$inpostCode = $address->getData("inpost_locker_name");
+		$deliveryPointName = $address->getData("delivery_point_name");
 		$methods = array();
 		if(!empty($details) && isset($details["methods"])){
 			foreach($details["methods"] as $vendorId => $methodData){
 				$methods[$vendorId] = $methodData["code"];
 			}
-			$checkoutSession->setData("inpost_locker_name",$inpostCode);
+			$checkoutSession->setData("delivery_point_name",$deliveryPointName);
 			$checkoutSession->setShippingMethod($methods);
 			return array(
 				"source" => "quota",
 				"methods" => $methods,
-				"shipping_point_code" => $inpostCode
+				"shipping_point_code" => $deliveryPointName
 			);
 		}
 		return array(
@@ -44,6 +47,57 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		);
 
 	}
+
+
+
+	public function getDeliveryPointShippingAddress(){
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+		$shippingAddressFromDeliveryPoint = array();
+
+		switch ($deliveryMethodCode) {
+			case 'zolagopickuppoint':
+				/* @var $pos  Zolago_Pos_Model_Pos */
+				$pos = $helper->getPickUpPoint();
+				$shippingAddressFromDeliveryPoint = $pos->getShippingAddress();
+				break;
+			case 'ghinpost':
+				/* @var $locker GH_Inpost_Model_Locker */
+				$locker = $helper->getInpostLocker();
+				$shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
+				break;
+		}
+
+		return $shippingAddressFromDeliveryPoint;
+	}
+
+	/**
+	 * Retrieve Pick-Up Point object for current checkout session
+	 *
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	public function getPickUpPoint() {
+		if (is_null($this->pickUpPoint)) {
+
+			$selectedShipping = $this->getSelectedShipping();
+			$deliveryPointName = $selectedShipping['shipping_point_code'];
+
+			/* @var $pos  Zolago_Pos_Model_Pos */
+			$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointName);
+
+			if (!$pos->getIsAvailableAsPickupPoint()) {
+				$pos = Mage::getModel("zolagopos/pos");
+			}
+			$this->pickUpPoint = $pos;
+		}
+		return $this->pickUpPoint;
+	}
+
 	/**
 	 * Retrieve InPost Locker object for current checkout session
 	 * 
@@ -53,11 +107,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		if (is_null($this->inpostLocker)) {
 
 			$selectedShipping = $this->getSelectedShipping();
-			$inpostCode = $selectedShipping['shipping_point_code'];
+			$deliveryPointName = $selectedShipping['shipping_point_code'];
 
 			/** @var GH_Inpost_Model_Locker $locker */
 			$locker = Mage::getModel("ghinpost/locker");
-			$locker->loadByLockerName($inpostCode);
+			$locker->loadByLockerName($deliveryPointName);
 			if (!$locker->getIsActive()) {
 				$locker = Mage::getModel("ghinpost/locker");
 			}
@@ -226,5 +280,57 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		return $data;
+	}
+
+
+	/**
+	 * @param bool $includeTitle
+	 * @return mixed
+	 */
+	public function getMethodCodeByDeliveryType($includeTitle = false){
+
+		//$sessionShippingMethod (something like udtiership_4)
+		$storeId = Mage::app()->getStore()->getStoreId();
+
+		if (is_null($this->_deliveryMethodCode)) {
+
+			$sessionShippingMethod = "";
+			$selectedShipping = $this->getSelectedShipping();
+			foreach ($selectedShipping["methods"] as $vid => $methodSelectedData) {
+				$sessionShippingMethod = $methodSelectedData;
+			}
+
+			$this->_deliveryMethodCode = Mage::helper("udropship")->getOmniChannelMethodInfoByMethod($storeId, $sessionShippingMethod, $includeTitle);
+		}
+
+		return $this->_deliveryMethodCode;
+	}
+
+
+	/**
+	 * Get carrier logo for checkout
+	 *
+	 * @param $deliveryType
+	 * @return string
+	 */
+	public function getCarrierLogo($deliveryType)
+	{
+		$inpostCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
+		$pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+
+		switch ($deliveryType) {
+			case $inpostCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+				$carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/inpost/checkout-logo.png') . '" />';
+				break;
+			case $pickUpPointCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+				//Truck icon
+				$carrierLogo = '<figure class="truck"><i class="fa fa-map-marker fa-3x"></i></figure>';
+				break;
+			default:
+				//Truck icon
+				$carrierLogo = '<figure class="truck"><i class="fa fa-truck fa-3x"></i></figure>';
+		}
+
+		return $carrierLogo;
 	}
 }
