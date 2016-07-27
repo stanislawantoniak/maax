@@ -188,6 +188,9 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function confirmPickUp(Zolago_Po_Model_Po $po)
 	{
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		$hlp->addConfirmPickUpComment($po);
 		$this->_processStatus($po, self::STATUS_DELIVERED);
 	}
 	

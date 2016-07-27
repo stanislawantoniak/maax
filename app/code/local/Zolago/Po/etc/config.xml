@@ -113,6 +113,18 @@
                     </zolagopo_ghapi>
                 </observers>
             </zolagopayment_create_overpayment_save_after>
+			<zolagopayment_add_pickup_payment_transaction_save_after>
+				<observers>
+					<zolagopo>
+						<class>zolagopo/observer</class>
+						<method>addPickUpPaymentComment</method>
+					</zolagopo>
+					<zolagopo_ghapi>
+						<class>zolagopo/observer</class>
+						<method>ghapiAddMessagePaymentDataChanged</method>
+					</zolagopo_ghapi>
+				</observers>
+			</zolagopayment_add_pickup_payment_transaction_save_after>
 
             <zolagopo_po_split>
                 <observers>
