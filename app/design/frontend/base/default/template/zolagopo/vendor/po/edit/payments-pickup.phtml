@@ -67,7 +67,7 @@ $orderSymbolCode = $currency->getSymbol();
 					required: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
 					number: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
 					min: "<?php echo $hlpPo->__("Enter a payment amount"); ?>",
-					max: "<?php echo $hlpPo->__("Payment amount can not be more than total order sum"); ?> - <?php echo $debtAmountFormatted; ?>"
+					max: "<?php echo $hlpPo->__("Payment amount can not be more than total order sum - %s", $debtAmountFormatted); ?>"
 				}
 			}
 		});
