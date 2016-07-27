@@ -38,6 +38,7 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         $builder->prepareForm(array(
             "show_on_map",
             "map_name",
+			"map_notes",
             "map_phone",
             "map_latitude",
             "map_longitude",

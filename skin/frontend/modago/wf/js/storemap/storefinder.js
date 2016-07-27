@@ -262,16 +262,27 @@ function smoothZoom(map, max, cnt) {
         }, 80);
     }
 }
+
+function pos_info(pos) {
+    console.log(pos);
+    var list = "<p class='shop_name'>" + pos.name + "</p>";
+
+    if (pos.notes) list += "<p>" + pos.notes + "</p>";
+
+    list += "<p class='space_left'>" + pos.street + "<br>" + pos.postcode + " " + pos.city + "</p>";
+    if(pos.phone.length > 0){
+        list +="<p class='space_left'>tel. " + pos.phone + "</p>";
+    }
+
+    list +="<p class='space_left'>" + pos.time_opened + "</p>";
+
+    return list;
+}
+
 function formatInfoWindowContent(info) {
-    var contentString =
-        '<div class="marker-window">' +
-        '<div class="info_window_text">' +
-        '<p class="iw_header"><i class="shop_name bold">' + info.name + '</i></p>' +
-        '<div class="marker-info-tel"><b>Tel: </b>' + info.phone + '</div>' +
-        '<div class="additional-store-information">' + info.time_opened + '</div>' +
-        '</div>' +
-        '</div>';
-    return contentString;
+    return '<div class="marker-window pos_info">' +
+        pos_info(info) +
+        '</div>';;
 }
 
 function generateDirectionLink(pos, position) {
@@ -304,15 +315,8 @@ function buildStoresList(filteredData,position) {
             list += "<li data-id='" + posId + "'>" +
                 "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
 
-                "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
-                "<p><b>" + pos.name + "</b></p>" +
-                "<p>" + pos.street + "</p>" +
-                "<p>" + pos.postcode + " " + pos.city + "</p>";
-            if(pos.phone.length > 0){
-                list +="<p>Tel: " + pos.phone + "</p>";
-            }
-
-            list +="<div>" + pos.time_opened + "</div>" +
+                "<div class='col-md-7 col-sm-8 col-xs-7 left-column pos_info'>" +
+                pos_info(pos) +
                 "</div>" +
 
                 "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
