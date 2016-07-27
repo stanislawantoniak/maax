@@ -708,7 +708,10 @@ jQuery.noConflict();
 						event.preventDefault();
 						if ($(this).hasClass('children')) {
 							containerCloneMenu.html('');
-							$(this).next('ul').clone().appendTo(containerCloneMenu).css('width', '100%').slideDown(300);
+							$(this).next('ul').clone()
+								.appendTo(containerCloneMenu)
+								.css('width', '100%')
+								.slideDown(300);
 						} else {
 							containerCloneMenu.html('');
 						}
@@ -717,6 +720,15 @@ jQuery.noConflict();
 						}
 					}
 
+				});
+
+				$("html").click(function(event) {
+					if ($(event.target).closest('#nav_desc').length === 0) {
+						containerCloneMenu.html('');
+						$("#nav_desc a").find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
+						$('#nav_desc').find('.active').removeClass('active');
+						jQuery("#clone_submenu").css("top",0);
+					}
 				});
 			}
 		}
