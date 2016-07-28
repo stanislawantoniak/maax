@@ -242,7 +242,7 @@ body {
 		}
 		&#link_account {
 			display: none;
-			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+			@media (min-width: 420px) and (max-width: $screen-xs-max) {
 				display: inline-block;
 			}
 		}
