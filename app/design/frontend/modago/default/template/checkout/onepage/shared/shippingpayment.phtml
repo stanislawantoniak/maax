@@ -20,7 +20,7 @@ $helper = Mage::helper("zolagocheckout");
 
 $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
 $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-$carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($deliveryMethodCode);
+$carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($deliveryMethodCode);
 
 ?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
