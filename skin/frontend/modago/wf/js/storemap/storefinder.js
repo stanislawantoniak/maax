@@ -312,16 +312,16 @@ function buildStoresList(filteredData,position) {
             list += "<li data-id='" + posId + "'>" +
                 "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
 
-                "<div class='col-md-7 col-sm-8 col-xs-7 left-column pos_info'>" +
+                "<div class='col-md-7 col-sm-8 col-xs-12 left-column pos_info'>" +
                 pos_info(pos) +
                 "</div>" +
 
-                "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
+                "<div class='col-md-5 col-sm-4 col-xs-12 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-primary medium pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + Mall.translate.__("Show on map") + "</a></div>" +
                 "<div class='row'><a class='button button-primary medium pull-right' href='" + generateDirectionLink(pos,position) + "' target='_blank'><i class='fa fa-compass'></i> " + Mall.translate.__("Define the route") + "</a></div>";
 
-            if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
+            if(Mall.getIsBrowserMobile() && pos.phone && pos.phone.length > 0){
                 list += "<div class='row'>" +
                     "<a class='button button-primary medium pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + Mall.translate.__("Select phone") + "</a>" +
                     "</div>";
