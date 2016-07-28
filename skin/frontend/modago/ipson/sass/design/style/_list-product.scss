@@ -1,8 +1,14 @@
 #items-product {
     .item {
         .box_listing_product {
-            border:1px solid $color_fff;
+            border: 1px solid #ddd;
             background: $color_fff;
+            padding: 1px;
+            margin-top: 4px;
+            z-index: 10;
+            @media (max-width: $screen-xs-max) {
+                border-width: 0;
+            }
         }
     }
 }
@@ -15,19 +21,17 @@
         height: 16px;
         overflow: hidden;
         line-height: 14px;
-        text-align: center;
-        text-transform:uppercase;
     }
     .price {
-        color:$colorProductFinalPrice;
-        font-size: 14px;
+        //color:$colorProductFinalPrice;
+        //font-size: 14px;
         //font-family:$fontOpen;
-        text-align: center;
+        //text-align: center;
         .old {
             display: inline;
-            color:$colorFont;
-            text-decoration:line-through;
-            font-size:14px;
+            //color:$colorFont;
+            //text-decoration:line-through;
+            //font-size:14px;
         }
     }
 }
