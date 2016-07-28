@@ -23,7 +23,7 @@
           display: inline-block;
           width: 1px;
           height: 10px;
-          color: #8a8a8a;
+          color: #fff;
           margin: 2px 12px 0;
         }
         &:last-child:after {
@@ -81,7 +81,7 @@
 
   .top-bar-right {
     float: right;
-    line-height: 26px;
+    line-height: 29px;
     height: 29px;
   }
   @media only screen and (max-width: $screen-xs-max){
