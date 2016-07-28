@@ -515,7 +515,15 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 */
 	public function isPickUpPaymentCanBeEntered()
 	{
+		// First check if we have access to payments manage by ACL
+		/** @var Zolago_Dropship_Model_Session $session */
+		$session = Mage::getSingleton('udropship/session');
+		$isAllowed = $session->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
+		if (!$isAllowed) return false;
+		
 		$po = $this->getPo();
-		return Mage::helper("zolagopo")->isPickUpPaymentCanBeEntered($po);
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		return $hlp->isPickUpPaymentCanBeEntered($po);
 	}
 }
