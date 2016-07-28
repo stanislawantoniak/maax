@@ -10,7 +10,7 @@ $_helper = Mage::helper('zolagosolrsearch');
 <div class="block_search search hidden-xs">
     <form action="<?php echo Mage::getUrl("search", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get" role="search">
         <div class="form-group">
-            <input type="text" class="form-control" name="q" placeholder="<?php echo $_helper->__('Search...'); ?>" value="">
+            <input type="text" class="form-control" name="q" value="">
         </div>
         <div class="select-box hidden">
             <select name="scat" class="form-control select-styled search-context"></select>
