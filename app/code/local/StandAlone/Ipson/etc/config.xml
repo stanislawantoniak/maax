@@ -24,6 +24,11 @@
             <saipson>
                 <class>StandAlone_Ipson_Helper</class>
             </saipson>
+            <zolagosolrsearch>
+                <rewrite>
+                    <data>StandAlone_Ipson_Helper_Solrsearch_Data</data>
+                </rewrite>
+            </zolagosolrsearch>
         </helpers>
         <resources>
             <saipson_setup>
