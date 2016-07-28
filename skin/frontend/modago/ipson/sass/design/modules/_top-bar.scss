@@ -3,7 +3,6 @@
 }
 .top-bar {
   background-color: #262626;
-  color: #737373;
   max-height: 100px;
   overflow: hidden;
   padding: 5px 0;
@@ -43,16 +42,13 @@
 
   .top-bar-left {
     float: left;
-    height: 23px;
+    height: 28px;
 
     .top-bar-left-content {
-      //margin-left: 14px;
-
-
       li {
-        margin-right: 7px;
+        margin-right: 13px;
         font-size: 12px;
-        line-height: 23px;
+        line-height: 28px;
 
         &.active {
           font-weight: 400;
@@ -85,6 +81,8 @@
 
   .top-bar-right {
     float: right;
+    line-height: 26px;
+    height: 28px;
   }
   @media only screen and (max-width: $screen-xs-max){
     .top-bar-right {
@@ -108,12 +106,17 @@
           display: inline-block;
           width: 1px;
           height: 10px;
-          margin: 1px 0px 2px 4px;
+          margin: 1px 0px 8px 8px;
         }
 
         i {
-          margin-right: 5px;
-          font-size: 14px;
+          margin-right: 11px;
+          font-size: 18px;
+          &.fa-mobile {
+            font-size: 22px;
+            top: 3px;
+            position: relative;
+          }
         }
 
       }
