@@ -164,6 +164,10 @@ $color_ffffff: #ffffff;
 $color_ff0: #ff0;
 $color_fff: #fff;
 $color_8a8a8a: #8a8a8a;
+$color_797979: #797979;
+$color_008733: #008733;
+$color_f1f1f1: #f1f1f1;
+$color_7e7e7e: #7e7e7e;
 
 
 
@@ -201,7 +205,7 @@ $link-hover-color:      darken($link-color, 15%) !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif:  Roboto !default;
+$font-family-sans-serif:  latoregular, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
@@ -217,7 +221,6 @@ $font-size-h3:            25px !default; // ~24px
 $font-size-h4:            18px !default; // ~18px
 $font-size-h5:            14px !default;
 $font-size-h6:            12px !default; // ~12px
-
 
 $font-size-normal-link:            12px !default;
 //** Unit-less `line-height` for use in components like buttons.
@@ -995,3 +998,18 @@ $component-offset-horizontal: 180px !default;
 
 //Storesmap
 $button-border-color: $color_2d2d2d;
+
+
+//backgrounds colors
+$colorBackgroundBlocks:                 #FFF;
+$colorBackgroundSite:                   #F2F1F0;
+$colorBackgroundContent:                #FFF;
+
+
+/* SIDEBAR VARIABLES */
+$widthSidebar:                          268px;
+$widthSidebarMobile:                    $widthSidebar;
+$marginSidebar:                         20px;
+$colorBorderSidebar:                    #fff;
+$colorBackgroundSidebar:                $colorBackgroundBlocks;
+$colorBorderSidebarSection:             #fff;

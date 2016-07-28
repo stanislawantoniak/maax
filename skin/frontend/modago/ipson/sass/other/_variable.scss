@@ -52,6 +52,7 @@ $color-gray4: $color_b69494;
 $bc-primary : $gray-lighter;
 $color-black: $color_220000;
 $bc-secondary : #d9d9d9;
+$colorShortDescription:$color_8a8a8a;
 
 
 
@@ -124,9 +125,9 @@ $validation-error: $color_e84c3d;
 }
 
 // FONT
-$fontLight: RobotoLight, sans-serif;
-$fontRegular: Roboto, sans-serif;
-$fontBlack: RobotoBold, sans-serif;
+$fontLight: latolight, sans-serif;
+$fontRegular: latoregular, sans-serif;
+$fontBlack: latoblack, sans-serif;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
 
@@ -160,6 +161,7 @@ $colorFont:                             #000;
 $colorLink:                             #000;
 $colorLinkHover:                        #000;
 $colorLinkActive:                       #000;
+$colorSecondFont:                       #3d3d3d;
 
 //icon colors
 $colorIcon:                             #000;
@@ -248,7 +250,7 @@ $colorHeaderSearch:                     #2a2a2a;
 $colorHeaderSearchBg:                   #FFF;
 $colorHeaderSearchBorder:               #EBEBEB;
 $colorHeaderSearchBtnBg:                #EBEBEB;
-$colorHeaderSearchBtn:                  #2a2a2a;
+$colorHeaderSearchBtn:                  #454545;
 
 $colorHeaderUserAccountDesktopBtnBg:    #EBEBEB;
 $colorHeaderUserAccountMobileBtnBg:     #FFF;
@@ -371,6 +373,11 @@ $colorProductFlag:                      #FFF;
 $colorProductExtraInfo:                 $colorFont;
 $colorProductExtraInfoBg:               #FCFCFC;
 $colorProductExtraInfoBorder:           #EBEBEB;
+
+/* LISTING */
+$boxShadowListingColor:                 #f5f3f4;
+$colorProductFinalPrice:                #dc4348;
+$colorProductStrikeOutPrice:            #8a8a8a;
 
 /*FOOTER*/
 $textColorFooter:                       #fff;

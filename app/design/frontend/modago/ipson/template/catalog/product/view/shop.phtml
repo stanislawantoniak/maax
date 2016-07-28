@@ -4,6 +4,8 @@
 
 /** @var Zolago_Catalog_Model_Product $_product */
 $_product = $this->getProduct();
+$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
 
 /** @var Mage_Catalog_Helper_Output $_helper */
 $_helper = $this->helper('catalog/output');
@@ -13,8 +15,6 @@ $hlp = Mage::helper('catalog');
 
 /** @var Zolago_Catalog_Helper_Product $productHelper */
 $productHelper = Mage::helper("zolagocatalog/product");
-$flag = $productHelper->getProductBestFlag($_product);
-$flagLabel = $flag ? $hlp->__($flag) : "";
 
 $isSalable = $_product->isSalable(); //product is salable
 // prices
@@ -26,6 +26,9 @@ if ($_product->getTypeId() == 'configurable') {
 	$productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
 }
 
+$maxQty = (int)$_product->getData('stock_item')->getQty();
+$minQty = (int)$_product->getData('stock_item')->getMinSaleQty();
+
 $_helperSizetable = Mage::helper('zolagosizetable');
 /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
 $vendor_id = $_product->getData('udropship_vendor');
@@ -36,196 +39,194 @@ if ($_product->getTypeId() == 'configurable') { //fix for simple products
 	/** @var Zolago_Catalog_Block_Product_View_Type_Configurable $salableCount */
 	$salableCount = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getSalableCount();
 }
-$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+$sizeTableValue = '1';//$_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+$deliveryHeadline = trim($this->getStoreDeliveryHeadline());
+$returnHeadline = trim($this->getStoreReturnHeadline());
 ?>
 
 
 <?php
 
 $productName = $_helper->productAttribute($_product, $_product->getName(), 'name');
-
-//$vendor = Mage::helper('udropship')->getVendor($vendor_id);
-//$vendorName = $vendor->getData("vendor_name");
-//$vendorUrl = Mage::helper("umicrosite")->getVendorUrl($vendor);
-//$productName = str_replace($vendorName, "<a itemprop='brand' href='".$vendorUrl."'>".$vendorName."</a>",$productName);
 ?>
-<div id="product-shop" class="col-lg-7 col-md-7 col-sm-6 col-xs-12 clearfix" style="overflow-x:visible;">
-	<form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post"
-	      id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-		<?php echo $this->getBlockHtml('formkey') ?>
-		<input type="hidden" name="product" value="<?php echo $_product->getId() ?>"/>
-		<input type="hidden" name="related_product" id="related-products-field" value=""/>
-		<div class="row">
-			<div class="product-name col-lg-12">
-				<h1 itemprop="name" <?php if($flag): ?>class="product-name-with-flag"<?php endif; ?>><?php echo $productName; ?></h1>
-				<meta itemprop="sku" content="<?php echo $_product->getSku() ?>"/>
-				<span class="average_note_client">
-					<span class="note" data-number="5" data-score="<?php echo $this->getReviewsAvg(); ?>"></span> <?php /* variables set in ../view.phtml */ ?>
-					<span>(<?php echo $this->getReviewsCount(); ?> <?php echo $this->getReviewsLabel(); ?>)</span>
-				</span>
-				<?php if($flag): ?>
-				<div class="product-flag"><?php echo $flagLabel; ?></div>
+<!-- PRODUCT NAME -->
+<div id="product-name" class="col-md-12 product-name" style="overflow-x:visible;">
+	<h1 itemprop="name"><?php echo $productName; ?></h1>
+	<meta itemprop="sku" content="<?php echo $_product->getSku() ?>"/>
+</div>
+<!-- /PRODUCT NAME -->
+<!-- SHORT DESCRIPTION -->
+<div class="col-md-12" id="short-description-block">
+	<div id="short-description" class="row">
+		<?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+	</div>
+	<div id="product_price_box" class="row">
+		<div id="product-price" class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+			<?php if ($_product->getCanShowPrice() !== false): ?>
+				<div class="price-box-bundle">
+					<div class="price-box row">
+						<p class="price-box-line" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+							<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+								<meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
+							<?php endif; ?>
+
+							<meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
+							<meta itemprop="mpn" content="<?php echo $_product->getSku(); ?>"/>
+
+							<?php if ($isSalable): ?>
+								<meta itemprop="availability" content="http://schema.org/InStock"/>
+							<?php else: ?>
+								<meta itemprop="availability" content="http://schema.org/OutOfStock"/>
+							<?php endif; ?>
+
+							<meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
+							<span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
+                            <span class="price">
+                                <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+									<span itemprop="price">
+                                        <?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?>
+                                    </span>
+									<?php echo $currencySymbol; ?>
+								<?php endif; ?>
+                            </span>
+						</p>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
+		<div id="delivery-and-return" class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+			<div>
+				<?php if($deliveryHeadline): ?>
+					<?php echo $deliveryHeadline; ?>
+				<?php endif; ?>
+			</div>
+			<div>
+				<?php if($returnHeadline): ?>
+					<?php echo $returnHeadline; ?>
 				<?php endif; ?>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-lg-7 col-md-7">
-				<?php if ($_product->getCanShowPrice() !== false):
-					$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
-					$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();;
-					?>
-					<div class="price-box-bundle">
-						<div class="price-box">
-							<p class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-								<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
-									<meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
-								<?php endif; ?>
+	</div>
 
-								<meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
-								<meta itemprop="mpn" content="<?php echo $_product->getSku(); ?>"/>
+	<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+		<!--    Meta tags-->
+		<?php
+		$childrenData = array();
+		$childProducts = Mage::getModel('catalog/product_type_configurable')
+			->getUsedProducts(null, $_product);
+		foreach ($childProducts as $child) {
+			$childrenData[$child->getId()] = $child->getSku();
+		}
 
-								<?php if ($isSalable): ?>
-									<meta itemprop="availability" content="http://schema.org/InStock"/>
-								<?php else: ?>
-									<meta itemprop="availability" content="http://schema.org/OutOfStock"/>
-								<?php endif; ?>
-
-								<meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition"
-								      content="http://schema.org/NewCondition"/>
-								<span class="price-label"><?php echo $this->__("price"); ?>:</span>
-						<span
-							class="old-price"><?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ", "&nbsp;", Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
-						<span class="price"><?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?><span
-								itemprop="price"><?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?></span> <?php echo $currencySymbol; ?><?php endif; ?></span>
-							</p>
-						</div>
-					</div>
-				<?php endif; ?>
-				<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-
-					<!--    Meta tags-->
-					<?php
-					$childrenData = array();
-					$childProducts = Mage::getModel('catalog/product_type_configurable')
-						->getUsedProducts(null, $_product);
-					foreach ($childProducts as $child) {
-						$childrenData[$child->getId()] = $child->getSku();
-					}
-
-					/* @var $productViewTypeConfigurableBlock Zolago_Catalog_Block_Product_View_Type_Configurable */
-					$productViewTypeConfigurableBlock = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable');
-					$config = $productViewTypeConfigurableBlock->getConfig();
-					$basePrice = $config['basePrice'];
-					if (isset($config['attributes']) & !empty($config['attributes'])):
-						$attributes = $config['attributes'];
-						foreach ($attributes as $attributeId => $attributeData):
-							if ($attributeData['code'] == "size" && (isset($attributeData['options']) & !empty($attributeData['options']))):
-								$options = $attributeData['options'];
-								foreach ($options as $option):
-									?>
-									<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+		$productViewTypeConfigurableBlock = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable');
+		$config = $productViewTypeConfigurableBlock->getConfig();
+		$basePrice = $config['basePrice'];
+		if (isset($config['attributes']) & !empty($config['attributes'])):
+			$attributes = $config['attributes'];
+			foreach ($attributes as $attributeId => $attributeData):
+				if ($attributeData['code'] == "size" && (isset($attributeData['options']) & !empty($attributeData['options']))):
+					$options = $attributeData['options'];
+					foreach ($options as $option):
+						?>
+						<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                                         <meta itemprop="price" content="<?php echo round(($_product->getFinalPrice() + $option['price']), 2); ?>"/>
                                         <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
                                         <meta itemprop="mpn" content="<?php echo $childrenData[$option['products'][0]]; ?>"/>
-										<?php if ($option['is_salable']): ?>
-											<meta itemprop="availability" content="http://schema.org/InStock"/>
-										<?php else: ?>
-											<meta itemprop="availability" content="http://schema.org/OutOfStock"/>
-										<?php endif; ?>
-										<meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition"
-										      content="http://schema.org/NewCondition"/>
+							<?php if ($option['is_salable']): ?>
+								<meta itemprop="availability" content="http://schema.org/InStock"/>
+							<?php else: ?>
+								<meta itemprop="availability" content="http://schema.org/OutOfStock"/>
+							<?php endif; ?>
+							<meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition"
+								  content="http://schema.org/NewCondition"/>
                                     </span>
-									<?php
-								endforeach;
-							endif;
-						endforeach;
-					endif; ?>
-					<!--    Meta tags-->
-				<?php endif; ?>
-				<div class="size-box-bundle" id="product-options">
-					<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-						<?php if (!empty($productAttrs)) : ?>
-							<?php foreach ($productAttrs as $_attribute) : ?>
-								<?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
-									<?php $haveSizes = true; ?>
-									<div class="size-box clearfix clr">
-										<div class="size col-sm-12 col-md-12 col-xs-12">
-											<span class="size-label col-sm-6 col-md-6 col-xs-12"><?php echo $this->__("Select size"); ?></span>
-											<div class=" sizes-content form-group form-radio col-sm-6 col-md-5 col-xs-4">
-												<br/>
-												<a href="#" class="view-sizing underline pull-left" data-toggle="modal"
-												   data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?><?php endif; ?></a>
-											</div>
-										</div>
-									</div>
-								<?php endif; ?>
-							<?php endforeach; ?>
-						<?php endif; ?>
-					<?php endif; ?>
-					<div class="action-box-bundle clearfix">
-						<div id="product-likeboxes" style="display: inline-block;"></div>
-						<?php if ($isSalable): ?>
-							<button class="btn button button-primary ico addBasket"
-							        <?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
-							        data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
-							        id="add-to-cart"
-							        onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
-						<?php else: ?>
-							<div class="temporary-absence-product-wrapper">
-								<span class="temporary-absence-product"><?php echo $hlp->__("Product temporary<br />unavailable");//?></span>
+						<?php
+					endforeach;
+				endif;
+			endforeach;
+		endif;
+		?>
+		<!--    Meta tags-->
+	<?php endif; ?>
+	<div id="product-options" class="size-box-bundle">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
+			<div class="qty_label"><?php echo $this->__("Quantity").":";?></div>
+			<a href="#" class="qty_less">-</a>
+			<div class="qty"><input type="text" name="quantity" value="1"/></div>
+			<a href="#" class="qty_more">+</a>
+			<label id="qty-error" class="error"><?php echo $hlp->__("Maximum quantity %s", $maxQty); ?></label>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
+			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+				<?php if (!empty($productAttrs)) : ?>
+					<?php foreach ($productAttrs as $_attribute) : ?>
+						<?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+							<?php $haveSizes = true; ?>
+							<div class="size-box-label clearfix clr">
+								<div class="size-label"><?php /* echo Mage::helper('wfwf')->__("Size label"); */ ?></div>
 							</div>
+							<div class="size-box clearfix clr">
+								<div>
+									<a href="#" class="view-sizing" data-toggle="modal"
+									   data-target="#tabelaRozmiarow">
+										<?php if (!empty($sizeTableValue)) : ?>
+											<img src="<?php echo $this->getSkinUrl("images/svg/ruler.svg");?>"><?php echo $this->__("Sizes"); ?>
+										<?php endif; ?>
+									</a>
+								</div>
+							</div>
+
 						<?php endif; ?>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-5 col-md-5 hidden-sm hidden-xs">
-				<?php
-				$deliveryHeadline = trim($this->getStoreDeliveryHeadline());
-				$returnHeadline = trim($this->getStoreReturnHeadline());
-				?>
-				<?php if($deliveryHeadline || $returnHeadline): ?>
-				<div class="product-box-extra-info">
-					<?php if($deliveryHeadline): ?>
-						<div><i class="fa fa-truck"></i> <?php echo $deliveryHeadline; ?></div>
-					<?php endif; ?>
-					<?php if($returnHeadline): ?>
-						<div><i class="fa fa-refresh"></i> <?php echo $returnHeadline; ?></div>
-					<?php endif; ?>
-				</div>
+					<?php endforeach; ?>
 				<?php endif; ?>
-				<?php echo $this->getChildHtml('catalog.product.related'); ?>
+			<?php endif; ?>
+			<div class="action-box-bundle clearfix">
+				<?php if ($isSalable): ?>
+					<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+					<button class="btn button button-primary addBasket"
+							<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
+							data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
+							id="add-to-cart"
+							onclick="Mall.validateAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><?php echo $this->__("Add to cart");
+						?></button>
+				<?php endif; ?>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-lg-12">
-				<p class="short-description visible-md hidden-xs">
-					<?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
-					<a href="#description_product" class="scrollTo"><?php echo $hlp->__("see full description") ?></a>
-				</p>
-			</div>
+	</div>
+	<?php if (!$isSalable): ?>
+		<div class="temporary-absence-product-wrapper">
+			<span class="temporary-absence-product"><?php echo $hlp->__("Product temporary unavailable"); ?></span>
 		</div>
-		<div class="row hidden-xs" id="product-additional-social">
-			<div class="col-lg-7 product-additional-info">
-				<a href="#" data-toggle="modal" data-target="#ask_question"><?php echo $hlp->__("Ask about product"); ?></a>
-				<a href="#" data-toggle="modal" data-target="#terms_delivery"><?php echo $hlp->__("Delivery and return"); ?></a>
-			</div>
-			<div class="col-lg-5 followUsTop">
-				<div class="addthis_sharing_toolbox"></div>
-			</div>
+	<?php endif; ?>
+	<div id="short-description-footer">
+		<div id="same-collection-header">
 		</div>
-		<div class="row visible-xs visible-sm">
-			<div class="col-sm-12 col-xs-12">
-				<?php echo $this->getChildHtml('catalog.product.related'); ?>
-			</div>
+		<div id="same-product-list">
 		</div>
-	</form>
+	</div>
+
+	<div id="box-social" class="row">
+		<div class="col-lg-6 col-md-7 col-sm-7 col-xs-12">
+			<div id="product-likeboxes">
+				<div class="addLike-box" id="notadded-wishlist">
+					<!-- placebo -->
+					<span class="product-context-like-count" style="display: none"></span>
+					<p>
+						<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct(<?php echo $_product->getEntityId(); ?>);return false;" class="addLike">
+							<i class="fa fa-list" aria-hidden="true"></i><?php echo $this->__("Add to favorites"); ?></span>
+						</a>
+					</p>
+				</div>
+			</div>
+
+		</div>
+	</div>
 </div>
-<?php /* configurable price/stock data */ ?>
 <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 
 	<script type="text/javascript">
 		var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
-		var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
+		var useSizeboxList =  1;
 
 		jsonConfig.useSizeboxList = useSizeboxList;
 		Mall.product.productOptions(jsonConfig);
@@ -234,4 +235,29 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 <?php endif; ?>
 <script type="text/javascript">
 	Mall.product._entity_id = <?php echo $_product->getEntityId(); ?>;
+	jQuery(document).ready(function() {
+		jQuery("input[name=quantity]").change(function(){
+			jQuery("#qty-error").hide();
+		});
+	    var maxQty = "<?php echo $maxQty; ?>";
+	    var minQty = "<?php echo $minQty; ?>";
+		var quantity =  jQuery("input[name=quantity]").val();
+		jQuery("a.qty_more").click(function(e){
+			e.preventDefault();
+			jQuery("#qty-error").hide();
+			if(quantity < maxQty) {
+				quantity++;
+				jQuery("input[name=quantity]").val(quantity);
+			}
+		});
+		jQuery("a.qty_less").click(function(e){
+		e.preventDefault();
+		jQuery("#qty-error").hide();
+			if(quantity > minQty){
+				quantity--;
+				jQuery("input[name=quantity]").val(quantity);
+			}
+		});
+	});
+
 </script>

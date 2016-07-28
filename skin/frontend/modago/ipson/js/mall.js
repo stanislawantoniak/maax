@@ -580,6 +580,17 @@ var Mall = {
         });
     },
 
+    validateAddingToCart: function(id, minQty, maxQty){
+        jQuery("#qty-error").hide();
+        var quantity =  jQuery("#product-options input[name=quantity]").val();
+        if(quantity >= minQty && quantity <= maxQty){
+            Mall.addToCart(id, quantity);
+        }else{
+            jQuery("#qty-error").show();
+        }
+        return false;
+    },
+
     addToCart: function(id, qty) {
         if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
             return false;

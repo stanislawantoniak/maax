@@ -54,161 +54,129 @@ if ($vendorContext && $vendorContext->getId()) {
 $_helper = $this->helper('catalog/output');
 /** @var $_product Zolago_Catalog_Model_Product */
 $_product = $this->getProduct();
+$attributesData = $this->getAdditionalDataDetailed(true, false);
+
+$productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
+$brandShopProductId = $_product->getData('brandshop');
+$deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
-
 <div id="content" class="container-fluid">
-	<div class="row">
-		<div class="col-sm-12">
-			<div id="content-main" class="clearfix">
-				<div class="row" itemscope itemtype="http://schema.org/Product">
-					<section id="product_shop" class="section bg-w clearfix">
+	<div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+		<div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
+			<div id="product-gallery" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
+				<!-- GALLERY PRODUCT -->
+				<?php echo $this->getChildHtml('media') ?>
+				<!-- END GALERY PRODUCT -->
+			</div>
+			<div id="product-shop" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<?php echo
+				$this->getChild('product.shop')
+					->setReviewsCount($_reviewsCount)
+					->setReviewsLabel($_reviewsLabel)
+					->setReviewsAvg($avg)
+					->toHtml();
+				?>
+				<!-- END:/ PRODUCT SHOP -->
+			</div>
+		</div>
+		<div id="product_long_box">
+			<ul class="title_section">
+				<li>
+					<a href="#tab_description_product">Opis produktu</a>
+				</li>
+				<li class="hidden-xs">
+					<a href="#tab_reviews">Opinie</a>
+				</li>
+				<?php if (!empty($installments)) : ?>
+					<li class="hidden-xs">
+						<a href="#tab_installments">Zakupy na raty</a>
+					</li>
+				<?php endif; ?>
+				<?php if (!empty($funding)) : ?>
+					<li class="hidden-xs">
+						<a href="#tab_funding">Dofinansowanie</a>
+					</li>
+				<?php endif; ?>
+				<?php if (!empty($deliveryReturn)) : ?>
+					<li class="hidden-xs">
+						<a href="#tab_delivery">Dostawa i wzroty</a>
+					</li>
+				<?php endif; ?>
+			</ul>
+			<div id="tab_description_product">
+				<section class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+					<div>
+						<div itemprop="description"><?php echo $productDescription; ?></div>
+						<?php if (!empty($attributesData)) : ?>
+							<ul class="list">
+								<?php foreach ($attributesData as $attr) : ?>
+									<li>
+										<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
+										<?php if ($attr['code'] == "color"): ?>
+											<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+										<?php elseif ($attr['code'] == "manufacturer"): ?>
+											<?php
+											$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+											$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
+											$brand = $vendorsCollection->getFirstItem();
 
-						<!-- GALLERY PRODUCT -->
-						<div class="path_back_to_category visible-xs">
-							<?php if ($isVendorContent): ?>
-								<div class="col-xs-12 brandshop">
-									<a href="<?php echo $this->getVendorUrl(); ?>">
-										<?php echo $vendorContext->isBrandshop() ? $this->__("Brandshop") : $this->__("Vendor"); ?>
-										<img alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"
-										     src="<?php echo $this->getVendorLogoUrl(); ?>">
-									</a>
-								</div>
-							<?php endif; ?>
-							<div class="col-xs-12">
-								<?php if (Mage::registry('mobile_breadcrumb')): ?>
-									<?php $mobileBreadcrumb = Mage::registry('mobile_breadcrumb'); ?>
-									<a href="<?php echo $mobileBreadcrumb['link']; ?>" id="pbtc_link"><i
-											class="fa fa-angle-left"></i> <?php echo $mobileBreadcrumb['label']; ?></a>
-								<?php else: ?>
-									<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i
-											class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
-								<?php endif; ?>
-							</div>
-						</div>
-
-
-						<?php echo $this->getChildHtml('media') ?>
-						<!-- END GALERY PRODUCT -->
-						<?php echo
-						$this->getChild('product.shop')
-							->setReviewsCount($_reviewsCount)
-							->setReviewsLabel($_reviewsLabel)
-							->setReviewsAvg($avg)
-							->toHtml();
-						?>
-						<!-- END:/ PRODUCT SHOP -->
-					</section>
-					<!-- SECTION : SKOMPLETUJ CAŁOŚĆ -->
-					<?php echo $this->getChildHtml('crosssell'); ?>
-					<!-- END:/ SKOMPLETUJ CAŁOŚĆ -->
-					<!-- SECTION : OPIS PRODUKTU -->
-					<?php echo $this->getChildHtml('product.vendor.info'); ?>
-					<section id="description_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-						<header>
-							<h2 class="title_section">Opis produktu <i class="bullet-strzalka-down visible-xs"></i></h2>
-						</header>
-						<?php $attributesData = $this->getAdditionalDataDetailed(true, false); ?>
-						<?php
-						$productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
-						$brandShopProductId = $_product->getData('brandshop');
-						?>
-						<div class="main">
-							<div itemprop="description"><?php echo $productDescription; ?></div>
-							<?php if (!empty($attributesData)) : ?>
-								<ul class="list">
-									<?php foreach ($attributesData as $attr) : ?>
-										<li>
-											<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
-
-											<?php if ($attr['code'] == "color"): ?>
-												<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
-											<?php elseif ($attr['code'] == "manufacturer"): ?>
-												<?php
-												$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
-												$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
-												$brand = $vendorsCollection->getFirstItem();
-
-												$brandShopId = $brand->getId();
-												$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
-												$brandShopName = $brandShop->getData("vendor_name");
-												$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
-												?>
-
-												<?php if ($brandShopProductId == $brandShopId): ?>
-													<h3 class="itemprop-brand"><a
-															href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
-												<?php else: ?>
-													<?php echo $this->escapeHtml($attr['value']); ?>
-												<?php endif; ?>
-
-
+											$brandShopId = $brand->getId();
+											$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
+											$brandShopName = $brandShop->getData("vendor_name");
+											$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
+											?>
+											<?php if ($brandShopProductId == $brandShopId): ?>
+												<h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
 											<?php else: ?>
-
-												<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
-													<?php echo $this->escapeHtml($attr['value']); ?>
-												<?php else: ?>
-													<?php echo implode(",", $attr['value']); ?>
-												<?php endif; ?>
-
+												<?php echo $this->escapeHtml($attr['value']); ?>
 											<?php endif; ?>
-										</li>
-									<?php endforeach; ?>
-								</ul>
-							<?php endif; ?>
-						</div>
-					</section>
-					<!-- SECTION : OPIS PRODUKTU -->
-					<!--reviews-->
-					<?php echo $this->getChildHtml('product.review.section'); ?>
-					<!--end reviews-->
-					<section id="share" class="section clearfix visible-xs">
-						<div class="addthis_sharing_toolbox"></div>
-					</section>
+										<?php else: ?>
+											<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
+												<?php echo $this->escapeHtml($attr['value']); ?>
+											<?php else: ?>
+												<?php echo implode(",", $attr['value']); ?>
+											<?php endif; ?>
+										<?php endif; ?>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</div>
+				</section>
+			</div>
+			<div id="tab_reviews" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+				<?php echo $this->getChildHtml('product.review.section'); ?>
+			</div>
+			<?php if (!empty($installments)) : ?>
+				<div id="tab_installments" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
 
 				</div>
-			</div>
-		</div>
-	</div>
-</div>
+			<?php endif; ?>
+			<?php if (!empty($funding)) : ?>
+				<div id="tab_funding" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
 
-<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<button type="button" class="close" data-dismiss="modal"></button>
-
-			<div class="modal-body">
-				<div id="sizeTableIframeContainer">
-					<iframe id="sizeTableIframe"></iframe>
 				</div>
-			</div>
+			<?php endif; ?>
+			<?php if (!empty($deliveryReturn)) : ?>
+				<div id="tab_delivery" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+					<?php echo $deliveryReturn;?>
+				</div>
+			<?php endif; ?>
 		</div>
+
+	</div>
+
+	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+		<?php echo $this->getChildHtml('upsell'); ?>
+	</div>
+
+	<div id="product_additions_2" class="col-xs-12">
+		<?php echo $this->getChildHtml('crosssell'); ?>
 	</div>
 </div>
-
-<?php echo $this->getChildHtml('product.info.media.modal'); ?>
-
-
-<!--zadaj pytanie sprzedajacemu-->
-
-<div class="modal fade bs-example-modal-lg" id="ask_question" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"></button>
-				<h2 class="title_section"><?php echo $this->__("Submit a question about product"); ?></h2>
-			</div>
-			<div class="modal-body">
-				<?php echo $this->getChildHtml('udqa.product.question.product'); ?>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!--end zadaj pytanie sprzedajacemu-->
-
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
+	 aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-error modal-header" style="display: none;">
@@ -268,7 +236,35 @@ $_product = $this->getProduct();
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal"></button>
+			<div class="modal-body" style="overflow-y: hidden;">
+				<div id="sizeTableIframeContainer">
+					<iframe id="sizeTableIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--zadaj pytanie sprzedajacemu-->
+<div class="modal fade bs-example-modal-lg" id="ask_question" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php /* echo Mage::helper('wfwf')->__("Ask about product"); */ ?></h2>
+			</div>
+			<div class="modal-body">
+				<?php echo $this->getChildHtml('udqa.product.question.product'); ?>
+			</div>
+		</div>
+	</div>
+</div>
+<!--end zadaj pytanie sprzedajacemu-->
 
+<?php echo $this->getChildHtml('product.info.media.modal'); ?>
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 <?php echo $this->getChildHtml('zolago.page.benefits'); ?>
 
@@ -281,6 +277,7 @@ $_product = $this->getProduct();
 	Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
 	Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
 	Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
+	Mall.translate.add("add-to-favorites", "<?php echo $this->__("Add to favorites"); ?>");
 	Mall.translate.add("like-this-product", "<?php echo $this->__("like this product"); ?>");
 	Mall.translate.add("likes-this-product", "<?php echo $this->__("likes this product"); ?>");
 	Mall.translate.add("you-and", "<?php echo $this->__("You and"); ?>");
@@ -301,6 +298,10 @@ $_product = $this->getProduct();
 
 	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable."); ?>");
 
-	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
+	//Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
+
+	jQuery( function() {
+		jQuery( "#product_long_box" ).tabs();
+	} );
 
 </script>

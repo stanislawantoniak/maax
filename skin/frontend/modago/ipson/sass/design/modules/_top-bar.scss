@@ -3,7 +3,6 @@
 }
 .top-bar {
   background-color: #262626;
-  color: #737373;
   max-height: 100px;
   overflow: hidden;
   padding: 5px 0;
@@ -24,7 +23,7 @@
           display: inline-block;
           width: 1px;
           height: 10px;
-          color: #8a8a8a;
+          color: #fff;
           margin: 2px 12px 0;
         }
         &:last-child:after {
@@ -43,16 +42,13 @@
 
   .top-bar-left {
     float: left;
-    height: 23px;
+    height: 29px;
 
     .top-bar-left-content {
-      //margin-left: 14px;
-
-
       li {
-        margin-right: 7px;
+        margin-right: 13px;
         font-size: 12px;
-        line-height: 23px;
+        line-height: 28px;
 
         &.active {
           font-weight: 400;
@@ -85,6 +81,8 @@
 
   .top-bar-right {
     float: right;
+    line-height: 29px;
+    height: 29px;
   }
   @media only screen and (max-width: $screen-xs-max){
     .top-bar-right {
@@ -108,12 +106,29 @@
           display: inline-block;
           width: 1px;
           height: 10px;
-          margin: 1px 0px 2px 4px;
+          margin: 1px 0px 8px 8px;
         }
 
         i {
-          margin-right: 5px;
-          font-size: 14px;
+          margin-right: 11px;
+          font-size: 18px;
+          &.fa-mobile {
+            font-size: 22px;
+            top: 3px;
+            position: relative;
+          }
+          @include max-screen(550px) {
+            display: none;
+          }
+        }
+
+
+        &.delivery-link {
+          &:after {
+            @include max-screen(550px) {
+              display: none;
+            }
+          }
         }
 
       }
@@ -122,6 +137,10 @@
           content: "";
           margin-left: 0;
           margin-right: 0;
+        }
+
+        @include max-screen(550px) {
+          display: none;
         }
       }
 
@@ -139,6 +158,16 @@
     ul {
       display: inline-block;
       margin-bottom: 0;
+    }
+
+    #menu-right-top-menu {
+      li {
+        &:first-child {
+          @include max-screen($screen-desktop) {
+            display: none;
+          }
+        }
+      }
     }
   }
 

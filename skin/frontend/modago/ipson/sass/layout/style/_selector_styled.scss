@@ -1,9 +1,12 @@
+@import "../css/font-awesome.css";
+
 .selectboxit-container {
   .selectboxit {
     background-image: none;
     border-radius: 0;
     background-color: $color_fff;
-    border-color: $color_ccc;
+    border-color: #eee;
+    border-radius: 3px;
 
     &:hover {
       border-color: $gray-dark;
@@ -25,9 +28,9 @@
       font-weight: normal;
     }
     .selectboxit-arrow-container {
-      background: $selectMap;
-      @include sprite($selectMap, select_styled);
-      line-height: image-height(sprite-file($selectMap, select_styled));
+      //background: $selectMap;
+      //@include sprite($selectMap, select_styled);
+      //line-height: image-height(sprite-file($selectMap, select_styled));
       height: 29px;
       width: 29px;
 
@@ -36,6 +39,19 @@
       }
       .selectboxit-arrow {
         border: none;
+        top: 10px;
+        right: 7px;
+        font-size: 10px;
+      }
+      .selectboxit-arrow:before {
+        display: inline-block;
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        content: '\f078';
       }
     }
   }

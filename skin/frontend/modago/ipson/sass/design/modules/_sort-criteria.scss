@@ -36,7 +36,12 @@
 				font-size: 12px!important;
 				font-family: $fontRegular;
 				font-weight: normal;
-				color:$color_000;
+			}
+			label {
+				color:$color_333;
+			}
+			span {
+				color:$color_777;
 			}
 			.sort-by-container {
 				width: 160px;

@@ -212,6 +212,7 @@ section.bottom {
 	#header-main {
 		padding-top:15px;
 		padding-bottom: 0px;
+		background: #fff;
 		@media (max-width: $screen-sm-min) {
 			padding-top:0px;
 			padding-bottom:0px;
@@ -220,6 +221,7 @@ section.bottom {
 	#content {
 		padding-top:0;
 		padding-bottom:0;
+		background: #fff;
 	}
 	#content-main {
 		padding:0 15px 15px 15px;
@@ -310,6 +312,7 @@ section {
 }
 
 #main {
+	background: #fff;
 	> .container-fluid {
 		> .row {
 			> .col-sm-12 {

@@ -464,13 +464,13 @@ span.checked {
 
 .sidebar {
 	border: 1px solid $colorBorderSidebar;
-	border-bottom: none;
+	//border-bottom: none;
 	background: $colorBackgroundSidebar;
 	font-family: $fontRegular;
 	font-size: 12px;
 
 	.section {
-		border-bottom: 1px solid $colorBorderSidebarSection;
+		//border-bottom: 1px solid $colorBorderSidebarSection;
 		text-align:center;
 		-webkit-backface-visibility: hidden;
 	}

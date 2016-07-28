@@ -2,29 +2,27 @@
 ol.breadcrumb {
 	background:none;
 	font-family: $fontRegular;
-	font-size: 11px;
+	font-size: 1.2em;
+	font-weight: 600;
 	a:link,
 	a:visited {
-		color:$color_000;
-		font-family: $fontRegular;
-		font-size: 11px;			
+		font-weight: 400;
+		color: #85807f;
 	}
 	a:hover {
 		text-decoration: underline;
 	}
 	&.active {
-		color:$color_000;			
+		color: #85807f;
 	}
 }
 
 ol.breadcrumb{
 	li {
-		font-size: 11px;
+		color: #85807f;
+		font-size: 1.2em;
 		&:not(:first-child):before {
-			font-family: FontAwesome;
-			font-size: 11px;
 			text-align: right;
-			color:$color_000;
 		}
 	}
 }
