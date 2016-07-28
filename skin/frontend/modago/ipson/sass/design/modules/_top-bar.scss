@@ -42,13 +42,13 @@
 
   .top-bar-left {
     float: left;
-    height: 28px;
+    height: 29px;
 
     .top-bar-left-content {
       li {
         margin-right: 13px;
         font-size: 12px;
-        line-height: 28px;
+        line-height: 29px;
 
         &.active {
           font-weight: 400;
@@ -82,7 +82,7 @@
   .top-bar-right {
     float: right;
     line-height: 26px;
-    height: 28px;
+    height: 29px;
   }
   @media only screen and (max-width: $screen-xs-max){
     .top-bar-right {
