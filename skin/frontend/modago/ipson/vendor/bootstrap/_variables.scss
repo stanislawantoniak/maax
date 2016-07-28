@@ -995,3 +995,18 @@ $component-offset-horizontal: 180px !default;
 
 //Storesmap
 $button-border-color: $color_2d2d2d;
+
+
+//backgrounds colors
+$colorBackgroundBlocks:                 #FFF;
+$colorBackgroundSite:                   #F2F1F0;
+$colorBackgroundContent:                #FFF;
+
+
+/* SIDEBAR VARIABLES */
+$widthSidebar:                          268px;
+$widthSidebarMobile:                    $widthSidebar;
+$marginSidebar:                         20px;
+$colorBorderSidebar:                    #fff;
+$colorBackgroundSidebar:                $colorBackgroundBlocks;
+$colorBorderSidebarSection:             #fff;

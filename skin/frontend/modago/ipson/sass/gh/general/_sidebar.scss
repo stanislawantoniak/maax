@@ -9,7 +9,7 @@
 }
 .sidebar-first {
 	#sidebar {
-		width:185px;
+		width: $widthSidebar;
 		float:left;
 		margin-right:20px;
 		display:block;
@@ -21,10 +21,7 @@
 
 .sidebar-first {
 	#content-main {
-		margin-left: 205px;
-		@media (max-width: $screen-sm-max) {
-		  margin-left: 0 !important;
-		}
+		margin-left: $widthSidebar+$marginSidebar;
 	}
 }
 
@@ -35,11 +32,33 @@
 }
 
 .sidebar {
-	width:185px;
+	width: $widthSidebar;
 	position:relative;
 	margin-bottom: 52px;
 	z-index: 900;
 	.section {
+		#filter_category {
+			dt {
+				text-transform:none;
+				.suffix {
+					float: right;
+				}
+			}
+			dd {
+				a {
+					&:before {
+						content: "-";
+						padding: 0 5px 0 0;
+					}
+					.suffix {
+						float: right;
+					}
+				}
+			}
+			.action {
+				text-align: left;
+			}
+		}
 		padding:11px 18px 0;
 		.content {
 			padding-top:8px;
@@ -57,19 +76,20 @@
 		h3 {
 			position:relative;
 			display:block;
-			//	     	  height:18px;
-			//	     	  overflow:hidden;
+			white-space: normal;
+
+			font-size: 1.1428em;
+			color: #000;
+			border-bottom: 1px dotted $colorAccentSite;
 
 			@if $colorAccentTitleTransparent {
-				margin: 0 0 11px;
-				padding: 0;
+				margin: 0 0 1.0714em;
+				padding: 0 0 0.7142em 0;
 			} @else {
 				margin: 0 -18px 11px;
 				padding:0 0 0 25px;
 			}
 
-
-			white-space: normal;
 			span {
 				display: block;
 				white-space: normal;
@@ -80,6 +100,16 @@
 				position:absolute;
 				right:12px;
 				top:2px;
+
+				&.fa-angle-down {
+					display: none;
+				}
+
+				&.fa-angle-up {
+					display: none;
+				}
+
+
 			}
 			&:before {
 				content: ' ';
@@ -110,7 +140,19 @@
 		}
 	}
 }
+.filters-mobile {
+	h3 {
+		i {
+			&.fa-angle-down {
+				display: block !important;
+			}
 
+			&.fa-angle-up {
+				display: block !important;
+			}
+		}
+	}
+}
 .sidebar-first {
 	&.node-type-list {
 		#sidebar {
@@ -126,7 +168,7 @@
 .sidebar-first {
 	&.node-type-list {
 		#content-main {
-			margin-left: 310px;
+			margin-left: $widthSidebar+$marginSidebar;
 			overflow: hidden;
 			@media (max-width: $screen-xs-max) {
 				margin-left: 0 !important;
@@ -137,8 +179,6 @@
 .sidebar-first {
 	&.node-type-main_categories {
 		#sidebar {
-
-
 			@media (max-width: $screen-xs-max) {
 				width:100%;
 			}
