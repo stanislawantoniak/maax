@@ -79,6 +79,12 @@
                         <th><?php echo $this->__('Created At'); ?></th>
                         <td><?php echo $this->getCreatedAtHtml(); ?></td>
                     </tr>
+                    <?php if($this->getBankAccountHtml()): ?>
+                        <tr>
+                            <th><?php echo $this->__('Bank account'); ?></th>
+                            <td><?php echo $this->getBankAccountHtml(); ?></td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

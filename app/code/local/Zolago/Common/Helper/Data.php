@@ -310,7 +310,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		return true;
 	}
 
-	/**
+    /*
 	 * Retrieve information that vendor/operator can see/use Loyalty card section
 	 * 
 	 * @return bool
@@ -348,4 +348,14 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		$exist = file_exists($file);
 		return $exist;
 	}
+
+	/**
+	 * @param string $code
+	 * @return bool
+	 */
+	public function isModuleActive($code)
+	{
+		return ('true' == (string)Mage::getConfig()->getNode('modules/'.$code.'/active'));
+	}
+	
 }

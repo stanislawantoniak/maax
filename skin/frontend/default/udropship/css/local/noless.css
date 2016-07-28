@@ -798,6 +798,9 @@ z-index: 0;
     color: #d3d3d3;
 }
 
+#refundModalSimple label[for=refund].has-error {
+    width: 200%;
+}
 
 div .view_lupa {
 	position: absolute;
@@ -812,4 +815,28 @@ div .view_lupa {
 	height: 49px;
 	width: 49px;
 }
-
+.error.help-block {
+	color: #b94a48;
+}
+.fa-spin {
+	-webkit-animation: spin 2s infinite linear;
+	-moz-animation: spin 2s infinite linear;
+	-o-animation: spin 2s infinite linear;
+	animation: spin 2s infinite linear;
+}
+.fa {
+	display: inline-block;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale; }
+.fa-spinner:before {
+	content: "\f110";
+	font-size: 3em;
+}
+#spinner_block {
+	text-align: center;
+	padding: 20px 0 0;
+}
