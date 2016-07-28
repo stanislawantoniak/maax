@@ -14,7 +14,9 @@ class Zolago_Modago_Block_Sales_Order_Shipment extends Mage_Core_Block_Template 
 	 * @return mixed
 	 */
 	public function getShippingMethodInfo() {
-		return $this->getItem()->getShippingMethodInfo();
+		/* @var $po ZolagoOs_OmniChannelPo_Model_Po */
+		$po = $this->getItem();
+		return $po->getShippingMethodInfo();
 	}
 
 	public function getCarrierTitle() {
