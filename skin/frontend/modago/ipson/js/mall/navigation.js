@@ -35,10 +35,26 @@ Mall.Navigation = {
      * highlighted element (current category context) should temporary be disabled
      */
     attachOnChangeDesktopSubmenu: function() {
+
         var customToggle = function () {
+
+            var li = jQuery(this).parents("li");
+            var liOffset = li.offset().left;
+            var liOffsetTop = li.offset().top;
+
+            var left = liOffset + 10;
+
             if (jQuery('#nav_desc a').hasClass('active')) {
+                jQuery("#clone_submenu").css({
+                    'top': (liOffsetTop + 45),
+                    'left': left
+                });
                 jQuery('#nav_desc a[data-flagForceActive="1"]').removeClass('forceActive');
             } else {
+                jQuery("#clone_submenu").css({
+                    'top': 0
+                });
+
                 jQuery('#nav_desc a[data-flagForceActive="1"]').addClass('forceActive');
             }
         };

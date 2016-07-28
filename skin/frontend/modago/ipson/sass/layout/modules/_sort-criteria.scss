@@ -33,7 +33,12 @@
 			}
 		}
 	}
-
+    ul.sort {
+      margin-left: 310px;
+      @media (max-width: $screen-sm-max) {
+        margin-left: 0 !important;
+      }
+    }
 }
 .not-content-mode.sm-to-smmd-plus-smmd, .this-is-search.sm-to-smmd-plus-smmd {
   #sort-criteria {

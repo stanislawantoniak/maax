@@ -60,9 +60,9 @@
                 }
             }
             dl {
-                width:175px;
+                //width:175px;
                 @include max-screen($screen-sm-max) {
-                      width:155px;
+                      //width:155px;
                 }
                 dt {
                     margin-bottom:10px;

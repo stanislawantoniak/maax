@@ -52,7 +52,7 @@ $color-gray4: $color_b69494;
 $bc-primary : $gray-lighter;
 $color-black: $color_220000;
 $bc-secondary : #d9d9d9;
-$colorShortDescription:                                        $color_8a8a8a;
+
 
 
 
@@ -124,10 +124,9 @@ $validation-error: $color_e84c3d;
 }
 
 // FONT
-$fontLight: RobotoLight, sans-serif;
-$fontRegular: Roboto, sans-serif;
-$fontBlack: RobotoBold, sans-serif;
-$fontOpen: $fontRegular;
+$fontLight: latolight, sans-serif;
+$fontRegular: latoregular, sans-serif;
+$fontBlack: latoblack, sans-serif;
 
 /* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
 
@@ -155,7 +154,7 @@ $colorSiteBackground:                   #F2F1F0;
 $colorSiteOverlay:                      #000;
 $opacitySiteOverlay:                    .5;
 
-$colorShadow:                           #dfdfdf;
+$colorShadow:                           #bbb;
 
 $colorFont:                             #000;
 $colorLink:                             #000;
@@ -202,7 +201,6 @@ $colorBtnThirdBorderActive:             #008539;
 $colorBtnThirdColorActive:              #008539;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
-$colorSecondFont:                       #3d3d3d;
 
 @mixin primaryButtonGradient { //covers normal + hover + active + .disabled
 	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
@@ -216,6 +214,14 @@ $colorSecondFont:                       #3d3d3d;
 		background: $colorBtnPrimaryBgDisabled;
 	}
 }
+
+
+/***********************************************/
+$colorDropdownBorder:                   #e6e6e6;
+$colorDropdownBBoxShadow:               #bfbfbf;
+
+$colorMainMenuSubItemGradientStart:     #fff;
+$colorMainMenuSubItemGradientEnd:       #fff;
 
 /* CMS VARIABLES */
 $colorBorderCms:                        #bfbfbf;
@@ -254,6 +260,9 @@ $colorHeaderCheckoutStepsText:          $colorIconHeader;
 $colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
 
 /* TOP MENU VARIABLES */
+$colorMainMenuLinks:                     #808080;
+
+
 $colorAccentSiteMenuTop:                $colorAccentSite;
 $colorAccentBlocksMenuTop:              $colorAccentBlocks;
 $colorBgBlocksMenuTop:                  $colorBackgroundBlocks;
@@ -363,6 +372,11 @@ $colorProductExtraInfo:                 $colorFont;
 $colorProductExtraInfoBg:               #FCFCFC;
 $colorProductExtraInfoBorder:           #EBEBEB;
 
+/* LISTING */
+$boxShadowListingColor:                 #f5f3f4;
+$colorProductFinalPrice:                #dc4348;
+$colorProductStrikeOutPrice:            #8a8a8a;
+
 /*FOOTER*/
 $textColorFooter:                       #fff;
 $textColorFooterLink:                   #8a8a8a;
@@ -380,54 +394,3 @@ $backgroundColorFooter:                 #262626;
     outline: none;
   }
 }
-
-@mixin productFlagLabel {
-  .label-product {
-    text-align: center;
-    z-index: 1;
-
-    .listing-label {
-      color: #fff;
-      border-radius: 100%;
-      width: 45px;
-      height: 45px;
-      line-height: 45px;
-      font-size: 12px;
-      font-family: $fontOpen;
-      font-weight: 700;
-      display: inline-block;
-      top: 7px;
-      position: absolute;
-      z-index: 100;
-      left: 20px;
-
-      &.type-label-new {
-        background: $backgroundColorFlagNew;
-      }
-      &.type-label-sale, &.type-label-bestseller {
-        background: $backgroundColorFlagSale;
-      }
-      &.type-label-promotion {
-        background: $backgroundColorFlagPromotion;
-      }
-      .flag-bestseller:before {
-        content: "Hit";
-      }
-      .flag-promotion:before {
-        content: "Promo";
-      }
-      .flag-sale:before {
-        content: "Sale";
-      }
-      .flag-new:before {
-        content: "New";
-      }
-
-    }
-  }
-}
-
-$backgroundColorFlagNew:                #7fce25;
-$backgroundColorFlagSale:               #de0e59;
-$backgroundColorFlagPromotion:          #ec4920;
-$boxShadowListingColor:                 #f5f3f4;

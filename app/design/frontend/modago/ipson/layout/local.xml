@@ -50,7 +50,7 @@
 	</faq_index_index>
     <solrbridge_solrsearch_category_view>
         <reference name="content">
-            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>  
+            <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
         </reference>
     </solrbridge_solrsearch_category_view>
     <solrsearch_index_index>

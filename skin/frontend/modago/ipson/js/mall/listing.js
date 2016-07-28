@@ -126,14 +126,15 @@ Mall.listing = {
 
     initShuffle: function() {
         jQuery(document).ready(function() {
-            jQuery('#grid')
-                .on('layout.shuffle', function() {
+            //jQuery('#grid')
+            //    .on('layout.shuffle', function() {
                     Mall.listing.hideListingOverlay();
                     Mall.listing.likePriceView();
-		            Mall.listing.placeListingFadeContainer();
+		            // Mall.listing.placeListingFadeContainer();
 		            Mall.Footer.setContainerPadding();
-                })
-                .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+                //})
+                //.shuffle({throttleTime: 800, speed: 0, easing: 'linear' })
+			;
 	        jQuery(window).resize();
         });
     },
@@ -254,8 +255,8 @@ Mall.listing = {
 			i = title.find('i'),
 			open = 'open',
 			closed = 'closed',
-			arrowUp = 'fa-chevron-up',
-			arrowDown = 'fa-chevron-down',
+			arrowUp = 'fa-angle-up',
+			arrowDown = 'fa-angle-down',
 			isMobile = this.getCurrentMobileFilterState(),
 			dataAttr = 'data-' + (isMobile ? 'xs' : 'lg') + '-rolled';
 		if(state){
@@ -350,16 +351,24 @@ Mall.listing = {
 	        eachItemsHtml = [];
 
 		jQuery.each(products, function(index, item) {
-            eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
-            Mall.wishlist.addProduct({
-                id: item[0],
-                       wishlist_count: item[5],
-                in_your_wishlist: item[6] ? true : false
-                    });
+			eachItemsHtml.push(Mall.listing.createProductEntityImprove(item));
+
+			if( (index+1) % 2 == 0){
+				eachItemsHtml.push('<div class="clearfix visible-two-listing-columns"></div>');
+			}
+			if( (index+1) % 3 == 0){
+				eachItemsHtml.push('<div class="clearfix visible-three-listing-columns"></div>');
+			}
+
+			Mall.wishlist.addProduct({
+				id: item[0],
+				wishlist_count: item[5],
+				in_your_wishlist: item[6] ? true : false
+			});
+
 		});
 
-        grid.append(eachItemsHtml);
-        grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
+        grid.html(eachItemsHtml);
 
 		// attach events
 		this.preprocessProducts();
@@ -395,10 +404,10 @@ Mall.listing = {
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);return false;" : "Mall.wishlist.addFromSmallBlock(this);return false;";
 
 
-		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
+		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
-                    "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
+                    "<figure class='img_product'>"+
                         "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+
                     "<div class='logo_manufacturer' style='background-image:url(" + Mall.manufacturerImagesUrl + product[9] +")' ></div>"+
@@ -1268,11 +1277,14 @@ Mall.listing = {
 		jQuery(document).delegate(filtersId+' h3','click',function(e) {
 			e.preventDefault();
 			var me = jQuery(this);
-			self._doRollSection(
-				me.parent(),
-				!me.hasClass("open"),
-				false
-			);
+			if(self.getCurrentMobileFilterState()){
+				self._doRollSection(
+					me.parent(),
+					!me.hasClass("open"),
+					false
+				);
+			}
+
 			if(self.getCurrentMobileFilterState()) {
 				self.getFilters().find('h3.open').not(me).each(function() {
 					self._doRollSection(

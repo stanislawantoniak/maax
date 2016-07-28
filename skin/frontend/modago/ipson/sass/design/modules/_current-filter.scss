@@ -270,7 +270,8 @@
   #active-filters, #view-current-filter{
     h1 {
       @media (max-width: $screen-sm-to-smmd-max) {
-        font-size: 18px;
+        font-size: 21px;
+        color: #382e2f;
       }
     }
     dl {

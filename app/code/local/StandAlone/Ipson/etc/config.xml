@@ -2,7 +2,7 @@
 <config>
     <modules>
         <StandAlone_Ipson>
-            <version>0.0.2</version>
+            <version>0.0.4</version>
         </StandAlone_Ipson>
     </modules>
     <global>
@@ -24,6 +24,11 @@
             <saipson>
                 <class>StandAlone_Ipson_Helper</class>
             </saipson>
+            <zolagosolrsearch>
+                <rewrite>
+                    <data>StandAlone_Ipson_Helper_Solrsearch_Data</data>
+                </rewrite>
+            </zolagosolrsearch>
         </helpers>
         <resources>
             <saipson_setup>
