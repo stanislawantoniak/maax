@@ -209,7 +209,7 @@
 	}
 	#productGalleryBigMedia, #productGalleryBigMediaOpen {
 		.item {
-			@include productFlagLabel;
+			//@include productFlagLabel;
 		}
 		width: 100%;
 		max-width:409px;

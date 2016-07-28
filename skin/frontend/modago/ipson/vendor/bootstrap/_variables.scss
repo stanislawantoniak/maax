@@ -205,7 +205,7 @@ $link-hover-color:      darken($link-color, 15%) !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif:  Roboto !default;
+$font-family-sans-serif: "latoregular", sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
@@ -221,7 +221,6 @@ $font-size-h3:            25px !default; // ~24px
 $font-size-h4:            18px !default; // ~18px
 $font-size-h5:            14px !default;
 $font-size-h6:            12px !default; // ~12px
-
 
 $font-size-normal-link:            12px !default;
 //** Unit-less `line-height` for use in components like buttons.
