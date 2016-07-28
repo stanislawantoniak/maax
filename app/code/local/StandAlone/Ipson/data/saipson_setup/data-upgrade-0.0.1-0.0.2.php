@@ -23,7 +23,7 @@ $blocksToCreate = array(
 			<ul id="nav_footer_mobile">
 				<li>
 					<a href="#">
-						OBSLUGA KLIENTA <i class="fa fa-chevron-up"></i>
+						Osługa Klienta <i class="fa fa-chevron-down"></i>
 					</a>
 					<ul>
 						<li><a href="{{store direct_url='' _no_vendor='1'}}">Dostawa</a></li>
@@ -35,32 +35,32 @@ $blocksToCreate = array(
 				</li>
 				<li>
 					<a href="#">
-						INFORMACJE <i class="fa fa-chevron-up"></i>
+						INFORMACJE <i class="fa fa-chevron-down"></i>
 					</a>
 					<ul>
 						<li><a href="{{store direct_url='o-nas' _no_vendor='1'}}">O Nas</a></li>
 						<li><a href="{{store direct_url='' _no_vendor='1'}}">Regulamin</a></li>
-						<li><a href="{{store direct_url='' _no_vendor='1'}}">Polityka prywatnosci</a></li>
+						<li><a href="{{store direct_url='' _no_vendor='1'}}">Polityka prywatności</a></li>
 						<li><a href="{{store direct_url='' _no_vendor='1'}}">Kariera</a></li>
 					</ul>
 				</li>
 				<li>
 					<a href="#">
-						TWOJE KONTO <i class="fa fa-chevron-up"></i>
+						TWOJE KONTO <i class="fa fa-chevron-down"></i>
 					</a>
 					<ul>
 						<li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Zaloguj się</a></li>
 						<li><a href="{{store url='sales/order/process'}}">Twoje zamówienia</a></li>
-						<li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Przechowainia</a></li>
+						<li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Przechowalnie</a></li>
 					</ul>
 				</li>
 				<li>
 					<a href="#">
-						KONTAKT <i class="fa fa-chevron-up"></i>
+						KONTAKT <i class="fa fa-chevron-down"></i>
 					</a>
 					<ul>
 						<li><a href="mailto:contacr@ipson.com" class="contact-us-link">Napisz do nas</a></li>
-						<li><a href="tel:+800180022" class="contact-us-link">Bezplatna infolinia: 800 180 022</a></li>
+						<li><a href="tel:+800180022" class="contact-us-link">Bezpłatna infolinia: 800 180 022</a></li>
 						<li>Godziny pracy: pon. - piat. 9:00 - 17:00</li>
 					</ul>
 				</li>
@@ -79,7 +79,7 @@ EOD
 				<div class="wpb_wrapper">
 					<div class="wpb_text_column wpb_content_element ">
 						<div class="wpb_wrapper">
-							<h2 class="footer-list-title">OBSLUGA KLIENTA</h2>
+							<h2 class="footer-list-title">Osługa Klienta</h2>
 							<ul class="footer-list">
 							   <li><a href="{{store direct_url='' _no_vendor='1'}}">Dostawa</a></li>
 							   <li><a href="{{store direct_url='' _no_vendor='1'}}">Zwroty i reklamacje</a></li>
@@ -99,7 +99,7 @@ EOD
 							<ul class="footer-list">
 								  <li><a href="{{store direct_url='o-nas' _no_vendor='1'}}">O Nas</a></li>
 								  <li><a href="{{store direct_url='' _no_vendor='1'}}">Regulamin</a></li>
-								  <li><a href="{{store direct_url='' _no_vendor='1'}}">Polityka prywatnosci</a></li>
+								  <li><a href="{{store direct_url='' _no_vendor='1'}}">Polityka prywatności</a></li>
 								  <li><a href="{{store direct_url='' _no_vendor='1'}}">Kariera</a></li>
 							</ul>
 						</div>
@@ -115,7 +115,7 @@ EOD
 							<ul class="footer-list">
 								<li><a href="{{store direct_url='customer/account' _no_vendor='1'}}">Zaloguj się</a></li>
 								<li><a href="{{store url='sales/order/process'}}">Twoje zamówienia</a></li>
-								<li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Przechowainia</a></li>
+								<li><a href="{{store direct_url='wishlist' _no_vendor='1'}}">Przechowalnie</a></li>
 							</ul>
 						</div>
 					</div>
@@ -127,7 +127,7 @@ EOD
 						<div class="wpb_wrapper">
 							<h2 class="footer-list-title">KONTAKT</h2>
 						   <div><i class="fa fa-envelope-o" aria-hidden="true"></i><a href="mailto:contacr@ipson.com" class="contact-us-link">Napisz do nas</a></div>
-						   <div><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:+800180022" class="contact-us-link">Bezplatna infolinia: 800 180 022</a></div>
+						   <div><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:+800180022" class="contact-us-link">Bezpłatna infolinia: 800 180 022</a></div>
 						   <div><i class="fa fa-clock-o" aria-hidden="true"></i>Godziny pracy: pon. - piat. 9:00 - 17:00 </div>
 					</div>
 				</div>

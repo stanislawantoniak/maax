@@ -4,7 +4,7 @@
 		padding-top: 0px;
 		margin-bottom:15px;
 		margin-top: 0;
-		@media (max-width: $screen-xs-max) { 
+		@media (max-width: $screen-xs-max) {
 			margin-top:15px;
 		}
 	}
@@ -46,7 +46,7 @@
 			position:absolute;
 			right:0px;
 			top:10px;
-			
+
 		}
 	}
 	.color-box-bundle,
@@ -56,24 +56,24 @@
 			width: 90px;
 			display: inline-block;
 			float: left;
-            @media (min-width: 768px) and (max-width: 814px) {
+			@media (min-width: 768px) and (max-width: 814px) {
 				float:none;
-            	display:block;
+				display:block;
 				width:100%;
 			}
-            @media (max-width: $screen-xs-max) {
-            	float:none;
-            	display:block;
-            }
+			@media (max-width: $screen-xs-max) {
+				float:none;
+				display:block;
+			}
 		}
-	  .no-size {
-		span {
-		  canvas.diagonal {
-			background: url(../images/diagonal.png);
-			background-size: 100% 100%;
-		  }
+		.no-size {
+			span {
+				canvas.diagonal {
+					background: url(../images/diagonal.png);
+					background-size: 100% 100%;
+				}
+			}
 		}
-	  }
 		.color-label {
 			margin-top: -10px;
 		}
@@ -97,7 +97,7 @@
 				}
 			}
 		}
-		
+
 	}
 	.color-box-bundle  {
 		.form-group {
@@ -114,7 +114,7 @@
 				float: left;
 			}
 		}
-		
+
 	}
 
 	.size {
@@ -139,17 +139,17 @@
 			margin-bottom:0px;
 		}
 		.size-label {
-          padding-left: 0;
-          width: auto;
-          &.size-label-radios {
-            margin-right: 10px;
-          }
+			padding-left: 0;
+			width: auto;
+			&.size-label-radios {
+				margin-right: 10px;
+			}
 			@media (min-width: 768px) and (max-width: 814px) {
-							display:block;
-							width:100%;
-						}
+				display:block;
+				width:100%;
+			}
 			@media (max-width: $screen-xs-max) {
-				float:none; 
+				float:none;
 				display:block;
 			}
 		}
@@ -167,7 +167,7 @@
 					position:absolute;
 					top:0px;
 					left:0px;
-				}			
+				}
 			}
 		}
 		.view-sizing {
@@ -199,27 +199,27 @@
 					position: static;
 				}
 			}
-			
-			
+
+
 		}
-      .size-box {
-        .sizes-content {
-          padding-left: 0;
-        }
-        margin-bottom: 25px;
-      }
+		.size-box {
+			.sizes-content {
+				padding-left: 0;
+			}
+			margin-bottom: 25px;
+		}
 	}
 	.action-box-bundle {
 		margin-bottom:20px;
 		@media screen and (-webkit-min-device-pixel-ratio:0) {
-			   margin-top:4.5px;
-			}
-		
-		
+			margin-top:4.5px;
+		}
+
+
 		.col-xs-6 {
 			margin-top: 16px;
 			@media screen and (-webkit-min-device-pixel-ratio:0) {
-			    margin-top: 15px;
+				margin-top: 15px;
 			}
 			@media (max-width: 320px) {
 				margin-top: 15px;
@@ -228,16 +228,16 @@
 		.addLike-box {
 			white-space: nowrap;
 			@media (max-width: 360px) {
-			margin-top: 1px;
-			@media screen and (-webkit-min-device-pixel-ratio:0) {
+				margin-top: 1px;
+				@media screen and (-webkit-min-device-pixel-ratio:0) {
 					margin-top: 2px;
 				}
 			}
 		}
 		.addedLike-box {
-		    @media (max-width: 810px) {
-		        margin-top: -7px;
-		    }
+			@media (max-width: 810px) {
+				margin-top: -7px;
+			}
 		}
 		.addLike {
 			width:149px;
@@ -245,7 +245,7 @@
 			display:block;
 			padding: 7px 0 0 43px;
 			@media screen and (-webkit-min-device-pixel-ratio:0) {
-			   height:42px;
+				height:42px;
 			}
 		}
 		.likeAdded {
@@ -254,7 +254,7 @@
 			padding: 7px 0 0 43px;
 		}
 		.addBasket {
-			width: 100%; 
+			width: 100%;
 			max-width:165px;
 			overflow:hidden;
 			@media (min-width: $screen-lg-min) {
@@ -288,11 +288,11 @@
 	margin-top: -10px;
 }
 #rwd-color {
-  &.no-size-carousel {
-    padding-left: 0px;
-  }
+	&.no-size-carousel {
+		padding-left: 0px;
+	}
 	width: 300px;
-    padding: 1px 10px 0 16px;
+	padding: 1px 10px 0 16px;
 	.rwd-prev,
 	.rwd-next {
 		text-indent: -999em;
@@ -353,60 +353,60 @@
 		right:20px!important;
 		left:auto!important;
 		margin-left: -15px;
-		
+
 	}
 }
 .zoom_plus {
- top:15px;
+	top:15px;
 	span {
 		top: 5px;
-		left: 1px;		
-	} 
+		left: 1px;
+	}
 }
 .zoom_minus {
 	top:62px;
- 	span {
- 		top: 6px;
- 		left: -1px;
- 	}
+	span {
+		top: 6px;
+		left: -1px;
+	}
 }
 
 
-	i.flag {
-		display:inline-block;
-		position: absolute;
-		top: 10px;
-		right: 15px;
-		z-index: 800;
-		
-		&.sale {
-			
-			@include sprite-dimensions($allMap, sale);
-		}
-		&.percent,
-		&.promotion  {
-			
-			@include sprite-dimensions($allMap, percent);
-		}
-		&.new {
-			
-			@include sprite-dimensions($allMap, new);
-		}
-		&.hit,
-		&.bestseller  {
-			
-			@include sprite-dimensions($allMap, hit);
-		}
-		
-		
+i.flag {
+	display:inline-block;
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	z-index: 800;
+
+	&.sale {
+
+		@include sprite-dimensions($allMap, sale);
+	}
+	&.percent,
+	&.promotion  {
+
+		@include sprite-dimensions($allMap, percent);
+	}
+	&.new {
+
+		@include sprite-dimensions($allMap, new);
+	}
+	&.hit,
+	&.bestseller  {
+
+		@include sprite-dimensions($allMap, hit);
 	}
 
-	#galeria-lightbox {
-		i.flag {
-			left: 15px;
-			right:auto;
-		}
+
+}
+
+#galeria-lightbox {
+	i.flag {
+		left: 15px;
+		right:auto;
 	}
+}
 
 
 #question-form {
@@ -452,21 +452,21 @@
 		min-width: 133px;
 		font-size: 14px;
 	}
-  .error {
-    padding-left: 0px !important;
-  }
+	.error {
+		padding-left: 0px !important;
+	}
 }
 
 .no-size {
-    overflow: hidden;
-    span {
-        position: relative;
-        .diagonal {
-            position: absolute;
-            display: block;
-            top: 0;
-            left: -2px;
-            overflow: hidden;
-        }
-    }
+	overflow: hidden;
+	span {
+		position: relative;
+		.diagonal {
+			position: absolute;
+			display: block;
+			top: 0;
+			left: -2px;
+			overflow: hidden;
+		}
+	}
 }
