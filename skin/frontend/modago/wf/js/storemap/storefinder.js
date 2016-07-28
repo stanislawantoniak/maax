@@ -89,7 +89,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     infowindow = new google.maps.InfoWindow({
-        //pixelOffset: new google.maps.Size(0, 5),
+        // pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
     data = jQuery.parseJSON(data);
@@ -205,10 +205,9 @@ function refreshMap(filteredData) {
             infowindow.setContent(this.html);
             //$screen-sm: 768px
             if (window.innerWidth >= smallScreen) {
-                map.setCenter(this.getPosition()); // set map center to marker position
-                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+                smoothZoom(map, 10, this); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
-                map.setCenter(this.getPosition());
+                map.setCenter(this.getPosition()); // set map center to marker position
                 map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
             }
             //$screen-md: 992px
@@ -248,29 +247,27 @@ function refreshMap(filteredData) {
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
-function smoothZoom(map, max, cnt) {
-    if (cnt >= max) {
-        return;
-    }
-    else {
-        y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
-            google.maps.event.removeListener(y);
-            smoothZoom(map, max, cnt + 1);
-        });
+function smoothZoom(map, max, o) {
+    t = function () {
+        map.setCenter(o.getPosition());
         setTimeout(function () {
-            map.setZoom(cnt)
+            if (map.zoom < max) {
+                map.setZoom(map.zoom + 1);
+                if (map.zoom == max) google.maps.event.trigger(o, "click");
+            }
         }, 80);
+        if (map.zoom < max) google.maps.event.addListenerOnce(map, 'zoom_changed', t);
     }
+    if (map.zoom < max) t();
 }
 
 function pos_info(pos) {
-    console.log(pos);
     var list = "<p class='shop_name'>" + pos.name + "</p>";
 
     if (pos.notes) list += "<p>" + pos.notes + "</p>";
 
     list += "<p class='space_left'>" + pos.street + "<br>" + pos.postcode + " " + pos.city + "</p>";
-    if(pos.phone.length > 0){
+    if(pos.phone && pos.phone.length > 0){
         list +="<p class='space_left'>tel. " + pos.phone + "</p>";
     }
 
