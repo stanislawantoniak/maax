@@ -231,6 +231,18 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             $hlp->addOverpayComment($po, false, true, $observer->getEvent()->getData('operator_id'), $observer->getEvent()->getData('amount'));
         }
     }
+	
+	public function addPickUpPaymentComment($observer) {
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		$amount = $observer->getEvent()->getData('amount');
+		
+		if($po->getId()) {
+			$hlp->addPickUpPaymentComment($po, $amount);
+		}
+	}
 
 	/**
 	 * PO Compose	
