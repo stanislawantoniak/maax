@@ -116,6 +116,7 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
                         $txnId,
                         $txnType
                     );
+                    $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Pick Up payment created"));
 
 					Mage::dispatchEvent('zolagopayment_add_pickup_payment_transaction_save_after', array(
 						"po" => $po,
