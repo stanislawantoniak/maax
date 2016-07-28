@@ -24,10 +24,9 @@ ol.breadcrumb{
 	li {
 		font-size: 12px;
 		color: $color_000;
-		font-weight: bold;
 		&:not(:first-child):before {
 			font-family: FontAwesome;
-			font-size: 11px;
+			font-size: 12px;
 			text-align: right;
 			color:$color_000;
 		}

@@ -82,79 +82,85 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		<div id="product_long_box">
 			<ul class="title_section">
 				<li>
-					<a class="opened" name="description_product" href="#description_product">Opis produktu</a>
+					<a href="#tab_description_product">Opis produktu</a>
 				</li>
-				<!--
-                <li class="hidden-xs">
-                    <a href="#tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
-                </li>
-                -->
+				<li class="hidden-xs">
+					<a href="#tab_reviews">Opinie</a>
+				</li>
+				<?php if (!empty($installments)) : ?>
+					<li class="hidden-xs">
+						<a href="#tab_installments">Zakupy na raty</a>
+					</li>
+				<?php endif; ?>
+				<?php if (!empty($funding)) : ?>
+					<li class="hidden-xs">
+						<a href="#tab_funding">Dofinansowanie</a>
+					</li>
+				<?php endif; ?>
 				<?php if (!empty($deliveryReturn)) : ?>
 					<li class="hidden-xs">
-						<a href="#tab_delivery">Dostawa i zwroty</a>
+						<a href="#tab_delivery">Dostawa i wzroty</a>
 					</li>
 				<?php endif; ?>
 			</ul>
-			<section id="description_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-				<div>
-					<div itemprop="description"><?php echo $productDescription; ?></div>
-					<?php if (!empty($attributesData)) : ?>
-						<ul class="list">
-							<?php foreach ($attributesData as $attr) : ?>
-								<li>
-									<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
-									<?php if ($attr['code'] == "color"): ?>
-										<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
-									<?php elseif ($attr['code'] == "manufacturer"): ?>
-										<?php
-										$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
-										$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
-										$brand = $vendorsCollection->getFirstItem();
+			<div id="tab_description_product">
+				<section class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+					<div>
+						<div itemprop="description"><?php echo $productDescription; ?></div>
+						<?php if (!empty($attributesData)) : ?>
+							<ul class="list">
+								<?php foreach ($attributesData as $attr) : ?>
+									<li>
+										<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
+										<?php if ($attr['code'] == "color"): ?>
+											<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+										<?php elseif ($attr['code'] == "manufacturer"): ?>
+											<?php
+											$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+											$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
+											$brand = $vendorsCollection->getFirstItem();
 
-										$brandShopId = $brand->getId();
-										$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
-										$brandShopName = $brandShop->getData("vendor_name");
-										$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
-										?>
-										<?php if ($brandShopProductId == $brandShopId): ?>
-											<h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
+											$brandShopId = $brand->getId();
+											$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
+											$brandShopName = $brandShop->getData("vendor_name");
+											$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
+											?>
+											<?php if ($brandShopProductId == $brandShopId): ?>
+												<h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
+											<?php else: ?>
+												<?php echo $this->escapeHtml($attr['value']); ?>
+											<?php endif; ?>
 										<?php else: ?>
-											<?php echo $this->escapeHtml($attr['value']); ?>
+											<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
+												<?php echo $this->escapeHtml($attr['value']); ?>
+											<?php else: ?>
+												<?php echo implode(",", $attr['value']); ?>
+											<?php endif; ?>
 										<?php endif; ?>
-									<?php else: ?>
-										<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
-											<?php echo $this->escapeHtml($attr['value']); ?>
-										<?php else: ?>
-											<?php echo implode(",", $attr['value']); ?>
-										<?php endif; ?>
-									<?php endif; ?>
-								</li>
-							<?php endforeach; ?>
-						</ul>
-					<?php endif; ?>
-				</div>
-			</section>
-			<!-- SECTION : OPIS PRODUKTU -->
-			<!--
-            <ul class="title_section">
-                <li>
-                    <a class="opened" name="tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
-                </li>
-            </ul>
-            -->
-			<!--reviews-->
-			<?php // echo $this->getChildHtml('product.review.section'); ?>
-			<!--end reviews-->
-			<?php if (!empty($deliveryReturn)) : ?>
-				<ul class="title_section">
-					<li>
-						<a class="opened" name="tab_delivery">Dostawa i zwroty</a>
-					</li>
-				</ul>
-
-				<section id="tab_delivery" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-					<?php echo $deliveryReturn;?>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</div>
 				</section>
+			</div>
+			<div id="tab_reviews" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+				<?php echo $this->getChildHtml('product.review.section'); ?>
+			</div>
+			<?php if (!empty($installments)) : ?>
+				<div id="tab_installments" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+
+				</div>
+			<?php endif; ?>
+			<?php if (!empty($funding)) : ?>
+				<div id="tab_funding" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+
+				</div>
+			<?php endif; ?>
+			<?php if (!empty($deliveryReturn)) : ?>
+				<div id="tab_delivery" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+					<?php echo $deliveryReturn;?>
+				</div>
 			<?php endif; ?>
 		</div>
 
@@ -292,6 +298,10 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable."); ?>");
 
-	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
+	//Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
+
+	jQuery( function() {
+		jQuery( "#product_long_box" ).tabs();
+	} );
 
 </script>

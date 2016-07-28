@@ -14,7 +14,7 @@ Mall.product = {
 			Mall.product.rating.init();
             Mall.product.review.init();
             Mall.product.gallery.init();
-			Mall.product.sizetable.init();
+			//Mall.product.sizetable.init();
 			if(document.location.hash) {
 				document.location.hash = '';
 				window.history.replaceState({},'',document.location.href.replace('#',''));

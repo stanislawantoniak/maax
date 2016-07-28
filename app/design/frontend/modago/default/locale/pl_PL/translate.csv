@@ -131,6 +131,7 @@
 "Review","Opinia"
 "Your review has been accepted for moderation.","Dziękujemy za dodanie opinii. Zostanie ona opublikowana po akceptacji moderatora."
 "add to cart","dodaj do koszyka"
+"Add to cart","Dodaj do koszyka"
 "Product has been added to cart:","Produkt został dodany do koszyka:"
 "Go to shopping cart","Przejdź do koszyka"
 "Review written by","Opinia napisana przez:"
@@ -298,3 +299,4 @@
 "more","więcej"
 "less","mniej"
 "Submit a question about product","Zadaj pytanie o produkcie"
+"Maximum quantity %s", "Maximum quantity %s [PL]"
