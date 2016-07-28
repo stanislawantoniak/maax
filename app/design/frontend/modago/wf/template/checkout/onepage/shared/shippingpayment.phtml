@@ -10,6 +10,18 @@ $methods = $items->methods;
 
 $deliveryPoint = $this->getDeliveryPointCheckout();
 
+
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+	$sessionShippingMethod = $methodSelectedData;
+}
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+$carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($deliveryMethodCode);
 ?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
     <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
