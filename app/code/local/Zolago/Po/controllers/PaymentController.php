@@ -107,8 +107,8 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
                     $order = $po->getOrder();
                     $status = Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED;
 
-                    /* @var $client Zolago_Dotpay_Model_Client */
-                    $client = Mage::getModel("zolagodotpay/client", $order->getStore());
+                    /* @var $client Zolago_Payment_Model_Client */
+                    $client = Mage::getModel("zolagopayment/client");
                     $client->saveTransaction(
                         $order,
                         $amount,
@@ -116,6 +116,11 @@ class Zolago_Po_PaymentController extends Zolago_Dropship_Controller_Vendor_Abst
                         $txnId,
                         $txnType
                     );
+
+					Mage::dispatchEvent('zolagopayment_add_pickup_payment_transaction_save_after', array(
+						"po" => $po,
+						"amount" => $amount,
+					));
                 }
 
             } else {

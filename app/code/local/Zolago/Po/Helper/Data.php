@@ -213,6 +213,50 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
     }
 
 	/**
+	 * @param Zolago_Po_Model_Po$po
+	 * @param float|string $amount
+	 */
+	public function addPickUpPaymentComment($po, $amount) {
+		$fullName = $this->getCommentAuthorFullName();
+		$comment = "[$fullName] " . $this->__("Entered pick-up payment. Amount: %s",
+				Mage::helper('core')->currency($amount, true, false));
+		$po->addComment($comment, false, true);
+		$po->saveComments();
+	}
+
+	public function addConfirmPickUpComment($po) {
+		$fullName = $this->getCommentAuthorFullName();
+		$comment = "[$fullName] " . $this->__("Confirmed pick-up order");
+		$po->addComment($comment, false, true);
+		$po->saveComments();
+	}
+
+	/**
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return string
+	 */
+	public function getCommentAuthorFullName($vendor = null, $operator = null) {
+		/** @var Zolago_Payment_Helper_Data $helperZP */
+		$helperZP = Mage::helper("zolagopayment");
+		/** @var Zolago_Dropship_Model_Session $session */
+		$session = Mage::getSingleton("zolagodropship/session");
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = $vendor ? $vendor : $session->getVendor();
+		/** @var Zolago_Operator_Model_Operator $operator */
+		$operator = $operator ? $operator : $session->getOperator();
+
+		if ($operator->getId()) {
+			$fullName = $operator->getVendor()->getVendorName()." / " . $operator->getEmail();
+		} elseif($vendor->getId()) {
+			$fullName = $vendor->getVendorName();
+		} else {
+			$fullName = $helperZP->__("Automat");
+		}
+		return $fullName;
+	}
+
+	/**
 	 * @param Zolago_Po_Model_Po_Item $item
 	 * @return Mage_Catalog_Helper_Image
 	 */
