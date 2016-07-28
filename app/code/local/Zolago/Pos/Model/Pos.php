@@ -7,7 +7,7 @@
  * @method string getCity()
  * @method string getStreet()
  * @method string getPostcode()
- *
+ * @method string getExternalId()
  * @method int getShowOnMap()
  * @method string getMapName()
  * @method string getMapLatitude()

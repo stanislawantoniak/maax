@@ -14,6 +14,8 @@
  * @method Zolago_Po_Model_Po setCustomerId(int $customerId)
  * @method string getDeliveryPointName()
  * @method Zolago_Po_Model_Po setDeliveryPointName(string $value)
+ * @method string getExternalId()
+ * @method Zolago_Po_Model_Po setExternalId($value)
  */
 class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
@@ -918,8 +920,8 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 //                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
             }
 
-            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getDeliveryPointName();
-            $list[$i]['delivery_data']['delivery_point_name']                          = $po->getDeliveryPointName();
+            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getDeliveryInpostLocker()->getName();
+            $list[$i]['delivery_data']['delivery_point_name']                       = $po->getApiDeliveryPointName();
             $sa = $po->getShippingAddress();
             $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
             $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
@@ -1210,6 +1212,8 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	}
 
 	/**
+	 * Simple load inpost locker by name
+	 *
 	 * @param bool $force
 	 * @return GH_Inpost_Model_Locker
 	 */
@@ -1222,9 +1226,51 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		}
 		return $this->getData('inpost_locker');
 	}
+
+	/**
+	 * Load inpost locker by name only if delivery method was inpost
+	 *
+	 * @param bool $force
+	 * @return GH_Inpost_Model_Locker
+	 */
+	public function getDeliveryInpostLocker($force = false) {
+		if (!$this->hasData('delivery_inpost_locker') || $force) {
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel('ghinpost/locker');
+			if ($this->isDeliveryInpost($force)) {
+				$inpostLockerName = $this->getDeliveryPointName();
+				$locker->load($inpostLockerName, 'name');
+			}
+			$this->setData('delivery_inpost_locker', $locker);
+		}
+		return $this->getData('delivery_inpost_locker');
+	}
+
+	/**
+	 * Load POS by pos_id (delivery_point_name) if delivery method was pick-up point
+	 * 
+	 * @param bool $force
+	 * @return Zolago_Pos_model_Pos
+	 */
+	public function getDeliveryPickUpPoint($force = false) {
+		if (!$this->hasData('delivery_pickup_point') || $force) {
+			/** @var Zolago_Pos_model_Pos $pos */
+			$pos = Mage::getModel('zolagopos/pos');
+			if ($this->isDeliveryPickUpPoint($force)) {
+				$posId = $this->getDeliveryPointName();
+				$pos->load($posId);
+			}
+			$this->setData('delivery_pickup_point', $pos);
+		}
+		return $this->getData('delivery_pickup_point');
+	}
 	
-	public function isDeliveryInpost() {
-		if (!$this->hasData('is_delivery_inpost')) {
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function isDeliveryInpost($force = false) {
+		if (!$this->hasData('is_delivery_inpost') || $force) {
 			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
 			/** @var GH_Inpost_Model_Carrier $model */
 			$model = Mage::getModel("ghinpost/carrier");
@@ -1233,5 +1279,46 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 			$this->setData('is_delivery_inpost', $isInpost);
 		}
 		return $this->getData('is_delivery_inpost');
+	}
+
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function isDeliveryPickUpPoint($force = false) {
+		if (!$this->hasData('is_delivery_zolagopickuppoint') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+			$isPickUpPoint = ($methodCode == ZolagoOs_PickupPoint_Helper_Data::CODE);
+			$this->setData('is_delivery_zolagopickuppoint', $isPickUpPoint);
+		}
+		return $this->getData('is_delivery_zolagopickuppoint');
+	}
+
+	/**
+	 * @param bool $force
+	 * @return string
+	 */
+	public function getApiDeliveryPointName($force = false) {
+		if (!$this->hasData('api_delivery_point_name') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+
+			switch ($methodCode) {
+				case GH_Inpost_Model_Carrier::CODE:
+					$name = $this->getDeliveryInpostLocker($force)->getName();
+					break;
+				case ZolagoOs_PickupPoint_Helper_Data::CODE:
+					$pos  = $this->getDeliveryPickUpPoint($force);
+					$name = $pos->getExternalId();
+					$name = empty($name) ? $pos->getName() : $name;
+					$name = empty($name) ? $pos->getId() : $name;
+					break;
+				default:
+					$name = '';
+					break;
+			}
+			
+			$this->setData('api_delivery_point_name', $name);
+		}
+		return $this->getData('api_delivery_point_name');
 	}
 }
