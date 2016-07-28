@@ -55,14 +55,14 @@ $deliveryPoint = $this->getDeliveryPointCheckout();
 			<div class="panel-group">
 				<div class="row">
 					<?php if(!$deliveryPoint->id): ?>
-					<div class="col-md-12 col-sm-4 delivery-type">
-						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
-						<dl>
-							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
-							<dd>&nbsp;</dd>
-							<dd>&nbsp;</dd>
-						</dl>
-					</div>
+						<div class="col-md-12 col-sm-4 delivery-type">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="delivery-type-logo"><span>{{carrier_method}}</span><?php echo $carrierLogo; ?></dd>
+								<dd>&nbsp;</dd>
+								<dd>&nbsp;</dd>
+							</dl>
+						</div>
 					<?php else: ?>
 						<div class="col-md-12 col-sm-4 delivery-type">
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
