@@ -19,6 +19,19 @@ $checkoutOrderDeactivate = $this->isCheckOutBlocked();
 $waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
 
 $deliveryPoint = $this->getDeliveryPointCheckout();
+
+
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+	$sessionShippingMethod = $methodSelectedData;
+}
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+$carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($deliveryMethodCode);
 ?>
 <div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
@@ -195,7 +208,7 @@ $deliveryPoint = $this->getDeliveryPointCheckout();
 					<div class="col-md-12 col-sm-12 delivery-type">
 						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
-							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
+							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><?php echo $carrierLogo; ?></dd>
 							<dd>&nbsp;</dd>
 							<dd>&nbsp;</dd>
 						</dl>
