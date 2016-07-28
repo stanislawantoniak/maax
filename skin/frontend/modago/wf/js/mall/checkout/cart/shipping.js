@@ -88,7 +88,7 @@
                     e.preventDefault();
                     var parentModal = jQuery(this).parents(".modal");
                     var deliveryMethod = parentModal.attr("data-carrier-points");
-                    //console.log(deliveryMethod);
+
                     switch(deliveryMethod){
                         case 'zolagopickuppoint':
                             parentModal.modal("hide");
@@ -144,9 +144,9 @@
                     deliverySelectPointsModal.find('a[data-select-shipping-method-trigger="1"]').click();
                 } else {
                     deliverySelectPointsModal.modal("show");
+                    handleGeoLocation();
                 }
 
-                handleGeoLocation();
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: Mall.translate.__("shipping_map_select_city"),
