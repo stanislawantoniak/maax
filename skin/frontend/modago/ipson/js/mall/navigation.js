@@ -58,8 +58,26 @@ Mall.Navigation = {
                 jQuery('#nav_desc a[data-flagForceActive="1"]').addClass('forceActive');
             }
         };
+
+        var cloneMenuPosition = function () {
+            if(jQuery("#clone_submenu .clone_submenu-content").html().length == 0)
+                return;
+
+            var li = jQuery('#nav_desc a.active').parents("li");
+            var liOffset = li.offset().left;
+            var liOffsetTop = li.offset().top;
+
+            var left = liOffset + 10;
+
+            jQuery("#clone_submenu").css({
+                'top': (liOffsetTop + 45),
+                'left': left
+            });
+        };
+
+
         jQuery(document).delegate('#nav_desc a'  , 'click', customToggle);
-        jQuery(document).delegate('.closeSubMenu', 'click', customToggle);
+        jQuery(window).resize(function(){cloneMenuPosition();});
     }
 };
 
