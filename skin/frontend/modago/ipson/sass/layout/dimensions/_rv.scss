@@ -5,10 +5,22 @@ section#recently-viewed {
 			padding:0px 5px;
 		}
 		h3.title-section {
-			padding-top:0px;
-			padding-bottom:0px;
-			margin-left: -15px;
+			padding-top: 0px;
+			padding-bottom: 10px;
+			overflow: hidden;
+			display: inline-block;
+			width: 100%;
+			float: left;
+			position: relative;
+			text-transform: none;
+			font-family: latoregular, sans-serif;
+			font-weight: bold;
+			border-bottom: 1px solid $color_e8e8e8;
 
+			span {
+				border-bottom: 2px solid $colorReviewBorder;
+				padding-bottom: 7px;
+			}
 			@media (max-width: $screen-xs-max) {
 				padding-left:20px;
 				margin-bottom: 15px;
