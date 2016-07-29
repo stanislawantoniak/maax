@@ -52,6 +52,12 @@
             padding-right: 0;
             .buttons {
               .row {
+                .button {
+                  @media (max-width: $screen-xs-max) {
+                    width: 100%;
+                  }
+                }
+
                 &:not(:first-child) {
                   margin-top: 5px;
                 }
@@ -118,6 +124,9 @@
       font-size: 14px;
       color: #4f4f4f;
       font-weight: 400;
+      @media (max-width: $screen-xs-max) {
+        text-align: justify;
+      }
     }
 
     .shop_name {
