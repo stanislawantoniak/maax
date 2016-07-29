@@ -1,7 +1,17 @@
 #items-product {
 	margin-top:-4px;
 	.item {
-		margin-bottom: 0px;
+		margin-bottom: 30px;
+		&[class*="col"] {
+			padding: 0 15px;
+		}
+		&.col-phone {
+			@media(max-width:540px) {
+				width: 50%;
+				float: left;
+				min-height: 1px;
+			}
+		}
 	}
 }
 
