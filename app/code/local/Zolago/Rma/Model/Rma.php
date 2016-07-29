@@ -416,7 +416,7 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
                 if ($item->getPoItem()->getId()) {
                     $amount += $item->getPoItem()->getFinalItemPrice();
                 } else {
-                    $amount += $this->getPo()->getShippingAmountIncl();
+                    $amount += $item->getPrice();
                 }
 			}
 			$this->_refundAmountMax = $amount;
@@ -505,7 +505,7 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
 		} else {
 			$acceptedRefund = true;
 			foreach($existTransactions as $existTransaction) {
-				if($existTransaction->getTxnStatus() != 3){
+				if($existTransaction->getTxnStatus() != Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED){
 					$acceptedRefund = false;
 				}
 			}
