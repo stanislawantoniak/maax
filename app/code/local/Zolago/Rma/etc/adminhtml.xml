@@ -8,7 +8,7 @@
                         <urma translate="title" module="urma">
                             <title>Returns</title>
                             <sort_order>20</sort_order>
-                            <action>urmaadmin/rma</action>
+                            <action>rmaadmin/rma</action>
                         </urma>
                     </children>
                 </sales_management>

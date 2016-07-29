@@ -53,7 +53,7 @@
 <script type="text/javascript">
 function submitComment() {
     if (validateShipmentStatusSubmit()) {
-        submitAndReloadArea($('comments_block').parentNode, '<?php echo $this->getUrl('urmaadmin/order_rma/addComment', array('rma_id'=>$_entity->getId())) ?>')
+        submitAndReloadArea($('comments_block').parentNode, '<?php echo $this->getUrl('rmaadmin/order_rma/addComment', array('rma_id'=>$_entity->getId())) ?>')
     }
 }
 

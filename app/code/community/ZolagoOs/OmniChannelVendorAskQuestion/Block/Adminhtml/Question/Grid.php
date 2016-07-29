@@ -110,7 +110,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
             'options'       => Mage::getSingleton('udropship/source')->setPath('vendors')->toOptionHash(),
             'index'         => 'vendor_id',
             'filter'        => 'udropship/vendor_gridColumnFilter',
-            'format'        => sprintf('<a onclick="this.target=\'blank\'" href="%sid/$vendor_id/">$vendor_name</a>', $this->getUrl('udropshipadmin/adminhtml_vendor/edit'))
+            'format'        => sprintf('<a onclick="this.target=\'blank\'" href="%sid/$vendor_id/">$vendor_name</a>', $this->getUrl('zolagoosadmin/adminhtml_vendor/edit'))
         ));
         }
 
@@ -158,7 +158,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
                     array(
                         'caption' => Mage::helper('adminhtml')->__('Edit'),
                         'url'     => array(
-                            'base'=>'udqaadmin/index/edit',
+                            'base'=>'zosqaadmin/index/edit',
                             'params'=> array(
                                 'vendorId' => $this->getVendorId(),
                                 'customerId' => $this->getCustomerId(),
@@ -198,7 +198,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
 
             $this->getMassactionBlock()->addItem('delete', array(
                 'label'=> Mage::helper('udqa')->__('Delete'),
-                'url'  => $this->getUrl('udqaadmin/index/massDelete', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'  => $this->getUrl('zosqaadmin/index/massDelete', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
                 'confirm' => Mage::helper('udqa')->__('Are you sure?')
             ));
 
@@ -208,7 +208,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
             array_unshift($statuses, array('label'=>'', 'value'=>''));
             $this->getMassactionBlock()->addItem('update_question_status', array(
                 'label'         => Mage::helper('udqa')->__('Update Question Status'),
-                'url'           => $this->getUrl('udqaadmin/index/massUpdateQuestionStatus', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'           => $this->getUrl('zosqaadmin/index/massUpdateQuestionStatus', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
                 'additional'    => array(
                     'status'    => array(
                         'name'      => 'status',
@@ -221,7 +221,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
             ));
             $this->getMassactionBlock()->addItem('update_answer_status', array(
                 'label'         => Mage::helper('udqa')->__('Update Answer Status'),
-                'url'           => $this->getUrl('udqaadmin/index/massUpdateAnswerStatus', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'           => $this->getUrl('zosqaadmin/index/massUpdateAnswerStatus', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
                 'additional'    => array(
                     'status'    => array(
                         'name'      => 'status',
@@ -234,18 +234,18 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
             ));
             $this->getMassactionBlock()->addItem('send_customer_notification', array(
                 'label'         => Mage::helper('udqa')->__('Send Customer Notification'),
-                'url'           => $this->getUrl('udqaadmin/index/massSendCustomer', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'           => $this->getUrl('zosqaadmin/index/massSendCustomer', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
             ));
             $this->getMassactionBlock()->addItem('send_vendor_notification', array(
                 'label'         => Mage::helper('udqa')->__('Send Vendor Notification'),
-                'url'           => $this->getUrl('udqaadmin/index/massSendVendor', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'           => $this->getUrl('zosqaadmin/index/massSendVendor', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
             ));
         }
     }
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('udqaadmin/index/edit', array(
+        return $this->getUrl('zosqaadmin/index/edit', array(
             'id' => $row->getId(),
             'vendorId' => $this->getVendorId(),
             'customerId' => $this->getCustomerId(),
@@ -256,7 +256,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Grid extend
     public function getGridUrl()
     {
         if( $this->getVendorId() || $this->getCustomerId() ) {
-            return $this->getUrl('udqaadmin/index/' . (Mage::registry('usePendingFilter') ? 'pending' : ''), array(
+            return $this->getUrl('zosqaadmin/index/' . (Mage::registry('usePendingFilter') ? 'pending' : ''), array(
                 'vendorId' => $this->getVendorId(),
                 'customerId' => $this->getCustomerId(),
             ));

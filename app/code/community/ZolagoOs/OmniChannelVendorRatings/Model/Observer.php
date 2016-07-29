@@ -16,7 +16,7 @@ class ZolagoOs_OmniChannelVendorRatings_Model_Observer
                 $block->addTab('udratings', array(
                     'label'     => Mage::helper('udratings')->__('Vendor Reviews'),
                     'class'     => 'ajax',
-                    'url'       => $block->getUrl('udratingsadmin/review/customerReviews', array('_current' => true)),
+                    'url'       => $block->getUrl('zosratingsadmin/review/customerReviews', array('_current' => true)),
                     'after'     => 'reviews'
                 ));
             }
@@ -36,7 +36,7 @@ class ZolagoOs_OmniChannelVendorRatings_Model_Observer
                 $block->addTab('udratings', array(
                     'label'     => Mage::helper('udratings')->__('Customer Reviews'),
                     'class'     => 'ajax',
-                    'url'       => $block->getUrl('udratingsadmin/review/vendorReviews', array('_current' => true)),
+                    'url'       => $block->getUrl('zosratingsadmin/review/vendorReviews', array('_current' => true)),
                     'after'     => 'products_section'
                 ));
             }

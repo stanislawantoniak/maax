@@ -120,13 +120,13 @@
     </default>
     <admin>
         <routers>
-            <udqaadmin>
+            <zosqaadmin>
                 <args>
                     <modules>
                         <Zolago_DropshipVendorAskQuestion before="ZolagoOs_OmniChannelVendorAskQuestion">Zolago_DropshipVendorAskQuestion_Adminhtml</Zolago_DropshipVendorAskQuestion>
                     </modules>
                 </args>
-            </udqaadmin>
+            </zosqaadmin>
         </routers>
     </admin>
 </config>

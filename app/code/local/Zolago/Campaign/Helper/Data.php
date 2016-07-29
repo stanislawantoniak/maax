@@ -49,7 +49,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
             $defaultStoreId = $website->getDefaultStore()->getId();
 
             //1. Get vendor root category
-            // /udropshipadmin/adminhtml_vendor/edit/ -> Preferences -> Root categories -> Category ID
+            // /zolagoosadmin/adminhtml_vendor/edit/ -> Preferences -> Root categories -> Category ID
             $rootCatID = Mage::app()->getStore($defaultStoreId)->getRootCategoryId();
 
             $customVendorVars = Mage::helper('core')->jsonDecode($this->getVendor()->getCustomVarsCombined());
