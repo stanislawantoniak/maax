@@ -585,7 +585,7 @@ body {
 		&.navigation > li > a.active,
 		&.navigation > li > a.forceActive {
 			background: none;
-			font-weight: bold;
+			font-weight: 700;
 			letter-spacing: 0px;
 		}
 	}
@@ -596,10 +596,10 @@ body {
 		li {
 			a:link,
 			a:visited {
-				font-size: 17px;
-				color: $color_000;
+				font-size: 14px;
+				color: $colorMainNavigationStripe;
 				font-family: $fontRegular;
-				font-weight: 400;
+				font-weight: 500;
 				font-style: normal;
 				text-transform: uppercase;
 				line-height: 45px;
@@ -610,6 +610,7 @@ body {
 			}
 			a:hover {
 				background: none;
+				font-weight: 700;
 			}
 			/* === SUBMENU === */
 			ul {
