@@ -98,7 +98,6 @@ $_products = $_cache['products'];
 
 														<div class="price clearfix">
 															<div class="col-price">
-																<!--old-price-test--><span class="old">62,90 zł</span><!--end-old-price-test-->
 																<?php if ($product[3] != $product[4]) : ?>
 																<span class="old"><?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?></span>
 																<?php endif; ?>
