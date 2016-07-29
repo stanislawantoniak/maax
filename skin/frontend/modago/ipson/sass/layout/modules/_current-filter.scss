@@ -28,12 +28,10 @@
         }
 
         .label {
-          display: block;
           float: left;
           padding: 0px 6px 0 6px;
           min-width: 60px;
           display: inline-block;
-          float: left;
           height: 21px;
           margin: 0px 10px 7px 0px;
           position: relative;
@@ -57,8 +55,10 @@
       }
 	}
 	.actionViewFilter {
-		min-width: 205px;
-		margin-left: -21px;
+      min-width: 205px;
+      margin-left: -21px;
+      background: #000000 !important;
+      font-family: $fontRegular;
         @media (max-width: $screen-xs-max) {
           min-width: initial;
         }
@@ -70,7 +70,7 @@
         .fa {
             color: $color_ffffff;
             float: left;
-            margin: 3px 0;
+            margin: 1px 0;
         }
 
 	}
@@ -102,7 +102,8 @@
   }
 }
 
-.not-content-mode.sm-to-smmd-plus-smmd, .this-is-search.sm-to-smmd-plus-smmd {
+.not-content-mode.sm-to-smmd-plus-smmd,
+.this-is-search.sm-to-smmd-plus-smmd {
   #active-filters, #view-current-filter {
     h1 {
       @media (max-width: $screen-sm-to-smmd-max) {
