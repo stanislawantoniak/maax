@@ -738,6 +738,7 @@ jQuery.noConflict();
 			$('#nav_desc').on('click', 'a', function(event) {
 				if(!$(this).hasClass('clickable')){
 					event.preventDefault();
+					$("#nav_desc a").find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
 					$(this).closest('#nav_desc').find('.active').removeClass('active');
 					$(this).find('i').toggleClass('fa-angle-up fa-angle-down');
 					$(this).addClass('active');
