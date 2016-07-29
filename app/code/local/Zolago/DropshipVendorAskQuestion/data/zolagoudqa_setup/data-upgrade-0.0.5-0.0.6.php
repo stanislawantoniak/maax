@@ -2,7 +2,7 @@
 /**
  * Update in template question_url variable
  */
-
+/* no for standalone version
 $subject = <<<EOD
 {{var store_name}} – pytanie od klienta{{if increment_id}} dotyczące zamówienia {{var increment_id}}{{/if}}{{if question.product_id}} dotyczące produktu {{var question.product_name}}{{/if}}
 EOD;
@@ -139,3 +139,4 @@ $model->setTemplateText($template);
 $model->setTemplateSubject($subject);
 $model->save();
 
+*/

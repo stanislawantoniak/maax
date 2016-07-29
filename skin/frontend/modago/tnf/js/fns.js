@@ -695,7 +695,7 @@ jQuery.noConflict();
 				if(!$(this).hasClass('clickable')){
 					event.preventDefault();
 					$(this).closest('#nav_desc').find('.active').removeClass('active');
-					$(this).find('i').toggleClass('fa-angle-up fa-angle-down');
+					$(this).find('i').toggleClass('fa-caret-up fa-caret-down');
 					$(this).addClass('active');
 				}
 
