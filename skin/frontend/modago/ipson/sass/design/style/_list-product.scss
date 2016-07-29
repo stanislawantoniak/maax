@@ -19,7 +19,6 @@
         color: #3d3d3d;
         font-size: 14px;
         height: 40px;
-        line-height: 21px;
         overflow: hidden;
     }
     .price {
@@ -36,6 +35,9 @@
                 font-weight: 600;
                 color: black;
                 font-size: 17px;
+                @media (max-width: $screen-xs-max) {
+                    font-size: 14px;
+                }
             }
         }
         .size-box-bundle {
@@ -47,6 +49,7 @@
             .variants {
                 color: #3c3b3b;
                 font-size: 13px;
+                margin-bottom: 0px;
             }
             .addBasket {
                 float: right;
@@ -58,6 +61,12 @@
                 padding: 12px 13px;
                 margin: 0;
                 text-transform: uppercase;
+                @media (max-width: $screen-xs-max) {
+                    padding: 14px 13px;
+                    width: 100% !important;
+                    height: 40px;
+                    line-height: 34px;
+                }
             }
         }
     }

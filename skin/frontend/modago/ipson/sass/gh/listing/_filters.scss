@@ -252,6 +252,7 @@
 	&.filters-desktop {
 		@include min-screen($screen-sm-min) {
 			display: block !important;
+			margin-top: -52px;
 		}
 	}
 	&.filters-mobile {
