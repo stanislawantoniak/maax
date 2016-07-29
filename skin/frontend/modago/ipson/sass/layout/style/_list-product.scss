@@ -28,17 +28,16 @@
     background-repeat: no-repeat;
   }
   .name_product {
-    margin-bottom:18px;
+    margin-bottom: 15px;
     margin-top: 6px;
-    padding:0 8px;
+    padding:0 20px;
   }
   .price {
-    margin-bottom:18px;
-    padding:0 8px;
+    padding:0 20px;
     position:relative;
     .size-box-bundle {
+      padding: 0;
       color: $color_7e7e7e;
-      padding-bottom: 40px;
       a.qty_less, a.qty_more {
         display: block;
       }
