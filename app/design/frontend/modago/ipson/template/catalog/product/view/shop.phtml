@@ -42,6 +42,9 @@ if ($_product->getTypeId() == 'configurable') { //fix for simple products
 $sizeTableValue = '1';//$_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 $deliveryHeadline = trim($this->getStoreDeliveryHeadline());
 $returnHeadline = trim($this->getStoreReturnHeadline());
+$reviewsAvg = $this->getReviewsAvg();
+$reviewsCount = $this->getReviewsCount();
+$reviewsLabel = $this->getReviewsLabel();
 ?>
 
 
@@ -53,6 +56,8 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 <div id="product-name" class="col-md-12 product-name" style="overflow-x:visible;">
 	<h1 itemprop="name"><?php echo $productName; ?></h1>
 	<meta itemprop="sku" content="<?php echo $_product->getSku() ?>"/>
+	<div id="average_rating" data-number="5" data-score="<?php echo $reviewsAvg; ?>"></div>
+	<div class="review_count">(<?php echo $reviewsLabel; ?>: <?php echo $reviewsCount; ?>)</div>
 </div>
 <!-- /PRODUCT NAME -->
 <!-- SHORT DESCRIPTION -->
