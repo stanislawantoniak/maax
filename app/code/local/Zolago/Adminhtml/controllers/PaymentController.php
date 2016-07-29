@@ -56,7 +56,17 @@
 						$email = $order->getCustomerEmail();
 						$amount = $paymentHelper->getCurrencyFormattedAmount(abs($transaction->getTxnAmount()));
 
-						$rma = $paymentHelper->getTransactionRma($transaction);
+						$useAllocation = $paymentHelper->getConfigUseAllocation();
+
+						$rmaId = $transaction->getRmaId();
+						$rma = NULL;
+						if($useAllocation === false){
+							if($rmaId){
+								$rma = Mage::getModel('zolagorma/rma')->load($rmaId);
+							}
+						}else{
+							$rma = $paymentHelper->getTransactionRma($transaction);
+						}
 						if($rma) { //refund is for rma
 							if($paymentHelper->sendRmaRefundEmail(
 								$email,
