@@ -36,6 +36,43 @@
     margin-bottom:18px;
     padding:0 8px;
     position:relative;
+    .size-box-bundle {
+      color: $color_7e7e7e;
+      padding-bottom: 40px;
+      a.qty_less, a.qty_more {
+        display: block;
+      }
+      div.qty, a.qty_less, a.qty_more, div.qty_label {
+        float: left;
+        width: 36px;
+        height: 36px;
+        border: 1px solid $color_f1f1f1;
+        text-align: center;
+        padding: 3px 0 0;
+        font-size: 20px;
+      }
+      div.qty_less, div.qty_more{
+        cursor: pointer;
+      }
+      div.qty input{
+        width: 100%;
+        border: none;
+        text-align: center;
+      }
+      div.qty_label{
+        margin-right: 20px;
+        font-size: 14px;
+        border: none;
+        padding-top: 10px;
+      }
+      .quantity_block{
+        padding: 7px 0 0;
+      }
+      #qty-error{
+        display: none;
+      }
+    }
+
     .old {
       margin-right:5px;
     }
