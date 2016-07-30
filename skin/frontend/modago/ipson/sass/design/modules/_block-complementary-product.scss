@@ -1,8 +1,17 @@
 .block-complementary-product {
 	.rwdCarousel {
 		.item {
+			.col-price {
+				float: none;
+				position: relative!important;
+				top:0!important;
+				right: 0!important;
+				text-align: center;
+			}
 			background: $color_fff;
-			color: $color_515151;
+			color: $color_000;
+			text-align: center;
+			border: 1px solid $color_e8e8e8;
 			.img_product {
 
 			}
@@ -155,4 +164,8 @@
 			}			
 		}
 	}
+}
+
+#product_additions_2 {
+	padding: 0;
 }

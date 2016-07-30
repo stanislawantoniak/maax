@@ -4,13 +4,23 @@
 		margin-bottom: -5px;
 	}
 	@media (min-width: $screen-sm-min) {
-		margin-top: 30px;
+		margin-top: 0;
 	}
 }
 .block-complementary-product {
   header {
 	h4.title_section {
-	  padding-left: 35px;
+	  padding-left: 15px;
+	  text-transform: none;
+	  font-weight: bold;
+		overflow: visible;
+	  span {
+		  position: relative;
+		  right:0;
+		  top:0;
+		  border-bottom: 2px solid #8bb56d;
+		  padding-bottom: 7px;
+	  }
 	  @media(max-width: 360px) {
 		  padding-left: 30px;
 	  }
@@ -18,11 +28,11 @@
   }
 	.rwdCarousel {
 	//	width: 100%;
-		padding:15px 55px;
+		padding:2px 0 0;
 		position:relative;
 		//display: inline-block;
 		.item {
-			margin:0 20px;
+			margin:0;
 			@media (max-width: $screen-xs-max) {
 				margin:0 5px;
 			}
