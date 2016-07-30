@@ -41,7 +41,12 @@
 						border-color: $color_e8e8e8;
 					}
 				}
+
+				@media (max-width: $screen-xs-max) {
+					padding: 0 22px;
+				}
 			}
+
 		}
 	}
 	&.pagination-bottom {

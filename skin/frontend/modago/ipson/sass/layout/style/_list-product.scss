@@ -31,9 +31,15 @@
     margin-bottom: 15px;
     margin-top: 6px;
     padding:0 20px;
+    @media (max-width: $screen-xs-max) {
+      padding: 0;
+    }
   }
   .price {
     padding:0 20px;
+    @media (max-width: $screen-xs-max) {
+      padding:0;
+    }
     position:relative;
     .size-box-bundle {
       padding: 0;
@@ -43,8 +49,8 @@
       }
       div.qty, a.qty_less, a.qty_more, div.qty_label {
         float: left;
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         border: 1px solid $color_f1f1f1;
         text-align: center;
         padding: 3px 0 0;
