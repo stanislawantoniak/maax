@@ -1,0 +1,563 @@
+<?php
+$_store =  Mage::getSingleton('adminhtml/config_data')->getStore();
+?>
+<style type="text/css">
+    <?php include_once Mage::getModuleDir('', 'Snowdog_Freshmail') . DS . 'styles.php'; ?>
+</style>
+
+<div id="freshmail_formcontainer" class="freshmail-container">
+    <div id="freshmail_textheader" class="freshmail-container__header">
+        <?= Mage::getStoreConfig('snowfreshmail/popup_messages/popup_title', $_store); ?>
+    </div>
+    <div id="freshmail_subheader" class="freshmail-container__subheader">
+        <?= Mage::getStoreConfig('snowfreshmail/popup_messages/popup_text', $_store); ?>
+    </div>
+    <?php $_header_image = Mage::getStoreConfig('snowfreshmail/popup_design/photo', $_store); ?>
+    <div id="freshmail_photo_output_wrapper" class="freshmail-container__image"<?php if (!$_header_image): ?> style="display: none;"<?php endif; ?>>
+        <img id="heade-photo-output"<?php if ($_header_image): ?> src="<?= Mage::getBaseUrl('media') . 'snowfreshmail' . DS . $_header_image ?>"<?php endif; ?> alt="">
+    </div>
+    <div class="freshmail-container__field-row">
+        <label id="freshmail_label" class="freshmail-container__label">
+            <?= $this->__('Email') ?>
+        </label>
+        <div class="freshmail-container__field-container" id="freshmail_field_container">
+            <input class="freshmail-container__field" id="freshmail_field" type="email">
+        </div>
+    </div>
+    <div id="freshmail_agreement" class="freshmail-container__agreement">
+        <input id="freshmail_agreement_input" type="checkbox" value="1"<?php if (Mage::getStoreConfigFlag('snowfreshmail/popup_design/agreement_checked')): ?> checked="checked"<?php endif; ?>/>
+        <label id="freshmail_agreement_label" class="freshmail-container__agreement-label" for="freshmail_agreement_input">
+            <?= Mage::getStoreConfig('snowfreshmail/popup_messages/agreement_text', $_store); ?>
+        </label>
+    </div>
+    <div id="freshmail_button_wrapper" class="freshmail-container__button_wrapper">
+        <button id="freshmail_button" class="freshmail-container__button" type="button">
+            <?= Mage::getStoreConfig('snowfreshmail/popup_messages/button_text', $_store); ?>
+        </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    document.observe("dom:loaded", function () {
+
+        var freshmailFormcontainer                            = $('freshmail_formcontainer'),
+            freshmailPopupDesignFormcontainerWidth            = $('freshmail_popup_design_formcontainer_width'),
+            freshmailPopupDesignFormcontainerWidthCalculation = $('freshmail_popup_design_formcontainer_width_calculation'),
+            freshmailTextHeader                               = $('freshmail_textheader'),
+            freshmailSubheader                                = $('freshmail_subheader'),
+            freshmailLabel                                    = $('freshmail_label'),
+            freshmailPopupDesignLabelWidth                    = $('freshmail_popup_design_label_width'),
+            freshmailPopupDesignLabelWidthCalculation         = $('freshmail_popup_design_label_width_calculation'),
+            freshmailPopupDesignFieldWidth                    = $('freshmail_popup_design_field_width'),
+            freshmailPopupDesignAbelWidthCalculation          = $('freshmail_popup_design_field_width_calculation'),
+            freshmailPopupDesignFieldHeight                   = $('freshmail_popup_design_field_height'),
+            freshmailPopupDesignAbelHeightCalculation         = $('freshmail_popup_design_field_height_calculation'),
+            freshmailAgreementInput                           = $('freshmail_agreement_input'),
+            freshmailAgreement                                = $('freshmail_agreement'),
+            freshmailAgreementLabel                           = $('freshmail_agreement_label'),
+            freshmailButton                                   = $('freshmail_button'),
+            headePhotoOutputWrapper                           = $('freshmail_photo_output_wrapper'),
+            freshmailPopupDesignButtonWidth                   = $('freshmail_popup_design_button_width'),
+            freshmailPopupDesignButtonWidthCalculation        = $('freshmail_popup_design_button_width_calculation'),
+            freshmailPopupDesignButtonHeight                  = $('freshmail_popup_design_button_height');
+
+        /**
+         * Form container settings
+         */
+
+        freshmailPopupDesignFormcontainerWidth.observe (
+            'change', function() {
+                freshmailFormcontainer.setStyle({
+                    maxWidth: this.value + freshmailPopupDesignFormcontainerWidthCalculation.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_width_calculation').observe(
+            'change', function() {
+                freshmailFormcontainer.setStyle({
+                    maxWidth: freshmailPopupDesignFormcontainerWidth.value + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_background_color').observe(
+            'change', function() {
+                freshmailFormcontainer.setStyle({
+                    backgroundColor: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_border_color').observe(
+            'change', function() {
+                freshmailFormcontainer.setStyle({
+                    borderColor: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_border_width').observe(
+            'change', function() {
+                freshmailFormcontainer.setStyle({
+                    borderWidth: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_border_radius').observe(
+            'change', function() {
+                freshmailFormcontainer.setStyle({
+                    borderRadius: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_vertical_padding').observe(
+            'change', function() {
+                var value = this.value;
+                freshmailFormcontainer.setStyle({
+                    paddingTop: value + 'px',
+                    paddingBottom: value + 'px'
+                });
+
+            }
+        );
+
+        $('freshmail_popup_design_formcontainer_horizontal_padding').observe(
+            'change', function() {
+                value = this.value;
+                $('freshmail_formcontainer').setStyle({
+                    paddingLeft: value + 'px',
+                    paddingRight: value + 'px'
+                });
+            }
+        );
+
+        /**
+         * Header text settings
+         */
+
+        $('snowfreshmail_popup_messages_popup_title').observe(
+            'change', function() {
+                freshmailTextHeader.update(this.value);
+            }
+        );
+
+        $('freshmail_popup_design_textheader_display_yes').observe(
+            'click', function() {
+                freshmailTextHeader.show();
+            }
+        );
+
+        $('freshmail_popup_design_textheader_display_no').observe(
+            'click', function () {
+                freshmailTextHeader.hide();
+            }
+        );
+
+        $('freshmail_popup_design_textheader_color').observe(
+            'change', function() {
+                freshmailTextHeader.setStyle({
+                    color: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_textheader_size').observe(
+            'change', function() {
+                freshmailTextHeader.setStyle({
+                    fontSize: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_textheader_alignment').observe(
+            'change', function() {
+                freshmailTextHeader.setStyle({
+                    textAlign: this.value
+                });
+            }
+        );
+
+
+        /**
+         * Subheader text settings
+         */
+
+        $('snowfreshmail_popup_messages_popup_text').observe(
+            'change', function() {
+                freshmailSubheader.update(this.value);
+            }
+        );
+
+        $('freshmail_popup_design_subheader_display_yes').observe(
+            'click', function () {
+                freshmailSubheader.show();
+            }
+        );
+
+        $('freshmail_popup_design_subheader_display_no').observe(
+            'click', function () {
+                freshmailSubheader.hide();
+            }
+        );
+
+        $('freshmail_popup_design_subheader_color').observe(
+            'change', function () {
+                freshmailSubheader.setStyle({
+                    color: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_subheader_size').observe(
+            'change', function () {
+                freshmailSubheader.setStyle({
+                    fontSize: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_subheader_alignment').observe(
+            'change', function () {
+                freshmailSubheader.setStyle({
+                    textAlign: this.value
+                });
+            }
+        );
+
+        /**
+         * label settings
+         */
+
+        $('freshmail_popup_design_label_text_alignment').observe(
+            'change', function () {
+                freshmailLabel.setStyle({
+                    textAlign: this.value
+                });
+            }
+        );
+
+
+        freshmailPopupDesignLabelWidth.observe(
+            'change', function() {
+                freshmailLabel.setStyle({
+                    width: this.value + freshmailPopupDesignAbelWidthCalculation.value
+                });
+            }
+        );
+
+        freshmailPopupDesignLabelWidthCalculation.observe(
+            'change', function() {
+                freshmailLabel.setStyle({
+                    width: freshmailPopupDesignLabelWidth.value + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_label_color').observe(
+                'change', function () {
+                    freshmailLabel.setStyle({
+                        color: '#' + this.value
+                    });
+                });
+
+        $('freshmail_popup_design_label_size').observe(
+                'change', function () {
+                    freshmailLabel.setStyle({
+                        fontSize: this.value + 'px'
+                    });
+                });
+
+        $('freshmail_popup_design_label_position').observe(
+                'change', function () {
+                    freshmailLabel.setStyle({
+                        display: this.value
+                    });
+                });
+
+        $('freshmail_popup_design_label_style').observe(
+            'change', function() {
+                var value  = this.value,
+                    style  = 'normal',
+                    weight = 'normal';
+
+                if (value == "bold") {
+                    weight = 'bold';
+                } else if (value == "italic") {
+                    style = 'italic';
+                } else if (value == "bold italic") {
+                    weight = 'bold';
+                    style = 'italic';
+                }
+                freshmailLabel.setStyle({
+                    fontWeight: weight,
+                    fontStyle: style
+                });
+            }
+        );
+
+
+        /**
+         * Field settings
+         */
+
+        freshmailPopupDesignFieldWidth.observe(
+            'change', function () {
+                $('freshmail_field_container').setStyle({
+                    width: this.value + freshmailPopupDesignAbelWidthCalculation.value
+                });
+
+            }
+        );
+
+        freshmailPopupDesignAbelWidthCalculation.observe(
+            'change', function () {
+                $('freshmail_field_container').setStyle({
+                    width: freshmailPopupDesignFieldWidth.value + this.value
+                });
+            }
+        );
+
+        freshmailPopupDesignFieldHeight.observe(
+            'change', function () {
+                $('freshmail_field').setStyle({
+                    height: this.value + freshmailPopupDesignAbelHeightCalculation.value
+                });
+            }
+        );
+
+        freshmailPopupDesignAbelHeightCalculation.observe(
+            'change', function () {
+                $('freshmail_field').setStyle({
+                    height: freshmailPopupDesignFieldHeight.value + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_field_color').observe(
+            'change', function () {
+                value = this.value;
+                $('freshmail_field').setStyle({
+                    color: '#' + value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_field_size').observe(
+            'change', function () {
+                value = this.value;
+                $('freshmail_field').setStyle({
+                    fontSize: value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_field_border_color').observe(
+            'change', function () {
+                value = this.value;
+                $('freshmail_field').setStyle({
+                    borderColor: '#' + value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_field_border_width').observe(
+            'change', function () {
+                value = this.value;
+                $('freshmail_field').setStyle({
+                    borderWidth: value + 'px'
+                });
+            }
+        );
+
+        /**
+         * Agreement settings
+         */
+
+        $('freshmail_popup_design_agreement_display_yes').observe(
+            'click', function () {
+                freshmailAgreement.show();
+            }
+        );
+
+        $('freshmail_popup_design_agreement_display_no').observe(
+            'click', function () {
+                freshmailAgreement.hide();
+            }
+        );
+
+        $('freshmail_popup_design_agreement_checked_yes').observe(
+            'click', function () {
+                freshmailAgreementInput.checked = true;
+
+            }
+        );
+
+        $('freshmail_popup_design_agreement_checked_no').observe(
+            'click', function () {
+                freshmailAgreementInput.checked = false;
+            }
+        );
+
+        $('freshmail_popup_design_agreement_color').observe(
+            'change', function () {
+                freshmailAgreementLabel.setStyle({
+                    color: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_agreement_size').observe(
+            'change', function () {
+                freshmailAgreementLabel.setStyle({
+                    fontSize: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_agreement_alignment').observe(
+            'change', function () {
+                freshmailAgreement.setStyle({
+                    textAlign: this.value
+                });
+            }
+        );
+
+        $('snowfreshmail_popup_messages_agreement_text').observe(
+            'change', function() {
+                freshmailAgreementLabel.update(this.value);
+            }
+        );
+
+        /**
+         * Button settings
+         */
+
+        freshmailPopupDesignButtonWidth.observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    width: this.value + freshmailPopupDesignButtonWidthCalculation.value
+                });
+            }
+        );
+
+        freshmailPopupDesignButtonWidthCalculation.observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    width: freshmailPopupDesignButtonWidth.value + this.value
+                });
+            }
+        );
+
+        freshmailPopupDesignButtonHeight.observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    height:  this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_button_alignment').observe(
+            'change', function () {
+                $('freshmail_button_wrapper').setStyle({
+                    textAlign: this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_button_size').observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    fontSize: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_button_color').observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    color: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_button_border_color').observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    borderColor: '#' + this.value
+                });
+            }
+        );
+
+        $('freshmail_popup_design_button_border_width').observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    borderWidth: this.value + 'px'
+                });
+            }
+        );
+
+        $('freshmail_popup_design_button_background_color').observe(
+            'change', function () {
+                freshmailButton.setStyle({
+                    backgroundColor: '#' + this.value
+                });
+            }
+        );
+
+        $('snowfreshmail_popup_messages_button_text').observe(
+            'change', function() {
+                freshmailButton.update(this.value);
+            }
+        );
+
+        /**
+         * Button hovered settings
+         */
+
+        freshmailButton.observe('mouseover', function () {
+            this.setStyle({
+                backgroundColor: '#' + $('freshmail_popup_design_button_hovered_background_color').value,
+                borderColor: '#' + $('freshmail_popup_design_button_hovered_border_color').value,
+                borderWidth: $('freshmail_popup_design_button_border_width').value + 'px',
+                color: '#' + $('freshmail_popup_design_button_hovered_color').value
+            });
+        });
+
+        freshmailButton.observe('mouseout', function () {
+            this.setStyle({
+                backgroundColor: '#' + $('freshmail_popup_design_button_background_color').value,
+                borderColor: '#' + $('freshmail_popup_design_button_border_color').value,
+                color: '#' + $('freshmail_popup_design_button_color').value
+            });
+        });
+
+        /**
+         * Header photo settings
+         */
+
+         $('popup-form-photo-alignment').observe(
+            'change', function () {
+                headePhotoOutputWrapper.setStyle({
+                    textAlign: this.value
+                });
+            }
+        );
+
+        $('popup-form_photo_size').observe(
+            'change', function () {
+                if(this.value == 'scale_with_form') {
+                    $('heade-photo-output').setStyle({
+                        width: freshmailPopupDesignFieldWidth.value + freshmailPopupDesignAbelWidthCalculation.value
+                    });
+                }
+                else {
+                    $('heade-photo-output').removeAttribute('style');
+                }
+           }
+       );
+    });
+</script>

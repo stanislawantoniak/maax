@@ -1,0 +1,85 @@
+<?php
+/** @var Snowdog_Freshmail_Block_Adminhtml_Request_Details $this */
+$request = $this->getCurrentRequest();
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
+            <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
+        </tr>
+    </table>
+</div>
+
+<div class="entry-edit">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Details'); ?></h4>
+        </div>
+        <div class="log-details">
+            <table cellspacing="0" class="log-info table">
+                <col width="25%" />
+                <col />
+                <tbody>
+                    <tr>
+                        <th><?php echo $this->__('Created At'); ?></th>
+                        <td><?php echo $request->getCreatedAt(); ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $this->__('Expires At'); ?></th>
+                        <td><?php echo $request->getDateExpires(); ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $this->__('Processed At'); ?></th>
+                        <td>
+                            <?php if ($request->getProcessedAt()): ?>
+                                <?php echo $request->getProcessedAt(); ?>
+                            <?php else: ?>
+                                <span>-</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $this->__('Status'); ?></th>
+                        <td><?php echo $this->helper('snowfreshmail')->decorateItemStatus($request); ?></td>
+                    </tr>
+                    <?php if ($request->getLastResponse()):?>
+                    <tr>
+                        <th><?php echo $this->__('Last Response'); ?></th>
+                        <td>
+                            <pre><?php echo $this->escapeHtml($request->getLastResponse()); ?></pre>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="entry-edit">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Request'); ?></h4>
+        </div>
+        <div class="log-details">
+            <table cellspacing="0" class="log-info table">
+                <col width="25%" />
+                <col />
+                <tbody>
+                <tr>
+                    <th><?php echo $this->__('Action'); ?></th>
+                    <td><?php echo $this->escapeHtml($request->getAction()); ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo $this->__('Action Parameters'); ?></th>
+                    <td>
+                        <pre><?php echo $this->escapeHtml($request->getActionParameters(true)); ?></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

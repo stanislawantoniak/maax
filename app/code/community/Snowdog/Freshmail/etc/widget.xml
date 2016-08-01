@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<widgets>
+    <freshmail_popup type="snowfreshmail/popup">
+        <name>Freshmail Newsletter Popup</name>
+        <description type="desc">Newsletter popup</description>
+    </freshmail_popup>
+</widgets>

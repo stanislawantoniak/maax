@@ -1,0 +1,24 @@
+#freshmail_info_box {
+    margin-top: 10px;
+    width: 800px;
+    height: 160px;
+    background-color: #fff;
+    background-image: url('../snowfreshmail/images/info_background.png');
+    background-size: 500px;
+    background-position: top right;
+    background-repeat: no-repeat;
+    padding: 20px;
+}
+#freshmail_info_box_text {
+    width: 300px;
+}
+#freshmail_info_button_wrapper {
+    position: relative;
+    display: inline;
+}
+#freshmail_info_button_wrapper small {
+    position: absolute;
+    left: 5px;
+    top: 15px;
+    font-size: 10px;
+}
