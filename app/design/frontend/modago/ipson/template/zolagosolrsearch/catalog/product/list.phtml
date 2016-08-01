@@ -105,12 +105,13 @@ $_products = $_cache['products'];
 															</div>
 															<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
 																<!--work-in-progress-->
+																<script>jQuery(document).ready(function(){addListeners(<?php echo $product[0];?>)})</script>
 																<?php $haveSizes = true; $salableCount = 2; $minQty = 0; $maxQty = 3; ?>
 																<!--end-work-in-progress-->
 																<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
 																	<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
 																	<a href="#" class="qty_less" id="qty-less-<?php echo $product[0];?>">-</a>
-																	<div class="qty" id="input-box-<?php echo $product[0];?>""><input type="text" name="quantity" value="1"/></div>
+																	<div class="qty" id="input-box-<?php echo $product[0];?>"><input type="text" name="quantity" value="1"/></div>
 																	<a href="#" class="qty_more" id="qty-more-<?php echo $product[0];?>">+</a>
 																	<label id="qty-error-<?php echo $product[0];?>" class="error"><?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity %s", $maxQty); ?>
 																	<?php else: ?>
@@ -121,7 +122,7 @@ $_products = $_cache['products'];
 																	<div class="action-box-bundle clearfix">
 																		<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
 																		<button class="btn button button-primary addBasket"
-																				onclick="Mall.validateAddingToCartListening(<?php echo $product[0] ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;">
+																				onclick="Mall.validateAddingToCartListing(<?php echo $product[0] ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;">
 																			<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 																			<?php echo Mage::helper('zolagosolrsearch')->__("Add"); ?>
 																		</button>
@@ -216,8 +217,7 @@ $_products = $_cache['products'];
 						Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
 
 						<!--work-in-progress-->
-						jQuery(document).ready(function() {
-							var id = 4;
+						function addListeners(id) {
 							jQuery("#qty-error-" + id).hide();
 							jQuery("#input-box-" + id + " input[name=quantity]").change(function(){
 								jQuery("#qty-error-" + id).hide();
@@ -241,7 +241,7 @@ $_products = $_cache['products'];
 									jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
 								}
 							});
-						});
+						}
 						<!--end-work-in-progress-->
 					</script>
 
@@ -250,3 +250,59 @@ $_products = $_cache['products'];
 		</div>
 	</div>
 </section>
+
+<div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+	 aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-error modal-header" style="display: none;">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $this->__("Error occured!"); ?></h2>
+			</div>
+			<div class="modal-loading modal-header">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $this->__("Adding product to cart..."); ?></h2>
+			</div>
+			<div class="modal-loaded modal-header" style="display: none;">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+			</div>
+			<div class="modal-body modal-error" style="display: none">
+				<div class="modal-error-txt">
+
+				</div>
+			</div>
+			<div class="modal-body modal-loading" style="text-align: center">
+				<i class="fa fa-spinner fa-spin fa-2x"></i>
+			</div>
+			<div class="modal-loaded modal-body" style="display: none;">
+				<table>
+					<tbody id="product-added">
+					<tr id="full-width-popup-table">
+						<td class="thumb" style="width: 55px;"><img style="width: 55px;" alt=""></td>
+						<td class="desc"><p class="name_product"></p>
+							<p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span>1</span></p></td>
+						<td class="price"></td>
+					</tr>
+					<tr id="small-width-popup-table">
+						<td></td>
+						<td class="price" style="padding: 0 5px;"></td>
+					</tr>
+					</tbody>
+				</table>
+				<div id="buttons-after-add-to-cart">
+					<div class="button-after-add-to-cart" id="continue-shopping-after-add-to-cart">
+						<a href="#" data-dismiss="modal" class="button button-third">
+							<?php echo $this->__("Continue shopping"); ?>
+						</a>
+					</div>
+					<div class="button-after-add-to-cart" id="cart-after-add-to-cart">
+						<a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium link">
+							<?php echo $this->__("Go to shopping cart"); ?>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
