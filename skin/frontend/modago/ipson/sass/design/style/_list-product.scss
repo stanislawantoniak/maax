@@ -18,20 +18,56 @@
         font-weight: 400;
         color: #3d3d3d;
         font-size: 14px;
-        height: 16px;
+        height: 40px;
         overflow: hidden;
-        line-height: 14px;
     }
     .price {
-        //color:$colorProductFinalPrice;
-        //font-size: 14px;
-        //font-family:$fontOpen;
-        //text-align: center;
-        .old {
-            display: inline;
-            //color:$colorFont;
-            //text-decoration:line-through;
-            //font-size:14px;
+        color: #3c3b3b;
+        font-size: 14px;
+        .col-price {
+            .old {
+                color: #3c3b3b;
+                display: inline;
+                text-decoration:line-through;
+                vertical-align: top;
+            }
+            :not(.old) {
+                font-weight: 600;
+                color: black;
+                font-size: 17px;
+                @media (max-width: $screen-xs-max) {
+                    font-size: 14px;
+                }
+            }
+        }
+        .size-box-bundle {
+            display: block;
+            padding-bottom: 15px;
+            .action-box-container {
+                padding: 7px 0 0;
+            }
+            .variants {
+                color: #3c3b3b;
+                font-size: 13px;
+                margin-bottom: 0px;
+            }
+            .addBasket {
+                float: right;
+                height: 36px;
+                line-height: 28px;
+                font-size: 14px;
+                font-weight: 600;
+                padding-top: 4px !important;
+                padding: 12px 13px;
+                margin: 0;
+                text-transform: uppercase;
+                @media (max-width: $screen-xs-max) {
+                    padding: 14px 13px;
+                    width: 100% !important;
+                    height: 40px;
+                    line-height: 34px;
+                }
+            }
         }
     }
 }

@@ -69,11 +69,12 @@ $_products = $_cache['products'];
 											 * product[11]= skuv
 											 * product[12]= product_flag
 											 * product[13]= is_new
+											 * product[16]= prod_type
 											 */
 											$flag = false;//$product[15];
 											?>
 
-											<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-6 col-sm-6 col-md-4 col-lg-4 size14">
+											<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14">
 												<div class="box_listing_product">
 													<a href="<?php echo $product[2]; ?>"
 													   title="<?php echo $product[1]; ?>"
@@ -98,15 +99,47 @@ $_products = $_cache['products'];
 														<div class="price clearfix">
 															<div class="col-price">
 																<?php if ($product[3] != $product[4]) : ?>
-																	<span class="old">
-                                                                    	<?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
-                                                                	</span>
+																<span class="old"><?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?></span>
 																<?php endif; ?>
-																<span>
-                                                                    <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?>
-                                                                </span>
+																<span><?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?></span>
 															</div>
-
+															<!--work-in-progress-->
+															<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
+																<?php $haveSizes = true; $salableCount = 2; $minQty = 1; $maxQty = 3; ?>
+<!--																--><?php //$product[16] = Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>
+																<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
+																	<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
+																	<a href="#" class="qty_less">-</a>
+																	<div class="qty"><input type="text" name="quantity" value="1"/></div>
+																	<a href="#" class="qty_more">+</a>
+																	<label id="qty-error" class="error"><?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity %s", $maxQty); ?>
+																	<?php else: ?>
+																	<p class="variants"><?php echo Mage::helper('zolagosolrsearch')->__("Dostępny w kilku wariantach"); ?></p>
+																	<?php endif; ?>
+																</div>
+																<div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
+																	<div class="action-box-bundle clearfix">
+																		<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
+																		<button class="btn button button-primary addBasket"
+																				onclick="Mall.validateAddingToCart(<?php echo $product[0] ?>, <?php echo $minQty; ?>,<?php echo $maxQty; ?>);return false;">
+																			<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+																			<?php echo Mage::helper('zolagosolrsearch')->__("Add"); ?>
+																		</button>
+																		<?php else: ?>
+																		<span class="btn button button-primary addBasket"
+																		   href="<?php echo $product[2]; ?>"
+																		   title="<?php echo $product[1]; ?>"
+																		   data-entity="<?php echo $product[0]; ?>"
+																		   data-sku="<?php echo $product[10]; ?>"
+																		   data-skuv="<?php echo $product[11]; ?>">
+																			<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+																			<?php echo Mage::helper('zolagosolrsearch')->__("See"); ?>
+																		</span>
+																		<?php endif; ?>
+																	</div>
+																</div>
+															</div>
+															<!--end-work-in-progress-->
 														</div>
 													</a>
 												</div>

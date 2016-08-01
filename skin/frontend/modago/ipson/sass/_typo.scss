@@ -1347,3 +1347,11 @@ figure {
       display:block;
       text-align: left!important;
 }
+
+.container-fluid .wrapper-price{
+	margin-top: 10px;
+	display: block;
+	.price{
+		font-weight: bold;
+	}
+}

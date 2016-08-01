@@ -168,6 +168,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$_product[10]= $product->getSku();
 			$_product[11]= $hlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor());
 
+			$_product[16]= $product->getTypeId();
+
 			$products[] = $_product;
 		}
 
