@@ -49,9 +49,8 @@ class GH_FeedExport_Model_Observer
             'name' => 'product_inventory_is_in_stock',
             'values' => array(
                 array('value' => '', 'label' => ''),
-                array('value' => 1, 'label' => Mage::helper('catalog')->__('Out of Stock')),
-                array('value' => 2, 'label' => Mage::helper('catalog')->__('In Stock'))
-
+                array('value' => 1, 'label' => Mage::helper('catalog')->__('In Stock')), //Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK
+                array('value' => 2, 'label' => Mage::helper('catalog')->__('Out of Stock')) //Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK
             ),
             'value' => $model->getData("product_inventory_is_in_stock")
         ));

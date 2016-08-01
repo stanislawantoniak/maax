@@ -5,8 +5,26 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
     public function getCollection()
     {
+        $feed = $this->getFeed();
+
+        //Pre-Filters
+        $productStatus = $feed->getProductStatus();
+        $productVisibility = $feed->getProductVisibility();
+        $productTypeId = $feed->getProductTypeId();
+        $productInventoryIsInStock = $feed->getProductInventoryIsInStock();
+
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addStoreFilter();
+
+        if (!empty($productStatus))
+            $collection->addFieldToFilter("status", $productStatus);
+
+        if (!empty($productVisibility))
+            $collection->addFieldToFilter("visibility", $productVisibility);
+
+        if (!empty($productTypeId))
+            $collection->addFieldToFilter("type_id", $productTypeId);
+
 
         Mage::app()->getStore()->setId(0);
         $this->_rule->getConditions()->collectValidatedAttributes($collection);
@@ -36,7 +54,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
             $conditions_serialized = unserialize($rule->getData("conditions_serialized"));
 
-            $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();;
+            $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();
 
             $checkConfigurableStock = false;
             if (!empty($conditions)) {
