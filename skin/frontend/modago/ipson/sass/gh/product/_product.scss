@@ -189,7 +189,7 @@ i.flag {
 #product-shop {
 	#box-social {
 		border-top:  1px solid $gray-lighter;
-		padding-top: 10px;
+		padding-top: 25px;
 		margin-top: 50px;
 		margin-bottom: 25px;
 		font-family: $font-family-base;
@@ -230,6 +230,15 @@ i.flag {
 		.wrapper-addthis {
 			padding: 0;
 		}
+		#product-likeboxes {
+			.fa-list {
+				margin-right: 6px;
+			}
+			a {
+				padding: 8px 10px;
+				background: $color_e8e8e8;
+			}
+		}
 	}
 	.question p ,#product-likeboxes p  {
 		a {
@@ -259,6 +268,7 @@ i.flag {
 	#short-description-block {
 		margin-left:0px;
 		padding-left:0px;
+		overflow:hidden;
 	}
 	#short-description {
 		padding-left:0px;

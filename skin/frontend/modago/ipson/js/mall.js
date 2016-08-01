@@ -268,30 +268,28 @@ var Mall = {
 			
 			// Not added box
 			if(p.wishlist_count > 0){
-				likeText = this.getFavPluralText(p.wishlist_count);
+				//likeText = this.getFavPluralText(p.wishlist_count);
 			}else{
 				likeText = "";
 			}
 			boxNotAdded = jQuery(
-				'<div class="addLike-box" id="notadded-wishlist">' + 
-					'<span class="product-context-like-count">&nbsp;' + likeText + '</span>' +
-					'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike">' + 
-						Mall.i18nValidation.__('add-to-br-favorites') +
-					'</a>' + 
+				'<div class="addLike-box" id="notadded-wishlist">' +
+					'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike"><i class="fa fa-list" aria-hidden="true"></i>' +
+						Mall.i18nValidation.__('add-to-favorites') +
+					'</a>' +
 				'</div>');
 
 			// Added box
-			likeText = Mall.i18nValidation.__("you-like-this");
+			//likeText = Mall.i18nValidation.__("you-like-this");
 				
 			if(p.wishlist_count > 1){
-				likeText = this.getFavPluralText(p.wishlist_count - 1, true);
+				//likeText = this.getFavPluralText(p.wishlist_count - 1, true);
 			}
 
 			boxAdded = jQuery(
 				'<div class="addedLike-box" id="added-wishlist">' + 
-					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;">'+ 
-					likeText +
-					'<br><span>'  + Mall.i18nValidation.__("remove-from-favorites") + '</span>'+ 
+					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;"><i class="fa fa-list" aria-hidden="true"></i>'+
+					 Mall.i18nValidation.__("remove-from-favorites") +
 					'</a>' + 
 				'</div>');
 
