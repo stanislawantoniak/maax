@@ -3433,6 +3433,26 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         file_put_contents(realpath(Mage::getBaseDir('var')).DS.'log'.DS.$file, ob_get_clean(), FILE_APPEND);
     }
 
+
+    /**
+     *
+     * @param $storeId
+     * @param $udropshipMethod example udtiership_1
+     * @param bool $includeTitle
+     * @return Varien_Object
+     */
+    public function getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod, $includeTitle = false)
+    {
+        $collection = Mage::getModel("udropship/shipping")->getCollection();
+        $collection->joinDeliveryType();
+        if ($includeTitle)
+            $collection->joinDeliveryTitle($storeId);
+
+        $collection->getSelect()->having("udropship_method=?", $udropshipMethod);
+
+        return $collection->getFirstItem();
+    }
+
 }
 
 function udDump($data, $file = '')

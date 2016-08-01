@@ -840,3 +840,9 @@ div .view_lupa {
 	text-align: center;
 	padding: 20px 0 0;
 }
+
+
+
+#poPickUpAddPaymentForm label[for=payment-pickup-amount].has-error {
+	position: absolute;
+}
