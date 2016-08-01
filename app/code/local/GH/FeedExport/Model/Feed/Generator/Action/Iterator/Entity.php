@@ -12,7 +12,6 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 
 
             $feed = $this->getFeed();
-            Mage::log($feed->getData(), null, "product.log");
 
             //Pre-Filters
             $productStatus = $feed->getProductStatus();
