@@ -60,6 +60,11 @@ $productDescription = $_helper->productAttribute($_product, nl2br($_product->get
 $brandShopProductId = $_product->getData('brandshop');
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
+<div class="path_back_to_category visible-xs">
+	<div class="col-xs-12">
+		<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	</div>
+</div>
 <div id="content" class="container-fluid">
 	<div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 		<div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
