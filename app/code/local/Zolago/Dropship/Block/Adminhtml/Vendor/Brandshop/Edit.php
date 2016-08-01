@@ -16,7 +16,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop_Edit extends Mage_Adminht
         $this->_objectId = 'id';
         $this->_controller = 'adminhtml_vendor_brandshop';
         $this->_updateButton('save', 'label', Mage::helper('zolagodropship')->__('Save settings'));        
-        $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'brandshop_section')).'\')' );
+        $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'brandshop_section')).'\')' );
         $this->_updateButton('save', 'id', 'save_button');
         $this->_removeButton('reset');
         

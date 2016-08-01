@@ -12,7 +12,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Shipment_View
 
         $shipment = $this->getShipment();
         if (($id = $shipment->getId()) && $shipment->getUdropshipStatus()!=ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED) {
-            $url = $this->getUrl('udropshipadmin/adminhtml_shipment/ship', array(
+            $url = $this->getUrl('zolagoosadmin/adminhtml_shipment/ship', array(
                 'id'=>$id,
                 'order_id'=>$this->getRequest()->getParam('order_id')
             ));

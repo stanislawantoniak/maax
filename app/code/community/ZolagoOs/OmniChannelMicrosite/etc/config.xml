@@ -241,13 +241,13 @@
 
     <admin>
         <routers>
-            <umicrositeadmin>
+            <micrositeadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannelMicrosite</module>
-                    <frontName>umicrositeadmin</frontName>
+                    <frontName>micrositeadmin</frontName>
                 </args>
-            </umicrositeadmin>
+            </micrositeadmin>
         </routers>
     </admin>
 
@@ -260,7 +260,7 @@
                             <vendor_registration module="umicrosite">
                                 <title>Vendor Registrations</title>
                                 <sort_order>40</sort_order>
-                                <action>umicrositeadmin/adminhtml_registration</action>
+                                <action>micrositeadmin/adminhtml_registration</action>
                             </vendor_registration>
                         </children>
                     </udropship>

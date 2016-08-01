@@ -139,13 +139,13 @@
 
     <admin>
         <routers>
-            <udshipclassadmin>
+            <zosshipclassadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannelShippingClass_Adminhtml</module>
-                    <frontName>udshipclassadmin</frontName>
+                    <frontName>zosshipclassadmin</frontName>
                 </args>
-            </udshipclassadmin>
+            </zosshipclassadmin>
         </routers>
     </admin>
 
@@ -164,12 +164,12 @@
                             <udshipclass_customer module="udshipclass">
                                 <title>Customer Ship Classes</title>
                                 <sort_order>200</sort_order>
-                                <action>udshipclassadmin/customer</action>
+                                <action>zosshipclassadmin/customer</action>
                             </udshipclass_customer>
                             <udshipclass_vendor module="udshipclass">
                                 <title>Vendor Ship Classes</title>
                                 <sort_order>205</sort_order>
-                                <action>udshipclassadmin/vendor</action>
+                                <action>zosshipclassadmin/vendor</action>
                             </udshipclass_vendor>
                         </children>
                     </udropship>

@@ -115,7 +115,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Statement_Edit_Tab_Payouts ext
     
     public function getRowUrl($row)
     {
-        return $this->getUrl('udpayoutadmin/payout/edit', array('id' => $row->getId()));
+        return $this->getUrl('zospayoutadmin/payout/edit', array('id' => $row->getId()));
     }
 
     public function getGridUrl()
