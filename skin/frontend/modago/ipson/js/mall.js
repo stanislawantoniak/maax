@@ -605,6 +605,7 @@ var Mall = {
         if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
             return false;
         }
+        jQuery('#full-width-popup-table .quantity span').text('');
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
@@ -615,6 +616,7 @@ var Mall = {
 	    popup.modal('show');
 	    popup.css('pointer-events','none');
 	    jQuery('#add-to-cart').css('pointer-events','none');
+	    jQuery('#full-width-popup-table .quantity span').text(qty);
         OrbaLib.Cart.add({
             "product_id": id,
             "super_attribute": attr,
