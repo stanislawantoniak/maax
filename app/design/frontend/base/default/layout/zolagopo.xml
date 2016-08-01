@@ -50,6 +50,7 @@
 				<block name="vendor_po_edit_compose" type="zolagopo/vendor_po_edit_compose" template="zolagopo/vendor/po/edit/compose.phtml"/>
                 <block name="vendor_po_edit_payments_allocation" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments-allocation.phtml"/>
                 <block name="vendor_po_edit_payments_simple" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments-simple.phtml"/>
+				<block name="vendor_po_edit_payments_pickup" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments-pickup.phtml"/>
 				<block name="vendor_po_edit_pos" type="zolagopo/vendor_po_edit_pos" template="zolagopo/vendor/po/edit/pos.phtml"/>
 				<block name="vendor_po_edit_add_item" type="zolagopo/vendor_po_edit_additem" template="zolagopo/vendor/po/edit/add_item.phtml"/>
 				<block name="vendor_po_edit_edit_item" type="zolagopo/vendor_po_edit_edititem" template="zolagopo/vendor/po/edit/edit_item.phtml"/>
