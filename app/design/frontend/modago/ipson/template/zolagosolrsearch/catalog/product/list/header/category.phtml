@@ -40,8 +40,8 @@ if ($this->isContentMode() && !$vendor) return; // no header only on CMS page an
                             <p class="read-more-wrap">
                                 <span class="read-more-text"><?php echo substr($desc,0,strpos($desc, '|')); ?></span>
                                 <span class="read-more-target"><?php echo substr($desc,strpos($desc, '|') + 1); ?></span>
-                                <label for="category-description" class="read-more-trigger"><?php echo $this->__("Read more"); ?> <i class="fa fa-caret-down" aria-hidden="true"></i></label>
-                                <label for="category-description" class="read-less-trigger"><?php echo $this->__("Read less"); ?> <i class="fa fa-caret-up" aria-hidden="true"></i></label>
+                                <label for="category-description" class="read-more-trigger" onclick="setTimeout(Mall.listing.updateFilters, 30)"><?php echo $this->__("Read more"); ?> <i class="fa fa-caret-down" aria-hidden="true"></i></label>
+                                <label for="category-description" class="read-less-trigger" onclick="setTimeout(Mall.listing.updateFilters, 30)"><?php echo $this->__("Read less"); ?> <i class="fa fa-caret-up" aria-hidden="true"></i></label>
                             </p>
                             <?php else: echo $desc; endif; ?>
                         </div>

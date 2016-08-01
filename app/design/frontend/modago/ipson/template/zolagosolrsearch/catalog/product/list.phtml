@@ -103,16 +103,16 @@ $_products = $_cache['products'];
 																<?php endif; ?>
 																<span><?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?></span>
 															</div>
-															<!--work-in-progress-->
 															<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
-																<?php $haveSizes = true; $salableCount = 2; $minQty = 1; $maxQty = 3; ?>
-<!--																--><?php //$product[16] = Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>
+																<!--work-in-progress-->
+																<?php $haveSizes = true; $salableCount = 2; $minQty = 0; $maxQty = 3; ?>
+																<!--end-work-in-progress-->
 																<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
 																	<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
-																	<a href="#" class="qty_less">-</a>
-																	<div class="qty"><input type="text" name="quantity" value="1"/></div>
-																	<a href="#" class="qty_more">+</a>
-																	<label id="qty-error" class="error"><?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity %s", $maxQty); ?>
+																	<a href="#" class="qty_less" id="qty-less-<?php echo $product[0];?>">-</a>
+																	<div class="qty" id="input-box-<?php echo $product[0];?>""><input type="text" name="quantity" value="1"/></div>
+																	<a href="#" class="qty_more" id="qty-more-<?php echo $product[0];?>">+</a>
+																	<label id="qty-error-<?php echo $product[0];?>" class="error"><?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity %s", $maxQty); ?>
 																	<?php else: ?>
 																	<p class="variants"><?php echo Mage::helper('zolagosolrsearch')->__("Available in several variants"); ?></p>
 																	<?php endif; ?>
@@ -121,7 +121,7 @@ $_products = $_cache['products'];
 																	<div class="action-box-bundle clearfix">
 																		<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
 																		<button class="btn button button-primary addBasket"
-																				onclick="Mall.validateAddingToCart(<?php echo $product[0] ?>, <?php echo $minQty; ?>,<?php echo $maxQty; ?>);return false;">
+																				onclick="Mall.validateAddingToCartListening(<?php echo $product[0] ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;">
 																			<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 																			<?php echo Mage::helper('zolagosolrsearch')->__("Add"); ?>
 																		</button>
@@ -139,7 +139,6 @@ $_products = $_cache['products'];
 																	</div>
 																</div>
 															</div>
-															<!--end-work-in-progress-->
 														</div>
 													</a>
 												</div>
@@ -216,6 +215,34 @@ $_products = $_cache['products'];
 
 						Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
 
+						<!--work-in-progress-->
+						jQuery(document).ready(function() {
+							var id = 4;
+							jQuery("#qty-error-" + id).hide();
+							jQuery("#input-box-" + id + " input[name=quantity]").change(function(){
+								jQuery("#qty-error-" + id).hide();
+							});
+							var maxQty = "11";
+							var minQty = "1";
+							var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
+							jQuery("#qty-more-" + id).click(function(e){
+								e.preventDefault();
+								jQuery("#qty-error-" + id).hide();
+								if(quantity < maxQty) {
+									quantity++;
+									jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
+								}
+							});
+							jQuery("#qty-less-" + id).click(function(e){
+								e.preventDefault();
+								jQuery("#qty-error-" + id).hide();
+								if(quantity > minQty){
+									quantity--;
+									jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
+								}
+							});
+						});
+						<!--end-work-in-progress-->
 					</script>
 
 				</div>
