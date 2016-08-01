@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<config>
+    <menu>
+        <cms>
+            <children>
+                <mpblog module="mpblog">
+                    <title>Blog Pro</title>
+                    <sort_order>80</sort_order>
+                    <children>
+                        <new module="mpblog">
+                            <title>Add Post</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/mpblog_post/new</action>
+                        </new>
+                        <posts module="mpblog">
+                            <title>Posts</title>
+                            <sort_order>20</sort_order>
+                            <action>adminhtml/mpblog_post/index</action>
+                        </posts>
+                        <comments module="mpblog">
+                            <title>Comments</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/mpblog_comment/index</action>
+                        </comments>
+                        <categories module="mpblog">
+                            <title>Categories</title>
+                            <sort_order>40</sort_order>
+                            <action>adminhtml/mpblog_category/index</action>
+                        </categories>
+                        <tags module="mpblog">
+                            <title>Tags</title>
+                            <sort_order>50</sort_order>
+                            <action>adminhtml/mpblog_tag/index</action>
+                        </tags>
+                        <notifications module="mpblog">
+                            <title>Notifications</title>
+                            <sort_order>55</sort_order>
+                            <children>
+                                <comments module="mpblog">
+                                    <title>Comment Subscription</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/mpblog_notifications_comments/index</action>
+                                </comments>
+                                <queue module="mpblog">
+                                    <title>Sending Queue</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/mpblog_notifications_queue/index</action>
+                                </queue>
+                            </children>
+                        </notifications>
+                        <config module="mpblog">
+                            <title>Configuration</title>
+                            <sort_order>60</sort_order>
+                            <action>adminhtml/system_config/edit/section/mpblog/</action>
+                        </config>
+                    </children>
+                </mpblog>
+            </children>
+        </cms>
+        <system>
+            <children>
+                <mpblog module="mpblog">
+                    <title>Blog Pro Tools</title>
+                    <sort_order>50</sort_order>
+                    <children>
+                        <import module="mpblog">
+                            <title>Import</title>
+                            <sort_order>10</sort_order>
+                            <children>
+                                <wordpress module="mpblog">
+                                    <title>Wordpress</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/mpblog_import/wordpress</action>
+                                </wordpress>
+                                <awblog module="mpblog">
+                                    <title>aheadWorks Blog</title>
+                                    <sort_order>30</sort_order>
+                                    <action>adminhtml/mpblog_import/awblog</action>
+                                </awblog>
+                            </children>
+                        </import>
+                    </children>
+                </mpblog>
+            </children>
+        </system>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <mpblog>
+                                        <title>Magpleasure - Blog Pro</title>
+                                    </mpblog>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <cms>
+                        <children>
+                            <mpblog>
+                                <title>Blog Pro</title>
+                                <sort_order>80</sort_order>
+                                <children>
+                                    <new module="mpblog">
+                                        <title>Add Post</title>
+                                        <sort_order>10</sort_order>
+                                    </new>
+                                    <posts module="mpblog">
+                                        <title>Posts</title>
+                                        <sort_order>20</sort_order>
+                                    </posts>
+                                    <comments module="mpblog">
+                                        <title>Comments</title>
+                                        <sort_order>30</sort_order>
+                                    </comments>
+                                    <categories module="mpblog">
+                                        <title>Categories</title>
+                                        <sort_order>40</sort_order>
+                                    </categories>
+                                    <notifications module="mpblog">
+                                        <title>Notifications</title>
+                                        <sort_order>55</sort_order>
+                                        <children>
+                                            <comments module="mpblog">
+                                                <title>Comment Subscription</title>
+                                                <sort_order>10</sort_order>
+                                            </comments>
+                                            <queue module="mpblog">
+                                                <title>Sending Queue</title>
+                                                <sort_order>20</sort_order>
+                                            </queue>
+                                        </children>
+                                    </notifications>
+                                    <tags module="mpblog">
+                                        <title>Tags</title>
+                                        <sort_order>50</sort_order>
+                                    </tags>
+                                </children>
+                            </mpblog>
+                        </children>
+                    </cms>
+                    <system>
+                        <children>
+                            <mpblog module="mpblog">
+                                <title>Blog Pro Tools</title>
+                                <sort_order>50</sort_order>
+                                <children>
+                                    <import module="mpblog">
+                                        <title>Import</title>
+                                        <sort_order>10</sort_order>
+                                        <children>
+                                            <wordpress module="mpblog">
+                                                <title>Wordpress</title>
+                                                <sort_order>20</sort_order>
+                                            </wordpress>
+                                            <awblog module="mpblog">
+                                                <title>aheadWorks Blog</title>
+                                                <sort_order>30</sort_order>
+                                            </awblog>
+                                        </children>
+                                    </import>
+                                </children>
+                            </mpblog>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

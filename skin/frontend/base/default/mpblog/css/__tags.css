@@ -1,0 +1,54 @@
+/* Tags */
+.mpblog-tags .tag-list.cloud-enabled {
+  display: none;
+}
+.mpblog-tags .block-content canvas {
+  width: 100%;
+  margin-left: -5px;
+}
+.mpblog-tags ul {
+  list-style-type: none;
+}
+.mpblog-tags ul li {
+  display: inline;
+}
+.mpblog-tags a.tag1 {
+  font-size: 0.7em;
+  font-weight: 100;
+}
+.mpblog-tags a.tag2 {
+  font-size: 0.8em;
+  font-weight: 200;
+}
+.mpblog-tags a.tag3 {
+  font-size: 0.9em;
+  font-weight: 300;
+}
+.mpblog-tags a.tag4 {
+  font-size: 1.0em;
+  font-weight: 400;
+}
+.mpblog-tags a.tag5 {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+.mpblog-tags a.tag6 {
+  font-size: 1.4em;
+  font-weight: 600;
+}
+.mpblog-tags a.tag7 {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+.mpblog-tags a.tag8 {
+  font-size: 1.8em;
+  font-weight: 800;
+}
+.mpblog-tags a.tag9 {
+  font-size: 2.2em;
+  font-weight: 900;
+}
+.mpblog-tags a.tag10 {
+  font-size: 2.5em;
+  font-weight: 900;
+}

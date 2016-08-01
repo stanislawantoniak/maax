@@ -1,0 +1,14 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+<div class="comments-action fix-me">
+    <?php if ($this->showRss()): ?>
+        <span class="rss-comments"><a href="<?php echo $this->getRssCommentFeedUrl(); ?>" title="<?php echo $this->__("RSS Feed with Comments"); ?>"><i class="blog-icon rss"></i></a></span>
+    <?php endif; ?>
+    <span class="leave-a-comment"><a href="#form" onclick="blogComments.getForm('form', 0); return false;"><?php echo $this->__("Leave a comment"); ?></a></span>
+</div>
+

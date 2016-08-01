@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<config>
+    <search>
+        <types>
+            <mpblog_post>
+                <label>Blog Pro</label>
+                <model>mpblog/post</model>
+                <processor>fields</processor> <!-- Can be "eav" and <fields/> is not required when -->
+                <load_before_index>true</load_before_index> <!-- Can be "false" -->
+                <stores>stores</stores>  <!-- Can be "false" -->
+                <pk_field>post_id</pk_field>
+                <url_getter>getPostUrl</url_getter>
+                <fields>
+                    <title/>
+                    <meta_title/>
+                    <meta_tags/>
+                    <meta_description/>
+                    <tags/>
+                    <short_content>html</short_content>
+                    <full_content>html</full_content>
+                    <posted_by/>
+                </fields>
+                <getters> <!-- Possibility to receive some data using getters -->
+                    <getCategoriesText/>
+                    <getCommentsText/>
+                </getters>
+                <updated_at_field>published_at</updated_at_field>
+            </mpblog_post>
+        </types>
+    </search>
+</config>

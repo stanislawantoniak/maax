@@ -1,0 +1,179 @@
+/** Comments */
+@media (max-width: 770px) {
+  .comments-action {
+    display: inline-block;
+    margin-top: 20px;
+  }
+}
+@media (min-width: 770px) {
+  .comments-action {
+    float: right;
+  }
+}
+.comments-action .leave-a-comment {
+  margin-left: 15px;
+  line-height: 24px;
+}
+.comments-action .leave-a-comment a {
+  text-transform: uppercase;
+  font-size: larger;
+}
+.comments-action .blog-icon.rss {
+  background: url("../images/assets/rss.png") no-repeat 0 0 transparent;
+  /** One for elder */
+  background: url("../images/assets/rss.svg") no-repeat 0 0 transparent;
+  /** One for new */
+}
+@media (min-width: 770px) {
+  .comments-action .blog-icon.rss {
+    display: inline-block;
+  }
+}
+.comments-action .blog-icon.rss,
+.comments-action .leave-a-comment {
+  float: left;
+}
+.mpblog-comments-container .comments-header {
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 5px;
+  position: relative;
+}
+.mpblog-comments-container .comments-header span.leave-a-comment {
+  float: left;
+  margin-left: 0;
+}
+.mpblog-comments-container .comments-header span.rss-comments {
+  float: left;
+  margin-left: 20px;
+}
+.mpblog-comments-container .mp-comment-header {
+  margin-bottom: 10px;
+}
+.mpblog-comments-container .mp-comment-author,
+.mpblog-comments-container .mp-comment-date,
+.mpblog-comments-container .mp-comment-willapprove {
+  float: left;
+  margin-right: 10px;
+}
+.mpblog-comments-container .mp-comment-willapprove {
+  color: red;
+  font-style: italic;
+  font-size: smaller;
+}
+.mpblog-comments-container .mp-replies {
+  padding-left: 24px;
+}
+@media (max-width: 1024px) {
+  .mpblog-comments-container .mp-replies {
+    padding-left: 12px;
+  }
+}
+@media (max-width: 600px) {
+  .mpblog-comments-container .mp-replies {
+    padding-left: 6px;
+  }
+}
+.mp-comment-content,
+.mp-comment-form {
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid #cccccc;
+}
+.mp-comment-content.my-comment {
+  border-color: #3399cc;
+}
+.mp-comment-form {
+  background-color: #f4f4f4;
+}
+.mp-comment-form h5 {
+  text-transform: none;
+}
+.mp-blog-loader {
+  background: url('../images/ajax-loader.gif') no-repeat scroll 50% 0 transparent;
+  height: 11px;
+  width: 16px;
+  margin: 0 auto;
+}
+.comment-form-field {
+  margin-bottom: 10px;
+  position: relative;
+}
+.comment-form-field .checkbox + label {
+  padding: 0;
+}
+.comment-form-field textarea,
+.comment-form-field input[type="text"] {
+  line-height: 1.5;
+  padding: 5px !important;
+}
+.comment-form-field textarea {
+  height: 72px;
+  width: 100%;
+  max-width: 460px;
+}
+.comment-form-field textarea,
+.comment-form-field textarea:focus {
+  background-color: #ffffff;
+}
+.comment-form-field input[type="checkbox"] {
+  display: none;
+}
+.comment-form-field input[type="checkbox"] + label {
+  width: auto;
+  max-width: 100%;
+  font-weight: normal;
+  vertical-align: middle;
+  line-height: 1;
+}
+.comment-form-field input[type="checkbox"] + label:before {
+  content: "";
+  background: white;
+  float: left;
+  margin-right: 5px;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #cccccc;
+  -webkit-border-radius: 1px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 1px;
+  -moz-background-clip: padding;
+  border-radius: 1px;
+  background-clip: padding-box;
+}
+.comment-form-field input[type="checkbox"]:checked + label:before {
+  background: url("../images/assets/checked-input.png") no-repeat 50% 50% #ffffff;
+  background: url("../images/assets/checked-input.svg") no-repeat 50% 50% #ffffff;
+}
+.comment-form-field input.text {
+  width: 70% !important;
+}
+@media (max-width: 770px) {
+  .comment-form-field input.text {
+    width: 100% !important;
+  }
+}
+.comment-form-field textarea,
+.comment-form-field input.text {
+  border: 1px solid #cccccc;
+  -webkit-transition: -webkit-box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  -moz-transition: -moz-box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  -o-transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+.comment-form-field textarea.validation-failed,
+.comment-form-field input.text.validation-failed {
+  border: 1px dashed red;
+}
+.form-actions {
+  text-align: right;
+  position: relative;
+}
+.form-actions .mp-comment-reply-btn {
+  text-transform: uppercase;
+}
+.form-actions .subscribe {
+  position: absolute;
+  left: 0;
+  border-color: transparent;
+}

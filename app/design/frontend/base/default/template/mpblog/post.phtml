@@ -1,0 +1,72 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var Magpleasure_Blog_Helper_Data $helper  */
+$helper = $this->_helper();
+/** @var Magpleasure_Blog_Model_Post $post  */
+$post = $this->getPost();
+
+/** @var Magpleasure_Blog_Block_Content_Post $this */
+?>
+<div class="mpblog-container">
+    <div class="mpblog-post">
+
+        <div class="mp-blog-head fix-me">
+            <h1 class=""><?php echo $this->escapeHtml($post->getTitle()); ?></h1>
+
+            <?php if($this->getShowPrintLink()): ?>
+                <span class="mp-blog-print">
+                    <i class="<?php echo $this->getColorClass(); ?> glyphicons print"></i>
+                    <a class="mp-blog-print-link" href="#" onclick="window.print(); return false;" title="<?php echo $this->__("Print This Page"); ?>">
+                        <?php echo $this->__("Print"); ?>
+                    </a>
+                </span>
+            <?php endif; ?>
+        </div>
+
+        <?php if ($post->getPostThumbnailSrc()): ?>
+            <div class="post-thumbnail">
+                <?php if ($this->hasThumbnailUrl()): ?>
+                <a class="thumbnail-url" title="<?php echo $this->escapeHtml($post->getTitle()); ?>" href="<?php echo $this->getThumbnailUrl(); ?>">
+                <?php endif; ?>
+                <img class="thumbnail"
+                     src="<?php echo $post->getPostThumbnailSrc(); ?>"
+                     alt="<?php echo $this->escapeHtml($post->getTitle()); ?>"/>
+                <?php if ($this->hasThumbnailUrl()): ?>
+                </a>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="mp-header fix-me">
+            <?php echo $this->getHeaderHtml($post); ?>
+        </div>
+        <div class="mp-content std fix-me">
+            <?php echo $post->getFullContent(); ?>
+            <div class="mp-details fix-me">
+                <?php echo $this->getFooterHtml($post); ?>
+            </div>
+        </div>
+
+        <?php if ($post->getCommentsEnabled() || $helper->getSocialEnabled()): ?>
+        <div class="customer-action-bar fix-me">
+            <?php if ($helper->getSocialEnabled()): ?>
+                <?php echo $this->getSocialHtml(); ?>
+            <?php endif; ?>
+            <?php if ($post->getCommentsEnabled()): ?>
+                <?php echo $this->getCommentsActionHtml(); ?>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($post->getCommentsEnabled()): ?>
+            <div class="mpblog-comments-container" id="comments">
+            <?php echo $this->getCommentsHtml(); ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

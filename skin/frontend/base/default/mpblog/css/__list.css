@@ -1,0 +1,233 @@
+/* List of Posts */
+@media (max-width: 1024px) {
+  .mpblog-list.list .mpblog-post {
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+  }
+  .mpblog-list.list .mpblog-post:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+.mpblog-list.list .mpblog-post .thumbnail-container {
+  overflow: hidden;
+}
+.mpblog-list.list .mpblog-post .post-thumbnail {
+  -webkit-transition: -webkit-transform 0.3s 0.15s ease-out;
+  -moz-transition: -moz-transform 0.3s 0.15s ease-out;
+  -o-transition: -o-transform 0.3s 0.15s ease-out;
+  transition: -webkit-transform 0.3s 0.15s ease-out,-moz-transform 0.3s 0.15s ease-out,-o-transform 0.3s 0.15s ease-out,transform 0.3s 0.15s ease-out;
+}
+.mpblog-list.list .mpblog-post .post-thumbnail:hover {
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -o-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+}
+.mpblog-list.list .mp-read-more {
+  margin-right: 1.5em;
+  margin-bottom: 1.5em;
+  float: left;
+}
+.mpblog-list.grid {
+  width: 100%;
+}
+.mpblog-list.grid .item {
+  -webkit-transition: width 0.3s ease-in-out;
+  -moz-transition: width 0.3s ease-in-out;
+  -o-transition: width 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out;
+  float: left;
+  padding: 0 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.mpblog-list.grid .item .post-container {
+  overflow: hidden;
+  background-color: #f4f4f4;
+  padding: 10px;
+}
+.mpblog-list.grid .item .post-container .thumbnail-container {
+  overflow: hidden;
+}
+.mpblog-list.grid .item .post-container .post-thumbnail {
+  margin: -10px -10px 10px;
+  -webkit-transition: -webkit-transform 0.3s 0.15s ease-out;
+  -moz-transition: -moz-transform 0.3s 0.15s ease-out;
+  -o-transition: -o-transform 0.3s 0.15s ease-out;
+  transition: -webkit-transform 0.3s 0.15s ease-out,-moz-transform 0.3s 0.15s ease-out,-o-transform 0.3s 0.15s ease-out,transform 0.3s 0.15s ease-out;
+}
+.mpblog-list.grid .item .post-container .post-thumbnail:hover {
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.mpblog-list.grid .item .post-container .mp-footer {
+  margin-bottom: 20px;
+}
+.mpblog-list.grid .item .post-container span.comments {
+  float: left;
+  margin-left: 0;
+}
+/* Grid Sizer */
+.three-columns .mpblog-list.grid .grid-sizer {
+  width: 33%;
+}
+.three-columns .mpblog-list.grid .item {
+  width: 33%;
+}
+.three-columns .mpblog-list.grid .item.w2 {
+  width: 66%;
+}
+.three-columns .mpblog-list.grid .item.w3 {
+  width: 100%;
+  padding: 0 !important;
+}
+@media only screen and (max-width: 1024px) {
+  .three-columns .mpblog-list.grid .grid-sizer {
+    width: 50%;
+  }
+  .three-columns .mpblog-list.grid .item {
+    width: 50%;
+  }
+  .three-columns .mpblog-list.grid .item.w2,
+  .three-columns .mpblog-list.grid .item.w3 {
+    width: 100%;
+    padding: 0 !important;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .three-columns .mpblog-list.grid .grid-sizer {
+    width: 100%;
+  }
+  .three-columns .mpblog-list.grid .item {
+    padding: 0 !important;
+    width: 100%;
+  }
+  .three-columns .mpblog-list.grid .item.w3,
+  .three-columns .mpblog-list.grid .item.w2 {
+    width: 100%;
+  }
+}
+.two-columns-right .mpblog-list.grid .grid-sizer,
+.two-columns-left .mpblog-list.grid .grid-sizer {
+  width: 25%;
+}
+.two-columns-right .mpblog-list.grid .item,
+.two-columns-left .mpblog-list.grid .item {
+  width: 25%;
+}
+.two-columns-right .mpblog-list.grid .item.w2,
+.two-columns-left .mpblog-list.grid .item.w2 {
+  width: 50%;
+}
+.two-columns-right .mpblog-list.grid .item.w3,
+.two-columns-left .mpblog-list.grid .item.w3 {
+  width: 75%;
+}
+@media only screen and (max-width: 1024px) {
+  .two-columns-right .mpblog-list.grid .grid-sizer,
+  .two-columns-left .mpblog-list.grid .grid-sizer {
+    width: 50%;
+  }
+  .two-columns-right .mpblog-list.grid .item,
+  .two-columns-left .mpblog-list.grid .item {
+    width: 50%;
+  }
+  .two-columns-right .mpblog-list.grid .item.w3,
+  .two-columns-left .mpblog-list.grid .item.w3,
+  .two-columns-right .mpblog-list.grid .item.w2,
+  .two-columns-left .mpblog-list.grid .item.w2 {
+    width: 100%;
+    padding: 0 !important;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .two-columns-right .mpblog-list.grid .grid-sizer,
+  .two-columns-left .mpblog-list.grid .grid-sizer {
+    width: 100%;
+  }
+  .two-columns-right .mpblog-list.grid .item,
+  .two-columns-left .mpblog-list.grid .item {
+    padding: 0 !important;
+    width: 100%;
+  }
+  .two-columns-right .mpblog-list.grid .item.w3,
+  .two-columns-left .mpblog-list.grid .item.w3,
+  .two-columns-right .mpblog-list.grid .item.w2,
+  .two-columns-left .mpblog-list.grid .item.w2 {
+    width: 100%;
+  }
+}
+.one-column .mpblog-list.grid .grid-sizer {
+  width: 20%;
+}
+.one-column .mpblog-list.grid .item {
+  width: 20%;
+}
+.one-column .mpblog-list.grid .item.w2 {
+  width: 40%;
+}
+.one-column .mpblog-list.grid .item.w3 {
+  width: 60%;
+}
+@media only screen and (max-width: 1024px) {
+  .one-column .mpblog-list.grid .grid-sizer {
+    width: 33%;
+  }
+  .one-column .mpblog-list.grid .item {
+    width: 33%;
+  }
+  .one-column .mpblog-list.grid .item.w2 {
+    width: 66%;
+  }
+  .one-column .mpblog-list.grid .item.w3 {
+    width: 100%;
+    padding: 0 !important;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .one-column .mpblog-list.grid .grid-sizer {
+    width: 100%;
+  }
+  .one-column .mpblog-list.grid .item {
+    padding: 0 !important;
+    width: 100%;
+  }
+  .one-column .mpblog-list.grid .item.w3,
+  .one-column .mpblog-list.grid .item.w2 {
+    width: 100%;
+  }
+}
+.mpblog-container.list .mp-pager {
+  border-top: 1px solid #cccccc;
+}
+.mpblog-container .mp-pager {
+  margin-top: 40px;
+  padding: 10px 5px 0;
+}
+.mpblog-container .mp-pager .navi a {
+  line-height: 16px;
+  min-height: 16px;
+  width: 45%;
+}
+.mpblog-container .mp-pager .newer a {
+  float: right;
+  text-align: right;
+}
+.mpblog-container .mp-pager .newer a i.glyphicons {
+  margin-left: 5px;
+}
+.mpblog-container .mp-pager .older a {
+  float: left;
+  text-align: left;
+}
+.mpblog-container .mp-pager .older a i.glyphicons {
+  margin-right: 5px;
+}

@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<widgets>
+
+    <mpblog_recentposts type="mpblog/custom" translate="name description" module="mpblog">
+        <name>Blog Pro: Recent Posts</name>
+        <description>Select a category filter for posts.</description>
+        <parameters>
+            <category_id>
+                <label>Catgegory</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>mpblog/system_config_source_categories</source_model>
+                <comments>You can display only some category's posts or all recent posts of the blog.</comments>
+            </category_id>
+            <block_type>
+                <label>Type</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>sidebar</required>
+                <source_model>mpblog/system_config_source_customtypes</source_model>
+            </block_type>
+            <display_short>
+                <label>Display Short Content</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <comment>It's a only text for Sidebar type</comment>
+            </display_short>
+            <display_date>
+                <label>Display Date</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <comment>It's a only date for Sidebar type</comment>
+            </display_date>
+            <record_limit>
+                <label>Posts Limit</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>3</value>
+            </record_limit>
+        </parameters>
+    </mpblog_recentposts>
+    <mpblog_taggedposts type="mpblog/taggedposts" translate="name description" module="mpblog">
+        <name>Blog Pro: Tagged Posts</name>
+        <description>Input filter tags for posts.</description>
+        <parameters>
+            <block_title>
+                <label>Title</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+            </block_title>
+            <tags>
+                <label>Tags</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <description>Please enter Tags separated by comma</description>
+            </tags>
+            <block_type>
+                <label>Type</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>sidebar</required>
+                <source_model>mpblog/system_config_source_customtypes</source_model>
+            </block_type>
+            <display_short>
+                <label>Display Short Content</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <comment>It's a only text for Sidebar type</comment>
+            </display_short>
+            <display_date>
+                <label>Display Date</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <comment>It's a only date for Sidebar type</comment>
+            </display_date>
+            <record_limit>
+                <label>Posts Limit</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>3</value>
+            </record_limit>
+        </parameters>
+    </mpblog_taggedposts>
+    <mpblog_recentcomments type="mpblog/sidebar_recentcomments_custom" translate="name description" module="mpblog">
+        <name>Blog Pro: Recent Comments</name>
+        <description>Select a category filter for comments.</description>
+        <parameters>
+            <category_id>
+                <label>Category</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>mpblog/system_config_source_categories</source_model>
+                <comments>You can display only some category's comments or all recent comments of the blog.</comments>
+            </category_id>
+            <label>
+                <label>Block Label</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>Recent Comments</value>
+            </label>
+            <display_short>
+                <label>Display Short Content</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <comment>It's a only text for Sidebar type</comment>
+            </display_short>
+            <display_date>
+                <label>Display Date</label>
+                <type>select</type>
+                <visible>1</visible>
+                <required>1</required>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <comment>It's a only date for Sidebar type</comment>
+            </display_date>
+            <record_limit>
+                <label>Comments Limit</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>1</value>
+            </record_limit>
+        </parameters>
+    </mpblog_recentcomments>
+    <mpblog_categories type="mpblog/sidebar_category_custom" translate="name description" module="mpblog">
+        <name>Blog Pro: Categories Block</name>
+        <parameters>
+            <label>
+                <label>Block Label</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>Blog Categories</value>
+            </label>
+        </parameters>
+    </mpblog_categories>
+    <mpblog_archives type="mpblog/sidebar_archive_custom" translate="name description" module="mpblog">
+        <name>Blog Pro: Archives Sidebar Block</name>
+        <parameters>
+            <label>
+                <label>Block Label</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>Blog Archives</value>
+            </label>
+            <record_limit>
+                <label>Archives Limit to Display</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>1</required>
+                <value>12</value>
+            </record_limit>
+        </parameters>
+    </mpblog_archives>
+</widgets>

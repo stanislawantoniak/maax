@@ -1,0 +1,99 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+
+<?php /** @var $this Magpleasure_Blog_Block_Layout */ ?>
+
+<article class="mobile <?php echo $this->getMobileLayoutCode(); ?>">
+    <?php if ($this->hasMobileLeftColumn()): ?>
+        <aside class="left" id="mpblog_left_off_canvas">
+            <?php foreach ($this->getMobileBlocks('left_side') as $alias): ?>
+                <div class="mobile-block" data-set="sidebar-<?php echo $alias; ?>">
+                    <?php echo $this->getSidebarBlockHtml($alias); ?>
+                </div>
+            <?php endforeach; ?>
+        </aside>
+        <script type="text/javascript">
+            //<![CDATA[
+            (function( $ ){
+                $(document).ready(function(){
+                    $('#mpblog_left_off_canvas').swipy({'side':'left'});
+                });
+            }( jQuery ));
+            //]]>
+        </script>
+    <?php endif; ?>
+    <section class="content">
+        <div class="swipe-me <?php echo $this->hasMobileLeftColumn() ? "left" : "right"; ?>"
+             id="swipe_me"
+             title="<?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>">
+            <?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>
+        </div>
+        <?php foreach ($this->getMobileBlocks('content') as $alias): ?>
+            <div class="mobile-block" data-set="content-<?php echo $alias; ?>">
+                <?php echo $this->getContentBlockHtml($alias); ?>
+            </div>
+        <?php endforeach; ?>
+    </section>
+    <?php if ($this->hasMobileRightColumn()): ?>
+        <aside class="right" id="mpblog_right_off_canvas">
+            <?php foreach ($this->getMobileBlocks('right_side') as $alias): ?>
+                <div class="mobile-block" data-set="sidebar-<?php echo $alias; ?>">
+                    <?php echo $this->getSidebarBlockHtml($alias); ?>
+                </div>
+            <?php endforeach; ?>
+        </aside>
+        <script type="text/javascript">
+            //<![CDATA[
+            (function( $ ){
+                $(document).ready(function(){
+                    $('#mpblog_right_off_canvas').swipy({'side':'right'});
+                });
+            }( jQuery ));
+            //]]>
+        </script>
+    <?php endif; ?>
+</article>
+
+<article class="desktop <?php echo $this->getDesktopLayoutCode(); ?>">
+    <?php if ($this->hasDesktopLeftColumn()): ?>
+    <aside class="left">
+        <?php foreach ($this->getDesktopBlocks('left_side') as $alias): ?>
+            <div class="desktop-block" data-set="sidebar-<?php echo $alias; ?>">
+            <?php echo $this->getSidebarBlockHtml($alias); ?>
+            </div>
+        <?php endforeach; ?>
+    </aside>
+    <?php endif; ?>
+    <section class="content">
+        <?php foreach ($this->getDesktopBlocks('content') as $alias): ?>
+            <div class="desktop-block"  data-set="content-<?php echo $alias; ?>">
+            <?php echo $this->getContentBlockHtml($alias); ?>
+            </div>
+        <?php endforeach; ?>
+    </section>
+    <?php if ($this->hasDesktopRightColumn()): ?>
+    <aside class="right">
+        <?php foreach ($this->getDesktopBlocks('right_side') as $alias): ?>
+            <div class="desktop-block"  data-set="sidebar-<?php echo $alias; ?>">
+            <?php echo $this->getSidebarBlockHtml($alias); ?>
+            </div>
+        <?php endforeach; ?>
+    </aside>
+    <?php endif; ?>
+</article>
+
+<script type="text/javascript">
+//<![CDATA[
+(function( $ ){
+    $('<?php echo $this->getAskedBlockSelector(); ?>').appendAround();
+    $('.blog-video').fitVids();
+}( jQuery ));
+//]]>
+</script>
+
+

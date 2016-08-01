@@ -1,0 +1,57 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+
+<?php /**  @var $this Magpleasure_Blog_Block_System_Config_Form_Element_Colors_Render */ ?>
+
+<select class=" select" name="groups[tags][fields][presetted_colors][value]" id="mpblog_tags_presetted_colors">
+<?php foreach ($this->getSchemes() as $value => $label): ?>
+    <option  value="<?php echo $value; ?>"><?php echo $label; ?></option>
+<?php endforeach; ?>
+</select>
+
+<button onclick="applyColorScheme();" class="scalable apply" type="button" title="<?php echo $this->__("Apply"); ?>" id="mpblog_tags_presetted_colors_apply">
+    <span>
+        <span>
+            <span><?php echo $this->__("Apply"); ?></span>
+        </span>
+    </span>
+</button>
+
+<div class="fixed"></div>
+
+<script type="text/javascript">
+
+    var colorSchemes = <?php echo $this->getSchemesDataJson(); ?>;
+    var applyColorScheme = function(){
+
+
+        var key = $('mpblog_tags_presetted_colors').value;
+        if (key){
+
+            if (colorSchemes[key]){
+                var data = colorSchemes[key];
+
+                for (rowKey in data){
+                    var id = 'mpblog_tags_mt_' + rowKey;
+                    var element = $(id);
+                    if (element){
+                        element.value = data[rowKey];
+
+                        if (typeof(jscolor) != 'undefined'){
+
+                            new jscolor.color(element);
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    };
+
+</script>

@@ -1,0 +1,60 @@
+.search-query {
+  margin-bottom: 20px;
+}
+.search-query .input-box {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  float: left;
+}
+.search-query .input-box button.button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: none;
+  border: none;
+  padding: 6px 7px;
+}
+.search-query .input-box button.button i.glyphicons.search {
+  opacity: 0.5;
+  -webkit-transition: all 0.15s ease-in-out;
+  -moz-transition: all 0.15s ease-in-out;
+  -o-transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+}
+.search-query .input-box button.button i.glyphicons.search:hover {
+  opacity: 1;
+}
+.search-query .input-box button.button i.glyphicons.search:active {
+  -webkit-transform: scale(0.8);
+  -moz-transform: scale(0.8);
+  -o-transform: scale(0.8);
+  -ms-transform: scale(0.8);
+  transform: scale(0.8);
+}
+.search-query .input-box input[type="text"] {
+  width: 100%;
+}
+.search-query .advice {
+  padding: 3px 10px;
+  border: 1px solid #cccccc;
+  background: #f4f4f4;
+  float: left;
+  -webkit-border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 2px;
+  -moz-background-clip: padding;
+  border-radius: 2px;
+  background-clip: padding-box;
+}
+.search-query .advice a {
+  font-weight: bold;
+}
+.mpblog-search .block-content button.button {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.mpblog-search .block-content input.input-text {
+  width: 168px;
+  margin-top: 5px;
+}

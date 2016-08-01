@@ -1,0 +1,63 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+<?php /** @var Magpleasure_Blog_Block_Adminhtml_Widget_Form_Wysiwyg_Renderer $this */ ?>
+
+<textarea
+    class="<?php echo $this->getClass(); ?>"
+    name="<?php echo $this->getFieldName(); ?>"
+    id="<?php echo $this->getHtmlId(); ?>"
+    style="<?php echo $this->getStyle(); ?>"><?php echo $this->getValue(); ?></textarea>
+
+<script type="text/javascript">
+
+    (function($) {
+
+        $(function(){
+            $('#<?php echo $this->getHtmlId(); ?>').redactor({
+                toolbarFixedTopOffset: 37,
+                buttonSource: true,
+                plugins: [
+                    'undo',
+                    'fontcolor',
+                    'table',
+                    'video',
+                    'imagemanager',
+                    'magento',
+                    'cutter',
+                    'fullscreen',
+                    'definedlinks'
+                ],
+                minHeight: <?php echo $this->getMinHeight(); ?>,
+                imageUpload: '<?php echo $this->getImageUploadUrl(); ?>',
+                imageManagerJson: '<?php echo $this->getImageJsonUrl(); ?>',
+                clipboardUploadUrl: '<?php echo $this->getImageClipboardUrl(); ?>',
+                uploadImageFields: {
+                    'form_key': '<?php echo $this->getFormKey(); ?>'
+                },
+                autosave: '<?php echo $this->getAutoSaveUrl(); ?>',
+                autosaveError: function(name, json){
+                    console.log(name, json);
+                },
+                autosaveOnChange: true,
+                autosaveOnChangeInterval: 500,
+                cutter: <?php echo $this->getShowCutter() ? "true" : "false"; ?>,
+                definedLinks: '<?php echo $this->getMagentoLinksJsonUrl(); ?>',
+                initCallback: function(){
+                    $('.re-fullscreen').each(function(index, el){
+                        $(el.parentNode).css({float:"right"});
+                    });
+                },
+                buttons: ['formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist',
+                    'outdent', 'indent', 'image', 'file', 'link', 'alignment', 'html']
+            });
+        });
+
+    }( jQuery ));
+
+</script>
+

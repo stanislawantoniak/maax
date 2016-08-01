@@ -1,0 +1,25 @@
+@big-tablet-point: 1024px;
+@tablet-point: 770px;
+@big-phone-point: 600px;
+@phone-point: 360px;
+@border-color: #cccccc;
+@form-back-color: #f4f4f4;
+@white-back-color: #ffffff;
+
+@my-comment-border-color: #3399cc;
+
+.placeholder(@rules) {
+
+  &::-webkit-input-placeholder {
+    @rules();
+  }
+  &:-moz-placeholder {
+    @rules();
+  }
+  &::-moz-placeholder {
+    @rules();
+  }
+  &:-ms-input-placeholder {
+    @rules();
+  }
+}

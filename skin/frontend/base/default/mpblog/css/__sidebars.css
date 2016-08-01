@@ -1,0 +1,100 @@
+/* Sidebars */
+.mpblog-categories .block-content,
+.mpblog-search .block-content,
+.mpblog-recentposts .block-content,
+.mpblog-tags .block-content,
+.mpblog-recentcomments .block-content,
+.mpblog-archives .block-content {
+  padding: 5px 10px;
+}
+.mpblog-categories ul li,
+.mpblog-recentcomments ul li,
+.mpblog-archives ul li {
+  padding-left: 20px;
+  margin-bottom: 3px;
+  position: relative;
+}
+/* Sidebar Blocks */
+.sidebar-common ul li.active a {
+  font-weight: bold;
+}
+.sidebar-common ul li i.glyphicons,
+.sidebar-common ul li i.glyphicons:before {
+  font-size: smaller;
+}
+.sidebar-common ul li i.glyphicons {
+  display: block;
+  left: 4px;
+  top: 2px;
+  position: absolute;
+}
+.mpblog-categories ul li.active a,
+.mpblog-recentcomments ul li.active a,
+.mpblog-archives ul li.active a,
+.mpblog-recentposts ul li.active a,
+.mpblog-recentcomments ul li.active a,
+.mpblog-archives ul li.active a {
+  font-weight: bold;
+}
+.mpblog-categories ul li i.glyphicons,
+.mpblog-recentcomments ul li i.glyphicons,
+.mpblog-archives ul li i.glyphicons,
+.mpblog-recentposts ul li i.glyphicons,
+.mpblog-recentcomments ul li i.glyphicons,
+.mpblog-archives ul li i.glyphicons,
+.mpblog-categories ul li i.glyphicons:before,
+.mpblog-recentcomments ul li i.glyphicons:before,
+.mpblog-archives ul li i.glyphicons:before,
+.mpblog-recentposts ul li i.glyphicons:before,
+.mpblog-recentcomments ul li i.glyphicons:before,
+.mpblog-archives ul li i.glyphicons:before {
+  font-size: smaller;
+}
+.mpblog-categories ul li i.glyphicons,
+.mpblog-recentcomments ul li i.glyphicons,
+.mpblog-archives ul li i.glyphicons,
+.mpblog-recentposts ul li i.glyphicons,
+.mpblog-recentcomments ul li i.glyphicons,
+.mpblog-archives ul li i.glyphicons {
+  display: block;
+  left: 4px;
+  top: 2px;
+  position: absolute;
+}
+.mpblog-recentposts .mp-post-thesis {
+  margin-top: 3px;
+}
+.mpblog-recentposts .thumbnail {
+  float: left;
+  border: 1px solid #D0CBC1;
+  padding: 3px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  width: 68px;
+  height: 68px;
+}
+.mpblog-recentposts .thumbnail:hover {
+  -webkit-box-shadow: 0px 0px 6px 0 #cccccc;
+  -moz-box-shadow: 0px 0px 6px 0 #cccccc;
+  box-shadow: 0px 0px 6px 0 #cccccc;
+  -webkit-transition: all 0.15s 0.3s ease-in-out;
+  -moz-transition: all 0.15s 0.3s ease-in-out;
+  -o-transition: all 0.15s 0.3s ease-in-out;
+  transition: all 0.15s 0.3s ease-in-out;
+}
+.mpblog-recentposts .thumbnail .img {
+  width: 60px;
+  height: 60px;
+}
+.mpblog-recentposts ul li {
+  margin-bottom: 20px;
+}
+.mpblog-recentposts ul li:last-child {
+  margin-bottom: 0;
+}
+.mpblog-archives .block-content {
+  padding-top: 10px;
+}
+.mpblog-archives .block-content .actions {
+  margin: 10px -10px -5px;
+}

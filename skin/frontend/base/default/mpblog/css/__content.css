@@ -1,0 +1,260 @@
+.mpblog-container h1.mp-title {
+  margin-bottom: 20px;
+}
+@media (max-width: 770px) {
+  .mp-blog-head {
+    text-align: center;
+  }
+}
+.mp-blog-head h1 {
+  float: left;
+  margin-bottom: 0.25em;
+  max-width: 90%;
+}
+@media (max-width: 1024px) {
+  .mp-blog-head h1 {
+    max-width: 85%;
+    font-size: larger;
+  }
+}
+@media (max-width: 770px) {
+  .mp-blog-head h1 {
+    max-width: 100%;
+  }
+}
+.mp-blog-head a.mp-blog-rss-link,
+.mp-blog-head a.mp-blog-print-link {
+  font-size: smaller;
+}
+@media (max-width: 770px) {
+  .mp-blog-head a.mp-blog-rss-link,
+  .mp-blog-head a.mp-blog-print-link {
+    display: none;
+  }
+}
+.mp-blog-head span.mp-blog-rss,
+.mp-blog-head span.mp-blog-print {
+  float: right;
+  margin-top: 4px;
+}
+@media (max-width: 770px) {
+  .mp-blog-head span.mp-blog-rss,
+  .mp-blog-head span.mp-blog-print {
+    display: none;
+  }
+}
+.mpblog-post {
+  clear: both;
+  margin-bottom: 20px;
+}
+@media (max-width: 1024px) {
+  .mpblog-post .mp-post-header h2 {
+    font-size: larger;
+    margin-bottom: 0;
+  }
+}
+.mpblog-post .post-thumbnail {
+  margin-bottom: 1em;
+}
+.mpblog-post .post-thumbnail img.thumbnail {
+  width: 100%;
+}
+@media (max-width: 1024px) {
+  .mpblog-post .post-thumbnail {
+    margin-bottom: 0.5em;
+  }
+}
+.mpblog-post .mp-header {
+  padding: 0.5em 0;
+  margin-bottom: 1em;
+}
+@media (max-width: 1024px) {
+  .mpblog-post .mp-header {
+    border-top: none;
+    margin-bottom: 0.5em;
+  }
+}
+.mpblog-post .mp-header .posted-by,
+.mpblog-post .mp-header .date,
+.mpblog-post .mp-header .views {
+  float: left;
+}
+@media (max-width: 1024px) {
+  .mpblog-post .mp-header {
+    border-top: none;
+  }
+}
+.mpblog-post .mp-content div.mp-details {
+  margin-top: 20px;
+}
+.mpblog-post .mp-content iframe.blog-video {
+  margin-bottom: 1.5em !important;
+}
+.mpblog-post .mp-content hr.cutter {
+  display: none;
+}
+.mpblog-post .mp-content ol,
+.mpblog-post .mp-content ul {
+  margin-left: 20px;
+}
+.mpblog-post .mp-content img {
+  width: 100%;
+}
+.mpblog-post .mp-content img.alignleft {
+  display: inline;
+  float: left;
+  margin: 0 20px 3px 0;
+}
+.mpblog-post .mp-content img.alignright {
+  display: inline;
+  float: right;
+  margin: 0 0 3px 20px;
+}
+.mpblog-post .mp-content a > img {
+  border: 1px solid #D0CBC1;
+  padding: 3px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-transition: -webkit-box-shadow 0.15s 0.3s ease-in-out;
+  -moz-transition: -moz-box-shadow 0.15s 0.3s ease-in-out;
+  -o-transition: box-shadow 0.15s 0.3s ease-in-out;
+  transition: box-shadow 0.15s 0.3s ease-in-out;
+}
+.mpblog-post .mp-content a > img:hover {
+  -webkit-box-shadow: 0px 0px 6px 0 #cccccc;
+  -moz-box-shadow: 0px 0px 6px 0 #cccccc;
+  box-shadow: 0px 0px 6px 0 #cccccc;
+}
+.mpblog-post .mp-content blockquote {
+  margin: 0 1.6em 1.5em;
+  padding-left: 0;
+  color: #777;
+  font-style: italic;
+}
+.mpblog-post .mp-content table {
+  margin-bottom: 1.5em;
+}
+.mpblog-post .mp-content table tr th {
+  font-weight: bold;
+  border-bottom: 2px solid #cccccc;
+  background-color: #ffffff;
+}
+.mpblog-post .mp-content table tr td,
+.mpblog-post .mp-content table tr th {
+  padding: 5px 10px;
+}
+.mpblog-post .mp-content table tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+.mpblog-post .mp-content table tr:nth-child(even) td {
+  background-color: #f4f4f4;
+}
+.mpblog-post span.mp-tags,
+.mpblog-post span.categories,
+.mpblog-post span.posted-by,
+.mpblog-post span.date,
+.mpblog-post span.go-to-comments,
+.mpblog-post span.leave-a-comment,
+.mpblog-post span.comments,
+.mpblog-post span.rss-comments,
+.mpblog-post span.views {
+  font-size: smaller;
+}
+.mpblog-post span.mp-tags {
+  margin-right: 20px;
+  float: left;
+}
+.mpblog-post span.mp-tags-pic {
+  float: left;
+  width: 20px;
+}
+.mpblog-post span.mp-tags-pic span.text {
+  line-height: 16px;
+  text-indent: -999em;
+  display: block;
+}
+.mpblog-post span.categories {
+  margin-right: 20px;
+  float: left;
+}
+.mpblog-post span.categories-pic {
+  float: left;
+  display: block;
+  width: 19px;
+  height: 16px;
+}
+.mpblog-post span.categories-pic span.text {
+  line-height: 16px;
+  text-indent: -999em;
+  display: block;
+}
+.mpblog-post span.posted-by {
+  margin-right: 20px;
+}
+.mpblog-post span.date {
+  margin-right: 20px;
+}
+.mpblog-post span.views {
+  margin-right: 20px;
+}
+.mpblog-post span.comments {
+  float: right;
+  margin-left: 20px;
+}
+@media (max-width: 600px) {
+  .mpblog-post span.comments {
+    display: none;
+  }
+}
+.mpblog-post i.glyphicons {
+  margin-right: 5px;
+}
+.mpblog-post .customer-action-bar {
+  padding: 20px 0;
+  border-bottom: 1px solid #cccccc;
+}
+@media (max-width: 770px) {
+  .mpblog-post .customer-action-bar {
+    text-align: center;
+  }
+}
+.blog-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  opacity: 0.8;
+  -webkit-transition: all 0.15s ease-in-out;
+  -moz-transition: all 0.15s ease-in-out;
+  -o-transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+}
+.blog-icon:hover {
+  opacity: 1;
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
+}
+.blog-icon:active {
+  -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
+  -o-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
+}
+/* Recent Comments and Posts */
+.mp-recentcomment-date,
+.mp-recentpost-date {
+  font-style: italic;
+  font-size: smaller;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+/* Fix Magento Calendar Styles */
+i.glyphicons.calendar {
+  border: none !important;
+  background: none !important;
+}

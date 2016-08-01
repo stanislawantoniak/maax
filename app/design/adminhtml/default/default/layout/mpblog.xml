@@ -1,0 +1,397 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<layout version="0.1.0">
+    <mpblog_editor>
+        <update handle="apply_jquery_2" />
+        <reference name="head">
+            <action method="addItem">
+                <type>js_css</type>
+                <value>mpblog/vendor/redactor/redactor.css</value>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <value>mpblog/adminhtml/redactor/plugins/magento/magento.css</value>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <value>mpblog/adminhtml/redactor/plugins/cutter/cutter.css</value>
+            </action>
+        </reference>
+        <reference name="extra_head">
+            <action method="addSafeJs">
+                <alias>jQuery.Redactor</alias>
+                <value>mpblog/vendor/redactor/redactor.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.video</alias>
+                <value>mpblog/vendor/redactor/plugins/video.min.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.fullscreen</alias>
+                <value>mpblog/vendor/redactor/plugins/fullscreen.min.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.fontcolor</alias>
+                <value>mpblog/vendor/redactor/plugins/fontcolor.min.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.definedlinks</alias>
+                <value>mpblog/vendor/redactor/plugins/definedlinks.min.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.table</alias>
+                <value>mpblog/vendor/redactor/plugins/table.min.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.magento</alias>
+                <value>mpblog/adminhtml/redactor/plugins/magento/magento.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.cutter</alias>
+                <value>mpblog/adminhtml/redactor/plugins/cutter/cutter.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.imagemanager</alias>
+                <value>mpblog/vendor/redactor/plugins/imagemanager.min.js</value>
+            </action>
+            <action method="addSafeJs">
+                <alias>RedactorPlugins.undo</alias>
+                <value>mpblog/adminhtml/redactor/plugins/undo/undo.js</value>
+            </action>
+            <block type="magpleasure/adminhtml_template" name="mpblog.post.wysiwyg.variables" as="mpblog.post.wysiwyg.variables" template="mpblog/system/wysiwyg/variables.phtml" />
+        </reference>
+    </mpblog_editor>
+
+    <adminhtml_mpblog_draft_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_draft" name="mpblog.draft.container" as="mpblog_draft_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_draft_index>
+
+    <adminhtml_mpblog_draft_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/adminhtml_draft_grid" name="admin.mpblog.draft.grid"/>
+        </block>
+    </adminhtml_mpblog_draft_grid>
+
+    <adminhtml_mpblog_post_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_post" name="mpblog.post.container" as="mpblog_post_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_post_index>
+    <adminhtml_mpblog_post_new>
+        <update handle="adminhtml_mpblog_post_edit" />
+    </adminhtml_mpblog_post_new>
+    <adminhtml_mpblog_post_edit>
+        <update handle="apply_jquery_2"/>
+        <update handle="mpblog_editor"/>
+        <update handle="apply_ajax_tags"/>
+        <update handle="apply_file_image"/>
+        <update handle="apply_transliteration"/>
+        <reference name="extra_head">
+            <action method="addExtraJs">
+                <script>mpblog/adminhtml/directives/controls.js</script>
+            </action>
+            <action method="addRelation">
+                <module>mpBlogControls</module>
+            </action>
+            <action method="addTemplate">
+                <alias>mpblog/selector.html</alias>
+                <template>mpblog/system/config/form/element/controls/selector.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="mpblog/adminhtml_post_edit" name="mpblog_post_edit">
+                <block type="mpblog/adminhtml_post_edit_tabs" name="mpblog_post_edit_tabs" as="mpblog_post_tabs">
+                    <block type="mpblog/adminhtml_post_edit_tab_general" name="mpblog_post_edit_tab_post_content"/>
+                    <block type="mpblog/adminhtml_post_edit_tab_media" name="mpblog_post_edit_tab_post_media"/>
+                    <block type="mpblog/adminhtml_post_edit_tab_additional"
+                           name="mpblog_post_edit_tab_post_additional"/>
+                    <block type="mpblog/adminhtml_post_edit_tab_meta" name="mpblog_post_edit_tab_post_meta"/>
+                    <block type="mpblog/adminhtml_post_edit_tab_stats" name="mpblog_post_edit_tab_post_stats"/>
+                    <action method="addTab">
+                        <name>post_content</name>
+                        <block>mpblog_post_edit_tab_post_content</block>
+                    </action>
+                    <action method="addTab">
+                        <name>media</name>
+                        <block>mpblog_post_edit_tab_post_media</block>
+                    </action>
+                    <action method="addTab">
+                        <name>additional</name>
+                        <block>mpblog_post_edit_tab_post_additional</block>
+                    </action>
+                    <action method="addTab">
+                        <name>meta_data</name>
+                        <block>mpblog_post_edit_tab_post_meta</block>
+                    </action>
+                    <action method="addTab">
+                        <name>stats</name>
+                        <block>mpblog_post_edit_tab_post_stats</block>
+                    </action>
+                </block>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="addJs">
+                <script>mpblog/adminhtml/preview.js</script>
+            </action>
+            <action method="addJs">
+                <script>mpblog/adminhtml/common.js</script>
+            </action>
+            <action method="addCss">
+                <script>mpblog/css/styles.css</script>
+            </action>
+        </reference>
+    </adminhtml_mpblog_post_edit>
+
+    <adminhtml_mpblog_post_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/adminhtml_post_grid" name="admin.mpblog.post.grid"/>
+        </block>
+    </adminhtml_mpblog_post_grid>
+
+    <adminhtml_mpblog_post_massupdateattribute>
+        <update handle="apply_jquery_2"/>
+        <update handle="apply_ajax_tags"/>
+        <reference name="content">
+            <block type="mpblog/adminhtml_attribute_edit" name="mpblog_attribute_edit"/>
+        </reference>
+        <reference name="left">
+            <block type="mpblog/adminhtml_attribute_edit_tabs" name="mpblog_attribute_edit_tabs">
+                <block type="mpblog/adminhtml_attribute_edit_tabs_posts" name="mpblog_attribute_edit_tabs_post"/>
+                <block type="mpblog/adminhtml_attribute_edit_tabs_store" name="mpblog_attribute_edit_tabs_store"/>
+                <block type="mpblog/adminhtml_attribute_edit_tabs_category" name="mpblog_attribute_edit_tabs_category"/>
+                <block type="mpblog/adminhtml_attribute_edit_tabs_tags" name="mpblog_attribute_edit_tabs_tag"/>
+
+                <action method="addTab">
+                    <name>category</name>
+                    <block>mpblog_attribute_edit_tabs_category</block>
+                </action>
+                <action method="addTab">
+                    <name>store</name>
+                    <block>mpblog_attribute_edit_tabs_store</block>
+                </action>
+                <action method="addTab">
+                    <name>tag</name>
+                    <block>mpblog_attribute_edit_tabs_tag</block>
+                </action>
+                <action method="addTab">
+                    <name>post</name>
+                    <block>mpblog_attribute_edit_tabs_post</block>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_mpblog_post_massupdateattribute>
+
+    <adminhtml_mpblog_category_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_category" name="mpblog.category.container" as="mpblog_category_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_category_index>
+
+    <adminhtml_mpblog_category_new>
+        <update handle="adminhtml_mpblog_category_edit" />
+    </adminhtml_mpblog_category_new>
+    <adminhtml_mpblog_category_edit>
+        <update handle="apply_transliteration" />
+        <reference name="head">
+            <action method="addCss"><script>mpblog/css/styles.css</script></action>
+            <action method="addJs"><script>mpblog/adminhtml/common.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="mpblog/adminhtml_category_edit" name="mpblog_category_edit" />
+        </reference>
+        <reference name="left">
+            <block type="mpblog/adminhtml_category_edit_tabs" name="mpblog_category_edit_tabs">
+                <block type="mpblog/adminhtml_category_edit_tab_general" name="mpblog_category_edit_tab_general" />
+                <block type="mpblog/adminhtml_category_edit_tab_meta" name="mpblog_category_edit_tab_meta" />
+                <action method="addTab"><name>general</name><block>mpblog_category_edit_tab_general</block></action>
+                <action method="addTab"><name>meta_data</name><block>mpblog_category_edit_tab_meta</block></action>
+            </block>
+        </reference>
+    </adminhtml_mpblog_category_edit>
+
+    <adminhtml_mpblog_category_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/adminhtml_category_grid" name="admin.mpblog.categories.grid"/>
+        </block>
+    </adminhtml_mpblog_category_grid>
+
+    <adminhtml_mpblog_tag_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_tag" name="mpblog.tag.container" as="mpblog_tag_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_tag_index>
+
+    <adminhtml_mpblog_tag_edit>
+        <reference name="content">
+            <block type="mpblog/adminhtml_tag_edit" name="mpblog_tag_edit" />
+        </reference>
+        <reference name="left">
+            <block type="mpblog/adminhtml_tag_edit_tabs" name="mpblog_tag_edit_tabs">
+                <block type="mpblog/adminhtml_tag_edit_tab_general" name="mpblog_tag_edit_tab_general" />
+                <block type="mpblog/adminhtml_tag_edit_tab_meta" name="mpblog_tag_edit_tab_meta" />
+                <block type="mpblog/adminhtml_tag_edit_tab_posts" name="mpblog_tag_edit_tab_posts" />
+                <action method="addTab"><name>general</name><block>mpblog_tag_edit_tab_general</block></action>
+                <action method="addTab"><name>meta_data</name><block>mpblog_tag_edit_tab_meta</block></action>
+                <action method="addTab"><name>posts</name><block>mpblog_tag_edit_tab_posts</block></action>
+            </block>
+        </reference>
+    </adminhtml_mpblog_tag_edit>
+
+    <adminhtml_mpblog_tag_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/adminhtml_tag_grid" name="admin.mpblog.tag.grid"/>
+        </block>
+    </adminhtml_mpblog_tag_grid>
+
+    <adminhtml_mpblog_comment_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_comment" name="mpblog.comment.container" as="mpblog_comment_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_comment_index>
+
+    <adminhtml_mpblog_comment_reply>
+        <update handle="adminhtml_mpblog_comment_edit" />
+    </adminhtml_mpblog_comment_reply>
+
+    <adminhtml_mpblog_comment_edit>
+        <reference name="content">
+            <block type="mpblog/adminhtml_comment_edit" name="mpblog_comment_edit" />
+        </reference>
+        <reference name="left">
+            <block type="mpblog/adminhtml_comment_edit_tabs" name="mpblog_comment_edit_tabs">
+                <block type="mpblog/adminhtml_comment_edit_tab_general" name="mpblog_comment_edit_tab_general" />
+                <action method="addTab"><name>general</name><block>mpblog_comment_edit_tab_general</block></action>
+            </block>
+        </reference>
+    </adminhtml_mpblog_comment_edit>
+
+    <adminhtml_mpblog_comment_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/adminhtml_comment_grid" name="admin.mpblog.comments.grid"/>
+        </block>
+    </adminhtml_mpblog_comment_grid>
+
+    <adminhtml_mpblog_import_wordpress>
+        <reference name="content">
+            <block type="mpblog/adminhtml_import" name="mpblog_import" >
+                <action method="setImportType"><type>wordpress</type></action>
+            </block>
+        </reference>
+    </adminhtml_mpblog_import_wordpress>
+    <adminhtml_mpblog_import_awblog>
+        <reference name="content">
+            <block type="mpblog/adminhtml_import" name="mpblog_import" >
+                <action method="setImportType"><type>awblog</type></action>
+            </block>
+        </reference>
+    </adminhtml_mpblog_import_awblog>
+
+    <adminhtml_system_account_index>
+        <update handle="apply_ajax_form"/>
+    </adminhtml_system_account_index>
+
+    <adminhtml_mpblog_notifications_comments_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_subscription_comment" name="mpblog.subscription.comment.container" as="mpblog_subscription_comment_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_notifications_comments_index>
+
+
+    <adminhtml_mpblog_notifications_queue_index>
+        <reference name="content">
+            <block type="mpblog/adminhtml_subscription_notification" name="mpblog.subscription.notification.container"
+                   as="mpblog_subscription_notification_container" template="mpblog/grid/container.phtml">
+                <block type="mpblog/adminhtml_store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm">
+                        <params>0</params>
+                    </action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_mpblog_notifications_queue_index>
+
+    <adminhtml_mpblog_notifications_queue_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/adminhtml_subscription_notification_grid" name="admin.mpblog.notifications.grid"/>
+        </block>
+    </adminhtml_mpblog_notifications_queue_grid>
+
+
+    <adminhtml_system_config_edit>
+
+        <update handle="apply_glyphicons" />
+        <update handle="apply_angularjs" />
+        <update handle="apply_lodash" />
+
+        <update handle="apply_angularjs_draggable" />
+        <update handle="apply_angular_safe_variables" />
+
+        <reference name="head">
+            <action method="addCss">
+                <value>mpblog/css/styles.css</value>
+            </action>
+        </reference>
+
+        <reference name="head">
+            <action method="addJs">
+                <file>jscolor/jscolor.js</file>
+            </action>
+            <action method="addJs">
+                <name>magpleasure/libs/angularjs/components/ie-fix/json3.min.js</name>
+            </action>
+        </reference>
+
+        <reference name="extra_head">
+            <action method="addRelation">
+                <relation>mp.blog.layout</relation>
+            </action>
+            <action method="addExtraJs">
+                <script>mpblog/adminhtml/modules/layout.js</script>
+            </action>
+
+            <action method="addTemplate">
+                <alias>layout/element.html</alias>
+                <name>mpblog/system/config/field/element/template.phtml</name>
+            </action>
+
+
+            <action method="addTemplate">
+                <alias>layout/column.html</alias>
+                <name>mpblog/system/config/field/element/column/template.phtml</name>
+            </action>
+        </reference>
+    </adminhtml_system_config_edit>
+</layout>
