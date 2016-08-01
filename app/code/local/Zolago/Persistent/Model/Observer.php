@@ -32,6 +32,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	protected function _clearPersistent() {
 	    // user not logged in
 	    $checkoutSession = Mage::getSingleton('checkout/session');
+		/** @var Zolago_Sales_Model_Quote $oldQuote */
 	    $oldQuote = $checkoutSession->getQuote();
 
 		$shippingPointCode = $checkoutSession->getData("inpost_locker_name");
@@ -51,6 +52,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	        ->setCustomerLastname(null)
 	        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
 	        ->setIsPersistent(false);
+		/** @var Zolago_Sales_Model_Quote $newQuote */
         $newQuote = Mage::getModel('sales/quote');
         $newQuote->merge($oldQuote);
 
