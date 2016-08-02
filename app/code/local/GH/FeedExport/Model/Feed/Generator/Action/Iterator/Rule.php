@@ -113,55 +113,70 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         return $collection;
     }
 
-//    public function callback($row)
-//    {
-//        Mage::log($row, null, "callbackkk.log");
-//        $check = null;
-//        $valid = false;
-//        $stock = true;
-//
-//        $product = Mage::getModel('catalog/product');
-//        $product->setData($row);
-//
-//        if ($this->_rule->getConditions()->validate($product)) {
-//            $valid = true;
-//        }
-//
-//        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
-//        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
-//            && $stockItem->getManageStock() == 0
-//        ) {
-//
-//            $rule = Mage::getModel('feedexport/rule')->load($this->getId());
-//
-//            $conditions_serialized = unserialize($rule->getData("conditions_serialized"));
-//
-//            $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();
-//
-//            $checkConfigurableStock = false;
-//            if (!empty($conditions)) {
-//                foreach ($conditions as $condition) {
-//
-//                    if ($condition["attribute"] == "is_in_stock"
-//                        && $condition["operator"] == "=="
-//                        && $condition["value"] == 1
-//                    ) {
-//                        $checkConfigurableStock = true;
-//                        continue;
-//                    }
-//                }
-//            }
-//            if ($checkConfigurableStock) {
-//                $stock = ($row["available_child_count"] > 0) ? true : false;
-//            }
-//        }
-//
-//
-//        if ($valid && $stock) {
-//            $check = $product->getId();
-//        }
-//        return $check;
-//    }
+    public function callback($row)
+    {
+        $check = null;
+        $valid = false;
+        $stock = true;
+
+        $product = Mage::getModel('catalog/product');
+        $product->setData($row);
+
+        if ($this->_rule->getConditions()->validate($product)) {
+            $valid = true;
+        }
+
+        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            && $stockItem->getManageStock() == 0
+        ) {
+
+            $rule = Mage::getModel('feedexport/rule')->load($this->getId());
+
+            $conditions_serialized = unserialize($rule->getData("conditions_serialized"));
+
+            $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();
+
+            $checkConfigurableStock = false;
+            if (!empty($conditions)) {
+                foreach ($conditions as $condition) {
+
+                    if ($condition["attribute"] == "is_in_stock"
+                        && $condition["operator"] == "=="
+                        && $condition["value"] == 1
+                    ) {
+                        $checkConfigurableStock = true;
+                        continue;
+                    }
+                }
+            }
+            if ($checkConfigurableStock) {
+
+                $products = $this->_getChildProducts($product);
+
+                $isChildInStock = 0;
+                foreach ($products as $child) {
+                    $childStockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($child->getId());
+                    if ($childStockItem->getData("is_in_stock") == 1) {
+
+                        $isChildInStock = 1;
+                        break;
+                    }
+                }
+
+                if ($isChildInStock == 0) {
+                    $stock = false;
+                }
+
+            }
+        }
+
+
+        if ($valid && $stock) {
+            $check = $product->getId();
+        }
+        return $check;
+    }
 
     protected function _getChildProducts($product)
     {
