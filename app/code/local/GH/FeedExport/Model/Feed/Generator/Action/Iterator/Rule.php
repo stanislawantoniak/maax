@@ -66,7 +66,6 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             '(cataloginventory_stock_status.product_id=e.entity_id) AND (' . $adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID) .
             ' AND ' . $adapter->quoteInto("cataloginventory_stock_status.website_id=?", $websiteId) . ')',
             array()
-        // array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
         );
         $collection->addExpressionAttributeToSelect('is_in_stock',
             new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
