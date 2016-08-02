@@ -28,6 +28,11 @@
             <ghfeedexport>
                 <class>GH_FeedExport_Block</class>
             </ghfeedexport>
+            <feedexport>
+                <rewrite>
+                    <adminhtml_feed_edit_tab_general>GH_FeedExport_Block_Adminhtml_Feed_Edit_Tab_General</adminhtml_feed_edit_tab_general>
+                </rewrite>
+            </feedexport>
         </blocks>
         <helpers>
             <ghfeedexport>
@@ -46,15 +51,5 @@
                 </setup>
             </ghfeedexport_setup>
         </resources>
-        <events>
-            <adminhtml_promo_catalog_edit_tab_main_prepare_form>
-                <observers>
-                    <ghfeedexport_promo_catalog_edit_tab_main_prepare_form>
-                        <class>GH_FeedExport_Model_Observer</class>
-                        <method>addProductPreFilters</method>
-                    </ghfeedexport_promo_catalog_edit_tab_main_prepare_form>
-                </observers>
-            </adminhtml_promo_catalog_edit_tab_main_prepare_form>
-        </events>
     </global>
 </config>
