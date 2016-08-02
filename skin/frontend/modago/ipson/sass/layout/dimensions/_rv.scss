@@ -110,6 +110,7 @@ section#recently-viewed {
 					@media (max-width: $screen-xs-max) {
 
 						@include sprite-dimensions($allMap, arrow-rwd-slider-prev-mobile);
+						top: 68px!important;
 					}
 					&:hover {
 
@@ -128,6 +129,7 @@ section#recently-viewed {
 					@media (max-width: $screen-xs-max) {
 
 						@include sprite-dimensions($allMap, arrow-rwd-slider-next-mobile);
+						top: 68px!important;
 					}
 					&:hover {
 
