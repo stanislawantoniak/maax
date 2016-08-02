@@ -375,7 +375,29 @@ Mall.listing = {
 
 		return eachItemsHtml;
 	},
-
+	addListeners: function(id, min, max) {
+		jQuery("#qty-error-" + id).hide();
+		jQuery("#input-box-" + id + " input[name=quantity]").change(function(){
+			jQuery("#qty-error-" + id).hide();
+		});
+		var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
+		jQuery("#qty-more-" + id).click(function(e){
+			e.preventDefault();
+			jQuery("#qty-error-" + id).hide();
+			if(quantity < max) {
+				quantity++;
+				jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
+			}
+		});
+		jQuery("#qty-less-" + id).click(function(e){
+			e.preventDefault();
+			jQuery("#qty-error-" + id).hide();
+			if(quantity > min){
+				quantity--;
+				jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
+			}
+		});
+	},
 	/**
 	 * Creates single product container for listing.
      *
@@ -398,33 +420,68 @@ Mall.listing = {
      * @returns {string}
 	 */
     createProductEntityImprove: function(product) {
-        var oldPrice = product[3] > product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
-	        likeClass = "like" + (product[6] ? " liked" : ""),
-	        likeText = (product[6] ? "<span>Ty + </span>" : "<span></span>") + (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ",
-	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);return false;" : "Mall.wishlist.addFromSmallBlock(this);return false;";
+        var oldPrice = product[3] > product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "";
 
+		var data = 	'<div id="prod-' + product[0] + '" class="item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14">' +
+						'<div class="box_listing_product">' +
+							'<a href="' + product[2] + '" ' +
+							'title="' + product[1] + '" ' +
+							'data-entity="' + product[0] + '" ' +
+							'data-sku="' + product[10] + '" ' +
+							'data-skuv="' + product[11] + '">';
 
-		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14'>"+
-            "<div class='box_listing_product'>"+
-                "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
-                    "<figure class='img_product'>"+
-                        "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
-                    "</figure>"+
-                    "<div class='logo_manufacturer' style='background-image:url(" + Mall.manufacturerImagesUrl + product[9] +")' ></div>"+
-                    "<div class='name_product'>" + product[1] + "</div>"+
-                "</a>"+
-                "<div class='price clearfix'>"+
-                    "<div class='col-price'>" + oldPrice +
-                        "<span>" + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
-                    "</div>"+
-                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"'>"+
-                        "<span class='like_count'>" + likeText + "</span>"+
-                        "<span class='icoLike'></span>"+
-                        "<div class='toolLike'></div>"+
-                    "</div>"+
-                "</div>"+
-            "</div>"+
-        "</div>";
+		if(product[15])
+					data += '<div class="label-product">' +
+								'<div class="listing-label type-label-' + product[15] + '">' +
+									'<div class="flag-' + product[15] + '"></div>' +
+								'</div>' +
+							'</div>';
+		data += 			'<figure class="img_product boxed">' +
+								'<img ' +
+								'src="' + Mall.productImagesUrl + product[7] + '" ' +
+								'alt="' + product[1] + '" ' +
+								'class="img-responsive"/>' +
+							'</figure>' +
+							'<div class="name_product">' + product[1] + '</div>' +
+							'<div class="price clearfix">' +
+								'<div class="col-price">'  + oldPrice + '' +
+									'<span>' + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + '</span>' +
+								'</div>' +
+								'<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">' +
+									'<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">';
+		if (product[16] == 'simple')
+			data +=						'<a href="#" class="qty_less" id="qty-less-' + product[0] + '">-</a>' +
+										'<div class="qty" id="input-box-' + product[0] + '"><input type="text" name="quantity" value="1"/></div>' +
+										'<a href="#" class="qty_more" id="qty-more-' + product[0] + '">+</a>' +
+										'<label id="qty-error-' + product[0] + '" class="error" style="display: none;">' + Mall.translate.__("Maximum quantity") + ' ' + product[17] + '</label>';
+		else data +=					'<p class="variants">' + Mall.translate.__("Available in several variants") + '</p>';
+		data += 					'</div>' +
+									'<div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">' +
+										'<div class="action-box-bundle clearfix">';
+		if (product[16] == 'simple') data += '<button class="btn button button-primary addBasket"' +
+											 'onclick="Mall.validateAddingToCartListing(' + product[0] + ', ' + product[18] + ', ' + product[17] + ');return false;">' +
+												 '<i class="fa fa-shopping-cart" aria-hidden="true"></i> ' +
+												Mall.translate.__('Add') +
+											 '</button>';
+		else data += 						'<span class="btn button button-primary addBasket">' +
+												'<i class="fa fa-shopping-cart" aria-hidden="true"></i> ' +
+												Mall.translate.__('See') +
+											'</span>';
+		data += 						'</div>' +
+									 '</div>' +
+								 '</div>' +
+							 '</div>' +
+						 '</a>' +
+					 '</div>' +
+				 '</div>';
+
+		(function test() {
+			if (jQuery('#prod-' + product[0]).length)
+				Mall.listing.addListeners(product[0], product[18], product[17]);
+			else setTimeout(test , 100);
+		})();
+
+		return data;
     },
 
 	_listing_overlay_class: 'listing-overlay',

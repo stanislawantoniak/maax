@@ -625,7 +625,6 @@ var Mall = {
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
-        console.log(attr);
 	    var popup = jQuery("#popup-after-add-to-cart");
 	    popup.find(".modal-error").hide();
 	    popup.find(".modal-loaded").hide();
@@ -661,7 +660,7 @@ var Mall = {
             "product_id": id,
             "super_attribute": attr,
             "qty": qty
-        }, addtocartcallback);
+        }, addtocartlistingcallback.bind({id: id}));
         return false;
     },
 
@@ -1372,6 +1371,12 @@ function addtocartcallback(response) {
     }
 	popup.css({display: 'block','pointer-events':'auto'});
 	jQuery("#add-to-cart").css("pointer-events","auto");
+}
+
+
+function addtocartlistingcallback(response) {
+    addtocartcallback(response);
+    jQuery("#popup-after-add-to-cart .price").html(jQuery("#prod-" + this.id + " .col-price span").html());
 }
 
 function number_format(number, decimals, dec_point, thousands_sep) {
