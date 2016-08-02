@@ -5,6 +5,8 @@
  */
 class GH_FeedExport_Model_Observer
 {
+    const FILTER_STOCK_IN_STOCK = 1;
+    const FILTER_STOCK_OUT_OF_STOCK = 2;
 
     public function addProductPreFilters($observer)
     {
@@ -49,8 +51,8 @@ class GH_FeedExport_Model_Observer
             'name' => 'product_inventory_is_in_stock',
             'values' => array(
                 array('value' => '', 'label' => ''),
-                array('value' => 1, 'label' => Mage::helper('catalog')->__('In Stock')), //Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK
-                array('value' => 2, 'label' => Mage::helper('catalog')->__('Out of Stock')) //Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK
+                array('value' => self::FILTER_STOCK_IN_STOCK, 'label' => Mage::helper('catalog')->__('In Stock')), //Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK
+                array('value' => self::FILTER_STOCK_OUT_OF_STOCK, 'label' => Mage::helper('catalog')->__('Out of Stock')) //Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK
             ),
             'value' => $model->getData("product_inventory_is_in_stock")
         ));
