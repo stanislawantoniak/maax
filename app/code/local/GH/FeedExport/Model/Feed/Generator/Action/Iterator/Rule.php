@@ -46,13 +46,8 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
 
 
-    /**
-     * @param $feed
-     * @param $collection
-     * @param $stockValue (Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK or Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK)
-     * @return mixed
-     */
-    public function joinStockData($feed, $collection, $stockValue)
+
+    public function joinStockData($storeId, $collection)
     {
 
         $select = $collection->getSelect();
@@ -64,12 +59,13 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         $linkTable = $collection->getTable("catalog/product_super_link");
 
         // Join stock item from stock index
-        $websiteId = Mage::getModel('core/store')->load($feed->getStoreId())->getWebsiteId();
+        $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
         $select->joinLeft(
             array('cataloginventory_stock_status' => $stockStatusTable),
             '(cataloginventory_stock_status.product_id=e.entity_id) AND (' . $adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID) .
             ' AND ' . $adapter->quoteInto("cataloginventory_stock_status.website_id=?", $websiteId) . ')',
             array()
+        // array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
         );
         $collection->addExpressionAttributeToSelect('is_in_stock',
             new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
@@ -98,7 +94,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             "link_available.product_id=child_stock_available.product_id",
             array());
         $subSelect->where("link_available.parent_id=e.entity_id");
-        $subSelect->where("child_stock_available.is_in_stock=?", $stockValue);
+        $subSelect->where("child_stock_available.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
         $collection->addExpressionAttributeToSelect('available_child_count',
             "IF(e.type_id IN ('configurable', 'grouped'), (" . $subSelect . "), null)", array());
 
@@ -109,13 +105,14 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             array("child_qty" => $stockTable),
             "link_qty.product_id=child_qty.product_id", array());
         $subSelect->where("link_qty.parent_id=e.entity_id");
-        $subSelect->where("child_qty.is_in_stock=?", $stockValue);
+        $subSelect->where("child_qty.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 
         // Use subselect only for parent products
         $collection->addExpressionAttributeToSelect('stock_qty',
             "IF(e.type_id IN ('configurable', 'grouped'), (" . $subSelect . "), IFNULL($stockStatusTable.qty,0))", array());
         return $collection;
     }
+
 
     public function callback($row)
     {
@@ -130,15 +127,9 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             $valid = true;
         }
 
-        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
-        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
-            && $stockItem->getManageStock() == 0
-        ) {
-
+        if (in_array($row["type_id"], array(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE, Mage_Catalog_Model_Product_Type::TYPE_GROUPED))) {
             $rule = Mage::getModel('feedexport/rule')->load($this->getId());
-
             $conditions_serialized = unserialize($rule->getData("conditions_serialized"));
-
             $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();
 
             $checkConfigurableStock = false;
@@ -155,51 +146,16 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
                 }
             }
             if ($checkConfigurableStock) {
-
-                $products = $this->_getChildProducts($product);
-
-                $isChildInStock = 0;
-                foreach ($products as $child) {
-                    $childStockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($child->getId());
-                    if ($childStockItem->getData("is_in_stock") == 1) {
-
-                        $isChildInStock = 1;
-                        break;
-                    }
-                }
-
-                if ($isChildInStock == 0) {
+                if ($row["is_in_stock"] == 0) {
                     $stock = false;
                 }
-
             }
         }
-
 
         if ($valid && $stock) {
             $check = $product->getId();
         }
         return $check;
-    }
-
-    protected function _getChildProducts($product)
-    {
-        $connection = Mage::getSingleton('core/resource')->getConnection('read');
-        $table      = Mage::getSingleton('core/resource')->getTableName('catalog_product_relation');
-        $childIds   = array(0);
-
-        $rows = $connection->fetchAll(
-            'SELECT `child_id` FROM '.$table.' WHERE `parent_id` = '.intval($product->getEntityId())
-        );
-
-        foreach ($rows as $row) {
-            $childIds[] = $row['child_id'];
-        }
-
-        $collection = Mage::getModel('catalog/product')->getCollection()
-            ->addFieldToFilter('entity_id', array('in' => $childIds));
-
-        return $collection;
     }
 
 }
