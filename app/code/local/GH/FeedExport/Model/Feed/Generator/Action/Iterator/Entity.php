@@ -89,9 +89,6 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             $collection = Mage::getModel('catalog/product')->getCollection()
                 ->joinField('qty', 'cataloginventory/stock_item', 'qty',
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
-                ->addFieldToFilter("sku",
-                    array("in" => array("9-T0CCQ4FLV","9-TOTGWW", "9-TOTGWX") )
-                )
                 ->addStoreFilter();
 
             if (!empty($productStatus))
@@ -144,7 +141,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                 ->addRateVotes()
                 ->load();
         }
-        Mage::log($collection->getData(),null, "xxx.log");
+
         return $collection;
     }
 }

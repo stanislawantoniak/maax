@@ -15,10 +15,6 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addStoreFilter();
-            $collection
-                ->addFieldToFilter("sku",
-                    array("in" => array("9-T0CCQ4FLV","9-TOTGWW", "9-TOTGWX") )
-                );
 
         if (!empty($productStatus))
             $collection->addFieldToFilter("status", $productStatus);
