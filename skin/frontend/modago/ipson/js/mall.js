@@ -600,6 +600,17 @@ var Mall = {
         return false;
     },
 
+    validateAddingToCartListing: function(id, minQty, maxQty){
+        jQuery("#qty-error-" + id).hide();
+        var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
+        if(quantity >= minQty && quantity <= maxQty){
+            Mall.addToCartListing(id, quantity);
+        }else{
+            jQuery("#qty-error-" + id).show();
+        }
+        return false;
+    },
+
     addToCart: function(id, qty) {
         if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
             return false;
@@ -608,6 +619,7 @@ var Mall = {
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
+        console.log(attr);
 	    var popup = jQuery("#popup-after-add-to-cart");
 	    popup.find(".modal-error").hide();
 	    popup.find(".modal-loaded").hide();
@@ -616,6 +628,29 @@ var Mall = {
 	    popup.css('pointer-events','none');
 	    jQuery('#add-to-cart').css('pointer-events','none');
 	    jQuery('#full-width-popup-table .quantity span').text(qty);
+        OrbaLib.Cart.add({
+            "product_id": id,
+            "super_attribute": attr,
+            "qty": qty
+        }, addtocartcallback);
+        return false;
+    },
+
+    addToCartListing: function(id, qty) {
+        Mall.product = {_current_product_type:'simple'};
+        var attr = {undefined: undefined};
+
+        jQuery("#popup-after-add-to-cart .name_product").html(jQuery('[data-entity=' + id + '] .name_product').html());
+        jQuery("#popup-after-add-to-cart .thumb img").attr("src", jQuery('[data-entity=' + id + '] img').attr("src"));
+        jQuery("#popup-after-add-to-cart .quantity span").html(jQuery('#input-box-' + id + ' input').val());
+
+        var popup = jQuery("#popup-after-add-to-cart");
+        popup.find(".modal-error").hide();
+        popup.find(".modal-loaded").hide();
+        popup.find(".modal-loading").show();
+        popup.modal('show');
+        popup.css('pointer-events','none');
+        jQuery('#add-to-cart').css('pointer-events','none');
         OrbaLib.Cart.add({
             "product_id": id,
             "super_attribute": attr,

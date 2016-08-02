@@ -45,6 +45,7 @@
       padding: 0;
       color: $color_7e7e7e;
       a.qty_less, a.qty_more {
+        color: #777;
         display: block;
       }
       div.qty, a.qty_less, a.qty_more, div.qty_label {
@@ -53,7 +54,7 @@
         height: 34px;
         border: 1px solid $color_f1f1f1;
         text-align: center;
-        padding: 3px 0 0;
+        //padding: 3px 0 0;
         font-size: 20px;
       }
       div.qty_less, div.qty_more{
