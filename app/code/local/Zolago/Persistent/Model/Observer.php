@@ -32,9 +32,10 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	protected function _clearPersistent() {
 	    // user not logged in
 	    $checkoutSession = Mage::getSingleton('checkout/session');
+		/** @var Zolago_Sales_Model_Quote $oldQuote */
 	    $oldQuote = $checkoutSession->getQuote();
 
-		$shippingPointCode = $checkoutSession->getData("inpost_locker_name");
+		$shippingPointCode = $checkoutSession->getData("delivery_point_name");
 
 		$address = $oldQuote->getShippingAddress();
 		$details = $address->getUdropshipShippingDetails();
@@ -51,6 +52,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	        ->setCustomerLastname(null)
 	        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
 	        ->setIsPersistent(false);
+		/** @var Zolago_Sales_Model_Quote $newQuote */
         $newQuote = Mage::getModel('sales/quote');
         $newQuote->merge($oldQuote);
 
@@ -64,7 +66,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	    $checkoutSession->setQuoteId($newId);
 
 		/*InPost should not be lost after persistent->guest checkout*/
-		$checkoutSession->setData("inpost_locker_name",$shippingPointCode);
+		$checkoutSession->setData("delivery_point_name",$shippingPointCode);
 
 		$shippingMethodPerVendor = array();
 		if(isset($details["methods"])){
@@ -79,7 +81,7 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 
 		$addressNew = $quote->getShippingAddress();
 		$addressNew->setUdropshipShippingDetails(Zend_Json::encode($details));
-		$addressNew->setInpostLockerName($shippingPointCode);
+		$addressNew->setDeliveryPointName($shippingPointCode);
 		$quote->setTotalsCollectedFlag(false)->collectTotals()->save();
 
 		/*InPost should not be lost after persistent->guest checkout*/
