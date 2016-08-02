@@ -349,12 +349,12 @@ var Mall = {
             		recentlyViewedContent += "<a href='"+redirect_url+"' class='simple'>";
             		recentlyViewedContent += "<div class='container-fluid'>";
             		recentlyViewedContent += " <div class='row'>";
-            		recentlyViewedContent += "  <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4 left-col'>";
+            		recentlyViewedContent += "  <div class='left-col'>";
             		recentlyViewedContent += "   <figure>";
             		recentlyViewedContent += "    <img src='"+ image_url +"' class='img-responsive-slider'>";
             		recentlyViewedContent += "   </figure>";
             		recentlyViewedContent += "  </div>";
-            		recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-8 right-col no-gutter'>";
+            		recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-6 right-col no-gutter'>";
             		recentlyViewedContent += "   <div class='prod_name'>"+ title +"<div class='prod_name_fade'></div></div>";
             		recentlyViewedContent += "   <span class='wrapper-price'>";
             		recentlyViewedContent += "    <span class='price'>"+price+"</span>"
@@ -368,11 +368,10 @@ var Mall = {
             	jQuery("#recently-viewed.recently-viewed-cls").show();
 
             	rwd_recently_viewed.rwdCarousel({
-            		items : 4,
-            		itemsDesktop : [1000,3],
+            		items : 3,
+            		itemsDesktop : [1000,2],
             		itemsDesktopSmall : [800,2],
-            		itemsTablet: [600,2],
-            		itemsMobile : [540,1],
+            		itemsTablet: [670,1],
             		pagination : false,
             		navigation: true,
             		rewindNav : false,
@@ -616,6 +615,7 @@ var Mall = {
         if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
             return false;
         }
+        jQuery('#full-width-popup-table .quantity span').text('');
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
@@ -626,6 +626,7 @@ var Mall = {
 	    popup.modal('show');
 	    popup.css('pointer-events','none');
 	    jQuery('#add-to-cart').css('pointer-events','none');
+	    jQuery('#full-width-popup-table .quantity span').text(qty);
         OrbaLib.Cart.add({
             "product_id": id,
             "super_attribute": attr,
