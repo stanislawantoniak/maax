@@ -585,7 +585,6 @@ if (typeof Object.create !== "function") {
         goTo : function (position, speed, drag) {
             var primal = this,
                 goToPixel;
-
             if (primal.isTransition) {
                 return false;
             }
@@ -1450,7 +1449,13 @@ if (typeof Object.create !== "function") {
     $.fn.rwdCarousel.options = {
 
         items : 5,
-        itemsCustom : false,
+        itemsCustom : [
+            [1200,6],
+            [992,5],
+            [768,4],
+            [400,3],
+            [320,1]
+        ],
         itemsDesktop : [1199, 4],
         itemsDesktopSmall : [979, 3],
         itemsTablet : [768, 2],
@@ -1467,7 +1472,7 @@ if (typeof Object.create !== "function") {
         stopOnHover : false,
 
         navigation : false,
-        navigationText : ["prev", "next"],
+        navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
         rewindNav : true,
         scrollPerPage : false,
 

@@ -14,7 +14,7 @@
 ?>
 <?php if(count($this->getItems()) > 0) : ?>
     <section id="complementary_product" class="section bg-w clearfix" data-mobiletoggle="true">
-        <div class="block-complementary-product toggle-xs">
+        <div class="block-complementary-product toggle-xs rwd-carousel-related">
             <header>
                 <h4 class="title_section"><span><?php echo $this->__("Others also viewed"); ?>:</span></h4>
             </header>
@@ -34,10 +34,10 @@
                                             ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
                                             ->adaptiveResize(150, 150); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
                                             class="img-responsive"></figure>
-                                    <div class="name_product hidden-xs">
+                                    <div class="name_product">
                                         <?php echo $this->getShortProductName($_item, 42); ?>
                                     </div>
-                                    <div class="price clearfix hidden-xs like-two-line">
+                                    <div class="price clearfix like-two-line">
                                         <div class="col-price">
                                             <div class="strikeout-price">
                                                 <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice()) {

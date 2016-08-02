@@ -981,7 +981,7 @@ Mall.product = {
             productGalleryBigMedia.rwdCarousel({
                 singleItem: true,
                 slideSpeed: 1000,
-                navigation: true,
+                navigation: false,
                 pagination: true,
                 responsiveRefreshRate: 200,
                 mouseDrag: false,
@@ -1003,7 +1003,7 @@ Mall.product = {
                         var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
                         var itemH = ratio * width;
 
-                        var padding = ((maxHeight - itemH) / 2);
+                        var padding = ((420 - itemH) / 2);
                         jQuery(this).find('a').css('padding', padding + 'px 0');
                     });
 	                Mall.product.gallery.initLightbox();
@@ -1034,17 +1034,27 @@ Mall.product = {
         initThumbsCarousel: function() {
             var productGalleryThumbMedia = this.getThumbs();
             productGalleryThumbMedia.rwdCarousel({
-                items : 1,
-                pagination:false,
-                navigation: false,
-                touchDrag: false,
-                mouseDrag:false,
+                items : 3,
+                itemsCustom : [
+                    [1200,3]
+                ],
+                pagination:true,
+                navigation: true,
+                touchDrag: true,
+                rewindNav: false,
+                mouseDrag:true,
+                navigationText: ["prev", "next"],
                 afterInit : function(el) {
                     el.find(".rwd-item").eq(0).addClass("synced");
                     var items = Mall.product.gallery.getThumbs().find('.rwd-item');
                     Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
-                    if (items.length <= 4 ) {
-                        Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
+                    if (items.length <= 3 ) {
+                        Mall.product.gallery.getThumbsWrapper().find('.rwd-prev, .rwd-next').addClass('disabled');
+                        jQuery('#product-gallery #productGalleryThumbMedia .rwd-item').css('width', '117px!important');
+                    }else{
+                        jQuery('#productGalleryThumbMedia').css('padding', '0 24px');
+                        jQuery('#productGalleryThumbMedia  .rwd-prev').css('left', '-12px');
+                        jQuery('#productGalleryThumbMedia  .rwd-next').css('right', '-16px');
                     }
                 }
             });
@@ -1053,48 +1063,6 @@ Mall.product = {
                 e.preventDefault();
                 Mall.product.gallery.getBigMedia().trigger("rwd.goTo", jQuery(this).data("rwdItem"));
             });
-
-            this.getThumbsWrapper().on('click', '.up', function(event) {
-                event.preventDefault();
-                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
-                var item = thumbsWrapper.find('.rwd-item');
-                var itemHeight = item.height()+10;
-                var wrapper = thumbsWrapper.find('.rwd-wrapper');
-                var position = parseInt(wrapper.css('margin-top'));
-                var sumItem = itemHeight * (item.length-5);
-
-                wrapper.filter(':not(:animated)').animate({
-                    'margin-top': '+='+itemHeight
-                });
-
-                if (position == '-'+itemHeight) {
-                    thumbsWrapper.find('.up').addClass('disabled');
-                }
-                if (position != '-'+sumItem) {
-                    thumbsWrapper.find('.down').removeClass('disabled');
-                }
-            });
-
-            this.getThumbsWrapper().on('click', '.down', function(event) {
-                event.preventDefault();
-                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
-                var item = thumbsWrapper.find('.rwd-item');
-                var itemHeight = item.height()+10;
-                var wrapper = thumbsWrapper.find('.rwd-wrapper');
-                var position = parseInt(wrapper.css('margin-top'));
-                var sumItem = itemHeight * (item.length-5);
-
-                wrapper.filter(':not(:animated)').animate({
-                    'margin-top': '-='+itemHeight
-                });
-                if (position != '-'+itemHeight) {
-                    thumbsWrapper.find('.up').removeClass('disabled');
-                }
-                if (position == '-'+sumItem) {
-                    thumbsWrapper.find('.down').addClass('disabled');
-                }
-            });
-
         },
 
         /**
