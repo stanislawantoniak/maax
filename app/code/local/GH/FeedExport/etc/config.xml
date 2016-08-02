@@ -19,6 +19,7 @@
                     <feed_generator_pattern_product>GH_FeedExport_Model_Feed_Generator_Pattern_Product</feed_generator_pattern_product>
                     <feed_generator_action_iterator_rule>GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule</feed_generator_action_iterator_rule>
                     <config>GH_FeedExport_Model_Config</config>
+                    <feed_generator_action_iterator_entity>GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity</feed_generator_action_iterator_entity>
                 </rewrite>
             </feedexport>
         </models>
@@ -37,5 +38,22 @@
                 </rewrite>
             </feedexport>
         </helpers>
+        <resources>
+            <ghfeedexport_setup>
+                <setup>
+                    <module>GH_FeedExport</module>
+                </setup>
+            </ghfeedexport_setup>
+        </resources>
+        <events>
+            <adminhtml_promo_catalog_edit_tab_main_prepare_form>
+                <observers>
+                    <ghfeedexport_promo_catalog_edit_tab_main_prepare_form>
+                        <class>GH_FeedExport_Model_Observer</class>
+                        <method>addProductPreFilters</method>
+                    </ghfeedexport_promo_catalog_edit_tab_main_prepare_form>
+                </observers>
+            </adminhtml_promo_catalog_edit_tab_main_prepare_form>
+        </events>
     </global>
 </config>
