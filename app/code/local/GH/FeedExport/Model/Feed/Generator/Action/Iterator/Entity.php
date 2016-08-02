@@ -7,13 +7,8 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
     extends Mirasvit_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 {
 
-    /**
-     * @param $feed
-     * @param $collection
-     * @param $stockValue (Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK or Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK)
-     * @return mixed
-     */
-    public function joinStockData($feed, $collection, $stockValue)
+
+    public function joinStockData($storeId, $collection)
     {
 
         $select = $collection->getSelect();
@@ -25,7 +20,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
         $linkTable = $collection->getTable("catalog/product_super_link");
 
         // Join stock item from stock index
-        $websiteId = Mage::getModel('core/store')->load($feed->getStoreId())->getWebsiteId();
+        $websiteId = Mage::getModel('core/store')->load($storeId)->getWebsiteId();
         $select->joinLeft(
             array('cataloginventory_stock_status' => $stockStatusTable),
             '(cataloginventory_stock_status.product_id=e.entity_id) AND (' . $adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID) .
@@ -60,7 +55,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             "link_available.product_id=child_stock_available.product_id",
             array());
         $subSelect->where("link_available.parent_id=e.entity_id");
-        $subSelect->where("child_stock_available.is_in_stock=?", $stockValue);
+        $subSelect->where("child_stock_available.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
         $collection->addExpressionAttributeToSelect('available_child_count',
             "IF(e.type_id IN ('configurable', 'grouped'), (" . $subSelect . "), null)", array());
 
@@ -71,7 +66,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             array("child_qty" => $stockTable),
             "link_qty.product_id=child_qty.product_id", array());
         $subSelect->where("link_qty.parent_id=e.entity_id");
-        $subSelect->where("child_qty.is_in_stock=?", $stockValue);
+        $subSelect->where("child_qty.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 
         // Use subselect only for parent products
         $collection->addExpressionAttributeToSelect('stock_qty',
@@ -105,14 +100,18 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             if (!empty($productTypeId))
                 $collection->addFieldToFilter("type_id", $productTypeId);
 
-
+            ////////
+            $storeId = $feed->getStoreId();
+            $collection = $this->joinStockData($storeId, $collection);
             if ($productInventoryIsInStock) {
-                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK)
-                    $this->joinStockData($feed, $collection, Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
-
-                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_OUT_OF_STOCK)
-                    $this->joinStockData($feed, $collection, Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
+                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
+                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                }
+                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_OUT_OF_STOCK){
+                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
+                }
             }
+            //////////////
 
 
             if (count($this->getFeed()->getRuleIds()) || Mage::app()->getRequest()->getParam('skip')) {
