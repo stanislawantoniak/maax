@@ -59,10 +59,16 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             $valid = true;
         }
 
-        if (in_array($row["type_id"], array(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE, Mage_Catalog_Model_Product_Type::TYPE_GROUPED))) {
+        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            && $stockItem->getManageStock() == 0
+        ) {
+
             $rule = Mage::getModel('feedexport/rule')->load($this->getId());
+
             $conditions_serialized = unserialize($rule->getData("conditions_serialized"));
-            $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();
+
+            $conditions = isset($conditions_serialized["conditions"]) ? $conditions_serialized["conditions"] : array();;
 
             $checkConfigurableStock = false;
             if (!empty($conditions)) {
@@ -78,16 +84,51 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
                 }
             }
             if ($checkConfigurableStock) {
-                if ($row["is_in_stock"] == 0) {
+
+                $products = $this->_getChildProducts($product);
+
+                $isChildInStock = 0;
+                foreach ($products as $child) {
+                    $childStockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($child->getId());
+                    if ($childStockItem->getData("is_in_stock") == 1) {
+
+                        $isChildInStock = 1;
+                        break;
+                    }
+                }
+
+                if ($isChildInStock == 0) {
                     $stock = false;
                 }
+
             }
         }
+
 
         if ($valid && $stock) {
             $check = $product->getId();
         }
         return $check;
+    }
+
+    protected function _getChildProducts($product)
+    {
+        $connection = Mage::getSingleton('core/resource')->getConnection('read');
+        $table      = Mage::getSingleton('core/resource')->getTableName('catalog_product_relation');
+        $childIds   = array(0);
+
+        $rows = $connection->fetchAll(
+            'SELECT `child_id` FROM '.$table.' WHERE `parent_id` = '.intval($product->getEntityId())
+        );
+
+        foreach ($rows as $row) {
+            $childIds[] = $row['child_id'];
+        }
+
+        $collection = Mage::getModel('catalog/product')->getCollection()
+            ->addFieldToFilter('entity_id', array('in' => $childIds));
+
+        return $collection;
     }
 
 }
