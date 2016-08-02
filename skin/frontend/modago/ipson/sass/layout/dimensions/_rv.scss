@@ -20,6 +20,9 @@ section#recently-viewed {
 			span {
 				border-bottom: 2px solid $colorReviewBorder;
 				padding-bottom: 7px;
+				@media(max-width: $screen-xs-max) {
+					padding-bottom: 8px;
+				}
 			}
 			@media (max-width: $screen-xs-max) {
 				padding-left:20px;

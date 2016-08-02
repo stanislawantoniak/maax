@@ -369,6 +369,12 @@ var Mall = {
 
             	rwd_recently_viewed.rwdCarousel({
             		items : 3,
+            		itemsCustom : [
+                        [1000,3],
+                        [800,2],
+                        [670,2],
+                        [320,1]
+                    ],
             		itemsDesktop : [1000,2],
             		itemsDesktopSmall : [800,2],
             		itemsTablet: [670,1],
