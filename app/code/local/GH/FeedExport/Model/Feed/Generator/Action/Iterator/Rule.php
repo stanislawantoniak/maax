@@ -27,8 +27,9 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
         ////////
         $storeId = $feed->getStoreId();
-        $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+
         if ($productInventoryIsInStock) {
+            $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
             if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
                 $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
             }
