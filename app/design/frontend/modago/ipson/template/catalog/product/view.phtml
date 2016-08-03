@@ -84,7 +84,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<!-- END:/ PRODUCT SHOP -->
 			</div>
 		</div>
-		<div id="product_long_box">
+		<div id="product_long_box" class="col-xs-12">
 			<ul class="title_section">
 				<li>
 					<input type="radio" name="tabs" id="tab-1" checked>
@@ -174,13 +174,14 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 			</ul>
 	</div>
 
-	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-		<?php echo $this->getChildHtml('upsell'); ?>
-	</div>
+</div>
 
-	<div id="product_additions_2" class="col-xs-12">
-		<?php echo $this->getChildHtml('crosssell'); ?>
-	</div>
+<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+	<?php echo $this->getChildHtml('upsell'); ?>
+</div>
+
+<div id="product_additions_2" class="col-xs-12">
+	<?php echo $this->getChildHtml('crosssell'); ?>
 </div>
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
