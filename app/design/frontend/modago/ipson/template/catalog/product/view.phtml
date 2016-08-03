@@ -91,7 +91,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 			<ul class="title_section">
 				<li>
 					<input type="radio" name="tabs" id="tab-1" checked>
-					<label for="tab-1">Opis produktu <i class="fa" aria-hidden="true"></i></label>
+					<label for="tab-1"><?php echo $this->__("Product description"); ?><i class="fa" aria-hidden="true"></i></label>
 					<article class="content">
 						<div class="inner">
 							<div>
@@ -136,7 +136,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				</li>
 				<li>
 					<input type="radio" name="tabs" id="tab-2">
-					<label for="tab-2">Opinie<i class="fa" aria-hidden="true"></i></label>
+					<label for="tab-2"><?php echo $this->__("Review"); ?><i class="fa" aria-hidden="true"></i></label>
 					<article class="content">
 						<div class="inner">
 							<?php echo $this->getChildHtml('product.review.section'); ?>
@@ -146,7 +146,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<?php if (!empty($installments)) : ?>
 				<li>
 					<input type="radio" name="tabs" id="tab-3">
-					<label for="tab-3">Zakupy na raty<i class="fa" aria-hidden="true"></i></label>
+					<label for="tab-3"><?php echo $this->__("Hire purchase"); ?><i class="fa" aria-hidden="true"></i></label>
 					<article class="content">
 						<div class="inner">
 							<?php echo $installments;?>
@@ -156,7 +156,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<?php endif; if (!empty($funding)) : ?>
 				<li>
 					<input type="radio" name="tabs" id="tab-4">
-					<label for="tab-4">Dofinansowanie<i class="fa" aria-hidden="true"></i></label>
+					<label for="tab-4"><?php echo $this->__("Bailout"); ?><i class="fa" aria-hidden="true"></i></label>
 					<article class="content">
 						<div class="inner">
 							<?php echo $funding;?>
@@ -166,7 +166,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<?php endif; if (!empty($deliveryReturn)) : ?>
 				<li>
 					<input type="radio" name="tabs" id="tab-5">
-					<label for="tab-5">Dostawa i zwroty<i class="fa" aria-hidden="true"></i></label>
+					<label for="tab-5"><?php echo $this->__("Delivery and returns"); ?><i class="fa" aria-hidden="true"></i></label>
 					<article class="content">
 						<div class="inner">
 							<?php echo $deliveryReturn;?>
