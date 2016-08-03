@@ -54,8 +54,7 @@
         height: 34px;
         border: 1px solid $color_f1f1f1;
         text-align: center;
-        //padding: 3px 0 0;
-        font-size: 20px;
+        font-size: 14px;
       }
       div.qty_less, div.qty_more{
         cursor: pointer;
@@ -211,4 +210,7 @@ html.is-browser-mobile {
       }
     }
   }
+}
+.catalog-category-view .title-section {
+  text-align: center !important;
 }
