@@ -268,30 +268,28 @@ var Mall = {
 			
 			// Not added box
 			if(p.wishlist_count > 0){
-				likeText = this.getFavPluralText(p.wishlist_count);
+				//likeText = this.getFavPluralText(p.wishlist_count);
 			}else{
 				likeText = "";
 			}
 			boxNotAdded = jQuery(
-				'<div class="addLike-box" id="notadded-wishlist">' + 
-					'<span class="product-context-like-count">&nbsp;' + likeText + '</span>' +
-					'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike">' + 
-						Mall.i18nValidation.__('add-to-br-favorites') +
-					'</a>' + 
+				'<div class="addLike-box" id="notadded-wishlist">' +
+					'<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct('+p.entity_id+');return false;" class="addLike"><i class="fa fa-list" aria-hidden="true"></i>' +
+						Mall.i18nValidation.__('add-to-favorites') +
+					'</a>' +
 				'</div>');
 
 			// Added box
-			likeText = Mall.i18nValidation.__("you-like-this");
+			//likeText = Mall.i18nValidation.__("you-like-this");
 				
 			if(p.wishlist_count > 1){
-				likeText = this.getFavPluralText(p.wishlist_count - 1, true);
+				//likeText = this.getFavPluralText(p.wishlist_count - 1, true);
 			}
 
 			boxAdded = jQuery(
 				'<div class="addedLike-box" id="added-wishlist">' + 
-					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;">'+ 
-					likeText +
-					'<br><span>'  + Mall.i18nValidation.__("remove-from-favorites") + '</span>'+ 
+					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;"><i class="fa fa-list" aria-hidden="true"></i>'+
+					 Mall.i18nValidation.__("remove-from-favorites") +
 					'</a>' + 
 				'</div>');
 
@@ -351,12 +349,12 @@ var Mall = {
             		recentlyViewedContent += "<a href='"+redirect_url+"' class='simple'>";
             		recentlyViewedContent += "<div class='container-fluid'>";
             		recentlyViewedContent += " <div class='row'>";
-            		recentlyViewedContent += "  <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4 left-col'>";
+            		recentlyViewedContent += "  <div class='left-col'>";
             		recentlyViewedContent += "   <figure>";
             		recentlyViewedContent += "    <img src='"+ image_url +"' class='img-responsive-slider'>";
             		recentlyViewedContent += "   </figure>";
             		recentlyViewedContent += "  </div>";
-            		recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-8 right-col no-gutter'>";
+            		recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-6 right-col no-gutter'>";
             		recentlyViewedContent += "   <div class='prod_name'>"+ title +"<div class='prod_name_fade'></div></div>";
             		recentlyViewedContent += "   <span class='wrapper-price'>";
             		recentlyViewedContent += "    <span class='price'>"+price+"</span>"
@@ -370,11 +368,16 @@ var Mall = {
             	jQuery("#recently-viewed.recently-viewed-cls").show();
 
             	rwd_recently_viewed.rwdCarousel({
-            		items : 4,
-            		itemsDesktop : [1000,3],
+            		items : 3,
+            		itemsCustom : [
+                        [1000,3],
+                        [800,2],
+                        [670,2],
+                        [320,1]
+                    ],
+            		itemsDesktop : [1000,2],
             		itemsDesktopSmall : [800,2],
-            		itemsTablet: [600,2],
-            		itemsMobile : [540,1],
+            		itemsTablet: [670,1],
             		pagination : false,
             		navigation: true,
             		rewindNav : false,
@@ -603,10 +606,22 @@ var Mall = {
         return false;
     },
 
+    validateAddingToCartListing: function(id, minQty, maxQty){
+        jQuery("#qty-error-" + id).hide();
+        var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
+        if(quantity >= minQty && quantity <= maxQty){
+            Mall.addToCartListing(id, quantity);
+        }else{
+            jQuery("#qty-error-" + id).show();
+        }
+        return false;
+    },
+
     addToCart: function(id, qty) {
         if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
             return false;
         }
+        jQuery('#full-width-popup-table .quantity span').text('');
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
@@ -617,11 +632,35 @@ var Mall = {
 	    popup.modal('show');
 	    popup.css('pointer-events','none');
 	    jQuery('#add-to-cart').css('pointer-events','none');
+	    jQuery('#full-width-popup-table .quantity span').text(qty);
         OrbaLib.Cart.add({
             "product_id": id,
             "super_attribute": attr,
             "qty": qty
         }, addtocartcallback);
+        return false;
+    },
+
+    addToCartListing: function(id, qty) {
+        Mall.product = {_current_product_type:'simple'};
+        var attr = {undefined: undefined};
+
+        jQuery("#popup-after-add-to-cart .name_product").html(jQuery('[data-entity=' + id + '] .name_product').html());
+        jQuery("#popup-after-add-to-cart .thumb img").attr("src", jQuery('[data-entity=' + id + '] img').attr("src"));
+        jQuery("#popup-after-add-to-cart .quantity span").html(jQuery('#input-box-' + id + ' input').val());
+
+        var popup = jQuery("#popup-after-add-to-cart");
+        popup.find(".modal-error").hide();
+        popup.find(".modal-loaded").hide();
+        popup.find(".modal-loading").show();
+        popup.modal('show');
+        popup.css('pointer-events','none');
+        jQuery('#add-to-cart').css('pointer-events','none');
+        OrbaLib.Cart.add({
+            "product_id": id,
+            "super_attribute": attr,
+            "qty": qty
+        }, addtocartlistingcallback.bind({id: id}));
         return false;
     },
 
@@ -1332,6 +1371,12 @@ function addtocartcallback(response) {
     }
 	popup.css({display: 'block','pointer-events':'auto'});
 	jQuery("#add-to-cart").css("pointer-events","auto");
+}
+
+
+function addtocartlistingcallback(response) {
+    addtocartcallback(response);
+    jQuery("#popup-after-add-to-cart .price").html(jQuery("#prod-" + this.id + " .col-price span").html());
 }
 
 function number_format(number, decimals, dec_point, thousands_sep) {

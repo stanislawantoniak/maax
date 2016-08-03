@@ -60,6 +60,11 @@ $productDescription = $_helper->productAttribute($_product, nl2br($_product->get
 $brandShopProductId = $_product->getData('brandshop');
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
+<div class="path_back_to_category visible-xs">
+	<div class="col-xs-12">
+		<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	</div>
+</div>
 <div id="content" class="container-fluid">
 	<div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 		<div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
@@ -79,100 +84,104 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<!-- END:/ PRODUCT SHOP -->
 			</div>
 		</div>
-		<div id="product_long_box">
+		<div id="product_long_box" class="col-xs-12">
 			<ul class="title_section">
 				<li>
-					<a href="#tab_description_product">Opis produktu</a>
+					<input type="radio" name="tabs" id="tab-1" checked>
+					<label for="tab-1">Opis produktu <i class="fa" aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<div>
+								<div itemprop="description"><?php echo $productDescription; ?></div>
+								<?php if (!empty($attributesData)) : ?>
+									<ul class="list">
+										<?php foreach ($attributesData as $attr) : ?>
+											<li>
+												<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
+												<?php if ($attr['code'] == "color"): ?>
+													<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+												<?php elseif ($attr['code'] == "manufacturer"): ?>
+													<?php
+													$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+													$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
+													$brand = $vendorsCollection->getFirstItem();
+
+													$brandShopId = $brand->getId();
+													$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
+													$brandShopName = $brandShop->getData("vendor_name");
+													$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
+													?>
+													<?php if ($brandShopProductId == $brandShopId): ?>
+														<h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
+													<?php else: ?>
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													<?php endif; ?>
+												<?php else: ?>
+													<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													<?php else: ?>
+														<?php echo implode(",", $attr['value']); ?>
+													<?php endif; ?>
+												<?php endif; ?>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								<?php endif; ?>
+							</div>
+						</div>
+					</article>
 				</li>
-				<li class="hidden-xs">
-					<a href="#tab_reviews">Opinie</a>
+				<li>
+					<input type="radio" name="tabs" id="tab-2">
+					<label for="tab-2">Opinie<i class="fa" aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<?php echo $this->getChildHtml('product.review.section'); ?>
+						</div>
+					</article>
 				</li>
 				<?php if (!empty($installments)) : ?>
-					<li class="hidden-xs">
-						<a href="#tab_installments">Zakupy na raty</a>
-					</li>
-				<?php endif; ?>
-				<?php if (!empty($funding)) : ?>
-					<li class="hidden-xs">
-						<a href="#tab_funding">Dofinansowanie</a>
-					</li>
-				<?php endif; ?>
-				<?php if (!empty($deliveryReturn)) : ?>
-					<li class="hidden-xs">
-						<a href="#tab_delivery">Dostawa i wzroty</a>
-					</li>
+				<li>
+					<input type="radio" name="tabs" id="tab-3">
+					<label for="tab-3">Zakupy na raty<i class="fa" aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<?php echo $installments;?>
+						</div>
+					</article>
+				</li>
+				<?php endif; if (!empty($funding)) : ?>
+				<li>
+					<input type="radio" name="tabs" id="tab-4">
+					<label for="tab-4">Dofinansowanie<i class="fa" aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<?php echo $funding;?>
+						</div>
+					</article>
+				</li>
+				<?php endif; if (!empty($deliveryReturn)) : ?>
+				<li>
+					<input type="radio" name="tabs" id="tab-5">
+					<label for="tab-5">Dostawa i zwroty<i class="fa" aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<?php echo $deliveryReturn;?>
+						</div>
+					</article>
+				</li>
 				<?php endif; ?>
 			</ul>
-			<div id="tab_description_product">
-				<section class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-					<div>
-						<div itemprop="description"><?php echo $productDescription; ?></div>
-						<?php if (!empty($attributesData)) : ?>
-							<ul class="list">
-								<?php foreach ($attributesData as $attr) : ?>
-									<li>
-										<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
-										<?php if ($attr['code'] == "color"): ?>
-											<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
-										<?php elseif ($attr['code'] == "manufacturer"): ?>
-											<?php
-											$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
-											$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
-											$brand = $vendorsCollection->getFirstItem();
-
-											$brandShopId = $brand->getId();
-											$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
-											$brandShopName = $brandShop->getData("vendor_name");
-											$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
-											?>
-											<?php if ($brandShopProductId == $brandShopId): ?>
-												<h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
-											<?php else: ?>
-												<?php echo $this->escapeHtml($attr['value']); ?>
-											<?php endif; ?>
-										<?php else: ?>
-											<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
-												<?php echo $this->escapeHtml($attr['value']); ?>
-											<?php else: ?>
-												<?php echo implode(",", $attr['value']); ?>
-											<?php endif; ?>
-										<?php endif; ?>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
-					</div>
-				</section>
-			</div>
-			<div id="tab_reviews" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-				<?php echo $this->getChildHtml('product.review.section'); ?>
-			</div>
-			<?php if (!empty($installments)) : ?>
-				<div id="tab_installments" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-
-				</div>
-			<?php endif; ?>
-			<?php if (!empty($funding)) : ?>
-				<div id="tab_funding" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-
-				</div>
-			<?php endif; ?>
-			<?php if (!empty($deliveryReturn)) : ?>
-				<div id="tab_delivery" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
-					<?php echo $deliveryReturn;?>
-				</div>
-			<?php endif; ?>
-		</div>
-
 	</div>
 
-	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-		<?php echo $this->getChildHtml('upsell'); ?>
-	</div>
+</div>
 
-	<div id="product_additions_2" class="col-xs-12">
-		<?php echo $this->getChildHtml('crosssell'); ?>
-	</div>
+<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+	<?php echo $this->getChildHtml('upsell'); ?>
+</div>
+
+<div id="product_additions_2" class="col-xs-12">
+	<?php echo $this->getChildHtml('crosssell'); ?>
 </div>
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -210,7 +219,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 							<p class="size"><?php echo ucfirst($this->__("size")); ?>: <span></span></p>
 
-							<p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span>1</span></p></td>
+							<p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span></span></p></td>
 						<?php /* ensure the price in popup is correct */ ?>
 						<td class="price"></td>
 					</tr>
@@ -278,14 +287,6 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 	Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
 	Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
 	Mall.translate.add("add-to-favorites", "<?php echo $this->__("Add to favorites"); ?>");
-	Mall.translate.add("like-this-product", "<?php echo $this->__("like this product"); ?>");
-	Mall.translate.add("likes-this-product", "<?php echo $this->__("likes this product"); ?>");
-	Mall.translate.add("you-and", "<?php echo $this->__("You and"); ?>");
-	Mall.translate.add("person", "<?php echo $this->__("person"); ?>");
-	Mall.translate.add("person like", "<?php echo $this->__("person like"); ?>");
-	Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
-	Mall.translate.add("people likes", "<?php echo $this->__("people likes"); ?>");
-
 	Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
 	Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
 	Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
@@ -300,8 +301,11 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 	//Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 
-	jQuery( function() {
-		jQuery( "#product_long_box" ).tabs();
-	} );
-
+	var f = function () {
+		jQuery("#product_long_box").height(
+			jQuery("[name=tabs]:checked ~ article").height() + 140
+		);
+	};
+	f();
+	jQuery("[name=tabs]").change(f);
 </script>

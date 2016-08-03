@@ -4,13 +4,26 @@
 		margin-bottom: -5px;
 	}
 	@media (min-width: $screen-sm-min) {
-		margin-top: 30px;
+		margin-top: 0;
 	}
 }
 .block-complementary-product {
   header {
 	h4.title_section {
-	  padding-left: 35px;
+	  padding-left: 15px;
+	  text-transform: none;
+	  font-weight: bold;
+		overflow: visible;
+	  span {
+		  position: relative;
+		  right:0;
+		  top:0;
+		  border-bottom: 2px solid #8bb56d;
+		  padding-bottom: 7px;
+		  @media(max-width: $screen-xs-max) {
+			  padding-bottom: 9px;
+		  }
+	  }
 	  @media(max-width: 360px) {
 		  padding-left: 30px;
 	  }
@@ -18,11 +31,11 @@
   }
 	.rwdCarousel {
 	//	width: 100%;
-		padding:15px 55px;
+		padding:2px 0 0;
 		position:relative;
 		//display: inline-block;
 		.item {
-			margin:0 20px;
+			margin:0;
 			@media (max-width: $screen-xs-max) {
 				margin:0 5px;
 			}
@@ -220,6 +233,98 @@
 				}
 			}
 			
+		}
+	}
+}
+#product_additions_2 .block-complementary-product {
+	.rwdCarousel {
+		.item {
+			@media (max-width: $screen-xs-max) {
+				margin: 0;
+			}
+		}
+	}
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				background: none;
+				text-indent:0;
+			}
+			.owl-prev {
+				position: absolute;
+				left: 8px;
+				@media (min-width: $screen-sm-max) {
+					left: 8px;
+				}
+				top: 50%;
+				width: 45px;
+				line-height: 42px;
+				height: 45px;
+				margin-top: 28px;
+				border: 1px solid #eee;
+				border-radius: 100%;
+				@include transition(all 0.2s ease-in-out);
+				background: $body-bg;
+				&:hover {
+					border-color: #252525;
+				}
+			}
+			.owl-prev:before {
+				content: "\f104";
+				position: absolute;
+				font-size: 30px;
+				font-family: FontAwesome;
+				color: #252525;
+				left: 15px;
+				top: 0px;
+				@include transition(all 0.2s ease-in-out);
+			}
+			.owl-prev:after {
+				top: -20px;
+				left: -20px;
+				height: 70px;
+			}
+
+			.owl-next {
+				position: absolute;
+				right: 8px;
+				@media (min-width: $screen-sm-max) {
+					right: 8px;
+				}
+				top: 50%;
+				width: 45px;
+				margin-top: 28px;
+				height: 45px;
+				line-height: 42px;
+				border: 1px solid #eee;
+				border-radius: 100%;
+				@include transition(all 0.2s ease-in-out);
+				background: $body-bg;
+				&:hover {
+					border-color: #252525;
+				}
+			}
+
+			.owl-next:before {
+				content: "\f105";
+				position: absolute;
+				font-size: 30px;
+				font-family: FontAwesome;
+				color: #252525;
+				left: 18px;
+				top: 0px;
+				@include transition(all 0.2s ease-in-out);
+			}
+
+			.owl-next:after {
+				content: "";
+				position: absolute;
+				width: 88px;
+				height: 300px;
+				left: -20px;
+				top: -140px;
+			}
 		}
 	}
 }
