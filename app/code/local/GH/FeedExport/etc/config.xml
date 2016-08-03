@@ -21,6 +21,7 @@
                     <config>GH_FeedExport_Model_Config</config>
                     <feed_generator_action_iterator_entity>GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity</feed_generator_action_iterator_entity>
                     <feed_generator_action_iterator>GH_FeedExport_Model_Feed_Generator_Action_Iterator</feed_generator_action_iterator>
+                    <feed_generator_pattern>GH_FeedExport_Model_Feed_Generator_Pattern</feed_generator_pattern>
                 </rewrite>
             </feedexport>
         </models>
