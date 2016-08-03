@@ -58,6 +58,9 @@ $attributesData = $this->getAdditionalDataDetailed(true, false);
 
 $productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
 $brandShopProductId = $_product->getData('brandshop');
+
+if($_product->getData('is_installments')) $installments = $this->getLayout()->createBlock('cms/block')->setBlockId('product-installments')->toHtml();
+if($_product->getData('is_founding')) $funding = $this->getLayout()->createBlock('cms/block')->setBlockId('product-funding')->toHtml();
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
 <div class="path_back_to_category visible-xs">
