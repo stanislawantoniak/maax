@@ -1,0 +1,691 @@
+<tr>
+    <td style="width: 550px; padding-right: 20px">
+        <!-- form container start -->
+        <div class="entry-edit-head collapseable">
+            <a class="open" id="freshmail_popup_design_formcontainer-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_formcontainer', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Form Container'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_formcontainer">
+            <table>
+                <input id="freshmail_popup_design_formcontainer-state" name="config_state[freshmail_popup_formcontainer]" type="hidden" value="1" />
+                <legend><?php echo $this->__('Form container'); ?></legend>
+
+                <tr id="row_freshmail_popup_design_popup_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_width"><?php echo $this->__('Form max width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input style="width: 230px; display: inline;" autocomplete="off" id="freshmail_popup_design_formcontainer_width" name="groups[popup_design][fields][formcontainer_width][value]" value="<?php echo $this->getValue('formcontainer_width'); ?>" class="input-text" type="number">
+                        <select id="freshmail_popup_design_formcontainer_width_calculation" style="width: 40px; display: inline;" name="groups[popup_design][fields][formcontainer_width_calculation][value]">
+                            <option value="%"<?php if ($this->configHas('formcontainer_width_calculation', '%')): ?> selected="selected"<?php endif;?>><?php echo $this->__('%'); ?></option>
+                            <option value="px"<?php if ($this->configHas('formcontainer_width_calculation', 'px')): ?> selected="selected"<?php endif;?>><?php echo $this->__('px'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_container_background_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_background_color"><?php echo $this->__('Background color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_formcontainer_background_color" name="groups[popup_design][fields][formcontainer_background_color][value]" value="<?php echo $this->getValue('formcontainer_background_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_formcontainer_border_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_border_color"><?php echo $this->__('Border color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_formcontainer_border_color" name="groups[popup_design][fields][formcontainer_border_color][value]" value="<?php echo $this->getValue('formcontainer_border_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_formcontainer_border_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_border_width"><?php echo $this->__('Border width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" min="0" id="freshmail_popup_design_formcontainer_border_width" name="groups[popup_design][fields][formcontainer_border_width][value]" value="<?php echo $this->getValue('formcontainer_border_width'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_formcontainer_border_radius">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_border_radius"><?php echo $this->__('Rounded corners'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_formcontainer_border_radius" name="groups[popup_design][fields][formcontainer_border_radius][value]" value="<?php echo $this->getValue('formcontainer_border_radius'); ?>" class="input-text validate-digits-range digits-range-0-90" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value 0-90'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_formcontainer_vertical_padding">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_vertical_padding"><?php echo $this->__('Vertical padding'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_formcontainer_vertical_padding" name="groups[popup_design][fields][formcontainer_vertical_padding][value]" value="<?php echo $this->getValue('formcontainer_vertical_padding'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_formcontainer_horizontal_padding">
+                    <td class="label">
+                        <label for="freshmail_popup_design_formcontainer_horizontal_padding"><?php echo $this->__('Horizontal padding'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_formcontainer_horizontal_padding" name="groups[popup_design][fields][formcontainer_horizontal_padding][value]" value="<?php echo $this->getValue('formcontainer_horizontal_padding'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+        </fieldset>
+        <!-- form container end -->
+
+        <!-- photo header start -->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_photo_header-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_photo_header', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Photo header'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_photo_header" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_photo_header-state" name="config_state[freshmail_photo_header]" type="hidden" value="0" />
+                <script>
+                    var loadFile = function(event) {
+                        var output = document.getElementById('heade-photo-output');
+                        document.getElementById('freshmail_photo_output_wrapper').style.display = "block";
+                        output.src = URL.createObjectURL(event.target.files[0]);
+                    };
+                </script>
+                <legend><?php echo $this->__('Photo header'); ?></legend>
+                <tr id="row_freshmail_popup_design_photo">
+                    <td class="label">
+                        <label for="freshmail_popup_design_photo">
+                            <?php echo $this->__('File'); ?>
+                        </label>
+                    </td>
+                    <td class="value">
+                        <input id="freshmail_popup_design_photo" name="groups[popup_design][fields][photo][value]" value="<?php echo $this->getValue('photo'); ?>" class="" accept="image/*" onchange="loadFile(event)" type="file">
+                        <div><?php echo $this->getValue('photo'); ?>
+                            <input name="groups[popup_design][fields][photo][value][delete]" value="1" class="checkbox" id="freshmail_popup_design_photo_delete" type="checkbox">
+                            <label for="freshmail_popup_design_photo_delete">
+                                <?php echo $this->__('Delete File'); ?>
+                            </label>
+                            <input name="groups[popup_design][fields][photo][value][value]" value="" type="hidden">
+                        </div>
+                        <p class="note">
+                            <span><?php echo $this->__('File saved in'); ?>
+                                <strong>
+                                    <span style="color: red;">media/snowfreshmail</span>
+                                </strong> <?php echo $this->__('folder'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_photo_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_photo_size"><?php echo $this->__('Photo size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="popup-form_photo_size" style="display: inline;" name="groups[popup_design][fields][form_photo_size][value]">
+                            <option value="original_size"<?php if ($this->configHas('form_photo_size', 'original_size')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Original size'); ?></option>
+                            <option value="scale_with_form"<?php if ($this->configHas('form_photo_size', 'scale_with_form')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Scale with form'); ?></option
+                        </select>
+                    </td>
+                </tr>
+
+                <tr id="row_freshmail_popup_design_photo_alignment">
+                    <td class="label">
+                        <label for="freshmail_popup_design_photo_alignment"><?php echo $this->__('Photo alignment'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="popup-form-photo-alignment" style="display: inline;" name="groups[popup_design][fields][form_photo_alignment][value]">
+                            <option value="left"<?php if ($this->configHas('form_photo_alignment', 'left')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Left'); ?></option>
+                            <option value="center"<?php if ($this->configHas('form_photo_alignment', 'center')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Center'); ?></option>
+                            <option value="right"<?php if ($this->configHas('form_photo_alignment', 'right')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Right'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!-- photo header end -->
+
+        <!-- text header start -->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_textheader-head"
+                href="#"
+                onclick="Fieldset.toggleCollapse('freshmail_popup_design_textheader', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+                <?php echo $this->__('Text Header'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_textheader" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_textheader-state" name="config_state[freshmail_design_textheader]" type="hidden" value="0" />
+                <tr id="row_freshmail_popup_design_textheader_display">
+                    <td class="label">
+                        <label for="freshmail_popup_design_textheader_display"><?php echo $this->__('Display header text'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input id="freshmail_popup_design_textheader_display_yes" style="display: inline;" type="radio"  name="groups[popup_design][fields][textheader_display][value]" value="1"<?php if ($this->configHas('textheader_display')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('Yes'); ?>
+                        <input id="freshmail_popup_design_textheader_display_no" style="display: inline;" type="radio"  name="groups[popup_design][fields][textheader_display][value]" value="0"<?php if (!$this->configHas('textheader_display')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('No'); ?>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_textheader_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_textheader_color"><?php echo $this->__('Text color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_textheader_color" name="groups[popup_design][fields][textheader_color][value]" value="<?php echo $this->getValue('textheader_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_textheader_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_textheader_size"><?php echo $this->__('Text size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_textheader_size" name="groups[popup_design][fields][textheader_size][value]" value="<?php echo $this->getValue('textheader_size'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_textheader_alignment">
+                    <td class="label">
+                        <label for="freshmail_popup_design_textheader_alignment"><?php echo $this->__('Text alignment'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_textheader_alignment" style="display: inline;" name="groups[popup_design][fields][textheader_alignment][value]">
+                            <option value="left"<?php if ($this->configHas('textheader_alignment', 'left')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Left'); ?></option>
+                            <option value="center"<?php if ($this->configHas('textheader_alignment', 'center')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Center'); ?></option>
+                            <option value="right"<?php if ($this->configHas('textheader_alignment', 'right')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Right'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!-- text header end -->
+
+        <!--subheader start -->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_subheader-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_subheader', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Sub-Header'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_subheader" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_subheader-state" name="config_state[freshmail_subheader]" type="hidden" value="0" />
+                <legend><?php echo $this->__('Sub-header'); ?></legend>
+
+                <tr id="row_freshmail_popup_design_subheader_display">
+                    <td class="label">
+                        <label for="freshmail_popup_design_subheader_display"><?php echo $this->__('Display sub header'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input id="freshmail_popup_design_subheader_display_yes" style="display: inline;" type="radio" name="groups[popup_design][fields][subheader_display][value]" value="1"<?php if ($this->configHas('subheader_display')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('Yes'); ?>
+                        <input id="freshmail_popup_design_subheader_display_no" style="display: inline;" type="radio" name="groups[popup_design][fields][subheader_display][value]" value="0"<?php if (!$this->configHas('subheader_display')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('No'); ?>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_subheader_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_subheader_color"><?php echo $this->__('Text color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_subheader_color" name="groups[popup_design][fields][subheader_color][value]" value="<?php echo $this->getValue('subheader_color'); ?>" class="input-text jscolor" type="text">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_subheader_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_subheader_size"><?php echo $this->__('Text size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_subheader_size" name="groups[popup_design][fields][subheader_size][value]" value="<?php echo $this->getValue('subheader_size'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_subheader_alignment">
+                    <td class="label">
+                        <label for="freshmail_popup_design_subheader_alignment"><?php echo $this->__('Text alignment'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_subheader_alignment" style="display: inline;" name="groups[popup_design][fields][subheader_alignment][value]">
+                            <option value="left"<?php if ($this->configHas('subheader_alignment', 'left')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Left'); ?></option>
+                            <option value="center"<?php if ($this->configHas('subheader_alignment', 'center')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Center'); ?></option>
+                            <option value="right"<?php if ($this->configHas('subheader_alignment', 'right')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Right'); ?></option
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--subheader end -->
+
+        <!-- label start -->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_label-head"
+                href="#"
+                onclick="Fieldset.toggleCollapse('freshmail_popup_design_label', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+                <?php echo $this->__('Label'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_label" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_label-state" name="config_state[freshmail_label]" type="hidden" value="0" />
+                <legend><?php echo $this->__('Label'); ?></legend>
+                <tr id="row_freshmail_popup_design_label_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_label_width"><?php echo $this->__('Label width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input style="width: 230px; display: inline;" autocomplete="off" id="freshmail_popup_design_label_width" name="groups[popup_design][fields][label_width][value]" value="<?php echo $this->getValue('label_width'); ?>" class="input-text" type="number" min="0">
+                        <select id="freshmail_popup_design_label_width_calculation" style="width: 40px; display: inline;" name="groups[popup_design][fields][label_width_calculation][value]">
+                            <option value="%"<?php if ($this->configHas('label_width_calculation', '%')): ?> selected="selected"<?php endif;?>><?php echo $this->__('%'); ?></option>
+                            <option value="px"<?php if ($this->configHas('label_width_calculation', 'px')): ?> selected="selected"<?php endif;?>><?php echo $this->__('px'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_label_position">
+                    <td class="label">
+                        <label for="freshmail_popup_design_label_position"><?php echo $this->__('Label position'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_label_position" style="display: inline;" name="groups[popup_design][fields][label_position][value]">
+                            <option value="inline-block"<?php if ($this->configHas('label_position', 'inline-block')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Inline'); ?></option>
+                            <option value="block"<?php if ($this->configHas('label_position', 'block')): ?> selected="selected"<?php endif;?>><?php echo $this->__('New line'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_label_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_label_text-color"><?php echo $this->__('Text color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_label_color" name="groups[popup_design][fields][label_color][value]" value="<?php echo $this->getValue('label_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_label_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_label_size"><?php echo $this->__('Text size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_label_size" name="groups[popup_design][fields][label_size][value]" value="<?php echo $this->getValue('label_size'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_text_style">
+                    <td class="label">
+                        <label for="freshmail_popup_design_label_style"><?php echo $this->__('Text style'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_label_style" style="display: inline;" id="label_style" name="groups[popup_design][fields][label_style][value]">
+                            <option value="normal"<?php if ($this->configHas('label_style', 'normal')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Normal'); ?></option>
+                            <option value="bold"<?php if ($this->configHas('label_style', 'bold')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Bold'); ?></option>
+                            <option value="italic"<?php if ($this->configHas('label_style', 'italic')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Italic'); ?></option>
+                            <option value="bold italic"<?php if ($this->configHas('label_style', 'bold italic')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Bold & Italic'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_label_text_alignment">
+                    <td class="label">
+                        <label for="freshmail_popup_design_label_text_alignment"><?php echo $this->__('Text alignment'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_label_text_alignment" style="display: inline;" name="groups[popup_design][fields][label_text_alignment][value]">
+                            <option value="left"<?php if ($this->configHas('label_text_alignment', 'left')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Left'); ?></option>
+                            <option value="center"<?php if ($this->configHas('label_text_alignment', 'center')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Center'); ?></option>
+                            <option value="right"<?php if ($this->configHas('label_text_alignment', 'right')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Right'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!-- label end -->
+
+        <!-- field start -->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_field-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_field', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Field'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_field" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_field-state" name="config_state[freshmail_design_field]" type="hidden" value="0" />
+
+                <tr id="row_freshmail_popup_design_field_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_field_width"><?php echo $this->__('Field width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input style="width: 230px; display: inline;" autocomplete="off" id="freshmail_popup_design_field_width" name="groups[popup_design][fields][field_width][value]" value="<?php echo $this->getValue('field_width'); ?>" class="input-text" min="0" type="number">
+                        <select style="width: 40px; display: inline;" id="freshmail_popup_design_field_width_calculation" name="groups[popup_design][fields][field_width_calculation][value]">
+                            <option value="%"<?php if ($this->configHas('field_width_calculation', '%')): ?> selected="selected"<?php endif;?>><?php echo $this->__('%'); ?></option>
+                            <option value="px"<?php if ($this->configHas('field_width_calculation', 'px')): ?> selected="selected"<?php endif;?>><?php echo $this->__('px'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_field_height">
+                    <td class="label">
+                        <label for="freshmail_popup_design_field_height"><?php echo $this->__('Field height'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input style="width: 230px; display: inline;" autocomplete="off" id="freshmail_popup_design_field_height" name="groups[popup_design][fields][field_height][value]" value="<?php echo $this->getValue('field_height'); ?>" class="input-text" min="0" type="number">
+                        <select style="width: 40px; display: inline;" id="freshmail_popup_design_field_height_calculation" name="groups[popup_design][fields][field_height_calculation][value]">
+                            <option value="%"<?php if ($this->configHas('field_height_calculation', '%')): ?> selected="selected"<?php endif;?>><?php echo $this->__('%'); ?></option>
+                            <option value="px"<?php if ($this->configHas('field_height_calculation', 'px')): ?> selected="selected"<?php endif;?>><?php echo $this->__('px'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_field_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_field_text-color"><?php echo $this->__('Text color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_field_color" name="groups[popup_design][fields][field_color][value]" value="<?php echo $this->getValue('field_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_field_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_field_size"><?php echo $this->__('Text size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_field_size" name="groups[popup_design][fields][field_size][value]" value="<?php echo $this->getValue('field_size'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_field_border_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_field_border-color"><?php echo $this->__('Border color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_field_border_color" name="groups[popup_design][fields][field_border_color][value]" value="<?php echo $this->getValue('field_border_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_field_border_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_field_border_width"><?php echo $this->__('Border width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_field_border_width" name="groups[popup_design][fields][field_border_width][value]" value="<?php echo $this->getValue('field_border_width'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!-- field end -->
+
+        <!-- agreement start -->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_agreement-head" href="#" onclick="Fieldset.toggleCollapse('freshmail_popup_design_agreement', '<?php echo $this->getUrl('*/*/state'); ?>');
+                    return false;">
+                   <?php echo $this->__('Agreement'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_agreement" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_agreement-state" name="config_state[freshmail_agreement_field]" type="hidden" value="0" />
+                <tr id="row_freshmail_popup_design_agreement_display">
+                    <td class="label">
+                        <label for="freshmail_popup_design_agreement_display"><?php echo $this->__('Display checkbox'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input id="freshmail_popup_design_agreement_display_yes" style="display: inline;" type="radio"  name="groups[popup_design][fields][agreement_display][value]" value="1"<?php if ($this->configHas('agreement_display')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('Yes'); ?>
+                        <input id="freshmail_popup_design_agreement_display_no" style="display: inline;" type="radio"  name="groups[popup_design][fields][agreement_display][value]" value="0"<?php if (!$this->configHas('agreement_display')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('No'); ?>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_agreement_checked">
+                    <td class="label">
+                        <label for="freshmail_popup_design_agreement_checked"><?php echo $this->__('Default checked?'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input style="display: inline;" id="freshmail_popup_design_agreement_checked_yes" type="radio"  name="groups[popup_design][fields][agreement_checked][value]" value="1"<?php if ($this->configHas('agreement_checked')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('Yes'); ?>
+                        <input style="display: inline;" id="freshmail_popup_design_agreement_checked_no" type="radio"  name="groups[popup_design][fields][agreement_checked][value]" value="0"<?php if (!$this->configHas('agreement_checked')): ?> checked="checked"<?php endif;?>> <?php echo $this->__('No'); ?>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_agreement_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_agreement_text-color"><?php echo $this->__('Text color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_agreement_color" name="groups[popup_design][fields][agreement_color][value]" value="<?php echo $this->getValue('agreement_color'); ?>" class="input-text jscolor" min="0" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_agreement_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_agreement_size"><?php echo $this->__('Text size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_agreement_size" name="groups[popup_design][fields][agreement_size][value]" value="<?php echo $this->getValue('agreement_size'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_agreement_alignment">
+                    <td class="label">
+                        <label for="freshmail_popup_design_agreement_alignment"><?php echo $this->__('Text alignment'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_agreement_alignment" style="display: inline;" name="groups[popup_design][fields][agreement_alignment][value]">
+                            <option value="left"<?php if ($this->configHas('agreement_alignment', 'left')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Left'); ?></option>
+                            <option value="center"<?php if ($this->configHas('agreement_alignment', 'center')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Center'); ?></option>
+                            <option value="right"<?php if ($this->configHas('agreement_alignment', 'right')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Right'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!-- agreement end -->
+
+        <!--button start-->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_button-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_button', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Button'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_button" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_button-state" name="config_state[freshmail_button_field]" type="hidden" value="0" />
+                <tr id="row_freshmail_popup_design_button_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_widtht"><?php echo $this->__('Button width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input style="width: 230px; display: inline;" autocomplete="off" id="freshmail_popup_design_button_width" name="groups[popup_design][fields][button_width][value]" value="<?php echo $this->getValue('button_width'); ?>" class="input-text" min="0" type="number">
+                        <select style="width: 40px; display: inline;" id="freshmail_popup_design_button_width_calculation" name="groups[popup_design][fields][button_width_calculation][value]">
+                            <option value="%"<?php if ($this->configHas('button_width_calculation', '%')): ?> selected="selected"<?php endif;?>><?php echo $this->__('%'); ?></option>
+                            <option value="px"<?php if ($this->configHas('button_width_calculation', 'px')): ?> selected="selected"<?php endif;?>><?php echo $this->__('px'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_height">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_height"><?php echo $this->__('Button height'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_height" name="groups[popup_design][fields][button_height][value]" value="<?php echo $this->getValue('button_height'); ?>" class="input-text" min="0" type="number">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_alignment">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_alignment"><?php echo $this->__('Button alignment'); ?></label>
+                    </td>
+                    <td class="value">
+                        <select id="freshmail_popup_design_button_alignment" style="display: inline;" name="groups[popup_design][fields][button_alignment][value]">
+                            <option value="left"<?php if ($this->configHas('button_alignment', 'left')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Left'); ?></option>
+                            <option value="center"<?php if ($this->configHas('button_alignment', 'center')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Center'); ?></option>
+                            <option value="right"<?php if ($this->configHas('button_alignment', 'right')): ?> selected="selected"<?php endif;?>><?php echo $this->__('Right'); ?></option
+                        </select>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_size">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_size"><?php echo $this->__('Text size'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_size" name="groups[popup_design][fields][button_size][value]" value="<?php echo $this->getValue('button_size'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_text-color"><?php echo $this->__('Text color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_color" name="groups[popup_design][fields][button_color][value]" value="<?php echo $this->getValue('button_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_background_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_background-color"><?php echo $this->__('Background color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_background_color" name="groups[popup_design][fields][button_background_color][value]" value="<?php echo $this->getValue('button_background_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_border_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_border_color"><?php echo $this->__('Border color'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_border_color" name="groups[popup_design][fields][button_border_color][value]" value="<?php echo $this->getValue('button_border_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_border_width">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_border_width"><?php echo $this->__('Border width'); ?></label>
+                    </td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_border_width" name="groups[popup_design][fields][button_border_width][value]" value="<?php echo $this->getValue('button_border_width'); ?>" class="input-text" min="0" type="number">
+                        <p class="note">
+                            <span>
+                                <?php echo $this->__('value in px'); ?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--button end-->
+
+        <!--button hovered start-->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_button_hovered-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_button_hovered', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Button hovered'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_button_hovered" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_button_hovered-state" name="config_state[freshmail_button_hovered_field]" type="hidden" value="0" />
+                <tr id="row_freshmail_popup_design_button_hovered_background_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_hovered_background-color"><?php echo $this->__('Background color'); ?></label></td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_hovered_background_color" name="groups[popup_design][fields][button_hovered_background_color][value]" value="<?php echo $this->getValue('button_hovered_background_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_hovered_border_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_hovered_border_color"><?php echo $this->__('Border color'); ?></label></td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_hovered_border_color" name="groups[popup_design][fields][button_hovered_border_color][value]" value="<?php echo $this->getValue('button_hovered_border_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_button_hovered_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_button_hovered_color"><?php echo $this->__('Text color'); ?></label></td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_button_hovered_color" name="groups[popup_design][fields][button_hovered_color][value]" value="<?php echo $this->getValue('button_hovered_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--button hovered end-->
+
+        <!--error & success messages start-->
+        <div class="entry-edit-head collapseable">
+            <a id="freshmail_popup_design_error&success-head"
+               href="#"
+               onclick="Fieldset.toggleCollapse('freshmail_popup_design_error&success', '<?php echo $this->getUrl('*/*/state'); ?>'); return false;">
+               <?php echo $this->__('Error & success messages'); ?>
+            </a>
+        </div>
+        <fieldset class="config collapseable" id="freshmail_popup_design_error&success" style="display: none">
+            <table>
+                <input id="freshmail_popup_design_error&success-state" name="config_state[freshmail_error&success_field]" type="hidden" value="0" />
+                <tr id="row_freshmail_popup_design_error_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_error_color"><?php echo $this->__('Error text color'); ?></label></td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_error_color" name="groups[popup_design][fields][error_color][value]" value="<?php echo $this->getValue('error_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+                <tr id="row_freshmail_popup_design_success_color">
+                    <td class="label">
+                        <label for="freshmail_popup_design_success_color"><?php echo $this->__('Success text color'); ?></label></td>
+                    <td class="value">
+                        <input autocomplete="off" id="freshmail_popup_design_success_color" name="groups[popup_design][fields][success_color][value]" value="<?php echo $this->getValue('success_color'); ?>" class="input-text jscolor" type="text">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <!--error & success messages end-->
+    </td>
+    <td style="width: 60%">
+        <h2 style="margin-bottom: 25px"><?php echo $this->__('Form Preview'); ?></h2>
+        <?php echo $this->getPreview(); ?>
+    </td>
+</tr>

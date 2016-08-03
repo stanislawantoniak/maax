@@ -1,0 +1,51 @@
+<tr id="row_freshmail_popup_settings_popup_appear">
+    <td class="label">
+        <label for="freshmail_popup_settings_popup_appear"><?php echo $this->__('Popup should appear'); ?></label>
+    </td>
+    <td class="value">
+        <p>
+            <input name="groups[popup_settings][fields][popup_appear][value]" value="0" type="radio" <?php if (!$this->getValue('popup_redirection')): ?> checked<?php endif; ?>> <?php echo $this->__('Immediately'); ?>
+        </p>
+        <p>
+            <input name="groups[popup_settings][fields][popup_appear][value]" value="after_time" type="radio" <?php if ($this->getValue('popup_appear') == 'after_time'): ?> checked<?php endif; ?>>
+            <?php echo $this->__('After'); ?>
+            <input style="width: 25px" maxlength="2" name="groups[popup_settings][fields][popup_appear_time][value]" value="<?php echo $this->getValue("popup_appear_time"); ?>" type="text" class="input-text">
+            <select style="width: 70px" name="groups[popup_settings][fields][popup_appear_time_type][value]">
+                <option value="s"><?php echo $this->__('seconds'); ?></option>
+            </select>
+        </p>
+        <p>
+            <input name="groups[popup_settings][fields][popup_appear][value]" value="after_scroll" type="radio" <?php if ($this->getValue('popup_appear') == 'after_scroll'): ?> checked<?php endif; ?>> <?php echo $this->__('After scrolling through'); ?>
+            <input style="width: 35px" maxlength="2" name="groups[popup_settings][fields][popup_appear_scroll][value]" value="<?php echo $this->getValue("popup_appear_scroll"); ?>" type="number" min="0" class="input-text">
+            <select style="width: 35px" name="groups[popup_settings][fields][popup_appear_scroll_type][value]">
+                <option value="%"><?php echo $this->__('%'); ?></option>
+            </select>
+            <?php echo $this->__('of the page'); ?>
+        </p>
+    </td>
+</tr>
+<tr id="row_freshmail_popup_settings_popup_redirection">
+    <td class="label">
+        <label for="freshmail_popup_settings_popup_redirection"><?php echo $this->__('Redirection after subscription'); ?></label>
+    </td>
+    <td class="value" colspan="2" >
+        <p>
+            <input name="groups[popup_settings][fields][popup_redirection][value]" value="0" type="radio" <?php if (!$this->getValue('popup_redirection')): ?> checked<?php endif; ?>> <?php echo $this->__('No redirection'); ?>
+        </p>
+        <p>
+            <input name="groups[popup_settings][fields][popup_redirection][value]" value="page" type="radio" <?php if ($this->getValue('popup_redirection') == 'page'): ?> checked<?php endif; ?>> <?php echo $this->__('Magento page'); ?>
+            <select name="groups[popup_settings][fields][popup_redirection_page][value]">
+                <?php foreach ($this->getCmsPages() as $page): ?>
+                    <option value="<?php echo $page->getIdentifier(); ?>" <?php if ($this->getValue('popup_redirection_page') == $page->getIdentifier()): ?>selected<?php endif; ?>>
+                        <?php echo $page->getTitle(); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+        <p class="redirect-link">
+            <input name="groups[popup_settings][fields][popup_redirection][value]" value="url" type="radio" <?php if ($this->getValue('popup_redirection') == 'url'): ?> checked<?php endif; ?>> <?php echo $this->__('Custom URL'); ?>
+            <input style="width: 57.5%" name="groups[popup_settings][fields][popup_redirection_url][value]" value="<?php echo $this->getValue('popup_redirection_url'); ?>" type="text" class="input-text validate-url">
+            <a href="<?php echo $this->getValue('popup_redirection_url'); ?>" target="_blank"><?php echo $this->__('Check URL'); ?></a>
+        </p>
+    </td>
+</tr>
