@@ -188,6 +188,14 @@ class Zolago_Po_Model_Po_Status
 	 */
 	public function confirmPickUp(Zolago_Po_Model_Po $po)
 	{
+		// Add shipment for RMA
+		// @see Zolago_Rma_Model_ServicePo::prepareRmaForSave()
+		/** @var Zolago_Po_Helper_Shipment $manager */
+		$manager = Mage::helper('zolagopo/shipment');
+		$po->setUdpoNoSplitPoFlag(true);
+		$manager->setUdpo($po);
+		$manager->getShipment(); // create shipment from po
+		
 		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("zolagopo");
 		$hlp->addConfirmPickUpComment($po);
