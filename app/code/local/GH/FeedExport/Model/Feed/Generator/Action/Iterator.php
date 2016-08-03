@@ -44,10 +44,9 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator
             $iteratorModel->start();
         }
 
-        $step = 500;
-        $limit = intval($size / $step);
-        if ($limit < $step) {
-            $limit = $step;
+        $limit = intval($size / 100);
+        if ($limit < 100) {
+            $limit = 100;
         }
 
         $collection->getSelect()->limit($limit, $idx);
