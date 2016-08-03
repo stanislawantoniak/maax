@@ -999,6 +999,12 @@ Mall.product = {
                     var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
                     var width = parseInt(Mall.product.gallery.getBigMedia().css('width'));
                     Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
+                        var height = parseInt(jQuery(this).find('img').css('height'));
+                        if(height > 420){
+                            jQuery(this).find('img').css('height', '420');
+                            jQuery(this).find('img').css('width', 'auto');
+                            jQuery(this).find('img').css('margin', '0 auto');
+                        }
                         // Horizontal center big medias
                         var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
                         var itemH = ratio * width;
@@ -1052,7 +1058,7 @@ Mall.product = {
                         Mall.product.gallery.getThumbsWrapper().find('.rwd-prev, .rwd-next').addClass('disabled');
                         jQuery('#product-gallery #productGalleryThumbMedia .rwd-item').css('width', '117px!important');
                     }else{
-                        jQuery('#productGalleryThumbMedia').css('padding', '0 24px');
+                        jQuery('#productGalleryThumbMedia').css('padding', '0 25px');
                         jQuery('#productGalleryThumbMedia  .rwd-prev').css('left', '-12px');
                         jQuery('#productGalleryThumbMedia  .rwd-next').css('right', '-16px');
                     }
