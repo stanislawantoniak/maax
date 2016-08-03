@@ -1056,7 +1056,6 @@ Mall.product = {
                     Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
                     if (items.length <= 3 ) {
                         Mall.product.gallery.getThumbsWrapper().find('.rwd-prev, .rwd-next').addClass('disabled');
-                        jQuery('#product-gallery #productGalleryThumbMedia .rwd-item').css('width', '117px!important');
                     }else{
                         jQuery('#productGalleryThumbMedia').css('padding', '0 25px');
                         jQuery('#productGalleryThumbMedia  .rwd-prev').css('left', '-12px');
