@@ -58,6 +58,9 @@ $attributesData = $this->getAdditionalDataDetailed(true, false);
 
 $productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
 $brandShopProductId = $_product->getData('brandshop');
+
+if($_product->getData('is_installments')) $installments = $this->getLayout()->createBlock('cms/block')->setBlockId('product-installments')->toHtml();
+if($_product->getData('is_founding')) $funding = $this->getLayout()->createBlock('cms/block')->setBlockId('product-funding')->toHtml();
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
 <div class="path_back_to_category visible-xs">
@@ -272,6 +275,18 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 	</div>
 </div>
 <!--end zadaj pytanie sprzedajacemu-->
+<div class="modal fade" id="calculator" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal"></button>
+			<div class="modal-body" style="overflow-y: hidden;">
+				<div id="calculatorIframeContainer">
+					<iframe id="calculatorIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>

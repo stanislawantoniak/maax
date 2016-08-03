@@ -214,14 +214,26 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 	</div>
 
 	<div id="box-social" class="row">
-		<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
-			<div id="product-likeboxes">
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="product-likeboxes">
 				<div class="addLike-box" id="notadded-wishlist">
 					<!-- placebo -->
 					<span class="product-context-like-count" style="display: none"></span>
 					<p>
 						<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct(<?php echo $_product->getEntityId(); ?>);return false;" class="addLike">
 							<i class="fa fa-list" aria-hidden="true"></i><?php echo $this->__("Add to favorites"); ?></span>
+						</a>
+					</p>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="product-calculatorbox">
+				<div>
+					<p>
+						<a href="#" data-toggle="modal" data-target="#calculator">
+							<i class="fa fa-calculator" aria-hidden="true"></i><?php echo $this->__("Mortgage calculator"); ?></span>
 						</a>
 					</p>
 				</div>
