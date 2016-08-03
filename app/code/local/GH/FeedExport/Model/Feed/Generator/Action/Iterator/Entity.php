@@ -77,4 +77,20 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 
         return $collection;
     }
+
+    public function callback($row)
+    {
+        $this->_patternModel  = Mage::getSingleton('feedexport/feed_generator_pattern');
+        $this->_patternModel->setFeed($this->getFeed());
+
+        if($this->_type == 'review')
+        {
+            $model = Mage::getModel('review/review')->load($row['review_id']);
+        } else {
+            $model = Mage::getModel('catalog/'.$this->_type)->load($row['entity_id']);
+        }
+        $result = $this->_patternModel->getPatternValue($this->_format['entity'][$this->_type], $this->_type, $model, $row);
+
+        return $result;
+    }
 }

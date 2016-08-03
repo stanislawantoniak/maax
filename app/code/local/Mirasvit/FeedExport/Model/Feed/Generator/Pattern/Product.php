@@ -424,6 +424,11 @@ class Mirasvit_FeedExport_Model_Feed_Generator_Pattern_Product
 
     protected function _getChildProducts($product)
     {
+//        try{
+//          Mage::throwException("dfgdfgdf");
+//        } catch(Exception $e){
+//            Mage::logException($e,null, "_getChildProducts.log");
+//        }
         $connection = Mage::getSingleton('core/resource')->getConnection('read');
         $table      = Mage::getSingleton('core/resource')->getTableName('catalog_product_relation');
         $childIds   = array(0);
