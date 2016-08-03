@@ -110,7 +110,7 @@ i.flag {
 	border: none;
 	padding: 0;
 	margin-top: 40px;
-    width: 100%;
+    //width: 100%;
 	.ui-tabs-panel {
 		border-radius: 0;
 		border: 1px solid $color_e8e8e8;
@@ -150,7 +150,12 @@ i.flag {
 			opacity: 0.8;
 		}
 	}
-	ul.title_section {
+	.title_section {
+      margin-bottom:0px;
+      margin-left:0px;
+      padding-left:0px;
+      width:100%;
+
       padding: 0;
       list-style: none;
       max-height: 100%;
@@ -220,7 +225,7 @@ i.flag {
         height: 100%;
 
         li {
-          margin: 1px .2em 0 0;
+          margin: 1px 7px 0 0;
           display: inline-block;
           position: initial !important;
 
