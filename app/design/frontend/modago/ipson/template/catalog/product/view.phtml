@@ -299,9 +299,9 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		in_your_wishlist: <?php echo Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product) ? "true" : "false"; ?>
 	});
 	Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
-	Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
+	Mall.translate.add("added-to-shopping-list", "<?php echo Mage::helper("zolagocatalog")->__("Added to shopping list"); ?>");
 	Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
-	Mall.translate.add("add-to-favorites", "<?php echo $this->__("Add to favorites"); ?>");
+	Mall.translate.add("add-to-favorites", "<?php echo Mage::helper("zolagocatalog")->__("Add to shopping list"); ?>");
 	Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
 	Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
 	Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");

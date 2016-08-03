@@ -598,7 +598,7 @@ var Mall = {
     validateAddingToCart: function(id, minQty, maxQty){
         jQuery("#qty-error").hide();
         var quantity =  jQuery("#product-options input[name=quantity]").val();
-        if(quantity >= minQty && quantity <= maxQty){
+        if(quantity >= minQty && quantity <= maxQty && quantity > 0){
             Mall.addToCart(id, quantity);
         }else{
             jQuery("#qty-error").show();
