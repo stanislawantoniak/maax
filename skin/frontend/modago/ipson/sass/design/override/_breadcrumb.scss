@@ -19,7 +19,6 @@ ol.breadcrumb {
 
 ol.breadcrumb{
 	li {
-		color: #85807f;
 		font-size: 1.2em;
 		&:not(:first-child):before {
 			text-align: right;
@@ -31,5 +30,15 @@ ol.breadcrumb{
 	a::before{
 		font-family: "FontAwesome";
 		content: "\f104";
+	}
+}
+
+.catalog-product-view {
+	.breadcrumb {
+		font-size: 11px;
+		padding-left: 0;
+	}
+	.path_back_to_category {
+		text-transform: none;
 	}
 }

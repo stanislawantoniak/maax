@@ -8,7 +8,7 @@
         cursor:pointer;
         margin-left:12px;
         margin-bottom:12px;
-        &:nth-child(3n+1) {
+        &:nth-child(4n+1) {
           margin-left: 0;
         }
         span {
@@ -608,6 +608,13 @@ span.checked {
 	}
 }
 
+.suffix {
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-weight: 400;
+}
+
 .filter-type {
 	table {
 		td {
@@ -817,6 +824,7 @@ span.checked {
 	}
 	dl {
 		dt {
+			position: relative;
 			padding-left: 5px;
 			display:block;
 		}
@@ -865,15 +873,13 @@ span.checked {
 	#filter_recommended_products, #filter_product_flag_facet, #filter_flags_facet {
 		label {
 			position:relative;
+			width: 100%;
 			span {
 				display:inline-block;
 				height:17px;
 				width:85px;
 				padding-left: 0;
 				&+.suffix {
-					position:absolute;
-					left:115px;
-					top:0;
 					width:auto;
 				}
 			}
@@ -938,7 +944,7 @@ span.checked {
 			#slider-range {
 				margin-bottom: 10px;
 				margin-left: -16px;
-				width:147px;
+				//width:147px;
 			}
 			#od_do {
 				margin-top: 10px;

@@ -12,6 +12,9 @@
         }
     }
 }
+#rwd-complementary-product .box_listing_product .name_product {
+    overflow: visible;
+}
 .box_listing_product {
     background:$color_fff;
     .name_product {
@@ -47,7 +50,7 @@
                 padding: 7px 0 0;
             }
             .variants {
-                color: #3c3b3b;
+                color: #5c5c5c;
                 font-size: 13px;
                 margin-bottom: 0px;
             }
