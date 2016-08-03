@@ -298,17 +298,22 @@ i.flag {
 		.wrapper-addthis {
 			padding: 0;
 		}
-		#product-likeboxes {
-			.fa-list {
+		.product-likeboxes, .product-calculatorbox {
+			.fa-list, .fa-calculator {
 				margin-right: 6px;
 			}
 			a {
 				padding: 8px 10px;
 				background: $color_e8e8e8;
+				font-size: 13px;
+			}
+
+			@media (max-width: $screen-sm-max) {
+				margin-top: 15px;
 			}
 		}
 	}
-	.question p ,#product-likeboxes p  {
+	.question p, .product-likeboxes p, .product-calculatorbox p  {
 		a {
 			color: $colorSecondFont !important;
 			&:hover {
@@ -1056,10 +1061,27 @@ div[itemprop="description"] {
 	}
 }
 
+#calcuIframeContainer {
+  position: relative;
+  @media(max-width: $screen-xs-max) {
+    margin: 0;
+  }
+  #calculatorIframe {
+    width: 100%;
+    max-height:100%;
+    border: none;
+  }
+}
+
 @media (max-width: 450px) {
 	#tabelaRozmiarow {
 		.modal-dialog {
 			width: 88% !important;
 		}
 	}
+    #calculator {
+        .modal-dialog {
+            width: 88% !important;
+        }
+    }
 }
