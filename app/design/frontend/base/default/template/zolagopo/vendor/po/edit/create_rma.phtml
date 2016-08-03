@@ -100,7 +100,7 @@ $reasonOptions = $this->getRmaReasons();
 	var validator = null;
 
 	productRow.click(function(e){
-		if(!e.toElement.hasClassName('checkRmaItem')){
+		if(!e.target.hasClassName('checkRmaItem')){
 			jQuery(this).find(checkbox).click();
 		}
 		var productChecked = jQuery(this).find(checkbox).prop("checked");
