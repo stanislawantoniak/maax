@@ -332,6 +332,10 @@ jQuery.noConflict();
 					$('html, body').animate({
 						scrollTop: animeOffset
 					}, 800);
+
+                    $("#product_long_box").height(
+                        $("[name=tabs]:checked ~ article").height() + 140
+                    );
 				});
 
 			});
