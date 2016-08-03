@@ -5,22 +5,21 @@
     background-image: none;
     border-radius: 0;
     background-color: $color_fff;
-    border-color: #eee;
-    border-radius: 3px;
+    border-color: $color_f1f1f1;
 
     &:hover {
-      border-color: $gray-dark;
+      border-color: $color_f1f1f1;
       background-color: $color_fff;
 
     }
     &:focus {
-      border-color: $gray-dark;
+      border-color: $color_f1f1f1;
       background-color: $color_fff;
       box-shadow: none;
 
     }
     .selectboxit-text {
-      color: $gray-darker;
+      color: $color_7e7e7e;
       text-decoration: none;
       //        text-indent: 10px;
       font-family: $fontRegular;
@@ -32,16 +31,16 @@
       //@include sprite($selectMap, select_styled);
       //line-height: image-height(sprite-file($selectMap, select_styled));
       height: 29px;
-      width: 29px;
+      width: 16px;
 
       .caret {
         border: none;
       }
       .selectboxit-arrow {
         border: none;
-        top: 10px;
-        right: 7px;
-        font-size: 10px;
+        top: 14px;
+        right: 9px;
+        font-size: 9px;
       }
       .selectboxit-arrow:before {
         display: inline-block;

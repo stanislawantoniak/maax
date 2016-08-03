@@ -30,7 +30,8 @@
 }
 
 #product-options .fa-shopping-cart {
-	margin-right: -30px;
+	margin-right: 9px;
+	margin-left: -21px;
 	font-size: 16px;
 	position: relative;
 	color: $color_fff;
@@ -262,6 +263,9 @@ i.flag {
 		margin-bottom: 25px;
 		font-family: $font-family-base;
 		color: $text-color;
+		@media (max-width: 768px) {
+			margin-top: 80px;
+		}
 		p {
 			margin: 0;
 			font-family: $font-family-base;
@@ -599,7 +603,7 @@ i.flag {
 			line-height: 47px;
 			display: inline-block;
 			float: left;
-			text-transform: uppercase;
+			text-transform: none;
 			font-size: 14px;
 			color:$colorFont;
 			font-family: $fontRegular;
@@ -618,16 +622,14 @@ i.flag {
 		}
 		.size-box {
 			.sizes-content {
-				padding-left:15px;
 				.selectboxit-container {
 					span, .selectboxit-options a {
 						height:40px;
 						line-height: 38px;
 					}
 					.selectboxit-arrow-container {
-						background: $selectMap;
-						//@include sprite($selectMap, select_wf_disabled);
-						//line-height: image-height(sprite-file($selectMap, select_wf_disabled));
+						background: #e8e8e8;
+						border: 1px solid #ccc;
 					}
 				}
 			}
@@ -774,12 +776,17 @@ i.flag {
 			position:relative;
 			display:block;
 			font-size: 14px;
-			color: $colorSecondFont;
+			color: $color_7e7e7e;
+			text-decoration: underline;
 			white-space: nowrap;
 			float:none;
-			padding-top:3px;
+			margin: 0 0 0 14px;
 			&:hover {
-				text-decoration: underline;
+				text-decoration: none;
+			}
+			@media (max-width: 336px){
+				font-size: 12px;
+				margin-left: 12px;
 			}
 			svg {
 				path {
@@ -789,10 +796,6 @@ i.flag {
 				margin-left:0;
 			}
 			@media (max-width: 814px) {
-
-			}
-			@media (max-width: $screen-xs-max) {
-				margin-left:0px;
 
 			}
 			.linkToModal {
@@ -823,7 +826,7 @@ i.flag {
 
 		}
 		.size-box {
-			margin-bottom: 40px;
+			margin-bottom: 20px;
 		}
 	}
 	.action-box-bundle {
@@ -841,6 +844,10 @@ i.flag {
 
 		@media (max-width: 360px) {
 			font-size: 9px;
+		}
+		@media (max-width: 768px) {
+			margin-left: -20px;
+			margin-top: 20px;
 		}
 		.col-xs-6.text-right {
 			margin-top: 16px;
@@ -923,7 +930,7 @@ i.flag {
 			max-width: 175px;
 			margin: -5px 0 0;
 			padding-left: 34px;
-			width: 100%;
+			width: 175px;
 			overflow:hidden;
 			@media (min-width: $screen-lg-min) {
 				max-width:190px;

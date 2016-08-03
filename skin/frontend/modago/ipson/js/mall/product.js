@@ -219,47 +219,35 @@ Mall.product = {
 			});
 
 			if (showSelect) {
-				var labelText = jQuery('.size-label').text();
-				// insert option group
-				var groupElement = jQuery("<div/>", {
-					"class": "size"
-				}).appendTo(".size-box");
-				jQuery(".size-box").append(this._options_group_template);
-				// create label group
-				jQuery("<span/>", {
-					"class": "size-label col-sm-6 col-md-6 col-xs-12",
-					"html": (this._size_label + ":")
+            	// insert option group
+            	var groupElement = jQuery("<div/>", {
+            		"class": "size"
+            	}).appendTo(".size-box");
+            	jQuery(".size-box").append(this._options_group_template);
+            	// create label group
+            	// create form group for selectbox options
+            	var formGroupElementClass = (deskTopDevice) ? ' sizes-content' : ' sizes-content form-group select-size-mobile-trigger';
+            	var formGroupElement = jQuery("<div/>", {
+            		class: "row " + formGroupElementClass
+            	}).appendTo(groupElement);
 
-				}).appendTo(groupElement);
-
-
-				// create form group for selectbox options
-				var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
-				var formGroupElement = jQuery("<div/>", {
-					class: "" + formGroupElementClass
-				}).appendTo(groupElement);
-
-				//create select part
-				var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
-				var formGroupElementSelect = jQuery("<select/>", {
-					id: "select-data-id-" + group.id,
-					class: formGroupElementSelectClass
-				}).appendTo(formGroupElement);
+            	//create select part
+            	var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
+            	var formGroupElementSelect = jQuery("<select/>", {
+            		id: "select-data-id-" + group.id,
+            		class: formGroupElementSelectClass
+            	}).appendTo(formGroupElement);
 
 
-				jQuery.each(group.options, function (index, option) {
-					Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
-				});
+            	jQuery.each(group.options, function (index, option) {
+            		Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
+            	});
+            	jQuery(".sizes-content").append(this._size_table_template);
+                jQuery(".sizes-content a").css('display','inline-block');
 
-				this.applyAdditionalRules(group, formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-				if (deskTopDevice) {
-					jQuery('div.size-box div.size a').css('position', 'relative');
-					jQuery('div.size-box div.size a').css('top', '5px');
-				}
-			} else {
-				jQuery('div.size-box').remove();
-			}
-
+            } else {
+            	jQuery('.size-box div').remove();
+            }
 		}
 
 	},
