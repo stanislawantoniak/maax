@@ -8,7 +8,7 @@
 }
 
 .headroom--pinned {
-	top: -34px !important;
+	top: -40px !important;
 }
 
 body {
@@ -765,7 +765,7 @@ body {
 	//height: 85px;
 	height: 132px;
 	@include max-screen($screen-xs-max) {
-		height: 85px;
+		height: 95px;
 		//top: -34px !important;
 	}
 }
