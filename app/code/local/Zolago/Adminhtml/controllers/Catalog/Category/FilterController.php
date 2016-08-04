@@ -177,4 +177,9 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		return Mage::registry("current_category");
 	}
         
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/categories');  
+                
+    }
 }
