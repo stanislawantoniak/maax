@@ -23,7 +23,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                 ->joinField('qty', 'cataloginventory/stock_item', 'qty',
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
                 ->addStoreFilter();
-            $collection->addFieldToFilter("sku", array("in" => "88-133131-03"));
+            $collection->addFieldToFilter("sku","88-133131-03");
 //            if (!empty($productStatus))
 //                $collection->addFieldToFilter("status", $productStatus);
 //

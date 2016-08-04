@@ -100,23 +100,11 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
                 break;
 
             case 'qty':
-                $value = intval($row["stock_qty"]);
+                $value = isset($row["stock_qty"]) ? intval($row["stock_qty"]): 0;
                 break;
 
             case 'is_in_stock':
-                $stockItem = $product->getStockItem();
-                if (!($stockItem && $stockItem->getData('item_id'))) {
-                    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
-                }
-                if ($stockItem) {
-                    $value = $stockItem->getIsInStock();
-                } else {
-                    $value = 0;
-                }
-
-                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-                    $value = $product->getData("configurable_is_in_stock");
-                }
+                $value = isset($row["is_in_stock"]) ? intval($row["is_in_stock"]): 0;
                 break;
 
             case 'category_id':
