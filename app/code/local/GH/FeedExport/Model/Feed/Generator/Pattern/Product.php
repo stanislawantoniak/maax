@@ -19,6 +19,29 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
         if ($pattern['type'] == 'parent') {
             $product = $this->_getParentProduct($product);
         }
+        if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+            && ($pattern['key'] == "is_in_stock" || $pattern['key'] == "qty")
+        ) {
+            $products = $this->_getChildProducts($product);
+            $isChildInStock = 0;
+            $childQty = 0;
+            foreach ($products as $child) {
+                $childStockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($child->getId());
+                if ($childStockItem->getData("is_in_stock") == 1) {
+                    $isChildInStock = 1;
+                    $childQty += (int)$childStockItem->getData("qty");
+                    //break;
+                }
+            }
+            $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+            if($stockItem->getManageStock() == 0){
+                $product->setData("configurable_is_in_stock", $isChildInStock);
+            } else {
+                $product->setData("configurable_is_in_stock", $product->getData("is_in_stock"));
+            }
+
+            $product->setData("configurable_qty", $childQty);
+        }
 
         if ($pattern['type'] == 'grouped') {
             $products             = $this->_getChildProducts($product);
@@ -100,11 +123,36 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
                 break;
 
             case 'qty':
-                $value = isset($row["stock_qty"]) ? intval($row["stock_qty"]): 0;
+                $stockItem = $product->getStockItem();
+                if (!($stockItem && $stockItem->getData('item_id'))) {
+                    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+                }
+                if ($stockItem && $stockItem->getData('item_id')) {
+                    $product->setStockItem($stockItem);
+                    $value = ceil($stockItem->getQty());
+                } else {
+                    $value = 0;
+                }
+                $value = intval($value);
+                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+                    $value = $product->getData("configurable_qty");
+                }
                 break;
 
             case 'is_in_stock':
-                $value = isset($row["is_in_stock"]) ? intval($row["is_in_stock"]): 0;
+                $stockItem = $product->getStockItem();
+                if (!($stockItem && $stockItem->getData('item_id'))) {
+                    $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product->getId());
+                }
+                if ($stockItem) {
+                    $value = $stockItem->getIsInStock();
+                } else {
+                    $value = 0;
+                }
+
+                if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+                    $value = $product->getData("configurable_is_in_stock");
+                }
                 break;
 
             case 'category_id':
