@@ -5,6 +5,10 @@ $helper = Mage::helper("zolagosolrsearch");
 ?>
 <?php $key = $this->getFacetKey(); ?>
 <?php if($this->getCanShow()): ?>
+    <?php $item = $this->getAllItems(); ?>
+
+    <?php if (is_array($item) && !empty($item['children'])): ?>
+
     <?php
         $backUrl = $this->getParentCategoryUrl();
         $backLabel = strtolower($this->escapeHtml($this->getParentCategoryLabel()));
@@ -14,6 +18,7 @@ $helper = Mage::helper("zolagosolrsearch");
         $isParrentRoot = $this->getIsParentRootCategory();
         $canShowBackToCampaign = $this->getCanShowBackToCampaign();
     ?>
+
 	<div class="section clearfix" data-xs-rolled="open" data-lg-rolled="<?php echo $sectionClass; ?>">
 		<h3 class="<?php echo $sectionClass; ?>">
             <span>
@@ -23,8 +28,8 @@ $helper = Mage::helper("zolagosolrsearch");
         </h3>
 		<div class="content" id="filter_category">
 			<dl>
-			<?php $item = $this->getAllItems(); ?>
-				<?php if (is_array($item)): ?>
+
+
 					<?php if($item['is_root_category']): ?>
 						<?php foreach($item['children'] as $child_item=>$child_val): ?>
 							<?php if($this->getCanShowItem($child_val['count'])): ?>							    
@@ -38,7 +43,7 @@ $helper = Mage::helper("zolagosolrsearch");
 							<?php endif;?>
 						<?php endforeach; ?>
 						<?php endif; ?>
-				<?php endif; ?>
+
 			</dl>
 			<div class="action clearfix">
 			<?php if($backUrl != null) : ?>
@@ -68,4 +73,5 @@ $helper = Mage::helper("zolagosolrsearch");
 		</div>
 
 	</div>
+    <?php endif; ?>
 <?php endif; ?>
