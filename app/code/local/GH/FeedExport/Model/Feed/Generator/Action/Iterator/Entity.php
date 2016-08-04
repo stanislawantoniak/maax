@@ -74,7 +74,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                 ->addRateVotes()
                 ->load();
         }
-
+        Mage::log($collection->getSize(), null, "yyy.log");
         return $collection;
     }
 

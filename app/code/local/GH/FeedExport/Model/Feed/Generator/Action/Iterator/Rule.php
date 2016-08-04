@@ -37,7 +37,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
             }
         }
         //////////////
-
+        Mage::log($collection->getSize(), null, "xxx.log");
         Mage::app()->getStore()->setId(0);
         $this->_rule->getConditions()->collectValidatedAttributes($collection);
 
