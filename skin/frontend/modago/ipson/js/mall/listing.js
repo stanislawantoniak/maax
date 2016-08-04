@@ -122,6 +122,36 @@ Mall.listing = {
 		this.positionFiltersAfterLpBannerLoad();
 
 		this.initShuffle();
+
+		this.initAddToBasketFromListing();
+	},
+
+	initAddToBasketFromListing: function() {
+		jQuery(document).delegate('.qty_more', 'click', function (e) {
+			e.preventDefault();
+			var quantity = parseInt(jQuery(this).parents(".quantity_block").find("input[name=quantity]").val());
+			var max = parseInt(jQuery(this).attr("data-qty"));
+			if (quantity < max) {
+				quantity++;
+				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(quantity)
+					.parents(".qty-box").tooltip('destroy');
+			} else {
+				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(max)
+					.parents(".qty-box").tooltip('show');
+			}
+		});
+		jQuery(document).delegate('.qty_less', 'click', function (e) {
+			e.preventDefault();
+			var quantity = parseInt(jQuery(this).parents(".quantity_block").find("input[name=quantity]").val());
+			var min = parseInt(jQuery(this).attr("data-min_qty"));
+			if (quantity > min) {
+				quantity--;
+				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(quantity)
+					.parents(".qty-box").tooltip('destroy');
+			} else {
+				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(min);
+			}
+		});
 	},
 
     initShuffle: function() {
@@ -375,29 +405,7 @@ Mall.listing = {
 
 		return eachItemsHtml;
 	},
-	addListeners: function(id, min, max) {
-		jQuery("#qty-error-" + id).hide();
-		jQuery("#input-box-" + id + " input[name=quantity]").change(function(){
-			jQuery("#qty-error-" + id).hide();
-		});
-		var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
-		jQuery("#qty-more-" + id).click(function(e){
-			e.preventDefault();
-			jQuery("#qty-error-" + id).hide();
-			if(quantity < max) {
-				quantity++;
-				jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
-			}
-		});
-		jQuery("#qty-less-" + id).click(function(e){
-			e.preventDefault();
-			jQuery("#qty-error-" + id).hide();
-			if(quantity > min){
-				quantity--;
-				jQuery("#input-box-" + id + " input[name=quantity]").val(quantity);
-			}
-		});
-	},
+
 	/**
 	 * Creates single product container for listing.
      *
@@ -450,10 +458,11 @@ Mall.listing = {
 								'<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">' +
 									'<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">';
 		if (product[16] == 'simple')
-			data +=						'<a href="#" class="qty_less" id="qty-less-' + product[0] + '">-</a>' +
-										'<div class="qty" id="input-box-' + product[0] + '"><input type="text" name="quantity" value="1"/></div>' +
-										'<a href="#" class="qty_more" id="qty-more-' + product[0] + '">+</a>' +
-										'<label id="qty-error-' + product[0] + '" class="error" style="display: none;">' + Mall.translate.__("Maximum quantity") + ' ' + product[17] + '</label>';
+			data +=						'<a href="#" class="qty_less" id="qty-less-' + product[0] + '" data-min_qty="' + product[18]+'">-</a>' +
+										'<div class="qty qty-box" id="input-box-' + product[0] + '"' +
+											'title="' + Mall.translate.__("Maximum quantity") + '&nbsp;' + product[17] + '"' +
+											'data-toggle="tooltip" data-placemen="top"><input type="text" name="quantity" value="1"/></div>' +
+										'<a href="#" class="qty_more" id="qty-more-' + product[0] + '" data-qty="' + product[17] + '">+</a>';
 		else data +=					'<p class="variants">' + Mall.translate.__("Available in several variants") + '</p>';
 		data += 					'</div>' +
 									'<div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">' +
@@ -474,13 +483,6 @@ Mall.listing = {
 						 '</a>' +
 					 '</div>' +
 				 '</div>';
-
-		(function test() {
-			if (jQuery('#prod-' + product[0]).length)
-				Mall.listing.addListeners(product[0], product[18], product[17]);
-			else setTimeout(test , 100);
-		})();
-
 		return data;
     },
 
