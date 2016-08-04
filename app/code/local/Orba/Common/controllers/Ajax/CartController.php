@@ -67,12 +67,10 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
                            'quantity' => (int)$item->getQty(),
                            'vendor' => Mage::helper('core')->escapeHtml($vendor),
                            'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
-                           'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer'))
+                           'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
+                           'variant' => $variant ? (string)$product->getResource()->getAttribute('size')->getSource()->getOptionText($variant) : ''
                        )
                    );
-
-		if ($variant) $details['variant'] = (string)$product->getResource()->getAttribute('size')->getSource()->getOptionText($variant);
-
         return $details;
     }
 

@@ -30,7 +30,8 @@
 }
 
 #product-options .fa-shopping-cart {
-	margin-right: -30px;
+	margin-right: 9px;
+	margin-left: -21px;
 	font-size: 16px;
 	position: relative;
 	color: $color_fff;
@@ -144,13 +145,11 @@ i.flag {
 	#submit-review {
 		font-family: $fontRegular;
 		font-size: 13px;
-		padding-left:35px;
-		padding-right:35px;
 		&:hover {
 			opacity: 0.8;
 		}
 	}
-	.title_section {
+	>.title_section {
       margin-bottom:0px;
       margin-left:0px;
       padding-left:0px;
@@ -160,13 +159,13 @@ i.flag {
       list-style: none;
       max-height: 100%;
 
-      li {
+      >li {
 
-        input {
+        >input[type=radio] {
           display: none;
         }
 
-        label {
+        >label {
           text-transform: uppercase;
           font-weight: bold;
           cursor: pointer;
@@ -176,23 +175,23 @@ i.flag {
           border-bottom: 1px #eee solid;
           margin-bottom: 0;
 
-          .fa {
+          >.fa {
             visibility: hidden;
           }
         }
 
-        article {
+        >article {
           overflow: hidden;
           visibility: hidden;
           height: 0;
           border-bottom: 1px #eee solid;
 
-          .inner {
+          >.inner {
             padding: 10px;
           }
         }
 
-        input:checked ~ article {
+        >input:checked ~ article {
           height: auto;
           visibility: visible;
         }
@@ -262,6 +261,9 @@ i.flag {
 		margin-bottom: 25px;
 		font-family: $font-family-base;
 		color: $text-color;
+		@media (max-width: 768px) {
+			margin-top: 80px;
+		}
 		p {
 			margin: 0;
 			font-family: $font-family-base;
@@ -298,17 +300,22 @@ i.flag {
 		.wrapper-addthis {
 			padding: 0;
 		}
-		#product-likeboxes {
-			.fa-list {
+		.product-likeboxes, .product-calculatorbox {
+			.fa-list, .fa-calculator {
 				margin-right: 6px;
 			}
 			a {
 				padding: 8px 10px;
 				background: $color_e8e8e8;
+				font-size: 13px;
+			}
+
+			@media (max-width: $screen-sm-max) {
+				margin-top: 15px;
 			}
 		}
 	}
-	.question p ,#product-likeboxes p  {
+	.question p, .product-likeboxes p, .product-calculatorbox p  {
 		a {
 			color: $colorSecondFont !important;
 			&:hover {
@@ -599,7 +606,7 @@ i.flag {
 			line-height: 47px;
 			display: inline-block;
 			float: left;
-			text-transform: uppercase;
+			text-transform: none;
 			font-size: 14px;
 			color:$colorFont;
 			font-family: $fontRegular;
@@ -618,16 +625,14 @@ i.flag {
 		}
 		.size-box {
 			.sizes-content {
-				padding-left:15px;
 				.selectboxit-container {
 					span, .selectboxit-options a {
 						height:40px;
 						line-height: 38px;
 					}
 					.selectboxit-arrow-container {
-						background: $selectMap;
-						//@include sprite($selectMap, select_wf_disabled);
-						//line-height: image-height(sprite-file($selectMap, select_wf_disabled));
+						background: #e8e8e8;
+						border: 1px solid #ccc;
 					}
 				}
 			}
@@ -651,15 +656,15 @@ i.flag {
 					width:100%;
 					height:auto;
 					@include border-radius(3px);
-					border:1px solid $color_fff;
+					border:1px solid $color_f1f1f1;
 				}
 				&:hover {
 					&+img {
-						border-color:$color_999;
+						border-color:$color_7e7e7e;
 					}
 				}
 				img:hover {
-					border-color:$color_999;
+					border-color:$color_7e7e7e;
 				}
 				[type="radio"]:checked {
 					&+img {
@@ -672,11 +677,47 @@ i.flag {
 	}
 	.color-box-bundle  {
 		.color-label {
-			line-height: 57px;
+			line-height: 30px;
 		}
 		.form-group {
+			margin-bottom: 5px;
 			label {
 				height:54px;
+			}
+		}
+		.rwd-color {
+			width: 170px;
+			.rwd-prev, .rwd-next {
+				position: absolute;
+				top: 31px;
+				font-size: 20px;
+				color: $color_ccc;
+				&:hover {
+					color: $color_000;
+				}
+				@media (max-width: 814px){
+					top: 12px;
+				}
+			}
+			.rwd-next {
+				&:before {
+					content: '\f105';
+					display: inline-block;
+					font-family: FontAwesome;
+					font-style: normal;
+					font-weight: normal;
+					line-height: 1;
+				}
+			}
+			.rwd-prev {
+				&:before {
+					content: '\f104';
+					display: inline-block;
+					font-family: FontAwesome;
+					font-style: normal;
+					font-weight: normal;
+					line-height: 1;
+				}
 			}
 		}
 	}
@@ -774,12 +815,17 @@ i.flag {
 			position:relative;
 			display:block;
 			font-size: 14px;
-			color: $colorSecondFont;
+			color: $color_7e7e7e;
+			text-decoration: underline;
 			white-space: nowrap;
 			float:none;
-			padding-top:3px;
+			margin: 0 0 0 14px;
 			&:hover {
-				text-decoration: underline;
+				text-decoration: none;
+			}
+			@media (max-width: 336px){
+				font-size: 12px;
+				margin-left: 12px;
 			}
 			svg {
 				path {
@@ -789,10 +835,6 @@ i.flag {
 				margin-left:0;
 			}
 			@media (max-width: 814px) {
-
-			}
-			@media (max-width: $screen-xs-max) {
-				margin-left:0px;
 
 			}
 			.linkToModal {
@@ -823,7 +865,7 @@ i.flag {
 
 		}
 		.size-box {
-			margin-bottom: 40px;
+			margin-bottom: 20px;
 		}
 	}
 	.action-box-bundle {
@@ -841,6 +883,10 @@ i.flag {
 
 		@media (max-width: 360px) {
 			font-size: 9px;
+		}
+		@media (max-width: 768px) {
+			margin-left: -20px;
+			margin-top: 20px;
 		}
 		.col-xs-6.text-right {
 			margin-top: 16px;
@@ -923,7 +969,7 @@ i.flag {
 			max-width: 175px;
 			margin: -5px 0 0;
 			padding-left: 34px;
-			width: 100%;
+			width: 175px;
 			overflow:hidden;
 			@media (min-width: $screen-lg-min) {
 				max-width:190px;
@@ -1024,7 +1070,6 @@ div[itemprop="description"] {
 
 #note_product {
 	.main {
-		padding: 0 35px 0 0 !important;
 		#no-opinion-statistics {
 			p {
 				margin-bottom: 30px;
@@ -1056,10 +1101,27 @@ div[itemprop="description"] {
 	}
 }
 
+#calcuIframeContainer {
+  position: relative;
+  @media(max-width: $screen-xs-max) {
+    margin: 0;
+  }
+  #calculatorIframe {
+    width: 100%;
+    max-height:100%;
+    border: none;
+  }
+}
+
 @media (max-width: 450px) {
 	#tabelaRozmiarow {
 		.modal-dialog {
 			width: 88% !important;
 		}
 	}
+    #calculator {
+        .modal-dialog {
+            width: 88% !important;
+        }
+    }
 }

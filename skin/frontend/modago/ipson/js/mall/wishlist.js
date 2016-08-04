@@ -278,11 +278,11 @@ Mall.wishlist = {
                 "style": "color: #4f4f4f"
             }).wrap("<div/>").parent().html();
             likeHtml += jQuery("<span/>", {
-                html: '<i class="fa fa-list" aria-hidden="true"></i>' + Mall.translate.__("remove-from-favorites", "remove from favorites")
+                html: '<i class="fa fa-list" aria-hidden="true"></i>' + Mall.translate.__("added-to-shopping-list", "Added to shopping list")
             }).wrap("<div/>").parent().html();
         } else {
             likeHtml += jQuery("<span/>", {
-                html: '<i class="fa fa-list" aria-hidden="true"></i>' +  Mall.translate.__("remove-from-favorites", "remove from favorites")
+                html: '<i class="fa fa-list" aria-hidden="true"></i>' +  Mall.translate.__("added-to-shopping-list", "Added to shopping list")
             }).wrap("<div/>").parent().html();
         }
 
@@ -323,14 +323,14 @@ Mall.wishlist = {
                 href: "#",
                 onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
                 "class": "addLike",
-                html: '<i class="fa fa-list" aria-hidden="true"></i>' + Mall.translate.__("add-to-favorites", "Add to favorites")
+                html: '<i class="fa fa-list" aria-hidden="true"></i>' + Mall.translate.__("add-to-favorites", "Add to shopping list")
             }).wrap("<div/>").parent().html();
         } else {
             likeHtml += jQuery("<a/>", {
                 href: "#",
                 onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
                 "class": "addLike",
-                html: '<i class="fa fa-list" aria-hidden="true"></i>' + Mall.translate.__("add-to-favorites", "Add to favorites")
+                html: '<i class="fa fa-list" aria-hidden="true"></i>' + Mall.translate.__("add-to-favorites", "Add to shopping list")
             }).wrap("<div/>").parent().html();
         }
 

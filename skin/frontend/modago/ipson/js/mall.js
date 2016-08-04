@@ -260,7 +260,7 @@ var Mall = {
 		// Process product context 
 
 
-		var likeBoxes = jQuery("#product-likeboxes");
+		var likeBoxes = jQuery(".product-likeboxes");
 
 		if(data.content.product && likeBoxes.length){
 			var p = data.content.product, 
@@ -289,8 +289,8 @@ var Mall = {
 			boxAdded = jQuery(
 				'<div class="addedLike-box" id="added-wishlist">' + 
 					'<a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct('+p.entity_id+');return false;"><i class="fa fa-list" aria-hidden="true"></i>'+
-					 Mall.i18nValidation.__("remove-from-favorites") +
-					'</a>' + 
+					 Mall.i18nValidation.__("added-to-shopping-list") +
+					'</a>' +
 				'</div>');
 
 			boxLoading = jQuery(
@@ -598,7 +598,7 @@ var Mall = {
     validateAddingToCart: function(id, minQty, maxQty){
         jQuery("#qty-error").hide();
         var quantity =  jQuery("#product-options input[name=quantity]").val();
-        if(quantity >= minQty && quantity <= maxQty){
+        if(quantity >= minQty && quantity <= maxQty && quantity > 0){
             Mall.addToCart(id, quantity);
         }else{
             jQuery("#qty-error").show();

@@ -25,7 +25,6 @@ $productAttrs = array();
 if ($_product->getTypeId() == 'configurable') {
 	$productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
 }
-
 $maxQty = (int)$_product->getData('stock_item')->getQty();
 $minQty = (int)$_product->getData('stock_item')->getMinSaleQty();
 
@@ -153,7 +152,35 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		?>
 		<!--    Meta tags-->
 	<?php endif; ?>
+	<!--        catalog.product.related-->
+	<?php echo $this->getChildHtml('catalog.product.related'); ?>
+	<!--        catalog.product.related end-->
+
 	<div id="product-options" class="size-box-bundle">
+		<div class="block_to_size">
+			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+				<?php if (!empty($productAttrs)) : ?>
+					<?php foreach ($productAttrs as $_attribute) : ?>
+						<?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+							<?php $haveSizes = true; ?>
+							<div class="size-box-label clearfix clr">
+								<div class="size-label"><?php  echo $hlp->__("Size label"); ?>:</div>
+							</div>
+							<div class="size-box clearfix clr">
+								<div>
+									<a style="display:none;" href="#" class="view-sizing" data-toggle="modal"
+									   data-target="#tabelaRozmiarow">
+										<?php if (!empty($sizeTableValue)) : ?>
+											<?php echo $this->__("Sizes"); ?>
+										<?php endif; ?>
+									</a>
+								</div>
+							</div>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			<?php endif; ?>
+		</div>
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
 			<div class="qty_label"><?php echo $this->__("Quantity").":";?></div>
 			<a href="#" class="qty_less">-</a>
@@ -162,37 +189,13 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			<label id="qty-error" class="error"><?php echo $hlp->__("Maximum quantity %s", $maxQty); ?></label>
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
-			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-				<?php if (!empty($productAttrs)) : ?>
-					<?php foreach ($productAttrs as $_attribute) : ?>
-						<?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
-							<?php $haveSizes = true; ?>
-							<div class="size-box-label clearfix clr">
-								<div class="size-label"><?php /* echo Mage::helper('wfwf')->__("Size label"); */ ?></div>
-							</div>
-							<div class="size-box clearfix clr">
-								<div>
-									<a href="#" class="view-sizing" data-toggle="modal"
-									   data-target="#tabelaRozmiarow">
-										<?php if (!empty($sizeTableValue)) : ?>
-											<img src="<?php echo $this->getSkinUrl("images/svg/ruler.svg");?>"><?php echo $this->__("Sizes"); ?>
-										<?php endif; ?>
-									</a>
-								</div>
-							</div>
-
-						<?php endif; ?>
-					<?php endforeach; ?>
-				<?php endif; ?>
-			<?php endif; ?>
 			<div class="action-box-bundle clearfix">
 				<?php if ($isSalable): ?>
-					<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 					<button class="btn button button-primary addBasket"
 							<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
 							data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 							id="add-to-cart"
-							onclick="Mall.validateAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><?php echo $this->__("Add to cart");
+							onclick="Mall.validateAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
 						?></button>
 				<?php endif; ?>
 			</div>
@@ -211,14 +214,26 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 	</div>
 
 	<div id="box-social" class="row">
-		<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
-			<div id="product-likeboxes">
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="product-likeboxes">
 				<div class="addLike-box" id="notadded-wishlist">
 					<!-- placebo -->
 					<span class="product-context-like-count" style="display: none"></span>
 					<p>
 						<a href="#" onclick="Mall.wishlist.addToWishlistFromProduct(<?php echo $_product->getEntityId(); ?>);return false;" class="addLike">
-							<i class="fa fa-list" aria-hidden="true"></i><?php echo $this->__("Add to favorites"); ?></span>
+							<i class="fa fa-list" aria-hidden="true"></i><?php echo Mage::helper("zolagocatalog")->__("Add to shopping list"); ?></span>
+						</a>
+					</p>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="product-calculatorbox">
+				<div>
+					<p>
+						<a href="#" data-toggle="modal" data-target="#calculator">
+							<i class="fa fa-calculator" aria-hidden="true"></i><?php echo $this->__("Mortgage calculator"); ?></span>
 						</a>
 					</p>
 				</div>

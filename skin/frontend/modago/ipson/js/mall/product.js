@@ -219,47 +219,35 @@ Mall.product = {
 			});
 
 			if (showSelect) {
-				var labelText = jQuery('.size-label').text();
-				// insert option group
-				var groupElement = jQuery("<div/>", {
-					"class": "size"
-				}).appendTo(".size-box");
-				jQuery(".size-box").append(this._options_group_template);
-				// create label group
-				jQuery("<span/>", {
-					"class": "size-label col-sm-6 col-md-6 col-xs-12",
-					"html": (this._size_label + ":")
+            	// insert option group
+            	var groupElement = jQuery("<div/>", {
+            		"class": "size"
+            	}).appendTo(".size-box");
+            	jQuery(".size-box").append(this._options_group_template);
+            	// create label group
+            	// create form group for selectbox options
+            	var formGroupElementClass = (deskTopDevice) ? ' sizes-content' : ' sizes-content form-group select-size-mobile-trigger';
+            	var formGroupElement = jQuery("<div/>", {
+            		class: "row " + formGroupElementClass
+            	}).appendTo(groupElement);
 
-				}).appendTo(groupElement);
-
-
-				// create form group for selectbox options
-				var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
-				var formGroupElement = jQuery("<div/>", {
-					class: "" + formGroupElementClass
-				}).appendTo(groupElement);
-
-				//create select part
-				var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
-				var formGroupElementSelect = jQuery("<select/>", {
-					id: "select-data-id-" + group.id,
-					class: formGroupElementSelectClass
-				}).appendTo(formGroupElement);
+            	//create select part
+            	var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
+            	var formGroupElementSelect = jQuery("<select/>", {
+            		id: "select-data-id-" + group.id,
+            		class: formGroupElementSelectClass
+            	}).appendTo(formGroupElement);
 
 
-				jQuery.each(group.options, function (index, option) {
-					Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
-				});
+            	jQuery.each(group.options, function (index, option) {
+            		Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
+            	});
+            	jQuery(".sizes-content").append(this._size_table_template);
+                jQuery(".sizes-content a").css('display','inline-block');
 
-				this.applyAdditionalRules(group, formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-				if (deskTopDevice) {
-					jQuery('div.size-box div.size a').css('position', 'relative');
-					jQuery('div.size-box div.size a').css('top', '5px');
-				}
-			} else {
-				jQuery('div.size-box').remove();
-			}
-
+            } else {
+            	jQuery('.size-box div').remove();
+            }
 		}
 
 	},
@@ -1092,12 +1080,25 @@ Mall.product = {
         initReleatedCarousel: function() {
             var rwd_color = this.getReleated();
             rwd_color.rwdCarousel({
-                items:5,
+                items:3,
                 navigation : true,
+                touchDrag: true,
                 pagination: false,
                 itemsScaleUp: false,
                 responsive: false,
-                rewindNav : false
+                mouseDrag:true,
+                rewindNav : false,
+                afterInit : function(el) {
+                    var items = Mall.product.gallery.getReleated().find('.rwd-item');
+                    Mall.product.gallery.getReleated().find('.up').addClass('disabled');
+                    if (items.length <= 3 ) {
+                        Mall.product.gallery.getReleated().find('.rwd-prev, .rwd-next').addClass('disabled');
+                    }else{
+                        jQuery('.color-box-bundle .rwd-color').css('padding', '0 0 0 13px');
+                        jQuery('.color-box-bundle .rwd-color .rwd-prev').css('left', '0px');
+                        jQuery('.color-box-bundle .rwd-color .rwd-next').css('right', '-14px');
+                    }
+                }
             });
         },
 
@@ -1200,7 +1201,37 @@ Mall.product = {
 		    setContent: function(content) {
 			    this._content = content;
 		    }
-	    }
+	    },
+
+		calculator: {
+			_content: "",
+			_iframe_id: "calculatorIframe",
+			_iframe: "",
+			_doc: "",
+			init: function() {
+				this._doc = document.getElementById(this._iframe_id).contentWindow.document;
+				this._doc.open();
+				this._doc.write(this.getContent());
+				this._doc.close();
+				this._iframe = jQuery('#'+this._iframe_id);
+				this.resize();
+				jQuery('#tabelaRozmiarow').on('shown.bs.modal',Mall.product.sizetable.resize);
+				jQuery(window).resize(this.resize);
+			},
+			resize: function() {
+				var body = Mall.product.sizetable._doc.body;
+				Mall.product.sizetable._iframe.css('height','');
+				Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
+				Mall.product.sizetable._iframe.css('width','');
+				Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+			},
+			getContent: function() {
+				return this._content;
+			},
+			setContent: function(content) {
+				this._content = content;
+			}
+		}
 
     }
 };
