@@ -145,13 +145,11 @@ i.flag {
 	#submit-review {
 		font-family: $fontRegular;
 		font-size: 13px;
-		padding-left:35px;
-		padding-right:35px;
 		&:hover {
 			opacity: 0.8;
 		}
 	}
-	.title_section {
+	>.title_section {
       margin-bottom:0px;
       margin-left:0px;
       padding-left:0px;
@@ -161,13 +159,13 @@ i.flag {
       list-style: none;
       max-height: 100%;
 
-      li {
+      >li {
 
-        input {
+        >input[type=radio] {
           display: none;
         }
 
-        label {
+        >label {
           text-transform: uppercase;
           font-weight: bold;
           cursor: pointer;
@@ -177,23 +175,23 @@ i.flag {
           border-bottom: 1px #eee solid;
           margin-bottom: 0;
 
-          .fa {
+          >.fa {
             visibility: hidden;
           }
         }
 
-        article {
+        >article {
           overflow: hidden;
           visibility: hidden;
           height: 0;
           border-bottom: 1px #eee solid;
 
-          .inner {
+          >.inner {
             padding: 10px;
           }
         }
 
-        input:checked ~ article {
+        >input:checked ~ article {
           height: auto;
           visibility: visible;
         }
@@ -1036,7 +1034,6 @@ div[itemprop="description"] {
 
 #note_product {
 	.main {
-		padding: 0 35px 0 0 !important;
 		#no-opinion-statistics {
 			p {
 				margin-bottom: 30px;
