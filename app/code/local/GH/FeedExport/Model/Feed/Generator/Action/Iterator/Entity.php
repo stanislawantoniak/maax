@@ -22,12 +22,12 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             $collection = Mage::getModel('catalog/product')->getCollection()
                 ->joinField('qty', 'cataloginventory/stock_item', 'qty',
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
-                ;
+            ;
             $storeId = $feed->getStoreId();
-            //$collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+            $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
 
 
-            //$collection->addFieldToFilter("sku","88-133131-03");
+            $collection->addFieldToFilter("sku","88-133131-03");
             if (!empty($productStatus))
                 $collection->addFieldToFilter("status", $productStatus);
 
@@ -37,20 +37,20 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             if (!empty($productTypeId))
                 $collection->addFieldToFilter("type_id", $productTypeId);
 
+            $collection->addStoreFilter();
+//
 
 //            if ($productInventoryIsInStock) {
 //                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
-//                    $collection->getSelect()->where("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+//                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 //                }
 //                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_OUT_OF_STOCK){
-//                    $collection->getSelect()->where("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
+//                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
 //                }
 //            }
 
-            $collection->addStoreFilter();
 
-
-
+            Mage::log($collection->getSize(), null, "yyy1.log");
             if (count($this->getFeed()->getRuleIds()) || Mage::app()->getRequest()->getParam('skip')) {
                 $collection->getSelect()->joinLeft(
                     array('rule' => Mage::getSingleton('core/resource')->getTableName('feedexport/feed_product')),
@@ -58,7 +58,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                     ->where('rule.feed_id = ?', $this->getFeed()->getId())
                     ->where('rule.is_new = 1');
             }
-
+            Mage::log($collection->getSize(), null, "yyy2.log");
         } elseif ($this->_type == 'category') {
             $root = Mage::getModel('catalog/category')->load($this->getFeed()->getStore()->getRootCategoryId());
 
