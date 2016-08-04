@@ -259,14 +259,10 @@ footer.footer {
       border: 1px solid #fff !important;
       color: #fff;
       text-transform: uppercase;
-      padding: 6px 17px 6px 15px;
+      padding: 6px 10px 6px 15px;
       margin: 0;
       display: block;
       overflow: hidden;
-      //&:hover {
-      //  background-color:$color_fff;
-      //  color:#262626;
-      //}
     }
     @media screen and (max-width: $screen-md-max) {
       margin: 20px 0 0;
