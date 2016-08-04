@@ -32,7 +32,6 @@ $helper = Mage::helper("zolagosolrsearch");
 							<?php endif;?>
 						<?php endforeach; ?>
 					<?php else: ?>
-					<dt><?php echo $item['text']; ?>&nbsp;<span class="suffix">(<?php echo $item['total'] ?>)</span></dt>
 						<?php foreach($item['children'] as $child_item=>$child_val): ?>
 							<?php if($this->getCanShowItem($child_val['count'])): ?>
 								<dd><a data-params='<?php echo $item['params'];?>' href="<?php echo $child_val['url'] ?>" class="simpleChild"><span><?php echo $child_val['text']; ?></span>&nbsp;<span class="suffix">(<?php echo $child_val['count']; ?>)</span></a></dd>

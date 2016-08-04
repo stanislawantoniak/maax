@@ -46,10 +46,6 @@
 			}
 			dd {
 				a {
-					&:before {
-						content: "-";
-						padding: 0 5px 0 0;
-					}
 					.suffix {
 						float: right;
 					}
@@ -127,7 +123,7 @@
 			margin-bottom: 10px;
 		}
 		dd {
-			margin-left: 10px;
+
 			a {
 				padding:8px 0;
 				display:block;
