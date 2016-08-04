@@ -1080,12 +1080,25 @@ Mall.product = {
         initReleatedCarousel: function() {
             var rwd_color = this.getReleated();
             rwd_color.rwdCarousel({
-                items:5,
+                items:3,
                 navigation : true,
+                touchDrag: true,
                 pagination: false,
                 itemsScaleUp: false,
                 responsive: false,
-                rewindNav : false
+                mouseDrag:true,
+                rewindNav : false,
+                afterInit : function(el) {
+                    var items = Mall.product.gallery.getReleated().find('.rwd-item');
+                    Mall.product.gallery.getReleated().find('.up').addClass('disabled');
+                    if (items.length <= 3 ) {
+                        Mall.product.gallery.getReleated().find('.rwd-prev, .rwd-next').addClass('disabled');
+                    }else{
+                        jQuery('.color-box-bundle .rwd-color').css('padding', '0 0 0 13px');
+                        jQuery('.color-box-bundle .rwd-color .rwd-prev').css('left', '0px');
+                        jQuery('.color-box-bundle .rwd-color .rwd-next').css('right', '-14px');
+                    }
+                }
             });
         },
 
