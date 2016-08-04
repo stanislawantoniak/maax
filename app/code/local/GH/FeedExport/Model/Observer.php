@@ -31,7 +31,7 @@ class GH_FeedExport_Model_Observer
         // array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
         );
         $collection->addExpressionAttributeToSelect('is_in_stock',
-            new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
+            new Zend_Db_Expr('cataloginventory_stock_status.stock_status'),
             array()
         );
 
