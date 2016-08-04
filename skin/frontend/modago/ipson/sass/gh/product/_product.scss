@@ -658,15 +658,15 @@ i.flag {
 					width:100%;
 					height:auto;
 					@include border-radius(3px);
-					border:1px solid $color_fff;
+					border:1px solid $color_f1f1f1;
 				}
 				&:hover {
 					&+img {
-						border-color:$color_999;
+						border-color:$color_7e7e7e;
 					}
 				}
 				img:hover {
-					border-color:$color_999;
+					border-color:$color_7e7e7e;
 				}
 				[type="radio"]:checked {
 					&+img {
@@ -679,11 +679,47 @@ i.flag {
 	}
 	.color-box-bundle  {
 		.color-label {
-			line-height: 57px;
+			line-height: 30px;
 		}
 		.form-group {
+			margin-bottom: 5px;
 			label {
 				height:54px;
+			}
+		}
+		.rwd-color {
+			width: 170px;
+			.rwd-prev, .rwd-next {
+				position: absolute;
+				top: 31px;
+				font-size: 20px;
+				color: $color_ccc;
+				&:hover {
+					color: $color_000;
+				}
+				@media (max-width: 814px){
+					top: 12px;
+				}
+			}
+			.rwd-next {
+				&:before {
+					content: '\f105';
+					display: inline-block;
+					font-family: FontAwesome;
+					font-style: normal;
+					font-weight: normal;
+					line-height: 1;
+				}
+			}
+			.rwd-prev {
+				&:before {
+					content: '\f104';
+					display: inline-block;
+					font-family: FontAwesome;
+					font-style: normal;
+					font-weight: normal;
+					line-height: 1;
+				}
 			}
 		}
 	}
