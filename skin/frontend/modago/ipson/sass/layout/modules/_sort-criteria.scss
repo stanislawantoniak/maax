@@ -35,7 +35,7 @@
 	}
     ul.sort {
       margin-left: 290px;
-      @media (max-width: $screen-sm-max) {
+      @media (max-width: $screen-sm-to-smmd-max) {
         margin-left: 0 !important;
       }
     }
