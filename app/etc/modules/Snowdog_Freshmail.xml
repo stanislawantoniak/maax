@@ -7,7 +7,7 @@
 <config>
     <modules>
         <Snowdog_Freshmail>
-            <active>true</active>
+            <active>false</active>
             <codePool>community</codePool>
             <depends>
                 <Mage_Newsletter/>
