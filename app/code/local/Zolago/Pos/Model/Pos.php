@@ -3,16 +3,22 @@
 /**
  * Class Zolago_Pos_Model_Pos
  *
+ * @method string getName()
  * @method string getCity()
  * @method string getStreet()
  * @method string getPostcode()
- *
+ * @method string getExternalId()
  * @method int getShowOnMap()
  * @method string getMapName()
  * @method string getMapLatitude()
  * @method string getMapLongitude()
  * @method string getMapPhone()
  * @method string getMapTimeOpened()
+ *
+ *
+ * @method int getIsAvailableAsPickupPoint()
+ *
+ *
  */
 class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
 {
@@ -136,6 +142,32 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
             $hours = Mage::getStoreConfig('carriers/ghinpost/open_hours');
         }
         return $hours;
+    }
+
+    /**
+     * Retrieve shipping address info
+     *
+     * @return array
+     */
+    public function getShippingAddress()
+    {
+        $data['street'][] = $this->getStreet();
+        $data['postcode'] = $this->getPostcode();
+        $data['city'] = $this->getCity();
+        $data['country_id'] = $this->getCountryId();
+        $data['region_id'] = $this->getRegionText();
+        $data['region'] = $this->getRegionText();
+        return $data;
+    }
+
+
+    /**
+     *
+     * @return string
+     */
+    public function getCountryId()
+    {
+        return 'PL';
     }
 }
 

@@ -36,4 +36,16 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
                                    ));
     }
 
+    protected function _addFieldIsAvailableAsPickupPoint()
+    {
+        $this->_fieldset->addField('is_available_as_pickup_point',
+            'checkbox',
+            array(
+                'name' => 'is_available_as_pickup_point',
+                'label' => $this->_helper->__('Is POS available as Pick-Up Point'),
+                'class' => 'toggle bootstrapSwitch',
+                "use_plugin" => "switch",
+            ));
+    }
+
 }

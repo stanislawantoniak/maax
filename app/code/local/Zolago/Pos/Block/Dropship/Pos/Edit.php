@@ -18,6 +18,7 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'name',
             'is_active',
             'external_id',
+            'is_available_as_pickup_point',
         ));         
         
 		$settings->addField("pos_id", "hidden", array("name"=>"pos_id"));

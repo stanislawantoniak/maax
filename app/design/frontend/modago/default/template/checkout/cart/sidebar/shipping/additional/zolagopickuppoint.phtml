@@ -1,0 +1,35 @@
+<?php
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+
+$collection = Mage::getModel("zolagopos/pos")->getCollection();
+$collection->addFieldToFilter("is_available_as_pickup_point", 1);
+
+?>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"></button>
+    <h2 class="title_section"><?php echo $helper->__("Choose Pick-Up Point"); ?></h2>
+</div>
+
+<div class="modal-body">
+    <div class="main_container">
+        <div class="col-md-9">
+            <select name="shipping_select_pos" style="width: 100%;" class="select2">
+                <?php foreach ($collection as $pos): ?>
+                    <option value="<?php echo $pos->getId(); ?>"
+                            data-carrier-town="<?php echo $pos->getCity(); ?>"
+                            data-carrier-pointid="<?php echo $pos->getId(); ?>"
+                            data-carrier-pointcode="<?php echo $pos->getId(); ?>"
+                            data-carrier-additional="<?php echo $pos->getStreet(); ?> <?php echo $pos->getPostcode(); ?>"
+                    >
+                        <?php echo $pos->getName(); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <a class="button button-primary" data-select-shipping-method-trigger="1" href=""><?php echo $helper->__("Choose"); ?></a>
+        </div>
+    </div>
+</div>
