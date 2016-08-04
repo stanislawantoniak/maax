@@ -20,16 +20,16 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
 
         //$collection->addAttributeToFilter("sku","88-133131-03");
 
-//        if (!empty($productStatus))
-//            $collection->addFieldToFilter("status", $productStatus);
-//
-//        if (!empty($productVisibility))
-//            $collection->addFieldToFilter("visibility", $productVisibility);
-//
-//        if (!empty($productTypeId))
-//            $collection->addFieldToFilter("type_id", $productTypeId);
-//
-//
+        if (!empty($productStatus))
+            $collection->addFieldToFilter("status", $productStatus);
+
+        if (!empty($productVisibility))
+            $collection->addFieldToFilter("visibility", $productVisibility);
+
+        if (!empty($productTypeId))
+            $collection->addFieldToFilter("type_id", $productTypeId);
+
+
 
 //        if ($productInventoryIsInStock) {
 //            if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
