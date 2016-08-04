@@ -214,6 +214,24 @@ $_products = $_cache['products'];
 						<?php endforeach; ?>
 
 						Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+
+						jQuery(window).on("resize", function () {
+							jQuery(".name_product").each(function(){
+								let t = jQuery(this);
+								let height = t.height();
+								t.height("auto");
+
+								if (!t.data("origText")) t.data("origText", t.text());
+								else t.text(t.data("origText"));
+
+								while (t.height() > height)
+									t.text(function (index, text) {
+										return text.replace(/\W*\s(\S)*$/, '...');
+									});
+								
+								t.height(height);
+							});
+						}).resize();
 					</script>
 
 				</div>
