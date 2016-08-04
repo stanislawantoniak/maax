@@ -27,7 +27,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
 
 
-            $collection->addFieldToFilter("sku","88-133131-03");
+            //$collection->addFieldToFilter("sku","88-133131-03");
             if (!empty($productStatus))
                 $collection->addFieldToFilter("status", $productStatus);
 
