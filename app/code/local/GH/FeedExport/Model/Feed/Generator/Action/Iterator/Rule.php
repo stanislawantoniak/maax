@@ -16,27 +16,27 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addStoreFilter();
 
-        if (!empty($productStatus))
-            $collection->addFieldToFilter("status", $productStatus);
+//        if (!empty($productStatus))
+//            $collection->addFieldToFilter("status", $productStatus);
+//
+//        if (!empty($productVisibility))
+//            $collection->addFieldToFilter("visibility", $productVisibility);
+//
+//        if (!empty($productTypeId))
+//            $collection->addFieldToFilter("type_id", $productTypeId);
+//
+//
+//        $storeId = $feed->getStoreId();
+//        $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+//        if ($productInventoryIsInStock) {
+//            if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
+//                $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+//            }
+//            if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_OUT_OF_STOCK){
+//                $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
+//            }
+//        }
 
-        if (!empty($productVisibility))
-            $collection->addFieldToFilter("visibility", $productVisibility);
-
-        if (!empty($productTypeId))
-            $collection->addFieldToFilter("type_id", $productTypeId);
-
-        ////////
-        $storeId = $feed->getStoreId();
-        $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
-        if ($productInventoryIsInStock) {
-            if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
-                $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
-            }
-            if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_OUT_OF_STOCK){
-                $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
-            }
-        }
-        //////////////
         Mage::log($collection->getSize(), null, "xxx.log");
         Mage::app()->getStore()->setId(0);
         $this->_rule->getConditions()->collectValidatedAttributes($collection);
