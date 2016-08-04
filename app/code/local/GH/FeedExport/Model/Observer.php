@@ -31,7 +31,7 @@ class GH_FeedExport_Model_Observer
         // array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
         );
         $collection->addExpressionAttributeToSelect('is_in_stock',
-            new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
+            new Zend_Db_Expr('cataloginventory_stock_status.stock_status'),
             array()
         );
 
@@ -40,8 +40,7 @@ class GH_FeedExport_Model_Observer
             "e.entity_id = cataloginventory_stock_table.product_id",
             array()
         );
-        $collection->addExpressionAttributeToSelect('politics',
-            "IF(e.type_id IN ('configurable', 'grouped'), (cataloginventory_stock_table.manage_stock = 1 AND cataloginventory_stock_table.is_in_stock = 0) , (cataloginventory_stock_table.min_qty>999999) )", array());
+
         // Join all children count
         $subSelect = $adapter->select();
         $subSelect->from(array("link_all" => $linkTable), array("COUNT(link_all.link_id)"));
