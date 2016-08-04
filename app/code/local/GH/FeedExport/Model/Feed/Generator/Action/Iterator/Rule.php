@@ -16,9 +16,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         $collection = Mage::getResourceModel('catalog/product_collection');
          $storeId = $feed->getStoreId();
         $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
-        $collection->addStoreFilter();
 
-        //$collection->addAttributeToFilter("sku","88-133131-03");
 
         if (!empty($productStatus))
             $collection->addFieldToFilter("status", $productStatus);
@@ -29,7 +27,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         if (!empty($productTypeId))
             $collection->addFieldToFilter("type_id", $productTypeId);
 
-
+        $collection->addStoreFilter();
 
 //        if ($productInventoryIsInStock) {
 //            if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
