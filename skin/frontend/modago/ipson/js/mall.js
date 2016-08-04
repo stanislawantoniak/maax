@@ -607,12 +607,11 @@ var Mall = {
     },
 
     validateAddingToCartListing: function(id, minQty, maxQty){
-        jQuery("#qty-error-" + id).hide();
         var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
         if(quantity >= minQty && quantity <= maxQty){
             Mall.addToCartListing(id, quantity);
         }else{
-            jQuery("#qty-error-" + id).show();
+			jQuery('#input-box-' + id).tooltip('show');
         }
         return false;
     },
