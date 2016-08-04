@@ -25,18 +25,19 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                 ;
             $storeId = $feed->getStoreId();
             $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
-            $collection->addStoreFilter();
 
-            //$collection->addFieldToFilter("sku","88-133131-03");
-//            if (!empty($productStatus))
-//                $collection->addFieldToFilter("status", $productStatus);
-//
-//            if (!empty($productVisibility))
-//                $collection->addFieldToFilter("visibility", $productVisibility);
-//
-//            if (!empty($productTypeId))
-//                $collection->addFieldToFilter("type_id", $productTypeId);
-//
+
+            $collection->addFieldToFilter("sku","88-133131-03");
+            if (!empty($productStatus))
+                $collection->addFieldToFilter("status", $productStatus);
+
+            if (!empty($productVisibility))
+                $collection->addFieldToFilter("visibility", $productVisibility);
+
+            if (!empty($productTypeId))
+                $collection->addFieldToFilter("type_id", $productTypeId);
+
+            $collection->addStoreFilter();
 //
 
 //            if ($productInventoryIsInStock) {
