@@ -24,7 +24,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
                 ;
             $storeId = $feed->getStoreId();
-            $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+            //$collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
 
 
             //$collection->addFieldToFilter("sku","88-133131-03");
