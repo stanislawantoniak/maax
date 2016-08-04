@@ -42,10 +42,10 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 
             if ($productInventoryIsInStock) {
                 if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
-                    $collection->getSelect()->where("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
                 }
                 if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_OUT_OF_STOCK){
-                    $collection->getSelect()->where("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
+                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
                 }
             }
 
