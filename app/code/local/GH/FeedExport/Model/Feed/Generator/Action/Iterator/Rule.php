@@ -13,8 +13,10 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         $productTypeId = $feed->getProductTypeId();
         $productInventoryIsInStock = $feed->getProductInventoryIsInStock();
 
-        $collection = Mage::getResourceModel('catalog/product_collection')
-            ->addStoreFilter();
+        $collection = Mage::getResourceModel('catalog/product_collection');
+         $storeId = $feed->getStoreId();
+        $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+
 
         if (!empty($productStatus))
             $collection->addFieldToFilter("status", $productStatus);
@@ -25,9 +27,8 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
         if (!empty($productTypeId))
             $collection->addFieldToFilter("type_id", $productTypeId);
 
-        ////////
-        $storeId = $feed->getStoreId();
-        $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+
+
         if ($productInventoryIsInStock) {
             if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
                 $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
@@ -36,8 +37,10 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule extends Mirasvit_F
                 $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK);
             }
         }
-        //////////////
 
+        $collection->addStoreFilter();
+
+        Mage::log($collection->getSize(), null, "xxx.log");
         Mage::app()->getStore()->setId(0);
         $this->_rule->getConditions()->collectValidatedAttributes($collection);
 
