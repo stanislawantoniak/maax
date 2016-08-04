@@ -22,8 +22,12 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             $collection = Mage::getModel('catalog/product')->getCollection()
                 ->joinField('qty', 'cataloginventory/stock_item', 'qty',
                     'product_id=entity_id', '{{table}}.stock_id=1', 'left')
-                ->addStoreFilter();
-            $collection->addFieldToFilter("sku","88-133131-03");
+                ;
+            $storeId = $feed->getStoreId();
+            $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+            $collection->addStoreFilter();
+
+            //$collection->addFieldToFilter("sku","88-133131-03");
 //            if (!empty($productStatus))
 //                $collection->addFieldToFilter("status", $productStatus);
 //
@@ -34,8 +38,7 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
 //                $collection->addFieldToFilter("type_id", $productTypeId);
 //
 //
-//            $storeId = $feed->getStoreId();
-//            $collection = Mage::getModel("ghfeedexport/observer")->joinStockData($storeId, $collection);
+
 //            if ($productInventoryIsInStock) {
 //                if ($productInventoryIsInStock == GH_FeedExport_Model_Observer::FILTER_STOCK_IN_STOCK){
 //                    $collection->addFieldToFilter("is_in_stock", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
