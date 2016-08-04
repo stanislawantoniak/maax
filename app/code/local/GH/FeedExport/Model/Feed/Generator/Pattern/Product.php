@@ -115,7 +115,7 @@ class GH_FeedExport_Model_Feed_Generator_Pattern_Product extends Mirasvit_FeedEx
                 }
 
                 if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-                    $value = $product->getData("configurable_is_in_stock");
+                    $value = intval($row["is_in_stock"]);
                 }
                 break;
 
