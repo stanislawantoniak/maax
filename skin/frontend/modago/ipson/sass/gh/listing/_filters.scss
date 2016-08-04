@@ -488,6 +488,10 @@ span.checked {
 		cursor: default;
 	}
 	dl {
+		margin-bottom: 15px;
+		&:last-child {
+			margin-bottom: 0px;
+		}
 		dt {
 			text-transform: uppercase;
 		}
