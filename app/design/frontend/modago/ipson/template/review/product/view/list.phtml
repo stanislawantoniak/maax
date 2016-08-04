@@ -55,16 +55,9 @@ switch($_reviewsCount) {
 ?>
 
 <section id="note_product" class="section bg-w clearfix">
-    <header>
-        <h5 class="title_section"><?php echo $this->__("Product reviews"); ?>
-            <span class="average_note_client" class="visible-xs">
-                <span class="note" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></span>
-                <span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
-            </span>
-        </h5>
-    </header>
     <div class="main clearfix no-padding-bottom">
         <div id="statystyki_opinii" class="row">
+            <?php if($_reviewsCount > 0): ?>
             <div class="col-md-9 col-sm-12">
                 <div class="row">
                     <div class="col-sm-5">
@@ -91,6 +84,11 @@ switch($_reviewsCount) {
 	        <div class="visible-xs" style="text-align: center">
                 <a href="#block-review-form" class="btn green viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a>
 	        </div>
+            <?php else: ?>
+            <div>
+                <p><?php echo $this->__("Share your review with other users"); ?><br><br><a href="#block-review-form" class="btn green viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a></p>
+            </div>
+            <?php endif; ?>
         </div>
 
     </div>
