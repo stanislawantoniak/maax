@@ -296,7 +296,7 @@
     <default>
         <mana_dev>
             <debug>
-                <jquery_min>0</jquery_min>
+                <jquery_min>1</jquery_min>
             </debug>
         </mana_dev>
         <mana>
