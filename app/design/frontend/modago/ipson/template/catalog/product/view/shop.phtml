@@ -186,17 +186,27 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			<a href="#" class="qty_less">-</a>
 			<div class="qty"><input type="text" name="quantity" value="1"/></div>
 			<a href="#" class="qty_more">+</a>
-			<label id="qty-error" class="error"><?php echo $hlp->__("Maximum quantity %s", $maxQty); ?></label>
+			<label id="qty-error" class="error"><?php echo $hlp->__("Maximum quantity: %s", $maxQty); ?></label>
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
 			<div class="action-box-bundle clearfix">
 				<?php if ($isSalable): ?>
-					<button class="btn button button-primary addBasket"
-							<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
-							data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
-							id="add-to-cart"
-							onclick="Mall.validateAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
-						?></button>
+					<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+						<button class="btn button button-primary addBasket"
+								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
+								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
+								id="add-to-cart"
+								onclick="Mall.validateAddingToCart(<?php echo $_product->getId(); ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
+							?></button>
+					<?php else: ?>
+						<button class="btn button button-primary addBasket"
+								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
+								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
+								id="add-to-cart"
+								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
+							?></button>
+					<?php endif; ?>
+
 				<?php endif; ?>
 			</div>
 		</div>
@@ -259,25 +269,111 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		jQuery("input[name=quantity]").change(function(){
 			jQuery("#qty-error").hide();
 		});
-	    var maxQty = "<?php echo $maxQty; ?>";
-	    var minQty = "<?php echo $minQty; ?>";
-		var quantity =  jQuery("input[name=quantity]").val();
-		jQuery("a.qty_more").click(function(e){
-			e.preventDefault();
-			jQuery("#qty-error").hide();
-			if(quantity < maxQty) {
-				quantity++;
-				jQuery("input[name=quantity]").val(quantity);
-			}
-		});
-		jQuery("a.qty_less").click(function(e){
-		e.preventDefault();
-		jQuery("#qty-error").hide();
-			if(quantity > minQty){
-				quantity--;
-				jQuery("input[name=quantity]").val(quantity);
-			}
-		});
 	});
-
 </script>
+<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery(".sizes-content select").change(function(){
+				jQuery("#qty-error").hide();
+				var newMinQty = jQuery(this).attr('minqty');
+				var newMaxQty = jQuery(this).children('option:selected').attr('maxqty');
+				var currentQty = jQuery("input[name=quantity]").val();
+				if(parseInt(newMaxQty) < parseInt(currentQty)){
+					jQuery("input[name=quantity]").val(newMaxQty);
+					jQuery("#qty-error").text('<?php echo $hlp->__("Maximum quantity:"); ?>' + ' ' + newMaxQty);
+					jQuery("#qty-error").show();
+				}
+			});
+			jQuery("a.qty_more").click(function(e){
+				e.preventDefault();
+				var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				if(!attrId){
+					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
+					jQuery("#qty-error").show();
+				}else{
+					var maxQty;
+					var minQty;
+					jQuery(".sizes-content select option").each(function(){
+						if(jQuery(this).val() == attrId){
+							maxQty = jQuery(this).attr('maxqty');
+							minQty = jQuery(this).attr('minqty');
+						}
+					});
+					var quantity =  jQuery("input[name=quantity]").val();
+					jQuery("#qty-error").hide();
+					if(parseInt(quantity) < parseInt(maxQty)) {
+						quantity++;
+						jQuery("input[name=quantity]").val(quantity);
+					}
+					else{
+						jQuery("#qty-error").text('<?php echo $hlp->__("Maximum quantity:"); ?>' + ' ' + maxQty);
+						jQuery("#qty-error").show();
+						jQuery("input[name=quantity]").val(maxQty);
+					}
+				}
+			});
+			jQuery("a.qty_less").click(function(e){
+				e.preventDefault();
+				var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				if(!attrId){
+					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
+					jQuery("#qty-error").show();
+				}else{
+					var maxQty;
+					var minQty;
+					jQuery(".sizes-content select option").each(function(){
+						if(jQuery(this).val() == attrId){
+							maxQty = jQuery(this).attr('maxqty');
+							minQty = jQuery(this).attr('minqty');
+						}
+					});
+					var quantity =  jQuery("input[name=quantity]").val();
+					jQuery("#qty-error").hide();
+					if(parseInt(quantity) > parseInt(minQty)){
+						quantity--;
+						jQuery("input[name=quantity]").val(quantity);
+					}
+					if(parseInt(quantity) > parseInt(maxQty)) {
+						jQuery("#qty-error").text('<?php echo $hlp->__("Maximum quantity:"); ?>' + ' ' + maxQty);
+						jQuery("#qty-error").show();
+						jQuery("input[name=quantity]").val(maxQty);
+					}
+				}
+			});
+		});
+	</script>
+<?php else: ?>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			var maxQty = "<?php echo $maxQty; ?>";
+			var minQty = "<?php echo $minQty; ?>";
+			jQuery("a.qty_more").click(function(e){
+				e.preventDefault();
+			    var quantityMore =  jQuery("input[name=quantity]").val();
+			    jQuery("#qty-error").hide();
+			    if(parseInt(quantityMore) >= parseInt(maxQty)) {
+				   jQuery("#qty-error").show();
+				   jQuery("input[name=quantity]").val(maxQty);
+			    }else{
+			    	quantityMore++;
+				    jQuery("input[name=quantity]").val(quantityMore);
+			    }
+			});
+			jQuery("a.qty_less").click(function(e){
+			    e.preventDefault();
+			    var quantityLess =  jQuery("input[name=quantity]").val();
+			    jQuery("#qty-error").hide();
+			    if(parseInt(quantityLess) > parseInt(minQty)){
+				   quantityLess--;
+				   jQuery("input[name=quantity]").val(quantityLess);
+			    }
+			    if(parseInt(quantityLess) > parseInt(maxQty)) {
+			 	  jQuery("#qty-error").show();
+			 	  jQuery("input[name=quantity]").val(maxQty);
+			    }
+			});
+		});
+	</script>
+<?php endif; ?>
+

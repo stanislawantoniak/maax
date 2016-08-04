@@ -595,9 +595,21 @@ var Mall = {
         });
     },
 
-    validateAddingToCart: function(id, minQty, maxQty){
+    validateAddingToCart: function(id){
         jQuery("#qty-error").hide();
         var quantity =  jQuery("#product-options input[name=quantity]").val();
+        var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+        if(!attrId){
+            return false;
+        }
+        var maxQty;
+        var minQty;
+        jQuery(".sizes-content select option").each(function(){
+            if(jQuery(this).val() == attrId){
+                maxQty = jQuery(this).attr('maxqty');
+                minQty = jQuery(this).attr('minqty');
+            }
+        });
         if(quantity >= minQty && quantity <= maxQty && quantity > 0){
             Mall.addToCart(id, quantity);
         }else{
@@ -605,6 +617,17 @@ var Mall = {
         }
         return false;
     },
+
+    validateSimpleAddingToCart: function(id, minQty, maxQty){
+            jQuery("#qty-error").hide();
+            var quantity =  jQuery("#product-options input[name=quantity]").val();
+            if(quantity >= minQty && quantity <= maxQty && quantity > 0){
+                Mall.addToCart(id, quantity);
+            }else{
+                jQuery("#qty-error").show();
+            }
+            return false;
+        },
 
     validateAddingToCartListing: function(id, minQty, maxQty){
         jQuery("#qty-error-" + id).hide();
@@ -2009,7 +2032,7 @@ jQuery(document).ready(function() {
 
     jQuery(".size-box select").selectBoxIt({
         native: Mall.getIsBrowserMobile(),
-        defaultText: (jQuery(".size-box option").length > 1) ? jQuery(".size-box .size .size-label").text() : '',
+        defaultText: (jQuery(".size-box option").length > 1) ? Mall.i18nValidation.__('Size') : '',
         autoWidth: false
     });
     var optionsCount = jQuery(".size-box option").length;

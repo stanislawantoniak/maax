@@ -585,6 +585,7 @@ i.flag {
 			width: 100%;
 			border: none;
 			text-align: center;
+			font-size: 18px;
 		}
 		div.qty_label{
 			margin-right: 20px;
@@ -597,6 +598,7 @@ i.flag {
 		}
 		#qty-error{
 			display: none;
+			padding: 0!important;
 		}
 	}
 	.color-box-bundle,
