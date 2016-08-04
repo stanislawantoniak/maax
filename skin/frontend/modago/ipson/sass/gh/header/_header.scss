@@ -19,7 +19,7 @@ body {
 	}
 	@include max-screen($screen-xs-max) {
 		.headroom--unpinned {
-			top: -85px !important;
+			top: -95px !important;
 		}
 	}
 	.headroom--top {
