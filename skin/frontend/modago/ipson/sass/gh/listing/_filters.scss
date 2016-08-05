@@ -564,7 +564,7 @@ span.checked {
 		label {
 			span,a {
 				//color:$color_fff;
-				text-transform: uppercase;
+				//text-transform: uppercase;
 				text-align: center;
 				&+.suffix {
 					font-weight: normal;
@@ -574,6 +574,12 @@ span.checked {
 					text-align: left;
 				}
 			}
+
+			&.css-label {
+				padding-left: 10px !important;
+				line-height: 19px;
+			}
+
 		}
 
 		label[for="filter_recommended_products_news"], .new {
@@ -869,10 +875,10 @@ span.checked {
 			position:relative;
 			width: 100%;
 			span {
-				display:inline-block;
-				height:17px;
+				//display:inline-block;
+				//height:17px;
 				width:85px;
-				padding-left: 0;
+				padding-left: 15px;
 				&+.suffix {
 					width:auto;
 				}
