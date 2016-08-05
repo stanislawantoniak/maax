@@ -2,8 +2,13 @@
 .item {
 	.col-price {
 		text-align: left;
+		height: 40px;
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
 		.label {
 			text-align: left;
-			}
 		}
+	}
 }
