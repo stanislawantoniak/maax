@@ -31,8 +31,8 @@
                                     <figure class="img_product"><img
                                             src="<?php echo Mage::helper("zolago_image")
                                             ->init($_item, 'small_image')
-                                            ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
-                                            ->adaptiveResize(150, 150); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
+                                            ->resize(200, 200); ?>"
+                                            alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
                                             class="img-responsive"></figure>
                                     <div class="name_product">
                                         <?php echo $this->getShortProductName($_item, 42); ?>
