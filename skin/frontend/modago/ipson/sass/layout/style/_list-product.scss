@@ -73,6 +73,10 @@
         border: none;
         text-align: center;
         font-size: 14px;
+        outline: none !important;
+        &:focus {
+          outline: none !important;
+        }
         background-color: transparent;
       }
       div.qty_label{

@@ -144,12 +144,19 @@ Mall.listing = {
 			e.preventDefault();
 			var quantity = parseInt(jQuery(this).parents(".quantity_block").find("input[name=quantity]").val());
 			var min = parseInt(jQuery(this).attr("data-min_qty"));
-			if (quantity > min) {
+			var max = parseInt(jQuery(this).parents(".quantity_block").find(".qty_more").attr("data-qty"));
+			if (quantity > min && quantity <= max) {
 				quantity--;
 				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(quantity)
 					.parents(".qty-box").tooltip('destroy');
 			} else {
-				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(min);
+				if (quantity > max) {
+					jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(max)
+						.parents(".qty-box").tooltip('show');
+				} else {
+					jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(min)
+						.parents(".qty-box").tooltip('show');
+				}
 			}
 		});
 	},
