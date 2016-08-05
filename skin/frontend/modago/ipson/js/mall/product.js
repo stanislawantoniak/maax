@@ -285,7 +285,9 @@ Mall.product = {
 			html: option.label,
 			id: ("size_" + option.id),
 			"data-superattribute": id,
-			name: ("super_attribute["+ id +"]")
+			name: ("super_attribute["+ id +"]"),
+			"maxQty": option.maxQty,
+			"minQty": option.minQty,
 		}).appendTo(groupElement);
 	},
 

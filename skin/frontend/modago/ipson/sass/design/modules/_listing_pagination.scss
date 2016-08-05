@@ -22,7 +22,6 @@
 		.pages {
 			a {
 				display: inline-block;
-				padding: 0 31px;
 				background-color: $color_ffffff;
 				border: 1px solid $color_afafaf;
 				text-align: center;
@@ -41,12 +40,22 @@
 						border-color: $color_e8e8e8;
 					}
 				}
-
-				@media (max-width: $screen-xs-max) {
-					padding: 0 22px;
+			}
+		}
+	}
+	&.pagination-top{
+		.listing-pagination .pages {
+			width: 20%;
+			@media (max-width: $screen-sm-to-smmd-max) {
+				width: 100%;
+			}
+			a {
+				width: 100%;
+				max-width: 73px;
+				@media (max-width: $screen-sm-to-smmd-max) {
+					max-width: 55px;
 				}
 			}
-
 		}
 	}
 	&.pagination-bottom {
@@ -57,6 +66,9 @@
 		}
 		.totals {
 			margin-right: 10px;
+		}
+		.listing-pagination .pages a {
+			padding: 0 31px;
 		}
 	}
 }
