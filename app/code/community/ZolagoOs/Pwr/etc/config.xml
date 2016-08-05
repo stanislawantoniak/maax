@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_Pwr>
+            <version>0.0.1</version>
+        </ZolagoOs_Pwr>
+    </modules>
+    <global>
+        <models>
+            <zospwr>
+                <class>ZolagoOs_Pwr_Model</class>
+                <resourceModel>zospwr_resource</resourceModel>
+            </zospwr>
+            <zospwr_resource>
+                <class>ZolagoOs_Pwr_Model_Resource</class>
+            </zospwr_resource>
+        </models>
+        <blocks>
+            <zospwr>
+                <class>ZolagoOs_Pwr_Block</class>
+            </zospwr>
+        </blocks>
+        <helpers>
+            <zospwr>
+                <class>ZolagoOs_Pwr_Helper</class>
+            </zospwr>
+        </helpers>
+        <resources>
+            <zospwr_setup>
+                <setup>
+                    <module>ZolagoOs_Pwr</module>
+                </setup>
+            </zospwr_setup>
+        </resources>
+    </global>
+</config>
