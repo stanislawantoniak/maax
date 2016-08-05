@@ -586,6 +586,10 @@ i.flag {
 			border: none;
 			text-align: center;
 			font-size: 18px;
+            outline:none !important;
+            &:focus {
+              outline:none !important;
+            }
 		}
 		div.qty_label{
 			margin-right: 20px;
