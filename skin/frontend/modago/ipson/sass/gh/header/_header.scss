@@ -762,12 +762,13 @@ body {
 
 @import "../../other/variable";
 .header_top {
-	//height: 85px;
 	height: 132px;
 	@include max-screen($screen-xs-max) {
 		height: 95px;
-		//top: -34px !important;
 		border-bottom: 1px solid $colorAccentBlocksHeader;
+		&.headroom {
+			border-bottom: none;
+		}
 	}
 }
 
