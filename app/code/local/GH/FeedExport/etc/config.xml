@@ -19,6 +19,8 @@
                     <feed_generator_pattern_product>GH_FeedExport_Model_Feed_Generator_Pattern_Product</feed_generator_pattern_product>
                     <feed_generator_action_iterator_rule>GH_FeedExport_Model_Feed_Generator_Action_Iterator_Rule</feed_generator_action_iterator_rule>
                     <config>GH_FeedExport_Model_Config</config>
+                    <feed_generator_action_iterator_entity>GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity</feed_generator_action_iterator_entity>
+                    <feed_generator_pattern>GH_FeedExport_Model_Feed_Generator_Pattern</feed_generator_pattern>
                 </rewrite>
             </feedexport>
         </models>
@@ -26,6 +28,11 @@
             <ghfeedexport>
                 <class>GH_FeedExport_Block</class>
             </ghfeedexport>
+            <feedexport>
+                <rewrite>
+                    <adminhtml_feed_edit_tab_general>GH_FeedExport_Block_Adminhtml_Feed_Edit_Tab_General</adminhtml_feed_edit_tab_general>
+                </rewrite>
+            </feedexport>
         </blocks>
         <helpers>
             <ghfeedexport>
@@ -37,5 +44,12 @@
                 </rewrite>
             </feedexport>
         </helpers>
+        <resources>
+            <ghfeedexport_setup>
+                <setup>
+                    <module>GH_FeedExport</module>
+                </setup>
+            </ghfeedexport_setup>
+        </resources>
     </global>
 </config>
