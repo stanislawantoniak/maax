@@ -138,23 +138,20 @@
 		min-width: 92px;
 		text-align: center;
 		background:$color_fff;
-		border:2px solid $gray-darker;
-		box-shadow: inset 1px 1px 0 0 $color_e6e6e6;
+		border: 1px solid $gray;
 		@include border-radius(0px);
 		&:hover,
-		&.hover {
-
-			background: $gray-darker;
-			border-color:$color_2e2e2e;
-			color:$color_fff;
-			box-shadow:none;
+		&.hover,
+		&:focus,
+		&.focus {
+			border-color: $colorBtnThirdBorderActive;
+			color:$gray-dark;
 		}
 		&:active,
 		&.active {
 			@media(min-width:1024px){
-				background: $color_fff;
 				border-color: $colorBtnThirdBorderActive;
-				color: $colorBtnThirdColorActive;
+				color:$gray-dark;
 			}
 		}
 	}
