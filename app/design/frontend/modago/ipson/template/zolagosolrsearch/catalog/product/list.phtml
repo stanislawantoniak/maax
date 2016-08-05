@@ -216,7 +216,7 @@ $_products = $_cache['products'];
 						Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
 
 						jQuery(window).on("resize", function () {
-							jQuery(".name_product").each(function(){
+							jQuery("#items-product .name_product").each(function(){
 								let t = jQuery(this);
 								let height = t.height();
 								t.height("auto");
