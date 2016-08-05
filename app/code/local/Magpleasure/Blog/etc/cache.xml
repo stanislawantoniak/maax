@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<config>
+    <placeholders>
+        <mpblog_custom>
+            <block>mpblog/custom</block>
+            <placeholder>MPBLOG_CUSTOM</placeholder>
+            <container>Magpleasure_Blog_Model_Enterprise_Pagecache_Custom</container>
+            <cache_lifetime>60</cache_lifetime>
+        </mpblog_custom>
+        <mpblog_sidebar_recentcomments>
+            <block>mpblog/sidebar_recentcomments_custom</block>
+            <placeholder>MPBLOG_SIDEBAR_RECENTCOMMENTS</placeholder>
+            <container>Magpleasure_Blog_Model_Enterprise_Pagecache_Recentcomments</container>
+            <cache_lifetime>30</cache_lifetime>
+        </mpblog_sidebar_recentcomments>
+    </placeholders>
+</config>

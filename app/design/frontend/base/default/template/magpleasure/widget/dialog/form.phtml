@@ -1,0 +1,35 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+
+?>
+
+<form id="mp_<?php echo $this->getData('uid'); ?>"  novalidate
+      name="<?php echo $this->getData('uid'); ?>"
+    <?php if ($this->getFormController()): ?> ng-controller="<?php echo $this->getFormController(); ?>" <?php endif; ?>>
+    <div class="mp-modal-header dialog-header">
+        <h3><?php echo $this->getTitle(); ?></h3>
+        <button id="close_buton_<?php echo $this->getData('uid'); ?>" type="button" class="mp-close"
+            <?php if ($this->getFormController()): ?> ng-click="closeDialog()" <?php endif; ?>>×
+        </button>
+    </div>
+    <div class="form-add mp-content-form">
+        <div class="hor-scroll">
+            <?php echo $this->getChildHtml($this->getData('content')); ?>
+        </div>
+    </div>
+    <div class="mp-modal-footer  a-center">
+        <?php echo $this->getChildHtml($this->getData('footer')); ?>
+        <span><?php echo $this->__(' or '); ?>
+            <a <?php if ($this->getFormController()): ?> ng-click="closeDialog()" <?php endif; ?>
+                style="cursor: pointer;">
+                <?php echo $this->__('Close'); ?>
+            </a>
+        </span>
+    </div>
+</form>
+
+

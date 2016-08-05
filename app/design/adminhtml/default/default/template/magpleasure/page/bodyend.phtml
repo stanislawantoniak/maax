@@ -1,0 +1,14 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+
+/** @var  Magpleasure_Common_Block_Page_Extrahead $this */
+?>
+<?php if ($this->hasTemplates()): ?>
+<?php foreach ($this->getTemplates() as $template): ?>
+<?php echo $this->getTemplateHtml($template); ?>
+<?php endforeach; ?>
+<?php endif; ?>

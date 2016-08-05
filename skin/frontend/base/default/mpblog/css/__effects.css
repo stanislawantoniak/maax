@@ -1,0 +1,124 @@
+textarea.placeholder .placeholder,
+input.placeholder[type="text"] .placeholder {
+  color: #8c8c8c;
+  text-indent: 0;
+  opacity: 0.8;
+  -webkit-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -moz-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -o-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+textarea.placeholder .hovered-placeholder,
+input.placeholder[type="text"] .hovered-placeholder {
+  opacity: 1;
+}
+textarea.placeholder .focused-placeholder,
+input.placeholder[type="text"] .focused-placeholder {
+  text-indent: -100%;
+  opacity: 0;
+}
+textarea.placeholder::-webkit-input-placeholder,
+input.placeholder[type="text"]::-webkit-input-placeholder {
+  color: #8c8c8c;
+  text-indent: 0;
+  opacity: 0.8;
+  -webkit-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -moz-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -o-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+textarea.placeholder:-moz-placeholder,
+input.placeholder[type="text"]:-moz-placeholder {
+  color: #8c8c8c;
+  text-indent: 0;
+  opacity: 0.8;
+  -webkit-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -moz-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -o-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+textarea.placeholder::-moz-placeholder,
+input.placeholder[type="text"]::-moz-placeholder {
+  color: #8c8c8c;
+  text-indent: 0;
+  opacity: 0.8;
+  -webkit-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -moz-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -o-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+textarea.placeholder:-ms-input-placeholder,
+input.placeholder[type="text"]:-ms-input-placeholder {
+  color: #8c8c8c;
+  text-indent: 0;
+  opacity: 0.8;
+  -webkit-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -moz-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  -o-transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  transition: text-indent 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+textarea.placeholder:hover::-webkit-input-placeholder,
+input.placeholder[type="text"]:hover::-webkit-input-placeholder {
+  opacity: 1;
+}
+textarea.placeholder:hover:-moz-placeholder,
+input.placeholder[type="text"]:hover:-moz-placeholder {
+  opacity: 1;
+}
+textarea.placeholder:hover::-moz-placeholder,
+input.placeholder[type="text"]:hover::-moz-placeholder {
+  opacity: 1;
+}
+textarea.placeholder:hover:-ms-input-placeholder,
+input.placeholder[type="text"]:hover:-ms-input-placeholder {
+  opacity: 1;
+}
+textarea.placeholder:focus,
+input.placeholder[type="text"]:focus {
+  -webkit-box-shadow: inset 0px 0px 5px 0px #cccccc;
+  -moz-box-shadow: inset 0px 0px 5px 0px #cccccc;
+  box-shadow: inset 0px 0px 5px 0px #cccccc;
+  border: 1px solid #4d4d4d;
+}
+textarea.placeholder:focus::-webkit-input-placeholder,
+input.placeholder[type="text"]:focus::-webkit-input-placeholder {
+  text-indent: -100%;
+  opacity: 0;
+}
+textarea.placeholder:focus:-moz-placeholder,
+input.placeholder[type="text"]:focus:-moz-placeholder {
+  text-indent: -100%;
+  opacity: 0;
+}
+textarea.placeholder:focus::-moz-placeholder,
+input.placeholder[type="text"]:focus::-moz-placeholder {
+  text-indent: -100%;
+  opacity: 0;
+}
+textarea.placeholder:focus:-ms-input-placeholder,
+input.placeholder[type="text"]:focus:-ms-input-placeholder {
+  text-indent: -100%;
+  opacity: 0;
+}
+.fix-me {
+  zoom: 1;
+  /* IE6&7 */
+}
+.fix-me:before,
+.fix-me:after {
+  content: "";
+  display: table;
+}
+.fix-me:after {
+  clear: both;
+}
+.to-left {
+  float: left;
+}
+.to-right {
+  float: right;
+}
+/* Misc styles */
+div.fixed {
+  clear: both;
+}

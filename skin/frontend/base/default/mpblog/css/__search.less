@@ -1,0 +1,67 @@
+@import "__variables";
+@import "__lesshat";
+
+.search-query {
+
+  margin-bottom: 20px;
+
+  .input-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+    float: left;
+
+    button.button {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: none;
+      border: none;
+      padding: 6px 7px;
+
+      i.glyphicons.search {
+        opacity: 0.5;
+        .transition(all .15s ease-in-out);
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &:active {
+          .scale(0.8);
+        }
+
+      }
+    }
+
+    input[type="text"] {
+      width: 100%;
+    }
+  }
+
+  .advice {
+    padding: 3px 10px;
+    border: 1px solid @border-color;
+    background: @form-back-color;
+    float: left;
+    .border-radius(2px);
+    a {
+      font-weight: bold;
+    }
+  }
+}
+
+.mpblog-search {
+  .block-content {
+
+    button.button {
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    input.input-text {
+      width: 168px;
+      margin-top: 5px;
+    }
+  }
+}

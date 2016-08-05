@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <snowfreshmail translate="title" module="snowfreshmail">
+                                        <title>FreshMail</title>
+                                    </snowfreshmail>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <snowfreshmail translate="title" module="snowfreshmail">
+                        <title>FreshMail</title>
+                    </snowfreshmail>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <snowfreshmail>
+            <title>FreshMail</title>
+            <sort_order>200</sort_order>
+            <children>
+                <requests translate="title" module="snowfreshmail">
+                    <title>Request Logs</title>
+                    <action>adminhtml/freshmail_request</action>
+                </requests>
+                <configuration translate="title" module="snowfreshmail">
+                    <title>Configuration</title>
+                    <action>adminhtml/system_config/edit/section/snowfreshmail</action>
+                </configuration>
+            </children>
+        </snowfreshmail>
+    </menu>
+</config>

@@ -1,0 +1,149 @@
+@import "__lesshat";
+@import "__variables";
+
+/* Layout Configuration */
+
+.mobile {
+
+  display: none;
+  @media (max-width: @tablet-point) {
+    display: block;
+  }
+
+  .mobile-block {
+    display: none;
+    @media (max-width: @tablet-point) {
+      display: block;
+    }
+  }
+
+  &.two-columns-left ,
+  &.two-columns-right {
+    section.content {
+      width: 100%;
+      float: left;
+
+      .swipe-me {
+        .size(40px);
+        .transition(all .5s .3s ease-in-out);
+        opacity: 0.5;
+        text-indent: -10000px;
+        cursor: pointer;
+        margin-bottom: 5px;
+        margin-top: -15px;
+        float: right;
+
+        &:hover {
+          opacity: 0.7;
+        }
+
+        &.right {
+          background: url(../images/swipe_left.png) no-repeat 100% 50% transparent;
+          background: url(../images/swipe_left.svg) no-repeat 100% 50% transparent;
+        }
+
+        &.left {
+          background: url(../images/swipe_right.png) no-repeat 100% 50% transparent;
+          background: url(../images/swipe_right.svg) no-repeat 100% 50% transparent;
+        }
+      }
+    }
+    aside {
+      position: fixed;
+      width: 80%;
+      max-width: 320px;
+      top: 0;
+      height: 100vh;
+      background: #fff;
+      z-index: 199999;
+      padding: 20px;
+    }
+
+    aside.right, aside.left {
+      overflow-y: scroll;
+      display: none;
+      &.active {
+        display: block;
+        .box-shadow(0px 0 15px 0 #333);
+      }
+    }
+
+    aside.right {
+
+      right: -80%;
+
+      &.active {
+        right: 0;
+      }
+    }
+
+    aside.left { /* None Active */
+      left: -80%;
+
+      &.active {
+        left: 0;
+      }
+    }
+
+    .mpblog-search {
+      input#search-blog {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.desktop {
+
+  display: block;
+
+  @media (max-width: @tablet-point) {
+    display: none;
+  }
+
+  .desktop-block {
+    display: block;
+
+    @media (max-width: @tablet-point) {
+      display: none;
+    }
+  }
+
+  &.two-columns-left,
+  &.two-columns-right {
+    section.content {
+      width: 74%;
+      float: left;
+    }
+    aside.left ,
+    aside.right {
+      width: 23%;
+      float: left;
+    }
+  }
+
+  &.two-columns-right {
+    section.content {
+      padding-right: 20px;
+    }
+  }
+
+  &.two-columns-left {
+    section.content {
+      padding-left: 20px;
+    }
+  }
+
+  &.three-columns {
+    section.content {
+      width: 58%;
+      float: left;
+      padding: 0 18px;
+    }
+    aside.left ,
+    aside.right {
+      width: 18%;
+      float: left;
+    }
+  }
+}

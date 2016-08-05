@@ -1,0 +1,28 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var Magpleasure_Blog_Model_Mysql4_Category_Collection $collection  */
+/** @var Magpleasure_Blog_Block_Sidebar_Category $this  */
+$collection = $this->getCollection();
+?>
+<?php if ($this->getDisplay() && count($collection)): ?>
+<div class="block mpblog-categories">
+    <div class="block-title">
+        <strong><span><?php echo $this->getBlockHeader(); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul class="mplog-categories">
+        <?php foreach ($collection as $category): ?>
+            <li class="mpblog-category<?php if ($category->getIsActive()): ?> active<?php endif; ?> mpblog-category-<?php echo $category->getId(); ?>">
+                <i class="<?php echo $this->getColorClass(); ?> glyphicons ok_2"></i>
+                <a href="<?php echo $category->getCategoryUrl(); ?>"><?php echo $this->escapeHtml($category->getName()); ?></a>
+            </li>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<config>
+    <modules>
+        <Magpleasure_Blog>
+            <active>true</active>
+            <codePool>local</codePool>
+            <edition>community</edition>
+            <depends>
+                <Magpleasure_Common/>
+                <Magpleasure_Searchcore/>
+            </depends>
+        </Magpleasure_Blog>
+    </modules>
+</config> 

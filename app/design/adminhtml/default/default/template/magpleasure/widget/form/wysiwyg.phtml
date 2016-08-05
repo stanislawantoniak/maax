@@ -1,0 +1,20 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+?>
+<?php /** @var $this Magpleasure_Common_Block_Adminhtml_Widget_Form_Wysiwyg_Renderer */ ?>
+
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea#<?php echo $this->getHtmlId(); ?>",
+        theme_url: "<?php echo $this->getTinyThemeJsUrl(); ?>",
+        skin_url: "<?php echo $this->getTinySkinUrl(); ?>",
+        content_css: "<?php echo $this->getTinyContentUrl(); ?>"
+    });
+</script>
+
+
+<textarea id="<?php echo $this->getHtmlId(); ?>" class="input-text" style="<?php echo $this->getStyle(); ?>" name="<?php echo $this->getData('name'); ?>"><?php echo $this->getValue(); ?></textarea>
