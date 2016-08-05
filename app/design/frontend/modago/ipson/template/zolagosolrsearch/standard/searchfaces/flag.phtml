@@ -34,16 +34,7 @@ $key = $this->getFacetKey();
 					   data-params='<?php echo $item['params'];?>' 
 					   data-url="<?php echo $item['url'] ?>" <?php if ($item['active']): ?>checked<?php endif; ?>>
 	            <label for="<?php echo $item['itemId']; ?>" class="css-label <?php echo $class; ?>">
-                    <span>
-                        <a href="<?php echo $item['url']; ?>"
-                           class="listing-link">
-	                        <?php echo $item['item']; ?>
-                        </a>
-                    </span>
-		            &nbsp;
-                    <span class="suffix">
-                        (<?php echo $item['count']; ?>)
-                    </span>
+                    <span><a href="<?php echo $item['url']; ?>" class="listing-link"><?php echo $item['item']; ?></a></span><span class="suffix">(<?php echo $item['count']; ?>)</span>
 	            </label>
             </div>
 
