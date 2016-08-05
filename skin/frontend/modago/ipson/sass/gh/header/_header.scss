@@ -578,7 +578,7 @@ body {
 /* HEADER BOTTOM */
 .header_bottom {
 	background: $colorBgBlocksMenuTop;
-	border-top: 1px solid $colorAccentBlocksMenuTop;
+	//border-top: 1px solid $colorAccentBlocksMenuTop;
 	border-bottom: 1px solid $colorAccentBlocksMenuTop;
 	#nav_desc {
 		&.navigation > li > a:hover,
