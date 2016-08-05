@@ -60,8 +60,10 @@ Mall.Navigation = {
         };
 
         var cloneMenuPosition = function () {
-            if(jQuery("#clone_submenu .clone_submenu-content").html().length == 0)
+            if((typeof jQuery("#clone_submenu .clone_submenu-content").html() == "undefined") || jQuery("#clone_submenu .clone_submenu-content").html().length == 0){
                 return;
+            }
+
 
             var li = jQuery('#nav_desc a.active').parents("li");
             var liOffset = li.offset().left;
