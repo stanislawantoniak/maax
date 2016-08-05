@@ -13,6 +13,11 @@
             </zospwr>
             <zospwr_resource>
                 <class>ZolagoOs_Pwr_Model_Resource</class>
+                <entities>
+                    <point>
+                        <table>zospwr_point</table>
+                    </point>
+                </entities>
             </zospwr_resource>
         </models>
         <blocks>
