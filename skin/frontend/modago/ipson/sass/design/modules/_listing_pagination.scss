@@ -44,16 +44,24 @@
 		}
 	}
 	&.pagination-top{
-		.listing-pagination .pages {
-			width: 20%;
-			@media (max-width: $screen-sm-to-smmd-max) {
-				width: 100%;
-			}
-			a {
-				width: 100%;
-				max-width: 73px;
+		.listing-pagination {
+			.pages {
+				width: 20%;
 				@media (max-width: $screen-sm-to-smmd-max) {
-					max-width: 55px;
+					width: 100%;
+				}
+				a {
+					width: 100%;
+					max-width: 73px;
+					@media (max-width: $screen-sm-to-smmd-max) {
+						max-width: 55px;
+					}
+				}
+			}
+			.pages, .totals {
+				float: left;
+				@media (max-width: $screen-sm-to-smmd-max) {
+					float: none;
 				}
 			}
 		}
