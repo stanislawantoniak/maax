@@ -38,4 +38,17 @@
             </zospwr_setup>
         </resources>
     </global>
+    <crontab>
+        <jobs>
+            <zospwr_sync_points>
+                <schedule>
+                    <!-- Run 3:00 everyday  -->
+                    <cron_expr>3 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zospwr/observer::syncPoints</model>
+                </run>
+            </zospwr_sync_points>
+        </jobs>
+    </crontab>
 </config>

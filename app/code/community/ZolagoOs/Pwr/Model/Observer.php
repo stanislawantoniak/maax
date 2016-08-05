@@ -5,5 +5,8 @@
  */
 class ZolagoOs_Pwr_Model_Observer
 {
+    public function syncPoints()
+    {
 
+    }
 }
