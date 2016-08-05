@@ -18,11 +18,9 @@ section#recently-viewed {
 			border-bottom: 1px solid $color_e8e8e8;
 
 			span {
+				font-size: 20px;
 				border-bottom: 2px solid $colorReviewBorder;
-				padding-bottom: 7px;
-				@media(max-width: $screen-xs-max) {
-					padding-bottom: 8px;
-				}
+				padding-bottom: 9px;
 			}
 			@media (max-width: $screen-xs-max) {
 				padding-left:20px;
