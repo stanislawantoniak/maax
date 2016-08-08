@@ -411,10 +411,10 @@ define([
     };
 
 	var rendererIsInStock = function (item, value, node, options) {
-		var itemsTxt		= Translator.translate("Available together {{stock_qty}} items");
-		var variantsTxt		= Translator.translate("{{available_child_count}} variants of {{all_child_count}}");
+		var itemsTxt		= item.type_id === "simple" ? Translator.translate("Available {{stock_qty}} items") : Translator.translate("Available together {{stock_qty}} items");
+		var variantsTxt		= item.type_id === "simple" ? "" : Translator.translate("{{available_child_count}} variants of {{all_child_count}}");
 		if (item.stock_qty == 1) {
-			itemsTxt = Translator.translate("Available together {{stock_qty}} item");
+			itemsTxt = item.type_id === "simple" ? Translator.translate("Available {{stock_qty}} item") : Translator.translate("Available together {{stock_qty}} item");
 		}
 
 		itemsTxt	= itemsTxt.replace("{{stock_qty}}", item.stock_qty);
@@ -789,7 +789,7 @@ define([
         var config = {
             columnSets: processColumnSets(columns),
 
-            loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
+            loadingMessage: '<div id="spinner_block"><i class="fa fa-spinner fa-spin"></i><div>' + Translator.translate("loading-spinner-bottom") + '</div></div>',
             noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
 
             selectionMode: 'none',

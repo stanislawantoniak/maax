@@ -84,16 +84,32 @@
 }
 
 
-#edit-campaign .form-group .radio-buttons label {
+#edit-campaign .form-group .radio-buttons label,
+#edit-card .form-group .radio-buttons label {
     position: relative;
     top: -2px;
     margin: 0 8px 0 4px;
 }
-#edit-campaign input.datetimepicker {
+#edit-campaign input.datetimepicker,
+#edit-card  input.datetimepicker {
     width: 150px;
 }
-#edit-campaign .icon-calendar {
+#edit-campaign .icon-calendar,
+#edit-card  .icon-calendar {
     cursor: pointer;
+}
+
+#edit-card .has-error.help-block {
+    margin-top: 7px;
+    margin-bottom: 10px;
+}
+
+#edit-card input[type="radio"], #edit-card input[type="checkbox"] {
+    margin: 2px 0 0 0;
+}
+
+#edit-card .radio-buttons, #edit-card .datetimepicker-wrapper {
+    width: inherit !important;
 }
 
 /*Banners*/
@@ -782,6 +798,9 @@ z-index: 0;
     color: #d3d3d3;
 }
 
+#refundModalSimple label[for=refund].has-error {
+    width: 200%;
+}
 
 div .view_lupa {
 	position: absolute;
@@ -796,4 +815,34 @@ div .view_lupa {
 	height: 49px;
 	width: 49px;
 }
+.error.help-block {
+	color: #b94a48;
+}
+.fa-spin {
+	-webkit-animation: spin 2s infinite linear;
+	-moz-animation: spin 2s infinite linear;
+	-o-animation: spin 2s infinite linear;
+	animation: spin 2s infinite linear;
+}
+.fa {
+	display: inline-block;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale; }
+.fa-spinner:before {
+	content: "\f110";
+	font-size: 3em;
+}
+#spinner_block {
+	text-align: center;
+	padding: 20px 0 0;
+}
 
+
+
+#poPickUpAddPaymentForm label[for=payment-pickup-amount].has-error {
+	position: absolute;
+}

@@ -133,7 +133,7 @@ article {
 			padding-left: 0;
 			font-size: 20px;
 			font-family: $fontRegular;
-			line-height: 18px;
+			line-height: 22px;
 			text-transform: uppercase;
 			margin: 0 0 8px 0;
 			text-align: left;
@@ -232,7 +232,7 @@ body.catalog-product-view {
 div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
 	height: auto;
     margin: 10px 0 0 0;
-    padding-left: 18px;
+    padding-left: 0;
     @media (max-width: $screen-xs-max) {
       padding: 0;
       margin: 0;
@@ -241,5 +241,10 @@ div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
 		@media(max-width: 360px) {
 			left: 0;
 		}
+	}
+}
+#product_long_box{
+	h1, h2, h3, h4{
+		padding: 0;
 	}
 }

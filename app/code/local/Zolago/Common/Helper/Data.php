@@ -309,4 +309,53 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return true;
 	}
+
+    /*
+	 * Retrieve information that vendor/operator can see/use Loyalty card section
+	 * 
+	 * @return bool
+	 */
+	public function useLoyaltyCardSection() {
+		if (!$this->useGalleryConfiguration() // For now Modago don't use loyalty card
+		&& $this->hasDedicatedLoyaltyCardEditPhtml() // Section can be shown only if for vendor dedicated skin there is edit phtml
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if view file for edit card exist
+	 *
+	 * @return bool
+	 */
+	protected function hasDedicatedLoyaltyCardEditPhtml() {
+		/**
+		 * For more info:
+		 * @see ZolagoOs_LoyaltyCard_Block_Vendor_Card_Abstract::getTemplateFile()
+		 * @see layout/zosloyaltycard.xml
+		 * @see Mage_Core_Model_Design_Package::getBaseDir()
+		 */
+		$area = 'frontend';
+		$package = Mage::app()->getStore()->getConfig("design/package/name");
+		$theme = Mage::app()->getStore()->getConfig("design/theme/skin");
+		$type = 'template';
+		$baseDir = Mage::getBaseDir('design') . DS . $area . DS . $package . DS . $theme . DS . $type;
+		$templatePath = ZolagoOs_LoyaltyCard_Block_Vendor_Card_Edit::TEMPLATE_PATH;
+
+		$file = $baseDir . DS . $templatePath;
+
+		$exist = file_exists($file);
+		return $exist;
+	}
+
+	/**
+	 * @param string $code
+	 * @return bool
+	 */
+	public function isModuleActive($code)
+	{
+		return ('true' == (string)Mage::getConfig()->getNode('modules/'.$code.'/active'));
+	}
+	
 }

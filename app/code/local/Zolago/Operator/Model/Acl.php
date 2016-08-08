@@ -14,6 +14,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     const ROLE_GHAPI_OPERATOR						= "ghapi_operator";
     const ROLE_BILLING_OPERATOR		                = "billing_operator";
     const ROLE_SUPERUSER_OPERATOR		            = "superuser_operator";
+	const ROLE_LOYALTY_CARD_OPERATOR				= "loyalty_card_operator";
 	
 	// Resource definition
 	
@@ -62,6 +63,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_BANNER                                = "banner/vendor";
 	const RES_BUDGET_MARKETING						= "udropship/marketing";
 
+	const RES_LOYALTY_CARD							= "loyalty/card"; 
 
     // Overpayments management
 	const RES_PAYMENT_OPERATOR						= "udpo/payment";
@@ -144,6 +146,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_VENDOR_SIZETABLE					=> "Sizetable settings",
         self::RES_VENDOR_RULES						=> "Regulations",
         self::RES_VENDOR_RULES_DOCUMENT				=> "Get regulations documents",
+
+		self::RES_LOYALTY_CARD						=> "Loyalty card"
 	);
 
 	public function __construct() {
@@ -235,6 +239,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         $this->setRule(self::OP_ADD, $type           , self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES_DOCUMENT);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_POS);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_OPERATOR);
+		
+		// Build ACL rule - LOYALTY CARD management
+		if ($commonHlp->useLoyaltyCardSection()) {
+			$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_LOYALTY_CARD_OPERATOR, self::RES_LOYALTY_CARD);
+		}
 	}
 
 	/**
@@ -260,6 +269,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 			$_currentRoles[self::ROLE_BILLING_OPERATOR]   = "Billing and statements";
 		} else {
 			$_currentRoles[self::ROLE_SUPERUSER_OPERATOR] = "Configuration";
+		}
+		if ($commonHlp->useLoyaltyCardSection()) {
+			$_currentRoles[self::ROLE_LOYALTY_CARD_OPERATOR]   = "Loyalty cards";
 		}
 		return $_currentRoles;
 	}

@@ -1,0 +1,310 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */
+
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+
+//$locker		= $this->getInpostLocker();
+//$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+
+$items= $this->getRateItems();
+$methods = $items->methods;
+
+
+$_totalDiscount = $this->getTotalDiscount();
+$_coupon = $this->getCoupon();
+$checkoutOrderDeactivate = $this->isCheckOutBlocked();
+$waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
+
+
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+	$sessionShippingMethod = $methodSelectedData;
+}
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+$carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($deliveryMethodCode);
+?>
+<div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
+
+	<?php $_items = $this->getItems(); ?>
+	<?php $this->preparePresentation(); ?>
+
+	<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 section" id="content-main">
+		<section class="main bg-w">
+			<header class="title-section">
+				<h2 id="show-table-summary-product">
+					<?php echo $this->__("Your order"); ?>
+					<i class="visible-xs bullet-strzalka-down"></i>
+				</h2>
+			</header>
+			
+			<div id="summary-panel-product">
+				<?php $total = 0; ?>
+				<?php foreach ($_items as $_item) : ?>
+					<?php echo $this->getItemHtml($_item); ?>
+					<?php $total += $_item->getData('row_total_incl_tax'); ?>
+				<?php endforeach; ?>
+				<div class="panel_action row visible-xs">
+					<div class="col-sm-6">
+						<a href="<?php echo $this->getBasketUrl(); ?>" id="zmien_produkty" class="button button-third large pull-left"><?php echo $helper->__('Change'); ?></a>
+					</div>
+					<div class="col-sm-6">
+						<a href="#" id="zwin_produkty" class="button button-third large pull-right"><?php echo $helper->__('Roll products'); ?></a>
+					</div>
+				</div>
+			</div>
+			
+			<div id="sumary_total_amount" class="panel panel-custom">
+				<div class="panel-body">
+					<div class="col-sm-6 visible-lg visible-md visible-sm">
+						<div class="row">
+							<a href="<?php echo $this->getBasketUrl(); ?>"
+							   id="zmiana_zawartosci_koszyka"
+							   class="button button-third large pull-left"><?php echo $helper->__('Change basket'); ?></a>
+						</div>
+					</div>
+					
+					<div class="col-sm-6 col-xs-12">
+						<div class="row">
+							<dl>
+								<dd>
+									<span class="lb XXX-0"><?php echo $this->__('Summary value'); ?>:</span>
+									<span><?php echo Mage::helper('core')->formatPrice($total); ?></span>
+								</dd>
+								<dd>
+									<span class="lb XXX-3"><?php echo $this->__('Shipping cost'); ?>:</span>
+									<span class="total_shipping"></span>
+								</dd>
+								<?php if($_totalDiscount):?>
+								<dd>
+									<span class="lb XX-1"><?php echo $_totalDiscount->getTitle(); ?>:</span>
+									<span class="total_discount" data-price="<?php echo ($_totalDiscount->getValue() * -1);?>"><?php echo Mage::helper('core')->formatPrice($_totalDiscount->getValue()); ?></span>
+								</dd>
+								<?php endif;?>
+								<dt>
+									<strong>
+										<span class="lb XX-2"><?php echo $helper->__('To pay'); ?>:</span>
+										<span class="total_value"></span>
+									</strong>
+								</dt>
+							</dl>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<div id="order-show-products" class="clearfix visible-xs">
+				<div class="panel_action row">
+					<div class="col-sm-6">
+						<a href="#" id="pokaz_produkty" class="button button-third large pull-right"><?php echo $this->__('Show products'); ?></a>
+					</div>
+				</div>
+			</div>
+
+			<div class="row hidden-xs">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements">
+					<div class="checkout_agreement_vendors"
+					     data-original-title="<?php echo $helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+					     data-placement="bottom">
+						<div class="agreement-nocheck-checkout">
+							<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
+						</div>
+					</div>
+					<form>
+						<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="tos_agreement_checkout" class="css-checkbox required"
+							       required="true"
+							       name="tos_agreement_checkout"
+							       aria-required="true">
+							<label for="tos_agreement_checkout" class="css-label tos_agreement_checkout-label control-label required">
+								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+							</label>
+						</div>
+						<?php endif; ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="dotpay_agreement" class="css-checkbox dotpay_agreement"
+							       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
+							<label for="dotpay_agreement" class="css-label dotpay_agreement-label">
+								<?php echo $modagoHelper->getAgreementHtml('dotpay') ?>
+							</label>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-6 col-sm-12 col-md-push-2 col-lg-push-2 col-lg-7">
+					<p class="text-potwierdzenie">{{checkout_review_info}}</p>
+				</div>
+				<div class="col-md-3 col-sm-6 col-md-pull-6 col-lg-2 col-lg-pull-7">
+					<button  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
+				</div>
+				<div class="col-md-3 col-sm-6">
+                    <?php if($checkoutOrderDeactivate): ?>
+                        <a class="button button-primary large link pull-right disabled"><?php echo $helper->__('Order now and pay'); ?></a>
+                        <?php else: ?>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $helper->__('Order now and pay'); ?></button>
+                    <?php endif; ?>
+				</div>
+			</div>
+
+
+		</section>
+	</div>
+	
+	
+	<div class="sidebar-second col-lg-3 col-md-4 col-sm-12 col-xs-12">
+		<section  class="main bg-w opened-panel-group sidebar-addresses">
+			<header >
+				<h2 class="open">
+					<?php echo $helper->__('Address data'); ?>
+					<i class="bullet-strzalka-up visible-xs"></i>
+				</h2>
+			</header>
+			<div class="panel-group">
+				<div class="row">
+				<?php if(!$deliveryPoint->id): ?>
+					<div class="col-md-12  col-sm-4">
+						<h4><?php echo $helper->__('Delivery address'); ?>:</h4>
+						{{shipping}}
+					</div>
+				<?php endif; ?>
+					<div class="col-md-12  col-sm-4">
+						<h4><?php echo $helper->__('Sales document'); ?>:</h4>
+						<dl>
+							<dd>{{sales_document}}<dd>
+						</dl>
+					</div>
+					<div class="col-md-12 col-sm-4 invoice-data">
+						<h4><?php echo $helper->__('Invoice data'); ?>:</h4>
+						{{billing}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="button button-third large pull-right prev-button-address"><?php echo $helper->__('Change'); ?></button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="main bg-w opened-panel-group sidebar-deliverypayment">
+			<header>
+				<h2 class="open">
+					<?php echo $helper->__('Delivery and payment'); ?>
+					<i class="bullet-strzalka-up visible-xs"></i>
+				</h2>
+			</header>
+			<div class="panel-group">
+				<div class="row">
+					<?php if(!$deliveryPoint->id): ?>
+					<div class="col-md-12 col-sm-12 delivery-type">
+						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+						<dl>
+							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><?php echo $carrierLogo; ?></dd>
+							<dd>&nbsp;</dd>
+							<dd>&nbsp;</dd>
+						</dl>
+					</div>
+					<?php else: ?>
+						<div class="col-md-12 col-sm-12 delivery-type">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="delivery-point-data">
+									<?php echo $deliveryPoint->checkout->title; ?>
+									<?php echo $deliveryPoint->checkout->logo; ?>
+								</dd>
+								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
+								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
+								<dd class="location-description ">{{inpost_locker_location_description}}</dd>
+							</dl>
+						</div>
+					<?php endif; ?>
+				</div>
+				<?php if (count($methods) > 1): ?>
+				<div class="row">
+					<div class="col-sm-12">
+						<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
+					</div>
+				</div>
+				<?php endif; ?>
+				<div class="row">
+					<div class="col-md-12 col-sm-12">
+						<h4><?php echo $helper->__('Payment type'); ?>:</h4>
+						<dl>
+							<dd>{{payment_method}}</dd>
+							<dd class="online-data">{{online_data}}</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="button button-third large pull-right  prev-button-deliverypaymnet"><?php echo $helper->__('Change'); ?></button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="main bg-w visible-xs opened-panel-group">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 checkout_agreements_mobile">
+				<div class="checkout_agreement_vendors"
+				     data-original-title="<?php echo $helper->__("This agreement is required. Provided data will be used only in order realization process."); ?>"
+				     data-placement="bottom">
+					<div class="agreement-nocheck-checkout">
+						<?php echo $modagoHelper->getAgreementHtml('checkout'); ?>
+					</div>
+				</div>
+				<form>
+					<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
+						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="tos_agreement_checkout_mobile" class="css-checkbox required"
+							       required="true"
+							       name="tos_agreement_checkout"
+							       aria-required="true">
+							<label for="tos_agreement_checkout_mobile" class="css-label tos_agreement_checkout-label control-label required">
+								<?php echo $modagoHelper->getAgreementHtml('policy') ?>
+							</label>
+						</div>
+					<?php endif; ?>
+					<div class="form-group form-checkbox small text-align-left">
+						<input type="checkbox" id="dotpay_agreement_mobile" class="css-checkbox dotpay_agreement"
+						       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
+						<label for="dotpay_agreement_mobile" class="css-label dotpay_agreement-label">
+							<?php echo $modagoHelper->getAgreementHtml('dotpay') ?>
+						</label>
+					</div>
+				</form>
+			</div>
+			<p class="text-potwierdzenie">{{checkout_review_info}}</p>
+			<div class="row">
+				<div class="col-sm-6">
+					<button  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
+				</div>
+				<div class="col-sm-6">
+                    <?php if($checkoutOrderDeactivate): ?>
+                        <a class="button button-primary large link pull-right disabled "><?php echo $helper->__('Order now and pay'); ?></a>
+                    <?php else: ?>
+                        <button class="button button-primary large link pull-right"  id="step-2-submit"><i></i>&nbsp;<?php echo $helper->__('Order now and pay'); ?></button>
+                    <?php endif; ?>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+<div style="display:none" id="checkout-review-hidden-box">
+	<div id="checkout-review-info-cod"><?php echo $this->getCheckoutReviewInfoCod(); ?></div>
+	<div id="checkout-review-info"><?php echo $this->getCheckoutReviewInfo(); ?></div>
+</div>
+<script>
+	jQuery(document).ready(function() {
+		Mall.Checkout.waitForExternalGTMTags = <?php echo $waitForExternalGTMTags; ?>;
+	});
+</script>

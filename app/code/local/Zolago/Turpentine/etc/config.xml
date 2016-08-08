@@ -14,6 +14,7 @@
 				<rewrite>
 					<!-- Swap vcl template file -->
 					<varnish_configurator_version3>Zolago_Turpentine_Model_Varnish_Configurator_Version3</varnish_configurator_version3>
+					<varnish_configurator_version4>Zolago_Turpentine_Model_Varnish_Configurator_Version4</varnish_configurator_version4>
 					<varnish_admin>Zolago_Turpentine_Model_Varnish_Admin</varnish_admin>
 					<observer_varnish>Zolago_Turpentine_Model_Observer_Varnish</observer_varnish>
                     <observer_ban>Zolago_Turpentine_Model_Observer_Ban</observer_ban>
@@ -75,6 +76,15 @@
                     </zolago_turpentine_observer_ban>
                 </observers>
             </vendor_manual_save_status_after>
+			<!-- After vendor manual change product flag (sale/promo) from vendor portal price grid  -->
+			<vendor_manual_save_product_flag_after>
+				<observers>
+					<zolago_turpentine_observer_ban>
+						<class>turpentine/observer_ban</class>
+						<method>banMultiProductPageCache</method>
+					</zolago_turpentine_observer_ban>
+				</observers>
+			</vendor_manual_save_product_flag_after>
             <!-- After vendor mass change product status from vendor portal price grid  -->
             <vendor_manual_mass_save_status_after>
                 <observers>

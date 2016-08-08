@@ -36,12 +36,12 @@ class ZolagoOs_Rma_Block_Adminhtml_Rma_View_Tracking extends Mage_Adminhtml_Bloc
      */
     public function getSubmitUrl()
     {
-        return $this->getUrl('urmaadmin/order_rma/addTrack/', array('rma_id'=>$this->getRma()->getId()));
+        return $this->getUrl('rmaadmin/order_rma/addTrack/', array('rma_id'=>$this->getRma()->getId()));
     }
 
     public function getGenerateUrl()
     {
-        return $this->getUrl('urmaadmin/order_rma/createLabel/', array('rma_id'=>$this->getRma()->getId()));
+        return $this->getUrl('rmaadmin/order_rma/createLabel/', array('rma_id'=>$this->getRma()->getId()));
     }
 
     /**
@@ -65,7 +65,7 @@ class ZolagoOs_Rma_Block_Adminhtml_Rma_View_Tracking extends Mage_Adminhtml_Bloc
      */
     public function getRemoveUrl($track)
     {
-        return $this->getUrl('urmaadmin/order_rma/removeTrack/', array(
+        return $this->getUrl('rmaadmin/order_rma/removeTrack/', array(
             'rma_id' => $this->getRma()->getId(),
             'track_id' => $track->getId()
         ));
@@ -78,7 +78,7 @@ class ZolagoOs_Rma_Block_Adminhtml_Rma_View_Tracking extends Mage_Adminhtml_Bloc
      */
     public function getTrackInfoUrl($track)
     {
-        return $this->getUrl('urmaadmin/order_rma/viewTrack/', array(
+        return $this->getUrl('rmaadmin/order_rma/viewTrack/', array(
             'rma_id' => $this->getRma()->getId(),
             'track_id' => $track->getId()
         ));

@@ -125,7 +125,7 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
                                'label'     => Mage::helper('zolagodropship')->__('Shops/Brandshops rights'),
                                'class'	   => 'ajax',
                                'after'     => 'form_section',
-                               'url'	=> $block->getUrl('udropshipadmin/adminhtml_vendor/brandshopSettings',array('_current' => true)),
+                               'url'	=> $block->getUrl('zolagoosadmin/adminhtml_vendor/brandshopSettings',array('_current' => true)),
                            ));
             $block->addTabToSection('brandshop_section','vendor_rights',20);
 

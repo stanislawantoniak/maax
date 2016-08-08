@@ -231,6 +231,18 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             $hlp->addOverpayComment($po, false, true, $observer->getEvent()->getData('operator_id'), $observer->getEvent()->getData('amount'));
         }
     }
+	
+	public function addPickUpPaymentComment($observer) {
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		$amount = $observer->getEvent()->getData('amount');
+		
+		if($po->getId()) {
+			$hlp->addPickUpPaymentComment($po, $amount);
+		}
+	}
 
 	/**
 	 * PO Compose	
@@ -388,13 +400,35 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		
 		if($changeLog){
 			if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
-				$type = $hlp->__("Shipping");
+				$text = Mage::helper('zolagopo')->__("Shipping address changed (%s)", implode(", " , $changeLog));
 			}else{
-				$type = $hlp->__("Billing");
+				$text = Mage::helper('zolagopo')->__("Billing address changed (%s)", implode(", " , $changeLog));
 			}
-			$text = Mage::helper('zolagopo')->__("%s address changed (%s)", $type, implode(", " , $changeLog));
 			$this->_logEvent($po, $text);
 		}
+	}
+
+	public function poDeliveryAddressInpostChange($observer) {
+		/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+		$udropshipHlp = Mage::helper('udropship');
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		$hlp = Mage::helper("zolagopo");
+		$address = $udropshipHlp->formatCustomerAddressInpost($po, true, ', ');
+		$text = $hlp->__("InPost shipping address changed (%s)", $address);
+		$this->_logEvent($po, $text);
+	}
+
+	/**
+	 * PO Manually Create RMA
+	 * @param type $observer
+	 */
+	public function poManuallyRma($observer) {
+		$po = $observer->getEvent()->getData('po');
+		/* @var $po Zolago_Po_Model_Po */
+
+		$text = Mage::helper('zolagopo')->__("RMA created successfully");
+		$this->_logEvent($po, $text);
 	}
 	
 	/**
@@ -412,8 +446,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	protected function _logEvent($po, $comment) {
 		$session = Mage::getSingleton('udropship/session');
 		/* @var $session Zolago_Dropship_Model_Session */
-		$vendor = $session->getVendor();
-		$operator = $session->getOperator();
+		$vendor = $po->getVendor();
+		$operator = $po->getOperator();
 		
 		if($session->isOperatorMode()){
 			$fullname = $vendor->getVendorName()  . " / " . $operator->getEmail();
@@ -421,7 +455,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			$fullname = $vendor->getVendorName();
 		}
 		
-		$po->addComment("[" . $fullname . "] " . $comment, false, true);
+		$po->addComment("[" . $fullname . "] "  . $comment, false, true);
 		$po->saveComments();
 	}
 

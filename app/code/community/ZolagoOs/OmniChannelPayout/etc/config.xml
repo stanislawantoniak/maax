@@ -271,13 +271,13 @@
 
     <admin>
         <routers>
-            <udpayoutadmin>
+            <zospayoutadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannelPayout_Adminhtml</module>
-                    <frontName>udpayoutadmin</frontName>
+                    <frontName>zospayoutadmin</frontName>
                 </args>
-            </udpayoutadmin>
+            </zospayoutadmin>
         </routers>
     </admin>
 
@@ -304,7 +304,7 @@
                             <payouts>
                                 <title>Payouts</title>
                                 <sort_order>100</sort_order>
-                                <action>udpayoutadmin/payout</action>
+                                <action>zospayoutadmin/payout</action>
                             </payouts>
                         </children>
                     </udropship>

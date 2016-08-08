@@ -247,7 +247,7 @@ footer.footer {
       li {
         float: none;
         display: inline-block;
-        margin-right: 0;
+        margin-right: 5px;
 
         &.lastItem {
           margin-right: 0;
@@ -268,7 +268,7 @@ footer.footer {
             height: 28px;
 
             &:hover {
-              color: $colorLinkHover;
+              color: $colorLinkHoverOnDark;
             }
           }
         }

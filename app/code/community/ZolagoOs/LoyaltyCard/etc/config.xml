@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<ZolagoOs_LoyaltyCard>
+			<version>1.0.2</version>
+		</ZolagoOs_LoyaltyCard>
+	</modules>
+	<global>
+
+		<models>
+			<zosloyaltycard>
+				<class>ZolagoOs_LoyaltyCard_Model</class>
+				<resourceModel>zosloyaltycard_resource</resourceModel>
+			</zosloyaltycard>
+			<zosloyaltycard_resource>
+				<class>ZolagoOs_LoyaltyCard_Model_Resource</class>
+				<entities>
+					<card>
+						<table>zos_loyalty_card</table>
+					</card>
+				</entities>
+			</zosloyaltycard_resource>
+		</models>
+
+		<helpers>
+			<zosloyaltycard>
+				<class>ZolagoOs_LoyaltyCard_Helper</class>
+			</zosloyaltycard>
+		</helpers>
+
+		<resources>
+			<zosloyaltycard_setup>
+				<setup>
+					<module>ZolagoOs_LoyaltyCard</module>
+				</setup>
+			</zosloyaltycard_setup>
+		</resources>
+
+		<blocks>
+			<zosloyaltycard>
+				<class>ZolagoOs_LoyaltyCard_Block</class>
+			</zosloyaltycard>
+		</blocks>
+
+		<events>
+			<loyalty_card_save_after>
+				<observers>
+					<zosloyaltycard_card_save_after_attach_new_subscriber>
+						<type>singleton</type>
+						<class>zosloyaltycard/observer</class>
+						<method>attachNewSubscriberFromLoyaltyCard</method>
+					</zosloyaltycard_card_save_after_attach_new_subscriber>
+					<zosloyaltycard_card_save_before_record_log>
+						<type>singleton</type>
+						<class>zosloyaltycard/observer</class>
+						<method>saveLog</method>
+					</zosloyaltycard_card_save_before_record_log>
+				</observers>
+			</loyalty_card_save_after>
+			<loyalty_card_delete_after>
+				<observers>
+					<zosloyaltycard_card_delete_after_delete_subscription>
+						<type>singleton</type>
+						<class>zosloyaltycard/observer</class>
+						<method>deleteSubscriptionAfterDeleteLoyaltyCard</method>
+					</zosloyaltycard_card_delete_after_delete_subscription>
+					<zosloyaltycard_card_delete_before_record_log>
+						<type>singleton</type>
+						<class>zosloyaltycard/observer</class>
+						<method>saveLog</method>
+					</zosloyaltycard_card_delete_before_record_log>
+				</observers>
+			</loyalty_card_delete_after>
+		</events>
+
+	</global>
+
+	<frontend>
+		<routers>
+			<zosloyaltycard>
+				<use>standard</use>
+				<args>
+					<module>ZolagoOs_LoyaltyCard</module>
+					<frontName>loyalty</frontName>
+				</args>
+			</zosloyaltycard>
+		</routers>
+		<layout>
+			<updates>
+				<zosloyaltycard>
+					<file>zosloyaltycard.xml</file>
+				</zosloyaltycard>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<ZolagoOs_LoyaltyCard>
+					<files>
+						<default>ZolagoOs_LoyaltyCard.csv</default>
+					</files>
+				</ZolagoOs_LoyaltyCard>
+			</modules>
+		</translate>
+		<secure_url>
+			<zos_loyalty_card>/loyalty/card/</zos_loyalty_card>
+		</secure_url>
+	</frontend>
+	<crontab>
+		<jobs>
+			<!-- Attach customer to customer groups depends on card type -->
+			<!-- and -->
+			<!-- place data from card to customers accounts -->
+			<zosloyaltycard_attach_loyalty_card_data>
+				<schedule>
+					<cron_expr>0 */2 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>zosloyaltycard/observer::attachLoyaltyCardData</model>
+				</run>
+			</zosloyaltycard_attach_loyalty_card_data>
+		</jobs>
+	</crontab>
+</config>

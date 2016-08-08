@@ -36,12 +36,11 @@
     </div>
 <?php //    <!--        Selected payment--> ?>
 
-    <?php
-    foreach ($methods as $_method):
-        $_code = $_method->getCode();
-?>
+    <?php $i = 1; ?>
+    <?php $count = count($methods); ?>
+    <?php foreach ($methods as $_method): $_code = $_method->getCode(); ?>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default payment-method-panel <?php if($i==$count): ?>last-item<?php endif;?>">
         <div class="panel-body">
                 <div class="form-group form-radio">
                     <?php if(!$oneMethod): ?>
@@ -49,8 +48,8 @@
 							   value="<?php echo $_code ?>" 
 							   type="radio" 
 							   name="payment[method]" 
-							   title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" 
-							   data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
+							   title="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
+							   data-payment-method="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
 							   data-online="<?php echo $this->getIsOnline($_method) ?>"
 							   <?php if($this->getSelectedMethodCode()==$_code): ?>checked="checked"<?php endif; ?>
 							   class="css-radio payment-method"  />
@@ -58,7 +57,7 @@
                         <span class="no-display">
 							<input id="p_method_<?php echo $_code ?>" 
 								value="<?php echo $_code ?>" 
-								data-payment-method="<?php echo $this->escapeHtml($_method->getTitle()) ?>"
+								data-payment-method="<?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?>"
 								data-online="<?php echo $this->getIsOnline($_method) ?>"
 								type="radio" 
 								name="payment[method]" 
@@ -98,7 +97,7 @@
 
         </div>
         </div>
-
+    <?php $i++; ?>
 <?php endforeach; ?>
     <input type="hidden" name="payment_emul" />
     <input type="hidden" name="payment_provider_emul" />

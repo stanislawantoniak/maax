@@ -43,17 +43,19 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Bl
                 "title" => $hlp->__("Reset password button is active when vendor have status ACTIVE"),
             ), 0);
 
-            //wyślij prośbę o akceptację regulaminu aktywny - gdy regulamin niezaakceptowany
-            $sendRegulationLink = $this->getUrl('*/*/sendConfirmationEmail', array('id' => $this->getRequest()->getParam($this->_objectId)));
-            $sendRegulationBefore = "Are you sure you want to send regulations accept email?";
-            $this->_addButton('send_regulation_accept_button', array(
-                'label' => Mage::helper('adminhtml')->__('Send regulation accept request'),
-                'class' => 'save',
-                "name" => "send_regulation_accept_button",
-                "onclick" => "deleteConfirm('{$sendRegulationBefore}','{$sendRegulationLink}')",
-                "disabled" => $model && $model->getRegulationAccepted() ? true : false,
-                "title" => $hlp->__("Send regulation accept request button active when regulations accepted"),
-            ), 1);
+			if (!Mage::helper("core")->isModuleEnabled('ZolagoOs_OutsideStore')) {
+				//wyślij prośbę o akceptację regulaminu aktywny - gdy regulamin niezaakceptowany
+				$sendRegulationLink = $this->getUrl('*/*/sendConfirmationEmail', array('id' => $this->getRequest()->getParam($this->_objectId)));
+				$sendRegulationBefore = "Are you sure you want to send regulations accept email?";
+				$this->_addButton('send_regulation_accept_button', array(
+					'label' => Mage::helper('adminhtml')->__('Send regulation accept request'),
+					'class' => 'save',
+					"name" => "send_regulation_accept_button",
+					"onclick" => "deleteConfirm('{$sendRegulationBefore}','{$sendRegulationLink}')",
+					"disabled" => $model && $model->getRegulationAccepted() ? true : false,
+					"title" => $hlp->__("Send regulation accept request button active when regulations accepted"),
+				), 1);
+			}
 
         } elseif (($sessVD = Mage::getSingleton('adminhtml/session')->getData('uvendor_edit_data', true))) {
         	unset($sessVD['logo']);

@@ -20,11 +20,11 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Brandshop_Edit_Form extends Mage_Ad
         $fieldset = $form->addFieldset('brandshop_settings', array('legend' => Mage::helper('zolagodropship')->__('Brandshop settings details'), 'class' => 'fieldset-wide'));
         $fieldset->addField('vendor_name', 'note', array(
             'label'     => Mage::helper('zolagodropship')->__('Vendor'),
-            'text'      => '<a href="' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id' => $vendorId)) . '" onclick="this.target=\'blank\'">' . $vendor->getVendorName() . '</a>'
+            'text'      => '<a href="' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id' => $vendorId)) . '" onclick="this.target=\'blank\'">' . $vendor->getVendorName() . '</a>'
         ));
         $fieldset->addField('brandshop_name', 'note', array(
             'label'     => Mage::helper('zolagodropship')->__('Brandshop'),
-            'text'      => '<a href="' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id' => $brandshopId)) . '" onclick="this.target=\'blank\'">' . $brandshop->getVendorName() . '</a>'
+            'text'      => '<a href="' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id' => $brandshopId)) . '" onclick="this.target=\'blank\'">' . $brandshop->getVendorName() . '</a>'
         ));
         $fieldset->addField('description', 'textarea', array(
             'label'     => Mage::helper('zolagodropship')->__('Vendor description at brandshop page'),

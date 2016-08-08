@@ -401,7 +401,7 @@
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannelPo_Adminhtml</module>
-                    <frontName>udpoadmin</frontName>
+                    <frontName>zospoadmin</frontName>
                 </args>
             </udpoadmin>
         </routers>
@@ -422,7 +422,7 @@
                         <children>
                             <udpo translate="title" module="udpo">
                                 <title>Purchase Orders</title>
-                                <action>udpoadmin/po</action>
+                                <action>zospoadmin/po</action>
                                 <sort_order>55</sort_order>
                             </udpo>
                         </children>
@@ -436,12 +436,12 @@
                             <advanced module="udpo">
                                 <title>Advanced PO Details</title>
                                 <sort_order>5</sort_order>
-                                <action>udpoadmin/report</action>
+                                <action>zospoadmin/report</action>
                             </advanced>
                             <advanced_item module="udpo">
                                 <title>Advanced PO Item Details</title>
                                 <sort_order>7</sort_order>
-                                <action>udpoadmin/report/item</action>
+                                <action>zospoadmin/report/item</action>
                             </advanced_item>
                             <general module="udpo">
                                 <title>Shipment Details</title>

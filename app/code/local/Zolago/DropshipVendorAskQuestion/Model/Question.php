@@ -144,7 +144,7 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
 
     public function getAdminUrl()
     {
-        return Mage::getModel('adminhtml/url')->getUrl('udqaadmin/index/edit', array('id'=>$this->getId()));
+        return Mage::getModel('adminhtml/url')->getUrl('zosqaadmin/index/edit', array('id'=>$this->getId()));
     }
 
 }

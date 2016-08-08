@@ -113,12 +113,12 @@
         <template>
             <email>
                 <sales_email_rma_template translate="label" module="urma">
-                   <label>New uReturn</label>
+                   <label>New Return</label>
                    <file>urma_new.html</file>
                    <type>html</type>
                 </sales_email_rma_template>
                 <sales_email_rma_comment_template translate="label" module="urma">
-                   <label>uReturn Update</label>
+                   <label>Return Update</label>
                    <file>urma_update.html</file>
                    <type>html</type>
                 </sales_email_rma_comment_template>
@@ -278,13 +278,13 @@
 
     <admin>
         <routers>
-            <urmaadmin>
+            <rmaadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_Rma_Adminhtml</module>
-                    <frontName>urmaadmin</frontName>
+                    <frontName>rmaadmin</frontName>
                 </args>
-            </urmaadmin>
+            </rmaadmin>
         </routers>
     </admin>
 
@@ -303,7 +303,7 @@
                         <children>
                             <urma translate="title" module="urma">
                                 <title>Returns</title>
-                                <action>urmaadmin/rma</action>
+                                <action>rmaadmin/rma</action>
                                 <sort_order>500</sort_order>
                             </urma>
                         </children>
@@ -341,7 +341,7 @@
                                 <config>
                                     <children>
                                         <urma>
-                                            <title>uReturns</title>
+                                            <title>Returns</title>
                                             <sort_order>60</sort_order>
                                         </urma>
                                     </children>
@@ -421,6 +421,11 @@ Comment: {{comment}}
                 <ups_pdf_label_width>4</ups_pdf_label_width>
                 <ups_pdf_label_height>7</ups_pdf_label_height>
             </ups>
+        </urma>
+        <urma>
+            <logic>
+                <enabled>1</enabled>
+            </logic>
         </urma>
     </default>
 
