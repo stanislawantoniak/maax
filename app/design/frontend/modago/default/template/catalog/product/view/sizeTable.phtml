@@ -45,7 +45,7 @@
 
     <?php endforeach; ?>
     <?php foreach ($sizes as $j => $size): ?>
-        <?php if (isset($table[$i][$j]) && !empty($size) && $i > 0): ?>
+        <?php if (isset($table[$i][$j]) && !empty($size) && $j > 0): ?>
             <table>
                 <?php foreach ($names as $i => $name): ?>
                     <?php if (!empty($table[$i][$j])): ?>
