@@ -25,6 +25,8 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
         $data = $this->getRequest()->getParams();
         unset($data["form_key"]);
 
+		if ($vendor->getData("iaishop_pass") != '' && $data["pass"] == '') unset($data["pass"]);
+
 
         foreach ($data as $k => $v) $vendor->setData("iaishop_" . $k, $v);
 
