@@ -87,6 +87,42 @@ class ZolagoOs_IAIShop_Model_GHAPI_Connector
         return $this->_query('getOrdersByID', $obj);
     }
 
+	/**
+	 * GH API getChangeOrderMessageRequest
+	 * @param string $token
+	 * @param int $batchSize
+	 * @param string $messageType
+	 * @param string $orderId
+	 * @return array
+	 */
+	public function getChangeOrderMessageRequest($token, $batchSize, $messageType, $orderId = null) {
+		$obj = new StdClass();
+		$obj->sessionToken = trim($token);
+		$obj->messageBatchSize = $batchSize;
+		$obj->messageType = $messageType;
+		$obj->orderId = $orderId;
+		return $this->_query('getChangeOrderMessage',$obj);
+	}
+
+	/**
+	 * GH API setOrderShipmentRequest
+	 * @param string $token
+	 * @param string $orderID
+	 * @param string $dateShipped
+	 * @param string $courier
+	 * @param string $shipmentTrackingNumber
+	 * @return void
+	 */
+	public function setOrderShipmentRequest($token, $orderID, $dateShipped, $courier, $shipmentTrackingNumber) {
+		$obj = new StdClass();
+		$obj->sessionToken = trim($token);
+		$obj->orderID = $orderID;
+		$obj->dateShipped = $dateShipped;
+		$obj->courier = $courier;
+		$obj->shipmentTrackingNumber = $shipmentTrackingNumber;
+		$this->_query('setOrderShipment', $obj);
+	}
+
     /**
      * soap query
      * @param string $name

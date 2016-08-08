@@ -31,10 +31,18 @@ class ZolagoOs_IAIShop_Model_Observer
         }       
 
 
-        //2. Add orders to IAI-Shop API
+        //3. Add orders to IAI-Shop API
         /** @var ZolagoOs_IAIShop_Helper_Data $helper */
         $helper = Mage::helper("zosiaishop");
         $response = $helper->addOrders($orders);
+
+
+		//4. Get newOrder messages from GH_API
+		$paymentIncrementIdsByVendor = $this->getPaymentMessages();
+
+		if (empty($paymentIncrementIdsByVendor))
+			return;
+
     }
 
 
@@ -47,11 +55,13 @@ class ZolagoOs_IAIShop_Model_Observer
 
         $messagesCollection = Mage::getModel("ghapi/message")
             ->getCollection();
+
         $messagesCollection
             ->addFieldToFilter("message", "newOrder")
             ->setOrder('po_increment_id', 'DESC')
             ->setOrder('message_id', 'ASC')
             ->setOrder('vendor_id', 'ASC');
+
         $messagesCollection->getSelect()->limit(self::IAISHOP_SYNC_ORDERS_BATCH);
 
         if ($messagesCollection->count() <= 0)
@@ -59,7 +69,8 @@ class ZolagoOs_IAIShop_Model_Observer
 
 
         foreach ($messagesCollection as $message) {
-            $orderIncrementIds[$message->getVendorId()][] = $message->getPoIncrementId();
+			if ((bool) Mage::helper('udropship')->getVendor($message->getVendorId())->getIaishopId())
+            	$orderIncrementIds[$message->getVendorId()][] = $message->getPoIncrementId();
         }
 
         return $orderIncrementIds;
@@ -93,5 +104,42 @@ class ZolagoOs_IAIShop_Model_Observer
         }
 
         return $orders;
+    }
+
+	public function getPaymentMessages()
+	{
+		$paymentIncrementIds = array();
+
+		$messagesCollection = Mage::getModel("ghapi/message")
+			->getCollection();
+
+		$messagesCollection
+			->addFieldToFilter("message", "paymentDataChanged")
+			->setOrder('po_increment_id', 'DESC')
+			->setOrder('message_id', 'ASC')
+			->setOrder('vendor_id', 'ASC');
+
+		$messagesCollection->getSelect()->limit(self::IAISHOP_SYNC_ORDERS_BATCH);
+
+		if ($messagesCollection->count() <= 0)
+			return $paymentIncrementIds; //nothing to update
+
+
+		foreach ($messagesCollection as $message) {
+			if ((bool) Mage::helper('udropship')->getVendor($message->getVendorId())->getIaishopId())
+				$paymentIncrementIds[$message->getVendorId()][] = $message->getPoIncrementId();
+		}
+
+		return $paymentIncrementIds;
+	}
+
+	public function getGhApiNewPayment($vendorId)
+	{
+		//ini_set("soap.wsdl_cache_enabled", 0);
+		$orders = array();
+		$connector = $this->getGHAPIConnector();
+		$doLoginResponse = $connector->doLoginRequest($vendorId);
+
+//		paymentDataChanged
     }
 }
