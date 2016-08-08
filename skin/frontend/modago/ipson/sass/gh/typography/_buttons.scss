@@ -70,10 +70,12 @@
 	&.button-primary {
 		padding: 10px 15px;
 		color:$colorBtnPrimary;
-		font-family: $fontBlack;
+		font-family: $fontRegular;
 		text-align: center;
 		white-space:nowrap;
-
+		&:hover {
+			opacity: 0.8;
+		}
 		@include primaryButtonGradient;
 
 		@media (max-width: $screen-xs-max) {
@@ -131,21 +133,22 @@
 	}
 	&.button-third {
 		padding: 3px 15px;
-		color:$gray-dark;
+		color:$color_fff;
 		font-weight: normal;
 		font-size: 12px;
 		font-family: $fontRegular;
 		min-width: 92px;
 		text-align: center;
-		background:$color_fff;
+		background:$color_008733;
 		border: 1px solid $gray;
+		opacity: 0.8;
 		@include border-radius(0px);
 		&:hover,
 		&.hover,
 		&:focus,
 		&.focus {
 			border-color: $colorBtnThirdBorderActive;
-			color:$gray-dark;
+			opacity: 1;
 		}
 		&:active,
 		&.active {

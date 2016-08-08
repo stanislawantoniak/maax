@@ -141,6 +141,9 @@ i.flag {
 			font-family:$fontRegular !important;
 		}
 	}
+	#comments {
+		border-top: 1px #e8e8e8 solid;
+	}
 	.viewFormComments,
 	#submit-review {
 		font-family: $fontRegular;
@@ -188,6 +191,10 @@ i.flag {
 
           >.inner {
             padding: 10px;
+
+			  section.section .main {
+				  padding: 0;
+			  }
           }
         }
 

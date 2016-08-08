@@ -45,7 +45,7 @@
 		.panel-body {
 			.current-addres,
 			.top-panel {
-				border-bottom: 1px solid $bc-primary;
+				border: 1px solid $bc-primary;
 				background:$panel-top;
 			}
 			.top-panel {
@@ -95,7 +95,7 @@
 		font-weight: bold;
 	}
 	.border-top {
-		border-top:1px solid $gray-lighter;
+		border-top:none;
 		&:first-child {
 			border-top:none;
 		}
@@ -159,10 +159,13 @@
 				border: none;
 			}
 			legend {
-				font-size: 14px;
-				font-weight: bold;
+				font-size: 16px;
 				color: $color_000;
 				border-color: $gray-lighter;
+				text-transform: uppercase;
+				border-bottom: none;
+				font-weight: normal;
+				padding-bottom: 0!important;
 			}
 		}
 
@@ -315,15 +318,30 @@
 
 #checkout {
 	.default_pay {
+		.panel {
+			border: none;
+		}
+		.panel-body {
+			padding: 0;
+			.panel {
+				border: 1px solid $color_eeedf0;
+				padding: 15px;
+				background: #fcfcfc;
+
+			}
+		}
 		> .panel {
 
 			> .panel-footer {
 				text-align: right;
+				padding-top: 15px;
+				border: 1px solid $color_eeedf0;
+				border-top: none;
 			}
 			> .panel-body {
 				dt {
 					font-weight: normal;
-					font-family: $fontBlack;
+					font-family: $fontRegular;
 				}
 				#payment-provider {
 					margin-top: 12px;
@@ -384,13 +402,16 @@
 			margin-bottom:30px;
 			h2 {
 				@media (max-width:480px) {
-					padding-left: 45px;
+					padding-left: 28px;
 				}
 				&:before {
 					@media (max-width:480px) {
 						left: 14px;
 					}
 				}
+				padding-left: 28px;
+				font-size: 20px;
+				font-weight:normal;
 			}
 			p {
 				margin-left: 35px;
@@ -399,8 +420,11 @@
 	}
 	h4 {
 		margin-top:10px;
-		margin-bottom:15px;
+		margin-bottom:15px!important;
 		padding:0;
+		font-size: 16px;
+		text-transform: uppercase;
+		font-family: $fontRegular;
 	}
 	h4.number_order {
 		margin-bottom: 10px;
@@ -413,9 +437,12 @@
 	.panel {
 		.panel-body {
 			position:relative;
+			strong {
+				font-family: $fontRegular!important;
+			}
 			.current-addres,
 			.top-panel {
-				margin:-15px -15px 0 -15px;
+				margin:0;
 				padding:15px;
 				-webkit-backface-visibility: hidden;
 			}
@@ -528,6 +555,9 @@
 		}
 	}
 	.sidebar-second {
+		section {
+			border: solid 1px $color_ebebeb;
+		}
 		.main {
 			padding:30px 30px;
 			margin-bottom: 15px;
@@ -970,6 +1000,9 @@
 		}
 		.panel:first-child {
 			margin-top: 15px;
+		}
+		.panel.last-item{
+			margin-bottom: 0;
 		}
 	}
 	#block_invoice {
