@@ -184,4 +184,121 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         return $this->doRequest("addorders", $action, $request);
     }
 
+	/**
+	 * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=addPayment
+	 */
+	public function addPayment($params)
+	{
+
+		$action = "addPayment";
+
+		$request = array();
+		$request[$action] = array();
+		$request['addPayment']['params'] = $params; //array();
+
+//		$request['addPayment']['params']['order_number'] = 1;
+//		$request['addPayment']['params']['source_id'] = 2;
+//		$request['addPayment']['params']['source_type'] = 3;
+//		$request['addPayment']['params']['value'] = 4.0;
+//		$request['addPayment']['params']['account'] = "account";
+//		$request['addPayment']['params']['type'] = 'payment';
+//		$request['addPayment']['params']['payment_form_id'] = 5;
+//		$request['addPayment']['params']['accounting_date'] = "accounting_date";
+//		$request['addPayment']['params']['external_payment_id'] = "external_payment_id";
+
+		return $this->doRequest("payments", $action, $request);
+	}
+
+	/**
+	 * @see http://www.iai-shop.com/api.phtml?action=method&function=getorders&method=getOrders
+	 */
+	public function getOrders($params)
+	{
+
+		$action = "getOrders";
+
+		$request = array();
+		$request['getOrders'] = array();
+		$request['getOrders']['params'] = $params; //array();
+
+//		$request['getOrders']['params']['prepaid_status'] = "prepaid_status";
+//		$request['getOrders']['params']['orders_status'] = array();
+//		$request['getOrders']['params']['orders_status'][0] = "orders_status";
+//		$request['getOrders']['params']['deliverers'] = array();
+//		$request['getOrders']['params']['deliverers'][0] = "deliverers";
+//		$request['getOrders']['params']['payment_type'] = "payment_type";
+//		$request['getOrders']['params']['orders_id'] = array();
+//		$request['getOrders']['params']['orders_id'][0] = "orders_id";
+//		$request['getOrders']['params']['orders_sn'] = array();
+//		$request['getOrders']['params']['orders_sn'][0] = 1;
+//		$request['getOrders']['params']['clients'] = array();
+//		$request['getOrders']['params']['clients'][0] = array();
+//		$request['getOrders']['params']['clients'][0]['login'] = "login";
+//		$request['getOrders']['params']['clients'][0]['firstname'] = "firstname";
+//		$request['getOrders']['params']['clients'][0]['lastname'] = "lastname";
+//		$request['getOrders']['params']['clients'][0]['city'] = "city";
+//		$request['getOrders']['params']['clients'][0]['email'] = "email";
+//		$request['getOrders']['params']['clients'][0]['has_tax_no'] = "has_tax_no";
+//		$request['getOrders']['params']['clients'][0]['searching_mode'] = "searching_mode";
+//		$request['getOrders']['params']['clients'][0]['company'] = "company";
+//		$request['getOrders']['params']['clients'][0]['country_id'] = "country_id";
+//		$request['getOrders']['params']['clients'][0]['region_name'] = "region_name";
+//		$request['getOrders']['params']['range'] = array();
+//		$request['getOrders']['params']['range']['date'] = array();
+//		$request['getOrders']['params']['range']['date']['type'] = 'add';
+//		$request['getOrders']['params']['range']['date']['typesDate'] = array();
+//		$request['getOrders']['params']['range']['date']['typesDate'][0] = 'add';
+//		$request['getOrders']['params']['range']['date']['date_begin'] = "date_begin";
+//		$request['getOrders']['params']['range']['date']['date_end'] = "date_end";
+//		$request['getOrders']['params']['range']['sn'] = array();
+//		$request['getOrders']['params']['range']['sn']['sn_begin'] = 2;
+//		$request['getOrders']['params']['range']['sn']['sn_end'] = 3;
+//		$request['getOrders']['params']['source'] = array();
+//		$request['getOrders']['params']['source']['shops_mask'] = 4;
+//		$request['getOrders']['params']['source']['shops_id'] = array();
+//		$request['getOrders']['params']['source']['shops_id'][0] = 5;
+//		$request['getOrders']['params']['source']['auctions_params'] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['systems'] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['systems'][0] = "systems";
+//		$request['getOrders']['params']['source']['auctions_params']['numbers'] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['numbers'][0] = 6;
+//		$request['getOrders']['params']['source']['auctions_params']['accounts'] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['accounts'][0] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['accounts'][0]['account_id'] = 7;
+//		$request['getOrders']['params']['source']['auctions_params']['accounts'][0]['account_login'] = "account_login";
+//		$request['getOrders']['params']['source']['auctions_params']['clients'] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['clients'][0] = array();
+//		$request['getOrders']['params']['source']['auctions_params']['clients'][0]['client_id'] = 8;
+//		$request['getOrders']['params']['source']['auctions_params']['clients'][0]['client_login'] = "client_login";
+//		$request['getOrders']['params']['products'] = array();
+//		$request['getOrders']['params']['products'][0] = array();
+//		$request['getOrders']['params']['products'][0]['id'] = 9;
+//		$request['getOrders']['params']['products'][0]['name'] = "name";
+//		$request['getOrders']['params']['products'][0]['size'] = "size";
+//		$request['getOrders']['params']['products'][0]['size_name'] = "size_name";
+//		$request['getOrders']['params']['results_page'] = 10;
+//		$request['getOrders']['params']['results_limit'] = 11;
+//		$request['getOrders']['params']['invoice_requested'] = "invoice_requested";
+//		$request['getOrders']['params']['packages'] = array();
+//		$request['getOrders']['params']['packages']['numbers'] = array();
+//		$request['getOrders']['params']['packages']['numbers'][0] = "numbers";
+//		$request['getOrders']['params']['packages']['has_number'] = "has_number";
+//		$request['getOrders']['params']['stocks'] = array();
+//		$request['getOrders']['params']['stocks'][0] = array();
+//		$request['getOrders']['params']['stocks'][0]['stock_id'] = 12;
+//		$request['getOrders']['params']['campaign'] = array();
+//		$request['getOrders']['params']['campaign']['campaignId'] = 13;
+//		$request['getOrders']['params']['campaign']['discountCodes'] = array();
+//		$request['getOrders']['params']['campaign']['discountCodes'][0] = "discountCodes";
+//		$request['getOrders']['params']['loyalty_points_flag'] = 'all';
+//		$request['getOrders']['params']['operator'] = "operator";
+//		$request['getOrders']['params']['person_packing'] = "person_packing";
+//		$request['getOrders']['params']['order_by'] = array();
+//		$request['getOrders']['params']['order_by'][0] = array();
+//		$request['getOrders']['params']['order_by'][0]['element_name'] = "element_name";
+//		$request['getOrders']['params']['order_by'][0]['sort_direction'] = "sort_direction";
+//		$request['getOrders']['params']['operator_match'] = 'no_assignment';
+
+		return $this->doRequest("getorders", $action, $request);
+	}
 }
