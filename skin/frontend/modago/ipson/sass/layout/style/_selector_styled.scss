@@ -98,6 +98,13 @@
 .cart-qty-field {
   .selectboxit {
     width: 60px;
+    height: 35px;
+    .selectboxit-text{
+      line-height: 35px;
+    }
+    i.selectboxit-arrow {
+      top:12px!important;
+    }
   }
 }
 

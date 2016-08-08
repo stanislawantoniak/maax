@@ -774,6 +774,13 @@ body {
 		}
 	}
 }
+.checkout {
+	.header_top {
+		height: 65px;
+		border-bottom: 1px solid $color_ebebeb;
+		padding: 10px 0 0;
+	}
+}
 
 /* USER MENU */
 .user-navigation {

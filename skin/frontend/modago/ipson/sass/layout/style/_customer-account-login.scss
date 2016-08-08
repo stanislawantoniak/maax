@@ -45,6 +45,13 @@
 			}
 		}
 	}
+	.section {
+		header.title-section {
+			h2 {
+				font-size: 20px;
+			}
+		}
+	}
 	.form-horizontal {
 		.form-group {
 			@media (max-width: $screen-md-min) {
@@ -133,6 +140,7 @@
 		.col-01,
 		.col-02 {
 			position:relative;
+			border: 1px solid #e6e6e6;
 		}
 		form {
 			margin-bottom: 30px;
@@ -154,6 +162,10 @@
 			width: 140px;
 			&#login-button {
 				bottom: 105px;
+				font-family: $fontRegular;
+				&:hover {
+					opacity: 0.8;
+				}
 			}
           &.forget-pass-button {
             width: auto;
