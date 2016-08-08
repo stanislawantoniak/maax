@@ -25,40 +25,24 @@ class ZolagoOs_IAIShop_Model_Client_Connector
      */
     public function addOrders($params)
     {
+        $helper = Mage::helper('zosiaishop');
         $orders = array();
 
-        $deliveryMethodsMapping = array(
-            "polish_post" => 6,
-            "standard_courier" => 5,
-            "inpost_parcel_locker" => 7
-        );
 
-        //Sposób zapłaty za zamówienie.
-        // Dopuszczalne wartości
-        // "cash_on_delivery" - pobranie,
-        // "prepaid" - przedplata,
-        // "tradecredit" - kredytKupiecki.
-        $paymentMethodsMapping = array(
-            "online_bank_transfer" => "prepaid",
-            "credit_card" => "prepaid",
-            "bank_transfer" => "tradecredit",
-            "cash_on_delivery" => "cash_on_delivery"
 
-        );
-
-        $countries = array("PL" => "Polska");
-
+        var_dump($params);
+        die();
         foreach ($params as $n => $param) {
             $orders[$n]['order_type'] = "retail";
-            $orders[$n]['shop_id'] = $this->getShopId();
+//            $orders[$n]['shop_id'] = $this->getShopId();
             $orders[$n]['stock_id'] = $param->pos_id;
             $orders[$n]['payment_type'] = $param->payment_method;
             $orders[$n]['currency'] = $param->order_currency;
             $orders[$n]['client_once'] = "y";
-            $orders[$n]['order_operator'] = "MODAGO";
+            $orders[$n]['order_operator'] = $helper->getOrderOperator();
             $orders[$n]['ignore_bridge'] = true;
 
-            $orders[$n]['payment_type'] = $paymentMethodsMapping[$param->payment_method];
+            $orders[$n]['payment_type'] = $helper->getMappedPayment($param->payment_method);
 
 
             $delivery_address = array();
@@ -67,14 +51,14 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             $delivery_address['street'] = $param->delivery_data->delivery_address->delivery_street;
             $delivery_address['zip_code'] = $param->delivery_data->delivery_address->delivery_zip_code;
             $delivery_address['city'] = $param->delivery_data->delivery_address->delivery_city;
-            $delivery_address['country'] = $countries[$param->delivery_data->delivery_address->delivery_country];
+            $delivery_address['country'] = $helper->getMappedCountry($param->delivery_data->delivery_address->delivery_country);
             $delivery_address['phone'] = $param->delivery_data->delivery_address->phone;
             $delivery_address['additional'] = $param->delivery_data->inpost_locker_id;
 
             $orders[$n]['delivery_address'] = $delivery_address;
             $orders[$n]['delivery_address']['additional'] = $param->delivery_data->inpost_locker_id;
 
-            $orders[$n]['deliverer_id'] = $deliveryMethodsMapping[$param->delivery_method];
+            $orders[$n]['deliverer_id'] = $helper->getMappedDelivery($param->delivery_method);
 
             $orders[$n]['invoice_requested'] = $param->invoice_data->invoice_required;
             if ($param->invoice_data->invoice_required) {
