@@ -48,8 +48,7 @@ class ZolagoOs_IAIShop_Model_GHAPI_Connector
         if (!$this->_password) {
             /* @var $_ghApiVendorUser GH_Api_Model_User */
             $_ghApiVendorUser = $this->getGHAPIVendorUser();
-            //$this->_password = $_ghApiVendorUser->getPassword();
-            $this->_password = "testtest123";
+            $this->_password = $_ghApiVendorUser->getPassword();
         }
         return $this->_password;
     }
