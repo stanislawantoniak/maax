@@ -1479,6 +1479,25 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $this->_redirectReferer();
     }
 
+    public function confirmPickUpAction() {
+        try {
+            $udpo = $this->_registerPo();
+            if (!$udpo->isPaid()) {
+                $this->_getSession()->addError(Mage::helper("zolagopo")->__("The order should be paid."));
+                return $this->_redirectReferer();
+            }
+
+            $udpo->getStatusModel()->confirmPickUp($udpo);
+            $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order Pick Up has been successfully confirmed."));
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+        }
+        return $this->_redirectReferer();
+    }
+
     /**
      *
      * @return type
@@ -1713,11 +1732,23 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$session = $this->_getSession();
 
 			if ($inpostName && $po->getId() && ($po->getUdropshipVendor() == $session->getVendor()->getId())) {
-				$po->setInpostLockerName($inpostName)->save();
+
+                $locker = Mage::getModel('ghinpost/locker')->load($inpostName, 'name');
+
+                $shippingAddress = Mage::getModel('sales/order_address')->load($po->getShippingAddressId());
+
+                $shippingAddress->setStreet($locker->getStreet() . " " . $locker->getBuildingNumber())
+                    ->setCity($locker->getTown())
+                    ->setPostcode($locker->getPostcode())
+                    ->save();
+
+                $po->setDeliveryPointName($inpostName)
+                    ->save();
 				
 				Mage::dispatchEvent("zolagopo_po_inpost_locker_name_change", array(
 					"po" => $po,
-					"inpost_name" => $inpostName
+					"inpost_name" => $inpostName,
+					"type" => Mage_Sales_Model_Order_Address::TYPE_SHIPPING
 				));
 				
 				$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Correctly written a new delivery address to InPost locker."));

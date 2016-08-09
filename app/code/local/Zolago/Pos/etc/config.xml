@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Pos>
-			<version>0.0.11</version>
+			<version>0.1.0</version>
 		</Zolago_Pos>
 	</modules>
 	<global>

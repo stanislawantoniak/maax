@@ -410,6 +410,7 @@
           </action>
         </block>
         <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery" as="checkout_cart_shipping" template="checkout/cart/sidebar/shipping.phtml">
+          <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery.additional" as="checkout_cart_shipping_additional" template="checkout/cart/sidebar/shipping/additional.phtml" />
           <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
         </block>
       </block>
@@ -1030,7 +1031,7 @@
         <label>Orders history</label>
       </action>
       <!--RMA-->
-      <action method="addLink" translate="label">
+      <action method="addLink" translate="label" ifconfig="urma/logic/enabled">
         <name>rma</name>
         <path>sales/rma/history/</path>
         <label>Returns and complaints</label>
@@ -1230,7 +1231,7 @@
           <label>Orders history</label>
         </action>
         <!--RMA-->
-        <action method="addLink" translate="label">
+        <action method="addLink" translate="label" ifconfig="urma/logic/enabled">
           <name>rma</name>
           <path>sales/rma/history/</path>
           <label>Returns and complaints</label>
@@ -1658,7 +1659,7 @@
     </reference>
     <update handle="customer_account"/>
     <reference name="my.account.wrapper">
-      <block type="zolagorma/list" as="list" name="sales.rma.list"/>
+        <block type="zolagorma/list" as="list" name="sales.rma.list" />
     </reference>
   </sales_rma_history>
   <sales_po_rmalist>

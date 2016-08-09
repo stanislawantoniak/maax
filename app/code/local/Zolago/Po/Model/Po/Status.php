@@ -182,6 +182,25 @@ class Zolago_Po_Model_Po_Status
             Mage::throwException(Mage::helper('ghapi')->__('Invalid status for this operation.'));
         }
     }
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function confirmPickUp(Zolago_Po_Model_Po $po)
+	{
+		// Add shipment for RMA
+		// @see Zolago_Rma_Model_ServicePo::prepareRmaForSave()
+		/** @var Zolago_Po_Helper_Shipment $manager */
+		$manager = Mage::helper('zolagopo/shipment');
+		$po->setUdpoNoSplitPoFlag(true);
+		$manager->setUdpo($po);
+		$manager->getShipment(); // create shipment from po
+		
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		$hlp->addConfirmPickUpComment($po);
+		$this->_processStatus($po, self::STATUS_DELIVERED);
+	}
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
@@ -393,6 +412,7 @@ class Zolago_Po_Model_Po_Status
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
 
 		$newStatus2 = $this->getPoStatusByPayment($po,$newStatus);
+		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("udpo");
 		$po->setForceStatusChangeFlag(true);
 		$hlp->processPoStatusSave($po, $newStatus2, true);

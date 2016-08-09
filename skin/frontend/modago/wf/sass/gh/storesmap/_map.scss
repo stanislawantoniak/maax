@@ -47,16 +47,17 @@
           padding: 20px 5px 20px 0;
           .left-column {
             padding-left: 0;
-            p {
-              padding: 0 0 10px 0;
-              margin: 0;
-              line-height: 1em;
-            }
           }
           .right-column {
             padding-right: 0;
             .buttons {
               .row {
+                .button {
+                  @media (max-width: $screen-xs-max) {
+                    width: 100%;
+                  }
+                }
+
                 &:not(:first-child) {
                   margin-top: 5px;
                 }
@@ -110,26 +111,33 @@
       }
 
       .marker-window {
-        font-size: 16px;
-        max-width: 170px;
-
-        .info_window_text .iw_header {
-          width: 100%;
-          margin: 0;
-          line-height: 1.2;
-
-          .shop_name {
-            font-size: 16px;
-            font-weight: 400;
-            text-transform: uppercase;
-            color: #000;
-            margin: 6px 0;
-
-            font-style: normal;
-          }
-        }
-
+        max-width: 225px;
       }
+    }
+  }
+
+  .pos_info {
+    p {
+      padding: 0 0 10px 0;
+      margin: 0;
+      line-height: 1.5em;
+      font-size: 14px;
+      color: #4f4f4f;
+      font-weight: 400;
+      @media (max-width: $screen-xs-max) {
+        text-align: justify;
+      }
+    }
+
+    .shop_name {
+      font-weight: 600;
+      padding: 0 0 3px 0;
+    }
+    .space_left {
+      margin-left: 3px !important;
+    }
+    .space_left br {
+      line-height: 1.1em;
     }
   }
 }

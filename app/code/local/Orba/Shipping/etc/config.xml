@@ -77,7 +77,7 @@
           </files>
         </Orba_Shipping>
       </modules>
-    </translate>  
+    </translate>
   </adminhtml>
   <frontend>
     <routers>
@@ -147,6 +147,7 @@
           <tracking_password>PPSA</tracking_password>
           <title>Poczta Polska</title>          
           <model>orbashipping/post</model>
+          <cod_allowed>1</cod_allowed>
       </zolagopp>
       <zolagogls>
           <active>1</active>

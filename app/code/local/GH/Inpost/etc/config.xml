@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<GH_Inpost>
-			<version>0.0.6</version>
+			<version>0.1.0</version>
 		</GH_Inpost>
 	</modules>
 	<global>
@@ -39,12 +39,12 @@
 		</resources>
 		<fieldsets>
 			<sales_convert_quote_address>
-				<inpost_locker_name><to_order>*</to_order></inpost_locker_name>
+				<delivery_point_name><to_order>*</to_order></delivery_point_name>
 			</sales_convert_quote_address>
 			<sales_convert_order>
-				<inpost_locker_name>
+				<delivery_point_name>
 					<to_udpo>*</to_udpo>
-				</inpost_locker_name>
+				</delivery_point_name>
 			</sales_convert_order>
 		</fieldsets>
 	</global>
@@ -103,6 +103,7 @@
 				<tracking_url>https://inpost.pl/pl/pomoc/znajdz-przesylke?parcel=%s</tracking_url>
 				<login>test@testowy.pl</login>
 				<password>WqJevQy*X7</password>
+				<cod_allowed>1</cod_allowed>
 			</ghinpost>
 		</carriers>
 	</default>

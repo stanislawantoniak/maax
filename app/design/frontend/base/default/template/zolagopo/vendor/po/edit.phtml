@@ -22,6 +22,9 @@ $_modagoHlp = Mage::helper("zolagocommon");
 $_tracking = $this->getCurrentTracking($_currentShipping); 
 /** @var Zolago_Payment_Helper_Data $paymentHelper */
 $paymentHelper = Mage::helper('zolagopayment');
+$activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
+
+$isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 ?>
 <div class="container">
 	<!--=== Page Header ===-->
@@ -33,7 +36,7 @@ $paymentHelper = Mage::helper('zolagopayment');
 			<?php endforeach;?>
 		</div>
 		<div class="main-actions align-right col-md-6">
-			<?php /* Confirm direct realistaion */ ?>
+			<?php /* Confirm direct realisation */ ?>
 			<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
 				<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-ok"></i>
@@ -41,19 +44,35 @@ $paymentHelper = Mage::helper('zolagopayment');
 				</a> 
 			<?php endif;?>
 
-			<?php /* Confirm realase button */ ?>
+			<?php /* Confirm release button */ ?>
 			<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
 				<a class="btn-notification btn" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-ok"></i>
 					<?php echo $_hlp->__("Accept the order");?>
 				</a> 
 			<?php endif;?>
-			
+
+
+
 			<?php if($_statusModel->isShippingAvailable($_po)):?>
+
 				<?php if($this->canUseCarrier()):?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+
+					<?php if (!$_hlp->isDeliveryPickUpPoint($_po) ): ?>
+						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+					<?php else: ?>
+
+						<?php if ($_hlp->isPickUpPointConfirmAvailable($_po) ): ?>
+							<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
+								<i class="icon-ok"></i>
+								<?php echo $_hlp->__("Confirm Pick Up");?>
+							</a>
+						<?php endif; ?>
+
+					<?php endif; ?>
+
 				<?php else:?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
+					<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
 				<?php endif;?>
 			<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
 				<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
@@ -73,6 +92,15 @@ $paymentHelper = Mage::helper('zolagopayment');
 					<i class="icon-barcode"></i>
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
+
+
+					<?php if ($_hlp->isPickUpPointConfirmAvailable($_po)): ?>
+						<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
+							<i class="icon-ok"></i>
+							<?php echo $_hlp->__("Confirm Pick Up");?>
+						</a>
+					<?php endif; ?>
+
 				<?php endif;?>
 			<?php else:?>
 				<?php /* if($_po->getStockConfirm()):?>
@@ -81,6 +109,8 @@ $paymentHelper = Mage::helper('zolagopayment');
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
 				<?php endif; */?>
+
+
 			<?php endif;?>
 				
 			<?php if($_statusModel->isConfirmStockAvailable($_po) && !$_po->getStockConfirm()):?>	
@@ -158,6 +188,16 @@ $paymentHelper = Mage::helper('zolagopayment');
                         <i class="icon-usd"></i>
                         <?php echo $_hlp->__("Payment"); ?>
                     </h4>
+					<div class="toolbar no-padding">
+						<div class="btn-group">
+							<?php if($isPickUpPaymentCanBeEntered): ?>
+								<!--when delivery method is pickup-point it is possible to enter payment to order-->
+								<span data-toggle="modal" data-target="#paymentsModal-pickup" class="btn btn-xs">
+									<i class="icon-money"></i>
+									<?php echo $_hlp->__("Enter Payment"); ?>
+								</span>
+							<?php endif; ?>
+
 
                     <?php
                     if ($this->canShowPaymentDetails()):
@@ -166,40 +206,40 @@ $paymentHelper = Mage::helper('zolagopayment');
 							$overpayDetails = $paymentHelper->getAllocationOverpaymentDetails($_po);
 							//if no payment details do not show Payment details button
 							if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
-								<div class="toolbar no-padding">
-									<div class="btn-group">
+
 									<span data-toggle="modal" data-target="#paymentsModal-allocation" class="btn btn-xs">
 										<i class="glyphicon glyphicon-pushpin"></i>
 										<?php echo $_hlp->__("Payment details"); ?>
 									</span>
-									</div>
-								</div>
+
 							<?php endif; ?>
-						<?php else: // simplified logic 
+						<?php else: // simplified logic
 							$transactionsDetails = $paymentHelper->getSimpleTransactionsDetails($_po);
 							$refundsDetails = $paymentHelper->getSimpleRefundsDetails($_po);
 							?>
 							<?php if($transactionsDetails->count() || $refundsDetails->count()):
 								if (($transactionsDetails->count()) || $returnsDetails->count()): ?>
-									<div class="toolbar no-padding">
-										<div class="btn-group">
+
 										<span data-toggle="modal" data-target="#paymentsModal-simple" class="btn btn-xs">
 											<i class="glyphicon glyphicon-pushpin"></i>
 											<?php echo $_hlp->__("Payment details"); ?>
 										</span>
-										</div>
-									</div>
+
 								<?php endif; ?>
 							<?php endif; ?>
 						<?php endif; ?>
                     <?php endif; ?>
+
+						</div>
+					</div>
+
                 </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z">
 						<dt><?php echo $_hlp->__("Payment method"); ?>:</dt>
 						<dd><?php echo $this->getPaymentMethod($_po); ?></dd>
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
-						<dd><?php echo !$_po->isCod() && $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
+						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
 						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
@@ -301,13 +341,25 @@ $paymentHelper = Mage::helper('zolagopayment');
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
 									<?php if($_canSplit):?>
-									<i class="icon-checked-action"></i>
-									<span id="split-wrapper" class="inline-block">
-										<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
-											<i class=" icon-unlink"></i>
-											<?php echo $_hlp->__("Split order");?>
-										</button>
-									</span>
+										<div style="margin-bottom:10px;">
+											<i class="icon-checked-action"></i>
+											<span id="split-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
+													<i class=" icon-unlink"></i>
+													<?php echo $_hlp->__("Split order");?>
+												</button>
+											</span>
+										</div>
+									<?php endif;?>
+									<?php if(!$activeNoRma && ($_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED || $_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED)):?>
+										<div style="margin-left: 48px;">
+											<span id="create-rma-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#createRma" class="btn" id="rma">
+													<i class=" icon-exclamation-sign"></i>
+													<?php echo $_hlp->__("Create RMA");?>
+												</button>
+											</span>
+										</div>
 									<?php endif;?>
 								</td>
 								
@@ -613,7 +665,11 @@ if ($this->canShowPaymentDetails()) {
 		} 
 	}
 }
-	
+
+if ($isPickUpPaymentCanBeEntered)
+	echo $this->getChild("vendor_po_edit_payments_pickup")->setData('po', $_po)->toHtml();
+
+
 /*******************************************************************************
  *	Split modal
  *******************************************************************************/
@@ -662,6 +718,13 @@ if ($this->canShowPaymentDetails()) {
  *	Comment modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_comment");
+
+/*******************************************************************************
+ *	Create RMA modal
+ *******************************************************************************/
+if(!$activeNoRma){
+	echo $this->getChildHtml("vendor_po_create_rma");
+}
 ?>
 
 <script type="text/javascript">

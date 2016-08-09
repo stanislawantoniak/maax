@@ -89,7 +89,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     infowindow = new google.maps.InfoWindow({
-        //pixelOffset: new google.maps.Size(0, 5),
+        // pixelOffset: new google.maps.Size(0, 5),
         buttons: {close: {show: 0}}
     });
     data = jQuery.parseJSON(data);
@@ -205,10 +205,9 @@ function refreshMap(filteredData) {
             infowindow.setContent(this.html);
             //$screen-sm: 768px
             if (window.innerWidth >= smallScreen) {
-                map.setCenter(this.getPosition()); // set map center to marker position
-                smoothZoom(map, 10, map.getZoom()); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
+                smoothZoom(map, 10, this); //call smoothZoom, parameters map, final zoomLevel, and starting zoom level
             } else {
-                map.setCenter(this.getPosition());
+                map.setCenter(this.getPosition()); // set map center to marker position
                 map.setZoom(((map.getZoom() > 10) ? map.getZoom() : 10));
             }
             //$screen-md: 992px
@@ -248,30 +247,39 @@ function refreshMap(filteredData) {
     markerClusterer = new MarkerClusterer(map, markers, markerClusterOptions);
 }
 // the smooth zoom function
-function smoothZoom(map, max, cnt) {
-    if (cnt >= max) {
-        return;
-    }
-    else {
-        y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
-            google.maps.event.removeListener(y);
-            smoothZoom(map, max, cnt + 1);
-        });
+function smoothZoom(map, max, o) {
+    t = function () {
+        map.setCenter(o.getPosition());
         setTimeout(function () {
-            map.setZoom(cnt)
+            if (map.zoom < max) {
+                map.setZoom(map.zoom + 1);
+                if (map.zoom == max) google.maps.event.trigger(o, "click");
+            }
         }, 80);
+        if (map.zoom < max) google.maps.event.addListenerOnce(map, 'zoom_changed', t);
     }
+    if (map.zoom < max) t();
 }
+
+function pos_info(pos) {
+    var list = "<p class='shop_name'>" + pos.name + "</p>";
+
+    if (pos.notes) list += "<p>" + pos.notes + "</p>";
+
+    list += "<p class='space_left'>" + pos.street + "<br>" + pos.postcode + " " + pos.city + "</p>";
+    if(pos.phone && pos.phone.length > 0){
+        list +="<p class='space_left'>tel. " + pos.phone + "</p>";
+    }
+
+    list +="<p class='space_left'>" + pos.time_opened + "</p>";
+
+    return list;
+}
+
 function formatInfoWindowContent(info) {
-    var contentString =
-        '<div class="marker-window">' +
-        '<div class="info_window_text">' +
-        '<p class="iw_header"><i class="shop_name bold">' + info.name + '</i></p>' +
-        '<div class="marker-info-tel"><b>Tel: </b>' + info.phone + '</div>' +
-        '<div class="additional-store-information">' + info.time_opened + '</div>' +
-        '</div>' +
-        '</div>';
-    return contentString;
+    return '<div class="marker-window pos_info">' +
+        pos_info(info) +
+        '</div>';;
 }
 
 function generateDirectionLink(pos, position) {
@@ -304,23 +312,16 @@ function buildStoresList(filteredData,position) {
             list += "<li data-id='" + posId + "'>" +
                 "<div class='col-md-12 col-sm-12 col-xs-12 store-info-item'>" +
 
-                "<div class='col-md-7 col-sm-8 col-xs-7 left-column'>" +
-                "<p><b>" + pos.name + "</b></p>" +
-                "<p>" + pos.street + "</p>" +
-                "<p>" + pos.postcode + " " + pos.city + "</p>";
-            if(pos.phone.length > 0){
-                list +="<p>Tel: " + pos.phone + "</p>";
-            }
-
-            list +="<div>" + pos.time_opened + "</div>" +
+                "<div class='col-md-7 col-sm-8 col-xs-12 left-column pos_info'>" +
+                pos_info(pos) +
                 "</div>" +
 
-                "<div class='col-md-5 col-sm-4 col-xs-5 right-column'>" +
+                "<div class='col-md-5 col-sm-4 col-xs-12 right-column'>" +
                 "<div class='buttons'>" +
                 "<div class='row'><a class='button button-primary medium pull-right' href='' data-markernumber='" + posId + "' onclick='showMarkerWindow(this);return false;'><i class='fa fa-map-marker'></i> " + Mall.translate.__("Show on map") + "</a></div>" +
                 "<div class='row'><a class='button button-primary medium pull-right' href='" + generateDirectionLink(pos,position) + "' target='_blank'><i class='fa fa-compass'></i> " + Mall.translate.__("Define the route") + "</a></div>";
 
-            if(Mall.getIsBrowserMobile() && pos.phone.length > 0){
+            if(Mall.getIsBrowserMobile() && pos.phone && pos.phone.length > 0){
                 list += "<div class='row'>" +
                     "<a class='button button-primary medium pull-right' href='tel:" + pos.phone + "'><i class='fa fa-phone'></i> " + Mall.translate.__("Select phone") + "</a>" +
                     "</div>";

@@ -131,7 +131,7 @@ Zolago.gridIntegrator = function(gridObj){
 			if(!(i%2)){
 				_el.parent().css("margin-right", "2%");
 			}
-			_el.datepicker();
+			_el.datepicker({firstDay: 1});
 	});
 	
 	// Range
