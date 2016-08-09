@@ -27,7 +27,6 @@
 /*
  * @var $this Mage_Core_Model_Resource_Setup
  */
-//$installer = $this;
 $installer = Mage::getResourceModel('catalog/setup', 'catalog_setup');
 
 $installer->startSetup();
@@ -42,7 +41,7 @@ if (!$installer->getAttributeSet('catalog_product', $setName))
 		->create($setName, $installer->getDefaultAttributeSetId($entityTypeId));
 
 
-$attributeSetId = $installer->getAttributeSetId($setName, $entityTypeId);
+$attributeSetId = $installer->getAttributeSetId($entityTypeId, $setName);
 
 if (!$installer->getAttributeGroup($entityTypeId, $attributeSetId, $groupName))
 	$installer->addAttributeGroup($entityTypeId, $attributeSetId, $groupName, 100);
@@ -72,6 +71,7 @@ foreach ($data as $item) {
 	if (!$installer->getAttribute($entityTypeId, $item[0])) {
 
 		$installer->addAttribute($entityTypeId, $item[0], array(
+			'attribute_set'		=> $setName,
 			'type'              => 'varchar',
 			'backend'           => '',
 			'frontend'          => '',
@@ -93,6 +93,7 @@ foreach ($data as $item) {
 		));
 
 		$installer->updateAttribute('catalog_product', $item[0], 'grid_permission', Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER);
+		$installer->updateAttribute('catalog_product', $item[0], 'set_id', $attributeSetId);
 
 		$attributeId = $installer->getAttributeId($entityTypeId, $item[0]);
 		$installer->addAttributeToGroup($entityTypeId, $attributeSetId, $attributeGroupId, $attributeId, 100);
