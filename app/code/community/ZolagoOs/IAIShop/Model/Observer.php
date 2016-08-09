@@ -16,33 +16,50 @@ class ZolagoOs_IAIShop_Model_Observer
 
     public function syncIAIShop()
     {
-        //1. Get newOrder messages from GH_API
-        $orderIncrementIdsByVendor = $this->getNewOrderMessages();
+    	$this->sendOrder();
+		$this->addPayment();
+		$this->getShipping();
+    }
 
-        if (empty($orderIncrementIdsByVendor))
-            return;
+	private function sendOrder()
+	{
+		//1. Get newOrder messages from GH_API
+		$orderIncrementIdsByVendor = $this->getNewOrderMessages();
 
-        //2. Get order's info from GH_API
-        $orders = array();
-        foreach ($orderIncrementIdsByVendor as $vendorId => $orderIncrementIds) {
+		if (empty($orderIncrementIdsByVendor))
+			return;
 
-            if (!empty($vendorOrders = $this->getGhApiVendorOrders($vendorId, $orderIncrementIds)))
-                $orders[$vendorId] = $vendorOrders;
-        }       
+		//2. Get order's info from GH_API
+		$orders = array();
+		foreach ($orderIncrementIdsByVendor as $vendorId => $orderIncrementIds) {
 
-
-        //3. Add orders to IAI-Shop API
-        /** @var ZolagoOs_IAIShop_Helper_Data $helper */
-        $helper = Mage::helper("zosiaishop");
-        $response = $helper->addOrders($orders);
+			if (!empty($vendorOrders = $this->getGhApiVendorOrders($vendorId, $orderIncrementIds)))
+				$orders[$vendorId] = $vendorOrders;
+		}
 
 
-		//4. Get newOrder messages from GH_API
+		//3. Add orders to IAI-Shop API
+		/** @var ZolagoOs_IAIShop_Helper_Data $helper */
+		$helper = Mage::helper("zosiaishop");
+		$response = $helper->addOrders($orders);
+    }
+
+	private function addPayment()
+	{
+		echo "<br>addPayment()";
+		echo "<br>" . 4;
+		//1. Get paymentDataChanged messages from GH_API
 		$paymentIncrementIdsByVendor = $this->getPaymentMessages();
 
 		if (empty($paymentIncrementIdsByVendor))
 			return;
 
+		echo "<br>" . 5;
+    }
+
+	private function getShipping()
+	{
+		
     }
 
 

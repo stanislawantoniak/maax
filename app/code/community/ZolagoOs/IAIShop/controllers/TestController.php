@@ -8,6 +8,8 @@ class ZolagoOs_IAIShop_TestController extends Mage_Core_Controller_Front_Action
         error_reporting(E_ALL);
         ini_set("display_errors", 1);
 
+		echo "ZolagoOs_IAIShop_TestController indexAction()";
+
 		Mage::getModel("zosiaishop/observer")->syncIAIShop();
 
         return;

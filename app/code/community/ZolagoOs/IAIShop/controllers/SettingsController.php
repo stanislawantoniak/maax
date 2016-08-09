@@ -5,6 +5,10 @@ class ZolagoOS_IAIShop_SettingsController extends Zolago_Dropship_Controller_Ven
 
     public function indexAction()
     {
+		if (!$this->_getSession()->getVendor()->getData('ghapi_vendor_access_allow')) {
+			return $this->_redirect('udropship/vendor');
+		}
+
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagoosiaishop');
     }
