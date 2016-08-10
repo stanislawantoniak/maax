@@ -106,48 +106,48 @@ class Modago_ImportProducts_Shell extends Mage_Shell_Abstract
      * @param $simples
      * @return array
      */
-    public function insertConfigurable($dp, $vendorId, $configurableSkuv, $simples){
+    public function insertConfigurable($dp, $vendorId, $configurableSkuv, $simples) {
         $attributeSet = "Do przeniesienia";
 
         $skusUpdated = [];
         $subskus = array();
-        foreach($simples as $simpleXMLData){
+        foreach($simples as $simpleXMLData) {
             $simpleSkuV = (string)$simpleXMLData->sku;
             $simpleSku = $vendorId . "-" . $simpleSkuV;
             $subskus[] = $simpleSku;  //Collect simple skus for configurable
             $product = array(
-                "name" => $simpleSkuV,
-                "sku" => $simpleSku,
-                "skuv" => $simpleSkuV,
-                //"price" => "0.00",
-                "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
-                "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
-                "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
-                "tax_class_id" => 0,
-                "attribute_set" => $attributeSet,
-                "store" => "admin",
-                "description" => $simpleXMLData->description,
-                "short_description" => $simpleXMLData->description2,
-                "size" => $simpleXMLData->size,
-                "color" => $simpleXMLData->color,
-                //"description_status" => 1,
+                           "name" => $simpleSkuV,
+                           "sku" => $simpleSku,
+                           "skuv" => $simpleSkuV,
+                           //"price" => "0.00",
+                           "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+                           "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
+                           "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
+                           "tax_class_id" => 0,
+                           "attribute_set" => $attributeSet,
+                           "store" => "admin",
+                           "description" => $simpleXMLData->description,
+                           "short_description" => $simpleXMLData->description2,
+                           "size" => $simpleXMLData->size,
+                           "ean" => $simpleXMLData->barcode,
+                           //"description_status" => 1,
 
-                //ext_
-                "ext_productline" => $simpleXMLData->collection,
-                "ext_category" => $simpleXMLData->clothes_description,
-                "ext_color" => $simpleXMLData->color,
-                "ext_brand" => $simpleXMLData->brand,
+                           //ext_
+                           "ext_productline" => $simpleXMLData->collection,
+                           "ext_category" => $simpleXMLData->clothes_description,
+                           "ext_color" => $simpleXMLData->color,
+                           "ext_brand" => $simpleXMLData->brand,
 
-                //col
-                "col1" => $simpleXMLData->unit_of_measure,
-                "col2" => $simpleXMLData->gender,
-                "col3" => $simpleXMLData->intake,
-                "col4" => $simpleXMLData->clothes_type,
-                "col5" => $simpleXMLData->size_group,
-                "col6" => $simpleXMLData->week_no,
-                "col7" => $simpleXMLData->barcode
+                           //col
+                           "col1" => $simpleXMLData->unit_of_measure,
+                           "col2" => $simpleXMLData->gender,
+                           "col3" => $simpleXMLData->intake,
+                           "col4" => $simpleXMLData->clothes_type,
+                           "col5" => $simpleXMLData->size_group,
+                           "col6" => $simpleXMLData->week_no,
+                           "col7" => $simpleXMLData->barcode
 
-            );
+                       );
             // Now ingest item into magento
             $dp->ingest($product);
             $skusUpdated[] = $simpleSku;
@@ -157,29 +157,39 @@ class Modago_ImportProducts_Shell extends Mage_Shell_Abstract
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "name" => $configurableSkuv,
-            "sku" => $configurableSku,
-            "skuv" => $simpleSku,
-            //"price" => "0.00",
-            "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
-            "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
-            "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-            "tax_class_id" => 0,
-            "attribute_set" => $attributeSet,
-            "store" => "admin",
-            "configurable_attributes" => "size",
-            "simples_skus" => implode(",", $subskus),
+                                   "name" => $configurableSkuv,
+                                   "sku" => $configurableSku,
+                                   "skuv" => $simpleSku,
+                                   //"price" => "0.00",
+                                   "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+                                   "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
+                                   "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+                                   "tax_class_id" => 0,
+                                   "attribute_set" => $attributeSet,
+                                   "store" => "admin",
+                                   "configurable_attributes" => "size",
+                                   "simples_skus" => implode(",", $subskus),
+                                   "ean" => $firstSimple->barcode,
 
-            "description" => $firstSimple->description,
-            "short_description" => $firstSimple->description2,
-            //"description_status" => 1,
+                                   "description" => $firstSimple->description,
+                                   "short_description" => $firstSimple->description2,
+                                   //"description_status" => 1,
 
-            //ext_
-            "ext_productline" => $firstSimple->collection,
-            "ext_category" => $firstSimple->clothes_description,
-            "ext_brand" => $firstSimple->brand
+                                   //ext_
+                                   "ext_productline" => $firstSimple->collection,
+                                   "ext_color" => $firstSimple->color,
+                                   "ext_category" => $firstSimple->clothes_description,
+                                   "ext_brand" => $firstSimple->brand,
 
-        );
+                                   //col
+                                   "col1" => $firstSimple->unit_of_measure,
+                                   "col2" => $firstSimple->gender,
+                                   "col3" => $firstSimple->intake,
+                                   "col4" => $firstSimple->clothes_type,
+                                   "col5" => $firstSimple->size_group,
+                                   "col6" => $firstSimple->week_no,
+                                   "col7" => $firstSimple->barcode
+                               );
         // Now ingest item into magento
         $dp->ingest($productConfigurable);
         $skusUpdated[] = $configurableSku;
