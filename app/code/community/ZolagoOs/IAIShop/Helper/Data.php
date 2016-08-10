@@ -38,7 +38,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
             $iaiShopConnector->addOrders($orders);
         }
     }
-    
+
     /**
      * map payment method
      */
@@ -56,14 +56,14 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         );
         return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
     }
-    
+
     /**
      * return order operator name
      */
     public function getOrderOperator() {
         return 'MODAGO';
     }
-    
+
     /**
      * papped counties
      */
@@ -71,7 +71,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
          $countries = array("PL" => "Polska");
          return isset($countries[$country])? $countries[$country]: 'unknown';
      }
-     
+
     /**
      * mapped delivery
      */
@@ -83,4 +83,18 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         );
         return isset($deliveryMethodsMapping[$delivery])? $deliveryMethodsMapping[$delivery]: 'unknown';
      }
+
+	/**
+	 * @param $params
+	 */
+	public function addPayments($params)
+	{
+		foreach ($params as $vendorId => $payments) {
+			$iaiShopConnector = $this->getIAIShopConnector($vendorId);
+
+			foreach ($payments as $payment) {
+				$iaiShopConnector->addPayment($payment);
+			}
+		}
+	}
 }

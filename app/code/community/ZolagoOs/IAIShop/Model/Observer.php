@@ -12,8 +12,8 @@ class ZolagoOs_IAIShop_Model_Observer
         }
         return $this->_connector;
     }
-    
-    
+
+
     /**
      * sync orders
      */
@@ -30,45 +30,15 @@ class ZolagoOs_IAIShop_Model_Observer
 
     public function syncIAIShop()
     {
-
         $vendors = $this->getAllowVendors();
         if (!count($vendors)) {
             return false;
-        }        
+        }
 
         foreach ($vendors as $vendor) {
             $this->_syncOrders($vendor);
         }
-        
-    }
-    
-    
-    /**
-     * prepare list of messages to confirmation
-     *
-     * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
-     * @param StdClass $order
-     */
 
-    public function setConfirmMessage($vendor,$order) {
-        $this->_confirm[$vendor->getId()][] = $order->messageID;
-    }
-    /**
-     * confirm messages list in api queue
-     *
-     * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
-     */
-    public function confirmMessage($vendor) {
-        if (!isset($this->_confirm[$vendor->getId()])) {
-            return;
-        }
-        $connector = $this->_getGHAPIConnector();
-        $token = $this->_getToken($vendor);
-        $params = new StdClass();
-        $params->sessionToken = $token;
-        $params->messageID = new StdClass();
-        $params->messageID->ID = $this->_confirm[$vendor->getId()];
-        $connector->setChangeOrderMessageConfirmation($params);
     }
 
     /**
@@ -79,13 +49,13 @@ class ZolagoOs_IAIShop_Model_Observer
         $orderIncrementIds = array();
 
         $messagesCollection = Mage::getModel("ghapi/message")
-            ->getCollection();
-        $messagesCollection
-            ->addFieldToFilter("message", "newOrder")
-            ->addFieldToSelect('vendor_id')
-            ->getSelect()->group('vendor_id');
+                              ->getCollection();
 
-        
+        $messagesCollection
+        ->addFieldToFilter("message", "newOrder")
+        ->addFieldToSelect('vendor_id')
+        ->getSelect()->group('vendor_id');
+
         if ($messagesCollection->count() <= 0)
             return $orderIncrementIds; //nothing to update
         $vendors = array();
@@ -95,10 +65,44 @@ class ZolagoOs_IAIShop_Model_Observer
                 $vendors[] = $vendor;
             }
         }
-        
+
         return $vendors;
     }
 
-    
-    
+    public function getPaymentMessages()
+    {
+        $paymentIncrementIds = array();
+
+        $messagesCollection = Mage::getModel("ghapi/message")
+                              ->getCollection();
+
+        $messagesCollection
+        ->addFieldToFilter("message", "paymentDataChanged")
+        ->setOrder('po_increment_id', 'DESC')
+        ->setOrder('message_id', 'ASC')
+        ->setOrder('vendor_id', 'ASC');
+
+        $messagesCollection->getSelect()->limit(self::IAISHOP_SYNC_ORDERS_BATCH);
+
+        if ($messagesCollection->count() <= 0)
+            return $paymentIncrementIds; //nothing to update
+
+
+        foreach ($messagesCollection as $message) {
+            if ((bool) Mage::helper('udropship')->getVendor($message->getVendorId())->getIaishopId())
+                $paymentIncrementIds[$message->getVendorId()][] = $message->getPoIncrementId();
+        }
+
+        return $paymentIncrementIds;
+    }
+
+    public function getGhApiNewPayment($vendorId)
+    {
+        //ini_set("soap.wsdl_cache_enabled", 0);
+        $orders = array();
+        $connector = $this->getGHAPIConnector();
+        $doLoginResponse = $connector->doLoginRequest($vendorId);
+
+//		paymentDataChanged
+    }
 }
