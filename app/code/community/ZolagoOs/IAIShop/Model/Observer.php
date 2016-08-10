@@ -4,6 +4,7 @@ class ZolagoOs_IAIShop_Model_Observer
 {
     private $_connector = false;
     protected $_token = array();
+    protected $_helper;
 
     private function _getGHAPIConnector()
     {
@@ -32,6 +33,7 @@ class ZolagoOs_IAIShop_Model_Observer
     {
         $vendors = $this->getAllowVendors();
         if (!count($vendors)) {
+            $this->fileLog('No messages for IAI Shop');            
             return false;
         }
 
@@ -104,5 +106,14 @@ class ZolagoOs_IAIShop_Model_Observer
         $doLoginResponse = $connector->doLoginRequest($vendorId);
 
 //		paymentDataChanged
+    }
+    public function getHelper() {
+        if (!$this->_helper) {
+            $this->_helper = Mage::helper('zosiaishop');
+        }
+        return $this->_helper;
+    }
+    public function fileLog($mess) {
+        $this->getHelper()->fileLog($mess);
     }
 }

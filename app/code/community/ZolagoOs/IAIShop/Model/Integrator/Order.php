@@ -7,9 +7,16 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
     protected $_token;
     protected $_connector;
     protected $_confirmOrderList;
+    protected $_helper;
 
     const IAISHOP_SYNC_ORDERS_BATCH = 100;
 
+    public function getHelper() {
+        if (!$this->_helper) {
+            $this->_helper = Mage::helper('zosiaishop');
+        }
+        return $this->_helper;
+    }
 
     public function setVendor($vendor) {
         $this->_vendor = $vendor;
@@ -72,15 +79,24 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
      */
     public function processResponse($responseList,$orderId) {
         foreach ($responseList as $item) {
-            if (!$item->faultCode &&
-                    !empty($item->order_sn)) {
-                $po = Mage::getModel('udpo/po')->loadByIncrementId($orderId);
-                if ($po) {
-                    $po->setExternalOrderId($item->order_sn)
-                    ->save();
-                    $this->addOrderToConfirmMessage($orderId);
+            if (!$item->faultCode) {
+                if (empty($item->order_sn)) {
+                    $po = Mage::getModel('udpo/po')->loadByIncrementId($orderId);
+                    if ($po) {
+                        $po->setExternalOrderId($item->order_sn)
+                        ->save();
+                        $this->addOrderToConfirmMessage($orderId);
+                        $this->log($this->getHelper()->__('Order %s was imported to IAI Shop at number %s (%s)',$orderId,$item->order_sn,$item->order_id));
+                    } else {
+                        $this->log($this->getHelper()->__('Order %s does not exists',$orderId));
+                    }
+                    break;
+                } else {
+                    $this->log($this->getHelper()->__('IAI Api order has not serial number for order %s',$orderId));
                 }
-                break;
+            } else {
+                $this->getHelper()->fileLog($item);
+                $this->log($this->getHelper()->__('IAI Api Error %d at order %s: %s',$item->faultCode,$orderId,$item->faultString));
             }
         }
 
@@ -157,5 +173,16 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
             return $list->orderList;
         }
         return array();
+    }
+    
+    /**
+     * logs 
+     *
+     * @param string
+     */
+
+    public function log($mess) {
+        $vendorId = $this->getVendor()->getId();
+        $this->getHelper()->log($vendorId,$mess);
     }
 }

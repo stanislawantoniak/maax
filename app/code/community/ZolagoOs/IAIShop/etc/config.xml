@@ -2,7 +2,7 @@
 <config>
     <modules>
         <ZolagoOs_IAIShop>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </ZolagoOs_IAIShop>
     </modules>
     <global>
@@ -14,17 +14,26 @@
         <models>
             <zosiaishop>            	
                 <class>ZolagoOs_IAIShop_Model</class>
+                <resourceModel>zosiaishop_resource</resourceModel>
             </zosiaishop>
             <zosiaishop_ghapi>
                	<class>ZolagoOs_IAIShop_Model_GHAPI</class>
             </zosiaishop_ghapi>
+            <zosiaishop_resource>
+            	<class>ZolagoOs_IAIShop_Model_Resource</class>
+            	<entities>
+            		<log>
+            			<table>zos_iaishop_log</table>
+            		</log>
+            	</entities>
+            </zosiaishop_resource>
         </models>
         <resources>
-            <zosiaishop>
+            <zosiaishop_setup>
                 <setup>
                     <module>ZolagoOs_IAIShop</module>
                 </setup>
-            </zosiaishop>
+            </zosiaishop_setup>
         </resources>
         <blocks>
             <zosiaishop>
@@ -76,6 +85,41 @@
             <zosiaishop_settings>/iaishop/settings/save</zosiaishop_settings>
         </secure_url>
     </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <ZolagoOs_IAIShop>
+                    <files>
+                        <default>ZolagoOs_IAIShop.csv</default>
+                    </files>
+                </ZolagoOs_IAIShop>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <zosiaishop>
+                    <file>zosiaishop.xml</file>
+                </zosiaishop>
+            </updates>
+        </layout>    
+    </adminhtml>
+    <admin>
+    		<routers>
+			<adminhtml>
+				<zosiaishop>
+					<use>admin</use>
+					<module>ZolagoOs_IAIShop</module>
+					<frontname>zosiaishop</frontname>
+				</zosiaishop>
+				<args>
+					<modules>
+						<zosiaishop before="Mage_Adminhtml">ZolagoOs_IAIShop_Adminhtml</zosiaishop>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+
+    </admin>
     <crontab>
         <jobs>
             <zosiaishop_iaishop_sync>
