@@ -47,9 +47,18 @@ $inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::get
 $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
 
+<?php
+// TODO Paczka w Ruchu
+$pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+$pwrPoints = isset($pwrData["map_points"]) ? $pwrData["map_points"] : "";
+?>
+
 <script type="text/javascript">
     var inPostPointsData = '<?php echo $inPostPoints; ?>';
     var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
+
+    var pwrPointsData = '<?php echo $pwrPoints; ?>';
+    var pwrPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
 
     var sessionPointName = '<?php echo $locker->getName(); ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');

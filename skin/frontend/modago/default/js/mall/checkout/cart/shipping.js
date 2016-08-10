@@ -88,7 +88,7 @@
                     e.preventDefault();
                     var parentModal = jQuery(this).parents(".modal");
                     var deliveryMethod = parentModal.attr("data-carrier-points");
-                    //console.log(deliveryMethod);
+                    console.log(deliveryMethod);
                     switch(deliveryMethod){
                         case 'zolagopickuppoint':
                             parentModal.modal("hide");
@@ -110,8 +110,9 @@
             if (jQuery("input[data-select-shipping-method-trigger=0]").length == 0)
                 return;
 
+            // FIXME not sure this part is multi map
             //Init map
-            google.maps.event.addDomListener(window, 'load', initMap);
+            google.maps.event.addDomListener(window, 'load', initMapInPost);
             google.maps.event.addDomListener(window, "resize", resizingMap());
 
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
@@ -146,7 +147,7 @@
                     deliverySelectPointsModal.modal("show");
                 }
 
-                handleGeoLocation();
+                handleGeoLocationInPost();
             });
             jQuery("[name=shipping_select_city]").select2({
                 placeholder: Mall.translate.__("shipping_map_select_city"),
@@ -193,6 +194,7 @@
 
         },
         attachShowOnMapSavedInSessionPoint: function () {
+            // FIXME not sure this part is multi map
             var sessionPoint = jQuery("[name=shipping_point_code]");
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='ghinpost']");
             var sessionPointTown;
@@ -390,7 +392,7 @@ var gmarkers = [];
 var gmarkersNameRelation = [];
 
 
-function initMap() {
+function initMapInPost() {
 
     var mapOptions = {
         zoom: 8,
@@ -428,7 +430,7 @@ function initMap() {
     data = []; //No city no points
 }
 
-function refreshMap(filteredData, nearestStores) {
+function refreshMapInPost(filteredData, nearestStores) {
 
     var imageUrl = "/js/gh/gmap/icons/gmap_marker_black.png";
 
@@ -607,13 +609,13 @@ function resizingMap(point) {
 
 }
 //GEO
-function showPosition(position) {
+function showPositionInPost(position) {
     //Try to find in 30 km
-    var closestStores = calculateTheNearestStores(position, minDist, false);
+    var closestStores = calculateTheNearestStoresInPost(position, minDist, false);
 
     //Try to find in 100 km
     if (closestStores.length <= 0) {
-        closestStores = calculateTheNearestStores(position, minDistFallBack, true);
+        closestStores = calculateTheNearestStoresInPost(position, minDistFallBack, true);
     }
     closestStores.sort(sortByDirection);
     closestStores = closestStores.slice(0,3);
@@ -622,7 +624,7 @@ function showPosition(position) {
     nearestStores = closestStores;
 
     if (jQuery("[name=shipping_select_city]").val().length === 0) {
-        refreshMap([], nearestStores);
+        refreshMapInPost([], nearestStores);
         jQuery("#map_delivery")
             .css({"visibility": "visible", "display": "block"});
     }
@@ -630,21 +632,21 @@ function showPosition(position) {
 }
 
 //Get the latitude and the longitude;
-function successGeolocationFunction(position) {
+function successGeolocationFunctionInPost(position) {
     window.geoposition = position;
-    showPosition(window.geoposition);
+    showPositionInPost(window.geoposition);
     //Show on map session paczkomat
     Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
 
 }
 
-function handleGeoLocation() {
+function handleGeoLocationInPost() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successGeolocationFunction);
+        navigator.geolocation.getCurrentPosition(successGeolocationFunctionInPost);
     }
 }
 
-function calculateTheNearestStores(position, minDistance, fallback) {
+function calculateTheNearestStoresInPost(position, minDistance, fallback) {
     // find the closest location to the user's location
     var pos;
     var closestStores = [];
@@ -670,24 +672,6 @@ function sortByDirection(a, b) {
 }
 //--GEO
 
-
-
-// the smooth zoom function
-function smoothZoom(map, max, cnt) {
-
-    if (cnt >= max) {
-        return;
-    }
-    else {
-        y = google.maps.event.addListener(map, 'zoom_changed', function (event) {
-            google.maps.event.removeListener(y);
-            smoothZoom(map, max, cnt + 1);
-        });
-        setTimeout(function () {
-            map.setZoom(cnt)
-        }, 80);
-    }
-}
 
 function formatDetailsContent(pos) {
     var payment_point_description = "";
@@ -767,10 +751,10 @@ function buildStoresList(points) {
 
 
 function searchOnMap(q, markerToShow) {
-    _makeMapRequest(q, markerToShow);
+    _makeMapRequestInPost(q, markerToShow);
 }
 
-function _makeMapRequest(q, markerToShow) {
+function _makeMapRequestInPost(q, markerToShow) {
 
     jQuery.ajax({
         url: "/modago/inpost/getPopulateMapData",
@@ -782,8 +766,8 @@ function _makeMapRequest(q, markerToShow) {
 
             var pointsOnMap = data.map_points;
 
-            constructShippingPointSelect(pointsOnMap);
-            refreshMap(pointsOnMap, nearestStores);
+            constructShippingPointSelectInPost(pointsOnMap);
+            refreshMapInPost(pointsOnMap, nearestStores);
             jQuery("#map_delivery").css({"visibility": "visible", "display": "block"});
 
 
@@ -804,7 +788,7 @@ function _makeMapRequest(q, markerToShow) {
     });
 }
 
-function constructShippingPointSelect(map_points) {
+function constructShippingPointSelectInPost(map_points) {
     var options = [],
         map_point_long_name;
 

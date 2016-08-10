@@ -41,8 +41,9 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     {
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+		$pwrCode = Mage::helper("zospwr")->getCode(); //Paczka w Ruchu
 
-        return array($ghInpostCarrierCode, $pickUpPointCode);
+        return array($ghInpostCarrierCode, $pickUpPointCode, $pwrCode);
     }
 
 
@@ -52,6 +53,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+		$pwrCode = Mage::helper("zospwr")->getCode(); //Paczka w Ruchu
 
         switch ($deliveryMethodCode) {
             case $pickUpPointCode:
@@ -61,6 +63,11 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
             case $ghInpostCarrierCode:
                 $locker = $this->getInpostLocker();
                 $additionalData = $this->getLockerRender($locker);
+                break;
+			case $pwrCode:
+				// TODO \/
+                $locker = $this->getInpostLocker();
+				$additionalData = $this->getLockerRender($locker);
                 break;
         }
         return $additionalData;
@@ -160,5 +167,4 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         return $result;
     }
-
 } 
