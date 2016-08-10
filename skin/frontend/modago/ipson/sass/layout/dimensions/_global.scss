@@ -443,6 +443,9 @@ section {
 		.footer-black {
 			display:none;
 		}
+		.footer-black.visible_footer {
+			display:block;
+		}
 	}
 }
 
