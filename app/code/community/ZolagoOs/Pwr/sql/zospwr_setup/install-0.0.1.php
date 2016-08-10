@@ -3,6 +3,8 @@
 $installer = $this;
 $installer->startSetup();
 
+$installer->getConnection()->dropTable($installer->getTable('zospwr/point'));
+
 /**
  * Create table 'zospwr/point'
  */
@@ -24,9 +26,9 @@ $table = $installer->getConnection()
         ))
     ->addColumn('is_active',
         Varien_Db_Ddl_Table::TYPE_SMALLINT,
-        16,
+        6,
         array(
-            'nullable' => false,
+            'nullable'		=> false,
             "default"		=> 0,
             "comment"		=> "Is active"
         ))
@@ -34,13 +36,6 @@ $table = $installer->getConnection()
     ->addColumn('type',
         Varien_Db_Ddl_Table::TYPE_TEXT,
         64,
-        array(
-            'nullable' => true
-        ))
-    // Postcode
-    ->addColumn('postcode',
-        Varien_Db_Ddl_Table::TYPE_TEXT,
-        8,
         array(
             'nullable' => true
         ))
@@ -73,7 +68,7 @@ $table = $installer->getConnection()
             'nullable' => true
         ))
     // town
-    ->addColumn('city',
+    ->addColumn('town',
         Varien_Db_Ddl_Table::TYPE_TEXT,
         256,
         array(
@@ -93,31 +88,37 @@ $table = $installer->getConnection()
         array(
             'nullable' => false
         ))
-    // operatinghours
+    // operating_hours
     ->addColumn('operating_hours', Varien_Db_Ddl_Table::TYPE_TEXT, 256,
         array(
             'nullable' => true
         ))
-    // available
-    ->addColumn('available', Varien_Db_Ddl_Table::TYPE_SMALLINT, 1,
-        array(
-            'nullable' => false
-        ))
-    // location
-    ->addColumn('location', Varien_Db_Ddl_Table::TYPE_TEXT, 256,
+    // location_description
+    ->addColumn('location_description', Varien_Db_Ddl_Table::TYPE_TEXT, 256,
         array(
             'nullable' => true
-        ))
-    // status
-    ->addColumn('status', Varien_Db_Ddl_Table::TYPE_TEXT, 64,
-        array(
-            'nullable' => false
         ))
     ->addColumn('updated_at',
         Varien_Db_Ddl_Table::TYPE_TIMESTAMP,
         array(
             "comment"		=> "Updated at"
         ))
+	// payment_available
+	->addColumn('payment_available', Varien_Db_Ddl_Table::TYPE_SMALLINT, 1,
+		array(
+			'nullable' => false
+		))
+	->addColumn('payment_type', Varien_Db_Ddl_Table::TYPE_SMALLINT, 1,
+		array(
+			'nullable' => false
+		))
+	// psd
+	->addColumn('psd',
+		Varien_Db_Ddl_Table::TYPE_TEXT,
+		64,
+		array(
+			'nullable' => false,
+		))
     ->addIndex($this->getIdxName('zospwr/point', array('name')),
         array('name'));
 

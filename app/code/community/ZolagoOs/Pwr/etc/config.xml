@@ -38,17 +38,49 @@
             </zospwr_setup>
         </resources>
     </global>
+	<frontend>
+		<translate>
+			<modules>
+				<ZolagoOs_Pwr>
+					<files>
+						<default>ZolagoOs_Pwr.csv</default>
+					</files>
+				</ZolagoOs_Pwr>
+			</modules>
+		</translate>
+	</frontend>
+	<adminhtml>
+		<translate>
+			<modules>
+				<ZolagoOs_Pwr>
+					<files>
+						<default>ZolagoOs_Pwr.csv</default>
+					</files>
+				</ZolagoOs_Pwr>
+			</modules>
+		</translate>
+	</adminhtml>
     <crontab>
         <jobs>
-            <zospwr_sync_points>
+            <zospwr_update_points>
                 <schedule>
                     <!-- Run 3:00 everyday  -->
                     <cron_expr>3 0 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zospwr/observer::syncPoints</model>
+                    <model>zospwr/observer::updateAllPoints</model>
                 </run>
-            </zospwr_sync_points>
+            </zospwr_update_points>
         </jobs>
     </crontab>
+	<default>
+		<carriers>
+			<zospwr>
+				<active>0</active>
+				<api>https://api-test.paczkawruchu.pl/WebServicePwR/WebServicePwRTest.asmx?wsdl</api>
+				<partner_id>TEST000782</partner_id>
+				<partner_key>E8651567B6</partner_key>
+			</zospwr>
+		</carriers>
+	</default>
 </config>

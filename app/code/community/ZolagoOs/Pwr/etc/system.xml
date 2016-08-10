@@ -4,49 +4,48 @@
         <carriers>
             <groups>
                 <zospwr translate="label" module="zospwr">
-                    <label>Paczka w ruchu</label>
+                    <label>PwR</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1000</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <active translate="label">
+                        <active translate="label" module="zospwr">
                             <label>Enabled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>1</sort_order>
+                            <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </active>
-                        <api translate="label">
-                            <label>Adres API - Paczka w Ruchu</label>
-                            <comment/>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </api>
-                        <pwr_id translate="label">
-                            <label>ID:</label>
-                            <comment>ID klienta</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </pwr_id>
-                        <pwr_key translate="label">
-                            <label>Klucz:</label>
-                            <comment>Klucz</comment>
+                        <api translate="label" module="zospwr">
+                            <label>Address API</label>
+                            <comment>Url to WSDS</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </pwr_key>
+                        </api>
+                        <partner_id translate="label" module="zospwr">
+                            <label>PartnerID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </partner_id>
+                        <partner_key translate="label" module="zospwr">
+                            <label>PartnerKey</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </partner_key>
                     </fields>
                 </zospwr>
             </groups>

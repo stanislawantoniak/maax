@@ -41,7 +41,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     {
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
-		$pwrCode = Mage::helper("zospwr")->getCode(); //Paczka w Ruchu
+		$pwrCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode(); //Paczka w Ruchu
 
         return array($ghInpostCarrierCode, $pickUpPointCode, $pwrCode);
     }
@@ -53,7 +53,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
-		$pwrCode = Mage::helper("zospwr")->getCode(); //Paczka w Ruchu
+		$pwrCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode(); //Paczka w Ruchu
 
         switch ($deliveryMethodCode) {
             case $pickUpPointCode:
