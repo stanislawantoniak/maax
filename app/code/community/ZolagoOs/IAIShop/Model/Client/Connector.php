@@ -30,8 +30,6 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
 
 
-        var_dump($params);
-        die();
         foreach ($params as $n => $param) {
             $orders[$n]['order_type'] = "retail";
 //            $orders[$n]['shop_id'] = $this->getShopId();
@@ -75,7 +73,11 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
 
             $products = array();
-            $order_items = $param->order_items->item;
+            if (!is_array($param->order_items)) {
+                $order_items = $param->order_items->item;
+            } else {
+                $order_items = $param->order_items;
+            }
             foreach ($order_items as $i => $order_item) {
                 if (!$order_item->is_delivery_item) {
                     $products[$i]['product_sizecode'] = $order_item->item_sku;
@@ -92,7 +94,6 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             unset($i, $products);
         }
 
-        //krumo($orders);
         $action = "addOrders";
 
         $request = array();
@@ -100,7 +101,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         $request[$action]['params']['orders'] = $orders;
 
         return $this->doRequest("addorders", $action, $request);
-        
+//        
 
 
         $request = array();

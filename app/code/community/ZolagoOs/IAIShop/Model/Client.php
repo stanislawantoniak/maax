@@ -3,9 +3,6 @@
 class ZolagoOs_IAIShop_Model_Client
 {
     //authentication config
-    const IAISHOP_SHOP_NAME = "demo1-pl.iai-shop.com";
-    const IAISHOP_PANEL_LOGIN = "staant813";
-    const IAISHOP_PASS = "8b6e6bbb";
 
     private $_inputFormat = 'json'; //other options: xml (default) and php (serialized php array),
     private $_outputFormat = 'json'; //other options as above
@@ -40,7 +37,7 @@ class ZolagoOs_IAIShop_Model_Client
     private function getVendor()
     {
         if (!$this->_vendor) {
-            $this->_vendor = Mage::getModel("zolagodropship/vendor")->load($this->getVendorId());
+            $this->_vendor = Mage::getModel("udropship/vendor")->load($this->getVendorId());
         }
         return $this->_vendor;
     }
@@ -90,7 +87,6 @@ class ZolagoOs_IAIShop_Model_Client
         if (!$this->_apiUrl) {
             /* @$vendor Zolago_Dropship_Model_Vendor  */
             $vendor = $this->getVendor();
-
             $address = 'http://' . $vendor->getIaishopUrl() . '/api/';
             $this->_apiUrl = $address;
         }

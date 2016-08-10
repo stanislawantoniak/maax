@@ -12,9 +12,12 @@
             </zosiaishop>
         </helpers>
         <models>
-            <zosiaishop>
+            <zosiaishop>            	
                 <class>ZolagoOs_IAIShop_Model</class>
             </zosiaishop>
+            <zosiaishop_ghapi>
+               	<class>ZolagoOs_IAIShop_Model_GHAPI</class>
+            </zosiaishop_ghapi>
         </models>
         <resources>
             <zosiaishop>
@@ -28,6 +31,19 @@
                 <class>ZolagoOs_IAIShop_Block</class>
             </zosiaishop>
         </blocks>
+        <udropship>
+        	<vendor>
+        		<fields>
+  			    <zosiaishop_vendor_access_allow>
+                        	<label>IAI-Shop API Access</label>
+                        	<type>select</type>
+                        	<source>yesno</source>
+                        	<fieldset>ghapi_vendor_access</fieldset>
+                        	<position>2</position>
+	                    </zosiaishop_vendor_access_allow>
+        		</fields>
+        	</vendor>
+        </udropship>        
     </global>
     <frontend>
         <routers>

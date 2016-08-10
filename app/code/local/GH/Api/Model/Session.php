@@ -43,7 +43,7 @@ class GH_Api_Model_Session extends Mage_Core_Model_Abstract {
 	 * @param int $vendor_id
 	 * @return string
 	 */
-	protected function generateToken($vendor_id) {
+	public function generateToken($vendor_id) {
 		$string = $vendor_id.microtime(true).mt_rand(0,1000);
 		$data = str_shuffle($string);
 		return hash(self::GH_API_SESSION_TOKEN_ALGO,$data);

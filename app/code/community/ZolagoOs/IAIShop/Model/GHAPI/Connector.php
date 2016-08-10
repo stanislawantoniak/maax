@@ -6,53 +6,6 @@
 class ZolagoOs_IAIShop_Model_GHAPI_Connector
     extends GH_Api_Model_Soap_Client
 {
-    private $_vendorId = false;
-    protected $_ghApiUser = false;
-    private $_webApiKey = false;
-    private $_password = false;
-
-    private function setVendorId($vendorId)
-    {
-        return $this->_vendorId = $vendorId;
-    }
-
-    private function getVendorId()
-    {
-        return $this->_vendorId;
-    }
-
-    private function getGHAPIVendorUser()
-    {
-        if (!$this->_ghApiUser) {
-            $vendorId = $this->getVendorId();
-
-            /* @var $ghApiUser GH_Api_Model_User */
-            $ghApiUser = Mage::getModel('ghapi/user');
-            $this->_ghApiUser = $ghApiUser->loadByVendorId($vendorId);
-        }
-        return $this->_ghApiUser;
-    }
-
-    private function getApiKey()
-    {
-        if (!$this->_webApiKey) {
-            /* @var $_ghApiVendorUser GH_Api_Model_User */
-            $_ghApiVendorUser = $this->getGHAPIVendorUser();
-            $this->_webApiKey = $_ghApiVendorUser->getApiKey();
-        }
-        return $this->_webApiKey;
-    }
-
-    private function getPassword()
-    {
-        if (!$this->_password) {
-            /* @var $_ghApiVendorUser GH_Api_Model_User */
-            $_ghApiVendorUser = $this->getGHAPIVendorUser();
-            $this->_password = $_ghApiVendorUser->getPassword();
-        }
-        return $this->_password;
-    }
-
 
     /**
      * GH API doLogin
@@ -64,12 +17,24 @@ class ZolagoOs_IAIShop_Model_GHAPI_Connector
      */
     public function doLoginRequest($vendorId)
     {
-        $this->setVendorId($vendorId);
-
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+        if (!$vendor) {
+            Mage::throwException('No vendor '.$vendorId);
+        }        
+        if (!$vendor->getData('ghapi_vendor_access_allow')) {
+            return false;            
+        }
+        $ghApiUser = Mage::getModel('ghapi/user')->loadByVendorId($vendorId);
+        if (!$ghApiUser) {
+            return false;
+        }
+        $password = $ghApiUser->getPassword();
+        $apiKey = $ghApiUser->getApiKey();
         $obj = new StdClass();
         $obj->vendorId = $vendorId;
-        $obj->password = $this->getPassword();
-        $obj->webApiKey = $this->getApiKey();
+        $obj->password = $password;
+        $obj->webApiKey = $apiKey;
+        var_Dump($obj);
         return $this->_query('doLogin', $obj);
     }
 
@@ -99,10 +64,11 @@ class ZolagoOs_IAIShop_Model_GHAPI_Connector
         $params = array('encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'trace' => 1);
         /** @var GH_Api_Helper_Data $helper */
         $helper = Mage::helper('ghapi');
-        if ($testFlag) {
-            $url = $helper->prepareWsdlUri($helper->getWsdlTestUrl(), $params);
+        $uri = Mage::getUrl('ghapi/wsdl/',array('_store'=>1));
+        if ($testFlag) {            
+            $url = $helper->prepareWsdlUri($uri, $params);
         } else {
-            $url = $helper->getWsdlTestUrl();
+            $url = $uri;
         }
         $client = new SoapClient($url, $params);
         $data = array();
