@@ -41,6 +41,8 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * map payment method
+     *
+     * @todo make configuration in magento admin
      */
     public function getMappedPayment($payment) {
         //Sposób zapłaty za zamówienie.
@@ -54,6 +56,9 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
                                      "bank_transfer" => "tradecredit",
                                      "cash_on_delivery" => "cash_on_delivery"
                                  );
+        if (!isset($paymentMethodsMapping[$payment])) {
+            $this->fileLog('wrong payment method');
+        }
         return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
     }
 
@@ -65,22 +70,32 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * papped counties
+     * mapped countries
+     *
+     * @todo make configuration in magento admin
      */
     public function getMappedCountry($country) {
         $countries = array("PL" => "Polska");
+        if (!isset($countries[$country])) {
+            $this->fileLog('Wrong country '.$country);
+        }
         return isset($countries[$country])? $countries[$country]: 'unknown';
     }
 
     /**
      * mapped delivery
+     *
+     * @todo make configuration in magento admin
      */
     public function getMappedDelivery($delivery) {
         $deliveryMethodsMapping = array(
-                                      "polish_post" => 6,
-                                      "standard_courier" => 5,
-                                      "inpost_parcel_locker" => 7
+                                      "polish_post" => 100039,
+                                      "standard_courier" => 10,
+                                      "inpost_parcel_locker" => 45
                                   );
+        if (!isset($deliveryMethodsMapping[$delivery])) {
+            $this->fileLog('Wrong delivery '.$delivery);
+        }
         return isset($deliveryMethodsMapping[$delivery])? $deliveryMethodsMapping[$delivery]: 'unknown';
     }
 

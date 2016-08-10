@@ -80,7 +80,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
     public function processResponse($responseList,$orderId) {
         foreach ($responseList as $item) {
             if (!$item->faultCode) {
-                if (empty($item->order_sn)) {
+                if (!empty($item->order_sn)) {
                     $po = Mage::getModel('udpo/po')->loadByIncrementId($orderId);
                     if ($po) {
                         $po->setExternalOrderId($item->order_sn)
@@ -92,6 +92,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
                     }
                     break;
                 } else {
+                    $this->getHelper()->fileLog($item);
                     $this->log($this->getHelper()->__('IAI Api order has not serial number for order %s',$orderId));
                 }
             } else {
