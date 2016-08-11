@@ -82,7 +82,7 @@ class Orba_Shipping_Helper_Carrier_Dpd extends Orba_Shipping_Helper_Carrier {
      * parsing track response
      */
     protected function _parseTrackResponse($track,$result,&$message,&$status,&$shipmentIdMessage) {
-        if (is_object($result)) {
+        if (is_object($result) && $result->length) {
             $shipmentIdMessage = $this->__('Tracking ID') . ': '.$track->getTrackNumber() . PHP_EOL;
             $responseData = array();
             $table = $result->item(0);
@@ -127,7 +127,7 @@ class Orba_Shipping_Helper_Carrier_Dpd extends Orba_Shipping_Helper_Carrier {
                 }
             }
         } else {
-            $mess = $this->__('DPD Service Error: Wrong track and trace Data (%s)',$result);
+            $mess = Mage::helper('orbashipping')->__('DPD does not have a response for tracking number: '.$track->getTrackNumber());
             $this->_log($mess);
             $message[] = $mess;
         }

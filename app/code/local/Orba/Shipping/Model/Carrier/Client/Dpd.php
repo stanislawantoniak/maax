@@ -16,7 +16,7 @@ class Orba_Shipping_Model_Carrier_Client_Dpd extends Orba_Shipping_Model_Client_
      */
     public function getTrackAndTraceInfo($shipmentId) {
         $trackingUrl = Mage::getStoreConfig('carriers/zolagodpd/tracking_gateway');
-        $trackingUrl = $trackingUrl."?q=".$shipmentId."&typ=1";
+        $trackingUrl = $trackingUrl."?q=".trim($shipmentId)."&typ=1";
 
         $header[] = "Accept-Charset: utf-8;q=0.7,*;q=0.7";
         $header[] = "Accept-Language: en-us,en;q=0.7";
@@ -45,7 +45,7 @@ class Orba_Shipping_Model_Carrier_Client_Dpd extends Orba_Shipping_Model_Client_
 
         $tableData = $dom->getElementsByTagName('tbody');
         if(!$tableData){
-            Mage::throwException(Mage::helper('orbashipping')->__('DPD does not have a response for track number '.$shipmentId));
+            Mage::throwException(Mage::helper('orbashipping')->__('DPD does not have a response for tracking number '.$shipmentId));
         }
         return $tableData;
     }
