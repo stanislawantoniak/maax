@@ -12,7 +12,6 @@
 $helper = Mage::helper('zolagosales');
 //$order = Mage::getModel('sales/order')->load(30); //only for testing
 $order = $this->getOrder();
-print_r($order);
 if (!$order) {
     return; //only for not getting error when view template email
 }
