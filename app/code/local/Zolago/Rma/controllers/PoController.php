@@ -12,7 +12,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
          */
         $this->_viewAction();
     }
-    protected function _canViewRma(Unirgy_Rma_Model_Rma $rma)
+    protected function _canViewRma(ZolagoOs_Rma_Model_Rma $rma)
     {
         $customerId = Mage::getSingleton('customer/session')->getCustomerId();
         if ($rma->getId() && $rma->getCustomerId() && ($rma->getCustomerId() == $customerId)) {
@@ -37,6 +37,10 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $this->_redirectReferer();
     }
     public function rmaListAction() {
+        $activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
+        if($activeNoRma){
+            return $this->_redirect('sales/order/process');
+        }
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
@@ -142,9 +146,13 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $po = $rma->getPo();
 
         $this->_rmaSetOwnShippingAddress($data, $rma);
+		// Send can throw exception so this need to be done with rma save
+		$dhlRequest = $this->_getTrackignRequest($data);
+		if ($dhlRequest) {
+			$rma->setSendDlhRequestOnSave($dhlRequest);
+		}
         $rma->save();
         // set tracking
-        $dhlRequest = $this->_getTrackignRequest($data);
         $this->_setTracking($dhlRequest, $rma, $data);
 
         if (!empty($data['send_email'])) {
@@ -192,7 +200,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
     protected function _saveRma()
     {
-
         $rmas = $this->_initRma(true);
         $data = $this->getRequest()->getPost('rma');
         $data['send_email'] = true;
@@ -210,6 +217,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 				'shipmentDate' => $data['carrier_date'],
 				'shipmentStartHour' => $data['carrier_time_from'],
 				'shipmentEndHour' => $data['carrier_time_to'],
+				'shippingPaymentType' => Orba_Shipping_Model_Carrier_Client_Dhl::PAYER_TYPE_SHIPPER // chyba powinno być USER ale trzeba jeszcze sprawdzić to w DHL
 			);
 		}
 		else{
@@ -225,17 +233,16 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $po = $rma->getPo();
             /* @var $po Zolago_Po_Model_Po */
             $rma->register();
-            // set tracking
-            if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
-                $track = Mage::getModel('urma/rma_track');
-                $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
-                $track->setTrackNumber($trackingParams['trackingNumber']);
-                $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
-                $track->setCarrierCode(Orba_Shipping_Model_Carrier_Dhl::CODE);
-                $track->setLabelPic($trackingParams['file']);
-                $rma->addTrack($track);
-                $rma->setCurrentTrack($track);
-            }
+			// set tracking
+			if ($dhlRequest) {
+				$track = Mage::getModel('urma/rma_track');
+				$track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+				$track->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT);
+				$rma->addTrack($track);
+				$rma->setCurrentTrack($track);
+				// Send can throw exception so this need to be done with rma save
+				$rma->setSendDlhRequestOnSave($dhlRequest);
+			}
         }
         if (!empty($data['comment_text'])) {
             foreach ($rmas as $rma) {
@@ -251,9 +258,9 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         $rma->setRmaReason(@$data['rma_reason']);
 
-
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
+		/** @var Mage_Core_Model_Resource_Transaction $trans */
         $trans = Mage::getModel('core/resource_transaction');
         foreach ($rmas as $rma) {
             $rma->setIsCutomer(true);
@@ -263,21 +270,38 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $trans->addObject($rma->getPo())->save();
 
         foreach ($rmas as $rma) {
-
+            
                 Mage::dispatchEvent("zolagorma_rma_created", array(
                     "rma" => $rma
                 ));
 
-            if($rma->getCurrentTrack()) {                
+            $rma->save();
+
+			$trackingParams = $rma->getDhlTrackingParams();
+            if ($dhlRequest && $trackingParams) {
+                $track = $rma->getCurrentTrack();
+                $carrier = Orba_Shipping_Model_Carrier_Dhl::CODE;
+                $track->setTrackNumber($trackingParams['trackingNumber']);
+                $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
+                $track->setCarrierCode($carrier);
+                $track->setLabelPic($trackingParams['file']);
+
+                $track->setData("gallery_shipping_source", isset($trackingParams["gallery_shipping_source"]) ? $trackingParams["gallery_shipping_source"] : 0);
+                $track->setData("shipping_source_account", $trackingParams["account"]);
+                $po = $rma->getPo();
+                $weight = $po->getTracking()->getWeight();
+                $type = Mage::helper('orbashipping/carrier_dhl')->getDhlParcelKeyByWeight($weight);
+                $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
+                $manager->calculateCharge($track,$type,$po->getVendor(),$rma->getTotalValue(),0);
+            }
+
+            if($rma->getCurrentTrack()) {
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
 					"rma"		=> $rma,
 					"track"		=> $rma->getCurrentTrack()
 				));
             }
-
-            $rma->save();
-			
-			if(isset($data['customer_address_id'])){
+            if(isset($data['customer_address_id'])){
 				// Duplicate Customer address to RMA address tored in Order Address
 				$customerAddress = $this->_getCustomer()->getAddressById(
 					$data['customer_address_id']
@@ -320,11 +344,13 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
      */
     protected function _setTracking($dhlRequest, $rma, $data)
     {
-        $config = Mage::getSingleton("shipping/config");
-        /* @var $config Mage_Shipping_Model_Config */
-        if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
+		/* @var $config Mage_Shipping_Model_Config */
+		$config = Mage::getSingleton("shipping/config");
+		$trackingParams = $rma->getDhlTrackingParams();
+		if ($dhlRequest && $trackingParams) {
             $track = Mage::getModel('urma/rma_track');
             $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+            $track->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_RMA_CLIENT);
             $track->setTrackNumber($trackingParams['trackingNumber']);
             $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
             $track->setCarrierCode(Orba_Shipping_Model_Carrier_Dhl::CODE);

@@ -192,7 +192,10 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 
         Mage::dispatchEvent(
             "vendor_manual_save_price_after",
-            array("products" => $coll)
+            array(
+                "products"    => $coll,
+                "product_ids" => $coll->getAllIds()
+            )
         );
 
 		$this->_forward("get", "vendor_price", "udprod");
@@ -213,7 +216,6 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	/**
 	 * Details action (JSON)
 	 */
-	
 	public function detailAction() {
 		$ids = $this->getRequest()->getParam("ids", array());
 		
@@ -228,9 +230,10 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		if($collection->getSize()<count($ids)){
 			throw new Mage_Core_Exception("You are trying to edit not your product");
 		}
-		
-		$out = Mage::getResourceSingleton('zolagocatalog/vendor_price')
-				->getDetails($ids, $storeId, true, $this->_getSession()->isAllowed("campaign"));
+
+        /** @var Zolago_Catalog_Model_Resource_Vendor_Price $model */
+        $model = Mage::getResourceSingleton('zolagocatalog/vendor_price');
+		$out = $model->getDetails($ids, $storeId, true, $this->_getSession()->isAllowed("campaign"));
 		
 		$this->getResponse()->
 				setHeader('Content-type', 'application/json')->

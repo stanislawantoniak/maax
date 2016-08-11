@@ -107,4 +107,5 @@ class Zolago_Modago_Block_Page_Html_Breadcrumbs extends Mage_Page_Block_Html_Bre
             $request->getActionName()=="index"
         );
     }
+
 }

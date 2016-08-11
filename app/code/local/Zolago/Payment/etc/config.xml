@@ -1,59 +1,77 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
-        <Zolago_Payment>
-            <version>0.0.12</version>
-        </Zolago_Payment>
-    </modules>
-    <global>
-        <helpers>
-            <zolagopayment>
-                <class>Zolago_Payment_Helper</class>
-            </zolagopayment>
-        </helpers>
-        <models>
-            <zolagopayment>
-                <class>Zolago_Payment_Model</class>
-                <resourceModel>zolagopayment_resource</resourceModel>
-            </zolagopayment>
-            <zolagopayment_resource>
-                <class>Zolago_Payment_Model_Resource</class>
-                <entities>
-                    <provider>
-                        <table>zolago_payment_provider</table>
-                    </provider>
-                    <allocation>
-                        <table>zolago_payment_allocation</table>
-                    </allocation>
-                </entities>
-            </zolagopayment_resource>
-        </models>
-        <blocks>
-            <zolagopayment>
-                <class>Zolago_Payment_Block</class>
-            </zolagopayment>
-        </blocks>
-        <resources>
-            <zolagopayment_setup>
-                <setup>
-                    <module>Zolago_Payment</module>
-                </setup>
-            </zolagopayment_setup>
-        </resources>
-        <events>
-            <zolagopayment_save_transaction_after>
-                <observers>
-                    <zolago_payment_allocation_observer>
-                        <class>zolagopayment/allocation_observer</class>
-                        <method>salesOrderPaymentTransactionSaveAfter</method>
-                    </zolago_payment_allocation_observer>
-                </observers>
-            </zolagopayment_save_transaction_after>
-
-
-        </events>
-    </global>
-    <frontend>
+	<modules>
+		<Zolago_Payment>
+			<version>0.1.9</version>
+		</Zolago_Payment>
+	</modules>
+	<global>
+		<helpers>
+			<zolagopayment>
+				<class>Zolago_Payment_Helper</class>
+			</zolagopayment>
+		</helpers>
+		<models>
+			<zolagopayment>
+				<class>Zolago_Payment_Model</class>
+				<resourceModel>zolagopayment_resource</resourceModel>
+			</zolagopayment>
+			<zolagopayment_resource>
+				<class>Zolago_Payment_Model_Resource</class>
+				<entities>
+					<provider>
+						<table>zolago_payment_provider</table>
+					</provider>
+					<allocation>
+						<table>zolago_payment_allocation</table>
+					</allocation>
+					<vendor_invoice>
+						<table>zolago_vendor_invoice</table>
+					</vendor_invoice>
+					<vendor_payment>
+						<table>zolago_vendor_payment</table>
+					</vendor_payment>
+				</entities>
+			</zolagopayment_resource>
+		</models>
+		<blocks>
+			<zolagopayment>
+				<class>Zolago_Payment_Block</class>
+			</zolagopayment>
+		</blocks>
+		<resources>
+			<zolagopayment_setup>
+				<setup>
+					<module>Zolago_Payment</module>
+				</setup>
+			</zolagopayment_setup>
+		</resources>
+		<events>
+			<zolagopayment_save_transaction_after>
+				<observers>
+					<zolago_payment_allocation_observer>
+						<class>zolagopayment/allocation_observer</class>
+						<method>salesOrderPaymentTransactionSaveAfter</method>
+					</zolago_payment_allocation_observer>
+				</observers>
+			</zolagopayment_save_transaction_after>
+		</events>
+		<template>
+			<email>
+				<refund_email_template translate="label" module="zolagopayment">
+					<label>Order refund email template</label>
+					<file>refund_email_template.html</file>
+					<type>html</type>
+				</refund_email_template>
+				<refund_rma_email_template translate="label" module="zolagopayment">
+					<label>RMA refund email template</label>
+					<file>refund_rma_email_template.html</file>
+					<type>html</type>
+				</refund_rma_email_template>
+			</email>
+		</template>
+	</global>
+	<frontend>
 		<translate>
 			<modules>
 				<Zolago_Payment>
@@ -63,7 +81,25 @@
 				</Zolago_Payment>
 			</modules>
 		</translate>
-    </frontend>
+	</frontend>
+	<adminhtml>
+		<translate>
+			<modules>
+				<Zolago_Payment>
+					<files>
+						<default>Zolago_Payment.csv</default>
+					</files>
+				</Zolago_Payment>
+			</modules>
+		</translate>
+        <layout>
+            <updates>
+                <zolagopayment>
+                    <file>zolagopayment.xml</file>
+                </zolagopayment>
+            </updates>
+        </layout>
+	</adminhtml>
 	<admin>
 		<routers>
 			<zolagopayment>
@@ -71,53 +107,66 @@
 				<module>Zolago_Payment</module>
 				<frontname>payment</frontname>
 			</zolagopayment>
-		</routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <zolagopayment before="Mage_Adminhtml">Zolago_Payment_Adminhtml</zolagopayment>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
 	</admin>
 	<default>
 		<payment>
-            <zolagopayment_gateway>
-                <active>1</active>
-                <visible>1</visible>
-                <model>zolagopayment/gateway</model>
-                <order_status>pending</order_status>
-                <title>Online Payment</title>
-                <allowspecific>0</allowspecific>
-            </zolagopayment_gateway>
-            <zolagopayment_cc>
-                <active>1</active>
-                <visible>1</visible>
-                <model>zolagopayment/cc</model>
-                <order_status>pending</order_status>
-                <title>Credit Card</title>
-                <allowspecific>0</allowspecific>
-            </zolagopayment_cc>
+			<zolagopayment_gateway>
+				<active>1</active>
+				<visible>1</visible>
+				<model>zolagopayment/gateway</model>
+				<order_status>pending</order_status>
+				<title>Online Payment</title>
+				<allowspecific>0</allowspecific>
+			</zolagopayment_gateway>
+			<zolagopayment_cc>
+				<active>1</active>
+				<visible>1</visible>
+				<model>zolagopayment/cc</model>
+				<order_status>pending</order_status>
+				<title>Credit Card</title>
+				<allowspecific>0</allowspecific>
+			</zolagopayment_cc>
 			<cashondelivery>
-                <visible>1</visible>
-                <p_details>0</p_details>
+				<visible>1</visible>
+				<p_details>0</p_details>
+                <channel_owner>0</channel_owner>
 			</cashondelivery>
 			<banktransfer>
-                <visible>1</visible>
-                <p_details>1</p_details>
+				<visible>1</visible>
+				<p_details>1</p_details>
+                <channel_owner>1</channel_owner>
 			</banktransfer>
-            <dotpay>
-                <p_details>1</p_details>
-            </dotpay>
-            <payment_refunds>
-                <payment_refunds_automatic>2</payment_refunds_automatic>
-            </payment_refunds>
-        </payment>
+			<dotpay>
+				<p_details>1</p_details>
+                <channel_owner>1</channel_owner>
+			</dotpay>
+			<payment_refunds>
+				<payment_refunds_automatic>2</payment_refunds_automatic>
+			</payment_refunds>
+			<config>
+				<use_allocation>1</use_allocation>
+			</config>
+		</payment>
 	</default>
-    <crontab>
-        <jobs>
-            <zolagopayment_automatic_refunds>
-                <schedule>
-                    <!-- Run every 1 minute -->
-                    <cron_expr>0 */2 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagopayment/observer::processRefunds</model>
-                </run>
-            </zolagopayment_automatic_refunds>
-        </jobs>
-    </crontab>
+	<crontab>
+		<jobs>
+			<zolagopayment_automatic_refunds>
+				<schedule>
+					<!-- Run every 1 minute -->
+					<cron_expr>0 */2 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>zolagopayment/observer::processRefunds</model>
+				</run>
+			</zolagopayment_automatic_refunds>
+		</jobs>
+	</crontab>
 </config>

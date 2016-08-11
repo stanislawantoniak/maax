@@ -50,6 +50,10 @@ var App = function($) {
 
 			// Toggle class
 			$('#container').toggleClass('sidebar-closed');
+
+			if(typeof window.priceGrid != "undefined") {
+				window.priceGrid.resize();
+			}
 			
 		});
 

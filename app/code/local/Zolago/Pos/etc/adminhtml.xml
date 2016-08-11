@@ -12,11 +12,15 @@
     <menu>
         <vendors>
             <children>
-                <zolagopos>
-                    <title>Pos</title>
-                    <sort_order>100</sort_order>
-                    <action>adminhtml/pos/index</action>
-                </zolagopos>
+                <vendor_general_config>
+                    <children>
+                        <zolagopos>
+                            <title>Pos</title>
+                            <sort_order>100</sort_order>
+                            <action>adminhtml/pos/index</action>
+                        </zolagopos>
+                    </children>
+                </vendor_general_config>
             </children>
         </vendors>
     </menu>
@@ -26,10 +30,14 @@
                 <children>
                     <vendors>
                         <children>
-                            <zolagopos>
-                                <title>Pos</title>
-                                <sort_order>40</sort_order>
-                            </zolagopos>
+                            <vendor_general_config>
+                                <children>
+                                    <zolagopos>
+                                        <title>Pos</title>
+                                        <sort_order>100</sort_order>
+                                    </zolagopos>
+                                </children>
+                            </vendor_general_config>
                         </children>
                     </vendors>
                 </children>

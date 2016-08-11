@@ -7,7 +7,6 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	 */
 	public function rmaCreated($observer) {
 		$rma = $observer->getEvent()->getData('rma');
-		
 		$author = null;
 		$customerSession = Mage::getSingleton('customer/session');
 		if($customerSession->isLoggedIn() && $customerSession->getCustomer()->getId()){
@@ -92,7 +91,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
 				$track->setNextCheck(date('Y-m-d H:i:s', $time));
-				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
+				$track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING);
 				$track->save();
 		    
 		}
@@ -116,6 +115,10 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$oldStatus = $observer->getEvent()->getData("old_status");
 		$notify = $observer->getEvent()->getData("notify");
 
+		// do not send emails with statuses for rma 
+		if ($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN) {
+		    $notify = false;
+		}
 
 		$helper = Mage::helper("zolagorma");
 		/* @var $rma Zolago_Rma_Model_Rma */
@@ -231,6 +234,20 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$this->_logEvent($rma, $text, false);
 		}
 	}
+
+	public function rmaCreatedManually($observer){
+		$session = Mage::getSingleton('udropship/session');
+		$rma = $observer->getEvent()->getData('rma');
+		$vendor = $rma->getVendor();
+		$operator = $rma->getOperator();
+		if($session->isOperatorMode()){
+			$author = $operator;
+		}else{
+			$author = $vendor;
+		}
+		$text = Mage::helper('zolagorma')->__("RMA created successfully");
+		$this->_logEvent($rma, $text, false, $author);
+	}
 	
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
@@ -239,7 +256,6 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	 * @param string mixed|null
 	 */
 	protected function _logEvent($rma, $comment, $sendEmail=null, $author=null) {
-		
 		$notifyByStatus = (bool)$rma->getStatusObject()->getNotifyCustomer();
 		
 		$data  = array(
@@ -262,7 +278,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			}elseif($custSession->getCustomerId()){
 				$data['customer_id'] = $custSession->getCustomerId();
 			}
-		}elseif($author instanceof Unirgy_Dropship_Model_Vendor){
+		}elseif($author instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$data['vendor_id'] = $author->getId();
 		}elseif($author instanceof Zolago_Operator_Model_Operator){
 			$data['vendor_id'] = $author->getVendor()->getId();
@@ -293,7 +309,6 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$data['is_customer_notified'] = 1;
 			$data['is_visible_on_front'] = 1;
 		}
-		
 		
 		/* @var $commentModel Zolago_Rma_Model_Rma_Comment */
 		$commentModel->setRma($rma);
@@ -328,6 +343,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
             'content'   => Mage::app()->getLayout()->createBlock('zolagorma/adminhtml_dropship_edit_tab_returnreasons', 'vendor.returnreasons.form')
                 ->toHtml()
         ));
+        $block->addTabToSection('return_reasons','logistic',60);
     }
 	
 	/**

@@ -1,0 +1,244 @@
+<?php /* @var $this GH_Statements_Block_Adminhtml_Vendor_Statements_Edit_Tab_General */
+/** @var GH_Statements_Helper_Data $_helper */
+$_helper = Mage::helper('ghstatements');
+/** @var Mage_Core_Helper_Data $cHlp */
+$cHlp = Mage::helper('core');
+$statement = $this->getStatement();
+
+$vendorId = $statement->getVendorId();
+$vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+?>
+
+
+<div style="" id="statement_tabs_form_section_content">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend">
+                <?php echo $this->getTabLabel(); ?>
+            </h4>
+        </div>
+        <div id="statement_form" class="fieldset ">
+            <div class="hor-scroll">
+                <table cellspacing="0" class="form-list">
+                    <tr>
+                        <td class="label">
+                            <label for="statement_id"><b><?php echo $_helper->__("Statement ID"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="statement_id"><?php echo $statement->getId(); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="name"><b><?php echo $_helper->__("Name"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="name"><?php echo $statement->getName(); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="vendor_name"><b><?php echo $_helper->__("Vendor"); ?></b></label>
+                        </td>
+                        <td class="value">
+                            <span id="vendor_name"><?php echo $vendor->getVendorName(); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td class="label"><label for="order_value"><b><?php echo $_helper->__("Order: Realised orders"); ?></b></label></td>
+                        <td class="value">
+                            <span id="order_value">
+                                <?php echo $cHlp->formatPrice($statement->getData('order_value')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of realised orders (Gallery payment channel)"); ?></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="order_commission_value"><b><?php echo $_helper->__("Order: Commission Amount"); ?></b></label></td>
+                        <td class="value">
+                            <span id="order_commission_value">
+                                <?php echo $cHlp->formatPrice($statement->getData('order_commission_value')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of commision from realised orders"); ?></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="rma_value"><b><?php echo $_helper->__("RMA: value"); ?></b></label></td>
+                        <td class="value">
+                            <span id="rma_value">
+                                <?php echo $cHlp->formatPrice($statement->getData('rma_value')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of commision returns from RMA"); ?></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="total_commission"><b><?php echo $_helper->__("Modago commission"); ?></b></label></td>
+                        <td class="value">
+                            <span id="total_commission">
+                                <?php echo $cHlp->formatPrice($statement->getData('total_commission')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of commision from realised orders minus sum of commision returns from RMA"); ?></span></p>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="label"><label for="refund_value"><b><?php echo $_helper->__("Refunds balance"); ?></b></label></td>
+                        <td class="value">
+                            <span id="refund_value">
+                                <?php echo $cHlp->formatPrice($statement->getData('refund_value')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of refunds"); ?></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="gallery_discount_value"><b><?php echo $_helper->__("Discounts financed by Modago"); ?></b></label></td>
+                        <td class="value">
+                            <span id="gallery_discount_value">
+                                <?php echo $cHlp->formatPrice($statement->getData('gallery_discount_value')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of discounts financed by Modago"); ?></span></p>
+                        </td>
+                    </tr>
+
+                    <!--Koszty-->
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="tracking_charge_total"><b><?php echo $_helper->__("Tracking: Charge Total"); ?></b></label></td>
+                        <td class="value">
+                            <span id="tracking_charge_total">
+                                <?php echo $cHlp->formatPrice($statement->getData('tracking_charge_total')); ?> (Netto: <?php echo $cHlp->formatPrice($statement->getData('tracking_charge_subtotal')); ?>)
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="marketing_value">
+                                <b><?php echo $_helper->__("Marketing: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="marketing_value">
+                                <?php echo $cHlp->formatPrice(-$statement->getData('marketing_value')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- Koszty end -->
+
+                    <!--Korekty-->
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><label for="commission_correction"><b><?php echo $_helper->__("Correction: commission"); ?></b></label></td>
+                        <td class="value">
+                            <span id="commission_correction">
+                                <?php echo $cHlp->formatPrice($statement->getData('commission_correction')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="delivery_correction">
+                                <b><?php echo $_helper->__("Correction: delivery"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                        <span id="delivery_correction">
+                            <?php echo $cHlp->formatPrice($statement->getData('delivery_correction')); ?>
+                        </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="marketing_correction">
+                                <b><?php echo $_helper->__("Correction: marketing"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                        <span id="marketing_correction">
+                            <?php echo $cHlp
+                                ->formatPrice($statement->getData('marketing_correction')); ?>
+                        </span>
+                        </td>
+                    </tr>
+                    <!--Korekty end -->
+
+                    <tr>
+                        <td class="label">
+                            <label for="to_pay">
+                                <b><?php echo $_helper->__("To payout"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="to_pay">
+                               <strong><?php echo $cHlp->formatPrice($statement->getData('to_pay')); ?></strong>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td><span><?php echo $_helper->__('Balance:');?></span></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="last_statement_balance">
+                                <b><?php echo $_helper->__("Balance: Last balance"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="last_statement_balance">
+                                <?php echo $cHlp
+                                    ->formatPrice($statement->getData('last_statement_balance')); ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="payment_value">
+                                <b><?php echo $_helper->__("Payment: Amount"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="payment_value">
+                                <?php echo $cHlp
+                                    ->formatPrice(-$statement->getData('payment_value')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Sum of payments to vendor"); ?></span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">
+                            <label for="actual_balance">
+                                <b><?php echo $_helper->__("Balance: Actual balance"); ?></b>
+                            </label>
+                        </td>
+                        <td class="value">
+                            <span id="actual_balance">
+                                <?php echo $cHlp->formatPrice($statement->getData('actual_balance')); ?>
+                            </span>
+                            <p class="note"><span><?php echo $_helper->__("Last statement balance + payout value - sum of payments to vendor"); ?></span></p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

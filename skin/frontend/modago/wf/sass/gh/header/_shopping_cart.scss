@@ -1,0 +1,105 @@
+.shopping-cart-widget {
+  .cart-bag {
+    height: 25px;
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    right: 0;
+    top: -1px;
+    text-align: center;
+
+    &:before {
+      content: "";
+      position: relative;
+      display: block;
+      z-index: 1;
+      width: 14px;
+      height: 23px;
+      top: -8px;
+      left: 50%;
+      background-color: transparent;
+      border: 2px solid $colorIconTextHeader;
+      border-radius: 15px;
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      transform: translateX(-50%);
+      @include transition(top 0.3s ease-in-out);
+    }
+    &:hover {
+      &:before {
+        top: -10px;
+      }
+    }
+
+    .ico-sum {
+      background: none;
+      display: none;
+    }
+
+    .badge-number {
+      background-color: #fff;
+      color: #fff;
+      display: block;
+      min-width: 20px;
+      border: 2px solid $colorIconTextHeader;
+      -webkit-border-radius: 0px;
+      border-radius: 0px;
+      font-weight: 600;
+      z-index: 1;
+      font-size: 11px;
+      line-height: 14px;
+      margin-top: -25px;
+      right: 0;
+      padding: 0 5px !important;
+      position: relative;
+      @include transition(color 0.3s ease-in-out);
+      cursor: pointer;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        z-index: -1;
+        box-shadow: inset 0 0 0 35px $colorIconTextHeader;
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+        @include transition(box-shadow 0.3s, transform 0.3s);
+      }
+
+      &:after {
+        content: "";
+        width: 100%;
+        position: absolute;
+        display: none !important;
+        bottom: -6px;
+        height: 2px;
+        left: -2px;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+        background-color: $colorIconTextHeader;
+        border-left: 2px solid $colorIconTextHeader;
+        border-right: 2px solid $colorIconTextHeader;
+        display: block;
+      }
+
+      &:hover {
+        color: #252525;
+        @include transition(color 0.3s ease-in-out);
+
+        &:before {
+          box-shadow: inset 0 0 0 1px $colorIconTextHeader;
+          -webkit-transform: scale3d(1.1, 1.1, 1.1);
+          transform: scale3d(1.1, 1.1, 1.1);
+          @include transition(box-shadow 0.3s, transform 0.3s);
+        }
+      }
+    }
+  }
+}

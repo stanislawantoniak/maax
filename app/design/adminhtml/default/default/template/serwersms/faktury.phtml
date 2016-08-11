@@ -1,0 +1,133 @@
+<style>
+    .ramka_serwersms{
+        border: 1px solid #e02124;
+    }
+    
+    .ramka_serwersms td{
+        padding-left: 10px; padding-right: 10px;
+    }
+    
+    .ramka_serwersms a{
+        color: #e02124;
+    }
+    
+    .naglowek_serwersms{
+        background: #e02124; padding: 10px 10px; color: #fff;
+    }
+    
+    .naglowek_serwersms a{
+        color: #fff;
+    }
+    .text-right{
+        text-align: right;
+    }
+    .serwersms_info{
+        font-size: 11px;
+        color: #333;
+    }
+</style>
+<?php
+$dane = $this->pokazFaktury();
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody><tr>
+            <td><h3 class="icon-head head-adminhtml-wyslane">Faktury</h3></td>
+        </tr>
+    </tbody></table>
+</div>
+<table class="ramka_serwersms">
+    <tr>
+        <td colspan="5" class="naglowek_serwersms">
+            <img src="<?php echo $this->getSkinUrl('serwersms/serwersms.png') ?>" />
+        </td>
+    </tr>
+    <?php
+        
+    if(is_array($dane)){
+       echo '<tr><td><strong>Numer</strong></td><td><strong>Rozliczono</strong></td><td><strong>Kwota</strong></td><td><strong>Termin</strong></td><td><strong>Podgląd</strong></td></tr>';
+    /*
+     * Paginator 
+     */
+        $liczba_rekordow = count($dane);
+        $liczba_na_stronie = 20;
+        $liczba_stron = ceil($liczba_rekordow/$liczba_na_stronie);
+        
+        if($this->getRequest()->getParam('strona')){
+            $aktywna_strona = $this->getRequest()->getParam('strona');
+        } else {
+            $aktywna_strona = 1;
+        }
+        
+        $indeks_koncowy = $aktywna_strona*$liczba_na_stronie;
+        $indeks_poczatkowy = $indeks_koncowy-$liczba_na_stronie;
+        
+        for($i=$indeks_poczatkowy;$i<$indeks_koncowy;$i++){
+            if(!empty($dane[$i])){
+                $tablica[] = $dane[$i];
+            }
+        }
+        
+        $key_pag = Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_index","faktury");
+        
+        for($i=1;$i<=$liczba_stron;$i++){
+            $link = Mage::helper("adminhtml")->getUrl("serwersms/adminhtml_index/faktury/",array("strona" => $i, "key" => $key_pag));
+            if($i == $aktywna_strona){
+                $wszystkie_strony[$i] = $i;
+            } else {
+                $wszystkie_strony[$i] = '<a href="'.$link.'">'.$i.'</a>';
+            }
+        }
+        $poczatek = Mage::helper("adminhtml")->getUrl("serwersms/adminhtml_index/faktury/",array("strona" => 1, "key" => $key_pag));
+        $koniec = Mage::helper("adminhtml")->getUrl("serwersms/adminhtml_index/faktury/",array("strona" => $liczba_stron, "key" => $key_pag));
+        
+        if($liczba_stron<=11){
+            foreach($wszystkie_strony as $strona){
+                $paginator[] = $strona;
+            }
+        } elseif($aktywna_strona<=6){
+            for($i=1;$i<=11;$i++){
+                $paginator[] = $wszystkie_strony[$i];
+            }
+            $paginator[] = '<a href="'.$koniec.'">'.$liczba_stron.' &gt;&gt;</a>';
+        } elseif($aktywna_strona >= $liczba_stron-5){
+            $paginator[] = '<a href="'.$poczatek.'">&lt;&lt; 1</a>';
+            for($i=$liczba_stron-10;$i<=$liczba_stron;$i++){
+                $paginator[] = $wszystkie_strony[$i];
+            }
+        } else {
+            $paginator[] = '<a href="'.$poczatek.'">&lt;&lt; 1</a>';
+            for($i=$aktywna_strona-5;$i<=$aktywna_strona+5;$i++){
+                $paginator[] = $wszystkie_strony[$i];
+            }
+            $paginator[] = '<a href="'.$koniec.'">'.$liczba_stron.' &gt;&gt;</a>';
+        }
+        
+        $paginator = implode(" | ",$paginator);
+        /*
+         * Paginator END
+         */
+        
+        $key = Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_index","podgladfaktury");
+        foreach($tablica as $pole){
+            $link = Mage::helper("adminhtml")->getUrl("serwersms/adminhtml_index/podgladfaktury/",array("faktura" => $pole['id'], "key" => $key));
+            echo '
+                <tr>
+                    <td>'.$pole['numer'].'</td><td>'.$pole['rozliczono'].'</td><td>'.$pole['kwota'].'</td><td>'.$pole['termin'].'</td><td><a href="'.$link.'">podgląd</a></td>
+                </tr>
+                ';
+        }
+        echo '<tr><td colspan="5" align="center" class="naglowek_serwersms">'.$paginator.'</td></tr>';
+    } else {
+        echo '<tr><td colspan="5">';
+
+                if($dane == 'blad logowania: nieprawidlowy login lub haslo' or $dane == ''){
+                    echo Mage::helper('sms_helper/SerwerSMS')->niezalogowanyWidok();
+                } else {
+                    echo '<strong>'.$dane.'</strong>';
+                }
+
+         echo '</td></tr>';
+    }
+    ?>
+</table>

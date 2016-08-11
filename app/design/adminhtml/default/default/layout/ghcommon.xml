@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_rawsql_index>
+        <reference name="content">
+            <block type="ghcommon/adminhtml_rawsql" name="ghcommon_rawsql" template="ghcommon/rawsql.phtml">
+                <block type="ghcommon/adminhtml_rawsql_grid" name="ghcommon_rawsql_grid"/>
+            </block>
+        </reference>
+    </adminhtml_rawsql_index>
+        <adminhtml_rawsql_edit>
+            <reference name="content">
+                <block type="ghcommon/adminhtml_rawsql_edit" name="ghcommon_rawsql_edit" template="ghcommon/rawsql/edit.phtml">
+                    <block type="ghcommon/adminhtml_rawsql_edit_form" name="form"/>
+                </block>
+            </reference>
+       </adminhtml_rawsql_edit>
+        <adminhtml_rawsql_launch>
+            <reference name="content">
+                <block type="ghcommon/adminhtml_rawsql_launch" name="ghcommon_rawsql_launch" template="ghcommon/rawsql/launch.phtml">
+                    <block type="ghcommon/adminhtml_rawsql_launch_result" name="query_result" template="ghcommon/rawsql/launch/result.phtml"/>
+                </block>
+            </reference>
+       </adminhtml_rawsql_launch>
+                                                                            
+</layout>

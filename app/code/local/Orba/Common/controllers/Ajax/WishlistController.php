@@ -25,10 +25,38 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 			$this->_sendJson(0, $error);
 			return;
 		}
-		
-		
-		// Send correct data
-		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
+
+		$this->_changeWishlistInCache(1,$this->getRequest()->getParam('product'));
+
+		// Only info about new count
+		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+		$content = array(
+			'favorites_count'	=> $cacheHelper->getFavoritesCount(),
+		);
+		$this->_sendJson(true, $content);
+	}
+
+	protected function _changeWishlistInCache($inWishlist,$productId) {
+		if(($inWishlist === 1 || $inWishlist === 0) && is_numeric($productId)) {
+			//mark item's wishlist status in products cache
+			/** @var Zolago_Customer_Model_Session $customerSession */
+			$customerSession = Mage::getSingleton('customer/session');
+			$currentProducts = $customerSession->getProductsCache();
+			$madeChanges = false;
+			if(isset($currentProducts['products']) && !empty($currentProducts['products'])) {
+				foreach($currentProducts['products'] as $k=>$product) {
+					if($product[0] == $productId && $product[6] != $inWishlist) {
+						$currentProducts['products'][$k][6] = $inWishlist;
+						$madeChanges = true;
+						break;
+					}
+				}
+				if($madeChanges) {
+					$customerSession->setData(Zolago_Customer_Model_Session::CURRENT_PRODUCTS,$currentProducts);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -68,10 +96,16 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 			$this->_sendJson(0, $error);
 			return;
 		}
-		
-		// Send correct data
-		$this->_forward("get_account_information", "ajax_customer", "orbacommon");
-		
+
+		$this->_changeWishlistInCache(0,$this->getRequest()->getParam('product'));
+
+		// Only info about new count
+		/** @var Orba_Common_Helper_Ajax_Customer_Cache $cacheHelper */
+		$cacheHelper = Mage::helper('orbacommon/ajax_customer_cache');
+		$content = array(
+			'favorites_count'	=> $cacheHelper->getFavoritesCount(),
+		);
+		$this->_sendJson(true, $content);
 	}
 	
 	/**
@@ -87,9 +121,14 @@ class Orba_Common_Ajax_WishlistController extends Zolago_Wishlist_IndexControlle
 	 * @param mixed $content
 	 */
 	protected function _sendJson($status, $content) {
-		$this->getResponse()->
-			setHeader("Content-type", "application/json")->
-			setBody(Mage::helper('core')->jsonEncode(array(
+		$_helper = Mage::helper('orbacommon');
+		$this->getResponse()
+			->clearHeaders()
+			->setHeader("Content-type", "application/json", true)
+			->setHeader('Pragma', 'no-cache', true)
+			->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true)
+			->setHeader('Expires', $_helper->timestampToGmtDate(0), true)
+			->setBody(Mage::helper('core')->jsonEncode(array(
 				'status'	=> (bool)$status,
 				'content'	=> $content
 			))

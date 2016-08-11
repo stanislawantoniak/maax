@@ -1,0 +1,128 @@
+.stores-map {
+  #map-container {
+    padding: 0;
+    border: 1px solid $bc-secondary;
+    -webkit-box-shadow: $bc-secondary 0 2px 5px;
+    -moz-box-shadow: $bc-secondary 0 2px 5px;
+    box-shadow: $bc-secondary 0 2px 5px;
+    @media (max-width: $screen-sm) {
+      clear: both;
+    }
+  }
+
+  #map {
+    width: 100%;
+    height: 450px;
+
+    @media (max-width: $screen-md) {
+      width: 85%;
+      height: 400px;
+      margin: 10px auto;
+    }
+    @media (max-width: $screen-sm) {
+      width: 85%;
+      height: 300px;
+      margin: 10px auto;
+    }
+  }
+
+
+  #inline-actions {
+    padding-top: 10px;
+  }
+  .button-third {
+    min-width: 160px;
+    @media (max-width: $screen-xs) {
+      padding: 7px 5px;
+      min-width: 130px;
+    }
+    @media (max-width: 350px) {
+      min-width: 125px;
+    }
+  }
+  .item {
+    margin-left: 20px;
+  }
+
+  .marker-window {
+    max-width: 170px;
+  }
+
+  .info_window_text .iw_header {
+    width: 100%;
+    margin: 0;
+    line-height: 1.2;
+    text-transform: capitalize;
+  }
+
+  .info_window_text .iw_header .shop_name {
+    display: block;
+    text-transform: capitalize;
+    font-style: normal;
+    margin: 6px 0;
+  }
+
+  .search-by-map {
+    h4 {
+      text-transform: uppercase;
+    }
+    .button.button-primary {
+      padding: 7px 15px;
+      margin-top: 10px;
+
+    }
+  }
+  .search-by-map-list {
+    h4 {
+      text-transform: uppercase;
+      padding: 0;
+    }
+  }
+
+  .search-by-map-list ul {
+    padding-left: 5px;
+    list-style: none;
+  }
+
+  .search-by-map-list {
+    padding-top: 20px;
+    ul.search-by-map-list-html {
+      .store-info-item {
+        border-top: 1px solid $bc-secondary;
+        padding: 20px 5px 20px 0;
+        .left-column {
+          padding-left: 0;
+          p {
+            padding: 0 0 10px 0;
+            margin: 0;
+          }
+        }
+        .right-column {
+          padding-right: 0;
+          .buttons {
+            .row {
+              &:not(:first-child) {
+                margin-top: 5px;
+              }
+            }
+
+          }
+
+        }
+      }
+    }
+  }
+
+  a.stores-map-show-all {
+    color: $link-color !important;
+    top: 5px;
+    position: relative;
+    font-size: $font-size-normal-link;
+    font-family: $font-family-sans-serif;
+    text-decoration: underline;
+  }
+
+  .no-padding {
+    padding: 0;
+  }
+}

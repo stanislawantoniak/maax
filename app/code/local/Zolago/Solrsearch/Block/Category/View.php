@@ -10,7 +10,11 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 	protected function _prepareLayout() {
         parent::_prepareLayout();
 
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
         if ($headBlock = $this->getLayout()->getBlock('head')) {
+			/** @var Zolago_Catalog_Model_Category $category */
             $category = $this->getCurrentCategory();
             if ($title = $category->getMetaTitle()) {
                 $headBlock->setTitle($title);
@@ -22,7 +26,17 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 $headBlock->setKeywords($keywords);
             }
             if ($this->helper('catalog/category')->canUseCanonicalTag()) {
-                $headBlock->addLinkRel('canonical', $category->getCanonicalUrl());
+				$noVendor = false;
+				if ($vendor && $vendor->getId()) {
+					$root = $vendor->getRootCategory();
+					$websiteId = (int)Mage::app()->getWebsite()->getId();
+					if (isset($root[$websiteId]) && empty($root[$websiteId])) {
+						// if empty this means vendor have root category same as gallery
+						// so canonical should be gallery link
+						$noVendor = true;
+					}
+				}
+				$headBlock->addLinkRel('canonical', $category->getCanonicalUrl($noVendor));
             }
 
             /*rewrite gh_url_rewrite*/
@@ -39,6 +53,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 }
             }
             /*rewrite gh_url_rewrite*/
+
+            /* @var $campaign Zolago_Campaign_Model_Campaign */
+            $campaign = $category->getCurrentCampaign();
+
+            if($campaign){
+                $headBlock->setTitle($campaign->getNameCustomer() . " - " . Mage::app()->getStore()->getName());
+            }
         }
 
         if($this->isContentMode()) {
@@ -60,7 +81,8 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
                 ->getBlock('root')
                 ->addBodyClass('node-type-main_categories')
                 ->addBodyClass('is-content-mode')
-                ->setTemplate('page/1column.phtml');
+                //->setTemplate('page/1column.phtml')
+            ;
 
 			$this->getLayout()->getBlock('before_body_end')->unsetChild('searchfaces');
 
@@ -78,8 +100,6 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 				->addBodyClass('filter-sidebar');
 		}
 
-        /** @var Zolago_Dropship_Model_Vendor $vendor */
-        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
         if($vendor && $vendor->getId()) {
             $this->getLayout()
                 ->getBlock('root')
@@ -123,9 +143,13 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     }
 
+    /**
+     * @return string
+     */
     public function getSidebarWrapper()
     {
-        $categoryId = $this->getCurrentCategory()->getId();
+        $category = $this->getCurrentCategory();
+        $categoryId = $category->getId();
         $name = "sidebar-c{$categoryId}-wrapper";
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 
@@ -133,8 +157,83 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
             $vendorId = $vendor->getVendorId();
             $name = "sidebar-c{$categoryId}-v{$vendorId}-wrapper";
         }
+        $block = $this->getLayout()->createBlock('cms/block')->setBlockId($name);
+        $blockModel = Mage::getModel('cms/block')->load($name);
+        $blockId = $blockModel->getId();
+        $currentStoreId = Mage::app()->getStore()->getId();
 
-        return $this->getLayout()->createBlock('cms/block')->setBlockId($name)->toHtml();
+        $defaultStoreId = Mage_Core_Model_App::ADMIN_STORE_ID;
+
+        if ($blockId && ($blockModel->getIsActive() == 1)
+            && (in_array($currentStoreId, $blockModel->getData("store_id")) || in_array($defaultStoreId, $blockModel->getData("store_id")))
+        ) {
+            $blockHtml = $block->toHtml();
+        } else {
+            //Render automatically
+            $lambda = function ($params) {
+                return $params['scope']->renderSidebarWrapper($params['category'], $params['vendor']);
+            };
+            $cacheKey = $name . '_auto_render_' . Mage::app()->getStore()->getId();
+            $blockHtml = Mage::helper('zolagocommon')->getCache(
+                $cacheKey
+                , self::CACHE_GROUP
+                , $lambda
+                , array('category' => $category, 'vendor' => $vendor, 'scope' => $this)
+            );
+        }
+        return $blockHtml;
+    }
+
+    /**
+     * @param $category
+     * @param $vendor
+     * @return string
+     */
+    public function renderSidebarWrapper($category, $vendor)
+    {
+        $blockHtml = '';
+        $categories = $this->getRenderMenuCategories($category, $vendor);
+
+        if (empty($categories)) {
+            return $blockHtml;
+        }
+        $blockHtml .= '<div id="sidebar" class="clearfix">';
+        $blockHtml .= '<div class="sidebar">';
+
+        $blockHtml .= '<div class="section clearfix hidden-xs">';
+        $blockHtml .= '<h3 class="open no-pointer"><strong>' . $category->getLongName() . '</strong></h3>';
+        $blockHtml .= '<div class="content content-cms bigger-left">';
+        $blockHtml .= '<dl class="no-margin">';
+        foreach ($categories as $cat) {
+            $blockHtml .= '<dd><a href="' . $cat["url"] . '" class="simple">' . $cat["name"] . '</a></dd>';
+
+        }
+        $blockHtml .= '</dl>';
+
+        $blockHtml .= '</div>';
+        $blockHtml .= '</div>';
+        $blockHtml .= '</div>';
+        $blockHtml .= '</div>';
+
+        return $blockHtml;
+    }
+
+    /**
+     * @param $category
+     * @param $vendor
+     * @return mixed
+     */
+    public function getRenderMenuCategories($category, $vendor){
+        if(!$this->getData("sidebar_menu_categories")){
+            $categories = Mage::getModel('catalog/category')->getCategories($category->getId());
+            if($vendor){
+                $menu = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 1, true, $vendor);
+            } else {
+                $menu = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 1, false);
+            }
+            $this->setData("sidebar_menu_categories",$menu);
+        }
+        return $this->getData("sidebar_menu_categories");
     }
 
     public function getProductListHtml() {

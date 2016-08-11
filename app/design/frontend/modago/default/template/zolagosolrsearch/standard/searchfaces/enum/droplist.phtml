@@ -1,4 +1,7 @@
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var Zolago_Modago_Block_Solrsearch_Faces_Enum_Droplist $this */
+$key = $this->getFacetKey();
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -11,57 +14,57 @@
     <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div id="filter_<?php echo $key ?>" class="content checkbox filter-enum">
-            <?php foreach ($this->getItems() as $item => $count): ?>
-                <?php if ($this->getCanShowItem($item, $count)): ?>
+            <?php foreach ($this->getItems() as $item): ?>
+                <?php if ($this->getCanShowItem($item)): ?>
                     <?php
-                    if(!$isOptionSelected && $this->isItemActive($item)) {
+                    if(!$isOptionSelected && $item['active']) {
                         $isOptionSelected = true;
                     }
                     ?>
                     <div class="form-group form-checkbox">
-                        <input data-url="<?php echo $this->getItemUrl($item); ?>"
-							   data-params='<?php echo $this->getItemJson($item); ?>'
+                        <input data-url="<?php echo $item['url']; ?>"
+							   data-params='<?php echo $item['params']; ?>'
 							   type="checkbox" 
-							   name="<?php echo $this->getItemName($item); ?>"
-							   value="<?php echo $this->getItemValue($item); ?>"
-							   id="<?php echo $this->getItemId($item); ?>"
+							   name="<?php echo $item['name']; ?>"
+							   value="<?php echo $item['value']; ?>"
+							   id="<?php echo $item['itemId']; ?>"
 							   class="css-checkbox" 
-							   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                        <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+							   <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+                        <label for="<?php echo $item['itemId']; ?>" class="css-label">
 	                        <span>
-		                        <a href="<?php echo $this->getItemUrl($item); ?>"
+		                        <a href="<?php echo $item['url']; ?>"
 		                           class="listing-link">
-		                            <?php echo $item; ?>
+		                            <?php echo $item['item']; ?>
 		                        </a>
 	                        </span>
 	                        &nbsp;
 	                        <span class="suffix">
-		                        (<?php echo $count; ?>)
+		                        (<?php echo $item['count']; ?>)
 	                        </span>
                         </label>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
             <?php if ($this->getCanShowHidden()): ?>
-                <?php foreach ($this->getHiddenItems() as $item => $count): ?>
+                <?php foreach ($this->getHiddenItems() as $item): ?>
                     <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
-                        <input data-url="<?php echo $this->getItemUrl($item) ?>"  
+                        <input data-url="<?php echo $item['url'] ?>"  
 							   type="checkbox" 
 							   class="css-checkbox" 
-							   name="<?php echo $this->getItemName($item);?>"
-							   value="<?php echo $this->getItemValue($item)?>"
-							   id="<?php echo $this->getItemId($item)?>"
-							   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-	                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+							   name="<?php echo $item['name'];?>"
+							   value="<?php echo $item['value']?>"
+							   id="<?php echo $item['itemId']?>"
+							   <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+	                    <label for="<?php echo $item['itemId']; ?>" class="css-label">
 	                        <span>
-		                        <a href="<?php echo $this->getItemUrl($item); ?>"
+		                        <a href="<?php echo $item['url']; ?>"
 		                           class="listing-link">
-			                        <?php echo $item; ?>
+			                        <?php echo $item['item']; ?>
 		                        </a>
 	                        </span>
 		                    &nbsp;
 	                        <span class="suffix">
-		                        (<?php echo $count; ?>)
+		                        (<?php echo $item['count']; ?>)
 	                        </span>
 	                    </label>
                     </div>
@@ -71,21 +74,21 @@
                 </div>
             <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>"" data-filter-type="<?php echo $pureKey; ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
         <?php if($isOptionSelected) : ?>
             <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
                 <div class="active-filter">
-                    <?php foreach ($this->getItems() as $item => $count): ?>
-                        <?php if ($this->getCanShowItem($item, $count) && $this->isItemActive($item)): ?>
-                            <a href="<?php echo $this->getItemUrl($item); ?>"
+                    <?php foreach ($this->getItems() as $item): ?>
+                        <?php if ($this->getCanShowItem($item) && $item['active']): ?>
+                            <a href="<?php echo $item['url']; ?>"
                                class="active-filter-label"
-                               data-input="<?php echo $this->getItemId($item); ?>">
-                                <?php echo $this->getItemValue($item); ?><i class="fa fa-times"></i>
+                               data-input="<?php echo $item['itemId']; ?>">
+                                <?php echo $item['value']; ?><i class="fa fa-times"></i>
                             </a>
                             <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
-                                   value="<?php echo $this->getItemValue($item); ?>"/>
+                                   value="<?php echo $item['value']; ?>"/>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>

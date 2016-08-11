@@ -1,0 +1,29 @@
+<?php
+/** @var GH_Statements_Block_Dropship_Invoice $this */
+/** @var GH_Statements_Helper_Data $helper */
+$helper = Mage::helper('ghstatements');
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $helper->__("Invoices");?></h3>
+        </div>
+    </div>
+    <!-- /Page Header -->
+</div>
+
+<div class="container z-grid">
+    <div class="widget box">
+        <div class="widget-content">
+            <?php echo $this->getGridHtml(); ?>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        var gridObj = <?php echo $this->getGridJsObjectName();?>;
+        // create integrator
+        new Zolago.gridIntegrator(gridObj);
+    })();
+</script>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<zolagoconverter>
+			<groups>
+				<marketing translate="label">
+					<label>Marketing settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<token translate="label">
+							<label>Security token</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</token>
+						<ip translate="label">
+							<label>Server IP</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</ip>
+					</fields>
+				</marketing>
+			</groups>
+		</zolagoconverter>
+	</sections>
+</config>

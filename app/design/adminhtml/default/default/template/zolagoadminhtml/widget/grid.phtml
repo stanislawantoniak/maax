@@ -1,4 +1,5 @@
 <?php
+/** @var Mage_Adminhtml_Block_Widget_Grid $this */
 /**
  * Template for Mage_Adminhtml_Block_Widget_Grid
  *
@@ -60,7 +61,8 @@ $numColumns = sizeof($this->getColumns());
 			<div class="pull-right form-inline">
 				<?php $_curPage  = $this->getCollection()->getCurPage() ?>
 				<?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
-				<div class="form-group"> 
+                <?php if(!($_curPage == $_lastPage && $_lastPage = 1)): // don't show if no need ?>
+				<div class="form-group">
 					<input type="text" size="1" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="page align-right form-control" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
 				</div>
 				<div class="text-holder">
@@ -83,6 +85,7 @@ $numColumns = sizeof($this->getColumns());
 						<?php endif; ?>
 					</div>
 				</div>
+                <?php endif; ?>
 				<div class="text-holder">
 					<label>
 					<?php if($this->getRssLists()): ?>
@@ -118,7 +121,7 @@ $numColumns = sizeof($this->getColumns());
 	<div class="grid">
 		<div class="hor-scroll">
 		<table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
-			<?php foreach ($this->getColumns() as $_column): ?>
+			<?php foreach ($this->getColumns() as $_column): /** @var $_column Mage_Adminhtml_Block_Widget_Grid_Column */ ?>
 			<col <?php echo $_column->getHtmlProperty() ?> />
 			<?php endforeach; ?>
 			<?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
@@ -126,7 +129,7 @@ $numColumns = sizeof($this->getColumns());
 					<?php if ($this->getHeadersVisibility()): ?>
 						<tr class="headings">
 						<?php foreach ($this->getColumns() as $_column): ?>
-							<th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
+							<th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="<?php echo $_column->hasData('headings_css_class') ? $_column->getHeadingsCssClass(): 'nobr';?>"><?php echo $_column->getHeaderHtml() ?></span></th>
 						<?php endforeach; ?>
 						</tr>
 					<?php endif; ?>

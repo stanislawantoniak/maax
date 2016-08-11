@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Pos>
-			<version>0.0.7</version>
+			<version>0.1.0</version>
 		</Zolago_Pos>
 	</modules>
 	<global>
@@ -51,6 +51,18 @@
                 </observers>
             </udpo_order_save_before>
 		</events>
+		<udropship>
+		    <vendor>
+		        <fields>
+		            <problem_pos_id>	
+		                <label>Problem POS</label>
+                        <fieldset>vendor_info</fieldset>
+                        <source_model>zolagopos/source</source_model>
+                        <type>select</type>
+		            </problem_pos_id>
+		        </fields>
+		    </vendor>
+		</udropship>
 	</global>
 	<frontend>
 		<routers>
@@ -65,7 +77,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_Pos before="Unirgy_Dropship">Zolago_Pos_Dropship</Zolago_Pos>
+						<Zolago_Pos before="ZolagoOs_OmniChannel">Zolago_Pos_Dropship</Zolago_Pos>
 					</modules>
 				</args>
 			</udropship>
@@ -104,17 +116,6 @@
 				</zolagopos>
 			</updates>
 		</layout>
-		<events>
-			<controller_action_layout_render_before_udpoadmin_order_po_view>
-                <observers>
-					<zolagopos>
-						<type>singleton</type>
-						<class>zolagopos/observer</class>
-						<method>addPosInfoToOrderInfo</method>
-					</zolagopos>
-				</observers>
-            </controller_action_layout_render_before_udpoadmin_order_po_view>
-		</events>
 	</adminhtml>
 	<admin>
 		<routers>

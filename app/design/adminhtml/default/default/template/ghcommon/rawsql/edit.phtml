@@ -1,0 +1,23 @@
+<div class="content-header">
+   <h3><?php echo $this->getHeaderText() ?></h3>
+   <p class="content-buttons form-buttons">
+        <?php echo $this->getButtonsHtml(); ?>
+    </p>
+</div>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="rawsql_edit_form">
+    <?php echo $this->getBlockHtml('formkey')?>
+    <?php echo $this->getChild('form')->toHtml(); ?>
+    <input type="hidden" name="launch_query" value="0" id="launch_query_form_hidden">
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var editForm = new varienForm('rawsql_edit_form');
+    var rawsqlControl = {
+        save: function(run) {
+            document.getElementById('launch_query_form_hidden').value = run;
+            editForm.submit();
+            return false;
+        }
+    };
+    
+</script>

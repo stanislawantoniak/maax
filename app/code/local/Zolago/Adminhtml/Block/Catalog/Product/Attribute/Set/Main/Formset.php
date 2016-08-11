@@ -44,7 +44,6 @@ class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset extends 
     {
         $data = Mage::getModel('eav/entity_attribute_set')
             ->load($this->getRequest()->getParam('id'));
-Mage::log($data->getData());
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset(
             'set_name',

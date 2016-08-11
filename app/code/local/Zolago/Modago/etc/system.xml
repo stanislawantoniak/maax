@@ -65,13 +65,99 @@
                             <show_in_default>1</show_in_default>
                             <validate>validate-number</validate>
                         </vendor_landingpage_n_products>
+                        <category_cache_lifetime translate="label">
+                            <label>Category cache lifetime</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Time in seconds</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <validate>validate-number</validate>
+                        </category_cache_lifetime>
                     </fields>
                 </zolagomodago_cataloglisting>
+                <zolagomodago_cataloglisting_pagination translate="label">
+                    <label>Pagination</label>
+                    <frontend_type>text</frontend_type>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>0</sort_order>
+                    <fields>
+                        <products_per_page_iphone translate="label">
+                            <label>iPhone - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on iPhone per one page.</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_iphone>
+                        <products_per_page_ipad translate="label">
+                            <label>iPad - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on iPad per one page.</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_ipad>
+                        <products_per_page_mobile translate="label">
+                            <label>Mobile browsers - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on Mobile browsers per one page.</comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_mobile>
+                        <products_per_page_desktop translate="label">
+                            <label>Desktop browsers - Products per page</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown on Desktop browsers per one page.</comment>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </products_per_page_desktop>
+                    </fields>
+                </zolagomodago_cataloglisting_pagination>
             </groups>
         </zolagomodago_catalog>
 
         <design translate="label" module="zolagomodago">
             <groups>
+                <head_vendor translate="label">
+                    <label>HTML Head (Vendor Landing Page)</label>
+                    <frontend_type>text</frontend_type>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>21</sort_order>
+                    <fields>
+                        <vendor_landing_page_title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Use {{vendor}} to define vendor name.</comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vendor_landing_page_title>
+                        <vendor_landing_page_description translate="label">
+                            <label>Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <comment>Use {{vendor}} to define vendor name.</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vendor_landing_page_description>
+                    </fields>
+                </head_vendor>
                 <popular_brands translate="label">
                     <label>Popular brands block</label>
                     <frontend_type>text</frontend_type>
@@ -80,16 +166,6 @@
                     <show_in_store>1</show_in_store>
                     <sort_order>50</sort_order>
                     <fields>
-                        <popular_brands_count translate="label">
-                            <label>Brand's icons number</label>
-                            <frontend_type>text</frontend_type>
-                            <comment>How many brand's icons are shown on the front page</comment>
-                            <sort_order>0</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <validate>validate-number</validate>
-                        </popular_brands_count>
                         <popular_brands_config translate="label">
                             <label>Main page brand's config</label>
                             <frontend_type>text</frontend_type>
@@ -169,6 +245,26 @@
 			            </hide_after>
 		            </fields>
 	            </scrolltop>
+	            <header>
+		            <fields>
+			            <secondary_logo_src translate="label">
+				            <label>Alternative logo SRC</label>
+				            <frontend_type>text</frontend_type>
+				            <sort_order>50</sort_order>
+				            <show_in_default>1</show_in_default>
+				            <show_in_website>1</show_in_website>
+				            <show_in_store>1</show_in_store>
+			            </secondary_logo_src>
+			            <secondary_logo_alt translate="label">
+				            <label>Alternative logo ALT</label>
+				            <frontend_type>text</frontend_type>
+				            <sort_order>60</sort_order>
+				            <show_in_default>1</show_in_default>
+				            <show_in_website>1</show_in_website>
+				            <show_in_store>1</show_in_store>
+			            </secondary_logo_alt>
+		            </fields>
+	            </header>
             </groups>
         </design>
     </sections>

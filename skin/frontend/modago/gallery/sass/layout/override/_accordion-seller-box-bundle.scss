@@ -1,0 +1,56 @@
+#seller-box-bundle {
+	#accordion {
+		.panel-default {
+			border:none;
+			margin-bottom: -6px;
+			> .panel-heading {
+				padding: 14px 15px 14px 15px;
+				h4 {
+					padding:0px;
+					&.panel-title {
+						position:relative;
+						a {
+							display:block;
+							padding-left:26px;
+							position:relative;
+							
+							
+						}
+						&:before {
+					    content: " ";
+					    display: block;
+					    width: 18px;
+					    height: 18px;
+					    position: absolute;
+					    left: -9px;
+						top: -2px;
+							@media (max-width: 360px) {
+								left: -4px;
+							}
+						}
+					}
+					
+				}
+				
+				&+ .panel-collapse {
+					.panel-body {
+						padding-left: 40px;
+						padding-right: 40px;
+						ul {
+							margin:0px;
+							padding:0px;
+						}
+						.view-store {
+							padding: 3px 10px;
+							display: inline-block;
+							float: right;
+							margin-right: 2px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+

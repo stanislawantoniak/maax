@@ -2,18 +2,22 @@
 /** @var $this Mage_Customer_Block_Form_Login */
 $_hlp = Mage::helper("zolagocustomer");
 $_isCheckout = $this->getRequest()->getParam("is_checkout");
+$socialLogin = $this->getChildHtml('ced_sociallogin_login');
 ?>
 
 <div id="content" class="container-fluid">
 	<div id="logIn" class="row">
 		<div id="content-main" class="">
-			<div class="col-sm-6 column-block">
+			<div class="col-sm-6 column-block login-column">
 				<div class="main bg-w equalBlock col-01">  
-					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form">
+					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form" <?php if(!$socialLogin):?>style="margin-bottom:70px"<?php endif; ?>>
 						<?php echo $this->getBlockHtml('formkey'); ?>
 						<?php if($_isCheckout):?>
 							<input name="is_checkout" type="hidden" value="1"/>
 						<?php endif;?>
+						<?php if($this->getRequest()->getParam('redirect')): ?>
+							<input name="redirect" type="hidden" value="<?php echo $this->getRequest()->getParam('redirect'); ?>" />
+						<?php endif; ?>
 						<section class="section clearfix">
 							<header class="title-section">
 								<h2><?php echo $_hlp->__('Do you have account already?') ?></h2>
@@ -35,25 +39,27 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<div class="inner-form-group">
-												<a class="forgot-password underline visible-sm visible-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 186px;"><?php echo $this->__('Forgot Your Password?') ?></a>
+												<a class="forgot-password underline visible-sm visible-xs" href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot Your Password?') ?></a>
 												<input type="password" name="login[password]" class="form-control input-text required-entry validate-password login-text-field" id="pass" title="" autocomplete="off" tabindex="2">
-												<a class="forgot-password underline hidden-sm hidden-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 186px;"><?php echo $_hlp->__("You don't remember password?"); ?></a>
+												<a class="forgot-password underline hidden-sm hidden-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 157px;"><?php echo $_hlp->__("You don't remember password?"); ?></a>
 											</div>
 										</div>
 									</div>
 								</li>
-								<?php echo $this->getChildHtml('form.additional.info'); ?>
-								<?php /* echo $this->getChildHtml('persistent.remember.me') */; ?>
-								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
 							</ul>
-							<?php /* <footer class="footer-section">
-								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
-							</footer> */ ?>
+							<?php /* echo $this->getChildHtml('persistent.remember.me') */; ?>
+							<?php echo $this->getChildHtml('form.additional.info'); ?>
+							<button type="submit" name="send" class="button button-primary large link pull-right" <?php if(!$socialLogin): ?>style="bottom:30px;" <?php endif;?>id="login-button"><?php echo $_hlp->__('Login') ?></button>
+							<?php if($socialLogin): ?>
+							<footer class="footer-section">
+								<?php echo $socialLogin ?>
+							</footer>
+							<?php endif; ?>
 						</section>
 					</form>
-				</div>   
+				</div>
 			</div>
-			<div class="col-sm-6 column-block">
+			<div class="col-sm-6 column-block register-column">
 				<div class="main bg-w equalBlock col-02">
 					<?php echo $this->getChildHtml("form.register.continue");?>
 				</div>

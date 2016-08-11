@@ -28,7 +28,7 @@ class Zolago_Banner_Block_Vendor_Banner extends Mage_Core_Block_Template{
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Session
+     * @return ZolagoOs_OmniChannel_Model_Session
      */
     protected function _getSession(){
         return Mage::getSingleton('udropship/session');

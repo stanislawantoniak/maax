@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Sizetable>
-			<version>0.0.6</version>
+			<version>0.0.7</version>
 		</Zolago_Sizetable>
 	</modules>
 	<global>
@@ -100,13 +100,13 @@
 					</modules>
 				</args>
 			</adminhtml>
-			<udropshipadmin>
+			<zolagoosadmin>
 				<args>
 					<modules>
-						<Zolago_Sizetable_Adminhtml before="Unirgy_Dropship">Zolago_Sizetable</Zolago_Sizetable_Adminhtml>
+						<Zolago_Sizetable_Adminhtml before="ZolagoOs_OmniChannel">Zolago_Sizetable</Zolago_Sizetable_Adminhtml>
 					</modules>
 				</args>
-			</udropshipadmin>
+			</zolagoosadmin>
 		</routers>
 	</admin>
 	<frontend>
@@ -121,7 +121,7 @@
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_Sizetable before="Unirgy_Dropship">Zolago_Sizetable_Dropship</Zolago_Sizetable>
+						<Zolago_Sizetable before="ZolagoOs_OmniChannel">Zolago_Sizetable_Dropship</Zolago_Sizetable>
 					</modules>
 				</args>
 			</udropship>

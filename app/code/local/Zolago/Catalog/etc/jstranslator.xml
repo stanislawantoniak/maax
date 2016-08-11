@@ -48,9 +48,15 @@
     <price-type translate="message" module="zolagocatalog">
         <message>Type</message>
     </price-type>
+    <price-politics translate="message" module="zolagocatalog">
+        <message>Manual out-of-stock</message>
+    </price-politics>
     <price-loading translate="message" module="zolagocatalog">
         <message>Loading...</message>
     </price-loading>
+    <loading-spinner-bottom translate="message" module="zolagocatalog">
+        <message>loading-spinner-bottom</message>
+    </loading-spinner-bottom>
     <price-child-products translate="message" module="zolagocatalog">
         <message>Child products</message>
     </price-child-products>
@@ -120,6 +126,12 @@
     <mass-price-change translate="message" module="zolagocatalog">
         <message>Mass price change</message>
     </mass-price-change>
+    <mass-status-change translate="message" module="zolagocatalog">
+        <message>Mass status change</message>
+    </mass-status-change>
+    <mass-politics-change translate="message" module="zolagocatalog">
+        <message>Stock policy mass change</message>
+    </mass-politics-change>
     <empty translate="message" module="zolagocatalog">
         <message>empty</message>
     </empty>
@@ -141,5 +153,46 @@
     <apply-to-selection translate="message" module="zolagocatalog">
         <message>Apply to selection</message>
     </apply-to-selection>
-
+    <description-status translate="message" module="zolagocatalog">
+        <message>Description status</message>
+    </description-status>
+    <execute translate="message" module="zolagocatalog">
+        <message>Execute</message>
+    </execute>
+    <Mass-enable-products-on-site translate="message" module="zolagocatalog">
+        <message>Mass enable products on site</message>
+    </Mass-enable-products-on-site>
+    <Mass-disable-products-on-site translate="message" module="zolagocatalog">
+        <message>Mass disable products on site</message>
+    </Mass-disable-products-on-site>
+    <selection translate="message" module="zolagocatalog">
+        <message>Selection</message>
+    </selection>
+    <unwrapping translate="message" module="zolagocatalog">
+        <message>Unwrapping</message>
+    </unwrapping>
+    <no-results-found translate="message" module="zolagocatalog">
+        <message>No results found</message>
+    </no-results-found>
+    <server-error translate="message" module="zolagocatalog">
+        <message>Server error occured. Close this window to reload page.</message>
+    </server-error>
+	<available-together-items>
+		<message>Available together {{stock_qty}} items</message>
+	</available-together-items>
+	<available-together-item>
+		<message>Available together {{stock_qty}} item</message>
+	</available-together-item>
+    <available-items>
+        <message>Available {{stock_qty}} items</message>
+    </available-items>
+    <available-item>
+        <message>Available {{stock_qty}} item</message>
+    </available-item>
+	<variants-of>
+		<message>{{available_child_count}} variants of {{all_child_count}}</message>
+	</variants-of>
+    <product-preview>
+        <message>Product preview</message>
+    </product-preview>
 </jstranslator>

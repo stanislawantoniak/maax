@@ -1,0 +1,28 @@
+<?php
+/** @var Mage_Core_Block_Template $this */
+$apiSecret = Mage::getStoreConfig('salesmanago_tracking/general/api_secret');
+$arr   =  explode('-to-validate-', $this->getRequest()->getParam('params'));
+$email = !empty($arr[0]) ? str_replace(' ', '+', $arr[0]) : '';
+$key   = !empty($arr[1]) ? $arr[1] : '';
+$isValid = ($key == sha1($email . $apiSecret));
+?>
+<style>
+    .is-invalid .hide-if-invalid {display:none;}
+    #logIn .is-invalid form {margin-bottom:0px}
+</style>
+<div id="content" class="container-fluid">
+    <div id="logIn" class="row">
+        <div id="content-main" class="">
+            <div class="col-sm-12 column-block">
+                <div class="main bg-w equalBlock col-01 <?php echo !$isValid ? 'is-invalid' : ''; ?>">
+                    <form action="<?php echo $this->getUrl("newsletter/subscriber/subscribeAgain");?>" method="post" class="form-horizontal" >
+                        <input type="hidden" name="email" value="<?php echo $email ?>"/>
+                        <input type="hidden" name="key" value="<?php echo $key ?>"/>
+                        <?php echo $this->getChildHtml("zolagonewsletter.sm.unsubscribe.redirect.formkey");?>
+                        <?php echo $this->getChildHtml("salesmanago_unsubscribe_redirect");?>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,6 +16,7 @@ class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Model_Validator_Abstr
 		$this->_stringLength('external_id','External id',100);
 
 		$this->_notEmpty('is_active','Is active');
+		$this->_notEmpty('is_available_as_pickup_point','Is POS available as Pick-Up Point');
 
 		$this->_stringLength('client_number','Client number',100);
 
@@ -47,7 +48,7 @@ class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Model_Validator_Abstr
 		$this->_notEmpty('postcode','Postcode');
 
 		if (!Zend_Validate::is($this->_data['postcode'], 'PostCode', array("format" => "\d\d-\d\d\d"))) {
-			$this->_errors[] = $this->_helper->__('%s has not valid format (ex.12-345)', $this->_helper->__('Postcode'));
+			$this->_errors[] = $this->_helper->__('Zip code has not valid format (ex.12-345)');
 		}
 		$this->_notEmpty('street','Street');
 		$this->_stringLength('street','Street',150);

@@ -12,6 +12,7 @@ class Zolago_Checkout_SinglepageController extends Zolago_Checkout_Controller_Ab
 
         // Not logged user - redirect to guest controller
         if (!$this->_getCustomerSession()->isLoggedIn()) {
+            Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
             return $this->_redirect("*/guest/login");
         }
 

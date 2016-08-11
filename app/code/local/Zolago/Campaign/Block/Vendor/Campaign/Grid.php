@@ -14,8 +14,16 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
 
 	protected function _prepareCollection(){
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
-		/* @var $vendor Unirgy_Dropship_Model_Vendor */
+		/* @var $vendor ZolagoOs_OmniChannel_Model_Vendor */
 		$collection = Mage::getResourceModel("zolagocampaign/campaign_collection");
+        $collection->getSelect()
+            ->join(
+                array('campaign_website' => Mage::getSingleton('core/resource')->getTableName(
+                    "zolagocampaign/campaign_website"
+                )),
+                'campaign_website.campaign_id = main_table.campaign_id',
+                array("website_id" => "campaign_website.website_id")
+            );
 		$collection->addVendorFilter($vendor);
 
 		$this->setCollection($collection);
@@ -31,13 +39,29 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
 			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Campaign"),
 		));
-		
-		$this->addColumn("url_key", array(
-			"type"		=>	"text",
-			"index"		=>	"url_key",
-			"class"		=>  "form-control",
-			"header"	=>	$_helper->__("Url"),
-		));
+
+
+        $websiteOptions =  Mage::getModel("zolagocampaign/source_campaign")
+            ->getCampaignWebsites();
+
+        $this->addColumn("website_id", array(
+            "type"		=>	"options",
+            'options'   => $websiteOptions,
+            "index"		=>	"website_id",
+            "class"		=>  "form-control",
+            "header"	=>	$_helper->__('Websites'),
+        ));
+
+        if (Mage::helper("zolagodropship")->isLocalVendor()) {
+            $this->addColumn("is_landing_page", array(
+                "type" => "options",
+                'options' => Mage::getModel('adminhtml/system_config_source_yesno')->toArray(),
+                "index" => "is_landing_page",
+                "class" => "form-control",
+                "header" => $_helper->__("Landing page"),
+            ));
+        }
+
 		
 		$this->addColumn("type", array(
             "type"		=>	"options",

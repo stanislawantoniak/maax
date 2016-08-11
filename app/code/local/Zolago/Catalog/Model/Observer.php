@@ -7,7 +7,7 @@
  *
  */
 class Zolago_Catalog_Model_Observer
-{	
+{
 	/**
 	 * Handle default category on product page
 	 * @area: frontend
@@ -54,7 +54,7 @@ class Zolago_Catalog_Model_Observer
 
     static public function processConfigurableQueue()
     {
-        Mage::getModel('zolagocatalog/queue_configurable')->process(2500);
+        Mage::getModel('zolagocatalog/queue_configurable')->process(6000);
     }
 
 
@@ -116,10 +116,65 @@ class Zolago_Catalog_Model_Observer
             : 0;
         $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : null;
         $msrpType = (isset($attributesData['converter_msrp_type']) && $attributesData['converter_msrp_type'] == 0)? 1:0;
-        $productIdsLog = implode(",", $productIds);
+
         if (!empty($converterPriceType) || !is_null($priceMargin) || !empty($msrpType)) {
             //Add to queue
             Zolago_Catalog_Helper_Pricetype::queue($productIds);
+        }
+    }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     * @throws Exception
+     */
+    public function catalogProductDeleteAfter(Varien_Event_Observer $observer)
+    {
+        try {
+            $product = $observer->getEvent()->getProduct();
+            $productId = $product->getId();
+
+            $resource = Mage::getSingleton('core/resource');
+            $writeConnection = $resource->getConnection('core_write');
+            $tableName = $resource->getTableName('catalog_category_product');
+            $query = "DELETE FROM {$tableName} WHERE product_id = " . (int)$productId;
+            $writeConnection->query($query);
+        } catch (Mage_Adminhtml_Exception $e) {
+            Mage::logException($e);
+        }
+        return $this;
+    }
+
+    /**
+     * Add 'attribute_base_store' into Admin Store View Information edit form
+     * If attribute_base_store will be specified labels will be taken if not present.
+     * If you do not specify a store view then the default (Admin) labels will be used
+     * Event: adminhtml_store_edit_form_prepare_form
+     * @see Mage_Adminhtml_Block_System_Store_Edit_Form::_prepareForm()
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function addFieldsToAdminStoreViewEdit($observer) {
+        /** @var Zolago_Catalog_Helper_Data $hlp */
+        $hlp = Mage::helper('zolagocatalog');
+        /** @var Mage_Adminhtml_Block_System_Store_Edit_Form $block */
+        $block = $observer->getData('block');
+        $form = $block->getForm();
+        $fieldset = $form->getElements()->searchById('store_fieldset');
+
+        if (Mage::registry('store_type') == 'store') {
+            $storeModel = Mage::registry('store_data');
+            if ($postData = Mage::registry('store_post_data')) {
+                $storeModel->setData($postData['store']);
+            }
+
+            $fieldset->addField('store_attribute_base_store', 'select', array(
+                'name'      => 'store[attribute_base_store]',
+                'label'     => $hlp->__('Use attributes labels from'),
+                'values'    => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(true, false),
+                'value'     => $storeModel->getAttributeBaseStore(),
+                'note'      => $hlp->__('From this store view labels will be taken if not present. If you do not specify a store view then the default (Admin) labels will be used')
+            ));
         }
     }
 }

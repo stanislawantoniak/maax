@@ -5,12 +5,18 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 13.08.2014
  */
+$checkoutSession = Mage::getSingleton('checkout/session');
+$sessionShippingMethod = $checkoutSession->getData("shipping_method");
 
+$inpostCode = $checkoutSession->getData("inpost_code");
+
+
+$shippingBlock = $this->getChild('checkout_cart_shipping');
 ?>
 
 <?php
     $_totals = $this->getQuote()->getData();
-    $_totalWithShipment = $_totals['grand_total']; // $this->getQuote()->getGrandTotal()+ $this->getShippingTotal();
+    $_totalWithShipment = isset($_totals['grand_total'])? $_totals['grand_total']:0; // $this->getQuote()->getGrandTotal()+ $this->getShippingTotal();
     $_hasCoupon = (bool) $this->getQuote()->getCouponCode();
     $_couponLabel = '';
     $_couponDescription = '';
@@ -20,17 +26,22 @@
         $_couponLabel = $_ruleModel->getStoreLabel();
         $_couponDescription = $_ruleModel->getDescription();
     }
+    
 ?>
-<div id="sidebar-secondary" class="sidebar-secound col-lg-3 col-md-4 ">
+
+<div id="sidebar-secondary" class="sidebar-second col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
-        <!--<div class="inner-cart-summary">-->
-        <header>
-            <h2><?php echo $this->__("Your shopping"); ?></h2>
-        </header>
+
         <div class="col-sidebar-cart-summary clearfix">
-            <ul id="product_summary">
-                <?php echo $this->getChildHtml('totals'); ?>
-            </ul>
+            <?php echo $this->getChildHtml('checkout_cart_shipping'); ?>
+        </div>
+        <!--Select Shipping-->
+
+
+        
+        
+        <div class="col-sidebar-cart-summary clearfix">
+            
             <div id="discount_voucher">
                 <div class="form-group clearfix">
                     <?php if (!$_hasCoupon) : ?>
@@ -54,14 +65,16 @@
             </div>
         </div>
         <div class="form-action">
-            <a href="<?php echo $this->getCheckoutUrl(); ?>" class="button button-primary"><?php echo $this->__("Checkout"); ?></a>
-			<?php $_tosHtml = $this->getChildHtml("tos");?>
+            <button id="cart-buy" href="<?php echo $this->getCheckoutUrl(); ?>" class="button button-primary"><i></i>&nbsp;<?php echo $this->__("Checkout"); ?></button>
+			<?php /* $_tosHtml = $this->getChildHtml("tos");?>
 			<?php if($_tosHtml):?>
 				<br><br>
 				<?php echo $_tosHtml?>
-			<?php endif;?>
+			<?php endif; */?>
         </div>
         <!--</div>-->
+
+        <div id="cart-buy-overlay" class="hidden"><i class="fa fa-spinner fa-spin"></i></div>
     </aside>
     <?php /* <aside id="payment-methods" class="main bg-w">
         <!--<div class="inner-payment-methods">-->
@@ -111,7 +124,20 @@
         font-size: 12px;
         text-align: center;
         text-transform: uppercase;
-        float: left; }
+        float: left;
+    }
+    #cart-buy-overlay{
+        position:absolute;
+        top:0px;
+        left:0px;
+        bottom:0px;
+        right:0px;
+        background-color: #fff;
+        opacity: 0.5;
+        padding-top: 55%;
+        font-size: 40px;
+        text-align: center;
+    }
 </style>
 
 <script type="text/javascript">

@@ -22,7 +22,7 @@ abstract class Zolago_Rma_Block_Vendor_Rma_Edit_Abstract
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->getParentBlock()->getVendor();

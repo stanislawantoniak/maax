@@ -19,6 +19,8 @@
                     <block name="ghapi_dropship_soap_collected" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setOrderAsCollected.phtml"/>                
                     <block name="ghapi_dropship_soap_shipment" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setOrderShipment.phtml"/>                
                     <block name="ghapi_dropship_soap_reservation" type="ghapi/dropship_soap" template="ghapi/dropship/soap/setOrderReservation.phtml"/>                
+                    <block name="ghapi_dropship_soap_categories" type="ghapi/dropship_soap" template="ghapi/dropship/soap/getCategories.phtml"/>
+                    <block name="ghapi_dropship_soap_update_products" type="ghapi/dropship_soap" template="ghapi/dropship/soap/updateProductsPricesStocks.phtml"/>
                 </block>
             </block>
         </reference>

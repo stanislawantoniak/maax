@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 <config>
+    <menu>
+        <vendors>
+            <children>
+                <vendor_integration_config>
+                    <children>
+                        <zolagocatalog translate="title" module="zolagocatalog">
+                            <title>Converter update settings</title>
+                            <sort_order>20</sort_order>
+                            <action>adminhtml/system_config/edit/section/zolagocatalog</action>
+                            <resource>system/config/zolagocatalog</resource>
+                        </zolagocatalog>
+                    </children>
+                </vendor_integration_config>
+            </children>
+        </vendors>
+    </menu>
     <acl>
         <resources>
             <admin>
@@ -19,33 +35,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <vendors>
-            <children>
-                <zolagocatalog translate="title">
-                    <title>Converter update settings</title>
-                    <sort_order>100</sort_order>
-                    <action>adminhtml/system_config/edit/section/zolagocatalog</action>
-                </zolagocatalog>
-            </children>
-        </vendors>
-    </menu>
-    <acl>
-        <resources>
-        	<admin>
-	        	<children>
-	                <vendors>
-	                    <children>
-	                        <zolagocatalog translate="title" module="zolagocatalog">
-	                            <title>Converter update settings</title>
-	                            <sort_order>70</sort_order>
-	                        </zolagocatalog>
-	                    </children>
-	                </vendors>
-	            </children>
-            </admin>
-        </resources>
-    </acl>
-
 </config>
-

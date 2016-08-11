@@ -3,6 +3,9 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	const XML_PATH_DEFAULT_IDENTITY = "sales_email/order/identity";
 	
+	protected $_isGoogleBot;
+	
+	protected $_app;
 	/**
 	 * Check is top customer data for varnish request
 	 * @return boolean
@@ -25,28 +28,30 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @param int | Mage_Core_Model_Store $storeId
 	 */
 	public function sendEmailTemplate($email, $name, $template, 
-			array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
+		array $templateParams = array(), $storeId=true, $sender=null, $bcc=null) {
 
-            $templateParams['use_attachments'] = true;
-		
-			$storeId = Mage::app()->getStore($storeId)->getId();
-			if(is_null($sender)){
-				$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
-			}
+        $templateParams['use_attachments'] = true;
 
-            /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
-			$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
-            /** @var Mage_Core_Model_Email_Info $emailInfo */
-			$emailInfo = Mage::getModel('core/email_info');
-			$emailInfo->addTo($email, $name);
-			$mailer->addEmailInfo($emailInfo);
+		$storeId = Mage::app()->getStore($storeId)->getId();
+		if(is_null($sender)){
+			$sender = Mage::getStoreConfig(self::XML_PATH_DEFAULT_IDENTITY, $storeId);
+		}
+        $templateParams['year'] = Mage::getModel('core/date')->date('Y');
 
-			// Set all required params and send emails
-			$mailer->setSender($sender);
-			$mailer->setStoreId($storeId);
-			$mailer->setTemplateId($template);
-			$mailer->setTemplateParams($templateParams);
-			return $mailer->send();
+        /* @var $mailer Zolago_Common_Model_Core_Email_Template_Mailer */
+		$mailer = Mage::getModel('zolagocommon/core_email_template_mailer');
+        /** @var Mage_Core_Model_Email_Info $emailInfo */
+		$emailInfo = Mage::getModel('core/email_info');
+		$emailInfo->addTo($email, empty($name)? $email:$name);
+		$emailInfo->addBcc($bcc);
+		$mailer->addEmailInfo($emailInfo);
+
+		// Set all required params and send emails
+		$mailer->setSender($sender);
+		$mailer->setStoreId($storeId);
+		$mailer->setTemplateId($template);
+		$mailer->setTemplateParams($templateParams);
+		return $mailer->send();
 	}
 	/**
 	 * @param string $filename
@@ -60,7 +65,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		$oldPack = Mage::getDesign()->getPackageName();
 		$oldTheme = Mage::getDesign()->getTheme($type);
-		
+
 		Mage::getDesign()->
 			setPackageName($store->getConfig("design/package/name"))->
 			setTheme($store->getConfig("design/theme/" . $type));
@@ -109,15 +114,19 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return boolean
 	 */
 	public function isGoogleBot(){
-	    $userAgent = empty($_SERVER['HTTP_USER_AGENT'])? null:$_SERVER['HTTP_USER_AGENT'];
-	    if (empty($userAgent)) {
-	        return false;
-	    }
-	    $crawlers = 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|' .
-	        'AcioRobot|ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|bingbot|' .
-            'GeonaBot|Gigabot|Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby';
-        $isCrawler = (preg_match("/$crawlers/", $userAgent) > 0);	
-        return $isCrawler;
+	    if (is_null($this->_isGoogleBot)) {
+	        $userAgent = empty($_SERVER['HTTP_USER_AGENT'])? null:$_SERVER['HTTP_USER_AGENT'];
+    	    if (empty($userAgent)) {
+    	        $isCrawler = false;
+	        } else {
+        	    $crawlers = 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|' .
+	                'AcioRobot|ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|bingbot|' .
+                    'GeonaBot|Gigabot|Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby';
+                $isCrawler = (preg_match("/$crawlers/", $userAgent) > 0);	
+            }
+            $this->_isGoogleBot = $isCrawler;
+        }
+        return $this->_isGoogleBot;;
     }
 	
 	/**
@@ -204,4 +213,149 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		return strtr($string,$chars);
 	}
+	
+	protected function _getApp() {
+        if (!$this->_app) {
+            $this->_app = Mage::app();
+        }
+        return $this->_app;	    
+	}
+    /**
+     * cache helper function (uses lambda)
+     * 
+     * @param string $key
+     * @param string $group 
+     * @param string $function
+     * @param array $params
+     * @param int $ttl
+     * @return mixed
+     */
+     public function getCache($key,$group,$function,$params,$ttl = Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL) {
+         if (!($out = $this->_getApp()->loadCache($key)) ||
+             !$this->_getApp()->useCache($group)) {
+             $out = $function($params);
+             if ($this->_getApp()->useCache($group)) {
+                 $this->_getApp()->saveCache($out,$key,array($group),$ttl);
+             }                                                     
+         }
+         return $out;
+                             
+     }
+
+	public function stringForJs($string,$quote='"',$includeQuotes=false) {
+		$finalQuote = $includeQuotes ? $quote : "";
+		return $finalQuote.str_replace(array($quote,"\n","\r"),array('\\'.$quote," "," "),$string).$finalQuote;
+	}
+
+
+	public function getSkuvFromSku($sku,$vendorId) {
+		$toRemove = $vendorId."-";
+		$toRemoveLen = strlen($toRemove);
+		if(substr($sku,0,$toRemoveLen) == $toRemove) {
+			return substr_replace($sku,"",0,$toRemoveLen);
+		} else {
+			return $sku;
+		}
+	}
+
+	public function isOwnStore() {
+		return Mage::app()->getWebsite()->getHaveSpecificDomain() ? true : false;
+	}
+
+	/**
+	 * @param $storeCode
+	 * @return false|Mage_Core_Model_Store
+	 */
+	public function getStoreByCode($storeCode)
+	{
+		$stores = array_keys(Mage::app()->getStores());
+		foreach($stores as $id){
+			$store = Mage::app()->getStore($id);
+			if($store->getCode() == $storeCode) {
+				return $store;
+			}
+		}
+		return Mage::getModel('core/store'); // Empty model
+	}
+
+	private function getConfigIsGallery() {
+		$flag = (string)Mage::getConfig()->getNode('global/is_gallery');
+		return $flag;
+	}
+
+	/**
+	 * is_gallery flag tell us to use functionality from Modago(true) or not(false)
+	 * if false this will be hidden/blocked:
+	 *
+	 * portal vendora:
+	 * 		rozliczenia
+	 * 		warunki współpracy
+	 * 		na ekranie logowania - nowe konto
+	 *
+	 * admin: rejestracje sklepów
+	 * 		recenzje sklepów
+	 * 		koszty marketingu
+	 * 		rozliczenia
+	 * 		salda
+	 * 		faktury
+	 * 		wypłaty
+	 * 		konfiguracje z tym związane
+	 *
+	 * @return bool
+	 */
+	public function useGalleryConfiguration() {
+		if ($this->getConfigIsGallery() === "false") {
+			return false;
+		}
+		return true;
+	}
+
+    /*
+	 * Retrieve information that vendor/operator can see/use Loyalty card section
+	 * 
+	 * @return bool
+	 */
+	public function useLoyaltyCardSection() {
+		if (!$this->useGalleryConfiguration() // For now Modago don't use loyalty card
+		&& $this->hasDedicatedLoyaltyCardEditPhtml() // Section can be shown only if for vendor dedicated skin there is edit phtml
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if view file for edit card exist
+	 *
+	 * @return bool
+	 */
+	protected function hasDedicatedLoyaltyCardEditPhtml() {
+		/**
+		 * For more info:
+		 * @see ZolagoOs_LoyaltyCard_Block_Vendor_Card_Abstract::getTemplateFile()
+		 * @see layout/zosloyaltycard.xml
+		 * @see Mage_Core_Model_Design_Package::getBaseDir()
+		 */
+		$area = 'frontend';
+		$package = Mage::app()->getStore()->getConfig("design/package/name");
+		$theme = Mage::app()->getStore()->getConfig("design/theme/skin");
+		$type = 'template';
+		$baseDir = Mage::getBaseDir('design') . DS . $area . DS . $package . DS . $theme . DS . $type;
+		$templatePath = ZolagoOs_LoyaltyCard_Block_Vendor_Card_Edit::TEMPLATE_PATH;
+
+		$file = $baseDir . DS . $templatePath;
+
+		$exist = file_exists($file);
+		return $exist;
+	}
+
+	/**
+	 * @param string $code
+	 * @return bool
+	 */
+	public function isModuleActive($code)
+	{
+		return ('true' == (string)Mage::getConfig()->getNode('modules/'.$code.'/active'));
+	}
+	
 }

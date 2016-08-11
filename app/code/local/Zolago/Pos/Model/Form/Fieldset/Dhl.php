@@ -10,7 +10,7 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
     protected function _addFieldUseDhl() {
         $this->_fieldset->addField('use_dhl', 'select', array(
                                        'name'          => 'use_dhl',
-                                       'label'         => $this->_helper->__('Use DHL'),
+                                       'label'         => $this->_helper->__('Use this DHL setting'),
                                        'values'		   => Mage::getSingleton("adminhtml/system_config_source_yesno")->toOptionArray(),
                                        'required'      => false,
 									   'class'		   => "form-control"
@@ -23,7 +23,7 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'label'         => $this->_helper->__('DHL Account'),
                                        'required'      => true,
                                        "maxlength"     => 32,
-									   'class'		   => "form-control"
+									   'class'		   => "form-control disable_dhl"
                                    ));
 
     }
@@ -34,7 +34,7 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'label'         => $this->_helper->__('DHL Login'),
                                        'required'      => true,
                                        "maxlength"     => 32,
-									   'class'		   => "form-control"
+									   'class'		   => "form-control disable_dhl"
                                    ));
 
     }
@@ -44,7 +44,7 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'label'         => $this->_helper->__('DHL Password'),
                                        'required'      => true,
                                        "maxlength"     => 32,
-									   'class'		   => "form-control"
+									   'class'		   => "form-control disable_dhl"
                                    ));
 
     }
@@ -66,6 +66,14 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'required'      => false,
                                        "maxlength"     => 2,
 									   'class'		   => "form-control"
+                                   ));
+
+    }
+    protected function _addFieldDhlCheckButton() {
+        $this->_fieldset->addType('check_button',Mage::getConfig()->getBlockClassName('orbashipping/dhl_check'));
+        $this->_fieldset->addField('dhl_check_button', 'check_button', array(
+                                       'name'          => 'dhl_check_button',
+                                       'label'         => '',
                                    ));
 
     }

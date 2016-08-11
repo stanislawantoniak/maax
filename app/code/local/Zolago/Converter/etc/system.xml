@@ -36,6 +36,24 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </url_price>
+                        <url_price_batch translate="label">
+                            <label>URL Price Batch</label>
+                            <comment>Use {{keys}} for product keys</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </url_price_batch>
+                        <url_price_batch_size translate="label">
+                            <label>Price Batch size</label>
+                            <comment>Max 200 to avoid CURL connection errors</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </url_price_batch_size>
                         <login translate="label">
                             <label>Login</label>
 							<comment>For basic auth</comment>

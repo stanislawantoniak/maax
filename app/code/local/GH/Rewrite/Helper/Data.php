@@ -31,7 +31,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
             $query = http_build_query($queryData);
             $url = rtrim(Mage::getUrl($url),"/");
 	        $url = str_replace('/?___SID=U','?___SID=U',$url);
-            if($query && !$forceNoQuery) {
+            if($query) {
 		        $url .= '?' . $query;
 	        }
         }
@@ -91,10 +91,6 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		if(isset($params['rows'])) {
 			unset($params['rows']);
-		}
-
-		if(isset($params['start'])) {
-			unset($params['start']);
 		}
 
 		if($listingModel->isCategoryMode()) {
@@ -168,7 +164,7 @@ class GH_Rewrite_Helper_Data extends Mage_Core_Helper_Abstract {
         $collection->addFieldToFilter("is_system", 0);
         $collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
         $collection->addFieldToFilter("product_id", array('null' => true));
-        $collection->addFieldToFilter("request_path", array('like' => $path.'%'));
+        $collection->addFieldToFilter("request_path", array('like' => $path.''));
         $data = $collection->getFirstItem();
 
         $url_rewrite_id = $data->getData("url_rewrite_id");

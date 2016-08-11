@@ -177,7 +177,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         /* @var $zcSDModel  Zolago_Pos_Model_Resource_Pos */
         $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant, $skuS); //reservation
-        //Mage::log(print_r($openOrdersQty, true), 0, "openOrdersQty.log");
 
 
         $availableStockByMerchantOnOpenOrders = array();
@@ -191,7 +190,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
         unset($qtyOnOpenOrders);
         unset($availableStockByMerchantQty);
-        //Mage::log(print_r($availableStockByMerchantOnOpenOrders, true), 0, "availableStockByMerchantOnOpenOrders.log");
 
         /*Prepare data to insert*/
         if (empty($availableStockByMerchantOnOpenOrders)) {
@@ -199,6 +197,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $productsIds = array();
+
+        $productsIdsForSolrAndVarnishBan = array();
 
         $cataloginventoryStockItem = array();
         if (!empty($availableStockByMerchantOnOpenOrders)) {
@@ -214,44 +214,60 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
 
                 $productsIds[$id] = $id;
-                if ($stocks[$id] != $is_in_stock) {                
+                if ($stocks[$id] != $is_in_stock) {
                     Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
                         "product_id" => $id,
                         "qty" => $qty,
                         "is_in_stock" => $is_in_stock,
                         "stock_id" => $stockId
                     ));
+                    $productsIdsForSolrAndVarnishBan[$id] = $id;
                 };
             }
         }
         if (empty($cataloginventoryStockItem)) {
             return;
         }
+        if (empty($productsIds)) {
+            return;
+        }
 
-        $insert = implode(',', $cataloginventoryStockItem);
-        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');            
-
-        $zcSDItemModel->saveCatalogInventoryStockItem($insert);
+        /*  @var $zcSDItemModel Zolago_CatalogInventory_Model_Resource_Stock_Item */
+        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
+        $zcSDItemModel->saveCatalogInventoryStockItem($cataloginventoryStockItem);
 
         //reindex
         Mage::getResourceModel('cataloginventory/indexer_stock')
             ->reindexProducts($productsIds);
 
         // Varnish & Turpentine
-        /** @var Mage_Catalog_Model_Resource_Product_Type_Configurable $modelZCPC */
-        $modelCPTC = Mage::getResourceModel('catalog/product_type_configurable');
-        $parentIds = $modelCPTC->getParentIdsByChild($productIds);
-        $allIds = array_merge($parentIds, $productIds);
-        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
-        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
-        $coll->addFieldToFilter('entity_id', array( 'in' => $allIds));
-        $coll->addAttributeToFilter("visibility", array('in' =>
-            array( Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
+        $coll = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsForSolrAndVarnishBan);
 
         //send to solr queue & ban url in varnish
         Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $coll));
+    }
+
+
+    /**
+     * @param $skeleton
+     * @param $priceBatch
+     */
+    public static function saveExternalPriceAttributes($skeleton, $priceBatch)
+    {
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+
+        $priceLabels = array("A", "B", "C", "Z", "salePriceBefore");
+        foreach ($skeleton as $sku => $id) {
+            $attrData = array();
+
+            foreach ($priceLabels as $priceLabel) {
+                if (!empty(isset($priceBatch[$sku][$priceLabel]) && (float)$priceBatch[$sku][$priceLabel]) > 0)
+                    $attrData["external_price_{$priceLabel}"] = (string)$priceBatch[$sku][$priceLabel];
+            }
+
+            $aM->updateAttributesPure(array($id), $attrData, 0);
+        }
     }
 
     /**
@@ -261,16 +277,17 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
         //queue inform_magento
         $skuS = array_keys($priceBatch);
-        Mage::log('Count: '.count($skuS), 0);
+
         if (empty($priceBatch)) {
             return;
         }
 
         $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
 
-        if (empty($skeleton)) {
+        if (empty($skeleton))
             return;
-        }
+
+        self::saveExternalPriceAttributes($skeleton, $priceBatch);
 
         /* @var $model Zolago_Catalog_Model_Resource_Product */
         $model = Mage::getResourceModel('zolagocatalog/product');

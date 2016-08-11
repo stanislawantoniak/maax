@@ -38,23 +38,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			}
 		}
 
-        //Dhl zip validation
-        $shippingId = $po->getShippingAddressId();
-        $address = Mage::getModel('sales/order_address')->load($shippingId);
-        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
-        $dhlActive = Mage::helper('orbashipping/carrier_dhl')->isActive();
-        if ($dhlEnabled && $dhlActive) {
-            $dhlHelper = Mage::helper('orbashipping/carrier_dhl');            
-            $dhlValidZip = $dhlHelper->isDHLValidZip($address->getCountry(), $address->getPostcode());
-            if (!$dhlValidZip) {
-                $alert[] = array(
-                    "text"  => $this->__(
-                            $dhlHelper::getAlertText($dhlHelper::ALERT_DHL_ZIP_ERROR)
-                        ),
-                    "class" => "danger"
-                );
-            }
-        }
 
 
 		if($po->getStatusModel()->isConfirmStockAvailable($po)){
@@ -91,7 +74,17 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 */
 	public function getLetterUrl(Mage_Sales_Model_Order_Shipment_Track $tracking, Zolago_Po_Model_Po $po) {
 		if($this->isLetterable($tracking)){
-			return $this->getUrl('orbashipping/dhl/lp', array(
+		    switch ($tracking->getCarrierCode()) {
+		        case Orba_Shipping_Model_Carrier_Dhl::CODE:
+		            $url = 'orbashipping/dhl/lp';
+		            break;
+                case  Orba_Shipping_Model_Packstation_Inpost::CODE:
+                    $url = 'orbashipping/inpost/lp';
+                    break;
+                default:
+                    Mage::throwException('Wrong carrier code');
+		    }
+			return $this->getUrl($url, array(
 					'trackId'		=> $tracking->getId(), 
 					'trackNumber'	=> $tracking->getNumber(), 
 					'vId'			=> $po->getVendor()->getId(), 
@@ -110,6 +103,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function isLetterable(Mage_Sales_Model_Order_Shipment_Track $tracking) {
 		switch ($tracking->getCarrierCode()) {
 			case Orba_Shipping_Model_Carrier_Dhl::CODE:
+			case Orba_Shipping_Model_Packstation_Inpost::CODE:
 				return true;
 			break;
 		}
@@ -124,10 +118,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param ZolagoOs_OmniChannelPo_Model_Po $po
 	 * @return string
 	 */
-	public function getCurrentStatus(Unirgy_DropshipPo_Model_Po $po) {
+	public function getCurrentStatus(ZolagoOs_OmniChannelPo_Model_Po $po) {
 		return Mage::helper("udpo")->getPoStatusName($this->getPo()->getUdropshipStatus());
 	}
 	
@@ -140,10 +134,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param ZolagoOs_OmniChannelPo_Model_Po $po
 	 * @return Zolago_Pos_Model_Pos
 	 */
-	public function getPos(Unirgy_DropshipPo_Model_Po $po) {
+	public function getPos(ZolagoOs_OmniChannelPo_Model_Po $po) {
 		return $po->getPos();
 	}
 	
@@ -185,10 +179,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
 	 */
-	public function	getItemRedener(Unirgy_DropshipPo_Model_Po_Item $item) {
+	public function	getItemRedener(ZolagoOs_OmniChannelPo_Model_Po_Item $item) {
 		$orderItem = $item->getOrderItem();
 		$type=$orderItem->getProductType();
 		return $this->_getRendererByType($type)->
@@ -228,7 +222,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 
 		$method = explode('_', $poShippingMethod, 2);
 		$carrierCode = !empty($method[0]) ? $method[0] : $_vendor->getCarrierCode();
-
 		$curShipping = $shipping->getItemByColumnValue('shipping_code', $uMethodCode);
 		$methodCode  = !empty($method[1]) ? $method[1] : '';
 
@@ -236,7 +229,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$labelMethodAllowAll = Mage::getStoreConfig('udropship/vendor/label_method_allow_all', $_order->getStoreId());
 
 		$availableMethods = array();
-			
 		if ($curShipping && $labelMethodAllowAll) {
 			$curShipping->useProfile($_vendor);
 			$_carriers = array($carrierCode=>0);
@@ -317,13 +309,15 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$collection =  Mage::getResourceModel('sales/order_shipment_collection')->
 				addAttributeToFilter('udpo_id', $_po->getId())->
 				addAttributeToFilter("udropship_status", 
-					array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+					array("nin"=>array(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED))
 		);
 		
 		$collection->setOrder("created_at", "DESC");
 		$this->setShipmentsCollection($collection);
-		$this->setCustomCurrentShipping($collection->getFirstItem());
 
+		/** @var Mage_Sales_Model_Order_Shipment $customCurrentShipping */
+		$customCurrentShipping = $collection->getFirstItem();
+		$this->setCustomCurrentShipping($customCurrentShipping);
 	}
 	
 	public function getCurrentTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
@@ -383,7 +377,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function getAllMessagesCount(Zolago_Po_Model_Po $po) {
 		if(!$this->hasData('all_messages_count')){
 			$collection = Mage::getResourceModel('udqa/question_collection');
-			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			/* @var $collection ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question_Collection */
 			$collection->addApprovedAnswersFilter();
 			$collection->addVendorFilter($this->getVendor());
 			$collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));
@@ -399,7 +393,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	public function getUnreadMessagesCount(Zolago_Po_Model_Po $po) {
 		if(!$this->hasData('unread_messages_count')){
 			$collection = Mage::getResourceModel('udqa/question_collection');
-			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			/* @var $collection ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question_Collection */
 			$collection->addApprovedAnswersFilter();
 			$collection->addVendorFilter($this->getVendor());
             $collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));
@@ -491,4 +485,45 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
             return true;
         }
     }
+    
+    /**
+     * Prepare shipping modal
+     */
+     protected function _getShippingModal() {
+         $po = $this->getPo();
+         $shippingMethod = $po->getUdropshipMethod();
+         $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
+         switch ($methodCode) {
+             case 'ghinpost': // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
+                 break;
+             case 'std': // carrier
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
+                 break;
+             case 'zolagopp': // poczta polska
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
+                 break;
+             default:
+                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');                 
+         }
+         $block->setParentBlock($this);
+         return $block->toHtml();
+     }
+
+	/**
+	 * @return bool
+	 */
+	public function isPickUpPaymentCanBeEntered()
+	{
+		// First check if we have access to payments manage by ACL
+		/** @var Zolago_Dropship_Model_Session $session */
+		$session = Mage::getSingleton('udropship/session');
+		$isAllowed = $session->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
+		if (!$isAllowed) return false;
+		
+		$po = $this->getPo();
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		return $hlp->isPickUpPaymentCanBeEntered($po);
+	}
 }

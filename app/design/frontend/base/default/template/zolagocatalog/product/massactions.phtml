@@ -1,3 +1,6 @@
+<?php
+/** @var $this Mage_Core_Block_Template */
+?>
 <div class="col-xs-4 main-actions">
 	<?php if($this->getParentBlock()->getCanShowGrid()):?>
 	<div style="position: relative;">
@@ -9,13 +12,19 @@
 		<li role="presentation">
 			<a role="menuitem" tabindex="-1" href="#" id="massConfirmProducts">
 				<i class="icon icon-check"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Confirm products"); ?>
+				<?php echo Mage::helper("zolagocatalog")->__("Accept description"); ?>
 			</a>
 		</li>
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="#" id="massAttributeRules">
+                <i class="icon icon-puzzle-piece"></i>
+                <?php echo Mage::helper("gh_attributerules")->__("Apply rules");?>
+            </a>
+        </li>
 		<li role="presentation">
-			<a role="menuitem" tabindex="0" href="#" id="massDisbaleProducts">
-				<i class="icon icon-off"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Disable products"); ?>
+			<a role="menuitem" tabindex="-1" href="#"  data-toggle="modal" data-target="#massChangeAttributeSet">
+				<i class="glyphicon glyphicon-send"></i>
+				<?php echo Mage::helper("zolagocatalog")->__("Move to other category");?>
 			</a>
 		</li>
 	</ul>

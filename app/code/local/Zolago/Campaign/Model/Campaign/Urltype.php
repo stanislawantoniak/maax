@@ -1,8 +1,8 @@
 <?php
 class Zolago_Campaign_Model_Campaign_Urltype {
 
-    const TYPE_MANUAL_LINK = 'url_type_manual_link';
-    const TYPE_LANDING_PAGE = "url_type_landing_page";
+    const TYPE_MANUAL_LINK = 0;
+    const TYPE_LANDING_PAGE = 1;
 
     /**
      * @return array

@@ -42,24 +42,13 @@ switch($_reviewsCount) {
         break;
 }
 $avg = $_reviewBlock->getAvarageRating();
+$_helper = $this->helper('catalog/output');
+/** @var $_product Zolago_Catalog_Model_Product */
+$_product = $this->getProduct();
 ?>
 
 <?php
-
-    $_helper = $this->helper('catalog/output');
-
-    /** @var $_product Zolago_Catalog_Model_Product*/
-    $_product = $this->getProduct();
-
-    $_helperSizetable = Mage::helper('zolagosizetable');
-    /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
-    $vendor_id = $_product->getData('udropship_vendor');
-    $storeId = Mage::app()->getStore()->getStoreId();
-    $attributeSetId = $_product->getData('attribute_set_id');
-    $brandId = $_product->getData( 'manufacturer');
-
-    $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
-
+$excludeProductDescriptionFromGoogleIndex = $this->excludeProductDescriptionFromGoogleIndex();
 ?>
 
 <div id="content" class="container-fluid">
@@ -90,7 +79,12 @@ if($vendorContext && $vendorContext->getId()) {
         </div>
     <?php endif;?>
     <div class="col-xs-12">
-        <a href="<?php echo $this->getParentCategoryUrl(); ?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	    <?php if(Mage::registry('mobile_breadcrumb')):?>
+		    <?php $mobileBreadcrumb = Mage::registry('mobile_breadcrumb'); ?>
+		    <a href="<?php echo $mobileBreadcrumb['link'];?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $mobileBreadcrumb['label']; ?></a>
+	    <?php else: ?>
+	        <a href="<?php echo $this->getParentCategoryUrl(); ?>"  id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	    <?php endif; ?>
     </div>
 </div>
 
@@ -146,7 +140,11 @@ if($vendorContext && $vendorContext->getId()) {
     $brandShopProductId = $_product->getData('brandshop');
     ?>
     <div class="main">
-        <div itemprop="description"><?php echo $productDescription; ?></div>
+        <div itemprop="description">
+            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleoff: all--><?php endif; ?><?php echo $productDescription; ?>
+            <?php if($excludeProductDescriptionFromGoogleIndex): ?><!--googleon: all--><?php endif; ?>
+        </div>
+
         <?php if (!empty($attributesData)) : ?>
             <ul class="list">
                 <?php foreach ($attributesData as $attr) : ?>
@@ -203,15 +201,14 @@ if($vendorContext && $vendorContext->getId()) {
 </div>
 </div>
 
-<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
-    <div class="modal-dialog">
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"></button>
-
-            <div class="modal-body">
-                <?php
-                    echo $sizeTableValue;
-                ?>
+            <div class="modal-body" style="overflow-y: hidden;">
+	            <div id="sizeTableIframeContainer">
+	                <iframe id="sizeTableIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
+	            </div>
             </div>
         </div>
     </div>
@@ -230,6 +227,26 @@ if($vendorContext && $vendorContext->getId()) {
                 <h2 class="title_section"><?php echo $this->__("Ask Vendor A Question"); ?></h2>
             </div>
             <div class="modal-body">
+	            <?php
+	            $vendorInfo = new Zolago_Catalog_Block_Product_Vendor_Info;
+	            $brandShopId = $vendorInfo->getBrandshopVendor()->getVendorId();
+	            $producer = ($vendorInfo->getVendor()->getVendorId() == $brandShopId);
+	            ?>
+	            <figure>
+		            <h3 id="bLogo">
+			            <a href="<?php echo $vendorInfo->getVendorUrl(); ?>">
+				            <img itemprop="logo" src="<?php echo $vendorInfo->getLogoUrl(); ?>" alt="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>">
+				            <meta itemprop="brand" content="<?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>" />
+			            </a>
+		            </h3>
+	            </figure>
+	            <div class="seller producer">
+		            <div class="seller-info">
+			            <a href="<?php echo $vendorInfo->getVendorUrl(); ?>">
+				            <strong><?php echo $vendorInfo->__("Seller"); ?>:</strong> <?php echo $vendorInfo->escapeHtml($vendorInfo->getVendorName()); ?>
+			            </a>
+		            </div>
+	            </div>
                 <?php echo $this->getChildHtml('udqa.product.question.product'); ?>
             </div>
         </div>
@@ -301,7 +318,13 @@ if($vendorContext && $vendorContext->getId()) {
 </div>
 
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
+<?php echo $this->getChildHtml('zolago.page.benefits'); ?>
 
+
+<?php
+$a = $this->getSizeTableForJs();
+
+?>
 <script type="text/javascript">
     Mall.wishlist.addProduct({
         id: <?php echo $_product->getId(); ?>,
@@ -323,13 +346,13 @@ if($vendorContext && $vendorContext->getId()) {
     Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
     Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
 
-
-
 	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
 	<?php if($_product->getCategory()):?>
 	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
 	<?php endif;?>
 
     jQuery('.no-size').attr('title',"<?php echo $this->__("This size is temporarily unavailable."); ?>");
+
+	Mall.product.sizetable.setContent(<?php echo $a;?>);
 
 </script>

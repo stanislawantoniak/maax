@@ -24,33 +24,33 @@ $key = $this->getFacetKey();
             <div class="longListWrapper">
                 <div class="scrollable">
                     <ul class="longListItems">
-                        <?php foreach ($this->getItems() as $item => $count): ?>
-                            <?php if ($this->getCanShowItem($item, $count)): ?>
+                        <?php foreach ($this->getItems() as $item): ?>
+                            <?php if ($this->getCanShowItem($item)): ?>
                                 <?php
-                                if(!$isOptionSelected && $this->isItemActive($item)) {
+                                if(!$isOptionSelected && $item['active']) {
                                     $isOptionSelected = true;
                                 }
-								$_url = $this->getItemUrl($item);;
+								$_url = $item['url'];
                                 ?>
                                 <li>
                                     <div class="form-group form-checkbox">
                                         <input data-url="<?php echo $_url ?>" 
-											   data-params='<?php echo $this->getItemJson($item);?>' 
-											   name="<?php echo $this->getItemName($item);?>"
-											   value="<?php echo $this->getItemValue($item)?>"
-											   id="<?php echo $this->getItemId($item)?>"
+											   data-params='<?php echo $item['params'];?>' 
+											   name="<?php echo $item['name'];?>"
+											   value="<?php echo $item['value']?>"
+											   id="<?php echo $item['itemId']?>"
 											   type="checkbox" 
-											   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+											   class="css-checkbox" <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+	                                    <label for="<?php echo $item['itemId']; ?>" class="css-label">
 					                        <span>
 						                        <a href="<?php echo $_url ?>"
 						                           class="listing-link">
-							                        <?php echo $item; ?>
+							                        <?php echo $item['item']; ?>
 						                        </a>
 					                        </span>
 		                                    &nbsp;
 					                        <span class="suffix">
-						                        (<?php echo $count; ?>)
+						                        (<?php echo $item['count']; ?>)
 					                        </span>
 	                                    </label>
                                     </div>
@@ -59,48 +59,48 @@ $key = $this->getFacetKey();
                             <?php endif; ?>
                         <?php endforeach; ?>
                         <?php if ($this->getCanShowHidden()): ?>
-                            <?php foreach ($this->getHiddenItems() as $item => $count): ?>
+                            <?php foreach ($this->getHiddenItems() as $item): ?>
                                 <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
-                                    <input data-url="<?php echo $this->getItemUrl($item) ?>" 
-										   data-params='<?php echo $this->getItemJson($item);?>' 
+                                    <input data-url="<?php echo $item['url'] ?>" 
+										   data-params='<?php echo $item['params'];?>' 
 										   type="checkbox" 
-										   name="<?php echo $this->getItemName($item);?>"
-										   value="<?php echo $this->getItemValue($item)?>"
-										   id="check_<?php echo $this->getItemId($item)?>" 
-										   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+										   name="<?php echo $item['name'];?>"
+										   value="<?php echo $item['value']?>"
+										   id="check_<?php echo $item['itemId']?>" 
+										   class="css-checkbox" <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
                                     <label for="check_<?php echo $item; ?>" class="css-label">
 	                                    <span>
-					                        <a href="<?php echo $this->getItemUrl($item); ?>"
+					                        <a href="<?php echo $item['url']; ?>"
 					                           class="listing-link">
-						                        <?php echo $item; ?>
+						                        <?php echo $item['item']; ?>
 					                        </a>
 	                                    </span>
 	                                    &nbsp;
 	                                    <span class="suffix">
-		                                    (<?php echo $count ?>)
+		                                    (<?php echo $item['count'] ?>)
 	                                    </span>
                                     </label>
                                 </div>
                                 <li data-state="hidden" style="display: none;">
                                     <div class="form-group form-checkbox">
-                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" 
-											   data-params='<?php echo $this->getItemJson($item);?>' 
+                                        <input data-url="<?php echo $item['url'] ?>" 
+											   data-params='<?php echo $item['params'];?>' 
 											   type="checkbox" 
-											   name="<?php echo $this->getItemName($item);?>"
-											   value="<?php echo $this->getItemValue($item)?>"
-											   id="<?php echo $this->getItemId($item)?>"
+											   name="<?php echo $item['name'];?>"
+											   value="<?php echo $item['value']?>"
+											   id="<?php echo $item['itemId']?>"
 											   class="css-checkbox" 
-											   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+											   <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+	                                    <label for="<?php echo $item['itemId']; ?>" class="css-label">
 					                        <span>
-						                        <a href="<?php echo $this->getItemUrl($item); ?>"
+						                        <a href="<?php echo $item['url']; ?>"
 						                           class="listing-link">
-							                        <?php echo $item; ?>
+							                        <?php echo $item['item']; ?>
 						                        </a>
 					                        </span>
 		                                    &nbsp;
 					                        <span class="suffix">
-						                        (<?php echo $count; ?>)
+						                        (<?php echo $item['count']; ?>)
 					                        </span>
 	                                    </label>
                                     </div>
@@ -121,15 +121,15 @@ $key = $this->getFacetKey();
         <?php if($isOptionSelected) : ?>
             <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
                 <div class="active-filter">
-                    <?php foreach ($this->getItems() as $item => $count): ?>
-                        <?php if ($this->getCanShowItem($item, $count) && $this->isItemActive($item)): ?>
-                            <a href="<?php echo $this->getItemUrl($item); ?>"
+                    <?php foreach ($this->getItems() as $item): ?>
+                        <?php if ($this->getCanShowItem($item) && $item['active']): ?>
+                            <a href="<?php echo $item['url']; ?>"
                                class="active-filter-label"
-                               data-input="<?php echo $this->getItemId($item); ?>">
-                                <?php echo $this->getItemValue($item); ?><i class="fa fa-times"></i>
+                               data-input="<?php echo $item['itemId']; ?>">
+                                <?php echo $item['value']; ?><i class="fa fa-times"></i>
                             </a>
                             <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
-                                   value="<?php echo $this->getItemValue($item); ?>"/>
+                                   value="<?php echo $item['value']; ?>"/>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>

@@ -12,7 +12,7 @@ class Zolago_Turpentine_Helper_Ban extends Nexcessnet_Turpentine_Helper_Ban {
         $coll->distinct(true);
         $coll->addFieldToSelect('request_path');
         $coll->addFieldToSelect('product_id');
-        $coll->addFieldToFilter('product_id', array( 'in' => $ids));
+        $coll->addFieldToFilter('product_id', array( 'in' => $ids));        
 
         $urlPatterns = array();
         foreach ($coll as $row) {
@@ -29,9 +29,36 @@ class Zolago_Turpentine_Helper_Ban extends Nexcessnet_Turpentine_Helper_Ban {
         unset($urlPatterns);
 
         if ( empty($urlPatternsFin) ) {
-            $urlPatternsFin[] = "##_NEVER_MATCH_##";
+            $urlPatternsFin['regex'] = array();
+            $urlPatternsFin['heating'] = array(); 
         }
 
         return $urlPatternsFin;
+    }
+
+    /**
+     * @param $ids
+     * @param bool $visibility
+     * @return Zolago_Catalog_Model_Resource_Product_Collection
+     */
+    public function prepareCollectionForMultiProductBan( $ids, $visibility = true ) {
+
+        if (is_array($ids)) {
+            $_ids = $ids;
+        } else {
+            $_ids = array($ids);
+        }
+        $_ids = array_unique($_ids);
+
+        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->addFieldToFilter('entity_id', array( 'in' => $_ids));
+        if ($visibility) {
+            $coll->addAttributeToFilter("visibility", array('in' =>
+                array( Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
+                    Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
+                    Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
+        }
+        return $coll;
     }
 }

@@ -164,8 +164,8 @@ $_session = Mage::getSingleton('udropship/session');
         ['validate-email', Translator.translate('Please enter valid email address'), function (v) {
             return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
         }],
-        ['udvendor_name-unique', 'This vendor name is already used.', udCheckVendorNameExist],
-        ['udemail-unique', 'This email is already used.', udCheckEmailExist],
+        ['udvendor_name-unique', '<?php echo $_sHlp->__("This vendor name is already used.") ?>', udCheckVendorNameExist],
+        ['udemail-unique', '<?php echo $_sHlp->__("This email is already used.") ?>', udCheckEmailExist],
         ['udvalidate-lte', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lte')],
         ['udvalidate-lt', 'Invalid input or value exceed maximum.', udNumberValidate.curry('lt')],
         ['udvalidate-gte', 'Invalid input or value lesser minimum.', udNumberValidate.curry('gte')],

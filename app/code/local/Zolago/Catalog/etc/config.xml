@@ -2,10 +2,15 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.33</version>
+            <version>0.1.5</version>
         </Zolago_Catalog>
     </modules>
     <default>
+		<catalog>
+			<price>
+				<automatic_strikeout_price_percent>5</automatic_strikeout_price_percent>
+			</price>
+		</catalog>
         <zolagocatalog>
             <config>
                 <group>config</group>
@@ -17,6 +22,12 @@
 				<include_not_salable>1</include_not_salable>
             </options>
 		</cataloginventory>
+        <udprod>
+            <product_description_history_changes_config>
+                <max_changes_count>5</max_changes_count>
+                <history_expiration_time>24</history_expiration_time>
+            </product_description_history_changes_config>
+        </udprod>
         <udropship>
             <vendor>
                 <vendor_mass_image_batch_size_byname>10</vendor_mass_image_batch_size_byname>
@@ -45,20 +56,33 @@
                     <pricessizes>
                         <table>vw_product_relation_prices_sizes_relation</table>
                     </pricessizes>
+                    <description_history>
+                        <table>zolago_catalog_product_description_history</table>
+                    </description_history>
                 </entities>
             </zolagocatalog_resource>
 			<catalog>
 				<rewrite>
+                    <entity_attribute>Zolago_Catalog_Model_Entity_Attribute</entity_attribute>
+                    <resource_eav_attribute>Zolago_Catalog_Model_Resource_Eav_Attribute</resource_eav_attribute>
+                    <resource_product_attribute_collection>Zolago_Catalog_Model_Resource_Product_Attribute_Collection</resource_product_attribute_collection>
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
                     <category>Zolago_Catalog_Model_Category</category>
                     <product>Zolago_Catalog_Model_Product</product>
                     <url>Zolago_Catalog_Model_Url</url>
                     <category>Zolago_Catalog_Model_Category</category>
+                    <product_type_configurable>Zolago_Catalog_Model_Product_Type_Configurable</product_type_configurable>
+                    <product_attribute_backend_media>Zolago_Catalog_Model_Product_Attribute_Backend_Media</product_attribute_backend_media>
                 </rewrite>
 			</catalog>
             <catalog_resource>
                 <rewrite>
+                    <eav_attribute>Zolago_Catalog_Model_Resource_Eav_Attribute</eav_attribute>
+                    <product_attribute_collection>Zolago_Catalog_Model_Resource_Product_Attribute_Collection</product_attribute_collection>
                     <product>Zolago_Catalog_Model_Resource_Product</product>
+                    <category>Zolago_Catalog_Model_Resource_Category</category>
+                    <category_tree>Zolago_Catalog_Model_Resource_Category_Tree</category_tree>
+                    <category_collection>Zolago_Catalog_Model_Resource_Category_Collection</category_collection>
                 </rewrite>
             </catalog_resource>
         </models>
@@ -66,6 +90,11 @@
             <zolagocatalog>
                 <class>Zolago_Catalog_Helper</class>
             </zolagocatalog>
+            <catalog>
+                <rewrite>
+                    <category>Zolago_Catalog_Helper_Category</category>
+                </rewrite>
+            </catalog>
         </helpers>
         <blocks>
             <zolagocatalog>
@@ -79,6 +108,7 @@
 					<product_view_type_configurable>Zolago_Catalog_Block_Product_View_Type_Configurable</product_view_type_configurable>
                     <product_list_related>Zolago_Catalog_Block_Product_List_Related</product_list_related>
                     <product_list_crosssell>Zolago_Catalog_Block_Product_List_Crosssell</product_list_crosssell>
+                    <product_list_upsell>Zolago_Catalog_Block_Product_List_Upsell</product_list_upsell>
                 </rewrite>
 			</catalog>
         </blocks>
@@ -104,6 +134,14 @@
             </zolagocatalog_read>
         </resources>
         <events>
+            <catalog_product_delete_after>
+                <observers>
+                    <zolagocatalog_category>
+                        <class>zolagocatalog/observer</class>
+                        <method>catalogProductDeleteAfter</method>
+                    </zolagocatalog_category>
+                </observers>
+            </catalog_product_delete_after>
             <catalog_product_attribute_update_after>
                 <observers>
                     <zolago_catalog_converter_mass>
@@ -132,7 +170,28 @@
                     </check_related_category_products>
                 </observers>
             </catalog_category_save_after>
+            <adminhtml_store_edit_form_prepare_form>
+                <observers>
+                    <zolagocatalog_add_fields_to_admin_store_view_edit>
+                        <class>zolagocatalog/observer</class>
+                        <method>addFieldsToAdminStoreViewEdit</method>
+                    </zolagocatalog_add_fields_to_admin_store_view_edit>
+                </observers>
+            </adminhtml_store_edit_form_prepare_form>
         </events>
+		<udropship>
+			<vendor>
+				<fields>
+					<automatic_strikeout_price_percent>
+						<label>Automatic strikeout price by percent</label>
+						<note>When difference between effective price and msrp is >= % show strikeout price. Leave empty for use default</note>
+						<type>text</type>
+						<fieldset>vendor_info</fieldset>
+						<position>1</position>
+					</automatic_strikeout_price_percent>
+				</fields>
+			</vendor>
+		</udropship>
     </global>
     <frontend>
         <routers>
@@ -225,15 +284,6 @@
                     <model>zolagocatalog/observer::processPriceTypeQueue</model>
                 </run>
             </zolagocatalog_process_pricetype_queue>
-            <zolagocatalog_clear_configurable_queue>
-                <schedule>
-                    <!-- Run every 10 minutes -->
-                    <cron_expr>*/10 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagocatalog/observer::clearConfigurableQueue</model>
-                </run>
-            </zolagocatalog_clear_configurable_queue>
         </jobs>
     </crontab>
 </config>

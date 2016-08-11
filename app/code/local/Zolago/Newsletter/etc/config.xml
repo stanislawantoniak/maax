@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Newsletter>
-			<version>0.0.4</version>
+			<version>0.0.5</version>
 		</Zolago_Newsletter>
 	</modules>
 	<frontend>
@@ -45,6 +45,11 @@
 	</frontend>
 	<global>
 		<models>
+		    <newsletter>
+		        <rewrite>
+		            <subscriber>Zolago_Newsletter_Model_Subscriber</subscriber>
+		        </rewrite>
+		    </newsletter>
 			<zolagonewsletter>
 				<class>Zolago_Newsletter_Model</class>
 				<resourceModel>zolagonewsletter_resource</resourceModel>
@@ -79,15 +84,22 @@
 				</setup>
 			</zolagonewsletter_setup>
 		</resources>
+		<blocks>
+			<newsletter>
+				<rewrite>
+					<subscribe>Zolago_Newsletter_Block_Subscribe</subscribe>
+				</rewrite>
+			</newsletter>
+		</blocks>
 	</global>
 	<default>
 		<newsletter>
-			<subscription>
+			<zolagosubscription>
 				<invitation>1</invitation>
 				<invitation_email_identity>support</invitation_email_identity>
 				<invitation_email_template>newsletter_subscription_invitation_email_template</invitation_email_template>
 				<invitation_repeat>0</invitation_repeat>
-			</subscription>
+			</zolagosubscription>
 		</newsletter>
 	</default>
 	<adminhtml>

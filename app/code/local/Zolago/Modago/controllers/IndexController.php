@@ -1,28 +1,43 @@
 <?php
 
-require_once Mage::getConfig()->getModuleDir('controllers', "Unirgy_DropshipMicrosite") . DS . "IndexController.php";
+require_once Mage::getConfig()->getModuleDir('controllers', "ZolagoOs_OmniChannelMicrosite") . DS . "IndexController.php";
 
-class Zolago_Modago_IndexController extends Unirgy_DropshipMicrosite_IndexController{
-	public function indexAction() {
-		
-		if(Mage::helper('umicrosite')->getCurrentVendor()){
-			return parent::indexAction();
-		}
-		
-		$this->loadLayout();
-		/*
-		$block = $this->getLayout()->getBlock("zolago_modago_home_popularvendors");
-		foreach($block->getVendorColleciton() as $vendor){
-			echo $block->getVendorName($vendor) . "<br/>";
-			echo $block->getVendorMarkUrl($vendor) . "<br/>";
-			echo $block->getVendorBaseUrl($vendor) . "<br/>";
-			echo $block->getVendorResizedLogoUrl($vendor) . "<br/>";
-			echo $vendor->getShoppingCartWatchworldOne() . "<br/>";
-			echo $vendor->getShoppingCartWatchworldTwo() . "<br/>";
-		}
-		die;
-		 */
-		
-		$this->renderLayout();
-	}
+class Zolago_Modago_IndexController extends ZolagoOs_OmniChannelMicrosite_IndexController
+{
+    const ROUTE_STORE_MAPS = "zolagomodago_storesmap";
+
+
+    public function indexAction()
+    {
+        $route = (string)Mage::getConfig()->getNode('frontend/routers/zolagomodago/args/frontName');
+
+        if (Mage::app()->getRequest()->getRouteName() == self::ROUTE_STORE_MAPS) {
+            $website = Mage::app()->getWebsite();
+            if ($website->getHaveSpecificDomain() && $website->getVendorId()) {
+                $this->_forward('index', "map", $route);
+                return;
+            } else {
+                $this->_forward('defaultNoRoute');
+                return;
+            }
+        }
+
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        $rootCategory = Mage::getModel("catalog/category")->load($rootId);
+        $campaign = $rootCategory->getCurrentCampaign();
+
+        $fq = $this->getRequest()->getParam('fq', '');
+
+        if ($campaign || !empty($fq)) {
+            $this->_forward('view', "category", "catalog", array("id" => $rootCategory->getId()));
+            return;
+        }
+
+        if (Mage::helper('umicrosite')->getCurrentVendor()) {
+            return parent::indexAction();
+        }
+
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

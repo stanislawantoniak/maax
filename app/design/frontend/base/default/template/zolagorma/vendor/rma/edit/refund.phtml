@@ -8,6 +8,8 @@ $_rma = $this->getRma();
 $_items = $_rma->getAllItems();
 /** @var $_hlp Zolago_Rma_Helper_Data */
 $_hlp = $this->getRmaHelper();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
 ?>
 
 <div class="modal fade" id="refundModal">
@@ -17,8 +19,19 @@ $_hlp = $this->getRmaHelper();
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">
-						<?php echo $_hlp->__("Make RMA refund");?>
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering RMA refund");?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming RMA refund"); ?>
+						<?php endif; ?>
 					</h4>
+					<div class="modal-comment">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering a refund will inform gallery administrators about need of refunding the money. Refund will be processed manually and then will change it's status to completed"); ?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming refund means that you have already made a bank transfer with refund to customer.");?>
+						<?php endif; ?>
+					</div>
 				</div>
 				<div class="modal-body">
 					<table id="rmaRefundItems" class="table table-striped table-bordered table-checkable  foot-empty-cells">
@@ -40,7 +53,12 @@ $_hlp = $this->getRmaHelper();
 							<?php
 							/** @var Mage_Core_Helper_Data $coreHlp */
 							$coreHlp = Mage::helper('core');
-							$paidNum = $_item->getPoItem()->getFinalItemPrice();
+							$_poItemId = $_item->getPoItem()->getId();
+							if($_poItemId) {
+								$paidNum = $_item->getPoItem()->getFinalItemPrice();
+							} else {
+								$paidNum = $_item->getPrice();
+							}
 							$paid = $coreHlp->currency($paidNum, true, false);
 							$paidAmount = $this->getPriceValue($paidNum);
 
@@ -66,7 +84,7 @@ $_hlp = $this->getRmaHelper();
 									<?php echo $_item->getVendorSimpleSku(); ?>
 								</td>
 								<td>
-									<?php echo $_item->getName(); ?>
+									<?php echo $_poItemId ? $_item->getName() : $_hlp->__($_item->getName()); ?>
 								</td>
 								<td>
 									<?php echo $paid; ?>
@@ -98,8 +116,14 @@ $_hlp = $this->getRmaHelper();
 					<input type="hidden" required="required" name="refundChecked" id="refundChecked" />
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Make refund");?></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Order refund"); ?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirm refund");?>
+						<?php endif; ?>
+					</button>
 				</div>
 			</div>
 		</form>

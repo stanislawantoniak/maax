@@ -16,13 +16,13 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		$pos = $this->_registerModel();
 		$vendor = $this->_getSession()->getVendor();
 
-		// Existing pos - has venor rights?
+		// Existing pos - has vendor rights?
 		if ($pos->getId() && !$pos->isAssignedToVendor($vendor)) {
-			$this->_getSession()->addError(Mage::helper('zolagopos')->__("You cannot edit this POS"));
+			$this->_getSession()->addError(Mage::helper('zolagopos')->__("You can not edit this POS"));
 			return $this->_redirect("*/*");
 			// POS id specified, but post dons't exists
 		} elseif (!$pos->getId() && $this->getRequest()->getParam("pos_id", null) !== null) {
-			$this->_getSession()->addError(Mage::helper('zolagopos')->__("POS dosn't exists"));
+			$this->_getSession()->addError(Mage::helper('zolagopos')->__("POS doesn't exists"));
 			return $this->_redirect("*/*");
 		}
 
@@ -42,12 +42,11 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 	public function newAction() {
 		$this->_forward("edit");
 	}
-
-	/**
-	 * Save Pos
-	 */
-	public function saveAction() {
-
+	
+    /**
+     * save vendor pos settings
+     */
+    public function settingsSaveAction() {
 		$helper = Mage::helper('zolagopos');
 		if (!$this->getRequest()->isPost()) {
 			return $this->_redirectReferer();
@@ -58,11 +57,47 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		if ($formKey != $formKeyPost) {
 			return $this->_redirectReferer();
 		}
+		$vendor = $this->_getSession()->getVendor();
+		$posId = $this->getRequest()->getParam('problem_pos_id');		
+		try {
+		    $pos = Mage::getModel('zolagopos/pos')->load($posId);
+		    if (!$pos->getId()) {
+		        Mage::throwException($helper->__('Pos does not exists'));
+		    }
+		    if (!$pos->getIsActive()) {
+		        Mage::throwException($helper->__('Pos "%s" inactive',$pos->getName()));		        
+		    }
+		    if (!$pos->isAssignedToVendor($vendor)) {
+		        Mage::throwException($helper->__('Pos not assigned to vendor'));
+		    }
+		    $vendor->setData('problem_pos_id',$posId);
+	    	$vendor->save();
+	    	$this->_getSession()->addSuccess($helper->__('Settings saved'));
+        } catch (Mage_Core_Exception $xt) {
+            $this->_getSession()->addError($xt->getMessage());            
+        } catch (Exception $xt) {
+            Mage::logException($xt);
+            $this->_getSession()->addError($xt->getMessage());
+        }
+		$this->_redirect("*/pos",array("_fragment"=>"tab_1_2"));
+    }
 
+    public function check_dhlAction() {
+        $posId = $this->getRequest()->getParam('pos_id');
+        $settings = Mage::helper('udpo')->getDhlSettings(null,$posId);
+        $mess = Mage::helper('orbashipping/carrier_dhl')->checkDhlSettings($settings);
+        echo json_encode($mess);
+    }
+
+	/**
+	 * Save Pos
+	 */
+	public function saveAction() {
+		$helper = Mage::helper('zolagopos');
 		$pos = $this->_registerModel();
 		$vendor = $this->_getSession()->getVendor();
 
-		// Has premission?
+		// Has permission?
 		if ($pos->getId() && !$pos->isAssignedToVendor($vendor)) {
 			$this->_getSession()->addError($helper->__("You cannot edit this POS"));
 			return $this->_redirectReferer();
@@ -71,6 +106,11 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		// Try save
 		$this->_getSession()->setFormData(null);
 		$data = $this->getRequest()->getParams();
+		$data["show_on_map"] = $this->getRequest()->getParam("show_on_map", 0);
+		$data["is_available_as_pickup_point"] = $this->getRequest()->getParam("is_available_as_pickup_point", 0);
+
+		$data["map_time_opened"] = htmlentities($this->getRequest()->getParam("map_time_opened",""));
+
 		$modelId = $this->getRequest()->getParam("pos_id");
 
 		try {
@@ -111,7 +151,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 			Mage::logException($e);
 			return $this->_redirectReferer();
 		}
-		return $this->_redirect("*/*");
+		return $this->_redirect("udropship/pos/edit/", array('pos_id' => $pos->getId()));
 		
 	}
 

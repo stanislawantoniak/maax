@@ -32,6 +32,13 @@
 		.forgot-password {
 			white-space: nowrap;
 			font-size: 12px;
+			&.visible-sm.visible-xs {
+				@media (max-width: 330px) {
+					right: 0;
+					left: auto;
+				}
+				left: 157px;
+			}
 		}
 		.form-checkbox {
 			

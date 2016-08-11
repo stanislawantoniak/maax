@@ -1,5 +1,8 @@
-<?php /** @var $this Zolago_Solrsearch_Block_Faces_Enum_Color */ ?>
-<?php $key = $this->getFacetKey(); ?>
+<?php
+/** @var $this Zolago_Solrsearch_Block_Faces_Enum_Color */
+$key = $this->getFacetKey();
+$baseMediaUrl = Mage::getBaseUrl("media") . "/m-image/";
+?>
 <?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
@@ -12,32 +15,32 @@
     <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content filter-color"  id="filter_<?php echo $key; ?>">
-    <?php foreach ($this->getItems() as $item => $count): ?>
-        <?php if ($this->getCanShowItem($item, $count)): ?>
-            <?php $_value = $this->getValueObject($item);?>
+    <?php foreach ($this->getItems() as $key => $item): ?>
+        <?php if ($this->getCanShowItem($item)): ?>
+            <?php $_value = $this->getValueObject($item['item']);?>
             <?php $_color = $_value->getColor();?>
             <?php $_image = $_value->getNormalImage();?>
             <?php $_imageHover = $_value->getNormalHoveredImage();?>
             <?php
-            if(!$isOptionSelected && $this->isItemActive($item)) {
+            if(!$isOptionSelected && $item['active']) {
                 $isOptionSelected = true;
             }
             ?>
-            <label title="<?php echo $item ?>"
-                   for="<?php echo $this->getItemId($item)?>"
-                   <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>
-                   data-param='<?php echo $this->getItemJson($item);?>'
+            <label title="<?php echo $item['item'] ?>"
+                   for="<?php echo $item['itemId'];?>"
+                   <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?>
+                   data-param='<?php echo $item['params'];?>'
                    data-color="<?php echo $_color?>"
-                   data-url="<?php echo $this->getItemUrl($item) ?>"
-                   <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
+                   data-url="<?php echo $item['url'] ?>"
+                   <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?>>
                 <input type="checkbox" 
-					name="<?php echo $this->getItemName($item);?>"
-					value="<?php echo $this->getItemValue($item)?>"
-					id="<?php echo $this->getItemId($item)?>" 
-					<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> />
+					name="<?php echo $item['name'];?>"
+					value="<?php echo $item['value'];?>"
+					id="<?php echo $item['itemId'];?>" 
+					<?php if($item['active']): ?>checked="checked"<?php endif; ?> />
 				<span>
 					<span>
-						<a href="<?php echo $this->getItemUrl($item) ?>"
+						<a href="<?php echo $item['url']; ?>"
 						   class="listing-link"></a>
 					</span>
 				</span>
@@ -47,26 +50,26 @@
 
 
     <?php if ($this->getCanShowHidden()): ?>
-        <?php foreach ($this->getHiddenItems() as $item => $count): ?>
-            <?php if ($this->getCanShowItem($item, $count)): ?>
-                <?php $_value = $this->getValueObject($item);?>
+        <?php foreach ($this->getHiddenItems() as $item): ?>
+            <?php if ($this->getCanShowItem($item)): ?>
+                <?php $_value = $this->getValueObject($item['item']);?>
                 <?php $_color = $_value->getColor();?>
                 <?php $_image = $_value->getNormalImage();?>
 				<?php $_imageHover = $_value->getNormalHoveredImage();?>
                 <?php
-                if(!$isOptionSelected && $this->isItemActive($item)) {
+                if(!$isOptionSelected && $item['active']) {
                     $isOptionSelected = true;
                 }
                 ?>
-                <label title="<?php echo $item ?>" data-state="hidden" for="<?php echo $this->getItemId($item)?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
+                <label title="<?php echo $item['item'] ?>" data-state="hidden" for="<?php echo $item['itemId']?>" <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?> data-param='<?php echo $item['params'];?>' data-color="<?php echo $_color?>" data-url="<?php echo $item['url'] ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?> style="display: none;">
                     <input type="checkbox" 
-						name="<?php echo $this->getItemName($item);?>"
-						value="<?php echo $this->getItemValue($item)?>"
-						id="<?php echo $this->getItemId($item)?>" 
-						<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> />
+						name="<?php echo $item['name'];?>"
+						value="<?php echo $item['value']?>"
+						id="<?php echo $item['itemId']?>" 
+						<?php if($item['active']): ?>checked="checked"<?php endif; ?> />
 	                <span>
 		                <span>
-			                <a href="<?php echo $this->getItemUrl($item) ?>"
+			                <a href="<?php echo $item['url'] ?>"
 			                   class="listing-link"></a>
 		                </span>
 	                </span>
@@ -87,15 +90,15 @@
         <?php if($isOptionSelected) : ?>
             <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
                 <div class="active-filter">
-                    <?php foreach ($this->getItems() as $item => $count): ?>
-                        <?php if ($this->getCanShowItem($item, $count) && $this->isItemActive($item)): ?>
-                            <a href="<?php echo $this->getItemUrl($item); ?>"
+                    <?php foreach ($this->getItems() as $item): ?>
+                        <?php if ($this->getCanShowItem($item) && $item['active']): ?>
+                            <a href="<?php echo $item['url']; ?>"
                                class="active-filter-label"
-                               data-input="<?php echo $this->getItemId($item); ?>">
-                                <?php echo $this->getItemValue($item); ?><i class="fa fa-times"></i>
+                               data-input="<?php echo $item['itemId']; ?>">
+                                <?php echo $item['value']; ?><i class="fa fa-times"></i>
                             </a>
                             <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
-                                   value="<?php echo $this->getItemValue($item); ?>"/>
+                                   value="<?php echo $item['value']; ?>"/>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>

@@ -1,0 +1,6 @@
+<?php
+
+class ZolagoOs_OmniChannelTierShipping_Block_Adminhtml_VendorEditTab_ShippingRates_V2_Renderer_Rates_Subrows extends ZolagoOs_OmniChannel_Block_Adminhtml_SystemConfigFormField_FieldContainer
+{
+
+}

@@ -25,6 +25,10 @@ class Zolago_Solrsearch_Block_Active extends Zolago_Solrsearch_Block_Faces
             if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
                 $res = true;
             }
+
+            if (Mage::registry('is_search_mode')) {
+                $res = false;
+            }
         }
         return $res;
     }

@@ -6,6 +6,7 @@
  * @method Zolago_Payment_Model_Allocation setAllocationAmount(float $amount)
  * @method int getTransactionId()
  * @method Zolago_Payment_Model_Allocation setTransactionId(int $id)
+ * @method int getPrimary()
  */
 class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
     const ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT   = 'payment';
@@ -37,6 +38,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
                     $comment = $helper->__($payment->getMethod());
                 }
                 $data = $this->getResource()->getDataAllocationForTransaction($transaction, $allocation_type, $operator_id, $comment);
+
                 $this->appendAllocations($data);
             }
         }
@@ -104,11 +106,11 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 	/**
 	 * @param int|Zolago_Po_Model_Po $poId
-	 * @return int|bool
+	 * @return float
 	 */
     public function getSumOfAllocations($poId) {
 	    $poId = $this->getPoId($poId);
-        return $poId ? $this->getResource()->getSumOfAllocations($poId) : false;
+        return $poId ? $this->getResource()->getSumOfAllocations($poId) : 0.0;
     }
 
     public function allocateOverpayment($newPo, $transactionId) {
@@ -181,7 +183,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
         return false;
     }
 
-	public function createOverpayment($po,$commentMoved="Moved to overpayment",$commentCreated="Created overpayment") {
+	public function createOverpayment($po,$commentMoved="Moved to overpayment",$commentCreated="Created overpayment",$rma_id=null) {
 
 		$po = $this->getPo($po);
 		$helper = Mage::helper("zolagopayment");
@@ -227,6 +229,9 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								$paymentDecreaseAmount = $payment->getAllocationAmount();
 								$overpaymentAmount -= $paymentDecreaseAmount;
 							}
+                            if (!$paymentDecreaseAmount) {
+                                break;
+                            }
 
 							//create payment decrease
 							$allocations[] = array(
@@ -239,7 +244,8 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'comment'           => $helper->__($commentMoved),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
-                                'is_automat'        => $this->isAutomat()
+                                'is_automat'        => $this->isAutomat(),
+								'rma_id'            => $rma_id
 							);
 
 							//create overpayment
@@ -253,14 +259,18 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 								'comment'           => $helper->__($commentCreated),
 								'customer_id'       => $po->getCustomerId(),
                                 'vendor_id'         => $po->getVendor()->getId(),
-                                'is_automat'        => $this->isAutomat()
+                                'is_automat'        => $this->isAutomat(),
+								'rma_id'            => $rma_id
 							);
 						} else {
 							break;
 						}
 					}
 					$this->restoreLocale();
-					$r = $this->appendMultipleAllocations($allocations);
+                    $r = false;
+                    if (!empty($allocations)) {
+                        $r = $this->appendMultipleAllocations($allocations);
+                    }
                     if ($r) {
                         Mage::dispatchEvent("zolagopayment_create_overpayment_save_after",
                             array(
@@ -292,7 +302,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
         $po_id = $this->getPoId($po);
 
-		$collection = $this->getPoAllocations($po_id);
+		$collection = $this->getPoAllocations($po);
 		if($collection) {
 			$collection->addPoIdFilter($po_id);
 			$collection->getSelect()->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);
@@ -386,6 +396,33 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 	}
 
 	/**
+	 * gets all allocations for single transaction
+	 * @param int|Mage_Sales_Model_Order_Payment_Transaction $transaction_id
+	 * @return Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getTransactionAllocations($transaction_id) {
+		$transaction_id = $this->getRealTransactionId($transaction_id);
+
+		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
+		$collection = $this->getCollection();
+
+		$collection
+			->joinOperators()
+			->joinPos()
+			->joinRmas()
+			->joinTransactions()
+			->joinRefundTransactions()
+			->joinVendors()
+			->joinCustomers()
+			->getSelect()
+				->order('main_table.created_at',Zend_Db_Select::SQL_ASC);
+
+		$collection->getSelect()->where("main_table.transaction_id = ?", $transaction_id);
+
+		return $collection;
+	}
+
+	/**
 	 * @return bool
 	 */
 	protected function isOperatorMode() {
@@ -434,6 +471,17 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 			return $po->getId();
 		}
 		return $po;
+	}
+
+	/**
+	 * @param int|Mage_Sales_Model_Order_Payment_Transaction $transaction
+	 * @return int
+	 */
+	protected function getRealTransactionId($transaction) {
+		if($transaction instanceof Mage_Sales_Model_Order_Payment_Transaction) {
+			return $transaction->getId();
+		}
+		return $transaction;
 	}
 
 	/**

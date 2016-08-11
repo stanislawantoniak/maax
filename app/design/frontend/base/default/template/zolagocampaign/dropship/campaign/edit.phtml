@@ -1,26 +1,34 @@
-<?php /* @var $this Zolago_Campaign_Block_Vendor_Campaign_Edit */ ?>
-<?php $_helper = Mage::helper("zolagocampaign"); ?>
-<?php $_model = $this->getModel();?>
+<?php
+/* @var $this Zolago_Campaign_Block_Vendor_Campaign_Edit */
+$_helper = Mage::helper("zolagocampaign");
+
+$_model = $this->getModel();
+
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
+
+
 <div class="container">
-	<div class="page-heading row">
-		<div class="col-lg-6">
-			<h3>
-				<?php if($this->isModelNew()):?>
-					<?php echo $_helper->__("New campaign");?>
-				<?php else: ?>
-					<?php echo $_helper->__("Edit campaign '%s'", $_model->getName());?>
-				<?php endif;?>
-			</h3>
-		</div>
-		
-	</div>
+    <div class="page-heading row">
+        <div class="col-lg-12">
+            <?php if ($this->isModelNew()): ?>
+                <h3><?php echo $_helper->__("New campaign"); ?></h3>
+                <p><?php echo $_helper->__("Create new campaign. Required fields are marked with an asterisk."); ?></p>
+            <?php else: ?>
+                <h3><?php echo $_helper->__("Edit campaign '%s'", $_model->getName()); ?></h3>
+                <p><?php echo $_helper->__("Below you will find details of campaign. You can make changes to your campaign settings by editing each field. You can add creation and add products."); ?></p>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 
 <div class="container z-grid">
-	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
+
 
 		<div class="form-actions">
             <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right">
@@ -28,6 +36,8 @@
         </div>
 	</form>
 </div>
+
+
 
 <!--        Show product tab and banners tab only on edit page-->
 <?php if(!$this->isModelNew()) :?>
@@ -37,10 +47,10 @@
         <a name="tmp"></a>
     </li>
     <li style="float:right" class="">
-        <a href="#tab_products" data-toggle="tab"><?php echo $_helper->__('Products'); ?></a>
+        <a href="#tab_products" data-toggle="tab"><i class="icon-folder-open"></i>&nbsp;<?php echo $_helper->__('Products'); ?></a>
     </li>
     <li style="float:right" class="active">
-        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
+        <a href="#tab_banners" data-toggle="tab"><i class="icon-picture"></i>&nbsp;<?php echo $_helper->__('Campaign creatives'); ?></a>
     </li>
 
 </ul>
@@ -51,15 +61,8 @@
 
             <div class="widget box">
                 <div class="widget-header">
-                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Products"); ?></h4>
-                    <div class="toolbar no-padding">
-                        <div class="btn-group">
-						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">
-							<i class="icon-plus"></i>
-                            <?php echo $_helper->__("Add products");?>
-						</span>
-                        </div>
-                    </div>
+                    <h4><i class="icon-folder-open"></i>&nbsp;<?php echo $_helper->__("Products"); ?></h4>
+
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getProductsGrid()->toHtml(); ?>
@@ -73,16 +76,8 @@
         <div class="container z-grid">
             <div class="widget box">
                 <div class="widget-header">
-                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Campaign creatives"); ?></h4>
-                    <div class="toolbar no-padding">
-                        <div class="btn-group">
-                            <a href="<?php echo $this->getAddNewBannerPath(); ?>">
-                                <span class="btn btn-xs"><i class="icon-plus"></i>
-                                    <?php echo $_helper->__("Add new campaign creative"); ?>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
+                    <h4><i class="icon-picture"></i>&nbsp;<?php echo $_helper->__("Campaign creatives"); ?></h4>
+
                 </div>
                 <div class="widget-content">
                     <?php echo $this->getBannersGrid()->toHtml(); ?>
@@ -95,7 +90,7 @@
 <!--Products tab-->
 <div class="modal fade" id="browseProducts">
     <div class="modal-dialog" style="width: 80%">
-        <form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
+        <form id="campaign_products" action="<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>"  class="form-horizontal row-border" method="post">
             <input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 
             <div class="modal-content">
@@ -109,15 +104,51 @@
                               rows="10"><?php echo $this->getCampaignProducts(); ?></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
-                    <button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+                    <button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Add");?></button>
                 </div>
             </div>
         </form>
     </div>
+</div>
+<?php endif; ?>
+
+<?php if(Mage::helper('zolagodropship')->isLocalVendor()): ?>
+<div class="modal fade" id="browseCategory">
+    <div class="modal-dialog" style="width: 50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><?php echo $_helper->__("Select Category");?></h4>
+            </div>
+            <div class="modal-body">
+                <div id='jstree' style="padding: 10px 0;"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+                <button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Add");?></button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php endif; ?>
     <script type="text/javascript">
+        var websitesData = JSON.parse('<?php echo json_encode($this->getWebsites()); ?>');
+        var productGridId = '<?php echo $this->getProductsGrid()->getId(); ?>';
+        var bannerGridId = '<?php echo $this->getBannersGrid()->getId(); ?>';
+
         jQuery(document).ready(function () {
+
+            jQuery(document).on('click','#'+bannerGridId+' .btn[data-action=remove]', function (e) {
+                e.preventDefault();
+                var campaignId = jQuery("input[name=campaign_id]").val();
+                var link = jQuery(this).attr('href') + "campaignId/" + campaignId;
+                bootbox.confirm('<?php echo $_helper->__("Are you sure you want to delete banner from campaign?"); ?>', function (result) {
+                    if (result) {
+                        window.location = link;
+                    }
+                });
+            });
 
             jQuery("#browseProducts form").submit(function (e) {
                 e.preventDefault();
@@ -136,39 +167,72 @@
                     //update grid if edit
                     var modelId = '<?php echo $_model->getId();?>';
                     if (modelId.length > 0) {
+                        startLoading();
                         jQuery.ajax({
-                            url: '/campaign/vendor/products',
+                            url:  '<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>'   ,
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
-                            success: function (result) {
-                                jQuery(('#zolagocampaign_campaign_product_grid')).html(jQuery(result).find('#zolagocampaign_campaign_product_grid').html());
-                                jQuery("#zolagocampaign_campaign_product_grid_table .filter input")
-                                    .addClass("form-control");
+                            success: function () {
+                                refreshProductGrid(modelId);
                             }
                         })
                     }
                 }
             });
 
-            jQuery("#browseProducts").on("show.bs.modal", function () {
-                console.log("Init loading products")
-            });
+
+            function refreshProductGrid(campaign){
+                jQuery.ajax({
+                    url:  '<?php echo Mage::getUrl('campaign/vendor/products', array("_secure" => true)); ?>'   ,
+                    //contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    data: {id: campaign, isAjax: true},
+                    success: function (result) {
+                        jQuery("#"+productGridId).replaceWith(result);
+                        stopLoading();
+                    }
+                })
+            }
+
+            jQuery("#browseProducts").on("show.bs.modal", function () {});
+
             jQuery(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            jQuery(document).on('click', '.btn[data-action=remove]', function (e) {
+
+
+
+            jQuery(document).on('click','#'+productGridId+' .btn[data-action=remove]', function (e) {
                 e.preventDefault();
                 var campaignId = jQuery("input[name=campaign_id]").val();
-                var path = jQuery(this).attr('href');
-                removeCampaignGridItemLink(path, campaignId);
-            })
-            function removeCampaignGridItemLink(path, campaignId) {
-                var link = path + "campaignId/" + campaignId;
-                window.location = link;
+                var productId = jQuery(this).data("item");
+                bootbox.confirm('<?php echo $_helper->__("Are you sure you want to delete product from campaign?"); ?>', function (result) {
+                    if (result) {
+                        startLoading();
+                        removeCampaignProduct(campaignId, productId);
+                    }
+                });
+            });
+
+            function removeCampaignProduct(campaignId, productId) {
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl('campaign/vendor/removeProduct', array("_secure" => true)); ?>',
+                    data: {campaignId: campaignId, id: productId},
+                    success: function () {
+                        refreshProductGrid(campaignId);
+                    }
+                })
             }
 
             jQuery('.datetimepicker').datetimepicker({
-                format: 'd-m-Y H:i'
+                lang: _currentLocale == "pl_PL" ? 'pl' : 'en',
+                format: 'd-m-Y H:i',
+                dayOfWeekStart:1
+            });
+            jQuery(".icon-calendar").click(function () {
+                jQuery(this).parents(".datetimepicker-wrapper").find(".datetimepicker")
+                    .datetimepicker("show")
+                    .blur();
             });
 
             var form = jQuery("#edit-campaign");
@@ -179,7 +243,17 @@
                         max: 100
                     },
                     "date_from": {dateBefore: '#date_to'},
-                    "date_to": {dateAfter: '#date_from'}
+                    "date_to": {dateAfter: '#date_from'},
+                    landing_page_category: {
+                        required: "input[name=is_landing_page]:checked",
+                        digits: true
+                    },
+                    landing_page_context: {
+                        required: "input[name=is_landing_page]:checked"
+                    },
+                    context_vendor_id: {
+                        required: "input[name=landing_page_context][value=vendor]:checked"
+                    }
                 },
                 messages: {
                     date_from: {
@@ -188,33 +262,193 @@
                     date_to: {
                         dateAfter: '<?php echo $_helper->__('Must be after corresponding start date'); ?>'
                     }
+                },
+                errorPlacement: function($error, $element){
+                    if ($element.closest("div").hasClass("input-group")) {
+                        $element.closest("div").parent().append($error);
+                    } else {
+                        $element.closest("div").append($error);
+                    }
                 }
             });
 
 
-            var urlTypeManual = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK; ?>';
-            var urlTypeLandingPage = '<?php echo Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE; ?>';
+
+            toggleLandingPagePanel();
+
+            jQuery(form).find('input[name="is_landing_page"]').on('change', function () {
+                toggleLandingPagePanel();
+
+            });
+
+            // On change website context update link
+            jQuery("#website_ids").on('change', function () {
+                setNewCampaignUrl(this.value);
+            });
+            function setNewCampaignUrl(value) {
+                var newUrl = "";
+                for (var i = 0; i < websitesData.length; i++) {
+                    if(websitesData[i]["value"] == value) {
+                        newUrl = websitesData[i]["url"];
+                    }
+                }
+                jQuery(form).find("#campaign_url").parent(".input-group").find(".input-group-addon").html(newUrl);
+            }
+            setNewCampaignUrl(jQuery("#website_ids").val());
+
+            function toggleLandingPagePanel() {
+                var showLandingPageConfig = jQuery('input[name="is_landing_page"]:checked').val();
+                var LandingPageConfig = jQuery('.landing-page-config').parents('.form-group');
+
+                if (showLandingPageConfig ==1) {
+                    jQuery("[name=campaign_url]").parents(".form-group").hide();
+                    LandingPageConfig.show();
+                } else {
+                    jQuery("[name=campaign_url]").parents(".form-group").show();
+                    LandingPageConfig.hide();
+                }
+
+            }
+
+            //vendor context select
+            toggleVendorSelect();
+            jQuery("[name=landing_page_context]").change(function(){
+                toggleVendorSelect();
+                jQuery("#landing_page_category_url").html("");
+            });
+
+            jQuery("[name=context_vendor_id]").change(function(){
+                jQuery("[name=landing_page_category]").val("");
+                jQuery("#landing_page_category_text").html("");
+                jQuery("#landing_page_category_url").html("");
+                refreshCategoriesTree(jQuery(this).val(), jQuery("[name=website_ids] option:selected").val());
+            });
+
+            jQuery("#browseCategory button[type=submit]").click(function () {
+                jQuery("#landing_page_category_url").html("");
 
 
-            var urlKeyContainer = jQuery(form).find('[name="url_key"]').parents('.form-group');
+            });
 
-            toggleUrlKeyField(jQuery(form).find('input[name="url_type"]:checked'), urlKeyContainer);
+	        //clear value of #campaign_url (non lp) if it's not visible
+	        var campaignUrl = jQuery('#campaign_url');
+	        if(!campaignUrl.is(':visible')) {
+		        campaignUrl.val("");
+	        }
 
-            jQuery(form).find('input[name="url_type"]').on('change', function () {
-                toggleUrlKeyField(jQuery(this), urlKeyContainer);
+            function toggleVendorSelect() {
+                if (jQuery("[name=is_landing_page]").is(":visible")) {
 
-            })
-            function toggleUrlKeyField(element, toggleContainer) {
-                var type = element.val();
-                switch (type) {
-                    case urlTypeManual:
-                        toggleContainer.show();
-                        break;
-                    case urlTypeLandingPage:
-                        toggleContainer.hide();
-                        break;
+                    // Set by default context gallery checked
+                    if (jQuery("[name=landing_page_context]:checked").length == 0) {
+                        jQuery("#landing_page_contextgallery").prop('checked', true);
+                    }
+
+                    var vendor = 0;
+                    var website = jQuery("[name=website_ids] option:selected").val();
+            jQuery("input[type=file][name=coupon_image]").change(function (e) {
+                if(this.disabled) return alert('File upload not supported!');
+                var F = this.files;
+                readImageUploader($(this), F[0]);
+            });
+
+                    if (jQuery("[name=landing_page_context]:checked").val() == "vendor") {
+                        jQuery("[name=context_vendor_id]").parents(".form-group").removeClass("hidden");
+                        vendor = jQuery("#context_vendor_id option:selected").val();
+                    } else {
+                        jQuery("[name=context_vendor_id]").parents(".form-group").addClass("hidden");
+                    }
+
+                    refreshCategoriesTree(vendor, website);
                 }
             }
 
+            function refreshCategoriesTree(vendor, website){
+                jQuery("#jstree").replaceWith('<div id="jstree"><span class="spinner" style="margin: 0 50%;"><i class="icon-spin icon-refresh"></i></span>&nbsp;</div>');
+                jQuery.ajax({
+                    url: '<?php echo Mage::getUrl("campaign/vendor/get_category_tree"); ?>',
+                    method: 'POST',
+                    data: {"vendor": vendor, website: website},
+                    success: function(tree){
+
+                        jQuery("#jstree").jstree("destroy");
+                        jQuery("#jstree").html(tree);
+                        jQuery("#jstree").jstree({
+                            "core": {
+                                "multiple": false,
+                                "animation": 0,
+                                'themes': {
+                                    'name': 'proton',
+                                    'responsive': true
+                                }
+                            },
+                            "checkbox": {
+                                "keep_selected_style": false,
+                                three_state: false
+                            },
+                            "plugins": ["checkbox"]
+
+                        });
+                    }
+                })
+            }
         });
+
+        function readImageUploader(input, file) {
+
+            var reader = new FileReader();
+            var image  = new Image();
+
+            reader.readAsDataURL(file);
+
+            reader.onload = function(_file) {
+                image.src    = _file.target.result;              // url.createObjectURL(file);
+                image.onload = function() {
+                    if(jQuery.type(file) !=="undefined"){
+                        if (jQuery.type(file) !=="undefined"
+                            //&& file.size <= (imageSize * 1000)
+                        ) {
+                            var id = jQuery(input).attr('id');
+                            var thumbPlace = jQuery(input).parents('.campaign-image-container').find('.campaign-image-thumbnail');
+
+                            var preview = '<a href="' +this.src+ '" '
+                                + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                                + '<img src="' + this.src + '" id="'+id+'_image" '
+                                + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                                + '</a>';
+
+
+                            thumbPlace.html(preview);
+                        }
+                    }
+
+
+
+                };
+                image.onerror= function() {
+                    alert('Invalid file type: '+ file.type);
+                };
+            };
+
+        }
+
+
+
+        var startLoading = function () {
+            var loader = jQuery("#vendor-loading");
+            if (!loader.length) {
+                loader = jQuery("<div>").attr({
+                    "id": "vendor-loading"
+                }).click(function () {
+                    return false;
+                }).hide().appendTo("body");
+            }
+            loader.addClass("with-progress");
+            loader.show();
+        };
+
+        var stopLoading = function () {
+            jQuery("#vendor-loading").fadeOut();
+        }
     </script>
+

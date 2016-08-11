@@ -33,7 +33,7 @@
 					<dt>{{firstname}} {{lastname}}</dt>
 					<dd>{{street}}</dd>
 					<dd><span class="selected-postcode">{{postcode}}</span> {{city}}</dd>
-					<dd class="phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+					<dd class="phone"><?php echo $_helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 					<dd class="action separator">
 						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
 					</dd>
@@ -166,8 +166,8 @@
                 <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
                 <div class="col-sm-5">
                     <input type="text" autocomplete="off" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
-                       name="rma[customer_account]" value="" id="customer-account"
-                       title="<?php echo $_helper->__("Bank account"); ?>" value="" class="form-control bank-account-rma validate-bankAccountWithReplace">
+                       name="rma[customer_account]" id="customer-account"
+                       title="<?php echo $_helper->__("Bank account"); ?>" class="form-control bank-account-rma validate-bankAccountWithReplace">
                 </div>
             </div>
         </div>

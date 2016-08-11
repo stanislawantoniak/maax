@@ -76,6 +76,8 @@
                 </args>
             </adminhtml>
         </routers>
+    </admin>
+    <adminhtml>
         <translate>
             <modules>
                 <Zolago_Common>
@@ -85,5 +87,5 @@
                 </Zolago_Common>
             </modules>
         </translate>
-    </admin>
+    </adminhtml>
 </config>

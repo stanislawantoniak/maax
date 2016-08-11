@@ -1,0 +1,182 @@
+<config>
+    <menu>
+        <vendors translate="title" module="zolagodropship">
+            <title>Vendors</title>
+            <sort_order>32</sort_order>
+            <children>
+                <vendor module="udropship">
+                    <title>Vendors</title>
+                    <sort_order>10</sort_order>
+                    <action>zolagoosadmin/adminhtml_vendor</action>
+                </vendor>
+                <vendor_registration module="umicrosite">
+                    <title>Vendor Registrations</title>
+                    <sort_order>20</sort_order>
+                    <action>micrositeadmin/adminhtml_registration</action>
+                </vendor_registration>
+                <review module="udratings">
+                    <title>Reviews and Ratings</title>
+                    <sort_order>30</sort_order>
+                    <children>
+                        <review_pending module="udratings">
+                            <title>Pending Reviews</title>
+                            <sort_order>10</sort_order>
+                            <action>zosratingsadmin/review/pending</action>
+                        </review_pending>
+                        <review_all>
+                            <title>All Reviews</title>
+                            <sort_order>20</sort_order>
+                            <action>zosratingsadmin/review/index</action>
+                        </review_all>
+                        <rating module="udratings">
+                            <title>Manage Ratings</title>
+                            <sort_order>30</sort_order>
+                            <action>zosratingsadmin/rating/index</action>
+                        </rating>
+                    </children>
+                </review>
+                <udqa module="udqa">
+                    <title>Vendor Questions</title>
+                    <sort_order>40</sort_order>
+                    <children>
+                        <question_pending module="udqa">
+                            <title>Pending Questions/Answers</title>
+                            <sort_order>10</sort_order>
+                            <action>zosqaadmin/index/pending</action>
+                        </question_pending>
+                        <question_all>
+                            <title>All Questions/Answers</title>
+                            <sort_order>20</sort_order>
+                            <action>zosqaadmin/index/index</action>
+                        </question_all>
+                    </children>
+                </udqa>
+                <sales_management module="zolagodropship" translate="title">
+                    <title>Sales management</title>
+                    <sort_order>50</sort_order>
+                    <children>
+                        <udpo translate="title" module="udpo">
+                            <title>Purchase Orders</title>
+                            <action>zospoadmin/po</action>
+                            <sort_order>10</sort_order>
+                        </udpo>
+                    </children>
+                </sales_management>
+                <vendor_general_config module="zolagodropship" translate="title">
+                    <title>General Config</title>
+                    <sort_order>150</sort_order>
+                    <children>
+                        <shipping module="udropship">
+                            <title>Shipping Methods</title>
+                            <sort_order>110</sort_order>
+                            <action>zolagoosadmin/adminhtml_shipping</action>
+                        </shipping>
+                        <udshipclass_customer module="udshipclass">
+                            <title>Customer Ship Classes</title>
+                            <sort_order>120</sort_order>
+                            <action>zosshipclassadmin/customer</action>
+                        </udshipclass_customer>
+                        <udshipclass_vendor module="udshipclass">
+                            <title>Vendor Ship Classes</title>
+                            <sort_order>130</sort_order>
+                            <action>zosshipclassadmin/vendor</action>
+                        </udshipclass_vendor>
+                    </children>
+                </vendor_general_config>
+                <vendor_integration_config module="zolagodropship" translate="title">
+                    <title>Integration config</title>
+                    <sort_order>160</sort_order>
+                </vendor_integration_config>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <title>Vendors</title>
+                        <sort_order>10</sort_order>
+
+                        <children>
+                            <!-- Adding new acl path START -->
+                            <vendor module="udropship">
+                                <title>Vendors</title>
+                                <sort_order>10</sort_order>
+                            </vendor>
+                            <vendor_registration module="umicrosite">
+                                <title>Vendor Registrations</title>
+                                <sort_order>20</sort_order>
+                            </vendor_registration>
+                            <review module="udratings">
+                                <title>Reviews and Ratings</title>
+                                <sort_order>30</sort_order>
+                                <children>
+                                    <review_pending module="udratings">
+                                        <title>Pending Reviews</title>
+                                        <sort_order>10</sort_order>
+                                    </review_pending>
+                                    <review_all>
+                                        <title>All Reviews</title>
+                                        <sort_order>20</sort_order>
+                                    </review_all>
+                                    <rating module="udratings">
+                                        <title>Manage Ratings</title>
+                                        <sort_order>30</sort_order>
+                                    </rating>
+                                </children>
+                            </review>
+                            <udqa module="udqa">
+                                <title>Vendor Questions</title>
+                                <sort_order>40</sort_order>
+                                <children>
+                                    <question_pending module="udqa">
+                                        <title>Pending Questions/Answers</title>
+                                        <sort_order>10</sort_order>
+                                    </question_pending>
+                                    <question_all>
+                                        <title>All Questions/Answers</title>
+                                        <sort_order>20</sort_order>
+                                    </question_all>
+                                </children>
+                            </udqa>
+                            <sales_management module="zolagodropship" translate="title">
+                                <title>Sales management</title>
+                                <sort_order>50</sort_order>
+                                <children>
+                                    <udpo translate="title" module="udpo">
+                                        <title>Purchase Orders</title>
+                                        <sort_order>10</sort_order>
+                                    </udpo>
+                                </children>
+                            </sales_management>
+                            <vendor_general_config module="zolagodropship" translate="title">
+                                <title>General Config</title>
+                                <sort_order>150</sort_order>
+                                <children>
+                                    <shipping module="udropship" translate="title">
+                                        <title>Shipping Methods</title>
+                                        <sort_order>110</sort_order>
+                                    </shipping>
+                                    <udshipclass_customer module="udshipclass">
+                                        <title>Customer Ship Classes</title>
+                                        <sort_order>120</sort_order>
+                                    </udshipclass_customer>
+                                    <udshipclass_vendor module="udshipclass">
+                                        <title>Vendor Ship Classes</title>
+                                        <sort_order>130</sort_order>
+                                    </udshipclass_vendor>
+                                </children>
+                            </vendor_general_config>
+                            <vendor_integration_config module="zolagodropship" translate="title">
+                                <title>Integration config</title>
+                                <sort_order>160</sort_order>
+                            </vendor_integration_config>
+                            <!-- Adding new acl path END -->
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

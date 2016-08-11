@@ -11,6 +11,8 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		$campaign =  Mage::getResourceModel("zolagocampaign/campaign_collection");
 		/* @var $campaign Zolago_Campaign_Model_Resource_Campaign_Collection */
 		$campaign->addVendorFilter($this->getVendor());
+        $campaign->addFieldToFilter("status", array("neq" => Zolago_Campaign_Model_Campaign_Status::TYPE_ARCHIVE));
+        $campaign->addFieldToFilter("type", array("neq" => Zolago_Campaign_Model_Campaign_Type::TYPE_INFO));
 		
 		$priceType = Mage::getSingleton('eav/config')->getAttribute(
 			Mage_Catalog_Model_Product::ENTITY,
@@ -34,8 +36,7 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 			"status"
 		);
 		$status->setStoreId($this->getCurrentStoreId());
-		/* @var $priceType Mage_Catalog_Model_Resource_Eav_Attribute */
-		
+
 		$typeModel = Mage::getSingleton('catalog/product_type');
 		
 		
@@ -47,21 +48,28 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		
 		$bool = Mage::getSingleton("eav/entity_attribute_source_boolean");
 		/* @var $bool Mage_Eav_Model_Entity_Attribute_Source_Boolean */
-		
-		$source=array(
-			"converter_price_type"	=> $priceTypes,
-			"converter_msrp_type"	=> $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
-			"campaign_regular_id"	=> $this->_clearEmpty($campaign->toOptionArray()),
-			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
-			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),
-			"product_flag"			=> $this->_clearEmpty($flags->getSource()->getAllOptions(false)),
-			"bool"					=> $this->_clearEmpty($bool->getAllOptions())
+
+		$descriptionStatusSrc = Mage::getSingleton("zolagocatalog/product_source_description");
+
+		$x = array_merge(
+			array(array("value" => 0, "label" => "Standard")),
+			$campaign->toOptionArray()
+		);
+		$source = array(
+			"converter_price_type" => $priceTypes,
+			"converter_msrp_type" => $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
+			"campaign_regular_id" => $this->_clearEmpty($x),
+			"status" => $this->_clearEmpty($status->getSource()->getAllOptions(false)),
+			"description_status" => $this->_clearEmpty($descriptionStatusSrc->getAllOptions(false, false, true)),
+			"type_id" => $this->_clearEmpty($typeModel::getAllOptions()),
+			"product_flag" => $this->_clearEmpty($flags->getSource()->getAllOptions(false)),
+			"bool" => $this->_clearEmpty($bool->getAllOptions())
 		);
 		
 		
 		return Mage::helper("core")->jsonEncode($source);
 	}
-	
+
 	/**
 	 * @param array $array
 	 * @return array
@@ -99,20 +107,20 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		}
 		$allowed = $this->getAllowedStores();
 		if($allowed){
-			return $allowed[0]->getId();
+			return $allowed[0]["id"];
 		}
 		throw new Mage_Core_Exception("No store defined");
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->_getSession()->getVendor();
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Session
+	 * @return ZolagoOs_OmniChannel_Model_Session
 	 */
 	protected function _getSession() {
 		return Mage::getSingleton('udropship/session');

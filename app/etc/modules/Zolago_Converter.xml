@@ -4,6 +4,10 @@
         <Zolago_Converter>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Zolago_Common/>
+                <Zolago_Dropship/>
+            </depends>
         </Zolago_Converter>
     </modules>
 </config>

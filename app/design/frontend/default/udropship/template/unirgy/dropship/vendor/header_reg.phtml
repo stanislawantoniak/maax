@@ -1,9 +1,8 @@
 <?php
 $_session = Mage::getSingleton('udropship/session');
-
 $_vendor = $_session->getVendor();
-
 $locale = $_session->getLocale();
+$disableSwichLocale = $this->hasData('disable_swich_locale') ? true : false;
 
 if(!empty($locale)){
     $_currentLocale = $locale;
@@ -26,10 +25,10 @@ $_allowedLocale = array(
         <!-- Logo -->
         <a class="navbar-brand" href="<?php echo $this->getUrl("udropship/vendor/"); ?>">
             <img src="<?php echo $this->getSkinUrl('img/bootsrap/logo.png'); ?>" alt="logo"/>
-            <strong>Modago</strong>
+            <strong>Zolago Group</strong>
         </a>
         <!-- /logo -->
-
+        <?php if (!$disableSwichLocale) : ?>
         <ul class="nav navbar-nav navbar-right">
             <!-- Locale -->
             <li class="dropdown">
@@ -53,7 +52,7 @@ $_allowedLocale = array(
             </li>
             <!-- /Locale -->
         </ul>
-
+        <?php endif; ?>
         <!-- /Top Right Menu -->
     </div>
     <!-- /top navigation bar -->

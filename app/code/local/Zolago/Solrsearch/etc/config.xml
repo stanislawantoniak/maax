@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <config>
+    <default>
+        <solrbridge>
+            <settings>
+                <logs_length_hours>48</logs_length_hours>
+            </settings>
+        </solrbridge>
+    </default>
     <modules>
         <Zolago_Solrsearch>
             <version>0.0.9</version>
@@ -42,7 +49,7 @@
 					<data>Zolago_Solrsearch_Model_Data</data>
 					<indexer>Zolago_Solrsearch_Model_Indexer</indexer>
 					<solr>Zolago_Solrsearch_Model_Solr</solr>
-					<ultility>Zolago_Solrsearch_Model_Ultility</ultility>
+					<ultility>Zolago_Solrsearch_Model_Ultility</ultility>					
 				</rewrite>
 			</solrsearch>
         </models>
@@ -60,6 +67,7 @@
 					<faces>Zolago_Solrsearch_Block_Faces</faces>
 					<faces_price>Zolago_Solrsearch_Block_Faces_Price</faces_price>
 					<faces_range>Zolago_Solrsearch_Block_Faces_Range</faces_range>
+					<adminhtml_logs>Zolago_Solrsearch_Block_Adminhtml_Logs</adminhtml_logs>
 				</rewrite>
 			</solrsearch>
         </blocks>
@@ -83,6 +91,46 @@
                     </zolagosolrsearch>
                 </observers>
             </catalog_converter_price_update_after>
+
+            <!-- When vendor mass update attributes by attribute rules mapper -->
+            <mass_autofill_attribute_rules_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </mass_autofill_attribute_rules_after>
+
+            <!-- When vendor change price from grid -->
+            <vendor_manual_save_price_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_save_price_after>
+
+            <!-- When vendor mass change price from grid -->
+            <vendor_manual_mass_save_price_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_mass_save_price_after>
+
+            <!-- When admin manually push to solr from admin product grid -->
+            <admin_manually_push_to_solr_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </admin_manually_push_to_solr_after>
 			
 			<!-- Converter stock save -->
 			<zolagocatalog_converter_stock_complete>
@@ -103,17 +151,17 @@
 					</zolagosolrsearch>
 				</observers>
 			</catalog_product_delete_before>
-			
-			<!-- Delte after commit -->
-			<catalog_product_delete_after>
+
+			<cataloginventory_stock_item_save_commit_after>
 				<observers>
 					<zolagosolrsearch>
+						<type>model</type>
 						<class>zolagosolrsearch/observer</class>
-						<method>catalogProductDeleteAfter</method>
+						<method>catalogInventorySave</method>
 					</zolagosolrsearch>
 				</observers>
-			</catalog_product_delete_after>
-			
+			</cataloginventory_stock_item_save_commit_after>
+
 			<!-- Process product save anywhere -->
 			<catalog_product_save_after>
 				<observers>
@@ -164,6 +212,25 @@
 					</zolagosolrsearch>
 				</observers>
 			</catalog_product_attribute_update_after>
+
+            <!-- Process save politics -->
+            <vendor_manual_mass_save_politics_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_mass_save_politics_after>
+            <vendor_manual_save_politics_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </vendor_manual_save_politics_after>
+
 			
 			<!-- Process mapper asign -->
 			<zolago_mapper_after_assign_products>
@@ -242,10 +309,6 @@
 					<solr_search>
 						<type>disabled</type>
 					</solr_search>
-					<zolagosolrsearch>
-						<class>zolagosolrsearch/observer</class>
-						<method>catalogruleApplyAfter</method>
-					</zolagosolrsearch>
 				</observers>
 			</catalogrule_after_apply>
 			<end_process_event_catalog_product_catalog_reindex_price>
@@ -360,15 +423,6 @@
     </frontend>
 	<crontab>
         <jobs>
-            <zolagosolrsearch_process_queue>
-                <schedule>
-                    <!-- Run every 2-3 min-->
-                    <cron_expr>1,3,5,9,11,14,16,18,20,23,26,28,31,33,36,38,41,43,46,48,51,53,56,58 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagosolrsearch/observer::cronProcessQueue</model>
-                </run>
-            </zolagosolrsearch_process_queue>
             <zolagosolrsearch_cleanup_queue>
                 <schedule>
                     <!-- Run 0:00 everyday  -->
@@ -378,10 +432,6 @@
                     <model>zolagosolrsearch/observer::cronCleanupQueue</model>
                 </run>
             </zolagosolrsearch_cleanup_queue>
-            <udvacation_process>
-                <schedule><cron_expr>21 0 * * *</cron_expr></schedule>
-                <run><model>udvacation/observer::processVacations</model></run>
-            </udvacation_process>
             <udpayout_process_standard>
                 <schedule><cron_expr>8 3 * * *</cron_expr></schedule>
                 <run><model>udpayout/observer::processStandard</model></run>
@@ -477,4 +527,11 @@
 
         </jobs>
     </crontab>
+    <default>
+        <solrbridge>
+            <search_context>
+                <use_category_context>1</use_category_context>
+            </search_context>
+        </solrbridge>
+    </default>
 </config>

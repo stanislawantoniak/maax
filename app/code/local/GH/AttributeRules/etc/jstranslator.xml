@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<jstranslator>
+    <save-as-rule translate="message" module="gh_attributerules">
+        <message>Save as rule</message>
+    </save-as-rule>
+    <delete-autofill-rule>
+        <message>Delete autofill rule?</message>
+    </delete-autofill-rule>
+    <are-you-sure-you-want-to-delete-this-rule>
+        <message>Are you sure you want to delete this rule?</message>
+    </are-you-sure-you-want-to-delete-this-rule>
+    <cancel>
+        <message>Cancel</message>
+    </cancel>
+    <remove-autofill-rule>
+        <message>Remove autofill rule</message>
+    </remove-autofill-rule>
+</jstranslator>

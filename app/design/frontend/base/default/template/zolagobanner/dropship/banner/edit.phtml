@@ -1,6 +1,9 @@
-<?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
-<?php $_helper = Mage::helper("zolagobanner");?>
-<?php $_model = $this->getModel();?>
+<?php
+/** @var $this Zolago_Banner_Block_Vendor_Banner_Edit */
+/** @var Zolago_Banner_Helper_Data $_helper */
+$_helper = Mage::helper("zolagobanner");
+$_model = $this->getModel();
+?>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 <script>
     tinymce.init({
@@ -26,7 +29,7 @@ $captionsNumber = (int)$config->captions_number;
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagobanner")->__("New campaign creative");?>
+					<?php echo Mage::helper("zolagobanner")->__("New campaign creative"); ?>: <?php echo $this->getCampaignName(); ?>
 				<?php else: ?>
 					<?php echo Mage::helper("zolagobanner")->__("Edit campaign creative '%s'", $_model->getName());?>
 				<?php endif;?>
@@ -49,11 +52,11 @@ $captionsNumber = (int)$config->captions_number;
                     </li>
                 <?php else: ?>
                     <li>
-                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getType(); ?>
+                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getTypeLabel(); ?>
                     </li>
                 <?php endif;?>
                 <?php if($this->isModelNew()):?>
-                    <li class="active"><?php echo $_helper->__("New campaign creative");?></li>
+                    <li class="active"><?php echo $_helper->__("New campaign creative (%s)", $_helper->__($this->getType()));?></li>
                 <?php else: ?>
                     <li class="active"><?php echo $_helper->__("Edit campaign creative '%s'", $_model->getName());?></li>
                 <?php endif;?>

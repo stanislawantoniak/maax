@@ -18,7 +18,7 @@ define([
 						</div>\
 						<div class="modal-footer">\
 						  <button type="button" class="btn btn-default" data-dismiss="modal">' + Translator.translate('Close')  + '</button>\
-						  <button type="button submit" class="btn btn-primary" data-loading-text="' + Translator.translate("Loading...") + '">' + Translator.translate('Save changes') + '</button>\
+						  <button type="button submit" class="btn btn-primary" data-loading-text="' + Translator.translate("Processing...") + '">' + Translator.translate('Save changes') + '</button>\
 						</div>\
 					  </div>\
 					</div>\

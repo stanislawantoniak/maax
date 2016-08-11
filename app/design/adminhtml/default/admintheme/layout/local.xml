@@ -19,6 +19,7 @@
             <action method="addCss"><name>cmsmart_layout.css</name></action>
             <action method="addJs"><script>cmsmart/admintemplate/jquery-1.10.2.min.js</script></action>
             <action method="addJs"><script>cmsmart/admintemplate/jquery-ui.min.js</script></action>
+            <action method="addItem"><type>skin_css</type><name>jquery-ui.css</name></action>
             <action method="addJs"><script>cmsmart/admintemplate/jquery.accordion.source.js</script></action>
             <action method="addJs"><script>cmsmart/admintemplate/tooltips.js</script></action>
         </reference>

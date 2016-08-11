@@ -1,5 +1,8 @@
-<?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Grid*/?>
-<?php $_hlp = Mage::helper("zolagocatalog");?>
+<?php
+/** @var $this Zolago_Catalog_Block_Vendor_Product_Grid */
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+?>
 <div class="container" id="content-wrapper">
 	<div id="grid-holder"></div>
 </div>
@@ -16,11 +19,17 @@
 		right:20px;
 		background: #f3f3f3;
 	}
+    @media (max-width: 1060px) {
+        #grid-holder {
+            top: 115px;
+        }
+    }
+
 	#grid-holder .dgrid-cell{
 		vertical-align: middle;
 	}
 	#grid-holder td.dgrid-cell{
-		  cursor: not-allowed;
+		  cursor: default;
 	}
 	#grid-holder td.dgrid-cell.dgrid-focus{
 		 box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
@@ -85,7 +94,7 @@
 		border-left: none;
 	}
 	#grid-holder .dgrid-column-set-0{
-		width: 315px;
+		width: 360px;
 	}
 	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-name{
 		width: 230px;
@@ -182,19 +191,9 @@
 	#grid-holder .dgrid-cell.field-status{
 		width: 40px;
 	}
-	#grid-holder td.dgrid-cell.field-status::after{
-		content: "";
-		display: inline-block;
-		width:0;
-		height:0;
-		border-radius:5px;
-		border: 5px green solid;
-	}
-	#grid-holder td.dgrid-cell.field-status.status-off::after{
-		border-color: red;
-	}
-	#grid-holder td.dgrid-cell.field-status.status-wait::after{
-		border-color: orange;
+	/** Total quantity - is in stock column **/
+	#grid-holder .dgrid-cell.field-is_in_stock {
+		width: 60px;
 	}
 	
 	/** Editor definition **/
@@ -226,10 +225,15 @@
 	#grid-holder .editor h4{
 		margin-bottom: 10px;
 	}
-	#grid-holder .editor .selection{
+	#grid-holder .editor .selection,
+	#grid-holder .editor .save-as-rule{
 		display: none;
 	}
-	#grid-holder .editor.use-selection .selection{
+    #grid-holder .editor.editor-field-name {
+        width: 400px;
+    }
+	#grid-holder .editor.use-selection .selection,
+	#grid-holder .editor.use-save-as-rule .save-as-rule{
 		display: block;
 	}
 	#grid-holder .editor textarea{
@@ -248,6 +252,26 @@
         text-align: center;
         color: #4d7496;
         font-weight: bold;
+    }
+    #grid-holder .header.field-required-highlight {
+        background-color: #FFFFE2;
+
+        background: -moz-linear-gradient(top, #FFFFE2 0%, #eeeeee 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFE2), color-stop(100%,#eeeeee));
+        background: -webkit-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: -o-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: -ms-linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+        background: linear-gradient(top, #FFFFE2 0%,#eeeeee 100%);
+    }
+    #grid-holder .header.field-required-highlight:hover {
+        background-color: #FFFFE2;
+
+        background: -moz-linear-gradient(top, #FFFFEF 0%, #eeeeee 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFEF), color-stop(100%,#eeeeee));
+        background: -webkit-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: -o-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: -ms-linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
+        background: linear-gradient(top, #FFFFEF 0%,#eeeeee 100%);
     }
 	
 	/** Fix tooltip **/
@@ -280,9 +304,42 @@
 		}
 	}
 </style>
+
+<script type="text/javascript" src="/skin/frontend/modago/default/js/rwd.carousel/rwd.carousel.js"></script>
+<script type="text/javascript" src="/skin/frontend/modago/default/js/modernizr.custom.js"></script>
 <script type="text/javascript">
-	require(['vendor/catalog/productGrid', 'vendor/catalog/productGrid/mass/status'], function(productGrid, status){
+	require(['vendor/catalog/productGrid'], function(productGrid) {
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
-		productGrid.startup("grid-holder");
+        window.productGrid = productGrid.startup("grid-holder");
+        var modal = jQuery("#product-image-popup");
+        modal.keydown(function(e) {
+            var car = jQuery('#product-image-popup .carousel');
+            switch(e.keyCode) {
+                case 39:
+                    car.trigger('rwd.next');
+                    break;                        
+                case 37:
+                    car.trigger('rwd.prev');
+                    break;
+            }
+        });
 	});
 </script>
+
+<div id="product-image-popup" class="modal ui-draggable in" role="dialog" aria-hidden="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+			</div>
+		</div>
+	</div>
+</div>

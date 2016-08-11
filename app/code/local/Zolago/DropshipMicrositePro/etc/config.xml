@@ -6,6 +6,11 @@
 		</Zolago_DropshipMicrositePro>
 	</modules>
 	<global>
+	    <cms>
+	        <block>
+	            <tempate_filter>zolagoudmspro/templateFilter</tempate_filter>
+	        </block>
+	    </cms>
         <blocks>
             <udmspro>
                 <rewrite>
@@ -19,7 +24,7 @@
 		<models>
 			<zolagoudmspro>
                 <class>Zolago_DropshipMicrositePro_Model</class>
-            </zolagoudmspro>
+            </zolagoudmspro>            
 		</models>
         <helpers>
             <udmspro>
@@ -35,123 +40,39 @@
 		                <legend>Addresses</legend>
 		                <position>80</position>
 		            </vendor_preferences>
+                    <company_registration_data>
+                        <legend>Company data</legend>
+                        <position>1</position>
+                    </company_registration_data>
+                    <company_contact_data>
+                        <legend>Company contact data</legend>
+                        <position>2</position>
+                    </company_contact_data>
+                    <executive_data>
+                        <legend>Main person responsible for cooperation</legend>
+                        <position>3</position>
+                    </executive_data>
+                    <administrator_data>
+                        <legend>Main person responsible for system administration</legend>
+                        <position>4</position>
+                    </administrator_data>
+                    <rma_contact_data>
+                        <legend>RMA contact data</legend>
+                        <position>6</position>
+                    </rma_contact_data>
+                    <rma_executive_data>
+                        <legend>RMA executive</legend>
+                        <position>7</position>
+                    </rma_executive_data>
 		        </fieldsets>
 		    </address>
 		    <vendor>
 		        <fields>
-		            <company_name>
-		                <label>Company name</label>
-		                <fieldset>vendor_info</fieldset>
-		                <type>text</type>
-		            </company_name>
-		            <tax_no>
-		                <label>NIP</label>
-		                <fieldset>vendor_info</fieldset>
-		                <type>text</type>
-		            </tax_no>
-		            <www>
-		                <label>Vendor WWW page</label>
-		                <fieldset>vendor_preferences</fieldset>
-		                <type>text</type>
-		            </www>
-		            <contact_email>
-		                <label>Contact email</label>
-		                <fieldset>vendor_preferences</fieldset>
-		                <type>text</type>
-                        <reg_class>validate-email</reg_class>
-		            </contact_email>
-		            <contact_telephone>
-		                <label>Contact phone</label>
-		                <fieldset>vendor_preferences</fieldset>
-		                <type>text</type>
-		            </contact_telephone>
-                    <rma_email>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>RMA contact data: Email</label>
-                        <type>text</type>
-                    </rma_email>
-                    <rma_telephone>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>RMA contact data: Phone</label>
-                        <type>text</type>
-                    </rma_telephone>
-                    <rma_executive_telephone>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>RMA executive: Phone</label>
-                        <type>text</type>
-                    </rma_executive_telephone>
-                    <rma_executive_telephone_mobile>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>RMA executive: Mobile</label>
-                        <type>text</type>
-                    </rma_executive_telephone_mobile>
-                    <rma_executive_email>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>RMA executive: Email</label>
-                        <type>text</type>
-                    </rma_executive_email>
 
-                    <executive_firstname>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Executive firstname</label>
-                        <type>text</type>
-                    </executive_firstname>                                                                                                                		            
-                    <executive_lastname>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Executive lastname</label>
-                        <type>text</type>
-                    </executive_lastname>                                                                                                                		            
-                    <executive_telephone>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Executive Phone</label>
-                        <type>text</type>
-                    </executive_telephone>                                                                                                                		            
-                    <executive_telephone_mobile>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Executive Phone Mobile</label>
-                        <type>text</type>
-                    </executive_telephone_mobile>                                                                                                                		            
-                    <billing_email>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing person email</label>
-                        <reg_class>validate-email</reg_class>
-                        <type>text</type>
-                    </billing_email>
-                    <billing_street>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing Street Address</label>
-                        <type>text</type>
-                    </billing_street>
-                    <billing_city>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing City</label>
-                        <type>text</type>
-                    </billing_city>
-                    <billing_zip>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing Zip/Postal Code</label>
-                        <type>text</type>
-                    </billing_zip>
-                    <administrator_firstname>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator first name</label>
-                        <type>text</type>
-                    </administrator_firstname>
-                    <administrator_lastname>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator last name</label>
-                        <type>text</type>
-                    </administrator_lastname>
-                    <administrator_telephone>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator phone</label>
-                        <type>text</type>
-                    </administrator_telephone>
-                    <administrator_telephone_mobile>
-                        <fieldset>vendor_preferences</fieldset>  
-                        <label>Administrator phone mobile</label>
-                        <type>text</type>
-                    </administrator_telephone_mobile>
+
+
+
+
 		        </fields>
 		    </vendor>
 		</udropship>
@@ -161,18 +82,27 @@
             <umicrosite>
                 <args>
                     <modules>
-                        <udmspro before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrositePro</udmspro>
+                        <udmspro before="ZolagoOs_OmniChannelMicrosite">Zolago_DropshipMicrositePro</udmspro>
                     </modules>
                 </args>
             </umicrosite>
 			<udmspro>
 				<args>
 					<modules>
-						<udmspro before="Unirgy_DropshipMicrositePro">Zolago_DropshipMicrositePro</udmspro>
+						<udmspro before="ZolagoOs_OmniChannelMicrositePro">Zolago_DropshipMicrositePro</udmspro>
 					</modules>
 				</args>
 			</udmspro>
 		</routers>
+        <translate>
+            <modules>
+                <Zolago_DropshipMicrositePro>
+                    <files>
+                        <default>Zolago_DropshipMicrositePro.csv</default>
+                    </files>
+                </Zolago_DropshipMicrositePro>
+            </modules>
+        </translate>
 		<events>
 			<controller_action_layout_load_before>
             	<observers>

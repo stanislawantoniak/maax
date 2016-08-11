@@ -88,6 +88,7 @@
 				<div class="rma-content-1">
 
 						<?php foreach($_rma->getItemsCollection() as $item):?>
+						<?php if($item->getPoItem()->getId()): ?>
 						<div class="rma-content-item">
 							<div class="img">
 								<img src="<?php echo $this->getRmaItemThumb($item);?>" alt=""/>
@@ -110,6 +111,7 @@
 								</div>
 							</div>
 						</div>
+						<?php endif; ?>
 						<?php endforeach;?>
 
 				</div>
@@ -146,7 +148,7 @@
 					<table>
 						<tbody>
 							<?php foreach($_comments as $_comment):?>
-							<?php /* @var $_comment Unirgy_Rma_Model_Rma_Comment */ ?>
+							<?php /* @var $_comment ZolagoOs_Rma_Model_Rma_Comment */ ?>
 							<tr>
 								<td class="author">
 									<?php echo Mage::helper('core')->formatDate($_comment->getCreatedAt(), "short", true);?><br/>

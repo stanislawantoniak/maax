@@ -10,7 +10,7 @@ if ($this->getCategoryLabel() || count($categoryCollection)) : ?>
     <?php if(count($categoryCollection)) : ?>
     <ul id="nav_category_mobile" class="navigation" role="navigation">
         <?php foreach ($categoryCollection as $cat) : ?>
-        <li><a href="/<?php echo $cat['url']; ?>"><?php echo $cat['label']; ?></a></li>
+        <li><a href="<?php echo $cat['url']; ?>"><?php echo $cat['name']; ?></a></li>
         <?php endforeach; ?>
     </ul>
     <?php endif; ?>

@@ -6,11 +6,11 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 	protected $_resourceCollectionName = "zolagopo/aggregated_collection";
    
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $venndor
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return boolean
 	 */
-	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, Zolago_Operator_Model_Operator $operator = null) {
+	public function isAllowed(ZolagoOs_OmniChannel_Model_Vendor $vendor = null, Zolago_Operator_Model_Operator $operator = null) {
 		if($operator instanceof Zolago_Operator_Model_Operator){
 			return in_array($this->getPosId(), $operator->getAllowedPos());
 		}elseif($vendor instanceof Zolago_Dropship_Model_Vendor){
@@ -99,5 +99,16 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 	public function getPdfFile() {
 		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
 		return $pdf->getPdfFile($this->getId());
+	}
+	public function delete() {
+	    $id = $this->getId();
+	    parent::delete();	    
+	    $write = Mage::getSingleton('core/resource')->getConnection('core_write');
+	    $table = $write->getTableName('udropship_po');
+	    $write->update(
+            $table,
+	         array("aggregated_id" => NULL),
+             "aggregated_id=".$id
+        );	                            
 	}
 }

@@ -57,24 +57,18 @@
 </head>
 <body>
 	<div id="rmaContainer">
+	    <?php if ($this->getLogo()) : ?>
 		<div id="logo">
 			<img src="<?php echo $this->getLogo(); ?>" />
 		</div>
+		<?php endif; ?>
 		<div id="rmaInfo">
-			<div id="rmaVendor" class="rmaRow" style="border-top: none">
-				<div class="rmaTitle">
-					<?php echo $_helper->__("Return to vendor"); ?>:
-				</div>
-				<div class="rmaContent">
-					<?php echo $this->getVendorName(); ?>
-				</div>
-			</div>
 			<div id="rmaDelivery" class="rmaRow">
 				<div class="rmaTitle">
 					<?php echo $_helper->__("Package delivery address"); ?>:
 				</div>
 				<div class="rmaContent">
-					<?php echo $this->getVendorAddress(); ?>
+					<?php echo $this->getDeliveryAddress(); ?>
 				</div>
 			</div>
 			<div id="rmaNumber" class="rmaRow">
@@ -141,6 +135,7 @@
 	<table class="rmaProducts" id="rmaProductsTable">
 		<tbody>
 		<?php foreach($_rma->getItemsCollection() as $item):?>
+			<?php if($item->getPoItem()->getId()): ?>
 			<tr>
 <!--				<td class="img" rowspan="2">-->
 <!--					<img src="--><?php //echo $this->getRmaItemThumb($item);?><!--" alt=""/>-->
@@ -162,6 +157,7 @@
 					<?php echo $this->getItemCondition($item);?>
 				</td>
 			</tr>
+			<?php endif; ?>
 		<?php endforeach;?>
 		</tbody>
 	</table>

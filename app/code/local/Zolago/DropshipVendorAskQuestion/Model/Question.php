@@ -40,7 +40,7 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
     public function isChangeQuestionStatusToDefault()
     {
         return !$this->hasQuestionStatus()
-            || $this->getQuestionStatus()!=Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_DECLINED
+            || $this->getQuestionStatus()!=ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_DECLINED
                 && !$this->getIsAdminChanges()
                 && $this->dataHasChangedFor('question_text')
                 && !$this->getIsSkipAutoQuestionStatus();
@@ -49,7 +49,7 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
     public function isChangeAnswerStatusToDefault()
     {
         return !$this->hasAnswerStatus()
-            || $this->getAnswerStatus()!=Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_DECLINED
+            || $this->getAnswerStatus()!=ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_DECLINED
                 && !$this->getIsAdminChanges()
                 && $this->dataHasChangedFor('answer_text')
                 && !$this->getIsSkipAutoAnswerStatus();
@@ -67,9 +67,9 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
         if (!Zend_Validate::is($this->getQuestionText(), 'NotEmpty')) {
             $errors[] = $qaHlp->__('Please enter the question text.');
         }
-        if (!Zend_Validate::is($this->getCustomerName(), 'NotEmpty')) {
+        /*if (!Zend_Validate::is($this->getCustomerName(), 'NotEmpty')) {
             $errors[] = $qaHlp->__('Please enter your name.');
-        }
+        }*/
         if (!Zend_Validate::is($this->getCustomerEmail(), 'EmailAddress')) {
             $errors[] = Mage::helper('customer')->__('Invalid email address "%s".', $this->getCustomerEmail());
         }
@@ -119,12 +119,12 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
     public function canCustomerViewAnswer()
     {
         return $this->getAnswerText()
-            && $this->getAnswerStatus()==Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED;
+            && $this->getAnswerStatus()==ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED;
     }
 
     public function canVendorViewQuestion()
     {
-        return $this->getQuestionStatus()==Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED;
+        return $this->getQuestionStatus()==ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED;
     }
 
     public function canShowCustomerInfo()
@@ -144,7 +144,7 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
 
     public function getAdminUrl()
     {
-        return Mage::getModel('adminhtml/url')->getUrl('udqaadmin/index/edit', array('id'=>$this->getId()));
+        return Mage::getModel('adminhtml/url')->getUrl('zosqaadmin/index/edit', array('id'=>$this->getId()));
     }
 
 }

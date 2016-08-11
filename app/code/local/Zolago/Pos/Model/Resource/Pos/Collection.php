@@ -23,6 +23,14 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 		$this->addFieldToFilter("is_active", 1);
 		return $this;
 	}
+
+    /**
+     * @return Zolago_Pos_Model_Resource_Pos_Collection
+     */
+    public function addShowOnMapFilter() {
+        $this->addFieldToFilter("show_on_map", 1);
+        return $this;
+    }
 	
     //{{{ 
     /**
@@ -47,11 +55,11 @@ class Zolago_Pos_Model_Resource_Pos_Collection
     }
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor|int $vendor
 	 * @return Zolago_Pos_Model_Resource_Pos_Collection
 	 */
 	public function addVendorFilter($vendor){
-		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+		if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
 		$condition = $this->getConnection()->quoteInto(

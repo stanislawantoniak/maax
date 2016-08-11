@@ -152,19 +152,75 @@ class GH_Rewrite_CsvController extends Mage_Adminhtml_Controller_Action
 						/** @var GH_Rewrite_Model_Resource_Url_Collection $ghrewriteUrlCollection */
 						$ghrewriteUrlCollection = $ghRewriteUrlModel->getCollection();
 						$ghrewriteUrlCollection->loadByHashId($ghUrlRewriteHashes);
+						$updatedRewrites = 0;
+						$urlChanged = false;
+						$skippedRewrites = array();
+						$urlColumn = $ghUrlRewriteColumns[9];
+						/** @var GH_Rewrite_Helper_Data $hlp */
+						$hlp = Mage::helper('ghrewrite');
+						$suffix = $hlp::GH_URL_REWRITE_REDIRECTION_SUFFIX;
 						if($ghrewriteUrlCollection->getSize()) { //if there are results then someone is trying to place identical rewrite in db
-							$hashesErrorLines = array();
-							foreach($ghrewriteUrlCollection as $duplicate) {
-								$hashesErrorLines[] = array_search($duplicate->getHashId(),$ghUrlRewriteHashes) + 1;
+							foreach($ghrewriteUrlCollection as $existing) {
+								$key = array_search($existing->getHashId(),$ghUrlRewriteHashes);
+								$data = $ghUrlRewrite[$key];
+								$oldData = $existing->getData();
+								$diff = 0;
+								foreach($data as $k=>$v) {
+									//check if sent data is not identical to this one;
+									if($data[$k] != $oldData[$k]) {
+										$existing->setData($k,$v);
+										$diff++;
+									}
+								}
+								if($diff) {
+									if($oldData[$urlColumn] != $data[$urlColumn] && $existing->getData('url_rewrite_id')) {
+										//update magento rewrites when url is different than original
+										/** @var Mage_Core_Model_Resource_Url_Rewrite_Collection $rewrite */
+										$rewrite = Mage::getModel('core/url_rewrite')->getCollection();
+										$rewrite->addFieldToFilter('id_path', array("in" => array($oldData[$urlColumn], $oldData[$urlColumn] . $suffix)));
+										foreach ($rewrite as $rewriteToRemove) {
+											if ($rewriteToRemove->getIdPath() == $oldData[$urlColumn] . $suffix) {
+												//when removing  don't just remove redirect, but reverse it for search engines to keep links where they were before
+												$targetPath = $rewriteToRemove->getRequestPath();
+												$requestPath = $rewriteToRemove->getTargetPath();
+												$rewriteToRemove
+													->setRequestPath($requestPath)
+													->setTargetPath($targetPath)
+													->save();
+											} else {
+												$rewriteToRemove->delete();
+											}
+										}
+										$existing->setData('url_rewrite_id', null);
+										$urlChanged = true;
+									}
+									$existing->save();
+									$updatedRewrites++;
+								} else {
+									$skippedRewrites[] = $key + 1;
+								}
+								unset($ghUrlRewrite[$key]);
 							}
-							$this->_exception("File contains rewrites which already exists in database. Lines: %s",implode(", ",$hashesErrorLines));
-						} else {
+
+						}
+
+						if(count($ghUrlRewrite)) {
 							//all is checked so now we can put everything to database
 							/** @var GH_Rewrite_Model_Resource_Url $resource */
 							$resource = $ghRewriteUrlModel->getResource();
 							$resource->appendRewrites($ghUrlRewrite);
-							$this->_getSession()->addSuccess($hlp->__("File was imported successfully. Imported rewrites: %s",count($ghUrlRewrite)));
+							$this->_getSession()->addSuccess($hlp->__("File was imported successfully. Imported rewrites: %s", count($ghUrlRewrite)));
 						}
+						if($updatedRewrites) {
+							$this->_getSession()->addSuccess($hlp->__("Updated rewrites: %s",$updatedRewrites));
+						}
+						if(count($skippedRewrites)) {
+							$this->_getSession()->addWarning($hlp->__("Skipped csv lines due to identical content: %s",implode(',',$skippedRewrites)));
+						}
+						if($urlChanged) {
+							$this->_getSession()->addWarning($hlp->__("Url has changed for one or more rewrites, don't forget to regenerate them!"));
+						}
+
 
 					} else {
 						$this->_exception("Provided file is empty or corrupt");

@@ -44,7 +44,7 @@ class Zolago_Catalog_Vendor_AttributesController
      * Index
      */
     public function indexAction() {
-        $this->_renderPage(null, 'udprod_product');
+        $this->_renderPage(null, 'udprod_attributes');
     }
 
 
@@ -94,11 +94,11 @@ class Zolago_Catalog_Vendor_AttributesController
     public function get_valuesAction() {
         $storeId = $this->_getStore();
         $attributeId = $this->getRequest()->getParam('attribute');
-        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
+//        $attribute = Mage::getModel('catalog/resource_eav_attribute')->load($attributeId);
         $collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
                                  ->setPositionOrder('asc')
                                  ->setAttributeFilter($attributeId)
-                                 ->setStoreFilter()
+                                 ->setStoreFilter($storeId)
                                  ->load();
 
 

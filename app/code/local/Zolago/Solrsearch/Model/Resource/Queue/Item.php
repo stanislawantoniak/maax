@@ -57,6 +57,7 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 			$select->where("core_name=?", $item->getCoreName());
 			$select->where("status=?", $item->getStatus());
 			$select->where("delete_only=?", $item->getDeleteOnly());
+			$select->where("store_id=?", $item->getStoreId());
 		    if($result=$this->getReadConnection()->fetchOne($select)){
 				$item->setId($result);
 				$item->setCreatedAt(Varien_Date::now());
@@ -83,5 +84,67 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 		}
 		return parent::_prepareDataForSave($object);
 	}
+
+    /**
+     * Multi update for solr multi push product to queue
+     *
+     * @param array $data
+     * @param array $productIds
+     * @param int $storeId
+     * @param string $coreName
+     * @param int $deleteOnly
+     * @return $this
+     */
+    public function multiUpdate($data, $productIds, $storeId, $coreName, $deleteOnly) {
+
+        $table = $this->getMainTable();
+        // for existing rows in DB
+        $condition = array(
+            "product_id IN (?)" => $productIds,
+            "store_id = ?"      => $storeId,
+            "core_name = ?"     => $coreName,
+            "delete_only = ?"   => $deleteOnly
+        );
+        $updateAffectedRows = $this->_getWriteAdapter()->update(
+            $this->getMainTable(),
+            $data,
+            $condition
+        );
+
+        // For not existing rows in DB
+        $select = $this->_getReadAdapter()->select();
+        $select->from($table);
+        $select->where("product_id IN (?)", $productIds);
+        $select->where("store_id = ?", $storeId);
+        $select->where("core_name = ?", $coreName);
+        $select->where("delete_only = ?", $deleteOnly);
+        $updatedProducts = $this->_getReadAdapter()->fetchAll($select);
+
+        $updatedProductsIds = array();
+        foreach ($updatedProducts as $row) {
+            $updatedProductsIds[] = $row['product_id'];
+        }
+        $productIdsToInsert = array_diff($productIds, $updatedProductsIds);
+
+        if (!empty($productIdsToInsert)) {
+
+            $rows = array();
+            foreach ($productIdsToInsert as $id) {
+                $rows[] = array(
+                    'product_id' => $id,
+                    'store_id' => $storeId,
+                    'status' => $data['status'],
+                    'core_name' => $coreName,
+                    'created_at' => $data['created_at'],
+                    'delete_only' => $deleteOnly
+                );
+            }
+
+            $write = $this->_getWriteAdapter();
+            $insertAffectedRows = $write->insertMultiple($table, $rows);
+        }
+        return $this;
+    }
+
 }
 

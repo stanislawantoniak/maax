@@ -15,6 +15,7 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
                 <div id="grid" class="shuffle--container shuffle--fluid">
                     <?php foreach ($_collection as $product): ?>
                         <?php $_product = $product->getProduct(); ?>
+                        <?php if (!$_product): continue; endif; ?>
                         <?php $_productImageUrl = $_helper->getResizedImageUrl($_product); ?>
                         <?php $_productImageInfo = $_helper->getResizedImageInfo($_product); ?>
                         <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
@@ -25,7 +26,7 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
 		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
 		                                     class="img-responsive" />
 	                                </figure>
-	                                <div class="logo_manufacturer" style="background-image:url(<?php echo $brandImagesList[$product->getData('brand_id')]; ?>)"></div>
+	                                <?php if(isset($brandImagesList[$product->getData('brand_id')])): ?><div class="logo_manufacturer" style="background-image:url(<?php echo $brandImagesList[$product->getData('brand_id')]; ?>)"></div><?php endif; ?>
                                     <div class="name_product">
                                         <?php echo $this->escapeHtml($_product->getName()); ?>
                                     </div>
@@ -61,8 +62,7 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
 //                                        }
                                         ?>
                                         <div class="like liked"
-                                             data-idproduct="<?php echo $_product->getId(); ?>"
-                                             data-status="1">
+                                             data-idproduct="<?php echo $_product->getId(); ?>">
                                             <span class="like_count">
                                                 <span>
                                                     <?php echo $inMyWishlist; ?>
@@ -70,12 +70,7 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
                                                 </span>
 	                                            <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
                                             </span>
-	                                        <span class="icoLike">
-                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/svg/unlike.svg'); ?>"
-                                                     alt="" onclick="return false;" width="18" height="18" />
-                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/svg/like.svg'); ?>"
-                                                     alt="" onclick="return false;" width="18" height="18" />
-                                            </span>
+	                                        <span class="icoLike"></span>
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
@@ -91,6 +86,9 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
 </div>
 
 <script>
+	//needed for like removal process
+	var unlikingOnWishlist = true;
+
     Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
     Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
     Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
@@ -129,15 +127,5 @@ $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
         in_your_wishlist: "true"
     });
     <?php endforeach; ?>
-
-    jQuery('#grid .like').click(function() {
-        Mall.wishlist.removeFromSmallBlock(this);
-
-        //remove item
-        grid.shuffle('remove', jQuery(this).closest('.item'));
-
-        //fix for footer
-        jQuery(window).resize();
-    });
 </script>
 

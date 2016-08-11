@@ -50,12 +50,37 @@
 			margin-top: -10px;
 			padding-bottom: 20px;
 		}
+		&#account_data_separator_3, &#account_data_separator_4 {
+			margin-top: 15px;
+			padding-top: 15px;
+		}
 	}
 	.account_submit_container {
 		text-align: right;
+	}
+	.account_editpassword_submit_container {
+		.submit-container {
+			max-width: 250px;
+		}
 	}
 
 }
 .my-account .has-feedback .form-control {
 	padding-right: inherit !important;
+}
+
+body.customer-account-password {
+	.bottom-links {
+		margin-top: 60px;
+	}
+	.social-login-caption {
+		@media(max-width: $screen-sm-max) {
+			margin-top: 10px;
+		}
+	}
+	.social-login-button-container {
+		@media(min-width: $screen-md-min) {
+			text-align: right;
+		}
+	}
 }

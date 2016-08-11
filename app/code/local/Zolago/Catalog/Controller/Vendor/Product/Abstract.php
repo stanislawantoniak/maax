@@ -130,13 +130,20 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				case "name":
 					$collection->joinAttribute("skuv", 'catalog_product/skuv', 'entity_id', null, 'left');
 				break;
+				case "is_in_stock":
+					/**
+					 * NOTE: is_in_stock is added after collection load for better performance ( 1 subselect vs 2)
+					 * @see Zolago_Catalog_Model_Resource_Vendor_Product_Collection::prepareRestResponse()
+					 */
+					$collection->joinChildQuantities();
+					$collection->joinAllChildrenCount();
+					$collection->joinAvailableChildrenCount();
+					break;
 			}
 		}
-		
-		
 		return $collection;
     }
-	
+
 	/**
 	 * @param string $key
 	 * @param mixed $value
@@ -168,7 +175,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			return $value;
 		}
 		
-		if($attribute){
+		if($attribute && $attribute->getId()){
 			// process name
 			if($attribute->getAttributeCode()=="name"){
 				$this->_getCollection()->addFieldToFilter(array(
@@ -180,9 +187,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			// Proces enuberable attributes
 			if($this->getGridModel()->isAttributeEnumerable($attribute)){
 				// Process null
-				if($value===self::NULL_VALUE){
-					return array("null"=>true);
-				}
+                if ($value === self::NULL_VALUE) {
+                    $this->_getCollection()->addFieldToFilter(array(
+                        array("attribute" => $attribute->getAttributeCode(), "filter" => array("null" => true)),
+                        array("attribute" => $attribute->getAttributeCode(), "filter" => array("eq" => ""))
+                    ));
+                    return null;
+                }
 				// Process multiply select
 				if($attribute->getFrontendInput()=="multiselect"){
 					/**
@@ -216,6 +227,15 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				}
 				return array("eq"=>$value);
 			}
+		} elseif ($key == 'is_in_stock') {
+			if (((int)$value) == Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK) {
+				$condition = 'stock_qty > ?';
+			} else {
+				$condition = 'stock_qty <= ?';
+			}
+			$collection = $this->_getCollection();
+			$collection->getSelect()->having($condition, 0);
+			return null;
 		}
 		
 		// Return default
@@ -235,6 +255,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		if(isset($out["thumbnail"])){
 			$out["images_count"] = true;
 		}
+		$out["is_in_stock"] = true;
 		return array_keys($out);
 	}
 	
@@ -302,13 +323,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				$out[] = $column->getAttribute()->getAttributeCode();
 			}
 		}
+		$out[] = 'is_in_stock';
 		return $out;
 	}
 	
 	/**
 	 * @param array $productIds
 	 * @param array $attributesData
-	 * @param type $storeId
+	 * @param int $storeId
 	 * @throws Mage_Core_Exception
 	 */
 	protected function _processAttributresSave(array $productIds, array $attributesData, $storeId, array $data) {
@@ -344,6 +366,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		
 		// Validate products vendor
 		if($checkVendor){
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $collection */
 			$collection = Mage::getResourceModel("catalog/product_collection");
 			$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
 			$collection->addIdFilter($productIds);
@@ -352,13 +375,49 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				throw new Mage_Core_Exception($helper->__("You are trying to edit not your product"));
 			}
 		}
-		
 		// Collect validation data
 		$notAllowed = array();
 		$missings = array();
+		$descriptionChildProds = array();
+		$nameChildProds = array();
+        /** @var Zolago_Catalog_Model_Resource_Product $resProduct */
+        $resProduct = Mage::getResourceModel('catalog/product');
 		foreach($attributesData as $attributeCode=>$value){
 			$attribute = $this->getGridModel()->getAttribute($attributeCode);
 			$attributesObjects[$attributeCode] = $attribute;
+			// special check for brandshop
+			if ($attributeCode == 'brandshop') {
+			    $vendor = $this->getVendor();
+			    if ($vendor->getVendorId() != $value) {			        
+    			    $list = $vendor->getCanAddProduct();    			        			    
+    			    $allow = false;
+    			    foreach ($list as $vendor) {
+                        if ($vendor['brandshop_id'] == $value) {
+                            $allow = true;
+                        }
+			        }
+			        if (!$allow) {
+			            $notAllowed[] = $attribute->getStoreLabel($vendorStoreId);
+			            continue;
+			        }
+			    }			    
+			}
+            // special check for description status
+			if ($attributeCode == 'description_status') {
+			    // add child 
+			    $list = $resProduct->getRelatedProducts($productIds);
+			    foreach ($list as $item) {
+                    $descriptionChildProds[$item['product_id']] = $item['product_id'];
+			    }
+                			    
+            }
+            // special check for product name
+            if ($attributeCode == 'name') {
+                $list = $resProduct->getRelatedProducts($productIds);
+                foreach ($list as $item) {
+                    $nameChildProds[$item['product_id']] = $item['product_id'];
+                }
+            }
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
 				$notAllowed[] = $attribute->getStoreLabel($vendorStoreId);
@@ -366,6 +425,8 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			if($checkRequired && $attribute->getIsRequired() && trim($value)==""){
 				$missings[] = $attribute->getStoreLabel($vendorStoreId);
 			}
+			
+			
 		}
 		// Validate grid permissions
 		if($notAllowed){
@@ -428,9 +489,37 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 					}
 				}
 			}
+		}	
+		// if children exists update the children (only description_status)
+		if ($descriptionChildProds) {
+		    $childAttributes = array(
+		        'description_status' => $attributesData['description_status']
+            );
+	    	Mage::getSingleton('catalog/product_action')
+    			->updateAttributes($descriptionChildProds, $childAttributes, $store->getId());
 		}
-
-		// Write attribs & make reindex
+        // if children exists update the children (only product name)
+        if ($nameChildProds) {
+            // Simple collection
+            /** @var Zolago_Catalog_Model_Resource_Product_Collection $collection */
+            $collection = Mage::getResourceModel("zolagocatalog/product_collection");
+            $collection->addFieldToFilter("entity_id", array("in" => $nameChildProds));
+            $collection->setStoreId($store->getId());
+            $collection->joinAttribute('size', 'catalog_product/size', 'entity_id', null, 'left');
+            $collection->load();
+            // make produt name for simple products like: <name from configurable><space><size text>
+            $sizeAttr = $this->getGridModel()->getAttribute('size');
+            $attrSource = $sizeAttr->getSource();
+            foreach ($collection as $product) {
+                $size = $attrSource->getOptionText($product->getData('size'));
+                $childAttributes = array(
+                    'name' => $attributesData['name'] . ' ' . $size
+                );
+                Mage::getSingleton('catalog/product_action')
+                    ->updateAttributes(array($product->getId()), $childAttributes, $store->getId());
+            }
+        }
+        // Write attribs & make reindex
 		Mage::getSingleton('catalog/product_action')
 			->updateAttributes($productIds, $attributesData, $store->getId());
 		
@@ -441,16 +530,40 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		$reposnse = $this->getResponse();
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
 		$storeId = 0;
-			
+
 		try{
 			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
 			$storeId = $data['store_id'];
 
+			/* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
+			$descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
+
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
-					$attributeData[$attribute] = ($attribute == "description" || $attribute == "short_description") ? Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]) : $data[$attribute];
+                    $attributeData[$attribute] = $data[$attribute];
+                    if ($attribute == "description" || $attribute == "short_description") {
+                        // Clear descriptions
+                        $attributeData[$attribute] = Mage::helper("zolagocatalog")->secureInvisibleContent($data[$attribute]);
+                    } elseif ($attribute == "name") {
+                        // Clear product name
+                        $attributeData[$attribute] = Mage::helper("zolagocatalog")->cleanProductName($data[$attribute]);
+                    }
+
+					/**
+					 * Save attribute change history
+					 */
+
+					$descriptionHistoryModel->updateChangesHistory(
+						$this->getVendorId(),
+						array($productId),
+						$attribute,
+						$data[$attribute],
+						Mage::getModel("catalog/product")->getCollection()->addAttributeToSelect($attribute),
+						$data["attribute_mode"][$attribute]
+					);
+					/*Save attribute change history*/
 				}
 			}
 			if($attributeData){
@@ -464,11 +577,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		} catch (Exception $ex) {
 			Mage::logException($ex);
 			$reposnse->setHttpResponseCode(500);
-			$reposnse->setBody("Some error occured");
+			$reposnse->setBody("Some error occurred");
 			return;
 		}
 
-		/** Inclue attribute set **/
+		/** Include attribute set **/
 		if(!$this->getRequest()->getParam("attribute_set_id")){
 			$this->getRequest()->setParam("attribute_set_id", $data['attribute_set_id']);
 		}

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_statements_calendar>
+        <update handle="ghstatements_update_menu"/>
+        <reference name="content">
+            <block type="ghstatements/adminhtml_calendar" name="ghstatements_calendar" template="ghstatements/calendar.phtml">
+                <block type="ghstatements/adminhtml_calendar_grid" name="ghstatements_calendar_grid"/>
+            </block>
+        </reference>
+    </adminhtml_statements_calendar>
+    <adminhtml_statements_calendar_item>
+        <update handle="ghstatements_update_menu"/>
+        <reference name="content">
+            <block type="ghstatements/adminhtml_calendar_item" name="ghstatements_calendar_item" template="ghstatements/calendar/item.phtml">
+                <block type="ghstatements/adminhtml_calendar_item_grid" name="ghstatements_calendar_item_grid"/>
+            </block>
+        </reference>
+    </adminhtml_statements_calendar_item>
+    <adminhtml_statements_calendar_edit>
+        <update handle="ghstatements_update_menu"/>
+        <reference name="content">
+            <block type="ghstatements/adminhtml_calendar_edit" name="ghstatements_calendar_edit" template="ghstatements/calendar/edit.phtml"/>
+        </reference>
+        <reference name="left">
+            <block type="ghstatements/adminhtml_calendar_edit_tabs" name="ghstatements_calendar_edit_tabs">
+                <!-- General tab -->
+                <action method="addTab">
+                    <name>group_general</name>
+                    <block>ghstatements/adminhtml_calendar_edit_tab_general</block>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_statements_calendar_edit>
+    <adminhtml_statements_calendar_item_edit>
+        <update handle="ghstatements_update_menu"/>
+        <reference name="content">
+            <block type="ghstatements/adminhtml_calendar_item_edit" name="ghstatements_calendar_item_edit" template="ghstatements/calendar/item/edit.phtml"/>
+        </reference>
+        <reference name="left">
+            <block type="ghstatements/adminhtml_calendar_item_edit_tabs" name="ghstatements_calendar_item_edit_tabs">
+                <!-- General tab -->
+                <action method="addTab">
+                    <name>group_general</name>
+                    <block>ghstatements/adminhtml_calendar_item_edit_tab_general</block>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_statements_calendar_item_edit>
+
+    <adminhtml_vendor_statements_index>
+        <update handle="ghstatements_update_menu"/>
+        <reference name="content">
+            <block type="ghstatements/adminhtml_vendor_statements" name="ghstatements_vendor_statements"
+                   template="ghstatements/vendor/statements.phtml">
+                <block type="ghstatements/adminhtml_vendor_statements_grid" name="ghstatements_vendor_statements_grid"/>
+            </block>
+        </reference>
+    </adminhtml_vendor_statements_index>
+
+    <adminhtml_vendor_statements_edit>
+        <update handle="ghstatements_update_menu"/>
+        <reference name="content">
+            <block type="ghstatements/adminhtml_vendor_statements_edit" name="ghstatements_vendor_statements_edit"
+                   template="ghstatements/vendor/statements/edit.phtml"/>
+        </reference>
+        <reference name="left">
+            <block type="ghstatements/adminhtml_vendor_statements_edit_tabs"
+                   name="ghstatements_vendor_statements_edit_tabs">
+            </block>
+        </reference>
+    </adminhtml_vendor_statements_edit>
+
+    <adminhtml_vendor_balance_index>
+        <!--placebo-->
+    </adminhtml_vendor_balance_index>
+</layout>

@@ -38,13 +38,15 @@ class GH_Api_Model_Soap_Client  {
      * @param string $token
      * @param int $batchSize
      * @param string $messageType
+     * @param string $orderId
      * @return void
      */
-     public function getChangeOrderMessage($token,$batchSize,$messageType) {
+     public function getChangeOrderMessage($token,$batchSize,$messageType,$orderId) {
          $obj = new StdClass();
          $obj->sessionToken = trim($token);
          $obj->messageBatchSize = $batchSize;
          $obj->messageType = $messageType;
+         $obj->orderId = $orderId;
          $this->_query('getChangeOrderMessage',$obj);
      }
 
@@ -124,6 +126,32 @@ class GH_Api_Model_Soap_Client  {
         $obj->reservationMessage = $reservationMessage;
         $this->_query('setOrderReservation', $obj);
     }
+
+    /**
+     * Test for getCategories
+     * @param $token
+     */
+    public function getCategories($token) {
+        $obj = new StdClass();
+        $obj->sessionToken = trim($token);
+        $this->_query('getCategories', $obj);
+    }
+
+	/**
+	 * test for getUpdateProductsPricesStocks
+	 *
+	 * @param $token
+	 * @param $data
+	 */
+	public function updateProductsPricesStocks($token, $data) {
+		$obj = new StdClass();
+		$obj->sessionToken = trim($token);
+		$obj->productsPricesUpdateList = $data['productsPricesUpdateList'];
+        $obj->productsStocksUpdateList = $data['productsStocksUpdateList'];
+		$this->_query('updateProductsPricesStocks', $obj);
+		/** @see GH_Api_Model_Soap::updateProductsPricesStocks() */
+	}
+
     /**
      * xml formatter
      * @param string $xml
@@ -149,10 +177,22 @@ class GH_Api_Model_Soap_Client  {
      * @return void
      */
     protected function _query($name,$parameters) {
-        $client = new SoapClient(Mage::helper('ghapi')->getWsdlTestUrl(),array('trace'=>true));
+        $testFlag = (bool)Mage::getConfig()->getNode('global/test_server');
+        $params = array ('encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'trace' => 1);
+		/** @var GH_Api_Helper_Data $helper */
+		$helper = Mage::helper('ghapi');
+        if ($testFlag) {
+            $url = $helper->prepareWsdlUri($helper->getWsdlTestUrl(), $params);
+        } else {
+            $url = $helper->getWsdlTestUrl();
+        }
+        $client = new SoapClient($url,$params);
         $data = array();
         try {
             $data = $client->$name($parameters);
+            if ($testFlag) {
+                 @unlink($url);   
+            }          
         } catch (Exception $xt) {
             Mage::logException($xt);
         }

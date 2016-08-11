@@ -14,11 +14,20 @@ class Orba_Shipping_Model_Carrier_Abstract extends
         $this->_settings = $settings;
     }
     public function setSenderAddress($address) {
+	    $address['phone'] = $this->getOnlyNumbers($address['phone']);
         $this->_senderAddress = $address;
     }
     public function setReceiverAddress($address) {
+	    $address['contact_phone'] = $this->getOnlyNumbers(
+            isset($address['contact_phone'])
+                ? $address['contact_phone']
+                : (isset($address['telephone']) ? $address['telephone'] : ''));
         $this->_receiverAddress = $address;
     }
+
+	protected function getOnlyNumbers($value) {
+		return filter_var(str_replace(array('+','-'),'',$value), FILTER_SANITIZE_NUMBER_INT);
+	}
 
 	/**
 	 * Empyt collect
@@ -66,6 +75,23 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     public function createShipmentAtOnce() {
         Mage::throwException(Mage::helper('orbacommon')->__('Not implemented yet'));
     }
+    public function calculateCharge($track,$rate,$vendor,$packageValue,$isCod) {
+        // nothing to do
+    }
+    
+    /**
+     * add additional info for track
+     */
 
+    public function processTrack($track,$data) {
+        return;
+    }
+    
+    /**
+     * cancel track 
+     */
 
+    public function cancelTrack($track) {
+        return;
+    }
 }

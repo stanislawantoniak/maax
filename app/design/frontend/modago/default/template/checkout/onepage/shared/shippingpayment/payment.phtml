@@ -6,7 +6,7 @@
     <!-- PANEL -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <!--            <div class="top-panel">-->
+            <?php /* <!--            <div class="top-panel">-->
             <!--                <h4>--><?php //echo $_helper->__("Wybierz sposób płatności"); ?><!--</h4>-->
             <!--                <div class="row">-->
             <!--                    <div class="form-group form-checkbox small default_pay">-->
@@ -19,9 +19,9 @@
             <!--						--><?php //endif;?>
             <!--                    </div>-->
             <!--                </div>-->
-            <!--            </div>-->
+            <!--            </div>--> */ ?>
             <?php echo $this->getChildHtml('methods') ?>
-            <!--        </div>-->
+            <?php // <!--        </div>--> ?>
         </div>
         <div class="panel-footer">
             <a class="underline" id="view_default_pay" href="#">
@@ -36,6 +36,7 @@
             Mall.translate.add("please-select-card", "<?php echo $this->__("Please select card type"); ?>");
             Mall.translate.add("bank", "<?php echo $this->__("Bank"); ?>");
             Mall.translate.add("payment-supported-by", "<?php echo $this->__("Payment supported by"); ?>");
+            Mall.translate.add("address-you-sure?", "<?php echo $this->__("Do you really want to remove this address?");?>");
         </script>
 </fieldset>
 

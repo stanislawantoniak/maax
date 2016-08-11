@@ -1,3 +1,4 @@
+<?php /** @var Zolago_Pos_Block_Dropship_Pos_Edit $this */ ?>
 <?php $_helper = Mage::helper("zolagopos");?>
 <?php $_pos = $this->getModel();?>
 <div class="container">
@@ -33,7 +34,23 @@
 jQuery(function($){
 	var form = $("#edit-pos");
 	new Zolago.formIntegrator(form);
-	form.validate();
+	form.validate({
+		rules: {
+			"phone": {
+				required: true,
+				"validate-telephone": true
+			},
+            "postcode": {
+                required: true,
+                postcodeWithReplace: true
+            }
+		},
+        messages: {
+            "postcode": {
+                postcodeWithReplace: '<?php echo Mage::helper("zolagopos")->__("Zip code has not valid format (ex.12-345)"); ?>'
+            }
+        }
+	});
 });
 </script>
 
@@ -63,12 +80,14 @@ jQuery(function($){
 					$("dhl_account").up('.form-group').show();
 					$("dhl_ecas").up('.form-group').show();
 					$("dhl_terminal").up('.form-group').show();
+					$("dhl_check_button").up('.form-group').show();
 				}else{
 					$("dhl_login").up('.form-group').hide();
 					$("dhl_password").up('.form-group').hide();
 					$("dhl_account").up('.form-group').hide();
 					$("dhl_ecas").up('.form-group').hide();
 					$("dhl_terminal").up('.form-group').hide();
+					$("dhl_check_button").up('.form-group').hide();
 				}
 			},
 			enableUps: function(state){
@@ -86,4 +105,67 @@ jQuery(function($){
 		document.observe("dom:loaded", function() {
 			posControl.init();
 		});
+
+		jQuery(document).ready(function () {
+
+			var isAvailableAsPickupPoint = jQuery('#is_available_as_pickup_point');
+			isAvailableAsPickupPoint.bootstrapSwitch({
+				onText: '<?php echo $_helper->__("Yes");?>',
+				offText: '<?php echo $_helper->__("No");?>'
+			});
+			if (isAvailableAsPickupPoint.val() == 1) {
+				jQuery('#is_available_as_pickup_point').bootstrapSwitch('state', true);
+			} else {
+				jQuery('#is_available_as_pickup_point').bootstrapSwitch('state', false);
+			}
+			isAvailableAsPickupPoint.on('switchChange.bootstrapSwitch', function () {
+				var isAvailableAsPickupPointState = jQuery(this).bootstrapSwitch('state');
+
+				if (isAvailableAsPickupPointState) {
+					jQuery('#is_available_as_pickup_point').val(1);
+				} else {
+					jQuery('#is_available_as_pickup_point').val(0);
+				}
+				event.preventDefault();
+			}).change();
+
+
+			var showPosOnMap = jQuery('#show_on_map');
+			showPosOnMap.bootstrapSwitch({
+				onText: '<?php echo $_helper->__("Yes");?>',
+				offText: '<?php echo $_helper->__("No");?>'
+			});
+			if (showPosOnMap.val() == 1) {
+				jQuery('#show_on_map').bootstrapSwitch('state', true);
+				jQuery(".map-fields").show();
+			} else {
+				jQuery('#show_on_map').bootstrapSwitch('state', false);
+				jQuery(".map-fields").hide();
+			}
+
+			showPosOnMap.on('switchChange.bootstrapSwitch', function () {
+				var showOnMapFields = jQuery(this).bootstrapSwitch('state');
+
+				if (showOnMapFields) {
+					jQuery(".map-fields").slideDown();
+					jQuery('#show_on_map').val(1);
+				} else {
+					jQuery(".map-fields").slideUp();
+					jQuery('#show_on_map').val(0);
+				}
+				event.preventDefault();
+			});
+
+
+
+
+			// Trick for htmlspecialchars_decode
+			var mapTimeOpened = jQuery('<textarea>').html(jQuery('#map_time_opened').text()).text();
+			jQuery('#map_time_opened').text(mapTimeOpened);
+		});
+    Dhl.init('<?php echo Mage::getUrl('*/*/check_dhl',array('pos_id' => $this->getRequest()->getParam('pos_id')));?>');
+    jQuery('.disable_dhl').change(function() {
+        Dhl.setInfo('orange','<?php echo Mage::helper('orbashipping')->__('Please save changed settings.')?>');
+        Dhl.disable();
+    });
 </script>

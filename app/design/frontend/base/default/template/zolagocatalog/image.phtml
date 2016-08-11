@@ -1,11 +1,16 @@
-<link rel="stylesheet" media="screen and (min-width: 750px) and (max-width: 990px)" href="/skin/frontend/base/default/css/800.css" />
-<?php $_helper = Mage::helper("zolagocatalog"); ?>
+<?php
+/** @var $this Zolago_Catalog_Block_Vendor_Image */
+$_helper = Mage::helper("zolagocatalog");
+$maxSize = $this->maxUploadInByte();
+?>
+<link rel="stylesheet" media="screen and (min-width: 750px) and (max-width: 990px)"
+      href="/skin/frontend/base/default/css/800.css"/>
 
 <div class="container">
     <!--=== Page Header ===-->
     <div class="page-header">
         <div class="page-title">
-            <h3><?php echo $_helper->__("Mass Image");?></h3>
+            <h3><?php echo $_helper->__("Mass Image"); ?></h3>
         </div>
     </div>
     <div class="tabbable tabbabble-custom">
@@ -14,30 +19,371 @@
                 <a name="tmp"></a>
             </li>
             <li class="active" style="float:left">
-                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagocatalog')->__('Images');?></a>
+                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagocatalog')->__('Images'); ?></a>
             </li>
             <li class="" style="float:left;">
-                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add');?></a>
+                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagocatalog')->__('Add'); ?></a>
             </li>
 
 
         </ul>
         <div class="tab-content">
             <div id="tab_1_1" class="tab-pane active">
-                <?php echo $this->getChildHtml("image_list");?>
+                <?php echo $this->getChildHtml("image_list"); ?>
             </div>
 
             <div id="tab_1_2" class="tab-pane">
-                <?php echo $this->getChildHtml("image_queue");?>
+                <?php echo $this->getChildHtml("image_queue"); ?>
             </div>
 
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    jQuery(document).ready(function(){
-        jQuery('.need-to-check').css({"opacity": "0.5"}).tooltip({
-            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+    jQuery(function ($) {
+        var startLoadingNoProgressBar = function () {
+
+            var loader = jQuery("#vendor-loading");
+            if (!loader.length) {
+                loader = jQuery("<div>").attr({
+                    "id": "vendor-loading",
+                    class: "with-progress",
+                }).click(function () {
+                    return false;
+                }).hide().appendTo("body");
+            }
+            loader.addClass("show-process").show();
+        };
+
+        initDragSort($(".vendor-image"));
+
+		$(document).delegate('.vendor-image-upload input[type=file]', 'change', function(e) {
+            if (!jQuery(this)[0].files[0]) {
+                return; // If no file to send
+            }
+			jQuery(".noty_message").click(); // close all
+
+            var form = $(this).closest("form"),
+                productId = form.find("input[name=product]").val(),
+                i = 0,
+                files = jQuery(this)[0].files,
+
+                fileSuccess = 0,
+                fileTooBigError = 0,
+                fileWrongFormatError = 0;
+
+            var analyze = analyzeFileSize(files, fileTooBigError);
+
+            files = analyze.files;
+            fileTooBigError = analyze.fileTooBigError;
+
+            var filesCount = jQuery(files).size();
+
+            var container = $(this).closest("td").find(".vendor-image-container");
+
+            startLoadingNoProgressBar();
+            //Send ajax
+            sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError, fileWrongFormatError);
+			// fix for no fire on change event on chrome with that same files selected
+			$(this).replaceWith('<input type="file" multiple name="vendor_image_upload[]">');
         });
+        function analyzeFileSize(files,fileTooBigError) {
+            var goodFiles = [];
+            jQuery.each(files, function (j, file) {
+                if (file.size >= <?php echo $maxSize; ?>) {
+                    fileTooBigError++;
+                } else {
+                    goodFiles.push(file);
+                }
+            });
+            return {"files": goodFiles, "fileTooBigError" : fileTooBigError};
+        }
+
+        function sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError,fileWrongFormatError){
+            //1. Construct form
+            var form_data = new FormData();
+            form_data.append("product", productId);
+            form_data.append("vendor_image_upload", files[i]);
+
+            //2. Send save ajax
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/uploadProductImage")?>',
+                type: "POST",
+                // Form data
+                data: form_data,
+                //Options to tell JQuery not to process data or worry about content-type
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: 'multipart/form-data'
+            }).done(function (result) {
+                data = $.parseJSON(result);
+                i++;
+
+                if (data.error) {
+                    if(data.type == <?php echo Zolago_Catalog_Vendor_ImageController::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_WRONG_FORMAT; ?>){
+                        fileWrongFormatError++;
+                    }
+                    if(data.type == <?php echo Zolago_Catalog_Vendor_ImageController::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_TOO_BIG; ?>){
+                        //fileTooBigError++;
+                    }
+                    if(data.type == <?php echo Zolago_Catalog_Vendor_ImageController::ZOLAGO_PRODUCT_IMAGE_UPLOAD_ERROR_FILE_DEFINED_BY_CODE; ?>){
+
+                    }
+                } else {
+                    fileSuccess++;
+                    container.html(data.content);
+                    initDragSort(container.find(".vendor-image"));
+
+                    jQuery('.need-to-check').tooltip({
+                        title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                    }).find("img").css({"opacity": "0.5"});
+                }
+
+                if(i < filesCount){
+                    //Next ajax
+                    sendImageToGallery(productId, files, i, filesCount, container, fileSuccess, fileTooBigError, fileWrongFormatError);
+
+                } else {
+                    //Request summary
+                    requestImagesUploadSummary(fileSuccess, fileTooBigError, fileWrongFormatError);
+                    stopLoading();
+                }
+            });
+
+
+        }
+
+        function requestImagesUploadSummary(fileSuccess, fileTooBigError, fileWrongFormatError) {
+            var timeout = 10000;
+
+            if (fileSuccess > 0) {
+                noty({
+                    text: '<?php echo $_helper->__('Images successfully uploaded: '); ?>' + '<b>' + fileSuccess + '</b>',
+                    type: 'success',
+                    timeout: timeout
+                });
+            }
+            if (fileTooBigError > 0) {
+                noty({
+                    text: '<?php echo $_helper->__('Files too large: '); ?>' + '<b>' + fileTooBigError + '</b>' + ' <?php echo $_helper->__('Files must be less than %sMB.', round($maxSize / (1024*1024), 1, PHP_ROUND_HALF_DOWN)); ?>',
+                    type: 'error',
+                    timeout: timeout
+                });
+            }
+            if (fileWrongFormatError > 0) {
+                noty({
+                    text: '<?php echo $_helper->__("Disallowed files type: "); ?>' + '<b>' + fileWrongFormatError + '</b>' + ' <?php echo $_helper->__("Please upload jpg, jpeg, gif or png."); ?>',
+                    type: 'warning',
+                    timeout: timeout
+                });
+            }
+
+        }
+
+
+        //CONTROLS
+        //1. ZOOM
+        $(document).on('click', '.vendor-image-zoom', function (e) {
+            e.preventDefault();
+            var controlLink = $(this);
+            var parentContainer = controlLink.closest("li");
+            var productId = parentContainer.data("product");
+            var productName = parentContainer.data("productname");
+            var fullImage = parentContainer.data("image");
+
+            var img = $('<img />', {
+                id: 'vendor_image_' + productId,
+                src: fullImage,
+                alt: productName
+            });
+
+            var modal = $("#vendorImageZoom");
+            modal.find(".modal-header .modal-title").html(productName);
+            modal.find(".modal-body").html(img);
+            modal.modal('show');
+        });
+
+
+        //2. Disable/Enable
+        $(document).on('click', '.vendor-image-availability', function (e) {
+            e.preventDefault();
+            var availabilityLink = $(this);
+            var parentContainer = availabilityLink.closest("li");
+            var imageToDisable = (parentContainer.hasClass("need-to-check") ? 0 : 1);
+
+            parentContainer.find(".vendor-image-refresh").show();
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/toggleAvailabilityProductImage")?>',
+                type: "POST",
+                data: {
+                    action: imageToDisable,
+                    product: parentContainer.data("product"),
+                    image_value: parentContainer.data("value")
+                },
+                success: function (result) {
+                    data = $.parseJSON(result);
+
+                    if (data.error) {
+                        //You can not disabled last Enabled Image
+                        noty({
+                            text: data.error,
+                            type: 'error',
+                            timeout: 4000
+                        });
+                    } else {
+                        parentContainer.find(".icon-ban-circle ").toggle();
+                        if (imageToDisable) {
+                            availabilityLink
+                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("This photo is currently disabled and you can not see them on your product page. You can enable on the picture by clicking on this button."); ?>")
+                                .html("<i class='icon-eye-close'></i>");
+                            parentContainer.tooltip('enable').addClass("need-to-check")
+                                .tooltip({
+                                    title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+                                })
+                                .find("img").css({"opacity": "0.5"});
+                        } else {
+                            availabilityLink
+                                .attr("title", "<?php echo Mage::helper("zolagocatalog")->__("This photo is currently enabled and you can see them on your product page. You can turn off the picture by clicking on this button."); ?>")
+                                .html("<i class='icon-eye-open'></i>");
+                            parentContainer.removeClass("need-to-check").tooltip('disable')
+                                .find("img").css({"opacity": "1"});
+                        }
+                    }
+
+
+                }
+            }).done(function () {
+                parentContainer.find(".vendor-image-refresh").hide();
+            });
+        });
+
+        //3. Delete
+        $(document).on('click', '.vendor-image-delete', function (e) {
+            var productImages = $(this).closest(".vendor-image").find("li");
+
+            //Delete modal
+            $('#vendorImageDelete').find('.btn-ok').data('value', $(this).data('value'));
+            $('#vendorImageDelete').find('.btn-ok').data('product', $(this).data('product'));
+            $('#vendorImageDelete').modal("show");
+
+        });
+
+        $("#vendorImageDelete .btn-ok").click(function (e) {
+            e.preventDefault();
+            var productImageToDelete = $("#vendorImageDelete .btn-ok").data('product');
+            var imageToDelete = $("#vendorImageDelete .btn-ok").data('value');
+            $(".vendor-image li[data-value=" + imageToDelete + "] .vendor-image-refresh").show();
+            $('#vendorImageDelete').modal("hide");
+
+            $.ajax({
+                url: '<?php echo Mage::getUrl("udprod/vendor_image/deleteProductImage")?>',
+                type: "POST",
+                data: {
+                    product: productImageToDelete,
+                    image_value: imageToDelete
+                },
+                success: function (result) {
+                    data = $.parseJSON(result);
+                    if (data.error) {
+                        //You can not disable last Enabled Image
+                        noty({
+                            text: data.error,
+                            type: 'error',
+                            timeout: 4000
+                        });
+                        $(".vendor-image li[data-value=" + imageToDelete + "] .vendor-image-refresh").hide();
+                    } else {
+                        $(".vendor-image li[data-value='" + imageToDelete + "']").remove();
+                    }
+                }
+            }).done(function () {
+                $(".vendor-image li[data-value=" + imageToDelete + "] .vendor-image-refresh").hide();
+            });
+
+        });
+        //--CONTROLS
+
+
+        //Clear modals on hide
+        $('#vendorImageZoom').on('hidden.bs.modal', function () {
+            $(this).find(".modal-header .modal-title").html("");
+            $(this).find(".modal-body").html("");
+        });
+        $('#vendorImageDelete').on('hidden.bs.modal', function () {
+            $(this).find('.btn-ok').data('value', "");
+            $(this).find('.btn-ok').data('product', "");
+        });
+
+
+        function initDragSort(container) {
+            container.dragsort({
+                dragSelector: "li",
+                placeHolderTemplate: "<li class='vendor-image-placeholder'></li>",
+                dragEnd: function () {
+
+                    var images = [];
+                    $.each($(this).closest("ul.vendor-image").find("li"), function (i, li) {
+                        images.push($(li).data("value"))
+                    });
+
+                    $.ajax({
+                        url: '<?php echo Mage::getUrl("udprod/vendor_image/changeProductImagesOrder")?>',
+                        type: "POST",
+                        data: {product: $(this).data("product"), images: images}
+                    });
+                },
+                dragBetween: false
+            });
+        }
+
+    });
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('.need-to-check').tooltip({
+            title: "<?php echo Mage::helper("zolagocatalog")->__("Image to check"); ?>"
+        }).find("img").css({"opacity": "0.5"});
     })
 </script>
+<!-- Modal For Image Zoom -->
+<div id="vendorImageZoom" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo Mage::helper("zolagocatalog")->__("Close"); ?>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="vendorImageDelete" class="modal fade" role="dialog">
+    <div class="modal-dialog  modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <?php echo Mage::helper("zolagocatalog")->__("Delete image"); ?>
+            </div>
+            <div class="modal-body">
+                <p><?php echo Mage::helper("zolagocatalog")->__("Are you sure?"); ?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <?php echo Mage::helper("zolagocatalog")->__("Close"); ?>
+                </button>
+                <a class="btn btn-danger btn-ok">
+                    <?php echo Mage::helper("zolagocatalog")->__("Delete"); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

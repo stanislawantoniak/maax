@@ -1,0 +1,40 @@
+<?php
+/*  @var $this GH_Statements_Block_Adminhtml_Statement_Calendar_Item_Edit */
+?>
+
+<div class="content-header">
+    <h3><?php echo $this->getHeaderText() ?></h3>
+
+    <p class="content-buttons form-buttons">
+        <?php echo $this->getBackButtonHtml(); ?>
+        <?php echo $this->getResetButtonHtml(); ?>
+        <?php if ($this->getIsNew()): ?>
+            <?php echo $this->getDeleteButtonHtml(); ?>
+        <?php endif; ?>
+        <?php echo $this->getSaveButtonHtml(); ?>
+    </p>
+</div>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="template_edit_form">
+    <?php echo $this->getBlockHtml('formkey') ?>
+    <?php echo $this->getForm() ?>
+</form>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var calendarItemForm = new varienForm('template_edit_form');
+    var calendarItemControl = {
+        init: function () {
+
+        },
+        save: function() {
+            calendarItemForm.submit();
+            return false;
+        },
+        remove: function() {
+            if(window.confirm("<?php echo Mage::helper('ghstatements')->__('Are you sure that you want to delete this event?') ?>")) {
+                window.location.href = '<?php echo $this->getDeleteUrl() ?>';
+            }
+        }
+    }
+    calendarItemControl.init();
+</script>

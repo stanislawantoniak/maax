@@ -117,7 +117,6 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	 */
 	protected function _prepareFixedEndColumns(){
 		 $static = $this->_getFixedColumns();
-		 $columns = array();
 		 if(isset($static['end'])){
 			 return $static['end'];
 		 }
@@ -144,7 +143,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"header"	=> $this->_getColumnLabel($thumbnail),
 				"filter"	=> true,
 				"sortable"	=> false,
-				"filterable "=>true
+				"filterable"=> true
 			);
 
 			// Name
@@ -156,8 +155,9 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"attribute" => $name,
 				"clickable" => true,
 				"required"  => true,
-				"filterable"=>true,
-				"header"	=> $this->_getColumnLabel($name)
+				"filterable"=> true,
+				"header"	=> $this->_getColumnLabel($name),
+                "htmlspecialchars_decode" => true
 			);
 			
 			$columnEnd = array();
@@ -172,7 +172,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	}
 
 	/**
-	 * @return type
+	 * @return array
 	 */
 	protected function _prepareDynamicColumns(){
 		$attributeCollection = $this->_getGridVisibleAttributes();
@@ -190,6 +190,23 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			);
 			$columns[$code] = $data;
 		}
+		$isInStock = array(
+			'is_in_stock'		=> array(
+				"index"			=> 'is_in_stock',
+				"required"		=> 0,
+				'type'			=> "options",
+				"clickable"		=> true,
+				"filterable"	=> true,
+				"header"		=> Mage::helper('zolagocatalog')->__("Total quantity"),
+				"attribute"		=> false,
+				"allow_empty"	=> 0
+			)
+		);
+
+		// Insert after description status column
+		$p1 = array_slice($columns, 0, ((int)array_search('description_status', array_keys($columns))) + 1 ,true);
+		$p2 = array_slice($columns, ((int)array_search('description_status', array_keys($columns))) + 1, null, true);
+		$columns = $p1 + $isInStock + $p2;
 		return $columns;
 	}
 
@@ -219,9 +236,8 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$attribute = $config['attribute'];
 		}
 		/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-
+		$extend = array();
 		if($attribute){
-			$extend = array();
 			
 			// Editable
 			if($attribute->getGridPermission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
@@ -256,6 +272,26 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 							}
 						break;
 
+						case "brandshop":
+						    $vendors = $this->getVendor()->getCanAddProduct();
+						    foreach ($vendors as $vendor) {
+						        $extend['filter_options'][] = array (
+						            'value' => $vendor->getBrandshopId(),
+						            'label' => $vendor->getVendorName(),
+                                );
+						    }
+						    // vendor himself
+						    $extend['filter_options'][] = array(
+						        'value' => $this->getVendor()->getId(),
+						        'label' => $this->getVendor()->getVendorName(),
+						    );
+							$options  = $attribute->getSource()->getAllOptions(false);
+							foreach($options as $option){
+								if($option['value']!==""){
+									$extend['options'][$option['value']]=$option['label'];
+								}
+							}
+						    break;
 						default:
 							$extend['options']  = array();
 							$extend['filter_options']  = $attribute->getSource()->getAllOptions(false);
@@ -274,12 +310,15 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				$extend['type'] = "price";
 				$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
 			}
-			
-			
-			return new Varien_Object(array_merge($config, $extend));
+		} elseif (isset($config['index']) && $config['index'] == 'is_in_stock') {
+			$extend['options'] = array();
+			$extend['filter_options'] = Mage::getSingleton('cataloginventory/source_stock')->toOptionArray();
+			foreach ($extend['filter_options'] as $option) {
+				$extend['options'][$option['value']] = $option['label'];
+			}
+			$extend['edit_options'] = $extend['filter_options'];
 		}
-
-		return new Varien_Object($config);
+		return empty($extend) ? new Varien_Object($config) : new Varien_Object(array_merge($config, $extend));
 	}
 
 	/**
@@ -477,7 +516,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	}
 
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->_getSession()->getVendor();

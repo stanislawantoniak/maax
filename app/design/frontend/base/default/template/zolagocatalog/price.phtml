@@ -1,29 +1,67 @@
+<?php
+/** @var Zolago_Catalog_Block_Vendor_Price $this*/
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+?>
 
 <div class="container">
     <div class="page-header row">
-        <div class="col-lg-4 page-title">
-            <h3><?php echo Mage::helper("zolagocatalog")->__("Mass prices");?></h3>
-			<span class="tageline"><?php echo Mage::helper("zolagocatalog")->__("Manage prices and stocks");?></span>
+        <div class="col-xs-4 page-title" style="padding-bottom: 0;">
+            <h3><?php echo $helper->__("Mass prices");?></h3>
         </div>
-		<div class="col-lg-4 main-actions ">
-			<label><?php echo Mage::helper("zolagocatalog")->__("Selected");?>: </label>
-			<button class="btn" disabled="disabled" id="change-prices">
-				<i class="icon icon-pencil"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Change prices");?>
-			</button>
+		<div class="col-xs-4 main-actions">
+            <div style="position: relative;">
+                <button class="btn btn-default dropdown-toggle" type="button" disabled="disabled" id="massActions" data-toggle="dropdown" aria-expanded="true">
+                    <?php echo $helper->__("Selected"); ?>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="massActions">
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#" id="change-prices">
+                            <i class="icon icon-pencil"></i>
+                            <?php echo $helper->__("Change prices"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-2" href="#" id="mass-enable-products">
+                            <i class="icon icon-off"></i>
+                            <?php echo $helper->__("Enable products on page"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-2" href="#" id="mass-invalid-products">
+                            <i class="icon icon-off"></i>
+                            <?php echo $helper->__("Set products as invalid"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-3" href="#" id="mass-change-politics">
+                            <i class="icon icon-unlock-alt"></i>
+                            <?php echo $helper->__("Change policy"); ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 		</div>
-		<div class="main-actions align-right col-lg-4 " style="padding-right: 0;">
+		<div class="col-xs-4 main-actions align-right" style="padding-right: 0;">
 			<form>
 				<select id="store-switcher" class="form-control">
 					<?php foreach($this->getAllowedStores() as $store):?>
-					<option value="<?php echo $this->escapeHtml($store->getId());?>" <?php if($this->getCurrentStoreId()==$store->getId()):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store->getName());?></option>
+					<option value="<?php echo $this->escapeHtml($store["id"]);?>" <?php if($this->getCurrentStoreId()== $store["id"]):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store["name"]);?></option>
 					<?php endforeach;?>
 				</select>
 			</form>
 		</div>
     </div>
 </div>
-
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8" style="font-size: 11px; margin-top: -9px;">
+            <?php echo $helper->__("Manage prices and stocks");?>
+        </div>
+    </div>
+</div>
+<div class="container text-right" style="padding-bottom: 10px;"><span class="grid-total-text"><?php echo $helper->__("Products: "); ?></span><span class="grid-total-number">0</span></div>
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12">
@@ -34,7 +72,7 @@
 <script type="text/javascript">
 	
 	sourceOptions = <?php echo $this->getAttributeSourceJson();?>;
-	
+
 	require(['vendor/catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
 		<?php /*
 		var store = new Observable(new Memory({ idProperty: "entity_id", data: <?php echo $this->getJsonCollection();?>}));

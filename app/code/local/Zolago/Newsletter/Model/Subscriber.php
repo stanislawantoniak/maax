@@ -1,7 +1,41 @@
 <?php
+
+/**
+ * Class Zolago_Newsletter_Model_Subscriber
+ *
+ * @method string getSubscriberFirstname()
+ * @method string getSubscriberLastname()
+ *
+ * @method $this setSubscriberFirstname($value)
+ * @method $this setSubscriberLastname($value)
+ */
 class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscriber
 {
-	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/subscription/confirmation_sales_rule";
+	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/zolagosubscription/confirmation_sales_rule";
+
+	protected $_mailFlag = false;
+	
+	public function getMailSendFlag() {
+	    return $this->_mailFlag;
+	}
+	public function setMailSendFlag() {
+	    $this->_mailFlag = true;
+	}
+   /**
+     * Send new coupons to one subscriber
+     */
+    public function sendSubscriberCouponMail()
+    {
+        $email = $this->getSubscriberEmail();
+        $customerId = $this->getCustomerId();
+        $subscribersCustomersId = array ($customerId);
+        $subscribers[$this->getId()] = $email;
+        $subscribersCustomersId[$email] = $customerId;
+        $subscribersCustomersSubscribers[$customerId] = $email;
+        $subscribersStore[$customerId] = $this->getStoreId();
+        return Mage::helper('zolagosalesrule')->sendCouponMails($subscribers, $subscribersCustomersId, $subscribersCustomersSubscribers,$subscribersStore);
+    }    
+
 
 	/**
 	 * Sends out confirmation success email by Subscriber ID
@@ -10,6 +44,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationSuccessEmail($sid=null)
 	{
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::sendConfirmationSuccessEmail();
+
 		$couponData = null;
 		$confirmationSalesRuleId = $this->getConfirmationSalesRule();
 
@@ -30,7 +67,6 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 				);
 			}
 		}
-
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE),
@@ -58,11 +94,14 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
     /**
      * Saving customer subscription status
      *
-     * @param   Mage_Customer_Model_Customer $customer
-     * @return  Mage_Newsletter_Model_Subscriber
+     * @param   Zolago_Customer_Model_Customer $customer
+     * @return  Zolago_Newsletter_Model_Subscriber
      */
     public function subscribeCustomer($customer)
     {
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::subscribeCustomer($customer);
+
 	    $subscriber = $this;
 	    $confirmationNeeded = Mage::getStoreConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1;
 
@@ -71,58 +110,75 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	    }
 
 	    $customerStoreId = $this->_getCustomerStoreId($customer);
-        $subscriber->loadByCustomer($customer);
 
-	    //if load by customer don't return valid object then try to load by it's email
-	    $guestSubscriber = false;
 	    if(!$subscriber->getId()) {
 		    // get all subscribers with this email
-		    $existingSubscriber = Mage::getModel('newsletter/subscriber')
-			    ->getCollection()
-			    ->addFieldToFilter('subscriber_email', array('eq' => $customer->getEmail()))
-			    ->addFieldToFilter('store_id', array('eq' => $customerStoreId))
-			    ->getFirstItem();
+		    $existingSubscriber = $this->rawLoadByCustomer($customer);
 
-		    if(!is_null($existingSubscriber) && $existingSubscriber->hasId() && $existingSubscriber->getId()) {
+		    if(!is_null($existingSubscriber) && $existingSubscriber->getId()) {
 			    $subscriber->setData($existingSubscriber->getData());
-			    $guestSubscriber = true;
+                // Handle situation when customer's email was in subscribers list as guest
+                // If it was then just assign customer to this email
+                $subscriber->setCustomerId($customer->getId());
+                $confirmCode = $subscriber->getSubscriberConfirmCode();
+                if (empty($confirmCode)) {
+                    $subscriber->setSubscriberConfirmCode($this->randomSequence());
+                }
 		    } else {
 			    $subscriber->unsData();
 		    }
 	    }
 
-        $status = $subscriber->getStatus();
+        $subscriberStatus = $subscriber->getStatus();
         //handle situation when user was in newsletter subscribers list
         if($subscriber->getId()) {
-	        if($customer->hasIsSubscribedHasChanged()) {
+            /*
+             * Note:
+             * Change is from 0 to 1 or from 1 to 0 [ getCustomerIsSubscribed() ]
+             * const STATUS_SUBSCRIBED   -> 1
+             * const STATUS_NOT_ACTIVE   -> 0
+             * const STATUS_UNSUBSCRIBED -> 0
+             * const STATUS_UNCONFIRMED  -> 0
+             */
+	        if($customer->hasIsSubscribedHasChanged() ||
+                // never confirmed newsletter and now don't want newsletter
+                // STATUS_UNCONFIRMED -> STATUS_NOT_ACTIVE
+                (!$customer->getIsSubscribed() && $subscriberStatus == self::STATUS_UNCONFIRMED)
+            ) {
 		        $customer->unsIsSubscribedHasChanged();
-		        //if customer wants to unsubscribe then unsubscribe him and send an unsubscription email
-		        if (!$customer->getIsSubscribed() && $status == self::STATUS_SUBSCRIBED) {
-			        $subscriber->setStatus(self::STATUS_UNSUBSCRIBED);
-			        $subscriber->sendUnsubscriptionEmail();
-		        } //otherwise check if customer wants to subscribe
-		        elseif ($customer->getIsSubscribed() && $status != self::STATUS_SUBSCRIBED) {
-			        //if he want to subscribe and he was subscribed before (right now is unsubscribed) just make him subscribed
-			        if ($status == self::STATUS_UNSUBSCRIBED || ($status == self::STATUS_UNCONFIRMED && !$confirmationNeeded)) {
-				        $subscriber->setStatus(self::STATUS_SUBSCRIBED);
-				        $subscriber->sendConfirmationSuccessEmail();
-			        } //otherwise set his status to unconfirmed and send confirmation request email
-			        else {
-				        $status = $confirmationNeeded ? self::STATUS_UNCONFIRMED : self::STATUS_SUBSCRIBED;
-				        $subscriber->setStatus($status);
-				        if($confirmationNeeded) {
-					        $subscriber->sendConfirmationRequestEmail();
-					        $customer->setConfirmMsg(true);
-				        } else {
-					        $subscriber->sendConfirmationSuccessEmail();
-				        }
-			        }
-		        }
-	        }
-	        //handle situation when customer's email was in subscribers list as guest
-	        //if it was then just assign customer to this email
-	        if($guestSubscriber) {
-		        $subscriber->setCustomerId($customer->getId());
+
+                if ($customer->getIsSubscribed()) {
+                    // customer wants to be subscribed
+
+                    if ($subscriberStatus == self::STATUS_UNSUBSCRIBED) {
+                        // customer is unsubscribed and he wants to be subscribed
+                        $subscriber->setStatus(self::STATUS_SUBSCRIBED);
+                        $subscriber->sendConfirmationSuccessEmail();
+                    }
+                    elseif ($subscriberStatus == self::STATUS_UNCONFIRMED) {
+                        // customer don't confirm newsletter but he wants to be subscribed
+                        $customer->setConfirmMsg(true);
+                        $subscriber->sendConfirmationRequestEmail();
+                    } elseif ($subscriberStatus == self::STATUS_SUBSCRIBED) {
+						//do nothing
+                    } else { //if $subscriberStatus == NULL || $subscriberStatus == self::STATUS_NOT_ACTIVE
+	                    if($confirmationNeeded && !$customer->getCedSocialloginFid() && !$customer->getCedSocialloginGid()) {
+		                    $customer->setConfirmMsg(true);
+		                    $subscriber->setStatus(self::STATUS_UNCONFIRMED);
+		                    $subscriber->sendConfirmationRequestEmail();
+	                    } else {
+		                    $subscriber->setStatus(self::STATUS_SUBSCRIBED);
+		                    $subscriber->sendConfirmationSuccessEmail();
+	                    }
+                    }
+                } else {
+                    // customer don't wont to be subscribed
+	                if ($subscriberStatus == self::STATUS_SUBSCRIBED) {
+		                // he don't wont to be subscribed and he is subscribed
+		                $subscriber->setStatus(self::STATUS_UNSUBSCRIBED);
+		                $subscriber->sendUnsubscriptionEmail();
+	                }
+                }
 	        }
 
             if($customer->hasIsEmailHasChanged()) {
@@ -167,13 +223,22 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
         }
         //and if he wasn't add it as new one with status NOT_ACTIVE if he didn't agree or as UNCONFIRMED if he agreed
         else {
-	        if($customer->getIsSubscribed() && $confirmationNeeded) {
+            $confirmCode = $this->randomSequence();
+	        if($customer->getIsSubscribed() && $confirmationNeeded && !$customer->getCedSocialloginFid() && !$customer->getCedSocialloginGid()) {
 		        $newStatus = self::STATUS_UNCONFIRMED;
 	        } elseif($customer->getIsSubscribed() && !$confirmationNeeded) {
 		        $newStatus = self::STATUS_SUBSCRIBED;
 	        } else {
 		        $newStatus = null;
 	        }
+            if ($customer->getCedSocialloginFid() || $customer->getCedSocialloginGid()) {
+                $confirmCode = null;
+                if ($customer->getIsSubscribed()) {
+                    $newStatus = self::STATUS_SUBSCRIBED;
+                } else {
+                    $newStatus = self::STATUS_UNSUBSCRIBED;
+                }
+            }
             if(!is_null($customer->getIsEmailHasChanged()) && is_null($customer->getIsJustRegistered())) {
                 $newStatus = self::STATUS_NOT_ACTIVE;
                 $customer->unsIsEmailHasChanged();
@@ -181,7 +246,7 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
             $subscriber
                 ->setStoreId($customerStoreId)
                 ->setCustomerId($customer->getId())
-                ->setSubscriberConfirmCode($this->randomSequence())
+                ->setSubscriberConfirmCode($confirmCode)
                 ->setEmail($customer->getEmail())
                 ->setStatus($newStatus)
                 ->setId(null);
@@ -213,6 +278,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendUnsubscriptionEmail($sid=null)
 	{
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::sendUnsubscriptionEmail();
+
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE),
@@ -226,6 +294,9 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 	 */
 	public function sendConfirmationRequestEmail($sid=null)
 	{
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::sendConfirmationRequestEmail();
+
 		return $this->_sendNewsletterEmail(
 			$sid,
 			Mage::getStoreConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE),
@@ -290,7 +361,98 @@ class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscribe
 		return $subscriber;
 	}
 
+
+
+
+
+    /**
+     * Changes is from 0 to 1 or from 1 to 0
+     * const STATUS_SUBSCRIBED   -> 1
+     * const STATUS_NOT_ACTIVE   -> 0
+     * const STATUS_UNSUBSCRIBED -> 0
+     * const STATUS_UNCONFIRMED  -> 0
+     *
+     * @param $customer Zolago_Customer_Model_Customer
+     * @return int
+     */
 	public function getCustomerIsSubscribed($customer) {
-		return  $this->loadByCustomer($customer)->getSubscriberStatus() == 1 ? 1 : 0;
+		return  $this->rawLoadByCustomer($customer)->getSubscriberStatus() == self::STATUS_SUBSCRIBED ? 1 : 0;
 	}
+
+    /**
+     * Load subscriber info by customer override
+     *
+     * @param Mage_Customer_Model_Customer $customer
+     * @return Mage_Newsletter_Model_Subscriber
+     */
+    public function loadByCustomer(Mage_Customer_Model_Customer $customer, $save = true)
+    {
+		if (!Mage::helper("zolagonewsletter")->isModuleActive())
+			return parent::loadByCustomer($customer);
+
+        $data = $this->getResource()->loadByCustomer($customer);
+        $this->addData($data);
+        if (!empty($data) && $customer->getId() && !$this->getCustomerId()) {
+            $this->setCustomerId($customer->getId());
+            if (empty($data['subscriber_confirm_code'])) {
+                $this->setSubscriberConfirmCode($this->randomSequence());
+            }
+            if ($this->getStatus()==self::STATUS_NOT_ACTIVE) {
+                $this->setStatus($customer->getIsSubscribed() ? self::STATUS_SUBSCRIBED : self::STATUS_UNSUBSCRIBED);
+            }
+            if ($save) {
+                $this->save();
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param Mage_Customer_Model_Customer $customer
+     * @param null $storeId
+     * @return Zolago_Newsletter_Model_Subscriber
+     */
+    public function rawLoadByCustomer(Mage_Customer_Model_Customer $customer, $storeId = null) {
+        $_storeId = $this->_getCustomerStoreId($customer);
+        if (!is_null($storeId)) {
+            $_storeId = $storeId;
+        }
+
+        /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+        $subscriber = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter('subscriber_email', array('eq' => $customer->getEmail()))
+            ->addFieldToFilter('store_id', array('eq' => $_storeId))
+            ->getFirstItem();
+        return $subscriber;
+    }
+
+    public function rawLoadByEmail($email, $storeId) {
+
+        /** @var Zolago_Newsletter_Model_Subscriber $subscriber */
+        $subscriber = Mage::getModel('newsletter/subscriber')
+            ->getCollection()
+            ->addFieldToFilter('subscriber_email', array('eq' => $email))
+            ->addFieldToFilter('store_id', array('eq' => $storeId))
+            ->getFirstItem();
+        return $subscriber;
+    }
+
+    /**
+     * Simplified version of subscribe
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function simpleSubscribe()
+    {
+        try {
+            $this->setSubscriberStatus(self::STATUS_SUBSCRIBED)
+                ->save();
+            $this->sendConfirmationSuccessEmail();
+            return $this;
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
 }

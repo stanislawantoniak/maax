@@ -499,6 +499,7 @@
             <block type="adminhtml/sales_transactions_detail" name="sales_transactions.detail" template="sales/transactions/detail.phtml">
                 <block type="adminhtml/sales_transactions_detail_grid" name="sales_transactions.detail.grid" as="detail_grid"/>
                 <block type="adminhtml/sales_transactions_child_grid" name="sales_transactions.child.grid" as="child_grid"/>
+                <block type="zolagoadminhtml/sales_transactions_allocations_grid" name="sales_transactions.allocations.grid" as="allocations_grid"/>
             </block>
         </reference>
     </adminhtml_sales_transactions_view>

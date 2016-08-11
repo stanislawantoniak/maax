@@ -1,16 +1,32 @@
 <?php
+/** @var Zolago_Dropship_Block_Form_Renderer_Fieldset_Element $element */
 $element = $this->getElement();
+$formGroupWrapperClass = $this->getElement()->getData("form_group_wrapper_class");
+$labelWrapperClass = $this->getElement()->getData("label_wrapper_class");
+$LwC = !empty($labelWrapperClass) ? $labelWrapperClass : "col-md-2";
+$inputGroupAddon = $this->getElement()->getData("input_group_addon");
 $wrapperClass = $this->getElement()->getData("wrapper_class");
 $wC = !empty($wrapperClass) ? $wrapperClass : "col-md-10";
+
+$usePlugin = $this->getElement()->getData("use_plugin");
+
 ?>
 
-<div class="form-group"<?php echo ($element->getType()=="hidden" ? " style=\"display:none;\"" : "") ?> >
+<div class="form-group <?php echo $formGroupWrapperClass; ?>"<?php echo ($element->getType()=="hidden" ? " style=\"display:none;\"" : "") ?> >
     <?php if($element->getType() == "link") : ?>
         <div class="<?php echo $wC;  ?>" id="<?php echo $element->getName(); ?>">
             <a href="<?php echo $this->getElement()->getData('url'); ?>"><?php echo $this->getElement()->getData('inside'); ?></a>
         </div>
+
     <?php else: ?>
-        <label class="col-md-2 control-label"><?php echo $element->getLabelHtml();?></label>
-        <div class="<?php echo $wC;  ?>"><?php echo $element->getElementHtml(); ?></div>
+        <label class="<?php echo $LwC; ?> control-label"><?php echo $element->getLabelHtml(); ?></label>
+        <div class="<?php echo $wC; ?> input-group">
+            <?php if (!empty($inputGroupAddon)): ?>
+                <span class="input-group-addon">
+                    <?php echo $inputGroupAddon; ?>
+                </span>
+            <?php endif; ?>
+            <?php echo $element->getElementHtml(); ?>
+        </div>
     <?php endif;?>
 </div>

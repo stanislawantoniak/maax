@@ -1,4 +1,4 @@
-<!--@subject {{var store.getFrontendName()}} – Przesyłka ze sklepu {{var vendor.getVendorName()}} została wysłana (Zamówienie nr {{var po.getIncrementId()}})! @-->
+<!--@subject Przesyłka ze sklepu {{var vendor.getVendorName()}} została wysłana (Zamówienie nr {{var po.getIncrementId()}})! @-->
 <body style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
 <!--[if gte mso 9]>
 <style type="text/css">
@@ -67,14 +67,14 @@
 									Twoje zamówienie jest już w drodze!
 								</h1>
 
-								<div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+								<div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
 									Właśnie została do Ciebie wysłana przesyłka ze sklepu {{var vendor.getVendorName()}}
 									(zamówienie nr {{var po.getIncrementId()}}).
 								</div>
 								<span class="spacer">&nbsp;</span>
 
 								{{depend po.isCod()}}
-								<div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+								<div style="border-bottom:15px solid white;line-height: 1.4em;margin:0;padding:0">
 									Za zamówienie zapłacisz kurierowi przy odbiorze. Pamiętaj aby przygotować do zapłaty:
 									<strong>{{var po.getFormattedGrandTotalInclTax()}}</strong>
 								</div>
@@ -102,6 +102,7 @@
 								</h2>
 
 								<div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    {{if po.getDeliveryPointName()}}Paczkomat InPost {{var po.getDeliveryPointName()}}<br>{{/if}}
 									{{var po.getShippingAddress().format('html')}}
 								</div>
 								<span class="spacer">&nbsp;</span>
@@ -118,14 +119,19 @@
 									                              style="text-decoration:none;color:#1155CC">skontaktuj się ze sklepem.</a><br/>
 									Dziękujemy za zakupy i zapraszamy ponownie!<br/><br/>
 									Zespół <a href='{{store url=""}}' style="text-decoration:none;color:#444">Modago.pl</a>
-								</div>
+								</div><br/><br/>
 							</div>
 						</td>
 					</tr>
 					</tbody>
 				</table>
-				<div style="background-color:#e5e5e5;direction:ltr;color:#777;font-size:11px;border:10px solid #E5E5E5;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif;text-align:center">&copy;
-					2014 <a href='{{store url=""}}' style="text-decoration:none;color:#777">Modago.pl</a>
+				                                                     <div style="background-color:#e5e5e5;direction:ltr;color:#777;font-size:11px;border:10px solid #e5e5e5;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif; text-align:left; max-width:580px">&copy;
+					              2016 <a target="_blank" style="text-decoration:none;color:#777" href="http://modago.pl">Modago.pl</a>
+
+
+                                                    <p>Ta wiadomość została wysłana przez internetową galerię handlową Modago.pl należącą do Zolago Group Sp.z o.o. z siedzibą w Warszawie, ul. Barkocińska 6, 03-543 Warszawa. Firma wpisana jest do rejestru przedsiębiorców KRS przez Sąd Rejonowy dla m.st. Warszawy XII Wydział Gospodarczy pod numerem KRS 0000457797, NIP: 527-269-26-64, REGON: 146630877, kapitał zakładowy: 200 000 PLN</p>
+
+                                                    <p>Nie odpisuj na tego maila, został on wysłany przez automat.</p>
 				</div>
 			</div>
 		</div>

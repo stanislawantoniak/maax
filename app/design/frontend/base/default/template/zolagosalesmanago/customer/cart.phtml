@@ -1,0 +1,93 @@
+<?php /** @var Zolago_SalesManago_Block_Customer_Cart $this */ ?>
+
+<?php $customerCart = $this->getCustomerCart(); ?>
+
+<?php if (!empty($customerCart)): ?>
+    <style type="text/css">
+        .item {
+            width: 31%;
+        }
+
+        @media (max-width: 470px) {
+            .item {
+                width: 45% !important;
+            }
+        }
+        @media (min-width: 480px) and (max-width: 500px) {
+            .name_product {
+                margin-bottom: 0px !important;
+            }
+        }
+        @media (max-width: 320px) {
+            .item {
+                width: 80% !important;
+            }
+
+        }
+        .name_product {
+            height: 36px;
+            overflow: hidden;
+        }
+
+    </style>
+    <div class="container-fluid bg-w" style="background: #fff; margin-right: auto; margin-left: auto;">
+    <div id="items-product" class="container-fluid">
+        <div>
+            <?php $helper = Mage::helper("zolagosalesmanago"); ?>
+            <div>
+
+                <?php foreach ($customerCart as $vendor => $items): ?>
+                    <?php foreach ($items as $item): ?>
+                        <div class="item" style="float: left; padding: 0 2px;width: 31%;">
+                            <div class="box_listing_product"  style="background: #fff;font-size: 12px;padding: 0 0 20px 0;">
+                                <?php $_product = Mage::getModel("catalog/product")->load($item->getProduct()->getId()); ?>
+
+                                <a href="<?php echo Mage::getUrl('checkout/cart'); ?>">
+                                    <figure class="img_product" style="
+                                    position: relative;
+                                    margin: 0 0 18px 0;
+                                    display: block;
+                                    ">
+                                        <img class="sm-inline" style="
+                                                width: 100%;
+                                                height: auto;
+                                                vertical-align: middle;
+                                                border: 0;
+                                        "
+                                             src="<?php echo (string)Mage::helper('catalog/image')
+                                                 ->init($_product, 'image')
+                                                 ->resize(148, 222); ?>"
+                                             alt="<?php echo Mage::helper("zolagocatalog")->getShortProductName($_product->getName(), 42); ?>"/>
+                                    </figure>
+
+                                </a>
+
+                                <div class="name_product" style="font-size: 12px;
+                                                                margin-top: 18px;
+                                                                margin-bottom: 18px;
+                                                                display: block;
+                                                                max-height: 36px;
+                                                                height: 36px;
+                                                                min-height: 36px;
+                                                                overflow: hidden;
+
+                                    ">
+                                    <a href="<?php echo Mage::getUrl('checkout/cart'); ?>"  style="color: black;text-decoration: none;font-family: latoregular, sans-serif;"><?php echo $this->escapeHtml($_product->getName()); ?></a>
+                                </div>
+                                <span style="color: #000000;
+                                        font-size: 120%;
+                                        position: relative;
+                                    ">
+                                    <b><?php echo Mage::helper('checkout')->formatPrice($item->getData("base_price_incl_tax")); ?></b>
+                                </span>
+
+
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;margin-bottom: 20px;"></div>
+<?php endif; ?>

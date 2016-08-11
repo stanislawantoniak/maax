@@ -4,28 +4,37 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
 
+    /**
+     * @param Varien_Object $row
+     * @return string
+     */
     public function render(Varien_Object $row)
     {
         $out = '';
-        $product = Mage::getModel('zolagocatalog/product')->load($row->getEntityId());
-        $catalogHelper = $this->helper('catalog/image');
+        $productId = $row->getEntityId();
+        $_helper = Mage::helper("zolagocatalog");
 
-        $gallery = $product->getFullMediaGalleryImages();
+        $out .= "<div style='display:table'><div style='display:table-row'>";
 
-        if ($gallery->count() > 0) {
-            foreach ($gallery as $_image) {
-                $thUrl = $catalogHelper->init($product, 'thumbnail', $_image->getFile())->resize(100);
+        $out .= "<div class='vendor-image-container' style='display:table-cell'>";
+        $out .= Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
-                if($_image['disabled']) {
-                    $img = "<div class='mass-thumb-image need-to-check'><img src='" . $thUrl .'?'.time(). "' /></div>";
-                } else {
-                    $img = "<div class='mass-thumb-image'><img src='" . $thUrl . "' /></div>";
-                }
+        $addImageLabel = $_helper->__("Add image");
 
-                $out .= $img;
-            }
-        }
+        $out .= "</div>";
+        $out .= "<div class='vendor-image-upload' style='display:table-cell;vertical-align:top'>
+                    <form>
+                        <input type='hidden' name='product' value='{$productId}' style='cursor:pointer' />
+                        <label class='btn btn-file' title='{$addImageLabel}' style='cursor:pointer !important;'>
+                            <i class='icon icon-plus-sign'></i> {$addImageLabel}
+                            <input type='file' multiple name='vendor_image_upload[]' />
+                        </label>
+                    </form>
+                </div>";
+
+        $out .= "</div></div>";
+
         return $out;
     }
-	
+
 }

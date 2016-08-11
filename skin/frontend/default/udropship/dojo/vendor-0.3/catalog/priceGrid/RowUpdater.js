@@ -83,16 +83,18 @@ define([
 			return this.getExpandAll();
 		},
 		toggle: function(row){
-			this._set(row.data, !this._get(row.data));
-			var self = this;
-			query("td.field-expander", row.element).forEach(function(item){
-				item.innerHTML = self.cellRender(row.data);
-			});
-			// toggle state of node which was clicked
-			if(this.is(row.data)){
-				this.doRowExpand(row.data, row.element);
-			}else{
-				this.doRowCollapse(row.data, row.element)
+			if (row.data.type_id != "simple") {
+				this._set(row.data, !this._get(row.data));
+				var self = this;
+				query("td.field-expander", row.element).forEach(function (item) {
+					item.innerHTML = self.cellRender(row.data);
+				});
+				// toggle state of node which was clicked
+				if (this.is(row.data)) {
+					this.doRowExpand(row.data, row.element);
+				} else {
+					this.doRowCollapse(row.data, row.element)
+				}
 			}
 		},
 		clear: function(id){
@@ -110,7 +112,7 @@ define([
 			put(node, ".collapsed");
 		},
 		cellRender: function(item){
-			return this.is(item) ? this._yes : this._can;
+			return this.is(item) ? this._yes : (item.type_id == "simple" ? this._not : this._can);
 		},
 		queueItem: function(item){
 			if(this._queue.indexOf(item.entity_id)<0){
@@ -180,7 +182,7 @@ define([
 							
 						tbody.append(
 							jQuery("<tr>").addClass("header-row").
-								append(jQuery("<td>").attr("colspan", 6).
+								append(jQuery("<td>").attr("colspan", 7).
 									addClass("align-center").text(Translator.translate("Child products"))
 							)
 						);	
@@ -190,11 +192,12 @@ define([
 								jQuery("<tr>").addClass("header-row").
 									append(jQuery("<td>").addClass("sub-checkbox")).
 									append(jQuery("<td>").text(item.label)).
+									append(jQuery("<td>").text(Translator.translate("SKU"))).
 									append(jQuery("<td>").text(Translator.translate("Price Variation"))).
 									append(jQuery("<td>").text(Translator.translate("In stock"))).
 									append(jQuery("<td>").text(Translator.translate("Stock Qty"))).
 									append(jQuery("<td>").text(Translator.translate("POS Stock")))
-							)
+							);
 					
 							item.children.forEach(function(child){
 								tbody.append(
@@ -204,6 +207,7 @@ define([
 											"disabled": "disabled"
 										}))).
 										append(jQuery("<td>").text(child.option_text)).
+										append(jQuery("<td>").text(child.skuv)).
 										append(jQuery("<td>").
 											addClass("signle-price-edit" + (!data.campaign ? " editable" : "")).
 											append(jQuery("<" + (!data.campaign ? "a" : "span") + ">").

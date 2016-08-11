@@ -2,7 +2,7 @@
 class Zolago_Catalog_Model_Resource_Vendor_Price_Collection 
 	extends Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 {
-  
+
 	public function addAttributes() {
 		
 		// Add non-o attribs
@@ -12,6 +12,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"msrp",
 			"product_flag",
 			"status",
+			"description_status",
 			"special_price",
 			"price",
 			"skuv"
@@ -48,9 +49,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		
 		$stockTable = $this->getTable('cataloginventory/stock_item');
+		$productWebsiteTable = $this->getTable('catalog/product_website');
 		$stockStatusTable = $this->getTable('cataloginventory/stock_status');
 		$linkTabel = $this->getTable("catalog/product_super_link");
-		
 		// Join price attrib
 		$priceExpression = $adapter->getCheckSql(
 			'(at_campaign_regular_id.value IS NOT NULL) AND (at_campaign_regular_id.value > 0)', 
@@ -61,15 +62,27 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$this->addExpressionAttributeToSelect('display_price', $priceExpression, array());
 		
 		
-		// Join stock item from stock index
-		$this->joinTable(
-				$stockStatusTable, 
-				'product_id=entity_id',
-				array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)')), 
-				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
-				'left'
-		);
-		
+		// Join stock item from stocak index
+		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
+		$select->joinLeft(
+		    array('cataloginventory_stock_status' => $stockStatusTable),
+				'(cataloginventory_stock_status.product_id=e.entity_id) AND ('.$adapter->quoteInto("cataloginventory_stock_status.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID).
+				    ' AND '.$adapter->quoteInto("cataloginventory_stock_status.website_id=?",$websiteId).')',
+				    array()
+		//	array('is_in_stock'=>new Zend_Db_Expr('IFNULL(stock_status, 0)'))
+        );
+		$this->addExpressionAttributeToSelect('is_in_stock', 
+		        new Zend_Db_Expr('IFNULL(cataloginventory_stock_status.stock_status, 0)'),
+		        array()
+        );
+
+		$select->join(
+				array('cataloginventory_stock_table' => $stockTable), 
+				"e.entity_id = cataloginventory_stock_table.product_id", 
+				array()
+        );
+		$this->addExpressionAttributeToSelect('politics', 
+				"IF(e.type_id IN ('configurable', 'grouped'), (cataloginventory_stock_table.manage_stock = 1 AND cataloginventory_stock_table.is_in_stock = 0) , (cataloginventory_stock_table.min_qty>999999) )", array());
 		// Join all childs count
 		$subSelect = $adapter->select();
 		$subSelect->from(array("link_all"=>$linkTabel), array("COUNT(link_all.link_id)"));
@@ -85,7 +98,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 				"link_available.product_id=child_stock_available.product_id", 
 				array());
 		$subSelect->where("link_available.parent_id=e.entity_id");
-		$subSelect->where("child_stock_available.is_in_stock=?",1);
+		$subSelect->where("child_stock_available.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 		$this->addExpressionAttributeToSelect('available_child_count', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), null)", array());
 		
@@ -94,15 +107,13 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$subSelect->from(array("link_qty"=>$linkTabel), array("IFNULL(SUM(child_qty.qty),0)"));
 		$subSelect->join(
 				array("child_qty"=>$stockTable), 
-				"link_qty.product_id=child_qty.product_id", 
-				array());
+				"link_qty.product_id=child_qty.product_id", array());
 		$subSelect->where("link_qty.parent_id=e.entity_id");
-		$subSelect->where("child_qty.is_in_stock=?",1);
+		$subSelect->where("child_qty.is_in_stock=?", Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
 		
 		// Use subselect only for parent products
 		$this->addExpressionAttributeToSelect('stock_qty', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), IFNULL($stockStatusTable.qty,0))", array());
-		
 		return $this;
 	}
 	
@@ -116,7 +127,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"status",
 			"converter_price_type",
 			"converter_msrp_type",
-			"price_margin"
+			"price_margin",
+			"politics",
+			"product_flag"
 		);
 	}
 	
@@ -139,8 +152,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"available_child_count",
 			"stock_qty",
 			"status",
+            "description_status",
 			"type_id",
 			"skuv",
+			"politics",
 		);
 	}
 	
@@ -162,7 +177,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"available_child_count",
 			"stock",
 			"status",
+            "description_status",
 			"type_id",
+			"politics",
 		));
 	}
    

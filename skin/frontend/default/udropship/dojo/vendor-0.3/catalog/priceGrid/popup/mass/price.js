@@ -51,11 +51,17 @@ define([
 								grid.selectAll();
 							}else{
 								jQuery.each(data.changed_ids, function(){
-									grid.select(this + 0); // Cast to number
+									grid.select(parseInt(this));
 								});
 							}
 						})
-					
+
+                    if (parseInt(data.skipped)) {
+                        noty({
+                            text: data.skipped_msg,
+                            type: 'warning'
+                        });
+                    }
 				},
 				complete: function(){
 					button.button('reset');

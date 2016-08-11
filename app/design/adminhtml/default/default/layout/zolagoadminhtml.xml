@@ -10,4 +10,24 @@
             <block type="adminhtml/template" name="attribute_edit_js" template="zolagoadminhtml/catalog/product/attribute/js.phtml"></block>
         </reference>
     </adminhtml_catalog_product_attribute_edit>	
+    <adminhtml_sales_order_change_track>      
+		<reference name="content">
+			<block name="shipment_tracking" type="adminhtml/sales_order_shipment_view_tracking" template="sales/order/shipment/view/tracking.phtml"/>
+		</reference>
+    </adminhtml_sales_order_change_track>
+
+    <adminhtml_sales_transactions_edit>
+        <reference name="head">
+            <action method="addJs"><script>jquery/jquery.min.js</script></action>
+            <action method="addCss"><stylesheet>js/select2/css/select2.min.css</stylesheet></action>
+            <action method="addItem"><type>skin_js</type><name>js/select2/js/select2.min.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/select2/js/i18n/pl.js</name></action>
+        </reference>
+        <reference name="content">
+            <block type="zolagoadminhtml/sales_transactions_edit" name="zolagoadminhtml_sales_transactions_edit"
+                   template="sales/transactions/edit.phtml">
+                <block type="zolagoadminhtml/sales_transactions_edit_form" name="form"/>
+            </block>
+        </reference>
+    </adminhtml_sales_transactions_edit>
 </layout>

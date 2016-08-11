@@ -5,8 +5,19 @@
  * @method string getMaxShippingDate()
  * @method string getGrandTotalInclTax()
  * @method string getIncrementId()
+ * @method string getPaymentMethodOwner()
+ * @method Zolago_Po_Model_Po setPaymentChannelOwner($owner)
+ * @method string getCreatedAt() DATETIME
+ * @method string getCustomerEmail()
+ * @method Zolago_Po_Model_Po setCustomerEmail(string $email)
+ * @method int getCustomerId()
+ * @method Zolago_Po_Model_Po setCustomerId(int $customerId)
+ * @method string getDeliveryPointName()
+ * @method Zolago_Po_Model_Po setDeliveryPointName(string $value)
+ * @method string getExternalId()
+ * @method Zolago_Po_Model_Po setExternalId($value)
  */
-class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
+class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
@@ -21,37 +32,51 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	 * Email sender
 	 */
     const XML_PATH_EMAIL_IDENTITY = 'sales_email/order/identity';
-	
+
+	/**
+	 * Retrieve boolean flag about if commission should be charged for GH_statements
+	 * For now info about charge_commission will be taken from actual dotpay config
+	 *
+	 * @return bool
+	 */
+	public function getChargeCommissionFlag() {
+		/** @var GH_Statements_Helper_Data $helper */
+		$helper = Mage::helper('ghstatements');
+		$flag = $helper->getDotpayChargeCommissionFlag($this->getStore());
+		return $flag;
+	}
+
 	/**
 	 * @return array
 	 */
 	public function getAllowedOperators() {
 		if(!$this->hasData("allowed_operators")){
-			$opreators = array();
+			$operators = array();
 			// Must have post
 			if($this->getPos() instanceof Zolago_Pos_Model_Pos){
-				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 				/* @var $collection Zolago_Operator_Model_Resource_Operator_Collection */
+				$collection = Mage::getResourceModel("zolagooperator/operator_collection");
 				$collection->addVendorFilter($this->getVendor());
 				$collection->addActiveFilter();
 				$collection->walk("afterLoad");
-				foreach($collection as $operator){
+				/** @var Zolago_Operator_Model_Operator $operator */
+				foreach($collection as $operator) {
 					if($this->isAllowed(null, $operator)){
-						$opreators[] = $operator;
+						$operators[] = $operator;
 					}
 				}
 			}
-			$this->setData("allowed_operators", $opreators);
+			$this->setData("allowed_operators", $operators);
 		}
 		return $this->getData("allowed_operators");
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $venndor
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return boolean
 	 */
-	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, 
+	public function isAllowed(ZolagoOs_OmniChannel_Model_Vendor $vendor = null,
 		Zolago_Operator_Model_Operator $operator = null) {
 		
 		if($operator instanceof Zolago_Operator_Model_Operator){
@@ -139,7 +164,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$collection->clear();
 		
 		$collection->addAttributeToFilter("udropship_status", 
-			array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+			array("nin"=>array(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED))
 		);
 		$collection->setOrder("created_at", "DESC");
 		
@@ -153,7 +178,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 	
 	/**
-	 * It can be returned when order has been delivered not later than the bigges number for allowed_days
+	 * It can be returned when order has been delivered not later than the biggest number for allowed_days
 	 * 
 	 * @return bloolean
 	 */
@@ -196,7 +221,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		try{
 			$transaction->beginTransaction();
 			$collection = $this->getItemsCollection() ;
-			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Item_Collection */
+			/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Item_Collection */
 
 			$newModel = Mage::getModel("zolagopo/po");
 			/* @var $newModel Zolago_Po_Model_Po */
@@ -271,10 +296,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			// Process comments
 			////////////////////////////////////////////////////////////////////
 			$comments = $newModel->getCommentsCollection();
-			/* @var $comments Unirgy_DropshipPo_Model_Mysql4_Po_Comment_Collection */
+			/* @var $comments ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Comment_Collection */
 			
 			foreach($this->getCommentsCollection() as $comment){
-				/* @var $comment Unirgy_DropshipPo_Model_Po_Comment */
+				/* @var $comment ZolagoOs_OmniChannelPo_Model_Po_Comment */
 				$tmpComment = clone $comment;
 				$tmpComment->setId(null);
 				$tmpComment->setParentId(null);
@@ -393,10 +418,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	
 	/**
 	 * 
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @param ZolagoOs_OmniChannelPo_Model_Po_Item $item
 	 * @return type
 	 */
-	public function calcuateItemPrice(Unirgy_DropshipPo_Model_Po_Item $item, $inclTax=true) {
+	public function calcuateItemPrice(ZolagoOs_OmniChannelPo_Model_Po_Item $item, $inclTax=true) {
 		return $inclTax ? $item->getPriceInclTax() : $item->getPriceExclTax();
 	}
 	
@@ -602,25 +627,41 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    public function isCod() {
 	   return $this->isPaymentCheckOnDelivery();
    }
-   
-   /**
-    * @return boolean
-    */
-   public function isPaid() {
-	   if(!$this->isCod()){
-		   return $this->getPaymentAmount() >= $this->getGrandTotalInclTax() ? true : false;
-	   }
-	   return true;
-   }
 
+	/**
+	 * @return boolean
+	 */
+	public function isPaid()
+	{
+		$paymentHelper = Mage::helper('zolagopayment');
+
+		$dueAmount = round((float)$this->getPaymentAmount() - (float)$this->getGrandTotalInclTax(), 4);
+
+		if (!$paymentHelper->getConfigUseAllocation($this->getStore())) {
+			return $dueAmount >= 0 ? true : false;
+		}
+		if (!$this->isCod()) {
+			return $dueAmount >= 0 ? true : false;
+		}
+		return true;
+	}
+	
 	public function getPaymentAmount() {
-		/** @var Zolago_Payment_Model_Allocation $allocationModel */
-		$allocationModel = Mage::getModel("zolagopayment/allocation");
-		return $allocationModel->getSumOfAllocations($this->getId()); //sum of allocations amount
+		/** @var Zolago_Payment_Helper_Data $paymentHelper */
+		$paymentHelper = Mage::helper('zolagopayment');
+
+		if ($paymentHelper->getConfigUseAllocation()) { // Sum of allocations amount
+			/** @var Zolago_Payment_Model_Allocation $allocationModel */
+			$allocationModel = Mage::getModel("zolagopayment/allocation");
+			$sum = $allocationModel->getSumOfAllocations($this->getId()); 
+		} else { // Sum of transaction for order
+			$sum = $paymentHelper->getSimplePaymentAmount($this);
+		}
+		return $sum; 
 	}
 
 	public function getDebtAmount() {
-		return -($this->getGrandTotalInclTax() - $this->getPaymentAmount());
+		return -(round((float)$this->getGrandTotalInclTax()-(float)$this->getPaymentAmount(),4));
 	}
 
 	public function getCurrencyFormattedAmount($amount) {
@@ -684,10 +725,40 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$this->_processStatus();
 
 		$this->_processMaxShippingDate();
+
+        $this->_processPaymentChannelOwner();
 		
 		return parent::_beforeSave();
 	}
-	
+
+    /**
+     * @param bool $force
+     * @return Zolago_Po_Model_Po
+     */
+    public function _processPaymentChannelOwner($force = false) {
+        if ($this->isObjectNew() || $force) {
+            $paymentChannelOwner = $this->getCurrentPaymentChannelOwner();
+            $this->setPaymentChannelOwner($paymentChannelOwner);
+        }
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrentPaymentChannelOwner() {
+        $path = '';
+        if ($this->isPaymentCheckOnDelivery()) {
+            $path = "payment/cashondelivery/channel_owner";
+        } elseif ($this->isPaymentBanktransfer()) {
+            $path = "payment/banktransfer/channel_owner";
+        } elseif ($this->isPaymentDotpay()) {
+            $path = "payment/dotpay/channel_owner";
+        }
+        $paymentChannelOwner = Mage::getStoreConfig($path);
+        return $paymentChannelOwner;
+    }
+
 	protected function _processAlert() {
 		if(!$this->getId()){
 			$alertBit = 0;
@@ -795,15 +866,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         }
     }
 
-    public function addItemWithTierCommission(Unirgy_DropshipPo_Model_Po_Item $item)
-    {
-        $this->addItem($item);
-        if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')) {
-            Mage::helper("udtiercom")->processPo($this);
-        }
-        return $this;
-    }
-
     /**
      * @param $ids int|array
      * @param $vendor Zolago_Dropship_Model_Vendor
@@ -820,10 +882,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
         $coll->addFieldToFilter('increment_id', $ids);
         $coll->addPosData("external_id");
-
         $list = array();
         $i = 0;
-        foreach ($coll as $po) {
+		/** @var Zolago_Po_Model_Po $po */
+		foreach ($coll as $po) {
+            $dueAmount = ($po->getDebtAmount() > 0)? 0:abs($po->getDebtAmount());
             /** @var Zolago_Po_Model_Po $po */
             $list[$i]['vendor_id']                = $vendor->getId();
             $list[$i]['vendor_name']              = $vendor->getVendorName();
@@ -833,11 +896,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
             $list[$i]['order_status']             = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
             $list[$i]['order_total']              = $po->getGrandTotalInclTax();
             $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
-            $list[$i]['order_due_amount']         = abs($po->getDebtAmount());
-            $list[$i]['delivery_method']          = 'standard_courier'; // todo when inpost added
+            $list[$i]['order_due_amount']         = $dueAmount;
+            $list[$i]['delivery_method']          = $po->getApiDeliveryMethod();
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
+			$list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
+			$list[$i]['customer_id']              = $po->getCustomerId();
+
 
             $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
             if ($list[$i]['invoice_data']['invoice_required']) {
@@ -854,7 +920,8 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 //                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
             }
 
-            $list[$i]['delivery_data']['inpost_locker_id'] = ''; // todo when inpost added
+            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getDeliveryInpostLocker()->getName();
+            $list[$i]['delivery_data']['delivery_point_name']                       = $po->getApiDeliveryPointName();
             $sa = $po->getShippingAddress();
             $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
             $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
@@ -914,6 +981,35 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         return '';
     }
 
+	/**
+	 * gets dummy email address for api
+	 * @param $orderId
+	 * @return string
+	 */
+	protected function getApiOrderEmail($orderId) {
+		return sprintf(Mage::getStoreConfig('ghapi_options/ghapi_general/ghapi_order_email'),$orderId);
+	}
+
+	/**
+	 * Retrieve delivery method for Modago Api
+	 *
+	 * @return string standard_courier|inpost_parcel_locker|polish_post
+	 */
+	public function getApiDeliveryMethod() {
+		$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+		switch ($methodCode) {
+			case Orba_Shipping_Model_Packstation_Inpost::CODE:
+				$dMethod = 'inpost_parcel_locker'; // Paczkomaty InPost
+				break;
+			case 'zolagopp': //todo: when model ready replace it by const CODE
+				$dMethod = 'polish_post'; // Poczta Polska
+				break;
+			default:
+				$dMethod = 'standard_courier';
+				break;
+		}
+		return $dMethod;
+	}
     /**
      * Return collection of PO for given Vendor
      * and array of ids (increment_id)
@@ -1061,12 +1157,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         $orderStatusChange = array();
 
         $completePos = array(
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED,
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED,
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED,
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED,
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED
         );
         $cancelPos = array(
-            Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED
+            ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED
         );
         $poStatuses = array();
         if ($orderPos->getSize() > 0) {
@@ -1082,11 +1178,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 
         if (empty($diffCompleteStatuses)) {
             $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_COMPLETE;
-            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED;
+            $orderStatusChange['udropship_status'] = ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED;
         }
         if (empty($diffCancelStatuses)) {
             $orderStatusChange['state'] = Mage_Sales_Model_Order::STATE_CANCELED;
-            $orderStatusChange['udropship_status'] = Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED;
+            $orderStatusChange['udropship_status'] = ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED;
         }
 
         //Mage::log($orderStatusChange, null, 'order.log');
@@ -1103,4 +1199,126 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
         }
 
     }
+
+	public function getContactToken() {
+		return md5(
+			$this->getStoreId().
+			$this->getOrderId().
+			$this->getEntityId().
+			$this->getCreatedAt().
+			$this->getOrder()->getCustomerId().
+			$this->getIncrementId()
+		);
+	}
+
+	/**
+	 * Simple load inpost locker by name
+	 *
+	 * @param bool $force
+	 * @return GH_Inpost_Model_Locker
+	 */
+	public function getInpostLocker($force = false) {
+		if (!$this->hasData('inpost_locker') || $force) {
+			$inpostLockerName = $this->getDeliveryPointName();
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel('ghinpost/locker')->load($inpostLockerName, 'name');
+			$this->setData('inpost_locker', $locker);
+		}
+		return $this->getData('inpost_locker');
+	}
+
+	/**
+	 * Load inpost locker by name only if delivery method was inpost
+	 *
+	 * @param bool $force
+	 * @return GH_Inpost_Model_Locker
+	 */
+	public function getDeliveryInpostLocker($force = false) {
+		if (!$this->hasData('delivery_inpost_locker') || $force) {
+			/** @var GH_Inpost_Model_Locker $locker */
+			$locker = Mage::getModel('ghinpost/locker');
+			if ($this->isDeliveryInpost($force)) {
+				$inpostLockerName = $this->getDeliveryPointName();
+				$locker->load($inpostLockerName, 'name');
+			}
+			$this->setData('delivery_inpost_locker', $locker);
+		}
+		return $this->getData('delivery_inpost_locker');
+	}
+
+	/**
+	 * Load POS by pos_id (delivery_point_name) if delivery method was pick-up point
+	 * 
+	 * @param bool $force
+	 * @return Zolago_Pos_model_Pos
+	 */
+	public function getDeliveryPickUpPoint($force = false) {
+		if (!$this->hasData('delivery_pickup_point') || $force) {
+			/** @var Zolago_Pos_model_Pos $pos */
+			$pos = Mage::getModel('zolagopos/pos');
+			if ($this->isDeliveryPickUpPoint($force)) {
+				$posId = $this->getDeliveryPointName();
+				$pos->load($posId);
+			}
+			$this->setData('delivery_pickup_point', $pos);
+		}
+		return $this->getData('delivery_pickup_point');
+	}
+	
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function isDeliveryInpost($force = false) {
+		if (!$this->hasData('is_delivery_inpost') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+			/** @var GH_Inpost_Model_Carrier $model */
+			$model = Mage::getModel("ghinpost/carrier");
+			$ghInpostCarrierCode  = $model->getCarrierCode();
+			$isInpost = ($methodCode == $ghInpostCarrierCode);
+			$this->setData('is_delivery_inpost', $isInpost);
+		}
+		return $this->getData('is_delivery_inpost');
+	}
+
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function isDeliveryPickUpPoint($force = false) {
+		if (!$this->hasData('is_delivery_zolagopickuppoint') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+			$isPickUpPoint = ($methodCode == ZolagoOs_PickupPoint_Helper_Data::CODE);
+			$this->setData('is_delivery_zolagopickuppoint', $isPickUpPoint);
+		}
+		return $this->getData('is_delivery_zolagopickuppoint');
+	}
+
+	/**
+	 * @param bool $force
+	 * @return string
+	 */
+	public function getApiDeliveryPointName($force = false) {
+		if (!$this->hasData('api_delivery_point_name') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+
+			switch ($methodCode) {
+				case GH_Inpost_Model_Carrier::CODE:
+					$name = $this->getDeliveryInpostLocker($force)->getName();
+					break;
+				case ZolagoOs_PickupPoint_Helper_Data::CODE:
+					$pos  = $this->getDeliveryPickUpPoint($force);
+					$name = $pos->getExternalId();
+					$name = empty($name) ? $pos->getName() : $name;
+					$name = empty($name) ? $pos->getId() : $name;
+					break;
+				default:
+					$name = '';
+					break;
+			}
+			
+			$this->setData('api_delivery_point_name', $name);
+		}
+		return $this->getData('api_delivery_point_name');
+	}
 }

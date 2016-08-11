@@ -14,7 +14,7 @@ ul.messages >li.success-msg ul {
 		background: #73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
 		margin-top: 10px;
 	}
-	>li:last-child {
+	li:last-child {
 		@include max-screen($screen-xs-max) {
 			margin-bottom: 10px;
 		}
@@ -31,6 +31,15 @@ ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul {
 		}
 	}
 }
+
+body.mypromotions-index-index {
+	ul.messages >li.error-msg ul, ul.messages >li.notice-msg ul, ul.messages >li.success-msg ul {
+		>li:last-child {
+			margin-bottom: 10px !important;
+		}
+	}
+}
+
 ul.messages >li ul>li>span {
     background-color: #deeaca;
     margin-left: 20px;

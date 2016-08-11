@@ -92,14 +92,23 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'ups_login',
             'ups_password',
         ));
-		
-		$review = $form->addFieldset('review', array('legend'=>$helper->__('Product Review Settings')));
-        $builder = Mage::getModel('zolagopos/form_fieldset_review'); 
-        $builder->setFieldset($review);
+
+        $beacon = $form->addFieldset('beacon', array('legend'=>Mage::helper('ghbeacon')->__('Beacon Settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_beacon');
+        $builder->setFieldset($beacon);
         $builder->prepareForm(array(
-            'review_status'
+            'beacon_id',
+            'beacon_name',
         ));
-        
+
+        /*
+				$review = $form->addFieldset('review', array('legend'=>$helper->__('Product Review Settings')));
+				$builder = Mage::getModel('zolagopos/form_fieldset_review');
+				$builder->setFieldset($review);
+				$builder->prepareForm(array(
+					'review_status'
+				));
+		 */
         $form->setValues($this->_getValues());
         
         $this->setForm($form);

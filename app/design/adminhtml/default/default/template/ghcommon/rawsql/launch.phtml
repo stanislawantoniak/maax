@@ -1,0 +1,20 @@
+<div class="content-header">
+   <h3><?php echo $this->getHeaderText() ?></h3>
+   <p class="content-buttons form-buttons">
+        <?php echo $this->getButtonsHtml(); ?>
+    </p>
+</div>
+<div>
+    <?php echo $this->getChild('query_result')->toHtml(); ?>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    var editForm = new varienForm('rawsql_edit_form');
+    var rawsqlControl = {
+        save: function() {
+            editForm.submit();
+            return false;
+        }
+    };
+    
+</script>

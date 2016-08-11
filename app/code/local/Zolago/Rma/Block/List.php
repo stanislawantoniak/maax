@@ -20,7 +20,8 @@ class Zolago_Rma_Block_List extends Mage_Core_Block_Template
         return Mage::getModel('zolagorma/rma')->
 				getCollection()->
 				addAttributeToSort('created_at', 'DESC')->
-				addFieldToFilter('customer_id',$customerId);
+				addFieldToFilter('customer_id',$customerId)->
+				addFieldToFilter('rma_type',Zolago_Rma_Model_Rma::RMA_TYPE_STANDARD);
     }
 
 	/**

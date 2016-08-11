@@ -2,6 +2,14 @@
 class Zolago_Page_Block_Html_Footer extends Mage_Page_Block_Html_Footer
 {
 
+    
+    /**
+     * cache footer
+     */
+     protected function _construct()
+     {
+         $this->setCacheLifetime(Zolago_Common_Block_Page_Html_Head::BLOCK_CACHE_TTL);
+     }
     /**
      * Get cache key informative items
      *

@@ -70,10 +70,7 @@ class GH_Rewrite_Adminhtml_GhrewriteController extends Mage_Adminhtml_Controller
                     )
                 );
 
-	            //everything went ok so update varnish config:
-	            $this->applyVarnishConfig();
-
-	            //and clear categories url rewrites cache:
+	            //clear categories url rewrites cache:
 	            $this->clearCategoriesUrlRewriteCache();
 
             } catch (Exception $e) {
@@ -178,10 +175,7 @@ class GH_Rewrite_Adminhtml_GhrewriteController extends Mage_Adminhtml_Controller
                     )
                 );
 
-	            //everything went ok so update varnish config:
-	            $this->applyVarnishConfig();
-
-	            //and clear categories url rewrites cache:
+	            //clear categories url rewrites cache:
 	            $this->clearCategoriesUrlRewriteCache();
 
             } catch (Exception $e) {
@@ -190,24 +184,6 @@ class GH_Rewrite_Adminhtml_GhrewriteController extends Mage_Adminhtml_Controller
         }
         $this->_redirect('*/*/index');
     }
-
-	//copied from /app/code/community/Nexcessnet/Turpentine/controllers/Varnish/ManagementController.php, but removed redirect
-	protected function applyVarnishConfig() {
-		Mage::dispatchEvent( 'turpentine_varnish_apply_config' );
-		$result = Mage::getModel( 'turpentine/varnish_admin' )->applyConfig();
-		foreach( $result as $name => $value ) {
-			if( $value === true ) {
-				$this->_getSession()
-					->addSuccess( Mage::helper( 'turpentine' )
-						->__( 'VCL successfully applied to ' . $name ) );
-			} else {
-				$this->_getSession()
-					->addError( Mage::helper( 'turpentine' )
-						->__( sprintf( 'Failed to apply the VCL to %s: %s',
-							$name, $value ) ) );
-			}
-		}
-	}
 
 	protected function clearCategoriesUrlRewriteCache() {
 		$cache = Mage::app()->getCache();

@@ -1,4 +1,5 @@
-<?php $_helper = Mage::helper("zolagopos");?>
+<?php /** @var Zolago_Pos_Block_Dropship_Pos $this */
+$_helper = Mage::helper("zolagopos");?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-heading row">
@@ -13,19 +14,32 @@
 				</a> 
 		</div>
 	</div>
+    <div class="tabbable tabbabble-custom">
+        <ul class="nav nav-tabs" style="margin-top:6px">
+            <li class="" style="float:left;">
+                <a name="tmp"></a>
+            </li>
+            <li class="active" style="float:left">
+                <a data-toggle="tab" href="#tab_1_1"><?php echo Mage::helper('zolagopos')->__('List'); ?></a>
+            </li>
+            <li class="" style="float:left;">
+                <a data-toggle="tab" href="#tab_1_2"><?php echo Mage::helper('zolagopos')->__('Settings'); ?></a>
+            </li>
+
+
+        </ul>
+        <div class="tab-content">
+            <div id="tab_1_1" class="tab-pane active">
+                <?php echo $this->getChildHtml("pos_list"); ?>
+            </div>
+
+            <div id="tab_1_2" class="tab-pane">
+                <?php echo $this->getChildHtml("pos_settings"); ?>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
-<div class="container z-grid">
-	<div class="widget box">
-		<div class="widget-content">
-			<?php echo $this->getGridHtml(); ?>
-		</div>
-	</div>
-</div>
-<script type="text/javascript">
-(function(){
-	var gridObj = <?php echo $this->getGridJsObjectName();?>;
-	// create integrator
-	new Zolago.gridIntegrator(gridObj);
-})();;
-</script>
+

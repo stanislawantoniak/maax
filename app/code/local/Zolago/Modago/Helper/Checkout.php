@@ -43,16 +43,26 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
                 unset($cRates);
                 if (!empty($data)) {
                     foreach ($data as $vId => $dataItem) {
-                        $cost[$vId] = array_sum($dataItem);
+                        $cost[$vId] = min($dataItem); //get lowest costs for ajax basket
                     }
                 }
             }
         }
-
-
-
-
         return $cost;
     }
 
+	/**
+	 * @return string
+	 */
+	public function getFormattedShippingCostSummary() {
+		$cost = $this->getShippingCostSummary();
+		$costSum = 0;
+		if (!empty($cost)) {
+			$costSum = array_sum($cost);
+		}
+		/** @var Mage_Core_Helper_Data $coreHelper */
+		$coreHelper = Mage::helper('core');
+		$formattedCost = $coreHelper->currency($costSum, true, false);
+		return $formattedCost;
+	}
 }

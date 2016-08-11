@@ -1,12 +1,12 @@
 <?php
 
-class Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect extends Unirgy_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect
+class Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect extends ZolagoOs_OmniChannel_Block_Adminhtml_SystemConfigFormField_CategoriesSelect
 {
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
         $this->setElement($element);
         $value = $element->getValue();
-        $cHlp = Mage::helper('udropship/catalog');
+        $cHlp = Mage::helper('zolagodropship/catalog');
         $cOpts = $cHlp->getCategoryValuesExtended();
         if (!$value && $cHlp->getStoreRootCategory()) {
             $value = $cHlp->getStoreRootCategory()->getId();

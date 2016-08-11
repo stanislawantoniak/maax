@@ -1,0 +1,163 @@
+<style>
+    .ramka_serwersms{
+        border: 1px solid #e02124;
+    }
+    
+    .ramka_serwersms td{
+        padding-left: 10px; padding-right: 10px;
+    }
+    
+    .ramka_serwersms a{
+        color: #e02124;
+    }
+    
+    .naglowek_serwersms{
+        background: #e02124; padding: 10px 10px;
+    }
+    .text-right{
+        text-align: right;
+    }
+    .serwersms_info{
+        font-size: 11px;
+        color: #333;
+    }
+</style>
+<script type="text/javascript">
+    function przeliczZnaki(){
+        var textarea = document.getElementById("znaki");
+        var wiadomosc = textarea.value.length;
+        var pole = document.getElementById("pokazznaki");
+        var sms = document.getElementById("liczbasms");
+        var lsms = '';
+        if(wiadomosc <= 160) lsms = 1;
+        if(wiadomosc > 160 && wiadomosc <= 306) lsms = 2;
+        if(wiadomosc > 306 && wiadomosc <= 459) lsms = 3;
+        if(wiadomosc > 459) lsms = 4;
+        if(wiadomosc >= 612) textarea.value = textarea.value.substr(0,612);
+        
+        pole.innerHTML = textarea.value.length;
+        sms.innerHTML = lsms;
+    }
+</script>
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody><tr>
+            <td><h3 class="icon-head head-adminhtml-wyslane">Wyślij SMS</h3></td>
+        </tr>
+    </tbody></table>
+</div>
+
+<?php
+$nadawcy = $this->nadawcyLista();
+?>
+<form action="<?php echo Mage::getUrl('serwersms/adminhtml_index/wysylkaform'); ?>" method="post">
+    <fieldset>
+        <table class="ramka_serwersms">
+            <tr>
+                <td colspan="4" class="naglowek_serwersms">
+                    <img src="<?php echo $this->getSkinUrl('serwersms/serwersms.png') ?>" />
+                </td>
+            </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+            <?php if(is_array($nadawcy)) { ?>
+            <tr>
+                <td><strong>Typ wiadomości:</strong></td>
+                <td></td><td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="radio" id="eco" name="typ" value="0" checked="checked" /> <label for="eco">ECO</label></td>
+                <td><input type="radio" id="full" name="typ" value="1" /> <label for="full">FULL</label>
+                    <br /><br />
+                    Nazwa nadawcy:<br />
+                    <select name="nadawca">
+                    <?php
+                            if(is_array($nadawcy)){
+                                foreach($nadawcy['wlasne'] as $nazwa => $status){
+                                if($status == 'Autoryzowano' or $status == '4005'){
+                                    echo '<option value="'.$nazwa.'">'.$nazwa.'</option>';
+                                }
+                            }
+                            echo '<option value="" disabled="disabled">-------------------</option>';
+
+                            foreach($nadawcy['predefiniowane'] as $nazwa => $status){
+                                    echo '<option value="'.$nazwa.'">'.$nazwa.'</option>';
+                            }
+                        }
+                        
+                    ?>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Odbiorca:</strong></td>
+                <td></td><td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="radio" id="recznie" name="odbiorca" value="0" checked="checked" /> <label for="recznie">Wpisz numer ręcznie:</label>
+                    <br /><br />
+                    <input type="text" name="numer_reczny">
+                </td>
+                <td><input type="radio" id="lista" name="odbiorca" value="1" /> <label for="lista">Wybierz z listy klientów:</label>
+                    <br /><br />
+                    <select name="numer_lista">
+                    <?php
+                    $kontakty = $this->kontaktyLista();
+                    foreach($kontakty as $kontakt){
+                        echo '<option value="'.$kontakt['telefon'].'">'.$kontakt['name'].' ('.$kontakt['telefon'].')</option>';
+                    }
+                    ?>
+                    </select>
+                </td>
+                <td><input type="radio" id="grupa" name="odbiorca" value="2" /> <label for="grupa">Wyślij do grupy:</label>
+                    <br /><br />
+                    <select name="numer_grupa">
+                    <?php
+                    $grupy = $this->grupyLista();
+                    foreach($grupy as $grupa){
+                        if($grupa['id'] != 0){
+                            echo '<option value="'.$grupa['id'].'">'.$grupa['name'].'</option>';
+                        }
+                    }
+                    ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><br /><strong>Treść wiadomości:</strong></td>
+                <td></td><td></td>
+            </tr>
+            <tr>
+                <td>Liczba znaków: <span id="pokazznaki" style="font-weight: bold">0</span><br />
+                    Liczba sms: <span id="liczbasms" style="font-weight: bold">0</span></td>
+                <td colspan="3">
+                    <textarea name="wiadomosc" style="width: 100%; height: 80px" id="znaki" onkeyup="przeliczZnaki();" onkeydown="przeliczZnaki();" onchange="przeliczZnaki();"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Wyślij" />
+                    <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <?php } else { ?>
+            <tr>
+                <td colspan="4">
+                    <?php
+                        if($nadawcy == 'blad logowania: nieprawidlowy login lub haslo' or $nadawcy == ''){
+                            echo Mage::helper('sms_helper/SerwerSMS')->niezalogowanyWidok();
+                        } else {
+                            echo '<strong>'.$nadawcy.'</strong>';
+                        }
+                    ?>
+                </td>
+            </tr>
+            <?php } ?>
+        </table>
+    </fieldset>
+</form>

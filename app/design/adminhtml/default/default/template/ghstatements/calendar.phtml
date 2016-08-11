@@ -1,0 +1,22 @@
+<?php
+/*  @var $this GH_Statements_Block_Adminhtml_Calendar_Grid */
+?>
+<div class="content-header">
+<table cellspacing="0">
+    <tr>
+        <td style="width:50%;">
+            <h3>
+                <?php echo Mage::helper('ghstatements')->__('Statements calendar') ?>
+            </h3>
+        </td>
+        <td class="a-right">
+            <p class="form-buttons">
+                <button style="" onclick="setLocation('<?php echo $this->getUrl('*/*/calendar_new') ?>')" class="scalable add" type="button" ><span><?php echo Mage::helper('ghstatements')->__('New calendar');?></span></button>
+            </p>
+        </td>
+    </tr>
+</table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('ghstatements_calendar_grid') ?>
+</div>

@@ -1,0 +1,178 @@
+<?php
+/** @var GH_AttributeRules_Block_Attribute $this */
+
+/** @var GH_AttributeRules_Helper_Data $helper */
+$helper = Mage::helper("gh_attributerules");
+$storeId = $this->getLabelStore();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+
+$dataRules = $this->getRulesData();
+?>
+
+
+<div class="modal fade bs-example-modal-sm" id="showAttributeRules" role="dialog">
+    <form method="post" action="<?php echo $this->getActionUrl();?>">
+        <input type="hidden" name="product_ids" value="">
+        <input type="hidden" name="attribute_set_id" value="">
+        <input type="hidden" name="global" value="">
+        <div class="query-from-grid"></div>
+        <div class="modal-dialog modal-sm" style="width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><?php echo $helper->__("Autofill rules"); ?></h4>
+                </div>
+                <div class="modal-body">
+                    <p class="alert alert-info">
+                        <strong><?php echo $helper->__("Information");?>:</strong>
+                        <?php echo $helper->__("Autofill rules let you change product attibutes with use of other product attributes.<br/>To create an autofill rule do the following (1) use product filter (2) edit an attribute and mark checkbox &quot;Save as rule&quot; (3) click submit<br/>Aterwards you will find new autofill rule saved under attribute that you changed, with value that you submitted and filter you used.");?>
+                    </p>
+                    <?php if(!empty($dataRules)): ?>
+                    <div class="widget-content">
+                        <table
+                            class="table-lvl-0 table table-bordered table-checkable table-no-inner-border table-hover">
+                            <thead>
+                            <tr>
+                                <th class="checkbox-column" style="width: 3%;">
+                                    <div class="">
+                                        <span class="">
+                                            <input type="checkbox"
+                                                   name="all"
+                                                   id="attr-select-all"
+                                                   value="1"
+                                                   data-checkbox-group-target="input[type=checkbox][data-checkbox-group=attr-group]"
+                                                   class="uniform">
+                                        </span>
+                                    </div>
+                                </th>
+                                <th colspan="2"><?php echo $helper->__("Attribute to fill"); ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($dataRules as $key => $row): ?>
+                            <tr class="">
+                                <td class="checkbox-column">
+                                    <div class="">
+                                        <span class="">
+                                            <input type="checkbox"
+                                                   name="attributes[]"
+                                                   id="attr-<?php echo $key; ?>"
+                                                   value="<?php echo $key;?>"
+                                                   data-checkbox-group="attr-group"
+                                                   data-checkbox-group-target="input[type=checkbox][data-checkbox-group=value-key-<?php echo $key; ?>]"
+                                                   data-checkbox-group-parent="#attr-select-all"
+                                                   class="uniform">
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="show-details-column align-center accordion-toggle" data-toggle="collapse" data-target="#row-<?php echo $key; ?>">
+                                    <span class="btn btn-xs"><i class="icon-plus"></i></span>
+                                </td>
+                                <td class="attribute-column accordion-toggle" data-toggle="collapse" data-target="#row-<?php echo $key; ?>">
+                                    <?php
+                                    /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
+                                    $attr = $row['attribute'];
+                                    echo $attr->getStoreLabel($storeId);
+                                    ?>
+                                </td>
+                            </tr>
+                            <!-- hidden table row for Value -->
+                            <tr>
+                                <td colspan="3" style="padding: 0;" id="row-<?php echo $key; ?>" class="body-lvl-1 accordian-body collapse hiddenRow">
+                                    <div>
+                                        <table class="table-lvl-1 table table-no-inner-border table-checkable table-no-inner-border table-hover">
+                                            <tbody>
+                                            <?php foreach ($row['value'] as $valueKey => $rulesGroup): // Rule grouped by value ?>
+                                                <tr>
+                                                    <td class="prefix-lvl-1"></td>
+                                                    <td class="checkbox-column">
+                                                        <div class="">
+                                                            <span class="">
+                                                                <input type="checkbox"
+                                                                       name="values[]"
+                                                                       id="value-key-<?php echo $valueKey; ?>"
+                                                                       value="<?php echo $valueKey; ?>"
+                                                                       data-checkbox-group="value-key-<?php echo $key; ?>"
+                                                                       data-checkbox-group-parent="#attr-<?php echo $key; ?>"
+                                                                       data-checkbox-group-target="input[type=checkbox][data-checkbox-group-id=rules-group-<?php echo $valueKey; ?>]"
+                                                                       class="uniform">
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="show-details-column-short align-center accordion-toggle" data-toggle="collapse" data-target="#rulesGroup-<?php echo $valueKey; ?>" style="cursor: pointer;">
+                                                        <span class="btn btn-xs"><i class="icon-plus"></i></span>
+                                                    </td>
+                                                    <td class="option-text-set-value accordion-toggle" data-toggle="collapse" data-target="#rulesGroup-<?php echo $valueKey; ?>" style="cursor: pointer;">
+                                                        <?php echo $helper->__("Set value: <b>%s</b>", $attr->getSource()->getOptionText($valueKey)); ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" style="padding: 0;" id="rulesGroup-<?php echo $valueKey; ?>" class="body-lvl-2 accordian-body collapse hiddenRow">
+                                                        <div>
+                                                        <table class="table-lvl-2 table table-no-inner-border table-checkable table-no-inner-border table-hover">
+                                                        <tbody>
+                                                        <!-- hidden table row for filters -->
+                                                        <?php /** @var GH_AttributeRules_Model_AttributeRule $rule */
+                                                        foreach ($rulesGroup as $rule): ?>
+                                                            <tr>
+                                                                <td class="prefix-lvl-2"></td>
+                                                                <td class="checkbox-column show-details-column-short">
+                                                                    <div class="">
+                                                                        <span class="">
+                                                                            <input type="checkbox"
+                                                                                   name="rules[]"
+                                                                                   value="<?php echo $rule->getId(); ?>"
+                                                                                   data-checkbox-group-id="rules-group-<?php echo $valueKey; ?>"
+                                                                                   data-checkbox-group-parent="#value-key-<?php echo $valueKey; ?>"
+                                                                                   class="uniform">
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                                <td colspan="4"><?php echo $helper->__("For filter: ") ?><b><?php echo $this->getFilterAsText($rule); ?></b>&nbsp;<a class="btn btn-xs btn-remove-rule" title="<?php echo $helper->__("Remove rule"); ?>" data-placement="top" href="<?php echo $this->getRemoveRuleUrl($rule); ?>" data-action="remove"><i class="icon-remove"></i></a></td>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                        </tbody>
+                                                        </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php else: ?>
+                    <p>
+                        <strong>
+                            <?php echo $helper->__("Currently you don't have saved any rules"); ?>
+                        </strong>
+                    </p>
+                    <?php endif; ?>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel"); ?></button>
+                    <div class="tooltip-wrapper"
+                         data-placement="top"
+                         data-title-products="<?php echo $helper->__("You don't have selected products");?>"
+                         data-title-rules="<?php echo $helper->__("You don't have selected rules");?>">
+                        <button data-toggle="tooltip"
+                            type="submit"
+                            class="btn btn-primary"
+                            disabled="disabled"
+                            data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $helper->__("Apply rules to selected products"); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

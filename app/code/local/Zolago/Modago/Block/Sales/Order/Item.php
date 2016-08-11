@@ -2,7 +2,7 @@
 /**
  * po item block
  */
-class Zolago_Modago_Block_Sales_Order_Item extends Unirgy_Rma_Block_Order_Rma_Items {
+class Zolago_Modago_Block_Sales_Order_Item extends ZolagoOs_Rma_Block_Order_Rma_Items {
     //{{{ 
     /**
      * name of renderer

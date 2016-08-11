@@ -16,7 +16,10 @@ class Zolago_Dotpay_NotificationController extends Dotpay_Dotpay_NotificationCon
 			}
 
 			/** @var Zolago_Dotpay_Model_Client $client */
-			$client = Mage::getModel("zolagodotpay/client");
+			$client = Mage::getModel("zolagodotpay/client", $order->getStore());
+			if(isset($data['id']) && $data['id']) {
+				$client->setDotpayId($data['id']);
+			}
 
 			if (!($order->getOrderCurrencyCode() == $data['operation_original_currency']
 				&& round($order->getGrandTotal(), 2) == $data['operation_original_amount'])

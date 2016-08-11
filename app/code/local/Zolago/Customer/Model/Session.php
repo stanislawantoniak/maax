@@ -5,74 +5,22 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 	const CURRENT_PRODUCTS_CATEGORY = 'curentProductsCategory';
 	const CURRENT_PRODUCTS = 'currentProducts';
 	const CURRENT_PRODUCTS_EXPIRE = 'currentProductsExpire';
-	const CURRENT_PRODUCTS_EXPIRE_MINUTES = 2880; //48h
+	const CURRENT_PRODUCTS_EXPIRE_PATH = 'customer/listing_products_cache/expiration_time';
 
     public function __construct()
     {
 	    parent::__construct();
     }
 
-	/**
-	 *
-	 * @param array $products
-	 */
-	public function addProductsToCache($products) {
-
-		$this->_clearProductsCache($products);
-
-		$newCategory = Mage::registry('current_category')->getId();
-		$prevCategory = $this->getData(self::CURRENT_PRODUCTS_CATEGORY);
-
-		$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
-
-		if(!$prevCategory || !$prevProducts) {
-			$this
-				->setData(self::CURRENT_PRODUCTS_CATEGORY, $newCategory)
-				->setData(self::CURRENT_PRODUCTS, $products);
-		} elseif($prevProducts['start'] < $products['start']) {
-			$newProducts = $products;
-			$newProducts['products'] = array_merge($prevProducts['products'],$newProducts['products']);
-			$this->setData(self::CURRENT_PRODUCTS,$newProducts);
-		}
-
-		$this->_setCurrentProductsExpire();
-
-		return $this->getData(self::CURRENT_PRODUCTS);
-	}
 
 	protected function _getCurrentProducts() {
 		return $this->_getProducts(Mage::getSingleton("zolagosolrsearch/catalog_product_list"));
 	}
 
-	protected function _clearProductsCache($products) {
-		$newCategory = Mage::registry('current_category')->getId();
-		$prevCategory = $this->getData(self::CURRENT_PRODUCTS_CATEGORY);
-		$prevProducts = $this->getData(self::CURRENT_PRODUCTS);
-		$prevProductsExpire = $this->getData(self::CURRENT_PRODUCTS_EXPIRE);
-
-		if($newCategory != $prevCategory ||
-			is_null($prevProducts) ||
-			is_null($prevProductsExpire) ||
-			$prevProductsExpire - time() < 0 ||
-			!isset($prevProducts['dir']) || $prevProducts['dir'] != $products['dir'] ||
-			!isset($prevProducts['sort']) || $prevProducts['sort'] != $products['sort'] ||
-			!isset($prevProducts['query']) || $prevProducts['query'] != $products['query'] ||
-			!isset($prevProducts['total']) || $prevProducts['total'] != $products['total'])
-		{ //clear products if user is looking at another category, changed sorting or search query
-			$this->unsetData(self::CURRENT_PRODUCTS_CATEGORY)->unsetData(self::CURRENT_PRODUCTS)->unsetData(self::CURRENT_PRODUCTS_EXPIRE);
-		}
-		return $this;
-	}
-
-	protected function _setCurrentProductsExpire() {
-		$expirationTime = time()+(self::CURRENT_PRODUCTS_EXPIRE_MINUTES*60);
-		return $this->setData(self::CURRENT_PRODUCTS_EXPIRE, $expirationTime);
-	}
 
 	public function getProductsCache() {
 		$currentProducts = $this->_getCurrentProducts();
-		$this->_clearProductsCache($currentProducts);
-		return $this->getData(self::CURRENT_PRODUCTS) ? $this->getData(self::CURRENT_PRODUCTS) : $this->addProductsToCache($currentProducts);
+		return $currentProducts;
 	}
 
 	/**
@@ -112,5 +60,30 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 			"dir"			=> $listModel->getCurrentDir(),
 			"products"		=> $_solrHelper->prepareAjaxProducts($listModel),
 		);
+	}
+
+	/**
+	 * Set customer object and setting customer id in session
+	 *
+	 * @param   Mage_Customer_Model_Customer $customer
+	 * @return  Mage_Customer_Model_Session
+	 */
+	public function setCustomer(Mage_Customer_Model_Customer $customer)
+	{
+		// check if customer is not confirmed
+		if ($customer->isConfirmationRequired()) {
+			if ($customer->getConfirmation()) {
+				return $this->_logout();
+			}
+		}
+		$this->_customer = $customer;
+		$this->setId($customer->getId());
+		$this->setCustomerId($customer->getId());
+		// save customer as confirmed, if it is not
+		if ((!$customer->isConfirmationRequired()) && $customer->getConfirmation()) {
+			$customer->setConfirmation(null)->save();
+			$customer->setIsJustConfirmed(true);
+		}
+		return $this;
 	}
 }

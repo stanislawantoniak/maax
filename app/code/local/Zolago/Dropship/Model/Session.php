@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
+class Zolago_Dropship_Model_Session extends ZolagoOs_OmniChannel_Model_Session
 {
 	/**
 	 * @var Zolago_Operator_Model_Operator
@@ -76,6 +76,8 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 */
 	public function login($username, $password)
     {
+        $url = Mage::registry('redirect_login_url');
+        $this->setBeforeAuthUrl($url);
 		// Logged as Vendor
 		if(parent::login($username, $password)){
 			return true;

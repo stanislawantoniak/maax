@@ -1,0 +1,40 @@
+<?php
+/** @var GH_Regulation_Block_Dropship_Rules $this */
+/** @var GH_Statements_Helper_Data $helper */
+$helper = Mage::helper('ghstatements');
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $helper->__("Balance tracking");?></h3>
+        </div>
+    </div>
+    <!-- /Page Header -->
+</div>
+
+<div class="container z-grid">
+    <div class="widget box">
+        <div class="widget-content">
+            <?php echo $this->getGridHtml(); ?>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        var gridObj = <?php echo $this->getGridJsObjectName();?>;
+        // create integrator
+        new Zolago.gridIntegrator(gridObj);
+    })();
+    // Custom hints
+    jQuery('a[name=balance_per_month]').attr('title', '<?php echo $helper->__("[customer payments] - [refunds] - [payouts] - [invoices]"); ?>');
+    jQuery('a[name=balance_cumulative]').attr('title', '<?php echo $helper->__("[Previous monthly balance] + [Monthly balance]"); ?>');
+    jQuery('a[name=balance_due]').attr('title', '<?php echo $helper->__("Due balance of the last statement in month"); ?>');
+    jQuery(".use-hint a").tooltip({
+        container: "body",
+        animation: false,
+        placement: "top",
+        trigger: "hover",
+        delay: {"show": 0, "hide": 0}
+    });
+</script>

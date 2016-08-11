@@ -9,7 +9,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
     }
 
     /**
-     * @return Unirgy_Dropship_Model_Session
+     * @return ZolagoOs_OmniChannel_Model_Session
      */
     protected function _getSession()
     {

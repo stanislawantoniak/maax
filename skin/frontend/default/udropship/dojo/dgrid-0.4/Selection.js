@@ -364,7 +364,7 @@ define([
 			// unless the event was received from an editor component.
 			// (Handler further checks against _allowSelectAll, which may be updated
 			// if selectionMode is changed post-init.)
-			if (this.allowSelectAll) {
+			if (this.allowSelectAll && 0) {
 				this.on('keydown', function (event) {
 					if (event[ctrlEquiv] && event.keyCode === 65 &&
 							!/\bdgrid-input\b/.test(event.target.className)) {

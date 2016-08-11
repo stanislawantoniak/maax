@@ -1,0 +1,69 @@
+.pagination-line {
+	* {
+		list-style: none !important;
+	}
+	margin: 0 !important;
+	padding: 0;
+	.listing-pagination {
+		margin: 0;
+		padding: 0;
+		.totals, .pages {
+			display: inline-block;
+			@media(max-width: 600px) {
+				display: block;
+			}
+            @media(min-width: 810px) and (max-width: 870px) {
+              display: block;
+            }
+		}
+		.totals {
+			color: $color_737373;
+			line-height: 30px;
+			vertical-align: top;
+			margin-right: 5px;
+			font-size: 12px;
+		}
+		.pages {
+			a {
+				display: inline-block;
+				padding: 0 24px;
+
+				border: 1px solid $color_ebebeb;
+				background-color: $color_ebebeb;
+
+				color: $color_000;
+
+				text-align: center;
+				//font-size: 25px;
+
+				height: 30px;
+				line-height: 29px;
+				&:hover {
+					//border-color: $color_333333;
+					background-color: $color_505050;
+					color: $color_fff;
+				}
+				&.page-disabled {
+					opacity: .5;
+					//color: $color_ffffff;
+					//background: $color_000000;
+					&:hover {
+						background: $color_000000;
+						color: $color_ffffff;
+						border-color: inherit;
+					}
+				}
+			}
+		}
+	}
+	&.pagination-bottom {
+		text-align: center;
+		margin-top: 25px !important;
+		.totals,.pages {
+			display: inline-block !important;
+		}
+		.totals {
+			margin-right: 10px;
+		}
+	}
+}

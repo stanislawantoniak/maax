@@ -8,6 +8,16 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 	public function __construct() {
 		$this->setTemplate('zolagosolrsearch/standard/searchfaces/price.phtml');
 	}
+	
+    /**
+     * overriding - display values will be calculated later
+     */
+
+	protected function _prepareItemValue($key,$val) {
+	    return array (
+	        'count' => $val,
+        );
+	}
 
 	/**
 	 * @return int
@@ -194,10 +204,23 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 	public function buildValue($min, $max) {
 		
 	}
+	
+    /**
+     * calculate url, id and active 
+     * 
+     * @param array &$item
+     */
+
+	protected function _prepareAdditionalValues(&$item) {
+	    $value = $item['value'];
+	    $item['url'] = $this->getItemUrl($value);
+	    $item['itemId'] = $this->getItemId($value);
+	    $item['active'] = $this->isItemActive($value);
+	}
+	
 	protected function applyPriceRangeProductCount() {
 		$priceRanges = $this->calculatePriceRanges();
 		$appliedPriceRanges = array();
-		
 		
 		foreach ($priceRanges as $l => $range) {
 			$start = floor(floatval($range['start']));
@@ -212,10 +235,10 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 				'value' => $value,
 			);
 			$items = $this->getItems();
-			foreach ($items as $price => $count) {
+			foreach ($items as $price => $val) {
 				$price = floor($price);
 				if (floatval($price) >= floatval($start) && floatval($price) <= floatval($end)) {
-					$rangeItemArray['count'] = ($rangeItemArray['count'] + $count);
+					$rangeItemArray['count'] = ($rangeItemArray['count'] + $val['count']);
 				}
 			}
 
@@ -226,7 +249,7 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
         if (!empty($appliedPriceRanges)) {
             $appliedPriceRanges = array_values($appliedPriceRanges);
-			$count = count($appliedPriceRanges);
+			$count = count($appliedPriceRanges);			
             for ($i = 0; $i < $count; $i++) {
                 if (isset($appliedPriceRanges[$i + 1]) && $appliedPriceRanges[$i]['end'] !== $appliedPriceRanges[$i + 1]['start']) {
 					$appliedPriceRanges[$i]['end'] = $appliedPriceRanges[$i + 1]['start'];
@@ -234,16 +257,19 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 					$appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPrice(
 							$appliedPriceRanges[$i]['value']
 					);
-					
 				};
+    			$this->_prepareAdditionalValues($appliedPriceRanges[$i]);					
             }
         }
+        // format first and last
 		
 		foreach($appliedPriceRanges as $i=>$range){
 			if($i==0){
-				$appliedPriceRanges[0]['value'] =  'TO ' . $appliedPriceRanges[0]['end'];
+				$appliedPriceRanges[0]['value'] = 'TO ' . $appliedPriceRanges[0]['end'];			    
+				$this->_prepareAdditionalValues($appliedPriceRanges[0]);			
 			}elseif($i==$count-1){
 				$appliedPriceRanges[$count-1]['value'] = $appliedPriceRanges[$count-1]['start'] . ' TO';
+                $this->_prepareAdditionalValues($appliedPriceRanges[$count-1]);
 			}else{
 				continue;
 			}
@@ -251,7 +277,6 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 					$appliedPriceRanges[$i]['value']
 			);
 		}
-		
 		return $appliedPriceRanges;
 	}
 

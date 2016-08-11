@@ -4,6 +4,7 @@
 /** @var Zolago_Dropship_Helper_Data $hlp */
 $hlp = Mage::helper('zolagodropship');
 
+/** @var Zolago_Dropship_Model_Session $_session */
 $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
@@ -14,7 +15,7 @@ $_allowedLocale = array(
 	"en_US"=>array("symbol"=>$this->__("EN"), "name"=>$this->__("English"))
 );
 ?>
-
+<script>var _currentLocale = '<?php echo $_currentLocale;?>';</script>
 <header class="header navbar navbar-fixed-top" role="banner">
 	<!-- Top Navigation Bar -->
 	<div class="container">
@@ -29,13 +30,9 @@ $_allowedLocale = array(
 		<!-- Logo -->
 		<a class="navbar-brand" href="<?php echo $this->getUrl("udropship/vendor/");?>">
 			<img src="<?php echo $this->getSkinUrl('img/bootsrap/logo.png');?>" alt="logo" />
-			<strong>Modago</strong>
+			<strong>Zolago Group</strong>
 		</a>
 		<!-- /logo -->
-
-
-
-
 
 		<?php if($_session->isLoggedIn()):?>
             <!-- Sidebar Toggler -->
@@ -63,6 +60,7 @@ $_allowedLocale = array(
 				</a>
 				<ul class="dropdown-menu">
 					<li><a href="<?php echo $this->getUrl('udropship/vendor/logout')?>"><i class="icon-off"></i> <?php echo $this->__('Log out')?></a></li>
+					<li><a href="<?php echo $this->getUrl('udropship/vendor/editPassword')?>"><i class="icon-wrench"></i> <?php echo Mage::helper("zolagodropship")->__('Change password')?></a></li>
 				</ul>
 			</li>
 			<!-- /user login dropdown -->
@@ -97,33 +95,32 @@ $_allowedLocale = array(
             </li>
             <!-- /HELP -->
 		</ul>
-        <?php else: ?>
+		<?php else: ?>
 
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Locale -->
+			<ul class="nav navbar-nav navbar-right">
+				<!-- Locale -->
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <?php foreach ($_allowedLocale as $locale => $info): ?>
-                                <?php if ($locale == $_currentLocale): ?>
-                                    <?php echo $this->escapeHtml($info['symbol']); ?>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                            <i class="icon-caret-down small"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <?php foreach ($_allowedLocale as $locale => $info): ?>
-                                <li>
-                                    <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
-                                        <?php echo $this->escapeHtml($info['name']); ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                    <!-- /Locale -->
-                </ul>
-
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<?php foreach ($_allowedLocale as $locale => $info): ?>
+							<?php if ($locale == $_currentLocale): ?>
+								<?php echo $this->escapeHtml($info['symbol']); ?>
+							<?php endif; ?>
+						<?php endforeach; ?>
+						<i class="icon-caret-down small"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<?php foreach ($_allowedLocale as $locale => $info): ?>
+							<li>
+								<a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
+									<?php echo $this->escapeHtml($info['name']); ?>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</li>
+				<!-- /Locale -->
+			</ul>
 		<?php endif; ?>
 		<!-- /Top Right Menu -->
 	</div>

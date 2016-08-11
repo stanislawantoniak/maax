@@ -1,6 +1,26 @@
 <?xml version="1.0"?>
 <config>
     <sections>
+		<catalog translate="label" module="catalog">
+			<groups>
+				<price translate="label">
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<automatic_strikeout_price_percent translate="label comment">
+							<label>Automatic strikeout price by percent</label>
+							<comment><![CDATA[When difference between effective price and msrp is >= % show strikeout price]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</automatic_strikeout_price_percent>
+					</fields>
+				</price>
+			</groups>
+		</catalog>
         <zolagocatalog translate="label" module="zolagocatalog">
             <label>Converter update settings</label>
             <tab>service</tab>
@@ -33,6 +53,38 @@
                 </config>
             </groups>
         </zolagocatalog>
+        <udprod translate="label" module="zolagocatalog">
+            <groups>
+                <product_description_history_changes_config translate="label">
+                    <label>Manage products descriptions</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>210</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <max_changes_count translate="label">
+                            <label>Max changes count</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <validate>validate-number</validate>
+                        </max_changes_count>
+                        <history_expiration_time translate="label">
+                            <label>Changes history expiration  life time (in hours)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <validate>validate-number</validate>
+                        </history_expiration_time>
+                    </fields>
+                </product_description_history_changes_config>
+            </groups>
+        </udprod>
 		<cataloginventory>
 			<groups>
 				<options>

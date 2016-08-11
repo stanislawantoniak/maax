@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <sales>
+            <children>
+                <udropship>
+                    <children>
+                        <review module="udratings">
+                            <title>Reviews and Ratings</title>
+                            <sort_order>60</sort_order>
+                            <children>
+                                <review_pending module="udratings">
+                                    <title>Pending Reviews</title>
+                                    <sort_order>10</sort_order>
+                                    <action>zosratingsadmin/review/pending</action>
+                                </review_pending>
+                                <review_all>
+                                    <title>All Reviews</title>
+                                    <sort_order>20</sort_order>
+                                    <action>zosratingsadmin/review/index</action>
+                                </review_all>
+                                <rating module="udratings">
+                                    <title>Manage Ratings</title>
+                                    <sort_order>30</sort_order>
+                                    <action>zosratingsadmin/rating/index</action>
+                                </rating>
+                            </children>
+                        </review>
+                    </children>
+                </udropship>
+            </children>
+        </sales>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <sales>
+                        <children>
+                            <udropship>
+                                <children>
+                                    <review>
+                                        <title>Reviews and Ratings</title>
+                                        <sort_order>60</sort_order>
+                                        <children>
+                                            <review_all>
+                                                <title>All Reviews</title>
+                                                <sort_order>20</sort_order>
+                                            </review_all>
+                                            <review_pending module="udratings">
+                                                <title>Pending Reviews</title>
+                                                <sort_order>20</sort_order>
+                                            </review_pending>
+                                            <rating module="udratings">
+                                                <title>Manage Ratings</title>
+                                                <sort_order>30</sort_order>
+                                            </rating>
+                                        </children>
+                                    </review>
+                                </children>
+                            </udropship>
+                        </children>
+                    </sales>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

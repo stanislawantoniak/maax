@@ -1,0 +1,86 @@
+<?php
+$vendorId = $this->getData("vendor_id");
+$helper = Mage::helper("zolagodropship");
+?>
+
+<?php if ($vendorId): ?>
+
+    <?php
+    $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+    $vendorEmail = $vendor->getEmail();
+    $ajaxUrl = $this->getData("save_url");
+
+    $modagoSalesmanagoLogin = $vendor->getData("modago_salesmanago_login");
+
+    //Magento's timestamp function makes a usage of timezone and converts it to timestamp
+    $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+    $date = date('d.m.Y H:i:s', $currentTimestamp);
+    ?>
+
+
+    <?php if (!empty($modagoSalesmanagoLogin)): ?>
+        <?php $accountCreated = $helper->__("Account created: %s, email for login: %s", $modagoSalesmanagoLogin, $vendorEmail); ?>
+        <div id="modago_salesmanago_create_account_info">
+            <?php echo $accountCreated; ?>
+        </div>
+        <?php else: ?>
+
+        <?php $accountJustCreated = $helper->__("Account created: %s, email for login: %s", $date, $vendorEmail); ?>
+
+        <div id="modago_salesmanago_create_account_info">
+            <button id="modago_salesmanago_create_account">
+                <?php echo $helper->__("Create account SALESmanago account"); ?>
+            </button>
+
+            <div id="modago_salesmanago_create_account_wrapper" style="display: none;">
+                <img src="<?php echo Mage::getBaseUrl("js"); ?>/spinner.gif" width="90px;"/>
+            </div>
+            <div id="modago_salesmanago_create_account_data"></div>
+        </div>
+
+
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                var email = '<?php echo $vendorEmail; ?>';
+                var vendorId = '<?php echo $vendorId; ?>';
+
+                function accountCreated() {
+
+                    jQuery("#modago_salesmanago_create_account_wrapper").hide();
+                    jQuery("#modago_salesmanago_create_account_info").html('<?php echo $accountJustCreated; ?>');
+                    alert('<?php echo $helper->__("Account has been created. You will have information on %s about active account after verification", $vendorEmail); ?>');
+                }
+
+                jQuery("#modago_salesmanago_create_account").click(function (e) {
+                    e.preventDefault();
+                    jQuery.ajax({
+                        url : '<?php echo $ajaxUrl; ?>',
+                        data: {vendor_id:vendorId},
+                        success: function(result){}
+                    });
+
+                    var r = confirm('<?php echo $helper->__("This function will create account in Marketing Automation SalesManago using Vendor email and actual password. Do you want to continue?"); ?>');
+
+
+                    if (r == true) {
+                        jQuery("#modago_salesmanago_create_account").hide();
+                        jQuery("#modago_salesmanago_create_account_wrapper").show();
+                        //"Konto zostało założone - po weryfikacji na adres email .... otrzymasz informację, że konto jest aktywne"
+                        setTimeout(
+                            function () {
+                                accountCreated();
+                            }, 5000);
+
+                    }
+
+
+                });
+
+            });
+        </script>
+
+    <?php endif; ?>
+
+
+<?php endif; ?>
+

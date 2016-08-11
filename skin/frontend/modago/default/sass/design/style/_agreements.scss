@@ -1,0 +1,124 @@
+#tos_agreement_container {
+	padding: 20px 20px 20px 18px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+#newsletter_agreement_container {
+	padding: 21px 15px 18px 17px;
+	margin-bottom: 18px;
+}
+#dotpay_agreement_container {
+	padding: 20px 20px 20px 18px;
+	margin-bottom: 15px;
+}
+
+.agreement-container {
+	border: 1px solid $color-gray2;
+	margin-right: 59px;
+	margin-left: 13px;
+	&.has-error {
+		border: 1px solid $validation-error;
+	}
+}
+
+.agreement-nocheck {
+	font-size: 12px;
+	padding: 20px 20px 20px 18px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	&.agreement-container {
+		margin-left: 0;
+		padding-left: 35px;
+	}
+}
+
+.agreement-nocheck-checkout {
+	font-size: 12px;
+	margin: 5px 0 18px;
+}
+
+.agreement-nocheck-registration {
+	font-size: 12px;
+	margin: 15px 0 15px;
+	@media(min-width: $screen-md-min) {
+		margin-left: 20px;
+	}
+}
+
+.agreement-btn {
+	text-decoration: underline !important;
+	cursor: pointer;
+}
+.agreement-more {
+	display: none;
+}
+.agreement-less-btn {
+	display: none;
+}
+
+.checkout_agreements, .checkout_agreements_mobile {
+	* {
+		font-size: 14px !important;
+	}
+	@media(max-width: $screen-sm-max) {
+		padding: 0;
+	}
+	form {
+		.form-group.form-checkbox{
+			margin-left: 0 !important;
+		}
+	}
+	.checkout_agreement_vendors {
+		padding-left: 20px;
+		background: $btnCheck;
+		@include sprite($btnCheck, checked);
+		background-repeat: no-repeat;
+		position: relative;
+		&:before {
+			content: '';
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(255,255,255,.6);
+		}
+		&:after {
+			content: '';
+			position: absolute;
+			height: 98%;
+			margin-top: 15px;
+			background-color: white;
+			width: 20px;
+			top: 0;
+			left: 0;
+		}
+	}
+	.tooltip {
+		left: 15px !important;
+		@media(max-width: $screen-md-max) {
+			left: 0 !important;
+		}
+	}
+}
+
+.checkout_agreements .dotpay_agreement_container {
+	text-align: right !important;
+	padding-right: 0 !important;
+	#dotpay_agreement-error {
+		text-align: right !important;
+	}
+	.dotpay_agreement-label {
+		white-space: nowrap;
+	}
+}
+
+#tos_agreement_container_registration {
+	margin-bottom: 13px !important;
+}
+
+#tos_agreement_container_registration, #newsletter_agreement_container_registration {
+	@media(min-width: $screen-md-min) {
+		margin-left: 20px;
+	}
+}

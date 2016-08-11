@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<layout>
+    <!--Sledzenie salda / Balance tracking-->
+    <udropship_statements_balance>
+        <update handle="udropship_vendor"/>
+        <update handle="bootstrap" />
+        <reference name="content">
+            <block name="statements_balance" type="ghstatements/dropship_balance" template="ghstatements/dropship/balance.phtml"/>
+        </reference>
+    </udropship_statements_balance>
+
+    <!--Rozliczenia okresowe / Periodic statements-->
+    <udropship_statements_periodic>
+        <update handle="udropship_vendor"/>
+        <update handle="bootstrap" />
+        <reference name="content">
+            <block name="statements_periodic" type="ghstatements/dropship_periodic" template="ghstatements/dropship/periodic.phtml"/>
+        </reference>
+    </udropship_statements_periodic>
+
+    <!--Faktury / Invoices-->
+    <udropship_statements_invoices>
+        <update handle="udropship_vendor"/>
+        <update handle="bootstrap" />
+        <reference name="content">
+            <block name="statements_invoice" type="ghstatements/dropship_invoice" template="ghstatements/dropship/invoices.phtml"/>
+        </reference>
+    </udropship_statements_invoices>
+
+</layout>

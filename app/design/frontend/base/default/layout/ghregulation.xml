@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<layout>
+    <udropship_vendor_accept>
+        <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+        <update handle="noty"/>
+
+        <remove name="sidebar"/>
+
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>../../../frontend/default/udropship/js/plugins/fileinput/fileinput.js</name>
+            </action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_reg.phtml</template></action>
+            <action method="setData">
+                <name>disable_swich_locale</name>
+                <value>1</value>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="ghregulation/dropship_regulation_accept"
+                   template="ghregulation/dropship/regulation/accept.phtml"
+                   name="ghregulation_dropship_regulation_accept"/>
+        </reference>
+    </udropship_vendor_accept>
+
+    <udropship_vendor_regulationexpired>
+        <update handle="udropship_vendor"/>
+        <update handle="bootstrap"/>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate">
+                <template>unirgy/dropship/vendor/header_reg.phtml</template>
+            </action>
+            <action method="setData">
+                <name>disable_swich_locale</name>
+                <value>1</value>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="ghregulation/dropship_regulation_accept"
+                   template="ghregulation/dropship/regulation/expired.phtml"
+                   name="ghregulation_dropship_regulation_regulationexpired"/>
+        </reference>
+    </udropship_vendor_regulationexpired>
+
+    <udropship_vendor_regulationaccepted>
+        <update handle="udropship_vendor"/>
+        <update handle="bootstrap"/>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate">
+                <template>unirgy/dropship/vendor/header_reg.phtml</template>
+            </action>
+            <action method="setData">
+                <name>disable_swich_locale</name>
+                <value>1</value>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="ghregulation/dropship_regulation_accept"
+                   template="ghregulation/dropship/regulation/accepted.phtml"
+                   name="ghregulation_dropship_regulation_regulationaccepted"/>
+        </reference>
+    </udropship_vendor_regulationaccepted>
+    <udropship_vendor_rules>
+        <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <reference name="content">
+            <block type="ghregulation/dropship_rules" template="ghregulation/dropship/rules.phtml"/>
+        </reference>
+    </udropship_vendor_rules>
+</layout>

@@ -8,6 +8,15 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
     }
 
 
+    
+    /**
+     * override (need only val)
+     */
+
+    public function getAllItems() {
+         return Mage_Core_Block_Template::getAllItems();
+    }
+
     public function getParsedCategories() {
         return $this->getParentBlock()->parseCategoryPathFacet($this->getAllItems());
     }
@@ -23,48 +32,127 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
             return Mage::helper('catalog')->__('narrow results');//search mode
         }
     }
-    public function getFilterCollection($categoryId) {
-        if (!$this->hasData('all_filter_collection')) {
-            $list = $this->getAllItems();
-            if (is_array($list)) {
-                $items = array_pop($list);
-            } else {
-                $items = array();
-            }
-            $children = isset($items['children'])? $items['children']:array();
-            $categoryList = array();
-            foreach ($children as $child => $out) {
-                $tmp = $this->pathToArray($child);
-                if (isset($tmp[0]['id'])) {
-                    $categoryList[] = $tmp[0]['id'];
+    
+    /**
+     * preparing list of attributes used in filters
+     *
+     * @return array
+     */
+
+    protected function _getAttributeCodesForFilter() {
+        $lambda = function() {
+			$collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
+			/* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+			$collection->joinAttributeCode();
+			$result = array();
+			$catIds = array();
+			foreach ($collection as $item) {
+				$categoryId = $item->getCategoryId();
+				$catIds[] = $categoryId;
+				$result[$categoryId][] = $item->getAttributeCode();
+			}
+			// Fallback for related categories
+			/** @var Zolago_Catalog_Model_Category $category */
+			$category = Mage::getModel('catalog/category');
+			$catTree = $category->getTreeModel()->load();
+			/** @var Zolago_Catalog_Model_Resource_Category_Collection $collection */
+			$collection = $catTree->getCollection();
+            $collection->joinCategoryFilters();
+			$collection->addFieldToFilter('entity_id', array('nin'=> $catIds));
+			$diffCategories = $collection->getData();
+
+			$diffCatIds = array();
+			foreach ($diffCategories as $category) {
+				$diffCatIds[] = (int)$category['entity_id'];
+			}
+            unset($category);
+
+			/** @var Zolago_Catalog_Model_Resource_Category $res */
+			$res = Mage::getResourceModel("zolagocatalog/category");
+			$data = $res->getRelatedIds($diffCatIds, true);
+			foreach ($data as $categoryId => $relatedToId) {
+				if (isset($result[$relatedToId])) {
+					// Make copy for related category
+					$result[$categoryId] = $result[$relatedToId];
+				}
+			}
+
+            foreach ($diffCategories as $category) {
+                if ($category["use_flag_filter"] == 1) {
+                    $result[$category['entity_id']][] = "flags";
+                }
+                if ($category["use_price_filter"] == 1) {
+                    $result[$category['entity_id']][] = "price";
+                }
+                if ($category["use_review_filter"] == 1) {
+                    $result[$category['entity_id']][] = "product_rating";
                 }
             }
-            $collection = Mage::getResourceModel("zolagocatalog/category_filter_collection");
-            /* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
-            $collection->joinAttributeCode();
-            $collection->addCategoryFilter($categoryList);
-            $result = array();
-            foreach ($collection as $item) {
-                $result[$item->getCategoryId()][] = $item->getAttributeCode();
-            }
-            $this->setData('all_filter_collection',$result);
-        }
-        $result = $this->getData('all_filter_collection');        
-        return isset($result[$categoryId])? $result[$categoryId]:array();
+
+			ksort($result);
+            return serialize($result);
+        };
+        $out = Mage::helper('zolagocommon')->getCache('attribute_codes_for_filter',self::CACHE_GROUP,$lambda,array());
+        return unserialize($out);
     }
+    
+    /**
+     * returns list of attributes used in filters by category id
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    public function getFilterCollection($categoryId)
+    {
+        if (!$this->hasData('all_filter_collection')) {
+            $result = $this->_getAttributeCodesForFilter();
+            $this->setData('all_filter_collection', $result);
+        }
+        $result = $this->getData('all_filter_collection');
+		return isset($result[$categoryId])? $result[$categoryId]:array();
+    }
+    
+    
+    
+    /**
+     * return rewrite path to category by category id  (using cache)
+     *
+     * @param int $categoryId
+     * @return string
+     */
+
+    protected function _getPathById($categoryId) {
+        $lambda = function($params) {
+            return Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $params['categoryId'])->getRequestPath();
+        };
+        return Mage::helper('zolagocommon')->getCache('category_rewrite_'.$categoryId,self::CACHE_GROUP,$lambda,array('categoryId' => $categoryId));
+    }
+    
+    /**
+     * preparing category url 
+     *
+     * @param array $item
+     * @param array $param
+     * @return string
+     */
+
     public function getItemUrl($item,$param = array()) {
 
-        $array = $this->pathToArray($item);
-        $last = array_pop($array);
-        $categoty_id = $last['id'];
-        $category = Mage::getModel('catalog/category')->load($categoty_id);
+        if (!isset($param['categoryId'])) {
+            $array = $this->pathToArray($item);
+            $last = array_pop($array);
+            $category_id = $last['id'];
+        } else {
+            $category_id = $param['categoryId'];
+        }
 
         $params = $this->getRequest()->getParams();
         // keep only existing filters
-        $codeList = $this->getFilterCollection($categoty_id);
+        $codeList = $this->getFilterCollection($category_id);
+        $codeList = array_merge($codeList,array('campaign_info_id', 'campaign_regular_id'));
+
         if (isset($params['fq'])) {
             foreach ($params['fq'] as $key => $val) {
-                if (in_array($key,array('price','flags','product_rating'))) continue; // price is always
                 if (!in_array($key,$codeList)) {
                     unset($params['fq'][$key]);
                 }
@@ -76,58 +164,20 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         if($parentBlock->getMode() == Zolago_Solrsearch_Block_Faces::MODE_CATEGORY) {
             if(isset($params['id'])) unset($params['id']);
             $tmp = array(
-                       '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
+                       '_direct' => $this->_getPathById($category_id),
                        '_query' => $this->processFinalParams($params)
                    );
             $facetUrl = Mage::getUrl('',$tmp);
         }
         else
         {
-
-            $names = array();
-            $ids   = array();
-
-            $names[] = $last['name'];
-            $parent_category_id = $last['id'];
-            // $ids[] = $last['id'];
-            // $children_category_ids = $category->getResource()->getChildren($category, true);
-            // if($children_category_ids){
-//
-            // foreach($children_category_ids as $child_cat_id){
-//
-            // $ids[] = $child_cat_id;
-//
-            // }
-            // }
-            // // All category links need to have links to fresh categories
-            // // No appending to current params
-            // if(isset($params['fq']['category_id'])) unset($params['fq']['category_id']);
-            // if(isset($params['parent_cat_id'])) unset($params['parent_cat_id']);
-//
-            // //Remove scat parameter in order to display siblings in layered navigation
-            // if(isset($params['scat'])) unset($params['scat']);
-
             $facetUrl = $this->getFacesUrl(
-                            array('scat' => $parent_category_id)
+                            array('scat' => $category_id)
                         );
-
-            // if($this->isItemActive($item)){
-            // $facetUrl = $this->getRemoveFacesUrl("category", array($last['name']));
-            // }
-
-
-
-//            if(isset($params['id'])) unset($params['id']);
-//            $tmp = array(
-//                '_direct' => 'search/index/index/',
-//                '_query' => $this->processFinalParams($params)
-//            );
-//            $facetUrl = Mage::getUrl('',$tmp);
         }
-
         return $facetUrl;
     }
-
+/*  UNUSED
     public function isItemActive($item) {
         $filterQuery = $this->getFilterQuery();
         if(!isset($filterQuery["category_id"])) {
@@ -143,11 +193,11 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
         }
         return false;
     }
-
+*/
     public function getItemText($item) {
-        $array = $this->pathToArray($item);
-        $last = array_pop($array);
-        return $last['name'];
+        $array = explode('/', $item);
+        $count = count($array);
+        return $array[$count - 2];
     }
 
     public function pathToArray($path) {
@@ -168,28 +218,79 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
      * @return boolean
      */
 
-    public function getCanShowItem($item, $count) {
+    public function getCanShowItem($count) {
         return ($count > 0) ? true : false;
     }
 
-    // public function getCanShow() {
-    // if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
-    // $category = $this->getParentBlock()->getCurrentCategory();
-    // $all = $this->getAllItems();
-    // // One item with couurent cat
-    // if(count($all)==1){
-    // list($item, $count) = each($all);
-    // $array = $this->pathToArray($item);
-    // if($array){
-    // $last = array_pop($array);
-    // if(isset($last['id']) && $last['id']==$category->getId()){
-    // return false;
-    // }
-    // }
-    // }
-    // }
-//
-    // return parent::getCanShow();
-    // }
+    public function getCanShow() {
+        return true; // category always visible
+    }
 
+	/**
+	 * @param array $data
+	 * @param bool $show_brothers if true solr gets two queries (first about current category, second about brothers), if false is only one query
+	 * @return array
+	 */
+    public function processCategoryData($data,$show_brothers = true)
+    {   
+        $lambda = function($category) {             
+            /** @var Zolago_Catalog_Model_Category $modelCC */
+            $modelCC = Mage::getModel('catalog/category');
+            /** @var  Mage_Catalog_Model_Resource_Category_Tree $tree */
+            
+            $tree = $modelCC->getTreeModel()->load();
+            $categoryChildren = $tree->getChildren($category['categoryId'],false);
+            return serialize($categoryChildren);
+        };
+        // Specify root and parent categories
+        $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+        // Current category
+        $category = Mage::registry('current_category');
+
+        // Checking is root category
+        $isRootCategory = false;
+        if (!$category && !$category->getId()) {
+            $modelCC = Mage::getModel('catalog/category');
+            $category = $modelCC->load($rootCategoryId);
+            $isRootCategory = TRUE;
+        }
+        if ($category->getId() == $rootCategoryId) {
+            $isRootCategory = true;
+        }
+        
+        /*
+         * Convert $data to array( [category_id] => array(key, count)
+         * where key is like: Bielizna/10
+         * where count is int
+         */
+        $_data = array();
+        foreach ($data as $key => $val) {
+            $items = explode('/', $key);
+            $catId = (int)$items[count($items)-1];
+            $_data[$catId] = array('key' => $key, 'value' => $val);
+        }
+        $children = array();
+        $categoryId = $category->getId();
+        // get children using cache
+        $categoryChildren = unserialize(Mage::helper('zolagocommon')->getCache('category_children_'.$categoryId,self::CACHE_GROUP,$lambda,array('categoryId' => $categoryId)));
+        foreach ($categoryChildren as $id) {            
+            if (isset($_data[$id])) {                
+                $key = $_data[$id]['key'];
+                $children[$key] = array (
+                    'count' => $_data[$id]['value'],
+                    'url' => $this->getItemUrl($key,array('categoryId' => $id)),
+                    'text' => $this->getItemText($key),
+                );
+            } 
+        }
+		$chosen_key = $category->getName() . "/" . $category->getId();
+		return array(
+			'is_root_category' => $isRootCategory,
+			'total' => isset($_data[$category->getId()]) ? $_data[$category->getId()]['value'] : array_sum($children),
+			'children' => $children,
+			'params' => $this->getItemJson($chosen_key),
+			'text' => $this->getItemText($chosen_key),
+		);
+    }
+	
 }

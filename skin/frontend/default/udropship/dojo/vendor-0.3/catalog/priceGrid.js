@@ -26,13 +26,15 @@ define([
 	"vendor/catalog/priceGrid/popup/mass/price",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc",
-    "vendor/catalog/priceGrid/popup/campaign"
+    "vendor/catalog/priceGrid/popup/campaign",
+    "vendor/catalog/priceGrid/popup/mass/status",
+    "vendor/catalog/priceGrid/popup/mass/politics"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
 	Keyboard, editor, declare, domConstruct, on, query, Memory, 
 	Observable, put, Cache, JsonRest, Selection, selector, lang, 
 	request, ObserverFilter, filterRendererFacory, 
 	singlePriceUpdater, singleStockUpdater, 
-	massPriceUpdater, RowUpdater, misc, campaignUpdater){
+	massPriceUpdater, RowUpdater, misc, campaignUpdater, massStatusUpdater, massPoliticsUpdater){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -43,19 +45,19 @@ define([
 		converterPriceTypeOptions = sourceOptions.converter_price_type,
 		flagOptions = sourceOptions.product_flag,
 		statusOptions = sourceOptions.status,
+		descriptionStatusOptions = sourceOptions.description_status,
 		typeIdOptions = sourceOptions.type_id,
 		boolOptions = sourceOptions.bool;
-		
-	
+
 	var states = {
 		loaded: {},
 		changed: {},
 		orig: {}
-	}
+	};
 	
 	var priceEditPriceMeta = function(object,value){
 		return !object.campaign_regular_id;
-	}
+	};
 	
 	
 	
@@ -81,36 +83,63 @@ define([
 			
 	var switcher = query("#store-switcher")[0];
 	var priceChanger = query("#change-prices")[0];
-	
+    var massEnableProductChanger  = query("#mass-enable-products")[0];
+    var massInvalidProductChanger = query("#mass-invalid-products")[0];
+    var politicsChanger =query("#mass-change-politics")[0];
 
-			
-	 storeRest = new JsonRest({
-		target:"/udprod/vendor_price/rest",
-		idProperty: "entity_id",
-		query: function(query, options){
-			if(switcher){
-				query['store_id'] = switcher.value;
-			}
-			//updater.setCanProcess(false);
-			
-			
-			var ret = JsonRest.prototype.query.call(this, query, options);
-			
-			//ret.then(function(){updater.setCanProcess(true);})
-			
-			return ret;
-		},
+
+    storeRest = new JsonRest({
+        target: "/udprod/vendor_price/rest",
+        idProperty: "entity_id",
+        // Overwrite querying for:
+        // - filtering by selected store
+        // - getting total numbers of products
+        query: function (query, options) {
+            // Filtering by selected store
+            if (switcher) {
+                query['store_id'] = switcher.value;
+            }
+            // Getting total numbers of products
+            var ret = JsonRest.prototype.query.call(this, query, options);
+            ret.total.then(function (res) {
+                jQuery(".grid-total-number").html(parseInt(res));
+            });
+            return ret;
+        },
 		
 		put: function(obj){
 			obj.changed = states.changed[obj.entity_id];
 			var def = JsonRest.prototype.put.apply(this, arguments);
-			def.then(function(){
-				obj.changed = states.changed[obj.entity_id] = [];
-			}, function(evt){
-				obj.changed = states.changed[obj.entity_id] = [];
+			def.then(function(data){
+                obj.changed = states.changed[obj.entity_id] = [];
+                if (data['message']) {
+                    var notyObj = {};
+                    if (data['message']['text']) {
+                        notyObj.text = data['message']['text'];
+                        data['message']['text'] = undefined;// Show msg only once
+                    }
+                    if (data['message']['type']) {
+                        notyObj.type = data['message']['type'];
+                        data['message']['type'] = undefined;
+                    } else {
+                        notyObj.type = 'warning';// Default
+                    }
+                    if (data['message']['timeout']) {
+                        notyObj.timeout = data['message']['timeout'];
+                        data['message']['timeout'] = undefined;
+                    }
+                    if (notyObj.text) { // Show msg only once
+	                    jQuery('#noty_top_layout_container').remove();
+                        noty(notyObj);
+                    }
+                }
+                // Fix for correct updating "changed" select in row for cell status
+                var row = grid.row(data['entity_id']);
+				jQuery(row.element).remove();
+            }, function(evt){
+                obj.changed = states.changed[obj.entity_id] = [];
 
 				var id = obj.entity_id;
-						
 				if(states.orig[id]){
 					if (grid.dirty.hasOwnProperty(id)) {
 						delete grid.dirty[id]; // delete dirty data
@@ -124,7 +153,7 @@ define([
 					   }
 					});
 				}
-				
+
 				alert(evt.response.data)
 			});
 			return def;
@@ -138,20 +167,23 @@ define([
 	
 	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
 
-	grid = new PriceGrid({
+	window.priceGrid = grid = new PriceGrid({
 		columns: {
 			selector: selector({ 
-				label: ''
+				label: '',
+                title: Translator.translate("Selection"),
+                className: "header"
 			}),
 			expander: {
 				label: '',
+                title: Translator.translate("Unwrapping"),
 				get: lang.hitch(updater, updater.cellRender),
 				sortable: false,
-				className: 'expander',
+				className: 'expander header',
 				renderHeaderCell: function(node){
 					on(node, "click", function(){
 						updater.toggleExpandAll();
-					})
+					});
 					
 					node.innerHTML = updater.getExpandSign();
 					node.style.cursor = "pointer";
@@ -163,32 +195,33 @@ define([
 			name: {
 				label: Translator.translate("Name"),
 				field: "name",
+                className: "header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("text", "name"),
 						sortable: false, 
 						field: "name",
-						className: "filterable",
+						className: "filterable"
 					}
 				]
 			},
 			skuv: {
 				label: Translator.translate("SKU"),
 				field: "skuv",			
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("text", "skuv"),
 						sortable: false, 
 						field: "skuv",
-						className: "filterable column-medium",
+						className: "filterable column-medium"
 					}
 				]
 			},
 			price: {
 				label: Translator.translate("Price"),
 				field: "display_price",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "display_price"),
@@ -208,7 +241,7 @@ define([
 			campaign_regular_id: {
 				label: Translator.translate("Price type"),
 				field: "campaign_regular_id",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "campaign_regular_id", {options: campainRegularIdOptions}),
@@ -229,10 +262,9 @@ define([
 			price_margin: {
 				label: Translator.translate("Margin"),
 				field: "price_margin",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
-						className: "filterable align-right column-medium",
 						renderHeaderCell: filterRendererFacory("range", "price_margin"),
 						sortable: false, 
 						field: "price_margin",
@@ -248,14 +280,14 @@ define([
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
 						},
-						className: "filterable align-right column-medium signle-price-edit popup-trigger",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger"
 					}
 				]
 			},
 			converter_price_type: {
 				label: Translator.translate("Price source"),
 				field: "converter_price_type",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
@@ -282,7 +314,7 @@ define([
 			msrp: {
 				label: Translator.translate("Msrp"),
 				field: "msrp",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
@@ -307,7 +339,7 @@ define([
 			converter_msrp_type: {
 				label: Translator.translate("MSRP Source"),
 				field: "converter_msrp_type",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "converter_msrp_type", {options: converterMsrpTypeOptions}),
@@ -334,7 +366,7 @@ define([
 			is_new: editor({
 				label: Translator.translate("New"),
 				field: "is_new",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					editor({
 						editor: "select",
@@ -359,7 +391,7 @@ define([
 			is_bestseller: {
 				label: Translator.translate("Best"),
 				field: "is_bestseller",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					editor({
 						editor: "select",
@@ -384,9 +416,13 @@ define([
 			product_flag: {
 				label: Translator.translate("Flag"),
 				field: "product_flag",
-				className: "column-short",
+				className: "column-short header",
 				children: [
-					{
+					editor({
+						editor: "select",
+						editorArgs: {options: flagOptions, required: false},
+						editOn: "dblclick",
+						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
 						sortable: false, 
 						field: "product_flag",
@@ -399,13 +435,13 @@ define([
 							}
 							return "";
 						}
-					}
+					})
 				]
 			},
 			is_in_stock: {
 				label: Translator.translate("In stock"),
 				field: "is_in_stock",
-				className: "column-short",
+				className: "column-short header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "is_in_stock", {options: boolOptions}),
@@ -426,7 +462,7 @@ define([
 			variant_qty: {
 				label: Translator.translate("Variants"),
 				field: "available_child_count",
-				className: "column-center",
+				className: "column-center header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "available_child_count"),
@@ -438,14 +474,14 @@ define([
 								return item.available_child_count + "/" + item.all_child_count;
 							}
 							return "";
-						},
+						}
 					}
 				]
 			},
 			stock_qty: {
 				label: Translator.translate("Stock Qty"),
 				field: "stock_qty",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
@@ -456,10 +492,35 @@ define([
 					}
 				]
 			},
+			politics: {
+				label: Translator.translate("Manual out-of-stock"), 
+				field: "politics",
+				className: "column-medium header",
+				children: [
+					editor({
+						editor: "select",
+						editorArgs: {options: boolOptions, required: true},
+						editOn: "dblclick",
+						autoSave: true,
+						renderHeaderCell: filterRendererFacory("select", "politics", {options: boolOptions}),
+						sortable: false,
+						field: "politics",
+						className: "filterable align-center column-short text-overflow",
+						formatter: function(value, item){
+							for(var i=0; i<boolOptions.length; i++){
+								if(boolOptions[i].value+'' == value+''){
+									return boolOptions[i].label;
+								}
+							}
+							return "";
+						}
+					})
+				]
+			},
 			status: { 
 				label: "Status", 
 				field: "status",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					editor({
 						editor: "select",
@@ -481,10 +542,31 @@ define([
 					})
 				]
 			},
+            description_status: {
+                label: Translator.translate("Description status"),
+                field: "description_status",
+                className: "column-medium header",
+                children: [
+                    {
+                        renderHeaderCell: filterRendererFacory("select", "description_status", {options: descriptionStatusOptions}),
+                        sortable: false,
+                        field: "description_status",
+                        className: "filterable column-medium align-center text-overflow",
+                        formatter: function(value, item){
+                            for(var i=0; i<descriptionStatusOptions.length; i++){
+                                if(descriptionStatusOptions[i].value+'' == value+''){
+                                    return descriptionStatusOptions[i].label;
+                                }
+                            }
+                            return "";
+                        }
+                    }
+                ]
+            },
 			type_id: { 
 				label: Translator.translate("Type"), 
 				field: "type_id",
-				className: "column-medium",
+				className: "column-medium header",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("select", "type_id", {options: typeIdOptions}),
@@ -540,7 +622,11 @@ define([
 		getBeforePut: false,
 		sort: "entity_id"
 	}, "grid-holder");
-	
+
+    var updateMassButton = function(){
+        jQuery("#massActions").prop( "disabled", !grid.getSelectedIds().length);
+    };
+
 	var updateSelectionButtons = function(){
 		var disabled = true;
 		for(var k in grid.selection){
@@ -549,13 +635,13 @@ define([
 			}
 		}
 		jQuery(priceChanger).prop("disabled", disabled);
-	}
+	};
 	
 	// Store switcher 
 	on(switcher, "change", function(){
 		updater.setStoreId(this.value);
 		grid.refresh();
-	})
+	});
 	
 	// Price changer 
 	on(priceChanger, "click", function(){
@@ -569,18 +655,77 @@ define([
 		
 		massPriceUpdater.handleClick({
 			"global":	global ? 1 : 0,
-			"query":	global ? query : {},
+			"query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
 			"selected": selected.join(","),
 			"store_id": switcher.value
 		});
 	});
+
+    // Status changer for mass enable products
+    on(massEnableProductChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massStatusUpdater.handleClick({
+            "global"   : global ? 1 : 0,
+            "query"    : global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected" : selected.join(","),
+            "store_id" : switcher.value,
+            "status"   : "enable"
+        });
+    });
+    // Status changer for mass invalid products
+    on(massInvalidProductChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massStatusUpdater.handleClick({
+            "global"   : global ? 1 : 0,
+            "query"    : global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected" : selected.join(","),
+            "store_id" : switcher.value,
+            "status"   : "invalid"
+        });
+    });
+    // Politics changer
+    on(politicsChanger, "click", function() {
+        var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+        var query = grid.get("query");
+        var selected = [];
+
+        if(!global){
+            selected = grid.getSelectedIds();
+        }
+
+        massPoliticsUpdater.handleClick({
+            "global":	global ? 1 : 0,
+            "query":	global ? misc.prepareQuery(query) : misc.prepareQuery({}),
+            "selected": selected.join(","),
+            "store_id": switcher.value
+        });
+    });
 	
 	// listen for selection
 	on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
-	
+	on.pausable(grid.domNode, "dgrid-select", updateMassButton);
+
 	// listen for selection
 	on.pausable(grid.domNode, "dgrid-deselect", updateSelectionButtons);
-	
+	on.pausable(grid.domNode, "dgrid-deselect", updateMassButton);
+
+    // listen for refresh if selected
+    on.pausable(grid.domNode, "dgrid-refresh-complete", updateMassButton);
+
 	// listen for clicks to trigger expand/collapse in table view mode
 	on.pausable(grid.domNode, ".dgrid-row td.expander :click", function(evt){
 		updater.toggle(grid.row(evt));		
@@ -618,14 +763,20 @@ define([
 		
 	});
 	
-	
+
 	// Connect objects
-	updater.setGrid(grid);
+	updater.setGrid	(grid);
 	updater.setStoreId(switcher.value);
 	
 	massPriceUpdater.setGrid(grid);
 	massPriceUpdater.setStoreId(switcher.value);
+
+    massStatusUpdater.setGrid(grid);
+    massStatusUpdater.setStoreId(switcher.value);
 	
+	massPoliticsUpdater.setGrid(grid);
+	massPoliticsUpdater.setStoreId(switcher.value);
+
 	singlePriceUpdater.setGrid(grid);
 	singlePriceUpdater.setStoreId(switcher.value);
 	
@@ -637,8 +788,24 @@ define([
 
 	
 	updateSelectionButtons();
-	
+	updateMassButton();
+
+    jQuery.map(window.priceGrid.columns, function (elem, i) {
+        if (elem.field) {
+            var title = elem.title ? elem.title : elem.label;
+            jQuery(".header.field-" + elem.field).attr("title", title).attr("data-tooltip-header", "true");
+        }
+    });
+    jQuery("[data-tooltip-header=true]").tooltip({
+        container: "body",
+        animation: false,
+        placement: "top",
+        trigger: "hover",
+        delay: {"show": 0, "hide": 0}
+    });
+
 	return grid; 
-	
+
+
 	
 });

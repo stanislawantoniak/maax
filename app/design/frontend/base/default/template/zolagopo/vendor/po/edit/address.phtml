@@ -1,7 +1,10 @@
 <?php $_hlp = Mage::helper("zolagopo");?>
 <?php $_po = $this->getPo(); ?>
 <?php $_address = $this->getAddress(); ?>
-<?php $_type = $this->getType();?>
+<?php $_type = $this->getType();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
 <!-- Modal <?php echo $_type;?> address -->
 <div class="modal fade" id="edit<?php echo ucfirst($this->getType());?>AddressModal">
 	<div class="modal-dialog">
@@ -107,13 +110,13 @@
 			</div>
 			<div class="modal-footer">
 				<?php /*if(!$this->isSameAsOrigin($_type)):?>
-					<button type="submit" name="restore" value="1" class="pull-left btn btn-loading" data-loading-text="<?php echo $_hlp->__("Loading...");?>">
+					<button type="submit" name="restore" value="1" class="pull-left btn btn-loading" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>">
 						<i class="icon-refresh"></i>
 						<?php echo $_hlp->__('Restore original')?>
 					</button>
 				<?php endif; */?>
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Save address");?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+				<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Save address");?></button>
 			</div>
 		</div>
 		</form>
@@ -149,6 +152,9 @@
 				"lastname": {
 					required: true
 				},
+				"telephone": {
+					"validate-telephone": true
+				},
 				"street": {
 					required: true
 				},
@@ -172,7 +178,8 @@
 			        required: true
 		        },
 		        "telephone": {
-			        required: true
+			        required: true,
+			        "validate-telephone": true
 		        },
 		        "street": {
 			        required: true

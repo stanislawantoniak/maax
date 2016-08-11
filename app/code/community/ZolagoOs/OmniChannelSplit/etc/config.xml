@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+/**
+  
+ */
+
+-->
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelSplit>
+            <version>2.1.10</version>
+            <usimpleup remote="http://download.unirgy.com/simple/client_api/version/"
+                changelog="http://unirgy.com/support/portal/announcements"
+                uninstall="udsplit/observer::usimpleup_uninstall"/>
+        </ZolagoOs_OmniChannelSplit>
+    </modules>
+
+    <global>
+        <models>
+            <udsplit>
+                <class>ZolagoOs_OmniChannelSplit_Model</class>
+            </udsplit>
+            <sales>
+                <rewrite>
+                    <quote_address>ZolagoOs_OmniChannelSplit_Model_Quote_Address</quote_address>
+                    <quote_address_rate>ZolagoOs_OmniChannelSplit_Model_Quote_Rate</quote_address_rate>
+                </rewrite>
+            </sales>
+        </models>
+
+        <helpers>
+            <udsplit>
+                <class>ZolagoOs_OmniChannelSplit_Helper</class>
+            </udsplit>
+        </helpers>
+
+        <blocks>
+            <udsplit>
+                <class>ZolagoOs_OmniChannelSplit_Block</class>
+            </udsplit>
+            <checkout>
+                <rewrite>
+                    <cart>ZolagoOs_OmniChannelSplit_Block_Cart</cart>
+                    <cart_shipping>ZolagoOs_OmniChannelSplit_Block_Cart_Shipping</cart_shipping>
+                    <onepage_shipping_method_available>ZolagoOs_OmniChannelSplit_Block_Onepage_Shipping</onepage_shipping_method_available>
+                    <onepage_review_info>ZolagoOs_OmniChannelSplit_Block_Onepage_Review</onepage_review_info>
+                    <multishipping_shipping>ZolagoOs_OmniChannelSplit_Block_Multishipping_Shipping</multishipping_shipping>
+                    <multishipping_overview>ZolagoOs_OmniChannelSplit_Block_Multishipping_Overview</multishipping_overview>
+                </rewrite>
+            </checkout>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_create_shipping_method_form>ZolagoOs_OmniChannelSplit_Block_Adminhtml_Order_ShippingMethod</sales_order_create_shipping_method_form>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+
+        <resources>
+            <udsplit_setup>
+                <setup>
+                    <module>ZolagoOs_OmniChannelSplit</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </udsplit_setup>
+            <udsplit_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </udsplit_write>
+            <udsplit_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </udsplit_read>
+        </resources>
+
+        <udropship>
+            <vendor>
+                <fields>
+                    <default_shipping_method_pattern>
+                        <label>Default Shipping Method Pattern</label>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>100</position>
+                        <default>ground</default>
+                    </default_shipping_method_pattern>
+                </fields>
+            </vendor>
+        </udropship>
+
+    </global>
+
+    <frontend>
+<!--
+        <routers>
+            <udsplit>
+                <use>standard</use>
+                <args>
+                    <module>ZolagoOs_OmniChannelSplit</module>
+                    <frontName>udsplit</frontName>
+                </args>
+            </udsplit>
+        </routers>
+        <layout>
+            <updates>
+                <udsplit>
+                    <file>udsplit.xml</file>
+                </udsplit>
+            </updates>
+        </layout>
+-->
+        <events>
+            <checkout_cart_update_items_after>
+                <observers>
+                    <udsplit>
+                        <type>singleton</type>
+                        <class>udsplit/observer</class>
+                        <method>checkout_cart_update_items_after</method>
+                    </udsplit>
+                </observers>
+            </checkout_cart_update_items_after>
+            <checkout_controller_multishipping_shipping_post>
+                <observers>
+                    <udsplit>
+                        <type>singleton</type>
+                        <class>udsplit/observer</class>
+                        <method>checkout_controller_multishipping_shipping_post</method>
+                    </udsplit>
+                </observers>
+            </checkout_controller_multishipping_shipping_post>
+        </events>
+    </frontend>
+
+    <adminhtml>
+<!--
+        <layout>
+            <updates>
+                <udsplit>
+                    <file>udsplit.xml</file>
+                </udsplit>
+            </updates>
+        </layout>
+-->
+        <events>
+            <controller_action_layout_render_before_adminhtml_sales_order_create_index>
+                <observers>
+                    <udsplit>
+                        <type>singleton</type>
+                        <class>udsplit/observer</class>
+                        <method>controller_action_layout_render_before_adminhtml_sales_order_create_index</method>
+                    </udsplit>
+                </observers>
+            </controller_action_layout_render_before_adminhtml_sales_order_create_index>
+
+            <controller_action_layout_render_before_udropshipadmin_adminhtml_vendor_index>
+                <observers><udsplit><type>singleton</type><class>udsplit/observer</class><method>adminhtml_version</method></udsplit></observers>
+            </controller_action_layout_render_before_udropshipadmin_adminhtml_vendor_index>
+        </events>
+    </adminhtml>
+
+    <default>
+        <carriers>
+            <udsplit>
+                <active>0</active>
+                <model>ZolagoOs_OmniChannelSplit_Model_Carrier</model>
+                <title>ZolagoOs Shipping (Split)</title>
+                <handling_type>F</handling_type>
+                <free_method>total</free_method>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <hide_vendor_name>0</hide_vendor_name>
+                <sm_hide_amounts>0</sm_hide_amounts>
+                <extco_check>1</extco_check>
+                <extco_dispatch_events>0</extco_dispatch_events>
+            </udsplit>
+        </carriers>
+    </default>
+</config>

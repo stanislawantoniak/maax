@@ -54,7 +54,7 @@
 	}
 }
 
-.sidebar-secound {
+.sidebar-second {
 	.p {
 		h2 {
 			font-size: 18px;
@@ -138,7 +138,7 @@
 	}
 }
 .my-account .data-table .products{
-	@media (max-width: $screen-xs-max){
+	@media (max-width: $screen-sm-max){
 		display:none;
 	}
 }

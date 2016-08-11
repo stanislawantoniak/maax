@@ -21,7 +21,7 @@ define([
 						</div>\
 						<div class="modal-footer">\
 						  <button type="button" class="btn btn-default" data-dismiss="modal">' + Translator.translate('Close')  + '</button>\
-						  <button type="button submit" class="btn btn-primary" data-loading-text="' + Translator.translate("Loading...") + '">' + Translator.translate('Save changes') + '</button>\
+						  <button type="button submit" class="btn btn-primary" data-loading-text="' + Translator.translate("Processing...") + '">' + Translator.translate('Save changes') + '</button>\
 						</div>\
 					  </div>\
 					</div>\
@@ -104,19 +104,23 @@ define([
 			// Restore selection
 			if(response.global){
 				grid.selectAll();
-			}else{
+			} else if(typeof response.changed_ids != 'undefined'){
 				response.changed_ids.forEach(function(id){
 					grid.select(id);
 				});
+			} else {
+				alert(Translator.translate('Server error occured. Close this window to reload page.'));
+				window.location.reload(true); //force no cache
 			}
 			
 			grid._updateHeaderCheckboxes();
 		},
 		_saveError: function(response){
+			var responseExists = typeof response.responseJSON != 'undefined';
 			var modal=jQuery('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">\
 			<div class="modal-dialog"><div class="modal-content"><div class="modal-body">' 
-			+ response.responseJSON + 
-			'</div><div class="modal-footer"><button class="btn btn-default" data-dismiss="modal">'+Translator.translate('Close')+'</button></div></div></div></div>');
+			+ (responseExists ? response.responseJSON : Translator.translate('Server error occured. Close this window to reload page.')) +
+			'</div><div class="modal-footer"><button class="btn btn-default" data-dismiss="modal"' + (!responseExists ? 'onclick="window.location.reload();"' : '') + '>'+Translator.translate('Close')+'</button></div></div></div></div>');
 			modal.modal('show');
 			modal.show();
 		},

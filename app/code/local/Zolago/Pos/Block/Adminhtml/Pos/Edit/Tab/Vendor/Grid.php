@@ -20,7 +20,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
     }
     
     /**
-     * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
+     * @return ZolagoOs_OmniChannel_Model_Mysql4_Vendor_Collection
      */
     protected function _getCollection() {
         $collection = Mage::getResourceModel('udropship/vendor_collection');

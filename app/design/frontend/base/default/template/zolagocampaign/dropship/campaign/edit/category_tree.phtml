@@ -1,0 +1,23 @@
+<?php /* @var $this Zolago_Campaign_Varien_Data_Form_Element_Categorytree  */ ?>
+
+<?php $_helper = Mage::helper("zolagocampaign");?>
+
+<?php $secureBaseUrl = Mage::getUrl('',array('_secure'=>true)); ?>
+
+
+<link rel="stylesheet" type="text/css" href="<?php echo $secureBaseUrl; ?>js/jstree/css/style.css"/>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jstree/jstree.js"></script>
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/jstree/jstree.checkbox.js"></script>
+
+
+<input id="<?php echo $this->getFieldName(); ?>" name="<?php echo $this->getFieldName(); ?>"
+       value="<?php echo $this->getFieldValue(); ?>" class="form-control col-md-2" style="width: 152px;" type="text">
+<label style="margin: 8px; cursor: pointer;">
+    <span data-toggle="modal" data-target="#browseCategory" title="<?php echo $_helper->__("Select Category");?>">
+        <i class="icon-edit"></i>&nbsp;
+    </span>
+</label>
+
+<?php echo $this->getAfterElementHtml(); ?>
+
+<script type="application/javascript" src="<?php echo $secureBaseUrl; ?>js/gh/campaign/category_tree.js"></script>

@@ -10,17 +10,25 @@
       <zolagosales>
         <class>Zolago_Sales_Block</class>
       </zolagosales>
+      <sales>
+          <rewrite>
+              <adminhtml_customer_edit_tab_recurring_profile>Zolago_Sales_Block_Adminhtml_Customer_Edit_Tab_Recurring_Profile</adminhtml_customer_edit_tab_recurring_profile>
+              <adminhtml_customer_edit_tab_agreement>Zolago_Sales_Block_Adminhtml_Customer_Edit_Tab_Agreement</adminhtml_customer_edit_tab_agreement>              
+          </rewrite>
+      </sales>
     </blocks>
     <models>
       <sales>
-        <rewrite>
-          <quote>Zolago_Sales_Model_Quote</quote>
-          <order_config>Zolago_Sales_Model_Order_Config</order_config>
-          <observer>Zolago_Sales_Model_Observer</observer>
-          <order>Zolago_Sales_Model_Order</order>
-            <order_address>Zolago_Sales_Model_Order_Address</order_address>
-            <quote_address>Zolago_Sales_Model_Quote_Address</quote_address>
-        </rewrite>
+          <rewrite>
+              <quote>Zolago_Sales_Model_Quote</quote>
+              <order_config>Zolago_Sales_Model_Order_Config</order_config>
+              <observer>Zolago_Sales_Model_Observer</observer>
+              <order>Zolago_Sales_Model_Order</order>
+              <order_address>Zolago_Sales_Model_Order_Address</order_address>
+              <quote_address>Zolago_Sales_Model_Quote_Address</quote_address>
+              <service_quote>Zolago_Sales_Model_Service_Quote</service_quote>
+              <order_payment_transaction>Zolago_Sales_Model_Order_Payment_Transaction</order_payment_transaction>
+          </rewrite>
       </sales>
     </models>
     <helpers>
@@ -35,6 +43,7 @@
                     <campaign_regular_id/>
                     <campaign_strikeout_price_type/>
                     <msrp/>
+                    <product_flag/>
                 </product_attributes>
             </item>
         </quote>
@@ -64,7 +73,7 @@
       <sales>
         <args>
           <modules>
-            <Zolago_Sales before="Unirgy_Rma">Zolago_Sales</Zolago_Sales>
+            <Zolago_Sales before="ZolagoOs_Rma">Zolago_Sales</Zolago_Sales>
           </modules>
         </args>
       </sales>

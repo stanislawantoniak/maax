@@ -53,8 +53,18 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		return $this->_reindexMappers();
 		
     }
+
 	/**
-	 * @param mixed $params
+	 * Assign products to catalog category
+	 * Remove old outdated
+	 * Insert to new one
+	 * Return true if no errors with mappers
+	 * Return false if any problems with mappers
+	 * errors messages saved in registry -> zolago_mapper_error
+	 *
+	 * @param null $productsIds
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function assignWithCatalog($productsIds=null) {
 		$filter = $productsIds ? array("product_id"=>$productsIds) : null;
@@ -88,7 +98,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 			
 			
 			if(!empty($toDelete)){
-				$this->getReadConnection()->delete(
+   				Mage::getSingleton('core/resource')->getConnection('core_write')->delete(
 					$this->getTable('catalog/category_product'),
 						$this->getReadConnection()->quoteInto("product_id=?", $productId) .
 						" AND ".
@@ -99,7 +109,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
                 }
 			}
 			foreach($toInsert as $insertId){
-				$this->getReadConnection()->insert(
+				Mage::getSingleton('core/resource')->getConnection('core_write')->insert(
 					$this->getTable('catalog/category_product'),
 					array("product_id"=>$productId, "category_id"=>$insertId, "position"=>1)
 				);
@@ -138,31 +148,37 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 //		// Process normal indexer
 //		Mage::getResourceSingleton("catalog/category_indexer_product")
 //			->catalogProductMassAction($event);
-		
-		Mage::dispatchEvent("zolago_mapper_after_assign_products", array(
-			"product_ids" => $affectedProductIds
-		));
 
+		if (!empty($categoryList)) {
+			Mage::dispatchEvent("zolago_mapper_after_assign_products", array(
+				"product_ids" => $affectedProductIds
+			));
+		}
+		if (Mage::registry('zolago_mapper_error')) {
+			// There was some error
+			return false;
+		}
 		return true;
 		
 	}
 	
 	
-    /**
-     * @param array $mappers set of mappers 
-     */
+	/**
+	 * @param array $mapper set of mappers
+	 * @return array
+	 */
     public function getAssignedProducts($mapper) {
     	if (!is_array($mapper) && !empty($mapper)) {
     		$mapper = array($mapper);
     	}
     	$adapter = $this->getReadConnection();
-    	$select = $adapter->select()
-						  ->distinct()
-						  ->from(
-						  	$this->getTable('zolagomapper/index'),
-				    		array('product_id')
-						  )
-						  ->where('mapper_id in (?)',implode(',',$mapper));
+		$select = $adapter->select()
+			->distinct()
+			->from(
+				$this->getTable('zolagomapper/index'),
+				array('product_id'))
+			->where($adapter->quoteInto('mapper_id ' . (is_scalar($mapper) ? " = ?" : "IN (?)"), $mapper));
+
 		$out = array();
 		foreach ($adapter->fetchAssoc($select) as $item) {
 			$out[$item['product_id']] = $item['product_id'];
@@ -427,7 +443,11 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		}
 		return $out;
 	}
-	
+
+	/**
+	 * @param null $params
+	 * @return bool
+	 */
 	protected function _clearIndex($params = null) {
 		if(is_array($params)){
 			$conds = array();

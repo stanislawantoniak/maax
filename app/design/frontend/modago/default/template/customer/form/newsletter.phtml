@@ -1,8 +1,10 @@
-<?php /** @var Mage_Customer_Block_Newsletter $this */ ?>
+<?php /** @var Mage_Customer_Block_Newsletter $this */
+$_helper = Mage::helper("customer");
+$baseUrl = Mage::helper("core/url")->getHomeUrl();
 
-<?php $_helper = Mage::helper("customer"); ?>
-<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
-
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+?>
 <div class="page-title box-wrapper">
 	<h1>
 		<span><?php echo $this->__('Notification settings') ?></span>
@@ -27,7 +29,7 @@
 							       class="css-label css-label-bold">
 							</label>
 							<div class="pseudo-label label-bold">
-								<label for="subscription"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
+								<label for="subscription"><?php echo $modagoHelper->getAgreementHtml('newsletter'); ?></label>
 							</div>
 						</div>
 					</div>
@@ -53,7 +55,7 @@
 							</label>
 
 							<div class="pseudo-label label-bold">
-								<?php /*echo Mage::getStoreConfig('customer/agreements/sms'); */?>
+								<?php /*echo $modagoHelper->getAgreementHtml('sms'); */?>
 							</div>
 						</div>
 					</div>

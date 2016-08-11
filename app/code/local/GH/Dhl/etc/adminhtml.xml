@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <translate>
+        <modules>
+            <GH_Dhl>
+                <files>
+                    <default>GH_Dhl.csv</default>
+                </files>
+            </GH_Dhl>
+        </modules>
+    </translate>
+    <menu>
+        <vendors>
+            <children>
+                <vendor_general_config>
+                    <children>
+                        <ghdhl>
+                            <title>GH Dhl Accounts</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/dhl/index</action>
+                        </ghdhl>
+                    </children>
+                </vendor_general_config>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <vendor_general_config>
+                                <children>
+                                    <ghdhl>
+                                        <title>GH Dhl Accounts</title>
+                                        <sort_order>30</sort_order>
+                                    </ghdhl>
+                                </children>
+                            </vendor_general_config>
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

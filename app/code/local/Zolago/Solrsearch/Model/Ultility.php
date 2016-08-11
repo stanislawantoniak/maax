@@ -20,7 +20,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	 * @var array
 	 */
 	protected $_configurableChildIdsFlat;
-	
+    
 	/**
 	 * @var Mage_Catalog_Model_Resource_Product_Attribute_Collection
 	 */
@@ -28,14 +28,12 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 
 	static protected $_logTime = 0;
 	static protected $_logProd = 0;
-	
-	/**
-	 * Get product collection by store id
-	 * @param int $store_id
-	 * @param int $page
-	 * @param int $itemsPerPage
-	 * @return Mage_Catalog_Model_Resource_Product_Collection
-	 */
+
+    /**
+     * Get product collection by store id
+     * @param int $store_id
+     * @return Mage_Catalog_Model_Resource_Product_Collection|Object
+     */
 	function getProductCollectionByStoreId($store_id)
 	{
 		$oldStore = Mage::app ()->getStore ();
@@ -60,12 +58,12 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 
 		return $collection;
 	}
-	
-	/**
-	 * Collect grouped data
-	 * @param Mage_Catalog_Model_Resource_Product_Collection $collection
-	 * @return \Zolago_Solrsearch_Model_Ultility
-	 */
+
+    /**
+     * Collect grouped data
+     * @param Mage_Catalog_Model_Resource_Product_Collection $collection
+     * @return $this
+     */
 	public function _collectGroupedChildIds(Mage_Catalog_Model_Resource_Product_Collection $collection) {
 		$groupedIds = array();
 		foreach($collection as $product){
@@ -149,7 +147,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		// Load base entity and joins
 		////////////////////////////////////////////////////////////////////////
-		$time = $this->getMicrotime();
+		// $time = $this->getMicrotime();
 		
 		$rows = $resourceModel->getFlatProducts($storeId, $allIds, array(
 			Zolago_Solrsearch_Model_Resource_Improve::JOIN_PRICE => true,
@@ -174,7 +172,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		// Load attributes data from source EAV
 		////////////////////////////////////////////////////////////////////////
-		$time = $this->getMicrotime();
+		// $time = $this->getMicrotime();
 		
 		$resourceModel->loadAttributesData($finalCollection, $attibutes, $finalCollection->getAllIds(), $storeId);
 		
@@ -183,7 +181,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		// Add tax percents
 		////////////////////////////////////////////////////////////////////////
-		$time = $this->getMicrotime();
+		// $time = $this->getMicrotime();
 		
 		$dataModel->addTaxPercents($finalCollection, $storeId);
 		
@@ -193,7 +191,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		// Add category data
 		////////////////////////////////////////////////////////////////////////
-		$time = $this->getMicrotime();
+		// $time = $this->getMicrotime();
 		$resourceModel->loadCategoryData($finalCollection, $storeId);
 		
 		//Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
@@ -203,7 +201,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		// Extend configurable product with child data
 		// Load attributes data from index EAV
 		////////////////////////////////////////////////////////////////////////
-		$time = $this->getMicrotime();
+		// $time = $this->getMicrotime();
 		
 		$resourceModel->loadAttributesDataFromIndex(
 				$finalCollection, 
@@ -219,9 +217,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		// Post process loaded data
 		////////////////////////////////////////////////////////////////////////
-		$time = $this->getMicrotime();
-		$regularIds =  $finalCollection->getFlag("regular_ids") ?
-				$finalCollection->getFlag("regular_ids") : $allIds;
+		// $time = $this->getMicrotime();
+		// $regularIds =  $finalCollection->getFlag("regular_ids") ?	$finalCollection->getFlag("regular_ids") : $allIds;
 		
 		foreach($finalCollection->getRegularIds() as $id){
 			if($item = $finalCollection->getItemById($id)){
@@ -268,8 +265,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			
 			$codes = array("name", "tax_class_id", "status", "visibility", "sku", 
 				'is_new', 'is_bestseller', 'product_flag', "image",
-				"special_price", "special_from_date", "special_to_date", "brandshop", 
-                "campaign_regular_id", "campaign_strikeout_price_type","wishlist_count");
+				"special_price", "special_from_date", "special_to_date", "msrp", "brandshop",
+                "campaign_regular_id", "campaign_info_id","campaign_strikeout_price_type","wishlist_count");
 			
 			//display brand suggestion attribute code
 			$brandAttributeCode = $this->getBrandAttributeCode();
@@ -411,7 +408,6 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		$documents = "{";
 		
 		//Mage::log("Collection " . count($collecitonIds));
-		
 		foreach($collecitonIds as $id){
 			/* @var $item Varien_Object */
 			
@@ -449,6 +445,18 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		list($usec, $sec) = explode(" ",microtime()); 
 		return ((float)$usec + (float)$sec); 
     } 
+    
+    /**
+     * cleanup log table
+     */
+     public function cleanupLogTable() {
+         $len = Mage::helper('solrsearch')->getSetting('logs_length_hours');
+         if ($len) {
+             $date = date('Y-m-d H:i:s',Mage::getModel('core/date')->timestamp(time()) - $len*3600);
+             $connection = $this->getWriteConnection();
+             $condition = array($connection->quoteInto('update_at < ?',$date));
+             $connection->delete($this->getLogTable(),$condition);
+         }
+     }
 
 }
-?>

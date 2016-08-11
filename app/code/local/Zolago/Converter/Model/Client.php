@@ -3,7 +3,11 @@
 class Zolago_Converter_Model_Client {
 
     const URL_KEY = "{{key}}";
+    const URL_KEY_BATCH = "{{keys}}";
+    const PRICE_BATCH_SIZE = 200;
+
     static protected $_priceRegistry;
+
     protected $_conf = array();
 
     /**
@@ -17,7 +21,7 @@ class Zolago_Converter_Model_Client {
         if(!$this->_conf) {
             $this->_conf = Mage::getStoreConfig("zolagoconverter/config");
         }
-        return $field ? $this->_conf[$field] : $this->_conf;
+        return $field ? trim($this->_conf[$field]) : $this->_conf;
     }
 
     /**
@@ -63,6 +67,85 @@ class Zolago_Converter_Model_Client {
             }
         }
         return null;
+    }
+
+
+    /**
+     * @param $vendorExternalId
+     * @param $vendorProductsData - array("skuv1"=>"A", "skuv2" => "A", ...); keys - skuv, value - price type
+     * @return array
+     */
+    public function getPriceBatch($vendorExternalId, $vendorProductsData)
+    {
+
+        $priceBatch = array();
+
+        if (empty($vendorProductsData)) {
+            return $priceBatch;
+        }
+
+        $urlPriceBatchSize = $this->getConfig('url_price_batch_size');
+        $numberQ = !empty($urlPriceBatchSize) ? $urlPriceBatchSize : self::PRICE_BATCH_SIZE;
+        //Mage::log(count($vendorProductsData), null, "set_log_4.log");
+        if (count($vendorProductsData) >= $numberQ) {
+            $priceBatchAll = array();
+            $vendorProductsDataBatch = array_chunk($vendorProductsData, $numberQ, true);
+            foreach ($vendorProductsDataBatch as $vendorProductsDataBatchItem) {
+                $response = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsDataBatchItem);
+                if(isset($response[$vendorExternalId])){
+                    $priceBatchAll = array_merge($priceBatchAll,$response[$vendorExternalId]);
+                }
+                unset($response);
+            }
+            $priceBatch[$vendorExternalId] = $priceBatchAll;
+        } else {
+            $priceBatch = $this->getPriceBatchRequest($vendorExternalId, $vendorProductsData);
+        }
+
+        return $priceBatch;
+
+    }
+
+    public function getPriceBatchRequest($vendorExternalId, $vendorProductsData){
+        $priceBatch = array();
+        if (empty($vendorProductsData)) { //should FIX http://85.194.243.53:8092/modago/_design/read/_view/price?keys=["5:"]
+            return $priceBatch;
+        }
+        $keyParts = array();
+        foreach ($vendorProductsData as $vendorSku => $priceType) {
+            if(!empty($vendorSku)){  //should FIX http://85.194.243.53:8092/modago/_design/read/_view/price?keys=["5:"]
+                $keyParts[] = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
+            }
+        }
+        if (empty($keyParts)) {
+            return $priceBatch;
+        }
+        $keys = "[" . implode(",", $keyParts) . "]";
+        $url = $this->_replaceUrlKey($this->getConfig('url_price_batch'), $keys, self::URL_KEY_BATCH);
+
+        $result = $this->_makeConnection($url);
+
+        if (isset($result['error'])) {
+            Mage::log(implode(' ,', $result), null, "getPriceBatchRequestError.log");
+            return $priceBatch;
+        }
+
+        if (is_array($result) && isset($result['rows'])) {
+            foreach ($result['rows'] as $row) {
+                if (isset($row['value']['price']) && !empty($row['value']['price'])) {
+                    $prices = $row['value']['price'];
+                    foreach ($prices as $priceConverterType => $pricesItem) {
+                        $vendorSku = explode(":", $row["key"])[1];
+                        if (strtoupper($priceConverterType) == strtoupper($vendorProductsData[$vendorSku])) {
+                            $priceBatch[$vendorExternalId][$vendorSku] = $pricesItem;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return $priceBatch;
     }
 
     /**
@@ -114,7 +197,7 @@ class Zolago_Converter_Model_Client {
         $result = $this->_makeConnection($url);
 
         if(isset($result['error'])) {
-            Mage::log(implode(' ,' , $result));
+            Mage::log(implode(' ,' , $result), null, "converterError.log");
             return null;
         }
         if (is_array($result) && isset($result['rows'])) {
@@ -128,11 +211,15 @@ class Zolago_Converter_Model_Client {
     }
 
     /**
-     * @param string $url
-     * @param string $key
-     * @return string
+     * @param $url
+     * @param $key
+     * @param bool|FALSE $placeholder
+     * @return mixed
      */
-    protected function _replaceUrlKey($url, $key) {
+    protected function _replaceUrlKey($url, $key, $placeholder = FALSE) {
+        if($placeholder){
+            return str_replace($placeholder, urlencode($key), $url);
+        }
         return str_replace(self::URL_KEY, urlencode($key), $url);
     }
 
@@ -145,14 +232,22 @@ class Zolago_Converter_Model_Client {
         $return = null;
         try {
             $process = curl_init($url);
-            curl_setopt($process, CURLOPT_HTTPHEADER, array(
-                            'Accept: application/json'
-                        ));
+            //Mage::log($url, null, "_makeConnection.log");
+            curl_setopt($process, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             curl_setopt($process, CURLOPT_USERPWD, $this->getConfig('login') . ":" . $this->getConfig('password'));
             curl_setopt($process, CURLOPT_TIMEOUT, 30);
             curl_setopt($process, CURLOPT_HTTPGET, 1);
             curl_setopt($process, CURLOPT_RETURNTRANSFER, true);
             $return = curl_exec($process);
+
+            if(curl_errno($process) > 0){
+                Mage::log("CONVERTER CONNECT ERROR NO: " . curl_errno($process));
+                if(curl_errno($process) == 56){
+                    Mage::log("CONVERTER GET PRICE IS TOO BIG");
+                }
+            }
+
+
             curl_close($process);
         }  catch (Exception $e) {
             Mage::logException($e);

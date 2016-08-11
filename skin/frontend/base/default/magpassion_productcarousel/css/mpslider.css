@@ -1,0 +1,115 @@
+.mp-carousel-wrapper {
+    position: relative;
+}
+.mp-navigation-midde {
+    position: absolute;
+    top: 45%;
+    width: 100%;
+}
+.mp-navigation-midde .mp-prev-carousel {
+    left: -30px;
+    position: absolute;
+}
+.mp-navigation-midde .mp-next-carousel {
+    right: -30px;
+    position: absolute;
+}
+.mp-prev-carousel, .mp-next-carousel {
+    color: #fff;
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin-left: 0px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #7ABCDE;
+}
+.mp-prev-carousel:hover, .mp-next-carousel:hover {cursor: pointer;}
+
+.mp-carouselproduct-item {padding: 5px;position: relative;}
+
+.mp-owl-topbar {position: relative;}
+.mp-owl-topbar h4 {
+    font-weight: 300;
+    border-bottom: 2px solid #e3e3e3;
+    color: #333;
+    font-size: 25px;
+    font-weight: 300;
+    line-height: 40px;
+    margin-top: 0;
+    overflow: visible;
+    padding-bottom: 0px;
+    position: relative;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    display: block;
+}
+.mp-owl-navigation {
+    position: absolute;
+    top: 5px;
+    right: 0;
+}
+.img-responsive {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+.mp-carouselproduct-item .product-info {position: relative;min-height: 180px;}
+.mp-carouselproduct-item .product-info, .mp-carouselproduct-item .product-info::before, .mp-carouselproduct-item .product-info::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.mp-carouselproduct-item .actions {
+    bottom: 0;
+    min-height: 85px;
+    padding-top: 10px;
+    position: absolute;
+    width: 100%;
+    
+}
+
+.mp-carouselproduct-item .price-box p {margin-bottom: 0;}
+.mp-carouselproduct-item .add-to-links {list-style: none;padding-left: 0;}
+.mp-carouselproduct-item .add-to-links li {margin: 0;}
+
+.vertical .mp-carouselproduct-item {
+    border-bottom: 1px solid #e3e3e3;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.mp-carouselproduct-item .product-image {
+    position: relative;
+}
+.mp-carouselproduct-item .product-image .ribbon-wrapper {
+    position: absolute;
+    right: 0;
+    top: 0px;
+}
+.mp-carouselproduct-item .product-image .ribbon-wrapper .new-label {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    background: #7ABCDE;
+    padding: 5px 15px;
+    color: #fff;
+    margin-top: 5px;
+}
+.mp-carouselproduct-item .product-image .ribbon-wrapper .sale-label {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    background: #FF9900;
+    padding: 5px 15px;
+    color: #fff;
+    margin-top: 5px;
+}
+
+.mp-carouselproduct-item .rating-box {float: left;margin-right: 5px;}
+.mp-carouselproduct-item h2.product-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mp-carouselproduct-item h2.product-name a {white-space: nowrap;}

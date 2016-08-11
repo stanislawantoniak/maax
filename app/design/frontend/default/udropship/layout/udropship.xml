@@ -1,21 +1,4 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Unirgy LLC
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://www.unirgy.com/LICENSE-M1.txt
- *
- * @category   Unirgy
- * @package    Unirgy_Dropship
- * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
- * @license    http:///www.unirgy.com/LICENSE-M1.txt
- */
--->
 <layout>
 
     <default>
@@ -55,8 +38,9 @@
             <action method="setTemplate"><template>page/page.phtml</template></action>
         </reference>
         <reference name="head">
-            <action method="setTitle"><title>Dropship Vendor Interface</title></action>
+            <action method="setTitle"><title>Vendor Portal</title></action>
             <action method="addCss"><stylesheet>css/udropship.css</stylesheet></action>
+            <!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
         </reference>
         <reference name="header">
             <action method="setTemplate"><template>unirgy/dropship/vendor/header.phtml</template></action>
@@ -89,7 +73,7 @@
         <update handle="udropship_vendor" />
         <reference name="content">
             <block type="core/template" template="unirgy/dropship/vendor/loginwrapper.phtml" name="login-wrapper">
-                <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login">
+                <block type="zolagodropship/vendor_login" template="unirgy/dropship/vendor/login.phtml" name="login">
                     <block type="page/template_links" name="login_links" as="login_links">
                         <action method="addLink" translate="label title" module="udropship">
                             <label>Forgot Password</label>
@@ -108,7 +92,7 @@
     </udropship_vendor_login>
 
     <udropship_vendor_login_ajax>
-        <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login" output="toHtml" />
+        <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login" output="toHtml" /> 
     </udropship_vendor_login_ajax>
 
     <udropship_vendor_password>

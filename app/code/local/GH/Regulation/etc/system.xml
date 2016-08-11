@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <udropship>
+            <groups>
+                <microsite>
+                    <fields>
+                        <confirmation_token_expiration_time translate="label">
+                            <label>Vendor account confirmation token life time (in hours)</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>168 (means - confirmation token will expire in 7 days)</comment>
+                            <sort_order>26</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </confirmation_token_expiration_time>
+                        <confirmation_email_send_copy_to translate="label">
+                            <label>Vendor Account Accept Receiver(s)</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Comma separated</comment>
+                            <sort_order>27</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </confirmation_email_send_copy_to>
+                        <invitation_email_send_copy_to translate="label">
+                            <label>Invitation To Regulation Accept Email Copy</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Comma separated</comment>
+                            <sort_order>28</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invitation_email_send_copy_to>
+                        <regulation_accepted_template translate="label">
+                            <label>Vendor Regulation Accepted Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>29</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </regulation_accepted_template>
+                    </fields>
+                </microsite>
+            </groups>
+        </udropship>
+    </sections>
+</config>

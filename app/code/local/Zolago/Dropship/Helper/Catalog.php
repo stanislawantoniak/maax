@@ -1,5 +1,5 @@
 <?php
-class Zolago_Dropship_Helper_Catalog extends Unirgy_Dropship_Helper_Catalog
+class Zolago_Dropship_Helper_Catalog extends ZolagoOs_OmniChannelVendorProduct_Helper_Udcatalog
 {
 	const ROOT_CATEGORY_LEVEL = 0;
 	

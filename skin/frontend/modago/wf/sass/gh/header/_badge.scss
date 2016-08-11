@@ -1,0 +1,99 @@
+.user-navigation {
+	a {
+		font-size: 22px;
+		.badge {
+		    background:$colorHeaderBadgeBg;
+		    @include border-radius(3px);
+		    color: $colorHeaderBadge;
+		    font-size: 11px;
+		    text-align: center;
+		    font-style: normal;
+		   @include max-screen($screen-sm-max) {
+		        @include border-radius(2px);
+		        font-size: 10px;
+		        font-style: normal;
+		   }
+		}
+	}
+}
+
+.user-navigation {
+	#link_favorites {
+		.badge {
+			top: -1px !important;
+			@include max-screen($screen-sm-max) {
+				top: -6px !important;
+				&.badgeSingle {
+					right: -6px !important;
+				}
+				&.badgeDouble {
+					right: -10px !important;
+				}
+				&.badgeTriple {
+					right: -14px !important;
+				}
+			}
+		}
+	}
+
+	.badgeHolder {
+		position: relative;
+		width: 24px;
+		margin: 0 auto 3px auto;
+		.badge {
+			padding: 2px 3px 1px 2px;
+			position: absolute !important;
+			top: 0 !important;
+			right: -15px !important;
+			&.badgeSingle {
+				right: -7px !important;
+			}
+			&.badgeDouble {
+				right: -12px !important;
+			}
+			&.badgeTriple {
+				right: -18px !important;
+			}
+
+			@include max-screen($screen-sm-max) {
+				top: -5px !important;
+				padding: 3px 3px 2px 2px;
+				&.badgeSingle {
+					right: -4px !important;
+				}
+				&.badgeDouble {
+					right: -7px !important;
+				}
+				&.badgeTriple {
+					right: -10px !important;
+				}
+			}
+			@include max-screen(410px) {
+				right: -13px !important;
+			}
+		}
+	}
+	a {
+		position:relative;
+		&#toggleSearch {
+			@include min-screen($screen-sm-min) {
+				padding-top: 8px !important;
+			}
+		}
+
+	}
+}
+
+@-moz-document url-prefix() {
+	.user-navigation {
+		a {
+			&.dropdown-toggle {
+				.badge {
+					@include max-screen($screen-sm-max) {
+						top:12px;
+					}
+				}
+			}
+		}
+	}
+}

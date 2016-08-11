@@ -275,8 +275,8 @@ var FormComponents = function($) {
 			initValidation(); // Validation
 			initWysiwyg(); // wysihtml5
 			initMultiselect(); // Multiselect
-		}
-
+		},
+        initUniform: initUniform // for ajax loading manage attribute block after save rule
 	};
 
 }(jQuery);

@@ -38,8 +38,8 @@
         <?php echo $this->helper('checkout')->formatPrice($this->getShippingIncludeTax()) ?>
     </li>
 <?php elseif($this->displayIncludeTax()) : ?>
-    <li>
-        <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
+    <li data-target="val_delivery_cost">
+        <span class="val_delivery_cost"><?php echo $this->__("Delivery cost:"); ?></span>
         <?php echo $this->helper('checkout')->formatPrice($this->getShippingIncludeTax()) ?>
     </li>
 <?php else:?>

@@ -17,11 +17,11 @@
 		</routers>
 		<translate>
 			<modules>
-				<Zolago_Pos>
+				<Zolago_Eav>
 					<files>
 						<default>Zolago_Eav.csv</default>
 					</files>
-				</Zolago_Pos>
+				</Zolago_Eav>
 			</modules>
 		</translate>		
 	</frontend>
@@ -40,6 +40,17 @@
             <zolagoeav>
                 <class>Zolago_Eav_Model</class>
             </zolagoeav>
+            <eav>
+                <rewrite>
+                    <resource_entity_attribute_collection>Zolago_Eav_Model_Resource_Entity_Attribute_Collection</resource_entity_attribute_collection>
+                </rewrite>
+            </eav>
+            <eav_resource>
+                <rewrite>
+                    <entity_attribute_option_collection>Zolago_Eav_Model_Resource_Entity_Attribute_Option_Collection</entity_attribute_option_collection>
+                    <entity_attribute_collection>Zolago_Eav_Model_Resource_Entity_Attribute_Collection</entity_attribute_collection>
+                </rewrite>
+            </eav_resource>
         </models>		
         <resources>
             <zolagoeav_setup>
@@ -72,11 +83,11 @@
 	<adminhtml>
 		<translate>
 			<modules>
-				<Zolago_Pos>
+				<Zolago_Eav>
 					<files>
 						<default>Zolago_Eav.csv</default>
 					</files>
-				</Zolago_Pos>
+				</Zolago_Eav>
 			</modules>
 		</translate>
 	</adminhtml>

@@ -3,16 +3,16 @@
  * pdf with rma details
  */
 class Zolago_Rma_Model_Pdf extends Zolago_Pdf_Model_Pdf {
-    const RMA_PDF_PATH = 'rma';
-    const RMA_PDF_PREFIX = 'rma_';
+    const PDF_PATH = 'rma';
+    const PDF_PREFIX = 'rma_';
 	const RMA_PDF_TEMPLATE = 'zolagorma/pdf_details.phtml';
 	const RMA_PDF_BLOCK = 'zolagorma/pdf';
 
     protected function _getFilePath() {
-        return self::RMA_PDF_PATH;
+        return self::PDF_PATH;
     }
     protected function _getFilePrefix() {
-        return self::RMA_PDF_PREFIX;
+        return self::PDF_PREFIX;
     }
 
 	public function getPdfFile($rmaid) {

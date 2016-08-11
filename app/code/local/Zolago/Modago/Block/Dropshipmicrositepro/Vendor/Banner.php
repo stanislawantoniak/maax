@@ -15,60 +15,97 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_BOX_WIDTH = 280;
     const BANNER_BOX_HEIGHT = 323;
 
-    const BANNER_INSPIRATION_WIDTH = 203;
-    const BANNER_INSPIRATION_HEIGHT = 304;
+    const BANNER_INSPIRATION_WIDTH = 400;
+    const BANNER_INSPIRATION_HEIGHT = 600;
 
     const BANNER_RESIZE_DIRECTORY = 'bannerresized';
     const BANNER_RESIZE_M_DIRECTORY = 'bannerresized/mobile';
 
-    protected $boxTypes = array(
+    /**
+     * Cache for loaded vendors
+     * @var array
+     */
+    protected $_vendors = array();
+
+    protected $bannerTypeFilter = array(
         Zolago_Banner_Model_Banner_Type::TYPE_SLIDER,
-        Zolago_Banner_Model_Banner_Type::TYPE_BOX
+        Zolago_Banner_Model_Banner_Type::TYPE_BOX,
+        Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION,
     );
 
+    /**
+     * Set banner filter type
+     * Param can by string or array of strings
+     * For banner types @see Zolago_Banner_Model_Banner_Type
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setBannerTypeFilter($value) {
+        if (!is_array($value)) {
+            $value = array($value);
+        }
+        $this->bannerTypeFilter = $value;
+        return $this;
+    }
+
+    /**
+     * Get array of banner types for future filtering
+     *
+     * @return array
+     */
+    public function getBannerTypeFilter() {
+        return $this->bannerTypeFilter;
+    }
 
     public function getVendor()
     {
         return Mage::helper('umicrosite')->getCurrentVendor();
     }
 
-
     /**
-     * 
      * @return Varien_Object
      */
-    protected function _prepareRequest() {
-            $time = Mage::getSingleton('core/date')->timestamp();
-		$request = new Varien_Object();
-		$request->setBannerShow("image");
-		$request->setStatus(1); // only active
-		$request->setDate(date('Y-m-d H:i:s',$time)); // only not expired
-		return $request;
+    protected function _prepareFilter() {
+        $filter = new Varien_Object();
+        $filter->setBannerShow(Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE);
+        $filter->setCampaignStatus(Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $filter->setDate(Mage::getModel('core/date')->date('Y-m-d H:i:s'));
+        $filter->setOnlyValid(true);
+        return $filter;
     }
 
-    public function getBoxes() {
-		
-		$finder = $this->getFinder();
-		$request = $this->_prepareRequest();
-		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
-		return $finder->request($request);
-    }	
-	
-	public function getSliders() {
-		$request = $this->_prepareRequest();
-		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);		
-		$finder = $this->getFinder();
-		return $finder->request($request);
-	}
-	
+    public function getPlacements($type) {
+        $filter = $this->_prepareFilter();
+        $filter->setType($type);
+        $finder = $this->getFinder();
+        return $finder->filter($filter);
+    }
+
+    /**
+     * Check if current url is url for home page
+     *
+     * @return true
+     */
+    public function getIsHomePage()
+    {
+        return $this->getUrl('') == $this->getUrl('*/*/*',
+            array(
+                //'_current'=>true,       //_current	bool	Uses the current module, controller, action and parameters
+                '_use_rewrite' => true,
+                "_no_vendor" => TRUE      // home page but not vendor home
+            )
+        );
+    }
+
 	/**
 	 * @return Zolago_Banner_Model_Finder
 	 */
 	public function getFinder() {
 		if(!$this->hasData("finder")){
-			$placements = array();
 			$vendor = $this->getVendor();
-            //krumo($vendor->getId());
+            $isHomePage = $this->getIsHomePage();
+
 			if(!empty($vendor)){
 				$vendorId = $vendor->getId();
                 $rootCatId = $vendor->getRootCategory();
@@ -85,33 +122,11 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 					$rootCatId = $currentCategory->getId();
 				}
 
-				$campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-
-				$placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
-				    $this->boxTypes
-				);
-
-
-                $imagesToScale = array();
-                if (!empty($placements)) {
-                    foreach ($placements as $placement) {
-                        if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
-                            $images = unserialize($placement['banner_image']);
-                            $placement['images'] = $images;
-                            $imagesToScale[$placement['type']][] = $images;
-                        }
-                    }
-                }
-
-                if(!empty($imagesToScale)){
-                    $this->scaleBannerImages($imagesToScale);
-                }
-
-			} else {
-                $localVendorId = Mage::helper('udropship')->getLocalVendorId();
+            }elseif ($this->getSWVendorId()) {
+                $vendorId = $this->getSWVendorId();
 
                 $rootCatId = 0;
-                if (Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
+                if ($isHomePage) {
                     $rootCatId = Mage::app()->getStore()->getRootCategoryId();
                 } else {
                     //get current category
@@ -120,118 +135,41 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                         $rootCatId = $currentCategory->getId();
                     }
                 }
+            }
+            else {
+                $vendorId = Mage::helper('udropship')->getLocalVendorId();
 
-
-                $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-
-                $placements = $campaignModel->getCategoryPlacements($rootCatId, $localVendorId,
-                    $this->boxTypes
-                );
-
-
-                $imagesToScale = array();
-                if (!empty($placements)) {
-                    foreach ($placements as $placement) {
-                        if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
-                            $images = unserialize($placement['banner_image']);
-                            $placement['images'] = $images;
-                            $imagesToScale[$placement['type']][] = $images;
-                        }
+                $rootCatId = 0;
+                if ($isHomePage) {
+                    $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+                } else {
+                    //get current category
+                    $currentCategory = Mage::registry('current_category');
+                    if (!empty($currentCategory) && $currentCategory->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
+                        $rootCatId = $currentCategory->getId();
                     }
                 }
-
-                if(!empty($imagesToScale)){
-                    $this->scaleBannerImages($imagesToScale);
-                }
             }
-			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
+
+            // Placements
+            /** @var Zolago_Campaign_Model_Resource_Placement_Collection $placementsColl */
+            $placementsColl = Mage::getResourceModel("zolagocampaign/placement_collection");
+            $placementsColl->addPlacementForCategory($rootCatId, $vendorId, $this->bannerTypeFilter);
+			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placementsColl));
 		}
 		return $this->getData("finder");
 	}
 
 
-    /**
-     * @param $imagesToScale
-     */
-    public function scaleBannerImages($imagesToScale)
-    {
-        if (!empty($imagesToScale)) {
-            foreach ($imagesToScale as $type => $imagesToScaleData) {
-                switch ($type) {
-                    case Zolago_Banner_Model_Banner_Type::TYPE_SLIDER:
-/*                        foreach ($imagesToScaleData as $sliderImageData) {
-                            foreach ($sliderImageData as $sliderImage) {
-
-                                $imageSliderPath = Mage::getBaseDir('media') . $sliderImage['path'];
-                                $imageSliderResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $sliderImage['path'];
-                                $imageSliderResizePathMobile = Mage::getBaseDir('media') . DS . $this->getImageResizeMobilePath($type) . $sliderImage['path'];
-
-                                //Desktop
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH);
-                                //Mobile
-                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH);
-
-                            }
-                        }
-                        unset($sliderImageData);*/
-                        break;
-                    case Zolago_Banner_Model_Banner_Type::TYPE_BOX:
-/*                        foreach ($imagesToScaleData as $boxImageData) {
-                            foreach ($boxImageData as $boxImage) {
-                                $imageBoxPath = Mage::getBaseDir('media') . $boxImage['path'];
-                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $boxImage['path'];
-
-                                $this->scaleBannerImage($imageBoxPath, $imageBoxResizePath, self::BANNER_BOX_WIDTH, self::BANNER_BOX_HEIGHT);
-                            }
-                        }
-                        unset($sliderImageData);*/
-                        break;
-                    case Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION:
-                        foreach ($imagesToScaleData as $boxImageData) {
-                            foreach ($boxImageData as $boxImage) {
-                                $imageBoxPath = Mage::getBaseDir('media') . $boxImage['path'];
-                                $imageBoxResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $boxImage['path'];
-
-                                $this->scaleBannerImage($imageBoxPath, $imageBoxResizePath, self::BANNER_INSPIRATION_WIDTH, self::BANNER_INSPIRATION_HEIGHT);
-                            }
-                        }
-                        unset($sliderImageData);
-                        break;
-                }
-            }
-        }
-    }
-
-
-    public function getImageResizePath($type)
+    static public function getImageResizePath($type)
     {
         return self::BANNER_RESIZE_DIRECTORY . DS . $type;
     }
 
 
-    public function getImageResizeMobilePath($type)
+    static public function getImageResizeMobilePath($type)
     {
         return self::BANNER_RESIZE_M_DIRECTORY . DS . $type;
-    }
-
-    public function scaleBannerImage($imagePath, $imageResizePath, $width, $height=null)
-    {
-        try
-        {
-            $image = new Varien_Image($imagePath);
-	        if(!is_null($height)) {
-		        $image->constrainOnly(false);
-		        $image->keepFrame(true);
-		        $image->backgroundColor(array(255, 255, 255));
-	        }
-            $image->keepAspectRatio(true);
-            $image->resize($width, $height);
-            $image->save($imageResizePath);
-        }
-        catch(Exception $e)
-        {
-            //Mage::log('No banner image', Zend_Log::ALERT);
-        }
     }
 
 	public function imageExists($imagePath) {
@@ -262,4 +200,24 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 	public function getImageUrl($imagePath) {
 		return rtrim(Mage::getBaseUrl('media'),'/') . $imagePath;
 	}
+
+    public function getImageResizeUrl($type, $path) {
+        return Mage::getBaseUrl('media')  . $this->getImageResizePath($type) . $path;
+    }
+
+    /**
+     * Get website vendor owner
+     * @return bool|int
+     * @throws Mage_Core_Exception
+     */
+    public function getSWVendorId()
+    {
+        /* @var $collection Mage_Core_Model_Mysql4_Website_Collection */
+        $collection = Mage::getModel("core/website")->getCollection();
+        $collection->addFieldToFilter("have_specific_domain", 1);
+        $collection->addFieldToFilter("website_id", Mage::app()->getWebsite()->getWebsiteId());
+        $website = $collection->getFirstItem();
+
+        return $website->getVendorId();
+    }
 }

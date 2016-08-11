@@ -7,7 +7,12 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Address
 
 	public function getStep1Sidebar()
     {
-        return $this->getLayout()->createBlock("cms/block")->setBlockId("checkout-right-column-step-1")->toHtml();
+	    if($this->isCustomerLoggedIn()) {
+		    $blockId = "checkout-right-column-step-1";
+	    } else {
+		    $blockId = "checkout-right-column-step-1-guest";
+	    }
+	    return $this->getLayout()->createBlock("cms/block")->setBlockId($blockId)->toHtml();
     }
 
 	public function getAgreements()
@@ -30,7 +35,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Address
     }
 
 	public function isCustomerSubscribed() {
-		if(Mage::getSingleton('customer/session')->isLoggedIn()){
+		if($this->isCustomerLoggedIn()){
 			$email = Mage::getSingleton('customer/session')->getCustomer()->getData('email');
 			$subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($email);
 			if($subscriber->getId())
@@ -39,5 +44,9 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Address
 			}
 		}
 		return false;
+	}
+
+	public function isCustomerLoggedIn() {
+		return Mage::getSingleton('customer/session')->isLoggedIn();
 	}
 } 

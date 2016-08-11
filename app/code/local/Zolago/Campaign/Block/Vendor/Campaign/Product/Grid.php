@@ -2,37 +2,58 @@
 
 class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
+    public function getVendor()
+    {
+        return Mage::getSingleton('udropship/session')->getVendor();
+    }
+
     public function __construct()
     {
         parent::__construct();
-        $this->setId('zolagocampaign_campaign_product_grid');
-        $this->setDefaultSort('entity_id');
-        $this->setDefaultDir('desc');
+        $this->setId('vendor_campaign_product_grid');
+        $this->setDefaultSort('skuv');
+        $this->setDefaultDir('asc');
         // Need
         $this->setGridClass('z-grid');
-        $this->setTemplate("zolagoadminhtml/widget/grid.phtml");
+        $this->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml");
+        $this->setSaveParametersInSession(true);
+        $this->setUseAjax(true);
 
     }
 
+    /**
+     * @return Mage_Adminhtml_Block_Widget_Grid
+     * @throws Exception
+     */
     protected function _prepareCollection()
     {
         $campaignId = $this->getRequest()->getParam("id");
+
+        $vendor = $this->getVendor();
+        /* @var $udropshipHelper ZolagoOs_OmniChannel_Helper_Data */
+        $udropshipHelper = Mage::helper("udropship");
+        $localVendor = $udropshipHelper->getLocalVendorId();
 
         $collection = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('skuv');
+
+        if ($vendor->getId() !== $localVendor) {
+            $collection->addAttributeToFilter('udropship_vendor', $vendor->getId());
+        }
+        $collection->addAttributeToFilter('visibility', array('neq' => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
         $collection->getSelect()
             ->join(
                 array('campaign_product' => Mage::getSingleton('core/resource')->getTableName(
-                        "zolagocampaign/campaign_product"
-                    )),
+                    "zolagocampaign/campaign_product"
+                )),
                 'campaign_product.product_id = e.entity_id'
             )
-            ->where("campaign_product.campaign_id=?", $campaignId);
+            ->where("campaign_product.campaign_id=?", $campaignId)
+            ->where("campaign_product.assigned_to_campaign<>?", Zolago_Campaign_Model_Resource_Campaign::CAMPAIGN_PRODUCTS_TO_DELETE);
 
         $collection->setPageSize(10);
-        //$collection->printLogQuery(true);
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -53,6 +74,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'index'  => 'skuv',
                  "class"  => "form-control",
                  'width'  => '50px',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_text',
             )
         );
         $this->addColumn(
@@ -62,16 +84,19 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'index'  => 'name',
                  "class"  => "form-control",
                  'width'  => '50px',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_text',
             )
         );
         $this->addColumn(
             'price',
             array(
-                 'header' => $_helper->__('Price'),
-                 'width'  => '50px',
-                 'type'   => 'number',
-                 "class"  => "form-control",
-                 'index'  => 'price',
+                'header' => $_helper->__('Price'),
+                'width' => '50px',
+                'type' => 'price',
+                'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
+                "class" => "form-control",
+                'index' => 'price',
+                'filter'=> 'zolagoadminhtml/widget_grid_column_filter_price',
             )
         );
 
@@ -97,7 +122,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/edit', array('_current' => true));
+        return $this->getUrl('*/*/products', array('_current' => true));
     }
 
     public function getRowUrl($item)

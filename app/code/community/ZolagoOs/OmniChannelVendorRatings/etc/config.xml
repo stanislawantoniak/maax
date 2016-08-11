@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<!--
+/**
+  
+ */
+
+-->
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelVendorRatings>
+            <version>1.0.1</version>
+        </ZolagoOs_OmniChannelVendorRatings>
+    </modules>
+
+    <global>
+        <models>
+            <udratings>
+                <class>ZolagoOs_OmniChannelVendorRatings_Model</class>
+                <resourceModel>udratings_mysql4</resourceModel>
+            </udratings>
+            <udratings_mysql4>
+                <class>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4</class>
+            </udratings_mysql4>
+            <review_mysql4>
+                <rewrite>
+                    <review>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Review</review>
+                    <review_summary>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Review_Summary</review_summary>
+                    <review_product_collection>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Review_Product_Collection</review_product_collection>
+                <review_collection>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Review_Collection</review_collection>
+                </rewrite>
+            </review_mysql4>
+            <rating>
+                <rewrite>
+                </rewrite>
+            </rating>
+            <rating_mysql4>
+                <rewrite>
+                    <rating_option_vote_collection>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_RatingOptionVoteCollection</rating_option_vote_collection>
+                    <rating>ZolagoOs_OmniChannelVendorRatings_Model_Mysql4_Rating</rating>
+                </rewrite>
+            </rating_mysql4>
+        </models>
+
+        <resources>
+            <udratings_setup>
+                <setup>
+                    <module>ZolagoOs_OmniChannelVendorRatings</module>
+                    <class>Mage_Sales_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </udratings_setup>
+            <udratings_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </udratings_write>
+            <udratings_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </udratings_read>
+        </resources>
+
+        <blocks>
+            <udratings>
+                <class>ZolagoOs_OmniChannelVendorRatings_Block</class>
+            </udratings>
+        </blocks>
+
+        <helpers>
+            <udratings>
+                <class>ZolagoOs_OmniChannelVendorRatings_Helper</class>
+            </udratings>
+        </helpers>
+
+        <udropship>
+            <vendor>
+                <fields>
+                </fields>
+            </vendor>
+        </udropship>
+
+        <template>
+            <email>
+                <udropship_vendor_rating_customer_email_template module="udropship">
+                   <label>Rate Vendor Shipment Customer Notification</label>
+                   <file>udrating_pending_customer.html</file>
+                   <type>html</type>
+               </udropship_vendor_rating_customer_email_template>
+            </email>
+        </template>
+
+        <events>
+            <sales_order_shipment_save_before>
+                <observers>
+                    <udratings>
+                        <type>singleton</type>
+                        <class>udratings/observer</class>
+                        <method>sales_order_shipment_save_before</method>
+                    </udratings>
+                </observers>
+            </sales_order_shipment_save_before>
+            <udropship_shipment_status_save_after>
+                <observers>
+                    <udratings>
+                        <type>singleton</type>
+                        <class>udratings/observer</class>
+                        <method>udropship_shipment_status_save_after</method>
+                    </udratings>
+                </observers>
+            </udropship_shipment_status_save_after>
+        </events>
+
+    </global>
+
+    <frontend>
+        <routers>
+            <udratings>
+                <use>standard</use>
+                <args>
+                    <module>ZolagoOs_OmniChannelVendorRatings</module>
+                    <frontName>udratings</frontName>
+                </args>
+            </udratings>
+        </routers>
+        <layout>
+            <updates>
+                <udratings>
+                    <file>udratings.xml</file>
+                </udratings>
+            </updates>
+        </layout>
+    </frontend>
+
+    <admin>
+        <routers>
+            <zosratingsadmin>
+                <use>admin</use>
+                <args>
+                    <module>ZolagoOs_OmniChannelVendorRatings_Adminhtml</module>
+                    <frontName>zosratingsadmin</frontName>
+                </args>
+            </zosratingsadmin>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <udratings>
+                    <file>udratings.xml</file>
+                </udratings>
+            </updates>
+        </layout>
+        <events>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <udratings>
+                        <class>udratings/observer</class>
+                        <method>core_block_abstract_to_html_before</method>
+                    </udratings>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <udropship_adminhtml_vendor_tabs_after>
+                <observers>
+                    <udratings>
+                        <class>udratings/observer</class>
+                        <method>udropship_adminhtml_vendor_tabs_after</method>
+                    </udratings>
+                </observers>
+            </udropship_adminhtml_vendor_tabs_after>
+            <udropship_adminhtml_vendor_edit_prepare_form>
+                <observers>
+                    <udratings>
+                        <type>singleton</type>
+                        <class>udratings/observer</class>
+                        <method>udropship_adminhtml_vendor_edit_prepare_form</method>
+                    </udratings>
+                </observers>
+            </udropship_adminhtml_vendor_edit_prepare_form>
+        </events>
+    </adminhtml>
+
+    <default>
+        <udropship>
+            <vendor_rating>
+                <ready_status>1,7</ready_status>
+                <customer_email_template>udropship_vendor_rating_customer_email_template</customer_email_template>
+            </vendor_rating>
+	    </udropship>
+    </default>
+
+    <crontab>
+        <jobs>
+            <udratings_pending_shipments>
+                <schedule><cron_expr>0 2 * * *</cron_expr></schedule>
+                <run><model>udratings/observer::cronSendPendingShipmentsEmails</model></run>
+            </udratings_pending_shipments>
+        </jobs>
+    </crontab>
+</config>

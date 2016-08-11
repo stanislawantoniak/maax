@@ -16,7 +16,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @var array
 	 */
 	protected $_solrToMageMap = array(
-		"products_id" => "id",
+		"products_id" => "entity_id",
+        "url_path_varchar" => "current_url",
 		"product_type_static" => "type_id",
 		"name_varchar" => "name",
 		"store_id" => "store_id",
@@ -33,10 +34,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"product_rating_int" => "product_rating",
 		"is_bestseller_int" => "is_bestseller",
 		"product_flag_int" => "product_flag",
+        "price_decimal" => "price",
+        "msrp_decimal" => "msrp",
 		"special_price_decimal" => "special_price",
 		"special_from_date_varchar" => "special_from_date",
 		"special_to_date_varchar" => "special_to_date",
         "campaign_regular_id_int" => "campaign_regular_id",
+        "campaign_info_id_varchar" => "campaign_info_id",
         "campaign_strikeout_price_type_int" => "campaign_strikeout_price_type",
 		"udropship_vendor_id_int" => "udropship_vendor",
 		"udropship_vendor_logo_varchar" => "udropship_vendor_logo",
@@ -50,6 +54,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @var array
 	 */
 	protected $_cores;
+
+    /**
+     * List of cores by store id
+     * Used in getCoresByStoreId()
+     * @var array
+     */
+    protected $_coresByStoreId = array();
 
 	/**
 	 * @var array
@@ -113,12 +124,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getRootCategoryId() {
 		if (is_null($this->_rootId)) {
             $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+            $rootId = 0;
             if ($vendor) {
                 $rootId = Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory(
 					$vendor,
 					Mage::app()->getWebsite()->getId()
 				);
-            } else {
+            } 
+            if (!$rootId) {
                 $rootId = Mage::app()->getStore()->getRootCategoryId();
             }
             $this->_rootId = $rootId;
@@ -134,6 +147,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		// Create product list
 		$products = array();
 
+		/** @var Zolago_Common_Helper_Data $hlp */
+		$hlp = Mage::helper('zolagocommon');
+
 		foreach ($listModel->getCollection() as $product) {
 			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
 
@@ -141,14 +157,16 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$_product[1] = $product->getName();
 //			$_product[2] = $this->_prepareCurrentUrl($product->getCurrentUrl());
             $_product[2] = $product->getCurrentUrl();
-			$_product[3] = $product->getStrikeoutPrice();
-			$_product[4] = $product->getFinalPrice();
+			$_product[3] = floatval($product->getStrikeoutPrice());
+			$_product[4] = floatval($product->getFinalPrice());
 			$_product[5] = $product->getWishlistCount();
 			$_product[6] = $product->getInMyWishlist();
 			$_product[7] = $this->_prepareListingResizedImageUrl($product->getListingResizedImageUrl());
 			$imageSizes = $product->getListingResizedImageInfo();
 			$_product[8] = !is_null($imageSizes) ? 100 * round(($imageSizes["height"] / $imageSizes["width"]),2) : 1;
 			$_product[9] = $this->_prepareManufacturerLogoUrl($product->getManufacturerLogoUrl());
+			$_product[10]= $product->getSku();
+			$_product[11]= $hlp->getSkuvFromSku($product->getSku(),$product->getUdropshipVendor());
 
 			$products[] = $_product;
 		}
@@ -189,21 +207,24 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 *
-	 * @param type $storeId
-	 * @return type
+	 * List of cores by store id
+	 * @param int $storeId
+	 * @return array
 	 */
 	public function getCoresByStoreId($storeId) {
-		$cores = array();
-		foreach ($this->getCores() as $core => $data) {
-			if (isset($data['stores'])) {
-				$ids = explode(",", trim($data['stores'], ","));
-				if (in_array($storeId, $ids)) {
-					$cores[] = $core;
-				}
-			}
-		}
-		return $cores;
+        if (!isset($this->_coresByStoreId[$storeId])) {
+            $cores = array();
+            foreach ($this->getCores() as $core => $data) {
+                if (isset($data['stores'])) {
+                    $ids = explode(",", trim($data['stores'], ","));
+                    if (in_array($storeId, $ids)) {
+                        $cores[] = $core;
+                    }
+                }
+            }
+            $this->_coresByStoreId[$storeId] = $cores;
+        }
+		return $this->_coresByStoreId[$storeId];
 	}
 
 	/**
@@ -375,11 +396,16 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		/** @var Zolago_Dropship_Model_Vendor $_vendor */
 		$array = array();
 
-		/** @var Unirgy_DropshipMicrosite_Helper_Data $micrositeHelper */
+		/** @var ZolagoOs_OmniChannelMicrosite_Helper_Data $micrositeHelper */
 		$micrositeHelper = Mage::helper('zolagodropshipmicrosite');
 		$_vendor = $micrositeHelper->getCurrentVendor();
 
 		$currentCategory = $this->getCurrentCategory();
+
+
+		$store = Mage::app()->getStore();
+		$storeId = $store->getId();
+		$useCategoryContext = Mage::getStoreConfig('solrbridge/search_context/use_category_context', $storeId);
 
 		// Setup varnish context
 		if(!$currentCategory && isset($contextData['category_id'])){
@@ -418,6 +444,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		} else {
 			// Categories are only shown for global context and not for vendor context
 			$allCats = Mage::getModel('catalog/category')->getCollection()
+					->addFieldToFilter('path', array('like' => '%/'.Mage::app()->getStore()->getRootCategoryId().'/%'))
 					->addAttributeToSelect('*')
 					->addAttributeToFilter('is_active', '1')
 					->addAttributeToFilter(self::ZOLAGO_USE_IN_SEARCH_CONTEXT, array('eq' => 1))
@@ -426,10 +453,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			foreach ($allCats as $category) {
 
 				if ($currentCategory && $currentCategory->getId() == $category->getId()) {
-					
+
 				} else {
 					$selected = false;
-
+					$solrProductCount = $category->getSolrProductsCount($category);
+					if ($solrProductCount <= 0) {
+						continue;
+					}
 					$array['select_options'][] = array(
 						'text' => $category->getName(),
 						'value' => $category->getId(),
@@ -437,29 +467,35 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 					);
 				}
 			}
-			
-			if ($currentCategory) {
-				$rootCategory = Mage::app()->getStore()->getRootCategoryId();
-				if ($rootCategory != $currentCategory->getId()) {
 
-					$array['select_options'][] = array(
-						'text' => $this->__('This category'),
-						'value' => $currentCategory->getId(),
-						'selected' => true
-					);
 
-					$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";
+			if($useCategoryContext){
+				if ($currentCategory) {
+					$rootCategory = Mage::app()->getStore()->getRootCategoryId();
+					if ($rootCategory != $currentCategory->getId()) {
 
-					// Make "Everywhere" unselected
-					$array['select_options'][0]['selected'] = false;
+						$array['select_options'][] = array(
+							'text' => $this->__('This category'),
+							'value' => $currentCategory->getId(),
+							'selected' => true
+						);
+
+						$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";
+
+						// Make "Everywhere" unselected
+						$array['select_options'][0]['selected'] = false;
+					}
 				}
 			}
+
 		}
 		return $array;
 	}
 
+
+
 	/**
-	 * Retrive info from solar for sibling categories
+	 * Retrieve info from solar for sibling categories
 	 *
 	 * @return array
 	 */
@@ -502,7 +538,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	/**
-	 * Map solr docuemnt data to local ORM product
+	 * Map solr document data to local ORM product
 	 * @param array $item
 	 * @param Mage_Catalog_Model_Product $product
 	 * @return Mage_Catalog_Model_Product
@@ -511,14 +547,34 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 
 		foreach ($this->_solrToMageMap as $solr => $mage) {
 			if (isset($item[$solr])) {
-				$product->setDataUsingMethod($mage, $item[$solr]);
+                $product->setData($mage, $item[$solr]);
 			}
 		}
-
-		$product->setId((int) $product->getId());
-
 		return $product;
 	}
+
+    /**
+     * Set price for current user from solr data
+     *
+     * @param array $item
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Product
+     */
+    public function mapSolrDocPriceToProduct(array $item, Mage_Catalog_Model_Product $product) {
+        $customerGroupId = Mage::getSingleton('customer/session')->getCustomerGroupId();
+        $finalPrice = $product->getPriceModel()->calculatePrice(
+            $product->getData("price"),             // basePrice
+            $product->getData("special_price"),     // specialPrice
+            $product->getData("special_from_date"), // specialPriceFrom
+            $product->getData("special_to_date"),   // specialPriceTo
+            null,                                   // rulePrice - not decided yet, for now not used
+            $product->getData("website_id"),        // websiteId,
+            $customerGroupId,
+            $product->getId()
+        );
+        $product->setData("calculated_final_price", $finalPrice);
+        return $product;
+    }
 
 	/**
 	 * @return array
@@ -647,7 +703,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 				"q" => $query,
 				"scat" => $cat,
 			);
-			$url = Mage::getUrl("search/index/index", $final);
+			$url = Mage::getUrl("search", $final);
 		} else {
 			if ($vendor) {
 				// check if vendor category
@@ -676,6 +732,25 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
          $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
          return $prefix.'_price_decimal';
     } 
-
+    
+    /**
+     * check if we are in search context
+     *     
+     * @return bool
+     * @todo zmienić tą funkcję bo to jakaś katastrofa
+     */
+     public function isSearchContext() {
+        $request = Mage::app()->getRequest();
+        return (
+            $request->getModuleName() == "search" &&
+            $request->getControllerName() == "index" &&
+            $request->getActionName() == "index"
+        ) | (
+            $request->getModuleName() == "orbacommon" &&
+            $request->getControllerName() == "ajax_listing" &&
+            $request->getActionName() == "get_blocks" &&
+            $request->getParam('q',false)
+        );
+     }
 
 }

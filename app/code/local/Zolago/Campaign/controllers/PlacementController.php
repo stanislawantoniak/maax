@@ -9,7 +9,7 @@ class Zolago_Campaign_PlacementController extends Zolago_Dropship_Controller_Ven
     public function indexAction()
     {
         Mage::register('as_frontend', true);
-        $this->_renderPage(null, 'zolagocampaign');
+        $this->_renderPage(null, 'zolagocampaign_placement');
     }
 
 }

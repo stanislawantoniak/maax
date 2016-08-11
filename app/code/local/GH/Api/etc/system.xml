@@ -2,8 +2,8 @@
 <config>
     <tabs>
         <ghapi translate="label" module="ghapi">
-            <label>GH API</label>
-            <sort_order>100</sort_order>
+            <label>Vendor Integration</label>
+            <sort_order>300</sort_order>
         </ghapi>
     </tabs>
     <sections>
@@ -12,8 +12,8 @@
             <tab>ghapi</tab>
             <sort_order>1000</sort_order>
             <show_in_default>1</show_in_default>
-            <show_in_website>1</show_in_website>
-            <show_in_store>1</show_in_store>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
 
             <groups>
                 <ghapi_general>
@@ -21,8 +21,8 @@
                     <frontend_type>text</frontend_type>
                     <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
 
                     <fields>
                         <ghapi_token_session_time translate="label">
@@ -31,10 +31,19 @@
                             <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <frontend_class>validate-number</frontend_class>
                         </ghapi_token_session_time>
+                        <ghapi_order_email>
+                            <label>Email for API orders</label>
+                            <comment>%s is replaced with order ID</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </ghapi_order_email>
                     </fields>
                 </ghapi_general>
                 <ghapi_messages translate="label" module="ghapi">
@@ -42,8 +51,8 @@
                     <frontend_type>text</frontend_type>
                     <sort_order>1000</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
 
                     <fields>
                         <ghapi_message_batch_size translate="label">
@@ -51,8 +60,8 @@
                             <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <frontend_class>validate-number</frontend_class>
                         </ghapi_message_batch_size>
                     </fields>

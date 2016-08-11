@@ -1,12 +1,21 @@
 <?php
+/** @var Zolago_Dropship_Block_Vendor_Preferences $this */
+/** @var Zolago_Dropship_Helper_Data $helper */
+$helper = Mage::helper("zolagodropship");
+/** @var Zolago_Dropship_Model_Session $_session */
 $_session = Mage::getSingleton('udropship/session');
+/** @var Zolago_Dropship_Model_Vendor $_vendor */
 $_vendor = $_session->getVendor();
+$_errorData = $_session->getData('vendorSettings') ? $_session->getData('vendorSettings') : array();
+if(count($_errorData)) {
+	$_session->unsetData('vendorSettings');
+}
 ?>
 <div class="container">
     <!--=== Page Header ===-->
     <div class="page-header">
         <div class="page-title">
-            <h3><?php echo Mage::helper("zolagodropship")->__("Company settings");?></h3>
+            <h3><?php echo $helper->__("Company settings");?></h3>
         </div>
     </div>
     <div class="row">
@@ -14,63 +23,68 @@ $_vendor = $_session->getVendor();
             <form id="vendor_contact" class="form-horizontal" method="post" action="/udropship/vendor_settings/infoPost">
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Company data"); ?></h4>
+                        <h4><?php echo $helper->__("Company data"); ?></h4>
                     </div>
                     <div class="widget-content">
 
                         <div class="form-group">
-                            <label for="vendor_name" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Company name"); ?>
+                            <label for="company_name" class="col-md-3 control-label">
+                                <?php echo $helper->__("Company name"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="vendor_name" name="vendor_name" value="<?php echo $_vendor->getVendorName(); ?>" type="text" required
+	                            <?php $companyName = isset($_errorData['company_name']) ? $_errorData['company_name'] : $_vendor->getCompanyName(); ?>
+                                <input id="company_name" name="company_name" value="<?php echo $companyName; ?>" type="text" required
                                        class="form-control" size="10">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="billing_street" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Street and Number"); ?>
+                                <?php echo $helper->__("Street and Number"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_street" name="billing_street" value="<?php echo $_vendor->getBillingStreet(1); ?>" type="text"
+	                            <?php $billing_street = isset($_errorData['billing_street']) ? $_errorData['billing_street'] : $_vendor->getBillingStreet(1); ?>
+                                <input id="billing_street" name="billing_street" value="<?php echo $billing_street; ?>" type="text"
                                        required class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="billing_city" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("City"); ?>
+                                <?php echo $helper->__("City"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_city" name="billing_city" value="<?php echo $_vendor->getBillingCity(); ?>" required type="text"
+	                            <?php $billing_city = isset($_errorData['billing_city']) ? $_errorData['billing_city'] : $_vendor->getBillingCity(); ?>
+                                <input id="billing_city" name="billing_city" value="<?php echo $billing_city; ?>" required type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="billing_zip" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Zip / Postal code"); ?>
+                                <?php echo $helper->__("Zip / Postal code"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_zip" name="billing_zip" value="<?php echo $_vendor->getBillingZip(); ?>" required type="text"
+	                            <?php $billing_zip = isset($_errorData['billing_zip']) ? $_errorData['billing_zip'] : $_vendor->getBillingZip(); ?>
+                                <input id="billing_zip" name="billing_zip" value="<?php echo $billing_zip; ?>" required type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="tax_no" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Tax identification no"); ?>
+                                <?php echo $helper->__("Tax identification no"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="tax_no" name="tax_no" value="<?php echo $_vendor->getTaxNo(); ?>" required type="text" class="form-control"
+	                            <?php $tax_no = isset($_errorData['tax_no']) ? $_errorData['tax_no'] : $_vendor->getTaxNo(); ?>
+                                <input id="tax_no" name="tax_no" value="<?php echo $tax_no; ?>" required type="text" class="form-control"
                                        size="10">
                             </div>
                         </div>
@@ -80,35 +94,38 @@ $_vendor = $_session->getVendor();
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Company contact data"); ?></h4>
+                        <h4><?php echo $helper->__("Company contact data"); ?></h4>
 
                     </div>
                     <div class="widget-content fiters">
                         <div class="form-group">
                             <label for="www" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("WWW"); ?>
+                                <?php echo $helper->__("WWW"); ?>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="www" name="www" value="<?php echo $_vendor->getWww(); ?>" type="text" class="form-control" size="10">
+	                            <?php $www = isset($_errorData['www']) ? $_errorData['www'] : $_vendor->getWww(); ?>
+                                <input id="www" name="www" value="<?php echo $www; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="contact_email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email"); ?>
+                                <?php echo $helper->__("Email"); ?>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="contact_email" name="contact_email" value="<?php echo $_vendor->getContactEmail(); ?>" type="text" class="form-control" size="10">
+	                            <?php $contact_email = isset($_errorData['contact_email']) ? $_errorData['contact_email'] : $_vendor->getContactEmail(); ?>
+                                <input id="contact_email" name="contact_email" value="<?php echo $contact_email; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="contact_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone"); ?>
+                                <?php echo $helper->__("Phone"); ?>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="contact_telephone" name="contact_telephone" value="<?php echo $_vendor->getData('contact_telephone'); ?>" type="text" class="form-control" size="10">
+	                            <?php $contact_telephone = isset($_errorData['contact_telephone']) ? $_errorData['contact_telephone'] : $_vendor->getData('contact_telephone'); ?>
+                                <input id="contact_telephone" name="contact_telephone" value="<?php echo $contact_telephone; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                     </div>
@@ -116,133 +133,143 @@ $_vendor = $_session->getVendor();
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Executive contact (business)"); ?></h4>
+                        <h4><?php echo $helper->__("Executive contact (business)"); ?></h4>
 
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
                             <label for="executive_firstname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Name"); ?>
+                                <?php echo $helper->__("Name"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_firstname" name="executive_firstname" required value="<?php echo $_vendor->getData('executive_firstname'); ?>" type="text"
+	                            <?php $executive_firstname = isset($_errorData['executive_firstname']) ? $_errorData['executive_firstname'] : $_vendor->getData('executive_firstname'); ?>
+                                <input id="executive_firstname" name="executive_firstname" required value="<?php echo $executive_firstname; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="executive_lastname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Surname"); ?>
+                                <?php echo $helper->__("Surname"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_lastname" name="executive_lastname" required value="<?php echo $_vendor->getData('executive_lastname'); ?>" type="text"
+	                            <?php $executive_lastname = isset($_errorData['executive_lastname']) ? $_errorData['executive_lastname'] : $_vendor->getData('executive_lastname'); ?>
+                                <input id="executive_lastname" name="executive_lastname" required value="<?php echo $executive_lastname; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="executive_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone "); ?>
+                                <?php echo $helper->__("Phone "); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_telephone" name="executive_telephone" required value="<?php echo $_vendor->getData('executive_telephone'); ?>" type="text"
+	                            <?php $executive_telephone = isset($_errorData['executive_telephone']) ? $_errorData['executive_telephone'] : $_vendor->getData('executive_telephone'); ?>
+                                <input id="executive_telephone" name="executive_telephone" required value="<?php echo $executive_telephone; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="executive_telephone_mobile" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Mobile"); ?>
+                                <?php echo $helper->__("Mobile"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_telephone_mobile" name="executive_telephone_mobile" required value="<?php echo $_vendor->getData('executive_telephone_mobile'); ?>"
+	                            <?php $executive_telephone_mobile = isset($_errorData['executive_telephone_mobile']) ? $_errorData['executive_telephone_mobile'] : $_vendor->getData('executive_telephone_mobile'); ?>
+                                <input id="executive_telephone_mobile" name="executive_telephone_mobile" required value="<?php echo $executive_telephone_mobile; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="billing_email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email"); ?>
+                                <?php echo $helper->__("Email"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="billing_email" name="billing_email" required value="<?php echo $_vendor->getData('billing_email'); ?>" type="text"
+	                            <?php $billing_email = isset($_errorData['billing_email']) ? $_errorData['billing_email'] : $_vendor->getData('billing_email'); ?>
+                                <input id="billing_email" name="billing_email" required value="<?php echo $billing_email; ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <?php if(!$this->isOperatorMode()): ?>
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Administrator contact (ITC or business)"); ?></h4>
+                        <h4><?php echo $helper->__("Administrator contact (ITC or business)"); ?></h4>
 
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
                             <label for="administrator_firstname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Name"); ?>
+                                <?php echo $helper->__("Name"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_firstname" name="administrator_firstname" required value="<?php echo $_vendor->getData('administrator_firstname'); ?>"
+	                            <?php $administrator_firstname = isset($_errorData['administrator_firstname']) ? $_errorData['administrator_firstname'] : $_vendor->getData('administrator_firstname'); ?>
+                                <input id="administrator_firstname" name="administrator_firstname" required value="<?php echo $administrator_firstname; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="administrator_lastname" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Surname"); ?>
+                                <?php echo $helper->__("Surname"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_lastname" name="administrator_lastname" required value="<?php echo $_vendor->getData('administrator_lastname'); ?>"
+	                            <?php $administrator_lastname = isset($_errorData['administrator_lastname']) ? $_errorData['administrator_lastname'] : $_vendor->getData('administrator_lastname'); ?>
+                                <input id="administrator_lastname" name="administrator_lastname" required value="<?php echo $administrator_lastname; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="administrator_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone "); ?>
+                                <?php echo $helper->__("Phone "); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_telephone" name="administrator_telephone" required value="<?php echo $_vendor->getData('administrator_telephone'); ?>"
+	                            <?php $administrator_telephone = isset($_errorData['administrator_telephone']) ? $_errorData['administrator_telephone'] : $_vendor->getData('administrator_telephone'); ?>
+                                <input id="administrator_telephone" name="administrator_telephone" required value="<?php echo $administrator_telephone; ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="administrator_telephone_mobile" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Mobile"); ?>
+                                <?php echo $helper->__("Mobile"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
+	                            <?php $administrator_telephone_mobile = isset($_errorData['administrator_telephone_mobile']) ? $_errorData['administrator_telephone_mobile'] : $_vendor->getData('administrator_telephone_mobile'); ?>
                                 <input id="administrator_telephone_mobile" name="administrator_telephone_mobile" required
-                                       value="<?php echo $_vendor->getData('administrator_telephone_mobile'); ?>" type="text" class="form-control" size="10">
+                                       value="<?php echo $administrator_telephone_mobile; ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email (default login)"); ?>
+                                <?php echo $helper->__("Email (default login)"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
+	                            <?php $email = isset($_errorData['email']) ? $_errorData['email'] : $_vendor->getEmail(); ?>
                                 <input id="email" name="email" required
-                                       value="<?php echo $_vendor->getEmail(); ?>" type="text" class="form-control"
+                                       value="<?php echo $email; ?>" type="text" class="form-control"
                                        size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("New Password"); ?>
+                                <?php echo $helper->__("New Password"); ?>
                             </label>
 
                             <div class="col-md-9">
@@ -250,13 +277,13 @@ $_vendor = $_session->getVendor();
                                        size="10">
                                 <p>
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                    <?php echo Mage::helper("zolagodropship")->__("Leave empty for no change"); ?>
+                                    <?php echo $helper->__("Leave empty for no change"); ?>
                                 </p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="password_repeat" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Repeat New Password"); ?>
+                                <?php echo $helper->__("Repeat New Password"); ?>
                             </label>
 
                             <div class="col-md-9">
@@ -266,7 +293,7 @@ $_vendor = $_session->getVendor();
                         </div>
                     </div>
                 </div>
-
+                <?php endif; ?>
                 <div class="form-actions">
                     <button type="reset" id="filter_reset" class="btn pull-right">
                         <span><span><?php echo $this->__('Cancel'); ?></span></span>

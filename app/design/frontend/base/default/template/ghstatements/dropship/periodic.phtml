@@ -1,0 +1,55 @@
+<?php
+/** @var GH_Statements_Block_Dropship_Periodic $this */
+/** @var GH_Statements_Helper_Data $helper */
+$helper = Mage::helper('ghstatements');
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $helper->__("Periodic statements");?></h3>
+        </div>
+    </div>
+    <!-- /Page Header -->
+</div>
+
+<div class="container z-grid">
+    <div class="widget box">
+        <div class="widget-content">
+            <?php echo $this->getGridHtml(); ?>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function(){
+        var gridObj = <?php echo $this->getGridJsObjectName();?>;
+        // create integrator
+        new Zolago.gridIntegrator(gridObj);
+    })();
+</script>
+<style>
+    .wrapper-details .left-detail, .wrapper-details .right-detail {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .left-detail {
+        width: 66.66%;
+    }
+    .right-detail {
+        width: 33.33%;
+        vertical-align: bottom;
+    }
+    .left-detail,.right-detail {
+        display: inline-block;
+    }
+    div[class^=row-] {
+        border-top: 1px solid #d9d9d9;
+    }
+    div.row-1 {
+        border-top: none;
+    }
+    .row-1, .row-2, .row-3 {
+        padding-bottom: 2px;
+        padding-top: 2px;
+    }
+</style>

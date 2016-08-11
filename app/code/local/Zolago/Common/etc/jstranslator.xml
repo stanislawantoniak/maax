@@ -151,7 +151,7 @@
 		<message>Enter valid price</message>
 	</jquery-validation-50>
 	<jquery-validation-51 translate="message" module="zolagocommon">
-		<message>Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'.</message>
+		<message>Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Starts with alphanumeric. No '--', '__', '..'.</message>
 	</jquery-validation-51>
 	<jquery-validation-52 translate="message" module="zolagocommon">
 		<message>Url key already exists</message>
@@ -159,4 +159,10 @@
 	<jquery-validation-53 translate="message" module="zolagocommon">
 		<message>The converter price of product or one of child product is not available</message>
 	</jquery-validation-53>
+    <zolago-common-processing-dot-dot-dot translate="message" module="zolagocommon">
+        <message>Processing...</message>
+    </zolago-common-processing-dot-dot-dot>
+    <dhl_unknown_error translate="message" module="orbashipping">
+        <message>Unknown error. Please reload page.</message>
+    </dhl_unknown_error>
 </jstranslator>

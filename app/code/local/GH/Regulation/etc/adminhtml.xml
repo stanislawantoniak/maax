@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <vendors>
+            <children>
+                <vendor_general_config>
+                    <children>
+                        <ghregulation module="ghregulation">
+                            <title>Vendor documents</title>
+                            <sort_order>45</sort_order>
+                            <children>
+                                <vendor_document_kind>
+                                    <title>Documents kinds</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/regulation/kind</action>
+                                </vendor_document_kind>
+                                <vendor_document_type>
+                                    <title>Documents types</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/regulation/type</action>
+                                </vendor_document_type>
+                                <vendor_documents>
+                                    <title>Documents list</title>
+                                    <sort_order>30</sort_order>
+                                    <action>adminhtml/regulation/list</action>
+                                </vendor_documents>
+                            </children>
+                        </ghregulation>
+                    </children>
+                </vendor_general_config>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <vendor_general_config>
+                                <children>
+                                    <ghregulation module="ghregulation">
+                                        <title>Vendor documents</title>
+                                        <sort_order>45</sort_order>
+                                    </ghregulation>
+                                </children>
+                            </vendor_general_config>
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

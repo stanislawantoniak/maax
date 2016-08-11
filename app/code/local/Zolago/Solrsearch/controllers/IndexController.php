@@ -28,7 +28,7 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
                 $_params['_query'] = $params;
                 $_params["_no_vendor"] = true;
-                $this->_redirect('search/index/index', $_params);
+                $this->_redirect('search', $_params);
                 return;
             }
         }

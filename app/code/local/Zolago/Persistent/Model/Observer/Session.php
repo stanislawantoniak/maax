@@ -24,6 +24,8 @@ class Zolago_Persistent_Model_Observer_Session extends Mage_Persistent_Model_Obs
 		}
 		
         parent::synchronizePersistentOnLogin($observer);
+		Mage::dispatchEvent('persistent_synchronize_on_login_after',
+			array('session' => Mage::helper('persistent/session')->getSession()));
     }
 
 }

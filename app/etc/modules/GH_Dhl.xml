@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <GH_Dhl>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <ZolagoOs_Rma/>
+                <Zolago_Common/>
+                <Zolago_Dropship/>
+            </depends>
+        </GH_Dhl>
+    </modules>
+</config>

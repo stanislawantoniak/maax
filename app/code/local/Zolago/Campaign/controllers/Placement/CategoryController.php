@@ -15,13 +15,20 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         $vendorCategories = Mage::helper('zolagocampaign')
             ->getVendorCategoriesList();
 
+
         if (!empty($vendorCategories)) {
             $vendorCats = array();
-            foreach ($vendorCategories as $vendorCategory) {
-                $vendorCats[$vendorCategory['id']] = $vendorCategory['id'];
-            }
-            if (in_array($category, $vendorCats)) {
-                $noAccess = false;
+            foreach ($vendorCategories as $websiteId => $vendorCategoriesPerWebsite) {
+                if (!isset($vendorCategoriesPerWebsite["categories"]))
+                    continue;
+
+                foreach ($vendorCategoriesPerWebsite["categories"] as $websiteId => $vendorCategory) {
+                    if (isset($vendorCategory['id']))
+                        $vendorCats[$vendorCategory['id']] = $vendorCategory['id'];
+                }
+                if (in_array($category, $vendorCats)) {
+                    $noAccess = false;
+                }
             }
         }
 
@@ -29,11 +36,15 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             return $this->_redirect('campaign/placement/index');
         }
         Mage::register('as_frontend', true);
-        $this->_renderPage(null, 'zolagocampaign');
+        $this->_renderPage(null, 'zolagocampaign_placement');
     }
 
-    public function saveNewAction() {
-        $helper = Mage::helper('zolagocampaign');
+    /**
+     * Add new placement to SLOT
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function saveNewAction()
+    {
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
@@ -48,14 +59,20 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             'position' => $data['position'],
             'priority' => $data['priority'],
         );
-        $campaign = Mage::getResourceModel('zolagocampaign/campaign');
+
+        /* @var $campaignPlacementModel Zolago_Campaign_Model_Resource_Placement */
+        $campaignPlacementModel = Mage::getResourceModel("zolagocampaign/placement");
         try {
-            $id = $campaign->setNewCampaignPlacement($placement);
+            $id = $campaignPlacementModel->setNewCampaignPlacement($placement);
             echo $id;
         } catch (Exception $e) {
-            echo $helper->__("Some error occure");
+            Mage::logException($e);
         }
     }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
     public function saveAction()
     {
         $helper = Mage::helper('zolagocampaign');
@@ -68,11 +85,14 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         $categoryId = (int)$data['category'];
         $campaign = Mage::getResourceModel('zolagocampaign/campaign');
         //remove items
-        if(isset($data['remove'])){
+        if (isset($data['remove'])) {
             try {
-                $campaign->removeCampaignPlacements($data['remove']);
+                /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
+                $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
+                $modelPlacement->removeCampaignPlacements($data['remove']);
+
             } catch (Exception $e) {
-                echo $helper->__("Some error occure");
+                Mage::logException($e);
             }
         }
         $placements = array();
@@ -82,6 +102,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             for ($i = 0; $i < $itemsCount; $i++) {
                 //campaigns
                 $placements[] = array(
+                    'placement_id' => $data['placement_id'][$i],
                     'vendor_id' => $vendorId,
                     'category_id' => $data['category'],
                     'campaign_id' => $data['campaign_id'][$i],
@@ -94,9 +115,11 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         }
         if (!empty($placements)) {
             try {
-                $campaign->setCampaignPlacements($categoryId, $vendorId, $placements);
+                /* @var $modelPlacement Zolago_Campaign_Model_Resource_Placement */
+                $modelPlacement = Mage::getResourceModel("zolagocampaign/placement");
+                $modelPlacement->setCampaignPlacements($placements);
             } catch (Exception $e) {
-                echo $helper->__("Some error occure");
+                Mage::logException($e);
             }
 
         }

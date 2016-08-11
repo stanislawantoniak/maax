@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Campaign>
-            <version>0.0.10</version>
+            <version>0.1.1</version>
         </Zolago_Campaign>
     </modules>
     <global>
@@ -30,6 +30,9 @@
 					<campaign_product>
 						<table>zolago_campaign_product</table>
 					</campaign_product>
+                    <campaign_product_tmp>
+                        <table>zolago_campaign_product_tmp</table>
+                    </campaign_product_tmp>
                     <campaign_placement>
                         <table>zolago_campaign_placement</table>
                     </campaign_placement>
@@ -63,6 +66,15 @@
                     </zolagocampaign_remove_products>
                 </observers>
             </campaign_product_remove_update_after>
+            <adminhtml_store_edit_form_prepare_form>
+                <!-- @see Zolago_Campaign_Model_Observer::addFieldsToAdminStoreEdit() -->
+                <observers>
+                    <zolagocampaign_add_fields_to_store_edit>
+                        <class>Zolago_Campaign_Model_Observer</class>
+                        <method>addFieldsToAdminStoreEdit</method>
+                    </zolagocampaign_add_fields_to_store_edit>
+                </observers>
+            </adminhtml_store_edit_form_prepare_form>
 		</events>
     </global>
 	<frontend>
@@ -117,6 +129,14 @@
                     <model>zolagocampaign/observer::unsetCampaignAttributes</model>
                 </run>
             </zolagocampaign_unset_campaign_attributes>
+            <zolagocampaign_attach_products_to_campaigns>
+                <schedule>
+                    <cron_expr>7 1,9,11,13,15,17,19 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagocampaign/observer::attachProductsToCampaignBySalesRule</model>
+                </run>
+            </zolagocampaign_attach_products_to_campaigns>
         </jobs>
     </crontab>
 </config>

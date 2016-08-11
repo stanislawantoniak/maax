@@ -18,11 +18,6 @@ Mall.listing = {
 	_ajaxTimer: null,
 
 	/**
-	 * Current listing page.
-	 */
-	_current_page: 1,
-
-	/**
 	 * Current query string - search listing.
 	 */
 	_current_query: "",
@@ -38,11 +33,6 @@ Mall.listing = {
 	_current_filters: [],
 
 	/**
-	 * How many items are visible on listing at the moment.
-	 */
-	_current_visible_items: 0,
-
-	/**
 	 * Total items for current listing.
 	 */
 	_current_total: 0,
@@ -51,41 +41,6 @@ Mall.listing = {
 	 * Current price range - filter.
 	 */
 	_current_price_rage: [0, 0],
-
-	/**
-	 * Lock for loading and showing items when scrolling.
-	 */
-	_scroll_load_lock: false,
-
-	/**
-	 * How many items will be appended to listing when scrolling.
-	 */
-	_scroll_load_offset: 28,
-
-	/**
-	 * How many items will be loaded when load more action is performed.
-	 */
-	_load_next_offset: 100,
-
-	/**
-	 * From which point products loading will be started.
-	 */
-	_load_next_start: 0,
-
-	/**
-	 * When to start showing new products - from bottom of the page.
-	 */
-	_scroll_load_bottom_offset: 2500,
-
-	/**
-	 * Queue for preloaded products.
-	 */
-	_product_queue: [],
-
-	/**
-	 * Can auto append method can be used for autoloaded products?
-	 */
-	_autoappend: false,
 
 	/**
 	 * Current filters state - mobile / desktop.
@@ -100,33 +55,17 @@ Mall.listing = {
 	/**
 	 * Currently show more
 	 */
-	_current_show_more: {},
+	_current_filters_show_more: {},
 
 	/**
 	 * Currently searches
 	 */
 	_current_search: {},
 
-
 	/**
 	 * Cache for ajax request
 	 */
 	_ajaxCache: {},
-
-	/**
-	 * Cache for ajax request
-	 */
-	_ajaxQueueCache: {},
-
-	/**
-	 * @type Array
-	 */
-	_init_products: [],
-
-    /**
-     * Current (first) visible on screen item
-     */
-    _firstOnScreenItem: null,
 
 	/**
 	 * @type Boolean
@@ -139,30 +78,21 @@ Mall.listing = {
 	 * Determines if ajax loading should not be delayed
 	 */
 	_noDelay: false,
-
-	/**
-	 * variable that stores content block
-	 */
-	_content_block: '',
-
-	/**
-	 * variable that stores filters block
-	 */
-	_filters_block: '',
 	
     /**
      * clicked url
      */
 	_current_url: '',
+
+	/**
+	 * products on page (php determines it based on user agent)
+	 */
+	_products_per_page: 0,
+
 	/**
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-
-		this.delegateSavePosition();
-
-		this.initShuffle();
-
         //hide btn filter product if no products (search for example)
         this.processActionViewFilter();
 
@@ -176,6 +106,7 @@ Mall.listing = {
 		this.initFilterEvents();
 
 		// filters delegation - better performance than initiation of each filter event on every ajax reload
+		this.delegatePaginationEvents();
 		this.delegateFilterEvents();
         this.delegateSaveContextForProductPage();
 
@@ -187,23 +118,10 @@ Mall.listing = {
 		// Add custom events to products
 		this.preprocessProducts();
 
-		// set next load start
-		this.setLoadNextStart(this.getCurrentVisibleItems());
-		this.reloadListingItemsAfterPageLoad();
-		this.loadProductsOnScroll();
+		//prevents filters from overlapping lp banner
+		this.positionFiltersAfterLpBannerLoad();
 
-		// load additional products to queue after page is loaded
-		if(this.getCurrentVisibleItems() < 100) {
-			this.setAutoappend(true);
-			this.loadToQueue();
-		} else {
-			if (this.canShowLoadMoreButton()) {
-				this.showLoadMoreButton();
-			}
-			this.showShapesListing();
-		}
-		this.setLoadMoreLabel();
-
+		this.initShuffle();
 	},
 
     initShuffle: function() {
@@ -212,29 +130,11 @@ Mall.listing = {
                 .on('layout.shuffle', function() {
                     Mall.listing.hideListingOverlay();
                     Mall.listing.likePriceView();
-                    Mall.listing.placeListingFadeContainer();
-                    if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
-                        Mall.listing.showLoadMoreButton();
-                    }
-                })
-                .on('done.shuffle', function() {
-                    if(!jQuery("."+Mall.listing.getFiltersClassMobile()+":visible").length) {
-                        if (!Mall.listing._firstOnScreenItem) {
-                            var itemId = sessionStorage.getItem('firstOnScreenItemId');
-                            if (itemId) {
-                                Mall.listing._firstOnScreenItem = jQuery(itemId);
-                            }
-                        }
-                        if(Mall.listing._firstOnScreenItem) {
-                            Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
-                        } else {
-                            Mall.listing.hideListingOverlay();
-                        }
-                    } else {
-                        grid.shuffle('layout');
-                    }
+		            Mall.listing.placeListingFadeContainer();
+		            Mall.Footer.setContainerPadding();
                 })
                 .shuffle({throttleTime: 800, speed: 0, easing: 'linear' });
+	        jQuery(window).resize();
         });
     },
 
@@ -247,15 +147,6 @@ Mall.listing = {
         }
     },
 
-	setInitProducts: function(products){
-		this._init_products = products;
-		return this;
-	},
-
-	getInitProducts: function(){
-		return this._init_products;
-	},
-
 	/**
 	 * Prepare response object based on static html data
 	 * @returns {undefined}
@@ -263,21 +154,20 @@ Mall.listing = {
 	_rediscoverCache: function(){
 		var content = {
 				filters: this.getFilters().prop("outerHTML"),
-				active: this.getActive().prop("outerHTML"),
 				toolbar: this.getToolbar().prop("outerHTML"),
+				pager: this.getPager().prop("outerHTML"),
                 category_with_filters: this.getCategoryWithFilters().prop("outerHTML"),
                 header: this.getHeader().prop("outerHTML"),
-                category_head_title: jQuery("head title").html(),
+				products: this.getInitProducts(),
 				total: this.getTotal(),
-				rows: this.getCurrentVisibleItems(),
 				query: this.getQuery(),
 				sort: this.getSort(),
 				dir: this.getDir(),
-				products: this.getInitProducts(),
-				url: document.location.href
+				url: document.location.href,
+				document_title: document.title
 			},
-			ajaxData = this.getQueryParamsAsArray(),
-			ajaxKey = this.getAjaxHistoryKey(ajaxData),
+			ajaxData = Mall.listing.getQueryParamsAsArray(),
+			ajaxKey = Mall.listing.getAjaxHistoryKey(ajaxData),
 			title = document.title;
 
 		if(this.getPushStateSupport()) {
@@ -329,12 +219,12 @@ Mall.listing = {
 		});
 
 		// Restore state of show more
-		jQuery.each(this.getCurrentShowMore(), function(idx, value){
+		jQuery.each(this.getCurrentFiltersShowMore(), function(idx, value){
 			var el = jQuery("#" + idx, content);
 			if(!el.length){
 				return;
 			}
-			self._doShowMore(el.parent(), value, false);
+			self._doShowMore(el.parent(), value);
 		});
 	},
 
@@ -412,286 +302,40 @@ Mall.listing = {
                 });
         }
 
-
 		Mall.listing.setMainSectionHeight();
 	},
 
-	_doShowMore: function(section, state, animate){
+	_doShowMore: function(section, state) {
 		var link = section.find(".showmore-filters"),
 			content = section.find("[data-state='hidden']");
 
-		if(animate){
-			if(state) {
-				content.show(500, function(){
-					link.text("Pokaż mniej");
-					link.attr("data-state", "1");
-				});
-			} else {
-				content.hide(500, function(){
-					link.text("Pokaż więcej");
-					link.attr("data-state", "0");
-				});
-			}
-		}else{
-			if(state){
-				content.show();
-				link.text("Pokaż mniej");
-				link.attr("data-state", "1");
-			}else{
-				content.hide();
-				link.text("Pokaż więcej");
-				link.attr("data-state", "0");
-			}
-		}
-	},
-
-	/**
-	 * Callback for getMoreProducts
-	 *
-	 * @see Mall.listing.getMoreProducts
-	 * @param data
-	 * @returns {boolean}
-	 */
-	getMoreProductsCallback: function (data) {
-		if (data.status === true) {
-			Mall.listing.setPageIncrement();
-			Mall.listing.appendToList(data.content.products);
-			// set current items count
-			Mall.listing.addToVisibleItems(data.content.rows);
-			Mall.listing.setTotal(data.content.total);
+		if (state) {
+			content.show();
+			link.text(Mall.translate.__("Show less"));
+			link.attr("data-state", "1");
 		} else {
-			// do something to inform customer that something went wrong
-			console.log("Something went wrong, try again");
-			return false;
+			content.hide();
+			link.text(Mall.translate.__("Show more"));
+			link.attr("data-state", "0");
 		}
-		return true;
-	},
-
-	setLoadMoreLabel: function () {
-		"use strict";
-		jQuery(".addNewPositionListProduct").
-			find("span").
-			text(this.getLoadNextOffset());
-		return this;
-	},
-
-	/**
-	 * Removes lock from queue.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	removeLockFromQueue: function () {
-		this._scroll_load_lock = false;
-
-		return this;
-	},
-
-	/**
-	 * Listens for scroll event and loads products from queue.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	loadProductsOnScroll: function () {
-		// detect if this is good time for showing next part of products
-		jQuery(window).scroll(function () {
-			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
-				if (!Mall.listing.getScrollLoadLock()
-					&& Mall.listing.getProductQueue().length > 0
-					&& !Mall.listing.getScrollLoadLock()) {
-					Mall.listing.setQueueLoadLock();
-					Mall.listing.appendFromQueue();
-				}
-			}
-		});
-
-		return this;
-	},
-
-	/**
-	 * Appends products from queue to listing.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	appendFromQueue: function () {
-		"use strict";
-		this.showLoading();
-		this.showShapesListing();
-
-		// append products to list
-		var products = Mall.listing.getProductQueue().slice(
-				0, Mall.listing.getScrollLoadOffset()),
-			items = Mall.listing.appendToList(products),
-			inst = imagesLoaded(jQuery(items)),
-			self = this;
-
-		// loading
-		inst.on("always", function () {
-			self.hideLoading();
-		});
-
-		Mall.listing.addToVisibleItems(products.length);
-
-		Mall.listing.setProductQueue(
-			Mall.listing.getProductQueue().slice(
-				Mall.listing.getScrollLoadOffset()
-				, Mall.listing.getProductQueue().length));
-
-		// remove lock from queue
-		Mall.listing.removeLockFromQueue();
-		// load next part of images
-		Mall.listing.loadPartImagesFromQueue();
-
-		return this;
 	},
 
 	/**
 	 * Shows listing loading.
-	 *
 	 * @returns {Mall.listing}
 	 */
 	showLoading: function () {
-		"use strict";
-
 		jQuery("#listing-loading").show();
-
 		return this;
 	},
 
 	/**
 	 * Hides listing loading.
-	 *
 	 * @returns {Mall.listing}
 	 */
 	hideLoading: function () {
-		"use strict";
-
 		jQuery("#listing-loading").hide();
-
 		return this;
-	},
-
-	/**
-	 * Loads products to queue and auto append first part of them to listing.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	loadMoreProducts: function () {
-		"use strict";
-
-		this.hideLoadMoreButton();
-		this.showLoading();
-		this.setAutoappend(true);
-		this.loadToQueue();
-
-		return this;
-	},
-
-	/**
-	 * Loads products to queue.
-	 */
-	loadToQueue: function () {
-
-        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems() && !Mall.isGoogleBot()) {
-            var forceObject = {
-                start: this.getLoadNextStart(),
-                rows: this.getLoadNextOffset()
-            };
-
-            this.setQueueLoadLock();
-
-            // Ajax load
-            OrbaLib.Listing.getProducts(
-                this.getQueryParamsAsArray(forceObject),
-                Mall.listing.appendToQueueCallback
-            );
-        }
-	},
-
-	/**
-	 * Loads proper part of images from queue.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	loadPartImagesFromQueue: function () {
-		"use strict";
-		// select part of queue
-		var part = Mall.listing.getProductQueue().slice(0, Mall.listing.getScrollLoadOffset());
-
-		// load images
-		if (part.length > 0) {
-			jQuery.each(part, function (index, item) {
-				Mall.listing.loadImageInBackground(item[7]);
-			});
-		}
-
-		return this;
-	},
-
-	/**
-	 * Return whether product queue is empty or not.
-	 *
-	 * @returns {boolean}
-	 */
-	canPrependFromQueue: function () {
-		"use strict";
-		return (this.getProductQueue().length > 0);
-	},
-
-	/**
-	 * Return whether load more button can be shown based on total and queue length.
-	 *
-	 * @returns {boolean}
-	 */
-	canShowLoadMoreButton: function () {
-		"use strict";
-		return (!this.canPrependFromQueue() && this.getTotal() > this.getCurrentVisibleItems());
-	},
-
-	/**
-	 * Loads image in background.
-	 *
-	 * @param url
-	 * @returns {Mall.listing}
-	 */
-	loadImageInBackground: function (url) {
-		"use strict";
-		var image = new Image ();
-		image.src = Mall.productImagesUrl + url;
-		image.onLoad = function () {
-		};
-
-		return this;
-	},
-
-	/**
-	 * Callback function called after loadToQueue.
-	 *
-	 * @param data
-	 */
-	appendToQueueCallback: function (data) {
-		if (!jQuery.isEmptyObject(data) && data.status !== undefined && data.status === true) {
-			if (data.content !== undefined && data.content.products !== undefined
-				&& !jQuery.isEmptyObject(data.content.products)) {
-				Mall.listing.setProductQueue(
-					Mall.listing.getProductQueue().concat(data.content.products)
-				);
-				Mall.listing.addLoadNextStart(data.content.rows);
-				// load images in background
-				if (Mall.listing.canPrependFromQueue()) {
-					Mall.listing.loadPartImagesFromQueue();
-				}
-				if(Mall.listing.getAutoappend()) {
-					Mall.listing.appendFromQueue();
-					Mall.listing.setAutoappend(false);
-				}
-			} else {
-				Mall.listing.removeLockFromQueue(); // this is dummy expression
-			}
-		} else {
-			console.log("Something went wrong, try again later | appendToQueueCallback");
-		}
-
-		Mall.listing.removeLockFromQueue();
 	},
 
 	/**
@@ -702,8 +346,9 @@ Mall.listing = {
 	 * @returns Array
 	 */
 	appendToList: function (products) {
-        var grid = jQuery('#grid');
-		        var eachItemsHtml = [];
+        var grid = jQuery('#grid'),
+	        eachItemsHtml = [];
+
 		jQuery.each(products, function(index, item) {
             eachItemsHtml.push( Mall.listing.createProductEntityImprove(item) );
             Mall.wishlist.addProduct({
@@ -712,13 +357,12 @@ Mall.listing = {
                 in_your_wishlist: item[6] ? true : false
                     });
 		});
+
         grid.append(eachItemsHtml);
         grid.shuffle('appended', grid.find('.item:not(.shuffle-item)'));
+
 		// attach events
 		this.preprocessProducts();
-		this.attachEventsToProducts();
-
-            jQuery(window).trigger('appendToListEnd');
 
 		return eachItemsHtml;
 	},
@@ -738,13 +382,14 @@ Mall.listing = {
      * product[7] = image_url
      * product[8] = image_ratio
      * product[9] = manufacturer_logo_url
+	 * product[10]= sku
+	 * product[11]= skuv
      *
 	 * @param product
      * @returns {string}
 	 */
     createProductEntityImprove: function(product) {
-
-        var oldPrice = product[3] != product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
+        var oldPrice = product[3] > product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "",
 	        likeClass = "like" + (product[6] ? " liked" : ""),
 	        likeText = (product[6] ? "<span>Ty + </span>" : "<span></span>") + (parseInt(product[5], 10) > 0 ? (product[5] > 99) ? "99+ " : product[5] : "") + " ",
 	        likeOnClick = product[6] ? "Mall.wishlist.removeFromSmallBlock(this);return false;" : "Mall.wishlist.addFromSmallBlock(this);return false;";
@@ -752,7 +397,7 @@ Mall.listing = {
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14'>"+
             "<div class='box_listing_product'>"+
-                "<a href='" + product[2] +"' data-entity='" + product[0] +"'>"+
+                "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
                     "<figure class='img_product' style='padding-bottom: " + product[8] +"%'>"+
                         "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+
@@ -761,91 +406,17 @@ Mall.listing = {
                 "</a>"+
                 "<div class='price clearfix'>"+
                     "<div class='col-price'>" + oldPrice +
-                        "<span>" + (number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
+                        "<span>" + (number_format(product[4], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)) + "</span>"+
                     "</div>"+
-                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"' data-status='"+product[6]+"' onclick='"+likeOnClick+"'>"+
-	                    "<span class='like_count'>" + likeText + "</span><span class='icoLike'>"+
-                    "<img src='" + Config.path.heartLike +"' class='img-01' style='width: 18px; height: 18px;' />"+
-                    "<img src='" + Config.path.heartLiked + "' class='img-02' style='width: 18px; height: 18px;'></span>"+
+                    "<div class='"+likeClass+"' data-idproduct='"+product[0]+"'>"+
+                        "<span class='like_count'>" + likeText + "</span>"+
+                        "<span class='icoLike'></span>"+
                         "<div class='toolLike'></div>"+
                     "</div>"+
                 "</div>"+
             "</div>"+
         "</div>";
     },
-
-	/**
-	 * Attaches events to products inserted to listing.
-	 */
-	attachEventsToProducts: function() {
-
-		var itemProduct = jQuery('.box_listing_product'),
-			textLike;
-
-		itemProduct.on('mouseenter', '.like', function(event) {
-			event.preventDefault();
-			if (jQuery(this).hasClass('liked')) {
-				textLike = 'Dodane do ulubionych';
-			} else {
-				textLike = 'Dodaj do ulubionych';
-			}
-			jQuery(this).find('.toolLike').show().text(textLike);
-		});
-		itemProduct.on('mouseleave mouseup', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('.toolLike').hide().text('');
-		});
-		itemProduct.on('mousedown', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('img:visible').animate({transform: 'scale(1.2)'}, 200);
-		});
-		itemProduct.on('mouseup', '.like', function(event) {
-			event.preventDefault();
-			jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200);
-		});
-		itemProduct.on('mousedown', '.liked', function(event) {
-			event.preventDefault();
-			var textLike = 'Usunięte z ulubionych';
-			jQuery(this).find('.toolLike').show().text(textLike);
-		});
-	},
-
-	/**
-	 * Return whether loading more products is possible,
-	 * in addition hide show more button and shape listing.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	canLoadMoreProducts: function() {
-		if(this._current_visible_items >= this._current_total) {
-			this.hideLoadMoreButton()
-				.hideShapesListing();
-		}
-
-		return this;
-	},
-
-	/**
-	 * Hides shape listing.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	hideShapesListing: function() {
-		jQuery("#items-product").find(".shapes_listing").hide();
-
-		return this;
-	},
-
-	/**
-	 * Shows shape listing.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	showShapesListing: function() {
-		jQuery("#items-product").find(".shapes_listing").show();
-
-		return this;
-	},
 
 	_listing_overlay_class: 'listing-overlay',
 
@@ -854,34 +425,11 @@ Mall.listing = {
 	},
 
 	showListingOverlay: function() {
-		var _ = this;
-		return _.getListingOverlay().show();
+		return this.getListingOverlay().show();
 	},
 
 	hideListingOverlay: function() {
 		return Mall.listing.getListingOverlay().hide();
-	},
-
-	/**
-	 * Hides load more button from frontend.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	hideLoadMoreButton: function() {
-		jQuery("#content-main").find(".addNewPositionListProductWrapper").hide();
-
-		return this;
-	},
-
-	/**
-	 * Shows load more button.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	showLoadMoreButton: function() {
-		jQuery("#content-main").find(".addNewPositionListProductWrapper").show();
-
-		return this;
 	},
 
 	/**
@@ -941,7 +489,7 @@ Mall.listing = {
 
 			// Show more is optional
 			if(sm.length){
-				self._current_show_more[id] = sm.attr("data-state")=="1";
+				self._current_filters_show_more[id] = sm.attr("data-state")=="1";
 			}
 
 			// Search strings
@@ -949,15 +497,6 @@ Mall.listing = {
 				self._current_search[id] = sr.val();
 			}
 		});
-	},
-
-	/**
-	 * @param {int} time
-	 * @returns {Mall.listing}
-	 */
-	setAjaxTimeout: function(time){
-		this._ajaxTimeout = time;
-		return this;
 	},
 
 	/**
@@ -981,7 +520,7 @@ Mall.listing = {
 	 */
 	_clearAjaxCache: function(onlyCurrentUrl){
 		if(onlyCurrentUrl){
-			var key = this._buildKey(this.getQueryParamsAsArray());
+			var key = this._buildKey(Mall.listing.getQueryParamsAsArray());
 			if(this._ajaxCache[key]){
 				delete this._ajaxCache[key];
 			}
@@ -1067,19 +606,23 @@ Mall.listing = {
 		if(!window.onpopstate) {
 			var self = this;
 			window.onpopstate = function() {
-				//uncheck all filters
-				jQuery("input[type=checkbox]").prop('checked', false);
 				//check url for selected filters
 				var filters = self._getUrlObjects(),
 					sort = false,
 					dir = false;
 				if (Object.keys(filters).length) {
+					//uncheck all filters
+					jQuery("input[type=checkbox]").prop('checked', false);
 					for (var filter in filters) {
 						if(filters.hasOwnProperty(filter)) {
 							for (var key in filters[filter]) {
 								if(filters[filter].hasOwnProperty(key)) {
 									var value = filters[filter][key];
 									if (key.substring(0, 2) == 'fq') {
+										var importantKeyPart = key.match(/fq\[(.*?)\]/)[1];
+										if(typeof importantKeyPart != "undefined") {
+											key = "fq["+importantKeyPart+"][]";
+										}
 										jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
 										if (key == "fq[price]") {
 											// Set values of range
@@ -1107,8 +650,8 @@ Mall.listing = {
 						self.setSort(sort);
 						self.setDir(dir);
 					} else {
-						self.setSort('');
-						self.setDir('');
+						self.setSort('wishlist_count');
+						self.setDir('desc');
 					}
 					self.setSortSelect();
 				}
@@ -1144,8 +687,8 @@ Mall.listing = {
 	 */
 	_ajaxSend: function(forceObject){
 		var self = this,
-			ajaxData = self.onPopStated ? window.history.state.ajaxData : this.getQueryParamsAsArray(forceObject),
-			ajaxKey = self.onPopStated ? window.history.state.ajaxKey : this.getAjaxHistoryKey(ajaxData);
+			ajaxData = self.onPopStated ? window.history.state.ajaxData : Mall.listing.getQueryParamsAsArray(forceObject),
+			ajaxKey = self.onPopStated ? window.history.state.ajaxKey : Mall.listing.getAjaxHistoryKey(ajaxData);
 
 		if(self.onPopStated) {
 			self.onPopStated = false;
@@ -1162,7 +705,7 @@ Mall.listing = {
 			ajaxData,
 			function(response){
 				if(response.status){
-					// Cache only success respons
+					// Cache only success response
 					self._ajaxCache[ajaxKey] = response;
 				}
 				self._handleAjaxRepsonse(response,ajaxKey,ajaxData)
@@ -1175,12 +718,23 @@ Mall.listing = {
 	},
 
 	_handleAjaxRepsonse: function(response,ajaxKey,ajaxData){
+		var hideAjaxLoading = true;
 		if(!response.status){
 			this._handleResponseError(response);
 		}else{
-			this.rebuildContents(response.content,ajaxKey,ajaxData);
+			var rebuildContents = this.rebuildContents(response.content,ajaxKey,ajaxData);
+
+			if(!rebuildContents){
+				hideAjaxLoading = false;
+			}
 		}
-		this.hideAjaxLoading();
+
+		if(hideAjaxLoading){
+			//do not hide loader if page will be refreshed
+			//(For example on Landing page last active filter remove)
+			this.hideAjaxLoading();
+		}
+
 	},
 
 	showAjaxLoading: function(){
@@ -1226,66 +780,73 @@ Mall.listing = {
 		return this._ajax_loader;
 	},
 
+
 	rebuildContents: function(content,ajaxKey,ajaxData){
+
+		if(typeof ajaxData == 'undefined' || typeof ajaxKey == 'undefined') {
+			ajaxData = Mall.listing.getQueryParamsAsArray();
+			ajaxKey = Mall.listing.getAjaxHistoryKey(ajaxData);
+		}
+
+		if(content.reload_to_cms){
+			//hack to reload cms page
+			window.location = content.url;
+			return false;
+		}
 		Mall.listing.showAjaxLoading();
+		Mall.Scrolltop.hopToTop();
+
 		// All filters
 		var filters = jQuery(content.filters);
-		if(this.getMobileFiltersOverlay().is(":visible")) {
-			filters.show();
+		if(filters.length) {
+			if (this.getMobileFiltersOverlay().is(":visible")) {
+				filters.show();
+			}
+			this.getFilters().replaceWith(filters);
+			this.initFilterEvents(filters);
 		}
-		this.getFilters().replaceWith(filters);
 
-		this.initFilterEvents(filters);
+		var header = jQuery(content.header);
+		if(header.length) {
+			this.getHeader().replaceWith(jQuery(content.header));
+		}
 
-		// Init toolbar
-		var toolbar = jQuery(content.toolbar);
-		this.getToolbar().replaceWith(toolbar);
-		this.initSortEvents(toolbar);
-
-        var breadcrumbs = this.getHeader().find('#breadcrumbs-header');
-		this.getHeader().replaceWith(jQuery(content.header));
-        this.getHeader().find('#breadcrumbs-header').html(breadcrumbs);
-		this.getActive().replaceWith(jQuery(content.active));
-
-        //Category with filters
-        var categoryWithFilters = jQuery(content.category_with_filters);
-        this.getCategoryWithFilters().replaceWith(categoryWithFilters);
-
-        //category_head_title
-        var category_head_title = content.category_head_title;
-        jQuery("head title").html(category_head_title);
+		//Category with filters
+		var categoryWithFilters = jQuery(content.category_with_filters);
+		this.getCategoryWithFilters().replaceWith(categoryWithFilters);
 
 		// Finally product
 		this.replaceProducts(content);
+		this.replacePager(content);
 
 		// Set pushstate
 		this._current_url = content.url;
 		this._pushHistoryState(ajaxKey,ajaxData);
 
+		if(typeof content.document_title != "undefined" && content.document_title.length && content.document_title != document.title) {
+			try {
+				document.getElementsByTagName('title')[0].innerHTML = content.document_title.replace('<','&lt;').replace('>','&gt;').replace(' & ',' &amp; ');
+			} catch(e){}
+		}
+
 		this.initActiveEvents();
 		this.initListingLinksEvents();
+
+		return true;
 	},
 
 	replaceProducts: function(data){
 		// 1. Reset the content
 		this.getProducts().find(".item").remove();
-		this.setProductQueue([]);
 
 		// 2. Reset the page and values
-		this.setPage(0);
 		this.setTotal(data.total);
-		this.setCurrentVisibleItems(data.rows);
 
 		this.appendToList(data.products);
+	},
 
-		this.setLoadNextStart(this.getCurrentVisibleItems());
-		this.reloadListingItemsAfterPageLoad();
-		this.loadProductsOnScroll();
-
-		// Init list
-		this.setAutoappend(true);
-		this.loadToQueue();
-		this.setLoadMoreLabel();
+	replacePager: function (data) {
+		this.getPager().html(data.pager);
 	},
 
 	initListingLinksEvents: function() {
@@ -1313,11 +874,13 @@ Mall.listing = {
 		}
 	},
 
+	_removeActiveFilters: false, //tells ajax cache key builder to drop start parameter
 	initActiveEvents: function(scope) {
 		scope = scope || Mall.listing.getActiveId();
 		var self = this,
 			active = this.getActiveLabel(scope),
 			remove = this.getActiveRemove(scope);
+
 		if(this.getPushStateSupport()) {
 
 			function unCheckbox(id) {
@@ -1330,8 +893,12 @@ Mall.listing = {
 
 			active.click(function() {
 				var me = jQuery(this);
+
 				self._current_url = me.attr('href');
-				if(!me.parent().hasClass('query-text-iks')) {
+
+				self._removeActiveFilters = true;
+
+				if(!me.parent().hasClass('query-text-iks')) { //not search
 					me.parents('.label').detach();
 					unCheckbox(me.data('input'));
 					if (active.length == 1) {
@@ -1345,7 +912,9 @@ Mall.listing = {
 			});
 
 			remove.click(function() {
+				Mall.listing._removeActiveFilters = true;
 				var me = jQuery(this);
+
 				self._current_url = me.attr('href');
 				active.each(function() {
 					unCheckbox(jQuery(this).data('input'));
@@ -1393,7 +962,8 @@ Mall.listing = {
 		jQuery('html').addClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','none'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.showMobileFiltersOverlay();
-		//self.triggerResize();
+		jQuery('#'+self.getMobileFiltersOverlayId()).click(self.closeMobileFilters);
+		jQuery(window).swipe(Mall.swipeOptions);
 	},
 
 	closeMobileFilters: function() {
@@ -1402,7 +972,7 @@ Mall.listing = {
 		jQuery('html').removeClass(self.getMobileFiltersOpenedClass());
 		jQuery('#sort-by').css('pointer-events','auto'); //fix for clicking through filters overlay and open sorting (mobile)
 		self.hideMobileFiltersOverlay();
-		//self.triggerResize();
+		jQuery('#'+self.getMobileFiltersOverlayId()).off('click');
 	},
 
 	getMobileFiltersOpenedClass: function() {
@@ -1441,11 +1011,6 @@ Mall.listing = {
 		return jQuery("#filters-btn").find(".actionViewFilter");
 	},
 
-	/** trigger window resize for correct filter positioning **/
-	triggerResize: function() {
-		jQuery(window).resize();
-	},
-
 	getProducts: function(){
 		return jQuery("#items-product");
 	},
@@ -1481,16 +1046,6 @@ Mall.listing = {
         return jQuery("#category_with_filters");
     },
 
-	/**
-	 * Return current mobile filters state. Is mobile or not.
-	 *
-	 * @returns {*}
-	 */
-	getCurrentMobileFilterState: function() {
-		return this._current_mobile_filter_state;
-	},
-
-
 	initScrolls: function(scope, opts){
 		scope = scope || jQuery(".solr_search_facets");
 		opts = opts || {};
@@ -1504,6 +1059,7 @@ Mall.listing = {
 				scrollButtons:{
 					enable:true
 				},
+				mouseWheel:{ scrollAmount: 50 },
 				advanced:{
 					updateOnBrowserResize:true
 				} // removed extra commas
@@ -1733,14 +1289,14 @@ Mall.listing = {
 			var me = jQuery(this);
 			self._doShowMore(
 				me.parents('.section'),
-				me.data('state') != '1',
-				false
+				me.attr('data-state') != '1'
 			);
 		});
 
 		// show/hide clear button on filter select/deselect
 		var hiddenClass = 'hidden';
 		jQuery(document).delegate(filtersId+' :checkbox','change',function(e) {
+			Mall.listing._removeActiveFilters = true;
 			e.preventDefault();
 			var me = jQuery(this).parents('.section'),
 				button = me.find('.action.clear');
@@ -1780,6 +1336,7 @@ Mall.listing = {
 		var clearBtnSelector = filtersId+' .action.clear a';
 		if(self.getPushStateSupport()) {
 			jQuery(document).delegate(clearBtnSelector,'click',function(e) {
+				Mall.listing._removeActiveFilters = true;
 				e.preventDefault();
 				var me = jQuery(this);
 				self._current_url = me.attr('href');
@@ -1800,13 +1357,90 @@ Mall.listing = {
 	/**
 	 *
 	 *
-	 * FILTERS END
+
+	   FILTERS END
 	 *
 	 *
 	 **/
 
+	delegatePaginationEvents: function() {
+		var self = this;
+		jQuery(document).delegate('a.page-next, a.page-prev','click', self.pageChange);
+
+		return self;
+	},
+
+	pageChangeForceObject: {},
+	pageChangeUri: false,
+	pageChange: function(e) {
+		Mall.listing.pageChangeUri = jQuery(this).attr('href');
+		var start = Mall.listing.getStart();
+
+		if (!Mall.isGoogleBot()) {
+			if(start) {
+				Mall.listing.pageChangeForceObject = {
+					start: start
+				};
+			}
+
+			var params = Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
+				ajaxKey = Mall.listing.getAjaxHistoryKey(params);
+
+			if(typeof Mall.listing._ajaxCache[ajaxKey] != "undefined") {
+				Mall.listing.goToNextPage(Mall.listing._ajaxCache[ajaxKey]);
+			} else {
+				if(!start) {
+					params["start"] = 1;
+				}
+
+				Mall.listing.showAjaxLoading();
+				// Ajax load
+				OrbaLib.Listing.getProducts(
+					params,
+					Mall.listing.goToNextPage
+				);
+			}
+		}
+
+		e.preventDefault();
+		return false;
+	},
+
+	goToNextPage: function (data) {
+		if (!jQuery.isEmptyObject(data)
+			&& data.status !== undefined
+			&& data.status && data.content !== undefined
+			&& data.content.products !== undefined
+			&& !jQuery.isEmptyObject(data.content.products)) {
+
+			Mall.Scrolltop.hopToTop();
+
+			Mall.listing.replaceProducts(data.content);
+			Mall.listing.replacePager(data.content);
+
+			var ajaxData = self.onPopStated ? window.history.state.ajaxData : Mall.listing.getQueryParamsAsArray(Mall.listing.pageChangeForceObject),
+				ajaxKey = self.onPopStated ? window.history.state.ajaxKey : Mall.listing.getAjaxHistoryKey(ajaxData);
+			// Set pushstate
+			Mall.listing._current_url = Mall.listing.pageChangeUri;
+			Mall.listing.pageChangeUri = false;
+			Mall.listing._pushHistoryState(ajaxKey,ajaxData);
+
+			//include header in order to keep active filters header labels always up to date
+			data.content.header = Mall.listing.getHeader().prop("outerHTML");
+			Mall.listing._ajaxCache[ajaxKey] = data;
+
+			Mall.listing.hideAjaxLoading();
+
+		} else {
+			console.log("Something went wrong, please contact support");
+		}
+	},
+
 	getToolbar: function(){
 		return jQuery("#sort-criteria");
+	},
+	getPager: function(){
+		return jQuery(".pagination-line");
 	},
 
 	getSortSelect: function(scope) {
@@ -2331,8 +1965,6 @@ Mall.listing = {
 	_transferValuesToCheckbox: function(min,max,scope){
 		this.getSliderCheckbox(scope).attr('value',
 			parseInt(min) + " TO " + parseInt(max));
-//		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
-//		this.getSliderCheckbox(scope).data('url', url);
 	},
 	getSliderCheckbox: function(scope){
 		return jQuery('#filter_slider',scope);
@@ -2342,12 +1974,6 @@ Mall.listing = {
 	},
 	setIsSliderActive: function(val){
 		return this.getSliderCheckbox().prop("checked", val);
-	},
-	markPrice: function (name) {
-		alert(jQuery(name).html());
-	},
-	unmarkPrice: function () {
-//		jQuery("#filter_price").find("input:checkbox").attr('checked',false);
 	},
 
 
@@ -2361,11 +1987,9 @@ Mall.listing = {
 		var q = {
 			fq: jQuery.isEmptyObject(this.getFiltersArray()) || this.getFiltersArray().fq === undefined ? [] : this.getFiltersArray().fq,
 			q: this.getQuery(),
-			page: this.getPage(),
 			sort: this.getSort(),
 			dir: this.getDir(),
 			scat: this.getScat(),
-			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
 
@@ -2377,10 +2001,27 @@ Mall.listing = {
 	},
 
 	getAjaxHistoryKey: function(data) {
-		var out = [];
+		var out = [],
+			names = [];
+
 		data.forEach(function(entry) {
-			out.push(entry.name+"="+entry.value);
+			if((entry.name == 'start' && entry.value > 1 && !Mall.listing._removeActiveFilters) || entry.name != 'start') {
+				out.push(entry.name + "=" + entry.value);
+				names.push(entry.name);
+			}
 		});
+
+		if(names.indexOf("start") == -1 && !Mall.listing._removeActiveFilters) {
+			var start = Mall.listing.getStart();
+			if (start > 1) {
+				out.push("start=" + start);
+			}
+		}
+
+		if(Mall.listing._removeActiveFilters) {
+			Mall.listing._removeActiveFilters = false; //handles all filters removal and drops the start parameter from ajaxCache key
+		}
+
 		return out.join("|");
 	},
 
@@ -2388,12 +2029,9 @@ Mall.listing = {
 		var force = forceObject || {};
 		var defaults = {
 			q: this.getQuery(),
-			page: this.getPage(),
 			sort: this.getSort(),
 			dir: this.getDir(),
-			scat: this.getScat(),
-			rows: this.getScrollLoadOffset(),
-			start: 0
+			scat: this.getScat()
 		};
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
@@ -2412,7 +2050,63 @@ Mall.listing = {
 		jQuery.each(this.getFqByInterface(), function(){
 			out.push({name: this.name, value: this.value});
 		});
+
 		return out;
+	},
+
+	/**
+	 * Calculates position and places shape listing fade block.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	placeListingFadeContainer: function() {
+		if(!Mall.isGoogleBot()) {
+			if (this.nextPageExists()) {
+				this.showShapesListing();
+				var grid = jQuery('#grid'),
+					gridHeight = grid.height(),
+					cutFromBottom = [];
+
+				var lastProducts = jQuery('#grid').find(
+					'.item:eq('+(this.getProductsPerPage()-4)+'),'+
+					'.item:eq('+(this.getProductsPerPage()-3)+'),'+
+					'.item:eq('+(this.getProductsPerPage()-2)+'),'+
+					'.item:eq('+(this.getProductsPerPage()-1)+')'); //last 4 products
+
+				lastProducts.each(function() {
+					var top = jQuery(this).position().top,
+						elemHeight = jQuery(this).height();
+
+					cutFromBottom.push(gridHeight - top - elemHeight - 60); //60 = shapes_listing height
+				});
+
+				cutFromBottom = parseInt(Math.min.apply(Math, cutFromBottom));
+
+				var newHeight = gridHeight - cutFromBottom;
+				if ((grid.height() - cutFromBottom ) <= newHeight) {
+					grid.not('.list-shop-product').height(newHeight);
+				}
+
+			} else {
+				this.hideShapesListing();
+			}
+		}
+
+		return this;
+	},
+
+	showShapesListing: function() {
+		jQuery("#items-product").find(".shapes_listing").show();
+		return this;
+	},
+
+	hideShapesListing: function() {
+		jQuery("#items-product").find(".shapes_listing").hide();
+		return this;
+	},
+
+	nextPageExists: function() {
+		return jQuery('.page-next').length ? true : false;
 	},
 
 	/**
@@ -2431,195 +2125,26 @@ Mall.listing = {
 		return this;
 	},
 
-	/**
-	 * Calculates position and places shape listing fade block.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	placeListingFadeContainer: function() {
-		if(!Mall.isGoogleBot()) {
-			if (this.canShowLoadMoreButton())
-			{
-				this.showLoadMoreButton();
-				this.showShapesListing();
-
-
-				if (!this.getScrollLoadLock()) {
-					var grid = jQuery('#grid'),
-						gridHeight = grid.height(),
-						cutFromBottom = [],
-						windowWidth = jQuery(window).width(),
-						sliceNumber = -4;
-
-					if (windowWidth < 992) {
-						sliceNumber = -3;
-					}
-					if (windowWidth < 541) {
-						sliceNumber = -2;
-					}
-
-					grid.find('.item').slice(sliceNumber).each(function() {
-						var top = jQuery(this).position().top;
-						var elemHeight = jQuery(this).height();
-						cutFromBottom.push(gridHeight - top - elemHeight);
-					});
-					cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
-					var newHeight = gridHeight - cutFromBottom;
-
-					if (cutFromBottom < 0) {
-						return this;
-					}
-
-					//magic number 1500 px
-					//to prevent jumping on top of page when
-					//browser wrong calculate height
-					if (cutFromBottom > 1500) { //
-						return this;
-					}
-
-					if ((grid.height() - cutFromBottom ) <= newHeight) {
-						grid.not('.list-shop-product').height(newHeight);
-					}
-				}
-
-			} else {
-				this.hideLoadMoreButton();
-				this.hideShapesListing();
-			}
-		}
-
-        return this;
-	},
-
-	/**
-	 * Sets load next start attribute.
-	 *
-	 * @param count
-	 * @returns {Mall.listing}
-	 */
-	addLoadNextStart: function (count) {
-		this._load_next_start += parseInt(count);
-
-		return this;
-	},
-
-	/**
-	 * Sets load next start attribute.
-	 *
-	 * @param count
-	 * @returns {Mall.listing}
-	 */
-	setLoadNextStart: function (count) {
-		this._load_next_start = count;
-
-		return this;
-	},
-
-	/**
-	* cool thing heppens here
-	*
-	* @returns {Mall.listing}
-	*/
-	reloadListingItemsAfterPageLoad: function() {
-        this.hideLoading();
-
-        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-        	Mall.listing.hideLoadMoreButton();
-            Mall.listing.hideShapesListing();
-        }
-
-        return this;
-	},
-
-	getFirstItemWidth: function (container) {
-		"use strict";
-		return container.find(".item").first().width();
-	},
-
 
     delegateSaveContextForProductPage: function() {
         jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
 	        var breadcrumb = jQuery('ol.breadcrumb');
-            if (breadcrumb.attr('data-search') == "0") {
-                e.preventDefault();
-                localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header').find('ol').html());
-            }
-            if (breadcrumb.attr('data-search') == "1") {
-                e.preventDefault();
-                var searchBreadcrumb = "";
-	            breadcrumb.find("li:not(.home,.search,.vendor)").each(function(i,val){
-                    var li = jQuery(val);
-                    var link = jQuery(val).data("link");
-                    var catid = jQuery(val).data("catid");
-                    var text = jQuery(val).find("a").html();
-
-                    searchBreadcrumb += '<li data-catid="'+catid+'" class="'+i+'">'
-                    +'<a href="'+link+'"  id="'+catid+'">'+text+'</a>'
-                    +'</li>';
-                });
-
-                localStorage.setItem(jQuery(this).attr("data-entity")+"_search_breadcrumb", searchBreadcrumb);
-            }
+            e.preventDefault();
+            localStorage.setItem(jQuery(this).attr("data-entity"), jQuery('#breadcrumbs-header').find('ol').html());
 
         });
     },
 
 	beforeResizeWidth: window.innerWidth,
 
-    delegateSavePosition: function() {
-
-        jQuery(document).delegate('.box_listing_product a','mousedown',function(e) {
-            e.preventDefault();
-            Mall.listing.setFirstOnScreenItem(jQuery(this).closest(".item"));
-        });
-
-        jQuery(window)
-	        .on('Mall.onScrollEnd', function() {
-                Mall.listing.getFirstOnScreenItem();
-            })
-	        .on('Mall.onResizeEnd', function() {
-                if (Mall.listing._firstOnScreenItem != null &&
-	                !jQuery(Mall.listing._firstOnScreenItem).isOnScreen(0.5, 0.7) && Mall.listing.beforeResizeWidth != window.innerWidth) {
-	                Mall.listing.beforeResizeWidth = window.innerWidth;
-                    Mall.listing.scrollToItem(Mall.listing._firstOnScreenItem);
-                }
-            });
-    },
-
-	updateFirstOnScreenItem: false,
-    getFirstOnScreenItem: function() {
-	    if(!Mall.listing._firstOnScreenItem && !Mall.listing.updateFirstOnScreenItem) {
-		    return null;
-	    } else if(!Mall.listing.updateFirstOnScreenItem) {
-		    Mall.listing.updateFirstOnScreenItem = true;
-		    return Mall.listing._firstOnScreenItem;
-	    }
-        var grid = jQuery('#grid');
-        var visibleItems = grid.find('.item:in-viewport');
-        var item = null;
-        for (var i = 0; i < visibleItems.length ; i++) {
-            if (jQuery(visibleItems[i]).isOnScreen(0.5,0.7)) {
-                Mall.listing.setFirstOnScreenItem(visibleItems[i]);
-                break;
-            }
-        }
-        return Mall.listing._firstOnScreenItem;
-    },
-
-    setFirstOnScreenItem: function(item) {
-        Mall.listing._firstOnScreenItem = item;
-        sessionStorage.setItem('firstOnScreenItemId', '#'+jQuery(item).attr('id'));
-        sessionStorage.setItem("windowWidth", jQuery(window).width());
-    },
-
-    scrollToItem: function(item) {
-        if (item != null && jQuery(item).length && !jQuery(item).isOnScreen(1, 0.85)) {
-	        Mall.listing.updateFirstOnScreenItem = false;
-	        var offsetTop = jQuery(item).offset().top - 60;
-	        jQuery('body,html').scrollTop(offsetTop);
-        }
-	    Mall.listing.hideListingOverlay();
-    },
+	positionFiltersAfterLpBannerLoad: function() {
+		var bannersContainer = jQuery('.lp-banners');
+		if(bannersContainer.length) {
+			bannersContainer.find('img').load(function() {
+				Mall.listing.positionFilters();
+			});
+		}
+	},
 
 	/**
 	 *
@@ -2675,21 +2200,10 @@ Mall.listing = {
 	},
 
 	/**
-	 * Returns current page. Currently turned off.
-	 *
-	 * @returns {string}
-	 */
-	getPage: function() {
-		// for now it's turned off
-		return "";
-	},
-
-
-	/**
 	 * @returns {object}
 	 */
-	getCurrentShowMore: function(){
-		return this._current_show_more;
+	getCurrentFiltersShowMore: function(){
+		return this._current_filters_show_more;
 	},
 
 	/**
@@ -2771,15 +2285,6 @@ Mall.listing = {
 	},
 
 	/**
-	 * Returns current category.
-	 *
-	 * @returns {string}
-	 */
-	getScat: function() {
-		return this._current_scat;
-	},
-
-	/**
 	 * Returns current filters.
 	 * @deprecated since getFqByInterface
 	 * @returns {*}
@@ -2799,139 +2304,12 @@ Mall.listing = {
 	},
 
 	/**
-	 * Returns currently visible items on listing.
-	 *
-	 * @returns {number}
-	 */
-	getCurrentVisibleItems: function() {
-		return this._current_visible_items;
-	},
-
-	/**
-	 * Returns total number of items in current filter/category listing.
-	 *
-	 * @returns {number}
-	 */
-	getTotal: function() {
-		return this._current_total;
-	},
-
-	/**
 	 * Returns current price range from price filter.
 	 *
 	 * @returns {*}
 	 */
 	getCurrentPriceRange: function() {
 		return this._current_price_rage;
-	},
-
-	/**
-	 * Returns how many pixels from bottom show new products will be started.
-	 *
-	 * @returns {number}
-	 */
-	getScrollBottomOffset: function() {
-		return this._scroll_load_bottom_offset;
-	},
-
-	/**
-	 * Returns current scroll load offset.
-	 *
-	 * @returns {number}
-	 */
-	getScrollLoadOffset: function () {
-		return this._scroll_load_offset;
-	},
-
-	/**
-	 * Returns state for scroll load lock.
-	 *
-	 * @returns {boolean}
-	 */
-	getScrollLoadLock: function () {
-		return this._scroll_load_lock;
-	},
-
-	/**
-	 * Returns start point for load more products.
-	 *
-	 * @returns {number}
-	 */
-	getLoadNextStart: function () {
-		return this._load_next_start;
-	},
-
-	/**
-	 * Returns current product queue.
-	 *
-	 * @returns {*}
-	 */
-	getProductQueue: function () {
-		return this._product_queue;
-	},
-
-	/**
-	 * Returns how many products should be loaded in next load request.
-	 *
-	 * @returns {number}
-	 */
-	getLoadNextOffset: function () {
-		return this._load_next_offset;
-	},
-
-	/**
-	 * Returns autoappend mode state.
-	 *
-	 * @returns {boolean}
-	 */
-	getAutoappend: function () {
-		"use strict";
-		return this._autoappend;
-	},
-
-
-	/**
-	 * Sets autoappend mode to given state.
-	 *
-	 * @param state
-	 * @returns {Mall.listing}
-	 */
-	setAutoappend: function (state) {
-		"use strict";
-		this._autoappend = state;
-
-		return this;
-	},
-
-	/**
-	 * Sets product queue to given value.
-	 *
-	 * @param queue
-	 * @returns {Mall.listing}
-	 */
-	setProductQueue: function (queue) {
-		this._product_queue = queue;
-
-		return this;
-	},
-
-	/**
-	 * Set current page.
-	 * @returns {Mall.listing}
-	 */
-	setPage: function(page) {
-		this._current_page = page;
-		return this;
-	},
-
-	/**
-	 * Increments current page.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	setPageIncrement: function() {
-		this._current_page += 1;
-		return this;
 	},
 
 	/**
@@ -2946,76 +2324,49 @@ Mall.listing = {
 		return this;
 	},
 
-	/**
-	 * Sets current category.
-	 *
-	 * @param scat
-	 * @returns {Mall.listing}
-	 */
+	getStart: function() {
+		var href = Mall.listing.pageChangeUri ? Mall.listing.pageChangeUri : window.location.href;
+		var start = Mall.getUrlPart('start',href);
+
+		return start ? start : 1;
+	},
+
+	/* Functions that set and get current category id */
 	setScat: function(scat) {
 		this._current_scat = scat;
 
 		return this;
 	},
-
-	/**
-	 * Sets current filters.
-	 *
-	 * @deprecated
-	 *
-	 * @param filters
-	 * @returns {Mall.listing}
-	 */
-	setFiltersArray: function(filters) {
-		this._current_filters = filters;
-
-		return this;
+	getScat: function() {
+		return this._current_scat;
 	},
 
-	/**
-	 * Adds given items count to visible items on listing.
-	 *
-	 * @param itemsCount
-	 * @returns {Mall.listing}
-	 */
-	addToVisibleItems: function(itemsCount) {
-		this._current_visible_items += parseInt(itemsCount);
-		return this;
-	},
-
-	/**
-	 * Set given items
-	 *
-	 * @param itemsCount
-	 * @returns {Mall.listing}
-	 */
-	setCurrentVisibleItems: function(itemsCount) {
-		this._current_visible_items = itemsCount;
-		return this;
-	},
-
-	/**
-	 * Sets total items.
-	 *
-	 * @param total
-	 * @returns {Mall.listing}
-	 */
+	/* Functions that set and get current total products count */
 	setTotal: function(total) {
 		this._current_total = parseInt(total);
-
 		return this;
 	},
+	getTotal: function() {
+		return this._current_total;
+	},
 
-	/**
-	 * Sets current mobile filters state.
-	 *
-	 * @param state
-	 * @returns {Mall.listing}
-	 */
+	/* Functions that set and get current filters state - mobile or not */
 	setCurrentMobileFilterState: function(state) {
 		this._current_mobile_filter_state = state;
 
 		return this;
+	},
+	getCurrentMobileFilterState: function() {
+		return this._current_mobile_filter_state;
+	},
+
+	/* Functions that set and get ajaxCache first products (not loaded by ajax) */
+	setInitProducts: function(products){
+		this._init_products = products;
+		return this;
+	},
+	getInitProducts: function(){
+		return this._init_products;
 	},
 
 	/**
@@ -3031,59 +2382,15 @@ Mall.listing = {
 		return this;
 	},
 
-	/**
-	 * Sets lock for loading products in queue.
-	 *
-	 * @returns {Mall.listing}
-	 */
-	setQueueLoadLock: function () {
-		"use strict";
-		this._scroll_load_lock = true;
-
+	/* Functions that set and get how many products per page should be displayed */
+	setProductsPerPage: function(num) {
+		this._products_per_page = num;
 		return this;
 	},
+	getProductsPerPage: function() {
+		return this._products_per_page;
+	}
 
-	/**
-	 * Sets how many products will be added to listing on scrolling.
-	 *
-	 * @param offset
-	 * @returns {Mall.listing}
-	 */
-	setScrollLoadOffset: function (offset) {
-		"use strict";
-
-		this._scroll_load_offset = offset;
-
-		return this;
-	},
-
-	/**
-	 * Sets offset in pixels when products will be appended.
-	 *
-	 * @param px
-	 * @returns {Mall.listing}
-	 */
-	setPixelsBeforeAppend: function (px) {
-		"use strict";
-
-		this._scroll_load_bottom_offset = px;
-
-		return this;
-	},
-
-	/**
-	 * Sets how many products will be loaded when load is clicked.
-	 *
-	 * @param offset
-	 * @returns {Mall.listing}
-	 */
-	setLoadNextOffset: function (offset) {
-		"use strict";
-
-		this._load_next_offset = offset;
-
-		return this;
-    }
 };
 
 jQuery(document).ready(function () {

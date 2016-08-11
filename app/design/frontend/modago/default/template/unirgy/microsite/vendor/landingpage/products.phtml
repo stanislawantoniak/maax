@@ -18,7 +18,10 @@ $_collection = $this->getCollection();
 
                         <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
-                                <a href="<?php echo $product->getCurrentUrl(); ?>">
+                                <a href="<?php echo $product->getCurrentUrl(); ?>"
+                                   data-entity="<?php echo $product->getEntityId(); ?>"
+                                   data-sku="<?php echo $product->getSku(); ?>"
+                                   data-skuv="<?php echo $this->getSkuv($product); ?>">
                                     <figure class="img_product" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
                                         <img src="<?php echo $_productImageUrl; ?>"
                                              alt="<?php $this->escapeHtml($product->getName()); ?>"
@@ -70,14 +73,7 @@ $_collection = $this->getCollection();
                                                 </span>
                                                 <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
                                             </span>
-                                            <span class="icoLike">
-                                                <img class="img-01"
-                                                     src="<?php echo $this->getSkinUrl('images/svg/unlike.svg'); ?>"
-                                                     alt="" width="18" height="18" />
-                                                <img class="img-02"
-                                                     src="<?php echo $this->getSkinUrl('images/svg/like.svg'); ?>"
-                                                     alt="" width="18" height="18" />
-                                            </span>
+                                            <div class="icoLike"></div>
                                             <div class="toolLike"></div>
                                         </div>
                                     </div>
@@ -113,15 +109,6 @@ $_collection = $this->getCollection();
         in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
     });
     <?php endforeach; ?>
-
-    jQuery('#grid .like').click(function() {
-        var inMyWishlisy = parseInt(jQuery(this).attr('data-status'));
-        if (inMyWishlisy) {
-            Mall.wishlist.removeFromSmallBlock(this);
-        } else {
-            Mall.wishlist.addFromSmallBlock(this);
-        }
-    });
 
     jQuery(window).resize(function() {
         Mall.listing.placeListingFadeContainer();

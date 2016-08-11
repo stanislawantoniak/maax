@@ -1,157 +1,179 @@
 <?xml version="1.0"?>
 <config>
-	<modules>
-		<Zolago_Rma>
-			<version>0.0.24</version>
-		</Zolago_Rma>
-	</modules>
-	<global>
-		<models>
-			<zolagorma>
-				<class>Zolago_Rma_Model</class>
-				<resourceModel>zolagorma_resource</resourceModel>
-			</zolagorma>
-			<zolagorma_resource>
-				<class>Zolago_Rma_Model_Resource</class>
-				<entities>
-					<rma_reason>
+    <modules>
+        <Zolago_Rma>
+            <version>0.0.28</version>
+        </Zolago_Rma>
+    </modules>
+    <global>
+        <models>
+            <zolagorma>
+                <class>Zolago_Rma_Model</class>
+                <resourceModel>zolagorma_resource</resourceModel>
+            </zolagorma>
+            <zolagorma_resource>
+                <class>Zolago_Rma_Model_Resource</class>
+                <entities>
+                    <rma_reason>
                         <table>zolago_rma_return_reason</table>
                     </rma_reason>
                     <rma_reason_vendor>
                         <table>zolago_rma_vendor_return_reason</table>
                     </rma_reason_vendor>
-				</entities>
-			</zolagorma_resource>
-			<urma>
-				<rewrite>
-					<rma>Zolago_Rma_Model_Rma</rma>
-					<rma_item>Zolago_Rma_Model_Rma_Item</rma_item>
-					<rma_track>Zolago_Rma_Model_Rma_Track</rma_track>
-					<rma_comment>Zolago_Rma_Model_Rma_Comment</rma_comment>
-				</rewrite>
-			</urma>
-			<urma_mysql4>
-				<rewrite>
-					<rma_track_collection>Zolago_Rma_Model_Resource_Rma_Track_Collection</rma_track_collection>
-					<rma_comment_collection>Zolago_Rma_Model_Resource_Rma_Comment_Collection</rma_comment_collection>
-				</rewrite>
-			</urma_mysql4>
-		</models>
-		<blocks>
-			<zolagorma>
-				<class>Zolago_Rma_Block</class>
-			</zolagorma>
-		</blocks>
-		<helpers>
-			<zolagorma>
-				<class>Zolago_Rma_Helper</class>
-			</zolagorma>
-			<urma>
-				<rewrite>
-					<data>Zolago_Rma_Helper_Data</data>
-				</rewrite>
-			</urma>
-		</helpers>
-		<fieldsets>
-			<!-- PO -> RMA -->
-			<zolagopo_convert_po>
-				<entity_id>
-					<to_urma>udpo_id</to_urma>
-				</entity_id>
-				<increment_id>
-					<to_urma>udpo_increment_id</to_urma>
-				</increment_id>
-			</zolagopo_convert_po>
-			
-			<!-- PO Item -> Rma Item (Override some editable fields) -->
-			<zolagopo_convert_po_item>
-				<price>
-					<to_urma_item>*</to_urma_item>
-				</price>
-				<vendor_sku>
-					<to_urma_item>*</to_urma_item>
-				</vendor_sku>
-				<vendor_simple_sku>
-					<to_urma_item>*</to_urma_item>
-				</vendor_simple_sku>
-				<entity_id>
-					<to_urma_item>udpo_item_id</to_urma_item>
-				</entity_id>
-			</zolagopo_convert_po_item>
-		</fieldsets>
-		<events>
-		    <shipment_returned>
-		        <observers>
-		            <zolagorma>
-		                <model>zolagorma/observer</model>
-		                <method>createReturnRma</method>
-		            </zolagorma>
-		        </observers>
-		    </shipment_returned>
-			<zolagorma_rma_created>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaCreated</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_created>
-			<zolagorma_rma_comment_added>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaCommentAdded</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_comment_added>
-			<zolagorma_rma_address_restore>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaAddressRestore</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_address_restore>
-			<zolagorma_rma_address_change>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaAddressChange</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_address_change>
-			<zolagorma_rma_status_changed>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaStatusChanged</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_status_changed>
-			<zolagorma_rma_track_added>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaTrackAdded</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_track_added>
-			<zolagorma_rma_track_status_change>
-				<observers>
-					<zolagorma>
-						<model>zolagorma/observer</model>
-						<method>rmaTrackStatusChange</method>
-					</zolagorma>
-				</observers>
-			</zolagorma_rma_track_status_change>
-		</events>
-		<resources>
-			<zolagorma_setup>
-				<setup>
-					<module>Zolago_Rma</module>
-				</setup>
-			</zolagorma_setup>
-			<zolagorma_write>
+                </entities>
+            </zolagorma_resource>
+            <urma>
+                <rewrite>
+                    <rma>Zolago_Rma_Model_Rma</rma>
+                    <rma_item>Zolago_Rma_Model_Rma_Item</rma_item>
+                    <rma_track>Zolago_Rma_Model_Rma_Track</rma_track>
+                    <rma_comment>Zolago_Rma_Model_Rma_Comment</rma_comment>
+                </rewrite>
+            </urma>
+            <urma_mysql4>
+                <rewrite>
+                    <rma_track_collection>Zolago_Rma_Model_Resource_Rma_Track_Collection</rma_track_collection>
+                    <rma_comment_collection>Zolago_Rma_Model_Resource_Rma_Comment_Collection</rma_comment_collection>
+                </rewrite>
+            </urma_mysql4>
+        </models>
+        <blocks>
+            <zolagorma>
+                <class>Zolago_Rma_Block</class>
+            </zolagorma>
+            <urma>
+                <rewrite>
+                    <adminhtml_rma_grid>Zolago_Rma_Block_Adminhtml_Rma_Grid</adminhtml_rma_grid>
+                </rewrite>
+            </urma>
+        </blocks>
+        <helpers>
+            <zolagorma>
+                <class>Zolago_Rma_Helper</class>
+            </zolagorma>
+            <urma>
+                <rewrite>
+                    <data>Zolago_Rma_Helper_Data</data>
+                </rewrite>
+            </urma>
+        </helpers>
+        <fieldsets>
+            <!-- PO -> RMA -->
+            <zolagopo_convert_po>
+                <entity_id>
+                    <to_urma>udpo_id</to_urma>
+                </entity_id>
+                <increment_id>
+                    <to_urma>udpo_increment_id</to_urma>
+                </increment_id>
+            </zolagopo_convert_po>
+
+            <!-- PO Item -> Rma Item (Override some editable fields) -->
+            <zolagopo_convert_po_item>
+                <price>
+                    <to_urma_item>*</to_urma_item>
+                </price>
+                <vendor_sku>
+                    <to_urma_item>*</to_urma_item>
+                </vendor_sku>
+                <vendor_simple_sku>
+                    <to_urma_item>*</to_urma_item>
+                </vendor_simple_sku>
+                <entity_id>
+                    <to_urma_item>udpo_item_id</to_urma_item>
+                </entity_id>
+            </zolagopo_convert_po_item>
+        </fieldsets>
+        <template>
+            <email>
+                <zolagorma_comment_customer_email_template translate="label" module="zolagorma">
+                    <label>RMA Customer Comment Notification Email</label>
+                    <file>zolagorma_comment_customer_email.html</file>
+                    <type>html</type>
+                </zolagorma_comment_customer_email_template>
+            </email>
+        </template>
+        <events>
+            <shipment_returned>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>createReturnRma</method>
+                    </zolagorma>
+                </observers>
+            </shipment_returned>
+            <zolagorma_rma_created>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaCreated</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_created>
+            <zolagorma_rma_created_manually>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaCreatedManually</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_created_manually>
+            <zolagorma_rma_comment_added>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaCommentAdded</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_comment_added>
+            <zolagorma_rma_address_restore>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaAddressRestore</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_address_restore>
+            <zolagorma_rma_address_change>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaAddressChange</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_address_change>
+            <zolagorma_rma_status_changed>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaStatusChanged</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_status_changed>
+            <zolagorma_rma_track_added>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaTrackAdded</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_track_added>
+            <zolagorma_rma_track_status_change>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaTrackStatusChange</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_track_status_change>
+        </events>
+        <resources>
+            <zolagorma_setup>
+                <setup>
+                    <module>Zolago_Rma</module>
+                </setup>
+            </zolagorma_setup>
+            <zolagorma_write>
                 <connection>
                     <use>core_write</use>
                 </connection>
@@ -161,48 +183,48 @@
                     <use>core_read</use>
                 </connection>
             </zolagorma_read>
-		</resources>
-	</global>
-	<frontend>
-		<routers>
-			<sales>
+        </resources>
+    </global>
+    <frontend>
+        <routers>
+            <sales>
                 <args>
                     <modules>
                         <zolagorma before="Mage_Sales">Zolago_Rma</zolagorma>
                     </modules>
                 </args>
             </sales>
-			<urma>
-				<args>
-					<modules>
-						<Zolago_Rma before="Unirgy_Rma">Zolago_Rma</Zolago_Rma>
-					</modules>
-				</args>
-			</urma>
-		</routers>
-		<layout>
-			<updates>
-				<zolagorma>
-					<file>zolagorma.xml</file>
-				</zolagorma>
-			</updates>
-		</layout>
-		<translate>
-			<modules>
-				<Zolago_Rma>
-					<files>
-						<default>Zolago_Rma.csv</default>
-					</files>
-				</Zolago_Rma>
-			</modules>
-		</translate>
-		<files>
-		    <pdf>
-		        <customer>doc/customer.pdf</customer>
+            <urma>
+                <args>
+                    <modules>
+                        <Zolago_Rma before="ZolagoOs_Rma">Zolago_Rma</Zolago_Rma>
+                    </modules>
+                </args>
+            </urma>
+        </routers>
+        <layout>
+            <updates>
+                <zolagorma>
+                    <file>zolagorma.xml</file>
+                </zolagorma>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Zolago_Rma>
+                    <files>
+                        <default>Zolago_Rma.csv</default>
+                    </files>
+                </Zolago_Rma>
+            </modules>
+        </translate>
+        <files>
+            <pdf>
+                <customer>doc/customer.pdf</customer>
             </pdf>
-		</files>
-	</frontend>
-	<admin>
+        </files>
+    </frontend>
+    <admin>
         <routers>
             <adminhtml>
                 <args>
@@ -211,10 +233,17 @@
                     </modules>
                 </args>
             </adminhtml>
+            <rmaadmin>
+                <args>
+                    <modules>
+                        <zolagorma before="ZolagoOs_Rma_Adminhtml">Zolago_Rma_Adminhtml</zolagorma>
+                    </modules>
+                </args>
+            </rmaadmin>
         </routers>
     </admin>
     <adminhtml>
-    	<translate>
+        <translate>
             <modules>
                 <Zolago_Rma>
                     <files>
@@ -257,6 +286,13 @@
             </zolagorma_global_return_reson_save_after>
         </events>
     </adminhtml>
+    <default>
+        <urma>
+            <email>
+                <zolagorma_comment_customer_email_template>zolagorma_comment_customer_email</zolagorma_comment_customer_email_template>
+            </email>
+        </urma>
+    </default>
     <crontab>
         <jobs>
             <zolagorma_process_collect_tracking>

@@ -26,8 +26,9 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 					$value = $this->getMinimalPrice("salePriceBefore");
 				}else{
 					$response = $this->_getProductPriceData(
-							$this->_getVendor()->getExternalId(), 
-							$product->getSkuv()
+						$this->_getVendor()->getExternalId(),
+						$product->getSkuv(),
+						$product->getId()
 					);
 					if($response){
 						$value = $response['salePriceBefore'];
@@ -39,7 +40,6 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 				$option['price'] = $this->getProduct()->getMsrp();
 			}
 		}
-		
 		return $options;
 	}
 	
@@ -48,20 +48,24 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 	 * @param string $vSku
 	 * @return mixed
 	 */
-	protected function _getProductPriceData($vendorExtranlId, $vSku) {
+	protected function _getProductPriceData($vendorExtranlId, $vSku, $productId) {
 		$key = "_" . $vendorExtranlId . "_" . $vSku;
 		if(!$this->hasData($key)){
-			
-			$convertert = Mage::getSingleton('zolagoconverter/client');
-			/* @var $convertert Zolago_Converter_Model_Client */
-			
+
+			$catalogProductResourceModel = Mage::getResourceModel('catalog/product');
+
 			$reponse = null;
-		
+
 			try{
-				$response = $convertert->getPrices(
-					$vendorExtranlId, 
-					$vSku
-				);
+				$priceLabels = $this->getPriceLabels();
+				foreach($priceLabels as $priceLabel){
+					$externalPrice = $catalogProductResourceModel->getAttributeRawValue($productId, "external_price_$priceLabel", 0);
+					if($externalPrice > 0){
+						$reponse[$priceLabel] = $externalPrice;
+					}
+					unset($externalPrice);
+				}
+
 			}catch(Exception $e){
 
 			}
@@ -87,15 +91,19 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		$priceType->setStoreId($this->getCurrentStoreId());
 		
 		$options = $priceType->getSource()->getAllOptions();
-		
+
 		$reponse = null;
-		
+
+		$catalogProductResourceModel = Mage::getResourceModel('catalog/product');
+
 		// Check direct price for simple product
 		if(!$product->isComposite()){
 			$response = $this->_getProductPriceData(
-				$vendor->getExternalId(), 
-				$product->getSkuv()
+				$vendor->getExternalId(),
+				$product->getSkuv(),
+				$product->getId()
 			);
+
 		}
 		
 		foreach($options as &$option){
@@ -208,6 +216,14 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		}
 		return null;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getPriceLabels()
+	{
+		return array("A", "B", "C", "Z", "salePriceBefore");
+	}
 	
 	/**
 	 * @param array $children
@@ -215,11 +231,6 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 	 * @return array
 	 */
 	protected function _addConverterDataToChilds(array $children, $storeId) {
-		
-		$vendor = $this->_getVendor();
-
-		$convertert = Mage::getSingleton('zolagoconverter/client');
-		/* @var $convertert Zolago_Converter_Model_Client */
 
 		$collection = Mage::getResourceModel("catalog/product_collection");
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
@@ -229,15 +240,18 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 
 		$converterData = array();
 
+		$catalogProductResourceModel = Mage::getResourceModel('catalog/product');
 		foreach($collection as $product){
 			try{
-				$response = $convertert->getPrices(
-					$vendor->getExternalId(), 
-					$product->getSkuv()
-				);
-				if($response){
-					$converterData[$product->getId()] = $response;
+				$priceLabels = $this->getPriceLabels();
+				foreach($priceLabels as $priceLabel){
+					$externalPrice = $catalogProductResourceModel->getAttributeRawValue($product->getId(), "external_price_$priceLabel", 0);
+					if($externalPrice > 0){
+						$converterData[$product->getId()][$priceLabel] = $externalPrice;
+					}
+					unset($externalPrice);
 				}
+
 			}catch(Exception $e){
 
 			}

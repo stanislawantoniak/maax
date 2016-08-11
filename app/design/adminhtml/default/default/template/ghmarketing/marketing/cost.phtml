@@ -1,0 +1,20 @@
+<?php
+/*  @var $this GH_Marketing_Block_Adminhtml_Marketing_Cost_Grid */
+?>
+<div class="content-header">
+<table cellspacing="0">
+    <tr>
+        <td style="width:50%;">
+            <h3>
+                <?php echo Mage::helper('ghmarketing')->__('GH Marketing - Cost') ?>
+            </h3>
+        </td>
+        <td class="a-right">
+            <?php echo $this->getButtonsHtml() ?>
+        </td>
+    </tr>
+</table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('ghmarketing_marketing_cost_grid') ?>
+</div>

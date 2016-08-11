@@ -87,7 +87,7 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <dl>
+                            <dl class="vendor-menu-mobile-content">
                                 <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
                             </dl>
                         </div>
@@ -118,7 +118,9 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>
+                            <div class="vendor-menu-mobile-content">
+                                <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,7 +139,15 @@ $producer = ($this->getVendor()->getVendorId() == $brandShopId);
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section"><?php echo $this->__("DELIVERY & RETURNS"); ?></h2>
+                <div class="col-md-12 no-padding title_section_with_logo">
+                    <div class="col-md-12 no-padding title_section_title_wrapper">
+                        <h2 class="title_section"><?php echo $this->__("DELIVERY & RETURNS"); ?></h2>
+                    </div>
+                    <div class="hidden-xs title_section_logo_wrapper">
+                        <img src="<?php echo Mage::getBaseUrl('media') . $this->getVendor()->getLogo(); ?>"  />
+                    </div>
+                </div>
+
             </div>
             <div class="modal-body">
                 <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>

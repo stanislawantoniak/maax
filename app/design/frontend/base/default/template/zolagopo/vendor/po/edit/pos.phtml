@@ -1,6 +1,9 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Compose  */?>
 <?php $_hlp = Mage::helper("zolagopo");?>
-<?php $_po =  $this->getPo();?>
+<?php $_po =  $this->getPo();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
 <!-- Modals comment -->
 <div class="modal fade" id="changePosModal">
 	<div class="modal-dialog">
@@ -31,8 +34,8 @@
 					<div id="changePosTable"></div>
 				</div>
 				<div class="modal-footer ">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" class="btn form-btn-loading btn-primary hidden" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Change");?></button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary hidden" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Change");?></button>
 				</div>
 			</div>
 		</form>
@@ -49,7 +52,7 @@ jQuery(function($){
 		table.html('');
 		btn.addClass("hidden");
 		if(posId){
-			table.html('<?php echo $_hlp->__("Loading...");?>');
+			table.html('<?php echo $_modagoHlp->__("Processing...");?>');
 			$.get(url.replace("{{pos}}", posId)).
 				done(function(data){
 					table.html(data);

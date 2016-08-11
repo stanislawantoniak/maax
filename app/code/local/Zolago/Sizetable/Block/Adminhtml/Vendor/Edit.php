@@ -2,7 +2,7 @@
 /**
  * js for size table settings
  */
-class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit extends Unirgy_Dropship_Block_Adminhtml_Vendor_Edit {
+class Zolago_Sizetable_Block_Adminhtml_Vendor_Edit extends ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit {
       
     public function getFormScripts()
     {
@@ -26,6 +26,91 @@ var updater = new RegionUpdater('country_id', 'region', 'region_id', <?php echo 
 var bUpdater = new RegionUpdater('billing_country_id', 'billing_region', 'billing_region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, 'disable');
 
 var allowedCarriers = <?php echo Zend_Json::encode($carriers) ?>;
+
+if (typeof connect_dhlJsObject != "undefined") {
+    if (!$('dhl_vendor').value) {
+        $('dhl_vendor').value = '{}';
+    }
+    var vendorDHL = $('dhl_vendor').value.evalJSON();
+
+    function changeVendorDHLProperty() {
+        if (!vendorDHL[this.DHLId]) {
+            vendorDHL[this.DHLId] = {};
+        }
+        if (!this.name) {
+            return;
+        }
+        var fname = this.name.replace(/^_/, '');
+        vendorDHL[this.DHLId][fname] = this.value;
+        highlightDHLRow(this);
+        $('dhl_vendor').value = Object.toJSON(vendorDHL);
+    }
+
+    function highlightDHLRow(input, changed) {
+        return; // disabled until done properly
+        $(input).up('tr').select('td').each(function (el) {
+            el.style.backgroundColor = changed || typeof changed=='undefined' ? '#ffb' : '';
+        });
+    }
+
+    connect_dhlJsObject.initCallback = function(self) {
+        self.initGridRows && self.initGridRows();
+    }
+
+    connect_dhlJsObject.initRowCallback = function(self, row) {
+        var inputs = $(row).select('input', 'select'), id, selected, fname;
+        for (var i=0; i<inputs.length; i++) {
+            if (inputs[i].type=='checkbox' && inputs[i].name=='') {
+                id = inputs[i].value;
+                if (vendorDHL[id] && (typeof vendorDHL[id]['on'] !== 'undefined')) {
+                    selected = vendorDHL[id]['on'];
+                    inputs[i].checked = selected;
+                    highlightDHLRow(inputs[i]);
+                } else {
+                    selected = inputs[i].checked;
+                }
+            } else {
+                inputs[i].disabled = !selected;
+                inputs[i].DHLId = id;
+                fname = inputs[i].name.replace(/^_/, '');
+                if (vendorDHL[id] && vendorDHL[id][fname]) {
+                    inputs[i].value = vendorDHL[id][fname];
+                }
+                $(inputs[i]).observe('change', changeVendorDHLProperty);
+            }
+        }
+    }
+
+    connect_dhlJsObject.checkboxCheckCallback = function(grid, element, checked){
+        $(element).up('tr').select('input', 'select').each(function (el) {
+            if (el.type=='checkbox' && el.name=='') {
+                if (!vendorDHL[el.value]) {
+                    vendorDHL[el.value] = {};
+                }
+                vendorDHL[el.value]['on'] = checked;
+                highlightDHLRow(element);
+            } else {
+                el.disabled = !checked;
+            }
+        });
+        $('dhl_vendor').value = Object.toJSON(vendorDHL);
+    }
+
+    connect_dhlJsObject.rowClickCallback = function(grid, event){
+        var trElement = Event.findElement(event, 'tr');
+        var isInput   = Event.element(event).tagName.match(/(input|select|option)/i);
+        if(trElement){
+            var checkbox = Element.getElementsBySelector(trElement, 'input');
+            if(checkbox[0]){
+                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                connect_dhlJsObject.setCheckboxChecked(checkbox[0], checked);
+            }
+        }
+    }
+    connect_dhlJsObject.initGrid();
+
+}
+
 if (typeof connect_attributesetJsObject != "undefined") {
     if (!$('vendor_attributeset').value) {
         $('vendor_attributeset').value = '{}';
@@ -42,6 +127,7 @@ if (typeof connect_attributesetJsObject != "undefined") {
         var fname = this.name.replace(/^_/, '');
         vendorAttributeset[this.attributesetId][fname] = this.value;
         highlightAttributesetRow(this);
+
         $('vendor_attributeset').value = Object.toJSON(vendorAttributeset);
     }
 
@@ -192,6 +278,7 @@ if (typeof connect_brandJsObject != "undefined") {
     connect_brandJsObject.initGrid();
 
 }
+
 if (typeof udropship_vendor_productsJsObject != "undefined") {
     if (!$('vendor_products').value) {
         $('vendor_products').value = '{}';

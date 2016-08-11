@@ -75,9 +75,9 @@ class Zolago_Solrsearch_Block_Faces_Enum_Manadev
 	}
 
 	
-	public function getCanShowItem($item, $count){
-		if($this->getValueObject($item)){
-			return parent::getCanShowItem($item, $count);
+	public function getCanShowItem($item){
+		if($this->getValueObject($item['item'])){
+			return parent::getCanShowItem($item);
 		}
 		return false;
 	}

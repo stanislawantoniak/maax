@@ -7,7 +7,8 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid_Renderer_Boolean extends Mag
 	 * @return string
 	 */
 	public function render(Varien_Object $row){
+	    $helper = Mage::helper('zolagocommon');
 		$value =  $row->getData($this->getColumn()->getIndex());
-		return ($value == '1') ? 'Yes' : 'No';
+		return ($value == '1') ? $helper->__('Yes') : $helper->__('No');
 	}
 }

@@ -42,7 +42,12 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			if($aggregated->getId()){
 				$aggregated->delete();
 			}
-			
+			// Clear tracking
+            $trackList = $shipment->getAllTracks();
+            foreach ($trackList as $track) {
+                $manager = Mage::helper('orbashipping')->getShippingManager($track->getCarrierCode());
+                $manager->cancelTrack($track);
+            }
 			// Clear current carrier
 			$po->setCurrentCarrier(null);
 			$po->getResource()->saveAttribute($po, "current_carrier");
@@ -109,19 +114,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		}
 		return implode("\n", $items);
 	}
-
-
-	/**
-	 * PO created directly from order (no split)
-	 * @param type $observer
-	 */
-	public function poCreatedFromOrder($observer) {
-		$po = $observer->getEvent()->getData('po');
-		/* @var $po Zolago_Po_Model_Po */
-		// Send email
-		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
-		Mage::helper('udropship')->processQueue();
-	}
+	
 	
 	/**
 	 * Change pos
@@ -139,7 +132,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				"Changed POS (%s&rarr;%s)", $oldPos->getExternalId(), $newPos->getExternalId());
 		
 		$this->_logEvent($po, $text);
-		
+
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 		Mage::helper('udropship')->processQueue();
@@ -157,6 +150,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			$newStatus = $observer->getEvent()->getNewStatus();
 			// Status changed to shipped
 			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
+				/** @var Zolago_Po_Helper_Data $helper */
+				$helper = Mage::helper("zolagopo");
 				// Register for use by email template block
 				if (Mage::registry('current_po')) {
 				    Mage::unregister('current_po');
@@ -171,7 +166,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 						"vendor"=>$po->getVendor()->getId(),
 						"po"=>$po->getId()
 					)),
-					"_ATTACHMENTS" => Mage::helper("zolagopo")->getPoImagesAsAttachments($po)
+					"_ATTACHMENTS" => $helper->getPoImagesAsAttachments($po)
 				);
 				$po->sendEmailTemplate(
 					Zolago_Po_Model_Po::XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED,
@@ -236,6 +231,18 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             $hlp->addOverpayComment($po, false, true, $observer->getEvent()->getData('operator_id'), $observer->getEvent()->getData('amount'));
         }
     }
+	
+	public function addPickUpPaymentComment($observer) {
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		$amount = $observer->getEvent()->getData('amount');
+		
+		if($po->getId()) {
+			$hlp->addPickUpPaymentComment($po, $amount);
+		}
+	}
 
 	/**
 	 * PO Compose	
@@ -273,11 +280,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				$po->getStore()->formatPrice($newItem->getPriceInclTax(), false);
 		}
 		
-		if($oldItem->getProductDiscountPrice()!=$newItem->getProductDiscountPrice()){
+		if($oldItem->getFinalItemPrice()!=$newItem->getFinalItemPrice()){
 			$changeLog[] = Mage::helper('zolagopo')->__("Discount") . ": " . 
-				$po->getStore()->formatPrice($oldItem->getProductDiscountPrice(), false) .
+				$po->getStore()->formatPrice($oldItem->getFinalItemPrice(), false) .
 				"&rarr;" . 
-				$po->getStore()->formatPrice($newItem->getProductDiscountPrice(), false);
+				$po->getStore()->formatPrice($newItem->getFinalItemPrice(), false);
 		}
 		
 		if($oldItem->getQty()!=$newItem->getQty()){
@@ -393,13 +400,35 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		
 		if($changeLog){
 			if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
-				$type = $hlp->__("Shipping");
+				$text = Mage::helper('zolagopo')->__("Shipping address changed (%s)", implode(", " , $changeLog));
 			}else{
-				$type = $hlp->__("Billing");
+				$text = Mage::helper('zolagopo')->__("Billing address changed (%s)", implode(", " , $changeLog));
 			}
-			$text = Mage::helper('zolagopo')->__("%s address changed (%s)", $type, implode(", " , $changeLog));
 			$this->_logEvent($po, $text);
 		}
+	}
+
+	public function poDeliveryAddressInpostChange($observer) {
+		/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+		$udropshipHlp = Mage::helper('udropship');
+		/* @var $po Zolago_Po_Model_Po */
+		$po = $observer->getEvent()->getData('po');
+		$hlp = Mage::helper("zolagopo");
+		$address = $udropshipHlp->formatCustomerAddressInpost($po, true, ', ');
+		$text = $hlp->__("InPost shipping address changed (%s)", $address);
+		$this->_logEvent($po, $text);
+	}
+
+	/**
+	 * PO Manually Create RMA
+	 * @param type $observer
+	 */
+	public function poManuallyRma($observer) {
+		$po = $observer->getEvent()->getData('po');
+		/* @var $po Zolago_Po_Model_Po */
+
+		$text = Mage::helper('zolagopo')->__("RMA created successfully");
+		$this->_logEvent($po, $text);
 	}
 	
 	/**
@@ -411,14 +440,14 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param ZolagoOs_OmniChannelPo_Model_Po $po
 	 * @param string $comment
 	 */
 	protected function _logEvent($po, $comment) {
 		$session = Mage::getSingleton('udropship/session');
 		/* @var $session Zolago_Dropship_Model_Session */
-		$vendor = $session->getVendor();
-		$operator = $session->getOperator();
+		$vendor = $po->getVendor();
+		$operator = $po->getOperator();
 		
 		if($session->isOperatorMode()){
 			$fullname = $vendor->getVendorName()  . " / " . $operator->getEmail();
@@ -426,7 +455,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			$fullname = $vendor->getVendorName();
 		}
 		
-		$po->addComment("[" . $fullname . "] " . $comment, false, true);
+		$po->addComment("[" . $fullname . "] "  . $comment, false, true);
 		$po->saveComments();
 	}
 
@@ -451,7 +480,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
         $cancel = array();
         foreach ($order_collection as $order) {            
 			$collection = Mage::getResourceModel("udpo/po_collection");
-			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+			/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 			$collection->addFieldToFilter("order_id", $order->getId());
     		$collection->addFieldToFilter("udropship_status", 
 					array("nin"=>Zolago_Po_Model_Po_Status::STATUS_CANCELED)
@@ -459,7 +488,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             if (!count($collection)) {
                 // check date of canceled
     			$collection = Mage::getResourceModel("udpo/po_collection");
-		    	/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+		    	/* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
 	    		$collection->addFieldToFilter("order_id", $order->getId());
                 $collection->addFieldToFilter("updated_at",array('lt'=>date('Y-m-d H:i:s',$time-24*3600)));
                 if (!count($collection)) {
@@ -634,6 +663,39 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
             if ($ghapiAccessForNew) {
                 $queue->addMessage($newPo, GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_PAYMENT_DATA_CHANGED);
             }
+        }
+    }
+
+
+    /**
+     * Dhl zip validation
+     * @param $observer
+     */
+    public function poAlertUpdate($observer)
+    {
+        $po = $observer->getPo();
+        $alert = $po->getAlert();
+
+        $shippingId = $po->getShippingAddressId();
+        $address = Mage::getModel('sales/order_address')->load($shippingId);
+        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
+        $dhlActive = Mage::helper('orbashipping/carrier_dhl')->isActive();
+        if ($dhlEnabled && $dhlActive) {
+            $dhlHelper = Mage::helper('orbashipping/carrier_dhl');
+            $dhlValidZip = $dhlHelper
+                ->isDHLValidZip($address->getCountry(), $address->getPostcode());
+
+            if (!$dhlValidZip) {
+                $alert |= Zolago_Po_Model_Po_Alert::ALERT_DHL_ZIP_CHECKING;
+
+            } else {
+                $alert &= ~Zolago_Po_Model_Po_Alert::ALERT_DHL_ZIP_CHECKING;
+
+            }
+
+            $po->setAlert($alert);
+            $po->getResource()->saveAttribute($po, "alert");
+
         }
     }
 }

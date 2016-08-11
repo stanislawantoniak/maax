@@ -1,6 +1,8 @@
 <?php
 /**
  * vendor operators
+ * 
+ * @method Zolago_Operator_Model_Resource_Operator getResource()
  */
 class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	
@@ -12,7 +14,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
     }
     
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
     public function getVendor() {
         if (!$this->hasData('vendor')) {            
@@ -87,7 +89,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         foreach ($collection as $candidate) {
 			/* @var $candidate Zolago_Operator_Model_Operator */
 			// Only active context-vendor
-            if ($candidate->getVendor()->getStatus()!="A") {
+            if (!in_array($candidate->getVendor()->getStatus(),array("A","I"))) {
                 continue;
             }
 			// Passwd match
@@ -144,7 +146,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	}
 	
 	public function isAllowedToPo($po) {
-		if($po instanceof Unirgy_DropshipPo_Model_Po){
+		if($po instanceof ZolagoOs_OmniChannelPo_Model_Po){
 			$po = $po->getId();
 		}
 		return $this->getResource()->isAllowedToPo($this, $po);

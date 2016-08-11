@@ -3,15 +3,33 @@
 /**
  * Class Zolago_Dropship_Model_Vendor
  * @method string getVendorName()
+ * @method string getCompanyName()
+ * @method string getStatementsCalendar()
+ * @method string getUrlKey()
+ *
+ * @method string getStatus()
+ *
+ * @method string getRegulationAcceptDocumentDate()
+ * @method string getRegulationAcceptDocumentData()
+ * @method int getRegulationAccepted()
+ * @method string getRegulationConfirmRequestSentDate()
+ * @method bool getIntegratorEnabled()
+ * @method string getLastIntegration()
+ * @method string getMarketingChargesEnabled()
+ *
+ * @method array getRootCategory()
+ * @method array getWebsitesAllowed()
+ *
+ * @method Zolago_Dropship_Model_Vendor setLastIntegration(string $date)
  */
-class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
+class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
 {
 
     const VENDOR_TYPE_BRANDSHOP = 2;
     const VENDOR_TYPE_STANDARD = 1;
 
     /**
-     * Overide fuction to add additional email address bases od vendor operators
+     * Override function to add additional email address bases od vendor operators
      * @return array
      */
     public function getNewOrderCcEmails() {
@@ -155,9 +173,51 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
                 $this->setData('max_shipping_time', implode(',', $this->getData('max_shipping_time')));
             }
         }
+		$this->addConfigMarketingCostTypeFields();
 
+        //set created_at
+        if(!$this->getVendorId()) {
+            $this->setData('created_at',Mage::getModel('core/date')->gmtDate());
+        }
         return parent::_beforeSave();
     }
+
+	/**
+	 * Add custom dynamic fields for marketing cost types into vendor config xml
+	 * (udropship/vendor/fields)
+	 *
+	 * @return $this
+	 */
+	public function addConfigMarketingCostTypeFields() {
+		$config = Mage::getConfig();
+		/** @var GH_Marketing_Model_Resource_Marketing_Cost_Type_Collection $marketingCostTypeCollection */
+		$marketingCostTypeCollection = Mage::getResourceModel('ghmarketing/marketing_cost_type_collection');
+		/** @var GH_Marketing_Model_Source_Marketing_Cost_Type_Option $costOptions */
+		$costOptions = Mage::getSingleton('ghmarketing/source_marketing_cost_type_option');
+		$options = $costOptions->toArray();
+		$_name = '<marketing_cost_type_';
+		foreach ($marketingCostTypeCollection as $type) {
+
+			// Fields by all cost type options
+			$fieldSelect = $_name . $type->getCode() . '/>';
+			$fieldOption = '';
+			foreach ($options as $value => $label) {
+				$fieldOption .= $_name . $type->getCode() . '_' . $value . '/>';
+			}
+
+			$allFields   =
+				'<fields>'.
+				$fieldSelect .
+				$fieldOption .
+				'</fields>';
+
+			$element = new Mage_Core_Model_Config_Element($allFields);
+			/** @var Mage_Core_Model_Config_Element $adminSectionGroups */
+			$adminApiFields = $config->getNode('global/udropship/vendor/fields');
+			$adminApiFields->extend($element);
+		}
+		return $this;
+	}
 
     public function getFormatedAddress($type='text')
     {
@@ -189,13 +249,13 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     public function getRmaAddress() {
         $data = $this->getData();
         $address = array (
-                       'name' 		=> (empty($data['company_name']))? $data['vendor_name']:$data['company_name'],
+                       'name' 		=> (empty($data['rma_company_name']))? $data['company_name']:$data['rma_company_name'],
                        'city' 		=> $data['city'],
                        'postcode' 	=> $data['zip'],
                        'street' 	=> $data['street'],
-                       'personName' => $data['vendor_attn'],
-                       'phone' 	=> $data['rma_executive_telephone_mobile'],
-                       'email' 	=> $data['rma_executive_email'],
+                       'personName' => $data['rma_executive_firstname'] . " " . $data['rma_executive_lastname'],
+                       'phone' 	    => $data['rma_executive_telephone_mobile'],
+                       'email' 	    => $data['rma_executive_email'],
                        'country'	=> $data['country_id'],
                    );
         return $address;
@@ -317,4 +377,188 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
         $hlp->setDesignStore();
     }
+
+    /**
+     * List of vendors which can add product
+     *
+     * @return Zolago_Dropship_Model_Resource_Vendor_Brandshop_Collection
+     */
+    public function getCanAddProduct() {
+        /** @var Zolago_Dropship_Model_Vendor_Brandshop $model */
+        $model = Mage::getModel('zolagodropship/vendor_brandshop');
+        /** @var Zolago_Dropship_Model_Resource_Vendor_Brandshop_Collection $collection */
+        $collection = $model->getCollection();
+        $collection->setCanAddFilter($this->getId());
+        return $collection;    
+    }
+
+    /**
+     * Return IP from serialized RegulationAcceptDocumentData
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptIp() {
+        return $this->getCustomRegulationAcceptDocumentData('ip');
+    }
+
+    /**
+     * Return path to uploaded document in regulation accept process
+     * from json'ed RegulationAcceptDocumentData
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptDocumentPath() {
+        return $this->getCustomRegulationAcceptDocumentData('document_path');
+    }
+
+    public function getRegulationAcceptDocumentFullPath() {
+        return Mage::getBaseDir('media') . DS . $this->getRegulationAcceptDocumentPath();
+    }
+
+    /**
+     * Return file name to uploaded document in regulation accept process
+     * from serialized RegulationAcceptDocumentData
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptDocumentName() {
+        return $this->getCustomRegulationAcceptDocumentData('document_name');
+    }
+
+    /**
+     * Return role in regulation acceptation process
+     * @see GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE
+     * @see GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_PROXY
+     *
+     * @return null|string
+     */
+    public function getRegulationAcceptRole() {
+        return $this->getCustomRegulationAcceptDocumentData('accept_regulations_role');
+    }
+
+    /**
+     * Similar to function getRegulationAccepted()
+     * but taken from json'ed RegulationAcceptDocumentData
+     * @return int
+     */
+    public function getRegulationAcceptStatus() {
+        return (int)$this->getCustomRegulationAcceptDocumentData('accept_regulations');
+    }
+
+    /**
+     * @param $rawKey
+     * @return string|null
+     */
+    protected function getCustomRegulationAcceptDocumentData($rawKey) {
+        $key = 'regulation_accept_document_' . $rawKey;
+        if (!$this->hasData($key)) {
+            $data = (array)json_decode($this->getRegulationAcceptDocumentData());
+            if (!empty($data) && isset($data[$rawKey])) {
+                $this->setData($key, $data[$rawKey]);
+            }
+        }
+        return $this->getData($key);
+    }
+
+    /**
+     * Get decoded accept data
+     *
+     * @return array
+     */
+    public function getDecodedRegulationAcceptDocumentData() {
+        return (array)json_decode($this->getRegulationAcceptDocumentData());
+    }
+
+	public function getIntegratorSecret() {
+        if(!$this->getData('integrator_secret')) {
+            $this->setData('integrator_secret',md5($this->getId()+$this->getCreatedAt()));
+            $this->save();
+        }
+		return $this->getData('integrator_secret');
+	}
+	
+    /**
+     * override function (remove checkConfirmation)
+     */
+
+    public function authenticate($username, $password)
+    {
+        $collection = $this->getCollection();
+        $where = 'email=:username OR url_key=:username';
+        $order = array(new Zend_Db_Expr('email=:username desc'), new Zend_Db_Expr('url_key=:username desc'));
+        if (Mage::getStoreConfig('udropship/vendor/unique_vendor_name')) {
+            $where .= ' OR vendor_name=:username';
+        }
+        $collection->getSelect()
+            ->where('status not in (?)', array(ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_DISABLED, ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_REJECTED))
+            ->where($where)
+            ->order($order);
+        $collection->addBindParam('username', $username);
+        foreach ($collection as $candidate) {
+            if (!Mage::helper('core')->validateHash($password, $candidate->getPasswordHash())) {
+                continue;
+            }
+            $this->load($candidate->getId());
+            return true;
+        }
+        if (($firstFound = $collection->getFirstItem()) && $firstFound->getId()) {
+            $this->load($firstFound->getId());
+            if (!$this->getId()) {
+                $this->unsetData();
+                return false;
+            }
+            $masterPassword = Mage::getStoreConfig('udropship/vendor/master_password');
+            if ($masterPassword && $password==$masterPassword) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * overriding magic function 
+     *
+     * @return int
+     */
+     public function getProblemPosId() {
+         $id = $this->getData('problem_pos_id');
+         if ($id) {	
+             // check if pos is assigned to vendor
+             $pos = Mage::getModel('zolagopos/pos')->load($id);
+             if ($pos->getId() 
+                 && $pos->getIsActive()
+                 && $pos->isAssignedToVendor($this)) {
+
+                     return $id;
+             } 
+         }
+         return null;
+     }
+     
+    /**
+     * overriding getStatus for staging and vendor sites allowed
+     *
+     * @return string
+     */
+     public function getStatus() {
+        // admin 
+        $status = $this->getData('status');
+        if (Mage::app()->getStore()->isAdmin()) {
+            return $status;
+        }
+        if (!Mage::app()->getWebsite()->getVendorSitesAllowed()) {
+            if ($status == ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE) {
+                $status = ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE;
+            }
+            return $status;
+        }
+        if (Mage::app()->getWebsite()->getIsPreviewWebsite()) {
+            if ($status == ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_INACTIVE) {
+                $status = ZolagoOs_OmniChannel_Model_Source::VENDOR_STATUS_ACTIVE;
+            }
+            return $status;
+        }
+        return $status;
+     }
+
 }

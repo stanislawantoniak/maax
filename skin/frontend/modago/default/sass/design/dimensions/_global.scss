@@ -56,6 +56,12 @@ section {
     font-size: 13px;
     padding: 0;
   }
+  h2.title_section, h5.title_section {
+	padding-left: 35px;
+	  @media(max-width: 360px) {
+		  padding-left: 30px;
+	  }
+  }
 }
 .itemprop-isSimilarTo {
   display: inline;

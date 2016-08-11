@@ -1,370 +1,478 @@
 <?php
+require_once ('remotefilegetter.php');
+
+/**
+ * Class FSHelper
+ *
+ * File System Helper
+ * Gives several utility methods for filesystem testing
+ * 
+ * @author dweeves
+ *        
+ */
 class FSHelper
 {
-	public static function isDirWritable($dir)
-	{
-		$test=@fopen("$dir/__testwr__","w");
-		if($test==false)
-		{
-			return false;
-		}
-		else
-		{
-			fclose($test);
-			unlink("$dir/__testwr__");
-		}
-		return true;
-	}
 
+    /**
+     * Checks if a directory has write rights
+     * 
+     * @param string $dir
+     *            directory to test
+     * @return boolean wether directory is writable
+     */
+    public static function isDirWritable($dir)
+    {
+        // try to create a new file
+        $test = @fopen("$dir/__testwr__", "w");
+        if ($test == false)
+        {
+            return false;
+        }
+        else
+        {
+            // if succeeded, remove test file
+            fclose($test);
+            unlink("$dir/__testwr__");
+        }
+        return true;
+    }
+
+    /**
+     * Tries to find a suitable way to execute processes
+     * 
+     * @return string NULL method to execute process
+     */
+    public static function getExecMode()
+    {
+        $is_disabled = array();
+        // Check for php disabled functions
+        $disabled = explode(',', ini_get('disable_functions'));
+        foreach ($disabled as $disableFunction)
+        {
+            $is_disabled[] = trim($disableFunction);
+        }
+        // try the following if not disabled,return first non disabled
+        foreach (array("popen","shell_exec") as $func)
+        {
+            if (!in_array($func, $is_disabled))
+            {
+                return $func;
+            }
+        }
+        return null;
+    }
 }
 
-
-
+/**
+ * Factory for magento directory handle
+ *
+ * @author dweeves
+ *        
+ */
 class MagentoDirHandlerFactory
 {
-	protected $_handlers=array();
-	protected static $_instance;
+    protected $_handlers = array();
+    protected static $_instance;
 
-	public function __construct()
-	{
-	}
+    public function __construct()
+    {}
 
-	public static function getInstance()
-	{
-		if(!isset(self::$_instance))
-		{
-			self::$_instance=new MagentoDirHandlerFactory();
-		}
-		return self::$_instance;
-	}
+    /**
+     * Singleton getInstance method
+     * 
+     * @return MagentoDirHandlerFactory
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$_instance))
+        {
+            self::$_instance = new MagentoDirHandlerFactory();
+        }
+        return self::$_instance;
+    }
 
-	public function registerHandler($obj)
-	{
-		$cls=get_class($obj);
-		if(!isset($this->_handlers[$cls]))
-		{
-			$this->_handlers[$cls]=$obj;
-		}
-	}
+    /**
+     * Registers a new object to handle magento directory
+     * 
+     * @param unknown $obj            
+     */
+    public function registerHandler($obj)
+    {
+        $cls = get_class($obj);
+        if (!isset($this->_handlers[$cls]))
+        {
+            $this->_handlers[$cls] = $obj;
+        }
+    }
 
-	public function getHandler($url)
-	{
-		foreach($this->_handlers as $cls=>$handler)
-		{
-			if ($handler->canHandle($url))
-			{
-				return $handler;
-			}
-		}
-
-	}
-
+    /**
+     * Return a handler for a given url
+     * 
+     * @param unknown $url            
+     * @return unknown
+     */
+    public function getHandler($url)
+    {
+        // Iterates on declared handlers , return first matching url
+        foreach ($this->_handlers as $cls => $handler)
+        {
+            if ($handler->canHandle($url))
+            {
+                return $handler;
+            }
+        }
+    }
 }
 
-abstract class RemoteFileGetter
-{
-	protected $_errors;
-	public abstract function urlExists($url);
-	public abstract function copyRemoteFile($url,$dest);
-	public function getErrors()
-	{
-		return $this->_errors;
-	}
-}
-
-class CURL_RemoteFileGetter extends RemoteFileGetter
-{
-	protected $_curlh;
-
-	public function createContext($url)
-	{
-		if($this->_curlh==NULL)
-		{
-			$curl_url=str_replace(" ","%20",$url);
-			$context = curl_init($curl_url);
-			$this->_curlh=$context;
-		}
-		return $this->_curlh;
-	}
-
-	public function destroyContext($url)
-	{
-		if($this->_curlh!=NULL)
-		{
-			curl_close($this->_curlh);
-			$this->_curlh=NULL;
-		}
-	}
-
-
-	public function urlExists($remoteurl)
-	{
-		$context=$this->createContext($remoteurl);
-		//optimized lookup through curl
-		/* head */
-		curl_setopt($context,  CURLOPT_HEADER, TRUE);
-		curl_setopt( $context, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $context, CURLOPT_CUSTOMREQUEST, 'HEAD' );
-		curl_setopt( $context, CURLOPT_NOBODY, true );
-
-		/* Get the HTML or whatever is linked in $url. */
-		$response = curl_exec($context);
-
-		/* Check for 404 (file not found). */
-		$httpCode = curl_getinfo($context, CURLINFO_HTTP_CODE);
-		$exists = ($httpCode==200);
-		/* retry on error */
-			
-		if($httpCode==503 or $httpCode==403)
-		{
-			/* wait for a half second */
-			usleep(500000);
-			$response = curl_exec($context);
-			$httpCode = curl_getinfo($context, CURLINFO_HTTP_CODE);
-			$exists = ($httpCode==200);
-		}
-		return $exists;
-	}
-
-	public function copyRemoteFile($url,$dest)
-	{
-		$this->_errors=array();
-		$ret=true;
-		$context=$this->createContext($url);
-		if(!$this->urlExists($url))
-		{
-			$this->_errors=array("type"=>"download error","message"=>"URL $url is unreachable");
-			return false;
-		}
-		$fp=fopen($dest,"w");
-		//add support for https urls
-		curl_setopt($context, CURLOPT_SSL_VERIFYPEER ,false);
-		curl_setopt($context, CURLOPT_RETURNTRANSFER, false);
-		curl_setopt( $context, CURLOPT_CUSTOMREQUEST, 'GET' );
-		curl_setopt( $context, CURLOPT_NOBODY, false);
-		curl_setopt($context, CURLOPT_FILE, $fp);
-		curl_setopt($context, CURLOPT_HEADER, 0);
-		curl_setopt($context,CURLOPT_FAILONERROR,true);
-		if(!ini_get('safe_mode'))
-		{
-			curl_setopt($context, CURLOPT_FOLLOWLOCATION, 1);
-		}
-		curl_exec($context);
-		if(curl_getinfo($context,CURLINFO_HTTP_CODE)>=400)
-		{
-			$this->_errors=array("type"=>"download error","message"=>curl_error($context));
-			$ret=false;
-		}
-		fclose($fp);
-		return $ret;
-	}
-}
-
-class URLFopen_RemoteFileGetter extends RemoteFileGetter
-{
-	public function urlExists($url)
-	{
-		$fname=$url;
-		$h=@fopen($fname,"r");
-		if($h!==false)
-		{
-			$exists=true;
-			fclose($h);
-		}
-		unset($h);
-	}
-
-	public function copyRemoteFile($url,$dest)
-	{
-		if(!$this->urlExists($url))
-		{
-			$this->_errors=array("type"=>"target error","message"=>"URL $remoteurl is unreachable");
-			return false;
-		}
-
-		$ok=@copy($url,$dest);
-		if(!$ok)
-		{
-			$this->_errors= error_get_last();
-		}
-		return $ok;
-	}
-}
-
-class RemoteFileGetterFactory
-{
-
-	public static function getFGInstance()
-	{
-		$fginst=NULL;
-		if(function_exists("curl_init"))
-		{
-			$fginst=new CURL_RemoteFileGetter();
-		}
-		else
-		{
-			$fginst=new URLFopen_RemoteFileGetter();
-		}
-		return $fginst;
-	}
-
-}
-
+/**
+ * Magento Directory Handler
+ *
+ * Provides methods for filesystem operations & command execution
+ * Mother abstract class to be derived either for local operation or remote (for performing operations on remote systems)
+ * 
+ * @author dweeves
+ *        
+ */
 abstract class MagentoDirHandler
 {
-	protected $_magdir;
-	protected $_lasterror;
-	public function __construct($magurl)
-	{
-		$this->_magdir=$magurl;
-		$this->_lasterror=array();
-	}
-	public function getMagentoDir()
-	{
-		return $this->_magdir;
-	}
-	public abstract function canhandle($url);
-	public abstract function file_exists($filepath);
-	public abstract function mkdir($path,$mask=null,$rec=false);
-	public abstract function copy($srcpath,$destpath);
-	public abstract function unlink($path);
-	public abstract function chmod($path,$mask);
-	public abstract function exec_cmd($cmd,$params,$workingdir = null);
+    protected $_magdir;
+    protected $_lasterror;
+    protected $_exec_mode;
+
+    /**
+     * Constructor from a magento directory url
+     * 
+     * @param unknown $magurl
+     *            magento base directory url
+     */
+    public function __construct($magurl)
+    {
+        $this->_magdir = $magurl;
+        $this->_lasterror = array();
+        $this->_exec_mode = FSHelper::getExecMode();
+    }
+
+    /**
+     * Returns magento directory
+     * 
+     * @return string
+     */
+    public function getMagentoDir()
+    {
+        return $this->_magdir;
+    }
+
+    /**
+     * Returns available execution mode
+     * 
+     * @return Ambigous <string, NULL>
+     */
+    public function getexecmode()
+    {
+        return $this->_exec_mode;
+    }
+
+    /**
+     * Wether current handler is compatible with given url
+     * 
+     * @param unknown $url            
+     */
+    public abstract function canhandle($url);
+
+    /**
+     * File exists
+     * 
+     * @param unknown $filepath            
+     */
+    public abstract function file_exists($filepath);
+
+    /**
+     * Mkdir
+     * 
+     * @param unknown $path            
+     * @param string $mask            
+     * @param string $rec            
+     */
+    public abstract function mkdir($path, $mask = null, $rec = false);
+
+    /**
+     * File Copy
+     * 
+     * @param unknown $srcpath            
+     * @param unknown $destpath            
+     */
+    public abstract function copy($srcpath, $destpath);
+
+    /**
+     * File Deletion
+     * 
+     * @param unknown $path            
+     */
+    public abstract function unlink($path);
+
+    /**
+     * Chmod
+     * 
+     * @param unknown $path            
+     * @param unknown $mask            
+     */
+    public abstract function chmod($path, $mask);
+
+    /**
+     * Check if we can execute processes
+     * 
+     * @return boolean
+     */
+    public function isExecEnabled()
+    {
+        return $this->_exec_mode != null;
+    }
+
+    /**
+     * Executes a process
+     * 
+     * @param unknown $cmd            
+     * @param unknown $params            
+     * @param string $workingdir            
+     */
+    public abstract function exec_cmd($cmd, $params, $workingdir = null);
 }
 
+/**
+ * Local Magento Dir Handler.
+ *
+ * Handle Magento related filesystem operations for a given local directory
+ * 
+ * @author dweeves
+ *        
+ */
 class LocalMagentoDirHandler extends MagentoDirHandler
 {
-	public function __construct($magdir)
-	{
-		parent::__construct($magdir);
-		MagentoDirHandlerFactory::getInstance()->registerHandler($this);
-	}
+    protected $_rfgid;
 
-	public function canHandle($url)
-	{
-		return (preg_match("|^.*?://.*$|",$url)==false);
-	}
+    /**
+     * Constructor
+     * 
+     * @param unknown $magdir            
+     */
+    public function __construct($magdir)
+    {
+        parent::__construct($magdir);
+        // Registers itself in the factory
+        MagentoDirHandlerFactory::getInstance()->registerHandler($this);
+        $this->_rfgid = "default";
+    }
 
-	public function file_exists($filename)
-	{
-		$mp=str_replace("//","/",$this->_magdir."/".str_replace($this->_magdir, '', $filename));
+    /**
+     * Can Handle any non remote urls
+     * 
+     * @param unknown $url            
+     * @return boolean
+     */
+    public function canHandle($url)
+    {
+        return (preg_match("|^.*?://.*$|", $url) == false);
+    }
 
-		return file_exists($mp);
-	}
+    /**
+     * Cleans a bit input filename, ensures filename will be located under magento directory if not already
+     * 
+     * @see MagentoDirHandler::file_exists()
+     */
+    public function file_exists($filename)
+    {
+        $mp = str_replace("//", "/", $this->_magdir . "/" . str_replace($this->_magdir, '', $filename));
+        
+        return file_exists($mp);
+    }
 
-	public function mkdir($path,$mask=null,$rec=false)
-	{
-		$mp=str_replace("//","/",$this->_magdir."/".str_replace($this->_magdir, '', $path));
+    /**
+     * Specific, set remote operation credentials for local file download
+     */
+    public function setRemoteCredentials($user, $passwd)
+    {
+        $fginst = RemoteFileGetterFactory::getFGInstance($this->_rfgid);
+        $fginst->setCredentials($user, $passwd);
+    }
 
-		if($mask==null)
-		{
-			$mask=octdec('755');
-		}
-		$ok=@mkdir($mp,$mask,$rec);
-		if(!$ok)
-		{
-			$this->_lasterror=error_get_last();
-		}
-		return $ok;
-	}
+    /**
+     * Handles a remote file getter id
+     * 
+     * @param unknown $rfgid            
+     */
+    public function setRemoteGetterId($rfgid)
+    {
+        $this->_rfgid = $rfgid;
+    }
 
-	public function chmod($path,$mask)
-	{
-		$mp=str_replace("//","/",$this->_magdir."/".str_replace($this->_magdir, '', $path));
+    /**
+     * ensures dirname will be located under magento directory if not already
+     * 
+     * @see MagentoDirHandler::mkdir()
+     */
+    public function mkdir($path, $mask = null, $rec = false)
+    {
+        $mp = str_replace("//", "/", $this->_magdir . "/" . str_replace($this->_magdir, '', $path));
+        
+        if ($mask == null)
+        {
+            $mask = octdec('755');
+        }
+        $ok = @mkdir($mp, $mask, $rec);
+        if (!$ok)
+        {
+            $this->_lasterror = error_get_last();
+        }
+        return $ok;
+    }
 
-		if($mask==null)
-		{
-			$mask=octdec('755');
-		}
-		$ok=@chmod($mp,$mask);
-		if(!$ok)
-		{
-			$this->_lasterror=error_get_last();
-		}
-		return $ok;
-	}
+    /**
+     * ensures path will be located under magento directory if not already
+     * 
+     * @see MagentoDirHandler::chmod()
+     */
+    public function chmod($path, $mask)
+    {
+        $mp = str_replace("//", "/", $this->_magdir . "/" . str_replace($this->_magdir, '', $path));
+        
+        if ($mask == null)
+        {
+            $mask = octdec('755');
+        }
+        $ok = @chmod($mp, $mask);
+        if (!$ok)
+        {
+            $this->_lasterror = error_get_last();
+        }
+        return $ok;
+    }
 
-	public function getLastError()
-	{
-		return $this->_lasterror;
-	}
+    /**
+     * Returns last error
+     * 
+     * @return Ambigous <multitype:, multitype:string multitype: >
+     */
+    public function getLastError()
+    {
+        return $this->_lasterror;
+    }
 
-	public function unlink($path)
-	{
-		$mp=str_replace("//","/",$this->_magdir."/".str_replace($this->_magdir, '', $path));
-		return @unlink($mp);
-	}
+    /**
+     * ensures filename will be located under magento directory if not already
+     * 
+     * @see MagentoDirHandler::unlink()
+     */
+    public function unlink($path)
+    {
+        $mp = str_replace("//", "/", $this->_magdir . "/" . str_replace($this->_magdir, '', $path));
+        return @unlink($mp);
+    }
 
-	public function copyFromRemote($remoteurl,$destpath)
-	{
-		$rfg=RemoteFileGetterFactory::getFGInstance();
-		$mp=str_replace("//","/",$this->_magdir."/".str_replace($this->_magdir, '', $destpath));
-		$ok=$rfg->copyRemoteFile($remoteurl,$mp);
-		if(!$ok)
-		{
-			$this->_lasterror=$rfg->getErrors();
-		}
-		unset($rfg);
-		return $ok;
-	}
+    /**
+     * Download a file into local filesystem
+     * ensures local filename will be located under magento directory if not already
+     * 
+     * @param unknown $remoteurl            
+     * @param unknown $destpath            
+     * @return unknown
+     */
+    public function copyFromRemote($remoteurl, $destpath)
+    {
+        $rfg = RemoteFileGetterFactory::getFGInstance($this->_rfgid);
+        $mp = str_replace("//", "/", $this->_magdir . "/" . str_replace($this->_magdir, '', $destpath));
+        $ok = $rfg->copyRemoteFile($remoteurl, $mp);
+        if (!$ok)
+        {
+            $this->_lasterror = $rfg->getErrors();
+        }
+        return $ok;
+    }
 
-	public function copy($srcpath,$destpath)
-	{
-		$result=false;
-		$destpath=str_replace("//","/",$this->_magdir."/".str_replace($this->_magdir, '', $destpath));
-		if(preg_match('|^.*?://.*$|', $srcpath))
-		{
-			$result=$this->copyFromRemote($srcpath,$destpath);
-		}
-		else
-		{
-				
-			$result=@copy($srcpath,$destpath);
-			if(!$result)
-			{
-				$this->_lasterror=error_get_last();
-			}
-		}
-		return $result;
-	}
+    /**
+     * ensures filename will be located under magento directory if not already
+     * 
+     * @see MagentoDirHandler::copy()
+     */
+    public function copy($srcpath, $destpath)
+    {
+        $result = false;
+        $destpath = str_replace("//", "/", $this->_magdir . "/" . str_replace($this->_magdir, '', $destpath));
+        if (preg_match('|^.*?://.*$|', $srcpath))
+        {
+            $result = $this->copyFromRemote($srcpath, $destpath);
+        }
+        else
+        {
+            
+            $result = @copy($srcpath, $destpath);
+            if (!$result)
+            {
+                $this->_lasterror = error_get_last();
+            }
+        }
+        return $result;
+    }
 
-	public function exec_cmd($cmd,$params, $working_dir = null)
-	{
-		$full_cmd = $cmd." ".$params;
-		$curdir=false;
-		$precmd="";
-		// If a working directory has been specified, switch to it
-		// before running the requested command
-		if(!empty($working_dir))
-		{
-			$curdir=getcwd();
-			$wdir=realpath($working_dir);
-			//get current directory
-			if($curdir!=$wdir && $wdir!==false)
-			{
-				//trying to change using chdir
-				if(!@chdir($wdir))
-				{
-					//if no success, use cd from shell
-					$precmd="cd $wdir && ";
-				}
-			}
-		}
-		$full_cmd = $precmd. $full_cmd;
-
-		$out=@shell_exec($full_cmd);
-
-		//restore old directory if changed
-		if($curdir)
-		{
-			@chdir($curdir);
-		}
-
-		if($out==null)
-		{
-			$this->_lasterror=array("type"=>" execution error","message"=>error_get_last());
-			return false;
-		}
-		return $out;
-	}
+    /**
+     * execute command, performs some execution directory check
+     * uses available command execution method
+     * 
+     * @see MagentoDirHandler::exec_cmd()
+     */
+    public function exec_cmd($cmd, $params, $working_dir = null)
+    {
+        $full_cmd = $cmd . " " . $params;
+        $curdir = false;
+        $precmd = "";
+        // If a working directory has been specified, switch to it
+        // before running the requested command
+        if (!empty($working_dir))
+        {
+            $curdir = getcwd();
+            $wdir = realpath($working_dir);
+            // get current directory
+            if ($curdir != $wdir && $wdir !== false)
+            {
+                // trying to change using chdir
+                if (!@chdir($wdir))
+                {
+                    // if no success, use cd from shell
+                    $precmd = "cd $wdir && ";
+                }
+            }
+        }
+        $full_cmd = $precmd . $full_cmd;
+        // Handle Execution
+        $emode = $this->getexecmode();
+        switch ($emode)
+        {
+            case "popen":
+                $x = popen($full_cmd, "r");
+                $out = "";
+                while (!feof($x))
+                {
+                    $data = fread($x, 1024);
+                    $out .= $data;
+                    usleep(100000);
+                }
+                fclose($x);
+                break;
+            case "shell_exec":
+                $out = shell_exec($full_cmd);
+                break;
+        }
+        
+        // restore old directory if changed
+        if ($curdir)
+        {
+            @chdir($curdir);
+        }
+        
+        if ($out == null)
+        {
+            $this->_lasterror = array("type"=>" execution error","message"=>error_get_last());
+            return false;
+        }
+        return $out;
+    }
 }

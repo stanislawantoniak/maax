@@ -1,0 +1,29 @@
+<config>
+    <menu>
+        <system>
+            <children>
+                <ghcommon_sql translate="title">
+                            <title>Raw sql querys</title>
+                            <sort_order>100</sort_order>
+                            <action>adminhtml/rawsql/index</action>
+                </ghcommon_sql>
+            </children>
+        </system>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                                    <ghcommon_sql translate="title">
+                                        <title>Raw sql querys</title>
+                                        <sort_order>100</sort_order>
+                                    </ghcommon_sql>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

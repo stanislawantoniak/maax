@@ -1,0 +1,80 @@
+<?php
+$documentList = $this->getDocumentList();
+$hlp = Mage::helper('ghregulation');
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo $hlp->__("Modago.pl regulation rules");?></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo $hlp->__("Regulation and attachments"); ?></h4>
+                    </div>
+                    <div class="widget-content">                        
+                        <?php foreach ($documentList as $key => $document) : ?>
+                        <?php $id = md5(json_encode($document)); ?>
+                            <div class="widget box">
+                                <div class="widget-header" style="font-size:14px">
+                                        <i class="icon-file-text-alt"></i> 
+                                        <?php echo $key; ?>
+                                </div>
+                                <div class="widget-content">                                    
+                                    <?php $actual = array_shift($document); ?>
+                                    <div class="dd">
+                                    <ol class="dd-list">
+                                    <li class="dd-item"><div class="dd-handle" style="cursor:default;height:40px; padding-top:9px"><?php echo $hlp->__('is valid from').' '.$actual['date']; ?>:
+                                    <a  href="<?php echo $actual['url'];?>"><?php echo $actual['filename'];?></a></div></li>
+                                    <?php if (count($document)) :?>
+                                    <ol id="history_<?php echo $id;?>" class="history dd-list">
+                                    <?php foreach ($document as $item) :?>
+                                            <li class="dd-item">
+                                                <div class="dd-handle" style="cursor:default; height:40px; padding-top:9px">
+                                                <?php echo $hlp->__('was valid from').' '.$item['date']; ?>:
+                                                <a href="<?php echo $item['url']; ?>"><?php echo $item['filename']; ?></a>
+                                                </div>
+                                            </li>
+                                    <?php endforeach; ?>
+                                    </ol>
+                                    <?php endif; ?>
+                                    </ol>
+                                    </div>
+                                    <?php if (count($document)) :?>                                    
+                                    <a class="history-click more" data-show="0" data-history="#history_<?php echo $id; ?>" href="javascript:void(0);">
+                                        <?php echo $hlp->__('show history'); ?>&nbsp;&nbsp;<i class="icon-angle-down"></i>
+                                    </a>
+                                    <?php endif; ?>                                    
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<style>
+.dd-handle:hover {
+    color:#333;
+    background-color:#fafafa;
+}
+</style>
+<script>
+jQuery(".history").hide();
+jQuery(".history-click").click(function() {
+    var data_id = jQuery(this).data('history');
+    var show = jQuery(this).data('show');
+    if (show == 0) {
+        jQuery(data_id).show('blind');
+        jQuery(this).html("<?php echo $hlp->__('hide history');?>&nbsp;&nbsp;<i class='icon-angle-up'></i>");
+        jQuery(this).data('show',1);
+    } else {
+        jQuery(data_id).hide('blind');
+        jQuery(this).html("<?php echo $hlp->__('show history');?>&nbsp;&nbsp;<i class='icon-angle-down'></i>");
+        jQuery(this).data('show',0);
+    }
+});
+</script>

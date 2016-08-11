@@ -2,6 +2,8 @@
 
 class Zolago_Common_Block_Page_Html_Head extends Mage_Page_Block_Html_Head {
 
+    // time to live block cache in seconds
+    const BLOCK_CACHE_TTL = 3600;
     /**
      * Add locale skin_js depend on current lang
      *

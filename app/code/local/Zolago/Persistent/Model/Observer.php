@@ -32,10 +32,19 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	protected function _clearPersistent() {
 	    // user not logged in
 	    $checkoutSession = Mage::getSingleton('checkout/session');
+		/** @var Zolago_Sales_Model_Quote $oldQuote */
 	    $oldQuote = $checkoutSession->getQuote();
+
+		$shippingPointCode = $checkoutSession->getData("delivery_point_name");
+
+		$address = $oldQuote->getShippingAddress();
+		$details = $address->getUdropshipShippingDetails();
+		$details = $details ? Zend_Json::decode($details) : array();
+
+
 	    $session = Mage::helper('persistent/session')->getSession();
 	    $session->removePersistentCookie();
-	    $checkoutSession->unsetAll();	   
+	    $checkoutSession->unsetAll();
 	    $oldQuote
 	        ->setCustomerId(null)
 	        ->setCustomerEmail(null)
@@ -43,8 +52,10 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
 	        ->setCustomerLastname(null)
 	        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
 	        ->setIsPersistent(false);
+		/** @var Zolago_Sales_Model_Quote $newQuote */
         $newQuote = Mage::getModel('sales/quote');
         $newQuote->merge($oldQuote);
+
         $newQuote
 	        ->setStoreId(Mage::app()->getStore()->getId())
             ->setIsActive(true)
@@ -52,8 +63,29 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
             ->collectTotals()
             ->save();
 	    $newId = $newQuote->getId();
-	    $checkoutSession->setQuoteId($newId);	    
-	    $checkoutSession->getQuote();
+	    $checkoutSession->setQuoteId($newId);
+
+		/*InPost should not be lost after persistent->guest checkout*/
+		$checkoutSession->setData("delivery_point_name",$shippingPointCode);
+
+		$shippingMethodPerVendor = array();
+		if(isset($details["methods"])){
+			foreach($details["methods"] as $_vendorId => $vendorRate){
+				$shippingMethodPerVendor[$_vendorId] = $vendorRate["code"];
+			}
+			$checkoutSession->setShippingMethod($shippingMethodPerVendor);
+		}
+
+
+	    $quote = $checkoutSession->getQuote();
+
+		$addressNew = $quote->getShippingAddress();
+		$addressNew->setUdropshipShippingDetails(Zend_Json::encode($details));
+		$addressNew->setDeliveryPointName($shippingPointCode);
+		$quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+
+		/*InPost should not be lost after persistent->guest checkout*/
+
 	}
 	/**
 	 * Emulate quote override to set special flag that tells quote 

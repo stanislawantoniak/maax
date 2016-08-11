@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout>
+	<ghintegrator_log_update_menu>
+		<reference name="menu">
+			<action method="setActive"><menupath>vendors/ghintegrator_log</menupath></action>
+		</reference>
+	</ghintegrator_log_update_menu>
+	<adminhtml_ghintegrator_log_index>
+		<update handle="ghintegrator_log_update_menu"/>
+		<reference name="content">
+			<block type="ghintegrator/adminhtml_ghintegrator_log" name="ghintegrator_log"
+			       template="ghintegrator/log.phtml">
+				<block type="ghintegrator/adminhtml_ghintegrator_log_grid" name="ghintegrator_log_grid"/>
+			</block>
+		</reference>
+	</adminhtml_ghintegrator_log_index>
+</layout>

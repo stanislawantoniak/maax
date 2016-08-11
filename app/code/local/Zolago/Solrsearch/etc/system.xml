@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Unirgy LLC
+ * ZolagoOs LLC
  *
  * NOTICE OF LICENSE
  *
@@ -10,9 +10,9 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.unirgy.com/LICENSE-M1.txt
  *
- * @category   Unirgy
- * @package    Unirgy_Dropship
- * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
+ * @category   ZolagoOs
+ * @package    ZolagoOs_OmniChannel
+ * @copyright  Copyright (c) 2008-2009 ZolagoOs LLC (http://www.unirgy.com)
  * @license    http:///www.unirgy.com/LICENSE-M1.txt
  */
  -->
@@ -35,5 +35,51 @@
 				</vendor>
             </groups>
 		</udropship>
+		<solrbridge>
+		    <groups>
+		        <settings>
+		            <fields>
+			            <solr_index>
+				            <label>Solr index</label>
+				            <comment>Select which Solr index the store will search in. (If you dont see any core, please goto to Default Config > Solr Bridge > Indices Settings to map your stores into Solr cores)</comment>
+				            <frontend_type>select</frontend_type>
+				            <sort_order>5</sort_order>
+				            <show_in_default>0</show_in_default>
+				            <show_in_website>0</show_in_website>
+				            <show_in_store>1</show_in_store>
+				            <source_model>solrsearch/adminhtml_system_source_config_cores</source_model>
+			            </solr_index>
+		                <logs_length_hours translate="label comment" module="solrsearch">
+		                    <label>Log table length in hours</label>
+		                    <comment>How long database store logs</comment>
+		                    <frontend_type>text</frontend_type>
+		                    <sort_order>49</sort_order>
+		                    <show_in_default>1</show_in_default>
+		                </logs_length_hours>
+		            </fields>
+		        </settings>
+				<search_context>
+					<label>Context</label>
+					<tab>solrbridge</tab>
+					<class>separator-top</class>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<use_category_context translate="label comment" module="solrsearch">
+							<label>Use Current Category Context</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+						</use_category_context>
+					</fields>
+				</search_context>
+		    </groups>
+		</solrbridge>
     </sections>
 </config>

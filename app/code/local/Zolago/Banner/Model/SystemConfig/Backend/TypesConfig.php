@@ -22,7 +22,6 @@ class Zolago_Banner_Model_SystemConfig_Backend_TypesConfig extends Mage_Core_Mod
 
     protected function _beforeSave()
     {
-        Mage::log($this->getValue());
         if (is_array($this->getValue())) {
             $this->setData('value', $this->_serialize($this->getValue()));
         }

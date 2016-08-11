@@ -49,9 +49,13 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getPossibleAttributes() {
 		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
 		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
-		$ids = $this->getCategory()->getResource()->getChildrenIds($this->getCategory());
+		$resCategory = $this->getCategory()->getResource();
+		$ids = $resCategory->getChildrenIds($this->getCategory());
+		// add related categories
 		$ids = array_merge($ids,array($this->getCategory()->getId()));
-		$exclude = array("product_rating", "product_flag", "is_bestseller", "is_new");
+		$related = $resCategory->getRelatedIds($ids);
+		$ids = array_merge($ids,$related);
+		$exclude = array("product_rating", "product_flag", "is_bestseller", "is_new");		
 		$values = $resMapper->getAttributesByCategory($ids, $exclude);
 		return $values;
 	}

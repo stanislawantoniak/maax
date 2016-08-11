@@ -35,6 +35,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	protected function _getCollection() {
 		if(!$this->_collection){
 			// Add extra fields
+			/**
+			 * For product grid
+			 * @see Zolago_Catalog_Controller_Vendor_Product_Abstract::_prepareCollection()
+			 * For price grid
+			 * @see Zolago_Catalog_Controller_Vendor_Price_Abstract::_prepareCollection()
+			 */
 			$this->_collection = $this->_prepareCollection();
 			
 		}
@@ -42,7 +48,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	}
 	
 	/**
-	 * Prepare colection
+	 * Prepare collection
 	 * @param Varien_Data_Collection $collection
 	 * @return Varien_Data_Collection
 	 */
@@ -82,12 +88,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		
 		$reposnse = $this->getResponse();
 		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
-				
+
 		try{
-			$productIds = $data['entity_id'];
+			$productId = $data['entity_id'];
 			$attributeChanged = $data['changed'];
 			$attributeData = array();
-			$storeId = $data['store_id'];
+            $storeId = $data['store_id'];
 
 			foreach($attributeChanged as $attribute){
 				if(isset($data[$attribute])){
@@ -95,8 +101,46 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				}
 			}
 			if($attributeData){
-				$this->_processAttributresSave(array($productIds), $attributeData, $storeId, $data);
-			}
+                /** @var Zolago_Catalog_Model_Product $product */
+                $product = Mage::getModel("zolagocatalog/product")->load($productId);
+                if (in_array('status', $attributeChanged) && !$product->getIsProductCanBeEnabled() && $data['status'] == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+                    $helper = Mage::helper("zolagocatalog");
+                    $data['status']  = $product->getStatus();
+
+                    $descAccepted = $product->getData('description_status') == Zolago_Catalog_Model_Product_Source_Description::DESCRIPTION_ACCEPTED;
+                    $isValidPrice = $product->getFinalPrice() > 0 ? true : false;
+                    if (!$descAccepted) {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled because don't have accepted description.", $product->getName());
+                    } elseif (!$isValidPrice) {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled because don't have valid price.", $product->getName());
+                    } else {
+                        $data['message']['text'] = $helper->__("Product %s can not change status to enabled.", $product->getName());
+                    }
+                    $data['message']['type']    = 'warning';
+                } else {
+                    $this->_processAttributresSave(array($productId), $attributeData, $storeId, $data);
+
+                    if (!empty(array_intersect(array('status', 'politics', 'product_flag'), $attributeChanged))) {
+                        /** @var Zolago_Turpentine_Helper_Ban $banHelper */
+                        $banHelper = Mage::helper( 'turpentine/ban' );
+                        /** @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+                        $coll = $banHelper->prepareCollectionForMultiProductBan(array($productId));
+
+						$eventName = "vendor_manual_save_attribute_after";
+						if (in_array('status', $attributeChanged))       $eventName = "vendor_manual_save_status_after";
+						if (in_array('politics', $attributeChanged))     $eventName = "vendor_manual_save_politics_after";
+						if (in_array('product_flag', $attributeChanged)) $eventName = "vendor_manual_save_product_flag_after";
+
+                        Mage::dispatchEvent($eventName,
+                            array(
+                                "products"          => $coll,
+                                'product_ids'       => $coll->getAllIds(),
+                                'attributes_data'   => $attributeData,
+                                'store_id'          => $storeId
+                            ));
+                    }
+                }
+            }
 
 		} catch (Mage_Core_Exception $ex) {
 			$reposnse->setHttpResponseCode(500);
@@ -120,7 +164,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	 * handle Get method
 	 */
 	protected function _handleRestGet($productId=null) {
-		$reposnse = $this->getResponse();
+		$response = $this->getResponse();
 		
 		$collection = $this->_getCollection();
 
@@ -133,7 +177,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				$collection->addAttributeToFilter($key, $value);
 			}
 		}
-		
+
 		// Make order and limit
 		$out = $collection->prepareRestResponse(
 				$this->_getRestSort(), 
@@ -141,10 +185,10 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		);
 		
 		if($productId && $out['items']){
-			$reposnse->
+			$response->
 				setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
 		}else{
-			$reposnse->
+			$response->
 				setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
 				setBody(Mage::helper("core")->jsonEncode($out['items']));
 		}
@@ -229,6 +273,9 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		//sort(-entity_id)
 		if(preg_match("/sort\((\-|\+)(\w+)\)/", $query, $matches)){
 			if(in_array($matches[2], $this->_getAvailableSortParams())){
+				if ($matches[2] == 'is_in_stock') {
+					$matches[2] = 'stock_qty';
+				}
 				return array(
 					"order"=>$matches[2], 
 					"dir"=>$matches[1]=="+" ? 
@@ -272,12 +319,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		$allowedStores = $this->getAllowedStores();
 		
 		foreach($allowedStores as $_store){
-			if($_store->getId()==$store->getId()){
+			if($_store["id"]==$store->getId()){
 				return (int)$store->getId();
 			}
 		}
 		
-		throw new Mage_Core_Exception("Unknow store");
+		throw new Mage_Core_Exception("Unknown store");
 	}
 	
 	/**
@@ -295,7 +342,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	}
 
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->_getSession()->getVendor();

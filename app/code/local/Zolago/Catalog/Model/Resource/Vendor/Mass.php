@@ -331,10 +331,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * @return array
 	 */
-	public function getAttributeSetsForVendor(Unirgy_Dropship_Model_Vendor $vendor) {
+	public function getAttributeSetsForVendor(ZolagoOs_OmniChannel_Model_Vendor $vendor) {
 		
 		$select = $this->getReadConnection()->select();
 		
@@ -353,20 +353,21 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		
 		$select->where("index.vendor_id=?", $vendor->getId());
+
 		$select->distinct(true);
 		$select->order("attribute_set_name");
-		
+
 		return  $this->getReadConnection()->fetchPairs($select);
 	}
 
 	/**
 	 * Get Static Filters for Vendor
 	 * 
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * 
 	 * @return array
 	 */	
-	public function getStaticFiltersForVendor(Unirgy_Dropship_Model_Vendor $vendor, $attributeSetId)
+	public function getStaticFiltersForVendor(ZolagoOs_OmniChannel_Model_Vendor $vendor, $attributeSetId)
 	{
 		$select = $this->getReadConnection()->select();
 		$setup = new Mage_Core_Model_Resource_Setup('core_setup');
@@ -442,12 +443,12 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	/**
 	 * Get Static Filters for Vendor
 	 * 
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param ZolagoOs_OmniChannel_Model_Vendor $vendor
 	 * 
 	 * @return array
 	 */
 
-    public function getStaticDropdownFiltersForVendorProductAssoc(Unirgy_Dropship_Model_Vendor $vendor, $attributeSetId)
+    public function getStaticDropdownFiltersForVendorProductAssoc(ZolagoOs_OmniChannel_Model_Vendor $vendor, $attributeSetId)
     {
 
         $select = $this->getReadConnection()->select();

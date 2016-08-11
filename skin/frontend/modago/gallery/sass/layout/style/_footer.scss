@@ -1,0 +1,221 @@
+/* FOOTER */
+.footer-black {
+	padding-top: 27px;
+	padding-bottom: 10px;
+	overflow: hidden;
+
+	.footer-logo {
+		margin-left: -5px;
+		margin-top: -13px;
+		text-align: left;
+		position: static;
+		display: inline-block;
+		float: left;
+		width: 170px;
+		a {
+			width: 100%;
+			img {
+				width: 100%;
+			}
+		}
+	}
+	.footer-about {
+		position: relative;
+		top: 10px;
+		margin-left: 21.6%;
+		float: left;
+		//@media (min-width: $screen-sm-min) { margin-left:0; float:right;margin-right: -15px; margin-top:-15px }
+		@media (min-width: $screen-md-min) {
+			margin-left: 8.6%;
+			float: left;
+			margin-right: inherit;
+			margin-top: inherit
+		}
+		@media (min-width: $screen-lg-min) {
+			margin-left: 17.6%;
+		}
+		ul {
+			margin-left: 0px;
+			padding-left: 0px;
+		}
+		li {
+			display: inline-block;
+			margin: 0 10px;
+		}
+	}
+	.footer-connect {
+		display: inline-block;
+		float: right;
+		position: relative;
+		clear: right;
+		top: 8px;
+		> span {
+			float: left;
+			margin-right: 10px;
+		}
+	}
+}
+
+.footer-payment {
+	float: left;
+}
+
+#footer {
+	[class^=ico_] {
+		@include inline-block;
+		margin-left: 15px;
+		&:first-child {
+
+		}
+
+	}
+	.ico_social_twitter {
+		@include sprite-dimensions($allMap, ico_social_twitter);
+		@media (max-width: 320px) {
+			margin-left: 0 !important;
+		}
+
+	}
+	.ico_social_fb {
+		@include sprite-dimensions($allMap, ico_social_fb);
+		margin-left: 17px;
+	}
+
+	.ico_social_instagram {
+		@include sprite-dimensions($allMap, ico_social_instagram);
+		margin-left: 21px;
+	}
+	.ico_social_gplus {
+		@include sprite-dimensions($allMap, ico_social_gplus);
+		margin-left: 23px;
+	}
+	.ico_social_pinterest {
+		@include sprite-dimensions($allMap, ico_social_pinterest);
+		margin-left: 22px;
+	}
+}
+
+.footer-gray-wr {
+	padding: 10px 0;
+}
+
+.copy {
+	position: relative;
+	left: -80px;
+}
+
+.footer-pay-visa, .footer-pay-master, .footer-pay-paypal {
+	height: 22px;
+	width: 33px;
+	display: inline-block;
+	margin-left: 18px;
+	position: relative;
+	top: 5px;
+}
+
+.footer-pay-master {
+	width: 35px;
+}
+
+.footer-pay-paypal {
+	width: 37px;
+}
+
+.footer-pay-visa {
+	margin-left: 0px;
+}
+
+@media (max-width: $screen-sm-max) {
+	#footer {
+
+		&.footer-black {
+			min-height: 117px;
+			padding-top: 10px;
+			position: relative;
+		}
+
+		.footer-logo {
+			width: 123px;
+			position: absolute;
+			top: -14px;
+			right: 0px;
+			margin: 0;
+			> a {
+				img {
+					width: 100%;
+					height: auto;
+				}
+			}
+		}
+		.footer-about {
+			padding-top: 10px;
+			margin-left: 0;
+			> ul {
+				margin: 0;
+				padding: 0;
+				position: relative;
+				top: -30px;
+				> li {
+					margin: 0 0 5px;
+					padding: 0;
+					display: block;
+				}
+			}
+		}
+		.footer-connect {
+			margin-left: 0;
+			margin-bottom: 10px;
+			float: left;
+			clear: left;
+			> span {
+				display: inline-block;
+				position: relative;
+				margin-right: 10px;
+				top: -5px;
+				padding-top: 8px;
+				@media (max-width: 320px) {
+					display: block;
+					width: 100%;
+					margin-bottom: 5px;
+				}
+			}
+		}
+		.footer-gray-wr {
+
+			.footer-utils {
+				overflow: hidden;
+				//                padding:0 10px;
+				a {
+					float: left;
+					& + a {
+						float: right;
+						margin-left: 20px;
+					}
+				}
+			}
+		}
+		.copy {
+			position: relative;
+			left: 0;
+		}
+		// END FOOTER
+	}
+
+}
+
+/* footer fix start: */
+body {
+	height: 100%;
+}
+#sb-site, .sb-site {
+	min-height: 100%;
+	position: relative;
+	padding-bottom: 256px;
+}
+#footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+/* footer fix end; */

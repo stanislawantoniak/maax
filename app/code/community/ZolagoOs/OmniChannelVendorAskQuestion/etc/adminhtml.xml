@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <sales>
+            <children>
+                <udropship>
+                    <children>
+                        <udqa module="udqa">
+                            <title>Vendor Questions</title>
+                            <sort_order>60</sort_order>
+                            <children>
+                                <question_pending module="udqa">
+                                    <title>Pending Questions/Answers</title>
+                                    <sort_order>10</sort_order>
+                                    <action>zosqaadmin/index/pending</action>
+                                </question_pending>
+                                <question_all>
+                                    <title>All Questions/Answers</title>
+                                    <sort_order>20</sort_order>
+                                    <action>zosqaadmin/index/index</action>
+                                </question_all>
+                            </children>
+                        </udqa>
+                    </children>
+                </udropship>
+            </children>
+        </sales>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <udqa>
+                                        <title>Vendor Questions</title>
+                                        <sort_order>60</sort_order>
+                                    </udqa>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <sales>
+                        <children>
+                            <udropship>
+                                <children>
+                                    <udqa>
+                                        <title>Vendor Questions</title>
+                                        <sort_order>60</sort_order>
+                                        <children>
+                                            <question_all>
+                                                <title>All Questions/Answers</title>
+                                                <sort_order>20</sort_order>
+                                            </question_all>
+                                            <question_pending module="udqa">
+                                                <title>Pending Questions/Answers</title>
+                                                <sort_order>20</sort_order>
+                                            </question_pending>
+                                        </children>
+                                    </udqa>
+                                </children>
+                            </udropship>
+                        </children>
+                    </sales>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

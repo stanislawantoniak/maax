@@ -1,0 +1,121 @@
+<?php
+$dane = $this->pokazDaneKonta();
+?>
+<style>
+    .ramka_serwersms{
+        border: 1px solid #e02124;
+    }
+    
+    .ramka_serwersms td{
+        padding-left: 10px; padding-right: 10px;
+    }
+    
+    .ramka_serwersms a{
+        color: #e02124;
+    }
+    
+    .naglowek_serwersms{
+        background: #e02124; padding: 10px 10px; color: #fff; font-weight: bold;
+    }
+    .text-right{
+        text-align: right;
+    }
+</style>
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody><tr>
+            <td><h3 class="icon-head head-adminhtml-wyslane">Dane konta</h3></td>
+        </tr>
+    </tbody></table>
+</div>
+<table class="ramka_serwersms">
+    <tr>
+        <td colspan="3" class="naglowek_serwersms">
+            <img src="<?php echo $this->getSkinUrl('serwersms/serwersms.png') ?>" />
+        </td>
+    </tr>
+    <?php if(is_array($dane)) {
+        if($dane['konto'] == 'PREPAID') $doladuj = '<a href="https://www.serwersms.pl/o,36-Zamow_pakiet_Pre_Paid.html">Doładuj swoje konto</a> | ';
+        else $doladuj = '';
+        ?>
+    <tr>
+        <td><strong>Typ konta:</strong></td><td><?php echo $dane['konto']; ?></td><td><?php echo $doladuj; ?><a href="http://www.serwersms.pl/k,19-Cennik.html">Cennik</a></td>
+    </tr>
+    <tr>
+        <td><strong>Stan konta:</strong></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td></td><td>SMS ECO:</td><td width="50%"><?php echo $dane['ECO']; ?></td>
+    </tr>
+    <tr>
+        <td></td><td>SMS FULL:</td><td><?php echo $dane['FULL']; ?></td>
+    </tr>
+    <tr>
+        <td><strong>Limit znaków:</strong></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td></td><td>SMS ECO:</td><td width="50%"><?php echo $dane['ECOlimit']; ?></td>
+    </tr>
+    <tr>
+        <td></td><td>SMS FULL:</td><td><?php echo $dane['FULLlimit']; ?></td>
+    </tr>
+    <tr>
+        <td><strong>Nazwy nadawcy:</strong><br>
+            <?php $key = Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_index","dodajnazwe"); ?>
+            (<a href="<?php echo Mage::helper("adminhtml")->getUrl("serwersms/adminhtml_index/dodajnazwe/",array("key" => $key)); ?>">Dodaj nową nazwę</a>)</td>
+        <td></td><td></td>
+    </tr>
+    <?php
+        foreach($dane['nadawcy'] as $nazwa => $status){
+            echo '
+                <tr>
+                    <td></td><td>'.$nazwa.'</td><td>'.$status.'</td>
+                </tr>
+                ';
+        }
+    ?>
+    <tr>
+        <td colspan="3" class="naglowek_serwersms">
+            Dane kontaktowe:
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Telefon:</strong></td><td><?php echo $dane['pomoc']['telefon']; ?></td>
+        <td rowspan="5">
+            
+            <table>
+                <tr><td colspan="2"><strong>Opiekun Twojego konta:</td></tr>
+                <tr><td rowspan="3"><img src="<?php echo $dane['pomoc']['foto']; ?>" width="70" /></td><td><?php echo $dane['pomoc']['opiekun']; ?></td></tr>
+                <tr><td><?php echo $dane['pomoc']['op_telefon']; ?></td></tr>
+                <tr><td><a href="mailto:<?php echo $dane['pomoc']['op_email']; ?>"><?php echo $dane['pomoc']['op_email']; ?></a></td></tr>
+            </table>
+            
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Infolinia:</strong></td><td><?php echo $dane['pomoc']['infolinia']; ?></td>
+    </tr>
+    <tr>
+        <td><strong>E-mail:</strong></td><td><a href="mailto:<?php echo $dane['pomoc']['email']; ?>"><?php echo $dane['pomoc']['email']; ?></a></td>
+    </tr>
+    <tr>
+        <td></td><td><a href="<?php echo $dane['pomoc']['formularz']; ?>">Formularz kontaktowy</a></td>
+    </tr>
+    <tr>
+        <td></td><td><a href="<?php echo $dane['pomoc']['faq']; ?>">FAQ</a></td>
+    </tr>
+    <?php } else { ?>
+    <tr>
+        <td colspan="3">
+            <?php
+                if($dane == 'blad logowania: nieprawidlowy login lub haslo' or $dane == ''){
+                    echo Mage::helper('sms_helper/SerwerSMS')->niezalogowanyWidok();
+                } else {
+                    echo '<strong>'.$dane.'</strong>';
+                }
+            ?>
+        </td>
+    </tr>
+    <?php } ?>
+    
+</table>

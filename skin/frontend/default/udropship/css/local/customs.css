@@ -360,7 +360,7 @@ table.foot-empty-cells tfoot td:empty {
 .udropship-vendor_settings-rma .widget.box .widget-header h4 {
   margin: 10px 0;
 }
-#control-battons div div {                   
+#control-battons div div {
     float: left;
 	margin-top:12px;
 	margin-left:8px;
@@ -385,6 +385,9 @@ table.foot-empty-cells tfoot td:empty {
 	clear:both;
 }
 /*fix for horizontal scroll for grid*/
+.grid-hscroll-1500w .z-grid{
+    min-width: 1500px!important;
+}
 .grid-hscroll-1400w .z-grid{
     min-width: 1400px!important;
 }
@@ -468,4 +471,88 @@ table.foot-empty-cells tfoot td:empty {
 	color: #ffffff !important;
 	background: #334d63 !important;
 	box-shadow: 1px 0 0 rgba(0, 0, 0, 0.25) inset, -1px 0 0 rgba(0, 0, 0, 0.25) inset !important;
+}
+
+/**
+ * Nowe ikonki
+ */
+
+.ania-icon-wrong {
+    background: url(../../images/ania-icons/wrong.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-notaccepted {
+    background: url(../../images/ania-icons/notaccepted.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-new {
+    background: url(../../images/ania-icons/new.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-hourglass {
+    background: url(../../images/ania-icons/hourglass-icon.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-enabled {
+    background: url(../../images/ania-icons/enabled.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.ania-icon-accepted {
+    background: url(../../images/ania-icons/accepted.png);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size: 25px;
+}
+.icon-product-preview {
+    background: url(../../images/icon-product-preview.png);
+    width: 28px;
+    height: 21px;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin-left: 5px;
+}
+#productPreviewModal a{
+    line-height: 30px;
+    font-size: 15px;
+}
+@media screen and (min-width: 768px) {
+	#shippingModal .modal-dialog {
+		width: 730px;
+	}
+}
+.no-padding-left {
+    padding-left: 0;
+}
+
+.udropship-statements-periodic .event-date-big {
+    font-size: 18px;
+    font-weight: bold;
+}
+.udropship-statements-periodic .wrapper-date-from-to-statement_period,
+.udropship-statements-periodic .important-cell
+{
+    font-size: 15px;
+    font-weight: bold;
+}
+.grid_row_highlighted {
+/*	background-color: #60a1ea !important; */
+	background-color: #999 !important;
 }

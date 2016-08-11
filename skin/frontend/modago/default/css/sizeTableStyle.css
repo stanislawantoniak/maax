@@ -1,0 +1,96 @@
+body,html {
+    font-family: "latoregular",sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+body img {
+    max-width: 100%;
+}
+
+#sizetable-container p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+#sizetable-container .sizetable-container-a {
+    float: left;
+    padding-right: 1%;
+    width: 50%;
+    position: relative;
+}
+#sizetable-container .sizetable-container-b {
+    width: 49%;
+    position: relative;
+    float: left;
+}
+@media (max-width: 558px) {
+    #sizetable-container .sizetable-container-a {
+        float: none;
+        width: 100%;
+        /*text-align: center;*/
+    }
+    #sizetable-container .sizetable-container-b {
+        width: 100%;
+    }
+}
+
+#sizetable-container {
+    min-width: inherit;
+}
+
+/*#sizetable-container .sizetable-container-c:not(:empty) {
+    padding-bottom: 20px;
+}*/
+
+
+.sizetable-desktop {
+    display: block;
+}
+.sizetable-mobile {
+    display: none;
+}
+
+/*
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+table {
+    text-align: left;
+    border-collapse: collapse;
+    width: 100%;
+}
+table tr td {
+    border: 1px solid black !important;
+    padding: 5px;
+}
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
+
+    #sizetable-container h1 {
+        font-size: 1.4em;
+    }
+    #sizetable-container ol,
+    #sizetable-container ul {
+        margin-left: -15px;
+    }
+
+    #sizetable-container tr {
+        border: 1px solid #ccc;
+        height: auto !important;
+    }
+    #sizetable-container tr:not(:first-child) td {
+        width: 50%;
+    }
+
+    .sizetable-desktop {
+        display: none;
+    }
+    .sizetable-mobile {
+        display: block;
+    }
+}

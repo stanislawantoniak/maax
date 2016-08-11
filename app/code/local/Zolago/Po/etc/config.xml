@@ -2,107 +2,103 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.21</version>
+            <version>0.0.25</version>
         </Zolago_Po>
     </modules>
     <global>
-		<resources>
+        <resources>
             <zolagopo_setup>
                 <setup>
                     <module>Zolago_Po</module>
                 </setup>
             </zolagopo_setup>
         </resources>
-		<blocks>
-			<zolagopo>
-				<class>Zolago_Po_Block</class>
-			</zolagopo>
-			<udpo>
-				<rewrite>
-					<vendor_po_info>Zolago_Po_Block_Vendor_Po_Info</vendor_po_info>
-					<adminhtml_po_grid>Zolago_Po_Block_Adminhtml_Po_Grid</adminhtml_po_grid>
-					<adminhtml_salesOrderViewTab_udpos>Zolago_Po_Block_Adminhtml_SalesOrderViewTab_Udpos</adminhtml_salesOrderViewTab_udpos>
-				</rewrite>
-			</udpo>
-		</blocks>
-		<helpers>
-			<zolagopo>
-				<class>Zolago_Po_Helper</class>
-			</zolagopo>
-			<udpo>
-				<rewrite>
-					<data>Zolago_Po_Helper_Data</data>
-				</rewrite>
-			</udpo>
-		</helpers>
-		<models>
-			<zolagopo>
-				<class>Zolago_Po_Model</class>
-				<resourceModel>zolagopo_resource</resourceModel>
-			</zolagopo>
-			<zolagopo_resource>
-				<class>Zolago_Po_Model_Resource</class>
-				<entities>
-					<aggregated>
-						<table>zolago_po_aggregated</table>
-					</aggregated>
-				</entities>
-			</zolagopo_resource>
-			<udpo>
-				<rewrite>
-					<source>Zolago_Po_Model_Source</source>
-					<po>Zolago_Po_Model_Po</po>
-					<po_item>Zolago_Po_Model_Po_Item</po_item>
-				</rewrite>
-			</udpo>
-		</models>
-		<events>
+        <blocks>
+            <zolagopo>
+                <class>Zolago_Po_Block</class>
+            </zolagopo>
+            <udpo>
+                <rewrite>
+                    <vendor_po_info>Zolago_Po_Block_Vendor_Po_Info</vendor_po_info>
+                    <adminhtml_po_grid>Zolago_Po_Block_Adminhtml_Po_Grid</adminhtml_po_grid>
+                    <adminhtml_salesOrderViewTab_udpos>Zolago_Po_Block_Adminhtml_SalesOrderViewTab_Udpos</adminhtml_salesOrderViewTab_udpos>
+                </rewrite>
+            </udpo>
+        </blocks>
+        <helpers>
+            <zolagopo>
+                <class>Zolago_Po_Helper</class>
+            </zolagopo>
+            <udpo>
+                <rewrite>
+                    <data>Zolago_Po_Helper_Data</data>
+                </rewrite>
+            </udpo>
+        </helpers>
+        <models>
+            <zolagopo>
+                <class>Zolago_Po_Model</class>
+                <resourceModel>zolagopo_resource</resourceModel>
+            </zolagopo>
+            <zolagopo_resource>
+                <class>Zolago_Po_Model_Resource</class>
+                <entities>
+                    <aggregated>
+                        <table>zolago_po_aggregated</table>
+                    </aggregated>
+                </entities>
+            </zolagopo_resource>
+            <udpo>
+                <rewrite>
+                    <source>Zolago_Po_Model_Source</source>
+                    <po>Zolago_Po_Model_Po</po>
+                    <po_item>Zolago_Po_Model_Po_Item</po_item>
+                </rewrite>
+            </udpo>
+        </models>
+        <events>
             <zolagopayment_allocation_save_after>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
                         <method>updatePoStatusByAllocation</method>
                     </zolagopo>
-                </observers>
-            </zolagopayment_allocation_save_after>
-            <zolagopayment_allocation_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessagePaymentDataChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopayment_allocation_save_after>
-			<zolagopo_po_save_after>
-				<observers>
-					<zolagopo>
-						<class>zolagopo/observer</class>
+            <zolagopo_po_save_after>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
                         <method>updatePoStatusByAllocation</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_save_after>
-			<zolagopo_po_save_new>
-				<observers>
-					<zolagopo>
-						<class>zolagopo/observer</class>
+                    </zolagopo>
+                    <zolagopo_alert>
+                        <model>zolagopo/observer</model>
+                        <method>poAlertUpdate</method>
+                    </zolagopo_alert>
+                </observers>
+            </zolagopo_po_save_after>
+            <zolagopo_po_save_new>
+                <observers>
+                    <zolagopo>
+                        <class>zolagopo/observer</class>
                         <method>ghapiAddMessageNewOrder</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_save_new>
+                    </zolagopo>
+                </observers>
+            </zolagopo_po_save_new>
             <zolagopayment_allocate_overpayment_save_after>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
                         <method>addAllocationComment</method>
                     </zolagopo>
-                </observers>
-            </zolagopayment_allocate_overpayment_save_after>
-            <zolagopayment_allocate_overpayment_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessagePaymentDataChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopayment_allocate_overpayment_save_after>
             <zolagopayment_create_overpayment_save_after>
@@ -111,298 +107,277 @@
                         <class>zolagopo/observer</class>
                         <method>addOverpayComment</method>
                     </zolagopo>
-                </observers>
-            </zolagopayment_create_overpayment_save_after>
-            <zolagopayment_create_overpayment_save_after>
-                <observers>
-                    <zolagopo>
+                    <zolagopo_ghapi>
                         <class>zolagopo/observer</class>
                         <method>ghapiAddMessagePaymentDataChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopayment_create_overpayment_save_after>
-
-			<zolagopo_po_split>
+			<zolagopayment_add_pickup_payment_transaction_save_after>
 				<observers>
 					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poSplit</method>
+						<class>zolagopo/observer</class>
+						<method>addPickUpPaymentComment</method>
 					</zolagopo>
+					<zolagopo_ghapi>
+						<class>zolagopo/observer</class>
+						<method>ghapiAddMessagePaymentDataChanged</method>
+					</zolagopo_ghapi>
 				</observers>
-			</zolagopo_po_split>
+			</zolagopayment_add_pickup_payment_transaction_save_after>
+
             <zolagopo_po_split>
                 <observers>
                     <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>poSplit</method>
+                    </zolagopo>
+                    <zolagopo_paymentsplit>
                         <model>zolagopo/observer</model>
                         <method>paymentSplit</method>
-                    </zolagopo>
-                </observers>
-            </zolagopo_po_split>
-            <zolagopo_po_split>
-                <observers>
-                    <zolagopo>
+                    </zolagopo_paymentsplit>
+                    <zolagopo_ghapi>
                         <model>zolagopo/observer</model>
                         <method>ghapiAddMessageItemsChanged</method>
-                    </zolagopo>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_split>
 
-			<zolagopo_po_shipping_cost>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poShippingCost</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_shipping_cost>
             <zolagopo_po_shipping_cost>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageItemsChanged</method>
+                        <method>poShippingCost</method>
                     </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_shipping_cost>
-			<zolagopo_po_item_remove>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poItemRemove</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_item_remove>
             <zolagopo_po_item_remove>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageItemsChanged</method>
+                        <method>poItemRemove</method>
                     </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_item_remove>
-			<zolagopo_po_item_edit>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poItemEdit</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_item_edit>
             <zolagopo_po_item_edit>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageItemsChanged</method>
+                        <method>poItemEdit</method>
                     </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_item_edit>
-			<zolagopo_po_item_add>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poItemAdd</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_item_add>
             <zolagopo_po_item_add>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageItemsChanged</method>
+                        <method>poItemAdd</method>
                     </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageItemsChanged</method>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_item_add>
-			<zolagopo_po_address_restore>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poAddressRestore</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_address_restore>
             <zolagopo_po_address_restore>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                        <method>poAddressRestore</method>
                     </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_restore>
-			<zolagopo_po_address_change>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poAddressChange</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_po_address_change>
             <zolagopo_po_address_change>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                        <method>poAddressChange</method>
                     </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                    </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_change>
-			<zolagopo_po_compose>
+			<zolagorma_rma_created_manually>
 				<observers>
 					<zolagopo>
 						<model>zolagopo/observer</model>
-						<method>poCompose</method>
+						<method>poManuallyRma</method>
 					</zolagopo>
 				</observers>
-			</zolagopo_po_compose>
-			<zolagopo_po_change_pos>
+			</zolagorma_rma_created_manually>
+			<zolagopo_po_inpost_locker_name_change>
 				<observers>
 					<zolagopo>
 						<model>zolagopo/observer</model>
-						<method>poChangePos</method>
+						<method>poDeliveryAddressInpostChange</method>
 					</zolagopo>
-				</observers>
-			</zolagopo_po_change_pos>
-
-			<udpo_po_status_save_after>
-				<observers>
-					<zolagopo>
+					<zolagopo_ghapi>
 						<model>zolagopo/observer</model>
-						<method>poChangeStatus</method>
-					</zolagopo>
+						<method>ghapiAddMessageDeliveryOrInvoice</method>
+					</zolagopo_ghapi>
 				</observers>
-			</udpo_po_status_save_after>
-            <udpo_po_status_save_after>
+			</zolagopo_po_inpost_locker_name_change>
+            <zolagopo_po_compose>
                 <observers>
                     <zolagopo>
                         <model>zolagopo/observer</model>
-                        <method>ghapiAddMessageCancelledOrChanged</method>
+                        <method>poCompose</method>
                     </zolagopo>
                 </observers>
-            </udpo_po_status_save_after>
-
-            <udpo_po_save_after>
-                <observers>
-                    <udpo>
-                        <type>singleton</type>
-                        <class>zolagopo/observer</class>
-                        <method>setOrderState</method>
-                    </udpo>
-                </observers>
-            </udpo_po_save_after>
-            <udpo_po_status_save_after>
-                <observers>
-                    <udpo>
-                        <type>singleton</type>
-                        <class>zolagopo/observer</class>
-                        <method>setOrderState</method>
-                    </udpo>
-                </observers>
-            </udpo_po_status_save_after>
-
-            <udpo_po_status_save_after>
+            </zolagopo_po_compose>
+            <zolagopo_po_change_pos>
                 <observers>
                     <zolagopo>
-                        <class>zolagopo/observer</class>
-                        <method>setOrderReservation</method>
+                        <model>zolagopo/observer</model>
+                        <method>poChangePos</method>
                     </zolagopo>
                 </observers>
+            </zolagopo_po_change_pos>
+
+            <udpo_po_status_save_after>
+                <observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>poChangeStatus</method>
+                    </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageCancelledOrChanged</method>
+                    </zolagopo_ghapi>
+                    <zolagopo_ghapi_reservetion>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderReservation</method>
+                    </zolagopo_ghapi_reservetion>
+                </observers>
             </udpo_po_status_save_after>
+
             <udpo_po_save_after>
                 <observers>
+                    <udpo>
+                        <type>singleton</type>
+                        <class>zolagopo/observer</class>
+                        <method>setOrderState</method>
+                    </udpo>
                     <zolagopo>
                         <class>zolagopo/observer</class>
                         <method>setOrderReservationOnSave</method>
                     </zolagopo>
                 </observers>
             </udpo_po_save_after>
-			<udpo_po_shipment_save_before>
-				<observers>
-					<poShipmentSaveBefore>
-						<model>zolagopo/observer</model>
-						<method>poShipmentSaveBefore</method>
-					</poShipmentSaveBefore>
-				</observers>
-			</udpo_po_shipment_save_before>
-			<sales_quote_address_save_before>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>quoteAddressSaveBefore</method>
-					</zolagopo>
-				</observers>
-			</sales_quote_address_save_before>
-			<zolagopo_shipment_cancel_after>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>shipmentCancelAfter</method>
-					</zolagopo>
-				</observers>
-			</zolagopo_shipment_cancel_after>
-		</events>
-		<fieldsets>
-			<!-- Transfer need invoice field -->
-			<sales_copy_order_billing_address>
+            <udpo_po_shipment_save_before>
+                <observers>
+                    <poShipmentSaveBefore>
+                        <model>zolagopo/observer</model>
+                        <method>poShipmentSaveBefore</method>
+                    </poShipmentSaveBefore>
+                </observers>
+            </udpo_po_shipment_save_before>
+            <sales_quote_address_save_before>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>quoteAddressSaveBefore</method>
+                    </zolagopo>
+                </observers>
+            </sales_quote_address_save_before>
+            <zolagopo_shipment_cancel_after>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>shipmentCancelAfter</method>
+                    </zolagopo>
+                </observers>
+            </zolagopo_shipment_cancel_after>
+        </events>
+        <fieldsets>
+            <!-- Transfer need invoice field -->
+            <sales_copy_order_billing_address>
                 <need_invoice>
                     <to_order>*</to_order>
-				</need_invoice>
-			</sales_copy_order_billing_address>
-			<sales_copy_order_shipping_address>
+                </need_invoice>
+            </sales_copy_order_billing_address>
+            <sales_copy_order_shipping_address>
                 <need_invoice>
                     <to_order>*</to_order>
-				</need_invoice>
-			</sales_copy_order_shipping_address>
-			<sales_convert_quote_address>
+                </need_invoice>
+            </sales_copy_order_shipping_address>
+            <sales_convert_quote_address>
                 <need_invoice>
                     <to_order_address>*</to_order_address>
                 </need_invoice>
-			</sales_convert_quote_address>
-			<sales_convert_order_address>
+            </sales_convert_quote_address>
+            <sales_convert_order_address>
                 <need_invoice>
                     <to_quote_address>*</to_quote_address>
                 </need_invoice>
-			</sales_convert_order_address>
-			<customer_address>
-                 <need_invoice>
-					 <to_quote_address>*</to_quote_address>
-				 </need_invoice>
+            </sales_convert_order_address>
+            <customer_address>
+                <need_invoice>
+                    <to_quote_address>*</to_quote_address>
+                </need_invoice>
             </customer_address>
-			<checkout_onepage_billing>
-				<need_invoice>
-					<to_customer>*</to_customer>
-				</need_invoice>
-			</checkout_onepage_billing>
-		</fieldsets>
-		<template>
+            <checkout_onepage_billing>
+                <need_invoice>
+                    <to_customer>*</to_customer>
+                </need_invoice>
+            </checkout_onepage_billing>
+        </fieldsets>
+        <template>
             <email>
-               <zolagopo_compose translate="label" module="zolagopo">
-                   <label>PO Customer Message</label>
-                   <file>zolagopo_compose.html</file>
-                   <type>html</type>
-               </zolagopo_compose> 
-			   <udropship_purchase_order_status_changed_shipped translate="label" module="zolagopo">
-                   <label>PO Status changed to shipped</label>
-                   <file>zolagopo_status_changed_shipped.html</file>
-                   <type>html</type>
-               </udropship_purchase_order_status_changed_shipped>
+                <zolagopo_compose translate="label" module="zolagopo">
+                    <label>PO Customer Message</label>
+                    <file>zolagopo_compose.html</file>
+                    <type>html</type>
+                </zolagopo_compose>
+                <udropship_purchase_order_status_changed_shipped translate="label" module="zolagopo">
+                    <label>PO Status changed to shipped</label>
+                    <file>zolagopo_status_changed_shipped.html</file>
+                    <type>html</type>
+                </udropship_purchase_order_status_changed_shipped>
             </email>
         </template>
     </global>
-	<default>
+    <default>
         <udropship>
             <purchase_order>
                 <status_changed_shipped>udropship_purchase_order_status_changed_shipped</status_changed_shipped>
                 <zolagopo_compose>zolagopo_compose</zolagopo_compose>
-			</purchase_order>
-		</udropship>
-	</default>
-	<admin>
-		<fieldsets>
-			<customer_dataflow>
-			   <need_invoice>
-				   <billing>1</billing>
-				   <shipping>1</shipping>
-			   </need_invoice>
-			</customer_dataflow>
-		</fieldsets>
-	</admin>
+            </purchase_order>
+        </udropship>
+    </default>
+    <admin>
+        <fieldsets>
+            <customer_dataflow>
+                <need_invoice>
+                    <billing>1</billing>
+                    <shipping>1</shipping>
+                </need_invoice>
+            </customer_dataflow>
+        </fieldsets>
+    </admin>
     <frontend>
         <layout>
             <updates>
@@ -411,35 +386,35 @@
                 </zolagopo>
             </updates>
         </layout>
-		<routers>
-			<udpo>
-				<args>
-					<modules>
-						<Zolago_Po before="Unirgy_DropshipPo">Zolago_Po</Zolago_Po>
-					</modules>
-				</args>
-			</udpo>
-			<sales>
-				<args>
-					<modules>
-						<Zolago_Po>Zolago_Po</Zolago_Po>
-					</modules>
-				</args>
-			</sales>
-		</routers>
-		<translate>
-			<modules>
-				<Zolago_Po>
-					<files>
-						<default>Zolago_Po.csv</default>
-					</files>
-				</Zolago_Po>
-			</modules>
-		</translate>
-		<secure_url>
-		    <udpo_vendor_aggregated>/udpo/vendor_aggregated/</udpo_vendor_aggregated>
-		</secure_url>
-	</frontend>
+        <routers>
+            <udpo>
+                <args>
+                    <modules>
+                        <Zolago_Po before="ZolagoOs_OmniChannelPo">Zolago_Po</Zolago_Po>
+                    </modules>
+                </args>
+            </udpo>
+            <sales>
+                <args>
+                    <modules>
+                        <Zolago_Po>Zolago_Po</Zolago_Po>
+                    </modules>
+                </args>
+            </sales>
+        </routers>
+        <translate>
+            <modules>
+                <Zolago_Po>
+                    <files>
+                        <default>Zolago_Po.csv</default>
+                    </files>
+                </Zolago_Po>
+            </modules>
+        </translate>
+        <secure_url>
+            <udpo_vendor_aggregated>/udpo/vendor_aggregated/</udpo_vendor_aggregated>
+        </secure_url>
+    </frontend>
     <adminhtml>
         <layout>
             <updates>
@@ -448,15 +423,15 @@
                 </zolagopo>
             </updates>
         </layout>
-		<translate>
-			<modules>
-				<Zolago_Po>
-					<files>
-						<default>Zolago_Po.csv</default>
-					</files>
-				</Zolago_Po>
-			</modules>
-		</translate>		
+        <translate>
+            <modules>
+                <Zolago_Po>
+                    <files>
+                        <default>Zolago_Po.csv</default>
+                    </files>
+                </Zolago_Po>
+            </modules>
+        </translate>
     </adminhtml>
     <crontab>
         <jobs>
@@ -471,4 +446,15 @@
             </zolagorma_process_collect_tracking>
         </jobs>
     </crontab>
+    <admin>
+        <routers>
+            <zospoadmin>
+                <args>
+                    <modules>
+                        <Zolago_Po before="ZolagoOs_OmniChannelPo_Adminhtml">Zolago_Po_Adminhtml</Zolago_Po>
+                    </modules>
+                </args>
+            </zospoadmin>
+        </routers>
+    </admin>
 </config>

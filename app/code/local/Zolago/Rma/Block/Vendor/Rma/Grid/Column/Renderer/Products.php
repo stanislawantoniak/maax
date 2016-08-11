@@ -8,9 +8,11 @@ class Zolago_Rma_Block_Vendor_Rma_Grid_Column_Renderer_Products
 		$return = "";
 		if(is_array($items)){
 			foreach($items as $item){
-				/* @var $item Zolago_Rma_Model_Rma_Item */
-				$return .=  "[" . $item->getItemConditionName() . "] " .
-						$this->escapeHtml($item->getName()) . "<br/>" ;
+				if($item->getItemConditionName()) {
+					/* @var $item Zolago_Rma_Model_Rma_Item */
+					$return .= "[" . $item->getItemConditionName() . "] " .
+						$this->escapeHtml($item->getName()) . "<br/>";
+				}
 			}
 		}
 		return $return;

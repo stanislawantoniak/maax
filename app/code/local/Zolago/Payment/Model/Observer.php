@@ -15,8 +15,12 @@ class Zolago_Payment_Model_Observer
         if (count($collection) > 0) {
             $orderModel = Mage::getModel('sales/order');
             //make refund transactions
+	        $rmaId = false;
             foreach ($collection as $item) {
 				/** @var Zolago_Payment_Model_Allocation $item */
+	            if(isset($item['rma_id']) && !empty($item['rma_id'])) {//indicates that refund that we're going to create contains RMA money
+		            $rmaId = $item['rma_id'];
+	            }
 
                 $amountToRefund = $item->getMaxAllocationAmount();
                 $amount = - $amountToRefund;
@@ -37,8 +41,19 @@ class Zolago_Payment_Model_Observer
                 $txnType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND;
 
                 /* @var $client Zolago_Dotpay_Model_Client */
-                $client = Mage::getModel("zolagodotpay/client");
-                $refundTransactionId = $client->saveTransaction($order, $amount, $status, $txnId, $txnType, array(), '', $parentTransactionId,$parentsTxtId);
+                $client = Mage::getModel("zolagodotpay/client", $order->getStore());
+                $refundTransactionId = $client->saveTransaction(
+	                $order,
+	                $amount,
+	                $status,
+	                $txnId,
+	                $txnType,
+                    $client->getDotpayId(),
+	                array(),
+	                '',
+	                $parentTransactionId,
+	                $parentsTxtId
+                );
 
 	            if($refundTransactionId) {
 		            // remove overpay allocation
@@ -54,7 +69,9 @@ class Zolago_Payment_Model_Observer
 			            'comment' => $helper->__("Moved to refund"),
 			            'customer_id' => $item->getData('customer_id'),
 			            'vendor_id' => $item->getData('vendor_id'),
-			            'is_automat' => 1
+			            'is_automat' => 1,
+			            'refund_transaction_id' => $refundTransactionId,
+			            'rma_id' => ($rmaId ? $rmaId : null)
 		            ));
 		            $allocation->save();
 
@@ -72,7 +89,8 @@ class Zolago_Payment_Model_Observer
 			            'customer_id' => $item->getData('customer_id'),
 			            'vendor_id' => $item->getData('vendor_id'),
 			            'is_automat' => 1,
-			            'refund_transaction_id' => $refundTransactionId
+			            'refund_transaction_id' => $refundTransactionId,
+			            'rma_id' => ($rmaId ? $rmaId : null)
 		            ));
 		            $allocation->save();
 	            } else {

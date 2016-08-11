@@ -73,7 +73,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         if (!$product instanceof Zolago_Catalog_Model_Product) {
             return $seo;
         }
-        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        // Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $catIds = $product->getCategoryIds();
 
 
@@ -89,15 +90,14 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $collection->setStoreId($store);
         $collection->addAttributeToFilter("entity_id", array("in" => $catIds));
         $collection->addAttributeToFilter("is_active", 1);
-//        $collection->addAttributeToFilter("basic_category", 1);
+
         $collection->addPathFilter("/$rootId/");
         $collection->setOrder("basic_category", "DESC");
         $collection->setOrder("level", "DESC");
         $collection->setOrder("position", "ASC");
-        //$collection->addAttributeToSelect("*");
-        //Mage::log($collection->getSelect()->__toString(), null, "dcat1.log");
+
         $cat = $collection->getFirstItem();
-        //Mage::log($cat->getData(), null, "dcat1.log");
+
 
 
         if($cat->getData("basic_category") == 1){
@@ -130,11 +130,12 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 
     public function getDynamicMetaTagsInParents($seo, $category)
     {
-        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $rootId = Mage::app()->getStore()->getRootCategoryId();
+        // Mage::helper("zolagosolrsearch")->getRootCategoryId();
         $categoryParentId = $category->getData("parent_id");
 
-
-        if ($categoryParentId == $rootId ||
+        if ((int)$categoryParentId == 0 ||
+            $categoryParentId == $rootId ||
             (isset($seo["dynamic_meta_title"])
                 && isset($seo["dynamic_meta_keywords"])
                 && isset($seo["dynamic_meta_description"]))
@@ -178,21 +179,33 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             return $result;
         }
         preg_match_all('#\$([a-zA-Z0-9_]+)#', $seoText, $matches, PREG_SET_ORDER);
+        preg_match_all('(\$current_date\sformat=\"([\w\-]+)\")', $seoText, $matchesOfDate, PREG_SET_ORDER);
 
         $attributesFoundInLine = array();
+
         if(!empty($matches)){
             foreach($matches as $match){
                 $attributesFoundInLine[$match[1]] = $match[1];
             }
+            unset($match);
         }
-
+        $dates = array();
+        if(!empty($matchesOfDate)){
+            foreach($matchesOfDate as $match){
+                $dates[$match[1]] = $match[1];
+            }
+            unset($match);
+        }
         if(empty($attributesFoundInLine)){
             return $seoText;
         }
 
+
+
         $labels = array();
 
         foreach ($attributesFoundInLine as $attributeCode) {
+
             $label = "";
 
             $attribute = $product->getResource()
@@ -203,21 +216,24 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
             }
             $frontend_input = $attribute->getData("frontend_input");
 
-            if ($frontend_input == "select") {
-                $label = $product
-                    ->setData($attributeCode, $product->getData($attributeCode))
-                    ->getAttributeText($attributeCode);
-            }
-            if ($frontend_input == "multiselect") {
-                $label = $product->getResource()
-                    ->getAttribute($attributeCode)
-                    ->getFrontend()
-                    ->getValue($product);
-            }
-            if ($frontend_input == "text") {
-                $label = $product->getResource()
-                    ->getAttribute($attributeCode)
-                    ->getFrontend()->getValue($product);
+            switch($frontend_input){
+                case "select":
+                    $label = $product
+                        ->setData($attributeCode, $product->getData($attributeCode))
+                        ->getAttributeText($attributeCode);
+                    break;
+                case "multiselect":
+                    $value = $product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product);
+                    $label = !empty($value) ? explode(",", $value)[0] : "";
+                    break;
+                default:
+                    $label = $product->getResource()
+                        ->getAttribute($attributeCode)
+                        ->getFrontend()
+                        ->getValue($product);
             }
 
             $labels[$attributeCode] = $label;
@@ -230,7 +246,16 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $subst = array();
         foreach($labels as $code => $strItem){
             $subst['{$'.$code.'}'] = $strItem;
+            $subst['{$'.$code.' first_letter=capital}'] = ucfirst($strItem);
         }
+
+        if(!empty($dates)){
+            foreach($dates as $format){
+                $subst['{$current_date format="'.$format.'"}'] = date($format);
+            }
+        }
+        $subst['{$current_date}'] = date("d-m-Y");
+        $subst['{$price}'] = Mage::helper('core')->currency($product->getFinalPrice(),true,false);
 
         return strtr($seoText, $subst);
     }
@@ -244,35 +269,35 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVendorUrl() {
 		return $this->getVendorContext()->getVendorUrl();
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVendorName() {
 		return $this->getVendorContext()->getVendorName();
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVendorLogoUrl() {
 		return Mage::getBaseUrl('media') . $this->getVendorContext()->getLogo();
 	}
-	
+
 	/**
 	 * @return Zolago_Dropship_Model_Vendor
 	 */
     public function getVendorContext() {
 		return Mage::helper("umicrosite")->getCurrentVendor();
 	}
-	
+
 	/**
 	 * @return Zolago_Dropship_Model_Vendor
 	 */
@@ -283,7 +308,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $this->getData('vendor');
 	}
-	
+
 	/**
 	 * @param Zolago_Dropship_Model_Vendor|null $vendor
 	 * @return string
@@ -294,7 +319,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $vendor->getStoreDeliveryHeadline();
 	}
-	
+
 	/**
 	 * @param Zolago_Dropship_Model_Vendor|null $vendor
 	 * @return string
@@ -306,8 +331,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		return $vendor->getStoreReturnHeadline();
 	}
 
-  
-   
+
+
 
     /**
      * @todo Implementation
@@ -320,7 +345,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	    $helper = Mage::helper("zolagocatalog/product");
         return $helper->getProductBestFlag($this->getProduct());
     }
-	
+
 	/**
 	 * @param Mage_Catalog_Model_Category $category
 	 * @return string
@@ -331,7 +356,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $category->getName();
 	}
-	
+
 	/**
 	 * @param Mage_Catalog_Model_Category $category
 	 * @return string
@@ -342,7 +367,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
         return $category->getUrl();
 	}
-	
+
 	/**
 	 * @return Mage_Catalog_Model_Category
 	 */
@@ -363,7 +388,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 			}
 			$this->setData("parent_category", $model);
 		}
-		
+
 		return $this->getData("parent_category");
 	}
 
@@ -415,12 +440,12 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                 }
                 $value = $attribute->getFrontend()->getValue($product);
                 if (!$product->hasData($attribute->getAttributeCode())) {
-                    if (!$showEmpty) 
+                    if (!$showEmpty)
                         continue;
                     $value = Mage::helper('catalog')->__('N/A');
-                } elseif ((string)$value == '') {
-                    if (!$showEmpty) 
-                        continue;                        
+                } elseif (is_string($value) && $value == '') {
+                    if (!$showEmpty)
+                        continue;
                     $value = Mage::helper('catalog')->__('No');
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = Mage::app()->getStore()->convertPrice($value, true);
@@ -444,7 +469,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                             'frontend_type' => $attribute->getFrontendInput(),
                             'attribute_order' => $attribute->getColumnAttributeOrder(),
                             'default_order' => $counter,
-                            
+
                         );
                     }
                 }
@@ -454,12 +479,190 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         }
         //sort by ColumnAttributeOrder
         usort($data, function ($a, $b) {
-            if ($a['attribute_order'] != $b['attribute_order']) {        
+            if ($a['attribute_order'] != $b['attribute_order']) {
                 return $a['attribute_order'] - $b['attribute_order'];
             } else {
-                return $a['default_order'] - $b['default_order'];            
+                return $a['default_order'] - $b['default_order'];
             }
         });
         return $data;
     }
+
+
+    /**
+     * Excluding Unwanted Text from the Google Index
+     * according to 3-level configuration
+     * 1. Product level. Three options: USE BRANDSHOP-VENDOR CONFIG, YES, NO
+     * 2. Brandshop-Vendor level. Three options: USE VENDOR CONFIG, YES, NO
+     * 3. Vendor level. Two options: YES(default value), NO
+     * @return bool
+     */
+    public function excludeProductDescriptionFromGoogleIndex()
+    {
+        $exclude = FALSE;
+
+        $product = $this->getProduct();
+
+        //Check level 3
+        $indexProductByGoogle = (int)$product->getIndexProductByGoogle();
+
+        switch ($indexProductByGoogle) {
+            case Zolago_Dropship_Model_Source_Indexbygoogle::PRODUCT_INDEX_BY_GOOGLE_USE_CONFIG:
+                //Go to level 2 (vndor-brandshop configuration)
+                $exclude = $this->getVendorBrandshopIndexByGoogleConfig($product);
+                break;
+            case Zolago_Dropship_Model_Source_Indexbygoogle::PRODUCT_INDEX_BY_GOOGLE_YES:
+                //Nothing (description should be shown)
+                break;
+            case Zolago_Dropship_Model_Source_Indexbygoogle::PRODUCT_INDEX_BY_GOOGLE_NO:
+                //Excluding description
+                $exclude = TRUE;
+                break;
+        }
+
+        return $exclude;
+    }
+
+
+    /**
+     * Brandshop-Vendor level. Three options: USE VENDOR CONFIG, YES, NO
+     * @param $product
+     * @return bool
+     */
+    public function getVendorBrandshopIndexByGoogleConfig($product)
+    {
+        $exclude = FALSE;
+        $vendorId = $product->getUdropshipVendor();
+        $brandshopId = $product->getBrandshop();
+
+        $model = Mage::getModel("zolagodropship/vendor_brandshop");
+        $model->loadByVendorBrandshop($vendorId,$brandshopId);
+
+        //Check level 2
+        $indexByGoogle = (int)$model->getIndexByGoogle();
+
+        switch ($indexByGoogle) {
+            case Zolago_Dropship_Model_Source_Brandshop_Indexbygoogle::BRANDSHOP_INDEX_BY_GOOGLE_USE_VENDOR_CONFIG:
+                //Go to level 1 (vndor configuration)
+                $exclude = $this->getVendorIndexByGoogleConfig($vendorId);
+                break;
+            case Zolago_Dropship_Model_Source_Brandshop_Indexbygoogle::BRANDSHOP_INDEX_BY_GOOGLE_YES:
+                //Nothing (description should be shown)
+                break;
+            case Zolago_Dropship_Model_Source_Brandshop_Indexbygoogle::BRANDSHOP_INDEX_BY_GOOGLE_NO:
+                //Excluding description
+                $exclude = TRUE;
+                break;
+        }
+        return $exclude;
+    }
+
+
+    /**
+     * @param $vendorId
+     * @return bool
+     */
+    public function getVendorIndexByGoogleConfig($vendorId)
+    {
+        $exclude = FALSE;
+        $model = Mage::getModel("zolagodropship/vendor")->load($vendorId);
+        $indexByGoogle = $model->getData("index_by_google");
+
+        if (!$indexByGoogle)
+            $exclude = TRUE;
+
+        return $exclude;
+    }
+
+	protected function _getSizeTableContent() {
+		/** @var $_product Zolago_Catalog_Model_Product*/
+		$_product = $this->getProduct();
+		$_helperSizetable = Mage::helper('zolagosizetable');
+		/** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
+		$vendor_id = $_product->getData('udropship_vendor');
+		$storeId = Mage::app()->getStore()->getStoreId();
+		$attributeSetId = $_product->getData('attribute_set_id');
+		$brandId = $_product->getData( 'manufacturer');
+
+		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+
+		return $sizeTableValue;
+	}
+
+	protected function _getSizeTableContainer() {
+		/** @var Mage_Cms_model_Block $block */
+		$block  = Mage::getModel('cms/block')
+			->setStoreId(Mage::app()->getStore()->getId())
+			->load('sizetablecontainer');
+
+
+        $sizeTableContent = $this->_getSizeTableContent();
+        $d = "";
+        if(!empty($sizeTableContent)){
+            $b = unserialize($this->_getSizeTableContent());
+
+            $blockTable = "";
+            $tableCheckIndicator = 0;
+            if (isset($b["table"])) {
+
+                $tableCheck = array();
+                foreach ($b["table"] as $tds) {
+                    $x = array_filter($tds);
+                    $tableCheck[] = !empty($x) ? 1 : 0;
+                }
+
+                $tableCheckIndicator = array_filter($tableCheck);
+
+                $blockTable = $this->getLayout()
+                    ->createBlock('core/template')
+                    ->setTemplate('catalog/product/view/sizeTable.phtml')
+                    ->setData("table", $b["table"])
+                    ->toHtml();
+            }
+            $contentTitle = isset($b["title"]) ? $b["title"] : "";
+
+            $contentC = isset($b["C"]) ? $b["C"] : "";
+            $contentA = isset($b["A"]) ? $b["A"] : "";
+            $contentB = isset($b["B"]) ? $b["B"] : "";
+            $c = array(
+                !empty($contentTitle) ? "<h1>" . $contentTitle . "</h1>" : "",
+                !empty($tableCheckIndicator) ? ("<div class='sizetable-container-c'>" . $blockTable . "</div>") : "",
+                "<div class='sizetable-container-c'>" . $contentC . "</div>",
+                "<div class='sizetable-container-ab'>",
+                "<div class='sizetable-container-a'>" . $contentA . "</div>",
+                "<div class='sizetable-container-b'>" . $contentB . "</div>",
+                "</div>"
+            );
+            $path = $this->getSkinUrl("css/sizeTableStyle.css");
+            $additionalCss = '<link rel="stylesheet" type="text/css" href="'.$path.'" media="all" />';
+            $d = $additionalCss . implode("", $c);
+        }
+        $vars = array(
+            //'sizetableCss' => $this->_getSizeTableStyle(),
+            'sizetableContent' => $d
+        );
+		/* This will be {{var sizetableCss}} and {{var sizetableContent}} in sizetablecontainer block  */
+
+		/** @var Mage_Cms_Model_Template_Filter $filterModel */
+		$filterModel = Mage::getModel('cms/template_filter');
+		$filterModel->setVariables($vars);
+
+		return $filterModel->filter($block->getContent());
+	}
+
+	protected function _getSizeTableStyle() {
+		/** @var Mage_Cms_model_Block $block */
+		$block  = Mage::getModel('cms/block')
+			->setStoreId(Mage::app()->getStore()->getId())
+			->load('sizetablecss');
+
+		return $block->getContent();
+	}
+
+	public function getSizeTableForJs() {
+		$sizetable = $this->_getSizeTableContainer();
+		$sizetable = str_replace(array("\"","\n","\r"),array("\\\""," "," "),$sizetable);
+
+		return "\"" . $sizetable . "\"";
+	}
 }

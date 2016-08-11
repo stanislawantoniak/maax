@@ -106,18 +106,20 @@
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
+				<name>js/dhl.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
 				<name>js/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js</name>
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/boostrap/bootstrap.min.js</name>
 			</action>
-			
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/melon/libs/lodash.compat.min.js</name>
 			</action>
-			
 			<action method="addItem">
 				<type>skin_js</type>
 				<name>js/melon/libs/html5shiv.js</name>
@@ -185,6 +187,10 @@
 				<type>skin_js</type>
 				<name>js/plugins/uniform/jquery.uniform.min.js</name>
 			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>plugins/bootstrap-switch/bootstrap-switch.js</name>
+			</action>
             <action method="addItem">
                 <type>skin_js</type>
                 <name>js/cssbs.js</name>
@@ -201,6 +207,8 @@
 			</action>
 			<block name="header.topmenu" as="topmenu" type="zolagodropship/vendor_menu_topmenu" template="unirgy/dropship/vendor/menu/topmenu.phtml"/>
 		</reference>
+		<!--we don't need salesmanago on vendor panel-->
+		<remove name="salesmanago_tracking"/>
 	</bootstrap>
 	<!-- Noty handling -->
 	<noty>
@@ -261,6 +269,16 @@
             <block type="zolagodropship/vendor_preferences" template="zolagodropship/vendor/settings/rma.phtml"/>
         </reference>
     </udropship_vendor_settings_rma>
+    <udropship_vendor_editpassword>
+        <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+        <update handle="noty"/>
+
+        <reference name="content">
+            <block type="zolagodropship/vendor_preferences" template="zolagodropship/vendor/settings/password.phtml"/>
+        </reference>
+    </udropship_vendor_editpassword>
     <!--settings-->
 
 	<udropship_vendor_shipmentinfo>
@@ -303,6 +321,18 @@
         </reference>
     </udropship_vendor_password>
 
+	<!--<udropship_vendor_accept>-->
+		<!--<update handle="udropship_vendor" />-->
+		<!--<update handle="bootstrap" />-->
+		<!--<update handle="forms"/>-->
+
+		<!--<reference name="root">-->
+			<!--<action method="setTemplate">-->
+				<!--<template>page/page_clear.phtml</template>-->
+			<!--</action>-->
+		<!--</reference>-->
+	<!--</udropship_vendor_accept>-->
+
 	<sales_order_shipment>
 		<reference name="shipment_items">
 			<action method="setTemplate">
@@ -319,5 +349,12 @@
 	</sales_order_printshipment>
 	
 	<!-- todo move it to new module-based xml layout -->
-	
+
+	<udropship_marketing_budget>
+		<update handle="udropship_vendor" />
+		<update handle="bootstrap" />
+		<reference name="content">
+			<block type="ghmarketing/dropship_marketing" template="ghmarketing/dropship/budget.phtml"/>
+		</reference>
+	</udropship_marketing_budget>
 </layout>

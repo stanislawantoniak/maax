@@ -5,7 +5,7 @@
  * @package    Zolago_DropshipVendorAskQuestion
  */
 
-class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendorAskQuestion_Helper_Data
+class Zolago_DropshipVendorAskQuestion_Helper_Data extends ZolagoOs_OmniChannelVendorAskQuestion_Helper_Data
 {
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON = "udqa/general/customer_new_question_confirmation";
 	const XML_PATH_EMAIL_CUSTOMER_CONFIRMATON_IDENTITY = "udqa/general/vendor_email_identity";
@@ -95,11 +95,8 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
 
         if (self::isNotifyVendorAgents($question)) {
             Mage::helper('udropship')->setDesignStore($store);
-            $emails = array();
 
             $vendorId = $question->getVendorId();
-
-            Mage::helper('udropship')->setDesignStore($store);
 
             $template = $store->getConfig('udqa/general/vendor_email_template');
             $identity = $store->getConfig('udqa/general/vendor_email_identity');
@@ -113,7 +110,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                 $incrementId = $order->getIncrementId();
             }
 
-
+            $emails = array();
             $emails += $superVendorAgents;
             $emails += $vendorAgents;
             unset($superVendorAgents);
@@ -132,8 +129,8 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                     'show_vendor_info'   => Mage::getStoreConfigFlag('udqa/general/show_vendor_info', $store),
 	                'use_attachments'    => true,
 	                'increment_id'		 => $incrementId,
+	                'question_url'		 => Mage::getUrl('udqa/vendor/questionEdit',array('id'=>$question->getId())),
                 );
-
 	            /** @var Zolago_Common_Helper_Data $mailer */
 	            $mailer = Mage::helper('zolagocommon');
                 foreach ($emails as $email => $_) {
@@ -156,6 +153,7 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
                 );
 
             }
+            Mage::helper('udropship')->setDesignStore();
         }
         return $this;
     }
@@ -172,10 +170,27 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Unirgy_DropshipVendor
     {
         $store = Mage::helper('udqa')->getStore($question);
         return !$question->getIsVendorAgentsNotified()
-        && $question->getQuestionStatus() == Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED
+        && $question->getQuestionStatus() == ZolagoOs_OmniChannelVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED
         && Mage::getStoreConfigFlag(
             'udqa/general/send_vendor_agent_notifications', $store
         );
     }
+    
+    /**
+     * store from question not from default
+     *
+     * @param ZolagoOs_OmniChannelVendorAskQuestion_Model_Question $question
+     * @return Mage_Core_Model_Store
+     */
+
+    public function getStore($question)
+    {
+        if (!$storeId = $question->getStoreId()) {            
+            return Mage::app()->getDefaultStoreView();
+        } else {
+            return Mage::getModel('core/store')->load($storeId);
+        }
+    }
+
 
 }

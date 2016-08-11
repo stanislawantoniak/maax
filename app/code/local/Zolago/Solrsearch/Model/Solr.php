@@ -5,6 +5,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	const REGISTER_KEY = "current_solr_data";
 	const FLAGS_FACET = "flags_facet";
 	const RATING_FACET = "product_rating_facet";
+	const FLAGS_CODE = "flags";
+	const RATING_CODE = "product_rating";
+	const PRICE_CODE = "price";
 	
 	protected $_specialKeys = array(
 		'is_new_facet',
@@ -147,6 +150,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		// Paginaton
 		$itemsPerPage = $this->getListModel()->getCurrentLimit();
 		$start = $this->getListModel()->getCurrentStart();
+
 		$this->start = $start;
         $this->rows = $itemsPerPage;
 	}

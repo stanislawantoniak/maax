@@ -1,4 +1,4 @@
-﻿"Order no", "Nr zamówienia"
+"Order no", "Nr zamówienia"
 "Date placed", "Data złożenia"
 "Shops", "Sklepy"
 "Products", "Produkty"
@@ -52,3 +52,5 @@
 "Attaching orders error: ","Błąd podczas przypinania zamówień: "
 "Confirmation token does not exist","Kod potwierdzający nie istnieje"
 "There are no more orders that can be attached to your account","Nie ma już zamówień, które moglibyśmy przpiąć do Twojego konta"
+"Ask question about order","Zadaj pytanie do zamówienia"
+"Ask question about RMA","Zadaj pytanie do zgłoszenia"

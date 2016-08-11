@@ -54,20 +54,22 @@
 								<?php foreach($rma->getItemsCollection() as $item):?>
 									<?php /* @var Zolago_Rma_Model_Rma_Item $item */ ?>
 									<?php $item = $item->getPoItem(); ?>
-									<?php /* @var Zolago_Po_Model_Po_Item $item */ ?>
-									<?php $thumbUrl = $this->getItemThumb($item); ?>
-									<?php $item = $item->getOrderItem(); ?>
-									<?php if(!$item->getParentItem()): ?>
-										<?php $name = $this->escapeHtml($item->getName()); ?>
-										<tr>
-											<td><img src="<?php echo $thumbUrl; ?>" alt="<?php echo $name; ?>" /></td>
-											<td>
-												<?php echo $name; ?><br/>
-												<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
-													<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
-												<?php endforeach;?>
-											</td>
-										</tr>
+									<?php if($item->getId()): ?>
+										<?php /* @var Zolago_Po_Model_Po_Item $item */ ?>
+										<?php $thumbUrl = $this->getItemThumb($item); ?>
+										<?php $item = $item->getOrderItem(); ?>
+										<?php if(!$item->getParentItem()): ?>
+											<?php $name = $this->escapeHtml($item->getName()); ?>
+											<tr>
+												<td><img src="<?php echo $thumbUrl; ?>" alt="<?php echo $name; ?>" /></td>
+												<td>
+													<?php echo $name; ?><br/>
+													<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
+														<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
+													<?php endforeach;?>
+												</td>
+											</tr>
+										<?php endif; ?>
 									<?php endif; ?>
 								<?php endforeach;?>
 								</tbody>
@@ -83,9 +85,9 @@
 				<?php endforeach; ?>
 				</tbody>
 			</table>
-		<?php else: ?>
-			<p class="rma-po-empty"><?php echo $this->__("You don't have active RMAs."); ?></p>
-		<?php endif; ?>
+		<?php else:
+			echo $this->getLayout()->createBlock('cms/block')->setBlockId('rma-empty-page')->toHtml();
+		endif; ?>
 		<div class="bottom-links">
 			<a class="button button-third large" href="<?php echo $backUrl; ?>">
 				<i class="glyphicon glyphicon-chevron-left"></i>

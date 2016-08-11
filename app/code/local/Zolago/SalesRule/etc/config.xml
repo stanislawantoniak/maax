@@ -2,10 +2,38 @@
 <config>
     <modules>
         <Zolago_SalesRule>
-            <version>0.0.4</version>
+            <version>0.0.13</version>
         </Zolago_SalesRule>
     </modules>
+    <frontend>
+        <routers>
+            <mypromotions>	
+                <use>standard</use>
+                <args>
+                    <module>Zolago_SalesRule</module>
+                    <frontName>mypromotions</frontName>
+                </args>
+            </mypromotions>
+        </routers>
+		<secure_url>
+			<mypromotions>/mypromotions</mypromotions>
+		</secure_url>
+        <translate>
+            <modules>
+                <Zolago_SalesRule>
+                    <files>
+                        <default>Zolago_SalesRule.csv</default>
+                    </files>
+                </Zolago_SalesRule>
+            </modules>
+        </translate>
+    </frontend>
     <global>
+        <blocks>
+            <zolagosalesrule>
+                <class>Zolago_SalesRule_Block</class>
+            </zolagosalesrule>
+        </blocks>
 		<helpers>
 			<zolagosalesrule>
 				<class>Zolago_SalesRule_Helper</class>
@@ -24,7 +52,13 @@
                     </relation>
 				</entities>
 			 </zolagosalesrule_resource>
-		</models>
+            <salesrule_resource>
+                <rewrite>
+                    <coupon>Zolago_SalesRule_Model_Resource_Coupon</coupon>
+					<!--<coupon_collection>Zolago_SalesRule_Model_Resource_Coupon_Collection</coupon_collection>-->
+                </rewrite>
+            </salesrule_resource>
+        </models>
         <resources>
             <zolagosalesrule_setup>
                 <setup>
@@ -33,6 +67,32 @@
             </zolagosalesrule_setup>
 		</resources>
 		<events>
+			<sales_quote_item_set_product>
+				<observers>
+					<zolagosalesrule>
+						<!--Copy sales rule product attributes to from product to quote item-->
+						<class>zolagosalesrule/observer</class>
+						<method>copySalesRuleAttrToQuoteItem</method>
+					</zolagosalesrule>
+				</observers>
+			</sales_quote_item_set_product>
+			<salesrule_rule_condition_combine>
+				<observers>
+					<zolagosalesrule>
+						<!--Add rule condition to combine list -->
+						<class>zolagosalesrule/observer</class>
+						<method>addRuleConditionForConfigurableProducts</method>
+					</zolagosalesrule>
+				</observers>
+			</salesrule_rule_condition_combine>
+		    <newsletter_subscriber_save_after>
+		        <observers>
+		            <zolagosalesrule>
+						<model>zolagosalesrule/observer</model>
+						<method>sendSubscriberCouponMail</method>
+		            </zolagosalesrule>
+		        </observers>
+		    </newsletter_subscriber_save_after>
 			<salesrule_validator_process>
 				<observers>
 					<zolagosalesrule>
@@ -76,6 +136,15 @@
 		</fieldsets>
 	</global>
 	<adminhtml>
+		<translate>
+			<modules>
+				<Zolago_SalesRule>
+					<files>
+						<default>Zolago_SalesRule.csv</default>
+					</files>
+				</Zolago_SalesRule>
+			</modules>
+		</translate>
 		<events>
 			<adminhtml_promo_quote_edit_tab_main_prepare_form>
 				<observers>
@@ -87,4 +156,17 @@
 			</adminhtml_promo_quote_edit_tab_main_prepare_form>
 		</events>
 	</adminhtml>
+    <crontab>
+        <jobs>
+            <zolagosalesrule_send_subscriber_coupon_mail>
+                <schedule>
+                    <!-- Run every 1 hour -->
+                    <cron_expr>0 */1 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosalesrule/observer::sendSubscriberCouponMailCron</model>
+                </run>
+            </zolagosalesrule_send_subscriber_coupon_mail>
+        </jobs>
+    </crontab>
 </config>

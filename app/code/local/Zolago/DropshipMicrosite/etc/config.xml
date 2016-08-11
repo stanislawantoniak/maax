@@ -1,31 +1,32 @@
 <?xml version="1.0"?>
 <config>
-	<modules>
-		<Zolago_DropshipMicrosite>
-			<version>0.0.2</version>
-		</Zolago_DropshipMicrosite>
-	</modules>
-	<global>
-		<blocks>
+    <modules>
+        <Zolago_DropshipMicrosite>
+            <version>0.0.2</version>
+        </Zolago_DropshipMicrosite>
+    </modules>
+    <global>
+        <blocks>
             <zolagodropshipmicrosite>
                 <class>Zolago_DropshipMicrosite_Block</class>
             </zolagodropshipmicrosite>
-		</blocks>
-		<helpers>
-			<zolagodropshipmicrosite>
-				<class>Zolago_DropshipMicrosite_Helper</class>
-			</zolagodropshipmicrosite>
+        </blocks>
+        <helpers>
+            <zolagodropshipmicrosite>
+                <class>Zolago_DropshipMicrosite_Helper</class>
+            </zolagodropshipmicrosite>
             <umicrosite>
                 <rewrite>
                     <data>Zolago_DropshipMicrosite_Helper_Datarewrite</data>
+                    <protected>Zolago_DropshipMicrosite_Helper_Protected</protected>
                 </rewrite>
             </umicrosite>
-		</helpers>
-		<models>
-			<zolagodropshipmicrosite>
-				<class>Zolago_DropshipMicrosite_Model</class>
-			</zolagodropshipmicrosite>
-		</models>
+        </helpers>
+        <models>
+            <zolagodropshipmicrosite>
+                <class>Zolago_DropshipMicrosite_Model</class>
+            </zolagodropshipmicrosite>
+        </models>
         <resources>
             <zolagodropshipmicrosite_setup>
                 <setup>
@@ -33,40 +34,54 @@
                 </setup>
             </zolagodropshipmicrosite_setup>
         </resources>
-		
-		<events>
-			<catalog_controller_category_init_after>
-				<observers>
-					<microsite_category_init_after>
-						<model>zolagodropshipmicrosite/observer</model>
-						<method>validateVendorCategory</method>
-					</microsite_category_init_after>
-				</observers>
-			</catalog_controller_category_init_after>
-		</events>
-	</global>
-	<frontend>
-		<events>
-			<controller_action_layout_load_before>
-				<observers>
-					<change_vendor_design>
-						<class>zolagodropshipmicrosite/observer</class>
-						<method>changeVendorDesign</method>
-					</change_vendor_design>
-				</observers>
-			</controller_action_layout_load_before>
-			
-			<!-- disable 404 on brandshop product -->
-			<catalog_controller_product_init>
+
+        <events>
+            <udropship_vendor_login>
                 <observers>
                     <umicrosite>
-                       <type>disabled</type>
+                        <type>disabled</type>
+                    </umicrosite>
+                </observers>                
+            </udropship_vendor_login>
+            <udropship_vendor_logout>
+                <observers>
+                    <umicrosite>
+                        <type>disabled</type>
+                    </umicrosite>
+                </observers>                
+            </udropship_vendor_logout>
+            <catalog_controller_category_init_after>
+                <observers>
+                    <microsite_category_init_after>
+                        <model>zolagodropshipmicrosite/observer</model>
+                        <method>validateVendorCategory</method>
+                    </microsite_category_init_after>
+                </observers>
+            </catalog_controller_category_init_after>
+        </events>
+    </global>
+    <frontend>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <change_vendor_design>
+                        <class>zolagodropshipmicrosite/observer</class>
+                        <method>changeVendorDesign</method>
+                    </change_vendor_design>
+                </observers>
+            </controller_action_layout_load_before>
+
+            <!-- disable 404 on brandshop product -->
+            <catalog_controller_product_init>
+                <observers>
+                    <umicrosite>
+                        <type>disabled</type>
                     </umicrosite>
                 </observers>
             </catalog_controller_product_init>
-			
-			<!-- enable own observer -->
-			<catalog_controller_product_init>
+
+            <!-- enable own observer -->
+            <catalog_controller_product_init>
                 <observers>
                     <zolagodropshipmicrosite>
                         <class>zolagodropshipmicrosite/observer</class>
@@ -74,7 +89,7 @@
                     </zolagodropshipmicrosite>
                 </observers>
             </catalog_controller_product_init>
-			
+
             <core_locale_set_locale>
                 <observers>
                     <bind_locale>
@@ -83,16 +98,7 @@
                     </bind_locale>
                 </observers>
             </core_locale_set_locale>
-		</events>
-		<routers>
-			<umicrosite>
-				<args>
-					<modules>
-						<Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
-					</modules>
-				</args>
-			</umicrosite>
-		</routers>
+        </events>
         <translate>
             <modules>
                 <Zolago_DropshipMicrosite>
@@ -102,5 +108,5 @@
                 </Zolago_DropshipMicrosite>
             </modules>
         </translate>
-	</frontend>
+    </frontend>
 </config>

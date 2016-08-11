@@ -17,6 +17,18 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
         if (Mage::helper('orbashipping/carrier_ups')->isActive()) {
             $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
         }
+        if (Mage::helper('orbashipping/packstation_inpost')->isActive()) {
+            $out[] = Orba_Shipping_Model_Packstation_Inpost::CODE;
+        }
+        if (Mage::helper('orbashipping/post')->isActive()) {
+            $out[] = Orba_Shipping_Model_Post::CODE;
+        }
+        if (Mage::helper('orbashipping/carrier_gls')->isActive()) {
+            $out[] = Orba_Shipping_Model_Carrier_Gls::CODE;
+        }
+		if (Mage::helper('orbashipping/carrier_dpd')->isActive()) {
+			$out[] = Orba_Shipping_Model_Carrier_Dpd::CODE;
+		}
         return $out;
     }
     //}}}
@@ -138,83 +150,38 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 	protected function _processShipmentTracks($shipmentTracks)
 	{
 		foreach ($shipmentTracks as $_sTracksId => $_sTracks) {
-			$tracksCount = count($shipmentTracks[$_sTracksId]);
 			foreach ($_sTracks as $_track) {
-				switch ($tracksCount) {
-					case Zolago_Dropship_Helper_Data::TRACK_SINGLE:
-						$this->_processOrder($_track);
-						break;
-					default:
-						$this->_processOrder($_sTracks, true);
-						break;
-				}
+				$this->_processOrder($_track);
 			}
 		}		
 	}
 
-	protected function _processOrder($_sTracks, $multiple = false)
-	{
-
-		if ($multiple) {
-			//Check if all Shipments are Delivered and Update Order Status
-			foreach ($_sTracks as $sTrack) {
-                $shipment = $sTrack->getShipment();
-                $shipmentStatus = (int)$shipment->getUdropshipStatus();
-                $poOrderId = $shipment->getUdpoId();
-
-                /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
-                $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
-
-                if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
-                    Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
-                }
-                if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
-
-                    $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
-
-                    try {
-                        $poOrder->save();
-                    } catch (Exception $e) {
-                        Mage::logException($e);
-                        return false;
-                    }
-                }
-                $this->_setOrderState($poOrder);
-			}
-		} else {
-            $sTrack = $_sTracks;
-            $shipment = $sTrack->getShipment();
-            $shipmentStatus = (int)$shipment->getUdropshipStatus();
-            $poOrderId = $shipment->getUdpoId();
-
-            /*@var $poOrder  Unirgy_DropshipPo_Model_Po */
-            $poOrder = Mage::getModel('zolagopo/po')->load($poOrderId);
-            if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED){
-                Mage::dispatchEvent('shipment_returned',array('shipment'=>$shipment));
-            }
-            if($shipmentStatus == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED){
-
-                $poOrder->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
-
-                try {
-                    $poOrder->save();
-                } catch (Exception $e) {
-                    Mage::logException($e);
-                    return false;
-                }
-            }
-            $this->_setOrderState($poOrder);
+	protected function _processOrder($_sTracks) {
+		$sTrack = $_sTracks;
+		$shipment = $sTrack->getShipment();
+		$shipmentStatus = (int)$shipment->getUdropshipStatus();
+		$poOrderId = $shipment->getUdpoId();
+		
+		/** @var Zolago_Po_Model_Po $po */
+		$po = Mage::getModel('zolagopo/po')->load($poOrderId);
+		if ($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED) {
+			Mage::dispatchEvent('shipment_returned', array('shipment' => $shipment));
 		}
-
-
-
+		
+		if ($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED) {
+			$po->getStatusModel()->changeStatus($po, Zolago_Po_Model_Po_Status::STATUS_DELIVERED);
+		}
+		if ($shipmentStatus == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED) {
+			$po->getStatusModel()->changeStatus($po, Zolago_Po_Model_Po_Status::STATUS_SHIPPED);
+		}
+		
 		return $this;
 	}
 
-    private function _setOrderState($po)
-    {
-        Mage::getModel('udpo/po')
-            ->setOrderState($po);
-    }
+	private function _setOrderState($po) {
+		/** @var Zolago_Po_Model_Po $helper */
+		$helper = Mage::getModel('udpo/po');
+		$helper->setOrderState($po);
+	}
 
 }

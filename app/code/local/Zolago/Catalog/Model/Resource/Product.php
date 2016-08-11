@@ -72,7 +72,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
         );
         $select->where("products.sku IN(?)", $skuS);
-        //Mage::log(microtime() . " priceMarginValues: ". $select, 0, 'converter_profilerPriceBatch.log');
+
         try {
             $assoc = $readConnection->fetchAll($select);
         } catch (Exception $e) {
@@ -384,4 +384,58 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         }
         return $priceType;
     }
+
+    /**
+     * get child products for configurable products
+     *
+     * @param array $ids configurable product ids
+     * @param bool $onlyRelatedAsFlat
+     * @return array
+     */
+    public function getRelatedProducts($ids,$onlyRelatedAsFlat=false) {
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        if(!$onlyRelatedAsFlat) {
+            $fields = array(
+                "parent_id" => "product_relation.parent_id",
+                "product_id" => "product_relation.child_id"
+            );
+        } else {
+            $fields = array(
+                "product_id" => "product_relation.child_id"
+            );
+        }
+        $select->from (
+            array('product_relation' => $this->getTable("catalog/product_relation")),
+            $fields
+        );
+        $select->where("parent_id in (?)",$ids);
+
+
+        if(!$onlyRelatedAsFlat) {
+            $list = $readConnection->fetchAll($select);
+        } else {
+            $list = $readConnection->fetchCol($select);
+        }
+
+        return $list;
+
+    }
+
+    /**
+     * Retrieve all category ids in which product is available
+     * @see Mage_Catalog_Model_Resource_Product::getAvailableInCategories()
+     *
+     * @return array
+     */
+    public function getAllAvailableInCategories() {
+        // is_parent=1 ensures that we'll get only category IDs those are direct parents of the product, instead of
+        // fetching all parent IDs, including those are higher on the tree
+        $select = $this->_getReadAdapter()->select()->distinct()
+            ->from($this->getTable('catalog/category_product_index'), array('product_id','category_id'))
+            ->where('is_parent = 1');
+
+        return $this->_getReadAdapter()->fetchAll($select);
+    }
+
 }

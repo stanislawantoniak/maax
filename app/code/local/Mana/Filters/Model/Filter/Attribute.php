@@ -112,7 +112,8 @@ class Mana_Filters_Model_Filter_Attribute
                 $data = array();
 
                 foreach ($options as $option) {
-                    if (!$option || is_array($option['value'])) {
+                    
+                    if (!$option || !is_array($option) || is_array($option['value'])) {
                         continue;
                     }
                     if (Mage::helper('core/string')->strlen($option['value'])) {

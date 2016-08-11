@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config>
+    <translate>
+        <modules>
+            <GH_Marketing>
+                <files>
+                    <default>GH_Marketing.csv</default>
+                </files>
+            </GH_Marketing>
+        </modules>
+    </translate>
+    <menu>
+        <vendors>
+            <children>
+                <ghmarketing>
+                    <title>GH Marketing</title>
+                    <sort_order>115</sort_order>
+                    <action>adminhtml/marketing_cost/index</action>
+                </ghmarketing>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <ghmarketing>
+                                <title>GH Marketing</title>
+                                <sort_order>40</sort_order>
+                            </ghmarketing>
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -565,7 +565,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	}
 
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	public function getVendor() {
 		return $this->_getSession()->getVendor();
@@ -637,18 +637,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	 * @return Mage_Core_Model_Store
 	 */
 	public function getLabelStore(){
-		if(!$this->getData("label_store")){
-			$store = null;
-			if($this->getVendor() && $this->getVendor()->getLabelStore()){
-				Mage::helper('udropship')->loadCustomData($this->getVendor());
-				$store = Mage::app()->getStore($this->getVendor()->getLabelStore());
-			}
-			if(!$store || !$store->getId()){
-				$store = $this->getStore();
-			}
-			$this->setData("label_store", $store);
-		}
-		return $this->getData("label_store");
+        /** @var Zolago_Catalog_Helper_Attribute $helper */
+        $helper = Mage::helper("zolagocatalog/attribite");
+        return $helper->getLabelStore($this->getVendor(), $this->getStore());
 	}
 
 	/**

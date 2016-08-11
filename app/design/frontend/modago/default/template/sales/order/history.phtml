@@ -42,7 +42,7 @@
 				<tr>
 					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
 					<td class="order-no"><?php echo $_order->getRealOrderId() ?></td>
-					<td>
+					<td class="data-table-td-shops">
 						<ul class="list-unstyled">
 						<?php foreach($this->getVendors($_order,true) as $_vendor):?>
 							<li class="uppercase"><?php echo $this->escapeHtml($_vendor->getVendorName());?></li>

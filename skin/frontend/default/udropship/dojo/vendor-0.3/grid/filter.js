@@ -3,9 +3,25 @@ define([
 	"dojo/dom-construct",
 	"dojo/on",
 	"put-selector/put",
-	"vendor/grid/ObserverFilter",
+	"vendor/grid/ObserverFilter"
 ], function(lang, domConstruct, on, put, ObserverFilter){
 
+    /**
+     * This function "render" header cell on grid
+     * Type is column type
+     * Name is column code
+     * Config is like:
+     * array (
+     *      valueType       => type
+     *      options         => array (value => label)
+     *      filterOptions   => array (array ( value => ..., label => ... ) )
+     *      allowEmpty      => true
+     * )
+     *
+     * @param string type
+     * @param string name
+     * @param array config
+     */
 	return function(type, name, config){
 		type = type || "text";
 		config = config || {};
@@ -24,7 +40,7 @@ define([
 					on(element, 'blur',		lang.hitch(observer, observer.stop));
 					
 					return element;
-				}
+				};
 			break;
 			
 			case "select":
@@ -66,7 +82,7 @@ define([
 							"value": item.value,
 							"innerHTML": item.label
 						}));
-					})
+					});
 
 					var observer = new ObserverFilter(element, this.grid, name);
 					
@@ -74,7 +90,7 @@ define([
 					on(element, 'change',	lang.hitch(observer, observer.update));
 					
 					return element;
-				}
+				};
 			break;
 			case "range":
 			case "datetime":
@@ -88,7 +104,7 @@ define([
 						var element = domConstruct.create("input", {
 							"type": "text",
 							"placeholder": Translator.translate(_type[0].toUpperCase() + _type.slice(1)),
-							"className": "range-field" + " " + "range-field-" + _type + " " + "range-field-" + valueType,
+							"className": "range-field" + " " + "range-field-" + _type + " " + "range-field-" + valueType
 						});
 						
 						// Add numeric widget
@@ -98,7 +114,7 @@ define([
 						
 						// Add calendar if needed
 						if(jQuery && jQuery.fn.datepicker && type=="datetime"){
-							jQuery(element).datepicker();
+							jQuery(element).datepicker({firstDay: 1});
 						}
 						
 						var observer = new ObserverFilter(element, grid, name + '['+_type+']', {valueType: valueType});
@@ -119,7 +135,7 @@ define([
 
 					
 					return wrapper;
-				}
+				};
 			break;
 		}
 	}

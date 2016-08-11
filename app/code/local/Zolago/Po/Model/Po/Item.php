@@ -6,7 +6,7 @@
  * @method string getName()
  * @method float getQty()
  */
-class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
+class Zolago_Po_Model_Po_Item extends ZolagoOs_OmniChannelPo_Model_Po_Item
 {
 	/**
 	 * @return array
@@ -26,6 +26,10 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	 */
 	public function getProduct() {
 		if (!$this->getData('product')) {
+			// Check if
+			// ->setStoreId($po->getStore()->getId())
+			// will not break something
+			// NOTE: set store before load make correct attribute value loading 
             $product = Mage::getModel('catalog/product')->load($this->getProductId());
             $this->setData('product', $product);
         }
@@ -49,12 +53,6 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 		return Mage::helper("catalog/image")->init($product, 'thumbnail');
 	}
 	
-	/**
-	 * @return float
-	 */
-	public function getDiscount() {
-		return round($this->getDiscountAmount()/$this->getQty(), 4);
-	}
 	
 	/**
 	 * Overrride if we have no order item 
@@ -126,23 +124,25 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 					$this->setData($field, $orderItem->getData($field));
 				}
 			}
+
+		   /** @var Zolago_DropshipTierCommission_Helper_Data $hlp */
+		   $hlp = Mage::helper("udtiercom");
+		   $hlp->processPoCommission($this->getPo());
 	   }
 	   
 	   
 	   return parent::_beforeSave();
    }
    
-   
-	public function getFinalProductPrice() {
-		return $this->getPriceInclTax() + (-1 * $this->getDiscountAmount()/$this->getQty());
+	/**
+	 * @return float
+	 */
+	public function getDiscount() {
+		return round($this->getDiscountAmount()/$this->getQty(), 4);
 	}
-	
-	public function getProductDiscountPrice() {
-		return $this->getFinalProductPrice();
-	}
-	
+   		
 	public function getFinalItemPrice() {
-		return $this->getPriceInclTax() - $this->getDiscount();
+		return round($this->getPriceInclTax() - $this->getDiscount(),4);
 	}
    
    public function getConfigurableText() {
@@ -172,9 +172,12 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	   if($this->getData('vendor_simple_sku')){
 		   return $this->getData('vendor_simple_sku');
 	   }
-	   
-	   
-	   return $this->getData('vendor_sku');
+
+       if ($this->getData('vendor_sku')) {
+           return $this->getData('vendor_sku');
+       }
+
+	   return $this->getData('sku');
    }
    
    

@@ -321,10 +321,22 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		if($item->getOrigData('special_to_date')){
 			$docData['special_to_date_varchar'] = $item->getOrigData('special_to_date');
 		}
+        // MSRP
+        if($item->getOrigData('msrp')){
+            $docData['msrp_decimal'] = $item->getOrigData('msrp');
+        }
         //campaign
         if ($item->getOrigData('campaign_regular_id')) {
             $docData['campaign_regular_id_int'] = (int)$item->getOrigData('campaign_regular_id');
+            // For now product can be only in one regular campaign (sale or promo)
+            $docData['campaign_regular_id_facet'] = array($item->getOrigData('campaign_regular_id'));
         }
+		//campaign info
+		if ($item->getOrigData('campaign_info_id')) {
+            $docData['campaign_info_id_varchar'] = (string)$item->getOrigData('campaign_info_id');
+            // For now product can be in many info campaigns
+            $docData['campaign_info_id_facet'] = $this->_prepareInfoCampaignsFacets($item->getOrigData('campaign_info_id'));
+		}
         if ($item->getOrigData('campaign_strikeout_price_type')) {
             $docData['campaign_strikeout_price_type_int'] = (int)$item->getOrigData('campaign_strikeout_price_type');
         }
@@ -383,7 +395,25 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		return $this;
 	}
-	
+
+    /**
+     * Parsing value like "21,22" into array("21","22")
+     * @param $value
+     * @return array
+     */
+    public function parseValueToArray($value) {
+        return array_filter(explode(",", $value), 'strlen');
+    }
+
+    /**
+     * Prepare campaigns ids for solr facets
+     * @param $value
+     * @return array
+     */
+    protected function _prepareInfoCampaignsFacets($value) {
+        return $this->parseValueToArray($value);
+    }
+
 	/**
 	 * Prepare aggregated field with all flags
 	 * @param Varien_Object $item
@@ -443,19 +473,20 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 
 		$attributeVal = $this->getAttributeValue($attributeObj, $item);
 
+		$attributeVal = trim($attributeVal);
 		//Generate sort attribute
 		if ($attributeObj->getUsedForSortBy() && !empty($attributeVal)) {
 			if ($origValue!==null) {
 				$addData['sort_'.$attributeCode.'_'.$origBackendType] = $origValue;
 				//$docData[$attributeKey] = $sortValue;
-				$addData[$attributeKey] = $attributeVal;
+				$addData[$attributeKey] = trim($attributeVal);
 			}
 		}
 		
 		//Generate product search weight value
 		if ($attributeCode==$this->getWeightAttributeCode()) {
 			if (!empty($attributeVal) && is_numeric($attributeVal)) {
-				$addData['product_search_weight_int'] = $attributeVal;
+				$addData['product_search_weight_int'] = trim($attributeVal);
 			}
 		}
 		
@@ -633,7 +664,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$product = $this->getTmpProduct();
 		$product->setId($productId);
 		$product->setData($attribute->getAttributeCode(), $data);
-		
+
 		// No source attr - get regular value
 		if(!$attribute->getSource() || is_null($data)){
 			return $attribute->getFrontEnd()->getValue($product);

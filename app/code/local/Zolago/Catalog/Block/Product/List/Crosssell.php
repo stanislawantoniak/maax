@@ -16,10 +16,12 @@ class Zolago_Catalog_Block_Product_List_Crosssell extends Mage_Catalog_Block_Pro
             ->addAttributeToSelect('campaign_regular_id')//for strikeout price from campaign
             ->addAttributeToSelect('campaign_strikeout_price_type')//for strikeout price from campaign
             ->addAttributeToSelect('skuv')//for strikeout price from campaign
+            ->addAttributeToSelect('product_flag', "left")//for strikeout price from campaign
             ->setPositionOrder()
             ->addStoreFilter();
 
-//        Mage::getSingleton('catalog/product_status')->addSaleableFilterToCollection($this->_itemCollection);
+        Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($this->_itemCollection);
+        //Mage::getSingleton('catalog/product_status')->addSaleableFilterToCollection($this->_itemCollection);
         Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($this->_itemCollection);
 
         $this->_itemCollection->load();

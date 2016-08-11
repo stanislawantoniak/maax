@@ -40,7 +40,7 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 			return false;
 		} elseif(!$this->isNoticeMessageActive($po->getVendor(), $message)) {
             return false;
-        } elseif(!($po instanceof Unirgy_DropshipPo_Model_Po)) {
+        } elseif(!($po instanceof ZolagoOs_OmniChannelPo_Model_Po)) {
 			Mage::throwException('Message could not be added because of wrong PO object');
 		} else {
             $this->unsetData();
@@ -264,10 +264,11 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 	 * @param $token
 	 * @param $batchSize
 	 * @param null $message
+	 * @param null $orderId
 	 * @return array
 	 * @throws Mage_Core_Exception
 	 */
-	public function getMessages($token,$batchSize,$message=null) {
+	public function getMessages($token,$batchSize,$message=null,$orderId = null) {
 		$user = $this->getUserByToken($token);
 
 		//check if batch is correct
@@ -278,7 +279,14 @@ class GH_Api_Model_Message extends Mage_Core_Model_Abstract {
 		//get messages collection
 		$messages = $this
 			->getCollection()
-			->filterByVendorId($user->getVendorId());
+			->filterByVendorId($user->getVendorId())
+			->setOrder('po_increment_id','DESC')
+			->setOrder('message_id','ASC');
+        // order filter
+        if ($orderId) {
+			$messages->filterByOrderId($orderId);
+        };
+			
 
 		//set limit to batchSize
 		$messages->getSelect()->limit($batchSize);

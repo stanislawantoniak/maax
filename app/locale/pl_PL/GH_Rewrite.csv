@@ -49,3 +49,6 @@
 "help-for-csv-file-in-gh-rewrite-module-line-12","11) <b>filters:</b> filtry zapisywane w kolejnych kolumnach jako para kluczy filtrów oraz wartości tych filtrów"
 "help-for-csv-file-in-gh-rewrite-module-line-13","Przykładowo: color (kolumna filters), czerwony (kolumna po filters)"
 "help-for-csv-file-in-gh-rewrite-module-line-14","Jeżeli chcemy mieć więcej filtrów to: color (kolumna filters), czerwony (kolumna po filters), manufacturer (kolejna kolumna),	DanHen (następna kolumna)"
+"Updated rewrites: %s","Zaktualizowanych przekierowań: %s"
+"Skipped csv lines due to identical content: %s","Pominięte linie w pliku csv z powodu identycznej zawartości: %s"
+"Url has changed for one or more rewrites, don't forget to regenerate them!","Zmienił się url dla jednego lub więcej wpisów, nie zapomnij o ponownym wygenerowaniu przekierowań!"

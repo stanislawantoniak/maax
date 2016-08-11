@@ -1,0 +1,13 @@
+<div>
+<?php $list = $this->getPromotions(); ?>
+<?php foreach ($list as $item) : ?>
+<div>
+    <?php if ($item['ruleItem']->getPromoImage()): ?>
+    <img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>">
+    <?php endif; ?>
+    <?php echo $item['ruleItem']->getName();?>
+    <?php echo $item['ruleItem']->getDescription(); ?>
+    <?php echo $item['code']; ?>
+</div>
+<?php endforeach; ?>
+</div>

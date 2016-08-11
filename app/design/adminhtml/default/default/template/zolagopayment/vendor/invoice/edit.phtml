@@ -1,0 +1,39 @@
+<?php /*  @var $this Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit */ ?>
+
+<div class="content-header">
+    <h3><?php echo $this->getHeaderText() ?></h3>
+
+    <p class="content-buttons form-buttons">
+        <?php echo $this->getBackButtonHtml(); ?>
+        <?php if ($this->getIsNew()): ?>
+            <?php echo $this->getDeleteButtonHtml(); ?>
+        <?php endif; ?>
+        <?php echo $this->getSaveButtonHtml(); ?>
+    </p>
+</div>
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="template_edit_form">
+    <?php echo $this->getBlockHtml('formkey') ?>
+
+    <?php /* @var $form Zolago_Payment_Block_Adminhtml_Vendor_Invoice_Edit_Form */ ?>
+    <?php echo $form = $this->getChildHtml("form"); ?>
+</form>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var form = new varienForm('template_edit_form');
+    var formControl = {
+        init: function () {
+
+        },
+        save: function () {
+            form.submit();
+            return false;
+        },
+        remove: function () {
+            if (window.confirm("<?php echo Mage::helper('zolagopayment')->__('Are you sure that you want to delete this vendor payment?') ?>")) {
+                window.location.href = '<?php echo $this->getDeleteUrl() ?>';
+            }
+        }
+    }
+    formControl.init();
+</script>

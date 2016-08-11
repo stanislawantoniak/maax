@@ -101,8 +101,12 @@ Cmsmart17(window).load(function(){
 	    '<img style="position: absolute; bottom: 0; right: 0" src="http://magento-australia.com/demo/cmsmart-logo.png" />'+
     '</div>'	
     );
+    active();
+    /*
+     // Over https this license check is blocked by browser
+     // (This request has been blocked; the content must be served over HTTPS)
+
     block();
-    
     Cmsmart17.ajax({
         type: 'POST',
         url: action_url,
@@ -142,14 +146,14 @@ Cmsmart17(window).load(function(){
         
         
     });       
-        
+
   
    Cmsmart17('.scalable').click(function(){
     
         var product_sku = Cmsmart17("[name='jform[params][license_skuproduct_admintheme]']").val();
         var license_key = Cmsmart17("[name='jform[params][license_key]']").val();
         var domain = Cmsmart17("[name='jform[params][domain]']").val();
-    
+
          Cmsmart17.ajax({
             type: 'POST',
             url: action_url,
@@ -189,7 +193,7 @@ Cmsmart17(window).load(function(){
         });       
    
    });   
-    
+   */
    
 });
 

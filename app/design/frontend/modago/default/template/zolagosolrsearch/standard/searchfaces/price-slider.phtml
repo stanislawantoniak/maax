@@ -36,7 +36,7 @@ $somethingIsActive = $isOptionSelected;
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->__("Price"); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
-			<?php $url = $this->getItemUrl($range['value']); ?>	
+			<?php $url = $range['url']; ?>	
             <div class="form-group form-checkbox">
 
                 <input 
@@ -44,11 +44,11 @@ $somethingIsActive = $isOptionSelected;
 					data-url="<?php echo $url;?>"
 					value="<?php echo $range['value'];?>" 
 					name="<?php echo $key; ?>" 
-					id="<?php echo $this->getItemId($range['value']);?>" 
+					id="<?php echo $range['itemId'];?>" 
 					class="css-checkbox"
-					<?php if ($this->isItemActive($range['value']) && !$isOptionSelected):?> checked="checked"<?php $somethingIsActive = true; endif;?>
+					<?php if ($range['active'] && !$isOptionSelected):?> checked="checked"<?php $somethingIsActive = true; endif;?>
 				/>
-                <label for="<?php echo $this->getItemId($range['value']);?>" class="css-label">
+                <label for="<?php echo $range['itemId'];?>" class="css-label">
 	                <span>
 		                <a href="<?php echo $url; ?>"
 		                   class="listing-link">
@@ -105,10 +105,10 @@ $somethingIsActive = $isOptionSelected;
             <div class="content-xs" id="filter_price_xs" data-content="xs">
                 <div class="active-filter">
                     <?php foreach($ranges as $range) : ?>
-                        <?php if ($this->isItemActive($range['value']) && !$isOptionSelected): ?>
+                        <?php if ($range['active'] && !$isOptionSelected): ?>
                                 <a href="<?php echo $this->getRemoveFacesUrl("price", $range['value']); ?>"
                                    class="active-filter-label"
-                                   data-input="<?php echo $this->getItemId($range['value']); ?>">
+                                   data-input="<?php echo $range['itemId']; ?>">
                                     <?php echo $range['formatted']; ?><i class="fa fa-times"></i>
                                    </a>
                         <?php endif; ?>

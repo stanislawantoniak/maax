@@ -7,7 +7,7 @@
 /** @var Zolago_Sales_Helper_Data $helper */
 /** @var Zolago_Sales_Model_Order $order */
 /** @var Zolago_Po_Helper_Data $helperUDPO */
-/** @var Unirgy_DropshipPo_Model_Mysql4_Po_Collection $poList */
+/** @var ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection $poList */
 
 $helper = Mage::helper('zolagosales');
 //$order = Mage::getModel('sales/order')->load(30); //only for testing
@@ -26,7 +26,9 @@ foreach ($poList as $po): /** @var Zolago_Po_Model_Po $po */ ?>
         <?php echo $helper->__("Shop:"); ?> <?php echo $po->getVendorName(); ?> <?php echo $count >= 2 ? $helper->__("(Shipment %d of %d)", $i++, $count): ""; ?><br/>
         <a href="<?php echo Mage::getUrl("help/contact/vendor", array(
             "vendor" => $po->getVendor()->getId(),
-            "po"     => $po->getId())); ?>" style="text-decoration:none"><?php echo $helper->__("contact with shop"); ?></a>
+            "po"     => $po->getId(),
+            "token"  => $po->getContactToken()
+        )); ?>" style="text-decoration:none"><?php echo $helper->__("contact with shop"); ?></a>
     </div>
     <span class="spacer">&nbsp;</span>
     <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">

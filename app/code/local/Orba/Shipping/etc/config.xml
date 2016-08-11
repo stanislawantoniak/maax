@@ -2,10 +2,15 @@
 <config>
   <modules>
     <Orba_Shipping>
-      <version>0.0.1</version>
+      <version>0.0.5</version>
     </Orba_Shipping>
   </modules>
   <global>
+      <blocks>
+          <orbashipping>
+              <class>Orba_Shipping_Block</class>
+          </orbashipping>
+      </blocks>
     <models>
       <orbashipping>
         <class>Orba_Shipping_Model</class>
@@ -63,6 +68,17 @@
       </modules>
     </translate>
   </global>
+  <adminhtml>
+    <translate>
+      <modules>
+        <Orba_Shipping>
+          <files>
+            <default>Orba_Shipping.csv</default>
+          </files>
+        </Orba_Shipping>
+      </modules>
+    </translate>
+  </adminhtml>
   <frontend>
     <routers>
       <orbashipping>
@@ -75,7 +91,7 @@
       <udropship>
         <args>
           <modules>
-            <Orba_Shipping before="Unirgy_Dropship">Orba_Shipping_Dropship</Orba_Shipping>
+            <Orba_Shipping before="ZolagoOs_OmniChannel">Orba_Shipping_Dropship</Orba_Shipping>
           </modules>
         </args>
       </udropship>
@@ -102,6 +118,7 @@
       <orbadhl>
         <active>1</active>
         <gateway>https://testowy.dhl24.com.pl/webapi</gateway>
+        <tracking_gateway>http://webapps.dhl.com.pl/app/tntwebservice/tntwebservice_v2.wsdl</tracking_gateway>
         <tracking_url><![CDATA[http://www.dhl.com.pl/sledzenieprzesylkikrajowej/szukaj.aspx?m=0&sn=%s]]></tracking_url>
         <sallowspecific>0</sallowspecific>
         <model>orbashipping/carrier_dhl</model>
@@ -109,6 +126,7 @@
         <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
         <repeat_tracking>1</repeat_tracking>
         <default_weight>2</default_weight>
+        <volumetric_weight>4000</volumetric_weight>
       </orbadhl>
       <orbaups>
         <active>1</active>
@@ -119,7 +137,30 @@
         <title>UPS</title>
         <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
         <repeat_tracking>1</repeat_tracking>
+        <volumetric_weight>5000</volumetric_weight>
       </orbaups>
+      <zolagopp>
+          <active>1</active>
+          <gateway>https://en-testwebapi.poczta-polska.pl/websrv/en.wsdl</gateway>
+          <tracking_gateway>https://tt.poczta-polska.pl/Sledzenie/services/Sledzenie?wsdl</tracking_gateway>
+          <tracking_id>sledzeniepp</tracking_id>
+          <tracking_password>PPSA</tracking_password>
+          <title>Poczta Polska</title>          
+          <model>orbashipping/post</model>
+          <cod_allowed>1</cod_allowed>
+      </zolagopp>
+      <zolagogls>
+          <active>1</active>
+          <tracking_gateway><![CDATA[https://gls-group.eu/app/service/open/rest/PL/pl/rstt001]]></tracking_gateway>
+          <title>GLS</title>          
+          <model>orbashipping/carrier_gls</model>
+      </zolagogls>
+      <zolagodpd>
+        <active>1</active>
+        <tracking_gateway><![CDATA[https://tracktrace.dpd.com.pl/findPackage]]></tracking_gateway>
+        <title>DPD</title>
+        <model>orbashipping/carrier_dpd</model>
+      </zolagodpd>
     </carriers>
   </default>
 </config>

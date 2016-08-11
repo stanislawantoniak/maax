@@ -4,12 +4,12 @@
 		<customer>
 			<groups>
 				<agreements translate="label">
-					<label>Customer agreements</label>
+					<label>Customer agreements (to show "more" button place "|" inside of agreement text)</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>1000</sort_order>
 					<show_in_default>1</show_in_default>
-					<show_in_website>0</show_in_website>
-					<show_in_store>0</show_in_store>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
 					<fields>
 						<policy translate="label">
 							<label>Policy</label>
@@ -43,6 +43,31 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</sms>
+						<register_info translate="label">
+							<label>Registration info</label>
+							<sort_order>50</sort_order>
+							<frontend_type>textarea</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</register_info>
+						<dotpay translate="label">
+							<label>Dotpay</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</dotpay>
+						<checkout translate="label">
+							<label>Checkout</label>
+							<comment>"{vendors}" in this text are replaced with legal entities of vendors that are taking part in transaction</comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>70</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</checkout>
 					</fields>
 				</agreements>
 				<orders_attach>
@@ -73,6 +98,54 @@
 						</email_identity>
 					</fields>
 				</orders_attach>
+				<listing_products_cache>
+					<label>Listing products cache</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1200</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<expiration_time translate="label">
+							<label>Expiration time in minutes</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</expiration_time>
+					</fields>
+				</listing_products_cache>
+				<loyalty_card>
+					<label>Loyalty card</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1300</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<config translate="label">
+							<label>Config JSON</label>
+							<frontend_type>textarea</frontend_type>
+							<comment><![CDATA[ Example: <br />
+								{<br />
+								&nbsp;&nbsp;"1": {<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"name": "Przypisz do GRUPA ID 2",<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"customer_group_id": 2<br />
+								&nbsp;&nbsp;},<br />
+								&nbsp;&nbsp;"2": {<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"name": "Przypisz do GRUPA ID 3",<br />
+								&nbsp;&nbsp;&nbsp;&nbsp;"customer_group_id": 3<br />
+								&nbsp;&nbsp;}<br />
+								}<br />
+							]]></comment>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</config>
+					</fields>
+				</loyalty_card>
 			</groups>
 		</customer>
 	</sections>

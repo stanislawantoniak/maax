@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<config>
+     <modules>
+        <SerwerSMS_Sms>
+          <version>1.0.0</version>
+        </SerwerSMS_Sms>
+     </modules>
+     
+     <frontend>
+       
+       <routers>
+          <routeurfrontend>
+              <use>standard</use>
+              <args>
+                 <module>SerwerSMS_Sms</module>
+                 <frontName>serwersms</frontName>
+              </args>
+           </routeurfrontend>
+       </routers>
+       
+    </frontend>
+    
+     <admin>
+         <routers>
+             <serwersms>
+                 <use>admin</use>
+                 <args>
+                     <module>SerwerSMS_Sms</module>
+                     <frontName>serwersms</frontName>
+                 </args>
+             </serwersms>
+         </routers>
+     </admin>
+     
+     <adminhtml>
+       <layout>
+           <updates>
+               <serwersms>
+                   <file>serwersms/sms.xml</file>
+               </serwersms>
+           </updates>
+       </layout>
+         <menu>
+             <serwersms translate="title" module="adminhtml">
+                 <title>SerwerSMS</title>
+                 <sort_order>100</sort_order>
+                 <children>
+                     <wyslane>
+                         <title>Wysłane wiadomości</title>
+                         <action>serwersms/adminhtml_index/index</action>
+                         <sort_order>100</sort_order>
+                     </wyslane>
+                     <niewyslane>
+                         <title>Niewysłane wiadomości</title>
+                         <action>serwersms/adminhtml_index/niewyslane</action>
+                         <sort_order>200</sort_order>
+                     </niewyslane>
+                     <odpowiedzi>
+                         <title>Odpowiedzi SMS</title>
+                         <action>serwersms/adminhtml_index/odpowiedzi</action>
+                         <sort_order>300</sort_order>
+                     </odpowiedzi>
+                     <wyslijsms>
+                         <title>Wyślij SMS</title>
+                         <action>serwersms/adminhtml_index/wyslijsms</action>
+                         <sort_order>400</sort_order>
+                     </wyslijsms>
+                     <dane_konta>
+                         <title>Dane konta</title>
+                         <action>serwersms/adminhtml_index/danekonta</action>
+                         <sort_order>500</sort_order>
+                     </dane_konta>
+                     <faktury>
+                         <title>Faktury</title>
+                         <action>serwersms/adminhtml_index/faktury</action>
+                         <sort_order>600</sort_order>
+                     </faktury>
+                     <konfiguracja>
+                         <title>Konfiguracja</title>
+                         <action>adminhtml/system_config/edit/section/smsconfig_section</action>
+                         <sort_order>700</sort_order>
+                     </konfiguracja>
+                 </children>
+             </serwersms>
+         </menu>
+         
+         <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <smsconfig_section translate="title">
+                                            <title>My Section</title>
+                                            <sort_order>100</sort_order>
+                                        </smsconfig_section>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        
+     </adminhtml>
+    
+    <global>
+        <blocks>
+            <serwersms>
+                <class>SerwerSMS_Sms_Block</class>
+            </serwersms>
+        </blocks>
+        
+        <models>
+            <serwersms_model>
+                <class>SerwerSMS_Sms_Model</class>
+                <resourceModel>sms_mysql4</resourceModel>
+            </serwersms_model>
+            <sms_mysql4>
+                <class>SerwerSMS_Sms_Model_Mysql4</class>
+                <entities>
+                    <SmsModel>
+                        <table>serwersms_sms</table>
+                    </SmsModel>
+                    <OdpowiedziModel>
+                        <table>serwersms_odpowiedzi</table>
+                    </OdpowiedziModel>
+                </entities>
+            </sms_mysql4>
+        </models>
+        <resources>
+            <sms_setup>
+                <setup>
+                    <module>SerwerSMS_Sms</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </sms_setup>
+        </resources>
+        <helpers>
+            <sms_helper>
+                <class>SerwerSMS_Sms_Helper</class>
+            </sms_helper>
+        </helpers>
+        
+        <events>
+            <sales_order_save_after>
+                <observers>
+                    <serwersms_model_Held>
+                        <class>serwersms_model/Observer</class>
+                        <method>wyslijsmsWstrzymanie</method>
+                    </serwersms_model_Held>
+                    <serwersms_model>
+                        <class>serwersms_model/Observer</class>
+                        <method>wyslijsmsOdblokowanie</method>
+                    </serwersms_model>
+                </observers>
+            </sales_order_save_after>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <serwersms_model>
+                        <class>serwersms_model/Observer</class>
+                        <method>wyslijsmsWysylka</method>
+                    </serwersms_model>
+                </observers>
+            </sales_order_shipment_save_after>
+            <checkout_type_onepage_save_order_after>
+                <observers>
+                    <serwersms_model>
+                        <class>serwersms_model/Observer</class>
+                        <method>wyslijsmsZamowienie</method>
+                    </serwersms_model>
+                </observers>
+            </checkout_type_onepage_save_order_after>
+
+        </events>
+    </global>
+    <default>
+        <smsconfig_section>
+            <tekstysms>
+                <tekst_zamowienie>Nowe zamówienie od #IMIE# #NAZWISKO#, kwota: #KWOTA# PLN, numer: #NUMER#</tekst_zamowienie>
+                <tekst_realizacja>#IMIE#, Twoje zamówienie nr: #NUMER# zostało zrealizowne i wysłane na adres: #IMIE# #NAZWISKO#, #ADRES#</tekst_realizacja>
+                <tekst_wstrzymanie>#IMIE#, Twoje zamówienie nr: #NUMER#, na kwotę: #KWOTA# PLN zostało wstrzymane</tekst_wstrzymanie>
+                <tekst_odblokowanie>#IMIE#, Twoje zamówienie nr: #NUMER#, na kwotę: #KWOTA# PLN zostało odblokowane</tekst_odblokowanie>
+            </tekstysms>
+        </smsconfig_section>
+    </default>
+    
+</config>

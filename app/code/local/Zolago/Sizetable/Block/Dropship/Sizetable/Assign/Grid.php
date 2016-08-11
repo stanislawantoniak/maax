@@ -24,7 +24,8 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 			->addVendorFilter($this->getVendorId())
 			->joinSizetables()
 			->joinSizetableBrands()
-			->joinSizetableAttributes();
+			->joinSizetableAttributes()
+			->distinct(true); // because brand option value can be set per stores
 
 		$this->setCollection($collection);
 		return parent::_prepareCollection();

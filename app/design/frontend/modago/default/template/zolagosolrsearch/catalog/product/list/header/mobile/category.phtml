@@ -8,7 +8,7 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
 ?>
 
 <?php if($this->isContentMode()): ?>
-<header id="header-main"  class="visible-xs">
+<header data-test="5" id="header-main"  class="visible-xs">
     <div class="wrapp-section bg-w">
         <div class="container-fluid">
             <div class="row">
@@ -59,3 +59,8 @@ $vendorTypeLabel =$vendor ?  $vendor->getVendorTypeLabel() : false;
     </div>
 </header>
 <?php endif; ?>
+
+
+
+
+

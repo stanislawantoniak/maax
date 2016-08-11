@@ -1,5 +1,10 @@
 <?php
+/** @var Zolago_Dropship_Block_Vendor_Preferences $this */
+/** @var Zolago_Dropship_Helper_Data $helper */
+$helper = Mage::helper("zolagodropship");
+/** @var Zolago_Dropship_Model_Session $_session */
 $_session = Mage::getSingleton('udropship/session');
+/** @var Zolago_Dropship_Model_Vendor $_vendor */
 $_vendor = $_session->getVendor();
 
 $dhlRma = $_vendor->getData('dhl_rma');
@@ -11,30 +16,30 @@ $upsRma = $_vendor->getData('orbaups_rma');
     <!--=== Page Header ===-->
     <div class="page-header">
         <div class="page-title">
-            <h3><?php echo Mage::helper("zolagodropship")->__("RMA settings");?></h3>
+            <h3><?php echo $helper->__("RMA settings");?></h3>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <form id="vendor_rma" class="form-horizontal"  method="post" action="/udropship/vendor_settings/rmaPost">
+            <form id="vendor_rma" class="form-horizontal" method="post" action="/udropship/vendor_settings/rmaPost">
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("Return address");?></h4>
+                        <h4><?php echo $helper->__("Return address");?></h4>
                     </div>
                     <div class="widget-content fiters">
                         <div>
                             <div class="form-group">
-                                <label for="company_name" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("Company name");?>
+                                <label for="rma_company_name" class="col-md-3 control-label">
+                                    <?php echo $helper->__("Company name");?>
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="company_name" name="company_name" required value="<?php echo $_vendor->getData('company_name'); ?>" type="text" class="form-control" size="10">
+                                    <input id="rma_company_name" name="rma_company_name" required value="<?php echo $_vendor->getData('rma_company_name'); ?>" type="text" class="form-control" size="10">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="street" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("Street and Number");?>
+                                    <?php echo $helper->__("Street and Number");?>
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-md-9">
@@ -43,7 +48,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                             </div>
                             <div class="form-group">
                                 <label for="city" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("City");?>
+                                    <?php echo $helper->__("City");?>
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-md-9">
@@ -52,7 +57,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                             </div>
                             <div class="form-group">
                                 <label for="zip" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("Zip / Postal code");?>
+                                    <?php echo $helper->__("Zip / Postal code");?>
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-md-9">
@@ -66,12 +71,12 @@ $upsRma = $_vendor->getData('orbaups_rma');
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("RMA contact data");?></h4>
+                        <h4><?php echo $helper->__("RMA contact data");?></h4>
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
                             <label for="rma_email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email");?>
+                                <?php echo $helper->__("Email");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
@@ -80,7 +85,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                         </div>
                         <div class="form-group">
                             <label for="rma_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone");?>
+                                <?php echo $helper->__("Phone");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
@@ -92,21 +97,30 @@ $upsRma = $_vendor->getData('orbaups_rma');
 
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("RMA executive");?></h4>
+                        <h4><?php echo $helper->__("RMA executive");?></h4>
                     </div>
                     <div class="widget-content fiters">
                         <div class="form-group">
-                            <label for="vendor_attn" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Name and surname");?>
+                            <label for="rma_executive_firstname" class="col-md-3 control-label">
+                                <?php echo $helper->__("Name");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="vendor_attn" name="vendor_attn" required value="<?php echo $_vendor->getData('vendor_attn'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_firstname" name="rma_executive_firstname" required value="<?php echo $_vendor->getData('rma_executive_firstname'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_executive_lastname" class="col-md-3 control-label">
+                                <?php echo $helper->__("Surname");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_lastname" name="rma_executive_lastname" required value="<?php echo $_vendor->getData('rma_executive_lastname'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="rma_executive_telephone" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Phone ");?>
+                                <?php echo $helper->__("Phone ");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
@@ -115,7 +129,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                         </div>
                         <div class="form-group">
                             <label for="rma_executive_telephone_mobile" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Mobile");?>
+                                <?php echo $helper->__("Mobile");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
@@ -124,7 +138,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                         </div>
                         <div class="form-group">
                             <label for="rma_executive_email" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Email");?>
+                                <?php echo $helper->__("Email");?>
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
@@ -138,56 +152,65 @@ $upsRma = $_vendor->getData('orbaups_rma');
 <!--                shipping-->
                 <div class="widget box">
                     <div class="widget-header">
-                        <h4><?php echo Mage::helper("zolagodropship")->__("RMA Shipping Settings");?></h4>
+                        <h4><?php echo $helper->__("RMA Shipping Settings");?></h4>
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
                             <label for="dhl_rma" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Use another DHL account for RMA");?>
+                                <?php echo $helper->__("Use another DHL account for RMA");?>
                             </label>
                             <div class="col-md-2">
                                 <select name="dhl_rma" id="dhl_rma" class="form-control">
-                                    <option <?php if($dhlRma == 1): ?>selected="selected"<?php endif; ?> value="1"><?php echo Mage::helper("zolagodropship")->__("Yes");?></option>
-                                    <option <?php if($dhlRma == 0): ?>selected="selected"<?php endif; ?> value="0"><?php echo Mage::helper("zolagodropship")->__("No");?></option>
+                                    <option <?php if($dhlRma == 1): ?>selected="selected"<?php endif; ?> value="1"><?php echo $helper->__("Yes");?></option>
+                                    <option <?php if($dhlRma == 0): ?>selected="selected"<?php endif; ?> value="0"><?php echo $helper->__("No");?></option>
                                 </select>
                             </div>
                         </div>
                         <div class="dhl_rma_options">
                             <div class="form-group">
                                 <label for="dhl_rma_account" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("Account number");?>
+                                    <?php echo $helper->__("Account number");?>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="dhl_rma_account" name="dhl_rma_account" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_account'); ?>" type="text" class="form-control" size="10">
+                                    <input id="dhl_rma_account" name="dhl_rma_account" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_account'); ?>" type="text" class="form-control disable_dhl" size="10">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="dhl_rma_login" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("DHL login");?>
+                                    <?php echo $helper->__("DHL login");?>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="dhl_rma_login" name="dhl_rma_login" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_login'); ?>" type="text" class="form-control" size="10">
+                                    <input id="dhl_rma_login" name="dhl_rma_login" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_login'); ?>" type="text" class="form-control disable_dhl" size="10">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="dhl_rma_password" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("DHL password");?>
+                                    <?php echo $helper->__("DHL password");?>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="dhl_rma_password" name="dhl_rma_password" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_password'); ?>" type="password" class="form-control" size="10">
+                                    <input id="dhl_rma_password" name="dhl_rma_password" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_password'); ?>" type="password" class="form-control disable_dhl" size="10">
                                 </div>
                             </div>
+                                <div class="form-group">
+                                    <label for="dhl_check" class="col-md-3 control-label">
+                                    </label>
+                                    <div class="col-md-9">
+                                        <button type="button" id="dhl_check_button" class="btn btn-primary"><?php echo Mage::helper('zolagodropship')->__("Check DHL Settings");?></button>
+                                        <span id="dhl_check_message"></span>
+                                    </div>
+                                </div>
+
                         </div>
 
 
                         <div class="form-group">
                             <label for="orbaups_rma" class="col-md-3 control-label">
-                                <?php echo Mage::helper("zolagodropship")->__("Use another UPS account for RMA");?>
+                                <?php echo $helper->__("Use another UPS account for RMA");?>
                             </label>
                             <div class="col-md-2">
                                 <select name="orbaups_rma" id="orbaups_rma" class="form-control">
-                                    <option <?php if($upsRma == 1): ?>selected="selected"<?php endif; ?> value="1"><?php echo Mage::helper("zolagodropship")->__("Yes");?></option>
-                                    <option <?php if($upsRma == 0): ?>selected="selected"<?php endif; ?> value="0"><?php echo Mage::helper("zolagodropship")->__("No");?></option>
+                                    <option <?php if($upsRma == 1): ?>selected="selected"<?php endif; ?> value="1"><?php echo $helper->__("Yes");?></option>
+                                    <option <?php if($upsRma == 0): ?>selected="selected"<?php endif; ?> value="0"><?php echo $helper->__("No");?></option>
                                 </select>
                             </div>
                         </div>
@@ -195,7 +218,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                         <div class="ups_rma_options">
                             <div class="form-group">
                                 <label for="orbaups_rma_account" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("License key");?>
+                                    <?php echo $helper->__("License key");?>
                                 </label>
                                 <div class="col-md-9">
                                     <input id="orbaups_rma_account" name="orbaups_rma_account" value="<?php echo $dhlRma = $_vendor->getData('orbaups_rma_account'); ?>" type="text" class="form-control" size="10">
@@ -203,7 +226,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                             </div>
                             <div class="form-group">
                                 <label for="orbaups_rma_login" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("UPS login");?>
+                                    <?php echo $helper->__("UPS login");?>
                                 </label>
                                 <div class="col-md-9">
                                     <input id="orbaups_rma_login" name="orbaups_rma_login" value="<?php echo $dhlRma = $_vendor->getData('orbaups_rma_login'); ?>" type="text" class="form-control" size="10">
@@ -211,7 +234,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                             </div>
                             <div class="form-group">
                                 <label for="orbaups_rma_password" class="col-md-3 control-label">
-                                    <?php echo Mage::helper("zolagodropship")->__("UPS password");?>
+                                    <?php echo $helper->__("UPS password");?>
                                 </label>
                                 <div class="col-md-9">
                                     <input id="orbaups_rma_password" name="orbaups_rma_password" value="<?php echo $dhlRma = $_vendor->getData('orbaups_rma_password'); ?>" type="password" class="form-control" size="10">
@@ -238,9 +261,22 @@ $upsRma = $_vendor->getData('orbaups_rma');
     jQuery(function ($) {
         var dhlRma = jQuery('#dhl_rma');
         var upsRma = jQuery('#orbaups_rma');
+        var reset = jQuery('#filter_reset');
 
         showOptions(dhlRma.val(), jQuery(".dhl_rma_options"));
         showOptions(upsRma.val(), jQuery(".ups_rma_options"));
+
+
+        Dhl.init('/udropship/vendor_settings/check_rma_dhl');
+        jQuery('.disable_dhl').change(function() {
+            Dhl.setInfo('orange','<?php echo Mage::helper('orbashipping')->__('Please save changed settings.')?>');
+            Dhl.disable();
+        });
+        reset.click(function() {
+            Dhl.setInfo('green','');
+            Dhl.enable();
+            return true;
+        });
 
 
         dhlRma.change(function () {

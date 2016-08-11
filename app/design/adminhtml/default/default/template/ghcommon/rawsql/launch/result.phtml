@@ -1,0 +1,34 @@
+<?php $query = $this->_getQuery(); ?>
+<b><?php echo Mage::helper('ghcommon')->__('Name').':</b> '.$query->getQueryName(); ?><br/>
+<b><?php echo Mage::helper('ghcommon')->__('Query').':</b><pre> '.$query->getQueryText(); ?></pre>
+<b><?php echo Mage::helper('ghcommon')->__('Results').':</b>'; ?></b>
+<?php $result = $this->_getResult(); ?>
+<?php $table_header = empty($result[0])? array(): array_keys($result[0]); ?>
+<?php if ($table_header) : ?>
+<div class="grid">
+<div style="max-width:100%;max-height:600px;overflow:auto">
+<table class="data" cellspacing="0">
+<thead>
+<tr class="headings">
+<?php foreach ($table_header as $head) : ?>
+    <th>
+        <?php echo $head; ?>
+    </th>
+<?php endforeach; ?>
+</tr>
+</thead>
+<tbody>
+<?php foreach ($result as $key => $row) : ?>
+<tr>
+    <?php foreach ($row as $val) : ?>
+        <td><?php echo htmlentities($val); ?></td>
+    <?php endforeach; ?>
+</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
+</div>
+</div>
+<?php else: ?>
+<?php echo Mage::helper('ghcommon')->__('No results');?>
+<?php endif; ?>

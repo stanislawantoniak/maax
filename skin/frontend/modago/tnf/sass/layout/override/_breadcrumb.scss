@@ -1,0 +1,32 @@
+.node-type-view-product {
+	#breadcrumbs {
+	margin-top: -15px;
+		@media (min-width: 768px) and (max-width: 768px) {
+			margin-top: 0px;
+		}
+	}
+}
+.node-type-main_categories {
+	ol.breadcrumb {
+		margin:20px 0px;
+	}
+}
+ol.breadcrumb,
+.brandshop-breadcrumps{
+	padding:0px 0px 0px;
+	margin:20px 0;
+	li {
+		&:not(:first-child):before {
+			content: "\f105";
+			display: inline-block;
+			margin-right: 5px;
+		}
+	}
+}
+.brandshop-breadcrumps{
+	a::before{
+		display: inline-block;
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+}

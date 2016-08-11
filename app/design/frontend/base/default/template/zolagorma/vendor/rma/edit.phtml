@@ -7,7 +7,11 @@ $_helper = Mage::helper("zolagorma");
 /** @var Mage_Core_Helper_Data $_coreHelper */
 $_coreHelper = Mage::helper("core");
 ?>
-<?php $_rma = $this->getModel();?>
+<?php
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
+<?php $_rma = $this->getModel(); ?>
 <?php $_po = $_rma->getPo();?>
 <?php $_pos = $_po->getPos();?>
 <?php $_rmaShipment = $_rma->getShipment(); ?>
@@ -23,7 +27,13 @@ $_coreHelper = Mage::helper("core");
 <?php $_statusesOptions = $this->getAvailableStatuses(false); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
 <?php $_trackCollection = $this->getVendorTrackingCollection();?>
-<?php $_customerTrackCollection = $this->getCustomerTrackingCollection();?>
+<?php $_customerTrackCollection = $this->getCustomerTrackingCollection();
+$isGallery = $_modagoHlp->useGalleryConfiguration();
+
+/** @var Zolago_Payment_Helper_Data $paymentHelper */
+$paymentHelper = Mage::helper('zolagopayment');
+$useAllocation = $paymentHelper->getConfigUseAllocation();
+?>
 
 <?php
     if ($id = Mage::getSingleton('core/session')->getPdfNumberPrintId()) {
@@ -78,33 +88,105 @@ jQuery(document).ready(function() {
 						<dd><?php echo $this->escapeHtml($_vendor->getVendorName())?></dd> 
 						<dt><?php echo $_helper->__("Refund payment");?>:</dt>
 						<dd>
-							<?php if($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
-							<div class="btn-group" id="status-holder"> 
-								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
-								<?php if($_rma->getRmaRefundAmount()): ?>
-									<?php echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false); ?>
+							<?php if($isGallery === false && $useAllocation === false): ?>
+								<?php if($_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $_po->isCod()): ?>
+									<div id="refundDisabled"
+										 data-original-title="<?php echo $_helper->__("Refund is not possible because order was sent using COD and client didn't receive the package."); ?>"
+										 data-placement="bottom">
+										<?php echo $_helper->__("Refund disabled") ?>
+										<i class="icon-question-sign"></i>
+									</div>
+								<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && (round($_rma->getRmaSimpleRefundAmount(),4) < round($_rma->getRmaRefundAmountMax(),4))): ?>
+									<div class="btn-group" id="status-holder">
+										<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+											<?php if($_rma->getRmaSimpleRefundAmount()): ?>
+												<?php echo $_coreHelper->currency($_rma->getRmaSimpleRefundAmount(),true,false); ?>
+											<?php else: ?>
+												<?php echo $_helper->__('Not paid'); ?>
+											<?php endif; ?>
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu">
+											<li>
+												<a href="#" data-toggle="modal" data-target="#refundModalSimple">
+													<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+														<?php echo $_helper->__("Order refund"); ?>
+													<?php else: ?>
+														<?php echo $_helper->__("Confirm refund");?>
+													<?php endif; ?>
+												</a>
+											</li>
+										</ul>
+									</div>
 								<?php else: ?>
-									<?php echo $_helper->__('Not paid'); ?>
+									<?php if($_rma->getRmaSimpleRefundAmount()):
+										echo $_coreHelper->currency($_rma->getRmaSimpleRefundAmount(),true,false);
+									else: ?>
+										<?php echo $_helper->__('Not paid');?>
+									<?php endif; ?>
 								<?php endif; ?>
-									<span class="caret"></span>
-								</button> 
-								<ul class="dropdown-menu"> 
-									<li><a href="#" data-toggle="modal" data-target="#refundModal"><?php echo $_helper->__("Make refund");?></a></li>
-								</ul> 
-							</div>
+								<?php if($_rma->getRmaSimpleRefundAmount()):
+									echo ' (';
+									if($_rma->isAlreadySimpleReturned()):
+										echo $_helper->__('Return completed');
+									else:
+										echo $_helper->__('Return processing');
+									endif;
+									echo ')';
+								endif; ?>
 							<?php else: ?>
-								<?php if($_rma->getRmaRefundAmount()):
-									 echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false);
-								else: ?>
-									<?php echo $_helper->__('Not paid');?>
+								<?php if($_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $_po->isCod()): ?>
+									<div id="refundDisabled"
+										 data-original-title="<?php echo $_helper->__("Refund is not possible because order was sent using COD and client didn't receive the package."); ?>"
+										 data-placement="bottom">
+										<?php echo $_helper->__("Refund disabled") ?>
+										<i class="icon-question-sign"></i>
+									</div>
+								<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
+									<div class="btn-group" id="status-holder">
+										<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+											<?php if($_rma->getRmaRefundAmount()): ?>
+												<?php echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false); ?>
+											<?php else: ?>
+												<?php echo $_helper->__('Not paid'); ?>
+											<?php endif; ?>
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu">
+											<li>
+													<a href="#" data-toggle="modal" data-target="#refundModal">
+														<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+															<?php echo $_helper->__("Order refund"); ?>
+														<?php else: ?>
+															<?php echo $_helper->__("Confirm refund");?>
+														<?php endif; ?>
+													</a>
+											</li>
+										</ul>
+									</div>
+								<?php else: ?>
+									<?php if($_rma->getRmaRefundAmount()):
+										echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false);
+									else: ?>
+										<?php echo $_helper->__('Not paid');?>
+									<?php endif; ?>
 								<?php endif; ?>
+								<?php if($_rma->getPo()->isPaymentDotpay() && $_rma->getRmaRefundAmount()):
+									echo ' (';
+									if($_rma->isAlreadyReturned()):
+										echo $_helper->__('Return completed');
+									else:
+										echo $_helper->__('Return processing');
+									endif;
+									echo ')';
+								endif; ?>
 							<?php endif; ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd>
 							<?php if(($_customerTrack=$_customerTrackCollection->getFirstItem()) && $_customerTrack->getId()):?>
 								<?php $_letterUrl = $this->getPoLetterUrl($_customerTrack, $_po);?>
-								<a data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
+								<a data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
 									<i class="icon-arrow-down"></i>
 									<?php echo $this->escapeHtml($_customerTrack->getTrackNumber());?>
 								</a>
@@ -137,7 +219,7 @@ jQuery(document).ready(function() {
 							<?php if($_poTracking):?>
 								<?php if($this->isLetterable($_poTracking)): ?>
 								<?php $_letterUrl = $this->getPoLetterUrl($_poTracking, $_po);?>
-								<a data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
+								<a data-loading-text="<?php echo $_modagoHlp->__("Processing..."); ?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
 									<i class="icon-arrow-down"></i>
 									<?php echo $this->escapeHtml($_poTracking->getTrackNumber());?>
 								</a>
@@ -265,7 +347,7 @@ jQuery(document).ready(function() {
 					</h4>
 				</div>
 				<div class="widget-content">
-					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>">
+					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>" id="rmaForm">
 						<div class="form-group">
 							<label class="control-label col-md-3" for="rma-status">
 								<?php echo $_helper->__("Status");?>
@@ -294,7 +376,10 @@ jQuery(document).ready(function() {
 								</label>
 							</div>
 						</div>
-						<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+						<div class="form-actions">
+							<input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right" />
+							<div id="rmaFormFakeSubmit" class="btn btn-primary pull-right" style="display:none"><?php echo $_helper->__("Save");?></div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -316,14 +401,15 @@ jQuery(document).ready(function() {
 										<dt><?php echo $_helper->__("Tracking no.");?>:</dt>
 										<dd>
 											<?php if($_tracking->getTrackNumber()):?>
-												<?php if ($_tracking->getCarrierCode() == Orba_Shipping_Model_Carrier_Dhl::CODE):?>
+												<?php if ($_tracking->getCarrierCode() == Orba_Shipping_Model_Carrier_Dhl::CODE &&
+													strpos($_tracking->getTrackNumber(),Zolago_Dropship_Model_Source::TRACK_UNDELIVERED_SUFFIX) === false):?>
 												<?php $_letterUrl = $this->getPoLetterUrl($_tracking, $_po);?>
-												<a data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
+												<a data-loading-text="<?php echo $_modagoHlp->__("Processing..."); ?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
 													<i class="icon-arrow-down"></i>
 													<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
 												</a>
 												<?php else:?>
-													<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>	
+													<span style="font-size: 11px;"><?php echo $this->escapeHtml($_tracking->getTrackNumber());?></span>
 												<?php endif;?>
 											<?php else:?>
 												<?php echo $_helper->__("N/A");?>
@@ -370,10 +456,17 @@ jQuery(document).ready(function() {
 /*******************************************************************************
  *	Make refund modal
  *******************************************************************************/
+if($isGallery === false && $useAllocation === false){
+	echo $this->getChild("vendor_rma_edit_simple_refund")
+		->setRma($_rma)
+		->setRmaHelper($_helper)
+		->toHtml();
+}else{
 	echo $this->getChild("vendor_rma_edit_refund")
 		->setRma($_rma)
 		->setRmaHelper($_helper)
 		->toHtml();
+}
 ?>
 <?php  /*
 <div class="container">
@@ -384,6 +477,25 @@ jQuery(document).ready(function() {
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
 	</form>
 </div> */ ?>
+<?php if(!$_rma->getRmaRefundAmount()): ?>
+	<?php /* rma close confirm modal */ ?>
+	<div id="modal_close_rma" class="modal fade in" aria-hidden="true" title="<?php echo $_helper->__("Continue closing RMA?"); ?>" style="background-color:rgba(0,0,0,.5)">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<strong><?php echo $_helper->__("Continue closing RMA?"); ?></strong>
+				</div>
+				<div class="modal-body">
+					<?php echo $_helper->__("You are trying to close RMA, however it does not contain any refund value. Do you want to continue?"); ?>
+					<div class="align-right" style="margin-top:20px">
+						<button class="btn btn-default" data-dismiss="modal" type="button"><?php echo $_helper->__('Cancel'); ?></button>
+						<button class="btn btn-primary"><?php echo $_helper->__('Yes'); ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>
 
 <script type="text/javascript">
 jQuery(function($) {
@@ -396,9 +508,25 @@ jQuery(function($) {
         // Isnt't currentylu selected & force notify
             doNotify = !!parseInt(el.children(":selected").attr('data-notify-customer'))
                 && el.children("[selected]").attr('value') != el.val();
+
+	    <?php if(!$_rma->getRmaRefundAmount() || ($_rma->getRmaRefundAmount() && $_rma->getPo()->isPaymentDotpay() && !$_rma->isAlreadyReturned())): ?>
+	        var form = jQuery('#rmaForm'),
+		        formSubmit = form.find('input[type=submit]'),
+		        formFakeSubmit = form.find('#rmaFormFakeSubmit');
+	        if(el.val() == 'closed_accepted') {
+				formSubmit.hide();
+		        formFakeSubmit.show();
+	        } else {
+		        formSubmit.show();
+		        formFakeSubmit.hide();
+	        }
+	    <?php endif; ?>
+
+	    <?php if(!$_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN): ?>
         notify.prop("checked", doNotify);
         notify.prop("disabled", doNotify);
         hidden.val(doNotify ? "1" : "0");
+	    <?php endif; ?>
     });
 
     $(".download-letter").click(function () {
@@ -429,22 +557,45 @@ jQuery(function($) {
     //init validations for this form
     $("form:has('#rma-notify-customer')").validate({});
 
-    var commentRecuired = function(value, elem, params){
+    var commentRequired = function(value, elem, params){
         if($("#rma-notify-customer").is(':checked')) {
-            if (value.trim().replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/gm," ").split(' ').length >= 5) { //if there is 5 words in comment ( explain )
-                return true;
-            } else {
-                return false;
-            }
+	        return value.trim().replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/gm," ").split(' ').length >= 5;
         }
-        else {
-            return true;
-        }
+        return true;
     };
 
     jQuery.validator.addMethod('commentRequired', function () {
-        return commentRecuired.apply(this, arguments);
+        return commentRequired.apply(this, arguments);
     }, "<?php echo $_helper->__("You must enter a comment containing at least 5 words"); ?>" );
 
+	<?php if(!$_rma->getRmaRefundAmount()): ?>
+		var noRefundModal = jQuery('#modal_close_rma'),
+			rmaForm = jQuery('#rmaForm'),
+			showNoRefundModal = function() {
+				noRefundModal.show();
+			},
+			hideNoRefundModal = function() {
+				noRefundModal.hide();
+			};
+		noRefundModal.find('button[data-dismiss=modal]').click(hideNoRefundModal);
+		noRefundModal.find('button.btn-primary').click(function() {
+			rmaForm.submit();
+		});
+		rmaForm.find('#rmaFormFakeSubmit').click(showNoRefundModal);
+	<?php elseif($_rma->getPo()->isPaymentDotpay() && !$_rma->isAlreadyReturned()): ?>
+		var rmaForm = jQuery('#rmaForm'),
+			fakeSubmit = rmaForm.find('#rmaFormFakeSubmit');
+
+			fakeSubmit.click(function() {
+				noty({
+					text: "<?php echo $_helper->__("You can't close RMA if refund is still processing. Please try again after refund completion.") ?>",
+					type: 'error',
+					timeout: 5000
+				});
+			});
+
+	<?php endif; ?>
+
+	jQuery('#refundDisabled').tooltip();
 });
 </script>

@@ -123,4 +123,9 @@ class Zolago_Solrsearch_Block_Catalog_Product_List extends Mage_Catalog_Block_Pr
         }
         return $list;
     }
+
+    protected function _beforeToHtml()
+    {
+        return $this;
+    }
 }

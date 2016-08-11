@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <vendors>
+            <children>
+                <ghstatements_vendor>
+                    <title>Vendor Statements</title>
+                    <sort_order>120</sort_order>
+                    <action>adminhtml/vendor_statements/index</action>
+                </ghstatements_vendor>
+                <ghstatements_balance>
+                    <title>Vendors balances</title>
+                    <sort_order>125</sort_order>
+                    <action>adminhtml/vendor_balance/index</action>
+                </ghstatements_balance>
+                <vendor_general_config>
+                    <children>
+                        <ghstatements_general_settings translate="title" module="ghstatements">
+                            <title>Statements configuration</title>
+                            <sort_order>60</sort_order>
+                            <action>adminhtml/system_config/edit/section/ghstatements</action>
+                            <resource>system/config/ghstatements</resource>
+                        </ghstatements_general_settings>
+                        <ghstatements_calendar>
+                            <title>Statements calendar</title>
+                            <sort_order>70</sort_order>
+                            <action>adminhtml/statements/calendar</action>
+                            <resource>vendors/ghstatements_vendor</resource>
+                        </ghstatements_calendar>
+                    </children>
+                </vendor_general_config>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <ghstatements_vendor>
+                                <title>Vendor Statements</title>
+                                <sort_order>120</sort_order>
+                            </ghstatements_vendor>
+                            <ghstatements_balance>
+                                <title>Vendors balances</title>
+                                <sort_order>125</sort_order>
+                            </ghstatements_balance>
+                        </children>
+                    </vendors>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ghstatements translate="title" module="ghstatements">
+                                        <title>GH statements</title>
+                                    </ghstatements>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

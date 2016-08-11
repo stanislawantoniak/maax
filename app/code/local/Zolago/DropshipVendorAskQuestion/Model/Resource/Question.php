@@ -1,7 +1,7 @@
 <?php
 
 
-class Zolago_DropshipVendorAskQuestion_Model_Resource_Question extends Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question
+class Zolago_DropshipVendorAskQuestion_Model_Resource_Question extends ZolagoOs_OmniChannelVendorAskQuestion_Model_Mysql4_Question
 {
     /**
      * @param $vendorId

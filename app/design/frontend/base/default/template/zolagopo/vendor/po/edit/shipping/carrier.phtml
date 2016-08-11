@@ -1,0 +1,238 @@
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Shipping  */
+/** @var Zolago_Po_Helper_Data $_hlp */
+$_hlp = Mage::helper("zolagopo");
+
+/** @var Zolago_Po_Model_Po $_po */
+$_po =  $this->getPo();
+
+$_availableMethods =  $this->getAvailableMethods();
+$_poShippingMethod = $this->getShippingMethod();
+
+/** @var Orba_Shipping_Helper_Carrier_Dhl $_dhlHlp */
+$_dhlHlp = Mage::helper('orbashipping/carrier_dhl');
+
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
+<!-- Modal add letter-->
+<div class="modal fade" id="shippingModal">
+	<div class="modal-dialog">
+		<form id="shipping-form" action="<?php echo $this->getFormUrl();?>" 
+			  class="form-horizontal row-border" method="post">
+			<input type="hidden" name="pos" value="<?php echo $_po->getDefaultPosId();?>"/>
+			<input type="hidden" name="partial_availability" value=""/>
+			<input type="hidden" name="partial_qty" value=""/>
+			<input type="hidden" name="force_status_change_flag" value="0"/>
+			<input type="hidden" name="auto-tracking" id="auto-tracking" value="off"/>
+			<input type="hidden" name="tracking_id" id="tracking_id" value=""/>
+			<input type="hidden" name="carrier_title" id="carrier_title" value=""/>
+			<input type="hidden" name="use_method_code"  value="<?php echo $_poShippingMethod;?>"/>
+			<input type="hidden" name="reference"  value="<?php echo $_po->getIncrementId();?>"/>
+			<input type="hidden" name="shipping_amount"  value="<?php echo $this->getRemainingShippingAmount()?>"/>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">
+						<?php if($this->canUseCarrier()):?>
+						<?php echo $_hlp->__("Print shipping label");?>
+						<?php else:?>
+						<?php echo $_hlp->__("Add shipping label");?>
+						<?php endif;?>
+					</h4>
+					<small class="text-small"><?php echo $_hlp->__("Insert carrier name and tracking number or enter data for label printing");?></small>
+				</div>
+				<div class="modal-body">
+					<ul class="list-unstyled">
+					<?php if($this->canUseCarrier()):?>
+						<li class="form-group carrier">
+							<label class="col-md-3 control-label"><?php echo $_hlp->__('Carrier') ?></label>
+							<div class="col-md-9">
+							<?php foreach($this->getCarriers() as $code => $name):?>
+								<label class="radio"> 
+									<input data-label="<?php echo $this->escapeHtml($name) ?>" id="shipping-carrier-<?php echo $this->escapeHtml($code);?>" name="carrier" <?php if($this->isMethodChecked($code)):?>checked="checked"<?php endif;?> value="<?php echo $this->escapeHtml($code);?>" title="<?php echo $this->escapeHtml($name) ?>" type="radio" class="uniform use-method" />
+									<?php echo $this->escapeHtml($name) ?>
+								</label> 
+							<?php endforeach;?>
+							</div>
+						</li>
+						<li class="form-group specify specify-carrier specify-carrier-orbadhl">
+							<label for="shipping-specify_orbadhl_shipping_date" class="col-md-3 control-label"><?php echo $_hlp->__('Dispatch date') ?></label>
+							<div class="col-md-3">
+								<div class="input-group"> 
+									<input id="shipping-specify_orbadhl_shipping_date" value="<?php echo date('d-m-Y');?>" name="specify_orbadhl_shipping_date" title="<?php echo $_hlp->__('Send date') ?>" type="text" class="form-control datepicker" />
+									<label for="shipping-specify_orbadhl_shipping_date" class="input-group-addon"><i class="icon-calendar"></i></label> 
+								</div>
+							</div>
+						</li>
+						<li class="form-group specify specify-carrier specify-carrier-orbadhl">
+							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Package type') ?></label>
+							<div class="col-md-9">
+								<select name="specify_orbadhl_rate_type" id="shipping-specify_orbadhl_rate_type" class="form-control">
+									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkg_rateTypes')->toOptionHash() as $value=>$label):?>
+										<option
+											value="<?php echo $this->escapeHtml($value);?>"
+											data-weight="<?php echo $_dhlHlp->getDhlParcelWeightByKey($value) ?>">
+											<?php echo $this->escapeHtml($label);?>
+										</option>
+									<?php endforeach;?>
+								</select>
+							</div>
+						</li>
+						<li class="form-group specify specify-carrier specify-carrier-orbadhl specify-specify_orbadhl_size" style="display:none">
+							<label for="shipping-specify_orbadhl_type" class="col-md-3 control-label"><?php echo $_hlp->__('Parcel size') ?></label>
+							<div class="col-md-9">
+								<select name="specify_orbadhl_size" id="shipping-specify_orbadhl_size" class="form-control" disabled>
+									<?php foreach(Mage::getSingleton('orbashipping/system_source_pkg_sizes')->toOptionHash() as $value=>$label):?>
+										<option
+											value="<?php echo $this->escapeHtml($value);?>"
+											data-weight="<?php echo $_dhlHlp->getDhlVolumetricWeightByKey($value); ?>">
+											<?php echo $this->escapeHtml($label);?>
+										</option>
+									<?php endforeach;?>
+								</select>
+								<div class="shipping-size-alert" style="display:none;color:red" class=""><?php echo $_hlp->__("Selected package's size volumetric weight is bigger than weight set up in first step. Values has been adjusted."); ?></div>
+							</div>
+						</li>
+						<li class="form-group specify specify-carrier specify-carrier-orbaups specify-specify_orbaups_type specify-specify_orbaups_type-PACKAGE">
+							<label for="shipping-tracking_id" class="col-md-3 control-label"><?php echo $_hlp->__('Tracking ID') ?></label>
+							<div class="col-md-9">
+								<input id="shipping-tracking_id"  name="tracking_id" title="<?php echo $_hlp->__('Tracking ID') ?>" type="text" class="form-control" />
+							</div>
+						</li>
+					<?php else:?>
+						<li class="form-group">
+							<input type="hidden" name="carrier" value="custom"/>
+							<label for="shipping-carrier_title" class="col-md-3 control-label"><?php echo $_hlp->__('Carrier') ?></label>
+							<div class="col-md-9">
+								<input id="shipping-carrier_title"  name="carrier_title" title="<?php echo $_hlp->__('Carrier') ?>" type="text" class="form-control" />
+							</div>
+						</li>
+						<li class="form-group">
+							<label for="shipping-tracking_id" class="col-md-3 control-label"><?php echo $_hlp->__('Tracking ID') ?></label>
+							<div class="col-md-9">
+								<input id="shipping-tracking_id"  name="tracking_id" title="<?php echo $_hlp->__('Tracking ID') ?>" type="text" class="form-control" />
+							</div>
+						</li>
+					<?php endif;?>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Save");?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(function($){
+	var form = $("#shipping-form");
+	var specify = $(".specify", form);
+	
+	<?php if($this->canUseCarrier()):?>
+	var carriers = $(".carrier :radio");
+<?php /*
+    var shippingOrbadhlPkgType = $("#shipping-specify_orbadhl_type", form);
+	var specifyOrbadhlPkgType = $(".specify-specify_orbadhl_type", form);
+*/ ?>
+	var shippingOrbadhlPkgRateType = $("#shipping-specify_orbadhl_rate_type", form),
+		specifyOrbadhlPkgSize = $(".specify-specify_orbadhl_size",form),
+		shippingOrbaupsPkgType = $("#shipping-specify_orbaups_type", form),
+		specifyOrbaupsPkgType = $(".specify-specify_orbaups_type", form),
+		specifyCarrier = $(".specify-carrier", form),
+		autotracking = $("#auto-tracking"),
+		carrierTitle = $("#carrier_title"),
+		orbadhlWeightByType = 0,
+		orbadhlWeightBySize = 0,
+		alert = jQuery('.shipping-size-alert');
+
+	
+	var handleCarrierChange = function(){
+		specifyCarrier.addClass("hidden");
+		var val = $(this).val();
+		if($(this).is(":checked")){
+			specifyCarrier.filter(".specify-carrier-"+val).removeClass("hidden")
+		}
+		autotracking.val("off");
+		carrierTitle.val($(this).data("label"));
+		switch(val){
+			case "orbadhl":
+				autotracking.val("on");
+				<?php /* shippingOrbadhlPkgType.change(); */?>
+				shippingOrbadhlPkgRateType.change();
+			break;
+			case "orbaups":
+				autotracking.val("off");
+				shippingOrbaupsPkgType.change();
+				// Process for ups
+			break;
+		}
+	};
+	
+	// Package handling
+	<?php /* var handleOrbadhlPkgType = function(){
+		if(!$(this).parents('.form-group').hasClass("hidden")){
+			specifyOrbadhlPkgType.addClass("hidden");
+			specifyOrbadhlPkgType.filter(".specify-specify_orbadhl_type-"+$(this).val()).removeClass("hidden")
+		}
+	}; */ ?>
+	var handleOrbadhlPkgRateType = function(){
+		orbadhlWeightByType = jQuery(this).find('option:selected').data('weight');
+		if(jQuery(this).val() == '<?php echo Orba_Shipping_Model_System_Source_Pkg_RateTypes::DHL_RATES_ENVELOPE ?>') {
+			specifyOrbadhlPkgSize.hide();
+			specifyOrbadhlPkgSize.find('select').attr('disabled',true);
+		} else {
+			specifyOrbadhlPkgSize.show();
+			specifyOrbadhlPkgSize.find('select').attr('disabled',false);
+			specifyOrbadhlPkgSize.change();
+		}
+	};
+
+	var handleOrbadhlPkgSize = function(){
+		orbadhlWeightBySize = jQuery(this).find('option:selected').data('weight');
+		if(orbadhlWeightBySize > orbadhlWeightByType) {
+			alert.show();
+			shippingOrbadhlPkgRateType.find('option').each(function() {
+				var thisWeight = jQuery(this).data('weight');
+				if(orbadhlWeightBySize < thisWeight) {
+					shippingOrbadhlPkgRateType.val(jQuery(this).attr('value'));
+					orbadhlWeightByType = thisWeight;
+					return false;
+				}
+			});
+		} else {
+			alert.hide();
+		}
+	};
+	
+	var handleOrbaupsPkgType = function(){
+		if(!$(this).parents('.form-group').hasClass("hidden")){
+			specifyOrbaupsPkgType.addClass("hidden");
+			specifyOrbaupsPkgType.filter(".specify-specify_orbaups_type-"+$(this).val()).removeClass("hidden")
+		}
+	};
+	
+	$(".datepicker", form).datepicker({firstDay: 1}).
+			attr("placeholder", $.datepicker._defaults.dateFormat);
+	
+	// Hide all specified opts
+	specify.addClass("hidden");
+	
+	// Register events
+	carriers.change(handleCarrierChange);
+	<?php /* shippingOrbadhlPkgType.change(handleOrbadhlPkgType); */ ?>
+	shippingOrbadhlPkgRateType.change(handleOrbadhlPkgRateType);
+	shippingOrbaupsPkgType.change(handleOrbaupsPkgType);
+	specifyOrbadhlPkgSize.change(handleOrbadhlPkgSize);
+	
+	// Trigger flow
+	if(carriers.filter(":checked").length){
+		carriers.filter(":checked").change();
+	}else{
+		carriers.filter(":eq(0)").change();
+	}
+	<?php else:?>
+		
+	<?php endif;?>
+});
+</script>

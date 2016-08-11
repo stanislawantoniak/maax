@@ -91,32 +91,8 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMoveUpUrl()
     {
-        $parentCategoryPath = '/';
-        $currentCategory = Mage::registry('current_category');
-
-        if (!empty($currentCategory)) {
-            $currentCategoryParent = $currentCategory->getParentCategory();
-            $urlPath = $currentCategoryParent->getUrlPath();
-            $currentCategoryParentId = $currentCategoryParent->getId();
-
-            $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-            if (!empty($vendor)) {
-                $vendorRootCategory = $vendor->getRootCategory();
-
-                if (!empty($vendorRootCategory)) {
-                    $currentStoreId = Mage::app()->getStore()->getId();
-                    $vendorRootCategoryForSite = isset($vendorRootCategory[$currentStoreId]) ? $vendorRootCategory[$currentStoreId] : false;
-                    if ($vendorRootCategoryForSite) {
-                        if ($vendorRootCategoryForSite == $currentCategoryParentId) {
-                            $urlPath = $parentCategoryPath;
-                        }
-                    }
-                }
-            }
-
-            $parentCategoryPath = Mage::getUrl($urlPath);
-        }
-        return $parentCategoryPath;
+        $category = Mage::registry('current_category');
+        return Mage::helper('zolagocatalog')->getMoveUpUrl($category);
     }
 
     /**
@@ -127,9 +103,15 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     public function getCategoryCollection()
     {
         $subCategories = array();
+        /** @var Zolago_Catalog_Model_Category $currentCategory */
         $currentCategory = Mage::registry('current_category');
         if(!empty($currentCategory)) {
-            $subCategories = Mage::helper('zolagomodago')->getSubCategories($currentCategory->getId());
+            /** @var Zolago_Modago_Helper_Data $zmHelper */
+            $zmHelper = Mage::helper('zolagomodago');
+            /** @var Zolago_Catalog_Model_Category $categoryModel */
+            $categoryModel = Mage::getModel('catalog/category');
+            $categories = $categoryModel->getCategories($currentCategory->getId());
+            $subCategories = $zmHelper->getCategoriesTree($categories, 1, 2, TRUE, TRUE);
         }
         return $subCategories;
     }

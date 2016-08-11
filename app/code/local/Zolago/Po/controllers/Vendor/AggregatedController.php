@@ -5,7 +5,7 @@ class Zolago_Po_Vendor_AggregatedController
 	
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return ZolagoOs_OmniChannel_Model_Vendor
 	 */
 	protected function _getVendor() {
 		return $this->_getSession()->getVendor();
@@ -20,6 +20,7 @@ class Zolago_Po_Vendor_AggregatedController
 	
 	/**
 	 * @return Zolago_Po_Model_Aggregated
+	 * @throws Mage_Core_Exception
 	 */
 	protected function _registerAggregated() {
 		if(!Mage::registry('current_aggregated')){
@@ -57,7 +58,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$this->_getSession()->addError($e->getMessage());
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper("zolagopo")->__("Some error occure")
+				Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
 			);
 			Mage::logException($e);
 		}
@@ -83,7 +84,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$this->_getSession()->addError($e->getMessage());
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper("zolagopo")->__("Some error occure")
+				Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
 			);
 			Mage::logException($e);
 		}
@@ -108,7 +109,7 @@ class Zolago_Po_Vendor_AggregatedController
 			$this->_getSession()->addError($e->getMessage());
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper("zolagopo")->__("Some error occure")
+				Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
 			);
 			Mage::logException($e);
 		}

@@ -2,7 +2,7 @@
 /**
  * client dhl
  */
-class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier_Client_Abstract {
+class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_Soap {
 
     const ADDRESS_HOUSE_NUMBER		= '.';
     const SHIPMENT_TYPE_PACKAGE		= 'PACKAGE';
@@ -13,6 +13,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     const PAYMENT_TYPE				= 'BANK_TRANSFER';
     const PAYER_TYPE_SHIPPER		= 'SHIPPER';
     const PAYER_TYPE_RECEIVER		= 'RECEIVER';
+    const PAYER_TYPE_USER			= 'USER';
     const SHIPMENT_RMA_CONTENT      = 'Reklamacyjny zwrot do nadawcy';
 
     const DHL_LABEL_TYPE			= 'LP';
@@ -65,6 +66,17 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $message->createdTo = $to;
         $message->offset = $offset;
         $return = $this->_sendMessage('getMyShipments',$message);
+        return $return;
+    }
+    /**
+     * shipments count
+     */
+    public function getMyShipmentsCount($from,$to) {
+        $message = new StdClass();
+        $message->authData = $this->_auth;
+        $message->createdFrom = $from;
+        $message->createdTo = $to;
+        $return = $this->_sendMessage('getMyShipmentsCount',$message);
         return $return;
     }
 
@@ -185,8 +197,8 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $shipmentObject->item[] = $obj;
 
         $message->shipments = $shipmentObject;
-
-        return $this->_sendMessage('createShipments', $message);
+        $messageResult = $this->_sendMessage('createShipments', $message);
+        return $messageResult;
     }
     /**
      * @param $postCode
@@ -226,6 +238,18 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
      * tracking info
      */
     public function getTrackAndTraceInfo($shipmentId) {
+        $wsdl = Mage::getStoreConfig('carriers/orbadhl/tracking_gateway');
+        $soapClient = new SoapClient($wsdl);
+        $shipments = array($shipmentId); // tu wpisujemy listę szukanych nr przesyłek
+        $remoteCallParams = array("shipmentNumbers" => $shipments);
+        $remoteCallResult = $soapClient->GetShipments($remoteCallParams);
+        return $remoteCallResult;
+    }
+
+    /**
+     * tracking info (old version)
+     */
+    public function getTrackAndTraceInfo2($shipmentId) {
         $message = new StdClass();
         $message->authData = $this->_auth;
         $message->shipmentId = $shipmentId;
@@ -315,7 +339,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
      *
      * @return array $result Default: array('status' => false);
      */
-    public function processDhlLabelsResult($method, $dhlResult)
+    public function processLabelsResult($method, $dhlResult)
     {
         $result = array(
                       'status'	=> false
@@ -352,9 +376,9 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     }
     protected function _prepareBiling() {
         $message = new StdClass;
-        $message->shippingPaymentType = $this->_default_params['shippingPaymentType'];
+        $message->shippingPaymentType = $this->getParam('shippingPaymentType');
         $message->billingAccountNumber = $this->_auth->account;
-        $message->paymentType = $this->_default_params['paymentType'];        
+        $message->paymentType = $this->getParam('paymentType');        
         return $message;
     }
     protected function _addSpecialItem($type,$value = null) {
@@ -371,13 +395,13 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
     protected function _prepareShipmentInfoAtOnce() {
         $shipmentSettings = $this->_shipmentSettings;
         $message = new StdClass;
-        $message->dropOffType = $this->_default_params['dropOffType'];
-        $message->serviceType = $this->_default_params['serviceType'];        
-        $message->labelType   = $this->_default_params['labelType'];
+        $message->dropOffType = $this->getParam('dropOffType');
+        $message->serviceType = $this->getParam('serviceType');        
+        $message->labelType   = $this->getParam('labelType');
         $message->billing = $this->_prepareBiling();
         $message->specialServices = $this->_prepareSpecialServices();
         $message->shipmentTime = $this->_prepareShipmentTime();
-        $message->labelType = $this->_default_params['labelType'];
+        $message->labelType = $this->getParam('labelType');
         return $message;       
     }
     protected function _prepareShipmentAtOnce() {
@@ -403,10 +427,14 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Carrier
         $shipment = new stdClass;
         $shipment->shipmentInfo = $this->_prepareShipmentInfoAtOnce(); 
         $shipment->ship = $this->_prepareShipmentAtOnce();
-        $shipment->content = self::SHIPMENT_RMA_CONTENT;
+        $shipment->content = empty($this->_settings['content'])? self::SHIPMENT_RMA_CONTENT:$this->_settings['content'];
+        if (!empty($this->_settings['comment'])) {
+            $shipment->comment = $this->_settings['comment'];
+        }
         $shipment->pieceList = $this->_createPieceList();
         $message->shipment = $shipment;
-        return $this->_sendMessage('createShipment',$message);
+        $ret =  $this->_sendMessage('createShipment',$message);
+        return $ret;
     }
     
     /**

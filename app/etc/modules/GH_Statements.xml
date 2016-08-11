@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <GH_Statements>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Zolago_Common/>
+                <Zolago_Dropship/>
+                <Zolago_Payment/>                
+            </depends>
+        </GH_Statements>
+    </modules>
+</config>

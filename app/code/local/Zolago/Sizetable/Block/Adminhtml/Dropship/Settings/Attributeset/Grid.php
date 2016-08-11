@@ -37,6 +37,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Attributeset_Grid exten
                 ->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getEntityType()->getId());
         $collection->getSelect()
                     ->columns('main_table.attribute_set_id as set_id');
+        $collection->addFieldToFilter("main_table.use_to_create_product", 1);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

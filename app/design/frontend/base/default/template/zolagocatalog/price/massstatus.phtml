@@ -1,0 +1,28 @@
+<?php
+/* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */
+$_helper = Mage::helper('zolagocatalog');
+/** @var Zolago_DropshipVendorProduct_Model_ProductStatus $modelStatuses */
+$modelStatuses = Mage::getModel("catalog/product_status");
+?>
+
+<input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>
+<input type="hidden" name="global" value="<?php echo $this->getGlobal() ? "1" : "0";?>"/>
+<input type="hidden" name="encoded_query" value="<?php echo $this->getEncodedQuery();?>"/>
+<input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
+<input type="hidden" name="status" value="<?php echo $this->getStatus();?>"/>
+<p class="alert alert-info">
+    <strong><?php echo $this->__("Information");?>:</strong>
+    <?php
+    if ($this->getStatus() == Zolago_DropshipVendorProduct_Model_ProductStatus::STATUS_ENABLED) {
+        echo $this->__("Proceeding will enable products in shop (they will be available for customers to buy). Product must have a price and the description accepted.");
+    } else {
+        echo $this->__("Proceeding will set selected products as invalid. They will no longer be on offer in shop. Use this function only when you are sure they cannot be disabled otherways (like stock policy change).");
+    }
+    ?>
+</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+    </div>
+</div>

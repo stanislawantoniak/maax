@@ -29,6 +29,13 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagorma/rma_collection');
         /* @var $collection Zolago_Rma_Model_Resource_Rma_Collection */
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        /* @var $vendor Zolago_Dropship_Model_Vendor */
+        $vendorsIds = $vendor->getChildVendorIds();
+        $vendorsIds[] = $vendor->getId();
+
+        $collection->addFieldToFilter("udropship_vendor",
+            array("in"=>  array_unique($vendorsIds)));
 		
 		$collection->addCustomerNames();
 		$collection->addItemsData();

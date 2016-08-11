@@ -1,14 +1,14 @@
 <?php
 include_once(Mage::getBaseDir("lib")."/mPDF/mpdf.php");
 class Zolago_Pdf_Model_Pdf extends mPDF {
-	const RMA_PDF_PATH = 'pdf';
-	const RMA_PDF_PREFIX = 'pdf_';
+	const PDF_PATH = 'pdf';
+	const PDF_PREFIX = 'pdf_';
 
 	protected function _getFilePath() {
-		return self::RMA_PDF_PATH;
+		return self::PDF_PATH;
 	}
 	protected function _getFilePrefix() {
-		return self::RMA_PDF_PREFIX;
+		return self::PDF_PREFIX;
 	}
 
 	protected function _getFileName($id) {

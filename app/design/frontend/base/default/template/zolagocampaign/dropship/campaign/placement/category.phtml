@@ -1,11 +1,16 @@
-<?php $_helper = Mage::helper("zolagocampaign");?>
+<?php /* @var $this Zolago_Campaign_Block_Vendor_Campaign_Placement_Category */ ?>
+
 <?php
+
+
+$_helper = Mage::helper("zolagocampaign");
+
 $bannerHelper = Mage::helper('zolagobanner');
 $bannerTypes = $bannerHelper->getBannersConfiguration();
 $vendor = Mage::getSingleton('udropship/session')->getVendor();
 $vendorName = $vendor->getVendorName();
 
-$campaigns = json_encode($this->getCampaigns(),JSON_HEX_APOS);
+$campaigns = $this->getCampaigns();
 
 $placements = $this->getCategoryPlacements();
 
@@ -13,179 +18,199 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
 ?>
 <script type="text/javascript" src="/skin/frontend/modago/default/js/imagesloaded.pkgd.min.js"></script>
 <div class="container">
-<form name="campaign-position" method="POST" action="/campaign/placement_category/save">
-    <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>" />
-    <div class="page-heading row">
-        <div class="col-lg-6">
-            <h3><span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
+    <form name="campaign-position" method="POST" action="<?php echo $this->getSaveUrl(); ?>">
+        <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>"/>
+
+        <div class="page-heading row">
+            <div class="col-lg-12">
+                                <h3><?php echo $_helper->__('Manage placements on page') ?>: <span data-source="category"><?php echo $this->getCategoryName(); ?></span> (<?php echo $this->getWebsiteName(); ?>)</h3>
+
+
+                <p><?php echo $_helper->__('Add or remove from page, select order and priority of ads.') ?></p>
+
+                <p><?php echo $_helper->__('NOTE! You do not need to save changes - every change is immediately automatically saved.') ?></p>
+            </div>
         </div>
-    </div>
-    <div class="page-heading row">
-        <div class="container">
-            <ol class="breadcrumb">
-                <li>
-                    <a href="/campaign/placement/index/">
-                        <?php echo $_helper->__('Manage placements') ?>
-                    </a>
-                </li>
-                <li>
-                    <?php echo $this->getCategoryName(); ?>
-                </li>
-            </ol>
+        <div class="page-heading row">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true)) ?>">
+                            <?php echo $_helper->__('Manage placements') ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo Mage::getUrl("campaign/placement/index", array("_secure" => true)) ?>">
+                            <?php echo $this->getWebsiteName(); ?>
+                        </a>
+                    </li>
+                    <li>
+                        <?php echo $this->getCategoryName(); ?>
+                    </li>
+                </ol>
+            </div>
         </div>
-    </div>
 
 
-    <?php if (!empty($bannerTypes)): ?>
-        <?php foreach ($bannerTypes as $bannerType): ?>
-            <?php if (!empty($bannerType->position_count)): ?>
-            <div class="row">
-                <!--=== Example Box ===-->
-                <div class="col-md-12">
-                    <div class="widget box">
-                        <div class="widget-header">
-                            <h4><i class="icon-pin-flag"></i> <span data-source="banner-type"><?php echo $bannerType->title; ?></span></h4>
+        <?php if (!empty($bannerTypes)): ?>
+            <?php foreach ($bannerTypes as $bannerType): ?>
+                <?php if (!empty($bannerType->position_count)): ?>
+                    <div class="row">
+                        <!--=== Example Box ===-->
+                        <div class="col-md-12">
+                            <div class="widget box">
+                                <div class="widget-header">
+                                    <h4><i class="icon-pin-flag"></i> <span
+                                            data-source="banner-type"><?php echo $bannerType->title; ?></span></h4>
 
-                            <?php $titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); ?>
+                                    <?php $titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); ?>
 
 
-                            <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
-                        </div>
-                        <div class="widget-content banner-type" style="display: block;">
+                                    <div class="toolbar no-padding">
+                                        <div class="btn-group"><span class="btn btn-xs widget-collapse"><i
+                                                    class="icon-angle-down"></i></span></div>
+                                    </div>
+                                </div>
+                                <div class="widget-content banner-type" style="display: block;">
 
-                            <span data-source="banner-type-code" class="hidden"><?php echo $_helper->__($titleCode); ?></span>
-                                <?php for($i=1; $i<= $bannerType->position_count; $i++): ?>
-                                    <div class="banner-positions">
-                                        <div class="col-md-6">
-                                            <span data-source="position"><?php echo $_helper->__($bannerType->position_label . ' %s', $i); ?></span>
-                                            <span data-source="position-n" class="hidden"><?php echo $i; ?></span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="align-right">
-                                                <?php echo $_helper->__('Drag to change priority'); ?>
-
-                                                <a href="#" class="btn btn-primary add-new"
-                                                   data-toggle="modal"
-                                                   data-target="#basicModal"><i class="icon-plus-sign"></i>
-                                                    <span><span> <?php echo $_helper->__('Add'); ?></span></span>
-                                                </a>
+                                    <span data-source="banner-type-code"
+                                          class="hidden"><?php echo $_helper->__($titleCode); ?></span>
+                                    <?php for ($i = 1; $i <= $bannerType->position_count; $i++): ?>
+                                        <div class="banner-positions">
+                                            <div class="col-md-6">
+                                                <span
+                                                    data-source="position"><?php echo $_helper->__($bannerType->position_label . ' %s', $i); ?></span>
+                                                <span data-source="position-n" class="hidden"><?php echo $i; ?></span>
                                             </div>
-                                        </div>
-                                        <ul class="col-md-12 campaign-list">
-                                            <?php if (!empty($placements) && isset($placements[$titleCode])): ?>
-                                                <?php foreach ($placements[$titleCode] as $placement): ?>
-                                                    <?php if($i == $placement['position']): ?>
-                                                        <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
-                                                            <div class="content">
-<!--                                                                --><?php //echo $placement['placement_id']; ?><!--<br />-->
-                                                            <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
-                                                                <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" style="height: 120px;"  />
-                                                            <?php endif; ?>
+                                            <div class="col-md-6">
+                                                <div class="align-right">
+                                                    <?php echo $_helper->__('Drag to change priority'); ?>
+
+                                                    <a href="#" class="btn btn-primary add-new"
+                                                       data-toggle="modal"
+                                                       data-target="#basicModal"><i class="icon-plus-sign"></i>
+                                                        <span><span> <?php echo $_helper->__('Add'); ?></span></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <ul class="col-md-12 campaign-list">
+                                                <?php if (!empty($placements) && isset($placements[$titleCode])): ?>
+                                                    <?php foreach ($placements[$titleCode] as $placement): ?>
+                                                        <?php if ($i == $placement['position']): ?>
+                                                            <li class="col-md-3 banner-item"
+                                                                data-placement="<?php echo $placement['placement_id']; ?>">
+                                                                <div class="content">
+                                                                    <?php if (isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
+                                                                        <img
+                                                                            src="<?php echo $placement['preview_image']; ?>"
+                                                                            class="banner-preview-image"
+                                                                            style="height: 120px;"/>
+                                                                    <?php endif; ?>
 
 
-
-                                                            <div class="row">
-                                                                <div class="col-md-8">
-                                                                    <input type="hidden" name="placement_id[]" value="<?php echo $placement['placement_id']; ?>">
-                                                                    <input type="hidden" name="campaign_id[]" value="<?php echo $placement['campaign_id']; ?>">
-                                                                    <input type="hidden" name="banner_id[]" value="<?php echo $placement['banner_id']; ?>">
-                                                                    <input type="hidden" name="type[]" value="<?php echo $placement['type']; ?>">
-                                                                    <input type="hidden" name="position[]" value="<?php echo $placement['position']; ?>">
-                                                                    <input type="hidden" name="priority[]" value="<?php echo $placement['priority']; ?>">
-                                                                    <h5>
+                                                                    <div class="row">
+                                                                        <div class="col-md-8">
+                                                                            <input type="hidden" name="placement_id[]"
+                                                                                   value="<?php echo $placement['placement_id']; ?>">
+                                                                            <input type="hidden" name="campaign_id[]"
+                                                                                   value="<?php echo $placement['campaign_id']; ?>">
+                                                                            <input type="hidden" name="banner_id[]"
+                                                                                   value="<?php echo $placement['banner_id']; ?>">
+                                                                            <input type="hidden" name="type[]"
+                                                                                   value="<?php echo $placement['type']; ?>">
+                                                                            <input type="hidden" name="position[]"
+                                                                                   value="<?php echo $placement['position']; ?>">
+                                                                            <input type="hidden" name="priority[]"
+                                                                                   value="<?php echo $placement['priority']; ?>">
+                                                                            <h5>
                                                                         <span data-edit-source="campaign_name">
                                                                             <?php echo $placement['campaign_name']; ?>
                                                                         </span>
-                                                                    </h5>
-                                                                    <h5>
+                                                                            </h5>
+                                                                            <h5>
                                                                         <span data-edit-source="banner_name">
                                                                             <?php echo $placement['banner_name']; ?>
                                                                         </span>
-                                                                    </h5>
-                                                                    <h5><?php echo $placement['campaign_vendor']; ?></h5>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <a href="#" data-placementid="<?php echo $placement['placement_id']; ?>"
-                                                                       class="btn btn-info edit-placement"
-                                                                       data-toggle="modal"
-                                                                       data-target="#editModal">
-                                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                            <div class="col-md-12 dates">
-                                                                <?php $iconClass = ''; ?>
-                                                                <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])):
-                                                                    $iconClass = $placement['status']['icon'];
-                                                                    ?>
-                                                                <?php endif; ?>
-                                                                <i data-edit-val="link-edit-status" class="<?php echo $iconClass; ?>"></i>
+                                                                            </h5>
+                                                                            <h5><?php echo $placement['campaign_vendor']; ?></h5>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <a href="#"
+                                                                               data-placementid="<?php echo $placement['placement_id']; ?>"
+                                                                               class="btn btn-info edit-placement"
+                                                                               data-toggle="modal"
+                                                                               data-target="#editModal">
+                                                                                <span
+                                                                                    class="glyphicon glyphicon-pencil"></span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 dates">
+                                                                            <?php $iconClass = ''; ?>
+                                                                            <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])):
+                                                                                $iconClass = $placement['status']['icon'];
+                                                                                ?>
+                                                                            <?php endif; ?>
+                                                                            <i data-edit-val="link-edit-status"
+                                                                               class="<?php echo $iconClass; ?>"></i>
                                                                 <span data-edit-source="campaign_status" class="hidden">
-                                                                    <?php if(!empty($placement['status'])): ?>
-                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
-                                                                    <?php echo $placement['status']['message']; ?>
+                                                                    <?php if (!empty($placement['status'])): ?>
 
-                                                                    <?php if($placement['show_edit_link']): ?>
-                                                                        <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
-                                                                       target="_blank">
-                                                                        <?php echo $_helper->__('go to campaign.'); ?>
-                                                                    </a>
-                                                                     <?php endif; ?>
-                                                                        <?php else:?>
-                                                                        <?php if($placement['show_edit_link']): ?>
-                                                                            <?php echo $_helper->__("To edit"); ?> <a data-edit-val="link-edit" href=""
-                                                                                   target="_blank">
-                                                                            <?php echo $_helper->__('go to campaign.'); ?>
-                                                                        </a>
-                                                                        <?php endif; ?>
+                                                                        <?php echo $placement['status']['message']; ?>
+
                                                                     <?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_from">
                                                                     <?php echo $placement['campaign_date_from']; ?>
                                                                 </span>
-                                                                <input type="hidden" name="show_edit_link" value="<?php echo (int)$placement['show_edit_link']; ?>" />
+                                                                            <input type="hidden" name="show_edit_link"
+                                                                                   value="<?php echo (int)$placement['show_edit_link']; ?>"/>
                                                                 <span data-edit-source="campaign_date_dash">
                                                                     <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>-<?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_to">
                                                                     <?php echo $placement['campaign_date_to']; ?>
                                                                 </span>
-                                                            </div>
-                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
-                                                        </div>
-                                                        </li>
+                                                                </div>
+                                                            </li>
                                                         <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-                                        </ul>
-                                        <br /><br /><br />
-                                    </div>
-                                <?php endfor; ?>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                            </ul>
+                                            <br/><br/><br/>
+                                        </div>
+                                    <?php endfor; ?>
 
+                                </div>
+                            </div>
                         </div>
+                        <!-- /.col-md-12 -->
+                        <!-- /Example Box -->
                     </div>
-                </div> <!-- /.col-md-12 -->
-                <!-- /Example Box -->
-            </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</form>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </form>
 </div>
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+
                 <h3><?php echo $_helper->__('Are you sure'); ?></h3>
             </div>
             <div class="modal-body">
                 <p><?php echo $_helper->__('Do you want to delete placement?'); ?></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->__("Cancel"); ?></button>
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><?php echo $this->__("Cancel"); ?></button>
                 <a href="" class="btn btn-danger danger" id="delete-placement"><?php echo $this->__("Delete"); ?></a>
             </div>
         </div>
@@ -208,11 +233,13 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row form-group">
-                            <label><?php echo $_helper->__('Choose campaign'); ?> <span class="required">*</span>: </label>
+                            <label><?php echo $_helper->__('Choose campaign'); ?> <span class="required">*</span>:
+                            </label>
                             <select name="campaign" class="form-control"></select>
                         </div>
                         <div class="row form-group">
-                            <label><?php echo $_helper->__('Choose creative'); ?> <span class="required">*</span>: </label>
+                            <label><?php echo $_helper->__('Choose creative'); ?> <span class="required">*</span>:
+                            </label>
                             <select name="banner" class="form-control"></select>
                         </div>
                         <div class="row form-group">
@@ -237,6 +264,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                     <div class="col-md-6" data-banner="preview"></div>
                     <div class="hidden">
                         <span data-val="campaign-status"></span>
+                        <span data-val="campaign-status-message"></span>
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
                         <span data-val="campaign-vendorname"></span>
@@ -268,6 +296,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
             </div>
             <div class="modal-body row">
                 <span data-edit-val="placement_id" class="hidden"></span>
+
                 <div class="col-md-12">
                     <img src="" class="image-preview-big"/>
                 </div>
@@ -306,14 +335,15 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         </select>
                     </div>
                     <div class="row">
-                        <a data-edit-val="link-delete" href="" data-toggle="modal" data-target="#confirm-delete">
-                            <?php echo $_helper->__("Delete this creative from the placement"); ?>
+                        <a data-edit-val="link-delete" class="btn btn-danger" href="" data-toggle="modal"
+                           data-target="#confirm-delete">
+                            <i class="icon-remove"></i>&nbsp;<?php echo $_helper->__("Delete this creative from the placement"); ?>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default"  data-dismiss="modal">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
                     <?php echo $_helper->__('Cancel'); ?>
                 </button>
                 <button type="button" class="btn btn-primary" id="edit-placement">
@@ -325,503 +355,528 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
 </div>
 
 <script type="text/javascript">
-jQuery(function ($) {
-    recountHeight();
-    $(document).on('mouseover', '.banner-type .campaign-list', function () {
-        $(this).sortable({ opacity: 0.9, scrollSensitivity: 10, scrollSpeed: 40, zIndex: 9999,
-            stop: function () {
-                savePresentation();
-            }});
-        $(this).disableSelection();
-    })
-    var compaigns = '<?php echo $campaigns; ?>';
-    var compaignsObj = jQuery.parseJSON(compaigns);
-    var isLocalVendor = '<?php echo $isLocalVendor; ?>';
-    var vendorId = '<?php echo $vendor->getId(); ?>';
-
-    $(document).on('change', '#basicModal select[name=campaign]', function () {
-        var campaign = $(this).val();
-        var type= $(this).closest('#basicModal').find('[name="creation_type"]').val();
-
-        getCampaignCreations(campaign,type, $('#basicModal select[name=banner]'));
-        getCampaignAdditionalInfo(campaign);
-    })
-
-    $(document).on('change', '#basicModal select[name=banner]', function () {
-        var banner = $(this).val();
-        if (banner.length > 0) {
-            $("#basicModal .alert.alert-warning").remove();
-        }
-        getBannerImage(banner);
-    })
-
-    $(document).on('click', '.edit-placement', function () {
-        $('[name="status"]').remove();
-        $(this).closest('.col-md-3.banner-item').append('<input type="hidden" name="status" value="active" />');
-    })
-    $(document).on('click', '#delete-placement', function (e) {
-        e.preventDefault();
-        var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
-
-        if (parseInt(placement) > 0) {
-            //remove from db
-            $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
-
-            $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
-        } else {
-            //remove added html
-            $('form').find('[name="status"]').parents('.banner-item').remove();
-        }
-        $('#confirm-delete [name="placement_id"]').remove();
-        savePresentation();
-        $("#confirm-delete").modal('hide');
-    })
-
-    function saveNewPresentation(campaignId, bannerId, type, position, priority) {
-        setPriority();
+    jQuery(function ($) {
         recountHeight();
-        var dataToSave = {};
-        //collect data
-        var category = $('[name=category]').val();
-
-        //assign data
-        dataToSave.vendor_id = vendorId;
-        dataToSave.category_id = category;
-
-        dataToSave.campaign_id = campaignId;
-        dataToSave.banner_id = bannerId;
-        dataToSave.type = type;
-        dataToSave.position = position;
-        dataToSave.priority = priority;
-
-        $.ajax({
-            url: '/campaign/placement_category/saveNew',
-            method: 'POST',
-            data: dataToSave,
-            success: function(id){
-                $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
-                $('[data-current="1"]').data("current",0);
-
-                savePresentation();
-            }
-
-        })
-
-    }
-
-    function savePresentation() {
-        setPriority();
-        recountHeight();
-        $.ajax({
-            url: '/campaign/placement_category/save',
-            method: 'POST',
-            data: $('form').serialize()
-
-        })
-    }
-
-    function getAlertTemplate(message) {
-        var tmpl = '<div class="alert alert-warning">' +
-            '<a href="#" class="close" data-dismiss="alert">&times;</a>' + message +
-            '</div>';
-        return tmpl;
-    }
-
-    function recountHeight() {
-        $('.banner-type').imagesLoaded(function() {
-            $('.banner-positions .campaign-list').each(function (i, item) {
-                var maxHeight = [];
-                $(this).find('.banner-item').each(function (k, bannerItem) {
-                    maxHeight.push($(bannerItem).height());
-                })
-                if (maxHeight.length > 0) {
-                    var maxValue = Math.max.apply(Math, maxHeight);
-                    $(this).find('.banner-item').each(function (k, bannerItem) {
-                        $(bannerItem).height(maxValue);
-                    })
+        $(document).on('mouseover', '.banner-type .campaign-list', function () {
+            $(this).sortable({
+                opacity: 0.9, scrollSensitivity: 10, scrollSpeed: 40, zIndex: 9999,
+                stop: function () {
+                    savePresentation();
                 }
-            })
-        });
+            });
+            $(this).disableSelection();
+        })
+        var compaigns = '<?php echo $campaigns; ?>';
+        var compaignsObj = jQuery.parseJSON(compaigns);
+        var isLocalVendor = '<?php echo $isLocalVendor; ?>';
+        var vendorId = '<?php echo $vendor->getId(); ?>';
 
-    }
+        $(document).on('change', '#basicModal select[name=campaign]', function () {
+            var campaign = $(this).val();
+            $("[data-banner=preview]").html("");
+            var type = $(this).closest('#basicModal').find('[name="creation_type"]').val();
 
-    //Construct add new modal
-    $("#basicModal").on("show.bs.modal", function (e) {
-        var category = $('[data-source="category"]').html();
-        var bannerType = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type"]').html();
-        var bannerTypeCode = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type-code"]').html();
-        var position = $(e.relatedTarget).parents('.widget .banner-positions').find('[data-source="position"]').html();
+            getCampaignCreations(campaign, type, $('#basicModal select[name=banner]'));
+            getCampaignAdditionalInfo(campaign);
+        })
 
-        var options = '<option value="0">      </option>';
-        if ($.type(compaignsObj[bannerTypeCode]) !== "undefined") {
-            if(isLocalVendor){
-                $.each(compaignsObj[bannerTypeCode], function (vendor, campaigns) {
-                    options += '<optgroup label="  ' + vendor + '">';
-                    campaigns.each(function (i, campaign) {
-                        options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
-                    })
-                    options += '</optgroup>';
-                })
-            } else {
-                compaignsObj[bannerTypeCode].each(function (i, val) {
-                    options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
-                })
+        $(document).on('change', '#basicModal select[name=banner]', function () {
+            var banner = $(this).val();
+            $("[data-banner=preview]").html("");
+            if (banner.length > 0) {
+                $("#basicModal .alert.alert-warning").remove();
             }
+            getBannerImage(banner);
+        })
+
+        $(document).on('click', '.edit-placement', function () {
+            $('[name="status"]').remove();
+            $(this).closest('.col-md-3.banner-item').append('<input type="hidden" name="status" value="active" />');
+        })
+        $(document).on('click', '#delete-placement', function (e) {
+            e.preventDefault();
+            var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
+
+            if (parseInt(placement) > 0) {
+                //remove from db
+                $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
+
+                $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
+            } else {
+                //remove added html
+                $('form').find('[name="status"]').parents('.banner-item').remove();
+            }
+            $('#confirm-delete [name="placement_id"]').remove();
+            savePresentation();
+            $("#confirm-delete").modal('hide');
+        })
+
+        function saveNewPresentation(campaignId, bannerId, type, position, priority) {
+            setPriority();
+            recountHeight();
+            var dataToSave = {};
+            //collect data
+            var category = $('[name=category]').val();
+
+            //assign data
+            dataToSave.vendor_id = vendorId;
+            dataToSave.category_id = category;
+
+            dataToSave.campaign_id = campaignId;
+            dataToSave.banner_id = bannerId;
+            dataToSave.type = type;
+            dataToSave.position = position;
+            dataToSave.priority = priority;
+
+            $.ajax({
+                url: '/campaign/placement_category/saveNew',
+                method: 'POST',
+                data: dataToSave,
+                success: function (id) {
+                    $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
+                    $('[data-current="1"]').attr("data-current", 0);
+                    savePresentation();
+                }
+
+            })
 
         }
 
-        $(this).find('[name=campaign]').html(options);
-        $(this).find('[data-val="category"]').html(category);
-        $(this).find('[data-val="banner-type"]').html(bannerType);
-        $(this).find('[data-val="position"]').html(position);
+        function savePresentation() {
+            setPriority();
+            recountHeight();
+            $.ajax({
+                url: '/campaign/placement_category/save',
+                method: 'POST',
+                data: $('form').serialize()
 
-        $(this).append('<input type="hidden"  name="creation_type" value="'+bannerTypeCode+'"  />');
+            })
+        }
 
+        function getAlertTemplate(message) {
+            var tmpl = '<div class="alert alert-warning">' +
+                '<a href="#" class="close" data-dismiss="alert">&times;</a>' + message +
+                '</div>';
+            return tmpl;
+        }
 
-    });
-    $('.add-new').click(function(){
-        var position = $(this).closest('.banner-positions')
-            .find('[data-source="position-n"]').text();
-        var typeCode = $(this).closest('.banner-type').find('[data-source="banner-type-code"]').text();
-        $(this).closest('.banner-positions')
-            .find('.campaign-list')
-            .append("<div data-targ='add' data-position='"+position+"' data-banner-type='"+typeCode+"'></div>");
-
-    })
-    $('#basicModal [data-dismiss="modal"]').click(function(){
-        $("[data-targ='add']").remove();
-        clearOptions();
-        $('#basicModal').modal('hide');
-    })
-
-    $('#save-positions').click(function(){
-        setPriority();
-        $('form[name=campaign-position]').submit();
-        return false;
-    })
-
-    function setPriority(){
-        $('form[name=campaign-position] .banner-positions .campaign-list').each(function(i,value){
-            $(value).find('.banner-item').each(function(v,item){
-                $(item).find('[name="priority[]"]').val(parseInt($(item).index())+1)
+        function recountHeight() {
+            $('.banner-type').imagesLoaded(function () {
+                $('.banner-positions .campaign-list').each(function (i, item) {
+                    var maxHeight = [];
+                    $(this).find('.banner-item').each(function (k, bannerItem) {
+                        maxHeight.push($(bannerItem).height());
+                    })
+                    if (maxHeight.length > 0) {
+                        var maxValue = Math.max.apply(Math, maxHeight);
+                        $(this).find('.banner-item').each(function (k, bannerItem) {
+                            $(bannerItem).height(maxValue);
+                        })
+                    }
+                })
             });
 
-        })
-    }
-
-    $("#basicModal").on("hide.bs.modal", function (e) {
-        $(this).find('[data-val="category"]').html('');
-        $(this).find('[data-val="banner-type"]').html('');
-        $(this).find('[data-val="position"]').html('');
-
-    });
-    $('#editModal [data-dismiss="modal"]').click(function(){
-        clearEditWindowOptions();
-    })
-
-    $('#editModal #edit-placement').click(function (e) {
-        //set priority
-        var priority = $('#editModal').find("select[name=priority] option:selected").val();
-        var placementId = $('#editModal').find('[data-edit-val="placement_id"]').text();
-        if(placementId>0){
-            //find modal source
-            var placementItem = $('.banner-item[data-placement="'+placementId+'"]');
-            changePlacementItemPriority(placementItem, priority);
         }
-        clearEditWindowOptions();
-        savePresentation();
-        $('#editModal').modal('hide');
-    })
 
-    function changePlacementItemPriority(placementItem, priority) {
-        var currentPriority = parseInt(placementItem.index()) + 1;
-        var placementItemHtml = $(placementItem)[0].outerHTML;
+        //Construct add new modal
+        $("#basicModal").on("show.bs.modal", function (e) {
+            var category = $('[data-source="category"]').html();
+            var bannerType = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type"]').html();
+            var bannerTypeCode = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type-code"]').html();
+            var position = $(e.relatedTarget).parents('.widget .banner-positions').find('[data-source="position"]').html();
 
-        if (priority < currentPriority) {
-            //move placement before
+            var options = '<option value="0">      </option>';
+            var temp;
+            if ($.type(compaignsObj[bannerTypeCode]) !== "undefined") {
+                if (isLocalVendor) {
+                    $.each(compaignsObj[bannerTypeCode], function (vendor, campaigns) {
+                        temp = [];
+                        options += '<optgroup label="  ' + vendor + '">';
+                        campaigns.each(function (i, campaign) {
+                            temp.push({v:i.name, k: i.campaign_id});
+                        });
+                        temp.sort(function(a,b){
+                            if(a.v > b.v){ return 1}
+                            if(a.v < b.v){ return -1}
+                            return 0;
+                        });
+                        $.each(temp, function(key, obj) {
+                            options += '<option value="' + obj.k + '">' + obj.v + '</option>';
+                        });
 
-            if($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')').length > 0){
-                $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
-                    .before(placementItemHtml);
-                //destroy item
-                $(placementItem).remove();
-            }
-        }
-        if (priority > currentPriority) {
-            //move placement after
+                        options += '</optgroup>';
 
-            if ($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')').length > 0) {
-
-                $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')')
-                    .before(placementItemHtml);
-            } else {
-
-                if($(placementItem).closest('.campaign-list').find('.banner-item').last().length > 0){
-                    $(placementItem).closest('.campaign-list').find('.banner-item').last()
-                        .after(placementItemHtml);
+                    })
                 } else {
-                    $(placementItem).closest('.campaign-list').append(placementItemHtml);
+                    temp = [];
+                    compaignsObj[bannerTypeCode].each(function (i, val) {
+                        temp.push({v:i.name, k: i.campaign_id});
+                    });
+                    temp.sort(function(a,b){
+                        if(a.v > b.v){ return 1}
+                        if(a.v < b.v){ return -1}
+                        return 0;
+                    });
+                    $.each(temp, function(key, obj) {
+                        options += '<option value="' + obj.k + '">' + obj.v + '</option>';
+                    });
                 }
 
             }
+
+            $(this).find('[name=campaign]').html(options);
+            $(this).find('[data-val="category"]').html(category);
+            $(this).find('[data-val="banner-type"]').html(bannerType);
+            $(this).find('[data-val="position"]').html(position);
+
+            $(this).append('<input type="hidden"  name="creation_type" value="' + bannerTypeCode + '"  />');
+
+
+        });
+        $('.add-new').click(function () {
+            var position = $(this).closest('.banner-positions')
+                .find('[data-source="position-n"]').text();
+            var typeCode = $(this).closest('.banner-type').find('[data-source="banner-type-code"]').text();
+            $(this).closest('.banner-positions')
+                .find('.campaign-list')
+                .append("<div data-targ='add' data-position='" + position + "' data-banner-type='" + typeCode + "'></div>");
+
+        })
+        $('#basicModal [data-dismiss="modal"]').click(function () {
+            $("[data-targ='add']").remove();
+            clearOptions();
+            $('#basicModal').modal('hide');
+        })
+
+        $('#save-positions').click(function () {
+            setPriority();
+            $('form[name=campaign-position]').submit();
+            return false;
+        })
+
+        function setPriority() {
+            $('form[name=campaign-position] .banner-positions .campaign-list').each(function (i, value) {
+                $(value).find('.banner-item').each(function (v, item) {
+                    $(item).find('[name="priority[]"]').attr("value", parseInt($(item).index()) + 1);
+                });
+
+            })
+        }
+
+        $("#basicModal").on("hide.bs.modal", function (e) {
+            $(this).find('[data-val="category"]').html('');
+            $(this).find('[data-val="banner-type"]').html('');
+            $(this).find('[data-val="position"]').html('');
+
+        });
+        $('#editModal [data-dismiss="modal"]').click(function () {
+            clearEditWindowOptions();
+        })
+
+        $('#editModal #edit-placement').click(function (e) {
+            //set priority
+            var priority = $('#editModal').find("select[name=priority] option:selected").val();
+            var placementId = $('#editModal').find('[data-edit-val="placement_id"]').text();
+            if (placementId > 0) {
+                //find modal source
+                var placementItem = $('.banner-item[data-placement="' + placementId + '"]');
+                changePlacementItemPriority(placementItem, priority);
+            }
+            clearEditWindowOptions();
+            savePresentation();
+            $('#editModal').modal('hide');
+        })
+
+        function changePlacementItemPriority(placementItem, priority) {
+            var currentPriority = parseInt(placementItem.index()) + 1;
+            var placementItemHtml = $(placementItem)[0].outerHTML;
+
+            if (priority < currentPriority) {
+                //move placement before
+
+                if ($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')').length > 0) {
+                    $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
+                        .before(placementItemHtml);
+                    //destroy item
+                    $(placementItem).remove();
+                }
+            }
+            if (priority > currentPriority) {
+                //move placement after
+
+                if ($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')').length > 0) {
+
+                    $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')')
+                        .before(placementItemHtml);
+                } else {
+
+                    if ($(placementItem).closest('.campaign-list').find('.banner-item').last().length > 0) {
+                        $(placementItem).closest('.campaign-list').find('.banner-item').last()
+                            .after(placementItemHtml);
+                    } else {
+                        $(placementItem).closest('.campaign-list').append(placementItemHtml);
+                    }
+
+                }
 
 //                //destroy item
-            $(placementItem).remove();
+                $(placementItem).remove();
 
+            }
         }
-    }
 
-    $('#basicModal #add-placement').click(function () {
-        //get data
-        var modal = $("#basicModal");
-        var campaign = modal.find('[name=campaign] option:selected').val();
-        var campaignName = modal.find('[name=campaign] option:selected').text();
-        var banner = modal.find('[name=banner] option:selected').val();
-        var bannerName = modal.find('[name=banner] option:selected').text();
-        var priority = modal.find('[name=priority] option:selected').val();
-        var showEditLink = modal.find('[data-val="campaign-showedit"]').text();
+        $('#basicModal #add-placement').click(function () {
+            //get data
+            var modal = $("#basicModal");
+            var campaign = modal.find('[name=campaign] option:selected').val();
+            var campaignName = modal.find('[name=campaign] option:selected').text();
+            var banner = modal.find('[name=banner] option:selected').val();
+            var bannerName = modal.find('[name=banner] option:selected').text();
+            var priority = modal.find('[name=priority] option:selected').val();
+            var showEditLink = modal.find('[data-val="campaign-showedit"]').text();
 
-        var previewImage = modal.find('[data-banner="preview"] img').attr("src");
+            var previewImage = modal.find('[data-banner="preview"] img').attr("src");
 
 
-        var bannerType = $('[data-targ="add"]').data('banner-type');
-        var pos = $('[data-targ="add"]').data('position');
+            var bannerType = $('[data-targ="add"]').data('banner-type');
+            var pos = $('[data-targ="add"]').data('position');
 
-        var dateFrom = modal.find('[data-val="campaign-date-from"]').text();
-        var dateTo = modal.find('[data-val="campaign-date-to"]').text();
+            var dateFrom = modal.find('[data-val="campaign-date-from"]').text();
+            var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
-        var status = modal.find('[data-val="campaign-status"]').text();
-        var vendorName = modal.find('[data-val="campaign-vendorname"]').text();
+            var status = modal.find('[data-val="campaign-status"]').text();
+            var statusMessage = modal.find('[data-val="campaign-status-message"]').html();
+            var vendorName = modal.find('[data-val="campaign-vendorname"]').text();
 
-        //set data
-        if (parseInt(banner) > 0) {
-            var dates = '';
-            if (dateFrom.length > 0 && dateTo.length > 0) {
-                dates = '<span data-edit-source="campaign_date_from">'+dateFrom
-                    + '</span><span data-edit-source="campaign_date_dash"> - </span>'
-                    + '<span data-edit-source="campaign_date_to">'+dateTo+'</span>';
+            //set data
+            if (parseInt(banner) > 0) {
+                var dates = '';
+                if (dateFrom.length > 0 && dateTo.length > 0) {
+                    dates = '<span data-edit-source="campaign_date_from">' + dateFrom
+                        + '</span><span data-edit-source="campaign_date_dash"> - </span>'
+                        + '<span data-edit-source="campaign_date_to">' + dateTo + '</span>';
+                }
+                var campaignBlock = '<li class="col-md-3 banner-item" data-status="">';
+                if ($.type(previewImage) !== "undefined") {
+                    campaignBlock += '<img src="' + previewImage + '" class="banner-preview-image" style="height: 120px;" />';
+                }
+                campaignBlock += '<div class="row" data-current="1">' +
+                    '<div class= "col-md-8" >' +
+                    '<input type="hidden" name="placement_id[]" value="0">' +
+                    '<input type="hidden" name="campaign_id[]" value="' + campaign + '">' +
+                    '<input type="hidden" name="banner_id[]" value="' + banner + '">' +
+                    '<input type="hidden" name="type[]" value="' + bannerType + '">' +
+                    '<input type="hidden" name="position[]" value="' + pos + '">' +
+                    '<input type="hidden" name="priority[]" value="0">' +
+                    '<h5><span data-edit-source="campaign_name">' + campaignName + '</span></h5>' +
+                    '<h5><span data-edit-source="banner_name">' + bannerName + '</span></h5>' +
+                    '<h5>' + vendorName + '</h5>' +
+                    '</div>' +
+                    '<div class="col-md-4">' +
+                    '<a href="#" class="btn btn-info edit-placement" data-toggle="modal" data-target="#editModal">' +
+                    '<span class="glyphicon glyphicon-pencil"></span>' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-12 dates">' +
+                    '<i class="' + status + '" data-edit-val="link-edit-status"></i> ' +
+                    '<span data-edit-source="campaign_status" class="hidden">' + statusMessage + '</span>'
+                    + dates +
+                    '</div>' +
+                    '<input type="hidden" value="' + showEditLink + '" name="show_edit_link" />' +
+                    '</li>';
+
+                changePlacementItemPriority($('[data-targ="add"]'), priority);
+                $('[data-targ="add"]').replaceWith(campaignBlock);
+
+                clearOptions();
+
+                saveNewPresentation(campaign, banner, bannerType, pos, priority);
+                //savePresentation();
+                $('#basicModal').modal('hide');
+
+            } else {
+                var alertMessageTemplate = getAlertTemplate('<?php echo $_helper->__('Please fill the required fields'); ?>');
+                $('#basicModal .modal-body .message-container').html(alertMessageTemplate);
             }
-            var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' ;
-            if($.type(previewImage) !== "undefined"){
-                campaignBlock += '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' ;
-            }
-            campaignBlock +=    '<div class="row" data-current="1">' +
-                '<div class= "col-md-8" >' +
-                '<input type="hidden" name="placement_id[]" value="0">' +
-                '<input type="hidden" name="campaign_id[]" value="'+campaign+'">' +
-                '<input type="hidden" name="banner_id[]" value="'+banner+'">' +
-                '<input type="hidden" name="type[]" value="'+bannerType+'">' +
-                '<input type="hidden" name="position[]" value="'+pos+'">' +
-                '<input type="hidden" name="priority[]" value="0">' +
-                '<h5><span data-edit-source="campaign_name">' + campaignName + '</span></h5>' +
-                '<h5><span data-edit-source="banner_name">' + bannerName + '</span></h5>' +
-                '<h5>' + vendorName + '</h5>' +
-                '</div>' +
-                '<div class="col-md-4">' +
-                '<a href="#" class="btn btn-info edit-placement" data-toggle="modal" data-target="#editModal">' +
-                '<span class="glyphicon glyphicon-pencil"></span>' +
-                '</a>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-md-12 dates">' +
-                '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
-                 dates +
-                '</div>' +
-                '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +
-                '</li>';
 
-            changePlacementItemPriority($('[data-targ="add"]'), priority);
-            $('[data-targ="add"]').replaceWith(campaignBlock);
 
+        })
+
+
+        //edit
+        $("#editModal").on("show.bs.modal", function (e) {
+            //get data
+            var nameSpace = $(e.relatedTarget).closest('.banner-item');
+            var campaign = nameSpace.find('[name="campaign_id[]"]').val();
+            var campaignName = nameSpace.find('[data-edit-source="campaign_name"]').text();
+
+            var bannerName = nameSpace.find('[data-edit-source="banner_name"]').text();
+            var banner = nameSpace.find('[name="banner_id[]"]').val();
+
+            var priority = nameSpace.index() + 1;
+
+            var vendorName = '<?php echo addslashes($vendorName); ?>';
+
+            var previewImage = nameSpace.find('.banner-preview-image').attr("src");
+
+            var campaignDateFrom = nameSpace.find('[data-edit-source="campaign_date_from"]').text();
+            var campaignDateDash = nameSpace.find('[data-edit-source="campaign_date_dash"]').text();
+            var campaignDateTo = nameSpace.find('[data-edit-source="campaign_date_to"]').text();
+
+            var campaignShowEditLink = nameSpace.find('[name="show_edit_link"]').val();
+
+            var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
+
+
+            var placementId = nameSpace.find('[name="placement_id[]"]').val();
+
+            var dates = [campaignDateFrom, campaignDateDash, campaignDateTo].join(" ");
+            //set data to modal
+            var modal = $(this);
+            modal.find('[data-edit-val="campaign_name"]').text(campaignName);
+            modal.find('[data-edit-val="banner_name"]').text(bannerName);
+            modal.find('[data-edit-val="dates"]').text(dates);
+            modal.find('img.image-preview-big').attr("src", previewImage);
+            modal.find('[data-edit-val="placement_id"]').text(placementId);
+
+            modal.find('[data-edit-val="campaign_status"]').html(status);
+
+            modal.find('[name=priority]').val(priority);
+
+            modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
+
+        });
+
+        $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
+            e.preventDefault();
+            var placement = $(this).closest('#editModal').find('[data-edit-val="placement_id"]').text();
+
+            $('#confirm-delete').append('<input type="hidden" name="placement_id" value="' + placement + '">');
+
+            $('#editModal').modal('hide');
+            $('#modal-dialog').modal('show');
+        })
+
+        $('#basicModal,#editModal').on('hidden.bs.modal', function () {
             clearOptions();
+        })
 
-            saveNewPresentation(campaign, banner, bannerType, pos, priority);
-            //savePresentation();
-            $('#basicModal').modal('hide');
 
-        } else {
-            var alertMessageTemplate = getAlertTemplate('<?php echo $_helper->__('Please fill the required fields'); ?>');
-            $('#basicModal .modal-body .message-container').html(alertMessageTemplate);
+        function clearOptions() {
+            var modal = $("#basicModal");
+            modal.find('select[name="campaign"]').html('');
+            modal.find('select[name="banner"]').html('');
+            modal.find('select[name="priority"]').val(1);
+            modal.find('[data-banner="preview"]').html('');
+            modal.find('[name=creation_type]').remove();
+            modal.find('.alert.alert-warning').remove();
+            modal.find('[data-val="campaign-status"]').html('');
+            modal.find('[data-val="campaign-vendorname"]').html('');
+            modal.find('[data-val="campaign-showedit"]').html('');
+            modal.find('[name="show_edit_link"]').val(0);
+            $('[data-targ="add"]').remove();
+            modal.find('[data-edit-val="link-delete"]').show();
+
         }
 
+        function clearEditWindowOptions() {
+            var modal = $("#editModal");
+            modal.find('[data-edit-val="campaign_name"]').html('');
+            modal.find('[data-edit-val="banner_name"]').html('');
+            modal.find('[data-edit-val="dates"]').html('');
+            modal.find('img.image-preview-big').attr("src", '');
+            modal.find('[name="show_edit_link"]').val(0);
+            modal.find('[data-val="campaign-showedit"]').html('');
+            $('[data-targ="add"]').remove();
+            modal.find('[data-edit-val="link-delete"]').show();
 
+        }
+
+        /**
+         *
+         * @param campaign
+         * @param type
+         * @param optionsContainer
+         */
+        function getCampaignCreations(campaign, type, optionsContainer) {
+            var loading = '<?php echo $_helper->__("Loading..."); ?>';
+            optionsContainer.html('<option value="0">' + loading + '</option>');
+            optionsContainer.prop("disabled", true);
+            campaign = parseInt(campaign);
+            if (campaign > 0) {
+                $.ajax({
+                    url: "/campaign/placement_category/getCampaignCreations",
+                    data: {campaign: campaign, type: type},
+                    success: function (result) {
+                        var banners = jQuery.parseJSON(result);
+                        var bannerOptions = '<option value="0">      </option>';
+                        $.each(banners, function (k, value) {
+                            bannerOptions += '<option value="' + value.banner_id + '">' + value.name + '</option>';
+                        })
+
+                        optionsContainer.html(bannerOptions).prop("disabled", false);
+                    }
+                })
+            }
+        }
+
+        function disableSaveButton() {
+            $('#basicModal #add-placement').addClass('btn-disabled');
+            $('#basicModal #add-placement').attr('disabled', 'disabled');
+            $('#basicModal #add-placement').prop('disabled', true);
+        }
+
+        function enableSaveButton() {
+            $('#basicModal #add-placement').removeClass('btn-disabled');
+            $('#basicModal #add-placement').attr('disabled', '');
+            $('#basicModal #add-placement').prop('disabled', false);
+        }
+
+        function getBannerImage(banner) {
+            banner = parseInt(banner);
+            if (banner > 0) {
+                disableSaveButton();
+                $.ajax({
+                    url: "/campaign/vendor/getBannerPreviewImage",
+                    data: {id: banner},
+                    success: function (src) {
+                        var wrapper = '<div class="row"><label>';
+                        wrapper += '<?php echo $_helper->__('Preview'); ?>';
+                        wrapper += ': </label></div><div class="row"><img src="' + src + '" /></div>';
+
+                        $('#basicModal').find('[data-banner="preview"]').html(wrapper);
+
+                        enableSaveButton();
+                    }
+                })
+            } else {
+                $('#basicModal').find('[data-banner="preview"]').html("");
+            }
+        }
+
+        function getCampaignAdditionalInfo(campaign) {
+            campaign = parseInt(campaign);
+            if (campaign > 0) {
+                $.ajax({
+                    url: '<?php echo Mage::getUrl("campaign/vendor/getCampaignData", array("_secure" => true))?>',
+                    data: {id: campaign},
+                    success: function (result) {
+
+                        var data = jQuery.parseJSON(result);
+                        $("#basicModal").find('[data-val="campaign-date-from"]').html(data.date_from);
+                        $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
+
+                        $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
+
+                        $("#basicModal").find('[data-val="campaign-status-message"]').html(data.status.message);
+
+
+                        $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
+                        $("#basicModal").find('[data-val="campaign-showedit"]').html(data.showedit);
+                    }
+                })
+            }
+        }
     })
-
-
-
-    //edit
-    $("#editModal").on("show.bs.modal", function (e) {
-        //get data
-        var nameSpace = $(e.relatedTarget).closest('.banner-item');
-        var campaign = nameSpace.find('[name="campaign_id[]"]').val();
-        var campaignName = nameSpace.find('[data-edit-source="campaign_name"]').text();
-
-        var bannerName = nameSpace.find('[data-edit-source="banner_name"]').text();
-        var banner = nameSpace.find('[name="banner_id[]"]').val();
-
-        var priority = nameSpace.index() +1;
-
-        var vendorName = '<?php echo addslashes($vendorName); ?>';
-
-        var previewImage = nameSpace.find('.banner-preview-image').attr("src");
-
-        var campaignDateFrom = nameSpace.find('[data-edit-source="campaign_date_from"]').text();
-        var campaignDateDash = nameSpace.find('[data-edit-source="campaign_date_dash"]').text();
-        var campaignDateTo = nameSpace.find('[data-edit-source="campaign_date_to"]').text();
-
-        var campaignShowEditLink = nameSpace.find('[name="show_edit_link"]').val();
-
-        var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
-
-        var placementId = nameSpace.find('[name="placement_id[]"]').val();
-
-        var dates = [campaignDateFrom, campaignDateDash, campaignDateTo].join(" ");
-        //set data to modal
-        var modal = $(this);
-        modal.find('[data-edit-val="campaign_name"]').text(campaignName);
-        modal.find('[data-edit-val="banner_name"]').text(bannerName);
-        modal.find('[data-edit-val="dates"]').text(dates);
-        modal.find('img.image-preview-big').attr("src",previewImage);
-        modal.find('[data-edit-val="placement_id"]').text(placementId);
-
-        modal.find('[data-edit-val="campaign_status"]').html(status);
-
-        modal.find('[name=priority]').val(priority);
-
-//        if(campaignShowEditLink == 0){
-//            modal.find('[data-edit-val="link-delete"]').hide();
-//        }
-//        if(campaignShowEditLink == 1){
-//            modal.find('[data-edit-val="link-delete"]').show();
-//        }
-
-        modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
-
-    });
-
-    $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
-        e.preventDefault();
-        var placement = $(this).closest('#editModal').find('[data-edit-val="placement_id"]').text();
-
-        $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
-
-        $('#editModal').modal('hide');
-        $('#modal-dialog').modal('show');
-    })
-
-    $('#basicModal,#editModal').on('hidden.bs.modal', function () {
-        clearOptions();
-    })
-
-
-
-
-    function clearOptions() {
-        var modal = $("#basicModal");
-        modal.find('select[name="campaign"]').html('');
-        modal.find('select[name="banner"]').html('');
-        modal.find('select[name="priority"]').val(1);
-        modal.find('[data-banner="preview"]').html('');
-        modal.find('[name=creation_type]').remove();
-        modal.find('.alert.alert-warning').remove();
-        modal.find('[data-val="campaign-status"]').html('');
-        modal.find('[data-val="campaign-vendorname"]').html('');
-        modal.find('[data-val="campaign-showedit"]').html('');
-        modal.find('[name="show_edit_link"]').val(0);
-        $('[data-targ="add"]').remove();
-        modal.find('[data-edit-val="link-delete"]').show();
-
-    }
-
-    function clearEditWindowOptions(){
-        var modal = $("#editModal");
-        modal.find('[data-edit-val="campaign_name"]').html('');
-        modal.find('[data-edit-val="banner_name"]').html('');
-        modal.find('[data-edit-val="dates"]').html('');
-        modal.find('img.image-preview-big').attr("src",'');
-        modal.find('[name="show_edit_link"]').val(0);
-        modal.find('[data-val="campaign-showedit"]').html('');
-        $('[data-targ="add"]').remove();
-        modal.find('[data-edit-val="link-delete"]').show();
-
-    }
-
-    /**
-     *
-     * @param campaign
-     * @param type
-     * @param optionsContainer
-     */
-    function getCampaignCreations(campaign,type, optionsContainer) {
-        var loading = '<?php echo $_helper->__("Loading..."); ?>';
-        optionsContainer.html('<option value="0">'+loading+'</option>');
-        campaign = parseInt(campaign);
-        if(campaign > 0){
-            $.ajax({
-                url : "/campaign/placement_category/getCampaignCreations",
-                data: {campaign : campaign, type: type},
-                success: function(result){
-                    var banners = jQuery.parseJSON(result);
-                    var bannerOptions = '<option value="0">      </option>';
-                    $.each(banners, function(k,value){
-                        bannerOptions += '<option value="' + value.banner_id + '">' + value.name + '</option>';
-                    })
-
-                    optionsContainer.html(bannerOptions);
-                }
-            })
-        }
-    }
-    function disableSaveButton(){
-        $('#basicModal #add-placement').addClass('btn-disabled');
-        $('#basicModal #add-placement').attr('disabled','disabled');
-        $('#basicModal #add-placement').prop('disabled',true);
-    }
-    function enableSaveButton(){
-        $('#basicModal #add-placement').removeClass('btn-disabled');
-        $('#basicModal #add-placement').attr('disabled','');
-        $('#basicModal #add-placement').prop('disabled',false);
-    }
-    function getBannerImage(banner) {
-        banner = parseInt(banner);
-        if (banner > 0) {
-            disableSaveButton();
-            $.ajax({
-                url : "/campaign/vendor/getBannerPreviewImage",
-                data: {id : banner},
-                success: function(src){
-                    var wrapper = '<div class="row"><label>';
-                    wrapper += '<?php echo $_helper->__('Preview'); ?>';
-                    wrapper += ': </label></div><div class="row"><img src="'+src+'" /></div>';
-
-                    $('#basicModal').find('[data-banner="preview"]').html(wrapper);
-
-                    enableSaveButton();
-                }
-            })
-        } else {
-            $('#basicModal').find('[data-banner="preview"]').html("");
-        }
-    }
-
-    function getCampaignAdditionalInfo(campaign){
-        campaign = parseInt(campaign);
-        if(campaign > 0){
-            $.ajax({
-                url : "/campaign/vendor/getCompaignData",
-                data: {id : campaign},
-                success: function(result){
-                    var data = jQuery.parseJSON(result);
-                    $("#basicModal").find('[data-val="campaign-date-from"]').html(data.date_from);
-                    $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
-
-                    $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
-
-                    $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
-                    $("#basicModal").find('[data-val="campaign-showedit"]').html(data.showedit);
-                }
-            })
-        }
-    }
-})
 </script>

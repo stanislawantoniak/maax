@@ -1,5 +1,5 @@
 <?php
-
+/* @var $_session Zolago_Dropship_Model_Session */
 $_session = Mage::getSingleton('udropship/session');
 $_vendor = $_session->getVendor();
 
@@ -16,6 +16,7 @@ $useUps = $_vendor->getData('use_orbaups');
     <div class="row">
         <div class="col-md-12">
             <form id="vendor_settings_shipping" class="form-horizontal"  method="post" action="/udropship/vendor_settings/shippingPost">
+
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("DHL Settings");?></h4>
@@ -39,7 +40,7 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <?php echo Mage::helper("zolagodropship")->__("DHL account");?>
                                     </label>
                                     <div class="col-md-9">
-                                        <input id="dhl_account" name="dhl_account" value="<?php echo $_vendor->getDhlAccount(); ?>" type="text" class="form-control" size="10">
+                                        <input id="dhl_account" name="dhl_account" value="<?php echo $_vendor->getDhlAccount(); ?>" type="text" class="form-control disable_dhl" size="10">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -47,7 +48,7 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <?php echo Mage::helper("zolagodropship")->__("DHL login");?>
                                     </label>
                                     <div class="col-md-9">
-                                        <input id="dhl_login" name="dhl_login" value="<?php echo $_vendor->getDhlLogin(); ?>" type="text" class="form-control" size="10">
+                                        <input id="dhl_login" name="dhl_login" value="<?php echo $_vendor->getDhlLogin(); ?>" type="text" class="form-control disable_dhl" size="10">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -55,7 +56,7 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <?php echo Mage::helper("zolagodropship")->__("DHL password");?>
                                     </label>
                                     <div class="col-md-9">
-                                        <input id="dhl_password" name="dhl_password" value="<?php echo $_vendor->getDhlPassword(); ?>" type="password" class="form-control" size="10">
+                                        <input id="dhl_password" name="dhl_password" value="<?php echo $_vendor->getDhlPassword(); ?>" type="password" class="form-control disable_dhl" size="10">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -74,11 +75,126 @@ $useUps = $_vendor->getData('use_orbaups');
                                         <input id="dhl_terminal" name="dhl_terminal" value="<?php echo $_vendor->getDhlTerminal(); ?>" type="text" class="form-control" size="10">
                                     </div>
                                 </div>
-                            </div>
+                                <div class="form-group">
+                                    <label for="dhl_check" class="col-md-3 control-label">
+                                    </label>
+                                    <div class="col-md-9">
+                                        <button type="button" id="dhl_check_button" class="btn btn-primary"><?php echo Mage::helper('zolagodropship')->__("Check DHL Settings");?></button>
+                                        <span id="dhl_check_message"></span>
+                                    </div>
+                                </div>
 
+                                <!--                                DHL Rates-->
+                                <div class="form-group subsection">
+                                    <label class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL Rates"); ?>
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="dhl_insurance_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_insurance_charge_amount" name="dhl_insurance_charge_amount" value="<?php echo $_vendor->getDhlInsuranceChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_insurance_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_insurance_charge_percent" name="dhl_insurance_charge_percent" value="<?php echo $_vendor->getDhlInsuranceChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_cod_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_cod_charge_amount" name="dhl_cod_charge_amount" value="<?php echo $_vendor->getDhlCodChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_cod_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_cod_charge_percent" name="dhl_cod_charge_percent" value="<?php echo $_vendor->getDhlCodChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+
+
+
+<!--                                Shipment charge-->
+                                <div class="form-group subsection">
+                                    <label class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Shipment charge"); ?>
+                                    </label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Envelope"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_envelope" name="dhl_rates_envelope" disabled
+                                               value="<?php echo $_vendor->getDhlRatesEnvelope(); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 0-5kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_0_5" name="dhl_rates_parcel_0_5" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_0_5"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 5-10kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_5_10" name="dhl_rates_parcel_5_10" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_5_10"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 10-20kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_10_20" name="dhl_rates_parcel_10_20" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_10_20"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Parcel 20-31.5kg"); ?>
+                                    </label>
+
+                                    <div class="col-md-3">
+                                        <input id="dhl_rates_parcel_20_31_5" name="dhl_rates_parcel_20_31_5" disabled
+                                               value="<?php echo $_vendor->getData("dhl_rates_parcel_20_31_5"); ?>" type="text"
+                                               class="form-control" size="10">
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="widget box">
                     <div class="widget-header">
@@ -121,6 +237,47 @@ $useUps = $_vendor->getData('use_orbaups');
                                     <input id="orbaups_password" name="orbaups_password" value="<?php echo $_vendor->getOrbaupsPassword(); ?>" type="password" class="form-control" size="10">
                                 </div>
                             </div>
+
+                            <!--                                UPS Rates-->
+                            <div class="form-group subsection">
+                                <label class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS Rates"); ?>
+                                </label>
+                            </div>
+
+                                <div class="form-group">
+                                    <label for="orbaups_insurance_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_insurance_charge_amount" name="orbaups_insurance_charge_amount" value="<?php echo $_vendor->getOrbaupsInsuranceChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orbaups_insurance_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Insurance charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_insurance_charge_percent" name="orbaups_insurance_charge_percent" value="<?php echo $_vendor->getOrbaupsInsuranceChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orbaups_cod_charge_amount" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge amount");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_cod_charge_amount" name="orbaups_cod_charge_amount" value="<?php echo $_vendor->getOrbaupsCodChargeAmount(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="orbaups_cod_charge_percent" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("COD charge percent");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="orbaups_cod_charge_percent" name="orbaups_cod_charge_percent" value="<?php echo $_vendor->getOrbaupsCodChargePercent(); ?>" type="text" class="form-control" size="10" disabled>
+                                    </div>
+                                </div>
+
                         </div>
 
                     </div>
@@ -142,11 +299,22 @@ $useUps = $_vendor->getData('use_orbaups');
     jQuery(function ($) {
         var dhlRma = jQuery('#use_dhl');
         var upsRma = jQuery('#use_orbaups');
+        var reset = jQuery('#filter_reset');
 
         showOptions(dhlRma.val(), jQuery(".use_dhl_options"));
         showOptions(upsRma.val(), jQuery(".use_orbaups_options"));
+        
+        Dhl.init('/udropship/vendor_settings/check_dhl');
 
-
+        jQuery('.disable_dhl').change(function() {
+            Dhl.setInfo('orange','<?php echo Mage::helper('orbashipping')->__('Please save changed settings.')?>');
+            Dhl.disable();
+        });
+        reset.click(function() {
+            Dhl.setInfo('green',''); 
+            Dhl.enable();
+            return true;
+        });
         dhlRma.change(function () {
             var valueDhl = $(this).val();
             showOptions(valueDhl, jQuery(".use_dhl_options"));
@@ -155,7 +323,7 @@ $useUps = $_vendor->getData('use_orbaups');
             var valueUps = $(this).val();
             showOptions(valueUps, jQuery(".use_orbaups_options"));
         })
-
+        
         function showOptions(value, options) {
             if (value == 1) {
                 options.show();

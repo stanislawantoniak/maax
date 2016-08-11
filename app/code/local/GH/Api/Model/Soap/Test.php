@@ -50,7 +50,12 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
         return $obj;
     }
 
-
+    public function updateProductsPricesStocks($params) {
+        $this->_begin();
+        $obj = parent::updateProductsPricesStocks($params);
+        $this->_rollback();
+        return $obj;
+    }
 
     /**
      * Show PO for given increment id (or ids)
@@ -98,6 +103,20 @@ class GH_Api_Model_Soap_Test extends GH_Api_Model_Soap {
 		$this->_rollback();
 		return $obj;
 	}
+
+    /**
+     * Method to export all attributes sets (with create products = yes)
+     * Export id and name
+     *
+     * @param $getCategoriesParameters
+     * @return StdClass
+     */
+    public function getCategories($getCategoriesParameters) {
+        $this->_begin();
+        $obj = parent::getCategories($getCategoriesParameters);
+        $this->_rollback();
+        return $obj;
+    }
 
     /**
      * @return GH_Api_Model_Message

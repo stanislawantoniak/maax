@@ -83,7 +83,7 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
 
-    function secureInvisibleContent( $text )
+    static function secureInvisibleContent( $text )
     {
         $text = preg_replace(
             array(
@@ -105,5 +105,76 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
         return $text;
     }
 
+    /**
+     * Clean product name:
+     * - replace multiple space with single one
+     * - trim
+     * - escape html
+     *
+     * @param $text
+     * @return string
+     */
+    public static function cleanProductName($text) {
+        $text = preg_replace('/ +/', ' ', $text);
+        $text = trim($text);
+        $text = Mage::helper('core')->escapeHtml($text);
+        return $text;
+    }
 
+    /**
+     * return shorted to $n letters escaped name of product for visual purpose
+     *
+     * @param $name
+     * @param $n
+     * @return mixed|string
+     */
+    public function getShortProductName($name, $n, $length = 50) {
+        $productName = $this->escapeHtml($name);
+
+        if (strlen($productName) > $length) {
+            $productName = substr($productName, 0, $n) . '...';
+        }
+        return $productName;
+    }
+
+    /**
+     * prepare move up url for category including landing page context
+     * @param Mage_Catalog_Model_Category $category
+     * @return string
+     */
+     public function getMoveUpUrl($category) {
+        $parentCategoryPath = Mage::getUrl('/');;
+        $currentCategory = $category;
+        if ($vendor = Mage::helper('umicrosite')->getCurrentVendor()) {            
+            $rootCategory = $vendor->getRootCategory();
+        } else {
+            $rootCategory = Mage::app()->getStore()->getRootCategoryId();        
+        }
+        if (!empty($currentCategory)) {
+            $campaign = $currentCategory->getCurrentCampaign();
+            if ($campaign && ($campaign->getLandingPageCategory() == $category->getId())) {
+                if ($currentCategory->getId() != $rootCategory) {
+                    $parentCategoryPath = $category->getUrlContext(false,false); // the same category without campaign
+                }
+            } else {
+                if($currentCategory->getId() != $rootCategory) {
+                    $currentCategoryParent = $currentCategory->getParentCategory();  
+                    $parentCategoryPath = $currentCategoryParent->getUrlContext(false);                  
+                }
+            }
+        }
+        return $parentCategoryPath;
+     }
+
+	/**
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @return float
+	 */
+	public function getAutomaticStrikeoutPricePercent(Zolago_Dropship_Model_Vendor $vendor) {
+		$percent = $vPercent = $vendor->getAutomaticStrikeoutPricePercent();
+		if (empty($vPercent)) {
+			$percent = Mage::getStoreConfig('catalog/price/automatic_strikeout_price_percent');
+		}
+		return (float)str_replace(",", ".", $percent);
+	}
 }

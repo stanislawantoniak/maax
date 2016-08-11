@@ -1,6 +1,8 @@
 /* FOOTER */
- #footer {
-    background-color: #000000;
+#footer {
+    .benefits {
+        margin-bottom: 35px;
+    }
 }
 .footer-black {
     background-color: #000000;
@@ -78,6 +80,7 @@
     background-color: #2e2e2e;
     border-top: 1px solid #242424;
     line-height: 36px;
+    min-height: 57px;
     a {
         color:#828282;
     }

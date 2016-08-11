@@ -13,6 +13,15 @@ if(!empty($rewriteData)){
         $categoryWithFiltersTitle = $rewriteData["listing_title"];
     }
 }
+$category = $this->getCurrentCategory();
+
+/* @var $campaign Zolago_Campaign_Model_Campaign */
+$campaign = $category->getCurrentCampaign();
+$campaignActiveFilterLabel = $campaign ? $campaign->getActiveFilterLabel() : "";
+
+/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
+$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
 
 ?>
 <?php if(!$this->isContentMode()): ?>
@@ -25,25 +34,34 @@ if(!empty($rewriteData)){
                         <dl class="clearfix" >
                             <dt><?php echo $filterLabel; ?></dt>
                             <dd>
-                                <?php foreach ($filterQuery as $key => $values): ?>
+                                <?php foreach ($filterQuery as $key => $values):?>
                                     <?php foreach ($values as $v): ?>
                                         <?php if($key != 'category_id'): ?>
                                             <?php $face_key = substr($key, 0, strrpos($key, '_')) ?>
                                             <?php
                                             $selectedFacetValue = $v;
-                                            if($face_key == 'price') {
+                                            if ($face_key == 'price') {
                                                 $selectedFacetValue = $this->formatFacetPrice($v);
+                                            } elseif (in_array($face_key, array(Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_ID_CODE, Zolago_Campaign_Model_Campaign::ZOLAGO_CAMPAIGN_INFO_CODE))) {
+                                                $selectedFacetValue = ($campaign) ? $campaign->getNameCustomer() : "";
+
+                                                if (!empty($campaignActiveFilterLabel))
+                                                    $selectedFacetValue = $campaignActiveFilterLabel;
                                             }
                                             ?>
                                             <span class="label">
-                                                <?php echo $this->__($this->getFacetLabel($key)); ?>:
+                                                <?php if (!in_array($key, array("campaign_info_id_facet", "campaign_regular_id_facet"))
+                                                || empty($campaignActiveFilterLabel)
+                                                ): ?>
+                                                    <?php echo $this->__($this->getFacetLabel($key)); ?>:
+                                                <?php endif; ?>
                                                 <span class="value">
                                                     <?php echo $this->facetFormat($selectedFacetValue) ?>
                                                 </span>
 												<span>
-													<a href="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
+													<a  href="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
 													   class="fa fa-times active-filter-label"
-													   data-input="<?php echo $this->getItemId($face_key, $v)?>"></a>
+                                                        data-input="<?php echo $this->getItemId($face_key, $v)?>"></a>
 												</span>
                                             </span>
 

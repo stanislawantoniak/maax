@@ -140,7 +140,11 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
                 Mage::helper("zolagocustomer")->__("You have been logged in")
             );
 
-            if ($this->getRequest()->getParams('is_checkout') == 0) {
+	        if($this->getRequest()->getPost('redirect') === 'mypromotions') {
+		        $this->_redirect("mypromotions");
+	        } elseif(strpos($_SERVER['HTTP_REFERER'],'mypromotions') !== false) {
+		        $this->_redirectReferer();
+	        } elseif ($this->getRequest()->getParams('is_checkout') == 0) {
                 $this->_redirect("customer/account");
             }
 
@@ -188,7 +192,38 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             $customer = $this->_getSession()->getCustomer();
             $origEmail = trim($customer->getEmail());
             $postEmail = trim($this->getRequest()->getParam('email'));
-            
+
+	        $postFirstname = $this->getRequest()->getParam('firstname');
+	        if($postFirstname !== null) {
+		        $postFirstname = trim($postFirstname);
+	        }
+
+	        $postLastname = $this->getRequest()->getParam('lastname');
+	        if($postLastname !== null) {
+		        $postLastname = trim($postLastname);
+	        }
+
+	        $postPhone = trim($this->getRequest()->getParam('phone'));
+			$postErrors = false;
+
+			if (($postFirstname === "" && $customer->getFirstname()) || ($postLastname === "" && $customer->getLastname())) {
+				$this->_getSession()->addError(
+					Mage::helper("zolagocustomer")->__("You cannot remove your firstname and lastname")
+				);
+				$postErrors = true;
+			}
+
+	        if($postPhone === "" && $customer->getPhone()) {
+		        $this->_getSession()->addError(
+			        Mage::helper("zolagocustomer")->__("You cannot remove your phone")
+		        );
+		        $postErrors = true;
+	        }
+
+	        if($postErrors) {
+		        return $this->_redirect('*/*/edit');
+	        }
+
             if(empty($postEmail)){
                 $postEmail = $origEmail;
                 $this->getRequest()->setParam("email", $origEmail);
@@ -226,6 +261,48 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         parent::editPostAction();
 	    return $this->_redirectReferer();
     }
+
+	/**
+	 * Success Registration
+	 *
+	 * @param Mage_Customer_Model_Customer $customer
+	 * @return Mage_Customer_AccountController
+	 */
+	protected function _successProcessRegistration(Mage_Customer_Model_Customer $customer)
+	{
+		$session = $this->_getSession();
+		if ($customer->isConfirmationRequired()) {
+			/** @var $app Mage_Core_Model_App */
+			$app = $this->_getApp();
+			/** @var $store  Mage_Core_Model_Store*/
+			$store = $app->getStore();
+			$customer->sendNewAccountEmail(
+				'confirmation',
+				$session->getBeforeAuthUrl(),
+				$store->getId()
+			);
+			$customerHelper = $this->_getHelper('customer');
+			$session->addSuccess($this->__('Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%s">click here</a>.',
+				$customerHelper->getEmailConfirmationUrl($customer->getEmail())));
+			$url = $this->_getUrl('*/*/index', array('_secure' => true));
+		} else {
+			$session->setCustomerAsLoggedIn($customer);
+			$session->renewSession();
+			$url = $this->_welcomeCustomer($customer);
+
+			if (Mage::helper("zolagonewsletter")->isModuleActive()) {
+				$model = Mage::getModel('zolagonewsletter/inviter');
+				if ($customer->getData("is_subscribed") == 0) {
+					// send invitation mail, model takes care of handling everything
+					$model->sendInvitationEmail($customer->getEmail());
+
+				}
+			}
+
+		}
+		$this->_redirectSuccess($url);
+		return $this;
+	}
 
 	public function editPassAction() {
 		if (!$this->_validateFormKey()) {
@@ -460,12 +537,31 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$errors = $this->_getCustomerErrors($data);
 			if (empty($errors)) {
 				unset($data['agreement']);
+                $data['is_subscribed'] = isset($data['is_subscribed']) ? 1 : 0;
 				$customer->setData($data);
 				/* needed for proper newsletter handling */
+                /* needed for proper salesmanago cart sync */
 				$customer->setIsJustRegistered(true);
 				$customer->save();
 				$this->_dispatchRegisterSuccess($customer);
 				$this->_successProcessRegistration($customer);
+
+				if($data['is_subscribed']) { //new customer, must confirm newsletter
+					if($this->getRequest()->getParam('referrer') == 'about') {
+						//register made from about us site
+						$msg = "Thank you for subscribing to our mailing list. In order to get our newsletter and receive coupon codes you have to confirm your e-mail.<br />Confirm your e-mail by clicking link in message that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation. You will also get your coupon codes.";
+					} else {
+						//normal register
+						$msg = "Your subscribtion has been saved.<br />To start receiving our newsletter you have to confirm your e-mail by clicking confirmation link in e-mail that we have just sent to you.<br />Newsletter setting in your account will be changed after e-mail confirmation.";
+					}
+					$session->addSuccess(Mage::helper('zolagonewsletter')->__($msg));
+				}
+
+				if(strpos($this->_getRefererUrl(),'mypromotions') != -1) {
+					$this->_redirectReferer();
+				} elseif($this->getRequest()->getParam('redirect') == 'mypromotions') {
+					$this->_redirect('mypromotions');
+				}
 				return;
 			} else {
 				$this->_addSessionError($errors);
@@ -484,8 +580,12 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$session->setCustomerFormData($this->getRequest()->getPost())
 				->addException($e, $this->__('Cannot save the customer.'));
 		}
-		$errUrl = $this->_getUrl('*/*/create', array('_secure' => true));
-		$this->_redirectError($errUrl);
+		if(strpos($this->_getRefererUrl(),'mypromotions') != -1 || $this->getRequest()->getParam('redirect') == 'mypromotions') {
+			$this->_redirectReferer();
+		} else {
+			$errUrl = $this->_getUrl('*/*/create', array('_secure' => true));
+			$this->_redirectError($errUrl);
+		}
 	}
 
 	/**

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_OmniChannelMicrosite>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Cms />
+                <ZolagoOs_OmniChannel />
+            </depends>
+        </ZolagoOs_OmniChannelMicrosite>
+        <ZolagoOs_OmniChannelMultiPrice>
+            <depends>
+                <ZolagoOs_OmniChannelMicrosite />
+            </depends>
+        </ZolagoOs_OmniChannelMultiPrice>
+    </modules>
+</config>

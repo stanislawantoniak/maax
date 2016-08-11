@@ -427,12 +427,21 @@ h2, h4, h5 {
 	    height:18px;
 	    background:$color-accent;
 	    position:absolute;
-	    left:0px;
-	    top:0px;
-		  @media(max-width: 360px) {
-			  left: 5px;
-		  }
+	    left:0;
+	    top:0;
+		@media(max-width: 360px) {
+			left: 5px;
+		}
 	  }
+	}
+}
+body.catalog-product-view {
+	h2,h4,h5 {
+		&.title_section:before {
+			@media(max-width: 360px) {
+				left: 0;
+			}
+		}
 	}
 }
 div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
@@ -480,7 +489,7 @@ p,.m {
 form {
 	.col-50{
 		width:48%;
-		
+
 		float:left;
 		&+.col-50{
 		margin:0 0 0 4%;
@@ -497,7 +506,7 @@ form {
 			&.form-ico-checked {
 					position:absolute;
 					background:$allMap;
-					@include sprite($allMap, form-ico-checked);	
+					@include sprite($allMap, form-ico-checked);
 					@include sprite-dimensions($allMap, form-ico-checked);
 					top:8px!important;
 					right:-27px!important;
@@ -505,7 +514,7 @@ form {
 			&.form-ico-times {
 					position:absolute;
 					background:$allMap;
-					@include sprite($allMap, form-ico-times);	
+					@include sprite($allMap, form-ico-times);
 					@include sprite-dimensions($allMap,form-ico-times);
 					top:8px!important;
 					right:-24px!important;
@@ -521,7 +530,7 @@ form {
 	.has-warning {
 		i.fa {
 			position:absolute;
-			
+
 			right:-5%;
 			color:$color-accent;
 		}
@@ -548,7 +557,7 @@ form {
 				height:0px;
 			}
 		}
-		
+
 		[type="text"],
 		[type="email"],
 		[type="password"] {
@@ -573,7 +582,7 @@ form {
 			height:42px;
 			outline:none!important;
 		}
-		
+
 		.firstName 	{max-width: 296px;}
 		.lastName 	{max-width: 296px;}
 		.firm 		{max-width: 415px;}
@@ -584,8 +593,8 @@ form {
 		.email 		{max-width: 296px;}
 		.password 	{max-width: 235px;}
 		.nip 		{max-width: 115px}
-		
-		
+
+
 
 		input:disabled {
 			border-color:#d9d9d9;
@@ -619,7 +628,7 @@ form {
 			input[type=radio].css-radio + label.css-label,
 			 {
 				padding-left:23px;
-				height:17px; 
+				height:17px;
 				display:inline-block;
 				line-height:17px;
 				background-repeat:no-repeat;
@@ -632,7 +641,7 @@ form {
 
 			}
 			label.css-label {
-			
+
 			-webkit-touch-callout: none;
 			-webkit-user-select: none;
 			-khtml-user-select: none;
@@ -668,7 +677,7 @@ form {
 				@include sprite($checkboxMap, checkbox-d);
 				color:#bcbcbc;
 			}
-			input[type=radio].css-radio:disabled + label.css-label { 
+			input[type=radio].css-radio:disabled + label.css-label {
 				@include sprite($radioMap, radio-h);
 				color:#bcbcbc;
 			}
@@ -680,13 +689,13 @@ form {
 				@include sprite($radioMap, radio-h-d);
 				color:#bcbcbc;
 			}
-			
-		
-		
+
+
+
 		.action {
 			padding:10px;
 		}
-		
+
 		.topHint {
 			background:#f0f0f0;
 			height:29px;
@@ -732,7 +741,7 @@ form {
 	    input[type=checkbox].css-checkbox + label.css-label,
 	    input[type=radio].css-radio + label.css-label {
 	        padding-left:20px;
-	        height:17px; 
+	        height:17px;
 	        display:inline-block;
 	        line-height:17px;
 	        background:$btnCheck;
@@ -754,9 +763,9 @@ form {
 	          font-size:12px;
 	        }
 	    }
-	
+
 	    input[type=checkbox].css-checkbox + label.css-label {
-	         @include sprite($btnCheck, check);	
+	         @include sprite($btnCheck, check);
 
 	    }
 	    input[type=radio].css-radio + label.css-label {
@@ -787,7 +796,7 @@ form {
 	display:inline-block;
 	//background:url('../images/arrow-menu-mobile-r.png');
 	background:$allMap;
-	@include sprite($allMap, arrow-menu-mobile-r);	
+	@include sprite($allMap, arrow-menu-mobile-r);
 	@include sprite-dimensions($allMap, arrow-menu-mobile-r);
 }
 .btn {
@@ -802,7 +811,7 @@ form {
 	text-align:center;
 	border:none;
 	&.addBasket {
-	  display:inline-block;	
+	  display:inline-block;
 	  height:42px;
 	  line-height: 42px;
 	  font-size: 12px;
@@ -821,7 +830,7 @@ form {
 	  		content:' ';
 	  		display:block;
 	  		background:$allMap;
-			@include sprite($allMap, ico_basket_btn);	
+			@include sprite($allMap, ico_basket_btn);
 			@include sprite-dimensions($allMap, ico_basket_btn);
 			float:left;
 			margin-top: 8px;
@@ -840,10 +849,10 @@ form {
 		position:relative;
 		top:-1px;
 	  }
-	  
+
 	}
 	&.clearAll {
-		background:#fff;	
+		background:#fff;
 		display:inline-block;
 		height:26px;
 		line-height: 25px;
@@ -852,7 +861,7 @@ form {
 		color:$gray-dark;
 		text-transform: uppercase;
 		font-size:12px;
-		@media (max-width: $screen-sm-min) { 
+		@media (max-width: $screen-sm-min) {
 			height:23px;line-height: 20px;
 		 }
 		&:hover {
@@ -942,7 +951,7 @@ form {
 			border-color:#c6a662;
 			box-shadow: none;
 			outline:none;
-			
+
 		}
 	}
 }
@@ -960,17 +969,17 @@ form {
 	.fa-arrow-btn-right {
 		background:$allMap;
 		@include inline-block;
-		@include sprite($allMap, arrow-btn-continue-shopping-link);	
+		@include sprite($allMap, arrow-btn-continue-shopping-link);
 		@include sprite-dimensions($allMap, arrow-btn-continue-shopping-link);
 		position:absolute;
 		right:5px;
-		top:5px;		
+		top:5px;
 	}
 	&:hover {
 		background:#000;
 		color:#fff;
-		.fa-arrow-btn-right {		
-			@include sprite($allMap, arrow-btn-continue-shopping-hover);			
+		.fa-arrow-btn-right {
+			@include sprite($allMap, arrow-btn-continue-shopping-hover);
 		}
 	}
 	&:active,
@@ -979,11 +988,11 @@ form {
 		background:#fff;
 		outline:none;
 		color:#c6a662;
-		.fa-arrow-btn-right {		
-			@include sprite($allMap, arrow-btn-continue-shopping-active);			
+		.fa-arrow-btn-right {
+			@include sprite($allMap, arrow-btn-continue-shopping-active);
 		}
 	}
-	
+
 }
 
 .ico {
@@ -991,11 +1000,11 @@ form {
 	position: relative;
 	float:left;
 	top:50%;
-		
+
 	&.ico_note {
 		@include inline-block;
 		background:$allMap;
-		@include sprite($allMap, ico_note);	
+		@include sprite($allMap, ico_note);
 		@include sprite-dimensions($allMap, ico_note);
 		margin-top: -(image-height(sprite-file($allMap, ico_note)) / 2) ;
 		line-height:  image-height(sprite-file($allMap, ico_note));
@@ -1005,7 +1014,7 @@ form {
 .view_lupa {
 	@include inline-block;
 	background:$allMap;
-	@include sprite($allMap, view_lupa);	
+	@include sprite($allMap, view_lupa);
 	@include sprite-dimensions($allMap, view_lupa);
 }
 
@@ -1025,11 +1034,11 @@ form {
 
 
 a.view_basket {
-    float: right;   
+    float: right;
     width:140px !important;
     height:28px;
     display:block;
-    line-height: 28px ;	
+    line-height: 28px ;
     margin-top: 14px ;
     font-weight: bold;
     margin-right: 14px;
@@ -1080,7 +1089,7 @@ a.view_basket {
 .bullet-plusik {
 	@include inline-block;
 	background:$allMap;
-	@include sprite($allMap, plusik);	
+	@include sprite($allMap, plusik);
 	@include sprite-dimensions($allMap, plusik);
 	position:absolute;
 	margin-top:-(image-height(sprite-file($allMap, plusik)) / 2) ;
@@ -1091,7 +1100,7 @@ a.view_basket {
 .bullet-strzalka-down {
 	@include inline-block;
 	background:$allMap;
-	@include sprite($allMap, strzalka_down);	
+	@include sprite($allMap, strzalka_down);
 	@include sprite-dimensions($allMap, strzalka_down);
 	position:absolute;
 	margin-top:-(image-height(sprite-file($allMap, strzalka_down)) / 2) ;
@@ -1101,7 +1110,7 @@ a.view_basket {
 .bullet-strzalka-up {
 	@include inline-block;
 	background:$allMap;
-	@include sprite($allMap, strzalka_up);	
+	@include sprite($allMap, strzalka_up);
 	@include sprite-dimensions($allMap, strzalka_up);
 	position:absolute;
 	margin-top:-(image-height(sprite-file($allMap, strzalka_up)) / 2) ;
@@ -1154,7 +1163,7 @@ a.view_basket {
 	}
 }
 
-// 
+//
 .recommend,
 .icons-checked {
 	position:relative;
@@ -1211,24 +1220,24 @@ a.view_basket {
 			}
 		}
 	}
-} 
+}
 
 // Icon
 
 .fa-delete-coupon {
 	background:$allMap;
     @include inline-block;
-    @include sprite($allMap, remove-coupon);	
+    @include sprite($allMap, remove-coupon);
 	@include sprite-dimensions($allMap, remove-coupon);
 }
 
 .fa-remove {
 	background:$allMap;
     @include inline-block;
-    @include sprite($allMap, remove-table-item);	
+    @include sprite($allMap, remove-table-item);
 	@include sprite-dimensions($allMap, remove-table-item);
 		@media (max-width: $screen-xs-max) {
-			@include sprite($allMap, remove-table-item-mobile);	
+			@include sprite($allMap, remove-table-item-mobile);
 			@include sprite-dimensions($allMap, remove-table-item-mobile);
 		}
 }
@@ -1239,6 +1248,23 @@ a {
 	}
 }
 
+.fa {
+	&.fa-1_1x {
+		font-size: 1.1em;
+	}
+	&.fa-1_2x {
+		font-size: 1.2em;
+	}
+	&.fa-1_3x {
+		font-size: 1.3em;
+	}
+	&.fa-1_4x {
+		font-size: 1.4em;
+	}
+	&.fa-1_5x {
+		font-size: 1.5em;
+	}
+}
 
 [class^=ico_] {
     background:$allMap;
@@ -1247,39 +1273,39 @@ a {
 		background:$allMap;
 	}
     &.ico_basket {
-        @include sprite($allMap, ico_basket);	
+        @include sprite($allMap, ico_basket);
 		@include sprite-dimensions($allMap, ico_basket);
 		 @include max-screen($screen-sm-max) {
-			@include sprite($allMap, m_ico_basket);	
+			@include sprite($allMap, m_ico_basket);
 			@include sprite-dimensions($allMap, m_ico_basket);
 		}
     }
     &.ico_favorites {
-        @include sprite($allMap, ico_favorites);	
+        @include sprite($allMap, ico_favorites);
 		@include sprite-dimensions($allMap, ico_favorites);
 		 @include max-screen($screen-sm-max) {
-			@include sprite($allMap, m_ico_favorites);	
+			@include sprite($allMap, m_ico_favorites);
 			@include sprite-dimensions($allMap, m_ico_favorites);
 		}
     }
     &.ico_your_account {
-        @include sprite($allMap, ico_your_account);	
+        @include sprite($allMap, ico_your_account);
 		@include sprite-dimensions($allMap, ico_your_account);
-		
+
     }
     &.ico_menu {
-        @include sprite($allMap, ico_menu);	
+        @include sprite($allMap, ico_menu);
 		@include sprite-dimensions($allMap, ico_menu);
 	    @include max-screen($screen-sm-max) {
-			@include sprite($allMap, m_ico_menu);	
+			@include sprite($allMap, m_ico_menu);
 			@include sprite-dimensions($allMap, m_ico_menu);
 		}
     }
     &.ico_search_mobile {
-        @include sprite($allMap, search_ico_mobile);	
+        @include sprite($allMap, search_ico_mobile);
 		@include sprite-dimensions($allMap, search_ico_mobile);
 		 @include max-screen($screen-sm-max) {
-			@include sprite($allMap, m_search_ico_mobile);	
+			@include sprite($allMap, m_search_ico_mobile);
 			@include sprite-dimensions($allMap, m_search_ico_mobile);
 			top: -2px;
 			position: relative;
@@ -1316,34 +1342,34 @@ a {
 	background:$allMap;
     @include inline-block;
     &.fb {
-	    @include sprite($allMap, follow_us_fb);	
+	    @include sprite($allMap, follow_us_fb);
 		@include sprite-dimensions($allMap, follow_us_fb);
 		&:hover {
-			    @include sprite($allMap, follow_us_fb-h);	
+			    @include sprite($allMap, follow_us_fb-h);
 				@include sprite-dimensions($allMap, follow_us_fb-h);
 		}
     }
     &.twitter {
-	    @include sprite($allMap, follow_us_twetter);	
+	    @include sprite($allMap, follow_us_twetter);
 		@include sprite-dimensions($allMap, follow_us_twetter);
 		&:hover {
-			    @include sprite($allMap, follow_us_twetter-h);	
+			    @include sprite($allMap, follow_us_twetter-h);
 				@include sprite-dimensions($allMap, follow_us_twetter-h);
 		}
     }
     &.pinterest {
-	    @include sprite($allMap, follow_us_pinterest);	
+	    @include sprite($allMap, follow_us_pinterest);
 		@include sprite-dimensions($allMap, follow_us_pinterest);
 		&:hover {
-			    @include sprite($allMap, follow_us_pinterest-h);	
+			    @include sprite($allMap, follow_us_pinterest-h);
 				@include sprite-dimensions($allMap, follow_us_pinterest-h);
 		}
     }
     &.gplus {
-	    @include sprite($allMap, follow_us_gplus);	
+	    @include sprite($allMap, follow_us_gplus);
 		@include sprite-dimensions($allMap, follow_us_gplus);
 		&:hover {
-			    @include sprite($allMap, follow_us_gplus-h);	
+			    @include sprite($allMap, follow_us_gplus-h);
 				@include sprite-dimensions($allMap, follow_us_gplus-h);
 		}
     }
@@ -1381,7 +1407,7 @@ figure {
 			height:auto;
 		}
 	}
-	
+
 }
 
 
@@ -1396,30 +1422,32 @@ figure {
 		border-radius: 0px;
 		background:$allMap;
 		border:none;
+		cursor: pointer;
 		&.small {
 			font-size: 13.33px;
 			color:#545151;
-			padding-left:52px;
+			padding-left:36px;
 			text-transform: none;
 			line-height: image-height(sprite-file($allMap, google-small-l));
+			text-align: center;
 			&.g-plus {
-				@include sprite($allMap, google-small-l);	
+				@include sprite($allMap, google-small-l);
 				@include sprite-dimensions($allMap, google-small-l);
 				&:hover {
-					@include sprite($allMap, google-small-h);	
+					@include sprite($allMap, google-small-h);
 				}
 				&:active {
-					@include sprite($allMap, google-small-a);	
+					@include sprite($allMap, google-small-a);
 				}
 			}
 			&.fb {
-				@include sprite($allMap, fb-small-l);	
+				@include sprite($allMap, fb-small-l);
 				@include sprite-dimensions($allMap, fb-small-l);
 				&:hover {
-					@include sprite($allMap, fb-small-h);	
+					@include sprite($allMap, fb-small-h);
 				}
 				&:active {
-					@include sprite($allMap, fb-small-a);	
+					@include sprite($allMap, fb-small-a);
 				}
 			}
 		}
@@ -1430,23 +1458,23 @@ figure {
 			text-transform: none;
 			line-height: image-height(sprite-file($allMap, google-medium-l));
 			&.g-plus {
-				@include sprite($allMap, google-medium-l);	
+				@include sprite($allMap, google-medium-l);
 				@include sprite-dimensions($allMap, google-medium-l);
 				&:hover {
-					@include sprite($allMap, google-medium-h);	
+					@include sprite($allMap, google-medium-h);
 				}
 				&:active {
-					@include sprite($allMap, google-medium-a);	
+					@include sprite($allMap, google-medium-a);
 				}
 			}
 			&.fb {
-				@include sprite($allMap, fb-medium-l);	
+				@include sprite($allMap, fb-medium-l);
 				@include sprite-dimensions($allMap, fb-medium-l);
 				&:hover {
-					@include sprite($allMap, fb-medium-h);	
+					@include sprite($allMap, fb-medium-h);
 				}
 				&:active {
-					@include sprite($allMap, fb-medium-a);	
+					@include sprite($allMap, fb-medium-a);
 				}
 			}
 
@@ -1457,7 +1485,7 @@ figure {
 		color:#fff;
 		font-weight: bold;
 		font-family: $fontRegular;
-		
+
 		text-align: center;
 		background: #c6a662; /* Old browsers */
 		/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -1586,11 +1614,15 @@ figure {
 	}
 }
 
+.social-button + .social-button {
+	margin-left: 10px;
+}
+
 .select-group {
 	position:relative;
 	display:inline-block;
 	.button-select {
-		display:inline-block;	
+		display:inline-block;
 		border:1px solid $gray;
 		position:relative;
 		background: #fff;
@@ -1601,30 +1633,30 @@ figure {
 			height:27px;
 			width:29px;
 			display:inline-block;
-			position:absolute; 
+			position:absolute;
 			right:0px;
 			top:0px;
 			background:$selectMap;
-			
+
 			text-indent: -999em;
 		}
 		&:hover {
 			border-color:#000;
 			.caret {
 				@include sprite($selectMap, select_styled_hover);
-			}	
+			}
 		}
 		&.disabled {
 			background: #f5f5f5;
 			border-color:$gray-light;
 			.caret {
 				@include sprite($selectMap, select_styled_disabled);
-			}	
+			}
 		}
 		&+ .dropdown-select {
 			display:none;
 			position:absolute;
-			
+
 			left:0px;
 			width:100%;
 			border:1px solid $gray;
@@ -1668,7 +1700,7 @@ figure {
 			.down {
 				height:27px;
 				width:29px;
-				@include sprite($selectMap, select_styled);	
+				@include sprite($selectMap, select_styled);
 				@include sprite-dimensions($selectMap, select_styled);
 			}
 			&+ .dropdown-select {
@@ -1693,7 +1725,7 @@ figure {
 			.down {
 				height:20px;
 				width:22px;
-				@include sprite($selectMap, select-small);	
+				@include sprite($selectMap, select-small);
 				@include sprite-dimensions($selectMap, select-small);
 			}
 			&+ .dropdown-select {
@@ -1701,14 +1733,14 @@ figure {
 				border-color:#dad8d8;
 				border-top:none;
 			}
-			
+
 		}
 		li {
 			a {
 				font-size: 10px;
 				font-family: 'OpenSansRegular'!important;
 			}
-			
+
 		}
 	}
 }

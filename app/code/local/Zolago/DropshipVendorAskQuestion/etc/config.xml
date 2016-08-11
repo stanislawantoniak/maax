@@ -2,20 +2,21 @@
 <config>
     <modules>
         <Zolago_DropshipVendorAskQuestion>
-            <version>0.0.5</version>
+            <version>0.0.7</version>
         </Zolago_DropshipVendorAskQuestion>
     </modules>
-	<global>
-		<blocks>
-			<zolagoudqa>
-				<class>Zolago_DropshipVendorAskQuestion_Block</class>
-			</zolagoudqa>
-			<udqa>
-			    <rewrite>
-			        <product_question>Zolago_DropshipVendorAskQuestion_Block_Product_Question</product_question>
-			    </rewrite>
-			</udqa>
-		</blocks>
+    <global>
+        <blocks>
+            <zolagoudqa>
+                <class>Zolago_DropshipVendorAskQuestion_Block</class>
+            </zolagoudqa>
+            <udqa>
+                <rewrite>
+                    <product_question>Zolago_DropshipVendorAskQuestion_Block_Product_Question</product_question>
+                    <adminhtml_question_grid>Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid</adminhtml_question_grid>
+                </rewrite>
+            </udqa>
+        </blocks>
         <models>
             <udqa>
                 <rewrite>
@@ -55,32 +56,32 @@
             <zolagoudqa>
                 <class>Zolago_DropshipVendorAskQuestion_Helper</class>
             </zolagoudqa>
-			<udqa>
-				<rewrite>
-					<data>Zolago_DropshipVendorAskQuestion_Helper_Data</data>
-				</rewrite>
-			</udqa>
+            <udqa>
+                <rewrite>
+                    <data>Zolago_DropshipVendorAskQuestion_Helper_Data</data>
+                </rewrite>
+            </udqa>
         </helpers>
-		<template>
+        <template>
             <email>
-			   <udqa_general_customer_new_question_confirmation translate="label" module="zolagoudqa">
-                   <label>Customer new question confirmation</label>
-                   <file>customer_new_question_confirmation.html</file>
-                   <type>html</type>
-               </udqa_general_customer_new_question_confirmation>
+                <udqa_general_customer_new_question_confirmation translate="label" module="zolagoudqa">
+                    <label>Customer new question confirmation</label>
+                    <file>customer_new_question_confirmation.html</file>
+                    <type>html</type>
+                </udqa_general_customer_new_question_confirmation>
             </email>
         </template>
-	</global>
+    </global>
     <frontend>
-		<routers>
-			<udqa>
-				<args>
-					<modules>
-						<Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">Zolago_DropshipVendorAskQuestion</Zolago_DropshipVendorAskQuestion>
-					</modules>
-				</args>
-			</udqa>
-		</routers>
+        <routers>
+            <udqa>
+                <args>
+                    <modules>
+                        <Zolago_DropshipVendorAskQuestion before="ZolagoOs_OmniChannelVendorAskQuestion">Zolago_DropshipVendorAskQuestion</Zolago_DropshipVendorAskQuestion>
+                    </modules>
+                </args>
+            </udqa>
+        </routers>
         <layout>
             <updates>
                 <zolago_udqa>
@@ -88,33 +89,44 @@
                 </zolago_udqa>
             </updates>
         </layout>
-		<translate>
-			<modules>
-				<Zolago_DropshipVendorAskQuestion>
-					<files>
-						<default>Zolago_DropshipVendorAskQuestion.csv</default>
-					</files>
-				</Zolago_DropshipVendorAskQuestion>
-			</modules>
-		</translate>
+        <translate>
+            <modules>
+                <Zolago_DropshipVendorAskQuestion>
+                    <files>
+                        <default>Zolago_DropshipVendorAskQuestion.csv</default>
+                    </files>
+                </Zolago_DropshipVendorAskQuestion>
+            </modules>
+        </translate>
     </frontend>
-	<adminhtml>
-		<translate>
-			<modules>
-				<Zolago_DropshipVendorAskQuestion>
-					<files>
-						<default>Zolago_DropshipVendorAskQuestion.csv</default>
-					</files>
-				</Zolago_DropshipVendorAskQuestion>
-			</modules>
-		</translate>
-	</adminhtml>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Zolago_DropshipVendorAskQuestion>
+                    <files>
+                        <default>Zolago_DropshipVendorAskQuestion.csv</default>
+                    </files>
+                </Zolago_DropshipVendorAskQuestion>
+            </modules>
+        </translate>
+    </adminhtml>
     <default>
         <udqa>
             <general>
                 <send_vendor_agent_notifications>1</send_vendor_agent_notifications>
-				<customer_new_question_confirmation>udqa_general_customer_new_question_confirmation</customer_new_question_confirmation>
+                <customer_new_question_confirmation>udqa_general_customer_new_question_confirmation</customer_new_question_confirmation>
             </general>
         </udqa>
     </default>
+    <admin>
+        <routers>
+            <zosqaadmin>
+                <args>
+                    <modules>
+                        <Zolago_DropshipVendorAskQuestion before="ZolagoOs_OmniChannelVendorAskQuestion">Zolago_DropshipVendorAskQuestion_Adminhtml</Zolago_DropshipVendorAskQuestion>
+                    </modules>
+                </args>
+            </zosqaadmin>
+        </routers>
+    </admin>
 </config>

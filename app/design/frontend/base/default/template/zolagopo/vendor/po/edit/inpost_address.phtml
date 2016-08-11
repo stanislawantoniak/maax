@@ -1,0 +1,89 @@
+<?php 
+/** @var Zolago_Po_Block_Vendor_Po_Edit_Inpostaddress $this */
+$_hlp = Mage::helper("zolagopo");
+$_po = $this->getPo();
+$_address = $this->getAddress();
+$_type = $this->getType();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocheckout");
+$poId = $_po->getId();
+$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+$lockerName = $_po->getDeliveryPointName();
+$lockerCity = $_po->getInpostLocker()->getTown();
+/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+$udropshipHlp = Mage::helper('udropship');
+?>
+<script type="text/javascript">
+	var inPostPointsData = '<?php echo $inPostPoints; ?>';
+	var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
+	var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
+	var poId = "<?php echo $poId; ?>";
+	var pachkomatLocate = "<?php echo Mage::helper('ghinpost')->__("Locker"); ?>";
+	var lockerCity = "<?php echo $lockerCity; ?>";
+	var lockerName = "<?php echo $lockerName; ?>";
+
+	var Inpost = [];
+	Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
+	Inpost['shipping_map_select_city'] = "<?php echo $_hlp->__("City"); ?>";
+	Inpost['shipping_map_select_locker'] = "<?php echo $_hlp->__("City"); ?>";
+	Inpost['shipping_map_nearest'] = "<?php echo $_hlp->__("City"); ?>";
+	Inpost['shipping_map_show_nearest_link'] = "<?php echo $_modagoHlp->__("show nearest"); ?>";
+	Inpost['shipping_map_hide_nearest_link'] = "<?php echo $_modagoHlp->__("hide nearest"); ?>";
+	Inpost['shipping_map_show_map_link'] = "<?php echo $_modagoHlp->__("show map"); ?>";
+	Inpost['shipping_map_hide_map_link'] = "<?php echo $_modagoHlp->__("hide map"); ?>";
+	Inpost['shipping_map_method_select'] = "<?php echo $_modagoHlp->__("choose"); ?>";
+
+</script>
+
+<div class="modal fade" id="editShippingInpostAddressModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="title_section"><?php echo $_hlp->__("Choose locker"); ?></h4>
+			</div>
+
+			<div class="modal-body" style="min-height: 200px;padding:0;">
+				<div class="col-md-12 main_container" style="padding:0;">
+					<div class="main_container_column">
+						<div class="row clearfix map_filter_container" style="padding: 20px;">
+							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
+								<div class="gui-form-control">
+									<label for="name" class="gui-label"><?php echo $_hlp->__("City"); ?></label>
+									<select name="shipping_select_city" style="width: 100%;"  class="select2">
+										<option value=""><?php echo $_hlp->__("Select City"); ?></option>
+										<?php foreach ($inPostData["filters"] as $city => $value): ?>
+											<option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-6 gui-form-control-wrapper">
+								<div class="gui-form-control">
+									<label for="name" class="gui-label"><?php echo $_hlp->__("Address"); ?></label>
+									<select class="select2" style="width: 100%;"   name="shipping_select_point" data-default="">
+										<option value=""><?php echo $_hlp->__("Choose city first"); ?></option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+						 <div class="row clearfix map_filter_container form-group invoice-data" style="min-height: 100px;margin: 0 20px;">
+							<!--Selected Point here-->
+							<div class="shipping_select_point_data">
+								<div class="row">
+									<div class="col-sm-6 address_data"><?php echo $udropshipHlp->formatCustomerAddressInpost($_po) ?></div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper('zolagocommon')->__("Cancel");?></button>
+							<button disabled="disabled" type="submit" name="choose_inpost" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_hlp->__("Choose");?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

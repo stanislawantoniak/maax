@@ -1,4 +1,8 @@
-<?php /* @var $this Zolago_Catalog_Block_Vendor_Product */ ?>
+<?php
+/* @var $this Zolago_Catalog_Block_Vendor_Product */
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
+?>
 <div class="container">
     <div class="page-header row">
         <div class="col-xs-4 page-title" style="padding-bottom:0;">
@@ -12,22 +16,35 @@
 <?php if($this->getCanShowGrid()):?>
 <div class="container">
     <div class="row">
-		<div class="col-xs-12" style="font-size: 11px; margin-top: -9px;">
+		<div class="col-xs-8" style="font-size: 11px;">
 			<a href="#" data-toggle="modal" data-target="#saveColumnsModal">
 				<i class="icon-table"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Customize columns");?>
+				<?php echo $helper->__("Customize columns");?>
 			</a>
 			&nbsp;
 			<a href="#" data-toggle="modal" data-target="#filtersModal">
 				<i class="icon-filter"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Show more filters");?> 
+				<?php echo $helper->__("Show more filters");?>
 			</a>
 			&nbsp;
 			<a href="#" class="hidden" id="remove-filters">
 				<i class="icon-remove"></i> 
-				<?php echo Mage::helper("zolagocatalog")->__("Remove filters");?> 
+				<?php echo $helper->__("Remove filters");?>
+			</a>
+            &nbsp;
+			<a id="showAttributeRules-trigger" data-toggle="modal" data-target="#showAttributeRules">
+				<i class="icon-puzzle-piece"></i>
+				<?php echo Mage::helper("gh_attributerules")->__("Autofill rules"); ?>
+			</a>
+			&nbsp;
+			<a id="changesHistory-trigger" data-toggle="modal" data-target="#showChangesHistory">
+				<i class="icon-repeat icon-flipped"></i>
+				<?php echo Mage::helper("zolagocatalog")->__("Revert Changes"); ?>
 			</a>
 		</div>
+        <div class="col-xs-4 text-right">
+            <span class="grid-total-text"><?php echo $helper->__("Products: "); ?></span><span class="grid-total-number">0</span>
+        </div>
     </div>
 </div>
 <?php endif;?>
@@ -39,7 +56,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<p class="alert alert-info"><?php echo Mage::helper("zolagocatalog")->__("Choose the category");?></p>
+				<p class="alert alert-info"><?php echo $helper->__("Choose the category");?></p>
 			</div>
 		</div>
 	</div>

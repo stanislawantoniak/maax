@@ -3,7 +3,10 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	//api access data
 	private $login;
 	private $password;
+	private $pin;
+	private $dotpay_id;
 	private $apiUrl;
+	private $store;
 
 	//operation statuses
 	const DOTPAY_OPERATION_STATUS_NEW                               = 'new';                               //nowa
@@ -25,6 +28,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 	//dotpay config paths
 	const DOTPAY_PIN_CONFIG_PATH = "payment/dotpay/pin";
+	const DOTPAY_ID_CONFIG_PATH = "payment/dotpay/id";
 	const DOTPAY_CANCEL_TIME_CONFIG_PATH = "payment/dotpay/cancel_time"; //time in minutes
 	const DOTPAY_API_URL_CONFIG_PATH = "payment/dotpay/api_url";
 	const DOTPAY_LOGIN_CONFIG_PATH = "payment/dotpay/login";
@@ -39,6 +43,28 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 	//payment method database name
 	const PAYMENT_METHOD = 'dotpay';
+
+	/**
+	 * Zolago_Dotpay_Model_Client constructor.
+	 *
+	 * @param null|string|bool|int|Mage_Core_Model_Store $store
+	 */
+	public function __construct($store = null) {
+		if(empty($store)) {
+			$store = null;
+		}
+		$this->store = Mage::app()->getStore($store);
+	}
+
+	public function setStore($store) {
+		// Reset
+		$this->login		= null;
+		$this->password		= null;
+		$this->pin			= null;
+		$this->dotpay_id	= null;
+		$this->apiUrl		= null;
+		$this->store		= Mage::app()->getStore($store);
+	}
 
 	/**
 	 * @param Mage_Sales_Model_Order $order
@@ -56,6 +82,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 					$status,
 					$data['operation_number'],
 					$type,
+					$this->getDotpayId(),
 					$data);
 			}
 		}
@@ -68,11 +95,9 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	 * @return bool
 	 */
 	public function validateData($data) {
-
-		$PIN = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH);
 		//isset for all because response not always gives all data
 		$signature =
-			$PIN .
+			$this->getPin() .
 			(isset($data['id']) ? $data['id'] : '') .
 			(isset($data['operation_number']) ? $data['operation_number'] : '') .
 			(isset($data['operation_type']) ? $data['operation_type'] : '') .
@@ -150,25 +175,43 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	}
 
 	public function getDotpayTransactionsToUpdate() {
-		return parent::getTransactionsToUpdate(self::PAYMENT_METHOD);
+		$collection = parent::getTransactionsToUpdate(self::PAYMENT_METHOD);
+		$collection->addFieldToFilter('dotpay_id',$this->getDotpayId());
+		return $collection;
 	}
 
 	public function getDotpayTransactionsToCancel() {
-		return parent::getTransactionsToCancel(self::PAYMENT_METHOD,$this->getExpirationTime());
+		$collection = parent::getTransactionsToCancel(self::PAYMENT_METHOD,$this->getExpirationTime());
+		$collection->addFieldToFilter('dotpay_id',$this->getDotpayId());
+		return $collection;
 	}
 
-	private function getLogin() {
+	public function getLogin() {
 		if(!$this->login) {
-			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH);
+			$this->login = Mage::getStoreConfig(self::DOTPAY_LOGIN_CONFIG_PATH, $this->store);
 		}
 		return $this->login;
 	}
 
-	private function getPassword() {
+	public function getPassword() {
 		if(!$this->password) {
-			$this->password = Mage::getStoreConfig(self::DOTPAY_PASSWORD_CONFIG_PATH);
+			$this->password = Mage::getStoreConfig(self::DOTPAY_PASSWORD_CONFIG_PATH, $this->store);
 		}
 		return $this->password;
+	}
+
+	public function getPin() {
+		if(!$this->pin) {
+			$this->pin = Mage::getStoreConfig(self::DOTPAY_PIN_CONFIG_PATH, $this->store);
+		}
+		return $this->pin;
+	}
+
+	public function getDotpayId() {
+		if(!$this->dotpay_id) {
+			$this->dotpay_id = Mage::getStoreConfig(self::DOTPAY_ID_CONFIG_PATH, $this->store);
+		}
+		return $this->dotpay_id;
 	}
 
 	private function getApiUrl() {
@@ -176,7 +219,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 		//Test url: https://ssl.dotpay.pl/test_seller/api/
 		//Normal url: https://ssl.dotpay.pl/s2/login/api/
 		if(!$this->apiUrl) {
-			$this->apiUrl = Mage::getStoreConfig(self::DOTPAY_API_URL_CONFIG_PATH);
+			$this->apiUrl = Mage::getStoreConfig(self::DOTPAY_API_URL_CONFIG_PATH, $this->store);
 		}
 		return $this->apiUrl;
 	}
@@ -210,7 +253,7 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 
 			$urlData = count($urlData) ? implode("/", $urlData) . "/" : '';
 
-			if (count($parameters)) {
+			if ($parameters && count($parameters)) {
 				$parameters = "?" . http_build_query($parameters);
 				$urlData = $urlData . $parameters;
 			}
@@ -254,11 +297,21 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 	}
 
 	/**
+	 *
+	 * @param $txnId
+	 * @param bool|array $params
+	 * @return bool
+	 */
+	public function getDotpayTransaction($txnId,$params=false) {
+		return $this->dotpayCurl("operations",$txnId,false,$params);
+	}
+
+	/**
 	 * @param $txnId
 	 * @return array|bool
 	 */
 	public function getDotpayTransactionUpdateFromApi($txnId) {
-		$dotpayTransaction = $this->dotpayCurl("operations",$txnId);
+		$dotpayTransaction = $this->getDotpayTransaction($txnId);
 		if(isset($dotpayTransaction['number']) && $dotpayTransaction['number'] == $txnId) {
 			return array(
 				"txnId" => $dotpayTransaction['number'],
@@ -284,27 +337,102 @@ class Zolago_Dotpay_Model_Client extends Zolago_Payment_Model_Client {
 				'amount' => abs($transaction->getTxnAmount()),
 				'comment' => 'Modago refund id: '.$transaction->getTxnId()
 			);
+
 			try {
 				$response = $this->dotpayCurl("operations", $transaction->getParentTxnId(), "refund", array(), true, $data);
+
 				if (isset($response['error_code'])) {
 					if($response['error_code'] == self::DOTPAY_REFUND_INVALID_AMOUNT) {
 						$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_REJECTED);
 						$transaction->setIsClosed(1);
+						$rejected = true;
 					}
 				} elseif(isset($response['detail']) && $response['detail'] == 'ok') {
 					$transaction->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
 					$transaction->setIsClosed(1);
+
+					//load parent transaction to get dotpay txn_id
+					$oldTransactionId = $transaction->getTxnId();
+					$newTransactionId = false;
+					$parentTxn = $this->getDotpayTransaction(false,array('description'=>$transaction->getParentTxnId()));
+
+					if(isset($parentTxn['count']) && $parentTxn['count'] == 1 && isset($parentTxn['results']) && isset($parentTxn['results'][0])) {
+						$newTransactionId = $parentTxn['results'][0]['number'];
+						$response = $parentTxn['results'][0];
+					} elseif(isset($parentTxn['count']) && $parentTxn['count'] > 1 && isset($parentTxn['results'])) {
+						foreach ($parentTxn['results'] as $parentResult) {
+							if(isset($parentResult['amount']) && $parentResult['amount'] == abs($transaction->getTxnAmount()) && isset($parentResult['number'])) {
+								$otherTransaction = Mage::getModel('sales/order_payment_transaction')->getCollection()->addFieldToFilter('transaction_id',$parentResult['number']);
+								if(!$otherTransaction->getSize()) {
+									$response = $parentResult;
+									$newTransactionId = $parentResult['number'];
+									break;
+								}
+								unset($transactionModel);
+							}
+						}
+					}
+
+
+					//if dotpay has returned new transaction id then update it in allocations
+					if($newTransactionId) {
+						$transaction->setTxnId($newTransactionId);
+						/** @var Zolago_Payment_Model_Allocation $allocationModel */
+						$allocationModel = Mage::getModel('zolagopayment/allocation');
+						$allocations = $allocationModel->getCollection()->addFieldToFilter('refund_transaction_id',$transaction->getId());
+						foreach($allocations as $allocation) {
+							$allocation->setData('comment',str_replace($oldTransactionId,$newTransactionId,$allocation->getComment()));
+							$allocation->save();
+						}
+					}
 				}
+
 				$transaction->setAdditionalInformation(
 					Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS,
 					$response
 				);
 				$transaction->save();
-				return true;
+				return isset($rejected) && $rejected ? false : true;
 			} catch(Exception $e) {
 				Mage::logException($e);
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param string $login
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setLogin($login) {
+		$this->login = $login;
+		return $this;
+	}
+
+	/**
+	 * @param string $password
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setPassword($password) {
+		$this->password = $password;
+		return $this;
+	}
+
+	/**
+	 * @param string $pin
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setPin($pin) {
+		$this->pin = $pin;
+		return $this;
+	}
+
+	/**
+	 * @param string|int $dotpay_id
+	 * @return Zolago_Dotpay_Model_Client $this
+	 */
+	public function setDotpayId($dotpay_id) {
+		$this->dotpay_id = $dotpay_id;
+		return $this;
 	}
 }

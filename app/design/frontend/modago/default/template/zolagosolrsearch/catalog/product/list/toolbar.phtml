@@ -4,7 +4,9 @@
 <aside id="sort-criteria" class="container-fluid">
     <div class="col-sm-12">
         <ul class="sort clearfix">
-            <li id="number_products" class=""><span class="label"><?php echo $this->__("Total products count:"); ?> </span> <span class="value"> <?php echo $_total; ?></span></li>
+            <li id="pagination" class="pagination-line pagination-top">
+				<?php echo $this->getChildHtml('product_list_toolbar_pager'); ?>
+            </li>
             <li class="sort-criteria-selector">
 	            <label for="sort-by">
 		            <?php echo $this->__("Sort by:"); ?>

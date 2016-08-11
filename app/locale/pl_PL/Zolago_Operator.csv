@@ -1,4 +1,4 @@
-﻿"Details", "Szczegóły"
+"Details", "Szczegóły"
 "Password", "Hasło"
 "Confirm password", "Potwierdź hasło"
 "First name", "Imię"
@@ -38,3 +38,6 @@
 "Edit agent","Edycja użytkownika"
 "View","Przeglądaj"
 "Email address is not valid","Adres email jest nieporawidłowy"
+"Billing and statements","Rozliczenia"
+"Configuration and regulations","Konfiguracja i regulaminy"
+"Configuration","Konfiguracja"

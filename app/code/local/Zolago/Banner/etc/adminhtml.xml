@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 <config>
+    <menu>
+        <vendors>
+            <children>
+                <vendor_general_config>
+                    <children>
+                        <zolagobanner translate="title" module="zolagobanner">
+                            <title>Content Box Configuration</title>
+                            <sort_order>50</sort_order>
+                            <action>adminhtml/system_config/edit/section/zolagobanner</action>
+                            <resource>system/config/zolagobanner</resource>
+                        </zolagobanner>
+                    </children>
+                </vendor_general_config>
+            </children>
+        </vendors>
+    </menu>
     <acl>
         <resources>
             <admin>
@@ -19,33 +35,5 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <vendors>
-            <children>
-                <zolagobanner translate="title">
-                    <title>Content Box Configuration</title>
-                    <sort_order>100</sort_order>
-                    <action>adminhtml/system_config/edit/section/zolagobanner</action>
-                </zolagobanner>
-            </children>
-        </vendors>
-    </menu>
-    <acl>
-        <resources>
-        	<admin>
-	        	<children>
-	                <vendors>
-	                    <children>
-	                        <zolagobanner translate="title" module="zolagobanner">
-	                            <title>Content box configuration</title>
-	                            <sort_order>65</sort_order>
-	                        </zolagobanner>
-	                    </children>
-	                </vendors>
-	            </children>
-            </admin>
-        </resources>
-    </acl>
-
 </config>
 

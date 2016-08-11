@@ -1,17 +1,28 @@
 <?xml version="1.0"?>
 <config>
-	<modules>
-		<Zolago_DropshipVendorRatings>
-			<version>0.0.1</version>
-		</Zolago_DropshipVendorRatings>
-	</modules>
-	<global>
-		<models>
-			<review_mysql4>
+    <modules>
+        <Zolago_DropshipVendorRatings>
+            <version>0.0.1</version>
+        </Zolago_DropshipVendorRatings>
+    </modules>
+    <global>
+        <models>
+            <review_mysql4>
                 <rewrite>
                     <review_product_collection>Zolago_DropshipVendorRatings_Model_Resource_Review_Product_Collection</review_product_collection>
                 </rewrite>
             </review_mysql4>
-		</models>	
-	</global>
+        </models>
+    </global>
+    <admin>
+        <routers>
+            <zosratingsadmin>
+                <args>
+                    <modules>
+                        <Zolago_DropshipVendorRatings before="ZolagoOs_OmniChannelVendorRatings_Adminhtml">Zolago_DropshipVendorRatings_Adminhtml</Zolago_DropshipVendorRatings>
+                    </modules>
+                </args>
+            </zosratingsadmin>
+        </routers>
+    </admin>
 </config>

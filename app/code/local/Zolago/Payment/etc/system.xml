@@ -7,7 +7,7 @@
                     <fields>
                         <p_details translate="label">
                             <label>Manage payment</label>
-                            <comment>Is payment details are visible in the udropship?</comment>
+                            <comment>Are payment details visible in the udropship?</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>200</sort_order>
@@ -15,6 +15,16 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </p_details>
+                        <channel_owner translate="label">
+                            <label>Payment channel owner</label>
+                            <comment>This means money flow through mall or vendor</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Zolago_Payment_Model_Source_Channel_Owner</source_model>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </channel_owner>
                     </fields>
                 </dotpay>
                 <zolagopayment_gateway translate="label">
@@ -216,7 +226,7 @@
                         </checkout_description>
                         <p_details translate="label">
                             <label>Manage payment</label>
-                            <comment>Is payment details are visible in the udropship?</comment>
+                            <comment>Are payment details visible in the udropship?</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>200</sort_order>
@@ -224,6 +234,16 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </p_details>
+                        <channel_owner translate="label">
+                            <label>Payment channel owner</label>
+                            <comment>This means money flow through mall or vendor</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Zolago_Payment_Model_Source_Channel_Owner</source_model>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </channel_owner>
 					</fields>
 				</cashondelivery>
 				<banktransfer>
@@ -247,7 +267,7 @@
                         </checkout_description>
                         <p_details translate="label">
                             <label>Manage payment</label>
-                            <comment>Is payment details are visible in the udropship?</comment>
+                            <comment>Are payment details visible in the udropship?</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>200</sort_order>
@@ -263,9 +283,18 @@
 		                    <show_in_website>1</show_in_website>
 		                    <show_in_store>0</show_in_store>
 	                    </account_number>
+                        <channel_owner translate="label">
+                            <label>Payment channel owner</label>
+                            <comment>This means money flow through mall or vendor</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Zolago_Payment_Model_Source_Channel_Owner</source_model>
+                            <sort_order>260</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </channel_owner>
 					</fields>
 				</banktransfer>
-
             </groups>
         </payment>
         <payment_refunds translate="label" module="zolagopayment">
@@ -275,15 +304,14 @@
             <sort_order>500</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
-            <show_in_store>1</show_in_store>
+            <show_in_store>0</show_in_store>
             <groups>
                 <payment_refunds_automatic translate="label">
-                    <label>Automatic Payment Refunds Settings</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>27</sort_order>
+                    <label>Automatic payment refunds</label>
+                    <sort_order>1</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
+                    <show_in_store>0</show_in_store>
                     <fields>
                         <interval translate="label">
                             <label>N-hours after last overpayment record is created</label>
@@ -296,6 +324,45 @@
                         </interval>
                     </fields>
                 </payment_refunds_automatic>
+	            <payment_refunds_emails translate="label">
+		            <label>Email notifications</label>
+		            <sort_order>2</sort_order>
+		            <show_in_default>1</show_in_default>
+		            <show_in_website>1</show_in_website>
+		            <show_in_store>1</show_in_store>
+		                <fields>
+			                <refund_email_identity translate="label">
+				                <label>Refund email sender</label>
+				                <frontend_type>select</frontend_type>
+				                <source_model>adminhtml/system_config_source_email_identity</source_model>
+				                <sort_order>10</sort_order>
+				                <show_in_default>1</show_in_default>
+				                <show_in_website>1</show_in_website>
+				                <show_in_store>1</show_in_store>
+				                <default>general</default>
+			                </refund_email_identity>
+			                <refund_email_template translate="label">
+				                <label>Order refund email template</label>
+				                <frontend_type>select</frontend_type>
+				                <source_model>adminhtml/system_config_source_email_template</source_model>
+				                <sort_order>20</sort_order>
+				                <show_in_default>1</show_in_default>
+				                <show_in_website>1</show_in_website>
+				                <show_in_store>1</show_in_store>
+				                <default>refund_email_template</default>
+			                </refund_email_template>
+			                <refund_rma_email_template translate="label">
+				                <label>RMA refund email template</label>
+				                <frontend_type>select</frontend_type>
+				                <source_model>adminhtml/system_config_source_email_template</source_model>
+				                <sort_order>30</sort_order>
+				                <show_in_default>1</show_in_default>
+				                <show_in_website>1</show_in_website>
+				                <show_in_store>1</show_in_store>
+				                <default>refund_rma_email_template</default>
+			                </refund_rma_email_template>
+		                </fields>
+	            </payment_refunds_emails>
             </groups>
         </payment_refunds>
     </sections>

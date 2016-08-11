@@ -28,7 +28,7 @@ class Zolago_Cms_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		// v<id> optional
 		if($vendor=$request->getVendor()){
-			if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+			if($vendor instanceof ZolagoOs_OmniChannel_Model_Vendor){
 				$vendor = $vendor->getId();
 			}
 			$parts['v'] = $vendor;

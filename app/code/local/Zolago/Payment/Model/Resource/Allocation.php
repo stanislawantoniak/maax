@@ -10,6 +10,10 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
         $this->_init('zolagopayment/allocation', "allocation_id");
     }
 
+	/**
+	 * @param $poId
+	 * @return float
+	 */
     public function getSumOfAllocations($poId) {
         $tableAllo = $this->getTable('zolagopayment/allocation');
         $select = $this->getReadConnection()->select();
@@ -56,7 +60,8 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
                 'comment'           => $comment,
                 'customer_id'       => ((!$po['customer_is_guest']) && !is_null($po['customer_is_guest'])) ? $po['customer_id'] : null,
                 'vendor_id'         => Mage::getModel("zolagopo/po")->load($po['entity_id'])->getVendor()->getId(),
-                'is_automat'        => $this->getAllocationModel()->isAutomat()
+                'is_automat'        => $this->getAllocationModel()->isAutomat(),
+                'primary'           => 1 //indicates that allocation was made directly from transaction - it's the first one
             );
 
             if ($po === end($poData)) {
@@ -89,6 +94,10 @@ class Zolago_Payment_Model_Resource_Allocation extends Mage_Core_Model_Resource_
 	 *    'created_at'        => Mage::getSingleton('core/date')->gmtDate(),
 	 *    'comment'           => $comment
 	 *    'customer_id'       => $po['customer_id']));
+	 *    'vendor_id'         => $po['vendor_id']
+	 *    'is_automat'        => 0/1
+	 *    'refund_transaction_id' => $refundTransactionId
+	 *    'rma_id'            => $rmaId
 	 *
 	 * @param $data
 	 */
