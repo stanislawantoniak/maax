@@ -106,24 +106,33 @@ class ZolagoOs_IAIShop_Model_Client_Connector
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=addPayment
      */
-    public function addPayment($params)
+    public function addPayment($param)
     {
+        $helper = Mage::helper('zosiaishop');
 
         $action = "addPayment";
 
         $request = array();
         $request[$action] = array();
-        $request['addPayment']['params'] = $params; //array();
+        $request[$action]['params'] = array();
 
-//		$request['addPayment']['params']['order_number'] = 1;
-//		$request['addPayment']['params']['source_id'] = 2;
-//		$request['addPayment']['params']['source_type'] = 3;
-//		$request['addPayment']['params']['value'] = 4.0;
-//		$request['addPayment']['params']['account'] = "account";
-//		$request['addPayment']['params']['type'] = 'payment';
-//		$request['addPayment']['params']['payment_form_id'] = 5;
-//		$request['addPayment']['params']['accounting_date'] = "accounting_date";
-//		$request['addPayment']['params']['external_payment_id'] = "external_payment_id";
+        $request[$action]['params']['order_number'] = $param->external_order_id;
+        $request[$action]['params']['value'] = $param->order_total;
+        $request[$action]['params']['type'] = 'payment';
+        $request[$action]['params']['payment_form_id'] = $param->payment_method_external_id;
+
+        return $this->doRequest("payments", $action, $request);
+    }
+
+    /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=getPaymentForms
+     */
+    public function getPaymentForms()
+    {
+        $action = "getPaymentForms";
+
+        $request = array();
+        $request[$action] = array();
 
         return $this->doRequest("payments", $action, $request);
     }
@@ -141,18 +150,18 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         $request['getOrders'] = array();
         $request['getOrders']['params'] = array();
         $request['getOrders']['params']['orders_status'] = array();
-	$request['getOrders']['params']['deliverers'] = array();
-	$request['getOrders']['params']['orders_id'] = array();
-	$request['getOrders']['params']['clients'] = array();
-	$request['getOrders']['params']['stocks'] = array();
-	$request['getOrders']['params']['orders_sn'] = array();
-	foreach ($params as $order) {
+        $request['getOrders']['params']['deliverers'] = array();
+        $request['getOrders']['params']['orders_id'] = array();
+        $request['getOrders']['params']['clients'] = array();
+        $request['getOrders']['params']['stocks'] = array();
+        $request['getOrders']['params']['orders_sn'] = array();
+        foreach ($params as $order) {
             $request['getOrders']['params']['orders_sn'][] = $order;
-	}
-	$request['getOrders']['params']['order_by'] = array();
-	$request['getOrders']['params']['operator_match'] = $helper->getOrderOperator();
-	
-        
+        }
+        $request['getOrders']['params']['order_by'] = array();
+        $request['getOrders']['params']['operator_match'] = $helper->getOrderOperator();
+
+
 
         return $this->doRequest("getorders", $action, $request);
     }

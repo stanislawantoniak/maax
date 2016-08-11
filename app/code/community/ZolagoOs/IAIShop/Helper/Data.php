@@ -53,7 +53,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         $paymentMethodsMapping = array(
                                      "online_bank_transfer" => "prepaid",
                                      "credit_card" => "prepaid",
-                                     "bank_transfer" => "tradecredit",
+                                     "bank_transfer" => "prepaid",
                                      "cash_on_delivery" => "cash_on_delivery"
                                  );
         if (!isset($paymentMethodsMapping[$payment])) {
@@ -61,6 +61,29 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
     }
+
+	/**
+	 * map payment method
+	 *
+	 * @todo make configuration in magento admin
+	 */
+	public function getMappedPaymentForPayments($payment) {
+		//Sposób zapłaty za zamówienie.
+		// Dopuszczalne wartości
+		// "cash_on_delivery" - pobranie,
+		// "prepaid" - przedplata,
+		// "tradecredit" - kredytKupiecki.
+		$paymentMethodsMapping = array(
+			"online_bank_transfer" => "Obsługa własna kart kredytowych",
+			"credit_card" => "Obsługa własna kart kredytowych",
+			"bank_transfer" => "Obsługa własna kart kredytowych",
+			"cash_on_delivery" => "Pobranie"
+		);
+		if (!isset($paymentMethodsMapping[$payment])) {
+			$this->fileLog('wrong payment method');
+		}
+		return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
+	}
 
     /**
      * return order operator name
