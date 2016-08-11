@@ -2,61 +2,11 @@
 /**
  * orders integrator for one vendor
  */
-class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
-    protected $_vendor;
-    protected $_token;
-    protected $_connector;
+class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Integrator_Abstract {
     protected $_confirmOrderList;
-    protected $_helper;
 
     const IAISHOP_SYNC_ORDERS_BATCH = 100;
 
-    public function getHelper() {
-        if (!$this->_helper) {
-            $this->_helper = Mage::helper('zosiaishop');
-        }
-        return $this->_helper;
-    }
-
-    public function setVendor($vendor) {
-        $this->_vendor = $vendor;
-    }
-
-    public function setConnector($connector) {
-        $this->_connector = $connector;
-    }
-
-    public function getVendor() {
-        return $this->_vendor;
-    }
-    public function getConnector() {
-        return $this->_connector;
-    }
-    /**
-     * prepare session for vendor
-     *
-     * @return string
-     */
-
-    protected function _getToken() {
-        $vendor = $this->getVendor();
-        $id = $vendor->getId();
-        if (empty($this->_token)) {
-            $session = Mage::getModel('ghapi/session');
-            $token = $session->generateToken($id);
-            $ghapiUser = Mage::getModel('ghapi/user')->loadByVendorId($id);
-            if (!$ghapiUser->getId()) {
-                Mage::throwException(Mage::helper('zosiaishop')->__('GH Api user for vendor %s does not exists',$vendor->getName()));
-            }
-            // set session for api
-            $session->setUserId($ghapiUser->getId())
-            ->setToken($token)
-            ->setCreatedAt(Mage::helper('ghapi')->getDate())
-            ->save();
-            $this->_token = $token;
-        }
-        return $this->_token;
-    }
 
     /**
      * prepare new orders list
@@ -120,7 +70,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
                     $this->addOrderToConfirmMessage($item->order_id);
                 }
             }
-            $this->confirmMessages($orders->list);
+            $this->confirmOrderMessages($orders->list);
         }
 
     }
@@ -128,22 +78,14 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
     /**
      * confirm messages from list
      */
-    public function confirmMessages($list) {
+    public function confirmOrderMessages($list) {
         $toConfirm = array();
         foreach ($list as $msg) {
             if (($msg->orderID) && isset($this->_confirmOrderList[$msg->orderID])) {
                 $toConfirm[] = $msg->messageID;
             }
         }
-        if (count($toConfirm)) {
-            $connector = $this->getConnector();
-            $token = $this->_getToken();
-            $params = new StdClass();
-            $params->sessionToken = $token;
-            $params->messageID = new StdClass();
-            $params->messageID->ID = $toConfirm;
-            $connector->setChangeOrderMessageConfirmation($params);
-        }
+        $this->confirmMessages($toConfirm);
     }
     /**
      * complete message list to confirm
@@ -176,14 +118,4 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends Varien_Object {
         return array();
     }
     
-    /**
-     * logs 
-     *
-     * @param string
-     */
-
-    public function log($mess) {
-        $vendorId = $this->getVendor()->getId();
-        $this->getHelper()->log($vendorId,$mess);
-    }
 }

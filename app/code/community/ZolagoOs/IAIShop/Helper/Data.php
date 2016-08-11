@@ -69,6 +69,37 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         return 'MODAGO';
     }
 
+    
+    /**
+     * mapped carriers
+     *
+     * @todo make configuration in admin
+     * @param int $carrierId
+     * @return string
+     */
+    public function getMappedCarrier($carrierId) {
+        $mappedCarrier = array(
+            84 => 'dhl',
+            80 => 'dhl',
+            18 => 'dhl',
+            81 => 'dhl',
+            82 => 'dhl',
+            83 => 'dhl',
+            100044 => 'dhl',
+            100056 => 'dhl',
+            17 => 'dhl',
+            19 => 'dhl',
+            10 => 'dhl',
+            37 => 'dhl',
+            2 => 'ups',
+            28 => 'ups',
+            85 => 'gls',
+        );
+        if (!isset($mappedCarrier[$carrierId])) {
+            $this->fileLog('Wrong carrier '.$carrierId);
+        }
+        return isset($mappedCarrier[$carrierId])? $mappedCarrier[$carrierId]: 'unknown';
+    }
     /**
      * mapped countries
      *

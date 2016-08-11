@@ -24,23 +24,54 @@ class ZolagoOs_IAIShop_Model_Observer
         $model->setConnector($this->_getGHAPIConnector());
         $model->sync();
     }
+    
     /**
-     * start process
+     * start sync orders
      */
 
+    public function syncIAIOrders() {
+        $this->_syncIAIAbstract('_syncOrders');
+    }
+    
+    /**
+     * start sync shipment
+     */
+    public function syncIAIShipments() {	
+        $this->_syncIAIAbstract('_syncShipments');
+    }
+    /**
+     * synchronize abstract
+     *
+     * @params string $funcName method name
+     */
+    protected function _syncIAIAbstract($funcName) {
+        $vendors = $this->getAllowVendors();
+        if (!count($vendors)) {
+            $this->fileLog('No allowed vendors');            
+            return false;
+        }
+        foreach ($vendors as $vendor) {
+            $this->$funcName($vendor);
+        }        
+    }
+    
+    /**
+     * sync shipments
+     */
+    protected function _syncShipments($vendor) {
+        $model = Mage::getModel('zosiaishop/integrator_shipment');
+        $model->setVendor($vendor);
+        $model->setConnector($this->_getGHAPIConnector());
+        $model->sync();        
+    }
+    /**
+     * start all 
+     */
 
     public function syncIAIShop()
     {
-        $vendors = $this->getAllowVendors();
-        if (!count($vendors)) {
-            $this->fileLog('No messages for IAI Shop');            
-            return false;
-        }
-
-        foreach ($vendors as $vendor) {
-            $this->_syncOrders($vendor);
-        }
-
+        $this->syncIAIOrders();
+        $this->syncIAIShipments();
     }
 
     /**
@@ -49,25 +80,15 @@ class ZolagoOs_IAIShop_Model_Observer
     public function getAllowVendors()
     {
         $orderIncrementIds = array();
-
-        $messagesCollection = Mage::getModel("ghapi/message")
-                              ->getCollection();
-
-        $messagesCollection
-        ->addFieldToFilter("message", "newOrder")
-        ->addFieldToSelect('vendor_id')
-        ->getSelect()->group('vendor_id');
-
-        if ($messagesCollection->count() <= 0)
-            return $orderIncrementIds; //nothing to update
-        $vendors = array();
-        foreach ($messagesCollection as $message) {
-            $vendor = Mage::getModel('udropship/vendor')->load($message->getVendorId());
-            if ($vendor->getData('zosiaishop_vendor_access_allow')) {
-                $vendors[] = $vendor;
-            }
+        $vendorModel = Mage::getModel('udropship/vendor');
+        $vendorCollection = $vendorModel->getCollection();
+        $vendorCollection->addFieldToFilter('custom_vars_combined',array('like' => '%"zosiaishop_vendor_access_allow":"1"%'))
+            ->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns('vendor_id');
+        foreach ($vendorCollection as $vendor) {            
+                $vendors[] = $vendorModel->load($vendor->getVendorId());
         }
-
         return $vendors;
     }
 
