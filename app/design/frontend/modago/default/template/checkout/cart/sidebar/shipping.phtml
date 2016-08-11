@@ -1,6 +1,4 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
-
-<?php
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper		= Mage::helper("zolagocheckout");
 
@@ -40,17 +38,8 @@ $discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() :
 $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
- ?>
-
-<?php
-$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
-?>
-
-<?php
-// TODO Paczka w Ruchu
-$pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-$pwrPoints = isset($pwrData["map_points"]) ? $pwrData["map_points"] : "";
+$inPostPoints = $this->getInpostPoints();
+$pwrPoints = $this->getPwrPoints();
 ?>
 
 <script type="text/javascript">

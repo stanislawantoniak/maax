@@ -167,4 +167,16 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         return $result;
     }
+	
+	public function getInpostPoints() {
+		$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+		$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+		return $inPostPoints;
+	}
+	
+	public function getPwrPoints() {
+		$pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr::getPopulateMapData();
+		$pwrPoints = isset($pwrData["map_points"]) ? $pwrData["map_points"] : "";
+		return $pwrPoints;
+	}
 } 
