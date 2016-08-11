@@ -24,21 +24,28 @@ class ZolagoOs_IAIShop_Model_Observer
         $model->setConnector($this->_getGHAPIConnector());
         $model->sync();
     }
+
+	protected function _syncPayments($vendor) {
+		$model = Mage::getModel('zosiaishop/integrator_payment');
+		$model->setVendor($vendor);
+		$model->setConnector($this->_getGHAPIConnector());
+		$model->sync();
+	}
+
     /**
      * start process
      */
-
-
     public function syncIAIShop()
     {
         $vendors = $this->getAllowVendors();
         if (!count($vendors)) {
-            $this->fileLog('No messages for IAI Shop');            
+            $this->fileLog('No messages for IAI Shop');
             return false;
         }
 
         foreach ($vendors as $vendor) {
             $this->_syncOrders($vendor);
+			$this->_syncPayments($vendor);
         }
 
     }
@@ -71,48 +78,13 @@ class ZolagoOs_IAIShop_Model_Observer
         return $vendors;
     }
 
-    public function getPaymentMessages()
-    {
-        $paymentIncrementIds = array();
-
-        $messagesCollection = Mage::getModel("ghapi/message")
-                              ->getCollection();
-
-        $messagesCollection
-        ->addFieldToFilter("message", "paymentDataChanged")
-        ->setOrder('po_increment_id', 'DESC')
-        ->setOrder('message_id', 'ASC')
-        ->setOrder('vendor_id', 'ASC');
-
-        $messagesCollection->getSelect()->limit(self::IAISHOP_SYNC_ORDERS_BATCH);
-
-        if ($messagesCollection->count() <= 0)
-            return $paymentIncrementIds; //nothing to update
-
-
-        foreach ($messagesCollection as $message) {
-            if ((bool) Mage::helper('udropship')->getVendor($message->getVendorId())->getIaishopId())
-                $paymentIncrementIds[$message->getVendorId()][] = $message->getPoIncrementId();
-        }
-
-        return $paymentIncrementIds;
-    }
-
-    public function getGhApiNewPayment($vendorId)
-    {
-        //ini_set("soap.wsdl_cache_enabled", 0);
-        $orders = array();
-        $connector = $this->getGHAPIConnector();
-        $doLoginResponse = $connector->doLoginRequest($vendorId);
-
-//		paymentDataChanged
-    }
     public function getHelper() {
         if (!$this->_helper) {
             $this->_helper = Mage::helper('zosiaishop');
         }
         return $this->_helper;
     }
+
     public function fileLog($mess) {
         $this->getHelper()->fileLog($mess);
     }
