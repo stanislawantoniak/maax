@@ -41,6 +41,7 @@ class ZolagoOs_Pwr_Model_Point extends Mage_Core_Model_Abstract {
 
 	/** types */
 	const TYPE_PSD						= 'PSD';			// ??
+	const TYPE_PSP						= 'PSP';			// ??
 	/** payment available */
 	const PAYMENT_AVAILABLE				= 1;				// obsługujących pobrania
 	const PAYMENT_NOT_AVAILABLE			= 0;				// nie obsługujących pobrań
@@ -88,7 +89,7 @@ class ZolagoOs_Pwr_Model_Point extends Mage_Core_Model_Abstract {
 	 * @return array
 	 */
 	public function getShippingAddress() {
-		$data['street'][]	= $this->getStreet() . ' ' . $this->getBuildingNumber();
+		$data['street'][]	= trim($this->getStreet() . ' ' . $this->getBuildingNumber());
 		$data['postcode']	= $this->getPostcode();
 		$data['city']		= $this->getTown();
 		$data['country_id']	= $this->getCountryId();
