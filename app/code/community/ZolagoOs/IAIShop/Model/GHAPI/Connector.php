@@ -34,7 +34,6 @@ class ZolagoOs_IAIShop_Model_GHAPI_Connector
         $obj->vendorId = $vendorId;
         $obj->password = $password;
         $obj->webApiKey = $apiKey;
-        var_Dump($obj);
         return $this->_query('doLogin', $obj);
     }
 
