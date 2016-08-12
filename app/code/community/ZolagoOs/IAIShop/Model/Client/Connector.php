@@ -25,6 +25,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
      */
     public function addOrders($params)
     {
+        /** @var ZolagoOs_IAIShop_Helper_Data $helper */
         $helper = Mage::helper('zosiaishop');
         $orders = array();
 
