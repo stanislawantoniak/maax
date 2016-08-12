@@ -62,28 +62,28 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
     }
 
-	/**
-	 * map payment method
-	 *
-	 * @todo make configuration in magento admin
-	 */
-	public function getMappedPaymentForPayments($payment) {
-		//Sposób zapłaty za zamówienie.
-		// Dopuszczalne wartości
-		// "cash_on_delivery" - pobranie,
-		// "prepaid" - przedplata,
-		// "tradecredit" - kredytKupiecki.
-		$paymentMethodsMapping = array(
-			"online_bank_transfer" => "Obsługa własna kart kredytowych",
-			"credit_card" => "Obsługa własna kart kredytowych",
-			"bank_transfer" => "Obsługa własna kart kredytowych",
-			"cash_on_delivery" => "Pobranie"
-		);
-		if (!isset($paymentMethodsMapping[$payment])) {
-			$this->fileLog('wrong payment method');
-		}
-		return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
-	}
+    /**
+     * map payment method
+     *
+     * @todo make configuration in magento admin
+     */
+    public function getMappedPaymentForPayments($payment) {
+        //Sposób zapłaty za zamówienie.
+        // Dopuszczalne wartości
+        // "cash_on_delivery" - pobranie,
+        // "prepaid" - przedplata,
+        // "tradecredit" - kredytKupiecki.
+        $paymentMethodsMapping = array(
+                                     "online_bank_transfer" => "Obsługa własna kart kredytowych",
+                                     "credit_card" => "Obsługa własna kart kredytowych",
+                                     "bank_transfer" => "Obsługa własna kart kredytowych",
+                                     "cash_on_delivery" => "Pobranie"
+                                 );
+        if (!isset($paymentMethodsMapping[$payment])) {
+            $this->fileLog('wrong payment method');
+        }
+        return isset($paymentMethodsMapping[$payment])? $paymentMethodsMapping[$payment]: 'unknown';
+    }
 
     /**
      * return order operator name
@@ -92,7 +92,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         return 'MODAGO';
     }
 
-    
+
     /**
      * mapped carriers
      *
@@ -102,22 +102,22 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getMappedCarrier($carrierId) {
         $mappedCarrier = array(
-            84 => 'dhl',
-            80 => 'dhl',
-            18 => 'dhl',
-            81 => 'dhl',
-            82 => 'dhl',
-            83 => 'dhl',
-            100044 => 'dhl',
-            100056 => 'dhl',
-            17 => 'dhl',
-            19 => 'dhl',
-            10 => 'dhl',
-            37 => 'dhl',
-            2 => 'ups',
-            28 => 'ups',
-            85 => 'gls',
-        );
+                             84 => 'DHL',
+                             80 => 'DHL',
+                             18 => 'DHL',
+                             81 => 'DHL',
+                             82 => 'DHL',
+                             83 => 'DHL',
+                             100044 => 'DHL',
+                             100056 => 'DHL',
+                             17 => 'DHL',
+                             19 => 'DHL',
+                             10 => 'DHL',
+                             37 => 'DHL',
+                             2 => 'UPS',
+                             28 => 'UPS',
+                             85 => 'GLS',
+                         );
         if (!isset($mappedCarrier[$carrierId])) {
             $this->fileLog('Wrong carrier '.$carrierId);
         }
@@ -166,19 +166,19 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
     }
-    
+
     /**
      * create logs (database)
      */
 
-     public function log($vendorId,$message) {
-         $log = Mage::getModel('zosiaishop/log');
-         $log->setVendorId($vendorId)
-             ->setLog($message)
-             ->save();
-         return $log;
-     }
-     
+    public function log($vendorId,$message) {
+        $log = Mage::getModel('zosiaishop/log');
+        $log->setVendorId($vendorId)
+        ->setLog($message)
+        ->save();
+        return $log;
+    }
+
     /**
      * create log (file in var/log);
      */

@@ -8,6 +8,8 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Abstract extends Varien_Object 
     protected $_connector;
     protected $_helper;
 
+
+
     public function getHelper() {
         if (!$this->_helper) {
             $this->_helper = Mage::helper('zosiaishop');
@@ -86,4 +88,5 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Abstract extends Varien_Object 
         $vendorId = $this->getVendor()->getId();
         $this->getHelper()->log($vendorId,$mess);
     }
+    
 }
