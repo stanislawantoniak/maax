@@ -389,37 +389,37 @@
 }
 
 #checkout  {
+	.button.button-third {
+		padding: 6px 18px;
+		background: #adadad !important;
+		background: -moz-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #adadad), color-stop(100%, #adadad)) !important;
+		background: -webkit-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: -o-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: -ms-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: linear-gradient(135deg, #adadad 0%, #adadad 100%) !important;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 ) !important;
+		color:$color_fff;
+		&:hover,
+		&.hover,
+		&:focus,
+		&.focus {
+			background: #444444 !important;
+			background: -moz-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #444444), color-stop(100%, #444444)) !important;
+			background: -webkit-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: -o-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: -ms-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: linear-gradient(135deg, #444444 0%, #444444 100%) !important;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor, GradientType=1) !important;
+			border-color: #444444;;
+		}
+	}
 	#content-main {
 		> .main {
 			padding:30px 30px;
 			@media (max-width:480px) {
 				padding:30px 15px;
-			}
-			.button.button-third {
-				padding: 6px 18px;
-				background: #adadad !important;
-				background: -moz-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
-				background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #adadad), color-stop(100%, #adadad)) !important;
-				background: -webkit-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
-				background: -o-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
-				background: -ms-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
-				background: linear-gradient(135deg, #adadad 0%, #adadad 100%) !important;
-				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 ) !important;
-				color:$color_fff;
-				&:hover,
-				&.hover,
-				&:focus,
-				&.focus {
-					background: #444444 !important;
-					background: -moz-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
-					background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #444444), color-stop(100%, #444444)) !important;
-					background: -webkit-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
-					background: -o-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
-					background: -ms-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
-					background: linear-gradient(135deg, #444444 0%, #444444 100%) !important;
-					filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor, GradientType=1) !important;
-					border-color: #444444;;
-				}
 			}
 		}
 	}
@@ -636,10 +636,10 @@
 			margin-left:-30px;
 			margin-bottom:15px;
 			@media (max-width:767px) {
-				margin-left:-15px;
+				margin-left:-27px;
 			}
 			@media (max-width:480px) {
-				margin-left:-30px;
+				margin-left:0;
 			}
 			&.open{
 				margin-bottom:-5px;
@@ -655,7 +655,7 @@
 			margin-bottom: 8px;
 			margin-top: 0px;
 			@media (max-width:480px) {
-				padding-left:45px;
+				padding-left:0;
 			}
 			&:before {
 				content: ' ';
@@ -774,9 +774,14 @@
 			padding-right: 2px;
 		}
 
+		.agreements-block{
+			.form-checkbox{
+				margin-left: 15px;
+			}
+		}
+
 		.form-checkbox {
 			margin-bottom: 15px;
-			margin-left: 20px;
 
 			&.agreement-container {
 				border: 1px solid $color-gray2;
@@ -986,7 +991,6 @@
 		}
 		#back {
 			position:relative;
-			top:12px;
 		}
 	}
 }
