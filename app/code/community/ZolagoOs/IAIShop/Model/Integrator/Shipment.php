@@ -4,22 +4,6 @@
  */
 class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_Integrator_Abstract {
     /**
-     * prepare new orders list
-     *
-     * @return array
-     */
-
-    public function getGhApiVendorOrders()
-    {
-        $token = $this->_getToken();
-        $connector = $this->getConnector();
-        $params = new StdClass();
-        $params->sessionToken = $token;
-        $params->messageBatchSize = self::IAISHOP_SYNC_ORDERS_BATCH ;
-        $params->messageType = GH_Api_Model_System_Source_Message_Type::GH_API_MESSAGE_NEW_ORDER;
-        return $connector->getChangeOrderMessage($params);
-    }
-    /**
      * process response from iaishop
      */
     public function processResponse($responseList,$orderId) {
