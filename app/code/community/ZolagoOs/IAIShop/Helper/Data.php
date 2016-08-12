@@ -112,7 +112,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
                              100056 => 'DHL',
                              17 => 'DHL',
                              19 => 'DHL',
-                             10 => 'DHL',
+                             10 => 'DPD',
                              37 => 'DHL',
                              2 => 'UPS',
                              28 => 'UPS',
@@ -143,9 +143,9 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getMappedDelivery($delivery) {
         $deliveryMethodsMapping = array(
-                                      "polish_post" => 100039,
-                                      "standard_courier" => 10,
-                                      "inpost_parcel_locker" => 45
+                                      "polish_post" => 100039, // POCZTEX KURIER KRAJOWY
+                                      "standard_courier" => 6, // STANDARD DPD
+                                      "inpost_parcel_locker" => 45 //INPOST
                                   );
         if (!isset($deliveryMethodsMapping[$delivery])) {
             $this->fileLog('Wrong delivery '.$delivery);
