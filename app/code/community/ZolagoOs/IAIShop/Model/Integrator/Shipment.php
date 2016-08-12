@@ -36,7 +36,14 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
      * save shipment in magento
      */
     protected function _setShipment($id,$courier,$trackNumber,$deliveryDate) {
+        // collect order
         $connector = $this->getConnector();
+        $params = new StdClass();
+        $params->sesstionToken = $this->_getToken();
+        $params->orderID = new StdClass();
+        $params->orderID->ID = array($id);
+        $connector->setOrderAsCollected($params);
+        
         $params = new StdClass();
         $params->orderID = $id;
         $params->sessionToken = $this->_getToken();
@@ -44,6 +51,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
         $params->dateShipped = $deliveryDate;
         $params->shipmentTrackingNumber = $trackNumber;
         $response = $connector->setOrderShipment($params);                        
+        
         if (empty($response->status)) {
             if (!empty($response->message)) {
                 $this->log($this->getHelper()->__('API error: %s',$response->message));
