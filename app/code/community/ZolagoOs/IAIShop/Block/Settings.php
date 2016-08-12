@@ -22,7 +22,7 @@ class ZolagoOs_IAIShop_Block_Settings extends Mage_Core_Block_Template
             'pass'
         ));
 
-
+        /*
         $delivery = $form->addFieldset('delivery', array('legend'=>$helper->__('IAI-Shop Delivery')));
         foreach ($this->getCarriers() as $d) $delivery->addField($d->getCarrierCode(), "select", array(
             "name"	 => "delivery_" . $d->getCarrierCode(),
@@ -37,6 +37,7 @@ class ZolagoOs_IAIShop_Block_Settings extends Mage_Core_Block_Template
             $form->getElement("pass")->setAfterElementHtml("");
         }
 
+        */
         $_session = Mage::getSingleton('udropship/session');
 
         $data = $_session->getFormData();
