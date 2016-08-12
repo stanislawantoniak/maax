@@ -295,15 +295,17 @@ class Zolago_Catalog_Vendor_ProductController
             /** @var Zolago_Catalog_Model_Product $model */
             $refresh = false;
             foreach ($storeIds as $sId) {
-                $model = Mage::getModel('catalog/product')->setStoreId($sId)->load($id);
-                $key = $string->formatUrlKey($model->getName().' '.$model->getSkuv());
-                if ($model->getUrlKey() == $key) {
-                    continue ;
-                }                
-                $model->setData('store_id', $sId); // Trick
-                $model->setUrlKey($key);
-                $resource->saveProductAttribute($model, 'url_key');
-                $refresh = true;
+                $urlRewriteCollection = Mage::getModel('core/url_rewrite')->getCollection()
+                    ->addFieldToFilter('store_id', $sId)
+                    ->addFieldToFilter('product_id', $id);
+                if(!$urlRewriteCollection->getFirstItem()->getRequestPath()){
+                    $model = Mage::getModel('catalog/product')->setStoreId($sId)->load($id);
+                    $key = $string->formatUrlKey($model->getName().' '.$model->getSkuv());
+                    $model->setData('store_id', $sId); // Trick
+                    $model->setUrlKey($key);
+                    $resource->saveProductAttribute($model, 'url_key');
+                    $refresh = true;
+                }
             }
             if ($refresh) {
                 $url->refreshProductRewrite($id);
