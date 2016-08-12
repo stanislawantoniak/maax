@@ -3,39 +3,12 @@
  * order shipments integrator for one vendor
  */
 class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_Integrator_Abstract {
-    /**
-     * process response from iaishop
-     */
-    public function processResponse($responseList,$orderId) {
-        foreach ($responseList as $item) {
-            if (!$item->faultCode) {
-                if (!empty($item->order_sn)) {
-                    $po = Mage::getModel('udpo/po')->loadByIncrementId($orderId);
-                    if ($po) {
-                        $po->setExternalOrderId($item->order_sn)
-                        ->save();
-                        $this->addOrderToConfirmMessage($orderId);
-                        $this->log($this->getHelper()->__('Order %s was imported to IAI Shop at number %s (%s)',$orderId,$item->order_sn,$item->order_id));
-                    } else {
-                        $this->log($this->getHelper()->__('Order %s does not exists',$orderId));
-                    }
-                    break;
-                } else {
-                    $this->getHelper()->fileLog($item);
-                    $this->log($this->getHelper()->__('IAI Api order has not serial number for order %s',$orderId));
-                }
-            } else {
-                $this->getHelper()->fileLog($item);
-                $this->log($this->getHelper()->__('IAI Api Error %d at order %s: %s',$item->faultCode,$orderId,$item->faultString));
-            }
-        }
-
-    }
     
     /**
      * save shipment in magento
      */
     protected function _setShipment($id,$courier,$trackNumber,$deliveryDate) {
+       
         // collect order
         $connector = $this->getConnector();
         $params = new StdClass();
@@ -95,6 +68,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
      */
      protected function _getOrdersExternalId() {
          $collection = Mage::getModel('udpo/po')->getCollection();
+         $status = Mage::getModel('zolagopo/po_status');
          $collection->getSelect()->joinLeft(
              array('ship' => $collection->getTable('sales/shipment')),
              'ship.udpo_id = main_table.entity_id and ship.udropship_status <> \''.ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED.'\'',
@@ -102,14 +76,15 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
              ->where('ship.entity_id IS NULL')
              ->where('main_table.external_order_id IS NOT NULL')
              ->where('main_table.udropship_status not in (?)',
-                 array(
-                     ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_RETURNED,
-                     ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED,
-                     ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED,
-                     )
+                    $status::getFinishStatuses()
                 );
         $list = array();
         foreach ($collection as $item) {
+            // accept orders 
+            if ($item->getUdropshipStatus() == ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_ACK) {             
+                $po = Mage::getModel('udpo/po')->load($item->getId());
+                $status->processConfirmRelease($po);
+            }
             $list[$item->getIncrementId()] = $item->getExternalOrderId();
         }
         return $list;        

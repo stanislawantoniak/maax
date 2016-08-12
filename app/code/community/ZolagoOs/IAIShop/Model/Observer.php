@@ -72,7 +72,11 @@ class ZolagoOs_IAIShop_Model_Observer
             return false;
         }
         foreach ($vendors as $vendor) {
-            $this->$funcName($vendor);
+            try {
+                $this->$funcName($vendor);
+            } catch (Exception $xt) {
+                Mage::logException($xt);
+            }
         }
     }
 
