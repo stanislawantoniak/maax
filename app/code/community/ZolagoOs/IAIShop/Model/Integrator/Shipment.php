@@ -39,7 +39,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
         // collect order
         $connector = $this->getConnector();
         $params = new StdClass();
-        $params->sesstionToken = $this->_getToken();
+        $params->sessionToken = $this->_getToken();
         $params->orderID = new StdClass();
         $params->orderID->ID = array($id);
         $connector->setOrderAsCollected($params);
