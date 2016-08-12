@@ -46,7 +46,7 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Ghapi extends ZolagoOs_IAIShop_
     public function prepareOrderList($list) {
         $ids = array();
         foreach ($list as $item) {
-            $ids[] = $item->orderID;
+            $ids[$item->orderID] = $item->orderID;
         }
         if (!count($ids)) {
             return array();
