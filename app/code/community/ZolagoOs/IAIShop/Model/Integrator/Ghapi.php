@@ -24,7 +24,7 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Ghapi extends ZolagoOs_IAIShop_
     /**
      * confirm messages from list
      */
-    public function confirmOrderMessages($list) {
+    public function confirmOrderMessages($list) {    
         $toConfirm = array();
         foreach ($list as $msg) {
             if (($msg->orderID) && isset($this->_confirmOrderList[$msg->orderID])) {

@@ -83,6 +83,7 @@ class ZolagoOs_IAIShop_Model_Observer
     public function syncIAIShop()
     {
         $this->syncIAIOrders();
+        $this->syncIAIPayments();
         $this->syncIAIShipments();
     }
 

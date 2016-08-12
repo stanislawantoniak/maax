@@ -64,7 +64,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Payment extends ZolagoOs_IAIShop_Model_I
                     }
                 }
             }
-            $this->confirmMessages($payments->list);
+            $this->confirmOrderMessages($payments->list);
         }
 
     }
