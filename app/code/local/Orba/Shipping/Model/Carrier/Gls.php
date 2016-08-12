@@ -4,7 +4,7 @@
  */
 class Orba_Shipping_Model_Carrier_Gls extends Orba_Shipping_Model_Carrier_Abstract {
     			
-	const CODE = "zolagogls";
+    const CODE = "zolagogls";
     protected $_code = self::CODE;
     protected $_number;
 
