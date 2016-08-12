@@ -52,7 +52,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             $delivery_address['city'] = $param->delivery_data->delivery_address->delivery_city;
             $delivery_address['country'] = $helper->getMappedCountry($param->delivery_data->delivery_address->delivery_country);
             $delivery_address['phone'] = $param->delivery_data->delivery_address->phone;
-            $delivery_address['additional'] = $param->delivery_data->inpost_locker_id;
+            $delivery_address['additional'] = $param->delivery_data->delivery_point_name;
 
             $orders[$n]['delivery_address'] = $delivery_address;
             $orders[$n]['delivery_address']['additional'] = $param->delivery_data->inpost_locker_id;
@@ -67,7 +67,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
                 $orders[$n]['client_once_data']['street'] = $param->invoice_data->invoice_address->invoice_street;
                 $orders[$n]['client_once_data']['zip_code'] = $param->invoice_data->invoice_address->invoice_street;
                 $orders[$n]['client_once_data']['city'] = $param->invoice_data->invoice_address->invoice_city;
-                $orders[$n]['client_once_data']['country'] = $countries[$param->invoice_data->invoice_address->invoice_country];
+                $orders[$n]['client_once_data']['country'] = $helper->getMappedCountry($param->invoice_data->invoice_address->invoice_country);
             } else {
                 $orders[$n]['client_once_data'] = $delivery_address;
             }
