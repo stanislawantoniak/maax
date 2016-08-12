@@ -20,6 +20,11 @@
  * @method array getRootCategory()
  * @method array getWebsitesAllowed()
  *
+ * @method int getIaishopId()
+ * @method string getIaishopUrl()
+ * @method string getIaishopLogin()
+ * @method string getIaishopPass()
+ *
  * @method Zolago_Dropship_Model_Vendor setLastIntegration(string $date)
  */
 class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
