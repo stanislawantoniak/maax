@@ -243,6 +243,7 @@ $pwrPoints = $this->getPwrPoints();
 </form>
 </fieldset>
 
-<?php echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
+<?php /** @see checkout/cart/sidebar/shipping/additional.phtml */
+echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
 
 <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3&sensor=FALSE"></script>
