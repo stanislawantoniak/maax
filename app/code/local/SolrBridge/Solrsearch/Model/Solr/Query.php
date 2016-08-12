@@ -820,7 +820,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         {
         	 return 'sort_position_decimal+'.$direction;
         }
-		else if($attributeCode = 'delta_price') {
+		else if($attributeCode == 'delta_price') {
 			/**
 			 * @see Zolago_Solrsearch_Model_Data::processFinalItemData()
 			 * and there
