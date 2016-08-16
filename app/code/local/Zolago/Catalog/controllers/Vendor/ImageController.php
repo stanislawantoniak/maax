@@ -626,7 +626,6 @@ class Zolago_Catalog_Vendor_ImageController
         $productId = $this->getRequest()->getParam("product", null);
         /** @var Zolago_Catalog_Model_Product $product */
         $product = Mage::getModel("catalog/product")->load($productId);
-        $result = array();
 
         $_helper = Mage::helper("zolagocatalog");
         /* @var $_helperGHCommon GH_Common_Helper_Data */
@@ -665,6 +664,7 @@ class Zolago_Catalog_Vendor_ImageController
 
                 $result["content"] = Mage::helper("zolagocatalog/image")->generateProductGallery($productId);
 
+                $this->setMainGalleryPage($productId);
             } catch (Exception $e) {
                 if ($e->getCode() == 0) {
                     $result = array(
