@@ -24,6 +24,8 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Int
                     if ($po) {
                         $po->setExternalOrderId($item->order_sn)
                         ->save();
+                        $po->addComment(Mage::helper('zosiaishop')->__('Order %s was imported to IAI Shop at number %s (%s)',$orderId,$item->order_sn,$item->order_id))
+                            ->saveComments();
                         $this->addOrderToConfirmMessage($orderId);
                         $this->log($this->getHelper()->__('Order %s was imported to IAI Shop at number %s (%s)',$orderId,$item->order_sn,$item->order_id));
                     } else {

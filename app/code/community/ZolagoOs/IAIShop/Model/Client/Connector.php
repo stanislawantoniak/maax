@@ -33,11 +33,14 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
         foreach ($params as $n => $param) {
             $orders[$n]['order_type'] = "retail";
-//            $orders[$n]['shop_id'] = $this->getShopId();
+            if ($this->getShopId()) {            
+                $orders[$n]['shop_id'] = $this->getShopId();
+            }
             $orders[$n]['stock_id'] = $param->pos_id;
             $orders[$n]['payment_type'] = $param->payment_method;
-            $orders[$n]['currency'] = $param->order_currency;
+            $orders[$n]['currency'] = $helper->getMappedCurrency($param->order_currency);
             $orders[$n]['client_once'] = "y";
+            
             $orders[$n]['order_operator'] = $helper->getOrderOperator();
             $orders[$n]['ignore_bridge'] = true;
 
@@ -58,8 +61,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             $orders[$n]['delivery_address']['additional'] = $param->delivery_data->inpost_locker_id;
 
             $orders[$n]['deliverer_id'] = $helper->getMappedDelivery($param->delivery_method);
+            $orders[$n]['client_notes'] = $helper->__('Order %s from Modago',$param->order_id);
 
-            $orders[$n]['invoice_requested'] = $param->invoice_data->invoice_required;
+            $orders[$n]['invoice_requested'] = $param->invoice_data->invoice_required ? 'y':'n';
             if ($param->invoice_data->invoice_required) {
                 $orders[$n]['client_once_data']['firstname'] = $param->invoice_data->invoice_address->invoice_first_name;
                 $orders[$n]['client_once_data']['lastname'] = $param->invoice_data->invoice_address->invoice_last_name;
@@ -96,11 +100,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         }
 
         $action = "addOrders";
-
         $request = array();
         $request[$action] = array();
         $request[$action]['params']['orders'] = $orders;
-
         return $this->doRequest("addorders", $action, $request);
     }
 

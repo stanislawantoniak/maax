@@ -27,6 +27,20 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+
+    /**
+     * mapped currency (now only PLN)
+     */
+     public function getMappedCurrency($currency) {
+         $currencyList = array (
+          'PLN' => 'PLN'
+         );
+         
+        if (!isset($currencyList[$currency])) {
+            $this->fileLog('wrong currency '.$currency);
+        }
+        return isset($currencyList[$currency])? $currencyList[$currency]:'unknown';
+     }
     /**
      * @param $params
      */
