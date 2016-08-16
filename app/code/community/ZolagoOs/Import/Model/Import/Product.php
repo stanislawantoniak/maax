@@ -288,6 +288,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
+                "ean" => $simpleXMLData->barcode,            
 
 
                 //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
@@ -320,6 +321,7 @@ class ZolagoOs_Import_Model_Import_Product
 
             "description" => $firstSimple->clothes_description,
             "short_description" => $firstSimple->description2,
+            "ean"	=> $firstSimple->barcode,
 
             //ext_
             "ext_productline" => $firstSimple->collection,
