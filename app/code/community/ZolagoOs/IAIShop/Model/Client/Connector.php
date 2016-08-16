@@ -30,11 +30,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
 
 
-        foreach ($params as $n => $param) {
-            $orders[$n]['order_sn'] = $sn;
-            $orders[$n]['products'] = array();
-            $orders[$n]['order_note'] = $helper->__('Order %s from Modago',$order_id);
-        }
+        $orders[0]['order_sn'] = $sn;
+        $orders[0]['products'] = array();
+        $orders[0]['order_note'] = $helper->__('Order %s from Modago',$order_id);
         $action = "setOrders";
         $request = array();
         $request[$action] = array();
