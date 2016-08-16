@@ -104,6 +104,7 @@ class ZolagoOs_IAIShop_Model_Observer
         ->reset(Zend_Db_Select::COLUMNS)
         ->columns('vendor_id');
         foreach ($vendorCollection as $vendor) {
+            $vendorModel = Mage::getModel('udropship/vendor');
             $vendors[] = $vendorModel->load($vendor->getVendorId());
         }
         return $vendors;
