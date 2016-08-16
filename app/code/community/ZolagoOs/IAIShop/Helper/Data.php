@@ -113,10 +113,13 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
                              17 => 'DHL',
                              19 => 'DHL',
                              10 => 'DPD',
+                             6	=> 'DPD',
                              37 => 'DHL',
                              2 => 'UPS',
                              28 => 'UPS',
                              85 => 'GLS',
+                             100039 => 'POCZTA POLSKA',
+                             45 => 'INPOST',
                          );
         if (!isset($mappedCarrier[$carrierId])) {
             $this->fileLog('Wrong carrier '.$carrierId);
