@@ -40,7 +40,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             array('*')
         );
 
-        $collection->addAttributeToFilter('order_payment.method', "banktransfer");
+        //$collection->addAttributeToFilter('order_payment.method', "banktransfer");
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
 
         //Last 2 month orders
@@ -78,7 +78,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             $out .= "</ul></div>";
 
 
-            $out .= "<div class='banktransfer-item banktransfer-right'>"."<b>" . Mage::helper("zolagosales")->__("Order  Created At") .": <i> ". $option["date"] . "</i></b><br>"."<b>" . Mage::helper("zolagosales")->__("Order Total") .": <i> ". $option["order_total"] . "</i></b>"."</div>";
+            $out .= "<div class='banktransfer-item banktransfer-right'>"."<b>" . Mage::helper("zolagoadminhtml")->__("Created At") .": <i> ". $option["date"] . "</i></b><br>"."<b>" . Mage::helper("zolagoadminhtml")->__("Order Total") .": <i> ". $option["order_total"] . "</i></b>"."</div>";
             $out .= "</div>";
 
             $out .= "<div class='banktransfer-row banktransfer-line'></div>";
