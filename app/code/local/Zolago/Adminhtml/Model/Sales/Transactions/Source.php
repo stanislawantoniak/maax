@@ -10,8 +10,8 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
     public function toOptionHash($selector = false)
     {
         switch ($this->getPath()) {
-            case 'banktransfer_orders':
-                $out = $this->_getBankTransferOrders();
+            case 'orders_info':
+                $out = $this->_getOrdersInfo();
                 break;
             default:
                 $out = parent::toOptionHash($selector);
@@ -23,7 +23,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
     /**
      * @return array
      */
-    protected function _getBankTransferOrders()
+    protected function _getOrdersInfo()
     {
         $orders = array();
 
