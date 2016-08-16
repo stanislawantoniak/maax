@@ -155,6 +155,12 @@
           <title>GLS</title>          
           <model>orbashipping/carrier_gls</model>
       </zolagogls>
+      <zolagodpd>
+        <active>1</active>
+        <tracking_gateway><![CDATA[https://tracktrace.dpd.com.pl/findPackage]]></tracking_gateway>
+        <title>DPD</title>
+        <model>orbashipping/carrier_dpd</model>
+      </zolagodpd>
     </carriers>
   </default>
 </config>

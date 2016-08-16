@@ -446,8 +446,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	protected function _logEvent($po, $comment) {
 		$session = Mage::getSingleton('udropship/session');
 		/* @var $session Zolago_Dropship_Model_Session */
-		$vendor = $po->getVendor();
-		$operator = $po->getOperator();
+		$vendor = $session->getVendor();
+		$operator = $session->getOperator();
 		
 		if($session->isOperatorMode()){
 			$fullname = $vendor->getVendorName()  . " / " . $operator->getEmail();
