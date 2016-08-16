@@ -19,6 +19,28 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         return $this->doRequest("getproducts", $action, $request);
     }
 
+    /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=setorders&method=setOrders
+     */
+
+    public function addComment($sn,$order_id) {
+        
+        $helper = Mage::helper('zosiaishop');
+        $orders = array();
+
+
+
+        foreach ($params as $n => $param) {
+            $orders[$n]['order_sn'] = $sn;
+            $orders[$n]['products'] = array();
+            $orders[$n]['order_note'] = $helper->__('Order %s from Modago',$order_id);
+        }
+        $action = "setOrders";
+        $request = array();
+        $request[$action] = array();
+        $request[$action]['params']['orders'] = $orders;
+        $response = $this->doRequest("setorders", $action, $request);
+    }
 
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=addorders&method=addOrders
@@ -61,7 +83,6 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             $orders[$n]['delivery_address']['additional'] = $param->delivery_data->inpost_locker_id;
 
             $orders[$n]['deliverer_id'] = $helper->getMappedDelivery($param->delivery_method);
-            $orders[$n]['client_notes'] = $helper->__('Order %s from Modago',$param->order_id);
 
             $orders[$n]['invoice_requested'] = $param->invoice_data->invoice_required ? 'y':'n';
             if ($param->invoice_data->invoice_required) {
