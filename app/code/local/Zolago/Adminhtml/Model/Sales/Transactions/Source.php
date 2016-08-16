@@ -34,11 +34,11 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             'main_table.order_id=order.entity_id',
             array('*')
         );
-        $collection->getSelect()->join(
-            array('order_payment' => $collection->getTable('sales/order_payment')),
-            'order_payment.parent_id=main_table.order_id',
-            array('*')
-        );
+//        $collection->getSelect()->join(
+//            array('order_payment' => $collection->getTable('sales/order_payment')),
+//            'order_payment.parent_id=main_table.order_id',
+//            array('*')
+//        );
 
         //$collection->addAttributeToFilter('order_payment.method', "banktransfer");
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
