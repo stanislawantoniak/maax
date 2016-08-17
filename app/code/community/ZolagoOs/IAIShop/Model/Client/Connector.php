@@ -32,7 +32,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
         $orders[0]['order_sn'] = $sn;
         $orders[0]['products'] = array();
-        $orders[0]['order_note'] = $helper->__('Order %s from Modago',$order_id);
+        $orders[0]['order_note'] = $helper->__('Zamówienie %s z Modago',$order_id);
         $action = "setOrders";
         $request = array();
         $request[$action] = array();
@@ -142,10 +142,29 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         $request[$action]['params']['value'] = $param->order_total;
         $request[$action]['params']['type'] = 'payment';
         $request[$action]['params']['payment_form_id'] = $param->payment_method_external_id;
-
+        $request[$action]['params']['accounting_date'] = date('Y-m-d');
         return $this->doRequest("payments", $action, $request);
     }
 
+/*
+    public function setPayment($paymentId) {
+        $helper = Mage::helper('zosiaishop');
+
+        $action = "setPayment";
+
+        $request = array();
+        $request[$action] = array();
+        $request[$action]['params'] = array();
+
+        $request[$action]['params']['payment_number'] = $paymentId;
+        $request[$action]['params']['account'] = '9023902930940932049';
+        $request[$action]['params']['accounting_date'] = date('Y-m-d');
+        $request[$action]['params']['external_payment_id'] = date('Ymd');
+        
+        Mage::log($request);
+        return $this->doRequest("payments", $action, $request);
+    }
+    */
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=getPaymentForms
      */
@@ -159,6 +178,23 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         return $this->doRequest("payments", $action, $request);
     }
 
+
+    /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=confirmPayment
+     */
+    public function confirmPayment($paymentId) {
+        
+        $helper = Mage::helper('zosiaishop');
+
+        $action = "confirmPayment";
+
+        $request = array();
+        $request[$action] = array();
+        $request[$action]['params'] = array();
+        $request[$action]['params']['payment_number'] = $paymentId;
+        Mage::log($request);
+        return $this->doRequest("payments", $action, $request);
+    }
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=getorders&method=getOrders
      */
