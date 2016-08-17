@@ -50,6 +50,10 @@
                 <name>mpblog/css/print.css</name>
                 <params><![CDATA[media="print" type="text/css"]]></params>
             </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/blog.js</script>
+            </action>
         </reference>
         <reference name="content">
             <block type="mpblog/layout" name="layout" as="layout">

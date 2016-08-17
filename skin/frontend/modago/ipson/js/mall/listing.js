@@ -163,15 +163,9 @@ Mall.listing = {
 
     initShuffle: function() {
         jQuery(document).ready(function() {
-            //jQuery('#grid')
-            //    .on('layout.shuffle', function() {
-                    Mall.listing.hideListingOverlay();
-                    Mall.listing.likePriceView();
-		            // Mall.listing.placeListingFadeContainer();
-		            Mall.Footer.setContainerPadding();
-                //})
-                //.shuffle({throttleTime: 800, speed: 0, easing: 'linear' })
-			;
+			Mall.listing.hideListingOverlay();
+			Mall.listing.likePriceView();
+			Mall.Footer.setContainerPadding();
 	        jQuery(window).resize();
         });
     },
