@@ -9,7 +9,7 @@ class Zolago_Modago_InpostController extends Mage_Core_Controller_Front_Action
 
         /* @var $collection GH_Inpost_Model_Resource_Locker_Collection */
         $collection = Mage::getModel("ghinpost/locker")->getCollection();
-        $collection->addFieldToFilter("town", array("eq" => $town));
+        $collection->addFieldToFilter("town", array("like" => "%" . $town . "%"));
         $collection->addFieldToFilter("type", GH_Inpost_Model_Locker::TYPE_PACK_MACHINE);
         $collection->addFieldToFilter("is_active", GH_Inpost_Model_Locker::STATUS_ACTIVE);
 
