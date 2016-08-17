@@ -53,7 +53,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
-		$pwrCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode(); //Paczka w Ruchu
+		$pwrCarrierCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode(); //Paczka w Ruchu
 
         switch ($deliveryMethodCode) {
             case $pickUpPointCode:
@@ -64,10 +64,9 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 $locker = $this->getInpostLocker();
                 $additionalData = $this->getLockerRender($locker);
                 break;
-			case $pwrCode:
-				// TODO \/
-                $locker = $this->getInpostLocker();
-				$additionalData = $this->getLockerRender($locker);
+			case $pwrCarrierCode:
+                $locker = $this->getPwrLocker();
+				$additionalData = $this->getPwrLockerRender($locker);
                 break;
         }
         return $additionalData;
@@ -167,7 +166,27 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         return $result;
     }
-	
+
+
+    /**
+     * @param ZolagoOs_Pwr_Model_Locker $locker
+     * @return string
+     */
+    public function getPwrLockerRender(ZolagoOs_Pwr_Model_Locker $locker)
+    {
+        $result = "";
+        if ($locker->getId()) {
+            $lockerDataLines = array(
+                $locker->getStreet(),
+                $locker->getTown(),
+                "(" . $locker->getLocationDescription() . ")"
+            );
+            $result = implode("<br />", $lockerDataLines);
+        }
+
+        return $result;
+    }
+
 	public function getInpostPoints() {
 		$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
 		$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";

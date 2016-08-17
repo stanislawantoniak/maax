@@ -1,6 +1,7 @@
 <?php
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
+    protected $pwrLocker = null;
 	protected $inpostLocker = null;
 	protected $pickUpPoint = null;
 
@@ -71,6 +72,11 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				$locker = $helper->getInpostLocker();
 				$shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
 				break;
+            case 'zolagopwr':
+                /* @var $locker ZolagoOs_Pwr_Model_Locker */
+                $locker = $helper->getPwrLocker();
+                $shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
+                break;
 		}
 
 		return $shippingAddressFromDeliveryPoint;
@@ -119,6 +125,28 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return $this->inpostLocker;
 	}
+
+    /**
+     * Retrieve Pwr Locker object for current checkout session
+     *
+     * @return ZolagoOs_Pwr_Model_Locker
+     */
+    public function getPwrLocker() {
+        if (is_null($this->pwrLocker)) {
+
+            $selectedShipping = $this->getSelectedShipping();
+            $deliveryPointName = $selectedShipping['shipping_point_code'];
+
+            /** @var ZolagoOs_Pwr_Model_Locker $locker */
+            $locker = Mage::getModel("zospwr/locker");
+            $locker->loadByLockerName($deliveryPointName);
+            if (!$locker->getIsActive()) {
+                $locker = Mage::getModel("zospwr/locker");
+            }
+            $this->pwrLocker = $locker;
+        }
+        return $this->pwrLocker;
+    }
 	
     public function getPaymentFromSession() {
 	    return Mage::getSingleton('checkout/session')->getPayment();
@@ -315,10 +343,14 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	public function getCarrierLogo($deliveryType)
 	{
-		$inpostCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
+		$pwrCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode();
+        $inpostCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 		$pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
 
 		switch ($deliveryType) {
+            case $pwrCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+                $carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/pwr/checkout-logo.png') . '" />';
+                break;
 			case $inpostCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
 				$carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/inpost/checkout-logo.png') . '" />';
 				break;
