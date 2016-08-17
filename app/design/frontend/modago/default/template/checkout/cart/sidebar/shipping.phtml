@@ -37,18 +37,9 @@ $productsPriceTotal = $totals["subtotal"]->getValue(); //Wartość produktów
 $discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() : 0); //Zniżka
 $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
-
-$inPostPoints = $this->getInpostPoints();
-$pwrPoints = $this->getPwrPoints();
 ?>
 
 <script type="text/javascript">
-    var inPostPointsData = '<?php echo $inPostPoints; ?>';
-    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
-
-    var pwrPointsData = '<?php echo $pwrPoints; ?>';
-    var pwrPoints = (pwrPointsData.length > 0) ? jQuery.parseJSON(pwrPointsData) : [];
-
     var sessionPointName = '<?php echo $locker->getName(); ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
