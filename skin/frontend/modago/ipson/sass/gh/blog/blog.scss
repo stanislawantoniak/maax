@@ -1,4 +1,16 @@
 .blog {
+
+
+  .mpblog-container {
+    .mp-blog-head {
+      h1 {
+        &.mp-title {
+          margin-bottom: 0;
+          padding: 0;
+        }
+      }
+    }
+  }
   .block-content {
     padding-right: 0;
     padding-left: 0;
@@ -20,7 +32,7 @@
       }
 
       button[type="submit"] {
-        background-image: url(../../../images/btn-search-filter.png);
+        background-image: url(../images/btn-search-filter.png);
         outline: none;
         height: 23px;
         margin-left: 2px;
