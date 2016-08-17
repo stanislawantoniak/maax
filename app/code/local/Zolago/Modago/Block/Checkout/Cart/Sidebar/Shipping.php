@@ -65,8 +65,8 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 $additionalData = $this->getLockerRender($locker);
                 break;
 			case $pwrCarrierCode:
-                $locker = $this->getPwrLocker();
-				$additionalData = $this->getPwrLockerRender($locker);
+                $point = $this->getPwrPoint();
+				$additionalData = $this->getPwrLockerRender($point);
                 break;
         }
         return $additionalData;
@@ -169,19 +169,19 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
 
     /**
-     * @param ZolagoOs_Pwr_Model_Locker $locker
+     * @param ZolagoOs_Pwr_Model_Point $point
      * @return string
      */
-    public function getPwrLockerRender(ZolagoOs_Pwr_Model_Locker $locker)
+    public function getPwrPointRender(ZolagoOs_Pwr_Model_Point $point)
     {
         $result = "";
-        if ($locker->getId()) {
-            $lockerDataLines = array(
-                $locker->getStreet(),
-                $locker->getTown(),
-                "(" . $locker->getLocationDescription() . ")"
+        if ($point->getId()) {
+            $pointDataLines = array(
+                $point->getStreet(),
+                $point->getTown(),
+                "(" . $point->getLocationDescription() . ")"
             );
-            $result = implode("<br />", $lockerDataLines);
+            $result = implode("<br />", $pointDataLines);
         }
 
         return $result;

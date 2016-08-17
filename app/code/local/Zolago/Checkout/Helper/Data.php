@@ -1,7 +1,7 @@
 <?php
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 
-    protected $pwrLocker = null;
+    protected $pwrPoint = null;
 	protected $inpostLocker = null;
 	protected $pickUpPoint = null;
 
@@ -73,9 +73,9 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 				$shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
 				break;
             case 'zolagopwr':
-                /* @var $locker ZolagoOs_Pwr_Model_Locker */
-                $locker = $helper->getPwrLocker();
-                $shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
+                /* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $helper->getpwrPoint();
+                $shippingAddressFromDeliveryPoint = $point->getShippingAddress();
                 break;
 		}
 
@@ -127,25 +127,25 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
     /**
-     * Retrieve Pwr Locker object for current checkout session
+     * Retrieve Pwr Point object for current checkout session
      *
-     * @return ZolagoOs_Pwr_Model_Locker
+     * @return ZolagoOs_Pwr_Model_Point
      */
-    public function getPwrLocker() {
-        if (is_null($this->pwrLocker)) {
+    public function getPwrPoint() {
+        if (is_null($this->pwrPoint)) {
 
             $selectedShipping = $this->getSelectedShipping();
             $deliveryPointName = $selectedShipping['shipping_point_code'];
 
-            /** @var ZolagoOs_Pwr_Model_Locker $locker */
-            $locker = Mage::getModel("zospwr/locker");
-            $locker->loadByLockerName($deliveryPointName);
-            if (!$locker->getIsActive()) {
-                $locker = Mage::getModel("zospwr/locker");
+            /** @var ZolagoOs_Pwr_Model_Point $point */
+            $point = Mage::getModel("zospwr/point");
+            $point->loadByName($deliveryPointName);
+            if (!$point->getIsActive()) {
+                $point = Mage::getModel("zospwr/point");
             }
-            $this->pwrLocker = $locker;
+            $this->pwrPoint = $point;
         }
-        return $this->pwrLocker;
+        return $this->pwrPoint;
     }
 	
     public function getPaymentFromSession() {

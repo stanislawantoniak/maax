@@ -40,6 +40,16 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 					"value" => $locker->getName()
 				);
 				break;
+            case 'zolagopwr':
+				/* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $this->getPwrPoint();
+
+				$data = array(
+                    "id" => $point->getId(),
+                    "city" => (string)ucwords(strtolower($point->getTown())),
+                    "value" => $point->getName()
+                );
+				break;
 		}
 		return $data;
 	}
@@ -97,6 +107,24 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 				$deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
 				$deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
 				break;
+            case 'zolagopwr':
+                /* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $helper->getPwrPoint();
+
+                $deliveryPoint->id = $point->getId();
+                $deliveryPoint->name = $point->getName();
+                $deliveryPoint->delivery_point_name = $point->getName();
+                $deliveryPoint->city = $point->getTown();
+                $deliveryPoint->street = $point->getStreet();
+                $deliveryPoint->postcode = $point->getPostcode();
+                $deliveryPoint->buildingNumber = $point->getBuildingNumber();
+                $deliveryPoint->locationDescription = $point->getLocationDescription();
+
+                $deliveryPoint->checkout->title = $helper->__("Locker PwR");
+                $deliveryPoint->checkout->logo = '<figure class="pwr-img"><div><img src="'.$this->getSkinUrl('images/pwr/checkout-logo.png').'"></div></figure><br/>';
+                $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
+                $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
+                break;
 		}
 
 		return $deliveryPoint;
@@ -110,6 +138,15 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 		$locker = $helper->getInpostLocker();
 		return $locker;
 	}
+    /**
+     * @return ZolagoOs_Pwr_Model_Point
+     */
+    public function getPwrPoint() {
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $point = $helper->getPwrPoint();
+        return $point;
+    }
 
 	public function getLastTelephoneForLocker() {
 		$shippingAddress = $this->getQuote()->getShippingAddress();
