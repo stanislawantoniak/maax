@@ -329,6 +329,8 @@ class ZolagoOs_Import_Model_Import_Product
             "ext_color" => $firstSimple->color,
             "ext_brand" => $firstSimple->brand,
 
+            "col1" => "Kolekcja:" . $firstSimple->description2,
+
             //magazyn dla konfigurowalnych - zarządzaj stanami = nie
             "use_config_manage_stock" => 0,
             "manage_stock" => 0,
