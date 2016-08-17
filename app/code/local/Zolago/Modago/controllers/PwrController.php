@@ -3,7 +3,7 @@
 class Zolago_Modago_PwrController extends Mage_Core_Controller_Front_Action {
 	
 	public function getPopulateMapDataAction() {
-		$town = html_entity_decode(trim($this->getRequest()->getParam("town", "")));
+		$town = trim($this->getRequest()->getParam("town", ""));
 		$result = array();
 
 		/* @var $collection GH_Inpost_Model_Resource_Locker_Collection */
