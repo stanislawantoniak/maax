@@ -33,34 +33,5 @@ $collection = $this->getCollection();
             </ul>
         </div>
     </div>
-
-    <?php if ($this->getMtEnabled()): ?>
-    <script type="text/javascript">
-        //<![CDATA[
-
-        document.observe('dom:loaded', function() {
-            try {
-                var options = {
-                    weight: true,
-                    weightMode: 'both',
-                    textHeight: 16,
-                    textColour: '#<?php echo $this->getMtTextColor(); ?>',
-                    outlineColour: '#<?php echo $this->getMtHiColor(); ?>',
-                    weightGradient: {
-                        0: '#<?php echo $this->getMtTextColor(); ?>',
-                        1: '#<?php echo $this->getMtTextColor2(); ?>'
-                    }
-                };
-
-                TagCanvas.Start('mpblog_canvas', 'mpblog_tags', options);
-            } catch(e) {
-                // something went wrong, hide the canvas container
-                document.getElementById('mpblog_canvas_container').style.display = 'none';
-            }
-        });
-        //]]>
-    </script>
-    <?php endif; ?>
-
 </div>
 <?php endif; ?>
