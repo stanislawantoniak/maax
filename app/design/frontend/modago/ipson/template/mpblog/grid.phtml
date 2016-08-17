@@ -1,0 +1,93 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+/** @var Magpleasure_Blog_Block_Content_Grid $this */
+?>
+
+<div class="mpblog-container grid">
+    <div class="mp-blog-head fix-me">
+        <h1 class="mp-title"><?php echo $this->getPageHeader(); ?></h1>
+        <?php if ($this->getShowRssLink()): ?>
+            <span class="mp-blog-rss">
+            <i class="<?php echo $this->getColorClass(); ?> glyphicons rss"></i>
+            <a class="mp-blog-rss-link" href="<?php echo $this->getRssFeedUrl(); ?>" target="_blank"
+               title="<?php echo $this->__("Subscribe RSS Feed"); ?>">
+                <?php echo $this->__("RSS Feed"); ?>
+            </a>
+        </span>
+        <?php endif; ?>
+    </div>
+    <?php if (count($this->getCollection())): ?>
+
+        <div class="mpblog-list grid" id="mpblog_grid">
+            <div class="grid-sizer"></div>
+            <?php foreach ($this->getCollection() as $post): ?>
+                <?php /** @var Magpleasure_Blog_Model_Post $post */ ?>
+                <div class="mpblog-post item <?php echo $post->getGridClass(); ?>">
+                    <div class="post-container">
+                        <?php if ($post->getListThumbnailSrc()): ?>
+                            <div class="thumbnail-container">
+                                <div class="post-thumbnail">
+                                    <a
+                                        href="<?php echo $post->getPostUrl(); ?>"
+                                        title="<?php echo $this->escapeHtml($post->getTitle()); ?>">
+
+                                        <img class="thumbnail"
+                                             src="<?php echo $post->getListThumbnailSrc(); ?>"
+                                             alt="<?php echo $this->escapeHtml($post->getTitle()); ?>"/>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <div class="mp-post-header">
+                            <h3><a href="<?php echo $post->getPostUrl(); ?>"><?php echo $this->escapeHtml($post->getTitle()); ?></a></h3>
+                        </div>
+
+                        <div class="mp-header fix-me">
+                            <?php echo $this->getHeaderHtml($post); ?>
+                        </div>
+
+                        <div class="mp-content std fix-me">
+                            <?php echo $post->getShortContent(); ?>
+                        </div>
+                        <div class="mp-footer fix-me"><?php echo $this->getFooterHtml($post); ?></div>
+                        <div class="mp-details fix-me">
+                            <a class="button mp-read-more" href="<?php echo $this->getReadMoreUrl($post); ?>" title="<?php echo $this->__("Read More"); ?>">
+                                <?php echo $this->__("Read More"); ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <script type="text/javascript">
+        //<![CDATA[
+            (function($){
+                $(document).ready(function(){
+
+                    setTimeout(function(){
+                        var $container = $('#mpblog_grid');
+                        $container.masonry({
+                            columnWidth: ".grid-sizer",
+                            itemSelector: '.item',
+                            singleMode: false,
+                            isResizable: true,
+                            isAnimated: true,
+                            animationOptions: {
+                                queue: false,
+                                duration: 500
+                            }
+                        });
+                    }, 300);
+                });
+            })(jQuery);
+        //]]>
+        </script>
+        <?php echo $this->getToolbarHtml(); ?>
+    <?php else: ?>
+        <?php echo $this->__("There are no posts yet."); ?>
+    <?php endif; ?>
+</div>

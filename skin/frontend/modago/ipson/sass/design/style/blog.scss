@@ -1,0 +1,36 @@
+.blog {
+  .block-content {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .mpblog-categories {
+
+  }
+
+  // sidebar search block
+  .mpblog-search {
+
+    .input-box {
+      input[type="text"] {
+        border: 1px solid #d6d6d6;
+        padding: 0 23px 0 5px !important;
+        float: left !important;
+        height: 23px !important;
+        width: 203px !important;
+      }
+
+      button[type="submit"] {
+        background-image: url(http://kosmetyki.ipson.modago.dev/skin/frontend/modago/default/images/btn-search-filter.png);
+        outline: none;
+        height: 23px;
+        margin-left: 2px;
+        float: left;
+        margin-top: 5px;
+        border: none;
+        background-color: transparent;
+        width: 23px;
+      }
+
+    }
+  }
+}

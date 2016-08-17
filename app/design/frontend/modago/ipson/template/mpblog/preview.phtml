@@ -1,0 +1,25 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+
+<div class="mpblog-preview">
+    <div class="mpblog-preview-header">
+        <h1><?php echo $this->getHeader(); ?></h1>
+
+        <?php if ($this->hasThumbnail()): ?>
+            <div class="thumbnail">
+                <img src="<?php echo $this->getThumbnailSrc(); ?>">
+            </div>
+        <?php endif; ?>
+    </div>
+    <div class="mpblog-preview-content std">
+        <?php echo $this->getContent(); ?>
+    </div>
+</div>
+<div class="mpblog-preview-button-set">
+    <button style="" onclick="window.close(); return false;" class="button" type="button" title="<?php echo $this->__("Close"); ?>" id="preview-close"><span><span><?php echo $this->__("Close"); ?></span></span></button>
+</div>
