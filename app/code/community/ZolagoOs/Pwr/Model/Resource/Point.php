@@ -20,7 +20,7 @@ class ZolagoOs_Pwr_Model_Resource_Point extends Mage_Core_Model_Resource_Db_Abst
 			
 			/** @var Orba_Shipping_Model_Packstation_Client_Pwr $client */
 			$client = Mage::getModel('orbashipping/packstation_client_pwr');
-			$array = $client->giveMeAllRUCHLocation();
+			$array = $client->giveMeAllRUCH();
 			
 			$updatesIds = array();
 			foreach ($array as $point) {
@@ -76,6 +76,10 @@ class ZolagoOs_Pwr_Model_Resource_Point extends Mage_Core_Model_Resource_Db_Abst
 					$processed['payment_type']		= (string)ZolagoOs_Pwr_Model_Point::PAYMENT_TYPE_NOT_AVAILABLE;
 				}
 			}
+
+			if ($key == "Zipcode") {
+                $processed["postcode"] = $value;
+            }
 		}
 
 		if (isset($processed['is_active']) && $processed['is_active'] == 'T') {
@@ -121,11 +125,11 @@ class ZolagoOs_Pwr_Model_Resource_Point extends Mage_Core_Model_Resource_Db_Abst
 			"District"				=> "district", // same as city?
 			// populated by mix of data
 			"Available"				=> "is_active",
+            "postcode"				=> "postcode",
 			//"CashOnDelivery"		=> "payment_available",
 			//"CashOnDelivery"		=> "payment_type",
 			// And this do not exist
 			/*
-			'postcode'				=> 'postcode',
 			'status'				=> 'status',
 			'locationDescription2'	=> 'location_description2',
 			'paymentpointdescr'		=> 'payment_point_description',

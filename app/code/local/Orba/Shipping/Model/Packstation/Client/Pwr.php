@@ -21,10 +21,10 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
 				$soap->__setSoapHeaders($header);
 			}
 			$result = $soap->$method($message);
-			//Mage::log($soap->__getLastRequest());
-			//Mage::log($soap->__getLastResponse());
+//			Mage::log($soap->__getLastRequest());
+//			Mage::log($soap->__getLastResponse());
 		} catch (Exception $xt) {
-			//Mage::logException($xt);
+//			Mage::logException($xt);
 			$result = $this->_prepareErrorMessage($xt);
 		}
 		return $result;
@@ -75,18 +75,19 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
 		return $helper;
 	}
 
-	/**
-	 * @return mixed|array
-	 */
-	public function giveMeAllRUCHLocation() {
-		$message = new StdClass();
-		$message->PartnerID = $this->getHelper()->getPartnerId();
-		$message->PartnerKey = $this->getHelper()->getPartnerKey();
-		$data = $this->_sendMessage("GiveMeAllRUCHLocation", $message);
-		$result = $this->_prepareResult($data);
-		return $result['NewDataSet']['AllRUCHLocation'];
-	}
-
+    /**
+     * There's location too
+     * @return mixed|array
+     */
+    public function giveMeAllRUCH() {
+        $message = new StdClass();
+        $message->PartnerID = $this->getHelper()->getPartnerId();
+        $message->PartnerKey = $this->getHelper()->getPartnerKey();
+        $data = $this->_sendMessage("GiveMeAllRUCHZipcode", $message);
+        $result = $this->_prepareResult($data);
+        Mage::log($result);
+        return $result['NewDataSet']['AllRUCHZipcode'];
+    }
 	/**
 	 * Prepare answer
 	 * 
@@ -94,7 +95,7 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
 	 * @return mixed|array
 	 */
 	protected function _prepareResult($data) {
-		$xml = simplexml_load_string($data->GiveMeAllRUCHLocationResult->any, "SimpleXMLElement", LIBXML_NOCDATA);
+        $xml = simplexml_load_string($data->GiveMeAllRUCHZipcodeResult->any, "SimpleXMLElement", LIBXML_NOCDATA);
 		$json = json_encode($xml);
 		$result = json_decode($json,true);
 		return $result;

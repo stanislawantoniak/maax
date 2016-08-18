@@ -46,6 +46,11 @@ $table = $installer->getConnection()
         array(
             'nullable' => true
         ))
+    // Postcode
+    ->addColumn('postcode', Varien_Db_Ddl_Table::TYPE_TEXT, 8,
+        array(
+            'nullable' => true
+        ))
     // street
     ->addColumn('street',
         Varien_Db_Ddl_Table::TYPE_TEXT,

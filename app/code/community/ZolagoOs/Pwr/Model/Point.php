@@ -89,7 +89,7 @@ class ZolagoOs_Pwr_Model_Point extends Mage_Core_Model_Abstract {
 	 * @return array
 	 */
 	public function getShippingAddress() {
-		$data['street'][]	= trim($this->getStreet() . ' ' . $this->getBuildingNumber());
+		$data['street'][]	= trim($this->getStreet());
 		$data['postcode']	= $this->getPostcode();
 		$data['city']		= $this->getTown();
 		$data['country_id']	= $this->getCountryId();
