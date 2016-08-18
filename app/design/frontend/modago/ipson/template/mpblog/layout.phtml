@@ -1,12 +1,16 @@
 <?php
-/**
- * @author Amasty Team
- * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
- * @package Magpleasure_Blog
- */
+$_helper = Mage::helper('mpblog');
+$_helperUrl = Mage::helper('mpblog/url');
 ?>
 
 <?php /** @var $this Magpleasure_Blog_Block_Layout */ ?>
+
+
+<div id="blog-mobile-menu">
+    <div class="wrapp-section bg-w visible-xs">
+        <h1><a href="<?php echo $_helperUrl->getUrl(); ?>"><?php echo $this->__("Blog"); ?></a></h1>
+    </div>
+</div>
 
 <article class="mobile <?php echo $this->getMobileLayoutCode(); ?> container-fluid">
     <?php if ($this->hasMobileLeftColumn()): ?>
@@ -28,11 +32,6 @@
         </script>
     <?php endif; ?>
     <section class="content">
-        <div id="blog-mobile-menu">
-            <div class="wrapp-section bg-w visible-xs">
-                <h1><?php echo $this->__("Blog"); ?></h1>
-            </div>
-        </div>
         <div class="swipe-me <?php echo $this->hasMobileLeftColumn() ? "left" : "right"; ?>"
              id="swipe_me"
              title="<?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>">
