@@ -1,1 +1,3 @@
 "Locker","Paczkomat"
+"Default dispatch point open hours","Domyślne godziny otwarcia punktu wysyłki"
+"Value used if open hours not defined in dispatch point (in POS)","Wartość jest użyta gdy w punkcie wysyłki nie ma zdefiniowanych godzin otwarcia (definiujemy je w POS)"
