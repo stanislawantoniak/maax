@@ -11,12 +11,12 @@
                     jQuery.ajax({
                         url: Mall.Cart.Map.deliverySet[e].urlData,
                         type: "POST",
-                        success: function (response) {
+                        success: (function (response) {
                             sessionStorage.setItem(e, response);
 
                             Mall.Cart.Map.deliverySet[e].mapPoints =
-                                JSON.parse(sessionStorage.getItem(e)).map_points;
-                        }
+                                JSON.parse(sessionStorage.getItem(this.e)).map_points;
+                         }).bind({e: e})
                     });
                 } else {
                     Mall.Cart.Map.deliverySet[e].mapPoints =
