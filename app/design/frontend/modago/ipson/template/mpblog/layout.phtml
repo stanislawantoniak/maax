@@ -10,9 +10,9 @@
 
 <article class="mobile <?php echo $this->getMobileLayoutCode(); ?> container-fluid">
     <?php if ($this->hasMobileLeftColumn()): ?>
-        <aside class="left" id="mpblog_left_off_canvas">
+        <aside class="left sidebar" id="mpblog_left_off_canvas">
             <?php foreach ($this->getMobileBlocks('left_side') as $alias): ?>
-                <div class="mobile-block" data-set="sidebar-<?php echo $alias; ?>">
+                <div class="mobile-block section" data-set="sidebar-<?php echo $alias; ?>">
                     <?php echo $this->getSidebarBlockHtml($alias); ?>
                 </div>
             <?php endforeach; ?>

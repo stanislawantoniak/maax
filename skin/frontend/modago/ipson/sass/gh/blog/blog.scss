@@ -20,6 +20,18 @@
   }
 
 
+  .mobile {
+    &.two-columns-left {
+      aside {
+        &.left {
+          &.active {
+            padding-left: 0;
+            padding-right: 0;
+          }
+        }
+      }
+    }
+  }
 
   .mpblog-container {
     &.list {
