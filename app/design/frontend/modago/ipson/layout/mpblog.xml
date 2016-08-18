@@ -9,6 +9,7 @@
 <layout version="0.1.0">
     <default>
         <update handle="apply_glyphicons" />
+
         <reference name="head">
             <action method="addCss"><styles>mpblog/css/styles.css</styles></action>
             <block type="mpblog/rss_wrapper" name="mpblog.rss.wrapper" as="mpblog_rss_wrapper"  />
