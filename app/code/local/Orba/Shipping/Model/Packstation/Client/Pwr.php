@@ -7,31 +7,6 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
 	}
 
 	/**
-	 * @param $method
-	 * @param null $message
-	 * @return array
-	 */
-	protected function _sendMessage($method, $message = null) {
-		try {
-			$wsdl = $this->_getWsdlUrl();
-			$mode = $this->_getSoapMode();
-			$soap = new SoapClient($wsdl, $mode);
-			$header = $this->_prepareSoapHeader();
-			if ($header) {
-				$soap->__setSoapHeaders($header);
-			}
-			$result = $soap->$method($message);
-//			Mage::log($soap->__getLastRequest());
-//			Mage::log($soap->__getLastResponse());
-		} catch (Exception $xt) {
-//			Mage::logException($xt);
-			$result = $this->_prepareErrorMessage($xt);
-		}
-		return $result;
-	}
-
-
-	/**
 	 * WSDL url
 	 *
 	 * @return string
@@ -85,7 +60,6 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
         $message->PartnerKey = $this->getHelper()->getPartnerKey();
         $data = $this->_sendMessage("GiveMeAllRUCHZipcode", $message);
         $result = $this->_prepareResult($data);
-        Mage::log($result);
         return $result['NewDataSet']['AllRUCHZipcode'];
     }
 	/**
