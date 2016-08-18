@@ -50,7 +50,6 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
             }
 
 
-            Mage::log($collection->getSize(), null, "yyy1.log");
             if (count($this->getFeed()->getRuleIds()) || Mage::app()->getRequest()->getParam('skip')) {
                 $collection->getSelect()->joinLeft(
                     array('rule' => Mage::getSingleton('core/resource')->getTableName('feedexport/feed_product')),
@@ -58,7 +57,6 @@ class GH_FeedExport_Model_Feed_Generator_Action_Iterator_Entity
                     ->where('rule.feed_id = ?', $this->getFeed()->getId())
                     ->where('rule.is_new = 1');
             }
-            Mage::log($collection->getSize(), null, "yyy2.log");
         } elseif ($this->_type == 'category') {
             $root = Mage::getModel('catalog/category')->load($this->getFeed()->getStore()->getRootCategoryId());
 

@@ -44,21 +44,19 @@
         <?php endforeach; ?>
 
     <?php endforeach; ?>
-
-
-    <?php foreach ($sizes as $i => $size): ?>
-        <?php if (isset($table[$i][$j]) && !empty($size) && $i > 0): ?>
+    <?php foreach ($sizes as $j => $size): ?>
+        <?php if (isset($table[$i][$j]) && !empty($size) && $j > 0): ?>
             <table>
-                <?php foreach ($names as $j => $name): ?>
-                    <?php if (!empty($table[$j][$i])): ?>
+                <?php foreach ($names as $i => $name): ?>
+                    <?php if (!empty($table[$i][$j])): ?>
                         <tr>
-                            <?php if ($j !== 0): ?>
-                            <td <?php if ($j !== 0): ?>style="background-color: #f2f1f0;"<?php endif; ?>>
+                            <?php if ($i !== 0): ?>
+                            <td <?php if ($i !== 0): ?>style="background-color: #f2f1f0;"<?php endif; ?>>
                                 <?php echo $name; ?>
                             </td>
                             <?php endif; ?>
-                            <td <?php if ($j == 0): ?> colspan="2" style="background-color: #f2f1f0;text-align: center;" <?php endif; ?>>
-                                <?php echo $table[$j][$i]; ?>
+                            <td <?php if ($i == 0): ?> colspan="2" style="background-color: #f2f1f0;text-align: center;" <?php endif; ?>>
+                                <?php echo $table[$i][$j]; ?>
 <!--                                                                (--><?php //echo $j; ?><!--,--><?php //echo $i; ?><!--)-->
                             </td>
                         </tr>

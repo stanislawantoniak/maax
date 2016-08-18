@@ -688,5 +688,11 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
     {
         return $this->_customerZipExists($country, $zip);
     }
-
+    protected function _customerZipExists($country, $zip)
+    {
+        /* @var $helper Orba_Shipping_Helper_Carrier_Dhl */
+        $helper = Mage::helper("orbashipping/carrier_dhl");
+        $isValidZip = $helper->isDHLValidZip($country, $zip);
+        return $isValidZip;
+    }
 }
