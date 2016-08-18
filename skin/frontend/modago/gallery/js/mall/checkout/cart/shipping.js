@@ -1,5 +1,4 @@
 (function(){
-    "use strict";
     Mall.Cart.Shipping = {
         form_id: "cart-shipping-methods-form",
         content: "#cart-shipping-methods",
@@ -326,7 +325,6 @@
             });
         },
         attachShowOnMapSavedInSessionPoint: function () {
-            "use strict";
             var self = this;
             var sessionPoint = jQuery("[name=shipping_point_code]");
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + self.carrierPoint + "']");
