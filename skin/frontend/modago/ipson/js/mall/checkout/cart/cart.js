@@ -1,79 +1,66 @@
 var Cart = {
-    changeQuantity: function (productId, maxQty, minQty, action){
-        var productQuantityBlock = jQuery("div.product_" + parseInt(productId));
-        productQuantityBlock.find(".error").hide();
-        var quantity =  productQuantityBlock.find("input[name=quantity]").val();
-        if(action == 'less'){
-            if(Cart.validateLessQuantity(quantity, maxQty, minQty)){
-                quantity--;
-                productQuantityBlock.find("input[name=quantity]").val(quantity);
-            }else{
-                //jQuery("div.product_"+productId).find(".error").show();
-            }
+    changeQuantity: function (id, val){
+
+        var input = jQuery("[data-id='" + id + "']");
+
+        var error = jQuery("div.product_" + parseInt(id)).find(".error");
+        error.hide();
+
+        if (val < input.attr("data-min-sale-qty")) {
+
+            val = input.attr("data-min-sale-qty");
+            error.show();
+
+        } else if (val > input.attr("data-max-sale-qty")) {
+
+            val = input.attr("data-max-sale-qty");
+            error.show();
+
         }
-        if(action == 'more'){
-            if(Cart.validateMoreQuantity(quantity, maxQty, minQty)){
-                quantity++;
-                productQuantityBlock.find("input[name=quantity]").val(quantity);
-                Cart.addToCart(productId, quantity);
-            }else{
-                productQuantityBlock.find("input[name=quantity]").val(maxQty);
-                jQuery("div.product_"+productId).find(".error").show();
-            }
-        }
+
+        input.val(val);
+
+        OrbaLib.Cart.update({
+            "item_id": id,
+            "qty": val
+        }, function(e){
+            jQuery.ajax({
+                url: "",
+                context: document.body,
+                success: function(s,x){
+                    jQuery(this).html(s);
+                }
+            });
+        });
+
+        jQuery("body").append('<div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 1000000; display: none; background: url(http://kosmetyki.ipson.modago.es/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat rgba(255, 255, 255, 0.498039);"></div>');
+        jQuery(".listing-overlay").show( "fade", 1000 );
+
         return false;
     },
 
-    validateLessQuantity: function(quantity, maxQty, minQty){
-        if(parseInt(quantity) > parseInt(minQty) && parseInt(quantity) > 0){
-            return true;
-        }
-        return false;
+    less: function (id) {
+        Cart.changeQuantity(
+            jQuery("[data-id='" + id + "']").attr("data-id"),
+            parseInt(jQuery("[data-id='" + id + "']").val()) - 1
+        );
     },
 
-    validateMoreQuantity: function(quantity, maxQty, minQty){
-        if(parseInt(quantity) < parseInt(maxQty) && parseInt(quantity) > 0){
-            return true;
-        }
-        return false;
+    more: function (id) {
+        Cart.changeQuantity(
+            jQuery("[data-id='" + id + "']").attr("data-id"),
+            parseInt(jQuery("[data-id='" + id + "']").val()) + 1
+        );
     },
 
-    addToCart: function(id, qty) {
-//        if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
-//            return false;
-//        }
-//        jQuery('#full-width-popup-table .quantity span').text('');
-//        var superLabel = jQuery(this._current_superattribute).attr("name");
-        var attr = {};
-//        attr[jQuery(this._current_superattribute).attr("data-superattribute")] = jQuery(this._current_superattribute).attr("value");
-//	    var popup = jQuery("#popup-after-add-to-cart");
-//	    popup.find(".modal-error").hide();
-//	    popup.find(".modal-loaded").hide();
-//	    popup.find(".modal-loading").show();
-//	    popup.modal('show');
-//	    popup.css('pointer-events','none');
-//	    jQuery('#add-to-cart').css('pointer-events','none');
-//	    jQuery('#full-width-popup-table .quantity span').text(qty);
-        OrbaLib.Cart.add({
-            "product_id": id,
-            "super_attribute": attr,
-            "qty": qty
-        }, addtocartcallback);
-        return false;
+    update: function(){
+        Cart.changeQuantity(
+            jQuery(this).attr("data-id"),
+            parseInt(jQuery(this).val())
+        );
     }
 };
 
 jQuery(document).ready(function() {
-	jQuery("input[name=quantity]").change(function(){
-//	    var quantityR = jQuery(this).val();
-//	    var maxQtyR = jQuery(this).closest("quantity_blocks").find("input[name=max_qty]").val(); console.log(jQuery(maxQtyR));
-//	    var minQtyR = jQuery(this).closest("quantity_blocks").find("input[name=min_qty]").val();
-//	    if(parseInt(quantityR) >= parseInt(minQtyR) && parseInt(quantityR) <= parseInt(maxQtyR) && parseInt(quantityR) > 0){
-//	        Cart.addToCart(productId, quantityR);
-//	    }else{
-//	        jQuery(this).val(maxQtyR);
-//            jQuery(this).parent("quantity_blocks").find(".error").show();
-//
-//        }
-	});
+    jQuery("input[name=quantity]").change(Cart.update);
 });

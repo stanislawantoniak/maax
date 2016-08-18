@@ -1212,6 +1212,14 @@
 						display: none;
 					}
 				}
+				@media (max-width: $screen-xs-max) {
+					a.qty_less, a.qty_more {
+						display: none;
+					}
+					div.qty {
+						width: 70px;
+					}
+				}
 			}
 			.wartosc {
 				width:33.333%;
