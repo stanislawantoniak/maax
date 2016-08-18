@@ -22,6 +22,11 @@
 
 
   .mpblog-container {
+    &.list {
+      .mp-pager {
+        border-top: none;
+      }
+    }
     .mp-blog-head {
       h1 {
         &.mp-title {
