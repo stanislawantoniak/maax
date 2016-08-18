@@ -17,7 +17,7 @@ $post = $this->getPost();
 ?>
 
 <?php if ($this->showAuthor() && $post->getPostedBy()): ?>
-    <span class="posted-by"><i class="<?php echo $this->getColorClass(); ?> glyphicons user"></i><?php echo $this->__("By "); ?>
+    <span class="posted-by"><i class="<?php echo $this->getColorClass(); ?> glyphicons user"></i><?php echo $this->__("By"); ?>
     <?php if ($this->useGoogleProfile()): ?>
         <a rel="author"
            href="<?php echo $this->getGoogleProfileUrl(); ?>"
