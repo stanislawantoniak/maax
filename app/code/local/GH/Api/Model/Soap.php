@@ -522,6 +522,8 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 return Orba_Shipping_Model_Carrier_Ups::CODE;
             case 'gls':
                 return Orba_Shipping_Model_Carrier_Gls::CODE;
+	    case 'dpd':
+	    	return Orba_Shipping_Model_Carrier_Dpd::CODE;
         }
 
         $this->throwWrongCourierName();

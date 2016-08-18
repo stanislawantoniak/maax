@@ -157,6 +157,12 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
 		);
+
+		$options[] = array(
+			'sort' => 'delta_price',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Best deals")
+		);
 		
 		return $options;
 	}
