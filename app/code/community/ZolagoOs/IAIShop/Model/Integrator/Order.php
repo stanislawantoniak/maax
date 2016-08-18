@@ -24,22 +24,22 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Int
                     if ($po) {
                         $po->setExternalOrderId($item->order_sn)
                         ->save();
-                        $po->addComment(Mage::helper('zosiaishop')->__('Order %s was imported to IAI Shop at number %s (%s)',$orderId,$item->order_sn,$item->order_id),false,true)
+                        $po->addComment(Mage::helper('zosiaishop')->__('Zamówienie %s zostało zaimportowane do IAI Shop pod numerem %s (%s)',$orderId,$item->order_sn,$item->order_id),false,true)
                             ->saveComments();
                         $this->addOrderToConfirmMessage($orderId);
-                        $this->log($this->getHelper()->__('Order %s was imported to IAI Shop at number %s (%s)',$orderId,$item->order_sn,$item->order_id));
+                        $this->log($this->getHelper()->__('Zamówienie %s zostało zaimportowane do IAI Shop pod numerem %s (%s)',$orderId,$item->order_sn,$item->order_id));
                         return $item->order_sn;
                     } else {
-                        $this->log($this->getHelper()->__('Order %s does not exists',$orderId));
+                        $this->log($this->getHelper()->__('Zamówienie %s nie istnieje w systemie',$orderId));
                     }
                     break;
                 } else {
                     $this->getHelper()->fileLog($item);
-                    $this->log($this->getHelper()->__('IAI Api order has not serial number for order %s',$orderId));
+                    $this->log($this->getHelper()->__('Zamówienie %s nie otrzymało numeru w IAI Api',$orderId));
                 }
             } else {
                 $this->getHelper()->fileLog($item);
-                $this->log($this->getHelper()->__('IAI Api Error %d at order %s: %s',$item->faultCode,$orderId,$item->faultString));
+                $this->log($this->getHelper()->__('Błąd IAI Api nr %d dla zamówienia %s: %s',$item->faultCode,$orderId,$item->faultString));
             }
         }
         return null;
