@@ -49,13 +49,7 @@ class Zolago_Mapper_Model_Observer {
         $event = $observer->getEvent();
         $productIds = $event->getProductIds();
         $websites = $event->getWebsiteIds();
-        $action = $event->getAction();
         $queue = Mage::getModel('zolagomapper/queue_product');
-
-        $url = Mage::getSingleton('catalog/url');
-        $resource = $url->getResource();
-        $string = Mage::getSingleton('catalog/product_url');
-
         foreach($productIds as $id) {
             foreach ($websites as $wid) {
                 $elem = array (
@@ -63,36 +57,7 @@ class Zolago_Mapper_Model_Observer {
                             'website_id' => $wid,
                         );
                 $queue->push($elem);
-
-                $storeIds = Mage::app()->getWebsite($wid)->getStoreIds();
-                foreach($storeIds as $sId){
-                    $refresh = false;
-                    $urlRewriteCollection = Mage::getModel('core/url_rewrite')->getCollection()
-                        ->addFieldToFilter('store_id', $sId)
-                        ->addFieldToFilter('product_id', $id);
-                    switch($action) {
-                        case 'add':
-                            if(!$urlRewriteCollection->getFirstItem()->getRequestPath()){
-                                $model = Mage::getModel('catalog/product')->setStoreId($sId)->load($id);
-                                $key = $string->formatUrlKey($model->getName().' '.$model->getSkuv());
-                                $model->setData('store_id', $sId); // Trick
-                                $model->setUrlKey($key);
-                                $resource->saveProductAttribute($model, 'url_key');
-                                $refresh = true;
-                            }
-                            break;
-                        case 'remove':
-                            if($urlRewriteCollection->getFirstItem()->getRequestPath()){
-                                $resource->clearProductRewrites($id, $sId);
-                                $refresh = true;
-                            }
-                            break;
-                    }
-                    if ($refresh) {
-                        $url->refreshProductRewrite($id, $sId);
-                    }
-                }
-            }
+            }            
         }
     }
 
