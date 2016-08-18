@@ -33,7 +33,31 @@
     }
   }
 
+  @media(max-width: $screen-xs-max) {
+    #blog-mobile-menu {
+      margin-top: -15px;
+      border-bottom: 1px solid $colorAccentBlocks;
+    }
+
+    h1 {
+      font-size: 18px;
+      padding-bottom: 12px;
+      padding-top: 12px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+
+
+  #swipe_me {
+    &.swipe-me.left {
+      position: absolute;
+      right: 15px;
+      top: 113px;
+    }
+  }
   .mpblog-container {
+    margin-top: 15px;
     &.list {
       .mp-pager {
         border-top: none;
