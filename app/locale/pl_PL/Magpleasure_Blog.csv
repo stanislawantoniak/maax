@@ -253,7 +253,7 @@
 "Post '%s' can be disabled only. Some post has same Url Key for the same Store View.","Post '%s' can be disabled only. Some post has same Url Key for the same Store View."
 "Post '%s' can't be saved. It need to be assigned to any Store View.","Post '%s' can't be saved. It need to be assigned to any Store View."
 "Posts","Posts"
-"Posts tagged '%s'","Posts tagged '%s'"
+"Posts tagged '%s'","Posty z tagiem '%s'"
 "Post was not canceled (%s).","Post was not canceled (%s)."
 "Post wasn't deleted (%s).","Post wasn't deleted (%s)."
 "Post wasn't duplicated. %s","Post wasn't duplicated. %s"
