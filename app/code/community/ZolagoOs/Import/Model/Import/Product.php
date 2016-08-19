@@ -145,7 +145,7 @@ class ZolagoOs_Import_Model_Import_Product
             // Important: for values other than "default" profile has to be an existing magmi profile
             $skusCreated = [];
             $importProfile = self::MAGMI_IMPORT_PROFILE;
-            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
+
             $toInsert = array();
             foreach ($skuBatch as $configurableSkuv => $simples) {
                 $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
@@ -153,6 +153,7 @@ class ZolagoOs_Import_Model_Import_Product
                 $toInsert = array_merge($u["products"], $toInsert);
             }
 
+            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
             foreach($toInsert as $toInsertItem){
                 $dp->ingest($toInsertItem);
             }
