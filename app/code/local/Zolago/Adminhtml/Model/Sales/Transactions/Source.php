@@ -33,14 +33,14 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             array('order' => $collection->getTable('sales/order')),
             'main_table.order_id=order.entity_id',
             array('*')
+       );
+        $collection->getSelect()->join(
+            array('order_payment' => $collection->getTable('sales/order_payment')),
+            'order_payment.parent_id=main_table.order_id',
+            array('*')
         );
-//        $collection->getSelect()->join(
-//            array('order_payment' => $collection->getTable('sales/order_payment')),
-//            'order_payment.parent_id=main_table.order_id',
-//            array('*')
-//        );
 
-        //$collection->addAttributeToFilter('order_payment.method', "banktransfer");
+//        $collection->addAttributeToFilter('order_payment.method', "banktransfer");
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
 
         //Last 2 month orders
@@ -58,6 +58,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             $options[$collectionItem->getEntityId()]["customer_firstname"] = $collectionItem->getData('customer_firstname');
             $options[$collectionItem->getEntityId()]["customer_lastname"] = $collectionItem->getData('customer_lastname');
             $options[$collectionItem->getEntityId()]["customer_email"] = $collectionItem->getData('customer_email');
+            $options[$collectionItem->getEntityId()]["payment_method"] = $collectionItem->getData('method');
 
             $options[$collectionItem->getEntityId()]["items"][$collectionItem->getItemId()] = array(
                 "id" => $collectionItem->getProductId(),
@@ -78,7 +79,9 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             $out .= "</ul></div>";
 
 
-            $out .= "<div class='banktransfer-item banktransfer-right'>"."<b>" . Mage::helper("zolagoadminhtml")->__("Created At") .": <i> ". $option["date"] . "</i></b><br>"."<b>" . Mage::helper("zolagoadminhtml")->__("Order Total") .": <i> ". $option["order_total"] . "</i></b>"."</div>";
+            $out .= "<div class='banktransfer-item banktransfer-right'>"."<b>" . Mage::helper("zolagoadminhtml")->__("Created At") .": <i> ". $option["date"] . "</i></b><br>"."<b>" . Mage::helper("zolagoadminhtml")->__("Order Total") .": <i> ". $option["order_total"] . 
+            "</i></b><br/>".Mage::helper('zolagoadminhtml')->__('Payment method').": ". Mage::helper('ghgtm')->getPaymentMethodName($option['payment_method']).
+            "</div>";
             $out .= "</div>";
 
             $out .= "<div class='banktransfer-row banktransfer-line'></div>";
