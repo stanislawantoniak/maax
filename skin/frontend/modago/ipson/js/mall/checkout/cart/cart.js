@@ -59,6 +59,10 @@ var Cart = {
 
     send: function() {
         if (Date.now() > Cart.time) {
+
+            jQuery("body").append('<div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 1000000; display: none; background: url(http://kosmetyki.ipson.modago.es/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat rgba(255, 255, 255, 0.498039);"></div>');
+            jQuery(".listing-overlay").show( "fade", 1000 );
+
             jQuery("#cart-form").submit();
 
             window.clearInterval(Cart.interval);
