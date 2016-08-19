@@ -41,8 +41,9 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     {
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+		$pwrCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode(); //Paczka w Ruchu
 
-        return array($ghInpostCarrierCode, $pickUpPointCode);
+        return array($ghInpostCarrierCode, $pickUpPointCode, $pwrCode);
     }
 
 
@@ -52,6 +53,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
 
         $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode(); //Inpost locker
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+		$pwrCarrierCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode(); //Paczka w Ruchu
 
         switch ($deliveryMethodCode) {
             case $pickUpPointCode:
@@ -61,6 +63,10 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
             case $ghInpostCarrierCode:
                 $locker = $this->getInpostLocker();
                 $additionalData = $this->getLockerRender($locker);
+                break;
+			case $pwrCarrierCode:
+                $point = $this->getPwrPoint();
+				$additionalData = $this->getPwrLockerRender($point);
                 break;
         }
         return $additionalData;
@@ -161,4 +167,35 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         return $result;
     }
 
+
+    /**
+     * @param ZolagoOs_Pwr_Model_Point $point
+     * @return string
+     */
+    public function getPwrPointRender(ZolagoOs_Pwr_Model_Point $point)
+    {
+        $result = "";
+        if ($point->getId()) {
+            $pointDataLines = array(
+                $point->getStreet(),
+                $point->getTown(),
+                "(" . $point->getLocationDescription() . ")"
+            );
+            $result = implode("<br />", $pointDataLines);
+        }
+
+        return $result;
+    }
+
+	public function getInpostPoints() {
+		$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
+		$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+		return $inPostPoints;
+	}
+	
+	public function getPwrPoints() {
+		$pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr::getPopulateMapData();
+		$pwrPoints = isset($pwrData["map_points"]) ? $pwrData["map_points"] : "";
+		return $pwrPoints;
+	}
 } 
