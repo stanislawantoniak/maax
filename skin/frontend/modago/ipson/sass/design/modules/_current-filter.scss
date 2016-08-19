@@ -190,33 +190,6 @@
   }
 }
 
-.catalog-category-view {
-    .breadcrumb {
-      background-attachment: scroll;
-      background-clip: border-box;
-      background-color: rgba(0, 0, 0, 0);
-      background-image: none;
-      background-origin: padding-box;
-      background-size: auto;
-
-
-      color: rgb(30, 30, 30);
-
-      font-family: $fontRegular;
-      font-size: 11px;
-
-
-      margin-bottom: 0px;
-      margin-left: 0px;
-      margin-right: 0px;
-      margin-top: 20px;
-      padding-bottom: 0px;
-      padding-left: 0px;
-      padding-right: 0px;
-      padding-top: 0px;
-    }
-}
-
 .not-content-mode.sm-to-smmd-plus-smmd, .this-is-search.sm-to-smmd-plus-smmd {
   .breadcrumb {
     @media (min-width: $screen-sm-to-smmd-min) and (max-width: $screen-sm-to-smmd-max) {
