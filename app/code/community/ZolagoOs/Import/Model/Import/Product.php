@@ -146,7 +146,7 @@ class ZolagoOs_Import_Model_Import_Product
             // Important: for values other than "default" profile has to be an existing magmi profile
             $skusCreated = [];
             $importProfile = self::MAGMI_IMPORT_PROFILE;
-            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $dp->beginImportSession($importProfile, "xcreate");
             foreach ($skuBatch as $configurableSkuv => $simples) {
                 $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
                 $skusCreated = array_merge($u, $skusCreated);
@@ -158,7 +158,7 @@ class ZolagoOs_Import_Model_Import_Product
             // create a Product import Datapump using Magmi_DatapumpFactory
             $dpUpdate = Magmi_DataPumpFactory::getDataPumpInstance("productimport");
             //Start update configurable with children session
-            $dpUpdate->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $dpUpdate->beginImportSession($importProfile, "update");
             $this->updateRelations($dp,$skusCreated);
             $dpUpdate->endImportSession();
 
