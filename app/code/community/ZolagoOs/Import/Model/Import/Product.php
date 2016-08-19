@@ -155,13 +155,13 @@ class ZolagoOs_Import_Model_Import_Product
 
 
             //Start update configurable with children session
-            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
-            $this->updateRelations($dp,$skusCreated);
-            $dp->endImportSession();
+            //$dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+            //$this->updateRelations($dp,$skusCreated);
+            //$dp->endImportSession();
 
 
             //3. Set additional attributes
-            $this->updateAdditionalAttributes();
+            //$this->updateAdditionalAttributes();
 
         } catch (Exception $e) {
             Mage::logException($e);
@@ -359,7 +359,7 @@ class ZolagoOs_Import_Model_Import_Product
         }
 
         // Now ingest item into magento
-        $dp->ingest($productConfigurable);
+        //$dp->ingest($productConfigurable);
         $skusUpdated[$configurableSku] = $subskus;
         $this->setConfigurableSkus($configurableSku);
 
