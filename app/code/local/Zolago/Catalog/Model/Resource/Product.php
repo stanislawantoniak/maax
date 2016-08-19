@@ -437,5 +437,57 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
         return $this->_getReadAdapter()->fetchAll($select);
     }
+    
+    /**
+     * preprare url keys for all stores from name and skuv
+     *
+     * @param array $ids
+     * @return array
+     */
+     public function getUrlKeysByStore($ids) {
+         $readConnection = $this->_getReadAdapter();
+         $select = $readConnection->select();
+         $select->from(
+             'catalog_product_entity_varchar AS a',
+             array (
+                 'value' => 'a.value',
+                 'store' => 'a.store_id',
+                 'productId' => 'a.entity_id',
+             )
+         )
+         ->join (
+             array('eav' => 'eav_attribute'),
+             'a.attribute_id = eav.attribute_id AND a.entity_type_id = eav.entity_type_id',
+             array('code'=>'eav.attribute_code')
+         )
+         ->join(
+             array('type' => 'eav_entity_type'),
+             'a.entity_type_id = type.entity_type_id',
+             array()
+         )
+         ->where('type.entity_type_code = "catalog_product"')
+         ->where('eav.attribute_code in (?)',array('skuv','name'))
+         ->where('a.entity_id in (?)',$ids);
+         
+         $result = $readConnection->fetchAll($select);
+         $tmpList = array();
+         $string = Mage::getSingleton('catalog/product_url');
+         foreach ($result as $item) {             
+             $tmpList[$item['productId']][$item['store']][$item['code']] = $item['value'];
+         }
+         $list = array();
+         foreach ($tmpList as $pid=>$store) {
+             foreach ($store as $storeId => $values) {
+                 if (!isset($values['skuv'])) {
+                     $values['skuv'] = isset($store[0]['skuv'])? $store[0]['skuv']:''; // from default
+                 }
+                 if (!isset($values['name'])) {
+                     $values['name'] = isset($store[0]['name'])? $store[0]['name']:''; // from default
+                 }
+                 $list[$pid][$storeId] = $string->formatUrlKey($values['name'].' '.$values['skuv']);
+             }
+         }
+         return $list;
+     }
 
 }
