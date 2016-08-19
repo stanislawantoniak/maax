@@ -283,7 +283,7 @@ class ZolagoOs_Import_Model_Import_Product
             "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
             "tax_class_id" => 2,
             "attribute_set" => $attributeSet,
-            "store" => "admin",
+            //"store" => "admin",
             "description" => $simpleXMLData->clothes_description,
             "short_description" => $simpleXMLData->description2,
             "size" => $simpleXMLData->size,
@@ -341,7 +341,7 @@ class ZolagoOs_Import_Model_Import_Product
             "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
             "tax_class_id" => 2,
             "attribute_set" => $attributeSet,
-            "store" => "admin",
+            //"store" => "admin",
             "configurable_attributes" => "size",
             "simples_skus" => implode(",", $subskus),
 
