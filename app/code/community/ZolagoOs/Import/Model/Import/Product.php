@@ -16,7 +16,6 @@ class ZolagoOs_Import_Model_Import_Product
     protected $_vendor;
 
     const MAGMI_IMPORT_PROFILE = "wojcik";
-    const MAGMI_IMPORT_VENDOR_ID = 1;
 
     public function __construct()
     {
@@ -145,7 +144,7 @@ class ZolagoOs_Import_Model_Import_Product
             // Important: for values other than "default" profile has to be an existing magmi profile
             $skusCreated = [];
             $importProfile = self::MAGMI_IMPORT_PROFILE;
-            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $dp->beginImportSession($importProfile, "create", new ZolagoOs_Import_Model_ImportProductsLogger());
             foreach ($skuBatch as $configurableSkuv => $simples) {
                 $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
                 $skusCreated = array_merge($u, $skusCreated);
@@ -197,6 +196,9 @@ class ZolagoOs_Import_Model_Import_Product
 
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
+
+        $aM->updateAttributesPure($idsConfigurable, array('manufacturer' => $vendorId), 0);
+
     }
 
     public function updateRelations($dp,$skusCreated)
@@ -276,7 +278,6 @@ class ZolagoOs_Import_Model_Import_Product
             $simpleSku = $vendorId . "-" . $simpleSkuV;
             $subskus[] = $simpleSku;  //Collect simple skus for configurable
             $product = array(
-                "manufacturer" => self::MAGMI_IMPORT_VENDOR_ID,
                 "name" => $simpleXMLData->description,
                 "sku" => $simpleSku,
                 "skuv" => $simpleSkuV,
@@ -308,7 +309,6 @@ class ZolagoOs_Import_Model_Import_Product
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "manufacturer" => self::MAGMI_IMPORT_VENDOR_ID,
             "name" => $simpleXMLData->description,
             "sku" => $configurableSku,
             "skuv" => $configurableSkuv,
