@@ -116,12 +116,12 @@ class ZolagoOs_Import_Model_Import_Product
             $skuBatch = array();
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
-                    $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+                    $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
                 }
             }
             if (is_object($xmlToArray["item"])) {
                 $productXML = $xmlToArray["item"];
-                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+                $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
             }
 
 
