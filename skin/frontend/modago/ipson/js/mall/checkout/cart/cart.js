@@ -1,4 +1,6 @@
 var Cart = {
+    delay: 700,
+
     changeQuantity: function (id, val){
 
         var input = jQuery("[data-id='" + id + "']");
@@ -19,7 +21,17 @@ var Cart = {
 
         input.val(val);
 
-        if (val != input.attr("old-value")) jQuery("#cart-form").submit();
+        if (val != input.attr("old-value")) {
+
+            this.time = Date.now() + this.delay;
+
+            if (!this.interval) this.interval = window.setInterval(Cart.send, 100);
+
+        } else {
+
+            window.clearInterval(Cart.interval);
+
+        }
 
         return false;
     },
@@ -38,11 +50,19 @@ var Cart = {
         );
     },
 
-    update: function(){
+    update: function() {
         Cart.changeQuantity(
             jQuery(this).attr("data-id"),
             parseInt(jQuery(this).val())
         );
+    },
+
+    send: function() {
+        if (Date.now() > Cart.time) {
+            jQuery("#cart-form").submit();
+
+            window.clearInterval(Cart.interval);
+        }
     }
 };
 
