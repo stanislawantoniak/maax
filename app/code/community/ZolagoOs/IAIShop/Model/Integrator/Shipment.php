@@ -27,13 +27,13 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
         
         if (empty($response->status)) {
             if (!empty($response->message)) {
-                $this->log($this->getHelper()->__('API error: %s',$response->message));
+                $this->log($this->getHelper()->__('Błąd API : %s',$response->message));
             } else {
-                $this->log($this->getHelper()->__('API error: %s',$this->getHelper()->__('Wrong answer from api')));                
+                $this->log($this->getHelper()->__('Błąd API: %s',$this->getHelper()->__('Błędna odpowiedź z API')));                
             }
             return false;
         } else {
-            $this->log($this->getHelper()->__('Shipment saved for order %s',$id));                            
+            $this->log($this->getHelper()->__('Parametry dostawy dla zamówienia %s zapisane poprawnie',$id));                            
             return true;
         } 
     }
@@ -109,11 +109,11 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
                     }
                  }
              } else {
-                 $this->log($this->getHelper()->__('Requested orders not exists in IAI Shop'));
+                 $this->log($this->getHelper()->__('Zamówienia nie istnieją w IAI Shop'));
                  $this->getHelper()->fileLog($orders->orders);
              }
          } else {
-             $this->log($this->getHelper()->__('Requested orders not exists in IAI Shop'));
+             $this->log($this->getHelper()->__('Zamówienia nie istnieją w IAI Shop'));
              $this->getHelper()->fileLog($orders);
          }
          return $orderToProcess;

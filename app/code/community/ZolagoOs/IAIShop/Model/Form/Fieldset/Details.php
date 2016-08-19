@@ -11,8 +11,7 @@ class ZolagoOs_IAIShop_Model_Form_Fieldset_Details extends Zolago_Common_Model_F
         $this->_fieldset->addField('id', 'text', array(
             'name'          => 'id',
             'label'         => $this->_helper->__('Store ID'),
-            'class'         => 'validate-number form-control',
-            'required'      => true,
+            'class'         => 'form-control',
             "maxlength"     => 50
         ));
 

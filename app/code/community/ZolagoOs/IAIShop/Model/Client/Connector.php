@@ -19,6 +19,26 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         return $this->doRequest("getproducts", $action, $request);
     }
 
+    /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=setorders&method=setOrders
+     */
+
+    public function addComment($sn,$order_id) {
+        
+        $helper = Mage::helper('zosiaishop');
+        $orders = array();
+
+
+
+        $orders[0]['order_sn'] = $sn;
+        $orders[0]['products'] = array();
+        $orders[0]['order_note'] = $helper->__('Zamówienie %s z Modago',$order_id);
+        $action = "setOrders";
+        $request = array();
+        $request[$action] = array();
+        $request[$action]['params']['orders'] = $orders;
+        $response = $this->doRequest("setorders", $action, $request);
+    }
 
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=addorders&method=addOrders
@@ -33,11 +53,14 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
         foreach ($params as $n => $param) {
             $orders[$n]['order_type'] = "retail";
-//            $orders[$n]['shop_id'] = $this->getShopId();
+            if ($this->getShopId()) {            
+                $orders[$n]['shop_id'] = $this->getShopId();
+            }
             $orders[$n]['stock_id'] = $param->pos_id;
             $orders[$n]['payment_type'] = $param->payment_method;
-            $orders[$n]['currency'] = $param->order_currency;
+            $orders[$n]['currency'] = $helper->getMappedCurrency($param->order_currency);
             $orders[$n]['client_once'] = "y";
+            
             $orders[$n]['order_operator'] = $helper->getOrderOperator();
             $orders[$n]['ignore_bridge'] = true;
 
@@ -59,7 +82,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
 
             $orders[$n]['deliverer_id'] = $helper->getMappedDelivery($param->delivery_method);
 
-            $orders[$n]['invoice_requested'] = $param->invoice_data->invoice_required;
+            $orders[$n]['invoice_requested'] = $param->invoice_data->invoice_required ? 'y':'n';
             if ($param->invoice_data->invoice_required) {
                 $orders[$n]['client_once_data']['firstname'] = $param->invoice_data->invoice_address->invoice_first_name;
                 $orders[$n]['client_once_data']['lastname'] = $param->invoice_data->invoice_address->invoice_last_name;
@@ -96,11 +119,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         }
 
         $action = "addOrders";
-
         $request = array();
         $request[$action] = array();
         $request[$action]['params']['orders'] = $orders;
-
         return $this->doRequest("addorders", $action, $request);
     }
 
@@ -121,10 +142,29 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         $request[$action]['params']['value'] = $param->order_total;
         $request[$action]['params']['type'] = 'payment';
         $request[$action]['params']['payment_form_id'] = $param->payment_method_external_id;
-
+        $request[$action]['params']['accounting_date'] = date('Y-m-d');
         return $this->doRequest("payments", $action, $request);
     }
 
+/*
+    public function setPayment($paymentId) {
+        $helper = Mage::helper('zosiaishop');
+
+        $action = "setPayment";
+
+        $request = array();
+        $request[$action] = array();
+        $request[$action]['params'] = array();
+
+        $request[$action]['params']['payment_number'] = $paymentId;
+        $request[$action]['params']['account'] = '9023902930940932049';
+        $request[$action]['params']['accounting_date'] = date('Y-m-d');
+        $request[$action]['params']['external_payment_id'] = date('Ymd');
+        
+        Mage::log($request);
+        return $this->doRequest("payments", $action, $request);
+    }
+    */
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=getPaymentForms
      */
@@ -138,6 +178,23 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         return $this->doRequest("payments", $action, $request);
     }
 
+
+    /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=payments&method=confirmPayment
+     */
+    public function confirmPayment($paymentId) {
+        
+        $helper = Mage::helper('zosiaishop');
+
+        $action = "confirmPayment";
+
+        $request = array();
+        $request[$action] = array();
+        $request[$action]['params'] = array();
+        $request[$action]['params']['payment_number'] = $paymentId;
+        Mage::log($request);
+        return $this->doRequest("payments", $action, $request);
+    }
     /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=getorders&method=getOrders
      */
