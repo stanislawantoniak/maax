@@ -266,6 +266,41 @@ class ZolagoOs_Import_Model_Import_Product
 
     }
 
+    public function insertSimple($dp, $vendorId, $simpleXMLData){
+
+        $attributeSet = "Default";
+
+        $simpleSkuV = (string)$simpleXMLData->sku;
+        $simpleSku = $vendorId . "-" . $simpleSkuV;
+        $subskus[] = $simpleSku;  //Collect simple skus for configurable
+        $product = array(
+            "name" => $simpleXMLData->description,
+            "sku" => trim($simpleSku),
+            "skuv" => $simpleSkuV,
+            "price" => "0.00",
+            "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+            "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
+            "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
+            "tax_class_id" => 2,
+            "attribute_set" => $attributeSet,
+            "store" => "admin",
+            "description" => $simpleXMLData->clothes_description,
+            "short_description" => $simpleXMLData->description2,
+            "size" => $simpleXMLData->size,
+            "ean" => $simpleXMLData->barcode,
+
+
+            //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
+            "manage_stock" => 1,
+            "qty" => 0,
+            "is_in_stock" => 0
+        );
+        // Now ingest item into magento
+        $simpleResult =$dp->ingest($product);
+
+        return $simpleSku;
+    }
+
 
     /**
      * @param $dp
@@ -282,41 +317,12 @@ class ZolagoOs_Import_Model_Import_Product
         $subskus = [];
 
         foreach ($simples as $simpleXMLData) {
-            $simpleSkuV = (string)$simpleXMLData->sku;
-            $simpleSku = $vendorId . "-" . $simpleSkuV;
-            $subskus[] = $simpleSku;  //Collect simple skus for configurable
-            $product = array(
-                "name" => $simpleXMLData->description,
-                "sku" => $simpleSku,
-                "skuv" => $simpleSkuV,
-                "price" => "0.00",
-                "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
-                "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
-                "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
-                "tax_class_id" => 2,
-                "attribute_set" => $attributeSet,
-                "store" => "admin",
-                "description" => $simpleXMLData->clothes_description,
-                "short_description" => $simpleXMLData->description2,
-                "size" => $simpleXMLData->size,
-                "ean" => $simpleXMLData->barcode,            
 
+            $simpleSku = $this->insertSimple($dp, $vendorId, $simpleXMLData);
+            $this->setSimpleSkus($simpleSku);
 
-                //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
-                "manage_stock" => 1,
-                "qty" => 0,
-                "is_in_stock" => 0
-            );
-            // Now ingest item into magento
-            $simpleResult =$dp->ingest($product);
-
-
-            if($simpleResult["ok"]){
-                $this->setSimpleSkus($simpleSku);
-            }
-
-            $product=null;    //clear memory
-            unset($product,$simpleXMLData); //clear memory
+            $product = null;    //clear memory
+            unset($product, $simpleXMLData); //clear memory
         }
 
 
