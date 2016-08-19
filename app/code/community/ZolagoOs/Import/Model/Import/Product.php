@@ -111,20 +111,22 @@ class ZolagoOs_Import_Model_Import_Product
                 return $this;
             }
 
-
+$sim = array();
             //Collect sku
             $skuBatch = array();
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
                     $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+                    $sim[(string)$productXML->sku] = array((string)$productXML->sku);
                 }
             }
-            if (is_object($xmlToArray["item"])) {
-                $productXML = $xmlToArray["item"];
-                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
-            }
+//            if (is_object($xmlToArray["item"])) {
+//                $productXML = $xmlToArray["item"];
+//                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+//            }
 
-
+krumo(count($sim));
+//            die("test");
 
             if (empty($skuBatch)) {
                 $this->log("No Data For Import", Zend_Log::ALERT);
@@ -196,7 +198,7 @@ class ZolagoOs_Import_Model_Import_Product
                 array(
                     'udropship_vendor' => $vendorId,
                     'description_status' => 1,
-                    'manufacturer' => $vendorId
+                   // 'manufacturer' => $vendorId
                 ),
             0);
 
@@ -304,10 +306,16 @@ class ZolagoOs_Import_Model_Import_Product
                 "is_in_stock" => 0
             );
             // Now ingest item into magento
-            $dp->ingest($product);
-            $this->setSimpleSkus($simpleSku);
+            $simpleResult =$dp->ingest($product);
+
+
+            if($simpleResult["ok"]){
+                $this->setSimpleSkus($simpleSku);
+            }
+
+            unset($simpleXMLData,$product);
         }
-        unset($simpleXMLData);
+
 
 
         //Create configurable
@@ -359,9 +367,11 @@ class ZolagoOs_Import_Model_Import_Product
         }
 
         // Now ingest item into magento
-        $dp->ingest($productConfigurable);
-        $skusUpdated[$configurableSku] = $subskus;
-        $this->setConfigurableSkus($configurableSku);
+        $configurableResult = $dp->ingest($productConfigurable);
+        if($configurableResult["ok"]){
+            $skusUpdated[$configurableSku] = $subskus;
+            $this->setConfigurableSkus($configurableSku);
+        }
 
         return $skusUpdated;
     }
