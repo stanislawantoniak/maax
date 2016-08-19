@@ -148,7 +148,7 @@ class ZolagoOs_Import_Model_Import_Product
 
             $toInsert = array();
             foreach ($skuBatch as $configurableSkuv => $simples) {
-                $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
+                $u = $this->insertConfigurable($vendorId, $configurableSkuv, $simples);
                 $skusCreated = array_merge($u["skus"], $skusCreated);
                 $toInsert = array_merge($u["products"], $toInsert);
             }
@@ -272,13 +272,12 @@ class ZolagoOs_Import_Model_Import_Product
 
 
     /**
-     * @param $dp
      * @param $vendorId
      * @param $configurableSkuv
      * @param $simples
      * @return array
      */
-    public function insertConfigurable($dp, $vendorId, $configurableSkuv, $simples)
+    public function insertConfigurable($vendorId, $configurableSkuv, $simples)
     {
         $attributeSet = "Default";
 
