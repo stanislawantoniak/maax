@@ -155,10 +155,12 @@ class ZolagoOs_Import_Model_Import_Product
             $dp->endImportSession();
 
 
+            // create a Product import Datapump using Magmi_DatapumpFactory
+            $dpUpdate = Magmi_DataPumpFactory::getDataPumpInstance("productimport");
             //Start update configurable with children session
-            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $dpUpdate->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
             $this->updateRelations($dp,$skusCreated);
-            $dp->endImportSession();
+            $dpUpdate->endImportSession();
 
 
             //3. Set additional attributes
@@ -278,6 +280,8 @@ class ZolagoOs_Import_Model_Import_Product
 
         $skusUpdated = [];
         $subskus = [];
+        krumo($simples);
+        die("test");
         foreach ($simples as $simpleXMLData) {
             $simpleSkuV = (string)$simpleXMLData->sku;
             $simpleSku = $vendorId . "-" . $simpleSkuV;
@@ -312,7 +316,8 @@ class ZolagoOs_Import_Model_Import_Product
                 $this->setSimpleSkus($simpleSku);
             }
 
-            unset($simpleXMLData,$product);
+            $product=null;    //clear memory
+            unset($product,$simpleXMLData); //clear memory
         }
 
 
@@ -367,6 +372,9 @@ class ZolagoOs_Import_Model_Import_Product
 
         // Now ingest item into magento
         $configurableResult = $dp->ingest($productConfigurable);
+
+        $productConfigurable=null;    //clear memory
+        unset($productConfigurable); //clear memory
         if($configurableResult["ok"]){
             $skusUpdated[$configurableSku] = $subskus;
             $this->setConfigurableSkus($configurableSku);
