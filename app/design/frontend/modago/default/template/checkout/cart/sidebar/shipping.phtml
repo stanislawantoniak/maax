@@ -1,6 +1,4 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
-
-<?php
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper		= Mage::helper("zolagocheckout");
 
@@ -39,24 +37,14 @@ $productsPriceTotal = $totals["subtotal"]->getValue(); //Wartość produktów
 $discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() : 0); //Zniżka
 $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
-
- ?>
-
-<?php
-$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
 
 <script type="text/javascript">
-    var inPostPointsData = '<?php echo $inPostPoints; ?>';
-    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
-
     var sessionPointName = '<?php echo $locker->getName(); ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
     Mall.translate.add("shipping_map_select_city", "<?php echo $helper->__("Select City"); ?>");
-    Mall.translate.add("shipping_map_select_locker", "<?php echo $helper->__("Choose locker"); ?>");
     Mall.translate.add("shipping_map_nearest", "<?php echo $helper->__("Nearest"); ?>");
     Mall.translate.add("shipping_map_show_nearest_link", "<?php echo $helper->__("show nearest"); ?>");
     Mall.translate.add("shipping_map_hide_nearest_link", "<?php echo $helper->__("hide nearest"); ?>");
@@ -245,6 +233,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 </form>
 </fieldset>
 
-<?php echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
+<?php /** @see checkout/cart/sidebar/shipping/additional.phtml */
+echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
 
 <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3&sensor=FALSE"></script>
