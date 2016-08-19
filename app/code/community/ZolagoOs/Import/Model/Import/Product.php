@@ -189,15 +189,13 @@ class ZolagoOs_Import_Model_Import_Product
         $aM = Mage::getSingleton('catalog/product_action');
 
         //3a. Set additional attributes (udropship_vendor for all products)
-        $aM->updateAttributesPure($ids, array('udropship_vendor' => $vendorId), 0);
-
         //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
-        $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
+        $aM->updateAttributesPure($ids,
+            array('udropship_vendor' => $vendorId,'description_status' => 1, 'manufacturer' => $vendorId),
+            0);
 
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
-
-        $aM->updateAttributesPure($ids, array('manufacturer' => $vendorId), 0);
 
     }
 
