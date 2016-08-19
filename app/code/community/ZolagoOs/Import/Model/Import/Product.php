@@ -359,7 +359,7 @@ class ZolagoOs_Import_Model_Import_Product
         }
 
         // Now ingest item into magento
-        //$dp->ingest($productConfigurable);
+        $dp->ingest($productConfigurable);
         $skusUpdated[$configurableSku] = $subskus;
         $this->setConfigurableSkus($configurableSku);
 
