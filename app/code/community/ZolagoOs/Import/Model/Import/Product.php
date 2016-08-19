@@ -254,6 +254,7 @@ class ZolagoOs_Import_Model_Import_Product
                     array(
                         "sku" => $skuConfigurable,
                         "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
+                        "store" => "default",
                         "configurable_attributes" => "size",
                         "simples_skus" => implode(",", $skusSimple),
                         "options_container" => array()
@@ -317,10 +318,8 @@ class ZolagoOs_Import_Model_Import_Product
         $subskus = [];
 
         foreach ($simples as $simpleXMLData) {
-
             $simpleSku = $this->insertSimple($dp, $vendorId, $simpleXMLData);
             $this->setSimpleSkus($simpleSku);
-
             $product = null;    //clear memory
             unset($product, $simpleXMLData); //clear memory
         }
