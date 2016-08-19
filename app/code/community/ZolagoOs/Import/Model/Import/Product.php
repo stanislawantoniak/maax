@@ -311,10 +311,11 @@ class ZolagoOs_Import_Model_Import_Product
 
 
         //Create configurable
-        $firstSimple = $simples[0];
+        $firstSimple = array_values($simples)[0];
+
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "name" => $firstSimple->description,
+            "name" => (string)$firstSimple->description,
             "sku" => $configurableSku,
             "skuv" => $configurableSkuv,
             "price" => "0.00",
@@ -327,17 +328,17 @@ class ZolagoOs_Import_Model_Import_Product
             "configurable_attributes" => "size",
             "simples_skus" => implode(",", $subskus),
 
-            "description" => $firstSimple->clothes_description,
-            "short_description" => $firstSimple->description2,
-            "ean"	=> $firstSimple->barcode,
+            "description" => (string)$firstSimple->clothes_description,
+            "short_description" => (string)$firstSimple->description2,
+            "ean"	=> (string)$firstSimple->barcode,
 
             //ext_
-            "ext_productline" => $firstSimple->collection,
-            "ext_category" => $firstSimple->clothes_description,
-            "ext_color" => $firstSimple->color,
-            "ext_brand" => $firstSimple->brand,
+            "ext_productline" => (string)$firstSimple->collection,
+            "ext_category" => (string)$firstSimple->clothes_description,
+            "ext_color" => (string)$firstSimple->color,
+            "ext_brand" => (string)$firstSimple->brand,
 
-            "col1" => "Kolekcja:" . $firstSimple->description2,
+            "col1" => "Kolekcja:" . (string)$firstSimple->description2,
 
             //magazyn dla konfigurowalnych - zarządzaj stanami = nie
             "use_config_manage_stock" => 0,
