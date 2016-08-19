@@ -6,10 +6,9 @@ var Cart = {
         var error = jQuery("div.product_" + parseInt(id)).find(".error");
         error.hide();
 
-        if (val < input.attr("data-min-sale-qty")) {
+        if (val < input.attr("data-min-sale-qty") || val == "NaN") {
 
             val = input.attr("data-min-sale-qty");
-            error.show();
 
         } else if (val > input.attr("data-max-sale-qty")) {
 
@@ -18,23 +17,13 @@ var Cart = {
 
         }
 
-        input.val(val);
+        if (val != input.attr("old-value")) {
 
-        OrbaLib.Cart.update({
-            "item_id": id,
-            "qty": val
-        }, function(e){
-            jQuery.ajax({
-                url: "",
-                context: document.body,
-                success: function(s,x){
-                    jQuery(this).html(s);
-                }
-            });
-        });
+            input.val(val);
+            input.attr("old-value", val);
 
-        jQuery("body").append('<div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 1000000; display: none; background: url(http://kosmetyki.ipson.modago.es/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat rgba(255, 255, 255, 0.498039);"></div>');
-        jQuery(".listing-overlay").show( "fade", 1000 );
+            jQuery("#cart-form").submit();
+        }
 
         return false;
     },
@@ -62,5 +51,5 @@ var Cart = {
 };
 
 jQuery(document).ready(function() {
-    jQuery("input[name=quantity]").change(Cart.update);
+    jQuery(".qty input").change(Cart.update);
 });
