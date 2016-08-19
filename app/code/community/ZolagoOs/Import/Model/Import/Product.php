@@ -116,13 +116,14 @@ class ZolagoOs_Import_Model_Import_Product
             $skuBatch = array();
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
-                    $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
+                    $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
                 }
             }
             if (is_object($xmlToArray["item"])) {
                 $productXML = $xmlToArray["item"];
-                $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
+                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
             }
+
 
 
             if (empty($skuBatch)) {
@@ -190,8 +191,13 @@ class ZolagoOs_Import_Model_Import_Product
 
         //3a. Set additional attributes (udropship_vendor for all products)
         //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
-        $aM->updateAttributesPure($ids,
-            array('udropship_vendor' => $vendorId,'description_status' => 1, 'manufacturer' => $vendorId),
+        $aM->updateAttributesPure(
+            $ids,
+                array(
+                    'udropship_vendor' => $vendorId,
+                    'description_status' => 1,
+                    'manufacturer' => $vendorId
+                ),
             0);
 
         //3c. Set additional attributes (status brandshop for configurable products)
@@ -301,13 +307,14 @@ class ZolagoOs_Import_Model_Import_Product
             $dp->ingest($product);
             $this->setSimpleSkus($simpleSku);
         }
+        unset($simpleXMLData);
 
 
         //Create configurable
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "name" => $simpleXMLData->description,
+            "name" => $firstSimple->description,
             "sku" => $configurableSku,
             "skuv" => $configurableSkuv,
             "price" => "0.00",
