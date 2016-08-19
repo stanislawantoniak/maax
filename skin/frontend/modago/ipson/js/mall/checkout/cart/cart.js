@@ -21,9 +21,8 @@ var Cart = {
 
         if (val != input.attr("old-value")) {
 
-            input.attr("old-value", val);
-
             jQuery("#cart-form").submit();
+
         }
 
         return false;
