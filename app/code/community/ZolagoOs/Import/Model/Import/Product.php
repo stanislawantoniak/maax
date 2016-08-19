@@ -307,7 +307,7 @@ class ZolagoOs_Import_Model_Import_Product
             $dp->ingest($product);
             $this->setSimpleSkus($simpleSku);
         }
-        unset($simpleXMLData);
+        unset($simpleXMLData,$product);
 
 
         //Create configurable
