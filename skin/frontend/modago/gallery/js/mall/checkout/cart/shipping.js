@@ -11,12 +11,12 @@
                     jQuery.ajax({
                         url: Mall.Cart.Map.deliverySet[e].urlData,
                         type: "POST",
-                        success: function (response) {
+                        success: (function (response) {
                             sessionStorage.setItem(e, response);
 
                             Mall.Cart.Map.deliverySet[e].mapPoints =
-                                JSON.parse(sessionStorage.getItem(e)).map_points;
-                        }
+                                JSON.parse(sessionStorage.getItem(this.e)).map_points;
+                         }).bind({e: e})
                     });
                 } else {
                     Mall.Cart.Map.deliverySet[e].mapPoints =
@@ -43,7 +43,7 @@
             jQuery(".data_shipping_item").click(function(){
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
-                if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint]){
+                if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint] && Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints){
 
                     if (!Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.some(
                             function(e, i, a){return e.name == jQuery("[name=shipping_point_code]").val()}

@@ -8,7 +8,7 @@ class Zolago_Modago_PwrController extends Mage_Core_Controller_Front_Action {
 
 		/* @var $collection GH_Inpost_Model_Resource_Locker_Collection */
 		$collection = Mage::getResourceModel("zospwr/point_collection");
-		$collection->addFieldToFilter("town", array("like" => "%" . $town . "%"));
+		if ($town != "") $collection->addFieldToFilter("town", array("eq" => $town));
 		$collection->addFieldToFilter("is_active", ZolagoOs_Pwr_Model_Point::STATUS_ACTIVE);
 		$collection->addOrder("street", "ASC");
 
