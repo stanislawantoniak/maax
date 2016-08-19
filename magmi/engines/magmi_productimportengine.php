@@ -1498,30 +1498,21 @@ class Magmi_ProductImportEngine extends Magmi_Engine
     public function getItemIds($item)
     {
         $sku = $item["sku"];
-        Mage::log($sku, null, "XXX.log");
         if (strcmp($sku, $this->_curitemids["sku"]) != 0)
         {
-            Mage::log("CASE 1", null, "XXX.log");
             // try to find item ids in db
             $cids = $this->getProductIds($sku);
-            Mage::log("IDS: ", null, "XXX.log");
-            Mage::log($cids, null, "XXX.log");
             if ($cids !== false)
             {
                 // if found use it
-                Mage::log("if found use it!", null, "XXX.log");
                 $this->_curitemids = $cids;
-                Mage::log($this->_curitemid, null, "XXX.log");
             }
             else
             {
                 // only sku & attribute set id from datasource otherwise.
-                Mage::log("only sku & attribute set id from datasource otherwise!!!", null, "XXX.log");
                 $this->_curitemids = array("pid"=>null,"sku"=>$sku,
                     "asid"=>isset($item["attribute_set"]) ? $this->getAttributeSetId($item["attribute_set"]) : $this->default_asid,
                     "type"=>isset($item["type"]) ? $item["type"] : "simple","__new"=>true);
-
-                Mage::log($this->_curitemid, null, "XXX.log");
             }
             // do not reset values for existing if non admin
             $this->onNewSku($sku, ($cids !== false));
@@ -1529,10 +1520,8 @@ class Magmi_ProductImportEngine extends Magmi_Engine
         }
         else
         {
-            Mage::log("CASE 2", null, "XXX.log");
             $this->onSameSku($sku);
         }
-        Mage::log("----------------------", null, "XXX.log");
         return $this->_curitemids;
     }
 
