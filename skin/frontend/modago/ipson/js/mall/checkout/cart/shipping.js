@@ -6,7 +6,7 @@
         init: function () {
             var self = this;
 
-            for (let e in Mall.Cart.Map.deliverySet) {
+            for (var e in Mall.Cart.Map.deliverySet) {
                 if (!sessionStorage.getItem(e)) {
                     jQuery.ajax({
                         url: Mall.Cart.Map.deliverySet[e].urlData,
@@ -14,7 +14,7 @@
                         success: (function (response) {
                             sessionStorage.setItem(this.e, response);
 
-                            Mall.Cart.Map.deliverySet[e].mapPoints =
+                            Mall.Cart.Map.deliverySet[this.e].mapPoints =
                                 JSON.parse(sessionStorage.getItem(this.e)).map_points;
                         }).bind({e: e})
                     });
@@ -552,8 +552,8 @@
 
                     //Refresh markers and "City", "Address" filters
                     //if nearest store marker clicked, but the city is different from selected
-                    if (this.nearest === 1 && inpostModal.find("select[name=shipping_select_city]").val() !== this.town) {
-                        inpostModal.find("select[name=shipping_select_city]")
+                    if (this.nearest === 1 && inpostModal.find("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
+                        inpostModal.find("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
                             .val(this.town)
                             .select2({
                                 dropdownParent: inpostModal,
@@ -564,9 +564,9 @@
                         Mall.Cart.Map.searchOnMap(this.town, this.name);
                     }
 
-                    jQuery("select[name=shipping_select_point]").val(this.name);
-                    if (!jQuery("select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
-                        jQuery("select[name=shipping_select_point]")
+                    jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]").val(this.name);
+                    if (!jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
+                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                             .select2({
                                 dropdownParent: inpostModal,
                                 language: Mall.reg.get("localeCode")
@@ -863,20 +863,20 @@
             // niech wybiera go automatycznie
 
             if(map_points.length === 1){
-                jQuery("select[name=shipping_select_point]")
+                jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                     .html(options.join(""))
                     .attr("disabled", false)
                     .val(map_points[0].name);
 
             } else {
-                jQuery("select[name=shipping_select_point]")
+                jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                     .html(options.join(""))
                     .attr("disabled", false)
                     .val("");
             }
 
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
-            jQuery("select[name=shipping_select_point]")
+            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                 .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
         },
         deliverySet: {
