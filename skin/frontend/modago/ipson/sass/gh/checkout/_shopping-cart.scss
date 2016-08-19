@@ -1178,6 +1178,48 @@
 				.selectboxit-container .selectboxit {
 					border-color: #d5d5d5;
 				}
+				div.qty,  a.qty_less, a.qty_more,  div.qty_label {
+					float: left;
+					width: 32px;
+					height: 32px;
+					border: 1px solid #f1f1f1;
+					text-align: center;
+					padding: 1px 0 0;
+					font-size: 20px;
+					color: #7e7e7e;
+					@media (max-width: 430px) {
+						width: 22px;
+					}
+				}
+				a.qty_less, a.qty_more {
+					display: block;
+				}
+				div.qty input {
+					width: 100%;
+					border: none;
+					text-align: center;
+					font-size: 16px;
+					outline: none !important;
+				}
+				.quantity_blocks{
+					width: 96px;
+					margin: 0 auto;
+					@media (max-width: $screen-xs-max) {
+						margin: 0;
+					}
+					.error {
+						padding: 0 !important;
+						display: none;
+					}
+				}
+				@media (max-width: $screen-xs-max) {
+					a.qty_less, a.qty_more {
+						display: none;
+					}
+					div.qty {
+						width: 70px;
+					}
+				}
 			}
 			.wartosc {
 				width:33.333%;

@@ -180,14 +180,16 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
-                <div class="ilosc">
 
-                    <div class="form-group styledSelected cart-qty-field" style="width: 60px;">
-                    <select name="cart[<?php echo $_item->getId() ?>][qty]" class="form-control select-styled" onchange="jQuery('#cart-form').submit();">
-                        <?php foreach($_helper->getCartQtyList($_item) as $key=>$value):?>
-                            <option <?php if($this->getQty($_item)==$key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($key);?>"><?php echo $this->escapeHtml($value);?></option>
-                        <?php endforeach;?>
-                    </select>
+                <div class="ilosc">
+                    <div class="quantity_blocks product_<?php echo $_item->getId(); ?>">
+                        <a href="#" class="qty_less" onClick="Cart.less(<?php echo $_item->getId(); ?>);return false;">-</a>
+                        <div class="qty"><input type="text" name="quantity" value="<?php echo $this->getQty($_item); ?>" data-id="<?php echo $_item->getId(); ?>" data-max-sale-qty="<?php echo $_helper->getMaxSaleQty($_item); ?>" data-min-sale-qty="1"/></div>
+                        <a href="#" class="qty_more" onClick="Cart.more(<?php echo $_item->getId(); ?>);return false;">+</a>
+                        <input type="hidden" name="max_qty" value="<?php echo $_helper->getMaxSaleQty($_item); ?>"/>
+                        <input type="hidden" name="min_qty" value="1"/>
+                        <input type="hidden" name="product_id" value="<?php echo $_item->getId(); ?>"/>
+                        <label id="qty-error" class="error"><?php echo $_helper->__("Maximum quantity: %s", $_helper->getMaxSaleQty($_item)); ?></label>
                     </div>
                 </div>
 

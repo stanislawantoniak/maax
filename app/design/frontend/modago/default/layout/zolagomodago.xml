@@ -157,6 +157,10 @@
       </action>
       <action method="addItem">
         <type>skin_js</type>
+        <script>js/mall/checkout/cart/cart.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
         <script>js/mall/validate.js</script>
       </action>
       <action method="addItem">
