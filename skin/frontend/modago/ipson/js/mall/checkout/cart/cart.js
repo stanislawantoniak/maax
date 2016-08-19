@@ -19,11 +19,7 @@ var Cart = {
 
         input.val(val);
 
-        if (val != input.attr("old-value")) {
-
-            jQuery("#cart-form").submit();
-
-        }
+        if (val != input.attr("old-value")) jQuery("#cart-form").submit();
 
         return false;
     },
