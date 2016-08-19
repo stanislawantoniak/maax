@@ -117,13 +117,12 @@ class ZolagoOs_Import_Model_Import_Product
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
                     $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
-
                 }
             }
-//            if (is_object($xmlToArray["item"])) {
-//                $productXML = $xmlToArray["item"];
-//                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
-//            }
+            if (is_object($xmlToArray["item"])) {
+                $productXML = $xmlToArray["item"];
+                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+            }
 
 
 
@@ -155,12 +154,10 @@ class ZolagoOs_Import_Model_Import_Product
             $dp->endImportSession();
 
 
-            // create a Product import Datapump using Magmi_DatapumpFactory
-            $dpUpdate = Magmi_DataPumpFactory::getDataPumpInstance("productimport");
             //Start update configurable with children session
-            $dpUpdate->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
             $this->updateRelations($dp,$skusCreated);
-            $dpUpdate->endImportSession();
+            $dp->endImportSession();
 
 
             //3. Set additional attributes
@@ -199,7 +196,7 @@ class ZolagoOs_Import_Model_Import_Product
                 array(
                     'udropship_vendor' => $vendorId,
                     'description_status' => 1,
-                   // 'manufacturer' => $vendorId
+                    'manufacturer' => $vendorId
                 ),
             0);
 
@@ -254,7 +251,6 @@ class ZolagoOs_Import_Model_Import_Product
                     array(
                         "sku" => $skuConfigurable,
                         "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
-                        "store" => "default",
                         "configurable_attributes" => "size",
                         "simples_skus" => implode(",", $skusSimple),
                         "options_container" => array()
@@ -265,41 +261,6 @@ class ZolagoOs_Import_Model_Import_Product
             Mage::logException($e);
         }
 
-    }
-
-    public function insertSimple($dp, $vendorId, $simpleXMLData){
-
-        $attributeSet = "Default";
-
-        $simpleSkuV = (string)$simpleXMLData->sku;
-        $simpleSku = $vendorId . "-" . $simpleSkuV;
-        $subskus[] = $simpleSku;  //Collect simple skus for configurable
-        $product = array(
-            "name" => $simpleXMLData->description,
-            "sku" => trim($simpleSku),
-            "skuv" => $simpleSkuV,
-            "price" => "0.00",
-            "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
-            "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
-            "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
-            "tax_class_id" => 2,
-            "attribute_set" => $attributeSet,
-            "store" => "default",
-            "description" => $simpleXMLData->clothes_description,
-            "short_description" => $simpleXMLData->description2,
-            "size" => $simpleXMLData->size,
-            "ean" => $simpleXMLData->barcode,
-
-
-            //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
-            "manage_stock" => 1,
-            "qty" => 0,
-            "is_in_stock" => 0
-        );
-        // Now ingest item into magento
-        $dp->ingest($product);
-
-        return $simpleSku;
     }
 
 
@@ -316,14 +277,37 @@ class ZolagoOs_Import_Model_Import_Product
 
         $skusUpdated = [];
         $subskus = [];
-
         foreach ($simples as $simpleXMLData) {
-            $simpleSku = $this->insertSimple($dp, $vendorId, $simpleXMLData);
-            $this->setSimpleSkus($simpleSku);
-            $product = null;    //clear memory
-            unset($product, $simpleXMLData); //clear memory
-        }
+            $simpleSkuV = (string)$simpleXMLData->sku;
+            $simpleSku = $vendorId . "-" . $simpleSkuV;
+            $subskus[] = $simpleSku;  //Collect simple skus for configurable
+            $product = array(
+                "name" => $simpleXMLData->description,
+                "sku" => $simpleSku,
+                "skuv" => $simpleSkuV,
+                "price" => "0.00",
+                "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+                "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
+                "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
+                "tax_class_id" => 2,
+                "attribute_set" => $attributeSet,
+                "store" => "admin",
+                "description" => $simpleXMLData->clothes_description,
+                "short_description" => $simpleXMLData->description2,
+                "size" => $simpleXMLData->size,
+                "ean" => $simpleXMLData->barcode,            
 
+
+                //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
+                "manage_stock" => 1,
+                "qty" => 0,
+                "is_in_stock" => 0
+            );
+            // Now ingest item into magento
+            $dp->ingest($product);
+            $this->setSimpleSkus($simpleSku);
+        }
+        unset($simpleXMLData);
 
 
         //Create configurable
@@ -340,7 +324,7 @@ class ZolagoOs_Import_Model_Import_Product
             "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
             "tax_class_id" => 2,
             "attribute_set" => $attributeSet,
-            "store" => "default",
+            "store" => "admin",
             "configurable_attributes" => "size",
             "simples_skus" => implode(",", $subskus),
 
@@ -375,14 +359,9 @@ class ZolagoOs_Import_Model_Import_Product
         }
 
         // Now ingest item into magento
-        $configurableResult = $dp->ingest($productConfigurable);
-
-        $productConfigurable=null;    //clear memory
-        unset($productConfigurable); //clear memory
-        if($configurableResult["ok"]){
-            $skusUpdated[$configurableSku] = $subskus;
-            $this->setConfigurableSkus($configurableSku);
-        }
+        $dp->ingest($productConfigurable);
+        $skusUpdated[$configurableSku] = $subskus;
+        $this->setConfigurableSkus($configurableSku);
 
         return $skusUpdated;
     }
