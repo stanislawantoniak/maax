@@ -6,7 +6,7 @@ var Cart = {
         var error = jQuery("div.product_" + parseInt(id)).find(".error");
         error.hide();
 
-        if (val < input.attr("data-min-sale-qty") || val == "NaN") {
+        if (val < input.attr("data-min-sale-qty") || isNaN(val)) {
 
             val = input.attr("data-min-sale-qty");
 
@@ -17,9 +17,10 @@ var Cart = {
 
         }
 
+        input.val(val);
+
         if (val != input.attr("old-value")) {
 
-            input.val(val);
             input.attr("old-value", val);
 
             jQuery("#cart-form").submit();
