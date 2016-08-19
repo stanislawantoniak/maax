@@ -296,7 +296,7 @@ class ZolagoOs_Import_Model_Import_Product
             "is_in_stock" => 0
         );
         // Now ingest item into magento
-        $simpleResult =$dp->ingest($product);
+        $dp->ingest($product);
 
         return $simpleSku;
     }
