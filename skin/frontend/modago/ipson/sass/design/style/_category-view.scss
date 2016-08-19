@@ -7,6 +7,9 @@
     //@media (max-width: $screen-sm-to-smmd-max) {
     //  text-align: left;
     //}
+    @media (max-width: $screen-xs-max) {
+      padding-top: 30px;
+    }
   }
   .category-attribute-description {
     color: #777;
