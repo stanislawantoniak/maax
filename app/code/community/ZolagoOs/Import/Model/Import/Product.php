@@ -156,9 +156,9 @@ class ZolagoOs_Import_Model_Import_Product
 
 
             //Start update configurable with children session
-            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
-            $this->updateRelations($dp,$skusCreated);
-            $dp->endImportSession();
+//            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+//            $this->updateRelations($dp,$skusCreated);
+//            $dp->endImportSession();
 
 
             //3. Set additional attributes
