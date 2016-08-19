@@ -197,7 +197,7 @@ class ZolagoOs_Import_Model_Import_Product
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
 
-        $aM->updateAttributesPure($idsConfigurable, array('manufacturer' => $vendorId), 0);
+        $aM->updateAttributesPure($ids, array('manufacturer' => $vendorId), 0);
 
     }
 
