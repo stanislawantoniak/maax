@@ -853,7 +853,7 @@
             var options = [],
                 map_point_long_name;
 
-            options.push('<option value="">'+Mall.translate.__("shipping_map_select_locker")+'</option>');
+            options.push('<option value="">'+(jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] .title_section").text())+'</option>');
             jQuery(map_points).each(function (i, map_point) {
                 map_point_long_name = map_point.street + " " + (map_point.building_number ? map_point.building_number : "") + ", " + map_point.town  + (map_point.postcode ? " (" + map_point.postcode + ")" : "");
                 options.push('<option data-carrier-town="' + map_point.town + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
