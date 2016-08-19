@@ -1,21 +1,17 @@
 .blog {
-
-
   .desktop {
     &.two-columns-left {
-      aside.left {
-        position: absolute;
-        width: $widthSidebar;
-      }
-
-
       section.content {
-        margin-left: $widthSidebar+$marginSidebar;
+        margin-left: $widthSidebar + $marginSidebar;
         overflow: hidden;
         width: inherit;
         padding-left: 0;
       }
 
+      aside.left {
+        width:$widthSidebar;
+        position: absolute;
+      }
     }
   }
 
