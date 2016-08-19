@@ -16,7 +16,6 @@ class ZolagoOs_Import_Model_Import_Product
     protected $_vendor;
 
     const MAGMI_IMPORT_PROFILE = "wojcik";
-    const MAGMI_IMPORT_VENDOR_ID = 1;
 
     public function __construct()
     {
@@ -197,6 +196,9 @@ class ZolagoOs_Import_Model_Import_Product
 
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
+
+        $aM->updateAttributesPure($idsConfigurable, array('manufacturer' => $vendorId), 0);
+
     }
 
     public function updateRelations($dp,$skusCreated)
@@ -276,7 +278,6 @@ class ZolagoOs_Import_Model_Import_Product
             $simpleSku = $vendorId . "-" . $simpleSkuV;
             $subskus[] = $simpleSku;  //Collect simple skus for configurable
             $product = array(
-                "manufacturer" => self::MAGMI_IMPORT_VENDOR_ID,
                 "name" => $simpleXMLData->description,
                 "sku" => $simpleSku,
                 "skuv" => $simpleSkuV,
@@ -308,7 +309,6 @@ class ZolagoOs_Import_Model_Import_Product
         $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "manufacturer" => self::MAGMI_IMPORT_VENDOR_ID,
             "name" => $simpleXMLData->description,
             "sku" => $configurableSku,
             "skuv" => $configurableSkuv,
