@@ -111,13 +111,13 @@ class ZolagoOs_Import_Model_Import_Product
                 return $this;
             }
 
-$sim = array();
+
             //Collect sku
             $skuBatch = array();
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
                     $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
-                    $sim[(string)$productXML->sku] = array((string)$productXML->sku);
+
                 }
             }
 //            if (is_object($xmlToArray["item"])) {
@@ -125,8 +125,7 @@ $sim = array();
 //                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
 //            }
 
-krumo(count($sim));
-//            die("test");
+
 
             if (empty($skuBatch)) {
                 $this->log("No Data For Import", Zend_Log::ALERT);
