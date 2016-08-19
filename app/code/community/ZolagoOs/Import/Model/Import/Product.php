@@ -146,9 +146,15 @@ class ZolagoOs_Import_Model_Import_Product
             $skusCreated = [];
             $importProfile = self::MAGMI_IMPORT_PROFILE;
             $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $toInsert = array();
             foreach ($skuBatch as $configurableSkuv => $simples) {
                 $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
-                $skusCreated = array_merge($u, $skusCreated);
+                $skusCreated = array_merge($u["skus"], $skusCreated);
+                $toInsert = array_merge($u["products"], $toInsert);
+            }
+
+            foreach($toInsert as $toInsertItem){
+                $dp->ingest($toInsertItem);
             }
             /* end import session, will run post import plugins */
             $dp->endImportSession();
@@ -277,6 +283,8 @@ class ZolagoOs_Import_Model_Import_Product
 
         $skusUpdated = [];
         $subskus = [];
+
+        $toInsert = array("skus" => array(), "products" => array());
         foreach ($simples as $simpleXMLData) {
             $simpleSkuV = (string)$simpleXMLData->sku;
             $simpleSku = $vendorId . "-" . $simpleSkuV;
@@ -304,7 +312,8 @@ class ZolagoOs_Import_Model_Import_Product
                 "is_in_stock" => 0
             );
             // Now ingest item into magento
-            $dp->ingest($product);
+            //$dp->ingest($product);
+            $toInsert["products"][] = $product;
             $this->setSimpleSkus($simpleSku);
         }
         unset($simpleXMLData);
@@ -359,11 +368,12 @@ class ZolagoOs_Import_Model_Import_Product
         }
 
         // Now ingest item into magento
-        $dp->ingest($productConfigurable);
+        //$dp->ingest($productConfigurable);
+        $toInsert["products"][] = $productConfigurable;
         $skusUpdated[$configurableSku] = $subskus;
         $this->setConfigurableSkus($configurableSku);
-
-        return $skusUpdated;
+        $toInsert["skus"][] = $skusUpdated;
+        return $toInsert;
     }
 
     /**
