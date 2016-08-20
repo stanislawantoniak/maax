@@ -276,6 +276,10 @@ class ZolagoOs_Import_Model_Import_Product
 
             $this->updateAdditionalAttributes();
 
+            
+            //--create csv
+
+
         } catch (Exception $e) {
             Mage::logException($e);
         }
