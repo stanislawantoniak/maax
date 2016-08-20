@@ -116,14 +116,13 @@ class ZolagoOs_Import_Model_Import_Product
             $skuBatch = array();
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
-                    $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+                    $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
                 }
             }
             if (is_object($xmlToArray["item"])) {
                 $productXML = $xmlToArray["item"];
-                $skuBatch[explode("/", (string)$productXML->sku)[0]][(string)$productXML->sku] = $productXML;
+                $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
             }
-
 
 
             if (empty($skuBatch)) {
@@ -190,19 +189,13 @@ class ZolagoOs_Import_Model_Import_Product
         $aM = Mage::getSingleton('catalog/product_action');
 
         //3a. Set additional attributes (udropship_vendor for all products)
+        $aM->updateAttributesPure($ids, array('udropship_vendor' => $vendorId), 0);
+
         //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
-        $aM->updateAttributesPure(
-            $ids,
-                array(
-                    'udropship_vendor' => $vendorId,
-                    'description_status' => 1,
-                    'manufacturer' => $vendorId
-                ),
-            0);
+        $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
 
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
-
     }
 
     public function updateRelations($dp,$skusCreated)
@@ -295,7 +288,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
-                "ean" => $simpleXMLData->barcode,            
+                "ean" => $simpleXMLData->barcode,
 
 
                 //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
@@ -307,15 +300,13 @@ class ZolagoOs_Import_Model_Import_Product
             $dp->ingest($product);
             $this->setSimpleSkus($simpleSku);
         }
-        unset($simpleXMLData);
 
 
         //Create configurable
-        $firstSimple = array_values($simples)[0];
-
+        $firstSimple = $simples[0];
         $configurableSku = $vendorId . "-" . $configurableSkuv;
         $productConfigurable = array(
-            "name" => (string)$firstSimple->description,
+            "name" => $simpleXMLData->description,
             "sku" => $configurableSku,
             "skuv" => $configurableSkuv,
             "price" => "0.00",
@@ -328,17 +319,17 @@ class ZolagoOs_Import_Model_Import_Product
             "configurable_attributes" => "size",
             "simples_skus" => implode(",", $subskus),
 
-            "description" => (string)$firstSimple->clothes_description,
-            "short_description" => (string)$firstSimple->description2,
-            "ean"	=> (string)$firstSimple->barcode,
+            "description" => $firstSimple->clothes_description,
+            "short_description" => $firstSimple->description2,
+            "ean"	=> $firstSimple->barcode,
 
             //ext_
-            "ext_productline" => (string)$firstSimple->collection,
-            "ext_category" => (string)$firstSimple->clothes_description,
-            "ext_color" => (string)$firstSimple->color,
-            "ext_brand" => (string)$firstSimple->brand,
+            "ext_productline" => $firstSimple->collection,
+            "ext_category" => $firstSimple->clothes_description,
+            "ext_color" => $firstSimple->color,
+            "ext_brand" => $firstSimple->brand,
 
-            "col1" => "Kolekcja:" . (string)$firstSimple->description2,
+            "col1" => "Kolekcja:" . $firstSimple->description2,
 
             //magazyn dla konfigurowalnych - zarządzaj stanami = nie
             "use_config_manage_stock" => 0,
@@ -352,7 +343,7 @@ class ZolagoOs_Import_Model_Import_Product
         $additionalColumns = array(
             "gender", "intake", "clothes_type", "size_group", "week_no", "barcode"
         );
-        for ($n = 1; $n < count($additionalColumns); $n++) {
+        for ($n = 0; $n < count($additionalColumns); $n++) {
             $property = $additionalColumns[$n];
             if (!empty($propertyValue = $this->formatAdditionalColumns($firstSimple, $property)))
                 $productConfigurable["col" . ($n + 1)] = $propertyValue;
@@ -381,7 +372,7 @@ class ZolagoOs_Import_Model_Import_Product
         if (empty((string)$col->$item)) {
             return $result;
         }
-        $result = "{$item}:" . (string)$col->$item;
+        $result = "{$item}: " . (string)$col->$item;
 
         return $result;
     }
