@@ -128,7 +128,6 @@ class ZolagoOs_Import_Model_Import_Product
                 $this->log("No Data For Import", Zend_Log::ALERT);
                 return $this;
             }
-krumo($skuBatch);
 
             //create csv
             $listSimples = array(
@@ -277,7 +276,7 @@ krumo($skuBatch);
 
             $this->updateAdditionalAttributes();
 
-            die("test");
+            
             //--create csv
 
 
