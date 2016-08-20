@@ -275,8 +275,6 @@ class ZolagoOs_Import_Model_Import_Product
             exec('php '.Mage::getBaseDir() . DS .'magmi/cli/magmi.cli.php -chain=wojcik:xcreate,wojcik_conf:xcreate');
 
             $this->updateAdditionalAttributes();
-
-            
             //--create csv
 
 
@@ -378,109 +376,6 @@ class ZolagoOs_Import_Model_Import_Product
             Mage::logException($e);
         }
 
-    }
-
-
-    /**
-     * @param $dp
-     * @param $vendorId
-     * @param $configurableSkuv
-     * @param $simples
-     * @return array
-     */
-    public function insertConfigurable($dp, $vendorId, $configurableSkuv, $simples)
-    {
-        $attributeSet = "Default";
-
-        $skusUpdated = [];
-        $subskus = [];
-        foreach ($simples as $simpleXMLData) {
-            $simpleSkuV = (string)$simpleXMLData->sku;
-            $simpleSku = $vendorId . "-" . $simpleSkuV;
-            $subskus[] = $simpleSku;  //Collect simple skus for configurable
-            $product = array(
-                "name" => $simpleXMLData->description,
-                "sku" => $simpleSku,
-                "skuv" => $simpleSkuV,
-                "price" => "0.00",
-                "type" => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
-                "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
-                "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE,
-                "tax_class_id" => 2,
-                "attribute_set" => $attributeSet,
-                "store" => "admin",
-                "description" => $simpleXMLData->clothes_description,
-                "short_description" => $simpleXMLData->description2,
-                "size" => (string)$simpleXMLData->size,
-                "ean" => $simpleXMLData->barcode,            
-
-
-                //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
-                "manage_stock" => 1,
-                "qty" => 0,
-                "is_in_stock" => 0
-            );
-            // Now ingest item into magento
-            $dp->ingest($product);
-            $this->setSimpleSkus($simpleSku);
-        }
-        unset($simpleXMLData);
-
-
-        //Create configurable
-        $firstSimple = array_values($simples)[0];
-
-        $configurableSku = $vendorId . "-" . $configurableSkuv;
-        $productConfigurable = array(
-            "name" => (string)$firstSimple->description,
-            "sku" => $configurableSku,
-            "skuv" => $configurableSkuv,
-            "price" => "0.00",
-            "type" => Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE,
-            "status" => Mage_Catalog_Model_Product_Status::STATUS_DISABLED,
-            "visibility" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-            "tax_class_id" => 2,
-            "attribute_set" => $attributeSet,
-            "store" => "admin",
-            "configurable_attributes" => "size",
-            "simples_skus" => implode(",", $subskus),
-
-            "description" => (string)$firstSimple->clothes_description,
-            "short_description" => (string)$firstSimple->description2,
-            "ean"	=> (string)$firstSimple->barcode,
-
-            //ext_
-            "ext_productline" => (string)$firstSimple->collection,
-            "ext_category" => (string)$firstSimple->clothes_description,
-            "ext_color" => (string)$firstSimple->color,
-            "ext_brand" => (string)$firstSimple->brand,
-
-            "col1" => "Kolekcja:" . (string)$firstSimple->description2,
-
-            //magazyn dla konfigurowalnych - zarządzaj stanami = nie
-            "use_config_manage_stock" => 0,
-            "manage_stock" => 0,
-            "qty" => 0,
-            "is_in_stock" => 0
-
-        );
-
-        //Additional columns
-        $additionalColumns = array(
-            "gender", "intake", "clothes_type", "size_group", "week_no", "barcode"
-        );
-        for ($n = 1; $n < count($additionalColumns); $n++) {
-            $property = $additionalColumns[$n];
-            if (!empty($propertyValue = $this->formatAdditionalColumns($firstSimple, $property)))
-                $productConfigurable["col" . ($n + 1)] = $propertyValue;
-        }
-
-        // Now ingest item into magento
-        $dp->ingest($productConfigurable);
-        $skusUpdated[$configurableSku] = $subskus;
-        $this->setConfigurableSkus($configurableSku);
-
-        return $skusUpdated;
     }
 
     /**
