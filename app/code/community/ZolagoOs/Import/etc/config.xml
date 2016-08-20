@@ -51,14 +51,4 @@
             </zolagoosimportadmin>
         </routers>
     </admin>
-    <!--<crontab>-->
-        <!--<jobs>-->
-            <!--<zolagoosimport_import_product>-->
-                <!--<schedule><cron_expr>0 * * * *</cron_expr></schedule>-->
-                <!--<run>-->
-                    <!--<model>zolagoosimport/observer::cronImportProducts</model>-->
-                <!--</run>-->
-            <!--</zolagoosimport_import_product>-->
-        <!--</jobs>-->
-    <!--</crontab>-->
 </config>
