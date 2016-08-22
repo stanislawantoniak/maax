@@ -125,6 +125,7 @@ skin/frontend/modago/puma/images/sprites/check_filter-*
 skin/frontend/modago/puma/images/sprites/bg-*
 skin/frontend/modago/puma/images/sprites/checkbox-*
 skin/frontend/modago/puma/images/sprites/radio-*
+skin/frontend/modago/ipson/css/gh/
 .sonar/
 sonar-project.properties
 magmi/conf/
