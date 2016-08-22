@@ -41,7 +41,6 @@ class ZolagoOs_Import_Model_Import_Price
     {
 
         $vendorId = $this->getVendorId();
-        krumo($vendorId);
 
         if (empty($vendorId)) {
             $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
@@ -62,13 +61,13 @@ class ZolagoOs_Import_Model_Import_Price
         }
         try {
 
-            $batch = [];
+            $priceBatch = [];
             $row = 1;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
                 while (($data = fgetcsv($fileContent, 100000, ";")) !== FALSE) {
 
                     if ($row > 1) {
-                        $batch[$data[0]] = array(
+                        $priceBatch[$vendorId . "-" . $data[0]] = array(
                             "A" => $data[1],
                             "B" => $data[2],
                             "C" => $data[3],
@@ -80,8 +79,14 @@ class ZolagoOs_Import_Model_Import_Price
 
                 }
                 fclose($fileContent);
-            }
+            }            
 
+
+            /** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
+            $restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
+            if (!empty($priceBatch)) 
+                $restApi::updatePricesConverter($priceBatch);
+            
 
         } catch (Exception $e) {
             Mage::logException($e);
