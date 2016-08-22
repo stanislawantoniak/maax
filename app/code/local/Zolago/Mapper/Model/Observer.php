@@ -57,9 +57,8 @@ class Zolago_Mapper_Model_Observer {
                             'website_id' => $wid,
                         );
                 $queue->push($elem);
-            }
+            }            
         }
-
     }
 
     public function catalogProductAttributeUpdateAfter($observer) {

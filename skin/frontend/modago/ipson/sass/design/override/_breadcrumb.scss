@@ -4,7 +4,7 @@ ol.breadcrumb {
 	font-family: $fontRegular;
 	font-size: 11px;
 	padding: 20px 0 0;
-	font-weight: 600;
+	margin-left: 3px;
 	a:link,
 	a:visited {
 		font-weight: 400;
@@ -33,13 +33,13 @@ ol.breadcrumb{
 		content: "\f104";
 	}
 }
-
-.catalog-product-view {
-	.breadcrumb {
-		font-size: 11px;
-		padding-left: 0;
-	}
-	.path_back_to_category {
-		text-transform: none;
-	}
-}
+//
+//.catalog-product-view {
+//	.breadcrumb {
+//		font-size: 11px;
+//		padding-left: 0;
+//	}
+//	.path_back_to_category {
+//		text-transform: none;
+//	}
+//}

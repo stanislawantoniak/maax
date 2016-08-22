@@ -22,7 +22,6 @@ ol.breadcrumb {
 		&:not(:first-child):before {
 			content: "\f105";
 			font-family: FontAwesome;
-			//width: 32px;
 			font-size: 11px;
 			display: inline-block;
 			text-align: right;
