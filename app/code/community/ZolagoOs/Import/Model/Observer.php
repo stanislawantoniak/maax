@@ -12,4 +12,13 @@ class ZolagoOs_Import_Model_Observer
     {
         Mage::getModel("zolagoosimport/import_product")->runImport();
     }
+
+
+    /**
+     * Import prices, stock
+     */
+    public function cronImportPriceStock()
+    {
+        Mage::getModel("zolagoosimport/import_price")->runImport();
+    }
 }

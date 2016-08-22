@@ -17,6 +17,9 @@ class ZolagoOs_Import_Model_Import_Product
 
     const MAGMI_IMPORT_PROFILE = "wojcik";
 
+    /**
+     * ZolagoOs_Import_Model_Import_Product constructor.
+     */
     public function __construct()
     {
         $this->_vendor = $this->getExternalId();
@@ -31,6 +34,17 @@ class ZolagoOs_Import_Model_Import_Product
        return "product";
     }
 
+    /**
+     * File name for _getPath()
+     *
+     * @return string
+     */
+    public function _getFileName()
+    {
+        return $this->getHelper()->getProductFile();
+
+    }
+    
     protected function _import()
     {
 
@@ -123,6 +137,9 @@ class ZolagoOs_Import_Model_Import_Product
         }
     }
 
+    /**
+     *
+     */
     protected function _moveProcessedFile()
     {
         $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
@@ -143,7 +160,7 @@ class ZolagoOs_Import_Model_Import_Product
 
 
         if (!copy($fileName, $newfile)) {
-            $this->log("Can not move file to processed directory", 2);
+            $this->log("Can not move file to processed directory", Zend_Log::ERR);
         } else {
             unlink($fileName);
         }
@@ -206,8 +223,9 @@ class ZolagoOs_Import_Model_Import_Product
     }
 
 
-
-
+    /**
+     * 
+     */
     public function updateAdditionalAttributes()
     {
         $vendorId = $this->_vendor;

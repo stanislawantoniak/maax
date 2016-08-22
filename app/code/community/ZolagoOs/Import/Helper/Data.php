@@ -23,6 +23,16 @@ class ZolagoOs_Import_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->getFileSourceConfig('import_products');
     }
 
+    public function getPriceFile()
+    {
+        return $this->getFileSourceConfig('import_prices');
+    }
+
+    public function getStockFile()
+    {
+        return $this->getFileSourceConfig('import_stock');
+    }
+
 
     /**
      * @param null $field

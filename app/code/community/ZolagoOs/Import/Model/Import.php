@@ -54,11 +54,7 @@ abstract class ZolagoOs_Import_Model_Import
      *
      * @return string
      */
-    protected function _getFileName()
-    {
-        return $this->getHelper()->getProductFile();
-
-    }
+    abstract function _getFileName();
 
     /**
      * @param $message
