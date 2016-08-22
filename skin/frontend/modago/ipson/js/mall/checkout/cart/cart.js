@@ -71,5 +71,5 @@ var Cart = {
 };
 
 jQuery(document).ready(function() {
-    jQuery(".qty input").change(Cart.update);
+    jQuery(".checkout-cart-index .qty input").change(Cart.update);
 });
