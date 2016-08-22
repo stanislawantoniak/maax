@@ -52,7 +52,6 @@
   .shipping-data-additional img,
   .shipping-data-additional figure {
     padding: 5px 7px;
-    border: 1px solid $gray;
   }
   .shipping-data-additional figure {
     width: 84px;
@@ -103,7 +102,7 @@
   }
 
   //Modal content
-  #select_inpost_point {
+  .carrier-points-modal {
     .modal-dialog.modal-lg {
       @media(max-width:767px) {
         margin: 30px auto;
