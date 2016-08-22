@@ -1,0 +1,53 @@
+<?php $_product = $this->getProduct(); ?>
+<?php $productId = $_product->getId(); $ruleId = $this->getRuleId();?>
+<?php if($_product->isSaleable()): ?>
+<script type="text/javascript">
+	Product.Bundle.prototype.reloadPrice = function() {
+		var calculatedPrice = 0;
+		var dispositionPrice = 0;
+		var includeTaxPrice = 0;
+		for (var option in this.config.selected) {
+			if (this.config.options[option]) {
+				for (var i=0; i < this.config.selected[option].length; i++) {
+					var prices = this.selectionPrice(option, this.config.selected[option][i]);
+					calculatedPrice += Number(prices[0]);
+					dispositionPrice += Number(prices[1]);
+					includeTaxPrice += Number(prices[2]);
+				}
+			}
+		}
+
+		var event = $(document).fire('bundle:reload-price', {
+			price: calculatedPrice,
+			priceInclTax: includeTaxPrice,
+			dispositionPrice: dispositionPrice,
+			bundle: this
+		});
+		if (!event.noReloadPrice) {
+			optionsPrice<?php echo $productId . '_' . $ruleId ?>.specialTaxPrice = 'true';
+			optionsPrice<?php echo $productId . '_' . $ruleId ?>.changePrice('bundle', calculatedPrice);
+			optionsPrice<?php echo $productId . '_' . $ruleId ?>.changePrice('nontaxable', dispositionPrice);
+			optionsPrice<?php echo $productId . '_' . $ruleId ?>.changePrice('priceInclTax', includeTaxPrice);
+			optionsPrice<?php echo $productId . '_' . $ruleId ?>.reload();
+		}
+
+		return calculatedPrice;
+	};
+
+    <?php if ($_product->isSaleable()): ?>
+        taxCalcMethod = "<?php echo Mage::helper('tax')->getConfig()->getAlgorithm($_product->getStore()) ?>";
+        CACL_UNIT_BASE = "<?php echo Mage_Tax_Model_Calculation::CALC_UNIT_BASE ?>";
+        CACL_ROW_BASE = "<?php echo Mage_Tax_Model_Calculation::CALC_ROW_BASE ?>";
+        CACL_TOTAL_BASE = "<?php echo Mage_Tax_Model_Calculation::CALC_TOTAL_BASE ?>";
+    <?php endif; ?>
+
+	var bundle<?php echo $productId . '_' . $ruleId ?> = new Product.Bundle(<?php echo $this->getJsonConfig() ?>);
+    if (!itorisGroupedPromoOptions[<?php echo $ruleId?>]) {
+        itorisGroupedPromoOptions[<?php echo $ruleId?>] = [];
+    }
+	itorisGroupedPromoOptions[<?php echo $ruleId?>][<?php echo $productId?>] = bundle<?php echo $productId . '_' . $ruleId ?>;
+	document.observe('dom:loaded', function(){
+		bundle<?php echo $productId . '_' . $ruleId ?>.reloadPrice();
+	});
+</script>
+<?php endif; ?>
