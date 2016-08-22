@@ -62,21 +62,24 @@ class ZolagoOs_Import_Model_Import_Price
         }
         try {
 
-           $lines = [];
+            $batch = [];
+            $row = 1;
+            if (($fileContent = fopen($fileName, "r")) !== FALSE) {
+                while (($data = fgetcsv($fileContent, 100000, ";")) !== FALSE) {
 
-
-            if (($fileContent = fopen ($fileName,"r")) !== FALSE) {
-                while (($data = fgetcsv($fileContent)) !== FALSE)  {
-
-                    $num = count($data);
-
-
-                    
-                    for ($c=1; $c < $num; $c++) {
-                        //echo $data[$c] . "<br />\n";
+                    if ($row > 1) {
+                        $batch[$data[0]] = array(
+                            "A" => $data[1],
+                            "B" => $data[2],
+                            "C" => $data[3],
+                            "Z" => $data[4],
+                            "salePriceBefore" => $data[5]
+                        );
                     }
+                    $row++;
+
                 }
-                fclose ($fileContent);
+                fclose($fileContent);
             }
 
 
