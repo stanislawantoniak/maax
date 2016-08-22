@@ -13,6 +13,11 @@ class ZolagoOs_Import_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->getConfig('external_id');
     }
 
+    public function getProcessedFilePlace()
+    {
+        return $this->getConfig('processed_files_folder');
+    }
+
     public function getProductFile()
     {
         return $this->getFileSourceConfig('import_products');
