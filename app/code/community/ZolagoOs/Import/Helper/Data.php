@@ -15,7 +15,7 @@ class ZolagoOs_Import_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getProductFile()
     {
-        return $this->getConfig('import_products');
+        return $this->getFileSourceConfig('import_products');
     }
 
 
