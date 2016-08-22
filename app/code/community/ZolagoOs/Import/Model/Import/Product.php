@@ -341,7 +341,7 @@ class ZolagoOs_Import_Model_Import_Product
         $additionalColumns = array(
             "gender", "intake", "clothes_type", "size_group", "week_no", "barcode"
         );
-        for ($n = 0; $n < count($additionalColumns); $n++) {
+        for ($n = 1; $n < count($additionalColumns); $n++) {
             $property = $additionalColumns[$n];
             if (!empty($propertyValue = $this->formatAdditionalColumns($firstSimple, $property)))
                 $productConfigurable["col" . ($n + 1)] = $propertyValue;
@@ -370,7 +370,7 @@ class ZolagoOs_Import_Model_Import_Product
         if (empty((string)$col->$item)) {
             return $result;
         }
-        $result = "{$item}: " . (string)$col->$item;
+        $result = "{$item}:" . (string)$col->$item;
 
         return $result;
     }
