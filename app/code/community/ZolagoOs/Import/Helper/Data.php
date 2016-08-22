@@ -41,6 +41,6 @@ class ZolagoOs_Import_Helper_Data extends Mage_Core_Helper_Abstract
         if (!$this->_file_source_conf ) {
             $this->_file_source_conf  = Mage::getStoreConfig("zolagoosimport/file_source");
         }
-        return $field ? trim($this->_file_source_conf [$field]) : $this->_file_source_conf ;
+        return $field ? trim($this->_file_source_conf[$field]) : $this->_file_source_conf;
     }
 }
