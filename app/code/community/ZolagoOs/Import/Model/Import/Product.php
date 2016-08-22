@@ -4,9 +4,9 @@
  * Import products
  */
 
-require_once(MAGENTO_ROOT . DS . "magmi/inc/magmi_defs.php");
+require_once(Mage::getBaseDir() . DS . "magmi/inc/magmi_defs.php");
 //Datapump include
-require_once(MAGENTO_ROOT . DS . "magmi/integration/inc/magmi_datapump.php");
+require_once(Mage::getBaseDir() . DS . "magmi/integration/inc/magmi_datapump.php");
 
 class ZolagoOs_Import_Model_Import_Product
     extends ZolagoOs_Import_Model_Import
