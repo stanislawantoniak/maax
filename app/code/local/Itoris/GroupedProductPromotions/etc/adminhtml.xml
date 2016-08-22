@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<config>
+	<menu>
+		<system>
+			<children>
+				<itoris_extensions>
+					<children>
+						<itoris_groupedproductpromotions translate="title" module="itoris_groupedproductpromotions">
+							<title>Grouped Product Promotions</title>
+							<action>adminhtml/groupedproductpromotions_configuration/</action>
+							<sort_order>40</sort_order>
+						</itoris_groupedproductpromotions>
+					</children>
+				</itoris_extensions>
+			</children>
+		</system>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<itoris_extensions>
+								<children>
+									<itoris_groupedproductpromotions translate="title" module="itoris_groupedproductpromotions">
+										<title>Grouped Product Promotions</title>
+										<sort_order>40</sort_order>
+									</itoris_groupedproductpromotions>
+								</children>
+							</itoris_extensions>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>
