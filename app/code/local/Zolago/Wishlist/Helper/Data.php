@@ -120,8 +120,9 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 	    $collection = $wishlist->getItemCollection();
 	    $brandId = Mage::helper('zolagocatalog')->getBrandId();
 	    $collection->getSelect()->distinct()
-	        ->joinLeft('catalog_product_entity_int', 'entity_id=product_id and attribute_id = '.$brandId, 'value as brand_id');
-        return $collection;
+	        ->joinLeft('catalog_product_entity_int as b', 'b.entity_id=product_id and b.store_id = 0 and b.attribute_id = '.$brandId, 'b.value as brand_id_default')
+	        ->joinLeft('catalog_product_entity_int as c', 'c.entity_id=product_id and c.store_id = main_table.store_id and c.attribute_id = '.$brandId, 'c.value as brand_id');
+             return $collection;
 	}
 	
 	
