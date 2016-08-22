@@ -55,7 +55,10 @@ class Itoris_GroupedProductPromotions_Model_Quote_Observer {
 		
 		//looking for all rules matching products in the cart
 		$cartProductQty = array();
-		foreach ($quote->getAllVisibleItems() as $item) $cartProductQty[$item->getProductId()] += $item->getQty();
+		foreach ($quote->getAllVisibleItems() as $item) {
+            if (!array_key_exists($item->getProductId(), $cartProductQty)) $cartProductQty[$item->getProductId()] = 0;
+		    $cartProductQty[$item->getProductId()] += $item->getQty();
+        }
 		$cartProductIds = array_keys($cartProductQty);
 		if (empty($cartProductIds)) return;
 		
