@@ -54,6 +54,12 @@
                         jQuery("[name=shipping_point_code]").attr("data-town", "");
                     }
 
+                    jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] [name=shipping_select_city]").select2({
+                        placeholder: Mall.translate.__("shipping_map_select_city"),
+                        dropdownParent: jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']"),
+                        language: Mall.reg.get("localeCode")
+                    });
+
                     self.implementMapSelections();
 
                     Mall.Cart.Map.initMap();
