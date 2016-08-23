@@ -90,7 +90,7 @@ abstract class ZolagoOs_Import_Model_Import
 
 
     /**
-     * Move processed file to another directory
+     * Move processed file to archive directory
      */
     protected function _moveProcessedFile()
     {

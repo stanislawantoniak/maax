@@ -90,7 +90,7 @@ class ZolagoOs_Import_Model_Import_Stock
                     $restApi::updateStockConverter($stockBatch);
                 }
             }
-            //$this->_moveProcessedFile();
+            $this->_moveProcessedFile();
 
         } catch (Exception $e) {
             Mage::logException($e);

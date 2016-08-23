@@ -85,7 +85,7 @@ class ZolagoOs_Import_Model_Import_Price
                     $restApi::updatePricesConverter($priceBatch);
                 }
             }
-            //$this->_moveProcessedFile();
+            $this->_moveProcessedFile();
 
         } catch (Exception $e) {
             Mage::logException($e);
