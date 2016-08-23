@@ -1,0 +1,266 @@
+#product-shop {
+	h1 {
+		font-family:$fontLight;
+		text-transform:uppercase;
+		font-size:34px;
+		border-bottom: 1px solid $gray-lighter;
+		@media (max-width: $screen-xs-max) { 
+			font-size:22px;
+		}
+	}
+	.short-description {
+		margin-bottom: 6px;
+		a {
+			color :#959595;
+			span {
+				color :#1dd8a0;
+			}
+		}
+	}
+	.price-box-bundle {
+		.price-label,
+		.old-price {
+			font-size: 24px;
+			color:#000;
+			font-family: $fontLight;
+		}
+		.old-price {
+			text-decoration: line-through;
+		}
+		.price {
+			font-size: 36px;
+			color:#000;
+			font-family: $fontBlack;
+			
+			@media (min-width: 481px) and (max-width: $screen-xs-max) {
+				line-height: 1.0;
+			}
+			@media (max-width: 480px) {
+				line-height: 1.0;
+			}
+		}
+		ul {
+			@include no-bullet;
+			li {
+				font-size: 12px;	
+				color:$gray-dark;
+				line-height: 1.5;
+			}
+		}
+	}
+	.color-box-bundle,
+	.size-box-bundle {
+		.color-label,
+		.size-label {
+			line-height: 47px;
+			text-transform: uppercase;
+			font-size: 12px;
+			color:#020202;
+            font-family: $fontBlack;
+            @media (min-width: 768px) and (max-width: 814px) {
+				line-height: 29px;
+			}
+            @media (max-width: $screen-xs-max) {
+            	line-height: 29px;
+            }
+		}
+		.form-group {
+			label {
+				cursor:pointer;
+				img {
+					@include border-radius(3px);
+					border:1px solid #fff;
+				}
+				&:hover {
+					&+img {
+						border-color:#999;
+					}
+				}
+				img:hover {
+					border-color:#999;
+				}
+				[type="radio"]:checked {
+					&+img {
+						border-color:#000;
+					}
+				}
+			}
+		}
+		
+	}
+	.color-box-bundle  {
+		.color-label {
+			line-height: 57px;
+		}
+	}
+	.size-box-bundle {
+		.size-label { 
+			line-height: 39px;
+		}
+		.form-group {
+			label {
+				span {
+					background:#fff;
+					border:1px solid $gray;
+					text-align:center;
+					line-height: 39px;
+					color:#858585;
+					font-size:14px;
+					font-family:$fontRegular;
+					font-weight: normal;
+				}
+			[type="radio"]:hover {
+				&+span {
+					border-color:#999;
+					background:#999;
+					color:#fff;
+				}
+			}	
+			span:hover {
+					border-color:#999;
+					background:#999;
+					color:#fff;
+				}
+			[type="radio"]:checked,
+			[type="radio"]:hover:checked {
+				&+span {
+					border-color:#000;
+					background:#000;
+					color:#fff;
+				}
+			}
+			
+			}
+		}
+		.view-sizing {
+			font-size: 14px;
+			white-space: nowrap;
+			.linkToModal {
+				text-align: right;
+			}			
+		}
+	}
+	.action-box-bundle {
+		font-size: 12px;
+		color:#000;
+		.addLike {
+			border:2px solid #a6a6a6;
+			@include border-radius(5px);
+			line-height: 1.2;
+			font-size: 11px;
+			color:$gray-dark;
+			text-transform: uppercase;
+			font-family: $fontRegular;
+			background:#fff url('../images/svg/unlike.svg') 8px 8px no-repeat;
+			background-size: 22px 22px;
+			&:hover {
+				text-decoration: none;
+				background:#fff url('../images/svg/like.svg') 8px 8px no-repeat;
+				background-size: 22px 22px;
+			}
+		}
+		.likeAdded {
+			color:$gray-dark;
+			background:#fff url('../images/svg/like.svg') 8px 5px no-repeat;
+			background-size: 22px 22px;
+			span {
+				color:#dcdcdc;
+			}
+			&:hover {
+				text-decoration: none;
+				/*background:#fff url('../images/heart.png') 8px 11px no-repeat;*/
+				span {
+					color:$gray-dark;
+				}
+			}
+		}
+		.addBasket {
+			@media (max-width: 320px) {
+				font-size: 11px;
+				font-weight: normal;
+			}
+		}
+	}
+}
+#rwd-color {
+	.rwd-prev,
+	.rwd-next {
+		background:$allMap;
+	}
+	.rwd-prev {
+		@include sprite($allMap, arrow-rwd-slider-prev-mobile);
+	}
+	.rwd-next {
+		@include sprite($allMap, arrow-rwd-slider-next-mobile);
+	}
+}
+
+.zoom_plus,
+.zoom_minus {
+	span {
+		background:$allMap;
+	}
+	
+	&.disabled {
+		cursor:default;
+		opacity:0.3
+	}
+	&:hover {
+		text-decoration: none;
+	}
+}
+.zoom_plus {
+	span {
+		@include sprite($allMap, zoom_plus);
+		
+	} 
+}
+.zoom_minus {
+ 	span {
+ 		@include sprite($allMap, zoom_minus);
+ 		
+ 	}
+}
+
+
+	i.flag {
+		background:$allMap;		
+		&.sale {
+			@include sprite($allMap, sale);
+		}
+		&.percent,
+		&.promotion  {
+			@include sprite($allMap, percent);
+		}
+		&.new {
+			@include sprite($allMap, new);
+		}
+		&.hit,
+		&.bestseller  {
+			@include sprite($allMap, hit);
+		}
+	}
+
+	#question-form {
+	h4 {
+		strong{
+			text-transform: uppercase;
+		}
+	}
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
+		line-height: 29px;
+	}
+	label {
+		font-weight: normal;
+	}
+	.nickname_field {
+		label {
+			line-height: 29px;
+		}
+	}
+      .error {
+        padding-left: 0px !important;
+      }
+}

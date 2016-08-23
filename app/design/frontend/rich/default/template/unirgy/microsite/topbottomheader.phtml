@@ -1,0 +1,79 @@
+<?php
+/**
+ * User: Andrzej Spólnicki
+ */
+/* @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Header */
+$baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
+$messagesBlock = $this->getMessagesBlock()->getGroupedHtml();
+
+$vendor = $this->getVendor();
+$vendorCanAsk = $vendor->getCanAsk();
+?>
+
+
+<div class="top_bottom  bg-w clearfix hidden-xs vendor-header-wrapper-desktop">
+    <?php echo $this->getDesktopVendorHeaderPanel(); ?>
+</div>
+
+
+<div class="clearfix hidden-xs messages-block-desktop">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" style="">
+                <?php echo $messagesBlock; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="top_bottom  bg-w visible-xs clearfix vendor-header-wrapper-mobile">
+    <!--mobile part-->
+    <?php echo $this->getMobileVendorHeaderPanel(); ?>
+</div>
+
+
+<div class="visible-xs clearfix messages-block-mobile">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" style="">
+                <?php echo $messagesBlock; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="top_bottom  bg-w visible-xs clearfix mobile-menu-wrapper">
+    <div id="shop_navigation" class="col-sm-12">
+        <ul id="shop_nav_mobile" class="navigation visible-xs" role="navigation">
+
+            <?php echo $this->getChildHtml('vendor.menu.mobile'); ?>
+
+            <!--            vendor.info.mobile-->
+            <?php echo $this->getChildHtml('vendor.info.mobile'); ?>
+            <!--            vendor.info.mobile end-->
+
+            <!-- question form mobile-->
+            <?php if ($vendorCanAsk): ?>
+                <li><a href="#"><?php echo $this->__("Submit a question to seller"); ?><i
+                            class="fa fa-chevron-down"></i></a>
+                    <ul>
+                        <li style="height: inherit; padding: 8px 20px 8px 10px;">
+                            <div>
+                                <?php echo $this->getChildHtml('vendor.question.mobile'); ?>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            <?php endif; ?>
+            <!-- question form mobile end-->
+
+            <!-- back to main gallery -->
+            <li><a href="<?php echo $baseUrl; ?>" class="clickable"><?php echo $this->__("Back to main gallery"); ?></a>
+
+            </li>
+            <!-- back to main gallery -->
+        </ul>
+    </div>
+
+</div>
+<!--mobile part end-->

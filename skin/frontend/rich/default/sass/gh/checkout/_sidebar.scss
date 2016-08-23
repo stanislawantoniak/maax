@@ -1,0 +1,79 @@
+#sidebar-secondary {
+  #cart-summary {
+    .col-sidebar-cart-summary {
+      @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+        width: 50%;
+        float: none;
+      }
+    }
+  }
+}
+
+#checkout #step-0, .customer-account-create {
+	.sidebar-second {
+		padding-left: 0;
+		.main {
+			padding: 30px;
+			@media(max-width: $screen-sm-max) {
+				padding: 30px 15px;
+			}
+			.checkout-sidebar-second-list-title {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 20px;
+			}
+			.checkout-sidebar-second-ul {
+				padding-left: 0;
+				list-style: none;
+				margin-bottom: 40px;
+				&:last-child {
+					margin-bottom: 0;
+				}
+				.checkout-sidebar-second-li {
+					min-height: 64px;
+					padding-left: 80px;
+					background-position: top left;
+					background-size: 64px;
+					background-repeat: no-repeat;
+					margin-bottom: 14px;
+					@media(max-width: 830px) {
+						min-height: 48px;
+						padding-left: 64px;
+						background-size: 48px;
+					}
+					&.checkout-sidebar-second-li-return {
+						background-image: url('../images/svg/benefits_return.svg');
+					}
+					&.checkout-sidebar-second-li-shipping {
+						background-image: url('../images/svg/about_delivery_quick.svg');
+					}
+					&.checkout-sidebar-second-li-payments {
+						background-image: url('../images/svg/checkout_payments.svg');
+					}
+					&.checkout-sidebar-second-li-safe {
+						background-image: url('../images/svg/checkout_safe.svg');
+					}
+					&.checkout-sidebar-second-li-status {
+						background-image: url('../images/svg/help_orders.svg');
+					}
+					&.checkout-sidebar-second-li-simple {
+						background-image: url('../images/svg/checkout_simple.svg');
+					}
+					&.checkout-sidebar-second-li-promos {
+						background-image: url('../images/svg/about_promotions.svg');
+					}
+					.checkout-sidebar-second-li-strong {
+						font-family: $fontBlack;
+						padding-top: 12px;
+						@media(max-width: 830px) {
+							padding-top: 6px;
+						}
+					}
+					.checkout-sidebar-second-li-normal {
+						white-space: nowrap;
+					}
+				}
+			}
+		}
+	}
+}

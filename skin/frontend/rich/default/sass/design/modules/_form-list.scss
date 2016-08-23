@@ -1,0 +1,21 @@
+ul.form-list {
+	@include no-bullets;
+	@include reset-m;
+	margin: 0 auto 25px;
+	li {
+		line-height: 1.7;
+		select {
+			color: #000;
+		}
+	}
+}
+
+form#question-form {
+  margin: 25px 0;
+  .error {
+    padding-left: 0px !important;
+  }
+}
+div#contact-container{
+	padding: 30px;
+}

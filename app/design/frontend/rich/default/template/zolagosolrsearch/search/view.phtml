@@ -1,0 +1,46 @@
+<?php
+/** @var Zolago_Solrsearch_Helper_Data $_helperZSS */
+$_helperZSS = Mage::helper('zolagosolrsearch');
+/** @var $this Zolago_Solrsearch_Block_Search_View */
+?>
+<?php if(0 && $this->isContentMode()): ?>
+    <?php //echo $this->getChildHtml('banner_result_title'); ?>
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="sidebar" class="hidden-xs clearfix">
+                    <?php echo $this->getSidebarWrapper(); ?>
+                </div>
+                <div id="content-main">
+                    <?php echo $this->getChildHtml('vendor.banner'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery(".wrapp-section").removeClass("bg-w");
+    </script>
+<?php elseif(0 && $this->isMixedMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+    <?php echo $this->getProductListHtml() ?>
+
+<?php else: ?>
+    <?php echo $this->getChildHtml('solrsearch_product_list_header_search'); ?>
+
+    <?php if ($_helperZSS->getNumFound()): ?>
+
+        <?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
+        <?php echo $this->getProductListHtml(); ?>
+    <?php endif; ?>
+
+    <style type="text/css">
+        #nav_category_mobile {display: none !important;}
+        #navCategory {display: none !important;}
+    </style>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery("#navCategory").removeClass("visible-xs");
+            Mall.translate.add("You","<?php echo $this->__("You"); ?>");
+        });
+    </script>
+<?php endif; ?>

@@ -1,0 +1,46 @@
+<?php
+/** @var $this Zolago_Solrsearch_Block_Category_View */
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+?>
+
+
+<?php if($this->isContentMode()): ?>
+    <?php if(!($vendor && $vendor->getId())): ?>
+        <div id="breadcrumbs-header" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <section id="main" class="<?php echo $this->getElementClass(); ?>">
+    <?php //echo $this->getChildHtml('banner_result_title'); ?>
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="sidebar" class="hidden-xs clearfix">
+                    <?php echo $this->getSidebarWrapper(); ?>
+                </div>
+                <div id="content-main">
+                    <?php echo $this->getChildHtml('vendor.banner'); ?>
+	                <div id="vendor-products">
+		                <?php echo $this->getChildHtml('vendor-products'); ?>
+	                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    <?php //echo $this->getCmsBlockHtml() ?>
+	<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
+
+<?php elseif($this->isMixedMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+    <?php echo $this->getProductListHtml() ?>
+
+<?php else: ?>
+    <?php echo $this->getProductListHtml(); ?>
+<?php endif; ?>

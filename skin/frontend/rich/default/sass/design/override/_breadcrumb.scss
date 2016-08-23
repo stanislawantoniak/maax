@@ -1,0 +1,37 @@
+.brandshop-breadcrumps,
+ol.breadcrumb {
+	background:none;
+	font-family: $fontRegular;
+	font-size: 11px;
+	a:link,
+	a:visited {
+		color:#000;
+		font-family: $fontRegular;
+		font-size: 11px;			
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	&.active {
+		color:#000;			
+	}
+}
+
+ol.breadcrumb{
+	li {
+		font-size: 11px;
+		&:not(:first-child):before {
+			font-family: FontAwesome;
+			font-size: 11px;
+			text-align: right;
+			color:#000;
+		}
+	}
+}
+
+.brandshop-breadcrumps{
+	a::before{
+		font-family: "FontAwesome";
+		content: "\f104";
+	}
+}

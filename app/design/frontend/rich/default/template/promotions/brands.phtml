@@ -1,0 +1,70 @@
+<?php /* @var $this Zolago_Modago_Block_Brands_Vendor */ ?>
+<?php
+$vendors = $this->getVendorCollection(false);
+?>
+<?php if (count($vendors) > 0) : ?>
+<div id="popular-brands" class="col-sm-12 vendor-logo-container">
+    <div class="row vendor-logo-container">
+        <div class="vendor-logo-items">
+            <?php $n = 1; ?>
+
+            <?php $needMore = true; ?>
+            <?php $needed = 104; //amount of logos to fill whole promotions page bg ?>
+            <?php $added = 1; ?>
+            <?php while($needMore): ?>
+                <?php foreach ($vendors as $v): ?>
+                    <div
+                        class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item">
+                        <a href="<?php echo $this->getVendorBaseUrl($v); ?>">
+                                        <span class="pop-shop-img-wr">
+                                            <img src="<?php echo $this->getVendorResizedLogoUrl($v, 100, 44); ?>"
+                                                 alt="">
+                                        </span>
+                        </a>
+                    </div>
+
+                    <?php if ($n % 2 == 0): ?>
+                        <div class="clearfix visible-xxs"></div>
+                    <?php endif; ?>
+
+                    <?php if ($n % 3 == 0): ?>
+                        <div class="clearfix visible-xs"></div>
+                    <?php endif; ?>
+
+                    <?php if ($n % 4 == 0): ?>
+                        <div class="clearfix visible-xss-landscape"></div>
+                    <?php endif; ?>
+
+                    <?php if ($n % 5 == 0): ?>
+                        <div class="clearfix visible-xs-landscape"></div>
+                    <?php endif; ?>
+
+                    <?php if ($n % 6 == 0): ?>
+                        <div class="clearfix visible-sm"></div>
+                        <div class="clearfix visible-md"></div>
+                    <?php endif; ?>
+
+                    <?php if ($n % 7 == 0): ?>
+                        <div class="clearfix visible-sm-landscape"></div>
+                    <?php endif; ?>
+
+                    <?php if ($n % 8 == 0): ?>
+                        <div class="clearfix visible-lg"></div>
+                    <?php endif; ?>
+
+                    <?php $n++; ?>
+                    <?php
+                    if($added != $needed) {
+                        $added++;
+                    } else {
+                        $needMore = false;
+                        break;
+                    }
+                    ?>
+                <?php endforeach; ?>
+
+            <?php endwhile; ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

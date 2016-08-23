@@ -1,0 +1,70 @@
+<?php /* @var $this Zolago_Modago_Block_Brands_Vendor */ ?>
+<?php
+$vendors = $this->getVendorCollection();
+?>
+
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('brands-page-header')->toHtml(); ?>
+
+<?php if (count($vendors) > 0) : ?>
+	<section id="popular-brands">
+		<div class="container-fluid">
+			<div class="col-sm-12 vendor-logo-container">
+				<div class="row">
+					<div class="vendor-logo-items">
+						<?php $n = 1; ?>
+
+						<?php foreach ($vendors as $v): ?>
+							<?php /** @var Zolago_Dropship_Model_Vendor $v */ ?>
+							<div
+								class="col-xxs col-xxs-landscape col-xs-4 col-xs-landscape col-sm-2 col-sm-landscape col-md-2 col-lg-3-eight vendor-logo-item <?php echo $v->getClasses(); ?>">
+								<a href="<?php echo !$v->getDummy() ? $this->getVendorBaseUrl($v) : '#'; ?>" <?php if($v->getDummy()): ?>style="cursor:default"<?php endif; ?>>
+									<span class="pop-shop-img-wr">
+										<img src="<?php echo !$v->getDummy() ? $this->getVendorResizedLogoUrl($v, 100, 44) : $v->getVendorResizedLogoUrl(); ?>" alt="<?php echo $v->getVendorName(); ?>" />
+									</span>
+									<?php if(!$v->getDummy()): ?><span class="vendor-logo-item-name">
+										<?php echo $v->getVendorName(); ?> &gt;
+									</span><?php endif; ?>
+								</a>
+							</div>
+
+							<?php if ($n % 2 == 0): ?>
+								<div class="clearfix visible-xxs"></div>
+							<?php endif; ?>
+
+							<?php if ($n % 3 == 0): ?>
+								<div class="clearfix visible-xs"></div>
+							<?php endif; ?>
+
+							<?php if ($n % 4 == 0): ?>
+								<div class="clearfix visible-xss-landscape"></div>
+							<?php endif; ?>
+
+							<?php if ($n % 5 == 0): ?>
+								<div class="clearfix visible-xs-landscape"></div>
+							<?php endif; ?>
+
+							<?php if ($n % 6 == 0): ?>
+								<div class="clearfix visible-sm"></div>
+								<div class="clearfix visible-md"></div>
+							<?php endif; ?>
+
+							<?php if ($n % 7 == 0): ?>
+								<div class="clearfix visible-sm-landscape"></div>
+							<?php endif; ?>
+
+							<?php if ($n % 8 == 0): ?>
+								<div class="clearfix visible-lg"></div>
+							<?php endif; ?>
+
+							<?php $n++; ?>
+						<?php endforeach; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
+<div style="margin-bottom: 30px;">
+	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('brands-page-block')->toHtml(); ?>
+</div>
+

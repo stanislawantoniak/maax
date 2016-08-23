@@ -1,0 +1,22 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 23.09.2014
+ */
+
+?>
+
+<div id="content" class="container-fluid account-content" >
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="sidebar" class="clearfix">
+                <div class="sidebar">
+                    <?php echo $this->getChildHtml("left"); ?>
+                </div>
+            </div>
+            <div id="content-main">
+                <?php echo $this->getChildHtml("my.account.wrapper"); ?>
+            </div>
+        </div>
+    </div>
+</div>
