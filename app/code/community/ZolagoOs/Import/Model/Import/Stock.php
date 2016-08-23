@@ -77,6 +77,25 @@ class ZolagoOs_Import_Model_Import_Stock
                 fclose($fileContent);
             }
 
+            if (empty($stockBatch)) {
+                $this->log("NO VALID DATA FOUND IN THE FILE", Zend_Log::ERR);
+                return $this;
+            }
+
+            //validate
+            $notValidSkus = $this->getHelper()->getNotValidSkus($stockBatch[$vendorId], $vendorId);
+
+            if (!empty($notValidSkus)) {
+                $notValidSkusLine = implode(", ", array_keys($notValidSkus));
+                $notValidSkusCount = count($notValidSkus);
+                $this->log("FILE CONTAINS {$notValidSkusCount} INVALID SKU(S): {$notValidSkusLine}", Zend_Log::ERR);
+                // Remove invalid skus from batch
+                foreach ($notValidSkus as $sku => $msg) {
+                    unset($stockBatch[$sku]);
+                }
+            }
+            //--validate
+
             /** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
             $restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
             if (!empty($stockBatch)) {
@@ -85,7 +104,6 @@ class ZolagoOs_Import_Model_Import_Stock
                     $stockBatchC = array_chunk($stockBatch, $numberQ, true);
                     foreach ($stockBatchC as $stockBatchCItem) {
                         $restApi::updateStockConverter($stockBatchCItem);
-
                     }
                     unset($stockBatchCItem);
                 } else {

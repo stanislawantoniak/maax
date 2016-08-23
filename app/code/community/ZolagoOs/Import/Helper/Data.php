@@ -58,4 +58,54 @@ class ZolagoOs_Import_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $field ? trim($this->_file_source_conf[$field]) : $this->_file_source_conf;
     }
+
+
+    /**
+     * Retrieve not valid skus
+     * Not valid if:
+     * product is not connected to vendor
+     * product don't exist
+     *
+     * @param $data
+     * @param $vendorId
+     * @return array
+     */
+    public function getNotValidSkus($data, $vendorId) {
+        $inputSkus = array();
+        foreach ($data as $sku => $item) {
+            $inputSkus[$sku] = $sku;
+        }
+
+        /* @var Zolago_Catalog_Model_Resource_Product_Collection $coll */
+        $coll = Mage::getResourceModel('zolagocatalog/product_collection');
+        $coll->addFieldToFilter('sku', array( 'in' => $inputSkus));
+        $coll->addAttributeToSelect('udropship_vendor', 'left');
+        $coll->addAttributeToSelect('skuv', 'left');
+
+        $_data = $coll->getData();
+
+
+        $allSkusFromColl = array();
+        $invalidOwnerSkus = array();
+
+        // wrong owner
+        foreach ($_data as $product) {
+            $allSkusFromColl[$product['sku']] = $product['sku'];
+            if ($product['udropship_vendor'] != $vendorId) {
+                $invalidOwnerSkus[$product['sku']] = $product['sku'];
+            }
+        }
+
+        // not existing products
+        $notExistingSkus = array_diff($inputSkus, $allSkusFromColl);
+
+        $allErrorsSkus = array_merge($invalidOwnerSkus, $notExistingSkus);
+
+        // get skuv from sku
+        foreach ($allErrorsSkus as $key => $sku) {
+            $allErrorsSkus[$key] = $sku;
+        }
+        $allErrorsSkus = array_unique($allErrorsSkus);
+        return $allErrorsSkus;
+    }
 }
