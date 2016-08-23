@@ -1,0 +1,12 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Pager */ ?>
+
+
+<?php if ($this->getCollection()->getSize()): ?>
+    <div class="pager-full pagination-line">
+        <?php foreach ($this->getFramePages() as $page => $start): ?>
+            <span style="width:35px">
+                <a href="<?php echo $start; ?>"><?php echo ($page + 1); ?></a>
+            </span>
+        <?php endforeach; ?>
+    </div>
+<?php endif ?>

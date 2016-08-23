@@ -1,0 +1,12 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+<?php if ($this->getIsEnabled()): ?>
+    <?php foreach ($this->getCollection() as $archive): ?>
+    <link rel="archives" title="<?php echo $this->escapeHtml($archive->getLabel()); ?>" href="<?php echo $archive->getArchiveUrl(); ?>" />
+    <?php endforeach; ?>
+<?php endif; ?>

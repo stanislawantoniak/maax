@@ -1,0 +1,166 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+$formKey = Mage::getSingleton('core/session')->getFormKey();
+$quote = $this->getQuote();
+$billingAddress = $quote->getBillingAddress();
+
+
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+?>
+
+<?php echo $this->getStep1Sidebar(); ?>
+<div id="content-main" class="col-lg-9 col-md-8 col-sm-8 col-xs-12 col-lg-pull-3 col-md-pull-4 col-sm-pull-4 section">
+	<section class="main bg-w">
+		<header class="title-section">
+			<h2><?php echo $this->__("User data"); ?></h2>
+		</header>
+		<form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
+        <input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+
+
+			<?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>
+				<?php foreach ($selectedShipping["methods"] as $vendorId => $methodSelected): ?>
+					<input type="hidden"
+						   name="shipping_method[<?php echo $vendorId; ?>]"
+						   value="<?php echo $methodSelected; ?>" />
+				<?php endforeach; ?>
+
+
+				<?php if (isset($methodSelected) && isset($selectedShipping["shipping_point_code"])): ?>
+					<?php $shippingPointCode = $this->getDeliveryPointData($selectedShipping["shipping_point_code"]); ?>
+					<?php if(!empty($shippingPointCode)): ?>
+						<input type="hidden" name="shipping_point_code"
+							   data-id="<?php echo $shippingPointCode["id"]; ?>"
+							   data-town="<?php echo $shippingPointCode["city"]; ?>"
+							   value="<?php echo $shippingPointCode["value"]; ?>" />
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endif; ?>
+
+            <input type="hidden" id="customer_logged_in" name="customer_logged_in" value="<?php echo (int) $this->isCustomerLoggedIn(); ?>">
+			<fieldset>
+				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
+
+				<div class="form-group clearfix">
+					<div class="row">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_firstname"><?php echo $this->__("First name"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="text" value="<?php echo $this->escapeHtml($quote->getCustomerFirstname()); ?>" <?php if ($this->isCustomerLoggedIn() && $quote->getCustomerFirstname()) : ?>readonly<?php endif; ?> class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" />
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group clearfix border-top">
+					<div class="row">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_lastname"><?php echo $this->__("Last name"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="text" value="<?php echo $this->escapeHtml($quote->getCustomerLastname()); ?>" <?php if ($this->isCustomerLoggedIn() && $quote->getCustomerFirstname()) : ?>readonly<?php endif; ?> class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group clearfix border-top">
+					<div class="row">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_email"><?php echo $this->__("Email"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="email" value="<?php echo $this->escapeHtml($quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group clearfix border-top">
+					<div class="row">
+						<label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="account_telephone"><?php echo $this->__("Telephone number"); ?></label>
+						<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="tel" value="<?php echo $this->escapeHtml($billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>" />
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+            <?php echo $this->getChildHtml("shipping"); ?>
+            <?php echo $this->getChildHtml("billing"); ?>
+            <?php if (!$this->isCustomerLoggedIn()) : ?>
+			<fieldset id="remember_data">
+				<legend><?php echo $this->__("Remember me(optional):"); ?></legend>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="row">
+							<div class="col-sm-12">
+								<p><?php echo $this->__("Set up your password to track your order and easily buy next time."); ?></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="add_pass" class="col-sm-12">
+
+                        <?php echo $this->getChildHtml("password"); ?>
+
+					</div>
+				</div>
+			</fieldset>
+            <?php /* <fieldset id="checkout-onepage-social-login">
+                <div class="row">
+	                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                        <?php echo $this->getChildHtml('ced_sociallogin_register'); ?>
+                    </div>
+                </div>
+            </fieldset> */ ?>
+            <?php endif; ?>
+			<div class="row  agreements-block">
+                <?php $agreements = $this->getAgreements(); ?>
+				<div class="form-group form-checkbox small text-align-left">
+
+					<input type="checkbox" id="agreement_tos" class="css-checkbox invoice_vat"
+					       name="agreement[tos]" value="1" required="true"  style="opacity: 0; visibility: visible;"
+					       <?php if($agreements['agreement_tos']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_tos" class="css-label"><?php echo $modagoHelper->getAgreementHtml('tos'); ?></label>
+				</div>
+				<?php if(!$this->isCustomerSubscribed()):?>
+				<div class="form-group form-checkbox small text-align-left">
+					<input type="hidden" name="agreement[newsletter]" value="0" />
+					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
+					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
+						   <?php if($agreements['agreement_newsletter']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_newsletter" class="css-label"><?php echo $modagoHelper->getAgreementHtml('newsletter'); ?></label>
+				</div>
+				<?php endif;?>
+			</div>
+			<div class="row action">
+				<div class="col-sm-6">
+					<a id="back" href="<?php echo $this->getPreviousStepUrl(); ?>" class="button button-third large pull-left"><?php echo $this->__("Back"); ?></a>
+				</div>
+				<div class="col-sm-6">
+					<button class="button button-primary large link pull-right" target="step-0-submit" id="step-0-submit"><i></i>&nbsp;<?php echo $this->__("Next"); ?></button>
+				</div>
+			</div>
+		</form>
+	</section>
+
+</div>
+
+<script type="text/javascript">
+    Mall.translate.add("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format.", "<?php echo $this->__("Invalid zip-code. Zip-code should include 5 numbers in XX-XXX format."); ?>");
+    Mall.translate.add("Telephone number is too short. Number must contain 9 digits, without spacing.", "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>");
+    Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("We already have an account with this address. Please <a href='/checkout/guest/login/'>log in</a> to your account."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+    Mall.translate.add("Password needs to have at least %s characters", "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>");
+    Mall.translate.add("Zip code should be entered in the format xx-xxx.", "<?php echo $this->__("Zip code should be entered in the format xx-xxx."); ?>");
+	Mall.translate.add("warning-wrong-zip", "<?php echo $this->__("Kod został wprowadzony poprawnie, ale nie znaleźliśmy takiego kodu w bazie adresowej. Sprawdź proszę jeszcze poprawność kodu pocztowego.");?>");
+
+    Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
+    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("We already have an account with this address. Please log in to your account."); ?>");
+   
+	Mall.translate.add("Pho.", "<?php echo $this->__('Pho.') ?>");
+    Mall.translate.add("Invoice", "<?php echo $this->__('Invoice') ?>");
+    Mall.translate.add("VAT Id", "<?php echo $this->__('VAT Id') ?>");
+    Mall.translate.add("Delivery address", "<?php echo $this->__('Delivery address') ?>");
+
+    Mall.validate.validators.config.passwordMinLength = <?php echo Mage::helper("zolagocustomer")->getPasswordMinLength(); ?>;
+
+</script>
+

@@ -1,0 +1,37 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+
+/** @var Magpleasure_Blog_Block_Sidebar_Tag $this  */
+/** @var Magpleasure_Blog_Model_Mysql4_Tag_Collection $collection  */
+$collection = $this->getCollection();
+?>
+<?php if ($this->getDisplay() && count($collection)): ?>
+<div class="block mpblog-tags">
+    <h3 class="open"><span><?php echo $this->getBlockHeader(); ?></span></h3>
+    <div class="block-content">
+        <?php if ($this->getMtEnabled()): ?>
+        <div id="mpblog_canvas_container" class="noSwipe">
+            <canvas height="<?php echo $this->getMtHeight(); ?>" id="mpblog_canvas">
+                <p><?php echo $this->__("Unfortunately, your browser doesn't support HTML5 canvas."); ?></p>
+            </canvas>
+        </div>
+        <?php endif; ?>
+        <div id="mpblog_tags" class="tag-list <?php if ($this->getMtEnabled()): ?> cloud-enabled<?php endif; ?>">
+            <ul>
+                <?php foreach ($collection as $tag): ?>
+                <li>
+                    <?php /** @var Magpleasure_Blog_Model_Tag $tag */ ?>
+
+                    <a href="<?php echo $tag->getTagUrl(); ?>" class="tag tag<?php echo $this->getTagSizeClass($tag); ?><?php if ($this->isActive($tag)): ?> active<?php endif; ?>" title="<?php echo $this->__("%s Topics", $tag->getPostCount()); ?>"  ><?php echo $this->escapeHtml($tag->getName()); ?></a>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

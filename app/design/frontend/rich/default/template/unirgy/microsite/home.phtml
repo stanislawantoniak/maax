@@ -1,0 +1,19 @@
+<?php $_vendor = Mage::helper('umicrosite')->getCurrentVendor(); ?>
+
+<div id="content" class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <?php echo $this->getChildHtml('vendor.menu'); ?>
+            <div id="content-main">
+
+                  <?php echo $this->getChildHtml('vendor.banner'); ?>
+
+                <div id="vendor-products">
+                    <?php echo $this->getChildHtml('vendor-products'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

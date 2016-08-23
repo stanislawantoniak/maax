@@ -1,0 +1,35 @@
+<?php $_hlp = Mage::helper("zolagocheckout");?>
+<div class="content-step">
+	<div id="step">
+		<ol class="step_01 step_02">
+			<li id="step_01" class="current-checkout executed">
+				<span><span><?php echo $_hlp->__("Cart");?></span></span>
+			</li>
+			<li id="step_02" class="current-checkout">
+				<span><span><?php echo $_hlp->__("Shipping data");?></span></span>
+			</li>
+			<li id="step_03">
+				<span><span><?php echo $_hlp->__("Payment choice");?></span></span>
+			</li>
+			<li id="step_04">
+				<span><span><?php echo $_hlp->__("Summary");?></span></span>
+			</li>
+		</ol>
+	</div>
+</div>
+
+<div class="modal fade" id="popup-after-submit-order" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-body clearfix">
+				<div class="col-xs-8 popup-message">
+					<h3><?php echo $_hlp->__("Your order is saving");?></h3>
+					<h4><?php echo $_hlp->__("In a few moments you will be redirected to payment page");?></h4>
+				</div>
+				<div class="col-xs-4 popup-spinner-wrapper">
+					<i class="fa fa-spinner fa-spin popup-spinner"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

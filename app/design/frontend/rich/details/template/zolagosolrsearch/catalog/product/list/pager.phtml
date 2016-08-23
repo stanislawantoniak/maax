@@ -1,0 +1,39 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Pager */ ?>
+
+<?php $_helper = Mage::helper("zolagomodago"); ?>
+<?php $productText = $_helper->polishProductSuffix($this->getTotalNum());?>
+<?php if ($this->getCollection()->getSize()): ?>
+    <div class="listing-pagination">
+        <div class="totals">
+            <?php if ($this->getLastPageNum() > 1): ?>
+                <?php echo $_helper->__('%s-%s of %s products', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+            <?php else: ?>
+	                <?php if($this->getTotalNum() > 1): ?>
+	                    <?php echo $productText ?>
+		            <?php else: ?>
+		                <?php echo $_helper->__('1 product'); ?>
+		            <?php endif; ?>
+            <?php endif; ?>
+        </div>
+
+        <?php if ($this->getLastPageNum() > 1): ?>
+            <div class="pages">
+                <?php if ($this->isFirstEnabled()): ?>
+                    <a href="<?php echo $this->getPreviousPageUrl() ?>" class="page-prev">
+                <?php else: ?>
+                    <a class="page-disabled">
+                <?php endif; ?>
+	                    <i class="fa fa-angle-double-left"></i>
+                    </a>
+
+                <?php if ($this->isLastEnabled()): ?>
+                    <a href="<?php echo $this->getNextPageUrl() ?>" class="page-next">
+                <?php else: ?>
+	                <a class="page-disabled">
+                <?php endif; ?>
+		                <i class="fa fa-angle-double-right"></i>
+	                </a>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif ?>

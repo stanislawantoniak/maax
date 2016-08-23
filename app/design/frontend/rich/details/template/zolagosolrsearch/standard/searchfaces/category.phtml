@@ -1,0 +1,85 @@
+<?php
+/** @var $this Zolago_Modago_Block_Solrsearch_Faces_Category */
+/** @var Zolago_Solrsearch_Helper_Data $helper */
+$helper = Mage::helper("zolagosolrsearch");
+?>
+<?php $key = $this->getFacetKey(); ?>
+<?php if($this->getCanShow()): ?>
+    <?php $item = $this->getAllItems(); ?>
+
+    <?php if (is_array($item) && !empty($item['children'])): ?>
+
+        <?php
+        $backUrl = $this->getParentCategoryUrl();
+        $backLabel = strtolower($this->escapeHtml($this->getParentCategoryLabel()));
+        $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+        $iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up";
+        $isSearch = $this->getIsSearch();
+        $isParrentRoot = $this->getIsParentRootCategory();
+        $canShowBackToCampaign = $this->getCanShowBackToCampaign();
+        ?>
+
+        <div class="section clearfix" data-xs-rolled="open" data-lg-rolled="<?php echo $sectionClass; ?>">
+            <h3 class="<?php echo $sectionClass; ?>">
+            <span>
+                <span class="visible-xs"><?php echo Mage::helper('catalog')->__('Category'); ?></span>
+                <span class="hidden-xs"><?php echo $this->getFacetLabel(); ?></span>
+            </span> <i class="fa <?php echo $iconClass; ?>"></i>
+            </h3>
+            <div class="content" id="filter_category">
+                <dl>
+                    <?php if($item['is_root_category']): ?>
+                        <?php foreach($item['children'] as $child_item=>$child_val): ?>
+                            <?php if($this->getCanShowItem($child_val['count'])): ?>
+                                <dd><a data-params='<?php echo $item['params'];?>' href="<?php echo $child_val['url']; ?>" class="simpleChild"><span><?php echo $child_val['text']; ?></span>&nbsp;<span class="suffix">(<?php echo $child_val['count']; ?>)</span></a></dd>
+                            <?php endif;?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php foreach($item['children'] as $child_item=>$child_val): ?>
+                            <?php if($this->getCanShowItem($child_val['count'])): ?>
+                                <dd><a data-params='<?php echo $item['params'];?>' href="<?php echo $child_val['url'] ?>" class="simpleChild"><span><?php echo $child_val['text']; ?></span>&nbsp;<span class="suffix">(<?php echo $child_val['count']; ?>)</span></a></dd>
+                            <?php endif;?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </dl>
+
+                <?php if($backUrl != null) : ?>
+                    <?php if(!$isSearch): ?>
+                        <?php if($isParrentRoot): ?>
+                            <?php if($canShowBackToCampaign): ?>
+                                <div class="action clearfix">
+                                    <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
+                                </div>
+                            <?php else: ?>
+                                <div class="action clearfix">
+                                    <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
+                                </div>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <?php if($canShowBackToCampaign): ?>
+                                <div class="action clearfix">
+                                    <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $helper->__("back to campaign"); ?></a>
+                                </div>
+                            <?php else: ?>
+                                <div class="action clearfix">
+                                    <a href="<?php echo $backUrl; ?>" class="go_back button button-fourth  medium link"><?php echo $helper->__("back to parent category"); ?> <?php //echo $backLabel; ?></a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if($isParrentRoot): ?>
+                            <div class="action clearfix">
+                                <a href="<?php echo $backUrl; ?>" class="go_back button button-fourth  medium link"><?php echo $backLabel; ?></a>
+                            </div>
+                        <?php else: ?>
+                            <div class="action clearfix">
+                                <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

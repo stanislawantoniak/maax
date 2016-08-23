@@ -1,0 +1,52 @@
+#seller-box-bundle {
+	#accordion {
+		.panel-default {
+			box-shadow: none;
+			> .panel-heading {
+				background:none;
+				border-radius: 0;
+				border-top:1px solid #d9d9d9;
+				border-bottom:1px solid #d9d9d9;
+				h4 {
+					&.panel-title {
+						font-size: 14px;
+						color:#000;
+						font-weight: normal;
+						 font-family: $fontRegular;
+						a {
+							text-align: left;
+							text-transform: uppercase;
+							}
+						&:before {
+					    background: none repeat scroll 0% 0% #6FFFCF;
+						}
+					}
+					
+				}
+				
+				&+ .panel-collapse {
+					.panel-body {
+						font-size: 13px;
+						color:#000;
+						text-align: left;
+						ul {
+							list-style: none;
+						}
+						.view-store {
+							font-size: 11px;
+							padding: 3px 10px;
+							color: #FFF;
+						}
+					}
+				}
+			}
+			&.last {
+				> .panel-heading {
+					border-bottom:none;
+				}
+			}
+		}
+	}
+}
+
+

@@ -1,0 +1,156 @@
+.zolagomodago-brands-index {
+  .wrapp-section {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    h1 {
+      padding-bottom: 10px;
+      padding-top: 10px;
+      .span-title {
+        font-size: 17px;
+      }
+    }
+  }
+}
+#popular-brands {
+
+  @media (max-width: 440px) {
+    // 0px - 440px
+    .hidden-2 {
+      display: none !important;
+    }
+  }
+  @media (min-width: 441px) and (max-width: 589px) {
+    .hidden-3 {
+      display: none !important;
+    }
+  }
+  @media (min-width: 590px) and (max-width: 717px) {
+    .hidden-4 {
+      display: none !important;
+    }
+  }
+  @media (min-width: 718px) and (max-width: 845px) {
+    .hidden-5 {
+      display: none !important;
+    }
+  }
+  @media (min-width: 846px) and (max-width: 990px) {
+    .hidden-6 {
+      display: none !important;
+    }
+  }
+  @media (min-width: 991px) and (max-width: $screen-md-max) {
+    // 991px - 1199px
+    .hidden-7 {
+      display: none !important;
+      }
+  }
+  @media (min-width: $screen-lg) {
+    //1200px - inf
+    .hidden-8 {
+      display: none !important;
+    }
+  }
+
+  .visible-xxs,
+  .visible-xss-3,
+  .visible-xss-landscape,
+  .visible-xs-landscape,
+  .visible-sm-landscape{
+    display: none !important;
+  }
+  h3 {
+    margin-top: 20px;
+    margin-bottom:28px;
+    font-size: 17px;
+    text-transform: uppercase;
+  }
+  .vendor-logo-container {
+    .vendor-logo-item {
+      text-align: center;
+      min-height: 1px;
+      padding-left: 0;
+//      padding-right: 0;
+      position: relative;
+      a {
+        &:hover {
+          text-decoration: underline;
+        }
+        display: block;
+        width: 130px;
+        margin: 0 auto 21px auto;
+
+        .pop-shop-img-wr {
+          line-height: 74px;
+          background: #ffffff;
+          text-align: center;
+          height: 74px;
+          width: 100%;
+          margin-top: 0;
+          display: block;
+        }
+        .vendor-logo-item-name {
+          font-size: 11px;
+          display: block;
+          text-align: center;
+          margin: 15px 2px 0 2px;
+          word-wrap: break-word
+        }
+      }
+
+
+    }
+
+    @media (min-width: $screen-lg) {
+      .col-lg-3-eight {
+        width: 12.5%;
+      }
+    }
+    @media (max-width: 440px) {
+      .col-xxs {
+        width: 50%;
+      }
+      .visible-xs {
+        display: none !important;
+      }
+      .visible-xxs {
+        display: block !important;
+      }
+    }
+
+    @media (min-width: 590px) and (max-width: 717px) {
+      .col-xxs-landscape {
+        width: 25%;
+      }
+      .visible-xs {
+        display: none !important;
+      }
+      .visible-xss-landscape {
+        display: block !important;
+      }
+    }
+    @media (min-width: 718px) and (max-width: 845px) {
+      .col-xs-landscape {
+        width: 20%;
+      }
+      .visible-xs, .visible-xss-landscape, .visible-sm {
+        display: none !important;
+      }
+      .visible-xs-landscape {
+        display: block !important;
+      }
+    }
+    @media (min-width: $screen-sm-max) and (max-width: $screen-md-max) {
+      .col-xs-landscape {
+        width: 14%;
+      }
+      .visible-xs, .visible-xss-landscape, .visible-sm, .visible-xs-landscape, .visible-md {
+        display: none !important;
+      }
+      .visible-sm-landscape {
+        display: block !important;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,127 @@
+<?php
+/* @var $this Zolago_Solrsearch_Block_Faces_Price */
+$solrData = $this->getSolrData ();
+$priceFieldName = Mage::helper ( 'solrsearch' )->getPriceFieldName ();
+
+$prefix = 'solrbridge-price';
+
+$ranges = $this->getFacetPriceRanges();
+
+$key = "fq[price]";
+$sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+$iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up";
+$isOptionSelected = $this->getIsRangeActive();
+
+$min = $this->getMinPriceRange();
+$max = $this->getMaxPriceRange();
+
+if($isOptionSelected){
+	$fromValue = $this->getCurrentStartPrice();
+	$toValue = $this->getCurrentEndPrice();
+}else{
+	$fromValue = $min;
+	$toValue = $max;
+}
+
+
+if($toValue==0){
+	$toValue = $max;
+}
+
+$name = '';
+$somethingIsActive = $isOptionSelected;
+?>
+<?php if ($max > 0 && (int)$max > (int)$min):?>
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->__("Price"); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div class="content"  id="filter_price">
+			<?php foreach($ranges as $range) : ?>
+			<?php $url = $range['url']; ?>	
+            <div class="form-group form-checkbox">
+
+                <input 
+					type="checkbox" 
+					data-url="<?php echo $url;?>"
+					value="<?php echo $range['value'];?>" 
+					name="<?php echo $key; ?>" 
+					id="<?php echo $range['itemId'];?>" 
+					class="css-checkbox"
+					<?php if ($range['active'] && !$isOptionSelected):?> checked="checked"<?php $somethingIsActive = true; endif;?>
+				/>
+                <label for="<?php echo $range['itemId'];?>" class="css-label">
+	                <span>
+		                <a href="<?php echo $url; ?>"
+		                   class="listing-link">
+			                <?php echo $range['formatted'] ?>
+		                </a>
+	                </span>
+	                <span class="suffix">
+		                (<?php echo $range['count']; ?>)
+	                </span>
+                </label>
+            </div>
+			<?php endforeach; ?>
+            <div id="od_do" class="clearfix">
+                <div class="clearfix">
+                    <div id="checkSlider" class="form-group form-checkbox">
+                        <?php $value = $fromValue . " TO " . $toValue; ?>
+						<?php $url = $this->getItemUrl($value, array('slider'=>1, 'fq'=>array('price' => $value))); ?>
+                        <input 
+							type="checkbox" 
+        					data-url="<?php echo $url;?>"
+							name="<?php echo $key; ?>" 
+							value="<?php echo ($isOptionSelected) ? $fromValue . " TO " . $toValue  : "";?>"
+							id="filter_slider" 
+							class="css-checkbox" 
+							<?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>
+						/>
+                        <label for="filter_slider" class="css-label"><a class="listing-link" href="<?php echo $url; ?>"></a></label>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <input type="tel" id="zakres_min" value="<?php echo $fromValue; ?>" /><label for="zakres_od"> - </label>
+                        </div>
+                    </div>
+                    <div class=" form-horizontal">
+                        <div class="form-group">
+                            <input id="zakres_max" value="<?php echo $toValue; ?>" type="tel" />
+                        </div>
+                    </div>
+                    <div class="form-action">
+                        <div class="form-group">
+                            <input id="price_submit" type="submit" class="button button-third pull-right filter-price-range-submit" data-url="<?php echo $this->getItemUrl('price',array('fq'=>array('price'=> '__min TO __max')));?>" data-filter-type="price" value="OK" style="min-width: initial;"/>
+                        </div>
+                    </div>
+                </div>
+                <div id="slider-range" data-min="<?php echo $min;?>" data-max="<?php echo ceil($max);?>"></div>
+
+            </div><br />
+
+            <div class="action clear clearfix <?php if(!$isOptionSelected && !$this->isFilterActive("price")): ?>hidden<?php endif; ?>">
+                <a href="<?php echo $this->getRemoveAllUrl("price") ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+            </div> 
+        </div>
+        <?php if($somethingIsActive) : ?>
+            <div class="content-xs" id="filter_price_xs" data-content="xs">
+                <div class="active-filter">
+                    <?php foreach($ranges as $range) : ?>
+                        <?php if ($range['active'] && !$isOptionSelected): ?>
+                                <a href="<?php echo $this->getRemoveFacesUrl("price", $range['value']); ?>"
+                                   class="active-filter-label"
+                                   data-input="<?php echo $range['itemId']; ?>">
+                                    <?php echo $range['formatted']; ?><i class="fa fa-times"></i>
+                                   </a>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+    <script type="text/javascript">
+        Mall.listing.setCurrentPriceRange(<?php echo $fromValue; ?>, <?php echo $toValue; ?>);
+    </script>
+<?php endif;?>
+
+<script type="text/javascript">
+    Mall.translate.add("price-filter-not-valid", "<?php echo $this->__("Prices in filter are not valid."); ?>");
+</script>

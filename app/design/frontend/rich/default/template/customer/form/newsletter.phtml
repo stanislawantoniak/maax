@@ -1,0 +1,97 @@
+<?php /** @var Mage_Customer_Block_Newsletter $this */
+$_helper = Mage::helper("customer");
+$baseUrl = Mage::helper("core/url")->getHomeUrl();
+
+/** @var Zolago_Modago_Helper_Data $modagoHelper */
+$modagoHelper = Mage::helper('zolagomodago');
+?>
+<div class="page-title box-wrapper">
+	<h1>
+		<span><?php echo $this->__('Notification settings') ?></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/"
+		                         class="underline"><?php echo $_helper->__('back: my account'); ?>&nbsp;&gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/"
+		                         class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
+	</h1>
+</div>
+<div class="background-wrapper box-wrapper container-fluid">
+	<div class="col-md-12">
+		<form action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
+			<?php echo $this->getBlockHtml('formkey'); ?>
+			<div class="fieldset newsletter-border">
+				<div id="general-subscription" class="row bigger-padding">
+					<div class="col-sm-12">
+						<div class="form-group form-checkbox">
+							<input type="checkbox" name="is_subscribed" id="subscription"
+							       value="1" <?php if ($this->getIsSubscribed()): ?> checked="checked"<?php endif; ?>
+							       class="css-checkbox"/>
+							<label for="subscription"
+							       class="css-label css-label-bold">
+							</label>
+							<div class="pseudo-label label-bold">
+								<label for="subscription"><?php echo $modagoHelper->getAgreementHtml('newsletter'); ?></label>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-general-subscription')->toHtml(); ?>
+					</div>
+					<div class="col-sm-12">
+						<?php /* Extensions placeholder */ ?>
+						<?php echo $this->getChildHtml('customer.form.newsletter.extra') ?>
+					</div>
+				</div>
+			</div>
+
+<!--			<div class="fieldset newsletter-border" style="margin-top: 20px;">
+				<div id="general-subscription" class="row bigger-padding">
+					<div class="col-sm-12">
+						<div class="form-group form-checkbox">
+							<input type="checkbox" name="" id="subscription_sms"
+							       value="1" <?php /*//if ( ? ): */?> checked="checked"<?php /*//endif; */?>
+							       class="css-checkbox"/>
+							<label for="subscription_sms"
+							       class="css-label css-label-bold">
+							</label>
+
+							<div class="pseudo-label label-bold">
+								<?php /*echo $modagoHelper->getAgreementHtml('sms'); */?>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<?php /*echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-sms')->toHtml(); */?>
+					</div>
+				</div>
+			</div>-->
+
+			<div class="bottom-links">
+				<a class="button button-third large" href="<?php echo Mage::getUrl("customer/account"); ?>">
+					<i class="glyphicon glyphicon-chevron-left"></i>
+					<?php echo $_helper->__('back') ?>
+				</a>
+				<button type="submit" class="btn button button-primary pull-right">
+					<?php echo $_helper->__("Save"); ?>
+				</button>
+				<div class="clearfix"></div>
+			</div>
+		</form>
+		<?php /* Extensions placeholder */ ?>
+		<?php echo $this->getChildHtml('customer.form.newsletter.extra2') ?>
+	</div>
+</div>
+
+<script>
+	jQuery(document).ready(function () {
+
+		jQuery('.more-info').on("click", function (event) {
+			event.preventDefault();
+
+			var field = jQuery(this).parents('.fieldset');
+
+			field.find('.three-dots').hide();
+			field.find('.more-info').hide();
+			field.find('.more-info-txt').show();
+		});
+	});
+</script>

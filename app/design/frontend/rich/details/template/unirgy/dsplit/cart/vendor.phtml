@@ -1,0 +1,118 @@
+<?php
+$_v = $this->getVendor();
+$info = $this->getBasketDeliveryInfo();
+$_helper = Mage::helper('zolagocheckout');
+$vendorDeliveryInfo = $_v->getTermsDeliveryInformation();
+?>
+
+<?php switch ($this->getPart()): case 'header': ?>
+
+    <div class="panel panel-default">
+    <div class="panel-heading hidden-xs"></div>
+    <div class="panel-body">
+    <div class="tableWrapper table-cart">
+    <!-- Thead -->
+
+    <?php break; case 'footer': ?>
+
+    <?php $_slogans = array();?>
+    <?php if($_v->getCartSloganOne()):?>
+        <?php $_slogans[] = $this->escapeHtml($_v->getCartSloganOne());?>
+    <?php endif;?>
+    <?php if($_v->getCartSloganTwo()):?>
+        <?php $_slogans[] = $this->escapeHtml($_v->getCartSloganTwo());?>
+    <?php endif;?>
+
+    <!-- TFoot -->
+    <div class="table-footer-group hidden-xs">
+        <div class="table-row clearfix">
+            <div class="table-cell cell-01 td">
+
+                <?php if($_slogans): ?>
+                    <p><?php echo implode("<br/>", $_slogans);?></p>
+                <?php endif; ?>
+
+                <?php if(!empty($vendorDeliveryInfo)): ?>
+                    <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
+                <?php endif; ?>
+            </div>
+
+            <div class="table-cell cell-03 label_value td">
+                <div class="value_quality_price"><?php echo $_helper ->__('Product total')?>:</div>
+                <?php $bestRate = $this->getMinimalShippingRate(); ?>
+
+            </div>
+            <div class="table-cell cell-04 td">
+                <div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
+                
+            </div>
+            <div class="table-cell cell-05 td"></div>
+
+
+        </div>
+
+    </div>
+    <!-- TFoot mobile-->
+    <div class="table-footer-group visible-xs">
+        <div class="table-row clearfix">
+            <div class="table-cell cell-03 label_value td">
+                <div class="value_quality_price"><?php echo $_helper->__('Product total'); ?>:</div>
+                <!--                <div class="value_quality_delivery">--><?php //echo $_helper->__("Minimal shipping cost"); ?><!--:</div>-->
+            </div>
+            <div class="table-cell cell-04 td">
+                <div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
+                <!--                <div class="quality_delivery">--><?php //if($bestRate): ?><!----><?php //echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><!----><?php //endif; ?><!--</div>-->
+            </div>
+        </div>
+        <div class="table-row clearfix">
+
+            <?php if($this->isHintAvailable()):?>
+                <div class="bubble visible-lg">
+                    <div>
+                        <p><?php echo $this->__("Free shipping from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
+                    </div>
+                </div>
+                <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px; display: none;">
+
+                </div>
+            <?php endif;?>
+        </div>
+
+        <div class="table-row clearfix">
+            <div class="table-cell cell-01 td  no-border">
+                <?php if($_slogans): ?>
+                    <p><?php echo implode("<br/>", $_slogans);?></p>
+                <?php endif; ?>
+
+                <?php if(!empty($vendorDeliveryInfo)): ?>
+                    <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >
+                        <?php echo $_helper ->__('Shipping rules and cost'); ?>
+                    </a>
+                <?php endif; ?>
+
+            </div>
+        </div>
+        <?php if(!empty($vendorDeliveryInfo)): ?>
+            <div class="conditions_shipping panel panel-default">
+                <div class="panel-heading">
+                    <h2>
+                        <?php echo $_helper ->__('Shipping rules and cost'); ?>
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <?php echo $vendorDeliveryInfo; ?>
+                    </p>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    </div>
+    </div>
+    </div>
+
+
+
+
+<?php endswitch ?>

@@ -1,0 +1,130 @@
+<?php
+/** @var Zolago_Dropship_Model_Vendor $vendor */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$vendorTypeLabel = $vendor ? $vendor->getVendorTypeLabel() : false;
+$category = $this->getCategory();
+
+/* @var $landingPageHelper Zolago_Campaign_Helper_LandingPage */
+$landingPageHelper = Mage::helper("zolagocampaign/landingPage");
+
+/* @var $campaign Zolago_Campaign_Model_Campaign */
+$banner = ($campaign = $category->getCurrentCampaign()) ? (array)$landingPageHelper->getCampaignLandingPageBannerByCampaign($campaign) : NULL;
+
+
+$bannerTextInfo = ($campaign) ? $campaign->getBannerTextInfo() : "";
+$desc = $this->getCategory()->getDescription();
+
+$moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
+
+if ($this->isContentMode() && !$vendor) return; // no header only on CMS page and no vendor
+?>
+
+
+<header id="header-main"  class="<?php if($this->isContentMode() && !$campaign): ?> hidden-xs<?php endif; ?>">
+    <div class="wrapp-section bg-w">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 header-panel">
+                <?php if (!empty($banner) || !empty($bannerTextInfo) || !$vendor): /* one column */?>
+                    <div id="breadcrumbs-header">
+                        <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                    </div>
+                    <?php if (empty($banner) && empty($bannerTextInfo)) : /* category / campaign name */?>
+                    <div id="view-current-filter" >
+                        <h1 class="category-attribute-long-name"><?php echo $this->getCategory()->getNameContext(); ?></h1>
+                        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('category-top-banner')->toHtml(); ?>
+                        <?php if ($this->getCategory()->getDescription()): ?>
+                        <div class="category-attribute-description">
+                            <?php if(strpos($desc, '|') !== false): ?>
+                            <input type="checkbox" class="read-more-state" id="category-description" />
+                            <p class="read-more-wrap">
+                                <span class="read-more-text"><?php echo substr($desc,0,strpos($desc, '|')); ?></span>
+                                <span class="read-more-target"><?php echo substr($desc,strpos($desc, '|') + 1); ?></span>
+                                <label for="category-description" class="read-more-trigger" onclick="setTimeout(Mall.listing.updateFilters, 30)"><?php echo $this->__("Read more"); ?> <i class="fa fa-caret-down" aria-hidden="true"></i></label>
+                                <label for="category-description" class="read-less-trigger" onclick="setTimeout(Mall.listing.updateFilters, 30)"><?php echo $this->__("Read less"); ?> <i class="fa fa-caret-up" aria-hidden="true"></i></label>
+                            </p>
+                            <?php else: echo $desc; endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        <a href="<?php echo $moveUpUrl; ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
+                    </div>
+                    <?php else : /* banners */ ?>
+
+                    <div id="lp-banners">
+                        <div id="view-current-filter" class="visible-xs visible-sm-to-smmd">
+                            <h1 data-item="2"><?php echo $this->getCategory()->getNameContext(); ?></h1>
+                            <a href="<?php echo $moveUpUrl ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
+                        </div>
+                        <div class="lp-banners">
+                            <?php $desktop = !empty($banner) ? $banner[1]["path"]: FALSE; ?>
+                            <?php $mobile = !empty($banner) ? $banner[2]["path"]: FALSE; ?>
+                            <div class="hidden-xs lp-banner-desktop">
+                                <?php if($desktop): ?>
+                                    <img
+                                        src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $desktop; ?>"
+                                        title="<?php echo $campaign->getNameCustomer(); ?>"
+                                        alt="<?php echo $campaign->getNameCustomer(); ?>"/>
+                                <?php endif; ?>
+
+                                <?php if ($campaign->getBannerTextInfo()): ?>
+                                    <div class="lp-banner-text-info">
+                                        <?php echo $campaign->getBannerTextInfo(); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="visible-xs lp-banner-mobile">
+                                <?php if ($mobile): ?>
+                                    <img
+                                        src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $mobile; ?>"
+                                        title="<?php echo $campaign->getNameCustomer(); ?>"
+                                        alt="<?php echo $campaign->getNameCustomer(); ?>"/>
+                                <?php endif; ?>
+
+                                <?php if ($campaign->getBannerTextInfo()): ?>
+                                    <div class="lp-banner-text-info">
+                                        <?php echo $campaign->getBannerTextInfo(); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php endif; ?>
+                    <div id="active-filters-wrapper">
+                        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                    </div>
+                <?php else: /* two columns */?>
+                    <div id="category-header-left">
+                        <div id="category-header-vendor-box">
+                            <?php if (!empty($vendorTypeLabel)): ?>
+                            <div class="vendor-header-label">
+                                <?php echo $vendor->getVendorTypeLabel(); ?>
+                            </div>
+                            <?php endif; ?>
+                            <a href="<?php echo $vendor->getVendorUrl(); ?>">
+                                <div class="vendor-header-logo"
+                                    style="background-image:url(<?php echo $vendor->getVendorLogoUrl(); ?>)"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div style="clear:both" class="visible-xs <?php echo !$this->isContentMode() ? 'visible-sm-to-smmd' : '' ?>"></div>
+                    <div id="category-header-right">
+                        <div class="right-wrapper">
+                            <div id="breadcrumbs-header">
+                                <?php echo $this->getChildHtml('zolagocatalog_breadcrumbs'); ?>
+                            </div>
+                            <div id="view-current-filter">
+                                <h1 data-item="3"><?php  echo $this->getCategory()->getNameContext();?></h1>
+                                <a href="<?php echo $moveUpUrl; ?>" class="backToCategory underline visible-xs visible-sm-to-smmd"><?php echo $this->__("Go up"); ?></a>
+                            </div>
+                            <div id="active-filters-wrapper">
+                                <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>                                
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

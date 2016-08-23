@@ -1,0 +1,58 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var Magpleasure_Blog_Block_Content_List_Details $this */
+
+/** @var Magpleasure_Blog_Helper_Data $helper  */
+$helper = $this->_helper();
+
+/** @var Magpleasure_Blog_Model_Post $post  */
+$post = $this->getPost();
+
+/** @var Magpleasure_Blog_Block_Content_Post_Details $this */
+?>
+
+<?php if ($this->showAuthor() && $post->getPostedBy()): ?>
+    <span class="posted-by"><i class="<?php echo $this->getColorClass(); ?> glyphicons user"></i><?php echo $this->__("By"); ?>
+    <?php if ($this->useGoogleProfile()): ?>
+        <a rel="author"
+           href="<?php echo $this->getGoogleProfileUrl(); ?>"
+           target="_blank"
+           title="<?php echo $this->escapeHtml($post->getPostedBy()); ?>">
+    <?php endif; ?>
+    <?php echo $this->escapeHtml($post->getPostedBy()); ?>
+    <?php if ($this->useGoogleProfile()): ?>
+        </a>
+    <?php endif; ?>
+    </span>
+<?php endif; ?>
+<?php if ($post->getCreatedAt()): ?>
+    <span class="date">
+        <i class="<?php echo $this->getColorClass(); ?> glyphicons calendar"></i>
+        <?php echo $this->renderDate($post->getCreatedAt()); ?>
+    </span>
+<?php endif; ?>
+<?php if ($helper->getDisplayViews()): ?>
+    <span class="views">
+        <i class="<?php echo $this->getColorClass(); ?> glyphicons eye_open"></i>
+        <?php echo $this->__("%s Views", $post->getViews()); ?>
+    </span>
+<?php endif; ?>
+<?php if ($post->getCommentsEnabled()): ?>
+    <span class="comments">
+        <i class="<?php echo $this->getColorClass(); ?> glyphicons conversation"></i>
+        <a href="<?php echo $this->getCommentsUrl(); ?>">
+        <?php if ($this->getCommentsCount() == 1): ?>
+            <?php echo $this->__("%s comment", $this->getCommentsCount()); ?>
+        <?php elseif ($this->getCommentsCount() > 1): ?>
+            <?php echo $this->__("%s comments", $this->getCommentsCount()); ?>
+        <?php else: ?>
+            <?php echo $this->__("No comments"); ?>
+        <?php endif; ?>
+        </a>
+    </span>
+<?php endif; ?>

@@ -1,0 +1,13 @@
+<?php $_item = $this->getItem() ?>
+<?php if($_item->getPoItem()->getId()): ?>
+<p>
+	<strong><?php echo $this->__('Product') ?>: </strong><?php echo $this->htmlEscape($_item->getName()) ?>
+	<?php if ($this->getItemOptions()): ?>
+		<?php foreach ($this->getItemOptions() as $option): ?>, <?php echo $option['label'] ?> <?php echo $option['value'] ?>
+		<?php endforeach; ?>
+	<?php endif; ?>
+	<?php echo $this->htmlEscape($_item->getDescription()) ?>
+	<br>
+	<strong><?php echo $this->__('Claim reason') ?>: </strong><?php echo $this->htmlEscape($_item->getItemConditionName()) ?>
+</p>
+<?php endif; ?>

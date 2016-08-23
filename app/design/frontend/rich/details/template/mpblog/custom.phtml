@@ -1,0 +1,53 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var Magpleasure_Blog_Block_Content_Custom $this  */
+/** @var Magpleasure_Blog_Model_Mysql4_Category_Collection $collection  */
+$collection = $this->getCollection();
+?>
+<?php if ($collection->getSize()): ?>
+<div class="mpblog-container">
+    <h1 class="mp-title"><?php echo $this->getBlockHeader(); ?></h1>
+    <div class="mpblog-list list">
+        <?php foreach ($this->getCollection() as $post): ?>
+        <div class="mpblog-post">
+            <h3 <?php if ($this->showThesis()): ?>class="mp-post-header"<?php endif; ?>><a href="<?php echo $post->getPostUrl(); ?>"><?php echo $this->escapeHtml($post->getTitle()); ?></a></h3>
+
+            <?php if ($post->getListThumbnailSrc()): ?>
+            <div class="thumbnail-container">
+                <div class="post-thumbnail">
+                    <a href="<?php echo $post->getPostUrl(); ?>" title="<?php echo $post->getTitle(); ?>">
+                        <img class="thumbnail"
+                             src="<?php echo $post->getListThumbnailSrc(); ?>"
+                             alt="<?php echo $post->getTitle(); ?>"/>
+                    </a>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($this->showDate()): ?>
+            <div class="mp-header fix-me <?php if ($post->getThumbnailSrc() && $post->isLeftThumbnail()): ?>border<?php endif; ?>">
+                <?php echo $this->getHeaderHtml($post); ?>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($this->showThesis()): ?>
+            <div class="mp-content std fix-me">
+                <?php echo $post->getShortContent(); ?>
+            </div>
+            <div class="mp-details fix-me">
+                <a class="button mp-read-more" href="<?php echo $this->getReadMoreUrl($post); ?>" title="<?php echo $this->__("Read More"); ?>">
+                    <?php echo $this->__("Read More"); ?>
+                </a>
+                <?php echo $this->getFooterHtml($post); ?>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
