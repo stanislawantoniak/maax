@@ -36,6 +36,9 @@ abstract class ZolagoOs_Import_Model_Import
      */
     abstract protected function _import();
 
+
+    abstract protected function _getImportEntityType();
+
     /**
      * Returns local path to import file
      *
@@ -44,7 +47,6 @@ abstract class ZolagoOs_Import_Model_Import
     protected function _getPath()
     {
         return $this->_getFileName();
-        //return (!empty($this->_getFileName())) ? Mage::getBaseDir('var') . DS . self::DIRECTORY . DS . $this->_getFileName() : "";
     }
 
     /**
@@ -60,9 +62,10 @@ abstract class ZolagoOs_Import_Model_Import
 
     /**
      * @param $message
+     * @param null $level
      */
-    public function log($message)
+    public function log($message, $level = NULL)
     {
-        Mage::log($message, null, "zolagoosimport.log");
+        Mage::log($message, $level, "zolagoosimport_" . $this->_getImportEntityType() . ".log");
     }
 }

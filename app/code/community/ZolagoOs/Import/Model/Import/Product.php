@@ -22,62 +22,14 @@ class ZolagoOs_Import_Model_Import_Product
         $this->_vendor = $this->getExternalId();
     }
 
-    /**
-     * @return array
-     */
-    public function getVendorId()
-    {
-        return $this->_vendor;
-    }
 
     /**
-     * @return array
+     * Implement _getImportEntityType() method.
      */
-    public function getProductSkus()
+    protected function _getImportEntityType()
     {
-        return array_merge($this->_simpleSkus, $this->_configurableSkus);
+       return "product";
     }
-
-
-    /**
-     * @return mixed
-     */
-    public function getSimpleSkus()
-    {
-        return $this->_simpleSkus;
-    }
-
-    /**
-     * @param mixed $simpleSkus
-     */
-    public function setSimpleSkus($simpleSkus)
-    {
-        $this->_simpleSkus = array_merge($this->_simpleSkus, array($simpleSkus));
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getConfigurableSkus()
-    {
-        return $this->_configurableSkus;
-    }
-
-    /**
-     * @param mixed $configurableSkus
-     */
-    public function setConfigurableSkus($configurableSkus)
-    {
-        $this->_configurableSkus = array_merge($this->_configurableSkus, array($configurableSkus));
-    }
-
-
-    public function runImport()
-    {
-        $this->_import();
-    }
-
 
     protected function _import()
     {
@@ -162,10 +114,99 @@ class ZolagoOs_Import_Model_Import_Product
             //3. Set additional attributes
             $this->updateAdditionalAttributes();
 
+
+            //4. Move processed file
+            $this->_moveProcessedFile();
+
         } catch (Exception $e) {
             Mage::logException($e);
         }
     }
+
+    protected function _moveProcessedFile()
+    {
+        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+        $date = date('Y_m_d_H_i_s', $currentTimestamp);
+
+        $fileName = $this->_getPath();
+
+        $path = $this->getHelper()->getProcessedFilePlace()
+            . DS . $this->getVendorId()
+            . DS . $this->_getImportEntityType();
+
+        if(!file_exists($path)) {
+            mkdir($path,0755,true);
+        }
+
+        $newfile = $path. DS . $date . ".xml";
+
+
+
+        if (!copy($fileName, $newfile)) {
+            $this->log("Can not move file to processed directory", 2);
+        } else {
+            unlink($fileName);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getVendorId()
+    {
+        return $this->_vendor;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductSkus()
+    {
+        return array_merge($this->_simpleSkus, $this->_configurableSkus);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getSimpleSkus()
+    {
+        return $this->_simpleSkus;
+    }
+
+    /**
+     * @param mixed $simpleSkus
+     */
+    public function setSimpleSkus($simpleSkus)
+    {
+        $this->_simpleSkus = array_merge($this->_simpleSkus, array($simpleSkus));
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getConfigurableSkus()
+    {
+        return $this->_configurableSkus;
+    }
+
+    /**
+     * @param mixed $configurableSkus
+     */
+    public function setConfigurableSkus($configurableSkus)
+    {
+        $this->_configurableSkus = array_merge($this->_configurableSkus, array($configurableSkus));
+    }
+
+
+    public function runImport()
+    {
+        $this->_import();
+    }
+
+
+
 
     public function updateAdditionalAttributes()
     {
@@ -377,8 +418,5 @@ class ZolagoOs_Import_Model_Import_Product
         return $result;
     }
 
-    public function log($message, $level = NULL)
-    {
-        Mage::log($message, $level, "zolagoosimport_product.log");
-    }
+
 }
