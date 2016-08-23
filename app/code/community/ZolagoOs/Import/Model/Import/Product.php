@@ -47,7 +47,7 @@ class ZolagoOs_Import_Model_Import_Product
     
     protected function _import()
     {
-        $vendorId = $this->getVendorId();
+        $vendorId = $this->getExternalId();
         $fileName = $this->_getPath();
 
         try {
@@ -121,42 +121,6 @@ class ZolagoOs_Import_Model_Import_Product
         }
     }
 
-    /**
-     *
-     */
-    protected function _moveProcessedFile()
-    {
-        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
-        $date = date('Y_m_d_H_i_s', $currentTimestamp);
-
-        $fileName = $this->_getPath();
-
-        $path = $this->getHelper()->getProcessedFilePlace()
-            . DS . $this->getVendorId()
-            . DS . $this->_getImportEntityType();
-
-        if(!file_exists($path)) {
-            mkdir($path,0755,true);
-        }
-
-        $newfile = $path. DS . $date . ".xml";
-
-
-
-        if (!copy($fileName, $newfile)) {
-            $this->log("Can not move file to processed directory", Zend_Log::ERR);
-        } else {
-            unlink($fileName);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getVendorId()
-    {
-        return $this->_vendor;
-    }
 
     /**
      * @return array

@@ -35,7 +35,7 @@ class ZolagoOs_Import_Model_Import_Stock
     protected function _import()
     {
 
-        $vendorId = $this->getVendorId();
+        $vendorId = $this->getExternalId();
         
         $fileName = $this->_getPath();
 
@@ -95,14 +95,5 @@ class ZolagoOs_Import_Model_Import_Stock
         } catch (Exception $e) {
             Mage::logException($e);
         }
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getVendorId()
-    {
-        return $this->_vendor;
     }
 }
