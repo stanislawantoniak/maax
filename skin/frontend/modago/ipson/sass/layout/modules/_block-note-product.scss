@@ -2,6 +2,14 @@
 	
 	#statystyki_opinii {
 		padding-bottom: 15px;
+		@media (max-width: $screen-xs-max) {
+			margin-left: -10px;
+			.visible-xs {
+				text-align: right !important;
+				margin-right: 15px;
+			}
+		}
+
 	}
 	dl.raty_note {
 		margin-bottom: 23px;
@@ -31,7 +39,7 @@
 			
 			strong {
 				display:inline-block;
-				width:100px;
+				width:64px;
 				float:left;
 				line-height: 23px;
 			}
