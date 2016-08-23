@@ -1,0 +1,196 @@
+<?php
+/* @var $this Zolago_Catalog_Block_Product_Vendor_Info */
+
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$session = Mage::getSingleton('customer/session');
+/* @var $session Mage_Customer_Model_Session */
+$baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
+$vendorQuestionFormAction = Mage::helper('zolagomodago')->getVendorQuestionFormAction();
+
+$marketingInformation = $this->getMarketingInfo();
+?>
+
+
+
+<!--SHOP INFO-->
+    <div class="modal fade bs-example-modal-lg" id="seller_description" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"></button>
+                    <?php if (!empty($marketingInformation->store_information_title)): ?>
+                        <h2 class="title_section">
+                            <?php echo $this->__($marketingInformation->store_information_title); ?>
+                        </h2>
+                    <?php endif; ?>
+                </div>
+
+                <div class="modal-body" style="color: #000000;">
+                    <?php if (!empty($marketingInformation->store_information)): ?>
+                        <?php echo $marketingInformation->store_information; ?>
+                    <?php else: ?>
+                        <dd>
+                            <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"><br/>
+                            <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
+                        </dd>
+                    <?php endif;?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--SHOP INFO end-->
+
+<!--DELIVERY & RETURNS-->
+
+<div class="modal fade bs-example-modal-lg" id="terms_delivery" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <div class="col-md-12 no-padding title_section_with_logo">
+                    <div class="col-md-12 no-padding title_section_title_wrapper">
+                        <h2 class="title_section"><?php echo $this->__("DELIVERY & RETURNS"); ?></h2>
+                    </div>
+                    <div class="hidden-xs title_section_logo_wrapper">
+                        <img src="<?php echo Mage::getBaseUrl('media') . $this->getVendor()->getLogo(); ?>"  />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" style="color: #000000;">
+                <div id="termsDeliveryInformation">
+                    <?php echo $marketingInformation->delivery_information; ?>
+                </div>
+                <div id="termsReturnInformation">
+                    <?php echo $marketingInformation->return_information; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--DELIVERY & RETURNS end-->
+
+<!--ASK QUESTION-->
+
+<div class="modal fade bs-example-modal-lg in" id="ask_question" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Ask Vendor A Question"); ?></h2>
+            </div>
+            <div class="modal-body" style="color: #000000;">
+
+                <form action="<?php echo $vendorQuestionFormAction; ?>" id="question-form" method="post"
+                      novalidate="novalidate" class="form clearfix">
+                    <?php echo $this->getBlockHtml('formkey'); ?>
+                    <input type="hidden" name="question[vendor_id]" value="<?php echo $vendor['vendor_id']; ?>"/>
+                    <input type="hidden" name="question[visibility]" value="0"/>
+                    <input type="hidden" name="redirect_referer" value="1"/>
+
+                    <div class="row">
+                        <fieldset class="fieldset col-xs-11">
+                            <ul class="form-list">
+                                <?php if (!$session->isLoggedIn()): ?>
+                                    <li class="wide">
+                                        <div class="form-group">
+                                            <label for="customer_name" class="required"
+                                                   aria-required="true"><?php echo $this->__('Your Name') ?> <em>*</em></label>
+
+                                            <div class="input-box">
+                                                <input type="text" name="question[customer_name]" id="customer_name"
+                                                       class="form-control required-entry input-text hint" required/>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="wide">
+                                        <div class="form-group">
+                                            <label for="customer_email" class="required"
+                                                   aria-required="true"><?php echo $this->__('Email') ?>
+                                                <em>*</em></label>
+
+                                            <div class="input-box">
+                                                <input type="text" name="question[customer_email]" id="customer_email"
+                                                       class="validate-email required-entry input-text form-control hint"
+                                                       required data-rule-email="true"/>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php else: ?>
+                                    <input type="hidden" name="question[customer_name]"
+                                           value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>"/>
+                                    <input type="hidden" name="question[customer_email]"
+                                           value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>"/>
+                                <?php endif; ?>
+                                <li class="wide">
+                                    <div class="form-group">
+                                        <label for="question_text" class="required"
+                                               aria-required="true"><?php echo $this->__('Question Text') ?> <em>*</em></label>
+
+                                        <div class="input-box">
+                                            <textarea name="question[question_text]" id="question_text"
+                                                      title="<?php echo $this->__('Question Text') ?>"
+                                                      class="required-entry input-text form-control" cols="5" rows="3"
+                                                      data-original-title="<?php echo $this->__('Question Text') ?>"
+                                                      required></textarea>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-11">
+                            <div class="buttons-set">
+                                <p class="required"
+                                   aria-required="true"><?php echo $this->__('* Required Fields') ?></p>
+                                <button type="submit" title="<?php echo $this->__('Submit') ?>"
+                                        class="btn button button-primary sending">
+                                    <span><span><?php echo $this->__('Submit') ?></span></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
+        Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+        jQuery("#question-form").validate(Mall.validate.getDefaultValidationOptions());
+    });
+</script>
+<!--ASK QUESTION END-->
+
+
+
+<!--ABOUT BRAND-->
+
+<div class="modal fade bs-example-modal-lg" id="brand_description" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <?php if (!empty($marketingInformation->brand_information_title)): ?>
+                    <h2 class="title_section">
+                        <?php echo $this->__($marketingInformation->brand_information_title); ?>
+                    </h2>
+                <?php endif; ?>
+            </div>
+            <div class="modal-body" style="color: #000000;">
+                <div id="marketingBrandInformation">
+                    <?php echo $marketingInformation->brand_information; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ABOUT BRAND-->

@@ -1,0 +1,98 @@
+<?php /* @var $this Zolago_Rma_Block_List */ ?>
+<?php $backUrl = $this->getUrl('customer/account'); ?>
+<?php $_helper = Mage::helper("sales"); ?>
+<?php $list = $this->getRmaList(); ?>
+<div class="rma">
+	<div class="page-title box-wrapper">
+		<h1>
+			<span><?php echo $this->__("Returns and complaints"); ?></span>
+			<span class="back-sm"><a href="<?php echo $backUrl; ?>" class="underline"><?php echo $_helper->__('back: my account'); ?>&nbsp;&gt;</a></span>
+			<span class="back-xs"><a href="<?php echo $backUrl; ?>" class="underline"><?php echo $_helper->__('back'); ?>&nbsp;&gt;</a></span>
+			<span class="rma-new-button"><a href="<?php echo $this->getUrl('sales/po/rmalist');?>" class="button button-primary"><?php echo $this->__("Create new RMA"); ?></a></span>
+		</h1>
+
+	</div>
+	<div class="background-wrapper box-wrapper rma-list">
+		<?php if($list->getSize()): ?>
+			<p><?php echo $this->__("Your returns and complaints"); ?>:</p>
+			<table class="data-table rma-table">
+				<thead>
+				<tr>
+					<th>
+						<?php echo $this->__("RMA number"); ?>
+					</th>
+					<th>
+						<?php echo $this->__("Date"); ?>
+					</th>
+					<th>
+						<?php echo $this->__("Vendor"); ?>
+					</th>
+					<th>
+						<?php echo $this->__("Products"); ?>
+					</th>
+					<th>
+						<?php echo $this->__("Status"); ?>
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach($list as $rma): ?>
+					<?php /* @var Zolago_Rma_Model_Rma $rma */ ?>
+					<tr>
+						<td>
+							<?php echo $rma->getIncrementId(); ?>
+						</td>
+						<td>
+							<?php echo Mage::helper('core')->formatDate($rma->getCreatedAt(), 'medium', false); ?>
+						</td>
+						<td>
+							<?php echo $this->escapeHtml($rma->getVendorName()); ?>
+						</td>
+						<td>
+							<table class="rma-items-table">
+								<tbody>
+								<?php foreach($rma->getItemsCollection() as $item):?>
+									<?php /* @var Zolago_Rma_Model_Rma_Item $item */ ?>
+									<?php $item = $item->getPoItem(); ?>
+									<?php if($item->getId()): ?>
+										<?php /* @var Zolago_Po_Model_Po_Item $item */ ?>
+										<?php $thumbUrl = $this->getItemThumb($item); ?>
+										<?php $item = $item->getOrderItem(); ?>
+										<?php if(!$item->getParentItem()): ?>
+											<?php $name = $this->escapeHtml($item->getName()); ?>
+											<tr>
+												<td><img src="<?php echo $thumbUrl; ?>" alt="<?php echo $name; ?>" /></td>
+												<td>
+													<?php echo $name; ?><br/>
+													<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
+														<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
+													<?php endforeach;?>
+												</td>
+											</tr>
+										<?php endif; ?>
+									<?php endif; ?>
+								<?php endforeach;?>
+								</tbody>
+							</table>
+						</td>
+						<td>
+							<p>
+								<?php echo $this->escapeHtml($this->__($this->getStatusCustomerText($rma))); ?>
+							</p>
+							<a class="button button-third large" href="<?php echo $this->getUrl('sales/rma/view/',array('id'=>$rma->getId()));?>"><?php echo $this->__("VIEW DETAILS"); ?></a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php else:
+			echo $this->getLayout()->createBlock('cms/block')->setBlockId('rma-empty-page')->toHtml();
+		endif; ?>
+		<div class="bottom-links">
+			<a class="button button-third large" href="<?php echo $backUrl; ?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
+		</div>
+	</div>
+</div>

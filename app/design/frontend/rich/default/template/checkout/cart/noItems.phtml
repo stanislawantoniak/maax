@@ -1,0 +1,43 @@
+<div id="content" class="container-fluid">
+    <div id="shopping-cart" class="row">
+        <form action=""><!-- col-lg-9 col-md-8 || col-sm-12 col-xs-12-->
+            <div id="content-main" class="col-lg-12 col-md-12  section">
+                <div class="main bg-w">
+                    <section>
+                        <header>
+                            <h1><?php echo $this->__('Shopping Cart is Empty') ?></h1>
+
+                            <p><?php //echo $this->getMessagesBlock()->getGroupedHtml() ?></p>
+
+                            <p><?php echo $this->getChildHtml('checkout_cart_empty_widget'); ?></p>
+
+                            <p class="ff_os fz_11 hidden-xs"><?php echo $this->__('You have no items in your shopping cart.') ?></p>
+                        </header>
+
+                        <footer class="hidden-xs">
+                            <a href="<?php echo $this->getContinueShoppingUrl() ?>"
+                               id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall"); ?> <i
+                                    class="fa-arrow-btn-right"></i></a>
+
+                            <div class="clr"></div>
+                        </footer>
+
+                    </section>
+
+                    <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
+                </div>
+            </div>
+            <!-- col-lg-3 col-md-4 || col-sm-12 col-xs-12-->
+            <aside id="aside-shopping-cart" class="main bg-w visible-xs">
+                <a href="<?php echo $this->getContinueShoppingUrl(); ?>"
+                   id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall"); ?> <i
+                        class="fa-arrow-btn-right"></i></a>
+
+                <div class="clr"></div>
+            </aside>
+        </form>
+    </div>
+</div>
+
+
+<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>

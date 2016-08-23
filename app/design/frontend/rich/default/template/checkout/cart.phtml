@@ -1,0 +1,63 @@
+<?php
+/** @var Zolago_DropshipSplit_Block_Cart $this */
+$_items = $this->getItems();
+/** @var Zolago_Checkout_Helper_Data $_helper */
+$_helper = Mage::helper("zolagocheckout");
+$basketDataLayer = $_helper->getBasketDataLayer();
+ ?>
+
+<?php if (!empty($basketDataLayer)): ?>
+	<script>
+		if (typeof dataLayer != "undefined") {
+			dataLayer.push(<?php echo json_encode($basketDataLayer); ?>);
+		}
+	</script>
+<?php endif; ?>
+
+<div id="content" class="container-fluid">
+    <div id="shopping-cart" class="row">
+        <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="cart-form">
+            <?php echo $this->getBlockHtml('formkey'); ?>
+            <div id="content-main" class="col-lg-9 col-md-8  section">
+                <div class="main bg-w">
+                    <section>
+                        <header>
+                            <h1><?php echo $this->__("Shopping Cart"); ?></h1>
+                            <p class="ff_os fz_11 hidden-xs"><?php echo $this->__("In modago.pl you buy directly in vendor. You pay only once."); ?></p>
+                        </header>
+
+                        <?php foreach($_items as $_item) : ?>
+
+                            <?php echo $this->getItemHtml($_item); ?>
+
+                        <?php endforeach; ?>
+
+                        <div class="modal fade" id="trigger_conditions_shipping" tabindex="-1" role="dialog" aria-labelledby="trigger_conditions_shipping" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-md modal-sm">
+                                <div class="modal-content">
+                                    <button type="button" class="close" data-dismiss="modal"></button>
+                                    <div class="modal-body"></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php /* <footer class="hidden-xs">
+                            <a href="#" id="clearAllShopping" class="simple"><i class="fa-remove"></i> <?php echo $this->__("Empty cart"); ?></a>
+                        </footer> */ ?>
+                    </section>
+                </div>
+            </div><!-- col-lg-3 col-md-4 || col-sm-12 col-xs-12-->
+        </form>
+        <?php echo $this->getChildHtml('zolagomodago.checkout.cart.sidebar'); ?>
+    </div>
+</div>
+
+
+<?php /*echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); */?>
+
+<style type="text/css">
+    .table-cart .colgroup-02 .colgroup .ilosc .select-group.medium {
+        display: inline; }
+    .styledSelected {width: 80px;}
+</style>

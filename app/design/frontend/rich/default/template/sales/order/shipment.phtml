@@ -1,0 +1,167 @@
+<?php
+/*
+ * Statuses cheatsheet:
+ * SHIPMENT_STATUS_PENDING		= 0  = Oczekuje na spakowanie
+ * SHIPMENT_STATUS_EXPORTED		= 10 = W trakcie pakowania
+ * SHIPMENT_STATUS_RETURNED		= 11 = Zwrócony
+ * SHIPMENT_STATUS_ACK			= 9  = Oczekuje na potwierdzenie
+ * SHIPMENT_STATUS_BACKORDER	= 5  = Oczekuje na rezerwację
+ * SHIPMENT_STATUS_ONHOLD		= 4  = Problem
+ * SHIPMENT_STATUS_READY		= 3  = Spakowane
+ * SHIPMENT_STATUS_PENDPICKUP	= 8  = ?????????
+ * SHIPMENT_STATUS_PARTIAL		= 2  = ?????????
+ * SHIPMENT_STATUS_SHIPPED		= 1  = Wysłane
+ * SHIPMENT_STATUS_CANCELED		= 6  = Anulowane
+ * SHIPMENT_STATUS_DELIVERED	= 7  = Dostarczone
+ * ?????????????????????????	= 12 = Oczekuje na zapłatę
+ */
+/** @var $this  Zolago_Modago_Block_Sales_Order_Shipment */
+/** @var $po    Zolago_Po_Model_Po */
+$_helper = Mage::helper('zolagosales');
+$po = $this->getItem();
+$paid = $po->isPaid();
+$helper = 
+$tracking = $this->getCurrentTracking();
+$trackingUrl = $this->getTrackingUrl();
+$carrier = $this->getCarrierTitle();
+
+
+$shippingMethodInfo = $this->getShippingMethodInfo();
+$shippingMethodTitle = $shippingMethodInfo->getUdropshipMethodTitle();
+
+
+$carrier = $carrier ? $carrier : $shippingMethodTitle;
+$status = $po->getUdropshipStatus();
+$sendDate = $this->getSendDate();
+$deliveryDate = $this->getDeliveryDate();
+$shipmentDate = $this->getShipmentDate();
+
+
+
+$iconTruck = '<i class="fa fa-truck fa-2x"></i>';
+$iconTruckOk = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><i class="fa fa-check-circle fa-stack-1x" style="color:#FFF;margin-left:5px;margin-top:-3px;"></i></span>';
+$iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><i class="fa fa-times-circle fa-stack-1x" style="color:#FFF;margin-left:5px;margin-top:-3px;"></i></span>';
+?>
+<div class="sales-order-top col-md-6 col-sm-6 col-xs-12">
+	<div class="sales-order-shipment">
+		<div class="shipment-top">
+			<span class="order-top-title"><?php echo $_helper->__('delivery'); ?></span>
+			<?php if(
+				!$paid &&
+				($status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ACK ||
+				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_BACKORDER ||
+				$status == 12 ||
+				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ONHOLD)
+			): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Waiting for payment'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruck; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Planned send date'); ?>: <?php echo $_helper->__("24h from date of payment"); ?></span>
+		<?php elseif(
+				$paid &&
+				($status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ACK ||
+				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_BACKORDER ||
+				$status == 12 ||
+				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_PENDING ||
+				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ONHOLD)
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Pending collection'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruck; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
+			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
+
+		<?php elseif(
+				$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_EXPORTED
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Collecting and packing'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruck; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
+			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
+		<?php elseif(
+			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_READY
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Packed and label printed'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruck; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
+			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
+		<?php elseif(
+			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Shipped'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruck; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
+			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
+			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
+			<?php if ($trackingUrl && $tracking) : ?>
+			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
+			<?php endif;?>
+		<?php elseif(
+			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Delivered'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruckOk; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
+			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
+			<?php if ($trackingUrl && $tracking) : ?>
+			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
+			<?php endif;?>
+		<?php elseif(
+			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Returned to sender'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruckBad; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
+			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
+			<?php if ($trackingUrl && $tracking) : ?>
+			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
+			<?php endif;?>
+		<?php elseif(
+			$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Canceled'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruckBad; ?>
+		</div>
+		<div class="shipment-bottom">
+		<?php endif; ?>
+		</div>
+	</div>
+</div>
+<div class="col-xs-12 sales-order-more">
+	<span><?php echo $_helper->__('expand details'); ?><i class="fa fa-chevron-down fa-lg"></i></span>
+</div>

@@ -1,0 +1,37 @@
+<?php
+/** @var Zolago_Modago_Block_Page_Html_Breadcrumbs $this */
+?>
+<?php  $vendor = Mage::helper("umicrosite")->getCurrentVendor(); ?>
+<?php if($crumbs && is_array($crumbs) || $this->getCanShowBrandshop()): ?>
+	<?php if($this->getCanShowBrandshop()):?>
+		<div class="pull-right  hidden-xs brandshop-breadcrumps">
+			<a href="<?php echo $this->getBrandshopUrl();?>"><?php echo $this->escapeHtml($this->__("Go to %s home page", $vendor->getVendorName()));?></a>
+		</div>
+	<?php endif;?>
+    <?php if($this->getCanShowStandardVendor()):?>
+        <div class="pull-right  hidden-xs brandshop-breadcrumps">
+            <a href="<?php echo $this->getStandardVendorUrl();?>"><?php echo $this->escapeHtml($this->__("Go to %s home page", $vendor->getVendorName()));?></a>
+        </div>
+    <?php endif;?>
+
+	<?php if($crumbs && is_array($crumbs)):?>
+    <ol class="breadcrumb hidden-xs" data-search="<?php echo $this->isSearchContext() ? "1" : "0"; ?>">
+        <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
+            <li <?php if($_crumbInfo['link']): ?>itemscope itemtype="http://data-vocabulary.org/Breadcrumb"<?php endif; ?> data-catid="<?php echo isset($_crumbInfo['id']) ? $_crumbInfo['id'] : '' ;?>" class="<?php echo $_crumbName.' '.(isset($_crumbInfo['class']) ? $_crumbInfo['class'] : ''); ?>"  data-link="<?php echo (isset($_crumbInfo['link']) ? $_crumbInfo['link'] : ""); ?>" >
+            <?php if(!$_crumbInfo['last'] && $_crumbInfo['link']): ?>
+                <a itemprop="url" href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($this->__($_crumbInfo['title'])) ?>" <?php if(isset($_crumbInfo['id']) && !empty($_crumbInfo['id'])): ?>id="<?php echo $this->escapeHtml($this->__($_crumbInfo['id'])) ?>"  <?php endif; ?>  ><span itemprop="title"><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></span></a>
+            <?php else: ?>
+                <?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?>
+            <?php endif; ?>
+            <?php if(!$_crumbInfo['last']): ?>
+
+            <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+<?php endif;?>
+
+	<?php if($this->getCanShowBrandshop()):?>
+		<div class="clearfix"></div>
+	<?php endif;?>
+<?php endif; ?>

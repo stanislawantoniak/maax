@@ -1,0 +1,192 @@
+<?php /* @var $this Mage_Catalog_Block_Product_List */ ?>
+<?php /* @var $this SolrBridge_Solrsearch_Block_Product_List */ ?>
+<?php /* @var $this ZolagoOs_OmniChannelMicrosite_Block_Frontend_VendorProducts */ ?>
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List */ ?>
+<?php
+$imgUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . "catalog/product/cache/";
+/** @var Zend_Currency $currency */
+$currency = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrency()->getCode());
+$symbol = " " . $currency->getSymbol();
+
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 19.08.2014
+ */
+/** @var $product Zolago_Solrsearch_Model_Catalog_Product */
+$_productImageUrl = '';
+
+/** @var Zolago_Customer_Model_Session $customerSession */
+$customerSession = Mage::getSingleton('zolagocustomer/session');
+$_cache = $customerSession->getProductsCache();
+$_products = $_cache['products'];
+?>
+<noscript>
+	<?php //dont show overlay for web crawlers and javascript disabled browsers ?>
+	<style>
+		.listing-overlay {
+			display:none !important;
+			width: 0;
+			height: 0;
+			visibility: hidden;
+			z-index: -1;
+		}
+	</style>
+</noscript>
+<div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0; top: 0; z-index: 1000000; background: url(/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat transparent;"></div>
+<section id="main" class="">
+	<div id="content" class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="listing-overlay" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 999; background: #F2F1F0;"></div>
+				<div id="content-main">
+					<div class="container-fluid" id="items-product">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12">
+								<div class="row">
+									<div id="grid" class="shuffle--container shuffle--fluid">
+										<!-- START LIST PRODUCT -->
+										<?php foreach ($_products as $product): ?>
+											<?php
+											/**
+											 * product[0] = id
+											 * product[1] = name
+											 * product[2] = url
+											 * product[3] = price
+											 * product[4] = final_price
+											 * product[5] = wishlist_count
+											 * product[6] = in_my_wishlist
+											 * product[7] = image_url
+											 * product[8] = image_ratio
+											 * product[9] = manufacturer_logo_url
+											 * product[10]= sku
+											 * product[11]= skuv
+											 */
+											?>
+
+											<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
+												<div class="box_listing_product">
+													<a href="<?php echo $product[2]; ?>"
+													   data-entity="<?php echo $product[0]; ?>"
+													   data-sku="<?php echo $product[10]; ?>"
+													   data-skuv="<?php echo $product[11]; ?>">
+														<figure class="img_product" style="padding-bottom: <?php echo $product[8]; ?>%">
+															<img
+																src="<?php echo $imgUrl . $product[7]; ?>"
+																alt="<?php echo $product[1]; ?>"
+																class="img-responsive"/>
+														</figure>
+														<div class="logo_manufacturer"
+														     style="background-image:url(<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . "m-image/" . $product[9] ?>)"></div>
+														<div class="name_product">
+															<?php echo $product[1]; ?>
+														</div>
+
+														<div class="price clearfix">
+															<div class="col-price">
+                                                            <?php if ($product[3] != $product[4]) : ?>
+                                                                <span class="old">
+                                                                    <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[3]), 2)).$symbol; ?>
+                                                                </span>
+                                                            <?php endif; ?>
+                                                                <span>
+                                                                    <?php echo str_replace(".",",",Zend_Locale_Math::round(sprintf("%F", $product[4]), 2)).$symbol; ?>
+                                                                </span>
+															</div>
+															<?php
+															// like count
+															$wishlistCount = "";
+															$inMyWishlist = "";
+															$plusSign = "";
+															if ($product[5] - 1 > 0) {
+																$wishlistCount = $product[5];
+																if ($product[6]) {
+																	$wishlistCount -= 1;
+																}
+															}
+
+															if ($product[6]) {
+																$inMyWishlist = $this->__("You");
+																if ($product[5] > 1) {
+																	$plusSign = " + ";
+																}
+															}
+
+															?>
+															<div class="like <?php if ($product[6]): ?>liked<?php endif; ?>"
+															     data-idproduct="<?php echo $product[0]; ?>">
+																<span class="like_count">
+																	<span>
+																		<?php echo $inMyWishlist; ?>
+																		<?php echo $plusSign; ?>
+																	</span>
+																	<?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
+																</span>
+																<div class="icoLike"></div>
+																<div class="toolLike"></div>
+															</div>
+														</div>
+													</a>
+												</div>
+											</div>
+										<?php endforeach; ?>
+									</div>
+									<div class="col-xs-12 shuffle__sizer"></div>
+									<div class="shapes_listing"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pagination-line pagination-bottom">
+						<?php echo $this->getChildHtml('product_list_toolbar_pager'); ?>
+					</div>
+					<div id="listing-loading">
+						<img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
+					</div>
+
+
+
+
+					<?php if ($this->getListModel()->isGoogleBot()): ?>
+						<?php echo $this->getChildHtml('product_list_toolbar_pager_full'); ?>
+					<?php endif; ?>
+
+					<script type="text/javascript">
+
+						Mall.listing.setQuery("<?php echo Mage::helper('catalogsearch')->getQueryText(); ?>");
+						Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+						Mall.listing.setInitProducts(<?php echo $this->getJsonProducts($_products); ?>);
+						Mall.listing.setProductsPerPage(<?php echo count($_products) - 8; ?>);
+
+						Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
+						Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
+						Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
+						Mall.translate.add("like-this-product", "<?php echo $this->__("like this product"); ?>");
+						Mall.translate.add("likes-this-product", "<?php echo $this->__("likes this product"); ?>");
+						Mall.translate.add("you-and", "<?php echo $this->__("You and"); ?>");
+						Mall.translate.add("person", "<?php echo $this->__("person"); ?>");
+						Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
+						Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
+						Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
+						Mall.translate.add("Show more", "<?php echo Mage::helper('zolagosolrsearch')->__("Show more"); ?>");
+						Mall.translate.add("Show less", "<?php echo Mage::helper('zolagosolrsearch')->__("Show less"); ?>");
+
+						<?php $isSecure = Mage::app()->getStore()->isCurrentlySecure(); ?>
+						Mall.initUrls("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK,$isSecure); ?>", "<?php echo Mage::getUrl("/",array("_no_vendor"=>true,'_secure'=>$isSecure)); ?>");
+
+						<?php foreach ($_products as $product): ?>
+						Mall.wishlist.addProduct({
+							id: <?php echo $product[0]; ?>,
+							wishlist_count: <?php echo (int)$product[5]; ?>,
+							in_your_wishlist: <?php echo $product[6] ? "true" : "false"; ?>
+						});
+						<?php endforeach; ?>
+
+						Mall.reg.set("varnish_category_id", <?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+
+					</script>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
