@@ -79,13 +79,25 @@ class ZolagoOs_Import_Model_Import_Price
 
                 }
                 fclose($fileContent);
-            }            
+            }
 
 
             /** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
             $restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-            if (!empty($priceBatch)) 
-                $restApi::updatePricesConverter($priceBatch);
+            if (!empty($priceBatch)) {
+                $numberQ = 20;
+                if (count($priceBatch) > $numberQ) {
+                    $priceBatchC = array_chunk($priceBatch, $numberQ);
+                    foreach ($priceBatchC as $priceBatchCItem) {
+                        $restApi::updatePricesConverter($priceBatchCItem);
+
+                    }
+                    unset($priceBatchCItem);
+                } else {
+                    $restApi::updatePricesConverter($priceBatch);
+                }
+            }
+
             
 
         } catch (Exception $e) {
