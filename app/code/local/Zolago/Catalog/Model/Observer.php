@@ -8,48 +8,48 @@
  */
 class Zolago_Catalog_Model_Observer
 {
-	/**
-	 * Handle default category on product page
-	 * @area: frontend
-	 * @event: catalog_controller_product_init
-	 * @param Varien_Event_Observer $observer
-	 */
-	public function productInit(Varien_Event_Observer $observer) {
-		$product = $observer->getEvent()->getProduct();
-		/* @var $product Mage_Catalog_Model_Products */
-		
-		// No category id
-		//if(!$product->getCategory()){
-			$rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
-			$category = Mage::helper("zolagosolrsearch")->getDefaultCategory($product, $rootId);
-			/* @var $category Mage_Catalog_Model_Category */
-			if($category && $category->getId()){
-				$product->setCategory($category);
-                Mage::unregister('current_category');
-                Mage::register('current_category', $category);
-			}	
-		//}
-	}
-	
+    /**
+     * Handle default category on product page
+     * @area: frontend
+     * @event: catalog_controller_product_init
+     * @param Varien_Event_Observer $observer
+     */
+    public function productInit(Varien_Event_Observer $observer) {
+        $product = $observer->getEvent()->getProduct();
+        /* @var $product Mage_Catalog_Model_Products */
+
+        // No category id
+        //if(!$product->getCategory()){
+        $rootId = Mage::helper("zolagosolrsearch")->getRootCategoryId();
+        $category = Mage::helper("zolagosolrsearch")->getDefaultCategory($product, $rootId);
+        /* @var $category Mage_Catalog_Model_Category */
+        if($category && $category->getId()) {
+            $product->setCategory($category);
+            Mage::unregister('current_category');
+            Mage::register('current_category', $category);
+        }
+        //}
+    }
+
     public function addColumnWidthField(Varien_Event_Observer $observer)
     {
         $fieldset = $observer->getForm()->getElement('front_fieldset');
         $fieldset->addField('column_width', 'text', array(
-            'name' => 'column_width',
-            'label' => Mage::helper('catalog')->__('Column width (px)'),
-            'title' => Mage::helper('catalog')->__('Column width (px)'),
-            'class' => 'validate-digits',
-        ));
+                                'name' => 'column_width',
+                                'label' => Mage::helper('catalog')->__('Column width (px)'),
+                                'title' => Mage::helper('catalog')->__('Column width (px)'),
+                                'class' => 'validate-digits',
+                            ));
     }
     public function addColumnAttributeOrder(Varien_Event_Observer $observer)
     {
         $fieldset = $observer->getForm()->getElement('front_fieldset');
         $fieldset->addField('column_attribute_order', 'text', array(
-            'name' => 'column_attribute_order',
-            'label' => Mage::helper('catalog')->__('Attribute order'),
-            'title' => Mage::helper('catalog')->__('Attribute order'),
-            'class' => 'validate-digits',
-        ));
+                                'name' => 'column_attribute_order',
+                                'label' => Mage::helper('catalog')->__('Attribute order'),
+                                'title' => Mage::helper('catalog')->__('Attribute order'),
+                                'class' => 'validate-digits',
+                            ));
     }
 
     static public function processConfigurableQueue()
@@ -113,7 +113,7 @@ class Zolago_Catalog_Model_Observer
         $attributesData = $observer->getData('attributes_data');
 
         $converterPriceType = isset($attributesData['converter_price_type']) ? $attributesData['converter_price_type']
-            : 0;
+                              : 0;
         $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : null;
         $msrpType = (isset($attributesData['converter_msrp_type']) && $attributesData['converter_msrp_type'] == 0)? 1:0;
 
@@ -169,12 +169,70 @@ class Zolago_Catalog_Model_Observer
             }
 
             $fieldset->addField('store_attribute_base_store', 'select', array(
-                'name'      => 'store[attribute_base_store]',
-                'label'     => $hlp->__('Use attributes labels from'),
-                'values'    => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(true, false),
-                'value'     => $storeModel->getAttributeBaseStore(),
-                'note'      => $hlp->__('From this store view labels will be taken if not present. If you do not specify a store view then the default (Admin) labels will be used')
-            ));
+                                    'name'      => 'store[attribute_base_store]',
+                                    'label'     => $hlp->__('Use attributes labels from'),
+                                    'values'    => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(true, false),
+                                    'value'     => $storeModel->getAttributeBaseStore(),
+                                    'note'      => $hlp->__('From this store view labels will be taken if not present. If you do not specify a store view then the default (Admin) labels will be used')
+                                ));
+        }
+    }
+
+    /**
+     * update url after assign website
+     */
+    public function catalogProductWebsiteUpdate($observer) {
+        $event = $observer->getEvent();
+        $productIds = $event->getProductIds();
+        $websites = $event->getWebsiteIds();
+        $action = $event->getAction();
+
+        $catalogResource = Mage::getResourceModel('catalog/product');
+
+        $url = Mage::getSingleton('catalog/url');
+        $url->setShouldSaveRewritesHistory(true);
+        $resource = $url->getResource();
+
+        $keys = $catalogResource->getUrlKeysByStore($productIds);
+
+
+        $urlRewriteCollection = Mage::getModel('core/url_rewrite')->getCollection()
+                                ->addFieldToFilter('product_id', array('in' =>  $productIds));
+        $urlList = array();
+        foreach ($urlRewriteCollection as $itemUrl) {
+            $urlList[$itemUrl->getProductId()][$itemUrl->getStoreId()] = $itemUrl->getRequestPath();
+        }
+
+
+        foreach($productIds as $id) {
+            $refresh = false;
+            foreach ($websites as $wid) {
+                $storeIds = Mage::app()->getWebsite($wid)->getStoreIds();
+                foreach($storeIds as $sId) {
+                    switch ($action) {
+                    case 'add':
+                        if ($key = empty($keys[$id][$sId])? (empty($keys[$id][0])? '':$keys[$id][0]):$keys[$id][$sId]) {
+                            if (empty($urlList[$id][$sId]) || ($urlList[$id][$sId] != $key)) {
+                                $model = Mage::getModel('catalog/product')->setStoreId($sId)->load($id);
+                                $model->setData('store_id', $sId); // Trick
+                                $model->setUrlKey($key);
+                                $resource->saveProductAttribute($model, 'url_key');
+                                $refresh = true;
+                            }
+                        }
+                        break;
+                    case 'remove':
+                        if (!empty($urlList[$id][$sId])) {
+                            $resource->clearProductRewrites($id, $sId);
+                            $refresh = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            if ($refresh) {
+                $url->refreshProductRewrite($id);
+            }
         }
     }
 }
