@@ -52,19 +52,29 @@ class ZolagoOs_Import_Model_Import_Price
             $priceBatch = [];
             $row = 1;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
-                while (($data = fgetcsv($fileContent, 100000, ";")) !== FALSE) {
+                while (($data = fgetcsv($fileContent, 100000000, ";")) !== FALSE) {
 
                     if ($row > 1) {
-                        $priceBatch[$vendorId . "-" . $data[0]] = array(
-                            "A" => $data[1],
-                            "B" => $data[2],
-                            "C" => $data[3],
-                            "Z" => $data[4],
-                            "salePriceBefore" => $data[5]
-                        );
+//                        $sku = $vendorId . "-" . $data[0];
+                        $sku = $data[0];
+                        if ((float)$data[1] > 0) {
+                            $priceBatch[$sku]["A"] = (float)$data[1];
+                        }
+                        if ((float)$data[2] > 0) {
+                            $priceBatch[$sku]["B"] = (float)$data[2];
+                        }
+                        if ((float)$data[3] > 0) {
+                            $priceBatch[$sku]["C"] = (float)$data[3];
+                        }
+                        if ((float)$data[4] > 0) {
+                            $priceBatch[$sku]["Z"] = (float)$data[4];
+                        }
+                        if ((float)$data[5] > 0) {
+                            $priceBatch[$sku]["salePriceBefore"] = (float)$data[5];
+                        }
                     }
                     $row++;
-
+                    unset($sku);
                 }
                 fclose($fileContent);
             }
@@ -75,17 +85,17 @@ class ZolagoOs_Import_Model_Import_Price
             if (!empty($priceBatch)) {
                 $numberQ = 20;
                 if (count($priceBatch) > $numberQ) {
-                    $priceBatchC = array_chunk($priceBatch, $numberQ);
+                    $priceBatchC = array_chunk($priceBatch, $numberQ, true);
+
                     foreach ($priceBatchC as $priceBatchCItem) {
                         $restApi::updatePricesConverter($priceBatchCItem);
-
                     }
                     unset($priceBatchCItem);
                 } else {
                     $restApi::updatePricesConverter($priceBatch);
                 }
             }
-            $this->_moveProcessedFile();
+            //$this->_moveProcessedFile();
 
         } catch (Exception $e) {
             Mage::logException($e);

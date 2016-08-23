@@ -36,7 +36,7 @@ class ZolagoOs_Import_Model_Import_Stock
     {
 
         $vendorId = $this->getExternalId();
-        
+
         $fileName = $this->_getPath();
 
         //Get first active POS
@@ -65,7 +65,9 @@ class ZolagoOs_Import_Model_Import_Stock
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
                 while (($data = fgetcsv($fileContent, 100000, ";")) !== FALSE) {
                     if ($row > 1) {
-                        $stockBatch[$vendorId][$vendorId . "-" . $data[0]] = array(
+                        //$sku = $vendorId . "-" . $data[0];
+                        $sku = $data[0];
+                        $stockBatch[$vendorId][$sku] = array(
                             $posExternalId => $data[1]
                         );
                     }
@@ -80,7 +82,7 @@ class ZolagoOs_Import_Model_Import_Stock
             if (!empty($stockBatch)) {
                 $numberQ = 20;
                 if (count($stockBatch) > $numberQ) {
-                    $stockBatchC = array_chunk($stockBatch, $numberQ);
+                    $stockBatchC = array_chunk($stockBatch, $numberQ, true);
                     foreach ($stockBatchC as $stockBatchCItem) {
                         $restApi::updateStockConverter($stockBatchCItem);
 
