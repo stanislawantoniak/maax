@@ -59,6 +59,12 @@
       top: 104px;
     }
   }
+
+  .mpblog-category {
+    &.active {
+      font-weight: bold;
+    }
+  }
   .mpblog-container {
     &.list {
       .mp-pager {
