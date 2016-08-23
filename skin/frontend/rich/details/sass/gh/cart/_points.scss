@@ -104,6 +104,12 @@
 
   //Modal content
   .carrier-points-modal {
+    h2.title_section {
+      margin-top: 15px;
+      @media(max-width: $screen-xs-max) {
+        font-size: 18px;
+      }
+    }
     .modal-dialog.modal-lg {
       @media(max-width:767px) {
         margin: 30px auto;
