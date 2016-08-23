@@ -1,0 +1,525 @@
+<definitions name="GHApi"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:tns="<?php echo $this->getTns(); ?>"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+   targetNamespace="<?php echo $this->getTargetNamespace();?>"
+  >
+  <types>
+  	<xsd:schema targetNamespace="<?php echo $this->getTargetNamespace();?>">
+		<xsd:element name="doLogin">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="vendorId" type="xsd:int"/>
+					<xsd:element name="password" type="xsd:string"/>
+					<xsd:element name="webApiKey" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+		<xsd:complexType name="doLoginResponse">
+			<xsd:all>
+				<xsd:element name="token" type="xsd:string"/>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:element name="getChangeOrderMessage">
+			<xsd:complexType>
+				<xsd:all>
+					<xsd:element name="sessionToken" type="xsd:string"/>
+					<xsd:element name="messageBatchSize" type="xsd:int"/>
+					<xsd:element name="messageType" type="xsd:string" nillable="true"/>
+					<xsd:element name="orderId" type="xsd:string" nillable="true"/>
+				</xsd:all>
+  			</xsd:complexType>
+		</xsd:element>
+			<xsd:complexType name="setChangeOrderMessageConfirmation">
+				<xsd:all>
+					<xsd:element name="sessionToken" type="xsd:string"/>
+					<xsd:element name="messageID" type="tns:messageIDList"/>
+				</xsd:all>
+			</xsd:complexType>
+		<xsd:complexType name="getChangeOrderMessageResponse">
+			<xsd:all>
+				<xsd:element name="list" type="tns:messageList"/>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
+			<xsd:complexType name="messageItem">
+				<xsd:all>
+					<xsd:element name="messageID" type="xsd:int"/>
+					<xsd:element name="messageType" type="xsd:string"/>
+					<xsd:element name="orderID" type="xsd:string"/>
+				</xsd:all>
+			</xsd:complexType>
+		<xsd:complexType name="messageList">
+		    <xsd:complexContent>
+		        <restriction base="SOAP-ENC:Array">
+        			<xsd:sequence>
+		        		<xsd:element name="message" type="tns:messageItem" minOccurs="0" maxOccurs="unbounded"/>
+        			</xsd:sequence>
+		        </restriction>
+		    </xsd:complexContent>
+		</xsd:complexType>
+
+		<xsd:complexType name="updateProductsPricesStocks">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="productsPricesUpdateList" type="tns:productsPricesUpdateList" nillable="true" />
+				<xsd:element name="productsStocksUpdateList" type="tns:productsStocksUpdateList" nillable="true" />
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="updateProductsPricesStocksResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="productsPricesUpdateList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="product" type="tns:productsPricesUpdateListItem" minOccurs="1" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="productsPricesUpdateListItem">
+			<xsd:all>
+				<xsd:element name="sku" type="xsd:string"/>
+				<xsd:element name="pricesTypesList" type="tns:pricesTypesList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="pricesTypesList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="priceTypeItem" type="tns:pricesTypesListItem" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="pricesTypesListItem">
+			<xsd:all>
+				<xsd:element name="priceType" type="xsd:string"/>
+				<xsd:element name="priceValue" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="productsStocksUpdateList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="product" type="tns:productsStocksUpdateListItem" minOccurs="1" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="productsStocksUpdateListItem">
+			<xsd:all>
+				<xsd:element name="sku" type="xsd:string"/>
+				<xsd:element name="posesList" type="tns:posesList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="posesList">
+			<xsd:complexContent>
+				<restriction base="SOAP-ENC:Array">
+					<xsd:sequence>
+						<xsd:element name="pos" type="tns:posesListItem" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="posesListItem">
+			<xsd:all>
+				<xsd:element name="id" type="xsd:string"/>
+				<xsd:element name="qty" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="messageIDList">
+			<xsd:sequence>
+				<xsd:element name="ID" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:complexType name="orderIDList">
+			<xsd:sequence>
+				<xsd:element name="ID" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:complexType name="orderList">
+			<xsd:sequence>
+				<xsd:element name="order" type="tns:order" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:complexType name="orderItemList">
+			<xsd:sequence>
+				<xsd:element name="item" type="tns:orderItem" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+
+		<xsd:complexType name="orderItem">
+			<xsd:all>
+				<xsd:element name="is_delivery_item" type="xsd:int"/>
+				<xsd:element name="item_sku" type="xsd:string"/>
+				<xsd:element name="item_name" type="xsd:string"/>
+				<xsd:element name="item_qty" type="xsd:int"/>
+				<xsd:element name="item_value_before_discount" type="xsd:float"/>
+				<xsd:element name="item_discount" type="xsd:float"/>
+				<xsd:element name="item_value_after_discount" type="xsd:float"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="order">
+			<xsd:all>
+				<xsd:element name="vendor_id" type="xsd:int"/>
+				<xsd:element name="vendor_name" type="xsd:string"/>
+				<xsd:element name="order_id" type="xsd:string"/>
+				<xsd:element name="order_date" type="xsd:string"/>
+				<xsd:element name="order_max_shipping_date" type="xsd:string"/>
+				<xsd:element name="order_status" type="xsd:string"/>
+				<xsd:element name="order_total" type="xsd:float"/>
+				<xsd:element name="payment_method" type="xsd:string"/>
+				<xsd:element name="order_due_amount" type="xsd:float"/>
+				<xsd:element name="delivery_method" type="xsd:string"/>
+				<xsd:element name="shipment_tracking_number" type="xsd:string"/>
+				<xsd:element name="pos_id" type="xsd:string"/>
+				<xsd:element name="order_currency" type="xsd:string"/>
+				<xsd:element name="order_email" type="xsd:string"/>
+				<xsd:element name="customer_id" type="xsd:string" nillable="true"/>
+				<xsd:element name="invoice_data" type="tns:invoiceData"/>
+				<xsd:element name="delivery_data" type="tns:deliveryData"/>
+				<xsd:element name="order_items" type="tns:orderItemList"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="deliveryData">
+			<xsd:all>
+				<xsd:element name="inpost_locker_id" type="xsd:string" nillable="true"/>
+				<xsd:element name="delivery_point_name" type="xsd:string" nillable="true"/>
+				<xsd:element name="delivery_address" type="tns:deliveryAddress"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="deliveryAddress">
+			<xsd:all>
+				<xsd:element name="delivery_first_name" type="xsd:string"/>
+				<xsd:element name="delivery_last_name" type="xsd:string"/>
+				<xsd:element name="delivery_company_name" type="xsd:string" nillable="true"/>
+				<xsd:element name="delivery_street" type="xsd:string"/>
+				<xsd:element name="delivery_city" type="xsd:string"/>
+				<xsd:element name="delivery_zip_code" type="xsd:string"/>
+				<xsd:element name="delivery_country" type="xsd:string"/>
+				<xsd:element name="phone" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+
+		<xsd:complexType name="invoiceData">
+			<xsd:all>
+				<xsd:element name="invoice_required" type="xsd:int"/>
+				<xsd:element name="invoice_address" type="tns:invoiceAddress" nillable="true"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="invoiceAddress">
+			<xsd:all>
+				<xsd:element name="invoice_first_name" type="xsd:string"/>
+				<xsd:element name="invoice_last_name" type="xsd:string"/>
+				<xsd:element name="invoice_company_name" type="xsd:string" nillable="true"/>
+				<xsd:element name="invoice_street" type="xsd:string"/>
+				<xsd:element name="invoice_city" type="xsd:string"/>
+				<xsd:element name="invoice_zip_code" type="xsd:string"/>
+				<xsd:element name="invoice_country" type="xsd:string"/>
+				<xsd:element name="invoice_tax_id" type="xsd:string" nillable="true"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="getOrdersByID">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="orderID" type="tns:orderIDList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="setOrderAsCollected">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="orderID" type="tns:orderIDList"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="statusResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="setOrderShipment">
+			<xsd:all>
+				<xsd:element name="sessionToken" type="xsd:string"/>
+				<xsd:element name="orderID" type="xsd:string"/>
+				<xsd:element name="dateShipped" type="xsd:string"/>
+				<xsd:element name="courier" type="xsd:string"/>
+				<xsd:element name="shipmentTrackingNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="getOrdersByIDResponse">
+			<xsd:all>
+				<xsd:element name="message" type="xsd:string"/>
+				<xsd:element name="status" type="xsd:boolean"/>
+				<xsd:element name="orderList" type="tns:orderList" nillable="true"/>
+			</xsd:all>
+		</xsd:complexType>
+	    <xsd:complexType name="setOrderReservation">
+		    <xsd:all>
+			    <xsd:element name="sessionToken" type="xsd:string"/>
+			    <xsd:element name="orderID" type="xsd:string"/>
+			    <xsd:element name="reservationStatus" type="xsd:string"/>
+			    <xsd:element name="reservationMessage" type="xsd:string"/>
+		    </xsd:all>
+	    </xsd:complexType>
+
+        <xsd:complexType name="categoryItem">
+            <xsd:all>
+                <xsd:element name="categoryID" type="xsd:int"/>
+                <xsd:element name="categoryName" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+        <xsd:complexType name="categories">
+            <xsd:sequence>
+                <xsd:element name="category" type="tns:categoryItem" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="getCategories">
+            <xsd:all>
+                <xsd:element name="sessionToken" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+        <xsd:complexType name="getCategoriesResponse">
+            <xsd:all>
+                <xsd:element name="message" type="xsd:string"/>
+                <xsd:element name="status" type="xsd:boolean"/>
+                <xsd:element name="categories" type="tns:categories" nillable="true"/>
+            </xsd:all>
+        </xsd:complexType>
+
+	</xsd:schema>
+  </types>
+  <message name="doLoginRequest">
+      <part name="doLogin" type="tns:doLogin"/>
+  </message>	
+  <message name="doLoginResponse">
+      <part name="doLoginResponse" type="tns:doLoginResponse"/>
+  </message>	
+  <message name="getChangeOrderMessageRequest">
+      <part name="getChangeOrderMessage" type="tns:getChangeOrderMessage"/>
+  </message>	
+  <message name="getChangeOrderMessageResponse">
+      <part name="getChangeOrderMessageResponse" type="tns:getChangeOrderMessageResponse"/>
+  </message>	
+  <message name="setChangeOrderMessageConfirmationRequest">
+      <part name="setChangeOrderMessageConfirmation" type="tns:setChangeOrderMessageConfirmation"/>
+  </message>	
+  <message name="setChangeOrderMessageConfirmationResponse">
+      <part name="setChangeOrderMessageConfirmationResponse" type="tns:statusResponse"/>
+  </message>	
+  <message name="setOrderAsCollectedRequest">
+      <part name="setOrderAsCollected" type="tns:setOrderAsCollected"/>
+  </message>	
+  <message name="setOrderAsCollectedResponse">
+      <part name="setOrderAsCollectedResponse" type="tns:statusResponse"/>
+  </message>	
+  <message name="getOrdersByIDRequest">
+      <part name="getOrdersByID" type="tns:getOrdersByID"/>
+  </message>	
+  <message name="getOrdersByIDResponse">
+      <part name="getOrdersByIDResponse" type="tns:getOrdersByIDResponse"/>
+  </message>	
+  <message name="setOrderShipmentRequest">
+      <part name="setOrderShipment" type="tns:setOrderShipment"/>
+  </message>	
+  <message name="setOrderShipmentResponse">
+      <part name="setOrderShipmentResponse" type="tns:statusResponse"/>
+  </message>
+	<message name="updateProductsPricesStocksRequest">
+		<part name="updateProductsPricesStocksRequest" type="tns:updateProductsPricesStocks"/>
+	</message>
+	<message name="updateProductsPricesStocksResponse">
+		<part name="updateProductsPricesStocksResponse" type="tns:statusResponse"/>
+	</message>
+  <message name="setOrderReservationRequest">
+	  <part name="setOrderReservationRequest" type="tns:setOrderReservation"/>
+  </message>
+  <message name="setOrderReservationResponse">
+	  <part name="setOrderReservationResponse" type="tns:statusResponse"/>
+  </message>
+  <message name="getCategoriesRequest">
+      <part name="getCategories" type="tns:getCategories"/>
+  </message>
+  <message name="getCategoriesResponse">
+      <part name="getCategoriesResponse" type="tns:getCategoriesResponse"/>
+  </message>
+  <portType name="GHApi_PortType">
+      <operation name="doLogin">
+         <input message="tns:doLoginRequest"/>
+         <output message="tns:doLoginResponse"/>
+      </operation>
+      <operation name="getChangeOrderMessage">
+         <input message="tns:getChangeOrderMessageRequest"/>
+         <output message="tns:getChangeOrderMessageResponse"/>
+      </operation>
+      <operation name="setChangeOrderMessageConfirmation">
+         <input message="tns:setChangeOrderMessageConfirmationRequest"/>
+         <output message="tns:setChangeOrderMessageConfirmationResponse"/>
+      </operation>
+      <operation name="setOrderAsCollected">
+         <input message="tns:setOrderAsCollectedRequest"/>
+         <output message="tns:setOrderAsCollectedResponse"/>
+      </operation>
+      <operation name="setOrderShipment">
+         <input message="tns:setOrderShipmentRequest"/>
+         <output message="tns:setOrderShipmentResponse"/>
+      </operation>
+      <operation name="getOrdersByID">
+         <input message="tns:getOrdersByIDRequest"/>
+         <output message="tns:getOrdersByIDResponse"/>
+      </operation>
+	  <operation name="updateProductsPricesStocks">
+		  <input message="tns:updateProductsPricesStocksRequest"/>
+		  <output message="tns:updateProductsPricesStocksResponse"/>
+	  </operation>
+	  <operation name="setOrderReservation">
+		  <input message="tns:setOrderReservationRequest"/>
+		  <output message="tns:setOrderReservationResponse"/>
+	  </operation>
+      <operation name="getCategories">
+          <input message="tns:getCategoriesRequest"/>
+          <output message="tns:getCategoriesResponse"/>
+      </operation>
+  </portType>
+  <binding name="GHApi_Binding" type="tns:GHApi_PortType">
+      <soap:binding style="document"
+         transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="doLogin">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>doLogin"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </output>
+      </operation>
+      <operation name="getChangeOrderMessage">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>getChangeOrderMessage"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </output>
+      </operation>
+      <operation name="setChangeOrderMessageConfirmation">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>setChangeOrderMessageConfirmation"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </output>
+      </operation>
+      <operation name="getOrdersByID">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>getOrdersByID"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </output>
+      </operation>
+      <operation name="setOrderAsCollected">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>setOrderAsCollected"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </output>
+      </operation>
+      <operation name="setOrderShipment">	
+         <soap:operation soapAction="<?php echo $this->getWsUrl();?>setOrderShipment"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </input>
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               use="literal"/>
+         </output>
+      </operation>
+	  <operation name="updateProductsPricesStocks">
+		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>updateProductsPricesStocks"/>
+		  <input>
+		  <soap:body
+			  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+			  use="literal"/>
+		  </input>
+		  <output>
+			  <soap:body
+				  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+				  use="literal"/>
+		  </output>
+	  </operation>
+	  <operation name="setOrderReservation">
+		  <soap:operation soapAction="<?php echo $this->getWsUrl();?>setOrderReservation"/>
+		  <input>
+		  <soap:body
+			  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+			  use="literal"/>
+		  </input>
+		  <output>
+			  <soap:body
+				  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+				  use="literal"/>
+		  </output>
+	  </operation>
+      <operation name="getCategories">
+          <soap:operation soapAction="<?php echo $this->getWsUrl();?>getCategories"/>
+          <input>
+          <soap:body
+              encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+              use="literal"/>
+          </input>
+          <output>
+              <soap:body
+                  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                  use="literal"/>
+          </output>
+      </operation>
+  </binding>
+  <service name="GHApi_Service">
+	  <port binding="tns:GHApi_Binding" name="GHApi_Port">
+         <soap:address
+            location="<?php echo $this->getWsUrl();?>" />
+      </port>
+  </service>
+</definitions>

@@ -1,0 +1,101 @@
+<?php
+/**
+ * Slider and Box on CMS Categories
+ * NOTE: For sliders and boxes on Gallery Home Page
+ * @see app/design/frontend/modago/default/template/unirgy/microsite/home/vendor/banner.phtml
+*/
+/** @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner */
+
+$this->setBannerTypeFilter(array(
+    Zolago_Banner_Model_Banner_Type::TYPE_SLIDER,
+    Zolago_Banner_Model_Banner_Type::TYPE_BOX,
+));
+$_sliders = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
+$_boxes   = $this->getPlacements(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
+
+if ($_sliders->count() || $_boxes->count()): ?>
+	<div id="vendor-banners">
+        <?php // SLIDERS START ?>
+		<?php if ($_sliders->count()): ?>
+			<section id="topSlider">
+                <?php /** @var Zolago_Campaign_Model_Placement $slider */ ?>
+                <?php foreach ($_sliders as $slider): // F1 OPEN
+                    $bannerImageData   = $slider->getBannerImageData();
+                    $bannerCaptionData = $slider->getBannerCaptionData();
+                    ?>
+					<div class="topSlide">
+						<div class="topSlideImages">
+                            <?php foreach($bannerImageData as $i => $slide): ?>
+                                <?php if(!empty($slide['url'])): // A1 OPEN ?>
+                                    <a href="<?php echo $slide['url']; ?>">
+                                <?php endif; ?>
+                                <?php if($i == 1): // Desktop size ?>
+									<?php $imageSize = $this->getImageSize($slide['path']); ?>
+                                    <img src="<?php echo $this->getImageUrl($slide['path']); ?>"
+									     class="hidden-xs"
+										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
+                                <?php else: // Mobile size ?>
+									<?php $imageSize = $this->getImageSize($slide['path']); ?>
+                                    <img src="<?php echo $this->getImageUrl($slide['path']); ?>"
+									     class="visible-xs"
+										<?php echo is_array($imageSize) ? $imageSize[3] : '' ?> />
+								<?php endif; ?>
+                                <?php if(!empty($slide['url'])): //A1 CLOSE ?>
+                                    </a>
+                                <?php endif; ?>
+							<?php endforeach; ?>
+						</div>
+						<div class="topSlideCaptions">
+                            <?php foreach($bannerCaptionData as $c => $caption): ?>
+                                <?php if($caption['text']): ?>
+                                    <?php if($caption['url']): ?>
+										<a href="<?php echo $caption['url']; ?>">
+									<?php endif; ?>
+									<span><?php echo $caption['text']; ?> <i class="fa fa-caret-right"></i></span>
+                                    <?php if($caption['url']): ?>
+										</a>
+									<?php endif; ?>
+                                    <?php if(isset($captions[$c+1])): ?>
+                                        <br />
+									<?php endif; ?>
+								<?php endif; ?>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</section>
+		<?php endif; ?>
+        <?php // SLIDERS END ?>
+
+        <?php // BOXES START ?>
+		<?php
+		if ($boxesCount = $_boxes->count()) :
+			$boxesCount = $boxesCount > 3 ? 3 : $boxesCount;
+			?>
+			<section id="boxesSlider"
+			         data-boxes-amount="<?php echo $boxesCount; ?>"<?php echo $boxesCount > 3 ? ' class="boxesSliderHasArrows"' : ''; ?>>
+                <?php foreach ($_boxes as $box):
+                    /** @var Zolago_Campaign_Model_Placement $box */
+                    $bannerImageData = $box->getBannerImageData();
+                    $path            = $bannerImageData['path'];
+                    $boxUrl          = $bannerImageData['url']; ?>
+                    <div class="boxesSlide">
+                        <?php if (!empty($boxUrl)): ?><a href="<?php echo $boxUrl; ?>"><?php endif; ?>
+                            <?php $imageSize = $this->getImageSize($path); ?>
+                            <div class="boxesSlideIn"
+                                 style="background-image: url('<?php echo $this->getImageUrl($path); ?>')"
+                                 data-ratio="<?php echo $this->getImageRatio($path); ?>">
+                            </div>
+                            <?php if (!empty($boxUrl)): ?></a><?php endif; ?>
+                    </div>
+				<?php endforeach; ?>
+			</section>
+		<?php endif; ?>
+        <?php // BOXES END ?>
+	</div>
+<?php endif; ?>
+
+<header id="vendor-nobanners" class="title-section">
+	<div id="vendor-nobanners-stripes"></div>
+	<h2><?php echo Mage::helper('zolagomodago')->__("Currently on top"); ?></h2>
+</header>

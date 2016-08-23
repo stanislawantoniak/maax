@@ -1,0 +1,95 @@
+<?php
+/* @var $this Inic_Faq_Block_Frontend_List */
+?>
+<div id="content" class="container-fluid faq-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="content-main">
+                <div class="my-account">
+                    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-page-mobile-menu')->toHtml() ?>
+
+                    <div class="bg-w main faq-content">
+                            <h3>
+                                <span><?php echo $this->__('Answers to frequently asked questions'); ?></span>
+                            </h3>
+                        <?php if ($this->hasFaq()): ?>
+
+                            <?php echo $this->getChildHtml('search_form'); ?>
+
+                            <div class="faq-container">
+                                <?php if ($this->getCategoryCollection()) : ?>
+                                    <dl class="faq-list">
+                                        <?php foreach ($this->getCategoryCollection() as $category) : ?>
+                                            <?php $catQues=$this->getItemCollectionByCategory($category); ?>
+                                            <?php if(count($catQues) > 0): ?>
+                                                <div>
+                                                    <dt>
+                                                        <h3><?php echo $this->htmlEscape($category->getName()); ?></h3>
+                                                    </dt>
+                                                    <dd>
+                                                        <?php //If List View ?>
+
+                                                            <?php foreach ($catQues as $item) : ?>
+                                                                <div class="panel-group">
+                                                                    <div class="panel panel-default">
+                                                                        <div class="panel-heading faq-question">
+                                                                            <h4 class="panel-title">
+                                                                                <span><?php echo $this->htmlEscape($item->getQuestion()); ?></span>
+                                                                                <i class="fa fa-chevron-down"></i>
+                                                                            </h4>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="panel-collapse collapse">
+                                                                        <div class="panel-body">
+                                                                            <?php echo Mage::helper('faq')->filter($item->getAnswer()); ?>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            <?php endforeach; ?>
+
+                                                        <?php $collectionCount=$this->getItemCollectionByCategoryCount($category); ?>
+                                                        <?php if($collectionCount): ?>
+                                                            <div style="clear:both;">
+<!--                                                                <a href="--><?php //echo $this->getCategoryUrl($category) ?><!--" style="float:right;">--><?php //echo $this->__('more'); ?><!--</a>-->
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </dd>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </dl>
+                                <?php else : ?>
+                                    <ul class="faq-list">
+                                        <?php foreach ($this->getFaqCollection() as $faqItem): ?>
+                                            <li>
+                                                <a href="#faq-item-<?php echo $faqItem->getId() ?>">
+                                                    <?php echo $this->htmlEscape($faqItem->getQuestion()) ?>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <?php echo Mage::helper('faq')->filter($faqItem->getAnswer()); ?>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </div>
+                        <?php else: ?>
+                            <p class="faq-items"><?php echo $this->__('There are no FAQ items at the moment.') ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery('.panel').click(function(){
+        jQuery(this).next(".panel-collapse").toggleClass("in");
+        jQuery(this).parents(".panel-group").find(".fa").toggleClass("fa-chevron-up").toggleClass("fa-chevron-down");
+    })
+</script>

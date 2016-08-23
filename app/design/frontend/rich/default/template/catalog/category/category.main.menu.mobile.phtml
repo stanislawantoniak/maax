@@ -1,0 +1,18 @@
+<?php
+/**
+ * Used in cms block: navigation-main-wrapper
+ */
+
+/** @var $this Zolago_Modago_Block_Catalog_Category */
+$categoryCollection = $this->getCategoryCollection();
+if ($this->getCategoryLabel() || count($categoryCollection)) : ?>
+<nav id="navCategory" class="visible-xs">
+    <?php if(count($categoryCollection)) : ?>
+    <ul id="nav_category_mobile" class="navigation" role="navigation">
+        <?php foreach ($categoryCollection as $cat) : ?>
+        <li><a href="<?php echo $cat['url']; ?>"><?php echo $cat['name']; ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
+</nav>
+<?php endif;?>

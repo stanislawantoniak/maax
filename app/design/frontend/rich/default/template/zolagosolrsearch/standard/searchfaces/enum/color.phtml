@@ -1,0 +1,108 @@
+<?php
+/** @var $this Zolago_Solrsearch_Block_Faces_Enum_Color */
+$key = $this->getFacetKey();
+$baseMediaUrl = Mage::getBaseUrl("media") . "/m-image/";
+?>
+<?php if ($this->getCanShow()): ?>
+    <?php
+    $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+    $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+    $isOptionSelected = false;
+    $key_withoutFacet = explode("_", $key);
+    array_pop($key_withoutFacet);
+	$pureKey = implode("_", $key_withoutFacet);
+    ?>
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div class="content filter-color"  id="filter_<?php echo $key; ?>">
+    <?php foreach ($this->getItems() as $key => $item): ?>
+        <?php if ($this->getCanShowItem($item)): ?>
+            <?php $_value = $this->getValueObject($item['item']);?>
+            <?php $_color = $_value->getColor();?>
+            <?php $_image = $_value->getNormalImage();?>
+            <?php $_imageHover = $_value->getNormalHoveredImage();?>
+            <?php
+            if(!$isOptionSelected && $item['active']) {
+                $isOptionSelected = true;
+            }
+            ?>
+            <label title="<?php echo $item['item'] ?>"
+                   for="<?php echo $item['itemId'];?>"
+                   <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?>
+                   data-param='<?php echo $item['params'];?>'
+                   data-color="<?php echo $_color?>"
+                   data-url="<?php echo $item['url'] ?>"
+                   <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?>>
+                <input type="checkbox" 
+					name="<?php echo $item['name'];?>"
+					value="<?php echo $item['value'];?>"
+					id="<?php echo $item['itemId'];?>" 
+					<?php if($item['active']): ?>checked="checked"<?php endif; ?> />
+				<span>
+					<span>
+						<a href="<?php echo $item['url']; ?>"
+						   class="listing-link"></a>
+					</span>
+				</span>
+            </label>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+
+    <?php if ($this->getCanShowHidden()): ?>
+        <?php foreach ($this->getHiddenItems() as $item): ?>
+            <?php if ($this->getCanShowItem($item)): ?>
+                <?php $_value = $this->getValueObject($item['item']);?>
+                <?php $_color = $_value->getColor();?>
+                <?php $_image = $_value->getNormalImage();?>
+				<?php $_imageHover = $_value->getNormalHoveredImage();?>
+                <?php
+                if(!$isOptionSelected && $item['active']) {
+                    $isOptionSelected = true;
+                }
+                ?>
+                <label title="<?php echo $item['item'] ?>" data-state="hidden" for="<?php echo $item['itemId']?>" <?php if($_image): ?>data-img="<?php echo $baseMediaUrl . $_image;?>"<?php endif; ?> data-param='<?php echo $item['params'];?>' data-color="<?php echo $_color?>" data-url="<?php echo $item['url'] ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo $baseMediaUrl . $_imageHover;?>"<?php endif; ?> style="display: none;">
+                    <input type="checkbox" 
+						name="<?php echo $item['name'];?>"
+						value="<?php echo $item['value']?>"
+						id="<?php echo $item['itemId']?>" 
+						<?php if($item['active']): ?>checked="checked"<?php endif; ?> />
+	                <span>
+		                <span>
+			                <a href="<?php echo $item['url'] ?>"
+			                   class="listing-link"></a>
+		                </span>
+	                </span>
+                </label>
+            <?php endif; ?>
+        <?php endforeach; ?>
+            <div class="actions text-right clearfix">
+                <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
+            </div>
+    <?php endif; ?>
+            <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>"
+                   data-filter-type="<?php echo $pureKey; ?>"
+                   class="button button-third clear clearfilter-color">
+	                <?php echo $this->__("Clear"); ?></a>
+            </div>
+        </div>
+        <?php if($isOptionSelected) : ?>
+            <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
+                <div class="active-filter">
+                    <?php foreach ($this->getItems() as $item): ?>
+                        <?php if ($this->getCanShowItem($item) && $item['active']): ?>
+                            <a href="<?php echo $item['url']; ?>"
+                               class="active-filter-label"
+                               data-input="<?php echo $item['itemId']; ?>">
+                                <?php echo $item['value']; ?><i class="fa fa-times"></i>
+                            </a>
+                            <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
+                                   value="<?php echo $item['value']; ?>"/>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

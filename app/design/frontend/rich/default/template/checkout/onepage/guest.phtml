@@ -1,0 +1,100 @@
+<?php
+/** @var Zolago_Checkout_Helper_Data $_helper */
+$_helper = Mage::helper("zolagocheckout");
+$basketDataLayer = $_helper->getBasketDataLayer();
+?>
+<?php if (!empty($basketDataLayer)): ?>
+	<script>
+		if (typeof dataLayer != "undefined") {
+			dataLayer.push(<?php echo json_encode($basketDataLayer); ?>);
+		}
+	</script>
+<?php endif; ?>
+<div id="content" class="container-fluid">
+	<div id="checkout" class="row">
+		<div class="step step-0 hidden" id="step-0">
+			<?php echo $this->getChildHtml("checkout.onepage.guest.address"); /** @see checkout/onepage/shared/address.phtml */ ?>
+		</div>
+		<div class="step step-1 hidden" id="step-1">
+            <?php echo $this->getChildHtml("checkout.onepage.guest.shippingpayment");?>
+		</div>
+		<div class="step step-2 hidden" id="step-2">
+			<?php echo $this->getChildHtml("checkout.onepage.guest.review");?>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	(function(){
+		var checkout = new Mall.CheckoutGuest();
+
+		checkout.setProgressObject(jQuery("#step ol"));
+		checkout.set("placeUrl", '<?php echo $this->getPlaceUrl();?>');
+		checkout.addStep(Mall.Checkout.steps.address);
+		checkout.addStep(Mall.Checkout.steps.shippingpayment);
+		checkout.addStep(Mall.Checkout.steps.review);
+		checkout.init(0);
+
+		Mall.reg.set("checkout", checkout);
+
+        //visual fix for hints
+        initFixHints = function() {
+            jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
+                placement: function (a, element) {
+                    var isModal= jQuery(element).parents('.modal-body').length;
+                    var viewport = window.innerWidth;
+                    var placement = "right";
+                    if (!isModal) { //is not modal window
+                        if (viewport < 470) {
+                            placement = "top";
+                        }
+                    } else {//is modal window
+                        if (viewport < 991) {
+                            placement = "top";
+                        }
+                        if (viewport < 768) {
+                            placement = "right";
+                        }
+                        if (viewport < 600) {
+                            placement = "top";
+                        }
+                    }
+
+                    return placement;
+                },
+                trigger: "focus"
+            });
+
+            jQuery('.phone, .zipcode, .nip').tooltip({
+                placement: "right",
+                trigger: "focus"
+            });
+
+            jQuery('input[type=text],input[type=email],input[type=password],textarea ').off('shown.bs.tooltip').on('shown.bs.tooltip', function () {
+                if(jQuery(this).parent(':has(i)').length && jQuery(this).parent().find('i').is(":visible")) {
+                    jQuery(this).next('div.tooltip.right').animate({left: "+=25"}, 100, function () {
+                    });
+                }
+            });
+
+        };
+        initFixHints();
+
+        var timer = window.setTimeout(function() {}, 0);
+        jQuery(window).on('resize', function() {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function() {
+                jQuery(window).trigger('resizeend');
+            }, 250);
+        });
+
+        jQuery(window).on('resizeend', function() {
+            var actualElem = jQuery('input[type=text],input[type=email],input[type=password],textarea ').next('div.tooltip').prev();
+            jQuery('input[type=text],input[type=email],input[type=password],textarea ').tooltip('destroy');//because on resize arrow don't work correctly
+            initFixHints();
+            actualElem.tooltip('show');
+        });
+        //end visual fix for hints
+
+	})();
+</script>

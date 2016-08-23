@@ -1,0 +1,61 @@
+<?php /* @var $this Zolago_Rma_Block_New_Step2  */ ?>
+<?php $_helper = Mage::helper("zolagorma"); ?>
+<?php $_po = $this->getPo(); ?>
+<?php $_rma = $this->getRma();?>
+<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
+<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
+<?php $_selectedShipping = $this->getSelectedShippingAddress();?>
+<?php $dateList = array() ;?>
+<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
+<?php $vendor = $_po->getVendor();?>
+
+<script type="text/javascript">
+
+    //INIT DATA
+    var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
+    var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
+    var dateList = <?php echo json_encode($dateList); ?>;
+    var dateListFormatedDate = [];
+
+    <?php // formatted date for next 20 (max) days from today
+    for($count = 0; $count < 20 ; $count++) {
+        $timestamp = time()+$count*3600*24;
+        $index = date('Y-m-d',$timestamp);
+        echo "dateListFormatedDate['$index'] = '" . $this->getFormattedDate($timestamp) . "';\n";
+    }
+    ?>
+
+    //converting weekdays to array
+    var weekdays = <?php echo json_encode($weekdays); ?>;
+    var arr = [];
+    for (var prop in weekdays) {
+        arr[prop] = (weekdays[prop].label);
+    }
+    weekdays = arr;
+    //converting weekdays to array END
+
+    var showBankAcc = <?php echo $_po->isPaymentCheckOnDelivery() ? '1' : '0'; ?>;
+    //applyFlow
+    var isAcknowledged = false;
+    var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
+
+    var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
+    var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
+    //INIT DATE END
+
+    jQuery(function(){
+        // Address book handling
+        var addressBook = new Mall.customer.AddressBook();
+
+        addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
+		<?php if($_defaultShipping=$this->getDefaultShipping()):?>
+        addressBook.setDefaultShipping(<?php echo $this->asJson($_defaultShipping->getId())?>);
+		<?php endif;?>
+
+        Mall.rma.new.addressbook.setAddressBook(addressBook);
+        <?php if(!$this->isDhlEnabled()): ?>
+        Mall.rma.new.dhlDisabled = true;
+        <?php endif; ?>
+    });
+
+</script>

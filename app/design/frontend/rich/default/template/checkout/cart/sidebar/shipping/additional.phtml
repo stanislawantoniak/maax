@@ -1,0 +1,26 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */ ?>
+
+<?php $methodsRequireAdditionalInfo = $this->getDeliveryMethodsPointSelectRequired(); ?>
+
+
+<?php if (!empty($methodsRequireAdditionalInfo)): ?>
+    <?php foreach ($methodsRequireAdditionalInfo as $methodCode): ?>
+        <div class="modal fade bs-example-modal-lg carrier-points-modal"
+             data-carrier-points="<?php echo $methodCode; ?>"
+             tabindex="-1"
+             role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- Modal Content-->
+                    <?php
+                    echo $this->getLayout()
+                        ->createBlock('zolagomodago/checkout_cart_sidebar_shipping_map_inpost')
+                        ->setTemplate("checkout/cart/sidebar/shipping/additional/{$methodCode}.phtml")
+                        ->toHtml();
+                    ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>

@@ -1,0 +1,70 @@
+<?php
+$_v = $this->getVendor();
+?>
+
+<?php switch ($this->getPart()): case 'header': ?>
+
+<!-- Start vendor panel  vendor panel -->
+<div class="panel panel-custom panel-vendor">
+    <?php if ($_v->getId()): ?>
+    <div class="panel-heading"><?php echo $this->__("Seller"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
+    <?php else: ?>
+    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?></div>
+    <?php endif ?>
+	
+	<!-- End head Thead -->
+	
+    <div class="panel-body">
+		<div class="table-summary-product">
+			<!-- Statr prodcurts  -->
+
+<?php break; case 'footer': ?>
+			<!-- End prodcurts  -->
+		</div>
+	</div>
+	
+	<!-- Start footer -->
+	<div class="panel-footer clearfix panel-vendor" data-vendor-id="<?php echo $_v->getVendorId();?>">
+		<div class="info_delivery col-xs-6" style="word-break: break-all;">
+			<div class="row">
+				<?php $_slogans = array();?>
+				<?php if($_v->getCartSloganOne()):?>
+					<?php $_slogans[] = $this->escapeHtml($_v->getCartSloganOne());?>
+				<?php endif;?>
+				<?php if($_v->getCartSloganTwo()):?>
+					<?php $_slogans[] = $this->escapeHtml($_v->getCartSloganTwo());?>
+				<?php endif;?>
+                <?php if($_slogans): ?>
+				<dl>
+					<?php foreach($_slogans as $_slogan):?>
+					<dd><?php echo $_slogan;?></dd>
+					<?php endforeach;?>
+				</dl>
+                <?php endif; ?>
+				
+			</div>
+		</div>
+		<div id="sumary_single_shop" class="col-xs-6">
+			<div class="row">
+				<dl>
+					<dd>
+						<span class="lb"><?php echo $this->__('Total')?>:</span> 
+						<span class="vendor_subtotal" data-price="<?php echo $this->getSubtotal();?>">
+							<?php echo Mage::helper('core')->formatPrice($this->getSubtotal(), true, false) ?>
+						</span>
+					</dd>
+					<dd>
+						<span class="lb"><?php echo $this->__("Shipping cost"); ?>:</span>
+						<span class="vendor_delivery" id="shipping_method_price_<?php echo $_v->getVendorId();?>"></span>
+					</dd>
+				</dl>
+			</div>
+		</div>
+    </div>
+   
+</div>
+<!-- End vendor panel -->
+
+
+
+<?php endswitch ?>
