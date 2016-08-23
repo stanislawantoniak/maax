@@ -767,7 +767,7 @@ body {
 .header_top {
 	height: 132px;
 	@include max-screen($screen-xs-max) {
-		height: 95px;
+		height: 87px;
 		border-bottom: 1px solid $colorAccentBlocksHeader;
 		&.headroom {
 			border-bottom: none;

@@ -6,11 +6,6 @@ $_helperUrl = Mage::helper('mpblog/url');
 <?php /** @var $this Magpleasure_Blog_Block_Layout */ ?>
 
 
-<div id="blog-mobile-menu">
-    <div class="wrapp-section bg-w visible-xs">
-        <h1><a href="<?php echo $_helperUrl->getUrl(); ?>"><?php echo $this->__("Blog"); ?></a></h1>
-    </div>
-</div>
 
 <article class="mobile <?php echo $this->getMobileLayoutCode(); ?> container-fluid">
     <?php if ($this->hasMobileLeftColumn()): ?>
