@@ -411,7 +411,7 @@
 "The information in this tab has been changed.","The information in this tab has been changed."
 "The notification can't be canceled.","The notification can't be canceled."
 "There are following posts founded for the search request '%s'","There are following posts founded for the search request '%s'"
-"There are no posts yet.","Nie ma żadnych postów."
+"There are no posts yet.","Nie znaleziono pasujących wpisów."
 "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form","The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form"
 "The uploaded file exceeds the upload_max_filesize directive in php.ini","The uploaded file exceeds the upload_max_filesize directive in php.ini"
 "The uploaded file was only partially uploaded","The uploaded file was only partially uploaded"
