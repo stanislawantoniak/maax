@@ -217,12 +217,12 @@ class ZolagoOs_Import_Model_Import_Product
     }
 
 
-    public function runImport()
+
+
+    protected function _getFileExtension()
     {
-        $this->_import();
+        return "xml";
     }
-
-
     /**
      * 
      */

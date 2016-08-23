@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Import product prices
+ * Import product stock
  */
-class ZolagoOs_Import_Model_Import_Price
+class ZolagoOs_Import_Model_Import_Stock
     extends ZolagoOs_Import_Model_Import
 {
     protected $_vendor;
 
     /**
-     * ZolagoOs_Import_Model_Import_Price constructor.
+     * ZolagoOs_Import_Model_Import_Stock constructor.
      */
     public function __construct()
     {
@@ -22,7 +22,7 @@ class ZolagoOs_Import_Model_Import_Price
      */
     protected function _getImportEntityType()
     {
-        return "price";
+        return "stock";
     }
 
     protected function _getFileExtension()
@@ -38,7 +38,7 @@ class ZolagoOs_Import_Model_Import_Price
      */
     public function _getFileName()
     {
-        return $this->getHelper()->getPriceFile();
+        return $this->getHelper()->getStockFile();
 
     }
 
@@ -64,20 +64,35 @@ class ZolagoOs_Import_Model_Import_Price
             $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
             return $this;
         }
+
+        //Get first active POS
+        $pos = Mage::getModel("zolagopos/pos")
+            ->getCollection()
+            ->addActiveFilter()
+            ->getFirstItem();
+        $posId = $pos->getId();
+
+        if (!$posId) {
+            $this->log("ACTIVE POS NOT FOUND", Zend_Log::ERR);
+            return $this;
+        }
+
+        $posExternalId = $pos->getExternalId();
+
+        if (!$posExternalId) {
+            $this->log("POS EXTERNAL ID CAN NOT BE UNDEFINED", Zend_Log::ERR);
+            return $this;
+        }
+
         try {
 
-            $priceBatch = [];
+            $stockBatch = [];
             $row = 1;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
                 while (($data = fgetcsv($fileContent, 100000, ";")) !== FALSE) {
-
                     if ($row > 1) {
-                        $priceBatch[$vendorId . "-" . $data[0]] = array(
-                            "A" => $data[1],
-                            "B" => $data[2],
-                            "C" => $data[3],
-                            "Z" => $data[4],
-                            "salePriceBefore" => $data[5]
+                        $stockBatch[$vendorId][$vendorId . "-" . $data[0]] = array(
+                            $posExternalId => $data[1]
                         );
                     }
                     $row++;
@@ -86,20 +101,19 @@ class ZolagoOs_Import_Model_Import_Price
                 fclose($fileContent);
             }
 
-
             /** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
             $restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
-            if (!empty($priceBatch)) {
+            if (!empty($stockBatch)) {
                 $numberQ = 20;
-                if (count($priceBatch) > $numberQ) {
-                    $priceBatchC = array_chunk($priceBatch, $numberQ);
-                    foreach ($priceBatchC as $priceBatchCItem) {
-                        $restApi::updatePricesConverter($priceBatchCItem);
+                if (count($stockBatch) > $numberQ) {
+                    $stockBatchC = array_chunk($stockBatch, $numberQ);
+                    foreach ($stockBatchC as $stockBatchCItem) {
+                        $restApi::updateStockConverter($stockBatchCItem);
 
                     }
-                    unset($priceBatchCItem);
+                    unset($stockBatchCItem);
                 } else {
-                    $restApi::updatePricesConverter($priceBatch);
+                    $restApi::updateStockConverter($stockBatch);
                 }
             }
             //$this->_moveProcessedFile();

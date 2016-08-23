@@ -13,6 +13,28 @@ abstract class ZolagoOs_Import_Model_Import
     const DIRECTORY = 'import';
 
     /**
+     * Import items from file
+     */
+    abstract protected function _import();
+
+    /**
+     * @return mixed (example: product, price, stock etc.)
+     */
+    abstract protected function _getImportEntityType();
+
+    /**
+     * @return mixed (xml, csv etc.)
+     */
+    abstract protected function _getFileExtension();
+
+    /**
+     * File name for _getPath()
+     *
+     * @return string
+     */
+    abstract function _getFileName();
+
+    /**
      * @return ZolagoOs_Import_Helper_Data
      */
     public function getHelper()
@@ -31,13 +53,10 @@ abstract class ZolagoOs_Import_Model_Import
         return $this->_externalId;
     }
 
-    /**
-     * Import items from file
-     */
-    abstract protected function _import();
-
-
-    abstract protected function _getImportEntityType();
+    public function runImport()
+    {
+        $this->_import();
+    }
 
     /**
      * Returns local path to import file
@@ -49,12 +68,34 @@ abstract class ZolagoOs_Import_Model_Import
         return $this->_getFileName();
     }
 
+
     /**
-     * File name for _getPath()
-     *
-     * @return string
+     * Move processed file to another directory
      */
-    abstract function _getFileName();
+    protected function _moveProcessedFile()
+    {
+        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+        $date = date('Y_m_d_H_i_s', $currentTimestamp);
+
+        $fileName = $this->_getPath();
+
+        $path = $this->getHelper()->getProcessedFilePlace()
+            . DS . $this->getVendorId()
+            . DS . $this->_getImportEntityType();
+
+        if (!file_exists($path)) {
+            mkdir($path, 0755, true);
+        }
+
+        $newfile = $path . DS . $date . "." . $this->_getFileExtension();
+
+
+        if (!copy($fileName, $newfile)) {
+            $this->log("Can not move file to processed directory", 2);
+        } else {
+            unlink($fileName);
+        }
+    }
 
     /**
      * @param $message
