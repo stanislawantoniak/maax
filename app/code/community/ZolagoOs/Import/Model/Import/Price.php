@@ -44,26 +44,9 @@ class ZolagoOs_Import_Model_Import_Price
 
     protected function _import()
     {
-
         $vendorId = $this->getVendorId();
-
-        if (empty($vendorId)) {
-            $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
-            return $this;
-        }
-
-        //1. Read file
         $fileName = $this->_getPath();
 
-        if (empty($fileName)) {
-            $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
-            return $this;
-        }
-
-        if (!file_exists($fileName)) {
-            $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
-            return $this;
-        }
         try {
 
             $priceBatch = [];

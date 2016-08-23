@@ -6,16 +6,6 @@
 class ZolagoOs_Import_Model_Import_Stock
     extends ZolagoOs_Import_Model_Import
 {
-    protected $_vendor;
-
-    /**
-     * ZolagoOs_Import_Model_Import_Stock constructor.
-     */
-    public function __construct()
-    {
-        $this->_vendor = $this->getExternalId();
-    }
-
 
     /**
      * Implement _getImportEntityType() method.
@@ -46,24 +36,8 @@ class ZolagoOs_Import_Model_Import_Stock
     {
 
         $vendorId = $this->getVendorId();
-
-        if (empty($vendorId)) {
-            $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
-            return $this;
-        }
-
-        //1. Read file
+        
         $fileName = $this->_getPath();
-
-        if (empty($fileName)) {
-            $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
-            return $this;
-        }
-
-        if (!file_exists($fileName)) {
-            $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
-            return $this;
-        }
 
         //Get first active POS
         $pos = Mage::getModel("zolagopos/pos")

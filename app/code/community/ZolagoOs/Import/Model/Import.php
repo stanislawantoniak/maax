@@ -12,6 +12,16 @@ abstract class ZolagoOs_Import_Model_Import
 
     const DIRECTORY = 'import';
 
+    protected $_vendor;
+
+    /**
+     * ZolagoOs_Import_Model_Import_Stock constructor.
+     */
+    public function __construct()
+    {
+        $this->_vendor = $this->getExternalId();
+    }
+
     /**
      * Import items from file
      */
@@ -55,6 +65,25 @@ abstract class ZolagoOs_Import_Model_Import
 
     public function runImport()
     {
+        //1. Check vendor
+        $vendorId = $this->getVendorId();
+        if (empty($vendorId)) {
+            $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
+            return $this;
+        }
+        //2. Read file
+        $fileName = $this->_getPath();
+
+        if (empty($fileName)) {
+            $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
+            return $this;
+        }
+
+        if (!file_exists($fileName)) {
+            $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
+            return $this;
+        }
+
         $this->_import();
     }
 
