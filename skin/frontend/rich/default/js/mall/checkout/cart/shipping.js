@@ -7,7 +7,7 @@
             var self = this;
 
             for (var e in Mall.Cart.Map.deliverySet) {
-                if (!sessionStorage.getItem(e)) {
+                if (jQuery(".shipping-method-selector").find("input[data-carrier-delivery-type='" + e + "']")[0] != undefined && !sessionStorage.getItem(e)) {
                     jQuery.ajax({
                         url: Mall.Cart.Map.deliverySet[e].urlData,
                         type: "POST",
