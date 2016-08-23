@@ -77,7 +77,7 @@ class Itoris_GroupedProductPromotions_Block_Checkout_Cart extends Itoris_Grouped
                 }
             }
         }*/
-        for ($i = 0; $i < count($configRule); $i++) {
+        /*for ($i = 0; $i < count($configRule); $i++) {
             for ($k = 0; $k < count($configRule[$i]['product_config']); $k++) {
                 for ($m = 0; $m < count($configRule[$i]['product_config']); $m++) {
                     if ((int)$configRule[$i]['product_config'][$k]['position'] < (int)$configRule[$i]['product_config'][$m]['position']) {
@@ -87,7 +87,20 @@ class Itoris_GroupedProductPromotions_Block_Checkout_Cart extends Itoris_Grouped
                     }
                 }
             }
+        }*/
+
+        foreach ($configRule as $config) {
+            for ($k = 0; $k < count($config['product_config']); $k++) {
+                for ($m = 0; $m < count($config['product_config']); $m++) {
+                    if ((int)$config['product_config'][$k]['position'] < (int)$config['product_config'][$m]['position']) {
+                        $buffer = $config['product_config'][$k];
+                        $config['product_config'][$k] = $config['product_config'][$m];
+                        $config['product_config'][$m] = $buffer;
+                    }
+                }
+            }
         }
+        
         return $configRule;
     }
 
