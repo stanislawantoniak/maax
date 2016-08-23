@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Itoris_GroupedProductPromotions>
+			<codePool>local</codePool>
+			<active>true</active>
+			<depends>
+				<Mage_Customer/>
+			</depends>
+		</Itoris_GroupedProductPromotions>
+	</modules>
+</config>

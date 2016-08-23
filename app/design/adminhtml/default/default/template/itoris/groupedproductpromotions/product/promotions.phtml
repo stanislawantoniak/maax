@@ -1,0 +1,164 @@
+<?php 
+/**
+ * ITORIS
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the ITORIS's Magento Extensions License Agreement
+ * which is available through the world-wide-web at this URL:
+ * http://www.itoris.com/magento-extensions-license.html
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to sales@itoris.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade the extensions to newer
+ * versions in the future. If you wish to customize the extension for your
+ * needs please refer to the license agreement or contact sales@itoris.com for more information.
+ *
+ * @category   ITORIS
+ * @package    ITORIS_GROUPEDPRODUCTPROMOTIONS
+ * @copyright  Copyright (c) 2013 ITORIS INC. (http://www.itoris.com)
+ * @license    http://www.itoris.com/magento-extensions-license.html  Commercial License
+ */
+
+ 
+?>
+<?php /* @var $this Itoris_GroupedProductPromotions_Block_Admin_Product_Edit_Tab_Promotions*/?>
+<?php if ($this->getCurrentProduct()->getTypeId() == 'grouped'): ?>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') ?>itoris/groupedproductpromotions/admin/promotions.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getDesign()->getSkinUrl('itoris/groupedproductpromotions/css/promotions.css', array()) ?>"/>
+<div id="itoris_groupedproductpromotions">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4><?php echo $this->__('Promotion Rules') ?></h4>
+            <button class="itoris_groupedproductpromotions_button_create_rule scalable add" type="button" title="Create">
+					<span><span><span>
+						<?php echo $this->__('Create New Rule') ?>
+					</span> </span> </span>
+            </button>
+        </div>
+    </div>
+<?php $templates = array();?>
+<?php
+    $userGroups = Mage::getResourceModel('customer/group_collection')->toOptionArray();
+    array_unshift($userGroups, array(
+        'label' => $this->__('All Groups'),
+        'value' => '',
+    ));
+?>
+<div class="itoris_groupedproductpromotions_content" style="display: none;">
+</div>
+    <?php $templates['set_rules'] = '
+        <div class="itoris_groupedproductpromotions_rule">
+        <div class="store_box">
+            <input class ="itoris_groupedpromotions_store" value="1" type="checkbox" name="itoris_groupedproductpromotions_rule[#{rule_id}][use_default]" #{use_default_value}/>
+		    <label for="itoris_groupedpromotions_store" class="normal">'. $this->__('Use Default Value') .'</label>
+		</div>
+        <input type="hidden" name="itoris_groupedproductpromotions_rule[#{rule_id}][rule_id_db]" value="#{rule_id_db}">
+        <input type="hidden" name="itoris_groupedproductpromotions_rule[#{rule_id}][rule_id]" value="#{rule_id}">
+        <input type="hidden" name="itoris_groupedproductpromotions_rule[#{rule_id}][parent_id]" value="#{parent_id}">
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <th class="title">' .  $this->__('Title') . ' <span class="required">*</span></th>
+                        <th class="position">' .  $this->__('Position') . '</th>
+                        <th class="status">' . $this->__('Status') . '</th>
+                        <th class="action_from">' .  $this->__('Date From') . '</th>
+                        <th class="action_to">' .  $this->__('Date To') . '</th>
+                        <th class="a-right">
+                            <button class="itoris_groupedproductpromotions_button_delete scalable delete" type="button" title="Delete">
+                                <span><span><span>
+                                    ' .  $this->__('Delete Rule') . '
+                                </span> </span> </span>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" style="width: 250px;" name="itoris_groupedproductpromotions_rule[#{rule_id}][title]" value="#{title}" class="required-entry input-text required-entry"></td>
+                        <td><input type="text" style="width: 30px;" name="itoris_groupedproductpromotions_rule[#{rule_id}][position]" value="#{position}"></td>
+                        <td>
+                            <select class="itoris_groupedproductpromotions_status" name="itoris_groupedproductpromotions_rule[#{rule_id}][status]" style="width: 115px; height: 20px;">
+                                <option value="1">' .  $this->__('Active') . '</option>
+                                <option value="0">' .  $this->__('Inactive') . '</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="itoris_groupedproductpromotions_rule[#{rule_id}][active_from]" style="width: 115px" id="itoris_groupedproductpromotions_active_from_#{rule_id}" class="itoris_groupedproductpromotions_active_from">
+                            <img class="date-trig" id="icon_active_from_#{rule_id}" src="' .  Mage::getBaseUrl('skin') . 'adminhtml/default/default/images/grid-cal.gif" />
+                        </td>
+                        <td>
+                            <input type="text" name="itoris_groupedproductpromotions_rule[#{rule_id}][active_to]" style="width: 115px" id="itoris_groupedproductpromotions_active_to_#{rule_id}" class="itoris_groupedproductpromotions_active_to">
+                            <img class="date-trig" id="icon_active_to_#{rule_id}" src="' .  Mage::getBaseUrl('skin') . 'adminhtml/default/default/images/grid-cal.gif" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="itoris_groupedproductpromotions_rule_hidden_box"><input type="hidden" class="input-text required-entry itoris_groupedproductpromotions_rule_hidden"></div>
+            <table class="itoris_groupedproductpromotions_associated_product">
+                <tr>
+                    <th colspan="6">
+                        ' . $this->__('Price calculation method') . '
+                        <select class="itoris_grouped_promotions_price_method" name="itoris_groupedproductpromotions_rule[#{rule_id}][price_method]" class="select">
+                            <option value="0">' . $this->__('Manual discounts for associated products') . '</option>
+                            <option value="1">' . $this->__('Discount for the Entire Promoset') . '</option>
+                            <option value="2">' . $this->__('Fixed Price for the Entire Promoset') . '</option>
+                        </select>
+                        <input type="text" name="itoris_groupedproductpromotions_rule[#{rule_id}][fixed_price]" value="#{fixed_price}" class="itoris_grouped_fixed_price_method" style="display: none; padding-top: 4px;">
+                        <input type="text" name="itoris_groupedproductpromotions_rule[#{rule_id}][discount_promoset]" value="#{discount_promoset}" class="itoris_grouped_discount_method" style="display: none; padding-top: 4px;">
+                        <select name="itoris_groupedproductpromotions_rule[#{rule_id}][code]" class="select itoris_grouped_discount_method" style="display: none; padding-top: 4px;">
+                            <option value="0">' . $this->__('Fixed') . '</option>
+                            <option value="1">' . $this->__('Percent') . '</option>
+                        </select>
+                    </th>
+                </tr>
+                <tr class="hat">
+                    <th></th>
+                    <th class="in_set">' . $this->__('In Set:') . '</th>
+                    <th class="qty">' . $this->__('QTY:') . '</th>
+                    <th class="discount">' . $this->__('Discount:') . '</th>
+                    <th class="discount" style="width: 70px"></th>
+                    <th class="show_promoset" style="width: 90px">' . $this->__('Show promoset on this product') . '</th>
+                    <th class="groups">' . $this->__('Customer Groups:') . '</th>
+                </tr>';
+                $associatedProducts = $this->getAssociatedProducts();
+                    $templates['sub_product'] = '
+                    <input type="hidden" name="itoris_groupedproductpromotions_product[#{rule_id}][#{subProductId}][product_rule_id_db]" value="#{product_rule_id_db}">
+                        <th><span>#{subProductName} </span><span class="required">*</span></th>
+                        <td style="text-align: center;"><input type="checkbox" value="1" #{checked_in_set}class="itoris_groupedproductpromotions_product_checkbox" name="itoris_groupedproductpromotions_product[#{rule_id}][#{subProductId}][in_set]"></td>
+                        <td><input type="text" value="#{qty}" disabled="disabled" class="itoris_groupedproductpromotions_product_qty validate-digits validate-digits-range digits-range-1-10000000" name="itoris_groupedproductpromotions_product[#{rule_id}][#{subProductId}][qty]"></td>
+                        <td><input type="text" value="#{discount}" disabled="disabled" class="itoris_groupedproductpromotions_product_discount" name="itoris_groupedproductpromotions_product[#{rule_id}][#{subProductId}][discount]"></td>
+                        <td>
+                            <select style="height: 21px; width: 65px;" disabled="disabled" class="itoris_groupedproductpromotions_product_type" name="itoris_groupedproductpromotions_product[#{rule_id}][#{subProductId}][type]">
+                                <option value="0">' . $this->__('Fixed') . '</option>
+                                <option value="1">' . $this->__('Percent') . '</option>
+                            </select>
+                        </td>
+                        <td style="text-align: center;"><input type="checkbox" disabled="disabled" value="1" #{checked_show_promoset} class="itoris_groupedproductpromotions_product_show_promoset" name="itoris_groupedproductpromotions_product[#{rule_id}][#{subProductId}][show_promoset]"></td>
+                    ';
+            $templates['set_rules'] .= '</table>
+            <select  id="customer_groups" class="itoris_groupedproductpromotions_group select multiselect" name="itoris_groupedproductpromotions_rule[#{rule_id}][group][]" multiple="multiple" size="10" style="width: 280px; height: 128px">';
+    foreach($userGroups as $group) {
+        if ($group['value']== '') {
+            $templates['set_rules'] .= '<option selected="selected" value="' . $group['value'] . '">' .  $group['label'] . '</option>';
+        } else {
+            $templates['set_rules'] .= '<option value="' . $group['value'] . '">' . $group['label'] . '</option>';
+        }
+    }
+    $templates['set_rules'] .= '</select>
+            <div class="note note_default">' . $this->__('Use the following code to insert the promoset into CMS or static block: {{block type="itoris_groupedproductpromotions/promotions" rule_id="%s"}}', '#{rule_id}'). '</div>
+            <div class="note note_for_store" style="display: none">' . $this->__('Use the following code to insert the promoset into CMS or static block: {{block type="itoris_groupedproductpromotions/promotions" rule_id="%s"}}', '#{parent_id}'). '</div>
+        </div>
+    </div>';
+?>
+<?php
+$dateFormat = Mage::app()->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+$checkStore = (int)Mage::app()->getRequest()->getParam('store');
+?>
+<script type="text/javascript">
+    var itorisGroupedProductPromotions = new Itoris.GroupedProductPromotions(<?php echo Zend_Json::encode($templates) ?>, '<?php echo $dateFormat ?>', '<?php echo $this->getCurrentProduct()->getId()?>', <?php echo Zend_Json::encode($this->getRulesForLoad()) ?>, <?php echo Zend_Json::encode($this->getSubProductForLoad()) ?>, <?php echo Zend_Json::encode($this->getIdSubProducts()) ?>, <?php echo $this->lastRuleIdFromDb() ? $this->lastRuleIdFromDb() : 0; ?>, <?php echo $checkStore; ?>);
+</script>
+<?php endif; ?>

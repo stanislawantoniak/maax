@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<layout>
+	<adminhtml_groupedproductpromotions_configuration_index>
+		<update handle="editor"/>
+		<reference name="left">
+			<block type="adminhtml/system_config_switcher" name="store_switcher" template="itoris/groupedproductpromotions/switcher.phtml"/>
+		</reference>
+		<reference name="content">
+			<block type="itoris_groupedproductpromotions/admin_settings_edit" name="setting_edit" />
+		</reference>
+		<reference name="head">
+			<action method="addJs">
+				<file>itoris/groupedproductpromotions/admin/helper.js</file>
+			</action>
+		</reference>
+	</adminhtml_groupedproductpromotions_configuration_index>
+    <adminhtml_catalog_product_edit>
+        <reference name="product_tabs">
+            <action method="addTab">
+                <name>groupedproductpromotions</name>
+                <block>itoris_groupedproductpromotions/admin_product_edit_tab_promotions</block>
+            </action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+</layout>
