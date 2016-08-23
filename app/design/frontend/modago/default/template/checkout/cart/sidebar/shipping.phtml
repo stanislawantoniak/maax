@@ -168,6 +168,10 @@ $grandTotal = $totals["grand_total"]->getValue(); //Suma
             $formattedCost = '';
             if (isset($cost[$method['code']])) {
                 $costSum = array_sum($cost[$method['code']]);
+//                $extraCharge = (int)Mage::getStoreConfig('carriers/'.$method["delivery_type"].'/cod_extra_charge');
+//                if($extraCharge && $checkoutSession->getPayment()['method'] == 'cashondelivery'){
+//                    $costSum = $costSum + $extraCharge;
+//                }
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
             $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($method["delivery_type"]);

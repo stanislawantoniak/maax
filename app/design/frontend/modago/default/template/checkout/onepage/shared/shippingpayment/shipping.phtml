@@ -23,6 +23,14 @@ foreach($selectedShipping["methods"] as $vid => $methodSelected){
 }
 
 $deliveryPoint = $this->getDeliveryPointCheckout();
+
+//$deliveryType = '';
+//foreach($methods as $method){
+//    if($method['code'] == $sessionShippingMethod){
+//        $deliveryType = $method["delivery_type"];
+//    }
+//}
+//$extraCharge = (int)Mage::getStoreConfig('carriers/'.$deliveryType.'/cod_extra_charge');
 ?>
 
 
@@ -34,6 +42,7 @@ $deliveryPoint = $this->getDeliveryPointCheckout();
 		(function(){
 			Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
 			Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
+			<?php /*Mall.reg.set("extra_charge", <?php echo Mage::helper("core")->jsonEncode($extraCharge); ?>);*/ ?>
 		})();
     </script>
     <div class="shipping-collect"></div>
