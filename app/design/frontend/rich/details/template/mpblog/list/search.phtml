@@ -27,7 +27,7 @@
     </form>
     <?php if ($this->hasSuggestion()): ?>
     <div class="advice">
-        <?php echo $this->__("Did you mean "); ?>
+        <?php echo $this->__("Did you mean?"); ?>
         <em>
         <?php foreach ($this->getWords() as $word): ?>
             <?php /** @var Magpleasure_Searchcore_Model_Suggestion_Word $word */ ?>
