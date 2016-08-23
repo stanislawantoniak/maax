@@ -105,9 +105,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             foreach ($order_items as $i => $order_item) {
                 if (!$order_item->is_delivery_item) {
                     $products[$i]['product_sizecode'] = $order_item->item_sku;
-                    $products[$i]['rebate'] = $order_item->item_discount;
+//                    $products[$i]['rebate'] = $order_item->item_discount;
                     $products[$i]['quantity'] = $order_item->item_qty;
-                    $products[$i]['price'] = $order_item->item_value_before_discount / $order_item->item_qty;
+                    $products[$i]['price'] = $order_item->item_value_after_discount / $order_item->item_qty;
 
                     $products[$i]['stock_id'] = $param->pos_id;
                 } else {
