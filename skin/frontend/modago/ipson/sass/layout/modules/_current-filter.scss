@@ -63,6 +63,7 @@
           min-width: initial;
         }
 		&.visible-xs {
+            padding: 6px 15px 4px;
 			@media (min-width:768px) and (max-width: 768px) {
               display: block !important;
             }
@@ -108,7 +109,7 @@
     h1 {
       @media (max-width: $screen-sm-to-smmd-max) {
         padding-bottom: 0px;
-        padding-top:12px;
+        padding-top:18px;
         width: 84%;
       }
     }
@@ -134,4 +135,7 @@
       }
     }
   }
+}
+#active-filters-wrapper {
+  margin-top: 15px;
 }
