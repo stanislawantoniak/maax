@@ -7,19 +7,7 @@
 
 $_helperUrl = Mage::helper('mpblog/url');
 ?>
-<div id="blog-mobile-menu">
-    <div class="wrapp-section bg-w visible-xs">
-        <h1>
-            <a href="<?php echo $_helperUrl->getUrl(); ?>">
-                <?php if($this->getIsCategory()): ?>
-                    <?php echo $this->getCategory()->getName(); ?>
-                <?php else: ?>
-                    <?php echo $this->__("Blog");; ?>
-                <?php endif; ?>
-            </a>
-        </h1>
-    </div>
-</div>
+<div id="blog-mobile-menu-title" data-blog-mobile-menu-title="<?php if($this->getIsCategory()): ?><?php echo $this->getCategory()->getName(); ?><?php endif; ?>"></div>
 
 <div class="mpblog-container list">
     <div class="mp-blog-head fix-me">
