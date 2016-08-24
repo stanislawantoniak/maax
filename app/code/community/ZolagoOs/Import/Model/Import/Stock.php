@@ -111,7 +111,7 @@ class ZolagoOs_Import_Model_Import_Stock
                 }
             }
             $stockBatchCount = count($stockBatch);
-            $this->log("{$stockBatchCount} SKU(S) SENT TO PROCESS", Zend_Log::INFO);
+            $this->log("SKU(S) SENT TO PROCESS: {$stockBatchCount}", Zend_Log::INFO);
             
             $this->_moveProcessedFile();
 
