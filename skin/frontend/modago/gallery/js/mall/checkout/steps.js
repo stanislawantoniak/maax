@@ -2095,7 +2095,6 @@
 					extraCharge = 0;
 
 				extraCharge = deliverypayment.getExtraCharge();
-                //console.log(selectedMethod);
 			
 				discountTotal = discountObject.length ? 
 					parseFloat(discountObject.data('price')) * -1 : 0;
@@ -2112,17 +2111,17 @@
 					}
 					subTotal += vendorSubtotal;
 
-//					if(extraCharge){
-//                        vendorShipping = vendorShipping + extraCharge;
-//                    }
+					if(extraCharge){
+                        vendorShipping = vendorShipping + extraCharge;
+                    }
 					
 					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
 					
 				});
 
-//				if(extraCharge){
-//				    shippingTotal = shippingTotal + extraCharge;
-//				}
+				if(extraCharge){
+				    shippingTotal = shippingTotal + extraCharge;
+				}
 				
 				this.content.find(".total_shipping").html(Mall.currency(shippingTotal));
 				this.content.find(".total_value").html(

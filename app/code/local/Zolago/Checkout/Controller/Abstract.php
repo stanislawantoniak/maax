@@ -232,7 +232,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$onepage->saveAgreements($agreementData);
 		}
 
-		
+
 		/**
 		billing_address_id:1
 		 */
@@ -261,13 +261,13 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$billingResponse = $onepage->saveBilling($billing, $billingAddressId);
 			if(isset($billingResponse['error']) && $billingResponse['error']==1){
 			    if (!is_array($billingResponse['message'])) {
-			        $billingResponse['message'] = array($billingResponse['message']);    
+			        $billingResponse['message'] = array($billingResponse['message']);
 			    }
 				throw new Mage_Core_Exception(implode("\n", $billingResponse['message']));
 			}
 		}
-		
-		
+
+
 		/**
 		shipping_address_id:1
 		 */
@@ -318,11 +318,11 @@ abstract class Zolago_Checkout_Controller_Abstract
 				throw new Mage_Core_Exception(implode("\n", $shippingResponse['message']));
 			}
 		}
-		
+
 		/**
 		shipping_method[4]:udtiership_1
 		 */
-		
+
 		if($shippingMethod = $request->getParam("shipping_method")){
 			$shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
 			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
@@ -368,7 +368,19 @@ abstract class Zolago_Checkout_Controller_Abstract
 			setTotalsCollectedFlag(false)->
 			collectTotals()->
 			save();
-		
+
+		//adding extra charge
+		//todo select carrier
+		$extraCharge = (int)Mage::getStoreConfig('carriers/zolagopp/cod_extra_charge');
+		if($extraCharge && $payment['method'] == 'cashondelivery'){
+			$costVal = $address->getShippingInclTax();
+			$baseCostVal = $address->getBaseShippingInclTax();
+			$costVal = $costVal + $extraCharge;
+			$baseCostVal = $baseCostVal + $extraCharge;
+			$address->setShippingInclTax($costVal);
+			$address->setBaseShippingInclTax($baseCostVal);
+			$address->save();
+		}
 	}
 
 
