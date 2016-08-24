@@ -1,7 +1,7 @@
 <?php /** @var $this Itoris_GroupedProductPromotions_Block_Product_View */ ?>
 <?php
 $rules = $this->getRules()[0];
-$img = Mage::helper('catalog/image')->init(Mage::getModel('catalog/product')->load($rules['product_id']), 'image')->resize(70, 70);
+$img = Mage::helper('catalog/image')->init(Mage::getModel('catalog/product')->load($rules['product_id']), 'image')->resize(80, 80);
 $sum = 0.0;
 // merge
 $sumWithDiscount = $rules['price_method'] == 2 ? (int) $rules['fixed_price'] : 0.0;
@@ -13,24 +13,26 @@ function fp ($i) {
 }
 ?>
 <?php if ($this->getDataHelper()->isRegisteredFrontend()) :?>
-<div>
-    <h4><?php echo $this->__('W zestawie taniej:'); ?></h4>
-    <figure>
-        <img src="<?php echo $img; ?>" alt="<?php echo $rules['title']; ?>">
-        <figcaption><?php echo $rules['title']; ?></figcaption>
-    </figure>
+<div class="bundle-product-box">
+    <h5><?php echo $this->__('W zestawie taniej:'); ?></h5>
     <div>
-        <?php foreach ($rules['product_config'] as $prodRule):
-            $_product = Mage::getModel('catalog/product')->load($prodRule['product_id']);
-            $sum += $prodRule['qty'] * $_product->getPrice();
-            if (!$rules['price_method']) $sumWithDiscount += $prodRule['qty'] * ($_product->getPrice() - $prodRule['discount'] * ($prodRule['type'] ? $_product->getPrice() * 0.01 : 1));
-            ?>
-        <p><?php if ($prodRule['qty'] > 1) echo $prodRule['qty'].'x '; echo $_product->getName(); ?></p><i><?php fp($prodRule['qty'] * $_product->getPrice()); ?></i>
-        <?php endforeach; ?>
-        <i class="sum"><?php fp($sum); ?></i>
-    </div>
-    <div>
-        <p><?php echo $this->__('Oszczędzasz'); ?> <?php fp($sum - $sumWithDiscount); ?>!</p><b><?php fp($sumWithDiscount); ?></b>
+        <figure>
+            <img src="<?php echo $img; ?>" alt="<?php echo $rules['title']; ?>">
+            <figcaption><?php echo $rules['title']; ?></figcaption>
+        </figure>
+        <div>
+            <?php foreach ($rules['product_config'] as $prodRule):
+                $_product = Mage::getModel('catalog/product')->load($prodRule['product_id']);
+                $sum += $prodRule['qty'] * $_product->getPrice();
+                if (!$rules['price_method']) $sumWithDiscount += $prodRule['qty'] * ($_product->getPrice() - $prodRule['discount'] * ($prodRule['type'] ? $_product->getPrice() * 0.01 : 1));
+                ?>
+                <p><?php if ($prodRule['qty'] > 1) echo $prodRule['qty'].'x '; echo $_product->getName(); ?></p><?php fp($prodRule['qty'] * $_product->getPrice()); ?>
+            <?php endforeach; ?>
+            <i class="sum"><?php fp($sum); ?></i>
+        </div>
+        <div class="summary">
+            <p><?php echo $this->__('Oszczędzasz'); ?> <?php fp($sum - $sumWithDiscount); ?>!</p><?php fp($sumWithDiscount); ?>
+        </div>
     </div>
 </div>
 <?php endif; ?>
