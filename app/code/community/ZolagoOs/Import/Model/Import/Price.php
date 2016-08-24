@@ -71,10 +71,10 @@ class ZolagoOs_Import_Model_Import_Price
                     $sku = $data[0];
 
                     if(isset($priceBatch[$sku])){
-                        $duplicateSkuScan[$sku][] = "LINE#{$row}: SKU {$sku}";
+                        $duplicateSkuScan[$row] = "LINE#{$row}: SKU {$sku}";
                     }
                     if (count($data) !== 6) {
-                        $wrongLineFormatScan[$row] = "LINE# {$row} (SKU: {$sku})";
+                        $wrongLineFormatScan[$row] = "LINE#{$row} (SKU: {$sku})";
                         continue;
                     }
                     if ((float)$data[1] > 0) {
@@ -143,14 +143,16 @@ class ZolagoOs_Import_Model_Import_Price
 
             //3. validate wrong line format
             if (!empty($wrongLineFormatScan)) {
-                $this->log("INVALID LINE FORMAT ANALYSIS RESULT: " . implode(" ;", $wrongLineFormatScan), Zend_Log::ERR);
+                $wrongLineFormatScanCount = count($wrongLineFormatScan);
+                $this->log("INVALID LINE FORMAT ANALYSIS RESULT: Wrong lines - {$wrongLineFormatScanCount}: " . implode(" ;", $wrongLineFormatScan), Zend_Log::ERR);
             }
+
             //4. validate duplicated SKU(S)
             if (!empty($duplicateSkuScan)) {
                 $this->log("DUPLICATED SKU(s) ANALYSIS RESULT: " . implode(" ;", $duplicateSkuScan), Zend_Log::ERR);
             }
             //--validate
-
+            
             /** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
             $restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
 

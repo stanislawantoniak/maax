@@ -76,6 +76,7 @@ class ZolagoOs_Import_Model_Import_Stock
 
             $stockBatch = [];
             $duplicateSkuScan = [];
+            $wrongLineFormatScan = [];
             $row = 0;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
                 while (($data = fgetcsv($fileContent, null, $this->_delimiter, $this->_enclosure)) !== FALSE) {
@@ -90,10 +91,10 @@ class ZolagoOs_Import_Model_Import_Stock
                     $sku = $data[0];
 
                     if(isset($stockBatch[$sku])){
-                        $duplicateSkuScan[$sku][] = "LINE#{$row}: SKU {$sku}";
+                        $duplicateSkuScan[$row] = "LINE#{$row}: SKU {$sku}";
                     }
                     if (count($data) !== 2) {
-                        $wrongLineFormatScan[$row] = "LINE# {$row} (SKU: {$sku})";
+                        $wrongLineFormatScan[$row] = "LINE#{$row} (SKU: {$sku})";
                         continue;
                     }
                     //$sku = $vendorId . "-" . $data[0];
@@ -106,6 +107,7 @@ class ZolagoOs_Import_Model_Import_Stock
                 }
                 fclose($fileContent);
             }
+
 
             if (empty($stockBatch)) {
                 $this->log("NO VALID DATA FOUND IN THE FILE", Zend_Log::ERR);
@@ -121,12 +123,22 @@ class ZolagoOs_Import_Model_Import_Stock
                 $this->log("FILE CONTAINS {$notValidSkusCount} INVALID SKU(S): {$notValidSkusLine}", Zend_Log::ERR);
                 // Remove invalid skus from batch
                 foreach ($notValidSkus as $sku => $msg) {
-                    unset($stockBatch[$sku]);
+                    unset($stockBatch[$vendorId][$sku]);
                 }
+            }
+
+            if (empty($stockBatch)) {
+                $this->log("NO VALID DATA FOUND IN THE FILE", Zend_Log::ERR);
+                return $this;
             }
             //2. validate duplicated SKU(S)
             if (!empty($duplicateSkuScan)) {
                 $this->log("DUPLICATED SKU(s) ANALYSIS RESULT: " . implode(" ;", $duplicateSkuScan), Zend_Log::ERR);
+            }
+            //3. validate wrong line format
+            if (!empty($wrongLineFormatScan)) {
+                $wrongLineFormatScanCount = count($wrongLineFormatScan);
+                $this->log("INVALID LINE FORMAT ANALYSIS RESULT: Wrong lines - {$wrongLineFormatScanCount}: " . implode(" ;", $wrongLineFormatScan), Zend_Log::ERR);
             }
             //--validate
 
@@ -144,7 +156,8 @@ class ZolagoOs_Import_Model_Import_Stock
                     $restApi::updateStockConverter($stockBatch);
                 }
             }
-            $stockBatchCount = count($stockBatch);
+            $stockBatchCount = count($stockBatch[$vendorId]);
+            
             $this->log("SKU(S) SENT TO PROCESS: {$stockBatchCount}", Zend_Log::INFO);
 
             $this->_moveProcessedFile();
