@@ -71,7 +71,7 @@ class Zolago_Customer_Model_Customer extends Mage_Customer_Model_Customer
 		if (strlen($password) && !Zend_Validate::is($password, 'StringLength', array(6))) {
 			$errors[] = Mage::helper('customer')->__('The minimum password length is %s', 6);
 		}
-		$confirmation = $this->getConfirmation();
+		$confirmation = empty($this->getConfirmation())? $this->getPasswordConfirmation(): $this->getConfirmation();
 		if ($password != $confirmation) {
 			$errors[] = Mage::helper('customer')->__('Please make sure your passwords match.');
 		}
