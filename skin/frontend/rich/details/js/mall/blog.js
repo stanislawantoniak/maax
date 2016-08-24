@@ -23,7 +23,7 @@
         },
         setBlogTitle: function () {
             var blogMobileMenuTitle = jQuery("#blog-mobile-menu-title").attr("data-blog-mobile-menu-title");
-            var title = blogMobileMenuTitle ? blogMobileMenuTitle : "Poradniki";
+            var title = blogMobileMenuTitle ? blogMobileMenuTitle : Mall.translate.__("Blog");
 
             jQuery("#blog-mobile-menu h1 a").text(title);
         }
