@@ -7,7 +7,7 @@
             var self = this;
 
             for (var e in Mall.Cart.Map.deliverySet) {
-                if (!sessionStorage.getItem(e)) {
+                if (jQuery(".shipping-method-selector").find("input[data-carrier-delivery-type='" + e + "']")[0] != undefined && !sessionStorage.getItem(e)) {
                     jQuery.ajax({
                         url: Mall.Cart.Map.deliverySet[e].urlData,
                         type: "POST",
@@ -16,7 +16,7 @@
 
                             Mall.Cart.Map.deliverySet[this.e].mapPoints =
                                 JSON.parse(sessionStorage.getItem(this.e)).map_points;
-                         }).bind({e: e})
+                        }).bind({e: e})
                     });
                 } else {
                     Mall.Cart.Map.deliverySet[e].mapPoints =
@@ -53,12 +53,6 @@
                         jQuery("[name=shipping_point_code]").attr("data-id", "");
                         jQuery("[name=shipping_point_code]").attr("data-town", "");
                     }
-
-                    jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] [name=shipping_select_city]").select2({
-                        placeholder: Mall.translate.__("shipping_map_select_city"),
-                        dropdownParent: jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']"),
-                        language: Mall.reg.get("localeCode")
-                    });
 
                     self.implementMapSelections();
 
@@ -160,8 +154,8 @@
             shippingMethodSelectedContainer.find('[data-item="additional"]').html(selectedMethodData["additional"]);
 
 
-            jQuery(".shipping-method-selector").hide();
-            jQuery(".shipping-method-selected").show();
+            jQuery(".shipping-method-selector").slideUp();
+            jQuery(".shipping-method-selected").slideDown();
         },
         getVendors: function () {
             return Mall.reg.get("vendors");
@@ -889,6 +883,10 @@
             ghinpost: {
                 mapDelivery: "map_delivery",
                 urlData: "/shipping/inpost/getPopulateMapData"
+            },
+            zolagopwr: {
+                mapDelivery: "pwr_map_delivery",
+                urlData: "/shipping/pwr/getPopulateMapData"
             }
         }
     }
