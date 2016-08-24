@@ -888,11 +888,11 @@
         deliverySet: {
             ghinpost: {
                 mapDelivery: "map_delivery",
-                urlData: "/modago/inpost/getPopulateMapData"
+                urlData: "/shipping/inpost/getPopulateMapData"
             },
             zolagopwr: {
                 mapDelivery: "pwr_map_delivery",
-                urlData: "/modago/pwr/getPopulateMapData"
+                urlData: "/shipping/pwr/getPopulateMapData"
             }
         }
     }
