@@ -23,17 +23,18 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
         $params->courier = $courier;
         $params->dateShipped = $deliveryDate;
         $params->shipmentTrackingNumber = $trackNumber;
-        $response = $connector->setOrderShipment($params);                        
-        
+        $response = $connector->setOrderShipment($params); 
+        $helper = $this->getHelper();
         if (empty($response->status)) {
             if (!empty($response->message)) {
-                $this->log($this->getHelper()->__('Błąd API : %s',$response->message));
+                $this->log($helper->__('Błąd API : %s',$response->message));
+                $helper->fileLog($helper->__('Błąd API: %s [zamówienie %s, vendor %s, courier %s]',$response->message,$id,$this->getVendor()->getId(),$courier));
             } else {
-                $this->log($this->getHelper()->__('Błąd API: %s',$this->getHelper()->__('Błędna odpowiedź z API')));                
+                $this->log($helper->__('Błąd API: %s',$helper->__('Błędna odpowiedź z API')));                
             }
             return false;
         } else {
-            $this->log($this->getHelper()->__('Parametry dostawy dla zamówienia %s zapisane poprawnie',$id));                            
+            $this->log($helper->__('Parametry dostawy dla zamówienia %s zapisane poprawnie',$id));                            
             return true;
         } 
     }
@@ -75,6 +76,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
              array())
              ->where('ship.entity_id IS NULL')
              ->where('main_table.external_order_id IS NOT NULL')
+             ->where('main_table.udropship_vendor = ?',$this->getVendor()->getId())
              ->where('main_table.udropship_status not in (?)',
                     $status::getFinishStatuses()
                 );

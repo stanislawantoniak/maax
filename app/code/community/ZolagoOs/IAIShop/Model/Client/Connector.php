@@ -192,7 +192,6 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         $request[$action] = array();
         $request[$action]['params'] = array();
         $request[$action]['params']['payment_number'] = $paymentId;
-        Mage::log($request);
         return $this->doRequest("payments", $action, $request);
     }
     /**
