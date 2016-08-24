@@ -54,7 +54,7 @@ class ZolagoOs_Import_Model_Import_Stock
         $posExternalId = $pos->getExternalId();
 
         if (!$posExternalId) {
-            $this->log("POS EXTERNAL ID CAN NOT BE UNDEFINED", Zend_Log::ERR);
+            $this->log("POS EXTERNAL ID CAN NOT BE UNDEFINED (POS_ID: {$posId})", Zend_Log::ERR);
             return $this;
         }
 
