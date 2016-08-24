@@ -88,9 +88,9 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
         // "prepaid" - przedplata,
         // "tradecredit" - kredytKupiecki.
         $paymentMethodsMapping = array(
-                                     "online_bank_transfer" => "Obsługa własna kart kredytowych",
-                                     "credit_card" => "Obsługa własna kart kredytowych",
-                                     "bank_transfer" => "Obsługa własna kart kredytowych",
+                                     "online_bank_transfer" => "Dotpay",
+                                     "credit_card" => "Dotpay",
+                                     "bank_transfer" => "Dotpay",
                                      "cash_on_delivery" => "Pobranie"
                                  );
         if (!isset($paymentMethodsMapping[$payment])) {
