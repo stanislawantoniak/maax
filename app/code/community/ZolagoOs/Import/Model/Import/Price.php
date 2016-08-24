@@ -112,7 +112,9 @@ class ZolagoOs_Import_Model_Import_Price
             } else {
                 $restApi::updatePricesConverter($priceBatch);
             }
-
+            $priceBatchCount = count($priceBatch);
+            $this->log("{$priceBatchCount} SKU(S) SENT TO PROCESS", Zend_Log::INFO);
+            
             $this->_moveProcessedFile();
 
         } catch (Exception $e) {
