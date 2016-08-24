@@ -1,0 +1,34 @@
+.node-type-shopping-cart {
+	#content-main {
+		.panel {
+			&.panel-default {
+				@include border-radius(1px);
+				border-color:#bfbfbf;
+			}
+			.panel-heading {
+				background:transparent;
+				border: none;
+				font-size: 18px;
+				color:#000;
+				&:before {
+					background: $color-accent;
+				}
+				strong {
+					max-width: 300px;
+					display: inline-block;
+					padding-right: 15px;
+					vertical-align: top;
+					@include max-screen($screen-md-max) {
+						max-width: 33%;
+					}
+					@include max-screen($screen-sm-max) {
+						max-width: 36%;
+					}
+					@include max-screen($screen-xs-max) {
+						max-width: none;
+					}
+				}
+			}
+		}
+	}
+}

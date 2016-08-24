@@ -1,0 +1,135 @@
+#checkout {
+	.panel {
+		&.panel-custom {
+			dl {
+				margin-bottom: 0px;
+			}
+
+			.panel-body {
+
+			}
+			#sumary_single_shop {
+				padding-top: 15px;
+				@media (max-width: 429px) {
+					float:right;
+					width:100%;
+				}
+				@media (max-width: 360px) {
+					padding-top: 15px;
+					
+				}
+				dd {
+					&:first-child {
+						margin-bottom: 5px;
+					}	
+				}
+				.lb {
+					//width:59px;
+					display:inline-block;
+					&+span {
+						display: inline-block;
+						width: 43.333%;
+						@media (min-width: $screen-md-min) {
+							width: 33.333%;
+						}
+					}
+				}
+			}
+			#info_delivery,
+			.info_delivery{
+				@media (max-width: 429px) {
+					display:none;
+				}
+				dl {
+					margin-top: 20px;
+				}
+			}
+		}
+	}
+}
+.table-summary-product {
+	.table-group {
+		.zdjecie,
+		.nazwa_rozmiar {
+			
+			min-height:54px;
+			position:relative;
+		}
+
+		.ilosc_cena {
+			min-height:54px;
+			
+			.cena_produktu {
+				position:relative;
+				
+				
+				
+
+				.stara_cena {
+					color:#757575;
+					@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max){
+						display:block;
+					}
+					@media(max-width: $screen-xs-max) {
+						position:absolute;
+						top:4px;
+						left:0px;
+						}
+					
+				}
+			}	
+		}
+	}
+}
+
+#checkout {
+	.panel {
+		&.panel-custom {
+			&#sumary_total_amount {
+				.lb {
+					display:inline-block;
+					&+span {
+						display: inline-block;
+						
+						width: 24.333%;
+						@media (min-width: $screen-md-min) {
+							width: 33.333%;
+						}
+						@media (max-width: 360px) {
+							width: 33.333%;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#checkout {
+	section {
+		header {
+			h2 {
+				
+				.date-order {
+					
+					&.pull-right {
+						@media (max-width: 639px) {
+							float:none!important;
+							display:block;
+							padding: 3px 0;
+						}
+					}
+					
+				}
+			}
+		}
+	}
+}
+
+
+#order-show-products {
+	.panel_action {
+		margin-bottom: 0px;
+	}
+}

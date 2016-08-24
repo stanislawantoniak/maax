@@ -1,0 +1,81 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+$_helperUrl = Mage::helper('mpblog/url');
+?>
+<div id="blog-mobile-menu">
+    <div class="wrapp-section bg-w visible-xs">
+        <h1>
+            <a href="<?php echo $_helperUrl->getUrl(); ?>">
+                <?php if($this->getIsCategory()): ?>
+                    <?php echo $this->getCategory()->getName(); ?>
+                <?php else: ?>
+                    <?php echo $this->__("Blog");; ?>
+                <?php endif; ?>
+            </a>
+        </h1>
+    </div>
+</div>
+
+<div class="mpblog-container list">
+    <div class="mp-blog-head fix-me">
+        <?php if ($this->getShowRssLink()): ?>
+            <span class="mp-blog-rss">
+            <i class="<?php echo $this->getColorClass(); ?> glyphicons rss"></i>
+            <a class="mp-blog-rss-link" href="<?php echo $this->getRssFeedUrl(); ?>" target="_blank"
+               title="<?php echo $this->__("Subscribe RSS Feed"); ?>">
+                <?php echo $this->__("RSS Feed"); ?>
+            </a>
+        </span>
+        <?php endif; ?>
+    </div>
+    <?php if (count($this->getCollection())): ?>
+
+        <div class="mpblog-list list">
+            <?php foreach ($this->getCollection() as $post): ?>
+                <?php /** @var Magpleasure_Blog_Model_Post $post */ ?>
+                <div class="mpblog-post">
+
+                    <div class="mp-post-header">
+                        <h2><a href="<?php echo $post->getPostUrl(); ?>"><?php echo $this->escapeHtml($post->getTitle()); ?></a></h2>
+                    </div>
+
+                    <?php if ($post->getListThumbnailSrc()): ?>
+                        <div class="thumbnail-container">
+                            <div class="post-thumbnail">
+                                <a
+                                    href="<?php echo $post->getPostUrl(); ?>"
+                                    title="<?php echo $this->escapeHtml($post->getTitle()); ?>">
+
+                                    <img class="thumbnail"
+                                         src="<?php echo $post->getListThumbnailSrc(); ?>"
+                                         alt="<?php echo $this->escapeHtml($post->getTitle()); ?>"/>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="mp-header fix-me">
+                        <?php echo $this->getHeaderHtml($post); ?>
+                    </div>
+                    <div class="mp-content std fix-me">
+                        <?php echo $post->getShortContent(); ?>
+                    </div>
+                    <div class="mp-details fix-me">
+                        <a class="button mp-read-more" href="<?php echo $this->getReadMoreUrl($post); ?>" title="<?php echo $this->__("Read More"); ?>">
+                            <?php echo $this->__("Read More"); ?>
+                        </a>
+                        <?php echo $this->getFooterHtml($post); ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php echo $this->getToolbarHtml(); ?>
+    <?php else: ?>
+        <?php echo $this->__("There are no posts yet."); ?>
+    <?php endif; ?>
+</div>

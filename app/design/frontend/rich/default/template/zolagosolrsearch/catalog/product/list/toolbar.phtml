@@ -1,0 +1,40 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar */ ?>
+<?php $_total = $this->getNumFound();?>
+
+<aside id="sort-criteria" class="container-fluid">
+    <div class="col-sm-12">
+        <ul class="sort clearfix">
+            <li id="pagination" class="pagination-line pagination-top">
+				<?php echo $this->getChildHtml('product_list_toolbar_pager'); ?>
+            </li>
+            <li class="sort-criteria-selector">
+	            <label for="sort-by">
+		            <?php echo $this->__("Sort by:"); ?>
+	            </label>
+	            <div class="sort-by-container">
+		            <input type="hidden" id="sort-dir" value="<?php echo $this->getCurrentDir() ?>" />
+		            <input type="hidden" id="sort-val" value="<?php echo $this->getCurrentOrder() ?>" />
+		            <select id="sort-by" class="form-control">
+			            <?php foreach($this->getSortOptions() as $option): ?>
+				            <option value="<?php echo $option['sort'].'||'.$option['dir']; ?>"
+				                    data-sort="<?php echo $option['sort']; ?>"
+				                    data-dir="<?php echo $option['dir']; ?>"
+				                    <?php $url = $this->getRewriteUrl($option); ?>
+				                    data-url="<?php echo $url; ?>"
+
+				                    <?php if ($option['sort'] === $this->getCurrentOrder() && $option['dir'] == $this->getCurrentDir()): ?>
+					                selected
+					                <?php endif; ?>>
+					            <?php echo str_replace(" ", "&nbsp;", $this->__($this->escapeHtml($option['label'])));?>
+		                    </option>
+			            <?php endforeach;?>
+		            </select>
+	            </div>
+            </li>
+        </ul>
+    </div>
+</aside>
+
+<script type="text/javascript">
+	Mall.listing.setTotal(<?php echo $_total; ?>);
+</script>

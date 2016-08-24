@@ -1,0 +1,41 @@
+<?php
+/** @var $_helper Zolago_Wishlist_Helper_Data */
+$_helper = $this->helper('wishlist');
+$_helperCustomer = $this->helper('customer');
+$backUrl = $this->getUrl('customer/account');
+/** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
+$_collection = $_helper->getWishlistItems();
+?>
+
+<?php if ($this->helper('wishlist')->isAllow()) : ?>
+    <div class="my-wishlist">
+
+        <?php if ($_helperCustomer->isLoggedIn() || Mage::helper('persistent/session')->isPersistent()) : ?>
+            <?php if ($this->hasWishlistItems()): //Zalogowany/persistant i ma jakies ulubione ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-logged-full')->toHtml(); ?>
+            <?php else: //Zalogowany/persistant nie ma ulubionych ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-logged-empty')->toHtml(); ?>
+            <?php endif ?>
+        <?php else: ?>
+            <?php if ($this->hasWishlistItems()): //nie zalogowany i ma jakies ulubione ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-not-logged-full')->toHtml(); ?>
+            <?php else: //nie zalogowany, nie ma ulubionych ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-not-logged-empty')->toHtml(); ?>
+            <?php endif ?>
+        <?php endif ?>
+
+        <div class="background-wrapper box-wrapper" id="wishlist-items">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12" id="wishlist-items-col">
+                        <?php $this->getChild('items')->setItems($this->getWishlistItems()); ?>
+                        <?php echo $this->getChildHtml('items'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php endif ?>
+
+
