@@ -4,6 +4,8 @@
         content: "#cart-shipping-methods",
 
         init: function () {
+            Mall.Cart.Map.deliverySet = Mall.reg.get("deliverySet");
+
             var self = this;
 
             for (var e in Mall.Cart.Map.deliverySet) {
@@ -878,16 +880,6 @@
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                 .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
-        },
-        deliverySet: {
-            ghinpost: {
-                mapDelivery: "map_delivery",
-                urlData: "/modago/inpost/getPopulateMapData"
-            },
-            zolagopwr: {
-                mapDelivery: "pwr_map_delivery",
-                urlData: "/modago/pwr/getPopulateMapData"
-            }
         }
     }
 

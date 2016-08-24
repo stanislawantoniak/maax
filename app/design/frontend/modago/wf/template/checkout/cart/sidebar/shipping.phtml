@@ -40,6 +40,14 @@ $discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() :
 $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
+$deliveryMethods = "{";
+foreach ($methods as $method)
+    if ($method['delivery_type'] != 'std' && $method['delivery_type'] != 'zolagopickuppoint')
+        $deliveryMethods .= $method['delivery_type'] . ": {mapDelivery: \"" .
+            $method['delivery_type'] . "_map_delivery\", urlData: \"/shipping/" .
+            $method['delivery_type'] . "/getPopulateMapData\" },";
+$deliveryMethods .= "}";
+
  ?>
 
 <?php
@@ -80,6 +88,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
             Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
             Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
             Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+
+            Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
         })();
     </script>
 
