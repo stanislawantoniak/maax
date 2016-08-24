@@ -20,7 +20,6 @@ class Itoris_Installer_Client{
 	 * @return bool
 	 */
 	public static function isRegistered($alias, Mage_Core_Model_Website $website = null){
-		return true;
 		if (IInstaller::isDev($alias, false)) {
 			$collection = self::prepareStoresCollectionForAdmin();
 		} else {
@@ -41,7 +40,6 @@ class Itoris_Installer_Client{
 	 * @return bool
 	 */
 	public static function isRegisteredAutonomous($alias, Mage_Core_Model_Website $website = null){
-		return true;
 		if (IInstaller::isDev($alias)) {
 			$collection = self::prepareStoresCollectionForAdmin();
 		} else {
@@ -64,7 +62,6 @@ class Itoris_Installer_Client{
 	 * @return bool
 	 */
 	public static function isAdminRegistered($alias){
-		return true;
 		$collection = self::prepareStoresCollectionForAdmin();
 		$hosts = self::getHostsList($collection);
 		self::cleanLicenses($alias, $hosts);
@@ -80,7 +77,6 @@ class Itoris_Installer_Client{
 	 * @return bool
 	 */
 	public static function isAdminRegisteredAutonomous($alias){
-		return true;
 		$collection = self::prepareStoresCollectionForAdmin();
 		$hosts = self::getHostsList($collection);
 		return self::isAnyLicenseExists($alias, $hosts);

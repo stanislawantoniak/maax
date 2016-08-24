@@ -102,7 +102,7 @@ class Itoris_GroupedProductPromotions_Block_Admin_Product_Edit_Tab_Promotions
 
 	public function getDateFormatWithLongYear(){
 		$locale = Mage::app()->getLocale();
-        return preg_replace('/(?<!y)yy(?!y)/', 'yyyy', $locale->getTranslation($locale->FORMAT_TYPE_SHORT, 'date')); 
+        return preg_replace('/(?<!y)yy(?!y)/', 'yyyy', $locale->getTranslation($locale::FORMAT_TYPE_SHORT, 'date')); 
 	}
 	
     public function lastRuleIdFromDb() {
