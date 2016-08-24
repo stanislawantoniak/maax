@@ -32,6 +32,13 @@ $_helperUrl = Mage::helper('mpblog/url');
              title="<?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>">
             <?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>
         </div>
+        <div id="blog-mobile-menu">
+            <div class="wrapp-section bg-w visible-xs">
+                <h1>
+                    <a href="<?php echo $_helperUrl->getUrl(); ?>"></a>
+                </h1>
+            </div>
+        </div>
         <?php foreach ($this->getMobileBlocks('content') as $alias): ?>
             <div class="mobile-block" data-set="content-<?php echo $alias; ?>">
                 <?php echo $this->getContentBlockHtml($alias); ?>
