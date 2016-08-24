@@ -75,19 +75,29 @@ class ZolagoOs_Import_Model_Import_Stock
         try {
 
             $stockBatch = [];
-            $row = 1;
+            $duplicateSkuScan = [];
+            $row = 0;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
                 while (($data = fgetcsv($fileContent, null, $this->_delimiter, $this->_enclosure)) !== FALSE) {
                     $row++;
+                    
                     if ($row == 1) {
+                        //skip header
                         continue;
                     }
+
+                    //$sku = $vendorId . "-" . $data[0];
+                    $sku = $data[0];
+
+                    if(isset($stockBatch[$sku])){
+                        $duplicateSkuScan[$sku][] = "LINE#{$row}: SKU {$sku}";
+                    }
                     if (count($data) !== 2) {
-                        $this->log("LINE#{$row}: WRONG LINE FORMAT", Zend_Log::ERR);
+                        $wrongLineFormatScan[$row] = "LINE# {$row} (SKU: {$sku})";
                         continue;
                     }
                     //$sku = $vendorId . "-" . $data[0];
-                    $sku = $data[0];
+
                     $stockBatch[$vendorId][$sku] = array(
                         $posExternalId => $data[1]
                     );
@@ -102,7 +112,7 @@ class ZolagoOs_Import_Model_Import_Stock
                 return $this;
             }
 
-            //validate
+            //1. validate SKU(S) not found in the system
             $notValidSkus = $this->getHelper()->getNotValidSkus($stockBatch[$vendorId], $vendorId);
 
             if (!empty($notValidSkus)) {
@@ -113,6 +123,10 @@ class ZolagoOs_Import_Model_Import_Stock
                 foreach ($notValidSkus as $sku => $msg) {
                     unset($stockBatch[$sku]);
                 }
+            }
+            //2. validate duplicated SKU(S)
+            if (!empty($duplicateSkuScan)) {
+                $this->log("DUPLICATED SKU(s) ANALYSIS RESULT: " . implode(" ;", $duplicateSkuScan), Zend_Log::ERR);
             }
             //--validate
 

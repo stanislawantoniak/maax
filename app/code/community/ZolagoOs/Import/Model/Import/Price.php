@@ -55,19 +55,28 @@ class ZolagoOs_Import_Model_Import_Price
 
             $priceBatch = [];
             $invalidPriceScan = [];
-            $row = 1;
+            $duplicateSkuScan = [];
+            $wrongLineFormatScan = [];
+            $row = 0;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
                 while (($data = fgetcsv($fileContent, null, $this->_delimiter, $this->_enclosure)) !== FALSE) {
                     $row++;
+
                     if ($row == 1) {
+                        //skip header
                         continue;
                     }
-                    if (count($data) !== 6) {
-                        $this->log("LINE#{$row}: WRONG LINE FORMAT", Zend_Log::ERR);
-                        continue;
-                    }
+
                     //$sku = $vendorId . "-" . $data[0];
                     $sku = $data[0];
+
+                    if(isset($priceBatch[$sku])){
+                        $duplicateSkuScan[$sku][] = "LINE#{$row}: SKU {$sku}";
+                    }
+                    if (count($data) !== 6) {
+                        $wrongLineFormatScan[$row] = "LINE# {$row} (SKU: {$sku})";
+                        continue;
+                    }
                     if ((float)$data[1] > 0) {
                         $priceBatch[$sku]["A"] = (float)$data[1];
                     } else {
@@ -93,9 +102,8 @@ class ZolagoOs_Import_Model_Import_Price
                     } else {
                         $invalidPriceScan[] = "{$sku} invalid price type salePriceBefore: " . $data[5];
                     }
-
-
                     unset($sku);
+
                 }
                 fclose($fileContent);
             }
@@ -111,15 +119,35 @@ class ZolagoOs_Import_Model_Import_Price
             if (!empty($notValidSkus)) {
                 $notValidSkusLine = implode(", ", array_keys($notValidSkus));
                 $notValidSkusCount = count($notValidSkus);
+
                 $this->log("FILE CONTAINS {$notValidSkusCount} INVALID SKU(S): {$notValidSkusLine}", Zend_Log::ERR);
+
                 // Remove invalid skus from batch
                 foreach ($notValidSkus as $sku => $msg) {
                     unset($priceBatch[$sku]);
                 }
             }
-            //2. validate SKU(S) with invalid prices <=0)
+
+
+
+            if (empty($priceBatch)) {
+                $this->log("NO VALID DATA FOUND IN THE FILE", Zend_Log::ERR);
+                return $this;
+            }
+
+
+            //2. validate SKU(S) with invalid prices (<=0)
             if (!empty($invalidPriceScan)) {
                 $this->log("INVALID PRICE ANALYSIS RESULT: " . implode(" ;", $invalidPriceScan), Zend_Log::ERR);
+            }
+
+            //3. validate wrong line format
+            if (!empty($wrongLineFormatScan)) {
+                $this->log("INVALID LINE FORMAT ANALYSIS RESULT: " . implode(" ;", $wrongLineFormatScan), Zend_Log::ERR);
+            }
+            //4. validate duplicated SKU(S)
+            if (!empty($duplicateSkuScan)) {
+                $this->log("DUPLICATED SKU(s) ANALYSIS RESULT: " . implode(" ;", $duplicateSkuScan), Zend_Log::ERR);
             }
             //--validate
 
