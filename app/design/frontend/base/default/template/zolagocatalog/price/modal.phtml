@@ -34,7 +34,7 @@
 		<input id="msrp" name="msrp" data-price="<?php echo $_product->getMsrp();?>" value="<?php echo $_product->getMsrp();?>" type="text" class="numeric form-control"/>
 		<?php foreach($this->getMsrpSourceOptions() as $option):?>
 		<label class="radio-inline" for="converter_msrp_type-<?php echo $option['value'];?>">
-			<input <?php if($option['value']==$_product->getData('converter_msrp_type')):?>checked="chekced"<?php endif;?> 
+			<input <?php if($option['value']==$_product->getData('converter_msrp_type')):?>checked="checked"<?php endif;?>
 					data-price="<?php echo $option['price']?>"
 					type="radio" class="uniform" id="converter_msrp_type-<?php echo $option['value'];?>" 
 					name="converter_msrp_type" value="<?php echo $option['value'];?>"/> 
@@ -44,6 +44,40 @@
 		
 	</div>
 </div>
+<?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE):?>
+	<div class="next-row">
+		<table class="table table-condensed table-striped table-bordered">
+			<colgroup>
+				<col width="150"/>
+				<col width="100"/>
+				<col width="100"/>
+				<col/>
+				<col/>
+				<col/>
+
+			</colgroup>
+		<tbody>
+			<tr>
+				<?php foreach($this->getPriceTyps() as $type=>$label):?>
+					<th><?php echo $this->__($label);?></th>
+				<?php endforeach;?>
+			</tr>
+			<tr  class="minimal-price">
+				<?php foreach($this->getPriceTyps() as $type=>$label):?>
+					<?php $_minimal = $_product->getData("external_price_".$type); ?>
+					<td id="price-pointer-<?php echo $type;?>" data-source="<?php echo $type;?>" data-price="<?php echo is_null($_minimal) ? "" : $_minimal;?>">
+						<?php if(!is_null($_minimal)):?>
+							<?php echo Mage::helper("core")->formatPrice($_minimal, false);?>
+						<?php else:?>
+							<?php echo $this->__("N/A");?>
+						<?php endif;?>
+					</td>
+				<?php endforeach;?>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+<?php endif; ?>
 <?php /* Use child products */ ?>
 <?php if($_product->isComposite()):?>
 <div class="next-row">
