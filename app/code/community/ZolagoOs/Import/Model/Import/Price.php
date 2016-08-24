@@ -6,15 +6,19 @@
 class ZolagoOs_Import_Model_Import_Price
     extends ZolagoOs_Import_Model_Import
 {
-    protected $_vendor;
+    /**
+     * Field delimiter.
+     *
+     * @var string
+     */
+    protected $_delimiter = ';';
 
     /**
-     * ZolagoOs_Import_Model_Import_Price constructor.
+     * Field enclosure character.
+     *
+     * @var string
      */
-    public function __construct()
-    {
-        $this->_vendor = $this->getExternalId();
-    }
+    protected $_enclosure = '"';
 
 
     /**
@@ -53,38 +57,44 @@ class ZolagoOs_Import_Model_Import_Price
             $invalidPriceScan = [];
             $row = 1;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
-                while (($data = fgetcsv($fileContent, 100000000, ";")) !== FALSE) {
-
-                    if ($row > 1) {
-//                        $sku = $vendorId . "-" . $data[0];
-                        $sku = $data[0];
-                        if ((float)$data[1] > 0) {
-                            $priceBatch[$sku]["A"] = (float)$data[1];
-                        } else {
-                            $invalidPriceScan[$sku][] = "{$sku} invalid price type A: " . $data[1];
-                        }
-                        if ((float)$data[2] > 0) {
-                            $priceBatch[$sku]["B"] = (float)$data[2];
-                        } else {
-                            $invalidPriceScan[] = "{$sku} invalid price type B: " . $data[2];
-                        }
-                        if ((float)$data[3] > 0) {
-                            $priceBatch[$sku]["C"] = (float)$data[3];
-                        } else {
-                            $invalidPriceScan[] = "{$sku} invalid price type C: " . $data[3];
-                        }
-                        if ((float)$data[4] > 0) {
-                            $priceBatch[$sku]["Z"] = (float)$data[4];
-                        } else {
-                            $invalidPriceScan[] = "{$sku} invalid price type Z: " . $data[4];
-                        }
-                        if ((float)$data[5] > 0) {
-                            $priceBatch[$sku]["salePriceBefore"] = (float)$data[5];
-                        } else {
-                            $invalidPriceScan[] = "{$sku} invalid price type salePriceBefore: " . $data[5];
-                        }
-                    }
+                while (($data = fgetcsv($fileContent, null, $this->_delimiter, $this->_enclosure)) !== FALSE) {
                     $row++;
+                    if ($row == 1) {
+                        continue;
+                    }
+                    if (count($data) !== 6) {
+                        $this->log("LINE#{$row}: WRONG LINE FORMAT", Zend_Log::ERR);
+                        continue;
+                    }
+                    //$sku = $vendorId . "-" . $data[0];
+                    $sku = $data[0];
+                    if ((float)$data[1] > 0) {
+                        $priceBatch[$sku]["A"] = (float)$data[1];
+                    } else {
+                        $invalidPriceScan[$sku][] = "{$sku} invalid price type A: " . $data[1];
+                    }
+                    if ((float)$data[2] > 0) {
+                        $priceBatch[$sku]["B"] = (float)$data[2];
+                    } else {
+                        $invalidPriceScan[] = "{$sku} invalid price type B: " . $data[2];
+                    }
+                    if ((float)$data[3] > 0) {
+                        $priceBatch[$sku]["C"] = (float)$data[3];
+                    } else {
+                        $invalidPriceScan[] = "{$sku} invalid price type C: " . $data[3];
+                    }
+                    if ((float)$data[4] > 0) {
+                        $priceBatch[$sku]["Z"] = (float)$data[4];
+                    } else {
+                        $invalidPriceScan[] = "{$sku} invalid price type Z: " . $data[4];
+                    }
+                    if ((float)$data[5] > 0) {
+                        $priceBatch[$sku]["salePriceBefore"] = (float)$data[5];
+                    } else {
+                        $invalidPriceScan[] = "{$sku} invalid price type salePriceBefore: " . $data[5];
+                    }
+
+
                     unset($sku);
                 }
                 fclose($fileContent);
@@ -108,7 +118,7 @@ class ZolagoOs_Import_Model_Import_Price
                 }
             }
             //2. validate SKU(S) with invalid prices <=0)
-            if(!empty($invalidPriceScan)){
+            if (!empty($invalidPriceScan)) {
                 $this->log("INVALID PRICE ANALYSIS RESULT: " . implode(" ;", $invalidPriceScan), Zend_Log::ERR);
             }
             //--validate
@@ -129,7 +139,7 @@ class ZolagoOs_Import_Model_Import_Price
             }
             $priceBatchCount = count($priceBatch);
             $this->log("SKU(S) SENT TO PROCESS: {$priceBatchCount}", Zend_Log::INFO);
-            
+
             $this->_moveProcessedFile();
 
         } catch (Exception $e) {

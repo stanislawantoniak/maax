@@ -8,6 +8,20 @@ class ZolagoOs_Import_Model_Import_Stock
 {
 
     /**
+     * Field delimiter.
+     *
+     * @var string
+     */
+    protected $_delimiter = ';';
+
+    /**
+     * Field enclosure character.
+     *
+     * @var string
+     */
+    protected $_enclosure = '"';
+
+    /**
      * Implement _getImportEntityType() method.
      */
     protected function _getImportEntityType()
@@ -63,15 +77,21 @@ class ZolagoOs_Import_Model_Import_Stock
             $stockBatch = [];
             $row = 1;
             if (($fileContent = fopen($fileName, "r")) !== FALSE) {
-                while (($data = fgetcsv($fileContent, 100000, ";")) !== FALSE) {
-                    if ($row > 1) {
-                        //$sku = $vendorId . "-" . $data[0];
-                        $sku = $data[0];
-                        $stockBatch[$vendorId][$sku] = array(
-                            $posExternalId => $data[1]
-                        );
-                    }
+                while (($data = fgetcsv($fileContent, null, $this->_delimiter, $this->_enclosure)) !== FALSE) {
                     $row++;
+                    if ($row == 1) {
+                        continue;
+                    }
+                    if (count($data) !== 2) {
+                        $this->log("LINE#{$row}: WRONG LINE FORMAT", Zend_Log::ERR);
+                        continue;
+                    }
+                    //$sku = $vendorId . "-" . $data[0];
+                    $sku = $data[0];
+                    $stockBatch[$vendorId][$sku] = array(
+                        $posExternalId => $data[1]
+                    );
+
 
                 }
                 fclose($fileContent);
@@ -112,7 +132,7 @@ class ZolagoOs_Import_Model_Import_Stock
             }
             $stockBatchCount = count($stockBatch);
             $this->log("SKU(S) SENT TO PROCESS: {$stockBatchCount}", Zend_Log::INFO);
-            
+
             $this->_moveProcessedFile();
 
         } catch (Exception $e) {

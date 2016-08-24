@@ -215,12 +215,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                 $productsIds[$id] = $id;
                 if ($stocks[$id] != $is_in_stock) {
-                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
-                        "product_id" => $id,
-                        "qty" => $qty,
-                        "is_in_stock" => $is_in_stock,
-                        "stock_id" => $stockId
-                    ));
+//                    Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+//                        "product_id" => $id,
+//                        "qty" => $qty,
+//                        "is_in_stock" => $is_in_stock,
+//                        "stock_id" => $stockId
+//                    ));
                     $productsIdsForSolrAndVarnishBan[$id] = $id;
                 };
             }
