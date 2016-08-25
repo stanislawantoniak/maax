@@ -88,9 +88,12 @@
 		h1{
 			color: $color_333;
 			background: $body-bg;
-			padding: 20px 30px !important;
+			padding: 20px 14px 0 !important;
 			text-transform: uppercase;
 			font-size: 0; //deletes gap between inline-blocks
+			@media (min-width: $screen-xs-max) {
+				padding: 0 5px !important;
+			}
 			span {
 				vertical-align: middle;
 				font-size: 30px;
@@ -132,9 +135,9 @@
 
 .my-account .background-wrapper{
 	background: $body-bg;
-	padding: 30px 15px;
+	padding: 10px 5px;
 	@media (max-width: $screen-xs-max){
-		margin: 20px 8px 0 8px;
+		margin: 0 8px 0 8px;
 	}
 }
 .my-account .data-table .products{
