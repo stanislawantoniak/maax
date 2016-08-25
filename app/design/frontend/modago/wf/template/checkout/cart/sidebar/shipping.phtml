@@ -40,13 +40,7 @@ $discountTotal = (isset($totals["discount"]) ? $totals["discount"]->getValue() :
 $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()->getShippingInclTax(); //Delivery cost
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
-$deliveryMethods = "{";
-foreach ($methods as $method)
-    if ($method['delivery_type'] != 'std' && $method['delivery_type'] != 'zolagopickuppoint')
-        $deliveryMethods .= $method['delivery_type'] . ": {mapDelivery: \"" .
-            $method['delivery_type'] . "_map_delivery\", urlData: \"/shipping/" .
-            $method['delivery_type'] . "/getPopulateMapData\" },";
-$deliveryMethods .= "}";
+$deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 
  ?>
 
