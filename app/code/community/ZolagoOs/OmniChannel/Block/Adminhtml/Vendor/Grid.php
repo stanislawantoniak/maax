@@ -86,7 +86,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Grid extends Mage_Adminhtml_Bl
                 'actions'   => array(
                     array(
                         'caption' => Mage::helper('sales')->__('View'),
-                        'url'     => array('base'=>'udropshipadmin/adminhtml_vendor/edit'),
+                        'url'     => array('base'=>'zolagoosadmin/adminhtml_vendor/edit'),
                         'field'   => 'id'
                     )
                 ),

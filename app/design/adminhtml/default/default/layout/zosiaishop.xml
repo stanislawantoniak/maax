@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout>
+	<zosiaishop_log_update_menu>
+		<reference name="menu">
+			<action method="setActive"><menupath>vendors/zosiaishop_log</menupath></action>
+		</reference>
+	</zosiaishop_log_update_menu>
+	<adminhtml_zosiaishop_log_index>
+		<update handle="zosiaishop_log_update_menu"/>
+		<reference name="content">
+			<block type="zosiaishop/adminhtml_zosiaishop_log" name="zosiaishop_log"
+			       template="zosiaishop/log.phtml">
+				<block type="zosiaishop/adminhtml_zosiaishop_log_grid" name="zosiaishop_log_grid"/>
+			</block>
+		</reference>
+	</adminhtml_zosiaishop_log_index>
+</layout>

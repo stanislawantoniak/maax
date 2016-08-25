@@ -271,6 +271,8 @@
 "Currently you don't have attribute changes history","Nie posiadasz historii zmian cech produktów"
 "Available together {{stock_qty}} items","Dostępne razem {{stock_qty}} sztuk"
 "Available together {{stock_qty}} item","Dostępna razem {{stock_qty}} sztuka"
+"Available {{stock_qty}} items","Dostępne {{stock_qty}} sztuk"
+"Available {{stock_qty}} item","Dostępna {{stock_qty}} sztuka"
 "{{available_child_count}} variants of {{all_child_count}}","{{available_child_count}} wariantów z {{all_child_count}}"
 "Total quantity","Łączna ilość sztuk"
 "Product preview","Podgląd produktu"

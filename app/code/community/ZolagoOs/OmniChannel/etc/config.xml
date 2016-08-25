@@ -1527,13 +1527,13 @@
 
     <admin>
         <routers>
-            <udropshipadmin>
+            <zolagoosadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannel</module>
-                    <frontName>udropshipadmin</frontName>
+                    <frontName>zolagoosadmin</frontName>
                 </args>
-            </udropshipadmin>
+            </zolagoosadmin>
         </routers>
     </admin>
 
@@ -1555,22 +1555,22 @@
                             <vendor module="udropship">
                                 <title>Vendors</title>
                                 <sort_order>10</sort_order>
-                                <action>udropshipadmin/adminhtml_vendor</action>
+                                <action>zolagoosadmin/adminhtml_vendor</action>
                             </vendor>
                             <shipping module="udropship">
                                 <title>Shipping Methods</title>
                                 <sort_order>20</sort_order>
-                                <action>udropshipadmin/adminhtml_shipping</action>
+                                <action>zolagoosadmin/adminhtml_shipping</action>
                             </shipping>
                             <label_batch module="udropship">
                                 <title>Label Batches</title>
                                 <sort_order>30</sort_order>
-                                <action>udropshipadmin/adminhtml_batch</action>
+                                <action>zolagoosadmin/adminhtml_batch</action>
                             </label_batch>
                             <statement module="udropship">
                                 <title>Vendor Statements</title>
                                 <sort_order>35</sort_order>
-                                <action>udropshipadmin/adminhtml_vendor_statement</action>
+                                <action>zolagoosadmin/adminhtml_vendor_statement</action>
                             </statement>
                         </children>
                     </udropship>
@@ -1585,12 +1585,12 @@
                             <general module="udropship">
                                 <title>General Details</title>
                                 <sort_order>10</sort_order>
-                                <action>udropshipadmin/adminhtml_report</action>
+                                <action>zolagoosadmin/adminhtml_report</action>
                             </general>
                             <item module="udropship">
                                 <title>Item Details</title>
                                 <sort_order>20</sort_order>
-                                <action>udropshipadmin/adminhtml_report/item</action>
+                                <action>zolagoosadmin/adminhtml_report/item</action>
                             </item>
                         </children>
                     </udropship>
@@ -1739,18 +1739,18 @@
 
     <crontab>
         <jobs>
-            <udropship_collect_tracking>
+            <collect_tracking>
                 <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
                 <run><model>udropship/observer::cronCollectTracking</model></run>
-            </udropship_collect_tracking>
-            <udropship_vendor_notify_lowstock>
+            </collect_tracking>
+            <vendor_notify_lowstock>
                 <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
                 <run><model>udropship/observer::vendorNotifyLowstock</model></run>
-            </udropship_vendor_notify_lowstock>
-            <udropship_vendor_clean_lowstock>
+            </vendor_notify_lowstock>
+            <vendor_clean_lowstock>
                 <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
                 <run><model>udropship/observer::vendorCleanLowstock</model></run>
-            </udropship_vendor_clean_lowstock>
+            </vendor_clean_lowstock>
         </jobs>
     </crontab>
 

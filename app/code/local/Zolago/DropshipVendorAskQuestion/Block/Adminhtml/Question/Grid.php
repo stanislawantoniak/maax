@@ -69,7 +69,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid extends Zol
                 'index' => 'vendor_id',
                 'filter_index' => 'vendor.vendor_name',
                 'filter' => 'udropship/vendor_gridColumnFilter',
-                'format' => sprintf('<a onclick="this.target=\'blank\'" href="%sid/$vendor_id/">$vendor_name</a>', $this->getUrl('udropshipadmin/adminhtml_vendor/edit'))
+                'format' => sprintf('<a onclick="this.target=\'blank\'" href="%sid/$vendor_id/">$vendor_name</a>', $this->getUrl('zolagoosadmin/adminhtml_vendor/edit'))
             ));
         }
 
@@ -117,7 +117,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Adminhtml_Question_Grid extends Zol
                     array(
                         'caption' => Mage::helper('adminhtml')->__('Edit'),
                         'url' => array(
-                            'base' => 'udqaadmin/index/edit',
+                            'base' => 'zosqaadmin/index/edit',
                             'params' => array(
                                 'vendorId' => $this->getVendorId(),
                                 'customerId' => $this->getCustomerId(),

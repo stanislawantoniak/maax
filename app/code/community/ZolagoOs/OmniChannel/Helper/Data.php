@@ -507,7 +507,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             );
             if ($this->isUdpoActive() && ($po = Mage::helper('udpo')->getShipmentPo($shipment))) {
                 $data['po_id'] = $po->getIncrementId();
-                $data['po_url'] = $ahlp->getUrl('udpoadmin/order_po/view', array(
+                $data['po_url'] = $ahlp->getUrl('zospoadmin/order_po/view', array(
                     'udpo_id'  => $po->getId(),
                     'order_id' => $order->getId(),
                 ));

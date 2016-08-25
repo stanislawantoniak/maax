@@ -1,0 +1,11 @@
+<?php
+
+/**
+ */
+class ZolagoOs_IAIShop_Model_Log extends Mage_Core_Model_Abstract
+{
+    protected function _construct()
+    {
+        $this->_init('zosiaishop/log');
+    }
+}
