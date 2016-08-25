@@ -58,7 +58,7 @@
 
                     self.implementMapSelections();
 
-                    Mall.Cart.Map.initMap();
+                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
 
                 }
 
@@ -103,14 +103,14 @@
                     deliverySelectPointsModal.modal("show");
                 }
 
-                Mall.Cart.Map.handleGeoLocation();
+                if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
             });
 
             self.attachShowHideMapOnMobile();
 
             self.attachShowHideNearestPointsList();
 
-            Mall.Cart.Map.initMap();
+            if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
@@ -554,8 +554,9 @@
 
                     //Refresh markers and "City", "Address" filters
                     //if nearest store marker clicked, but the city is different from selected
-                    if (this.nearest === 1 && inpostModal.find("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
-                        inpostModal.find("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
+                    if (this.nearest === 1 && jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
+
+                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
                             .val(this.town)
                             .select2({
                                 dropdownParent: inpostModal,
@@ -880,8 +881,7 @@
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                 .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
-        },
-        deliverySet: Mall.reg.get("deliverySet")
+        }
     }
 
     jQuery(document).ready(function(){
