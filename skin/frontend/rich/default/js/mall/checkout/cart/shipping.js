@@ -554,8 +554,9 @@
 
                     //Refresh markers and "City", "Address" filters
                     //if nearest store marker clicked, but the city is different from selected
-                    if (this.nearest === 1 && inpostModal.find("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
-                        inpostModal.find("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
+                    if (this.nearest === 1 && jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
+
+                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
                             .val(this.town)
                             .select2({
                                 dropdownParent: inpostModal,
