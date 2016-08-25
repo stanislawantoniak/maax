@@ -56,7 +56,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             if ($this->getShopId()) {            
                 $orders[$n]['shop_id'] = $this->getShopId();
             }
-            $orders[$n]['stock_id'] = $param->pos_id;
+            $orders[$n]['stock_id'] = 'M'.$param->pos_id;
             $orders[$n]['payment_type'] = $param->payment_method;
             $orders[$n]['currency'] = $helper->getMappedCurrency($param->order_currency);
             $orders[$n]['client_once'] = "y";
