@@ -1,0 +1,82 @@
+<?php
+/** @var Zolago_DropshipVendorAskQuestion_Block_Product_Question $this */;
+
+/** @var  $product */
+$product = $this->getProduct();
+$vendorId = $product->getUdropshipVendor();
+/** @var Mage_Customer_Model_Session $session */
+$session = Mage::getSingleton('customer/session');
+/** @var Zolago_DropshipVendorAskQuestion_Helper_Data $_helper */
+$_helper = Mage::helper('zolagoudqa');
+?>
+<form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
+    <input type="hidden" name="question[product_id]" value="<?php echo $product->getId()?>" />
+    <input type="hidden" name="question[visibility]" value="0" />
+
+    <div class="row">
+        <fieldset class="fieldset col-xs-11">
+            <ul class="form-list">
+                <input type="hidden" name="question[vendor_id]" value="<?php echo $vendorId; ?>" />
+                <li class="wide" id="question-form-customer-name">
+                    <div class="form-group">
+                        <label for="customer_name" class="required" aria-required="true"><?php echo $_helper->__('Your Name') ?> <em>*</em></label>
+                        <div class="input-box">
+                            <input type="text" name="question[customer_name]" id="customer_name" class="form-control required-entry input-text hint closer-valid-ico" required
+                                   value=""/>
+                        </div>
+                    </div>
+                </li>
+                <li class="wide" id="question-form-customer-email">
+                    <div class="form-group">
+                        <label for="customer_email" class="required" aria-required="true"><?php echo $_helper->__('Your Email') ?> <em>*</em></label>
+                        <div class="input-box">
+                            <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint closer-valid-ico" required data-rule-email="true"
+                                   value=""/>
+                        </div>
+                    </div>
+                </li>
+                <li class="wide" id="question-form-question-text">
+                    <div class="form-group">
+                        <label for="question_text" class="required" aria-required="true"><?php echo $_helper->__('Your Question') ?> <em>*</em></label>
+                        <div class="input-box">
+                            <textarea name="question[question_text]" id="question_text" title="" class="required-entry input-text form-control"
+                                      cols="5" rows="3" data-original-title="<?php echo $_helper->__('Your Question') ?>"
+                                      required></textarea>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </fieldset>
+    </div>
+    <div class="row">
+        <div class="col-xs-11">
+			<div class="row" style="margin: 0 -15px 0 -15px">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<p class="required" aria-required="true"><?php echo $_helper->__('* Required Fields') ?></p>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<button type="submit" title="<?php echo $_helper->__('Submit') ?>" class="btn button button-primary sending pull-right">
+						<i></i>
+						<span><span><?php echo $_helper->__('Submit') ?></span></span></button>
+				</div>
+			</div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    Mall.i18nValidation.add("required", "<?php echo $_helper->__('This field is required') ?>");
+    Mall.i18nValidation.add("email", "<?php echo $_helper->__('Valid email is required.') ?>");
+</script>
+<script>
+    jQuery(document).ready(function() {
+        var questionform =  jQuery("#question-form");
+
+        var validationOptions = jQuery.extend({}, Mall.validate.getDefaultValidationOptions(), {
+            ignore: ''//i.e. do not ignore hidden elements
+            ,errorPlacement: function (error, element) {
+                error.appendTo(element.parents(".form-group"));
+            }
+        });
+        questionform.validate(validationOptions);
+    });
+</script>

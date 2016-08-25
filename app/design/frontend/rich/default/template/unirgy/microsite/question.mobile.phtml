@@ -1,0 +1,129 @@
+<?php
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$session = Mage::getSingleton('customer/session');
+/* @var $session Mage_Customer_Model_Session */
+$helper = Mage::helper("zolagoudqa");
+?>
+
+    <form action="<?php echo $this->getFormAction(); ?>" id="question-form-mobile" method="post">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <input type="hidden" name="question[vendor_id]" value="<?php echo $vendor['vendor_id']; ?>" />
+        <input type="hidden" name="question[visibility]" value="0" />
+        <input type="hidden" name="redirect_referer" value="1"/>
+
+        <div class="row">
+            <fieldset class="fieldset col-xs-11">
+                <ul class="form-list open" style="border: none;">
+                    <?php if (!$session->isLoggedIn()): ?>
+                        <li class="wide" style="display: inline;">
+                            <div class="form-group">
+                                <label for="customer_name" class="required" aria-required="true"><?php echo $this->__('Your Name') ?><em>*</em></label>
+                                <div class="input-box">
+                                    <input type="text" name="question[customer_name]" id="customer_name-mobile" class="form-control required-entry input-text hint" required />
+                                </div>
+                            </div>
+                        </li>
+                        <li class="wide" style="display: inline;">
+                            <div class="form-group">
+                                <label for="customer_email" class="required" aria-required="true"><?php echo $this->__('Email') ?> <em>*</em></label>
+                                <div class="input-box">
+                                    <input type="text" name="question[customer_email]" id="customer_email-mobile"
+                                           class="validate-email required-entry input-text form-control hint" required
+                                           data-rule-email="true"/>
+                                </div>
+                            </div>
+                        </li>
+                    <?php else: ?>
+                        <input type="hidden" name="question[customer_name]"
+                               value="<?php $this->escapeHtml($session->getCustomer()->getName()); ?>"/>
+                        <input type="hidden" name="question[customer_email]"
+                               value="<?php $this->escapeHtml($session->getCustomer()->getEmail()); ?>"/>
+                    <?php endif; ?>
+                    <li class="wide" style="display: inline;">
+                        <div class="form-group">
+                            <label for="question_text" class="required" aria-required="true"><?php echo $this->__('Question Text') ?><em>*</em></label>
+                            <div class="input-box">
+                                <textarea name="question[question_text]" id="question_text-mobile"
+                                          title="<?php echo $this->__('Question Text') ?>"
+                                          class="required-entry input-text form-control" cols="5" rows="3"
+                                          data-original-title="<?php echo $this->__('Question Text') ?>"
+                                          required></textarea>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-xs-11">
+                <div class="buttons-set">
+                    <p class="required" aria-required="true"><?php echo $this->__('* Required Fields') ?></p>
+                    <button type="submit" title="<?php echo $this->__('Submit') ?>" class="btn sending button button-primary">
+                        <span><span><?php echo $this->__('Submit') ?></span></span></button>
+                </div>
+            </div>
+        </div>
+    </form>
+<script type="text/javascript">
+    jQuery("#question-form-mobile").each(function () {
+
+        jQuery(this).validate({
+            success: "valid",
+            focusInvalid: false,
+            errorElement: "span",
+            onfocusout: function (element) {
+                jQuery(element).valid();
+            },
+            onsubmit: true,
+            rules: {
+                title: {
+                    required:true
+                },
+                czy_polecasz_produkt : {
+                    required:true,
+                    maxlengh:1
+                },
+                stars: {
+                    stars: true
+                },
+            },
+
+            messages: {
+            },
+            ignore: "#cart-form",
+            ignoreTitle: true,
+            highlight: function(element, errorClass, validClass) {
+                var we = jQuery(element).innerWidth()+25;
+                var el = jQuery(element).attr('type');
+                jQuery(element).closest("div").addClass('has-error has-feedback').removeClass('has-success');
+                jQuery(element).closest("div").find('.form-ico-times').remove();
+
+                jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" ).append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+
+                jQuery(element).closest("div").find('.form-ico-checked').remove();
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                var we = jQuery(element).innerWidth()+25;
+                jQuery(element).closest("div").removeClass('has-error').addClass('has-success has-feedback');
+                jQuery(element).closest("div").find('.form-ico-checked').remove();
+                //if (element.attr("type") != "checkbox"){
+
+                jQuery(element).closest("div").append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+                //}
+                jQuery(element).closest("div").find('.form-ico-times').remove();
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("type") == "checkbox" ){
+                    jQuery(element).closest('div').append(error)
+                    //error.prepend(element).hide().slideToggle(300);
+                } else if (element.attr("type") == "radio") {
+                    jQuery(element).closest('div').append(error)
+                }else {
+                    error.insertAfter(element)
+                }
+
+            }
+        });
+    });
+    jQuery.extend(jQuery.validator.messages, { required: "<?php echo $helper->__("This field is required.");?>" });
+</script>

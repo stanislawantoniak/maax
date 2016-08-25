@@ -1,0 +1,106 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+/** @var Magpleasure_Blog_Block_Comments_Form $this */
+?>
+<?php if ($this->canPost()): ?>
+    <?php if ($this->isReply()): ?>
+        <h5><?php echo $this->__('Leave a reply to %s', $this->getReplyToCustomerName()); ?></h5>
+    <?php else: ?>
+        <h5><?php echo $this->__('Leave a comment'); ?></h5>
+    <?php endif; ?>
+    <?php if ($this->getIsAjax()): ?>
+        <?php echo $this->getMessageBlockHtml(); ?>
+    <?php endif; ?>
+    <form id="mpblog-form-<?php echo $this->getPostId(); ?>" onsubmit="blogComments.submitForm(); return false;">
+        <fieldset>
+            <div class="comment-form-field">
+                <div class="comment-form-input">
+                    <textarea name="message"
+                              class="textarea required-entry placeholder"
+                              id="message_field"
+                              placeholder="<?php echo $this->isReply() ? $this->__('Leave your awesome reply here...') : $this->__('Leave your awesome comment here...') ?>"
+                              title="<?php echo $this->isReply() ? $this->__('Reply') : $this->__('Comment'); ?>" ><?php echo $this->htmlEscape($this->getFormData()->getMessage()) ?></textarea>
+                </div>
+            </div>
+            <div class="comment-form-field">
+                <div class="comment-form-input">
+                    <input type="text"
+                           name="name"
+                           placeholder="<?php echo $this->__('John Doe') ?>"
+                           id="name_field"
+                           title="<?php echo $this->__('Name') ?>"
+                           class="text required-entry placeholder"
+                           value="<?php echo $this->htmlEscape($this->getFormData()->getName() ? $this->getFormData()->getName() : $this->getCustomerName()) ?>" />
+                </div>
+            </div>
+            <?php if (!$this->isLoggedId()): ?>
+            <div class="comment-form-field">
+                <div class="comment-form-input">
+                    <input type="text"
+                           name="email"
+                           id="email_field"
+                           placeholder="<?php echo $this->__("john.doe@example.com") ?>"
+                           class="text required-entry validate-email placeholder" title="<?php echo $this->__('Email') ?>"
+                           value="<?php echo $this->htmlEscape($this->getFormData()->getEmail() ? $this->getFormData()->getEmail() : $this->getCustomerEmail()) ?>" />
+                </div>
+            </div>
+            <?php else: ?>
+            <input type="hidden" name="email" value="<?php echo $this->getCustomerEmail(); ?>" />
+            <input type="hidden" name="customer_id" value="<?php echo $this->getCustomerId(); ?>" />
+            <?php endif; ?>
+            <input type="hidden" name="secure_code" value="<?php echo $this->getSecureCode(); ?>" />
+            <input type="hidden" name="reply_to" value="<?php echo $this->getReplyTo(); ?>" />
+            <input type="hidden" name="session_id" value="<?php echo $this->getSessionId(); ?>" />
+
+            <div class="form-actions fix-me">
+
+                <?php if ($this->getEmailsEnabled()): ?>
+                    <div class="comment-form-field to-left subscribe">
+                        <div class="comment-form-input">
+
+                            <input type="checkbox"
+                                   class="checkbox"
+                                   name="subscribe_to_replies"
+                                   id="subscribe_to_replies"
+                                   title="<?php echo $this->__('Subscribe to replies') ?>"
+                                   <?php if ($this->isCustomerSubscribed()): ?>checked<?php endif; ?> />
+
+                            <label for="subscribe_to_replies"><?php echo $this->__('Subscribe to comments') ?></label>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+
+                <button class="button to-right" type="submit">
+                    <span><span><?php echo $this->__("Submit"); ?></span></span>
+                </button>
+            </div>
+        </fieldset>
+    </form>
+    <script type="text/javascript">
+        //<![CDATA[
+        blogComments.form = new VarienForm('mpblog-form-<?php echo $this->getPostId(); ?>');
+        $('message_field').focus();
+        //]]>
+    </script>
+<?php else: ?>
+    <?php if ($this->getIsAjax()): ?>
+        <?php echo $this->getMessageBlockHtml(); ?>
+    <?php endif; ?>
+        <p>
+            <?php echo $this->__("Please "); ?>
+            <a href="<?php echo $this->getLoginUrl(); ?>"><?php echo $this->__("login"); ?></a>
+            <?php if ($this->isReply()): ?>
+                <?php echo $this->__(" to reply."); ?>
+            <?php else: ?>
+                <?php echo $this->__(" to comment."); ?>
+            <?php endif; ?>
+        </p>
+    <p><?php echo $this->__("Don't have an account?"); ?></p>
+    <p><a href="<?php echo $this->getRegisterUrl(); ?>"><?php echo $this->__("Sign Up for free"); ?></a>.</p>
+<?php endif; ?>
+

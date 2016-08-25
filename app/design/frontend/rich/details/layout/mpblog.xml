@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+-->
+<layout version="0.1.0">
+    <default>
+        <update handle="apply_glyphicons" />
+
+        <reference name="head">
+            <action method="addCss"><styles>mpblog/css/styles.css</styles></action>
+            <block type="mpblog/rss_wrapper" name="mpblog.rss.wrapper" as="mpblog_rss_wrapper"  />
+        </reference>
+    </default>
+    <mpblog_default>
+        <update handle="apply_jquery"/>
+        <update handle="apply_lightbox2"/>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column-blog.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>blog</value>
+            </action>
+        </reference>
+        <reference name="extra_head">
+            <action method="addSafeJs">
+                <alias>jQuery.fn.appendAround</alias>
+                <script>mpblog/vendor/appendaround/appendaround.js</script>
+            </action>
+            <action method="addSafeJs">
+                <alias>jQuery.fn.fitVids</alias>
+                <script>mpblog/vendor/fitvids/jquery.fitvids.js</script>
+            </action>
+            <action method="addSafeJs">
+                <alias>jQuery.fn.swipe</alias>
+                <script>mpblog/vendor/swipe/jquery.touch_swipe.min.js</script>
+            </action>
+            <action method="addSafeJs">
+                <alias>jQuery.fn.swipy</alias>
+                <script>mpblog/frontend/swipe/swipy.js</script>
+            </action>
+        </reference>
+        <reference name="head">
+            <block type="mpblog/content_archive_wrapper" name="mpblog.content.archive.wrapper" as="mpblog_content_archive_wrapper"/>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>mpblog/css/print.css</name>
+                <params><![CDATA[media="print" type="text/css"]]></params>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/blog.js</script>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="mpblog/layout" name="layout" as="layout">
+                <block type="mpblog/layout_container" name="layout.content" as="layout_content">
+                    <action method="setType">
+                        <type>content</type>
+                    </action>
+                </block>
+                <block type="mpblog/layout_container" name="layout.sidebar" as="layout_sidebar">
+                    <action method="setType">
+                        <type>sidebar</type>
+                    </action>
+                </block>
+            </block>
+        </reference>
+        <reference name="layout.sidebar">
+            <!-- Insert Custom Sidebar Blocks here -->
+        </reference>
+        <reference name="layout.content">
+            <!-- Insert Custom Content Blocks here -->
+        </reference>
+    </mpblog_default>
+    <mpblog_index_index>
+        <update handle="mpblog_default"/>
+        <reference name="head">
+            <block type="mpblog/content_list_wrapper" name="mpblog.content.list.wrapper" as="mpblog_content_list_wrapper" />
+        </reference>
+        <reference name="layout.content">
+            <block type="mpblog/content_list"
+                   name="mpblog.content.list"
+                   as="list"
+                   template="mpblog/list.phtml"/>
+
+            <block type="mpblog/content_grid"
+                   name="mpblog.content.grid"
+                   as="grid"
+                   template="mpblog/grid.phtml"/>
+        </reference>
+    </mpblog_index_index>
+    <mpblog_index_category>
+        <update handle="mpblog_default"/>
+        <reference name="head">
+            <block type="mpblog/content_list_wrapper" name="mpblog.content.list.wrapper" as="mpblog_content_list_wrapper" />
+        </reference>
+        <reference name="layout.content">
+
+            <block type="mpblog/content_category_list"
+                   name="mpblog.category.list"
+                   as="list"
+                   template="mpblog/list.phtml"/>
+
+            <block type="mpblog/content_category_grid"
+                   name="mpblog.category.grid"
+                   as="grid"
+                   template="mpblog/grid.phtml"/>
+        </reference>
+    </mpblog_index_category>
+    <mpblog_index_search>
+        <update handle="mpblog_default"/>
+        <reference name="head">
+            <block type="mpblog/content_list_wrapper" name="mpblog.content.list.wrapper" as="mpblog_content_list_wrapper" />
+        </reference>
+        <reference name="layout.content">
+
+            <block type="mpblog/content_search_query"
+                   name="mpblog.content.search"
+                   as="search"
+                   template="mpblog/list/search.phtml"/>
+
+            <block type="mpblog/content_search_list"
+                   name="mpblog.search.list"
+                   as="list"
+                   template="mpblog/list.phtml"/>
+
+            <block type="mpblog/content_search_grid"
+                   name="mpblog.search.grid"
+                   as="grid"
+                   template="mpblog/grid.phtml"/>
+        </reference>
+        <reference name="layout">
+            <action method="addBefore">
+                <where>content</where>
+                <alias>search</alias>
+            </action>
+        </reference>
+    </mpblog_index_search>
+    <mpblog_index_tag>
+        <update handle="mpblog_default"/>
+        <reference name="head">
+            <block type="mpblog/content_list_wrapper" name="mpblog.content.list.wrapper" as="mpblog_content_list_wrapper" />
+        </reference>
+        <reference name="layout.content">
+            <block type="mpblog/content_tag_list"
+                   name="mpblog.tag.list"
+                   as="list"
+                   template="mpblog/list.phtml"/>
+
+            <block type="mpblog/content_tag_grid"
+                   name="mpblog.tag.grid"
+                   as="grid"
+                   template="mpblog/grid.phtml"/>
+
+        </reference>
+    </mpblog_index_tag>
+    <mpblog_index_archive>
+        <update handle="mpblog_default"/>
+        <reference name="head">
+            <block type="mpblog/content_list_wrapper" name="mpblog.content.list.wrapper" as="mpblog_content_list_wrapper" />
+        </reference>
+        <reference name="layout.content">
+
+            <block type="mpblog/content_archive_list" name="mpblog.archive.list" as="list"
+                   template="mpblog/list.phtml"/>
+
+            <block type="mpblog/content_archive_grid" name="mpblog.archive.grid" as="grid"
+                   template="mpblog/grid.phtml"/>
+        </reference>
+    </mpblog_index_archive>
+
+    <mpblog_index_post>
+        <update handle="mpblog_default"/>
+        <reference name="head">
+            <action method="addJs">
+                <styles>mpblog/comments.js</styles>
+            </action>
+            <action method="addJs">
+                <styles>scriptaculous/effects.js</styles>
+            </action>
+
+            <block type="mpblog/social_wrapper"
+                   name="mpblog.social.wrapper"
+                   as="mpblog_social_wrapper"
+                   template="mpblog/social/wrapper.phtml" />
+
+            <block type="mpblog/content_post_wrapper"
+                   name="mpblog.content.post.wrapper"
+                   as="mpblog_content_post_wrapper"
+                   template="mpblog/post/wrapper.phtml" />
+
+        </reference>
+        <reference name="layout.content">
+
+            <block type="mpblog/content_post" name="mpblog.post" as="post">
+
+                <block type="mpblog/social"
+                       name="mpblog_social"
+                       as="mpblog_social"
+                       template="mpblog/social.phtml"/>
+
+                <block type="mpblog/comments_action"
+                       name="mpblog_comments_action"
+                       as="mpblog_comments_action"
+                       template="mpblog/comments/action.phtml"/>
+
+                <block type="mpblog/comments_list"
+                       name="mpblog_comments_list"
+                       as="mpblog_comments_list"
+                       template="mpblog/comments/list.phtml"/>
+            </block>
+        </reference>
+    </mpblog_index_post>
+
+    <mpblog_preview_window>
+        <reference name="head">
+            <action method="addCss"><styles>mpblog/css/styles.css</styles></action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate"><template>page/empty.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="mpblog/preview" name="mpblog.preview" as="mpblog_preview" template="mpblog/preview.phtml" />
+        </reference>
+    </mpblog_preview_window>
+
+    <mpblog_index_form>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mpblog/comments_form" name="mpblog.form" />
+        </block>
+    </mpblog_index_form>
+</layout> 

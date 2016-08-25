@@ -1,0 +1,106 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */ ?>
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 08.09.2014
+ */
+
+$billingAddress		= $this->getQuote()->getBillingAddress();
+$streetArr			= $billingAddress->getStreet(-1);
+$street				= is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
+$needInvoice		= $billingAddress->getNeedInvoice();
+$sameAsBilling		= $this->getQuote()->getShippingAddress()->getSameAsBilling();
+$cutomerAddressId	= $billingAddress->getCustomerAddressId();
+//$locker				= $this->getInpostLocker();
+
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
+?>
+<fieldset>
+    <input type="hidden" name="billing[address_id]" value="<?php echo $billingAddress->getId(); ?>">
+    <input type="hidden" name="billing[firstname]"  value="<?php echo $this->escapeHtml($billingAddress->getFirstname()); ?>">
+    <input type="hidden" name="billing[lastname]"   value="<?php echo $this->escapeHtml($billingAddress->getLastname()); ?>">
+    <input type="hidden" name="billing[region_id]"  value="<?php echo $this->escapeHtml($billingAddress->getRegionId()); ?>">
+    <input type="hidden" name="billing[region]"     value="<?php echo $this->escapeHtml($billingAddress->getRegion()); ?>">
+    <input type="hidden" name="billing[country_id]" value="<?php echo $billingAddress->getCountryId() ? $billingAddress->getCountryId() : $this->getStoreDefaultCountryId();?>">
+    <input type="hidden" name="billing[telephone]"  value="<?php echo $this->escapeHtml($billingAddress->getTelephone()); ?>" id="billing_telephone" />
+    <input type="hidden" name="billing[fax]" value="<?php echo $this->escapeHtml($billingAddress->getFax()); ?>">
+	<input type="hidden" name="billing[use_for_shipping]"     value="0">
+        <input type="hidden" name="billing[save_in_address_book]" value="<?php if($deliveryPoint->id): ?>0<?php else: ?>1<?php endif; ?>">
+	<input type="hidden" name="billing_address_id"            value="">
+    <legend><?php echo $this->__("Billing address:"); ?></legend>
+    <div class="form-group form-checkbox small">
+        <input type="checkbox" name="billing[need_invoice]" id="invoice_vat" class="css-checkbox invoice_vat" value="1" <?php if ($needInvoice): ?>checked<?php endif; ?>>
+        <label for="invoice_vat" class="css-label"><?php echo $this->__("I want an invoice"); ?></label>
+    </div>
+</fieldset>
+
+<fieldset id="invoice_data">
+
+	<?php if(!$deliveryPoint->id): ?>
+		<div class="form-group form-checkbox small">
+			<input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" <?php if ($sameAsBilling) : ?>checked<?php endif; ?> />
+			<label for="invoice_data_address" class="css-label"><?php echo $this->__("Billing address same as shipping address."); ?></label>
+		</div>
+	<?php endif; ?>
+
+    <div class="form-group clearfix border-top hide-success-vaild">
+        <div class="row">
+            <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?> / <?php echo $this->__("Fullname"); ?></label>
+            <div class="col-lg-7 col-md-5 col-sm-5">
+                <input type="text" value="<?php echo $this->escapeHtml($billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group clearfix border-top">
+        <div class="row">
+            <label class="col-sm-3" for="billing_vat_id"><?php echo $this->__("VAT ID"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-5">
+                <input type="tel" value="<?php echo $this->escapeHtml($billingAddress->getVatId()); ?>" class="form-control nip hint validate-nip" name="billing[vat_id]" id="billing_vat_id" data-original-title="<?php echo $this->__("Enter tax number"); ?>" >
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group border-top clearfix">
+        <div class="row">
+            <label class="col-sm-3" for="billing_street"><?php echo $this->__("Street and number"); ?></label>
+            <div class="col-lg-7 col-md-5 col-sm-5">
+                <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" required="true" <?php /* data-original-title="<?php echo $this->__("Enter street and number."); ?>" */ ?>>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group clearfix border-top">
+        <div class="row">
+            <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9">
+                <input type="tel" value="<?php echo $this->escapeHtml($billingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcodeWithReplace" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group clearfix border-top">
+        <div class="row">
+            <label class="col-sm-3" for="billing_city"><?php echo $this->__("City"); ?></label>
+            <div class="col-sm-5">
+                <input type="text" value="<?php echo $this->escapeHtml($billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" required="true" <?php /* data-original-title="<?php echo $this->__("Enter city name."); ?>" */ ?>>
+            </div>
+        </div>
+    </div>
+
+</fieldset>
+
+<script type="text/javascript">
+    Mall.translate.add("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax number is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
+
+    jQuery( document ).ready(function() {
+        jQuery('#billing_vat_id').on('change fucus click keydown keyup', function() {
+            if (jQuery(this).val().length) {
+                jQuery(this).parents('.form-group').removeClass('hide-success-vaild');
+            } else {
+                jQuery(this).parents('.form-group').addClass('hide-success-vaild');
+            }
+        });
+    });
+</script>

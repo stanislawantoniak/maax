@@ -1,0 +1,139 @@
+section#recently-viewed {
+	display: none;
+	.recently-viewed {
+		.rwd-item {
+			padding:0px 5px;
+		}
+		h3.title-section {
+			padding-top:0px;
+			padding-bottom:0px;
+			margin-left: -15px;
+
+			@media (max-width: $screen-xs-max) {
+				padding-left:20px;
+				margin-bottom: 15px;
+			}
+			&:before {
+				@media (max-width: $screen-xs-max) {
+					content: ' ';
+					display: block;
+					width: 18px;
+					height: 18px;
+					position: absolute;
+					left: -15px;
+					top: -4px;
+				}
+			}
+		}
+		.box_listing_product {
+			figure {
+				&.img_product {
+					margin-bottom: 10px;
+				}
+			}
+			.name_product {
+				padding:0px;
+
+			}
+		}
+		.item {
+			margin:0 20px;
+			@media (max-width: $screen-xs-max) {
+				margin:0 5px;
+			}
+		}
+		.customNavigation {
+			a {
+				margin-top:0px;
+				@media (max-width: $screen-xs-max) {
+					margin-top:6px;
+				}
+
+				&.prev {
+					left:10px;
+					@include sprite-dimensions($allMap, arrow-slider-latest-left-l);
+					@media (max-width: $screen-xs-max) {
+						@include sprite-dimensions($allMap, arrow-rwd-slider-prev-mobile);
+					}
+					&:hover {
+						@include sprite-dimensions($allMap, arrow-slider-latest-left-h);
+						@media (max-width: $screen-xs-max) {
+							@include sprite-dimensions($allMap, arrow-rwd-slider-prev-mobile-h);
+						}
+					}
+				}
+				&.next {
+					right:10px;
+
+					@include sprite-dimensions($allMap, arrow-slider-latest-right-l);
+					@media (max-width: $screen-xs-max) {
+
+						@include sprite-dimensions($allMap, arrow-rwd-slider-next-mobile);
+					}
+					&:hover {
+
+						@include sprite-dimensions($allMap, arrow-slider-latest-right-h);
+						@media (max-width: $screen-xs-max) {
+
+							@include sprite-dimensions($allMap, arrow-rwd-slider-next-mobile-h);
+						}
+					}
+				}
+			}
+		}
+		.rwd-controls {
+			.rwd-buttons {
+				.rwd-prev,
+				.rwd-next {
+
+					top:112.5px;
+					position:absolute;
+					text-indent: -999em;
+				}
+				.rwd-prev {
+					left:-23px;
+
+
+					@include sprite-dimensions($allMap, arrow-slider-latest-left-l);
+					@media (max-width: $screen-xs-max) {
+
+						@include sprite-dimensions($allMap, arrow-rwd-slider-prev-mobile);
+					}
+					&:hover {
+
+						@include sprite-dimensions($allMap, arrow-slider-latest-left-h);
+						@media (max-width: $screen-xs-max) {
+
+							@include sprite-dimensions($allMap, arrow-rwd-slider-prev-mobile-h);
+						}
+					}
+
+				}
+				.rwd-next {
+					right:-26px;
+
+					@include sprite-dimensions($allMap, arrow-slider-latest-right-l);
+					@media (max-width: $screen-xs-max) {
+
+						@include sprite-dimensions($allMap, arrow-rwd-slider-next-mobile);
+					}
+					&:hover {
+
+						@include sprite-dimensions($allMap, arrow-slider-latest-right-h);
+						@media (max-width: $screen-xs-max) {
+
+							@include sprite-dimensions($allMap, arrow-rwd-slider-next-mobile-h);
+						}
+					}
+				}
+				.rwd-prev,
+				.rwd-next {
+					&.disabled {
+						visibility:hidden;
+					}
+				}
+
+			}
+		}
+	}
+}

@@ -1,0 +1,188 @@
+<?php /* @var $this Zolago_Rma_Block_New_Step2  */ ?>
+<?php $_helper = Mage::helper("zolagorma"); ?>
+<?php $_po = $this->getPo(); ?>
+<?php $_rma = $this->getRma();?>
+<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
+<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
+<?php $_selectedShipping = $this->getSelectedShippingAddress();?>
+<?php //$dateList = $this->getDateList($_helper->getPostcode($_selectedShipping));?>
+<?php $dateList = array() ;?>
+<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
+<?php $vendor = $_po->getVendor();?>
+
+<?php echo $this->getChildHtml("zolagormatranslate"); ?>
+
+<div class="steps step-2 background-wrapper box-wrapper" id="step-2">
+	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
+	<input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
+	<div class="rma-container">
+		
+        <div id="pickup-address-form" class="fieldset flow-return">
+			<input type="hidden" id="can_init_addressbook" value="1"/>
+			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $_selectedShipping ? $_selectedShipping->getId() : ""; ?>"/>
+			<input type="hidden" name="rma[customer_postcode]" id="customer_address_postcode" value="<?php echo $_selectedShipping ? $_helper->getPostcode($_selectedShipping) : ''; ?>"/>
+			<input type="hidden" name="rma[override_address]" value="0"/>
+    
+            <h3 class="legend-big"><?php echo $this->getLegend(); ?></h3>
+            <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
+
+			<!-- selected address tmplate -->
+			<div class="hidden" id="selected-address-template">
+				<p class="pull-right small-no-float"><?php echo $_helper->__("Selected carrier address");?></p>
+				<dl class="pull-left" >
+					<dt>{{firstname}} {{lastname}}</dt>
+					<dd>{{street}}</dd>
+					<dd><span class="selected-postcode">{{postcode}}</span> {{city}}</dd>
+					<dd class="phone"><?php echo $_helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+					<dd class="action separator">
+						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+					</dd>
+				</dl>
+			</div>
+
+			<!-- normal address tmplate -->
+			<div class="panel panel-default hidden" id="normal-address-template">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<dl class="pull-left small-no-float">
+							<dt>{{firstname}} {{lastname}}</dt>
+							<dd>{{street}}</dd>
+							<dd>{{postcode}} {{city}}</dd>
+							<dd class="action separator">
+								<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+								<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 
+							</dd>
+						</dl> 
+						<button class="btn-select button button-third large choose"><?php echo $this->__("Choose")?></button>
+					</div>
+				</div>
+			</div>
+
+			<!-- add new template -->
+			<div class="panel add-new hidden" id="addressbook-add-new-template" data-toggle="modal" data-target="#addressbook-modal">
+				<div class="panel-body">
+					<h4 class="addressbook-add-new"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;<strong><?php echo $this->__("ADD NEW ADDRESS"); ?></strong></h4>
+					<div class="panel-body-content">
+
+					</div>
+				</div>
+			</div>
+			
+			<!-- Edit / add mdoal -->
+			<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"></button>
+							<h2 class="title_section" id="modal-title"></h2>
+						</div>
+						<div class="modal-body" id="modal-body">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+            <div class="panel panel-default">
+                <div class="panel-body panel-body-with-footer">
+                    <div class="current-rma-address current-address shipping clearfix">
+						<!-- content from js -->
+                    </div>
+					<div class="panel-adresses shipping">
+						<!-- content from js -->
+					</div>
+                </div>
+				<div class="panel-footer clearfix">
+					<a href="#" class="underline pull-right change_address shipping">
+						<?php echo $this->__("Change address");?>
+					</a>
+				</div>
+            </div>
+
+        </div>
+        <div id="pickup-date-form">
+            <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <?php if (($this->isDhlEnabled()) && count($dateList)): ?>
+						<input type="hidden" id="can_init_carrier" value="1"/>
+                        <div class="current-rma-date clearfix">
+                            <div id="pickup-date-form-panel" class="fieldset flow-return">
+
+                                <label class="required choose-date" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
+                                    <em>:</em></label>
+
+                                <div class="input-box" id="dateList">
+                                    <?php $number = 1; ?>
+                                    <?php foreach ($dateList as $date=>$item): ?>
+
+                                        <input
+                                            type="radio"
+                                            name="rma[carrier_date]"
+                                            id="carrier_date_<?php echo $date;?>"
+                                            value="<?php echo date('Y-m-d',$date);?>"
+                                            />
+                                        <label for="carrier_date_<?php echo $date;?>" class="<?php echo "label-$number";?>">
+                                            <span>
+                                                <span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
+                                                <br/>
+                                                <span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
+                                            </span>
+                                        </label>
+                                        <?php $number++; ?>
+                                    <?php endforeach; ?>
+                                </div>
+
+                                <label class="required carrier-time-from"
+                                       for="carrier-time-from"><?php echo $_helper->__("Select the time interval"); ?>
+                                    <em>:</em></label>
+                                <div class="choose-time">
+                                    <div class="field">
+                                        <div class="input-box">
+                                            <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from"
+                                                   value="<?php echo $_rma->getCarrierTimeFrom(); ?>"
+                                                   title="<?php echo $_helper->__("Choose time-from of the day"); ?>"/>
+                                            <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to"
+                                                   value="<?php echo $_rma->getCarrierTimeTo(); ?>"
+                                                   title="<?php echo $_helper->__("Choose time-to of the day"); ?>"/>
+                                        </div>
+                                        <div id="pickup-time"></div>
+                                    </div>
+                                    <div id="slider-range"></div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if(count($dateList) == 0): ?>
+                        <?php echo $_helper->__("For a given zip code can not be ordered a courier. ZIP Code may be wrong."); ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <?php if($this->showCustomerAccount()): ?>
+            <div class="fieldset row" id="customer-account-wrapper">
+            <div>
+                <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
+                <div class="col-sm-5">
+                    <input type="text" autocomplete="off" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
+                       name="rma[customer_account]" id="customer-account"
+                       title="<?php echo $_helper->__("Bank account"); ?>" class="form-control bank-account-rma validate-bankAccountWithReplace">
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <div>
+            <a href="#step-1" class="button button-third large back pull-left">
+                <?php echo $_helper->__("Back"); ?>
+            </a>
+            <button class="btn button button-primary next pull-right"
+                    id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+			<div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->getChildHtml("zolagormajs"); ?>
+
