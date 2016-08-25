@@ -175,7 +175,7 @@ class ZolagoOs_Import_Model_Import_Price
             $priceBatchCount = count($priceBatch);
             $this->log("SKU(S) SENT TO PROCESS: {$priceBatchCount}", Zend_Log::INFO);
 
-            //$this->_moveProcessedFile();
+            $this->_moveProcessedFile();
 
         } catch (Exception $e) {
             Mage::logException($e);
