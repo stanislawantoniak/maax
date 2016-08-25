@@ -46,6 +46,23 @@ class ZolagoOs_Import_Model_Import_Price
 
     }
 
+    function tofloat($num)
+    {
+        $dotPos = strrpos($num, '.');
+        $commaPos = strrpos($num, ',');
+        $sep = (($dotPos > $commaPos) && $dotPos) ? $dotPos :
+            ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
+
+        if (!$sep) {
+            return floatval(preg_replace("/[^0-9]/", "", $num));
+        }
+
+        return floatval(
+            preg_replace("/[^0-9]/", "", substr($num, 0, $sep)) . '.' .
+            preg_replace("/[^0-9]/", "", substr($num, $sep + 1, strlen($num)))
+        );
+    }
+
     protected function _import()
     {
         $vendorId = $this->getExternalId();
@@ -54,7 +71,6 @@ class ZolagoOs_Import_Model_Import_Price
         try {
 
             $priceBatch = [];
-            $invalidPriceScan = [];
             $duplicateSkuScan = [];
             $wrongLineFormatScan = [];
             $row = 0;
@@ -70,37 +86,33 @@ class ZolagoOs_Import_Model_Import_Price
                     //$sku = $vendorId . "-" . $data[0];
                     $sku = $data[0];
 
-                    if(isset($priceBatch[$sku])){
+
+
+                    if (isset($priceBatch[$sku])) {
                         $duplicateSkuScan[$row] = "LINE#{$row}: SKU {$sku}";
                     }
-                    if (count($data) !== 6) {
+                    if (count($data) !== 6 ||
+
+                        ((float)$data[1] < 0 || (float)$data[2] < 0 || (float)$data[3] < 0 || (float)$data[4] < 0 || (float)$data[5] < 0)
+                    ) {
                         $wrongLineFormatScan[$row] = "LINE#{$row} (SKU: {$sku})";
                         continue;
                     }
-                    if ((float)$data[1] > 0) {
+
+                    if ((float)$data[1] >= 0) {
                         $priceBatch[$sku]["A"] = (float)$data[1];
-                    } else {
-                        $invalidPriceScan[$sku][] = "{$sku} invalid price type A: " . $data[1];
                     }
-                    if ((float)$data[2] > 0) {
+                    if ((float)$data[2] >= 0) {
                         $priceBatch[$sku]["B"] = (float)$data[2];
-                    } else {
-                        $invalidPriceScan[] = "{$sku} invalid price type B: " . $data[2];
                     }
-                    if ((float)$data[3] > 0) {
+                    if ((float)$data[3] >= 0) {
                         $priceBatch[$sku]["C"] = (float)$data[3];
-                    } else {
-                        $invalidPriceScan[] = "{$sku} invalid price type C: " . $data[3];
                     }
-                    if ((float)$data[4] > 0) {
+                    if ((float)$data[4] >= 0) {
                         $priceBatch[$sku]["Z"] = (float)$data[4];
-                    } else {
-                        $invalidPriceScan[] = "{$sku} invalid price type Z: " . $data[4];
                     }
-                    if ((float)$data[5] > 0) {
+                    if ((float)$data[5] >= 0) {
                         $priceBatch[$sku]["salePriceBefore"] = (float)$data[5];
-                    } else {
-                        $invalidPriceScan[] = "{$sku} invalid price type salePriceBefore: " . $data[5];
                     }
                     unset($sku);
 
@@ -129,30 +141,23 @@ class ZolagoOs_Import_Model_Import_Price
             }
 
 
-
             if (empty($priceBatch)) {
                 $this->log("NO VALID DATA FOUND IN THE FILE", Zend_Log::ERR);
                 return $this;
             }
 
-
-            //2. validate SKU(S) with invalid prices (<=0)
-            if (!empty($invalidPriceScan)) {
-                $this->log("INVALID PRICE ANALYSIS RESULT: " . implode(" ;", $invalidPriceScan), Zend_Log::ERR);
-            }
-
-            //3. validate wrong line format
+            //2. validate wrong line format
             if (!empty($wrongLineFormatScan)) {
                 $wrongLineFormatScanCount = count($wrongLineFormatScan);
                 $this->log("INVALID LINE FORMAT ANALYSIS RESULT: Wrong lines - {$wrongLineFormatScanCount}: " . implode(" ;", $wrongLineFormatScan), Zend_Log::ERR);
             }
 
-            //4. validate duplicated SKU(S)
+            //3. validate duplicated SKU(S)
             if (!empty($duplicateSkuScan)) {
                 $this->log("DUPLICATED SKU(s) ANALYSIS RESULT: " . implode(" ;", $duplicateSkuScan), Zend_Log::ERR);
             }
             //--validate
-            
+
             /** @var Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 $restApi */
             $restApi = Mage::getModel('zolagocatalog/api2_restapi_rest_admin_v1');
 
@@ -170,7 +175,7 @@ class ZolagoOs_Import_Model_Import_Price
             $priceBatchCount = count($priceBatch);
             $this->log("SKU(S) SENT TO PROCESS: {$priceBatchCount}", Zend_Log::INFO);
 
-            $this->_moveProcessedFile();
+            //$this->_moveProcessedFile();
 
         } catch (Exception $e) {
             Mage::logException($e);
