@@ -460,18 +460,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 			collectTotals()->
 			save();
 
-		//adding extra charge
-		//todo select carrier
-//		$extraCharge = (int)Mage::getStoreConfig('carriers/zolagopp/cod_extra_charge');
-//		if($extraCharge && $payment['method'] == 'cashondelivery'){
-//			$costVal = $address->getShippingInclTax();
-//			$baseCostVal = $address->getBaseShippingInclTax();
-//			$costVal = $costVal + $extraCharge;
-//			$baseCostVal = $baseCostVal + $extraCharge;
-//			$address->setShippingInclTax($costVal);
-//			$address->setBaseShippingInclTax($baseCostVal);
-//			$address->save();
-//		}
 	}
 
 

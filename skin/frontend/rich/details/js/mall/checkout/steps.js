@@ -869,8 +869,8 @@
 					data.push({name: 'shipping[save_in_address_book]', value: 0});
                     data.push({name: 'shipping[telephone]', value: telephoneForLocker});
                     data.push({name: 'shipping_point_code', value: inpostName});
-					data.push({name: 'inpost[name]', value: inpostName});
-					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
+					data.push({name: 'delivery_point[name]', value: inpostName});
+					data.push({name: 'delivery_point[telephone]', value: telephoneForLocker});
 				}
 
 				var newsletterAgreement = this.getNewsletterAgreement();
@@ -2102,10 +2102,7 @@
 					parseFloat(discountObject.data('price')) * -1 : 0;
 			
 				// Prepare costs for vendors and totals
-               // var extra_charges = jQuery.parseJSON(Mall.reg.get("extra_charges"));
-                //console.log(this.getCODExtraCharges());
-                //var extraCharge = 400;
-                var vendorCODExtraCharge = deliverypayment.getCODExtraChargeForVendor(selectedMethod);
+              var vendorCODExtraCharge = deliverypayment.getCODExtraChargeForVendor(selectedMethod);
 				this.content.find(".panel-vendor.panel-footer").each(function(){
 					var el = jQuery(this);
 					var vendorId = el.data("vendorId");
