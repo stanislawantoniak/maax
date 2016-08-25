@@ -12,6 +12,8 @@ $modagoHelper = Mage::helper('zolagomodago');
 $items= $this->getRateItems();
 $methods = $items->methods;
 
+$allVendorsMethod = $items->allVendorsMethod;
+$extraCharges = $helper->getUdropshipMethodExtraCharges($allVendorsMethod);
 
 $_totalDiscount = $this->getTotalDiscount();
 $_coupon = $this->getCoupon();
@@ -33,6 +35,7 @@ $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
 $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($deliveryMethodCode);
 ?>
+
 <div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
 	<?php $_items = $this->getItems(); ?>

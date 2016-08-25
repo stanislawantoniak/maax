@@ -14,7 +14,30 @@ abstract class Zolago_Checkout_Controller_Abstract
 	public function getOnepage() {
 		return Mage::getSingleton('zolagocheckout/type_onepage');
 	}
-	
+
+
+    /**
+     * @param $extraCharge
+     */
+    public function setUdropshipShippingDetailsExtraChargeToAddress($extraCharge)
+    {
+        $quote = Mage::getModel("checkout/cart")->getQuote();
+        $address = $quote->getShippingAddress();
+
+        $details = $address->getUdropshipShippingDetails();
+        $details = $details ? Zend_Json::decode($details) : array();
+
+        if (!empty($details) && isset($details['methods'])) {
+            foreach ($details['methods'] as $vId => $detail) {
+                $details['methods'][$vId]['cost'] = $details['methods'][$vId]['cost'] + $extraCharge;
+                $details['methods'][$vId]['price'] = $details['methods'][$vId]['price'] + $extraCharge;
+                $details['methods'][$vId]['price_excl'] = $details['methods'][$vId]['price_excl'] + $extraCharge;
+                $details['methods'][$vId]['price_incl'] = $details['methods'][$vId]['price_incl'] + $extraCharge;
+            }
+            $address->setUdropshipShippingDetails(Zend_Json::encode($details));
+        }
+    }
+
 	/**
 	 * Process place order action
 	 * Make parial save of all data to quote
@@ -63,6 +86,74 @@ abstract class Zolago_Checkout_Controller_Abstract
 			Mage::logException($ex);
 			return $this->_prepareJsonResponse($response);
 		}
+
+
+        //$extraCharge = 400;
+        $onepage = $this->getOnepage();
+
+
+        $request = $this->getRequest();
+        /**
+        payment[method]:zolagopayment
+        payment[additional_information][provider]:m
+         */
+        if ($payment = $request->getParam("payment")) {
+
+            if ($payment['method'] == 'cashondelivery') {
+                /**
+                 * shipping_method[4]:udtiership_1
+                 */
+
+                if ($shippingMethod = $request->getParam("shipping_method")) {
+                    $udropshipMethod = array_shift($shippingMethod);
+                    $storeId = Mage::app()->getStore()->getId();
+
+                    $info = Mage::helper("udropship")->getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod);
+                    $carrier = $info->getDeliveryCode();
+
+
+                    if (in_array($carrier,
+                        array(
+                            Orba_Shipping_Model_Carrier_Default::CODE, //TODO ask Staszek
+                            Orba_Shipping_Model_Post::CODE,
+                            GH_Inpost_Model_Carrier::CODE,
+                            ZolagoOs_PickupPoint_Helper_Data::CODE)
+                    )
+                    ) {
+                        /** @var Zolago_Checkout_Helper_Data $helper */
+                        $helper = Mage::helper("zolagocheckout");
+
+                        $extraCharges = $helper->getUdropshipMethodExtraCharges(array($udropshipMethod));
+
+                        $extraCharge = isset($extraCharges[$udropshipMethod]) ? $extraCharges[$udropshipMethod] : 0;
+
+                        if ($extraCharge > 0) {
+                            $address = $onepage->getQuote()->getShippingAddress();
+                            $costVal = $address->getShippingInclTax();
+                            $baseCostVal = $address->getBaseShippingInclTax();
+                            $costVal = $costVal + $extraCharge;
+                            $baseCostVal = $baseCostVal + $extraCharge;
+                            $address->setShippingInclTax($costVal);
+                            $address->setBaseShippingInclTax($baseCostVal);
+                            $address->setGrandTotal($address->getGrandTotal() + $extraCharge);
+                            $address->setBaseGrandTotal($address->getBaseGrandTotal() + $extraCharge);
+
+                            //Save sales_flat_quote_address.udropship_shipping_details
+                            $this->setUdropshipShippingDetailsExtraChargeToAddress($extraCharge);
+                            //Save sales_flat_quote_address.udropship_shipping_details
+
+                            $address->save();
+                        }
+                    }
+
+
+                }
+            }
+
+
+        }
+
+
 
 		parent::saveOrderAction();
 
@@ -371,16 +462,16 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 		//adding extra charge
 		//todo select carrier
-		$extraCharge = (int)Mage::getStoreConfig('carriers/zolagopp/cod_extra_charge');
-		if($extraCharge && $payment['method'] == 'cashondelivery'){
-			$costVal = $address->getShippingInclTax();
-			$baseCostVal = $address->getBaseShippingInclTax();
-			$costVal = $costVal + $extraCharge;
-			$baseCostVal = $baseCostVal + $extraCharge;
-			$address->setShippingInclTax($costVal);
-			$address->setBaseShippingInclTax($baseCostVal);
-			$address->save();
-		}
+//		$extraCharge = (int)Mage::getStoreConfig('carriers/zolagopp/cod_extra_charge');
+//		if($extraCharge && $payment['method'] == 'cashondelivery'){
+//			$costVal = $address->getShippingInclTax();
+//			$baseCostVal = $address->getBaseShippingInclTax();
+//			$costVal = $costVal + $extraCharge;
+//			$baseCostVal = $baseCostVal + $extraCharge;
+//			$address->setShippingInclTax($costVal);
+//			$address->setBaseShippingInclTax($baseCostVal);
+//			$address->save();
+//		}
 	}
 
 

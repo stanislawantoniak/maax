@@ -255,13 +255,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 			foreach ($methodDataArr as $methodData) {
 				$vendorId = $methodData['vendor_id'];
 				$methodToFind[$code][$vendorId] = $vendorId;
-				$extraCharge = 0;
-				$costVal = $methodData['cost'];
-				$extraCharge = (int)Mage::getStoreConfig('carriers/'.$methodData["delivery_type"].'/cod_extra_charge');
-				if($extraCharge && Mage::getSingleton('checkout/session')->getPayment()['method'] == 'cashondelivery'){
-					$costVal = $costVal + $extraCharge;
-				}
-				$cost[$code][] = $costVal;
 			}
 		}
 
