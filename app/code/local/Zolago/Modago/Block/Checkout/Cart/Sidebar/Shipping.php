@@ -206,7 +206,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
     {
         $deliveryMethods = "{";
         foreach ($methods as $method) //Orba_Shipping_Model_Carrier_Default
-            if ($method['delivery_type'] != Mage::getModel("orbashipping/carrier_default")->getCarrierCode() && $method['delivery_type'] != Mage::helper("zospickuppoint")->getCode())
+            if ($method['delivery_type'] == Mage::getModel('orbashipping/packstation_inpost')->getCarrierCode() || $method['delivery_type'] == Mage::getModel('orbashipping/packstation_pwr')->getCarrierCode())
                 $deliveryMethods .= $method['delivery_type'] . ": {mapDelivery: \"" .
                     $method['delivery_type'] . "_map_delivery\", urlData: \"/shipping/" .
                     $method['delivery_type'] . "/getPopulateMapData\" },";
