@@ -32,6 +32,7 @@
 /*FOOTER*/
 @-ms-viewport {
   width: device-width; }
+
 /* line 647, ../vendor/bootstrap/_mixins.scss */
 .visible-xs, .visible-sm, .visible-sm-to-smmd, .visible-smmd, .visible-md, .visible-lg {
   display: none !important; }
@@ -49,7 +50,7 @@
   tr.visible-xs {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-xs, td.visible-xs {
     display: table-cell !important; } }
 @media (min-width: 768px) and (max-width: 991px) {
@@ -65,7 +66,7 @@
   tr.visible-sm {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-sm, td.visible-sm {
     display: table-cell !important; } }
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -81,7 +82,7 @@
   tr.visible-md {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-md, td.visible-md {
     display: table-cell !important; } }
 @media (min-width: 1200px) {
@@ -97,7 +98,7 @@
   tr.visible-lg {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-lg, td.visible-lg {
     display: table-cell !important; } }
 @media (max-width: 767px) {
@@ -129,7 +130,7 @@
   tr.visible-sm-to-smmd {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-sm-to-smmd, td.visible-sm-to-smmd {
     display: table-cell !important; } }
 @media (min-width: 810px) and (max-width: 991px) {
@@ -145,7 +146,7 @@
   tr.visible-smmd {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-smmd, td.visible-smmd {
     display: table-cell !important; } }
 @media (min-width: 768px) and (max-width: 809px) {
@@ -173,7 +174,7 @@
   tr.visible-print {
     display: table-row !important; }
 
-  /* line 641, ../vendor/bootstrap/_mixins.scss */
+  /* line 642, ../vendor/bootstrap/_mixins.scss */
   th.visible-print, td.visible-print {
     display: table-cell !important; } }
 @media print {
@@ -182,8 +183,8 @@
     display: none !important; } }
 /* line 1, ../sass/design/dimensions/_global.scss */
 .inspiration-strips {
-  border-bottom: 1px solid #000000;
-  border-top: 1px solid #000000; }
+  border-bottom: 1px solid black;
+  border-top: 1px solid black; }
 
 /* line 8, ../sass/design/dimensions/_global.scss */
 section.section#delivery ul {
@@ -191,12 +192,12 @@ section.section#delivery ul {
 /* line 12, ../sass/design/dimensions/_global.scss */
 section.section .typo-main {
   font-size: 12px;
-  color: #000;
+  color: black;
   line-height: 1.5; }
 /* line 17, ../sass/design/dimensions/_global.scss */
 section.section .main {
   font-size: 13px;
-  color: #000;
+  color: black;
   line-height: 1.5; }
 @media (max-width: 767px) {
   /* line 23, ../sass/design/dimensions/_global.scss */
@@ -223,7 +224,7 @@ section.section .main {
   background-color: #fff !important; }
 
 /* HEADER BOTTOM */
-/* line 5, ../sass/design/dimensions/_header.scss */
+/* line 6, ../sass/design/dimensions/_header.scss */
 .header_bottom #nav_mobile > li > a:link, .header_bottom #nav_mobile > li > a:visited {
   text-decoration: none; }
 /* line 9, ../sass/design/dimensions/_header.scss */
@@ -236,7 +237,7 @@ section.section .main {
 .header_bottom #nav_mobile > li li a:hover {
   text-decoration: underline; }
 
-/* line 27, ../sass/design/dimensions/_header.scss */
+/* line 28, ../sass/design/dimensions/_header.scss */
 .top_bottom #shop_nav_mobile > li > a:link, .top_bottom #shop_nav_mobile > li > a:visited {
   text-decoration: none; }
 /* line 31, ../sass/design/dimensions/_header.scss */
@@ -289,7 +290,7 @@ section.section .main {
 /* line 16, ../sass/design/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading div {
   text-align: center; }
-/* line 18, ../sass/design/dimensions/_summary-delivery-payment.scss */
+/* line 19, ../sass/design/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading div.hcena, .table-summary-product .table-heading div.hwartosc {
   text-align: right; }
 /* line 27, ../sass/design/dimensions/_summary-delivery-payment.scss */
@@ -321,11 +322,11 @@ section.section .main {
   font-size: 13px; }
 /* line 395, ../sass/other/_variable.scss */
 .top-bar a:hover, .top-bar a.hover {
-  color: #fff;
+  color: white;
   text-decoration: none; }
 /* line 400, ../sass/other/_variable.scss */
 .top-bar a:active, .top-bar a:focus, .top-bar a.active {
-  color: #fff;
+  color: white;
   text-decoration: none;
   outline: none; }
 /* line 21, ../sass/design/modules/_top-bar.scss */
@@ -484,19 +485,19 @@ section.section .main {
   margin-top: -5px; }
 /* line 12, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu .clone_submenu-content {
-  border: 1px solid #ffffff;
-  box-shadow: 0 2px 5px #ccc;
+  border: 1px solid white;
+  box-shadow: 0 2px 5px #cccccc;
   text-align: left;
   overflow: hidden;
   margin: 0;
-  background: #fff !important;
-  background: -moz-linear-gradient(-80deg, #fff 0%, #fff 100%) !important;
-  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #fff), color-stop(100%, #fff)) !important;
-  background: -webkit-linear-gradient(-80deg, #fff 0%, #fff 100%) !important;
-  background: -o-linear-gradient(-80deg, #fff 0%, #fff 100%) !important;
-  background: -ms-linear-gradient(-80deg, #fff 0%, #fff 100%) !important;
+  background: white !important;
+  background: -moz-linear-gradient(-80deg, white 0%, white 100%) !important;
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, white), color-stop(100%, white)) !important;
+  background: -webkit-linear-gradient(-80deg, white 0%, white 100%) !important;
+  background: -o-linear-gradient(-80deg, white 0%, white 100%) !important;
+  background: -ms-linear-gradient(-80deg, white 0%, white 100%) !important;
   background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%) !important;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 ) !important;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   width: 860px; }
@@ -507,7 +508,7 @@ section.section .main {
   margin-bottom: 36px; }
 /* line 29, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu .clone_submenu-content .box [rel=category] {
-  color: #4C4C4C;
+  color: #4c4c4c;
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase; }
@@ -528,12 +529,12 @@ section.section .main {
   color: #656565; }
 /* line 57, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dt {
-  color: #000;
-  border-bottom: 1px solid #EBEBEB;
+  color: black;
+  border-bottom: 1px solid #ebebeb;
   width: 100%;
   padding-bottom: 10px;
   line-height: 2; }
-/* line 63, ../sass/design/modules/_clone-menu.scss */
+/* line 64, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dt a:link, #clone_submenu ul dl dt a:visited {
   color: #7e7e7e;
   font-size: 15px;
@@ -543,8 +544,8 @@ section.section .main {
   text-decoration: underline; }
 /* line 73, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dd {
-  color: #000; }
-/* line 76, ../sass/design/modules/_clone-menu.scss */
+  color: black; }
+/* line 77, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dd a:link, #clone_submenu ul dl dd a:visited {
   font-size: 13px;
   font-weight: 400;
@@ -560,7 +561,7 @@ section.section .main {
   text-decoration: underline; }
 
 /* CLONE MENU */
-/* line 107, ../sass/design/modules/_clone-menu.scss */
+/* line 108, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul a.closeSubMenu:link, #clone_submenu ul a.closeSubMenu:visited {
   border-radius: 0;
   cursor: pointer;
@@ -576,7 +577,7 @@ section.section .main {
 /* line 121, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul a.closeSubMenu:link:hover, #clone_submenu ul a.closeSubMenu:visited:hover {
   background-position: 0 -30px !important;
-  color: #fff !important;
+  color: white !important;
   outline: none !important; }
 /* line 126, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul a.closeSubMenu:link:active, #clone_submenu ul a.closeSubMenu:visited:active {
@@ -597,8 +598,10 @@ section.section .main {
   height: 21px;
   line-height: 21px;
   color: #220000;
-  -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px;
   margin-top: 6px;
   margin-right: 6px;
@@ -608,7 +611,7 @@ section.section .main {
   margin-left: 6px; }
 /* line 21, ../sass/design/modules/_current-filter.scss */
 .content-xs .active-filter .fa {
-  color: #b99;
+  color: #bb9999;
   font-size: 11px; }
 /* line 26, ../sass/design/modules/_current-filter.scss */
 .content-xs .active-filter:hover .fa {
@@ -635,7 +638,7 @@ section.section .main {
     font-weight: normal; } }
 /* line 54, ../sass/design/modules/_current-filter.scss */
 #active-filters dl dd .label, #view-current-filter dl dd .label {
-  color: #000;
+  color: black;
   font-size: 12px;
   text-align: left;
   line-height: 20px;
@@ -649,8 +652,10 @@ section.section .main {
   cursor: pointer; }
 /* line 71, ../sass/design/modules/_current-filter.scss */
 #active-filters dl dd.action, #view-current-filter dl dd.action {
-  -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px; }
 /* line 76, ../sass/design/modules/_current-filter.scss */
 #active-filters .actionViewFilter, #view-current-filter .actionViewFilter {
@@ -689,7 +694,7 @@ section.section .main {
   /* line 108, ../sass/design/modules/_current-filter.scss */
   #header-main #category-header-left {
     width: 100%;
-    border-bottom: solid 2px #F2F1F0; } }
+    border-bottom: solid 2px #f2f1f0; } }
 /* line 119, ../sass/design/modules/_current-filter.scss */
 #header-main #category-header-right {
   position: relative; }
@@ -703,7 +708,7 @@ section.section .main {
     position: absolute;
     height: auto;
     top: 0;
-    border-right: solid 2px #F2F1F0;
+    border-right: solid 2px #f2f1f0;
     left: -20px;
     bottom: 15px; } }
 /* line 136, ../sass/design/modules/_current-filter.scss */
@@ -765,7 +770,7 @@ section.section .main {
   /* line 201, ../sass/design/modules/_current-filter.scss */
   .not-content-mode.sm-to-smmd-plus-smmd #header-main #category-header-left, .this-is-search.sm-to-smmd-plus-smmd #header-main #category-header-left {
     width: 100%;
-    border-bottom: solid 2px #F2F1F0; } }
+    border-bottom: solid 2px #f2f1f0; } }
 @media (min-width: 810px) {
   /* line 207, ../sass/design/modules/_current-filter.scss */
   .not-content-mode.sm-to-smmd-plus-smmd #header-main #category-header-right, .this-is-search.sm-to-smmd-plus-smmd #header-main #category-header-right {
@@ -776,7 +781,7 @@ section.section .main {
     position: absolute;
     height: auto;
     top: 0;
-    border-right: solid 2px #F2F1F0;
+    border-right: solid 2px #f2f1f0;
     left: -20px;
     bottom: 15px; } }
 @media (max-width: 809px) {
@@ -818,7 +823,7 @@ section.section .main {
 #sort-criteria ul li {
   width: 50%;
   line-height: 27px;
-  color: #000; }
+  color: black; }
 /* line 11, ../sass/design/modules/_sort-criteria.scss */
 #sort-criteria ul li.selectboxit-option {
   width: 100% !important; }
@@ -846,11 +851,11 @@ section.section .main {
   font-weight: normal; }
 /* line 40, ../sass/design/modules/_sort-criteria.scss */
 #sort-criteria ul li label {
-  color: #333; }
+  color: #333333; }
 /* line 43, ../sass/design/modules/_sort-criteria.scss */
 #sort-criteria ul li span {
   box-shadow: none;
-  color: #777; }
+  color: #777777; }
 /* line 47, ../sass/design/modules/_sort-criteria.scss */
 #sort-criteria ul li .sort-by-container {
   width: 160px;
@@ -913,36 +918,36 @@ section.section .main {
   line-height: 0; }
 
 /* display none until init */
-/* line 7, ../sass/design/modules/_rwdCarousel.scss */
+/* line 8, ../sass/design/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-page, .rwd-carousel .rwd-buttons div {
   cursor: pointer; }
 
 /* line 13, ../sass/design/modules/_rwdCarousel.scss */
 .customNavigation a {
   font-size: 30px;
-  color: #ccc;
+  color: #cccccc;
   cursor: pointer; }
 /* line 17, ../sass/design/modules/_rwdCarousel.scss */
 .customNavigation a:hover {
-  color: #808080; }
+  color: gray; }
 
-/* line 25, ../sass/design/modules/_rwdCarousel.scss */
+/* line 26, ../sass/design/modules/_rwdCarousel.scss */
 .block-promoted-banners .rwd-controls .rwd-buttons .rwd-prev, .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next {
   font-size: 30px;
-  color: #ccc;
+  color: #cccccc;
   cursor: pointer; }
 /* line 31, ../sass/design/modules/_rwdCarousel.scss */
 .block-promoted-banners .rwd-controls .rwd-buttons .rwd-prev:hover, .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next:hover {
-  color: #808080; }
+  color: gray; }
 
-/* line 41, ../sass/design/modules/_rwdCarousel.scss */
+/* line 42, ../sass/design/modules/_rwdCarousel.scss */
 .block-inspiration .rwd-controls .rwd-buttons .rwd-prev, .block-inspiration .rwd-controls .rwd-buttons .rwd-next {
   font-size: 30px;
-  color: #ccc;
+  color: #cccccc;
   cursor: pointer; }
 /* line 46, ../sass/design/modules/_rwdCarousel.scss */
 .block-inspiration .rwd-controls .rwd-buttons .rwd-prev:hover, .block-inspiration .rwd-controls .rwd-buttons .rwd-next:hover {
-  color: #808080; }
+  color: gray; }
 
 /* mouse grab icon */
 /* line 56, ../sass/design/modules/_rwdCarousel.scss */
@@ -972,8 +977,8 @@ section.section .main {
 
 /* line 83, ../sass/design/modules/_rwdCarousel.scss */
 #rwd-banners .item {
-  background: #fff;
-  color: #fff;
+  background: white;
+  color: white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -991,7 +996,7 @@ section.section .main {
 .block-inspiration .rwdCarousel .item .carousel-caption span.title-caption {
   font-family: latoregular, sans-serif;
   text-transform: uppercase;
-  color: #000; }
+  color: black; }
 /* line 13, ../sass/design/modules/_block-inspiration.scss */
 .block-inspiration .rwdCarousel .item .carousel-caption span.body-caption {
   color: #8b8b8b; }
@@ -1005,7 +1010,7 @@ section.section .main {
   text-decoration: underline; }
 /* line 34, ../sass/design/modules/_block-inspiration.scss */
 .block-inspiration #rwd-inspiration .item {
-  background: #fff;
+  background: white;
   color: #515151;
   text-align: center; }
 
@@ -1013,7 +1018,7 @@ section.section .main {
 #lp-banners {
   display: block;
   position: relative;
-  background-color: #ffffff;
+  background-color: white;
   vertical-align: top;
   float: none; }
 /* line 8, ../sass/design/modules/_block-lp-banners.scss */
@@ -1033,7 +1038,7 @@ section.section .main {
 
 /* line 1, ../sass/design/modules/_navCategoryMenu.scss */
 #navCategory {
-  background: #fff; }
+  background: white; }
 /* line 3, ../sass/design/modules/_navCategoryMenu.scss */
 #navCategory h3 {
   text-transform: uppercase;
@@ -1047,7 +1052,7 @@ section.section .main {
 /* line 12, ../sass/design/modules/_navCategoryMenu.scss */
 #navCategory .backToCategory:hover {
   text-decoration: underline; }
-/* line 18, ../sass/design/modules/_navCategoryMenu.scss */
+/* line 19, ../sass/design/modules/_navCategoryMenu.scss */
 #navCategory #nav_category_mobile > li > a:link, #navCategory #nav_category_mobile > li > a:visited {
   border-top: 1px solid #dedce1;
   line-height: 26px; }
@@ -1066,7 +1071,7 @@ section.section .main {
   list-style: none; }
 /* line 19, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .connected-carousels .carousel-navigation {
-  background: #fff; }
+  background: white; }
 /* line 21, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .connected-carousels .carousel-navigation li {
   cursor: pointer;
@@ -1078,10 +1083,10 @@ section.section .main {
   box-shadow: inset 0 0 0 3px #e5621b; }
 /* line 30, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .connected-carousels .carousel-navigation li.active img {
-  border: 1px solid #999; }
+  border: 1px solid #999999; }
 /* line 35, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .connected-carousels .carousel-navigation li:hover img {
-  border: 1px solid #999; }
+  border: 1px solid #999999; }
 /* line 48, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .connected-carousels .prev-stage span, #product-gallery .connected-carousels .next-stage span {
   background: url('../images/sprites/all-s399d59bcea.png'); }
@@ -1099,9 +1104,9 @@ section.section .main {
   background-position: 0 0; }
 
 /** Navigation carousel controls **/
-/* line 74, ../sass/design/modules/_gallery_product.scss */
+/* line 75, ../sass/design/modules/_gallery_product.scss */
 .connected-carousels .prev-navigation, .connected-carousels .next-navigation {
-  background: #fff;
+  background: white;
   background: url('../images/sprites/all-s399d59bcea.png'); }
 /* line 79, ../sass/design/modules/_gallery_product.scss */
 .connected-carousels .prev-navigation {
@@ -1121,19 +1126,21 @@ section.section .main {
 /* line 96, ../sass/design/modules/_gallery_product.scss */
 .jcarousel-pagination a {
   background: #626262;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px;
   text-indent: -999em;
   outline: none !important; }
 /* line 101, ../sass/design/modules/_gallery_product.scss */
 .jcarousel-pagination a.active {
-  background: #fff;
+  background: white;
   border: 1px solid #d0cfcf; }
 
 /* line 109, ../sass/design/modules/_gallery_product.scss */
 #product-gallery #productGalleryBigMedia .item, #product-gallery #productGalleryBigMedia .rwd-item, #product-gallery #productGalleryBigMediaOpen .item, #product-gallery #productGalleryBigMediaOpen .rwd-item, #product-gallery #productGalleryThumbMedia .item, #product-gallery #productGalleryThumbMedia .rwd-item, #product-gallery #productGalleryThumbMediaOpen .item, #product-gallery #productGalleryThumbMediaOpen .rwd-item {
-  color: #fff;
+  color: white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -1146,7 +1153,7 @@ section.section .main {
 #product-gallery #productGalleryThumbMedia .rwd-item.synced img, #product-gallery #productGalleryThumbMedia .rwd-item:hover img, #product-gallery #productGalleryThumbMediaOpen .rwd-item.synced img, #product-gallery #productGalleryThumbMediaOpen .rwd-item:hover img {
   border: 1px solid #b69494; }
 
-/* line 136, ../sass/design/modules/_gallery_product.scss */
+/* line 137, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .rwd-controls .rwd-buttons .rwd-prev, #product-gallery .rwd-controls .rwd-buttons .rwd-next {
   font-size: 0px;
   font: 0/0 a;
@@ -1170,9 +1177,9 @@ section.section .main {
 #product-gallery .rwd-controls .rwd-buttons .rwd-next:before {
   background-position: 0 0; }
 
-/* line 162, ../sass/design/modules/_gallery_product.scss */
+/* line 163, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .up, #product-gallery .down {
-  background: #fff;
+  background: white;
   background: url('../images/sprites/all-s399d59bcea.png');
   text-indent: -999em;
   outline: none; }
@@ -1191,14 +1198,16 @@ section.section .main {
 /* line 185, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .rwd-page span {
   background: #626262;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px;
   text-indent: -999em;
   outline: none !important; }
 /* line 190, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .rwd-page span.active {
-  background: #fff;
+  background: white;
   border: 1px solid #d0cfcf; }
 
 /* line 199, ../sass/design/modules/_gallery_product.scss */
@@ -1207,20 +1216,20 @@ body.lightbox {
   /* Prevent site from scrolling when a Slidebar is open, except when static Slidebars are only available. */
   position: fixed; }
 
-/* line 203, ../sass/design/modules/_gallery_product.scss */
+/* line 204, ../sass/design/modules/_gallery_product.scss */
 #lightbox, #inner-lightbox {
-  background: #fff; }
+  background: white; }
 
 /* line 210, ../sass/design/modules/_gallery_product.scss */
 #lightbox #productGalleryBigMediaOpen .item {
-  color: #fff;
+  color: white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
   text-align: center; }
 /* line 224, ../sass/design/modules/_gallery_product.scss */
 #lightbox #productGalleryThumbMedia .rwd-item, #lightbox #productGalleryThumbMediaOpen .rwd-item {
-  color: #fff;
+  color: white;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -1228,12 +1237,12 @@ body.lightbox {
   cursor: pointer; }
 /* line 231, ../sass/design/modules/_gallery_product.scss */
 #lightbox #productGalleryThumbMedia .rwd-item img, #lightbox #productGalleryThumbMediaOpen .rwd-item img {
-  border: 1px solid #fff; }
+  border: 1px solid white; }
 /* line 236, ../sass/design/modules/_gallery_product.scss */
 #lightbox #productGalleryThumbMedia .rwd-item.synced img, #lightbox #productGalleryThumbMedia .rwd-item:hover img, #lightbox #productGalleryThumbMediaOpen .rwd-item.synced img, #lightbox #productGalleryThumbMediaOpen .rwd-item:hover img {
-  border: 1px solid #999; }
+  border: 1px solid #999999; }
 
-/* line 246, ../sass/design/modules/_gallery_product.scss */
+/* line 247, ../sass/design/modules/_gallery_product.scss */
 #lightbox .rwd-controls .rwd-buttons .rwd-prev, #lightbox .rwd-controls .rwd-buttons .rwd-next {
   font-size: 0px;
   z-index: 10000;
@@ -1258,10 +1267,10 @@ body.lightbox {
 #lightbox .rwd-controls .rwd-buttons .rwd-next:before {
   background-position: 0 0; }
 
-/* line 274, ../sass/design/modules/_gallery_product.scss */
+/* line 275, ../sass/design/modules/_gallery_product.scss */
 #lightbox .up, #lightbox .down {
-  color: #fff;
-  background: #fff;
+  color: white;
+  background: white;
   text-indent: -999em;
   outline: none; }
 /* line 280, ../sass/design/modules/_gallery_product.scss */
@@ -1282,20 +1291,22 @@ body.lightbox {
 /* line 305, ../sass/design/modules/_gallery_product.scss */
 #lightbox .rwd-page span {
   background: #626262;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px;
   text-indent: -999em;
   outline: none !important; }
 /* line 310, ../sass/design/modules/_gallery_product.scss */
 #lightbox .rwd-page span.active {
-  background: #fff;
+  background: white;
   border: 1px solid #d0cfcf; }
 
 /* line 3, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item {
-  background: #fff;
-  color: #000;
+  background: white;
+  color: black;
   text-align: center;
   border: 1px solid #e8e8e8; }
 /* line 4, ../sass/design/modules/_block-complementary-product.scss */
@@ -1311,12 +1322,12 @@ body.lightbox {
   min-height: 34px; }
 /* line 23, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price {
-  color: #000;
+  color: black;
   font-size: 20px;
   font-family: latoregular, sans-serif; }
 /* line 27, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .label {
-  color: #000;
+  color: black;
   font-family: latoregular, sans-serif;
   font-weight: normal;
   font-size: 12px;
@@ -1326,14 +1337,14 @@ body.lightbox {
   font-family: latoblack, sans-serif; }
 /* line 37, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .old {
-  color: #000;
+  color: black;
   text-decoration: line-through;
   font-size: 15px; }
 /* line 42, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .like {
   font-size: 11px;
   font-family: latoblack, sans-serif;
-  color: #000;
+  color: black;
   margin-top: 7px !important; }
 /* line 48, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .price .like_count {
@@ -1353,7 +1364,7 @@ body.lightbox {
 .block-complementary-product .rwdCarousel .item .carousel-caption span.title-caption {
   font-family: latoregular, sans-serif;
   text-transform: uppercase;
-  color: #000; }
+  color: black; }
 /* line 72, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .item .carousel-caption span.body-caption {
   color: #8b8b8b; }
@@ -1374,66 +1385,66 @@ body.lightbox {
   background: url('../images/sprites/all-s399d59bcea.png'); }
 /* line 98, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .customNavigation a.prev {
-  background-position: -132px -404px; }
+  background-position: -160px -404px; }
 @media (max-width: 767px) {
   /* line 98, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwdCarousel .customNavigation a.prev {
-    background-position: -215px 0; } }
+    background-position: -204px 0; } }
 /* line 103, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .customNavigation a.prev:hover {
-  background-position: -196px -114px; }
+  background-position: -188px -404px; }
 @media (max-width: 767px) {
   /* line 103, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwdCarousel .customNavigation a.prev:hover {
-    background-position: -204px 0; } }
+    background-position: -193px 0; } }
 /* line 110, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .customNavigation a.next {
   right: 25px;
-  background-position: -188px -404px; }
+  background-position: -132px -404px; }
 @media (max-width: 767px) {
   /* line 110, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwdCarousel .customNavigation a.next {
-    background-position: -193px 0; } }
+    background-position: -125px 0; } }
 /* line 116, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwdCarousel .customNavigation a.next:hover {
-  background-position: -160px -404px; }
+  background-position: -196px -114px; }
 @media (max-width: 767px) {
   /* line 116, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwdCarousel .customNavigation a.next:hover {
-    background-position: -125px 0; } }
+    background-position: -215px 0; } }
 
-/* line 135, ../sass/design/modules/_block-complementary-product.scss */
+/* line 136, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwd-controls .rwd-buttons .rwd-prev, .block-complementary-product .rwd-controls .rwd-buttons .rwd-next {
   font-size: 48px;
   background: url('../images/sprites/all-s399d59bcea.png'); }
 /* line 140, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwd-controls .rwd-buttons .rwd-prev {
-  background-position: -132px -404px; }
+  background-position: -160px -404px; }
 @media (max-width: 767px) {
   /* line 140, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwd-controls .rwd-buttons .rwd-prev {
-    background-position: -215px 0; } }
+    background-position: -204px 0; } }
 /* line 145, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwd-controls .rwd-buttons .rwd-prev:hover {
-  background-position: -196px -114px; }
+  background-position: -188px -404px; }
 @media (max-width: 767px) {
   /* line 145, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwd-controls .rwd-buttons .rwd-prev:hover {
-    background-position: -204px 0; } }
+    background-position: -193px 0; } }
 /* line 153, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwd-controls .rwd-buttons .rwd-next {
-  background-position: -188px -404px; }
+  background-position: -132px -404px; }
 @media (max-width: 767px) {
   /* line 153, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwd-controls .rwd-buttons .rwd-next {
-    background-position: -193px 0; } }
+    background-position: -125px 0; } }
 /* line 158, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwd-controls .rwd-buttons .rwd-next:hover {
-  background-position: -160px -404px; }
+  background-position: -196px -114px; }
 @media (max-width: 767px) {
   /* line 158, ../sass/design/modules/_block-complementary-product.scss */
   .block-complementary-product .rwd-controls .rwd-buttons .rwd-next:hover {
-    background-position: -125px 0; } }
+    background-position: -215px 0; } }
 
 /* line 169, ../sass/design/modules/_block-complementary-product.scss */
 #product_additions_2 {
@@ -1499,7 +1510,7 @@ body.lightbox {
   font-size: 11px; }
 /* line 24, ../sass/design/modules/_block-comments.scss */
 #comments .comment .meta span {
-  color: #000; }
+  color: black; }
 /* line 29, ../sass/design/modules/_block-comments.scss */
 #comments .pag {
   list-style-image: none;
@@ -1508,7 +1519,7 @@ body.lightbox {
 /* line 31, ../sass/design/modules/_block-comments.scss */
 #comments .pag > li {
   border: none; }
-/* line 33, ../sass/design/modules/_block-comments.scss */
+/* line 34, ../sass/design/modules/_block-comments.scss */
 #comments .pag > li > a, #comments .pag > li > span {
   border: none;
   line-height: 27px;
@@ -1556,7 +1567,7 @@ body.lightbox {
 /* line 15, ../sass/design/modules/_modal.scss */
 .modal-content ul {
   list-style: none; }
-/* line 11, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../lib/gems/2.1.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
 .modal-content ul li {
   list-style-image: none;
   list-style-type: none;
@@ -1569,7 +1580,7 @@ body.lightbox {
   background: #313131;
   border: 1px solid #c5c5c5;
   font-size: 11px;
-  color: #fff; }
+  color: white; }
 /* line 27, ../sass/design/modules/_modal.scss */
 .modal-content .view-store:hover {
   text-decoration: underline; }
@@ -1579,7 +1590,7 @@ body.lightbox {
 /* line 34, ../sass/design/modules/_modal.scss */
 .modal-content .logo_salles a.view-store {
   font-size: 23px;
-  color: #000;
+  color: black;
   text-transform: uppercase;
   background: none;
   border: none; }
@@ -1602,7 +1613,7 @@ body.lightbox {
   list-style: none; }
 /* line 8, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .carousel-navigation-modd {
-  background: #fff; }
+  background: white; }
 /* line 11, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .carousel-navigation-modd li {
   cursor: pointer;
@@ -1614,26 +1625,26 @@ body.lightbox {
   box-shadow: inset 0 0 0 3px #e5621b; }
 
 /** Stage carousel controls **/
-/* line 30, ../sass/design/modules/_modal-gallery-product.scss */
+/* line 31, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-stage-modd, .connected-carousels-modd .next-stage-modd {
   background: url('../images/sprites/all-s399d59bcea.png'); }
 /* line 34, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-stage-modd {
-  background-position: -132px -404px; }
+  background-position: -160px -404px; }
 /* line 36, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-stage-modd:hover {
-  background-position: -196px -114px; }
+  background-position: -188px -404px; }
 /* line 40, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .next-stage-modd {
-  background-position: -188px -404px; }
+  background-position: -132px -404px; }
 /* line 42, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .next-stage-modd:hover {
-  background-position: -160px -404px; }
+  background-position: -196px -114px; }
 
 /** Navigation carousel controls **/
-/* line 52, ../sass/design/modules/_modal-gallery-product.scss */
+/* line 53, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-navigation-modd, .connected-carousels-modd .next-navigation-modd {
-  background: #fff;
+  background: white;
   background: url('../images/sprites/all-s399d59bcea.png'); }
 /* line 57, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-navigation-modd {
@@ -1769,28 +1780,28 @@ x-axis
 
 /* line 82, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.4);
   filter: "alpha(opacity=40)";
   -ms-filter: "alpha(opacity=40)"; }
 
 /* line 88, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.75);
   filter: "alpha(opacity=75)";
   -ms-filter: "alpha(opacity=75)"; }
 
 /* line 94, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.85);
   filter: "alpha(opacity=85)";
   -ms-filter: "alpha(opacity=85)"; }
 
 /* line 100, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.9);
   filter: "alpha(opacity=90)";
   -ms-filter: "alpha(opacity=90)"; }
@@ -1855,12 +1866,12 @@ x-axis
 /* theme: "dark" */
 /* line 158, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.15); }
 
 /* line 162, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75); }
 
 /* line 166, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -1891,7 +1902,7 @@ x-axis
 /* theme: "light-2", "dark-2" */
 /* line 188, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-2.mCSB_scrollTools .mCSB_draggerRail, .mCS-dark-2.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.1);
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
@@ -1899,7 +1910,7 @@ x-axis
 
 /* line 195, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-2.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-dark-2.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.75);
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
@@ -1907,12 +1918,12 @@ x-axis
 
 /* line 202, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-2.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.85); }
 
 /* line 206, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-2.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-light-2.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.9); }
 
 /* line 210, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -1934,7 +1945,7 @@ x-axis
 /* theme: "dark-2" */
 /* line 224, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-2.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.1);
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
@@ -1942,7 +1953,7 @@ x-axis
 
 /* line 231, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-2.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75);
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
@@ -1950,12 +1961,12 @@ x-axis
 
 /* line 238, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-2.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 242, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-2.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-dark-2.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 246, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -1978,7 +1989,7 @@ x-axis
 /* theme: "light-thick", "dark-thick" */
 /* line 262, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-thick.mCSB_scrollTools .mCSB_draggerRail, .mCS-dark-thick.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.1);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1986,7 +1997,7 @@ x-axis
 
 /* line 269, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-dark-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.75);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1994,12 +2005,12 @@ x-axis
 
 /* line 276, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-thick.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.85); }
 
 /* line 280, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-thick.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-light-thick.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.9); }
 
 /* line 284, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2021,7 +2032,7 @@ x-axis
 /* theme: "dark-thick" */
 /* line 298, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thick.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.1);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2029,7 +2040,7 @@ x-axis
 
 /* line 305, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2037,12 +2048,12 @@ x-axis
 
 /* line 312, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thick.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 316, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thick.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-dark-thick.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 320, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2065,28 +2076,28 @@ x-axis
 /* theme: "light-thin", "dark-thin" */
 /* line 336, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-thin.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.1); }
 
 /* theme "dark-thin" */
 /* line 343, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thin.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.15); }
 
 /* line 347, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thin.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75); }
 
 /* line 351, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thin.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 355, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-thin.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-dark-thin.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 359, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2109,7 +2120,7 @@ x-axis
 /* theme "rounded", "rounded-dark", "rounded-dots", "rounded-dots-dark" */
 /* line 375, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-rounded.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.15); }
 
 /* line 379, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2131,22 +2142,22 @@ x-axis
 /* theme "rounded-dark", "rounded-dots-dark" */
 /* line 393, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75); }
 
 /* line 397, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.15); }
 
 /* line 401, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 405, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 409, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2257,13 +2268,13 @@ x-axis
 
 /* line 500, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d.mCSB_scrollTools .mCSB_draggerRail, .mCS-3d-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.5), inset -1px 0 1px rgba(255, 255, 255, 0.2); }
 
 /* line 505, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-3d.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-3d.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-3d.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar, .mCS-3d-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-3d-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-3d-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-3d-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #555; }
+  background-color: #555555; }
 
 /* line 509, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d.mCSB_scrollTools_horizontal .mCSB_draggerRail, .mCS-3d-dark.mCSB_scrollTools_horizontal .mCSB_draggerRail {
@@ -2288,7 +2299,7 @@ x-axis
 /* theme "3d-dark" */
 /* line 526, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.1);
   box-shadow: inset 1px 0 1px rgba(0, 0, 0, 0.1); }
 
@@ -2350,11 +2361,11 @@ x-axis
 
 /* line 577, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d-thick.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-3d-thick.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-3d-thick.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-3d-thick.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #555; }
+  background-color: #555555; }
 
 /* line 580, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d-thick.mCSB_scrollTools .mCSB_draggerContainer {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.05);
   box-shadow: inset 1px 1px 16px rgba(0, 0, 0, 0.1); }
 
@@ -2397,11 +2408,11 @@ x-axis
 
 /* line 614, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d-thick-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-3d-thick-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-3d-thick-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-3d-thick-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #777; }
+  background-color: #777777; }
 
 /* line 617, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-3d-thick-dark.mCSB_scrollTools .mCSB_draggerContainer {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(0, 0, 0, 0.05);
   box-shadow: inset 1px 1px 16px rgba(0, 0, 0, 0.1); }
 
@@ -2434,14 +2445,14 @@ x-axis
 
 /* line 646, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-minimal.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.2);
   filter: "alpha(opacity=20)";
   -ms-filter: "alpha(opacity=20)"; }
 
 /* line 652, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-minimal.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-minimal.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.5);
   filter: "alpha(opacity=50)";
   -ms-filter: "alpha(opacity=50)"; }
@@ -2449,14 +2460,14 @@ x-axis
 /* theme: "minimal-dark" */
 /* line 660, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-minimal-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.2);
   filter: "alpha(opacity=20)";
   -ms-filter: "alpha(opacity=20)"; }
 
 /* line 666, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-minimal-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-minimal-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.5);
   filter: "alpha(opacity=50)";
   -ms-filter: "alpha(opacity=50)"; }
@@ -2465,7 +2476,7 @@ x-axis
 /* theme "light-3", "dark-3" */
 /* line 676, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-light-3.mCSB_scrollTools .mCSB_draggerRail, .mCS-dark-3.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.2); }
 
 /* line 681, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2487,22 +2498,22 @@ x-axis
 /* theme "dark-3" */
 /* line 695, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-3.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75); }
 
 /* line 699, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-3.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 703, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-3.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-dark-3.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 707, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-dark-3.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.1); }
 
 /* line 711, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2525,7 +2536,7 @@ x-axis
 /* theme "inset", "inset-dark", "inset-2", "inset-2-dark", "inset-3", "inset-3-dark" */
 /* line 727, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-dark.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-2.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-2-dark.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-3.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.2); }
 
 /* line 731, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2547,22 +2558,22 @@ x-axis
 /* theme "inset-dark", "inset-2-dark", "inset-3-dark" */
 /* line 745, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-inset-2-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75); }
 
 /* line 749, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-inset-2-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 753, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-inset-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar, .mCS-inset-2-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-inset-2-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 757, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-dark.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-2-dark.mCSB_scrollTools .mCSB_draggerRail, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.1); }
 
 /* line 761, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
@@ -2587,59 +2598,59 @@ x-axis
   background-color: transparent;
   border-width: 1px;
   border-style: solid;
-  border-color: #fff;
+  border-color: white;
   border-color: rgba(255, 255, 255, 0.2); }
 
 /* line 783, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-2-dark.mCSB_scrollTools .mCSB_draggerRail {
-  border-color: #000;
+  border-color: black;
   border-color: rgba(0, 0, 0, 0.2); }
 
 /* theme "inset-3", "inset-3-dark" */
 /* line 789, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.6); }
 
 /* line 793, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3-dark.mCSB_scrollTools .mCSB_draggerRail {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.6); }
 
 /* line 797, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.75); }
 
 /* line 801, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.85); }
 
 /* line 805, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-inset-3.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #000;
+  background-color: black;
   background-color: rgba(0, 0, 0, 0.9); }
 
 /* line 809, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.75); }
 
 /* line 813, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.85); }
 
 /* line 817, ../sass/design/modules/_jquery.mCustomScrollbar.scss */
 .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCS-inset-3-dark.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background-color: #fff;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.9); }
 
 /* ---------------------------------------- */
 /* line 1, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery {
-  background: #fff; }
+  background: white; }
 
 /* line 4, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery {
@@ -2649,7 +2660,7 @@ x-axis
   list-style: none; }
 /* line 11, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .carousel-navigation {
-  background: #fff; }
+  background: white; }
 /* line 13, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .carousel-navigation li {
   cursor: pointer;
@@ -2661,11 +2672,11 @@ x-axis
   box-shadow: inset 0 0 0 3px #e5621b; }
 /* line 22, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .carousel-navigation li.active img {
-  border: 1px solid #999; }
+  border: 1px solid #999999; }
 /* line 27, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .carousel-navigation li:hover img {
-  border: 1px solid #999; }
-/* line 37, ../sass/design/modules/_zoom_gallery.scss */
+  border: 1px solid #999999; }
+/* line 38, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .prev-stage, #zoom_gallery .connected-carousels .next-stage {
   background: url('../images/sprites/all-s399d59bcea.png'); }
 /* line 41, ../sass/design/modules/_zoom_gallery.scss */
@@ -2686,7 +2697,7 @@ x-axis
 /* line 3, ../sass/design/modules/_form_add_comment.scss */
 #review-form h4 strong {
   text-transform: uppercase; }
-/* line 7, ../sass/design/modules/_form_add_comment.scss */
+/* line 9, ../sass/design/modules/_form_add_comment.scss */
 #review-form input[type="text"], #review-form input[type="email"], #review-form input[type="password"] {
   line-height: 29px; }
 /* line 12, ../sass/design/modules/_form_add_comment.scss */
@@ -2750,7 +2761,7 @@ x-axis
   position: absolute;
   top: -3px;
   right: 0;
-  border: 1px solid #000000;
+  border: 1px solid black;
   padding: 5px;
   margin-bottom: 20px; }
 /* line 35, ../sass/design/modules/_summary-delivery-payment.scss */
@@ -2821,7 +2832,7 @@ x-axis
 /* line 129, ../sass/design/modules/_summary-delivery-payment.scss */
 .table-summary-product .table-group .nazwa_rozmiar .rozmiar_produktu {
   font-size: 11px; }
-/* line 137, ../sass/design/modules/_summary-delivery-payment.scss */
+/* line 139, ../sass/design/modules/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-2 .cena, .table-summary-product .table-group .tabcol-2 .losc, .table-summary-product .table-group .tabcol-2 .wartosc {
   text-align: right;
   font-size: 12px; }
@@ -2865,7 +2876,7 @@ x-axis
   border: 1px solid #ebebeb; }
 /* line 4, ../sass/design/modules/_helpful-vote.scss */
 .helpful-vote .main .bg-w {
-  background: none repeat scroll 0% 0% #fff; }
+  background: none repeat scroll 0% 0% white; }
 /* line 9, ../sass/design/modules/_helpful-vote.scss */
 .helpful-vote header h2 {
   font-weight: 300;
@@ -2909,7 +2920,7 @@ x-axis
 /* line 42, ../sass/design/modules/_helpful-vote.scss */
 .block_info_order .summary-order .popover-dismiss.badge {
   border: 1px solid #d9d9d9;
-  background: #fff !important;
+  background: white !important;
   border-radius: 50%;
   box-shadow: none;
   text-shadow: none; }
@@ -2920,11 +2931,11 @@ x-axis
 /* line 64, ../sass/design/modules/_helpful-vote.scss */
 .summary-order .popover-dismiss.badge {
   border: 1px solid #d9d9d9;
-  background: #fff !important;
+  background: white !important;
   border-radius: 50%;
   box-shadow: none;
   text-shadow: none;
-  color: #333; }
+  color: #333333; }
 /* line 73, ../sass/design/modules/_helpful-vote.scss */
 .summary-order .popover {
   box-shadow: none; }
@@ -2996,7 +3007,7 @@ body[class*=vendor] #header {
 /* line 23, ../sass/design/modules/_listing_pagination.scss */
 .pagination-line .listing-pagination .pages a {
   display: inline-block;
-  background-color: #ffffff;
+  background-color: white;
   border: 1px solid #afafaf;
   text-align: center;
   font-size: 15px;
@@ -3059,29 +3070,29 @@ footer.footer {
   /* Newsletter */ }
 /* line 9, ../sass/design/modules/_footer.scss */
 footer.footer a {
-  color: #000; }
+  color: black; }
 /* line 11, ../sass/design/modules/_footer.scss */
 footer.footer a:hover {
-  color: #000; }
+  color: black; }
 /* line 16, ../sass/design/modules/_footer.scss */
 footer.footer li a {
-  color: #000; }
+  color: black; }
 /* line 18, ../sass/design/modules/_footer.scss */
 footer.footer li a:hover {
-  color: #000; }
+  color: black; }
 /* line 24, ../sass/design/modules/_footer.scss */
 footer.footer p {
-  color: #fff; }
+  color: white; }
 /* line 28, ../sass/design/modules/_footer.scss */
 footer.footer .footer-list-title {
-  color: #fff;
+  color: white;
   border-color: #e6e6e6;
   font-family: latoblack, sans-serif;
   font-weight: bold;
   text-transform: uppercase;
   margin-top: 0;
   line-height: 1.3; }
-/* line 39, ../sass/design/modules/_footer.scss */
+/* line 40, ../sass/design/modules/_footer.scss */
 footer.footer .row.newsletter {
   margin-bottom: 20px;
   margin-top: 20px; }
@@ -3109,7 +3120,7 @@ footer.footer .container .footer-list-title {
 /* line 69, ../sass/design/modules/_footer.scss */
 footer.footer ul.footer-list {
   padding: 0; }
-/* line 74, ../sass/design/modules/_footer.scss */
+/* line 75, ../sass/design/modules/_footer.scss */
 footer.footer .container .widget-title, footer.footer .container .footer-list-title {
   font-size: 18px;
   padding-bottom: 10px;
@@ -3256,11 +3267,11 @@ footer.footer .footer-links a {
   color: #8a8a8a; }
 /* line 395, ../sass/other/_variable.scss */
 footer.footer .footer-links a:hover, footer.footer .footer-links a.hover {
-  color: #fff;
+  color: white;
   text-decoration: none; }
 /* line 400, ../sass/other/_variable.scss */
 footer.footer .footer-links a:active, footer.footer .footer-links a:focus, footer.footer .footer-links a.active {
-  color: #fff;
+  color: white;
   text-decoration: none;
   outline: none; }
 /* line 232, ../sass/design/modules/_footer.scss */
@@ -3310,11 +3321,11 @@ footer.footer .copyright h5 {
 /* line 291, ../sass/design/modules/_footer.scss */
 footer.footer #newsletter-validate-detail input[type="submit"] {
   height: 40px; }
-/* line 296, ../sass/design/modules/_footer.scss */
+/* line 298, ../sass/design/modules/_footer.scss */
 footer.footer #newsletter-validate-detail button, footer.footer #newsletter-validate-detail input[type=button], footer.footer #newsletter-validate-detail input[type=submit] {
   cursor: pointer;
   display: inline-block; }
-/* line 304, ../sass/design/modules/_footer.scss */
+/* line 310, ../sass/design/modules/_footer.scss */
 footer.footer #newsletter-validate-detail button, footer.footer #newsletter-validate-detail .button, footer.footer #newsletter-validate-detail input[type=button], footer.footer #newsletter-validate-detail input[type=submit], footer.footer #newsletter-validate-detail .wishlist_table .add_to_cart.button, footer.footer #newsletter-validate-detail .btn-black, footer.footer #newsletter-validate-detail .btn.btn-black, footer.footer #newsletter-validate-detail .subscription-toggle {
   color: #fff;
   padding: 6px 18px;
@@ -3515,10 +3526,10 @@ footer.footer .footer_block {
   margin: 30px 0;
   display: block;
   height: auto; }
-/* line 520, ../sass/design/modules/_footer.scss */
+/* line 521, ../sass/design/modules/_footer.scss */
 .footer_block ul#nav_footer_mobile > li > a:link, .footer_block ul#nav_footer_mobile > li > a:visited {
   font-size: 1.2em;
-  color: #fff;
+  color: white;
   text-decoration: none;
   position: relative;
   display: block;
@@ -3554,20 +3565,20 @@ b, strong {
 
 /* line 6, ../sass/design/override/_global.scss */
 .browsehappy {
-  background: #fff;
+  background: white;
   text-align: center;
   color: red; }
 
 /* line 13, ../sass/design/override/_global.scss */
 .modal-content button.close {
   opacity: 1;
-  color: #fff;
+  color: white;
   text-shadow: none;
   height: 39px;
   width: 39px;
-  background: #000;
+  background: black;
   border-radius: 20px !important;
-  border: 3px solid #fff !important;
+  border: 3px solid white !important;
   top: -20px;
   right: -20px;
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.6) !important; }
@@ -3578,16 +3589,16 @@ b, strong {
   position: absolute;
   top: 6px;
   left: 8px;
-  color: #ffffff; }
+  color: white; }
 
-/* line 1, ../sass/design/override/_breadcrumb.scss */
+/* line 2, ../sass/design/override/_breadcrumb.scss */
 .brandshop-breadcrumps, ol.breadcrumb {
   background: none;
   font-family: latoregular, sans-serif;
   font-size: 11px;
   padding: 20px 0 0;
   margin-left: 3px; }
-/* line 8, ../sass/design/override/_breadcrumb.scss */
+/* line 9, ../sass/design/override/_breadcrumb.scss */
 .brandshop-breadcrumps a:link, .brandshop-breadcrumps a:visited, ol.breadcrumb a:link, ol.breadcrumb a:visited {
   font-weight: 400;
   color: #85807f; }
@@ -3610,7 +3621,7 @@ ol.breadcrumb li:not(:first-child):before {
   font-family: "FontAwesome";
   content: "\f104"; }
 
-/* line 4, ../sass/design/override/_sidebar-menu-category.scss */
+/* line 5, ../sass/design/override/_sidebar-menu-category.scss */
 .sidebar .nav-pills li a:link, .sidebar .nav-pills li a:visited {
   background: none; }
 /* line 8, ../sass/design/override/_sidebar-menu-category.scss */
@@ -3622,14 +3633,14 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 3, ../sass/design/override/_review-cart.scss */
 .checkout-shared-review #content-main .panel {
-  background-color: #ffffff; }
+  background-color: white; }
 /* line 4, ../sass/design/override/_review-cart.scss */
 .checkout-shared-review #content-main .panel.panel-default {
   border-color: #bfbfbf; }
 
 /* line 3, ../sass/design/override/_order-view.scss */
 .order-view #content-main .panel {
-  background-color: #ffffff; }
+  background-color: white; }
 /* line 4, ../sass/design/override/_order-view.scss */
 .order-view #content-main .panel.panel-default {
   border-color: #bfbfbf; }
@@ -3640,7 +3651,7 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 3, ../sass/design/override/_summary-delivery-payment.scss */
 #checkout .panel.panel-custom {
-  background: #fff;
+  background: white;
   border-radius: 0px;
   border-color: #eeedf0; }
 /* line 7, ../sass/design/override/_summary-delivery-payment.scss */
@@ -3674,7 +3685,7 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 1, ../sass/design/style/_mainpage.scss */
 .nav a {
-  color: #ffffff; }
+  color: white; }
 
 /*popular shops*/
 /* line 6, ../sass/design/style/_mainpage.scss */
@@ -3694,7 +3705,7 @@ ol.breadcrumb li:not(:first-child):before {
   text-align: center; }
 /* line 21, ../sass/design/style/_mainpage.scss */
 .popular-shops .pop-shop-lst > li > a > span.pop-shop-img-wr {
-  background: #ffffff;
+  background: white;
   text-align: center; }
 /* line 24, ../sass/design/style/_mainpage.scss */
 .popular-shops .pop-shop-lst > li > a > span.pop-shop-img-wr img {
@@ -3703,10 +3714,10 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 34, ../sass/design/style/_mainpage.scss */
 .pop-shop-seemore {
   font-size: 12px;
-  background-color: #000000;
+  background-color: black;
   background-image: none;
   text-align: center;
-  color: #ffffff !important;
+  color: white !important;
   text-transform: uppercase; }
 
 /* line 43, ../sass/design/style/_mainpage.scss */
@@ -3797,7 +3808,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 3, ../sass/design/style/_list-product.scss */
 #items-product .item .box_listing_product {
   border: 1px solid #ddd;
-  background: #fff;
+  background: white;
   padding: 1px;
   margin-top: 4px;
   z-index: 10; }
@@ -3812,7 +3823,7 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 18, ../sass/design/style/_list-product.scss */
 .box_listing_product {
-  background: #fff; }
+  background: white; }
 /* line 20, ../sass/design/style/_list-product.scss */
 .box_listing_product .name_product {
   font-weight: 400;
@@ -3886,17 +3897,17 @@ ol.breadcrumb li:not(:first-child):before {
   /* IE10+ */
   background: linear-gradient(to bottom, rgba(242, 241, 240, 0.01) 0%, #f2f1f0 42%, #f2f1f0 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03f2f1f0', endColorstr='#f2f1f0',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#03f2f1f0', endColorstr='#f2f1f0',GradientType=0 );
   /* IE6-8 */
   text-align: center; }
 
 /* line 96, ../sass/design/style/_list-product.scss */
 #items-product .item .box_listing_product:hover .name_product, #items-product .item .box_listing_product.hover .name_product {
-  color: #000;
+  color: black;
   text-decoration: none; }
 /* line 102, ../sass/design/style/_list-product.scss */
 #items-product .item .box_listing_product .name_product:hover {
-  color: #000;
+  color: black;
   text-decoration: none; }
 
 /* line 5, ../sass/design/style/_customer-account-login.scss */
@@ -3915,12 +3926,12 @@ ol.breadcrumb li:not(:first-child):before {
   /* line 14, ../sass/design/style/_customer-account-login.scss */
   #logIn .form-list label {
     text-align: left; } }
-/* line 22, ../sass/design/style/_customer-account-login.scss */
+/* line 24, ../sass/design/style/_customer-account-login.scss */
 #logIn .form-list input[type="text"], #logIn .form-list input[type="email"], #logIn .form-list input[type="password"] {
   line-height: 29px; }
-/* line 27, ../sass/design/style/_customer-account-login.scss */
+/* line 29, ../sass/design/style/_customer-account-login.scss */
 #logIn .form-list input[type="text"]:focus, #logIn .form-list input[type="email"]:focus, #logIn .form-list input[type="password"]:focus {
-  background: #fff; }
+  background: white; }
 /* line 32, ../sass/design/style/_customer-account-login.scss */
 #logIn .form-list .forgot-password {
   white-space: nowrap;
@@ -3970,12 +3981,12 @@ ol.breadcrumb li:not(:first-child):before {
   /* line 15, ../sass/design/style/_customer-account-registered.scss */
   #form-registration label {
     text-align: left; } }
-/* line 27, ../sass/design/style/_customer-account-registered.scss */
+/* line 29, ../sass/design/style/_customer-account-registered.scss */
 #form-registration input[type="text"], #form-registration input[type="email"], #form-registration input[type="password"] {
   line-height: 29px; }
-/* line 32, ../sass/design/style/_customer-account-registered.scss */
+/* line 34, ../sass/design/style/_customer-account-registered.scss */
 #form-registration input[type="text"]:focus, #form-registration input[type="email"]:focus, #form-registration input[type="password"]:focus {
-  background: #fff; }
+  background: white; }
 @media (max-width: 767px) {
   /* line 37, ../sass/design/style/_customer-account-registered.scss */
   #form-registration #connect {
@@ -4013,84 +4024,88 @@ ol.breadcrumb li:not(:first-child):before {
 /*******************************************************************************/
 /* line 83, ../sass/design/style/_customer-account-registered.scss */
 .my-account {
-  color: #333; }
+  color: #333333; }
 /* line 86, ../sass/design/style/_customer-account-registered.scss */
 .my-account .page-title {
   margin-bottom: 8px; }
 /* line 88, ../sass/design/style/_customer-account-registered.scss */
 .my-account .page-title h1 {
-  color: #333;
-  background: #fff;
-  padding: 20px 30px !important;
+  color: #333333;
+  background: white;
+  padding: 20px 14px 0 !important;
   text-transform: uppercase;
   font-size: 0; }
-/* line 94, ../sass/design/style/_customer-account-registered.scss */
+@media (min-width: 767px) {
+  /* line 88, ../sass/design/style/_customer-account-registered.scss */
+  .my-account .page-title h1 {
+    padding: 0 5px !important; } }
+/* line 97, ../sass/design/style/_customer-account-registered.scss */
 .my-account .page-title h1 span {
   vertical-align: middle;
   font-size: 30px; }
 @media (max-width: 767px) {
-  /* line 94, ../sass/design/style/_customer-account-registered.scss */
+  /* line 97, ../sass/design/style/_customer-account-registered.scss */
   .my-account .page-title h1 span {
     font-size: 20px; } }
 @media (max-width: 991px) {
-  /* line 94, ../sass/design/style/_customer-account-registered.scss */
+  /* line 97, ../sass/design/style/_customer-account-registered.scss */
   .my-account .page-title h1 span {
     display: inline-block;
     width: 75%; } }
-/* line 105, ../sass/design/style/_customer-account-registered.scss */
+/* line 108, ../sass/design/style/_customer-account-registered.scss */
 .my-account .page-title h1 span.back-sm, .my-account .page-title h1 span.back-xs {
   text-transform: none;
   display: none;
   width: 24%;
   height: 100%;
   text-align: right;
-  background: #fff;
+  background: white;
   font-size: 14px; }
 @media (min-width: 481px) and (max-width: 767px) {
-  /* line 114, ../sass/design/style/_customer-account-registered.scss */
+  /* line 117, ../sass/design/style/_customer-account-registered.scss */
   .my-account .page-title h1 span.back-sm {
     display: inline-block; } }
 @media (max-width: 480px) {
-  /* line 119, ../sass/design/style/_customer-account-registered.scss */
+  /* line 122, ../sass/design/style/_customer-account-registered.scss */
   .my-account .page-title h1 span.back-xs {
     display: inline-block; } }
 
-/* line 129, ../sass/design/style/_customer-account-registered.scss */
+/* line 132, ../sass/design/style/_customer-account-registered.scss */
 .my-account .box-wrapper {
   border-right: 1px solid #ffeded; }
 
-/* line 133, ../sass/design/style/_customer-account-registered.scss */
+/* line 136, ../sass/design/style/_customer-account-registered.scss */
 .my-account .background-wrapper {
-  background: #fff;
-  padding: 30px 15px; }
+  background: white;
+  padding: 10px 5px; }
 @media (max-width: 767px) {
-  /* line 133, ../sass/design/style/_customer-account-registered.scss */
+  /* line 136, ../sass/design/style/_customer-account-registered.scss */
   .my-account .background-wrapper {
-    margin: 20px 8px 0 8px; } }
+    margin: 0 8px 0 8px; } }
 
 @media (max-width: 991px) {
-  /* line 140, ../sass/design/style/_customer-account-registered.scss */
+  /* line 143, ../sass/design/style/_customer-account-registered.scss */
   .my-account .data-table .products {
     display: none; } }
 
 @media (max-width: 560px) {
-  /* line 145, ../sass/design/style/_customer-account-registered.scss */
+  /* line 148, ../sass/design/style/_customer-account-registered.scss */
   .my-account .data-table .order-no {
     display: none; } }
 
 @media (max-width: 480px) {
-  /* line 151, ../sass/design/style/_customer-account-registered.scss */
+  /* line 154, ../sass/design/style/_customer-account-registered.scss */
   .my-account .data-table .status {
     display: none; } }
 
 @media (max-width: 1199px) {
-  /* line 157, ../sass/design/style/_customer-account-registered.scss */
+  /* line 160, ../sass/design/style/_customer-account-registered.scss */
   .my-account .data-table .total {
     display: none; } }
 
 /* line 1, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review {
-  color: #000; }
+  color: black; }
 /* line 6, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main section > header h1 {
   font-size: 24px;
@@ -4133,11 +4148,11 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 50, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
   font-size: 16px;
-  color: #000; }
+  color: black; }
 /* line 54, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
   font-size: 12px; }
-/* line 58, ../sass/design/style/_review-cart.scss */
+/* line 59, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
@@ -4195,7 +4210,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 5, ../sass/design/style/_table.scss */
 .data-table td, .data-table th {
   border: 1px #d7d7d7 solid;
-  color: #333; }
+  color: #333333; }
 /* line 9, ../sass/design/style/_table.scss */
 .data-table td {
   padding: 20px 10px; }
@@ -4229,7 +4244,7 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 1, ../sass/design/style/_order-view.scss */
 .order-view {
-  color: #000; }
+  color: black; }
 /* line 6, ../sass/design/style/_order-view.scss */
 .order-view #content-main section > header h1 {
   font-size: 24px;
@@ -4276,11 +4291,11 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 55, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
   font-size: 16px;
-  color: #000; }
+  color: black; }
 /* line 59, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
   font-size: 12px; }
-/* line 63, ../sass/design/style/_order-view.scss */
+/* line 64, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
@@ -4358,7 +4373,7 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 26, ../sass/design/style/_register.scss */
 .account-create form label.agreement-label {
   height: auto !important; }
-/* line 30, ../sass/design/style/_register.scss */
+/* line 33, ../sass/design/style/_register.scss */
 .account-create form input[type="text"], .account-create form input[type="email"], .account-create form input[type="password"], .account-create form input[type="tel"] {
   line-height: 29px; }
 /* line 37, ../sass/design/style/_register.scss */
@@ -4375,7 +4390,7 @@ ol.breadcrumb li:not(:first-child):before {
   position: fixed;
   right: -50px;
   background-color: #2e2e2e;
-  color: #fff;
+  color: white;
   font-size: 30px;
   font-weight: 700;
   text-align: center;
@@ -4418,7 +4433,7 @@ ol.breadcrumb li:not(:first-child):before {
 
 /* line 33, ../sass/design/style/_mypromotions.scss */
 #promo_list {
-  background-color: #F2F1F0;
+  background-color: #f2f1f0;
   margin: 0 -15px; }
 /* line 36, ../sass/design/style/_mypromotions.scss */
 #promo_list .promo_item {
@@ -4427,17 +4442,17 @@ ol.breadcrumb li:not(:first-child):before {
 #promo_list .promo_item .promo_item_box {
   cursor: pointer;
   border: 1px solid #ebebeb;
-  background: #fff;
+  background: white;
   padding: 0 0 0 0;
   -webkit-transition-property: box-shadow;
   transition-property: box-shadow;
   -webkit-transition-duration: 0.1s;
   transition-duration: 0.1s;
+  -webkit-transition-timing-function: ease-in;
   -moz-transition-timing-function: ease-in;
   -o-transition-timing-function: ease-in;
-  -webkit-transition-timing-function: ease-in;
   transition-timing-function: ease-in; }
-/* line 47, ../sass/design/style/_mypromotions.scss */
+/* line 48, ../sass/design/style/_mypromotions.scss */
 #promo_list .promo_item .promo_item_box:hover, #promo_list .promo_item .promo_item_box.hover {
   box-shadow: 0 0 3px 2px #bcbaba; }
 @media (max-width: 479px) {
@@ -4674,7 +4689,7 @@ body.mypromotions-index-index #content {
   font-family: latoregular, sans-serif;
   min-width: 92px;
   text-align: center;
-  background: #fff;
+  background: white;
   border: 1px solid #ebebeb;
   box-shadow: inset 1px 1px 0 0 #e6e6e6;
   border-radius: 3px;
@@ -4750,13 +4765,13 @@ body.mypromotions-index-index #content {
   display: block;
   padding: 50px 380px 60px 45px;
   min-height: 360px;
-  background: #ffffff url("../images/help/promolabels.png") no-repeat;
+  background: white url("../images/help/promolabels.png") no-repeat;
   background-size: auto 400px;
   background-position: 94% -90px;
   /* newsletter title, subtitle, form */ }
 /* line 376, ../sass/design/style/_mypromotions.scss */
 .mypromotions-cms-container .mypromotions-cms.mypromotions-nolabels {
-  background: #ffffff !important;
+  background: white !important;
   min-height: auto !important;
   padding: 50px 45px 60px; }
 @media (max-width: 767px) {
@@ -4962,11 +4977,11 @@ body.mypromotions-index-index #content {
 #mypromotions-register-modal #mypromotions-register, #mypromotions-persistent-modal #mypromotions-register {
   margin-top: 15px;
   padding: 20px 300px 30px 40px;
-  border: 4px solid #ff0000; }
+  border: 4px solid red; }
 @media (min-width: 992px) {
   /* line 565, ../sass/design/style/_mypromotions.scss */
   #mypromotions-register-modal #mypromotions-register, #mypromotions-persistent-modal #mypromotions-register {
-    background: #ffffff url("../images/help/promolabels.png") no-repeat;
+    background: white url("../images/help/promolabels.png") no-repeat;
     background-size: 280px auto;
     background-position: 97% 0; } }
 @media (max-width: 991px) {
@@ -5074,11 +5089,11 @@ body.mypromotions-index-index #content {
 /* line 674, ../sass/design/style/_mypromotions.scss */
 #mypromotions-persistent-modal .mypromotions-cms {
   margin-top: 15px;
-  border: 4px solid #ff0000; }
+  border: 4px solid red; }
 @media (min-width: 992px) {
   /* line 674, ../sass/design/style/_mypromotions.scss */
   #mypromotions-persistent-modal .mypromotions-cms {
-    background: #ffffff url("../images/help/promolabels.png") no-repeat;
+    background: white url("../images/help/promolabels.png") no-repeat;
     background-size: 280px auto;
     background-position: 97% 0; } }
 
@@ -5117,7 +5132,7 @@ body.mypromotions-index-index #content {
   /* IE10+ */
   background: linear-gradient(to bottom, rgba(242, 241, 240, 0) 0%, #f2f1f0 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f2f1f0', endColorstr='#f2f1f0',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f2f1f0', endColorstr='#f2f1f0',GradientType=0 );
   /* IE6-9 */ }
 
 /* line 716, ../sass/design/style/_mypromotions.scss */
@@ -5233,8 +5248,8 @@ body.mypromotions-index-index #content {
 /* line 71, ../sass/design/style/_agreements.scss */
 .checkout_agreements .checkout_agreement_vendors, .checkout_agreements_mobile .checkout_agreement_vendors {
   padding-left: 20px;
-  background: url('../images/sprites/check_filter-s5615536b44.png');
-  background-position: 0 -860px;
+  background: url('../images/sprites/check_filter-s5aa7d2774d.png');
+  background-position: 0 0;
   background-repeat: no-repeat;
   position: relative; }
 /* line 77, ../sass/design/style/_agreements.scss */
@@ -5252,7 +5267,7 @@ body.mypromotions-index-index #content {
   position: absolute;
   height: 98%;
   margin-top: 15px;
-  background-color: #ffffff;
+  background-color: white;
   width: 20px;
   top: 0;
   left: 0; }
