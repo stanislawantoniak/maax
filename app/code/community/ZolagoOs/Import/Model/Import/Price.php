@@ -63,6 +63,26 @@ class ZolagoOs_Import_Model_Import_Price
         );
     }
 
+    public function isContainNonNumericPrices($data)
+    {
+        foreach ($data as $_) {
+            if (!is_numeric($_)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isContainNegativePrices($data)
+    {
+        foreach ($data as $_) {
+            if ((float)$_ < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function _import()
     {
         $vendorId = $this->getExternalId();
@@ -87,13 +107,14 @@ class ZolagoOs_Import_Model_Import_Price
                     $sku = $data[0];
 
 
+                    $pricesData = array_slice($data, 1, count($data)-1, true);
 
                     if (isset($priceBatch[$sku])) {
                         $duplicateSkuScan[$row] = "LINE#{$row}: SKU {$sku}";
                     }
                     if (count($data) !== 6 ||
-
-                        ((float)$data[1] < 0 || (float)$data[2] < 0 || (float)$data[3] < 0 || (float)$data[4] < 0 || (float)$data[5] < 0)
+                        $this->isContainNonNumericPrices($pricesData) ||
+                        $this->isContainNegativePrices($data)
                     ) {
                         $wrongLineFormatScan[$row] = "LINE#{$row} (SKU: {$sku})";
                         continue;
@@ -114,7 +135,7 @@ class ZolagoOs_Import_Model_Import_Price
                     if ((float)$data[5] >= 0) {
                         $priceBatch[$sku]["salePriceBefore"] = (float)$data[5];
                     }
-                    unset($sku);
+                    unset($sku, $pricesData);
 
                 }
                 fclose($fileContent);
