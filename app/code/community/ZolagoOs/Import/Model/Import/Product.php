@@ -4,9 +4,9 @@
  * Import products
  */
 
-require_once(MAGENTO_ROOT . DS . "magmi/inc/magmi_defs.php");
+require_once(Mage::getBaseDir() . DS . "magmi/inc/magmi_defs.php");
 //Datapump include
-require_once(MAGENTO_ROOT . DS . "magmi/integration/inc/magmi_datapump.php");
+require_once(Mage::getBaseDir() . DS . "magmi/integration/inc/magmi_datapump.php");
 
 class ZolagoOs_Import_Model_Import_Product
     extends ZolagoOs_Import_Model_Import
@@ -288,7 +288,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
-                "ean" => $simpleXMLData->barcode,            
+                "ean" => $simpleXMLData->barcode,
 
 
                 //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
@@ -329,6 +329,8 @@ class ZolagoOs_Import_Model_Import_Product
             "ext_color" => $firstSimple->color,
             "ext_brand" => $firstSimple->brand,
 
+            "col1" => "Kolekcja:" . $firstSimple->description2,
+
             //magazyn dla konfigurowalnych - zarządzaj stanami = nie
             "use_config_manage_stock" => 0,
             "manage_stock" => 0,
@@ -341,7 +343,7 @@ class ZolagoOs_Import_Model_Import_Product
         $additionalColumns = array(
             "gender", "intake", "clothes_type", "size_group", "week_no", "barcode"
         );
-        for ($n = 0; $n < count($additionalColumns); $n++) {
+        for ($n = 1; $n < count($additionalColumns); $n++) {
             $property = $additionalColumns[$n];
             if (!empty($propertyValue = $this->formatAdditionalColumns($firstSimple, $property)))
                 $productConfigurable["col" . ($n + 1)] = $propertyValue;
@@ -370,7 +372,7 @@ class ZolagoOs_Import_Model_Import_Product
         if (empty((string)$col->$item)) {
             return $result;
         }
-        $result = "{$item}: " . (string)$col->$item;
+        $result = "{$item}:" . (string)$col->$item;
 
         return $result;
     }
