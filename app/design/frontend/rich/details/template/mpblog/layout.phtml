@@ -2,7 +2,9 @@
 $_helper = Mage::helper('mpblog');
 $_helperUrl = Mage::helper('mpblog/url');
 ?>
-
+<script type="text/javascript">
+    Mall.translate.add("Blog", "<?php echo $this->__("Blog"); ?>");
+</script>
 <?php /** @var $this Magpleasure_Blog_Block_Layout */ ?>
 
 
@@ -31,6 +33,13 @@ $_helperUrl = Mage::helper('mpblog/url');
              id="swipe_me"
              title="<?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>">
             <?php echo $this->hasMobileLeftColumn() ? $this->__("Swipe to the right") : $this->__("Swipe to the left"); ?>
+        </div>
+        <div id="blog-mobile-menu">
+            <div class="wrapp-section bg-w visible-xs">
+                <h1>
+                    <a href="<?php echo $_helperUrl->getUrl(); ?>"></a>
+                </h1>
+            </div>
         </div>
         <?php foreach ($this->getMobileBlocks('content') as $alias): ?>
             <div class="mobile-block" data-set="content-<?php echo $alias; ?>">
