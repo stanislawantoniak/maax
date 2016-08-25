@@ -4,6 +4,8 @@
         content: "#cart-shipping-methods",
 
         init: function () {
+            Mall.Cart.Map.deliverySet = Mall.reg.get("deliverySet");
+
             var self = this;
 
             for (var e in Mall.Cart.Map.deliverySet) {
@@ -54,9 +56,15 @@
                         jQuery("[name=shipping_point_code]").attr("data-town", "");
                     }
 
+                    jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] [name=shipping_select_city]").select2({
+                        placeholder: Mall.translate.__("shipping_map_select_city"),
+                        dropdownParent: jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']"),
+                        language: Mall.reg.get("localeCode")
+                    });
+
                     self.implementMapSelections();
 
-                    Mall.Cart.Map.initMap();
+                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
 
                 }
 
@@ -101,14 +109,14 @@
                     deliverySelectPointsModal.modal("show");
                 }
 
-                Mall.Cart.Map.handleGeoLocation();
+                if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
             });
 
             self.attachShowHideMapOnMobile();
 
             self.attachShowHideNearestPointsList();
 
-            Mall.Cart.Map.initMap();
+            if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
@@ -878,17 +886,6 @@
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
                 .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
-        },
-        deliverySet: {
-            ghinpost: {
-                mapDelivery: "map_delivery",
-                urlData: "/wf/inpost/getPopulateMapData"
-            }
-            // ,
-            // zolagopwr: {
-            //     mapDelivery: "pwr_map_delivery",
-            //     urlData: "/wf/pwr/getPopulateMapData"
-            // }
         }
     }
 
