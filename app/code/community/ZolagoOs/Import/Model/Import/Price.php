@@ -63,26 +63,6 @@ class ZolagoOs_Import_Model_Import_Price
         );
     }
 
-    public function isContainNonNumericPrices($data)
-    {
-        foreach ($data as $_) {
-            if (!is_numeric($_)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function isContainNegativePrices($data)
-    {
-        foreach ($data as $_) {
-            if ((float)$_ < 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected function _import()
     {
         $vendorId = $this->getExternalId();
@@ -113,8 +93,8 @@ class ZolagoOs_Import_Model_Import_Price
                         $duplicateSkuScan[$row] = "LINE#{$row}: SKU {$sku}";
                     }
                     if (count($data) !== 6 ||
-                        $this->isContainNonNumericPrices($pricesData) ||
-                        $this->isContainNegativePrices($data)
+                        $this->getHelper()->isContainNonNumericValues($pricesData) ||
+                        $this->getHelper()->isContainNegativeValues($pricesData)
                     ) {
                         $wrongLineFormatScan[$row] = "LINE#{$row} (SKU: {$sku})";
                         continue;
