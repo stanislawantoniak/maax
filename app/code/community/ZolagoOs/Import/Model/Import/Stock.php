@@ -90,7 +90,7 @@ class ZolagoOs_Import_Model_Import_Stock
                     //$sku = $vendorId . "-" . $data[0];
                     $sku = $data[0];
 
-                    if(isset($stockBatch[$sku])){
+                    if(isset($stockBatch[$vendorId][$sku])){
                         $duplicateSkuScan[$row] = "LINE#{$row}: SKU {$sku}";
                     }
 
@@ -166,7 +166,7 @@ class ZolagoOs_Import_Model_Import_Stock
             
             $this->log("SKU(S) SENT TO PROCESS: {$stockBatchCount}", Zend_Log::INFO);
 
-            //$this->_moveProcessedFile();
+            $this->_moveProcessedFile();
 
         } catch (Exception $e) {
             Mage::logException($e);
