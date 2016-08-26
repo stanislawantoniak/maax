@@ -2120,7 +2120,7 @@
 				
 				this.content.find(".total_shipping").html(Mall.currency(shippingTotal + vendorCODExtraCharge));
 				this.content.find(".total_value").html(
-						Mall.currency(shippingTotal + subTotal + discountTotal)
+						Mall.currency(shippingTotal + subTotal + discountTotal + vendorCODExtraCharge)
 				);
 			},
 			
