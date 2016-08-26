@@ -18,11 +18,10 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 		$helper = Mage::helper("zolagocheckout");
 
 		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-		//Zend_Debug::dump($deliveryMethodData);
 		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 
 		switch ($deliveryMethodCode) {
-			case 'zolagopickuppoint':
+			case ZolagoOs_PickupPoint_Helper_Data::CODE:
 				$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
 				$data = array(
 					"id" => $pos->getId(),
@@ -30,7 +29,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 					"value" => $pos->getId()
 				);
 				break;
-			case 'ghinpost':
+			case GH_Inpost_Model_Carrier::CODE:
 				/* @var $locker GH_Inpost_Model_Locker */
 				$locker = $this->getInpostLocker();
 
@@ -40,7 +39,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 					"value" => $locker->getName()
 				);
 				break;
-            case 'zolagopwr':
+            case Orba_Shipping_Model_Packstation_Pwr::CODE:
 				/* @var $locker ZolagoOs_Pwr_Model_Point */
                 $point = $this->getPwrPoint();
 
@@ -255,6 +254,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 			foreach ($methodDataArr as $methodData) {
 				$vendorId = $methodData['vendor_id'];
 				$methodToFind[$code][$vendorId] = $vendorId;
+				$cost[$code][] = $methodData['cost'];
 			}
 		}
 
