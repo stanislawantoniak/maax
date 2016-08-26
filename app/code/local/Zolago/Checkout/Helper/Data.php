@@ -37,6 +37,10 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
                 continue;
             }
 
+
+            if( $carrier == Orba_Shipping_Model_Packstation_Pwr::CODE){
+                $carrier = 'zospwr';
+            }
             $codAllowed = (bool)Mage::getStoreConfig('carriers/' . $carrier . '/' . "cod_allowed", $storeId);
 
             if ($codAllowed) {

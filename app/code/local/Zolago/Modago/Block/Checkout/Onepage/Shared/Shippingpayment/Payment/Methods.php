@@ -172,7 +172,9 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
             return $codCheckoutTitleDefault;
         }
 
-
+        if( $carrier == Orba_Shipping_Model_Packstation_Pwr::CODE){
+            $carrier = 'zospwr';
+        }
         $path = 'carriers/' . $carrier . '/' . "cod_allowed";
         $codAllowed = (bool)Mage::getStoreConfig($path, $storeId);
         if (!$codAllowed)
