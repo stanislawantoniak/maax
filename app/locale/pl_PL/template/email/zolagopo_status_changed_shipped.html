@@ -98,11 +98,10 @@
 								<span class="spacer">&nbsp;</span>
 
 								<h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
-									Adres dostawy({{var delivery_code}}):
+									Adres dostawy:
 								</h2>
 
 								<div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-									{{if po.getDeliveryPointName()}}Paczkomat InPost {{var po.getDeliveryPointName()}}<br>{{/if}}
                                     {{if delivery_code == "ghinpost"}}Paczkomat InPost {{var po.getDeliveryPointName()}}<br>{{/if}}
 									{{if delivery_code == "zolagopwr"}}Paczka w Ruchu<br>{{/if}}
 									{{var po.getShippingAddress().format('html')}}
