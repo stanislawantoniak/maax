@@ -73,6 +73,7 @@ skin/frontend/rich/details/images/sprites/check_filter-*
 skin/frontend/rich/details/images/sprites/bg-*
 skin/frontend/rich/details/images/sprites/checkbox-*
 skin/frontend/rich/details/images/sprites/radio-*
+skin/frontend/rich/details/css/gh/blog/blog.css
 skin/frontend/rich/default/css/bootstrap.css
 skin/frontend/rich/default/css/layout.css
 skin/frontend/rich/default/css/design.css
@@ -86,6 +87,7 @@ skin/frontend/rich/default/images/sprites/check_filter-*
 skin/frontend/rich/default/images/sprites/bg-*
 skin/frontend/rich/default/images/sprites/checkbox-*
 skin/frontend/rich/default/images/sprites/radio-*
+skin/frontend/rich/default/css/gh/blog/blog.css
 skin/frontend/modago/wf/css/bootstrap.css
 skin/frontend/modago/wf/css/layout.css
 skin/frontend/modago/wf/css/design.css
