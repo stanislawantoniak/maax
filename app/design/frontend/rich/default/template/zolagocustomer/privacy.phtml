@@ -1,0 +1,80 @@
+<?php /* @var $this Zolago_Customer_Block_Privacy */ ?>
+<?php
+$_helper = Mage::helper("customer");
+$zolagoCustomerHelper = Mage::helper("customer");
+
+?>
+
+<div class="page-title box-wrapper">
+    <h1>
+        <span><?php echo $zolagoCustomerHelper->__('Privacy settings') ?></span>
+		<span class="back-sm">
+            <a href="<?php echo $this->getUrl('customer/account/index') ?>"
+               class="underline"><?php echo $zolagoCustomerHelper->__('back: my account'); ?>&nbsp;&gt;</a>
+        </span>
+		<span class="back-xs">
+            <a href="<?php echo $this->getUrl('customer/account/index') ?>"
+               class="underline"><?php echo $zolagoCustomerHelper->__('back'); ?>&nbsp;&gt;</a>
+        </span>
+    </h1>
+</div>
+<div class="background-wrapper box-wrapper container-fluid">
+    <form action="<?php echo $this->getUrl('customer/account/privacyPost') ?>" method="post" id="forgetCustomer-form" autocomplete="off">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <div class="fieldset privacy-border">
+            <div id="general-subscription" class="row bigger-padding">
+                <div class="col-sm-12">
+                    <div class="form-group form-checkbox">
+                        <input type="hidden" name="forget_me" value="0" />
+                        <input type="checkbox" <?php if($this->isForgetMeChecked()):?>checked="checked"<?php endif;?> name="forget_me" id="forget_me" value="1" class="css-checkbox"/>
+                        <label for="forget_me"
+                               class="css-label css-label-bold">
+                        </label>
+
+                        <div class="pseudo-label label-bold">
+							<label for="forget_me">
+                            <?php echo $zolagoCustomerHelper->__('Do not show my products after logout') ?>
+							</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <?php echo $this->getLayout()
+                        ->createBlock('cms/block')
+                        ->setBlockId('privacy-settings-remember-me-description')
+                        ->toHtml();
+                    ?>
+                </div>
+                <div class="col-sm-12">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-links">
+            <a class="button button-third large" href="<?php echo Mage::getUrl("customer/account"); ?>">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                <?php echo $zolagoCustomerHelper->__('back') ?>
+            </a>
+            <button type="submit" class="btn button button-primary pull-right">
+                <?php echo $zolagoCustomerHelper->__("Save"); ?>
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('.more-info').on("click", function (event) {
+            event.preventDefault();
+
+            var field = jQuery(this).parents('.fieldset');
+
+            field.find('.three-dots').hide();
+            field.find('.more-info').hide();
+            field.find('.more-info-txt').show();
+        });
+    });
+</script>
+

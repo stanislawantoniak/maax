@@ -1,0 +1,72 @@
+<?php $table = $this->getData("table"); ?>
+
+
+<?php if($table): ?>
+<div class="sizetable-desktop">
+    <table>
+        <?php foreach ($table as $i => $tds): ?>
+            <?php $n = 0; ?>
+
+
+            <?php foreach ($tds as $j => $td): ?>
+                <?php if (!empty($td)): ?>
+                    <?php $n++; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <?php if ($n > 0): ?>
+                <tr>
+                    <?php foreach ($tds as $j => $td): ?>
+                        <?php if (!empty($td) || ($i == 0 && $j == 0)): ?>
+                            <?php $n++; ?>
+                            <td <?php if (($j == 0 || $i == 0) && !($j == 0 && $i == 0)): ?> style="background-color: #f2f1f0;" <?php endif; ?> >
+                                <?php echo $table[$i][$j]; ?>
+                            </td>
+                        <?php endif; ?>
+
+                    <?php endforeach; ?>
+                </tr>
+            <?php endif; ?>
+
+
+        <?php endforeach; ?>
+    </table>
+    <?php unset($i, $j); ?>
+</div>
+<div class="sizetable-mobile">
+
+    <?php $sizes = $table[0]; ?>
+    <?php $names = array(); ?>
+    <?php foreach ($table as $i => $tds): ?>
+        <?php $names[] = $tds[0]; ?>
+        <?php foreach ($tds as $j => $td): ?>
+
+        <?php endforeach; ?>
+
+    <?php endforeach; ?>
+    <?php foreach ($sizes as $j => $size): ?>
+        <?php if (isset($table[$i][$j]) && !empty($size) && $j > 0): ?>
+            <table>
+                <?php foreach ($names as $i => $name): ?>
+                    <?php if (!empty($table[$i][$j])): ?>
+                        <tr>
+                            <?php if ($i !== 0): ?>
+                            <td <?php if ($i !== 0): ?>style="background-color: #f2f1f0;"<?php endif; ?>>
+                                <?php echo $name; ?>
+                            </td>
+                            <?php endif; ?>
+                            <td <?php if ($i == 0): ?> colspan="2" style="background-color: #f2f1f0;text-align: center;" <?php endif; ?>>
+                                <?php echo $table[$i][$j]; ?>
+<!--                                                                (--><?php //echo $j; ?><!--,--><?php //echo $i; ?><!--)-->
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
+            </table>
+            <br/>
+        <?php endif; ?>
+
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>

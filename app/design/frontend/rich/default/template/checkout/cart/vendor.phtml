@@ -1,0 +1,83 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 12.08.2014
+ */
+
+?>
+
+<?php
+$_v = $this->getVendor();
+$_helper = Mage::helper('zolagocheckout');
+?>
+<?php switch ($this->getPart()): case 'header': ?>
+
+    <tr class="udropship-cart-vendor-header">
+        <td colspan="10" style="padding-top:5px; padding-bottom:0">
+            <?php if ($_v->getId()): ?>
+                <h3><?php echo $_v->getVendorName() ?> - <?php echo $_v->getCity().', '.$_v->getRegionCode() ?></h3>
+            <?php else: ?>
+                <h3>Unknown vendor</h3>
+            <?php endif ?>
+            <?php $vendorErrors = $this->getQuote1()->getMinVendorOrderAmountErrors(); ?>
+            <?php if (!empty($vendorErrors) && !empty($vendorErrors[$_v->getId()])): ?>
+                <p class="item-msg error">* <?php echo $this->htmlEscape($vendorErrors[$_v->getId()]) ?></p>
+            <?php endif ?>
+        </td>
+    </tr>
+
+    <?php break; case 'footer': ?>
+
+    <tr class="udropship-cart-vendor-footer">
+        <td colspan="10">
+            <div style="float:right">
+                <?php echo $_helper->__('Subtotal:')?> xxx
+                <strong><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></strong>
+            </div>
+            <?php if($this->isHintAvailable()):?>
+                <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px;">
+                    <?php echo $_helper->__('Free shipping from');?>:
+                    <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong>
+                </div>
+            <?php endif;?>
+            <?php if(($bestRate=$this->getMinimalShippingRate())!==null):?>
+                <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px;">
+                    <?php echo $_helper->__('Shipping from:')?>
+                    <strong><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?> </strong>
+                    (<?php echo $bestRate->getMethodTitle();?>)
+                </div>
+            <?php endif;?>
+            <?php if (!$this->isVirtual()): ?>
+                <?php if ($this->getErrorsOnly()): ?>
+                    <?php echo htmlspecialchars(Mage::getStoreConfig('carriers/udsplit/specificerrmsg')) ?>
+                <?php else: ?>
+                    <?php if (($_shippingRateGroups = $this->getEstimateRates())): ?>
+                        <?php echo $this->__('Select Shipping:')?>
+                        <select name="cart[estimate_method][<?php echo $_v->getId()?>]" class="shipment-methods" style="width:auto">
+                            <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
+                                <optgroup label="<?php echo $this->getCarrierName($code) ?>">
+                                    <?php foreach ($_rates as $_rate): ?>
+                                        <?php if ($_rate->getErrorMessage()): ?>
+                                            <?php //echo $_rate->getErrorMessage() ?>
+                                        <?php else:
+                                            $_price = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax());
+                                            $_incl = $this->getShippingPrice($_rate->getPrice(), true);
+                                            if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_price) {
+                                                $_price .= ' ('.$this->__('Incl. Tax ').$_incl.')';
+                                            }
+                                            ?>
+                                            <option value="<?php echo $this->htmlEscape($_rate->getCode()) ?>" <?php if($_rate->getCode()===$this->getShippingMethod('code')) echo ' selected="selected"' ?>>
+                                                <?php echo $_rate->getMethodTitle() ?> - <?php echo $_price ?>
+                                            </option>
+                                        <?php endif ?>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php endif; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+
+<?php endswitch ?>

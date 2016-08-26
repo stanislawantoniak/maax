@@ -1,0 +1,87 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 29.07.2014
+ *
+ * cross sell items template
+ *
+ * @see Mage_Catalog_Block_Product_List_Crosssell
+ */
+
+/** @var $this Mage_Catalog_Block_Product_List_Crosssell */
+/** @var $_item Zolago_Catalog_Model_Product */
+
+?>
+<?php if(count($this->getItems()) > 0) : ?>
+    <section id="complementary_product" class="section bg-w clearfix" data-mobiletoggle="true">
+        <div class="block-complementary-product toggle-xs">
+            <header>
+                <h4 class="title_section"><?php echo $this->__("Complete whole collection"); ?> <i
+                        class="bullet-strzalka-up visible-xs"></i></h4>
+            </header>
+            <div id="rwd-complementary-product" class="rwdCarousel">
+                <div class="rwd-carousel rwd-theme">
+                    <?php foreach ($this->getItems() as $_item) : ?>
+                        <?php if($_item->isSalable()): ?>
+                        <div class="item">
+                            <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
+                                <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
+                            <a href="<?php echo $_item->getProductUrl(); ?>" itemprop="url">
+
+                                <div class="box_listing_product">
+                                    <figure class="img_product"><img
+                                            src="<?php echo Mage::helper("zolago_image")
+                                            ->init($_item, 'small_image')
+                                            ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+                                            ->adaptiveResize(200, 312); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>"
+                                            class="img-responsive"></figure>
+                                    <div class="name_product hidden-xs">
+                                        <?php echo $this->getShortProductName($_item, 42); ?>
+                                    </div>
+                                    <div class="price clearfix hidden-xs like-two-line">
+                                        <div class="col-price">
+                                            <div class="strikeout-price">
+                                                <?php if($_item->getStrikeoutPrice() > $_item->getFinalPrice()) {
+                                                    echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false);
+                                                } else {
+                                                    echo '<br/>';
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="final-price">
+                                                <?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?>
+                                            </div>
+                                        </div>
+                                        <div class="like"
+                                             data-idproduct="<?php echo $_item->getId(); ?>">
+	                                        <span class="like_count">
+                                                <span>
+                                                </span>
+                                            </span>
+                                            <span class="icoLike"></span>
+                                            <div class="toolLike"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </a>
+                            </h5>
+                        </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        <?php foreach($this->getItems() as $_item) : ?>
+        Mall.wishlist.addProduct({
+            id: <?php echo (int) $_item->getId(); ?>,
+            wishlist_count: <?php echo (int) $_item->getWishlistCount(); ?>,
+            in_your_wishlist: "false"
+        });
+        <?php endforeach; ?>
+        Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
+    </script>
+<?php endif; ?>

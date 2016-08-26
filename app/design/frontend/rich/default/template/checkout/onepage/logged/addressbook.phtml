@@ -1,0 +1,207 @@
+<?php
+/* @var $this Zolago_Modago_Block_Checkout_Onepage_Logged_Addressbook */
+$formKey = Mage::getSingleton('core/session')->getFormKey();
+$helper = Mage::helper("zolagocheckout");
+
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
+
+$shippingAddress	= $this->getQuote()->getShippingAddress();
+?>
+
+<?php echo $this->getStep1Sidebar(); ?>
+<input type="hidden" name="shipping[country_id]" id="country_id" value="<?php echo $this->getStoreDefaultCountryId();?>">
+
+<div id="content-main" class="col-lg-9 col-md-8 col-sm-8 col-xs-12 col-lg-pull-3 col-md-pull-4 col-sm-pull-4 section">
+	<section class="main bg-w">
+		<header class="title-section">
+			<h2><?php echo !$deliveryPoint->id ? $helper->__("Confirm shipping data") : $helper->__("Delivery data"); ?></h2>
+		</header>
+
+		<!-- selected address template -->
+		<div class="hidden" id="selected-address-template">
+			<p class="pull-right default_delivery small-no-float">{{selected_caption}}</p>
+			<dl class="pull-left" >
+				<dt class="nameAddress">{{firstname}} {{lastname}}</dt>
+				<dt class="companyAddress" style="display:none">{{company}}</dt>
+				<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
+				<dd>{{street}}</dd>
+				<dd>{{postcode}} {{city}}</dd>
+				<dd class="separator phone"><?php echo $helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+				<dd class="action separator">
+					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+					<span class="set-default">
+						<a href="#" class="underline" style="margin-right: 0px;"><?php echo $this->__("set as default");?></a>
+						<span style="color: #5A5A5A;">(<?php echo $this->__("the address will be auto selected in future");?>)</span>
+					</span>
+					
+				</dd>
+			</dl>
+		</div>
+		
+		<!-- normal address template -->
+		<div class="panel panel-default hidden" id="normal-address-template">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<dl class="pull-left small-no-float">
+						<dt class="nameAddress">{{firstname}} {{lastname}}</dt>
+						<dt class="companyAddress" style="display:none">{{company}}</dt>
+						<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
+						<dd>{{street}}</dd>
+						<dd>{{postcode}} {{city}}</dd>
+						<dd class="action separator">
+							<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+							<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 
+							<a href="#" class="underline set-default"><?php echo $this->__("set as default");?></a>
+						</dd>
+					</dl> 
+					<button class="btn-select button button-third large choose"><?php echo $this->__("Choose")?></button>
+				</div>
+			</div>
+		</div>
+
+		<!-- add new template -->
+        <div class="panel add-new hidden" id="addressbook-add-new-template" data-toggle="modal" data-target="#addressbook-modal">
+            <div class="panel-body">
+                <h4 class="addressbook-add-new"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;<strong><?php echo $this->__("ADD NEW ADDRESS"); ?></strong></h4>
+                <div class="panel-body-content">
+
+                </div>
+            </div>
+        </div>
+		
+		<form action="<?php echo $this->getSaveUrl();?>" class="form">
+			<input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+			<?php if($deliveryPoint->id): ?>
+			<div id="inpost-wrapper" class="panel panel-default checkout-delivery-point-wrapper customer-logged-in">
+				<div class="panel-body">
+					<div class="form-group">
+						<input id="delivery_point_name"  name="delivery_point[name]" value="<?php echo $deliveryPoint->delivery_point_name; ?>" type="hidden"/>
+						<div class="row inpost-info">
+							<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
+								<strong><?php echo $deliveryPoint->checkout->title; ?></strong>
+								<br/>
+								<span id="inpost-locker-street"><?php echo $deliveryPoint->street; ?></span> <span id="inpost-locker-building-number"><?php echo $deliveryPoint->buildingNumber; ?></span>
+								<br/>
+								<span id="inpost-locker-postcode"><?php echo $deliveryPoint->postcode; ?></span> <span id="inpost-locker-town"><?php echo $deliveryPoint->city; ?></span>
+								<br/>
+								<span id="inpost-locker-location-description"><?php if(!empty($deliveryPoint->locationDescription)): ?>(<?php echo $deliveryPoint->locationDescription; ?>)<?php endif; ?></span>
+							</div>
+							<div class="col-xs-5 col-sm-6 col-md-6 col-lg-6 text-right">
+								<div class="figure-button-wrapper">
+									<?php echo $deliveryPoint->checkout->logo; ?>
+									<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large change-locker"><?php echo $helper->__('Change'); ?></a>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+								<?php echo $this->__("Telephone number"); ?>
+								<fieldset>
+									<div class="form-group clearfix border-top">
+										<div class="row">
+											<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 telephone-for-locker">
+												<input id="telephone_for_locker"
+													   name="delivery_point[telephone]"
+													   value="<?php echo $this->escapeHtml($this->getLastTelephoneForLocker()); ?>"
+													   type="tel"
+													   class="form-control phone hint validate-telephone"
+													   required="true"/>
+											</div>
+											<?php if(!empty($deliveryPoint->checkout->additionalInfo1) || !empty($deliveryPoint->checkout->additionalInfo2)): ?>
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 telephone-for-locker-comment">
+													<?php echo $deliveryPoint->checkout->additionalInfo1; ?>
+													<?php echo $deliveryPoint->checkout->additionalInfo2; ?>
+												</div>
+											<?php endif; ?>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+			<?php else: ?>
+			<h4><?php echo $this->__("Shipping address")?>:</h4>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="current-address current-addres clearfix shipping">
+						<!-- content from js -->
+					</div>
+					<div class="panel-adresses shipping">
+						<!-- content from js -->
+					</div>
+				</div>
+				<div class="panel-footer clearfix">
+					<a href="#" class="underline pull-right change_address shipping">
+						<?php echo $this->__("Change address");?>
+					</a>
+				</div>
+			</div>
+			<?php endif; ?>
+			<div id="invoice" class="form-group form-checkbox small" style="margin-left: 5px;">
+				<input type="checkbox" name="rodzaj" id="invoice_this" class="css-checkbox need_invoice">
+				<label for="invoice_this" class="css-label invoice_this"><?php echo $helper->__("I want to receive an invoice"); ?></label>
+			</div>
+
+			<div id="block_invoice">
+				<h4><?php echo $helper->__("Data for invoice"); ?>:</h4>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="current-address current-addres billing clearfix">
+							<!-- content from js -->
+						</div>
+						<div class="panel-adresses billing">
+							<!-- content from js -->
+						</div>
+						<!-- END PANEL -->
+					</div>
+					<div class="panel-footer clearfix">
+						<a href="#" class="underline pull-right change_address billing">
+							<?php echo $this->__("Change address");?>
+						</a>
+					</div>
+				</div>
+			</div>
+            <?php if (!$this->isCustomerSubscribed()): ?>
+                <?php  $agreements = $this->getAgreements(); ?>
+			<div class="row hide-success-vaild ">
+				<div class="form-group form-checkbox small text-align-left">
+					<input type="hidden" name="agreement[newsletter]" value="0" />
+					<input type="checkbox" id="agreement_newsletter" class="css-checkbox invoice_vat"
+					       name="agreement[newsletter]" value="1" style="opacity: 0; visibility: visible;"
+					       <?php if($agreements['agreement_newsletter']):?>checked="checked"<?php endif;?>
+						>
+					<label for="agreement_newsletter" class="css-label"><?php echo Mage::getStoreConfig('customer/agreements/newsletter'); ?></label>
+				</div>
+			</div>
+			<?php endif;?>
+			<div class="row">
+				<div class="col-sm-6">
+					<a id="back" href="<?php echo $this->getPreviousStepUrl(); ?>" class="button button-third large pull-left"><?php echo $this->__("Back"); ?></a>
+				</div>
+				<div class="col-sm-6">
+					<button class="button button-primary large link pull-right" target="step-0-submit" id="step-0-submit"><i></i>&nbsp;<?php echo $this->__("Next"); ?></button>
+				</div>
+			</div>
+
+		</form>  
+	</section>
+
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section" id="modal-title"></h2>
+            </div>
+            <div class="modal-body" id="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

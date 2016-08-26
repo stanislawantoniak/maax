@@ -395,6 +395,22 @@ Mall.product = {
 				}
 			});
 
+			jQuery('.raty_note #average_rating').raty({
+            	path: Config.path.ratyNote.ratyNotePath,
+            	starOff : Config.path.ratyNote.ratyNoteStarOff,
+            	starOn  : Config.path.ratyNote.ratyNoteStarOn,
+            	hints: ['', '', '', '', ''],
+            	readOnly: true,
+            	size   : 17,
+
+            	number: function() {
+            		return jQuery(this).attr('data-number');
+            	},
+            	score: function() {
+            		return jQuery(this).attr('data-score');
+            	}
+            });
+
 			jQuery('.ratings tr td div').raty({
 				path: Config.path.ratings.ratingsPath,
 				starOff : Config.path.ratings.ratingsStarOff,

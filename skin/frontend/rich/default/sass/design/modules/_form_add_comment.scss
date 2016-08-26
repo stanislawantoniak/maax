@@ -1,0 +1,49 @@
+#review-form {
+	h4 {
+		strong{
+			text-transform: uppercase;
+		}
+	}
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
+		line-height: 29px;
+	}
+	label {
+		font-weight: normal;
+	}
+	.nickname_field {
+		label {
+			line-height: 29px;
+		}
+	}
+}
+
+.review-summary-table {
+	border:none;
+	caption {
+		text-align: left;
+		font-weight: bold;
+	}
+	tr,th,td {
+		text-align: left;
+		border:none!important;
+	}
+	tbody tr th {
+		font-family: $fontRegular;
+		font-weight: normal;
+		width: 90px;
+		line-height: 25px;
+		@include max-screen($screen-sm-max) {
+			line-height: 30px;
+		}
+	}
+	img[src$='.svg'] {
+		width:22px;
+        height:22px;
+		@include max-screen($screen-sm-max) {
+			width: 30px;
+            height: 30px;
+		}
+	}
+}

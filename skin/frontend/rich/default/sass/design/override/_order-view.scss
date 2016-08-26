@@ -1,0 +1,15 @@
+.order-view {
+    #content-main {
+        .panel {            
+            &.panel-default {
+                border-color:#bfbfbf;
+	            &.order-view-mobile {
+					@media (max-width: 400px) {
+						margin: 0 -20px 10px;
+					}
+	            }
+            }
+            background-color: white;
+        }
+    }
+}

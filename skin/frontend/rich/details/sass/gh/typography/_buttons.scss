@@ -132,29 +132,29 @@
 		}
 	}
 	&.button-third {
-		padding: 3px 15px;
+		padding: 6px 18px;
+		background: #adadad !important;
+		background: -moz-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #adadad), color-stop(100%, #adadad)) !important;
+		background: -webkit-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: -o-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: -ms-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+		background: linear-gradient(135deg, #adadad 0%, #adadad 100%) !important;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 ) !important;
 		color:$color_fff;
-		font-weight: normal;
-		font-size: 12px;
-		font-family: $fontRegular;
-		min-width: 92px;
-		text-align: center;
-		background:$color_008733;
-		border: 1px solid $gray;
-		@include border-radius(0px);
 		&:hover,
 		&.hover,
 		&:focus,
 		&.focus {
-			border-color: $colorBtnThirdBorderActive;
-			opacity: 1;
-		}
-		&:active,
-		&.active {
-			@media(min-width:1024px){
-				border-color: $colorBtnThirdBorderActive;
-				color:$gray-dark;
-			}
+			background: #444444 !important;
+			background: -moz-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #444444), color-stop(100%, #444444)) !important;
+			background: -webkit-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: -o-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: -ms-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+			background: linear-gradient(135deg, #444444 0%, #444444 100%) !important;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor, GradientType=1) !important;
+			border-color: #444444;
 		}
 	}
 }
