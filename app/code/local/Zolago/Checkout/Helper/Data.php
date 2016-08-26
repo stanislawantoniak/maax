@@ -26,15 +26,21 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
 
             if (!in_array($carrier,
                 array(
-                    Orba_Shipping_Model_Carrier_Default::CODE, //TODO ask Staszek
+                    Orba_Shipping_Model_Carrier_Default::CODE,
                     Orba_Shipping_Model_Post::CODE,
                     GH_Inpost_Model_Carrier::CODE,
-                    ZolagoOs_PickupPoint_Helper_Data::CODE)
+                    ZolagoOs_PickupPoint_Helper_Data::CODE,
+                    Orba_Shipping_Model_Packstation_Pwr::CODE
+                )
             )
             ) {
                 continue;
             }
 
+
+            if( $carrier == Orba_Shipping_Model_Packstation_Pwr::CODE){
+                $carrier = 'zospwr';
+            }
             $codAllowed = (bool)Mage::getStoreConfig('carriers/' . $carrier . '/' . "cod_allowed", $storeId);
 
             if ($codAllowed) {

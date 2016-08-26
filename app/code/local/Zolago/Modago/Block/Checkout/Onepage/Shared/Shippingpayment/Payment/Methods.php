@@ -161,16 +161,20 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Method
         //COD availability defined only for Poczta Polska and inPost and  Pickup Point
         if (!in_array($carrier,
             array(
-                Orba_Shipping_Model_Carrier_Default::CODE, //TODO ask Staszek
+                Orba_Shipping_Model_Carrier_Default::CODE,
                 Orba_Shipping_Model_Post::CODE,
                 GH_Inpost_Model_Carrier::CODE,
-                ZolagoOs_PickupPoint_Helper_Data::CODE)
+                ZolagoOs_PickupPoint_Helper_Data::CODE,
+                Orba_Shipping_Model_Packstation_Pwr::CODE
+            )
         )
         ) {
             return $codCheckoutTitleDefault;
         }
 
-
+        if( $carrier == Orba_Shipping_Model_Packstation_Pwr::CODE){
+            $carrier = 'zospwr';
+        }
         $path = 'carriers/' . $carrier . '/' . "cod_allowed";
         $codAllowed = (bool)Mage::getStoreConfig($path, $storeId);
         if (!$codAllowed)

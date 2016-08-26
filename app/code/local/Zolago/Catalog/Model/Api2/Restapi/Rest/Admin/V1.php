@@ -292,14 +292,49 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         /* @var $model Zolago_Catalog_Model_Resource_Product */
         $model = Mage::getResourceModel('zolagocatalog/product');
 
-        //converter_price_type from configurable products
-        $priceType = $model->getConverterPriceTypeConfigurable($skuS);
 
-        //price_margin from configurable products
-        $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
+        $notVisibleIndividuallySkus = []; $visibleIndividuallySkus = [];
 
-        //converter_msrp_type from configurable products
-        $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);
+        $collection1 = Mage::getResourceModel("catalog/product_collection");
+        $collection1->addAttributeToFilter("sku", array("in" => $skuS));
+        $collection1->addAttributeToFilter("visibility", Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
+        $collection1Data = $collection1->getData();
+        foreach ($collection1Data as $collection1DataItem){
+            $notVisibleIndividuallySkus[] = $collection1DataItem["sku"];
+        }
+        unset($collection1DataItem);
+
+        $collection2 = Mage::getResourceModel("catalog/product_collection");
+        $collection2->addAttributeToFilter("sku", array("in" => $skuS));
+        $collection2->addAttributeToFilter("visibility", array("neq" => Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE));
+        $collection2Data = $collection2->getData();
+        foreach ($collection2Data as $collection2DataItem){
+            $visibleIndividuallySkus[] = $collection2DataItem["sku"];
+        }
+
+
+        $priceType = []; $priceMarginValues = []; $priceMSRPSourceManual= [];
+        if(!empty($notVisibleIndividuallySkus)){
+            //converter_price_type from configurable products
+            $priceType = $model->getConverterPriceTypeConfigurable($skuS);
+
+            //price_margin from configurable products
+            $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
+
+            //converter_msrp_type from configurable products
+            $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);
+        }
+        if(!empty($visibleIndividuallySkus)){
+            //converter_price_type from simple products
+            $priceType = $model->getConverterPriceTypeSimple($visibleIndividuallySkus);
+
+            //price_margin from simple products
+            $priceMarginValues = $model->getPriceMarginValuesSimple($visibleIndividuallySkus);
+
+            //converter_msrp_type from simple products
+            $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterSimple($visibleIndividuallySkus);
+        }
+
 
         if (empty($priceType) && empty($priceMarginValues) && empty($priceMSRPSourceManual)) {
             return;
@@ -336,7 +371,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $insert = array();
         $ids = array();
 
-//        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+
         $stores = array();
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {

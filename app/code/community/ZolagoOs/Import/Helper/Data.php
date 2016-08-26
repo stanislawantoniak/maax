@@ -108,4 +108,25 @@ class ZolagoOs_Import_Helper_Data extends Mage_Core_Helper_Abstract
         $allErrorsSkus = array_unique($allErrorsSkus);
         return $allErrorsSkus;
     }
+
+
+    public function isContainNonNumericValues($data)
+    {
+        foreach ($data as $_) {
+            if (!is_numeric($_)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isContainNegativeValues($data)
+    {
+        foreach ($data as $_) {
+            if ((float)$_ < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
