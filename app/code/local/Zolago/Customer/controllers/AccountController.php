@@ -443,6 +443,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
                 ->setEmail($customer->getEmail());
 
             // autologin
+            $this->_saveRestorePasswordParameters($customerId,$resetPasswordLinkToken);
             $this->_getSession()->setCustomerAsLoggedIn($customer);
 
             $this->renderLayout();
