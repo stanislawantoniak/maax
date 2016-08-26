@@ -113,10 +113,12 @@ abstract class Zolago_Checkout_Controller_Abstract
 
                     if (in_array($carrier,
                         array(
-                            Orba_Shipping_Model_Carrier_Default::CODE, //TODO ask Staszek
+                            Orba_Shipping_Model_Carrier_Default::CODE,
                             Orba_Shipping_Model_Post::CODE,
                             GH_Inpost_Model_Carrier::CODE,
-                            ZolagoOs_PickupPoint_Helper_Data::CODE)
+                            ZolagoOs_PickupPoint_Helper_Data::CODE,
+							Orba_Shipping_Model_Packstation_Pwr::CODE
+						)
                     )
                     ) {
                         /** @var Zolago_Checkout_Helper_Data $helper */
