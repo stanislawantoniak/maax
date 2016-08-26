@@ -515,6 +515,10 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     public function ghapiAddMessageNewOrder($observer) {
         $queue = Mage::getSingleton('ghapi/message');        
         $po = $observer->getPo();
+        if (!$po->getDefaultPosId()) {
+            // no pos - no new order message
+            return;
+        }
         $vendor = $po->getVendor();
         $ghapiAccess = $vendor->getData('ghapi_vendor_access_allow');
 
