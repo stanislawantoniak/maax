@@ -88,7 +88,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 		}
 
 
-        //$extraCharge = 400;
         $onepage = $this->getOnepage();
 
 
