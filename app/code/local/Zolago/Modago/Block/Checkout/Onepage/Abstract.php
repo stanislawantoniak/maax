@@ -255,7 +255,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 			foreach ($methodDataArr as $methodData) {
 				$vendorId = $methodData['vendor_id'];
 				$methodToFind[$code][$vendorId] = $vendorId;
-				$cost[$code][] = $methodData['cost'];
 			}
 		}
 
