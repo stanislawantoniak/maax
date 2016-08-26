@@ -3,9 +3,6 @@
 class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
-class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
-{
-
     protected $pwrPoint = null;
     protected $inpostLocker = null;
     protected $pickUpPoint = null;
@@ -104,17 +101,17 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
         $shippingAddressFromDeliveryPoint = array();
 
         switch ($deliveryMethodCode) {
-            case 'zolagopickuppoint':
+            case ZolagoOs_PickupPoint_Helper_Data::CODE:
                 /* @var $pos  Zolago_Pos_Model_Pos */
                 $pos = $helper->getPickUpPoint();
                 $shippingAddressFromDeliveryPoint = $pos->getShippingAddress();
                 break;
-            case 'ghinpost':
+            case GH_Inpost_Model_Carrier::CODE:
                 /* @var $locker GH_Inpost_Model_Locker */
                 $locker = $helper->getInpostLocker();
                 $shippingAddressFromDeliveryPoint = $locker->getShippingAddress();
                 break;
-            case 'zolagopwr':
+            case Orba_Shipping_Model_Packstation_Pwr::CODE:
                 /* @var $locker ZolagoOs_Pwr_Model_Point */
                 $point = $helper->getpwrPoint();
                 $shippingAddressFromDeliveryPoint = $point->getShippingAddress();
