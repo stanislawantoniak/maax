@@ -869,8 +869,8 @@
 					data.push({name: 'shipping[save_in_address_book]', value: 0});
                     data.push({name: 'shipping[telephone]', value: telephoneForLocker});
                     data.push({name: 'shipping_point_code', value: inpostName});
-					data.push({name: 'inpost[name]', value: inpostName});
-					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
+					data.push({name: 'delivery_point[name]', value: inpostName});
+					data.push({name: 'delivery_point[telephone]', value: telephoneForLocker});
 				}
 
 				var newsletterAgreement = this.getNewsletterAgreement();
@@ -1806,6 +1806,9 @@
 			getVendorCosts: function(){
 				return Mall.reg.get("vendor_costs");
 			},
+            getCODExtraCharges: function(){
+                return Mall.reg.get("extra_charges");
+            },
 			getSidebarAddresses: function(){
 				return this.content.find(".sidebar-addresses");
 			},
@@ -1875,6 +1878,15 @@
 				return null;
 			},
 
+            getCODExtraChargeForVendor: function(methodCode){
+                var codExtraCharges = this.getCODExtraCharges();
+                if(typeof codExtraCharges == "object" &&
+                    typeof codExtraCharges == "object" &&
+                    typeof codExtraCharges[methodCode] != "undefined"){
+                    return codExtraCharges[methodCode];
+                }
+                return null;
+            },
             getProvidersData: function () {
                 var selectedPayment = this.getSelectedPayment();
 
@@ -2077,7 +2089,7 @@
 				form.validate(Mall.validate._default_validation_options);
 				form_mobile.validate(Mall.validate._default_validation_options);
 			},
-			
+
 			_prepareTotals: function(checkout){
 				var subTotal = 0,
 					shippingTotal = 0,
@@ -2090,22 +2102,23 @@
 					parseFloat(discountObject.data('price')) * -1 : 0;
 			
 				// Prepare costs for vendors and totals
+              var vendorCODExtraCharge = deliverypayment.getCODExtraChargeForVendor(selectedMethod);
 				this.content.find(".panel-vendor.panel-footer").each(function(){
 					var el = jQuery(this);
 					var vendorId = el.data("vendorId");
 					var vendorSubtotal = parseFloat(el.find(".vendor_subtotal").data("price"));
 					var vendorShipping = deliverypayment.getCostForVendor(vendorId, selectedMethod);
-				
+
 					if(vendorShipping!==null){
 						shippingTotal += vendorShipping;
 					}
 					subTotal += vendorSubtotal;
 					
-					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
+					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping + vendorCODExtraCharge) : "N/A");
 					
 				});
 				
-				this.content.find(".total_shipping").html(Mall.currency(shippingTotal));
+				this.content.find(".total_shipping").html(Mall.currency(shippingTotal + vendorCODExtraCharge));
 				this.content.find(".total_value").html(
 						Mall.currency(shippingTotal + subTotal + discountTotal)
 				);

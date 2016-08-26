@@ -1802,6 +1802,9 @@
 			getVendorCosts: function(){
 				return Mall.reg.get("vendor_costs");
 			},
+			getExtraChargeData: function(){
+            	return Mall.reg.get("extra_charge");
+            },
 			getSidebarAddresses: function(){
 				return this.content.find(".sidebar-addresses");
 			},
@@ -1869,6 +1872,14 @@
 					return costs[vendorId][methodCode];
 				}
 				return null;
+			},
+			getExtraCharge: function(){
+			    var selectedPayment = this.getSelectedPayment();
+			    if (selectedPayment === 'cashondelivery') {
+			        var extraCharge = this.getExtraChargeData();
+                    return extraCharge;
+			    }
+			    return 0;
 			},
 
             getProvidersData: function () {
@@ -2080,7 +2091,10 @@
 					discountTotal = 0,
 					deliverypayment = checkout.getStepByCode("shippingpayment"),
 					selectedMethod = deliverypayment.getMethodCode(),
-					discountObject = this.content.find(".total_discount");
+					discountObject = this.content.find(".total_discount"),
+					extraCharge = 0;
+
+				extraCharge = deliverypayment.getExtraCharge();
 			
 				discountTotal = discountObject.length ? 
 					parseFloat(discountObject.data('price')) * -1 : 0;
@@ -2096,10 +2110,18 @@
 						shippingTotal += vendorShipping;
 					}
 					subTotal += vendorSubtotal;
+
+					if(extraCharge){
+                        vendorShipping = vendorShipping + extraCharge;
+                    }
 					
 					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
 					
 				});
+
+				if(extraCharge){
+				    shippingTotal = shippingTotal + extraCharge;
+				}
 				
 				this.content.find(".total_shipping").html(Mall.currency(shippingTotal));
 				this.content.find(".total_value").html(
