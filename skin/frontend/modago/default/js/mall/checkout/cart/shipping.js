@@ -48,7 +48,7 @@
                 if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint] && Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints){
 
                     if (!Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.some(
-                            function(e, i, a){return e.name == jQuery("[name=shipping_point_code]").val()}
+                            function(e){return e.name == jQuery("[name=shipping_point_code]").val()}
                         )) {
                         jQuery(".shipping_select_point_data").html("");
                         jQuery("[name=shipping_point_code]").val("");
@@ -56,9 +56,15 @@
                         jQuery("[name=shipping_point_code]").attr("data-town", "");
                     }
 
-                    self.implementMapSelections();
+                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
 
-                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
+                        Mall.Cart.Map.initMap();
+
+                        self.implementMapSelections(false);
+
+                        Mall.Cart.Map.refreshMap(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function(e){if(e.town==jQuery("[name=shipping_point_code]").attr("data-town")) return 1;}), Mall.Cart.Map.nearestStores);
+
+                    }
 
                 }
 
@@ -89,7 +95,7 @@
                 }
             });
 
-            self.implementMapSelections();
+            self.implementMapSelections(true);
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
@@ -255,7 +261,7 @@
             var totalSum = parseFloat(parseFloat(quote_products_total) + parseFloat(shippingCost) + parseFloat(quote_discount_total));
             jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSum));
         },
-        implementMapSelections: function () {
+        implementMapSelections: function (firstTime) {
             var self = this;
             if (jQuery("input[data-select-shipping-method-trigger=0]").length == 0)
                 return;
@@ -291,7 +297,7 @@
                 language: Mall.reg.get("localeCode")
             });
 
-            jQuery("[name=shipping_select_point]")
+            if (firstTime) jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
                 .select2({
@@ -327,9 +333,8 @@
             });
         },
         attachShowOnMapSavedInSessionPoint: function () {
-            var self = this;
             var sessionPoint = jQuery("[name=shipping_point_code]");
-            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + self.carrierPoint + "']");
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             var sessionPointTown;
 
             if (sessionPointName) {

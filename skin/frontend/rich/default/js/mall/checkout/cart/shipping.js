@@ -45,10 +45,11 @@
             jQuery(".data_shipping_item").click(function(){
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
-                if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint] && Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints){
+                if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint]
+                    && Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints){
 
                     if (!Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.some(
-                            function(e, i, a){return e.name == jQuery("[name=shipping_point_code]").val()}
+                            function(e){return e.name == jQuery("[name=shipping_point_code]").val()}
                         )) {
                         jQuery(".shipping_select_point_data").html("");
                         jQuery("[name=shipping_point_code]").val("");
@@ -56,9 +57,15 @@
                         jQuery("[name=shipping_point_code]").attr("data-town", "");
                     }
 
-                    self.implementMapSelections();
+                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
 
-                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
+                        Mall.Cart.Map.initMap();
+
+                        self.implementMapSelections(false);
+
+                        Mall.Cart.Map.refreshMap(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function(e){if(e.town==jQuery("[name=shipping_point_code]").attr("data-town")) return 1;}), Mall.Cart.Map.nearestStores);
+
+                    }
 
                 }
 
@@ -89,7 +96,7 @@
                 }
             });
 
-            self.implementMapSelections();
+            self.implementMapSelections(true);
 
             jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
                 //1. populate popup
@@ -245,9 +252,6 @@
                 var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
                 jQuery('#product_summary li[data-target="val_delivery_cost"]').find("span.price").html(shippingCostFormatted);
 
-                var shippingCostLabel = jQuery(methodRadio).attr("data-method-cost-label");
-                jQuery('#product_summary li[data-target="val_delivery_cost"]').find("span.val_delivery_cost").html(shippingCostLabel);
-
             } else {
                 shippingCost = 0; //not selected yet
             }
@@ -258,7 +262,7 @@
             var totalSum = parseFloat(parseFloat(quote_products_total) + parseFloat(shippingCost) + parseFloat(quote_discount_total));
             jQuery("#sum_price .value_sum_price").html(Mall.currency(totalSum));
         },
-        implementMapSelections: function () {
+        implementMapSelections: function (firstTime) {
             var self = this;
             if (jQuery("input[data-select-shipping-method-trigger=0]").length == 0)
                 return;
@@ -278,7 +282,6 @@
                         Mall.Cart.Map.showMarkerOnMap(val);
                     }
 
-
                     jQuery(".nearest_stores_container_list").hide();
                     jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
 
@@ -294,7 +297,7 @@
                 language: Mall.reg.get("localeCode")
             });
 
-            jQuery("[name=shipping_select_point]")
+            if (firstTime) jQuery("[name=shipping_select_point]")
                 .attr("disabled", true)
                 .val("")
                 .select2({
@@ -330,9 +333,8 @@
             });
         },
         attachShowOnMapSavedInSessionPoint: function () {
-            var self = this;
             var sessionPoint = jQuery("[name=shipping_point_code]");
-            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + self.carrierPoint + "']");
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             var sessionPointTown;
 
             if (sessionPointName) {
@@ -345,7 +347,6 @@
 
                 Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
             }
-
 
         },
         attachShowHideNearestPointsList: function(){
@@ -454,7 +455,6 @@
         gmarkersNameRelation: [],
 
         initMap: function() {
-
             this.map = null;
             this.gmarkers = [];
             this.gmarkersNameRelation = [];
