@@ -48,7 +48,7 @@
 							</depends>
 						</cod_checkout_title>
 						<cod_extra_charge>
-							<label>Extra charge</label>
+							<label>Extra charge for COD</label>
 							<frontend_type>text</frontend_type>
 							<sort_order>110</sort_order>
 							<show_in_default>1</show_in_default>
