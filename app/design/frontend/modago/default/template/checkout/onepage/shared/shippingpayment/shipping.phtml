@@ -1,12 +1,16 @@
 <?php 
 /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping */
 
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper		= Mage::helper("zolagocheckout");
+
 $items = $this->getItems();
 $vendors = $items->vendors;
 
 $vendorsJ = Mage::helper('core')->jsonEncode($vendors);
 
 $allVendorsMethod = $items->allVendorsMethod;
+$extraCharges = $helper->getUdropshipMethodExtraCharges($allVendorsMethod);
 
 $methods = $items->methods;
 $rates = $items->rates;
@@ -40,6 +44,7 @@ $extraCharge = (int)Mage::getStoreConfig('carriers/'.$deliveryType.'/cod_extra_c
     <div class="data-validate"></div>
     <script type="text/javascript">
 		(function(){
+            Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
 			Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
 			Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
 			Mall.reg.set("extra_charge", <?php echo Mage::helper("core")->jsonEncode($extraCharge); ?>);

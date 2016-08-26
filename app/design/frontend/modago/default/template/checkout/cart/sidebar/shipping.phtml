@@ -3,11 +3,12 @@
 $helper		= Mage::helper("zolagocheckout");
 
 $items = $this->getRateItems();
+$allVendorsMethod = $items->allVendorsMethod;
+$extraCharges = $helper->getUdropshipMethodExtraCharges($allVendorsMethod);
+
 $vendors = $items->vendors;
 
 $vendorsJ = Mage::helper('core')->jsonEncode($vendors);
-
-$allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 $rates = $items->rates;
@@ -64,6 +65,7 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 
     <script type="text/javascript">
         (function(){
+            Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
             Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
             Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
@@ -125,8 +127,8 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
                 <?php
 
                 $formattedCost = '';
-                if (isset($cost[$method['code']])) {
-                    $costSum = array_sum($cost[$method['code']]);
+                if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
+                    $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
                     $formattedCost = Mage::helper('core')->currency($costSum, true, false);
                 }
 
@@ -170,12 +172,8 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
         <?php foreach ($methods as $method): ?>
             <?php
             $formattedCost = '';
-            if (isset($cost[$method['code']])) {
-                $costSum = array_sum($cost[$method['code']]);
-//                $extraCharge = (int)Mage::getStoreConfig('carriers/'.$method["delivery_type"].'/cod_extra_charge');
-//                if($extraCharge && $checkoutSession->getPayment()['method'] == 'cashondelivery'){
-//                    $costSum = $costSum + $extraCharge;
-//                }
+            if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
+                $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
             $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($method["delivery_type"]);
@@ -200,6 +198,7 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
                                        data-carrier-description="<?php echo $daysInTransit; ?>"
                                        data-carrier-logo='<?php echo $carrierLogo; ?>'
                                        data-method-cost="<?php echo $costSum; ?>"
+                                       data-method-cost-label="<?php if(in_array($method['code'], array_keys($extraCharges))):  ?><?php echo $this->__("Min delivery cost:"); ?><?php else: ?><?php echo $this->__("Delivery cost:"); ?><?php endif; ?>"
                                        data-method-cost-formatted="<?php echo $formattedCost; ?>"
                                        data-carrier-delivery-type="<?php echo $method["delivery_type"]; ?>"
                                        data-carrier-additional=""
