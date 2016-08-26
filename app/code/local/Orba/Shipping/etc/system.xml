@@ -492,7 +492,11 @@
 							</depends>
 						</cod_checkout_title>
 						<cod_extra_charge>
+<<<<<<< .merge_file_gakunl
 							<label>Extra charge for COD</label>
+=======
+							<label>Extra charge</label>
+>>>>>>> .merge_file_QTuj9l
 							<frontend_type>text</frontend_type>
 							<sort_order>110</sort_order>
 							<show_in_default>1</show_in_default>
