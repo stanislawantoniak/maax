@@ -162,6 +162,13 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				$udropshipMethod = $po->getUdropshipMethod();
 				$shippingMethod = Mage::helper("udropship")->getOmniChannelMethodInfoByMethod(0, $udropshipMethod);
 				$deliveryCode = $shippingMethod->getDeliveryCode();
+				$inpostLabel = $pwrLabel = 0;
+				if($deliveryCode == GH_Inpost_Model_Carrier::CODE){
+					$inpostLabel = 1;
+				}
+				if($deliveryCode == Orba_Shipping_Model_Packstation_Pwr::CODE){
+					$pwrLabel = 1;
+				}
 				$params = array(
 					"tracking" => $tracking,
 					"track_url"=> $po->getTrackingUrl($tracking),
@@ -169,7 +176,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 						"vendor"=>$po->getVendor()->getId(),
 						"po"=>$po->getId()
 					)),
-					"delivery_code" => $deliveryCode,
+					"inpost_delivery" => $inpostLabel,
+					"pwr_delivery" => $pwrLabel,
 					"_ATTACHMENTS" => $helper->getPoImagesAsAttachments($po)
 				);
 				$po->sendEmailTemplate(
