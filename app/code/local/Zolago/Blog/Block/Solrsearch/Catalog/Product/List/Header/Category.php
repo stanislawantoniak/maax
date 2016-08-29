@@ -15,7 +15,24 @@ class Zolago_Blog_Block_Solrsearch_Catalog_Product_List_Header_Category
         if (!$categoryBlogPostId)
             return;
 
-        $blogPost = Mage::getModel("mpblog/post")->load($categoryBlogPostId);
+
+        $storeId = Mage::app()->getStore()->getId();
+
+        $blogPostModel = Mage::getModel("mpblog/post");
+        $blogPostCollection = $blogPostModel->getCollection()
+            ->addFieldToFilter("post_id", $categoryBlogPostId)
+            ->addFieldToFilter("status", Magpleasure_Blog_Model_Post::STATUS_ENABLED);
+
+        $blogPostCollection->getSelect()
+            ->joinLeft(
+                array(
+                    'post_store' => 'mp_blog_posts_store'
+                ),
+                "post_store.post_id = main_table.post_id",
+                array()
+            )
+            ->where("post_store.store_id=?", $storeId);
+        $blogPost = $blogPostCollection->getFirstItem();
 
         if (!$blogPost)
             return;
@@ -23,12 +40,12 @@ class Zolago_Blog_Block_Solrsearch_Catalog_Product_List_Header_Category
         $blogPostLinkBlock = $this
             ->getLayout()
             ->createBlock(
-            'Mage_Core_Block_Template',
-            'category_blog_link',
-            array('template' => 'zolagoblog/categoryBlogLink.phtml')
-        )
-        ->setLinkTitle($blogPost->getTitle())
-        ->setLinkUrl($blogPost->getUrl());
+                'Mage_Core_Block_Template',
+                'category_blog_link',
+                array('template' => 'zolagoblog/categoryBlogLink.phtml')
+            )
+            ->setLinkTitle($blogPost->getTitle())
+            ->setLinkUrl($blogPost->getUrl());
 
         echo $blogPostLinkBlock->toHtml();
 
