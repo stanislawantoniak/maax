@@ -55,6 +55,22 @@
                         jQuery("[name=shipping_point_code]").val("");
                         jQuery("[name=shipping_point_code]").attr("data-id", "");
                         jQuery("[name=shipping_point_code]").attr("data-town", "");
+
+                        var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
+
+                        inpostModal.find("[name=shipping_select_city]").val("").select2({
+                            placeholder: Mall.translate.__("shipping_map_select_city"),
+                            dropdownParent: inpostModal,
+                            language: Mall.reg.get("localeCode")
+                        });
+
+                        inpostModal.find("[name=shipping_select_point]")
+                            .attr("disabled", true)
+                            .val("")
+                            .select2({
+                                dropdownParent: inpostModal,
+                                language: Mall.reg.get("localeCode")
+                            });
                     }
 
                     if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
@@ -63,8 +79,21 @@
 
                         self.implementMapSelections(false);
 
-                        Mall.Cart.Map.refreshMap(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function(e){if(e.town==jQuery("[name=shipping_point_code]").attr("data-town")) return 1;}), Mall.Cart.Map.nearestStores);
+                        if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                            Mall.Cart.Map.refreshMap(
+                                Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function(e){
+                                    if(e.town==jQuery("[name=shipping_point_code]").attr("data-town")) return 1;}
+                                ),
+                                Mall.Cart.Map.nearestStores
+                            );
+                        else
+                            Mall.Cart.Map.refreshMap(
+                                Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                                Mall.Cart.Map.nearestStores
+                            );
 
+                        Mall.Cart.Map.map.setZoom(5);
+                        Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
                     }
 
                 }
