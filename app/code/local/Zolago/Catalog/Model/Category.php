@@ -4,6 +4,7 @@
  * Class Zolago_Catalog_Model_Category
  *
  * @method string getDisplayMode()
+ * @method int getCategoryBlogPostId()
  */
 class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 {

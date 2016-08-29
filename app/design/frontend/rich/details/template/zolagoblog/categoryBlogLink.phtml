@@ -1,0 +1,13 @@
+<?php
+$linkTitle = $this->getLinkTitle();
+$linkUrl = $this->getLinkUrl();
+
+if (empty($linkTitle) || empty($linkUrl))
+    return;
+
+$_helper = Mage::helper("zolagoblog");
+?>
+
+<div>
+    <a href="<?php echo $linkUrl; ?>" class="category-top-green-box"><?php echo $this->__("Free Guide - %s", $linkTitle); ?></a>
+</div>
