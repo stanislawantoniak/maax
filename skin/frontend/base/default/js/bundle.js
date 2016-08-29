@@ -22,11 +22,11 @@
  * @copyright   Copyright (c) 2006-2016 X.commerce, Inc. and affiliates (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-if(typeof Product=='undefined') {
+/*if(typeof Product=='undefined') {
     var Product = {};
-}
+}*/
 /**************************** BUNDLE PRODUCT **************************/
-Product.Bundle = Class.create();
+/*Product.Bundle = Class.create();
 Product.Bundle.prototype = {
     initialize: function(config){
         this.config = config;
@@ -272,3 +272,4 @@ Product.Bundle.prototype = {
         }
     }
 }
+*/

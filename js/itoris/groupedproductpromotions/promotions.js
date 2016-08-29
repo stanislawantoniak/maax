@@ -1,4 +1,4 @@
-if (!Itoris) {
+/*if (!Itoris) {
     var Itoris = {};
 }
 
@@ -192,4 +192,4 @@ Itoris.GroupedPromotions = Class.create({
         $('itoris_promotions_product_addtocart_form_' + ruleId).select('td')[1].select('.itoris_groupedproductpromotions_pricevalue')[1].update(eval('optionsPrice' + productId + '_' + ruleId).formatPrice(newDiscount));
         $('itoris_promotions_product_addtocart_form_' + ruleId).select('td')[1].select('.itoris_groupedproductpromotions_pricevalue')[2].update(eval('optionsPrice' + productId + '_' + ruleId).formatPrice(promoPriceTotal));
     }
-});
+});*/

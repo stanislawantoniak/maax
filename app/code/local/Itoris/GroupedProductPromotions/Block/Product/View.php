@@ -522,8 +522,8 @@ class Itoris_GroupedProductPromotions_Block_Product_View extends Mage_Core_Block
     protected function _prepareLayout() {
         $head = $this->getLayout()->getBlock('head');
         if ($head) {
-            $head->addItem('skin_js', 'js/bundle.js');
-            $head->addItem('js', 'varien/product.js');
+//            $head->addItem('skin_js', 'js/bundle.js');
+//            $head->addItem('js', 'varien/product.js');
         }
         return parent::_prepareLayout();
     }

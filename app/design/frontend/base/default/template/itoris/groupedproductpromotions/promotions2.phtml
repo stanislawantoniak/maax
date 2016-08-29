@@ -1,0 +1,174 @@
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(function(){
+        'use strict';
+        var qtyInputs = jQuery('#shopping-cart-table tr input.qty');
+        var countColumns = jQuery('#shopping-cart-table tbody tr')[0].select('td').length;
+        var priceColumns = jQuery('#shopping-cart-table tbody tr')[0].select('td .cart-price').length / 2;
+        var setColumns = countColumns - priceColumns * 2 - 2;
+        var rowTemplate = '<td class="itoris_promotions_row_products" colspan="'+ setColumns +'"></td><td colspan="'+ priceColumns +'" class="rule-price a-center"></td><td class="rule-qty"></td><td colspan="'+ priceColumns +'"  class="rule-total-price a-center"></td><td class="rule-remove"></td>';
+        var removeTemplate = jQuery('#shopping-cart-table tbody tr')[0].select('td')[countColumns - 1].innerHTML;
+        for (var i = 0; i < usedItorisPromotionsRules.length; i++) {
+            var inputsBlock = jQuery('#itoris_used_promotion_rule_' + i + '_qtys')[0];
+            for (var j = 0; j < usedItorisPromotionsRules[i].items.length; j++) {
+                for (var z = 0; z < qtyInputs.length; z++) {
+                    if (qtyInputs[z].name == 'cart[' + usedItorisPromotionsRules[i].items[j].item_id + '][qty]') {
+                        var row = qtyInputs[z].up('tr');
+                        inputsBlock.appendChild(qtyInputs[z]);
+                        qtyInputs[z].rule_orig_qty = usedItorisPromotionsRules[i].items[j].item_orig_qty;
+                        var itemOptions = row.select('.item-options')[0];
+                        var productBlock = jQuery('#itoris_used_promotion_rule_' + i + ' .itoris_groupedproductpromotions_product.product_' + usedItorisPromotionsRules[i].items[j].product_id)[0];
+                        if (productBlock) {
+                            if (itemOptions) {
+                                productBlock.insert({after: itemOptions});
+                            }
+                            var productPriceBlock = productBlock.select('.itoris_groupedproductpromotions_price')[0];
+                            if (productPriceBlock) {
+                                productPriceBlock.html(usedItorisPromotionsRules[i].items[j].old_price_formatted);
+                            }
+                        }
+                        row.remove();
+                    }
+                }
+            }
+        }
+
+        var tableBody = jQuery('#shopping-cart-table tbody')[0];
+        if (tableBody.select('tr.last')[0]) {
+            tableBody.select('tr.last')[0].removeClassName('last');
+        }
+        for (var i = 0; i < usedItorisPromotionsRules.length; i++) {
+            var row = document.createElement('tr');
+            row.innerHTML = rowTemplate;
+            tableBody.appendChild(row);
+            row.select('td')[0].appendChild(jQuery('#itoris_used_promotion_rule_' + i)[0]);
+            var qtyInput = document.createElement('input');
+            qtyInput.type = 'text';
+            qtyInput.className = 'input-text qty';
+            qtyInput.size = 4;
+            qtyInput.value = usedItorisPromotionsRules[i].rule_qty;
+            Event.observe(qtyInput, 'change', changeRuleProductsQtys.bind(this, row, qtyInput, false));
+            row.select('td.rule-qty')[0].appendChild(qtyInput);
+            row.select('td.rule-price')[0].html('<span class="cart-price"><span class="price">' + usedItorisPromotionsRules[i].rule_price_formatted + '</span><span class="itoris_groupedproductpromotions_discount cart">' + usedItorisPromotionsRules[i].rule_discount_formatted + ' OFF!</span></span>');
+            row.select('td.rule-total-price')[0].html('<span class="cart-price"><span class="price">' + usedItorisPromotionsRules[i].rule_total_price_formatted + '</span></span>');
+            if (removeTemplate) {
+                var rowRemove = row.select('td.rule-remove')[0];
+                rowRemove.html(removeTemplate);
+                var removeLink = rowRemove.select('a')[0];
+                if (removeLink) {
+                    removeLink.href = '#';
+                    Event.observe(removeLink, 'click', changeRuleProductsQtys.bind(this, row, {value:0}, true));
+                }
+            }
+            if (jQuery('.box-itoris-product-promotions')[0]) {
+                var forms = jQuery('.box-itoris-product-promotions')[0].select('form');
+
+                for (var j = 0; j < forms.length; j++) {break;
+                    var formId = forms[j].id;
+                    var formIdSplit = formId.split('_');
+                    var idRule = formIdSplit[formIdSplit.length - 1];
+                    if (idRule == usedItorisPromotionsRules[i].rule_id) {
+                        forms[j].remove();
+                    }
+                }
+
+
+            }
+        }
+    });
+    function changeRuleProductsQtys(row, qtyInput, updateCart, e) {
+        var ruleQty = parseNumber(qtyInput.value);
+        if (isNaN(ruleQty)) {
+            ruleQty = 0;
+        }
+        row.select('.promotion-product-qtys input').each(function(elm){
+            elm.value = ruleQty * elm.rule_orig_qty;
+        });
+        if (updateCart && jQuery('#shopping-cart-table tfoot .btn-update')[0]) {
+            jQuery('#shopping-cart-table tfoot .btn-update')[0].click();
+        }
+    }
+</script>
+New version - for ipson
+<script>
+    var usedItorisPromotionsRules = <?php echo (Mage::getSingleton('itoris_groupedproductpromotions/quote_observer')->getUsedRulesJson()) ?>;
+    jQuery(function(){
+        var qtyInputs = jQuery('#shopping-cart .qty input');
+//        var countColumns = 4;//jQuery('#shopping-cart-table tbody tr')[0].select('td').length;
+//        var priceColumns = 0;//jQuery('#shopping-cart-table tbody tr')[0].select('td .cart-price').length / 2;
+//        var setColumns = countColumns - priceColumns * 2 - 2;
+        // todo następny wiersz poprawić!
+        var rowTemplate = '<td class="itoris_promotions_row_products" colspan="'+ setColumns +'"></td><td colspan="'+ priceColumns +'" class="rule-price a-center"></td><td class="rule-qty"></td><td colspan="'+ priceColumns +'"  class="rule-total-price a-center"></td><td class="rule-remove"></td>';
+
+//        var removeTemplate = jQuery('#shopping-cart-table tbody tr')[0].select('td')[countColumns - 1].innerHTML;
+        for (var i = 0; i < usedItorisPromotionsRules.length; i++) {
+            var inputsBlock = jQuery('#itoris_used_promotion_rule_' + i + '_qtys')[0];
+            for (var j = 0; j < usedItorisPromotionsRules[i].items.length; j++) {
+                for (var z = 0; z < qtyInputs.length; z++) {
+                    if (qtyInputs[z].name == 'cart[' + usedItorisPromotionsRules[i].items[j].item_id + '][qty]') {
+//                        var row = qtyInputs[z].up('tr');
+                        inputsBlock.appendChild(qtyInputs[z]);
+                        qtyInputs[z].rule_orig_qty = usedItorisPromotionsRules[i].items[j].item_orig_qty;
+                        var itemOptions = row.select('.item-options')[0];
+                        var productBlock = jQuery('#itoris_used_promotion_rule_' + i + ' .itoris_groupedproductpromotions_product.product_' + usedItorisPromotionsRules[i].items[j].product_id)[0];
+                        if (productBlock) {
+                            if (itemOptions) {
+                                productBlock.insert({after: itemOptions});
+                            }
+                            var productPriceBlock = productBlock.select('.itoris_groupedproductpromotions_price')[0];
+                            if (productPriceBlock) {
+                                productPriceBlock.update(usedItorisPromotionsRules[i].items[j].old_price_formatted);
+                            }
+                        }
+//                        row.remove();
+                    }
+                }
+            }
+        }
+
+//        var tableBody = jQuery('#shopping-cart-table tbody')[0];
+//        if (tableBody.select('tr.last')[0]) {
+//            tableBody.select('tr.last')[0].removeClassName('last');
+//        }
+        for (var i = 0; i < usedItorisPromotionsRules.length; i++) {
+            var row = document.createElement('tr');
+            row.innerHTML = rowTemplate;
+            tableBody.appendChild(row);
+//            row.select('td')[0].appendChild(jQuery('#itoris_used_promotion_rule_' + i)[0]);
+            console.log(jQuery('#itoris_used_promotion_rule_' + i)[0]);
+//            var qtyInput = document.createElement('input');
+//            qtyInput.type = 'text';
+//            qtyInput.className = 'input-text qty';
+//            qtyInput.size = 4;
+//            qtyInput.value = usedItorisPromotionsRules[i].rule_qty;
+//            Event.observe(qtyInput, 'change', changeRuleProductsQtys.bind(this, row, qtyInput, false));
+//            row.select('td.rule-qty')[0].appendChild(qtyInput);
+//            row.select('td.rule-price')[0].update('<span class="cart-price"><span class="price">' + usedItorisPromotionsRules[i].rule_price_formatted + '</span><span class="itoris_groupedproductpromotions_discount cart">' + usedItorisPromotionsRules[i].rule_discount_formatted + ' <?php //echo  addslashes($this->__('OFF')) ?>//!</span></span>');
+//            row.select('td.rule-total-price')[0].update('<span class="cart-price"><span class="price">' + usedItorisPromotionsRules[i].rule_total_price_formatted + '</span></span>');
+            // to poniżej raczej niepotrzebne w przeciwieństwie do powyżej
+//            if (removeTemplate) {
+//                var rowRemove = row.select('td.rule-remove')[0];
+//                rowRemove.update(removeTemplate);
+//                var removeLink = rowRemove.select('a')[0];
+//                if (removeLink) {
+//                    removeLink.href = '#';
+//                    Event.observe(removeLink, 'click', changeRuleProductsQtys.bind(this, row, {value:0}, true));
+//                }
+//            }
+        }
+        debugger;
+    });
+//    function changeRuleProductsQtys(row, qtyInput, updateCart, e) {
+//        var ruleQty = parseNumber(qtyInput.value);
+//        if (isNaN(ruleQty)) {
+//            ruleQty = 0;
+//        }
+//        row.select('.promotion-product-qtys input').each(function(elm){
+//            elm.value = ruleQty * elm.rule_orig_qty;
+//        });
+//        if (updateCart && jQuery('#shopping-cart-table tfoot .btn-update')[0]) {
+//            jQuery('#shopping-cart-table tfoot .btn-update')[0].click();
+//        }
+//    }
+</script>
