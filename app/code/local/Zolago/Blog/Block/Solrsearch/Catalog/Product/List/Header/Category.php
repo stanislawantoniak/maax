@@ -6,6 +6,10 @@
 class Zolago_Blog_Block_Solrsearch_Catalog_Product_List_Header_Category
     extends Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category
 {
+
+    /**
+     *
+     */
     public function getCategoryBlogLink()
     {
         $category = $this->getCurrentCategory();
@@ -47,7 +51,7 @@ class Zolago_Blog_Block_Solrsearch_Catalog_Product_List_Header_Category
             ->setLinkTitle($blogPost->getTitle())
             ->setLinkUrl($blogPost->getUrl());
 
-        echo $blogPostLinkBlock->toHtml();
+        return $blogPostLinkBlock->toHtml();
 
     }
 }
