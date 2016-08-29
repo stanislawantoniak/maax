@@ -10,7 +10,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Shipment extends ZolagoOs_IAIShop_Model_
     protected function _setShipment($id,$courier,$trackNumber,$deliveryDate) {
        
         // collect order
-        $connector = $this->getConnector();
+        $connector = $this->getApiConnector();
         $params = new StdClass();
         $params->sessionToken = $this->_getToken();
         $params->orderID = new StdClass();

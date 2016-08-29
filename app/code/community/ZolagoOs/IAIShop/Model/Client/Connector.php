@@ -20,6 +20,17 @@ class ZolagoOs_IAIShop_Model_Client_Connector
     }
 
     /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=getproducts&method=getProducts
+     */
+    public function getProductsStocks($params)
+    {
+        $request = array();
+        $action = "get";
+        $request[$action]['params'] = $params;
+        return $this->doRequest("productsstocks", $action, $request);
+    }
+
+    /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=setorders&method=setOrders
      */
 
@@ -56,7 +67,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             if ($this->getShopId()) {            
                 $orders[$n]['shop_id'] = $this->getShopId();
             }
-            $orders[$n]['stock_id'] = 'M'.$param->pos_id;
+            $orders[$n]['stock_id'] = $param->pos_id;
             $orders[$n]['payment_type'] = $param->payment_method;
             $orders[$n]['currency'] = $helper->getMappedCurrency($param->order_currency);
             $orders[$n]['client_once'] = "y";
@@ -94,8 +105,8 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             } else {
                 $orders[$n]['client_once_data'] = $delivery_address;
             }
-            if ($param->email) {
-                $orders[$n]['client_once_data'] = $param->email;
+            if (!empty($param->email)) {
+                $orders[$n]['client_once_data']['email'] = $param->email;
             }
 
 
@@ -112,7 +123,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
                     $products[$i]['quantity'] = $order_item->item_qty;
                     $products[$i]['price'] = $order_item->item_value_after_discount / $order_item->item_qty;
 
-                    $products[$i]['stock_id'] = $param->pos_id;
+                    $products[$i]['stock_id'] = $order_item->pos_id;
                 } else {
                     $orders[$n]['delivery_cost'] = $order_item->item_value_after_discount;
                 }

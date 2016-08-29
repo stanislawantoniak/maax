@@ -5,7 +5,8 @@
 abstract class ZolagoOs_IAIShop_Model_Integrator_Abstract extends Varien_Object {
     protected $_vendor;
     protected $_token;
-    protected $_connector;
+    protected $_apiConnector;
+    protected $_iaiConnector;
     protected $_helper;
 
 
@@ -21,15 +22,21 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Abstract extends Varien_Object 
         $this->_vendor = $vendor;
     }
 
-    public function setConnector($connector) {
-        $this->_connector = $connector;
+    public function setApiConnector($connector) {
+        $this->_apiConnector = $connector;
+    }
+    public function setIaiConnector($connector) {
+        $this->_iaiConnector = $connector;
     }
 
     public function getVendor() {
         return $this->_vendor;
     }
-    public function getConnector() {
-        return $this->_connector;
+    public function getApiConnector() {
+        return $this->_apiConnector;
+    }
+    public function getIaiConnector() {
+        return $this->_iaiConnector;
     }
     /**
      * prepare session for vendor
@@ -68,7 +75,7 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Abstract extends Varien_Object 
      */
     public function confirmMessages($toConfirm) {
         if (count($toConfirm)) {
-            $connector = $this->getConnector();
+            $connector = $this->getApiConnector();
             $token = $this->_getToken();
             $params = new StdClass();
             $params->sessionToken = $token;
