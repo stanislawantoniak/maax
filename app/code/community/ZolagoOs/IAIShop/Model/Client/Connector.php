@@ -20,6 +20,17 @@ class ZolagoOs_IAIShop_Model_Client_Connector
     }
 
     /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=getproducts&method=getProducts
+     */
+    public function getProductsStocks($params)
+    {
+        $request = array();
+        $action = "get";
+        $request[$action]['params'] = $params;
+        return $this->doRequest("productsstocks", $action, $request);
+    }
+
+    /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=setorders&method=setOrders
      */
 
@@ -94,6 +105,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             } else {
                 $orders[$n]['client_once_data'] = $delivery_address;
             }
+            if (!empty($param->email)) {
+                $orders[$n]['client_once_data']['email'] = $param->email;
+            }
 
 
             $products = array();
@@ -109,7 +123,7 @@ class ZolagoOs_IAIShop_Model_Client_Connector
                     $products[$i]['quantity'] = $order_item->item_qty;
                     $products[$i]['price'] = $order_item->item_value_after_discount / $order_item->item_qty;
 
-                    $products[$i]['stock_id'] = $param->pos_id;
+                    $products[$i]['stock_id'] = $order_item->pos_id;
                 } else {
                     $orders[$n]['delivery_cost'] = $order_item->item_value_after_discount;
                 }

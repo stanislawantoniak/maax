@@ -50,6 +50,12 @@
                         	<fieldset>ghapi_vendor_access</fieldset>
                         	<position>2</position>
 	                    </zosiaishop_vendor_access_allow>
+  			    <zosiaishop_vendor_gallery_email>
+                        	<label>Default customer email for integrated orders</label>
+                        	<type>text</type>
+                        	<fieldset>ghapi_vendor_access</fieldset>
+                        	<position>6</position>
+	                    </zosiaishop_vendor_gallery_email>
         		</fields>
         	</vendor>
         </udropship>        

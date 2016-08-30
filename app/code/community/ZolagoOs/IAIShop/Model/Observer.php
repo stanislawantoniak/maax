@@ -2,43 +2,50 @@
 
 class ZolagoOs_IAIShop_Model_Observer
 {
-    protected $_connector = false;
+    protected $_apiConnector = false;
+    protected $_iaiConnector = false;
     protected $_helper;
 
     private function _getGHAPIConnector()
     {
-        if (!$this->_connector) {
-            $this->_connector = Mage::getModel('ghapi/soap');
+        if (!$this->_apiConnector) {
+            $this->_apiConnector = Mage::getModel('ghapi/soap');
         }
-        return $this->_connector;
+        return $this->_apiConnector;
     }
 
+    protected function _getIAIConnector() {
+        if (!$this->_iaiConnector) {
+            $this->_iaiConnector = Mage::getModel('zosiaishop/client_connector');
+        }
+        return $this->_iaiConnector;
+    }
 
-    /**
+    protected function _sync($name,$vendor) {    
+        $model = Mage::getModel($name);
+        $connector = $this->_getIAIConnector();        
+        $connector->setVendorId($vendor->getId());
+        $model->setIaiConnector($connector);
+        $model->setVendor($vendor);
+        $model->setApiConnector($this->_getGHAPIConnector());
+        $model->sync();
+    }
+    /**    
      * sync orders
      */
     protected function _syncOrders($vendor) {
-        $model = Mage::getModel('zosiaishop/integrator_order');
-        $model->setVendor($vendor);
-        $model->setConnector($this->_getGHAPIConnector());
-        $model->sync();
+        $this->_sync('zosiaishop/integrator_order',$vendor);
     }
 
     protected function _syncPayments($vendor) {
-        $model = Mage::getModel('zosiaishop/integrator_payment');
-        $model->setVendor($vendor);
-        $model->setConnector($this->_getGHAPIConnector());
-        $model->sync();
+        $this->_sync('zosiaishop/integrator_payment',$vendor);
     }
 
     /**
      * sync shipments
      */
     protected function _syncShipments($vendor) {
-        $model = Mage::getModel('zosiaishop/integrator_shipment');
-        $model->setVendor($vendor);
-        $model->setConnector($this->_getGHAPIConnector());
-        $model->sync();
+        $this->_sync('zosiaishop/integrator_shipment',$vendor);
     }
     /**
      * start sync orders
