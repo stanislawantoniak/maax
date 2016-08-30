@@ -13,17 +13,7 @@ class Zolago_Blog_Block_Catalog_Product_Posts extends Mage_Catalog_Block_Product
         /* @var $product Mage_Catalog_Model_Product */
         $product = Mage::registry('product');
 
-        $productBlogIds = [];
-
-        $range = range(1, 3);
-
-        foreach ($range as $i) {
-            if (!empty($product->getData("product_blog_post_id_$i"))) {
-                $productBlogIds[] = $product->getData("product_blog_post_id_$i");
-            }
-        }
-        //Zend_Debug::dump($productBlogIds);
-
+        $productBlogIds = $this->collectPostIdsForProduct($product);
 
         $storeId = Mage::app()->getStore()->getId();
 
@@ -46,6 +36,48 @@ class Zolago_Blog_Block_Catalog_Product_Posts extends Mage_Catalog_Block_Product
         $this->_productBlogItems = $blogPostCollection;
 
         return $this;
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @return array
+     */
+    protected function collectPostIdsForProduct(Mage_Catalog_Model_Product $product)
+    {
+        $productBlogIds = [];
+
+        $range = range(1, 3);
+        foreach ($range as $i) {
+            if (empty($product->getData("product_blog_post_id_$i")))
+                continue;
+
+            $productBlogIds[$product->getData("product_blog_post_id_$i")] = $product->getData("product_blog_post_id_$i");
+        }
+        unset($range);
+
+        $postsCount = $this->getPostsCount();
+        if (count($productBlogIds) >= $postsCount)
+            return $productBlogIds;
+
+        //Get products from the category
+        $productCategoryId = $product->getCategory()->getId();
+
+        $category = Mage::getModel('catalog/category')->load($productCategoryId);
+
+        $range = range(1, 5);
+        foreach ($range as $i) {
+            if (empty($category->getData("product_blog_post_id_$i")))
+                continue;
+
+            if (count($productBlogIds) >= $postsCount)
+                break;
+
+            $productBlogIds[$category->getData("product_blog_post_id_$i")] = $category->getData("product_blog_post_id_$i");
+        }
+        unset($range);
+
+
+        return $productBlogIds;
     }
 
     protected function _beforeToHtml()
