@@ -245,3 +245,17 @@ div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
 		}
 	}
 }
+
+.customer-account-create {
+  .section {
+    header {
+      &.title-section {
+        h2 {
+          @media(max-width: $screen-xs-max) {
+            padding-left: 20px;
+          }
+        }
+      }
+    }
+  }
+}
