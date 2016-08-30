@@ -39,11 +39,8 @@
         vertical-align: middle;
         text-align: center;
 
-
-
         @media(min-width: 421px) and (max-width: $screen-sm-max) {
           height: 100px;
-          /* display: flex; */
           vertical-align: middle;
           text-align: center;
         }
@@ -58,12 +55,9 @@
           height: auto;
           margin: auto;
 
-
-
-
           @media(min-width: 421px) and (max-width: $screen-sm-max) {
             padding: 0;
-            /* width: 100%; */
+            width: auto;
             height: auto;
             margin: auto;
             max-height: 100px;
