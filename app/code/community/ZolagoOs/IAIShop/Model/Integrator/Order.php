@@ -53,9 +53,8 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Int
         $vendor = $this->getVendor();
         $posList = $vendor->getActivePos();
         $externalList = array();
-        foreach ($posList as $posId) {
-            $pos = Mage::getModel('zolagopos/pos')->load($posId);
-            if ($extId = $pos->getExternalId()) {
+        foreach ($posList as $pos) {
+            if ($extId = $pos['external_id']) {
                 $externalList[$extId] = $extId;
             }
         }

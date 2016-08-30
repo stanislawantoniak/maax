@@ -40,11 +40,11 @@ class Zolago_Dropship_Model_Resource_Vendor extends ZolagoOs_OmniChannel_Model_M
 		$select->join(
 		    array("pos" => $this->getTable("zolagopos/pos")),
 		    "pos.pos_id = pos_vendor.pos_id",
-		    array()
+		    array("pos.external_id")
                 );
 		$select->where("pos_vendor.vendor_id=?", $object->getId());
 		$select->where("pos.is_active = 1");
-		return $this->getReadConnection()->fetchCol($select);
+		return $this->getReadConnection()->fetchAll($select);
 	}
 
     /**
