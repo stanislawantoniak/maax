@@ -117,7 +117,20 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
         }
         return $this->getData('child_vendor_ids');
     }
-
+    
+    /**
+     * return array
+     */
+    public function getActivePos() {        
+        if(!$this->hasData("active_pos")) {
+            $activePos = array();
+            if($this->getId()) {
+                $activePos = $this->getResource()->getActivePos($this);
+            }
+            $this->setData("active_pos", $activePos);
+        }
+        return $this->getData("active_pos");
+    }
     /**
      * @return array
      */

@@ -14,7 +14,7 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Ghapi extends ZolagoOs_IAIShop_
      */
      public function getGhApiVendorMessages($messageType) {
         $token = $this->_getToken();
-        $connector = $this->getConnector();
+        $connector = $this->getApiConnector();
         $params = new StdClass();
         $params->sessionToken = $token;
         $params->messageBatchSize = self::IAISHOP_SYNC_ORDERS_BATCH ;
@@ -56,7 +56,7 @@ abstract class ZolagoOs_IAIShop_Model_Integrator_Ghapi extends ZolagoOs_IAIShop_
         $params->sessionToken = $token;
         $params->orderID = new StdClass();
         $params->orderID->ID = $ids;
-        $connector = $this->getConnector();
+        $connector = $this->getApiConnector();
         $list = $connector->getOrdersById($params);
         if ($list->status) {
             return $list->orderList;

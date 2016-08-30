@@ -20,6 +20,17 @@ class ZolagoOs_IAIShop_Model_Client_Connector
     }
 
     /**
+     * @see http://www.iai-shop.com/api.phtml?action=method&function=getproducts&method=getProducts
+     */
+    public function getProductsStocks($params)
+    {
+        $request = array();
+        $action = "get";
+        $request[$action]['params'] = $params;
+        return $this->doRequest("productsstocks", $action, $request);
+    }
+
+    /**
      * @see http://www.iai-shop.com/api.phtml?action=method&function=setorders&method=setOrders
      */
 
@@ -94,6 +105,10 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             } else {
                 $orders[$n]['client_once_data'] = $delivery_address;
             }
+            $email = empty($param->email)? (empty($param->order_email)? null:$param->order_email): $param->email;
+            if (!empty($email)) {
+                $orders[$n]['client_once_data']['email'] = $email;
+            }
 
 
             $products = array();
@@ -105,11 +120,11 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             foreach ($order_items as $i => $order_item) {
                 if (!$order_item->is_delivery_item) {
                     $products[$i]['product_sizecode'] = $order_item->item_sku;
-                    $products[$i]['rebate'] = $order_item->item_discount;
+//                    $products[$i]['rebate'] = $order_item->item_discount;
                     $products[$i]['quantity'] = $order_item->item_qty;
-                    $products[$i]['price'] = $order_item->item_value_before_discount;
+                    $products[$i]['price'] = $order_item->item_value_after_discount / $order_item->item_qty;
 
-                    $products[$i]['stock_id'] = $param->pos_id;
+                    $products[$i]['stock_id'] = $order_item->pos_id;
                 } else {
                     $orders[$n]['delivery_cost'] = $order_item->item_value_after_discount;
                 }
@@ -192,7 +207,6 @@ class ZolagoOs_IAIShop_Model_Client_Connector
         $request[$action] = array();
         $request[$action]['params'] = array();
         $request[$action]['params']['payment_number'] = $paymentId;
-        Mage::log($request);
         return $this->doRequest("payments", $action, $request);
     }
     /**

@@ -44,16 +44,102 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Int
         }
         return null;
     }
+    
+    
+    /**
+     * process response from getProductsStock
+     */
+    protected function _processStockResponse($result) {	
+        $vendor = $this->getVendor();
+        $posList = $vendor->getActivePos();
+        $externalList = array();
+        foreach ($posList as $pos) {
+            if ($extId = $pos['external_id']) {
+                $externalList[$extId] = $extId;
+            }
+        }
+        $list = array();
+        if (empty($result->results)) {
+            $this->getHelper()->fileLog($result);
+            $this->log($this->getHelper()->__('Brak stanów magazynowych w IAI Shop'));
+            return $list;
+        }
+        foreach ($result->results as $object) {
+            if (isset($object->quantities->stocks)) { 
+                foreach ($object->quantities->stocks as $stock) {
+                    if (isset($stock->stock_id)
+                        && !empty($externalList[$stock->stock_id])
+                        && isset($stock->sizes)) {
+                        foreach ($stock->sizes as $size) {
+                            if (isset($size->product_sizecode)) {
+                                $list[$size->product_sizecode][$stock->stock_id] = empty($size->quantity)? 0:$size->quantity;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $list;
+        
+    }
+    
+    /**
+     * find quantity
+     */
+    protected function _findPos($item,$warehouse,$defaultId) {
+        if (!isset($warehouse[$item->item_sku])) {
+            return $defaultId;
+        }
+        $qty = $item->item_qty;
+        $stock = $warehouse[$item->item_sku];
+        $return = $defaultId;
+        foreach ($stock as $id=>$stockQty) {            
+            if ($id == $defaultId 
+                && $stockQty >= $qty) {
+                return $id; // default has highest priority
+            }
+            if ((float)$stockQty >= (float)$qty) {
+                $return = $id;
+            }
+        }
+        return $return;
+    }
+    /**
+     * assign stock_id for products from IAI shop
+     */
+    protected function _getProductsStock(&$list,$defaultPos) {
+        $iaiConnector = $this->getIaiConnector();
+        $params = array();
+        $params['products'] = array();
+        foreach ($list as $item) {
+            if (empty($item->is_delivery_item)) {
+                $params['products'][] = array(
+                    'identType' => 'codeExtern',
+                    'identValue' => $item->item_sku,
+                );
+            }
+        }        
+        $result = $iaiConnector->getProductsStocks($params);
+        $warehouse = $this->_processStockResponse($result);        
+        foreach ($list as &$item) {
+            if (empty($item->is_delivery_item)) {
+                $item->pos_id = $this->_findPos($item,$warehouse,$defaultPos);
+            }
+        }
+    }
     /**
      * sync orders
      */
     public function sync() {
         $orders = $this->getGhApiVendorOrders();
-        $iaiConnector = Mage::getModel("zosiaishop/client_connector");
-        $iaiConnector->setVendorId($this->getVendor()->getId());
+        $iaiConnector = $this->getIaiConnector();
         if ($orders->status) {
             foreach ($this->prepareOrderList($orders->list) as $item) {
                 if (empty($item->external_order_id)) {
+                    if ($email = $this->getVendor()->getData('zosiaishop_vendor_gallery_email')) {
+                        $item->email = sprintf($email,$item->order_id);
+                    }
+                    $this->_getProductsStock($item->order_items,$item->pos_id);                    
                     $response = $iaiConnector->addOrders(array($item));
                     if (!empty($response->result->orders)) {
                         $sn = $this->processResponse($response->result->orders,$item->order_id);
