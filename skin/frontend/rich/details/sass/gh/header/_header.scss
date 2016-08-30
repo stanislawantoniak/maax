@@ -62,10 +62,11 @@ body {
 	}
 	#header_top_block_center {
 		position: absolute;
-		top: 1px;
+		top: 8px;
 		//width: 160px;
 		width: 250px;
 		@include max-screen($screen-xs-max) {
+			top: 1px;
 			width: 160px;
 		}
 		z-index: 10;
@@ -79,17 +80,17 @@ body {
 				margin-top: 5px;
 			}
 		}
-
+		@include max-screen($screen-sm) {
+			top:3px;
+		}
 		@include max-screen(470px) {
+			top:4px;
 			width: 150px;
-			top: 3px;
-			left: -10px;
 			margin-left: 0;
 		}
 		@include max-screen(365px) {
 			width: 140px;
 			top: 6px;
-			left: -10px;
 			margin-left: 0;
 		}
 	}
