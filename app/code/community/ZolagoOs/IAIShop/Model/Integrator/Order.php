@@ -137,7 +137,7 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Int
             foreach ($this->prepareOrderList($orders->list) as $item) {
                 if (empty($item->external_order_id)) {
                     if ($email = $this->getVendor()->getData('zosiaishop_vendor_gallery_email')) {
-                        $item->email = $email;
+                        $item->email = sprintf($email,$item->order_id);
                     }
                     $this->_getProductsStock($item->order_items,$item->pos_id);                    
                     $response = $iaiConnector->addOrders(array($item));
