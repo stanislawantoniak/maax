@@ -22,6 +22,7 @@ class Zolago_Blog_Block_Catalog_Product_Posts extends Mage_Catalog_Block_Product
                 $productBlogIds[] = $product->getData("product_blog_post_id_$i");
             }
         }
+        //Zend_Debug::dump($productBlogIds);
 
 
         $storeId = Mage::app()->getStore()->getId();
@@ -51,6 +52,16 @@ class Zolago_Blog_Block_Catalog_Product_Posts extends Mage_Catalog_Block_Product
     {
         $this->_prepareData();
         return parent::_beforeToHtml();
+    }
+
+    /**
+     * Count of blog post links
+     * on the product page
+     * @return int
+     */
+    public function getPostsCount()
+    {
+        return (int)Mage::getStoreConfig('mpblog/product/posts_count');
     }
 
 }
