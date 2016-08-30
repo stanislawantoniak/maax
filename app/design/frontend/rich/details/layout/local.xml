@@ -60,6 +60,7 @@
     </solrsearch_index_index>
     <catalog_product_view>
         <reference name="product.info">
+			<block type="zolagoblog/catalog_product_posts" name="product.info.blogposts" as="blogposts" template="zolagoblog/catalog/product/view/blogposts.phtml"/>
             <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
         </reference>
     </catalog_product_view>

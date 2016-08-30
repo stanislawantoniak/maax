@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Blog>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Magpleasure_Blog/>
+
+            </depends>
+        </Zolago_Blog>
+    </modules>
+</config>
