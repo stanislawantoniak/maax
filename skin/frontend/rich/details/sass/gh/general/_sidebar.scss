@@ -38,6 +38,13 @@
 	z-index: 900;
 	.section {
 		#filter_category {
+			dl {
+				dd {
+					a {
+						padding: 0 0 16px 0;
+					}
+				}
+			}
 			dt {
 				text-transform:none;
 				.suffix {
