@@ -54,6 +54,7 @@
                         	<label>Default customer email for integrated orders</label>
                         	<type>text</type>
                         	<fieldset>ghapi_vendor_access</fieldset>
+                        	<comment>%s is replaced with order ID</comment>
                         	<position>6</position>
 	                    </zosiaishop_vendor_gallery_email>
         		</fields>

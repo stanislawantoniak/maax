@@ -46,6 +46,7 @@ class GH_Api_Block_Adminhtml_Dropship_Settings_Ghapi_Form extends Mage_Adminhtml
             $fieldset->addField('zosiaishop_vendor_gallery_email', 'text', array(
                 'name'      => 'zosiaishop_vendor_gallery_email',
                 'label'     => $hlp->__('Default customer email for integrated orders'),
+                'note'   => $hlp->__('%s is replaced with order ID'),
             ));        
         }
         // GH integration

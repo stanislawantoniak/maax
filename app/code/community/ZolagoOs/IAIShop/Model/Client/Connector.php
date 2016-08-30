@@ -105,8 +105,9 @@ class ZolagoOs_IAIShop_Model_Client_Connector
             } else {
                 $orders[$n]['client_once_data'] = $delivery_address;
             }
-            if (!empty($param->email)) {
-                $orders[$n]['client_once_data']['email'] = $param->email;
+            $email = empty($param->email)? (empty($param->order_email)? null:$param->order_email): $param->email;
+            if (!empty($email)) {
+                $orders[$n]['client_once_data']['email'] = $email;
             }
 
 
