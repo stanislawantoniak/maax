@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <sections>
+        <mpblog module="zolagopblog" translate="label">
+            <groups>
+                <product>
+                    <label>Product</label>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>150</sort_order>
+                    <fields>
+                        <posts_count translate="label">
+                            <label>Display Posts On Product Page</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </posts_count>
+                    </fields>
+                </product>
+            </groups>
+        </mpblog>
+    </sections>
+</config>
