@@ -19,21 +19,6 @@ $moveUpUrl = Mage::helper('zolagocatalog')->getMoveUpUrl($category);
 if ($this->isContentMode() && !$vendor) return; // no header only on CMS page and no vendor
 ?>
 
-<style>
-    .category-top-green-box {
-        margin-top: -40px;
-        float: right;
-        width: 400px;
-        text-align: center;
-        border: 1px solid green;
-        padding: 4px;
-    }
-    @media (max-width: 809px) {
-        .category-top-green-box {
-            display: none;
-        }
-    }
-</style>
 <header id="header-main"  class="<?php if($this->isContentMode() && !$campaign): ?> hidden-xs<?php endif; ?>">
     <div class="wrapp-section bg-w">
         <div class="container-fluid">

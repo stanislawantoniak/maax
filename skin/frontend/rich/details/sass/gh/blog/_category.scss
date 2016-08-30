@@ -1,0 +1,12 @@
+.category-blog-link {
+  margin-top: -40px;
+  float: right;
+  text-align: center;
+  border: 1px solid $color_008733;
+  padding: 4px;
+}
+@media (max-width: 809px) {
+  .category-blog-link {
+    display: none;
+  }
+}
