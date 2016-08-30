@@ -4,9 +4,6 @@
         <Zolago_SalesRule>
             <active>true</active>
             <codePool>local</codePool>
-			<depends>
-				<Amasty_Rules/>
-			</depends>
         </Zolago_SalesRule>
     </modules>
 </config>

@@ -49,6 +49,7 @@ class Zolago_Catalog_Controller_Ajax extends ZolagoOs_OmniChannel_Controller_Ven
      */
     protected function _processException($e) {
         if (get_class($e) === 'Exception') {
+            Mage:logException($e);
             $message = $this->__('Technical error');
         } else {
             $message = $e->getMessage();
