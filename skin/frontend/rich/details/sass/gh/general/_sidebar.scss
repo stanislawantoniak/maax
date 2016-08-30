@@ -39,7 +39,12 @@
 	.section {
 		#filter_category {
 			dl {
-				dd {
+				dd:last-child {
+					a {
+						padding: 0 0 8px 0;
+					}
+				}
+				dd:not(:last-child) {
 					a {
 						padding: 0 0 16px 0;
 					}
