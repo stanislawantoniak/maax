@@ -15,10 +15,10 @@
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>
 			<groups>
-				<general translate="label" module="zolagoosimport">
-					<label>Product Import Settings</label>
+				<general>
+					<label>General Settings</label>
 					<expanded>1</expanded>
-					<sort_order>10</sort_order>
+					<sort_order>9</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
@@ -31,8 +31,27 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</external_id>
+						<processed_files_folder translate="label" module="zolagoosimport">
+							<label>Processed files folder</label>
+							<comment><![CDATA[Enter absolute path to folder for processed files storage]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</processed_files_folder>
+					</fields>
+				</general>
+				<file_source translate="label" module="zolagoosimport">
+					<label>Import Settings</label>
+					<expanded>1</expanded>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
 						<import_products translate="label" module="zolagoosimport">
-							<label>Products import source file</label>
+							<label><![CDATA[<b>Products</b> import source file]]></label>
 							<comment><![CDATA[Enter absolute path to file]]></comment>
 							<frontend_type>text</frontend_type>
 							<sort_order>20</sort_order>
@@ -41,7 +60,7 @@
 							<show_in_store>0</show_in_store>
 						</import_products>
 					</fields>
-				</general>
+				</file_source>
 			</groups>
 		</zolagoosimport>
 	</sections>
