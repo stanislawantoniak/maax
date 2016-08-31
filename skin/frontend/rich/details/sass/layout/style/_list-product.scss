@@ -220,15 +220,15 @@ html.is-browser-mobile {
     .price {
       .like {
         .icoLike {
-          background-image: url('../images/svg/unlike.svg');
+          //background-image: url('../images/svg/unlike.svg');
           &:hover {
-            background-image: url('../images/svg/unlike.svg');
+            //background-image: url('../images/svg/unlike.svg');
           }
         }
         &.liked .icoLike {
-          background-image: url('../images/svg/like.svg');
+          //background-image: url('../images/svg/like.svg');
           &:hover {
-            background-image: url('../images/svg/like.svg');
+            //background-image: url('../images/svg/like.svg');
           }
         }
       }
