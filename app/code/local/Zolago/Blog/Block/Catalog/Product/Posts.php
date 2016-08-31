@@ -96,4 +96,28 @@ class Zolago_Blog_Block_Catalog_Product_Posts extends Mage_Catalog_Block_Product
         return (int)Mage::getStoreConfig('mpblog/product/posts_count');
     }
 
+
+    public function hasThumbnail($post)
+    {
+        $src = $post->getListThumbnail() ? $post->getListThumbnail() : $post->getPostThumbnail();
+        return !!$src;
+    }
+
+    public function getThumbnailSrc($post)
+    {
+        $src = $post->getListThumbnail() ? $post->getListThumbnail() : $post->getPostThumbnail();
+        if ($src){
+            return $this->_getThumbnailSrc($src, 100);
+        }
+
+        return false;
+    }
+
+    protected function _getThumbnailSrc($src, $width, $height = null)
+    {
+        $imageHelper = Mage::helper('mpblog')->getCommon()->getImage();
+        $height = $height ? $height : $width;
+        $imageHelper->init($src)->adaptiveResize($width, $height);
+        return $imageHelper->__toString();
+    }
 }

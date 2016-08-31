@@ -4,24 +4,19 @@
     <?php $productBlogItems = $this->_productBlogItems; ?>
 
     <?php if ($productBlogItems->getSize() > 0): ?>
-        <?php foreach ($productBlogItems as $productBlogItem): ?>
+        <?php foreach ($productBlogItems as $post): ?>
             <div class="col-md-12 col-sm-6 col-xs-6 product-blog-post-item">
                 <div class="product-blog-post-item-container">
-                    <a href="<?php echo $productBlogItem->getUrl(); ?>">
-                        <?php if (!empty($postThumb = $productBlogItem->getPostThumbnail())): ?>
+                    <div href="<?php echo$post->getUrl(); ?>">
+                        <?php if ($this->hasThumbnail($post)): ?>
                             <div class="col-md-6 col-sm-4 col-xs-12 post-thumb">
-                                <img class="product-post-thumb"
-                                     src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $postThumb; ?>"/>
-                            </div>
-
-                        <?php elseif (!empty($listThumb = $productBlogItem->getListThumbnail())): ?>
-                            <div class="col-md-6 col-sm-4 col-xs-12 post-thumb">
-                                <img class="product-post-thumb"
-                                     src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $listThumb; ?>"/>
+                                <img class="product-post-thumb" src="<?php echo $this->getThumbnailSrc($post); ?>"
+                                     alt="<?php echo $this->escapeHtml($post->getTitle()); ?>">
                             </div>
                         <?php endif; ?>
+
                         <div class="col-md-6 col-sm-8 col-xs-12 post-title">
-                            <span><?php echo $productBlogItem->getTitle(); ?></span>
+                            <span><?php echo $post->getTitle(); ?></span>
                         </div>
                     </a>
                 </div>
