@@ -6,6 +6,9 @@ $_collection = $this->getItems();
 /** @var Zolago_Catalog_Helper_Product $_helper */
 $_helper = Mage::helper('zolagocatalog/product');
 $brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
+
+/** @var Zolago_Solrsearch_Helper_Data $zssHelper */
+$zssHelper = Mage::helper("zolagosolrsearch");
 ?>
 
 <div class="container-fluid" id="items-product">
