@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.1.5</version>
+            <version>0.1.7</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -178,6 +178,16 @@
                     </zolagocatalog_add_fields_to_admin_store_view_edit>
                 </observers>
             </adminhtml_store_edit_form_prepare_form>
+            <catalog_product_website_update>
+                <observers>
+                    <zolagocatalog_product_website_update>
+                        <type>singleton</type>
+                        <class>zolagocatalog/observer</class>
+                        <method>catalogProductWebsiteUpdate</method>
+                    </zolagocatalog_product_website_update>
+                </observers>
+            </catalog_product_website_update>
+
         </events>
 		<udropship>
 			<vendor>

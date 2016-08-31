@@ -17,89 +17,39 @@ class ZolagoOs_Import_Model_Import_Product
 
     const MAGMI_IMPORT_PROFILE = "wojcik";
 
+    /**
+     * ZolagoOs_Import_Model_Import_Product constructor.
+     */
     public function __construct()
     {
         $this->_vendor = $this->getExternalId();
     }
 
-    /**
-     * @return array
-     */
-    public function getVendorId()
-    {
-        return $this->_vendor;
-    }
 
     /**
-     * @return array
+     * Implement _getImportEntityType() method.
      */
-    public function getProductSkus()
+    protected function _getImportEntityType()
     {
-        return array_merge($this->_simpleSkus, $this->_configurableSkus);
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getSimpleSkus()
-    {
-        return $this->_simpleSkus;
+       return "product";
     }
 
     /**
-     * @param mixed $simpleSkus
+     * File name for _getPath()
+     *
+     * @return string
      */
-    public function setSimpleSkus($simpleSkus)
+    public function _getFileName()
     {
-        $this->_simpleSkus = array_merge($this->_simpleSkus, array($simpleSkus));
+        return $this->getHelper()->getProductFile();
+
     }
-
-
-    /**
-     * @return mixed
-     */
-    public function getConfigurableSkus()
-    {
-        return $this->_configurableSkus;
-    }
-
-    /**
-     * @param mixed $configurableSkus
-     */
-    public function setConfigurableSkus($configurableSkus)
-    {
-        $this->_configurableSkus = array_merge($this->_configurableSkus, array($configurableSkus));
-    }
-
-
-    public function runImport()
-    {
-        $this->_import();
-    }
-
-
+    
     protected function _import()
     {
-
-        $vendorId = $this->getVendorId();
-        if (empty($vendorId)) {
-            $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
-            return $this;
-        }
-
-        //1. Read file
+        $vendorId = $this->getExternalId();
         $fileName = $this->_getPath();
-        //$this->log("READING FILE {$fileName}");
-        if (empty($fileName)) {
-            $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
-            return $this;
-        }
 
-        if (!file_exists($fileName)) {
-            $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
-            return $this;
-        }
         try {
             $fileContent = file_get_contents($fileName);
             $xml = simplexml_load_string($fileContent);
@@ -162,11 +112,68 @@ class ZolagoOs_Import_Model_Import_Product
             //3. Set additional attributes
             $this->updateAdditionalAttributes();
 
+
+            //4. Move processed file
+            $this->_moveProcessedFile();
+
         } catch (Exception $e) {
             Mage::logException($e);
         }
     }
 
+
+    /**
+     * @return array
+     */
+    public function getProductSkus()
+    {
+        return array_merge($this->_simpleSkus, $this->_configurableSkus);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getSimpleSkus()
+    {
+        return $this->_simpleSkus;
+    }
+
+    /**
+     * @param mixed $simpleSkus
+     */
+    public function setSimpleSkus($simpleSkus)
+    {
+        $this->_simpleSkus = array_merge($this->_simpleSkus, array($simpleSkus));
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getConfigurableSkus()
+    {
+        return $this->_configurableSkus;
+    }
+
+    /**
+     * @param mixed $configurableSkus
+     */
+    public function setConfigurableSkus($configurableSkus)
+    {
+        $this->_configurableSkus = array_merge($this->_configurableSkus, array($configurableSkus));
+    }
+
+
+
+
+    protected function _getFileExtension()
+    {
+        return "xml";
+    }
+    /**
+     * 
+     */
     public function updateAdditionalAttributes()
     {
         $vendorId = $this->_vendor;
@@ -377,8 +384,5 @@ class ZolagoOs_Import_Model_Import_Product
         return $result;
     }
 
-    public function log($message, $level = NULL)
-    {
-        Mage::log($message, $level, "zolagoosimport_product.log");
-    }
+
 }

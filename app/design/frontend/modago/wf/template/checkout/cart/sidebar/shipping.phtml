@@ -1,15 +1,14 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */?>
-
-<?php
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping */
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper		= Mage::helper("zolagocheckout");
 
 $items = $this->getRateItems();
+$allVendorsMethod = $items->allVendorsMethod;
+$extraCharges = $helper->getUdropshipMethodExtraCharges($allVendorsMethod);
+
 $vendors = $items->vendors;
 
 $vendorsJ = Mage::helper('core')->jsonEncode($vendors);
-
-$allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 $rates = $items->rates;
@@ -56,7 +55,6 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
     Mall.translate.add("shipping_map_select_city", "<?php echo $helper->__("Select City"); ?>");
-    Mall.translate.add("shipping_map_select_locker", "<?php echo $helper->__("Choose locker"); ?>");
     Mall.translate.add("shipping_map_nearest", "<?php echo $helper->__("Nearest"); ?>");
     Mall.translate.add("shipping_map_show_nearest_link", "<?php echo $helper->__("show nearest"); ?>");
     Mall.translate.add("shipping_map_hide_nearest_link", "<?php echo $helper->__("hide nearest"); ?>");
@@ -74,6 +72,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 
     <script type="text/javascript">
         (function(){
+            Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
             Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
             Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
             Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
@@ -133,8 +132,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                 <?php
 
                 $formattedCost = '';
-                if (isset($cost[$method['code']])) {
-                    $costSum = array_sum($cost[$method['code']]);
+                if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
+                    $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
                     $formattedCost = Mage::helper('core')->currency($costSum, true, false);
                 }
 
@@ -178,8 +177,8 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
         <?php foreach ($methods as $method): ?>
             <?php
             $formattedCost = '';
-            if (isset($cost[$method['code']])) {
-                $costSum = array_sum($cost[$method['code']]);
+            if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
+                $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
                 $formattedCost = Mage::helper('core')->currency($costSum, true, false);
             }
             $carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($method["delivery_type"]);
@@ -204,6 +203,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
                                        data-carrier-description="<?php echo $daysInTransit; ?>"
                                        data-carrier-logo='<?php echo $carrierLogo; ?>'
                                        data-method-cost="<?php echo $costSum; ?>"
+                                       data-method-cost-label="<?php if(in_array($method['code'], array_keys($extraCharges))):  ?><?php echo $this->__("Min delivery cost:"); ?><?php else: ?><?php echo $this->__("Delivery cost:"); ?><?php endif; ?>"
                                        data-method-cost-formatted="<?php echo $formattedCost; ?>"
                                        data-carrier-delivery-type="<?php echo $method["delivery_type"]; ?>"
                                        data-carrier-additional=""
