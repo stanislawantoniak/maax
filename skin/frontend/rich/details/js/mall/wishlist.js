@@ -293,10 +293,7 @@ Mall.wishlist = {
         jQuery("#notadded-wishlist").hide();
         jQuery("#added-wishlist").removeClass("hidden");
         jQuery("#added-wishlist").show();
-        jQuery("#added-wishlist").find(".likeAdded").html(likeHtml);
-
-		// set products count badge
-		Mall.setFavoritesCountBadge(data.content.favorites_count);
+        jQuery("#added-wishlist").find(".likeAdded").html(likeHtml);		
 
         return this;
     },
@@ -461,7 +458,6 @@ Mall.wishlist = {
                 // replace blocks
 	            if(typeof unlikingOnWishlist != 'undefined' && unlikingOnWishlist) {
 		            //remove item
-		            // grid.shuffle('remove',jQuery(obj).parents('.item'));
 					jQuery(obj).parents('.item').remove();
 		            //fix for footer
 		            jQuery(window).resize();
@@ -470,7 +466,6 @@ Mall.wishlist = {
 		            jQuery(obj).remove();
 	            }
 				// set products count badge
-				Mall.setFavoritesCountBadge(data.content.favorites_count);
                 Mall.wishlist.calculateWidths();
             }
         });

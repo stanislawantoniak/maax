@@ -102,11 +102,17 @@
       z-index: 900;
       cursor: pointer;
       text-align: center;
-      background: #e8e8e8;
-      padding: 8px 10px;
+
+      padding: 8px 0;
+
+      .likeAdded {
+        background: #e8e8e8;
+        padding: 8px 10px;
+      }
       .icoLike, &.liked .icoLike {
         font-size: 16px !important;
-        display: inline-block;
+        position: absolute;
+        left: -15px;
         vertical-align: middle;
         width: 18px;
         height: 18px;
@@ -119,14 +125,14 @@
         }
       }
       .icoLike {
-        background-image: url('../images/svg/unlike.svg');
+        //background-image: url('../images/svg/unlike.svg');
         &:hover {
-          background-image: url('../images/svg/like.svg');
+          //background-image: url('../images/svg/like.svg');
         }
       }
 
       &.liked .icoLike {
-        background-image: url('../images/svg/like.svg');
+        //background-image: url('../images/svg/like.svg');
         &:hover {
           //background-image: url('../images/svg/unlike.svg');
         }
