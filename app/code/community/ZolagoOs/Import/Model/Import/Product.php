@@ -46,7 +46,7 @@ class ZolagoOs_Import_Model_Import_Product
         return $this->getHelper()->getProductFile();
 
     }
-    
+
     protected function _import()
     {
         $vendorId = $this->getExternalId();
@@ -68,14 +68,36 @@ class ZolagoOs_Import_Model_Import_Product
             $skuBatch = array();
             if (is_array($xmlToArray["item"])) {
                 foreach ($xmlToArray["item"] as $productXML) {
-                    $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
+                    $configurableSkuv = explode("/", (string)$productXML->sku)[0];
+                    if (
+                        $this->startsWith($configurableSkuv, 'WW')
+                        || $this->startsWith($configurableSkuv, 'LW')
+                        || $this->startsWith($configurableSkuv, 'CW')
+                    ) {
+//            1. dla indeksów zaczynących się od WW, LW oraz CW np. WW1613SU1G041/068
+//            budujemy indeks konfigurowalny odcinając rozmiar /068 i jeden znak przed rozmiarem
+                        $configurableSkuv = substr($configurableSkuv, 0, -1);
+                    }
+                    $skuBatch[$configurableSkuv][] = $productXML;
+                    unset($configurableSkuv);
                 }
             }
+
             if (is_object($xmlToArray["item"])) {
                 $productXML = $xmlToArray["item"];
-                $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
+                $configurableSkuv = explode("/", (string)$productXML->sku)[0];
+                if (
+                    $this->startsWith($configurableSkuv, 'WW')
+                    || $this->startsWith($configurableSkuv, 'LW')
+                    || $this->startsWith($configurableSkuv, 'CW')
+                ) {
+//            1. dla indeksów zaczynących się od WW, LW oraz CW np. WW1613SU1G041/068
+//            budujemy indeks konfigurowalny odcinając rozmiar /068 i jeden znak przed rozmiarem
+                    $configurableSkuv = substr($configurableSkuv, 0, -1);
+                }
+                $skuBatch[$configurableSkuv][] = $productXML;
+                unset($configurableSkuv);
             }
-
 
             if (empty($skuBatch)) {
                 $this->log("No Data For Import", Zend_Log::ALERT);
@@ -174,7 +196,7 @@ class ZolagoOs_Import_Model_Import_Product
         return "xml";
     }
     /**
-     * 
+     *
      */
     public function updateAdditionalAttributes()
     {
@@ -285,16 +307,6 @@ class ZolagoOs_Import_Model_Import_Product
 
         $skusUpdated = [];
         $subskus = [];
-
-        if (
-            $this->startsWith($configurableSkuv, 'WW')
-            || $this->startsWith($configurableSkuv, 'LW')
-            || $this->startsWith($configurableSkuv, 'CW')
-        ) {
-//            1. dla indeksów zaczynących się od WW, LW oraz CW np. WW1613SU1G041/068
-//            budujemy indeks konfigurowalny odcinając rozmiar /068 i jeden znak przed rozmiarem
-            $configurableSkuv = substr($configurableSkuv, 0, -1);
-        }
 
         foreach ($simples as $simpleXMLData) {
             $simpleSkuV = (string)$simpleXMLData->sku;
