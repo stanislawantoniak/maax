@@ -1,5 +1,3 @@
-            //4. Move processed file
-            //$this->_moveProcessedFile();
 <?php
 
 /**
