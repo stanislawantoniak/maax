@@ -7,7 +7,7 @@
         <?php foreach ($productBlogItems as $post): ?>
             <div class="col-md-12 col-sm-6 col-xs-6 product-blog-post-item">
                 <div class="product-blog-post-item-container">
-                    <div href="<?php echo$post->getUrl(); ?>">
+                    <a href="<?php echo $post->getUrl(); ?>">
                         <?php if ($this->hasThumbnail($post)): ?>
                             <div class="col-md-6 col-sm-4 col-xs-12 post-thumb">
                                 <img class="product-post-thumb" src="<?php echo $this->getThumbnailSrc($post); ?>"
