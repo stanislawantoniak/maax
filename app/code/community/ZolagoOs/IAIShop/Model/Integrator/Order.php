@@ -140,6 +140,12 @@ class ZolagoOs_IAIShop_Model_Integrator_Order extends ZolagoOs_IAIShop_Model_Int
                         $item->email = sprintf($email,$item->order_id);
                     }
                     $this->_getProductsStock($item->order_items,$item->pos_id);                    
+                    // drut
+                    // @todo make config for it
+                    if ($this->getVendor()->getId() == 83) {
+                        $item->pos_id = 5;
+                    }
+                    // /drut
                     $response = $iaiConnector->addOrders(array($item));
                     if (!empty($response->result->orders)) {
                         $sn = $this->processResponse($response->result->orders,$item->order_id);
