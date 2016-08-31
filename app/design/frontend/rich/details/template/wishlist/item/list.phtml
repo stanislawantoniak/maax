@@ -26,7 +26,7 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                         <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-6 col-sm-3 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
                                 <a href="<?php echo $_product->getProductUrl(); ?>">
-	                                <figure class="img_product boxed" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
+	                                <figure class="img_product boxed">
 		                                <img src="<?php echo $_productImageUrl; ?>"
 		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
 		                                     class="img-responsive" />
