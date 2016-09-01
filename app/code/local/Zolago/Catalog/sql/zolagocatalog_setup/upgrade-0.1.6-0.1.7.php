@@ -16,7 +16,7 @@ $installer->addAttribute('catalog_product', 'delivery_volume', array(
 	'class'             => '',
 	'source'            => '',
 	'global'            => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
-	'visible'           => false,
+	'visible'           => true,
 	'required'          => false,
 	'user_defined'      => true,
 	'default'           => '0',

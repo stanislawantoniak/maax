@@ -59,7 +59,6 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
         //1. Get shipping from session
         $shipping_method_session = $checkoutSession->getData("shipping_method");
         $deliveryPointName = $checkoutSession->getData("delivery_point_name");
-
         if (!empty($shipping_method_session)) {
             return array(
                 "source" => "session",
