@@ -110,6 +110,14 @@
                     </zolagorma>
                 </observers>
             </zolagorma_rma_created>
+            <zolagorma_rma_created_manually>
+                <observers>
+                    <zolagorma>
+                        <model>zolagorma/observer</model>
+                        <method>rmaCreatedManually</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_rma_created_manually>
             <zolagorma_rma_comment_added>
                 <observers>
                     <zolagorma>
@@ -225,13 +233,13 @@
                     </modules>
                 </args>
             </adminhtml>
-            <urmaadmin>
+            <rmaadmin>
                 <args>
                     <modules>
                         <zolagorma before="ZolagoOs_Rma_Adminhtml">Zolago_Rma_Adminhtml</zolagorma>
                     </modules>
                 </args>
-            </urmaadmin>
+            </rmaadmin>
         </routers>
     </admin>
     <adminhtml>

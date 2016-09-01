@@ -3,11 +3,24 @@
 $formKey	= Mage::getSingleton('core/session')->getFormKey();
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper		= Mage::helper("zolagocheckout");
-$locker		= $this->getInpostLocker();
-$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+
 
 $items= $this->getRateItems();
 $methods = $items->methods;
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
+
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+	$sessionShippingMethod = $methodSelectedData;
+}
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+$carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($deliveryMethodCode);
 
 ?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
@@ -18,7 +31,7 @@ $methods = $items->methods;
 				<h2 class="open"><?php echo $helper->__('Address data'); ?></h2>
 			</header>
 			<div class="row">
-				<?php if(!$locker->getId()): ?>
+				<?php if(!$deliveryPoint->id): ?>
 				<div class="col-md-12 col-sm-4">
 					<h4><?php echo $helper->__('Delivery address'); ?>:</h4>
 					{{shipping}}
@@ -52,20 +65,23 @@ $methods = $items->methods;
 			</header>
 			<div class="panel-group">
 				<div class="row">
-					<?php if(!$locker->getId()): ?>
-					<div class="col-md-12 col-sm-4 delivery-type">
-						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
-						<dl>
-							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
-							<dd>&nbsp;</dd>
-							<dd>&nbsp;</dd>
-						</dl>
-					</div>
+					<?php if(!$deliveryPoint->id): ?>
+						<div class="col-md-12 col-sm-4 delivery-type">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="delivery-type-logo"><span>{{carrier_method}}</span><?php echo $carrierLogo; ?></dd>
+								<dd>&nbsp;</dd>
+								<dd>&nbsp;</dd>
+							</dl>
+						</div>
 					<?php else: ?>
 						<div class="col-md-12 col-sm-4 delivery-type">
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 							<dl>
-								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $inpostLogo; ?>"/></dd>
+								<dd class="delivery-point-data">
+									<?php echo $deliveryPoint->checkout->title; ?>
+									<?php echo $deliveryPoint->checkout->logo; ?>
+								</dd>
 								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
 								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
 								<dd class="location-description ">{{inpost_locker_location_description}}</dd>

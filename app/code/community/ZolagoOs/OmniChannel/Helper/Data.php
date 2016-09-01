@@ -507,7 +507,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             );
             if ($this->isUdpoActive() && ($po = Mage::helper('udpo')->getShipmentPo($shipment))) {
                 $data['po_id'] = $po->getIncrementId();
-                $data['po_url'] = $ahlp->getUrl('udpoadmin/order_po/view', array(
+                $data['po_url'] = $ahlp->getUrl('zospoadmin/order_po/view', array(
                     'udpo_id'  => $po->getId(),
                     'order_id' => $order->getId(),
                 ));
@@ -3040,6 +3040,24 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         return $result;
     }
 
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param bool $fullResponse
+	 * @param string $nl
+	 * @return string
+	 */
+	public function formatCustomerAddressInpost($po, $fullResponse = false, $nl = "<br/>") {
+		/** @var GH_Inpost_Model_Locker $locker */
+		$locker = $po->getInpostLocker();
+		$result = Mage::helper('ghinpost')->__("Locker") . ' ' . $locker->getName() . $nl
+			. $locker->getStreet() . " " . $locker->getBuildingNumber() . $nl
+			. $locker->getPostcode() . " " . $locker->getTown();
+		if ($fullResponse) {
+			$result .= $nl . "T. " . $po->getShippingAddress()->getTelephone();
+		}
+		return $result;
+	}
+
     public function getResizedVendorLogoUrl($v, $width, $height, $field='logo')
     {
         $v = Mage::helper('udropship')->getVendor($v);
@@ -3413,6 +3431,26 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         is_array($filtered) ? print_r($filtered) : var_dump($filtered);
         //Mage::log(ob_get_clean(), null, $file);
         file_put_contents(realpath(Mage::getBaseDir('var')).DS.'log'.DS.$file, ob_get_clean(), FILE_APPEND);
+    }
+
+
+    /**
+     *
+     * @param $storeId
+     * @param $udropshipMethod example udtiership_1
+     * @param bool $includeTitle
+     * @return Varien_Object
+     */
+    public function getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod, $includeTitle = false)
+    {
+        $collection = Mage::getModel("udropship/shipping")->getCollection();
+        $collection->joinDeliveryType();
+        if ($includeTitle)
+            $collection->joinDeliveryTitle($storeId);
+
+        $collection->getSelect()->having("udropship_method=?", $udropshipMethod);
+
+        return $collection->getFirstItem();
     }
 
 }

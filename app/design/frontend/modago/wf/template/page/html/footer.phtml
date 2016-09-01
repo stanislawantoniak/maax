@@ -31,8 +31,8 @@ $wfFooterLinks = $this->getLayout()->createBlock('cms/block')->setBlockId('wf_fo
 $wfFooterSocialLinks = $this->getLayout()->createBlock('cms/block')->setBlockId('wf_footer_social_links')->toHtml();
 
 ?>
-<footer class="footer">
-    <div class="container">
+<footer id="footer" class="footer">
+    <div class="footer-black container">
         <div class="row row-fluid clearfix footer-links">
             <?php echo $wfFooterLinks; ?>
         </div>
@@ -57,7 +57,21 @@ $wfFooterSocialLinks = $this->getLayout()->createBlock('cms/block')->setBlockId(
                 </div>
             </div>
         </div>
-
-
     </div>
+    <div class="footer-gray-wr">
+        <div class="container container-fluid">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="hidden-xs pull-left" id="powered-by-info">
+                        <a style="color: #8a8a8a;" title="System zaprojektowany i wykonany przez Zolago Group. Budowa systemów e-commerce, wdrożenia Magento, budowa systemów B2B,  tworzenie strategii Online i Multichannel, badania i optymalizacja, User Experience. Zbudujemy Twój biznes online! " target="_blank" href="http://zolago.com"> System e-commerce Zolago Group</a>
+                    </div>
+                    <div class="hidden-xs pull-right" id="persistent-forget-desktop"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        Mall.reg.set('persistent_url', '<?php echo str_replace(array('http://','https://'),array('//','//'), Mage::getUrl("persistent/index/forget", array("_no_vendor"=>true))); ?>');
+        Mall.reg.set('package_skin', '<?php echo Mage::getDesign()->getPackageName() . "_" . Mage::getDesign()->getTheme('skin'); ?>');
+    </script>
 </footer>

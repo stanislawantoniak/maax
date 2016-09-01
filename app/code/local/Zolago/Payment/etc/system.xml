@@ -295,7 +295,6 @@
                         </channel_owner>
 					</fields>
 				</banktransfer>
-
             </groups>
         </payment>
         <payment_refunds translate="label" module="zolagopayment">

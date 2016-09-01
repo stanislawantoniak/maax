@@ -16,6 +16,8 @@ class Zolago_Payment_Model_Allocation_Observer {
         $operator_id = $observer->getData('operator_id');
         $comment = $observer->getData('comment');
 
-        Mage::getModel("zolagopayment/allocation")->importDataFromTransaction($transaction, $allocation_type, $operator_id, $comment);
+		/** @var Zolago_Payment_Model_Allocation $model */
+		$model = Mage::getModel("zolagopayment/allocation"); 
+        $model->importDataFromTransaction($transaction, $allocation_type, $operator_id, $comment);
     }
 }

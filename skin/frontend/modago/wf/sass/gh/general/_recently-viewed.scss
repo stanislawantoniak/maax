@@ -8,7 +8,18 @@
   }
   .right-col {
     .prod_name {
-      min-height: 50px;
+      height: 50px;
+	  overflow:hidden;
+	  position:relative;
+	  .prod_name_fade {
+		position:absolute;
+		bottom: 0px;
+		width:100%;
+		left:0px;
+		height: $font-size-base;
+		display:block;
+		background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0.5) 20%,rgba(255,255,255,1) 100%);
+	  }
     }
     .wrapper-price {
       font-size: 14px;
@@ -92,42 +103,29 @@
 		.rwd-buttons {
 			.rwd-prev,
 			.rwd-next {
-				font-size: 48px;
-				background:$allMap;
+				color: $color_c2c2c2;
+				font-size: 32px;
+				top:10px;
 			}
 			.rwd-prev {
-
-				@include sprite($allMap, arrow-slider-latest-left-l);
-
-				@media (max-width: $screen-xs-max) {
-					@include sprite($allMap, arrow-rwd-slider-prev-mobile);
-
+				&:before {
+					content:"\f104";
+                    font-family: 'FontAwesome';
 				}
 				&:hover {
-					@include sprite($allMap, arrow-slider-latest-left-h);
-
-					@media (max-width: $screen-xs-max) {
-						@include sprite($allMap, arrow-rwd-slider-prev-mobile-h);
-
-					}
+					
+					color: $color_8a8a8a;
 				}
 
 			}
 			.rwd-next {
-
-				@include sprite($allMap, arrow-slider-latest-right-l);
-
-				@media (max-width: $screen-xs-max) {
-					@include sprite($allMap, arrow-rwd-slider-next-mobile);
-
+				&:before {
+					content:"\f105";
+                    font-family: 'FontAwesome';
 				}
+				
 				&:hover {
-					@include sprite($allMap, arrow-slider-latest-right-h);
-
-					@media (max-width: $screen-xs-max) {
-						@include sprite($allMap, arrow-rwd-slider-next-mobile-h);
-
-					}
+					color: $color_8a8a8a;
 				}
 			}
 		}

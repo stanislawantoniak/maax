@@ -84,6 +84,13 @@
 				</setup>
 			</zolagonewsletter_setup>
 		</resources>
+		<blocks>
+			<newsletter>
+				<rewrite>
+					<subscribe>Zolago_Newsletter_Block_Subscribe</subscribe>
+				</rewrite>
+			</newsletter>
+		</blocks>
 	</global>
 	<default>
 		<newsletter>

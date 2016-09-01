@@ -1,5 +1,5 @@
 .stores-map {
-
+  margin-bottom: 50px;
   #map-list-container {
     @media (min-width: $screen-md) {
       padding-left: 0;
@@ -11,6 +11,9 @@
       h4 {
         text-transform: uppercase;
         padding-top: 0;
+        @media (min-width: $screen-sm-min) {
+          font-size: 24px;
+        }
       }
 
       a.stores-map-show-all {
@@ -47,6 +50,7 @@
             p {
               padding: 0 0 10px 0;
               margin: 0;
+              line-height: 1em;
             }
           }
           .right-column {

@@ -302,23 +302,35 @@
 			img {
 				width:100%;
 				height:auto;
+				display:block;
 				@media (max-width: 360px) {
-					width:360px;
+					width:270px;
 				}
 				@media (max-width: 320px) {
-					width:320px;
+					width:260px;
 				}
 			}
 			position:relative;
 			.view_lupa {
+				i {
+					margin-top:12px;
+				}
 				position:absolute;
 				//                top:88%;
-				bottom: 2%;
-				right:10px;
+				bottom: 4%;
+				left: 17px;
 				z-index: 900;
+				border:1px solid $color_333;
+				border-radius:100%;
+				text-align:center;
+				height:40px;
+				width:40px;
 				@media (max-width: 767px) {
 					display:none;
 				}
+			}
+			.view_lupa_plus {
+				background: rgba(255, 255, 255, 0.4) none repeat scroll 0 0;
 			}
 		}
 	}
@@ -332,8 +344,11 @@
 				height:50px;
 				margin-top: -25px;
 				&:before {
-					content: ' ';
+					margin: 24px 0 0 18px;
+					color: $color_8a8a8a;
+					font-family:'FontAwesome';
 					display: block;
+					font-size:24px;
 					top:41%;
 					z-index: 900;
 				}
@@ -344,8 +359,7 @@
 			.rwd-prev {
 				left:0px;
 				&:before {
-					@include sprite-dimensions($allMap, arrow-stage-prev);
-					margin: 18px 0 0 18px;
+					content: '\f104';					
 				}
 				@media (min-width: 361px) and (max-width:767px) {
 					left: -33px;
@@ -354,8 +368,7 @@
 			.rwd-next {
 				right:0px;
 				&:before {
-					@include sprite-dimensions($allMap, arrow-stage-next);
-					margin: 18px 0 0 18px;
+					content: '\f105';									
 				}
 				@media (min-width: 361px) and (max-width:767px) {
 					right: -37px;

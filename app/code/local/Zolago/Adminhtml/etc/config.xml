@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Adminhtml>
-            <version>0.0.5</version>
+            <version>0.0.7</version>
         </Zolago_Adminhtml>
     </modules>
     <global>
@@ -33,6 +33,8 @@
                     <sales_transactions_detail>Zolago_Adminhtml_Block_Sales_Transactions_Detail</sales_transactions_detail>
                     <system_store_tree>Zolago_Adminhtml_Block_System_Store_Tree</system_store_tree>
                     <customer_edit_tabs>Zolago_Adminhtml_Block_Customer_Edit_Tabs</customer_edit_tabs>
+                    <sales_transactions_grid>Zolago_Adminhtml_Block_Sales_Transactions_Grid</sales_transactions_grid>
+                    <sales_transactions>Zolago_Adminhtml_Block_Sales_Transactions</sales_transactions>
                 </rewrite>
             </adminhtml>
             <cmsmart_admintheme>
@@ -101,7 +103,8 @@
 				<args>
 					<modules>
 						<zolagoadminhtml before="Mage_Adminhtml">Zolago_Adminhtml</zolagoadminhtml>
-					</modules>
+                        <zolago_adminhtml before="Mage_Adminhtml">Zolago_Adminhtml_Adminhtml</zolago_adminhtml>
+                    </modules>
 				</args>
 			</adminhtml>
 		</routers>

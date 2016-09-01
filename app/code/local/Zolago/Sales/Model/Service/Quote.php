@@ -30,9 +30,9 @@ class Zolago_Sales_Model_Service_Quote extends Mage_Sales_Model_Service_Quote {
 
         /** @var Zolago_Checkout_Helper_Data $helper */
         $helper = Mage::helper("zolagocheckout");
-        $locker = $helper->getInpostLocker();
+        $deliveryPointAddress = $helper->getDeliveryPointShippingAddress();
 
-        if ($addressValidation !== true && !$locker->getId()) {
+        if ($addressValidation !== true && empty($deliveryPointAddress)) {
             Mage::throwException(
                 Mage::helper('sales')->__('Please check billing address information. %s', implode(' ', $addressValidation))
             );

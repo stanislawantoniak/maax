@@ -7,28 +7,60 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
 	/**
-	 * @param Zolago_Po_Model_Po|int $poId
-	 * @return Zolago_Payment_Model_Resource_Allocation_Collection
+	 * Temporary live time cache
+	 *
+	 * @var array
 	 */
-    public function getOverpaymentDetails($poId) {
-
-        return $this->_addOverpaymentJoins($this->_getModel()->getPoOverpayments($poId));
-    }
-
+	protected $_cache = array();
 
 	/**
-	 * @param Zolago_Po_Model_Po|int $poId
+	 * @param Zolago_Po_Model_Po $po
 	 * @return Zolago_Payment_Model_Resource_Allocation_Collection
 	 */
-    public function getPaymentDetails($poId)  {
-	    
-        return $this->_addPaymentsJoins($this->_getModel()->getPoPayments($poId));
-    }
+	public function getAllocationOverpaymentDetails(Zolago_Po_Model_Po $po) {
+		$key = 'allocation_overpayment_details_' . $po->getId();
+		if (!isset($this->_cache[$key])) {
+			$this->_cache[$key] = $this->_addOverpaymentJoins($this->_getAllocationModel()->getPoOverpayments($po));
+		}
+		return $this->_cache[$key];
+	}
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return Zolago_Payment_Model_Resource_Allocation_Collection
+	 */
+	public function getAllocationPaymentDetails(Zolago_Po_Model_Po $po) {
+		$key = 'allocation_payment_details_'. $po->getId();
+		if (!isset($this->_cache[$key])) {
+			$this->_cache[$key] = $this->_addPaymentsJoins($this->_getAllocationModel()->getPoPayments($po));
+		}
+		return $this->_cache[$key];
+	}
+
+	public function getSimpleTransactionsDetails(Zolago_Po_Model_Po $po) {
+		$key = 'simple_transactions_details_'. $po->getId();
+		if (!isset($this->_cache[$key])) {
+			$coll = $this->getTransactionCollection($po);
+			$coll->addTxnTypeFilter(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
+			$this->_cache[$key] = $coll;
+		}
+		return $this->_cache[$key];
+	}
+	
+	public function getSimpleRefundsDetails(Zolago_Po_Model_Po $po) {
+		$key = 'simple_refunds_details_'. $po->getId();
+		if (!isset($this->_cache[$key])) {
+			$coll = $this->getTransactionCollection($po);
+			$coll->addTxnTypeFilter(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND);
+			$this->_cache[$key] = $coll;
+		}
+		return $this->_cache[$key];
+	}
 
 	/**
 	 * @return Zolago_Payment_Model_Allocation
 	 */
-	private function _getModel() {
+	private function _getAllocationModel() {
 		return Mage::getModel('zolagopayment/allocation');
 	}
 
@@ -214,4 +246,43 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 		);
 	}
 
+	/**
+	 * @param null $store
+	 * @return bool
+	 */
+	public function getConfigUseAllocation($store = null) {
+		$config = (bool)(!Mage::helper('core')->isModuleEnabled('ZolagoOs_OutsideStore')) || (bool)Mage::getStoreConfig('payment/config/use_allocation', $store);
+		return (bool)$config;
+	}
+
+	/**
+	 * @param $po
+	 * @return Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection
+	 */
+	public function getTransactionCollection(Zolago_Po_Model_Po $po) {
+		/** @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $coll */
+		$coll = Mage::getResourceModel('sales/order_payment_transaction_collection');
+		$coll->addOrderIdFilter($po->getOrder()->getId());
+		$coll->addFilter('txn_status', array('eq' => Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED));
+		return $coll;
+	}
+	
+	/**
+	 * @param $po
+	 * @return float
+	 */
+	public function getSimplePaymentAmount(Zolago_Po_Model_Po $po) {
+		$key = 'simple_payment_amount_' . $po->getId();
+		if (!isset($this->_cache[$key])) {
+			$sum = 0;
+			$coll = $this->getTransactionCollection($po);
+			$coll->addTxnTypeFilter(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
+			/** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
+			foreach ($coll as $transaction) {
+				$sum += $transaction->getTxnAmount();
+			}
+			$this->_cache[$key] = $sum;
+		}
+		return $this->_cache[$key];
+	}
 }

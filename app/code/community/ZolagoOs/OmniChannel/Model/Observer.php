@@ -393,20 +393,20 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
             if (($stId = $shipment->getStatementId())) {
                 $soi->setStatementId($stId);
                 if (($st = Mage::getModel('udropship/vendor_statement')->load($stId, 'statement_id')) && $st->getId()) {
-                    $soi->setStatementUrl(Mage::getModel('adminhtml/url')->getUrl('udropshipadmin/adminhtml_vendor_statement/edit', array('id'=>$st->getId())));
+                    $soi->setStatementUrl(Mage::getModel('adminhtml/url')->getUrl('zolagoosadmin/adminhtml_vendor_statement/edit', array('id'=>$st->getId())));
                 }
             }
             if (Mage::helper('udropship')->isUdpayoutActive() && ($ptId = $shipment->getPayoutId())) {
                 $soi->setPayoutId($ptId);
                 if (($pt = Mage::getModel('udpayout/payout')->load($ptId)) && $pt->getId()) {
-                    $soi->setPayoutUrl(Mage::getModel('adminhtml/url')->getUrl('udpayoutadmin/payout/edit', array('id'=>$pt->getId())));
+                    $soi->setPayoutUrl(Mage::getModel('adminhtml/url')->getUrl('zospayoutadmin/payout/edit', array('id'=>$pt->getId())));
                 }
             }
         	if (Mage::helper('udropship')->isUdpoActive() && ($ptId = $shipment->getUdpoId())) {
                 $soi->setUdpoId($ptId);
                 if (Mage::helper('udpo')->getShipmentPo($shipment)) {
                 	$soi->setUdpoId($shipment->getUdpo()->getIncrementId());
-                    $soi->setUdpoUrl(Mage::getModel('adminhtml/url')->getUrl('udpoadmin/order_po/view', array('udpo_id'=>$shipment->getUdpo()->getId())));
+                    $soi->setUdpoUrl(Mage::getModel('adminhtml/url')->getUrl('zospoadmin/order_po/view', array('udpo_id'=>$shipment->getUdpo()->getId())));
                 }
             }
             if (Mage::helper('udropship')->isUdropshipOrder($shipment->getOrder())) {

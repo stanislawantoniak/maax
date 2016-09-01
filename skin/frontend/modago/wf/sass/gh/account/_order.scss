@@ -3,7 +3,14 @@
 		width:100%;
 		margin-left:0px;
 		> .main {
-			padding:30px;
+            padding-top: 0;
+            border: none;
+			@include max-screen(768px) {
+				padding: 0px 16px;
+			}
+			@include max-screen(470px) {
+				padding: 0px 7px;
+			}
 		}
 		section {
 			> header {
@@ -27,8 +34,8 @@
 				}
 				p {
 					margin-bottom:0px;
-                    margin-left:35px;
-
+                    margin-left:30px;
+					clear:both;
 				}
 			}
 			> footer {
@@ -51,6 +58,9 @@
 		.headerTop {
 			display: block;
 			#order_header {
+              h2 {
+                padding-left: 30px;
+              }
 				height:26px;
 			}
 			.order-date {
@@ -168,6 +178,7 @@
 							padding-bottom:0px;
 						}						
 						&.cell-01 {
+                          float: left;
 							width:31.93916349809886%;
 							@media (max-width: $screen-xs-max) {
 								width:100%;
@@ -185,12 +196,14 @@
 							display:inline-block;
 						}
 						&.cell-03 {
+                          float: left;
 							width:47.52851711026616%;
 							@media (max-width: $screen-xs-max) {
 								width:67%;
 							}
 						}
 						&.cell-04 {
+                          float: left;
 							width:17.11026615969582%;
 							@media (max-width: $screen-xs-max) {
 								width:30%;
@@ -204,6 +217,7 @@
 							}
 						}
 						&.cell-05{
+                          float: left;
 							width:3.29531051964512%;
 						}
 						&.cell-04 {

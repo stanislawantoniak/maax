@@ -1,7 +1,7 @@
 // InPost locker view in checkout step I
 
 #checkout {
-  .inpost-wrapper {
+  .checkout-delivery-point-wrapper {
     display: block;
     margin-top: 5px;
     .panel-body {
@@ -25,6 +25,21 @@
     }
     .figure-button-wrapper {
       direction: rtl;
+
+      figure.truck {
+        width: 84px;
+        text-align: center;
+        color: #000;
+        padding: 5px 7px;
+        border: 1px solid #afafaf;
+      }
+    }
+    figure.logo-courier {
+      width: 84px;
+      text-align: center;
+      color: #000;
+      padding: 5px 7px;
+      border: 1px solid #afafaf;
     }
     figure.inpost-img {
       min-height: 60px;

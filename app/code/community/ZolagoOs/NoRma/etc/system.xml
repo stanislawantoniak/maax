@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <urma>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </urma>
+        <sales_email>
+            <groups>
+                <rma>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </rma>
+                <rma_comment>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </rma_comment>
+            </groups>
+        </sales_email>
+    </sections>
+</config>

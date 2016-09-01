@@ -8,24 +8,27 @@
 }
 
 .headroom--pinned {
-	top: 0 !important;
+	top: -34px !important;
 }
 
 body {
 	@media screen and (max-height: 749px) {
 		.headroom--unpinned {
-			top: 0px !important;
-		}
-	}
-	@media screen and (min-height: 750px) {
-		.headroom--unpinned {
 			top: 0 !important;
 		}
 	}
+	@include max-screen($screen-xs-max) {
+		.headroom--unpinned {
+			top: -85px !important;
+		}
+	}
 	.headroom--top {
-		position: static !important;
-		margin-top: -80px !important;
-		transition: none !important;
+      margin-top: 0 !important;
+      @include max-screen($screen-xs-max) {
+        position: static !important;
+        margin-top: -85px !important;
+        transition: none !important;
+      }
 	}
 	&.sb-open > header {
 		margin-left: 288px;
@@ -37,7 +40,7 @@ body {
 }
 
 .header_top {
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		position: fixed;
 	}
 	top: 0px;
@@ -62,7 +65,7 @@ body {
 		top: 1px;
 		//width: 160px;
 		width: 250px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			width: 160px;
 		}
 		z-index: 10;
@@ -72,7 +75,7 @@ body {
 			width: 100%;
 			height: auto;
 			margin-top: 15px;
-			@include max-screen($screen-sm-max) {
+			@include max-screen($screen-xs-max) {
 				margin-top: 5px;
 			}
 		}
@@ -93,7 +96,7 @@ body {
 	#header_top_block_right {
 		width: 100%;
 		padding-left: 265px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			padding-left: 105px;
 		}
 		position: absolute;
@@ -106,6 +109,9 @@ body {
 			@include max-screen($screen-xs-max) {
 				width: 0;
 			}
+            @include min-screen($screen-sm) {
+              width: 80%
+            }
 			#navigation {
 				text-align: center;
 			}
@@ -119,8 +125,9 @@ body {
 			@include max-screen($screen-xs-max) {
 				width: 100%;
 			}
-			@include min-screen($screen-md) {
+			@include min-screen($screen-sm) {
 				margin-top: 23px;
+                width: 20%
 			}
 		}
 		.header_icon {
@@ -196,18 +203,17 @@ body {
 	top: -4px;
 	width: 100%;
 	text-align: right;
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		margin-top: -3px;
 		height: 54px !important;
 
 	}
-	@include min-screen($screen-md) {
+	@include min-screen($screen-sm) {
 		position: relative;
 	}
 	li {
 		padding: 0 0 0 0;
 		margin-left: 0;
-		//width: 84px;
 		width: 40px;
 		height: 60px;
 		display: inline-block;
@@ -219,11 +225,7 @@ body {
 				//background-color: $colorIconHoverBgHeader;
 
 				color: #252525;
-				-webkit-transition: color 0.3s ease-in-out;
-				-moz-transition: color 0.3s ease-in-out;
-				-ms-transition: color 0.3s ease-in-out;
-				-o-transition: color 0.3s ease-in-out;
-				transition: color 0.3s ease-in-out;
+				@include transition(color 0.3s ease-in-out);
 
 				svg.header_icon path, svg.header_icon g, svg.header_icon g path {
 					fill: $colorIconHoverHeader !important;
@@ -239,12 +241,18 @@ body {
 		&#link_menu.not-open, &#link_menu.not-open:hover {
 			background-color: transparent;
 		}
-
-		@include min-screen($screen-md-min) {
+		&#link_account {
+			display: none;
+			@media (min-width: $screen-phone) and (max-width: $screen-xs-max) {
+				display: inline-block;
+			}
+		}
+		@include min-screen($screen-sm-min) {
 			&#link_basket {
 				height: 61px;
 			}
 		}
+
 
 		@include max-screen($screen-sm-max) {
 			width: 40px;
@@ -262,30 +270,27 @@ body {
 			}
 		}
 		@include max-screen(410px) {
-			width: 50px;
+			width: 40px;
 		}
 		@include max-screen(360px) {
-			width: 40px;
+			width: 33px;
 			&:hover, a:hover {
 				background-color: transparent;
 			}
 		}
 		a:link,
 		a:visited {
-			@include max-screen($screen-sm-max) {
-				padding-top: 16px !important;
+			font-size: 22px;
+			@include max-screen($screen-xs-max) {
+				padding-top: 8px !important;
 			}
-			@include min-screen($screen-md) {
-				padding-top: 10px !important;
+			@include min-screen($screen-sm-min) {
+				padding-top: 8px !important;
 			}
 		}
 		a:hover {
 			color: #252525;
-			-webkit-transition: color 0.3s ease-in-out;
-			-moz-transition: color 0.3s ease-in-out;
-			-ms-transition: color 0.3s ease-in-out;
-			-o-transition: color 0.3s ease-in-out;
-			transition: color 0.3s ease-in-out;
+			@include transition(color 0.3s ease-in-out);
 		}
 		&.no-badge {
 			a:link,
@@ -314,9 +319,9 @@ body {
 		padding-bottom: 2px;
 		display: block;
 		padding-top: 11px;
-		@include max-screen($screen-sm-max) {
+		@include max-screen($screen-xs-max) {
 			height: 46px;
-			padding-top: 17px;
+			padding-top: 8px;
 		}
 		&#toggleSearch {
 			//padding-top: 17px;
@@ -367,6 +372,14 @@ body {
 			a:visited {
 				padding: 14px 13px 9px !important;
 			}
+          @include screen($screen-sm-min, $screen-sm-max) {
+            a:link,
+            a:visited {
+              padding-right: 8px !important;
+              padding-left: 7px !important;
+            }
+          }
+
 
 			/* === SUBMENU === */
 			ul {
@@ -558,14 +571,14 @@ body {
 .header_bottom {
 	//    background:$color_fff url('../images/bg-menu.png') 0 0 repeat-x;
 	background: $colorBgBlocksMenuTop;
-	border-bottom: 1px solid $colorAccentBlocksMenuTop;
+//	border-bottom: 1px solid $colorAccentBlocksMenuTop;
 	#nav_desc {
 		&.navigation > li > a:hover,
 		&.navigation > li > a.active,
 		&.navigation > li > a.forceActive {
 			background: none;
 			color: $colorLinkHover;
-			font-weight: 600;
+			text-shadow:  0.25px 0.25px 0px;
 			&:before {
 				//background: $colorAccentSiteMenuTop;
 
@@ -586,7 +599,7 @@ body {
 				font-style: normal;
 				text-transform: uppercase;
 				line-height: 45px;
-				@media(max-width: $screen-sm-max) {
+				@media(max-width: $screen-xs-max) {
 					font-size: 15px;
 					line-height: 46px;
 				}
@@ -641,7 +654,7 @@ body {
 
 				a {
 					border-top: 1px solid $color_f7f6f7;
-					line-height: 26px;
+					line-height: 13px;
 				}
 
 				&:first-child {
@@ -746,8 +759,9 @@ body {
 .header_top {
   //height: 85px;
 	height: 132px;
-	@include max-screen($screen-sm-max) {
+	@include max-screen($screen-xs-max) {
 		height: 85px;
+		//top: -34px !important;
 	}
 }
 
@@ -896,5 +910,15 @@ body {
 	}
 	h2 {
 		background-color: $color_f2f1f0;
+	}
+}
+
+
+.header_icon_test {
+	width: 20px;
+	height: 20px;
+	margin: 0 12px;
+	g path, path {
+		fill: black;
 	}
 }

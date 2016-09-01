@@ -29,6 +29,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
         $isLocalVendor = $_zolagoDropshipHelper->isLocalVendor();
 
+        /* @var $_zolagoCommonHelper Zolago_Common_Helper_Data */
+        $_zolagoCommonHelper = Mage::helper("zolagocommon");
+        $useGalleryConfig = $_zolagoCommonHelper->useGalleryConfiguration();
+
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
         $form->setAction($this->getUrl("campaign/vendor/save", array("_secure" => true)));
@@ -144,14 +148,21 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "wrapper_class" => "col-md-9 radio-buttons",
             ));
 
-            $landingPage->addField("landing_page_context", "radios", array(
+            $landingPageContextArray = array(
                 "name" => "landing_page_context",
                 "required" => false,
                 "label" => $helper->__('Context'),
                 "values" => $landingPageSource = Mage::getSingleton('zolagocampaign/attribute_source_campaign_landingPageContext')->toOptionArray(),
                 "label_wrapper_class" => "col-md-3",
-                "wrapper_class" => "col-md-9 radio-buttons landing-page-config",
-            ));
+                "wrapper_class" => "col-md-9 radio-buttons landing-page-config"
+            );
+
+            if(!$useGalleryConfig){
+                $formGroupWrapperClass = array("form_group_wrapper_class" => "hidden");
+                $landingPageContextArray = array_merge($landingPageContextArray, $formGroupWrapperClass);
+            }
+
+            $landingPage->addField("landing_page_context", "radios", $landingPageContextArray);
 
             $landingPage->addField("context_vendor_id", "select", array(
                 "name" => "context_vendor_id",

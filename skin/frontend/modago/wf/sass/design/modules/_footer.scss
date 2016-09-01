@@ -2,8 +2,8 @@ footer.footer {
   color: $color_fff;
   background-color: $backgroundColorFooter;
 
-  margin-top: 20px;
-  padding-top: 20px;
+  //margin-top: 20px;
+  //padding-top: 20px;
 
 
   a {
@@ -230,6 +230,9 @@ footer.footer {
     .wpb_wrapper {
       p {
         margin-bottom: 0px;
+		&.text-gray {
+			color: $textColorFooterLink;
+		}
       }
     }
   }
@@ -244,7 +247,7 @@ footer.footer {
       li {
         float: none;
         display: inline-block;
-        margin-right: 0;
+        margin-right: 5px;
 
         &.lastItem {
           margin-right: 0;
@@ -265,7 +268,7 @@ footer.footer {
             height: 28px;
 
             &:hover {
-              color: $colorLinkHover;
+              color: $colorLinkHoverOnDark;
             }
           }
         }
@@ -373,7 +376,7 @@ footer.footer {
       }
     }
 
-    @media screen and (min-width: $screen-lg) {
+    @media screen and (min-width: $screen-sm) {
       label#newsletter-email {
         line-height: 32px;
       }

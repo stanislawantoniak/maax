@@ -2,6 +2,14 @@
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
 
+	protected function _isAllowed()
+	{
+        return Mage::getSingleton('admin/session')->isAllowed('admin/catalog/zolagomapper');  
+        //or at least
+            //return Mage::getSingleton('admin/session')->isAllowed('erp/stock_management');  
+            
+    }
+
     public function queueAction() {
         $queue = Mage::getModel('zolagomapper/queue_mapper');
         $model = $this->_registerModel();

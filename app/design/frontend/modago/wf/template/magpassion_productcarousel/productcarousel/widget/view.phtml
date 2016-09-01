@@ -334,18 +334,14 @@ $productHelper = Mage::helper("zolagocatalog/product");
     <?php endif;?>
     <?php if($_productcarousel->getShownavigator() == 1):?>
     <div class="mp-navigation-midde">
-        <span class="mp-prev-carousel">
-                <
-            </span>
-            <span class="mp-next-carousel">
-                >
-            </span>
+        <span class="mp-prev-carousel"></span>
+        <span class="mp-next-carousel"></span>
     </div>
     <?php endif;?>
     <script>
         jQuery(document).ready(function() {
-          var owl<?php echo $block_id;?> = jQuery("#<?php echo $mp_htmlid?>");
-          owl<?php echo $block_id;?>.owlCarousel({
+          var owl<?php echo $block_id;?> = jQuery("#<?php echo $mp_htmlid; ?>");
+          owl<?php echo $block_id; ?>.owlCarousel({
 
                 navigation : false,
                 lazyLoad : true,
@@ -362,8 +358,8 @@ $productHelper = Mage::helper("zolagocatalog/product");
                     autoHeight: true,
                 <?php endif;?>
                 <?php if ($_productcarousel->getcustomconfig()) echo $_productcarousel->getcustomconfig(); ?>
-                pagination: false,
-              items : 7,
+                pagination: true,
+              items : 6,
               itemsDesktop : [1206,5],
               itemsDesktopSmall : [979,4],
               itemsTablet:[768,3],

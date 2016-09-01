@@ -52,6 +52,16 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
             "class" => "form-control",
             "header" => $_helper->__("City"),
         ));
+        $this->addColumn("is_available_as_pickup_point", array(
+            "type" => "options",
+            "options" => array(
+                1 => $this->__("Yes"),
+                0 => $this->__("No")
+            ),
+            "index" => "is_available_as_pickup_point",
+            "class" => "form-control",
+            "header" => $_helper->__("Available as Pick-Up Point"),
+        ));
         $this->addColumn("show_on_map", array(
             "type" => "options",
             "options" => array(

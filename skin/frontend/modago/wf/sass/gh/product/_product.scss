@@ -1,3 +1,10 @@
+#product_details { 
+	margin-top:25px;
+	@media (max-width: $screen-xs-max) {
+		//margin-top:20px;
+		margin-top:0px;
+	}
+}
 #rwd-color {
 	.rwd-prev,
 	.rwd-next {
@@ -162,7 +169,7 @@ i.flag {
       padding-left: 24px;
       font-size: 18px;
     }
-    .addingLike-box, .addedLike-box {
+    .addingLike-box, .addedLike-box, .addLike-box {
       height: 32px;
     }
     .addingLike-box .fa-spinner {
@@ -182,11 +189,30 @@ i.flag {
       padding: 0;
     }
   }
-
+  .question p ,#product-likeboxes p  {
+	  a {
+		  color: $colorSecondFont !important;
+  		  &:hover {
+				text-decoration: underline;
+		  }
+	  	  span {
+				margin-left:-5px;
+			  	color: $colorSecondFont !important;
+	   	  }
+	  }
+	  span {
+		  margin-left:-5px;
+		  color: $colorSecondFont !important;
+	  }  
+  }
 
 	#delivery-and-return {
 		font-size:12px;
 		text-align:right;
+		position:absolute;
+		right:0px;
+		min-width:110px;
+		padding:0;
 	}
 	#short-description-block {
 		margin-left:0px;
@@ -363,7 +389,7 @@ i.flag {
 				line-height: 1.0;
 			}
 			@media (max-width: 480px) {
-				display:inline;
+				display:block;
 				margin:0;
 				padding:0;
 				line-height: 1;
@@ -575,15 +601,19 @@ i.flag {
 			position:relative;
 			display:block;
 			font-size: 14px;
+            color: $colorSecondFont;
 			white-space: nowrap;
 			float:none;
 			padding-top:3px;
+            &:hover {
+              text-decoration: underline;
+            }
 			svg {
 				path {
 					fill:$color_999;
 				}
-				margin-right:5px;
-				margin-left:10px;
+				margin-right:9px;
+				margin-left:0;
 			}
 			@media (max-width: 814px) {
 
@@ -816,4 +846,46 @@ div[itemprop="description"] {
 	color:$colorAccentSite;
 	font-family: $fontRegular;
 	text-transform: uppercase;
+}
+
+#note_product {
+  .main {
+    padding: 0 35px 0 0 !important;
+    #no-opinion-statistics {
+      p {
+        margin-bottom: 30px;
+        color: $colorShortDescription;
+      }
+    }
+  }
+}
+.full-view-product {
+  .path_back_to_category {
+    border-top: none !important;
+    border-bottom:1px solid $colorAccentBlocksHeader;
+    padding: 8px 0 8px 0;
+  }
+  #pbtc_link {
+    font-size: 14px;
+  }
+}
+
+#sizeTableIframeContainer {
+	position: relative;
+	@media(max-width: $screen-xs-max) {
+		margin: 0;
+	}
+	#sizeTableIframe {
+		width: 100%;
+		max-height:100%;
+		border: none;
+	}
+}
+
+@media (max-width: 450px) {
+	#tabelaRozmiarow {
+		.modal-dialog {
+			width: 88% !important;
+		}
+	}
 }

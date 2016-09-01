@@ -9,6 +9,10 @@
 			<action method="addCss">
 				<stylesheet>css/fonts.css</stylesheet>
 			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/jqueryui-touch-punch/jquery.ui.touch-punch.min.js</script>
+			</action>
 		</reference>
 		<reference name="header">
 			<block type="cms/block" name="top_bar" as="page.header.top_bar">
@@ -111,11 +115,11 @@
 				<alias>zolagosolrsearch_search_view</alias>
 			</action>
 			<block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
-				<!--<block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">-->
-					<!--<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>-->
-					<!--<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>-->
-					<!--<block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>-->
-				<!--</block>-->
+				<block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">
+					<block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+					<block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+					<block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
+				</block>
 				<!--<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar">-->
 					<!--<block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>-->
 				<!--</block>-->

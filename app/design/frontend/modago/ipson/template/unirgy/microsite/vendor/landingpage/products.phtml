@@ -1,0 +1,116 @@
+<?php
+/** @var $this Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Landingpage_Products */
+/** @var $product Zolago_Solrsearch_Model_Catalog_Product */
+
+$_collection = $this->getCollection();
+
+?>
+
+<div class="container-fluid" id="items-product">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="row">
+                <div id="grid" class="shuffle--container shuffle--fluid">
+                    <!-- START LIST PRODUCT -->
+                    <?php foreach ($_collection as $product): ?>
+                        <?php $_productImageUrl = $product->getListingResizedImageUrl(); ?>
+                        <?php $_productImageInfo = $product->getListingResizedImageInfo(); ?>
+
+                        <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
+                            <div class="box_listing_product">
+                                <a href="<?php echo $product->getCurrentUrl(); ?>"
+                                   data-entity="<?php echo $product->getEntityId(); ?>"
+                                   data-sku="<?php echo $product->getSku(); ?>"
+                                   data-skuv="<?php echo $this->getSkuv($product); ?>">
+                                    <figure class="img_product" style="padding-bottom: <?php echo 100 * round(($_productImageInfo["height"] /  $_productImageInfo["width"]),2); ?>%">
+                                        <img src="<?php echo $_productImageUrl; ?>"
+                                             alt="<?php $this->escapeHtml($product->getName()); ?>"
+                                             class="img-responsive" />
+                                    </figure>
+                                    <div class="name_product">
+                                        <?php echo $this->escapeHtml($product->getName()); ?>
+                                    </div>
+                                </a>
+                                    <div class="price clearfix">
+                                        <div class="col-price">
+                                            <?php if ($product->getStrikeoutPrice() != $product->getFinalPrice()) : ?>
+                                                <span class="old">
+                                                    <?php echo $this->helper('core')->currency($product->getStrikeoutPrice(), true, false); ?>
+                                                </span>
+                                            <?php endif; ?>
+                                            <span>
+                                                <?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?>
+                                            </span>
+                                        </div>
+                                        <?php
+                                        // like count
+                                        $wishlistCount = "";
+                                        $inMyWishlist = "";
+                                        $plusSign = "";
+                                        if ($product->getWishlistCount() - 1 > 0) {
+                                            $wishlistCount = $product->getWishlistCount();
+                                            if ($product->getInMyWishlist()) {
+                                                $wishlistCount -= 1;
+                                            }
+                                        }
+
+                                        if ($product->getInMyWishlist()) {
+                                            $inMyWishlist = $this->__("You");
+                                            if ($product->getWishlistCount() > 1) {
+                                                $plusSign = " + ";
+                                            }
+                                        }
+
+                                        ?>
+                                        <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
+                                             data-idproduct="<?php echo $product->getId(); ?>"
+                                             data-status="<?php echo (int)$product->getInMyWishlist(); ?>">
+                                            <span class="like_count">
+                                                <span>
+                                                    <?php echo $inMyWishlist; ?>
+                                                    <?php echo $plusSign; ?>
+                                                </span>
+                                                <?php echo $wishlistCount > 99 ? "99+" : $wishlistCount; ?>
+                                            </span>
+                                            <div class="icoLike"></div>
+                                            <div class="toolLike"></div>
+                                        </div>
+                                    </div>
+
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="col-xs-12 shuffle__sizer"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
+    Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
+    Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
+    Mall.translate.add("like-this-product", "<?php echo $this->__("like this product"); ?>");
+    Mall.translate.add("likes-this-product", "<?php echo $this->__("likes this product"); ?>");
+    Mall.translate.add("you-and", "<?php echo $this->__("You and"); ?>");
+    Mall.translate.add("person", "<?php echo $this->__("person"); ?>");
+    Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
+    Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
+    Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
+
+    Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>","<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+
+    <?php foreach ($_collection as $product): ?>
+    Mall.wishlist.addProduct({
+        id: <?php echo $product->getId(); ?>,
+        wishlist_count: <?php echo (int)$product->getWishlistCount(); ?>,
+        in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
+    });
+    <?php endforeach; ?>
+
+    jQuery(window).resize(function() {
+        Mall.listing.placeListingFadeContainer();
+    });
+
+</script>

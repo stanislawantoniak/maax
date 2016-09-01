@@ -840,3 +840,22 @@ div[itemprop="description"] {
 		margin-bottom: 0 !important;
 	}
 }
+#sizeTableIframeContainer {
+	position: relative;
+	@media(max-width: $screen-xs-max) {
+		margin: 0;
+	}
+	#sizeTableIframe {
+		width: 100%;
+		max-height:100%;
+		border: none;
+	}
+}
+
+@media (max-width: 450px) {
+	#tabelaRozmiarow {
+		.modal-dialog {
+			width: 88% !important;
+		}
+	}
+}

@@ -11,17 +11,17 @@
     .name_product {
         font-weight: 400;
         color: #3d3d3d;
-        font-size: 1.0714em;
-        height: 1.8em;
+        font-size: 14px;
+        height: 16px;
         overflow: hidden;
-
+        line-height: 14px;
         text-align: center;
         text-transform:uppercase;
     }
     .price {
-        color:$color_fd002a;
+        color:$colorProductFinalPrice;
         font-size: 14px;
-        font-family:$fontRegular;
+        font-family:$fontOpen;
         text-align: center;
         .old {
             display: inline;

@@ -1,0 +1,19 @@
+<div class="col-main">
+    <div class="page-title">
+        <h1>Nastąpił błąd podczas przetwarzania żądania</h1>
+    </div>
+
+    <?php if ($this->reportAction == 'print'): ?>
+    <div class="trace-container">
+        <div class="trace">
+            <h2><?php echo $this->reportData[0] ?></h2>
+            <strong>Trace:</strong><br/>
+            <?php echo nl2br(htmlspecialchars($this->reportData[1])) ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($this->reportId && $this->reportUrl): ?>
+        <p>Numer błędu: <?php echo $this->reportId ?></a></p>
+    <?php endif; ?>
+</div>

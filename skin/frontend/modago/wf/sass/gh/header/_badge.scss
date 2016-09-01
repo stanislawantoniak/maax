@@ -1,6 +1,6 @@
 .user-navigation {
 	a {
-		font-size: 18px;
+		font-size: 22px;
 		.badge {
 		    background:$colorHeaderBadgeBg;
 		    @include border-radius(3px);
@@ -75,6 +75,12 @@
 	}
 	a {
 		position:relative;
+		&#toggleSearch {
+			@include min-screen($screen-sm-min) {
+				padding-top: 8px !important;
+			}
+		}
+
 	}
 }
 

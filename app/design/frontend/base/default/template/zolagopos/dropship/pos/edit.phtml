@@ -108,8 +108,33 @@ jQuery(function($){
 
 		jQuery(document).ready(function () {
 
+			var isAvailableAsPickupPoint = jQuery('#is_available_as_pickup_point');
+			isAvailableAsPickupPoint.bootstrapSwitch({
+				onText: '<?php echo $_helper->__("Yes");?>',
+				offText: '<?php echo $_helper->__("No");?>'
+			});
+			if (isAvailableAsPickupPoint.val() == 1) {
+				jQuery('#is_available_as_pickup_point').bootstrapSwitch('state', true);
+			} else {
+				jQuery('#is_available_as_pickup_point').bootstrapSwitch('state', false);
+			}
+			isAvailableAsPickupPoint.on('switchChange.bootstrapSwitch', function () {
+				var isAvailableAsPickupPointState = jQuery(this).bootstrapSwitch('state');
+
+				if (isAvailableAsPickupPointState) {
+					jQuery('#is_available_as_pickup_point').val(1);
+				} else {
+					jQuery('#is_available_as_pickup_point').val(0);
+				}
+				event.preventDefault();
+			}).change();
+
 
 			var showPosOnMap = jQuery('#show_on_map');
+			showPosOnMap.bootstrapSwitch({
+				onText: '<?php echo $_helper->__("Yes");?>',
+				offText: '<?php echo $_helper->__("No");?>'
+			});
 			if (showPosOnMap.val() == 1) {
 				jQuery('#show_on_map').bootstrapSwitch('state', true);
 				jQuery(".map-fields").show();
@@ -130,6 +155,9 @@ jQuery(function($){
 				}
 				event.preventDefault();
 			});
+
+
+
 
 			// Trick for htmlspecialchars_decode
 			var mapTimeOpened = jQuery('<textarea>').html(jQuery('#map_time_opened').text()).text();

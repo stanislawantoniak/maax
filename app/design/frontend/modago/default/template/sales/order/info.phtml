@@ -7,7 +7,7 @@ $deliveryCode = $po->getOmniChannelMethodInfoByMethod()->getDeliveryCode();
 
 $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 $address = $this->getItem()->getShippingAddress();
-$inpostLockerName = $po->getInpostLockerName();
+$inpostLockerName = $po->getDeliveryPointName();
 
 ?>
 <div class="sales-order-top col-md-6 col-sm-6 col-xs-12 sales-order-hide">

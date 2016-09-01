@@ -1,6 +1,17 @@
 <?php
 $_items = $this->getItems();
+/** @var Zolago_Checkout_Helper_Data $_helper */
+$_helper = Mage::helper("zolagocheckout");
+$basketDataLayer = $_helper->getBasketDataLayer();
 ?>
+
+<?php if (!empty($basketDataLayer)): ?>
+    <script>
+        if (typeof dataLayer != "undefined") {
+            dataLayer.push(<?php echo json_encode($basketDataLayer); ?>);
+        }
+    </script>
+<?php endif; ?>
 
 <div id="content" class="container-fluid">
     <div id="shopping-cart" class="row">
@@ -10,7 +21,7 @@ $_items = $this->getItems();
                 <div class="main bg-w">
                     <section>
                         <header>
-                            <h1><?php echo $this->__("Shopping Cart"); ?></h1>
+                            <h2><?php echo $this->__("Shopping Cart"); ?></h2>
                         </header>
 
                         <?php foreach($_items as $_item) : ?>

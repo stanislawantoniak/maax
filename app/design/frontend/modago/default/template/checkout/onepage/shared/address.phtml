@@ -7,9 +7,6 @@ $billingAddress = $quote->getBillingAddress();
 
 
 $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
-/* @var $locker GH_Inpost_Model_Locker  */
-$locker		= $this->getInpostLocker();
-$lockerId = $locker->getId();
 ?>
 
 <?php echo $this->getStep1Sidebar(); ?>
@@ -28,11 +25,16 @@ $lockerId = $locker->getId();
 						   name="shipping_method[<?php echo $vendorId; ?>]"
 						   value="<?php echo $methodSelected; ?>" />
 				<?php endforeach; ?>
-				<?php if (isset($selectedShipping["shipping_point_code"])): ?>
-					<input type="hidden" name="shipping_point_code"
-						   data-id="<?php echo $lockerId; ?>"
-						   data-town="<?php echo (string)ucwords(strtolower($locker->getTown())); ?>"
-						   value="<?php echo $locker->getName(); ?>" />
+
+
+				<?php if (isset($methodSelected) && isset($selectedShipping["shipping_point_code"])): ?>
+					<?php $shippingPointCode = $this->getDeliveryPointData($selectedShipping["shipping_point_code"]); ?>
+					<?php if(!empty($shippingPointCode)): ?>
+						<input type="hidden" name="shipping_point_code"
+							   data-id="<?php echo $shippingPointCode["id"]; ?>"
+							   data-town="<?php echo $shippingPointCode["city"]; ?>"
+							   value="<?php echo $shippingPointCode["value"]; ?>" />
+					<?php endif; ?>
 				<?php endif; ?>
 			<?php endif; ?>
 

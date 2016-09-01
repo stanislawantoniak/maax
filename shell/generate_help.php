@@ -20,7 +20,7 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract {
 
         $tableName = $resource->getTableName('cms/block');
 
-        $query = 'SELECT title,identifier,content FROM ' . $tableName .' WHERE identifier like "udropship_help%"';
+        $query = 'SELECT title,identifier,content FROM ' . $tableName .' WHERE identifier like "zolagoos-help%"';
         $results = $readConnection->fetchAll($query);
         echo '<?php'.PHP_EOL;
         echo "require_once 'shell/abstract.php';".PHP_EOL;

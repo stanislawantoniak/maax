@@ -15,8 +15,16 @@
 	label.lastname-margin, label.confirmation-margin {
 		margin-top: 10px;
 	}
+  .account_data_separator {
+    @media (min-width: $screen-sm-min) {
+      margin-left: -30px;
+    }
+  }
 	.account_data_container {
 		padding-bottom: 20px;
+        //@media (min-width: $screen-sm-min) {
+        //    margin-left: -30px;
+        //}
 		.account_data {
 			height: 34px;
 			line-height: 34px;

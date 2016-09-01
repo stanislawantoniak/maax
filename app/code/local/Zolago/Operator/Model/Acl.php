@@ -14,6 +14,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     const ROLE_GHAPI_OPERATOR						= "ghapi_operator";
     const ROLE_BILLING_OPERATOR		                = "billing_operator";
     const ROLE_SUPERUSER_OPERATOR		            = "superuser_operator";
+	const ROLE_LOYALTY_CARD_OPERATOR				= "loyalty_card_operator";
 	
 	// Resource definition
 	
@@ -62,12 +63,16 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_BANNER                                = "banner/vendor";
 	const RES_BUDGET_MARKETING						= "udropship/marketing";
 
+	const RES_LOYALTY_CARD							= "loyalty/card"; 
 
     // Overpayments management
 	const RES_PAYMENT_OPERATOR						= "udpo/payment";
 
     // GH API Access
     const RES_GHAPI_OPERATOR						= "udropship/ghapi";
+
+	// IAI-Shop API Access
+	const RES_IAISHOP_OPERATOR						= "iaishop/settings";
 
     // Attribute preview
     const RES_UDPROD_VENDOR_ATTRIBUTES              = "udprod/vendor_attributes";
@@ -128,6 +133,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_PAYMENT_OPERATOR                  => "Payment manage",
         // GH API Access
         self::RES_GHAPI_OPERATOR                    => "GH API",
+		// IAI-Shop Access
+		self::RES_IAISHOP_OPERATOR                  => "IAI-Shop API",
         // Attribute preview
         self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
         // Price management
@@ -139,6 +146,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_VENDOR_SIZETABLE					=> "Sizetable settings",
         self::RES_VENDOR_RULES						=> "Regulations",
         self::RES_VENDOR_RULES_DOCUMENT				=> "Get regulations documents",
+
+		self::RES_LOYALTY_CARD						=> "Loyalty card"
 	);
 
 	public function __construct() {
@@ -210,15 +219,19 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         // Build ACL Rules - GH API Access
         if ($vendor->getData('ghapi_vendor_access_allow')) {
             $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+			$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_IAISHOP_OPERATOR);
         } else {
             $this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+			$this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_IAISHOP_OPERATOR);
         }
 
         // Build ACL Rule - autofill attributes by apply rule - masowa zmiana cech produków
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_GH_ATTRIBUTE_RULES);
 
         // Build ACL Rules - Billing and statements
-        $this->setRule(self::OP_ADD, $type           , self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
+		if ($isGallery) {
+			$this->setRule(self::OP_ADD, $type           , self::ROLE_BILLING_OPERATOR, self::RES_BILLING_AND_STATEMENTS);
+		}
         // superuser
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SETTINGS);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_SIZETABLE);
@@ -226,6 +239,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         $this->setRule(self::OP_ADD, $type           , self::ROLE_SUPERUSER_OPERATOR, self::RES_VENDOR_RULES_DOCUMENT);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_POS);
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_SUPERUSER_OPERATOR, self::RES_UDROPSHIP_OPERATOR);
+		
+		// Build ACL rule - LOYALTY CARD management
+		if ($commonHlp->useLoyaltyCardSection()) {
+			$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_LOYALTY_CARD_OPERATOR, self::RES_LOYALTY_CARD);
+		}
 	}
 
 	/**
@@ -244,12 +262,16 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 			self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
 			self::ROLE_PAYMENT_OPERATOR					=> "Payment manage",
 			self::ROLE_GHAPI_OPERATOR					=> "GH API Settings",
+
 		);
 		if ($isGallery){
 			$_currentRoles[self::ROLE_SUPERUSER_OPERATOR] = "Configuration and regulations";
 			$_currentRoles[self::ROLE_BILLING_OPERATOR]   = "Billing and statements";
 		} else {
 			$_currentRoles[self::ROLE_SUPERUSER_OPERATOR] = "Configuration";
+		}
+		if ($commonHlp->useLoyaltyCardSection()) {
+			$_currentRoles[self::ROLE_LOYALTY_CARD_OPERATOR]   = "Loyalty cards";
 		}
 		return $_currentRoles;
 	}

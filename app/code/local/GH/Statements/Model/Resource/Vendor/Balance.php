@@ -77,7 +77,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         // III. Collect values
         // 1. Customer payments (Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT)
         $customerPayments = $this->getCustomerPayments();
-        //Mage::log($customerPayments, null, "TEST_SALDO_PAYMENTS.log");
+        Mage::log($customerPayments, null, "TEST_SALDO_PAYMENTS.log");
         $data = $this->collectDataBeforeBalanceUpdate($customerPayments, "payment_from_client", $data, $closedBalanceMonths);
 
         // 2. Customer refunds (Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_REFUND)
@@ -293,7 +293,9 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $customerPaymentsCollection */
         $customerPaymentsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
         $customerPaymentsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(main_table.created_at,'%Y-%m') AS balance_month")
+
+            //  DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
 			// Only transactions from our dotpay
 			->joinLeft(
 				array('spt' => $this->getTable('sales/payment_transaction')),
@@ -304,7 +306,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
             ->where("main_table.primary = ?", 1)
             ->group("main_table.vendor_id")
             ->group("balance_month");
-        //Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
+        Mage::log($customerPaymentsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYMENTS.log");
 
         //  Mage::log($results, null, "TEST_SALDO_PAYMENTS.log");
         //Reformat by vendor -> month
@@ -332,7 +334,9 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $customerRefundsCollection */
         $customerRefundsCollection = Mage::getModel("zolagopayment/allocation")->getCollection();
         $customerRefundsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(main_table.created_at,'%Y-%m') AS balance_month")
+
+            //  DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
+            ->columns("main_table.vendor_id, SUM(CAST(main_table.allocation_amount AS DECIMAL(12,4))) as amount, DATE_FORMAT(CONVERT_TZ(main_table.created_at,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
 			// Only transactions from our dotpay
 			->joinLeft(
 				array('spt' => $this->getTable('sales/payment_transaction')),
@@ -360,7 +364,9 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 
         $vendorPayoutsCollection = Mage::getModel("zolagopayment/vendor_payment")->getCollection();
         $vendorPayoutsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-            ->columns("vendor_id, SUM(CAST(cost AS DECIMAL(12,4)))  as amount, DATE_FORMAT(date,'%Y-%m') AS balance_month")
+
+            //  DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
+            ->columns("vendor_id, SUM(CAST(cost AS DECIMAL(12,4)))  as amount, DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
             ->group("vendor_id")
             ->group("balance_month");
         //Mage::log($vendorPayoutsCollection->getSelect()->__toString(), null, "TEST_SALDO_PAYOUTS.log");
@@ -389,13 +395,15 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $vendorInvoices = array();
         $vendorInvoicesCollection = Mage::getModel("zolagopayment/vendor_invoice")->getCollection();
         $vendorInvoicesCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
+
+            //  DATE_FORMAT(CONVERT_TZ(sale_date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
             ->columns("vendor_id,
              SUM(
                 CAST(commission_brutto AS DECIMAL (12, 4))
                 + CAST(transport_brutto AS DECIMAL (12, 4))
                 + CAST(marketing_brutto AS DECIMAL (12, 4))
                 + CAST(other_brutto AS DECIMAL (12, 4))
-            )  as amount, DATE_FORMAT(sale_date,'%Y-%m') AS balance_month")
+            )  as amount, DATE_FORMAT(CONVERT_TZ(sale_date,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
             ->where("is_invoice_correction=?", Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_ORIGINAL)
             ->where("wfirma_invoice_number != '' ")
             ->group("vendor_id")
@@ -412,13 +420,15 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
         $vendorCorrections = array();
         $vendorInvoiceCorrectionsCollection = Mage::getModel("zolagopayment/vendor_invoice")->getCollection();
         $vendorInvoiceCorrectionsCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
+
+            //  DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') balance_month
             ->columns("vendor_id,
              SUM(
                 CAST(commission_brutto AS DECIMAL (12, 4))
                 + CAST(transport_brutto AS DECIMAL (12, 4))
                 + CAST(marketing_brutto AS DECIMAL (12, 4))
                 + CAST(other_brutto AS DECIMAL (12, 4))
-            )  as amount, DATE_FORMAT(date,'%Y-%m') AS balance_month")
+            )  as amount, DATE_FORMAT(CONVERT_TZ(date,'GMT', 'Europe/Warsaw'),'%Y-%m') AS balance_month")
             ->where("is_invoice_correction=?", Zolago_Payment_Model_Vendor_Invoice::INVOICE_TYPE_CORRECTION)
             ->where("wfirma_invoice_number != '' ")
             ->group("vendor_id")
@@ -509,7 +519,7 @@ class GH_Statements_Model_Resource_Vendor_Balance extends Mage_Core_Model_Resour
 
             foreach (array_keys($balancePeriod) as $balancePeriodDate) {
 
-                $monthBefore = date("Y-m", strtotime("-1 month", strtotime($balancePeriodDate)));
+                $monthBefore = Mage::getModel('core/date')->date('Y-m', strtotime("-1 month", strtotime($balancePeriodDate)));
 
                 if (isset($balancesByVendor[$vendorId][$balancePeriodDate])) {
                     $toUpdate[$vendorId][$balancePeriodDate] = sprintf("%.4f", $balancesByVendor[$vendorId][$balancePeriodDate]["balance_cumulative"]);

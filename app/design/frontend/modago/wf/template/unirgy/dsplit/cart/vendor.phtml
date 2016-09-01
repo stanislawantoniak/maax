@@ -39,21 +39,28 @@ $vendorDeliveryInfo = $_v->getTermsDeliveryInformation();
 
             <div class="table-cell cell-03 label_value td">
                 <div class="value_quality_price"><?php echo $_helper ->__('Product total')?>:</div>
-                <div class="value_quality_delivery">
-                    <?php if(($bestRate=$this->getMinimalShippingRate())!==null):?>
-                    <?php echo $_helper->__("Minimal shipping cost"); ?>:
-                    <?php endif; ?>
+                <?php $bestRate = $this->getMinimalShippingRate(); ?>
 
-                    <?php if($this->isHintAvailable() && $info):?>
-                        <div class="bubble visible-lg">
-                            <div>
-                                <?php echo $info; ?>
-                            </div>
-                        </div>
-                    <?php endif;?>
-                </div>
+<!--                <div class="value_quality_delivery">-->
+<!--                    --><?php //if(($bestRate)!==null):?>
+<!--                    --><?php //echo $_helper->__("Minimal shipping cost"); ?><!--:-->
+<!--                    --><?php //endif; ?>
+<!---->
+<!--                    --><?php //if($this->isHintAvailable() && $info):?>
+<!--                        <div class="bubble visible-lg">-->
+<!--                            <div>-->
+<!--                                --><?php //echo $info; ?>
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    --><?php //endif;?>
+<!--                </div>-->
             </div>
-            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery"><?php if($bestRate): ?><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><?php endif; ?></div></div>
+            <div class="table-cell cell-04 td">
+                <div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
+<!--                <div class="quality_delivery">-->
+<!--                    --><?php //if($bestRate): ?><!----><?php //echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><!----><?php //endif; ?>
+<!--                </div>-->
+            </div>
             <div class="table-cell cell-05 td"></div>
 
 
@@ -65,9 +72,12 @@ $vendorDeliveryInfo = $_v->getTermsDeliveryInformation();
         <div class="table-row clearfix">
             <div class="table-cell cell-03 label_value td">
                 <div class="value_quality_price"><?php echo $_helper->__('Product total'); ?>:</div>
-                <div class="value_quality_delivery"><?php echo $_helper->__("Minimal shipping cost"); ?>:</div>
+<!--                <div class="value_quality_delivery">--><?php //echo $_helper->__("Minimal shipping cost"); ?><!--:</div>-->
             </div>
-            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery"><?php if($bestRate): ?><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><?php endif; ?></div></div>
+            <div class="table-cell cell-04 td">
+                <div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
+<!--                <div class="quality_delivery">--><?php //if($bestRate): ?><!----><?php //echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><!----><?php //endif; ?><!--</div>-->
+            </div>
         </div>
         <div class="table-row clearfix">
 

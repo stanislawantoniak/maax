@@ -28,7 +28,7 @@
 	.like {
 		float:right;
 	    position:relative;
-	    margin-top: 6px;
+	    //margin-top: 6px;
 	    &:before {
 	        display:block;
 	        width:21px;
@@ -53,4 +53,30 @@
 #listing-loading > img {
   display: block;
   margin: 0 auto;
+}
+
+
+
+.visible-two-listing-columns {
+	display: none !important;
+
+	@media(max-width:540px) {
+		display: block !important;
+	}
+
+	@media(min-width: $screen-sm) and (max-width: $screen-sm-max) {
+		display: block !important;
+	}
+}
+
+.visible-three-listing-columns {
+	display: none !important;
+
+	@media(min-width: 541px) and (max-width: $screen-xs-max) {
+		display: block !important;
+	}
+
+	@media(min-width: $screen-md) {
+		display: block !important;
+	}
 }

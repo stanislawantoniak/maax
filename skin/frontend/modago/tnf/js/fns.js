@@ -274,9 +274,9 @@ jQuery.noConflict();
 
 		/* ================= end:// checkout ================= */
 		var widthWindow = $(window).innerWidth();
-		var kolumnaPrawa =  $("div.col-01").innerHeight();
-		var kolumnaLewa = $("div.col-02").innerHeight();
-		if (widthWindow >= 748) {
+		var kolumnaPrawa =  $("div.col-01").outerHeight();
+		var kolumnaLewa = $("div.col-02").outerHeight();
+		if (widthWindow >= 768) {
 			if (kolumnaLewa > kolumnaPrawa) {
 				$("div.col-01").css({'height' : kolumnaLewa});
 			} else {
@@ -288,9 +288,9 @@ jQuery.noConflict();
 			var col01 = $("div.col-01"), col02 = $("div.col-02");
 			col01.css({'height' : 'auto'});
 			col02.css({'height' : 'auto'});
-			var kolumnaPrawa =  col01.innerHeight();
-			var kolumnaLewa = col02.innerHeight();
-			if (widthWindow >= 748) {
+			var kolumnaPrawa =  col01.outerHeight();
+			var kolumnaLewa = col02.outerHeight();
+			if (widthWindow >= 768) {
 				if (kolumnaLewa > kolumnaPrawa) {
 					col01.css({'height' : kolumnaLewa});
 				} else {
@@ -301,7 +301,6 @@ jQuery.noConflict();
 				col02.css({'height' : 'auto'});
 			}
 		});
-
 
 
 		helperForm();
@@ -696,8 +695,7 @@ jQuery.noConflict();
 				if(!$(this).hasClass('clickable')){
 					event.preventDefault();
 					$(this).closest('#nav_desc').find('.active').removeClass('active');
-					$(this).closest('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
-					$(this).find('i').addClass('fa-caret-up');
+					$(this).find('i').toggleClass('fa-caret-up fa-caret-down');
 					$(this).addClass('active');
 				}
 
@@ -710,9 +708,8 @@ jQuery.noConflict();
 			containerCloneMenu.on('click', '.closeSubMenu', function(event) {
 				event.preventDefault();
 				$(this).closest('ul').remove();
-				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
-                $('#nav_desc a').removeClass('active');
+				$('#nav_desc a').removeClass('active');
 				if(jQuery('body').hasClass('filter-sidebar')) {
 					Mall.listing.positionFilters();
 				}
@@ -724,7 +721,6 @@ jQuery.noConflict();
 				event.preventDefault();
 				$('#clone_submenu').find('ul').remove();
 				$('#nav_desc').find('.active').removeClass('active');
-				$('#nav_desc').find('.fa-caret-up').removeClass('fa-caret-up');
 				$("html, body").animate({ scrollTop: 0 }, "slow");
 				if(jQuery('body').hasClass('filter-sidebar')) {
 					Mall.listing.positionFilters();

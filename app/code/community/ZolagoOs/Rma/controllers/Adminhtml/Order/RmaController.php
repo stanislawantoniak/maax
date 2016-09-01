@@ -197,7 +197,14 @@ class ZolagoOs_Rma_Adminhtml_Order_RmaController extends Mage_Adminhtml_Controll
                     ->setUsername(Mage::getSingleton('admin/session')->getUser()->getUsername())
                     ->setRmaStatus($status);
                 $rma->addComment($comment);
-                $rma->sendUpdateEmail(!empty($data['is_customer_notified']), $data['comment']);
+
+                if($comment instanceof Zolago_Rma_Model_Rma_Comment){
+                    $commentModel = $comment;
+                }else{
+                    $data['comment'] = $comment;
+                    $commentModel = Mage::getModel("zolagorma/rma_comment");
+                }
+                $rma->sendUpdateEmail(!empty($data['is_customer_notified']), $commentModel);
                 $rma->getCommentsCollection()->save();
                 if (isset($data['is_vendor_notified'])) {
                     Mage::helper('urma')->sendRmaCommentNotificationEmail($rma, $data['comment']);
@@ -216,7 +223,14 @@ class ZolagoOs_Rma_Adminhtml_Order_RmaController extends Mage_Adminhtml_Controll
                 if (isset($data['resolution_notes'])) {
                     $rma->setResolutionNotes($data['resolution_notes']);
                 }
-                $rma->sendUpdateEmail(!empty($data['is_customer_notified']), $data['comment']);
+
+                if($comment instanceof Zolago_Rma_Model_Rma_Comment){
+                    $commentModel = $comment;
+                }else{
+                    $data['comment'] = $comment;
+                    $commentModel = Mage::getModel("zolagorma/rma_comment");
+                }
+                $rma->sendUpdateEmail(!empty($data['is_customer_notified']), $commentModel);
                 $rma->getCommentsCollection()->save();
                 if (isset($data['is_vendor_notified'])) {
                     Mage::helper('urma')->sendRmaCommentNotificationEmail($rma, $data['comment']);

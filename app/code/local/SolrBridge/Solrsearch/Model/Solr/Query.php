@@ -820,6 +820,14 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         {
         	 return 'sort_position_decimal+'.$direction;
         }
+		else if($attributeCode == 'delta_price') {
+			/**
+			 * @see Zolago_Solrsearch_Model_Data::processFinalItemData()
+			 * and there
+			 * @see Zolago_Solrsearch_Model_Data::_prepareDeltaPrice()
+			 */
+			return 'sort_delta_price_decimal+'.$direction;
+		}
         else
         {
             $entityType = Mage::getModel('eav/config')->getEntityType('catalog_product');

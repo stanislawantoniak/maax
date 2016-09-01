@@ -13,7 +13,8 @@
       @include border-radius(0px);
 
       margin-right: 6px;
-      margin-top: 12px;
+      margin-top: 0px;
+      margin-bottom: 15px;
     }
     .wrapper-x {
       background-color: $colorAccentBlocks;
@@ -40,7 +41,11 @@
 }
 
 #active-filters, #view-current-filter{
-	
+  @media (max-width: $screen-sm-to-smmd-max) {
+    #filters-btn {
+      margin-top: 5px;
+    }
+  }
 	h1 {
 		text-transform: uppercase;
 		@media (max-width: $screen-xs-max) {
@@ -267,7 +272,7 @@
   #active-filters, #view-current-filter{
     h1 {
       @media (max-width: $screen-sm-to-smmd-max) {
-        font-size: 18px;
+        font-size: 20px;
       }
     }
     dl {

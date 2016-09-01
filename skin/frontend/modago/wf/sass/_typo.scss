@@ -1,6 +1,8 @@
 body {
+	font-family: $fontRegular;
 	color: $text-color;
 	background: $body-bg;
+	-webkit-font-smoothing: antialiased;
 }
 ::-webkit-input-placeholder {
    color: $color_000 !important;
@@ -219,7 +221,7 @@ a.underline {
 	font-family:$fontRegular;
 }
 p {
-	line-height: 1.8;
+	line-height: $line-height-base;
 	font-size: 1em;
 	font-family: $fontOpen;
 }
@@ -593,9 +595,9 @@ form {
 		&:active,
 		&:focus {
 			background:$color_fff;
-			border-color: $color_c6a662;
+			//border-color: $color_c6a662;
 			outline:none;
-			color:$color_c6a662;
+			//color:$color_c6a662;
 		}
 	}
 	&.clear {
@@ -629,7 +631,7 @@ form {
 		text-align: center;
 		background:$color_000;
 		border:1px solid $color_c5c5c5;
-		border-radius: 0;
+		@include border-radius($borderRadiusBtn);
 		text-transform: uppercase;
 		&:hover,
 		&.hover {
@@ -670,38 +672,27 @@ form {
 #btn_continue_shopping {
 	border:2px solid $color_000;
 	height:24px;
-	@include border-radius(5px);
-	padding : 0 30px 0 15px;
+	@include border-radius($borderRadiusBtn);
+	padding : 0 15px;
 	position:relative;
 	font-size: 12px;
 	line-height: 24px;
 	text-transform: uppercase;
 	background:$color_fff;
-	.fa-arrow-btn-right {
-		background:$allMap;
-		@include inline-block;
-		@include sprite($allMap, arrow-btn-continue-shopping-link);
-		@include sprite-dimensions($allMap, arrow-btn-continue-shopping-link);
-		position:absolute;
-		right:5px;
-		top:5px;
-	}
+
 	&:hover {
 		background:$color_000;
 		color:$color_fff;
-		.fa-arrow-btn-right {
-			@include sprite($allMap, arrow-btn-continue-shopping-hover);
-		}
 	}
 	&:active,
 	&:focus {
-		border-color:$color_c6a662;
 		background:$color_fff;
 		outline:none;
-		color:$color_c6a662;
-		.fa-arrow-btn-right {
-			@include sprite($allMap, arrow-btn-continue-shopping-active);
-		}
+	}
+	.fa-angle-right {
+		margin-left: 10px;
+		font-size: 15px;
+		font-weight: 600;
 	}
 
 }

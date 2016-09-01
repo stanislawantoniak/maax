@@ -197,7 +197,7 @@ class Zolago_Converter_Model_Client {
         $result = $this->_makeConnection($url);
 
         if(isset($result['error'])) {
-            Mage::log(implode(' ,' , $result));
+            Mage::log(implode(' ,' , $result), null, "converterError.log");
             return null;
         }
         if (is_array($result) && isset($result['rows'])) {

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--[if gte mso 12]>
+    <style type="text/css">
+        .container {
+            width: 580px;
+        }
+        .lowerMarginWhite {
+            margin: 25px 35px 10px 35px;
+        }
+        .productsTable {
+            width: 510px;
+        }
+        .spacer {
+            margin: 0 0 25px 0;
+        }
+        .productColumn {
+            width: 420px;
+        }
+        .valueColumn {
+            width: 80px;
+        }
+        .imgColumn {
+            width: 60px;
+        }
+        .productNameColumn {
+            padding-top:10px;
+        }
+    </style>
+    <![endif]-->
+    <style type="text/css">
+        @media only screen and (max-width: 480px) {
+            .borderContainer {
+                border: none !important;
+            }
+
+            .lowerMarginBlack {
+                margin-left: -20px !important;
+            }
+
+            .lowerMarginWhite {
+                border-left: 15px solid white !important;
+                border-right: 15px solid white !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F6F6F6;color:#444444">
+<div style="margin:0;padding:0;background-color:#F6F6F6;color:#444444">
+    <center>
+        <div class="borderContainer" style="border:20px solid #F6F6F6">
+            <div>
+                <table style="direction:ltr;text-align:left;font-family:'Arial','Helvetica',sans-serif;color:#444;background-color:white;max-width:580px"
+                       cellpadding="0" cellspacing="0" border="0" class="container">
+                    <tbody>
+                    <tr>
+                        <td style="margin:0;padding:0">
+                            <div style="width:100%; margin-top: 20px;">
+                                <div class="lowerMarginBlack">
+                                    <a href='{{store url=""}}' style="text-decoration:none;border:none">
+                                        <img width="190" height="48" alt="{{var logo_alt}}"
+                                             style="margin-bottom:0;margin-left:31px"
+                                             src="cid:logo.png">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="lowerMarginWhite"
+                                 style="border-top: 15px solid white;border-bottom:10px solid white;border-left:35px solid white;border-right:35px solid white;font-family:'Arial','Helvetica',sans-serif;font-size:13px;">
+                                <p style="border-top: #7f7f7f 1px solid;margin: 0;padding:0;font-size: 9px;">&nbsp;</p>
+                                <h1 style="font-weight:normal;font-size:21px;border-bottom:25px solid white;font-family:'Arial','Helvetica',sans-serif">
+                                    Sample email title
+                                </h1>
+
+                                <h2 style="font-size: 15px;border-bottom:10px solid white;font-family:'Arial','Helvetica',sans-serif;margin:0;padding:0">
+                                    Example subtitle
+                                </h2>
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    <a href="#" title="Example link" style="color:#0000ff">Example link.</a>
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sollicitudin justo tortor, in blandit erat convallis ut. Duis pharetra semper feugiat. Integer imperdiet dolor lacus, a dignissim felis vehicula molestie.
+                                </div>
+                                <span class="spacer">&nbsp;</span>
+
+                                <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                                    Vestibulum laoreet dui ac nunc porttitor luctus. Integer nec augue enim. Suspendisse justo ipsum, congue sit amet mollis et, euismod sed dolor. Vestibulum ullamcorper dignissim nulla, quis scelerisque mi laoreet ut. Nunc eu libero id nisl maximus euismod. Aliquam nec blandit nisi. Donec porttitor velit id blandit mattis. Nulla id tincidunt sem, nec convallis sapien. Nam elementum ipsum eu erat iaculis hendrerit. Quisque aliquam ipsum ut consequat euismod. Integer pretium enim vel velit posuere fringilla. Ut fringilla quam vitae condimentum euismod.
+                                </div>
+
+                                <span class="spacer">&nbsp;</span>
+                                <div style="border-top:35px solid white;border-bottom:10px solid white;line-height:1.4em;margin:0;padding:0">
+                                    Dziękujemy za zakupy i zapraszamy ponownie!<br/><br/>
+                                    Zespół sklepu {{config path="general/store_information/name"}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="background-color:#F6F6F6;direction:ltr;color:#777;font-size:11px;border:10px solid #F6F6F6;padding:0;margin:0;font-family:'Arial','Helvetica',sans-serif;text-align:center">&copy; 2016 <a href='{{store url=""}}' style="text-decoration:none;color:#777">{{config path="general/store_information/name"}}</a></div>
+            </div>
+        </div>
+    </center>
+</div>
+</body>

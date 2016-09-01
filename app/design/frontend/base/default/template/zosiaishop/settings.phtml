@@ -1,0 +1,48 @@
+<?php
+/** @var ZolagoOs_IAIShop_Block_Settings $this */
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-heading row">
+        <div class="col-lg-6">
+            <h3><?php echo Mage::helper("zosiaishop")->__("IAI-Shop settings");?></h3>
+        </div>
+    </div>
+    <div class="tabbable tabbabble-custom">
+        <div class="container" style="margin-top:15px;paddign: 10px">
+            <div class="row">
+                <div class="col-md-12">
+                    <form id="iaishop_settings" class="form-horizontal" method="post" action="<?php echo $this->getFormAction();?>">
+                        <?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+                        <?php echo $this->getFormHtml(); ?>
+
+                        <div class="form-actions">
+                            <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                                <span><?php echo $this->__('Save'); ?></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(function($){
+        var form = $("#iaishop_settings");
+        new Zolago.formIntegrator(form);
+        form.validate({
+            rules: {
+                "url": {
+                    required: true
+                },
+                "login": {
+                    required: true
+                }<?php if($this->getIsNew()): ?>,
+                "password": {
+                    required: true
+                }<?php endif; ?>
+            }
+        });
+    });
+</script>

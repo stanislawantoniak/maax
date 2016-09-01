@@ -72,13 +72,13 @@
     }
 
     .watch_more_links {
-      padding-top: 20px;
+      padding-top: 10px;
 
       a.watch_more,
       a.watch_less {
         font-size: 14px;
         text-transform: none;
-        color: $colorLink;
+        color: $colorSecondFont;
 
         &:hover {
           color: $colorLinkHover;

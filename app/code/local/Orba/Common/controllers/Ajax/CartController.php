@@ -21,7 +21,7 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
     }
 
     public function getDetailsForGTM($superAttribute) {
-        /** @var Zolago_Dropship_Helper_Data $udropHlp */
+		/** @var Zolago_Dropship_Helper_Data $udropHlp */
         $udropHlp = Mage::helper('udropship');
         /** @var Zolago_Common_Helper_Data $zcHlp */
         $zcHlp = Mage::helper('zolagocommon');
@@ -35,8 +35,10 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
         $product = $savedInfo['product'];
         $vendor    = $udropHlp->getVendor($product->getUdropshipVendor())->getVendorName();
         $brandshop = $udropHlp->getVendor($product->getbrandshop())->getVendorName();
+
         $attributeSize = $product->getResource()->getAttribute('size');
-        $attributeSizeId = $attributeSize->getAttributeId();
+        $attributeSizeId = $attributeSize ? $attributeSize->getAttributeId() : false;
+		$variant = ($attributeSizeId && isset($superAttribute[$attributeSizeId])) ? $superAttribute[$attributeSizeId] : false;
 
         /** @var Zolago_Catalog_Model_Category $cat */
         $cat = $solrHlp->getDefaultCategory($product, Mage::app()->getStore()->getRootCategoryId());
@@ -66,7 +68,7 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
                            'vendor' => Mage::helper('core')->escapeHtml($vendor),
                            'brandshop' => Mage::helper('core')->escapeHtml($brandshop),
                            'brand' => Mage::helper('core')->escapeHtml($product->getAttributeText('manufacturer')),
-                           'variant' => (string)$product->getResource()->getAttribute('size')->getSource()->getOptionText(isset($superAttribute[$attributeSizeId]) ? $superAttribute[$attributeSizeId] : -1)
+                           'variant' => $variant ? (string)$product->getResource()->getAttribute('size')->getSource()->getOptionText($variant) : ''
                        )
                    );
         return $details;

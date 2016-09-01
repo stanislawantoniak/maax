@@ -9,7 +9,7 @@ $ranges = $this->getFacetPriceRanges();
 
 $key = "fq[price]";
 $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
-$iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+$iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up";
 $isOptionSelected = $this->getIsRangeActive();
 
 $min = $this->getMinPriceRange();
@@ -83,7 +83,7 @@ $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol()
                         <label for="filter_slider" class="css-label"><a class="listing-link" href="<?php echo $url; ?>"></a></label>
                     </div>
                     <div class="slider-range-info">
-                        <input id="price_submit" type="submit" class="btn black filter-price-range-submit" data-url="<?php echo $this->getItemUrl('price',array('fq'=>array('price'=> '__min TO __max')));?>" data-filter-type="price" value="<?php echo Mage::helper("zolagocatalog")->__("Filter"); ?>" />
+                        <input id="price_submit" type="submit" class="btn hidden black filter-price-range-submit" data-url="<?php echo $this->getItemUrl('price',array('fq'=>array('price'=> '__min TO __max')));?>" data-filter-type="price" value="<?php echo Mage::helper("zolagocatalog")->__("Filter"); ?>" />
 
                             <label><?php echo Mage::helper("zolagocatalog")->__("Price"); ?>:</label>
                             <input type="tel" id="zakres_min" disabled="disabled" value="<?php echo $fromValue; ?>" /><label for="zakres_od"> <?php echo $currencySymbol; ?> - </label>
@@ -94,9 +94,7 @@ $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol()
                 </div>
             </div><br />
 
-            <div class="action clear clearfix <?php if(!$isOptionSelected && !$this->isFilterActive("price")): ?>hidden<?php endif; ?>">
-                <a href="<?php echo $this->getRemoveAllUrl("price") ?>" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
-            </div> 
+
         </div>
         <?php if($somethingIsActive) : ?>
             <div class="content-xs" id="filter_price_xs" data-content="xs">

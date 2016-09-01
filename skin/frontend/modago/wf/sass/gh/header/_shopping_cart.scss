@@ -1,184 +1,105 @@
 .shopping-cart-widget {
   .cart-bag {
-    //margin-left: 17px;
     height: 25px;
     position: relative;
     display: inline-block;
     padding: 0;
     right: 0;
-    top: 2px;
-    //float: right;
+    top: -1px;
     text-align: center;
-  }
-  .cart-bag:before {
-    content: "";
-    position: relative;
-    display: block;
-    z-index: 1;
-    width: 14px;
-    height: 26px;
-    top: -8px;
-    left: 50%;
-    background-color: transparent;
-    border: 2px solid $colorIconTextHeader;
-    border-radius: 15px;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-    -webkit-transition: top 0.3s ease-in-out;
-    -moz-transition: top 0.3s ease-in-out;
-    -ms-transition: top 0.3s ease-in-out;
-    -o-transition: top 0.3s ease-in-out;
-    transition: top 0.3s ease-in-out;
-  }
 
-  .cart-bag:hover:before {
-    top: -10px;
-  }
+    &:before {
+      content: "";
+      position: relative;
+      display: block;
+      z-index: 1;
+      width: 14px;
+      height: 23px;
+      top: -8px;
+      left: 50%;
+      background-color: transparent;
+      border: 2px solid $colorIconTextHeader;
+      border-radius: 15px;
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      -o-transform: translateX(-50%);
+      transform: translateX(-50%);
+      @include transition(top 0.3s ease-in-out);
+    }
+    &:hover {
+      &:before {
+        top: -10px;
+      }
+    }
 
-  .cart-bag .badge-number {
-    background-color: #fff;
-    color: #fff;
-    display: block;
-    min-width: 20px;
-    border: 2px solid $colorIconTextHeader;
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
-    font-weight: 600;
-    z-index: 1;
-    font-size: 13px;
-    font-family: "Open Sans", sans-serif;
-    line-height: 16px;
-    margin-top: -25px;
-    right: 0;
-    padding: 0 5px !important;
-    position: relative;
-    @include transition(color 0.3s ease-in-out);
-    cursor: pointer;
-  }
+    .ico-sum {
+      background: none;
+      display: none;
+    }
 
-  .cart-bag .badge-number:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    z-index: -1;
-    box-shadow: inset 0 0 0 35px $colorIconTextHeader;
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-    -webkit-transition: box-shadow 0.3s, -webkit-transform 0.3;
-    transition: box-shadow 0.3s, transform 0.3s;
-  }
+    .badge-number {
+      background-color: #fff;
+      color: #fff;
+      display: block;
+      min-width: 20px;
+      border: 2px solid $colorIconTextHeader;
+      -webkit-border-radius: 0px;
+      border-radius: 0px;
+      font-weight: 600;
+      z-index: 1;
+      font-size: 11px;
+      line-height: 14px;
+      margin-top: -25px;
+      right: 0;
+      padding: 0 5px !important;
+      position: relative;
+      @include transition(color 0.3s ease-in-out);
+      cursor: pointer;
 
-  .cart-bag .badge-number:after {
-    content: "";
-    width: 100%;
-    position: absolute;
-    display: none !important;
-    bottom: -6px;
-    height: 2px;
-    left: -2px;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-    background-color: $colorIconTextHeader;
-    border-left: 2px solid $colorIconTextHeader;
-    border-right: 2px solid $colorIconTextHeader;
-    display: block;
-  }
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        z-index: -1;
+        box-shadow: inset 0 0 0 35px $colorIconTextHeader;
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+        @include transition(box-shadow 0.3s, transform 0.3s);
+      }
 
-  .cart-bag .badge-number:hover {
-    color: #252525;
-    -webkit-transition: color 0.3s ease-in-out;
-    -moz-transition: color 0.3s ease-in-out;
-    -ms-transition: color 0.3s ease-in-out;
-    -o-transition: color 0.3s ease-in-out;
-    transition: color 0.3s ease-in-out;
-  }
+      &:after {
+        content: "";
+        width: 100%;
+        position: absolute;
+        display: none !important;
+        bottom: -6px;
+        height: 2px;
+        left: -2px;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+        background-color: $colorIconTextHeader;
+        border-left: 2px solid $colorIconTextHeader;
+        border-right: 2px solid $colorIconTextHeader;
+        display: block;
+      }
 
-  .cart-bag .badge-number:hover:before {
-    box-shadow: inset 0 0 0 1px $colorIconTextHeader;
-    -webkit-transform: scale3d(1.1, 1.1, 1.1);
-    transform: scale3d(1.1, 1.1, 1.1);
-    -webkit-transition: box-shadow 0.3s, -webkit-transform 0.3;
-    transition: box-shadow 0.3s, transform 0.3s;
-  }
+      &:hover {
+        color: #252525;
+        @include transition(color 0.3s ease-in-out);
 
-  .ico-sum {
-    background: none;
-    display: none;
-  }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-@media (min-width: 992px) {
-   .shop-text,
-  .breadcrumbs-type-8:not(.home)  .shop-text,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .shop-text,
-   .total,
-  .breadcrumbs-type-8:not(.home)  .total,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .total {
-    color: #FFF !important;
-  }
-   .cart-bag:before,
-  .breadcrumbs-type-8:not(.home)  .cart-bag:before,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .cart-bag:before {
-    border-color: red;
-  }
-   .cart-bag .badge-number,
-  .breadcrumbs-type-8:not(.home)  .cart-bag .badge-number,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .cart-bag .badge-number {
-    border-color: #fff;
-    color: $colorIconTextHeader;
-    line-height: 16px !important;
-    padding: 0 5px !important;
-    min-width: 20px !important;
-  }
-   .cart-bag .badge-number:before,
-  .breadcrumbs-type-8:not(.home)  .cart-bag .badge-number:before,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .cart-bag .badge-number:before {
-    -webkit-box-shadow: inset 0 0 0 35px #fff;
-    /* box-shadow: inset 0 0 0 35px #fff; */
-  }
-   .cart-bag .badge-number:after,
-  .breadcrumbs-type-8:not(.home)  .cart-bag .badge-number:after,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .cart-bag .badge-number:after {
-    background-color: #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #fff;
-  }
-   .cart-bag .badge-number:hover:before,
-  .breadcrumbs-type-8:not(.home)  .cart-bag .badge-number:hover:before,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .cart-bag .badge-number:hover:before {
-    -webkit-box-shadow: inset 0 0 0 1px #fff;
-    box-shadow: inset 0 0 0 1px #fff;
-  }
-   .shop-text,
-  .breadcrumbs-type-8:not(.home)  .shop-text,
-  .breadcrumbs-type-8:not(.home) .header-wrapper:not(.header-vertical)  .shop-text {
-    margin-top: 5px;
-  }
-  .header-vertical-enable .navbar-right {
-    text-align: center;
-    margin-top: 20px;
-  }
-  .header-vertical-enable  {
-    float: none;
-    display: inline-block;
+        &:before {
+          box-shadow: inset 0 0 0 1px $colorIconTextHeader;
+          -webkit-transform: scale3d(1.1, 1.1, 1.1);
+          transform: scale3d(1.1, 1.1, 1.1);
+          @include transition(box-shadow 0.3s, transform 0.3s);
+        }
+      }
+    }
   }
 }

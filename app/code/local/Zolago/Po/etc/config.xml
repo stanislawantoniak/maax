@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.24</version>
+            <version>0.0.25</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -113,6 +113,18 @@
                     </zolagopo_ghapi>
                 </observers>
             </zolagopayment_create_overpayment_save_after>
+			<zolagopayment_add_pickup_payment_transaction_save_after>
+				<observers>
+					<zolagopo>
+						<class>zolagopo/observer</class>
+						<method>addPickUpPaymentComment</method>
+					</zolagopo>
+					<zolagopo_ghapi>
+						<class>zolagopo/observer</class>
+						<method>ghapiAddMessagePaymentDataChanged</method>
+					</zolagopo_ghapi>
+				</observers>
+			</zolagopayment_add_pickup_payment_transaction_save_after>
 
             <zolagopo_po_split>
                 <observers>
@@ -203,6 +215,26 @@
                     </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_change>
+			<zolagorma_rma_created_manually>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poManuallyRma</method>
+					</zolagopo>
+				</observers>
+			</zolagorma_rma_created_manually>
+			<zolagopo_po_inpost_locker_name_change>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poDeliveryAddressInpostChange</method>
+					</zolagopo>
+					<zolagopo_ghapi>
+						<model>zolagopo/observer</model>
+						<method>ghapiAddMessageDeliveryOrInvoice</method>
+					</zolagopo_ghapi>
+				</observers>
+			</zolagopo_po_inpost_locker_name_change>
             <zolagopo_po_compose>
                 <observers>
                     <zolagopo>
@@ -416,13 +448,13 @@
     </crontab>
     <admin>
         <routers>
-            <udpoadmin>
+            <zospoadmin>
                 <args>
                     <modules>
                         <Zolago_Po before="ZolagoOs_OmniChannelPo_Adminhtml">Zolago_Po_Adminhtml</Zolago_Po>
                     </modules>
                 </args>
-            </udpoadmin>
+            </zospoadmin>
         </routers>
     </admin>
 </config>

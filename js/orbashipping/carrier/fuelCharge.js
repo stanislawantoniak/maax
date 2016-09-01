@@ -17,7 +17,8 @@ jQuery(document).ready(function ($) {
 
 function initDatepicker(){
     jQuery("[class^=datepicker]").datepicker({
-        dateFormat: 'dd-mm-yy'
+        dateFormat: 'dd-mm-yy',
+        firstDay: 1
 
     });
 }

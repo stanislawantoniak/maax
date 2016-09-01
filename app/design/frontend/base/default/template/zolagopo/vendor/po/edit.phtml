@@ -1,23 +1,31 @@
-<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
-<?php $_hlp					= Mage::helper("zolagopo");?>
-<?php $_po					= $this->getPo(); ?>
-<?php $_shippingMethod		= $this->getShippingMethod();?>
-<?php $_shipmentsCollection = $this->getShipmentsCollection();?>
-<?php /** @var Mage_Sales_Model_Order_Shipment $_currentShipping */
-$_currentShipping		= $this->getCustomCurrentShipping();?>
-<?php $_alerts				= $this->getAlerts($_po);?>
-<?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
-<?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
-<?php $_statusModel			= $_po->getStatusModel(); ?>
-<?php $_aggregated			= $_po->getAggregated();?>
-<?php $_isEditable			= $this->isEditable();?>
 <?php
+/* @var $this Zolago_Po_Block_Vendor_Po_Edit */ 
+$_hlp					= Mage::helper("zolagopo");
+$_po					= $this->getPo(); 
+$_shippingMethod		= $this->getShippingMethod();
+$_shipmentsCollection	= $this->getShipmentsCollection();
+/** @var Mage_Sales_Model_Order_Shipment $_currentShipping */
+$_currentShipping		= $this->getCustomCurrentShipping();
+$_alerts				= $this->getAlerts($_po);
+$_comments				= $_po->getVendorCommentsCollection();
+/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+$udropshipHlp			= Mage::helper('udropship');
+$_shippingStatuses		= $udropshipHlp->getVendorShipmentStatuses(); 
+$_statusModel			= $_po->getStatusModel(); 
+$_aggregated			= $_po->getAggregated();
+$_isEditable			= $this->isEditable();
+$paymentHelper = Mage::helper('zolagopayment');
+$_canSplit 				= $_isEditable && $paymentHelper->getConfigUseAllocation($_po->getStore());
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
-?>
-<?php /** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
-$_tracking = $this->getCurrentTracking($_currentShipping); ?>
+/** @var Mage_Sales_Model_Order_Shipment_Track $_tracking */
+$_tracking = $this->getCurrentTracking($_currentShipping); 
+/** @var Zolago_Payment_Helper_Data $paymentHelper */
+$paymentHelper = Mage::helper('zolagopayment');
+$activeNoRma = Mage::helper('zolagocommon')->isModuleActive('ZolagoOs_NoRma');
 
+$isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
+?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="row page-heading">
@@ -28,7 +36,7 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 			<?php endforeach;?>
 		</div>
 		<div class="main-actions align-right col-md-6">
-			<?php /* Confirm direct realistaion */ ?>
+			<?php /* Confirm direct realisation */ ?>
 			<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
 				<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-ok"></i>
@@ -36,19 +44,35 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 				</a> 
 			<?php endif;?>
 
-			<?php /* Confirm realase button */ ?>
+			<?php /* Confirm release button */ ?>
 			<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
 				<a class="btn-notification btn" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-ok"></i>
 					<?php echo $_hlp->__("Accept the order");?>
 				</a> 
 			<?php endif;?>
-			
+
+
+
 			<?php if($_statusModel->isShippingAvailable($_po)):?>
+
 				<?php if($this->canUseCarrier()):?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+
+					<?php if (!$_hlp->isDeliveryPickUpPoint($_po) ): ?>
+						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+					<?php else: ?>
+
+						<?php if ($_hlp->isPickUpPointConfirmAvailable($_po) ): ?>
+							<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
+								<i class="icon-ok"></i>
+								<?php echo $_hlp->__("Confirm Pick Up");?>
+							</a>
+						<?php endif; ?>
+
+					<?php endif; ?>
+
 				<?php else:?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
+					<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
 				<?php endif;?>
 			<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
 				<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
@@ -68,6 +92,15 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 					<i class="icon-barcode"></i>
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
+
+
+					<?php if ($_hlp->isPickUpPointConfirmAvailable($_po)): ?>
+						<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
+							<i class="icon-ok"></i>
+							<?php echo $_hlp->__("Confirm Pick Up");?>
+						</a>
+					<?php endif; ?>
+
 				<?php endif;?>
 			<?php else:?>
 				<?php /* if($_po->getStockConfirm()):?>
@@ -76,6 +109,8 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
 				<?php endif; */?>
+
+
 			<?php endif;?>
 				
 			<?php if($_statusModel->isConfirmStockAvailable($_po) && !$_po->getStockConfirm()):?>	
@@ -153,33 +188,58 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
                         <i class="icon-usd"></i>
                         <?php echo $_hlp->__("Payment"); ?>
                     </h4>
+					<div class="toolbar no-padding">
+						<div class="btn-group">
+							<?php if($isPickUpPaymentCanBeEntered): ?>
+								<!--when delivery method is pickup-point it is possible to enter payment to order-->
+								<span data-toggle="modal" data-target="#paymentsModal-pickup" class="btn btn-xs">
+									<i class="icon-money"></i>
+									<?php echo $_hlp->__("Enter Payment"); ?>
+								</span>
+							<?php endif; ?>
+
 
                     <?php
                     if ($this->canShowPaymentDetails()):
-                        /** @var Zolago_Payment_Helper_Data $paymentHelper */
-                        $paymentHelper = Mage::helper('zolagopayment');
-                        $paymentDetails = $paymentHelper->getPaymentDetails($this->getPo()->getId());
-                        $overpayDetails = $paymentHelper->getOverpaymentDetails($this->getPo()->getId());
+						if ($paymentHelper->getConfigUseAllocation($_po->getStore())): // use allocation logic
+							$paymentDetails = $paymentHelper->getAllocationPaymentDetails($_po);
+							$overpayDetails = $paymentHelper->getAllocationOverpaymentDetails($_po);
+							//if no payment details do not show Payment details button
+							if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
 
-                        //if no payment details do not show Payment details button
-                        if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)): ?>
-                            <div class="toolbar no-padding">
-                                <div class="btn-group">
-                                <span data-toggle="modal" data-target="#paymentsModal" class="btn btn-xs">
-                                    <i class="glyphicon glyphicon-pushpin"></i>
-                                    <?php echo $_hlp->__("Payment details"); ?>
-                                </span>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+									<span data-toggle="modal" data-target="#paymentsModal-allocation" class="btn btn-xs">
+										<i class="glyphicon glyphicon-pushpin"></i>
+										<?php echo $_hlp->__("Payment details"); ?>
+									</span>
+
+							<?php endif; ?>
+						<?php else: // simplified logic
+							$transactionsDetails = $paymentHelper->getSimpleTransactionsDetails($_po);
+							$refundsDetails = $paymentHelper->getSimpleRefundsDetails($_po);
+							?>
+							<?php if($transactionsDetails->count() || $refundsDetails->count()):
+								if (($transactionsDetails->count()) || $returnsDetails->count()): ?>
+
+										<span data-toggle="modal" data-target="#paymentsModal-simple" class="btn btn-xs">
+											<i class="glyphicon glyphicon-pushpin"></i>
+											<?php echo $_hlp->__("Payment details"); ?>
+										</span>
+
+								<?php endif; ?>
+							<?php endif; ?>
+						<?php endif; ?>
                     <?php endif; ?>
+
+						</div>
+					</div>
+
                 </div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z">
 						<dt><?php echo $_hlp->__("Payment method"); ?>:</dt>
 						<dd><?php echo $this->getPaymentMethod($_po); ?></dd>
 						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
-						<dd><?php echo !$_po->isCod() && $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
+						<dd><?php echo $_po->isPaid() ? $_hlp->__("Paid") : $_hlp->__("Not paid"); ?></dd>
 						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
 						<dd><?php echo $_po->getCurrencyFormattedAmount($_po->getPaymentAmount()); ?></dd>
 						<?php $debtAmount = $_po->getDebtAmount(); ?>
@@ -280,14 +340,26 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 							<!-- shipping row -->
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
-									<?php if($_isEditable):?>
-									<i class="icon-checked-action"></i>
-									<span id="split-wrapper" class="inline-block">
-										<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
-											<i class=" icon-unlink"></i>
-											<?php echo $_hlp->__("Split order");?>
-										</button>
-									</span>
+									<?php if($_canSplit):?>
+										<div style="margin-bottom:10px;">
+											<i class="icon-checked-action"></i>
+											<span id="split-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
+													<i class=" icon-unlink"></i>
+													<?php echo $_hlp->__("Split order");?>
+												</button>
+											</span>
+										</div>
+									<?php endif;?>
+									<?php if(!$activeNoRma && ($_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED || $_po->getUdropshipStatus() == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED)):?>
+										<div style="margin-left: 48px;">
+											<span id="create-rma-wrapper" class="inline-block">
+												<button data-toggle="modal" data-target="#createRma" class="btn" id="rma">
+													<i class=" icon-exclamation-sign"></i>
+													<?php echo $_hlp->__("Create RMA");?>
+												</button>
+											</span>
+										</div>
 									<?php endif;?>
 								</td>
 								
@@ -338,14 +410,22 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 					</h4>			
 					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
-						<div class="btn-group"> 
-							<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button> 
-						</div> 
+						<div class="btn-group">
+							<?php if($_po->isDeliveryInpost()):?>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingInpostAddressModal"><i class="icon-pencil"></i></button>
+							<?php else:?>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button>
+							<?php endif;?>
+						</div>
 					</div>
 					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
-					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+					<?php if($_po->isDeliveryInpost()):?>
+						<?php echo $udropshipHlp->formatCustomerAddressInpost($_po, true) ?>
+					<?php else:?>
+						<?php echo $udropshipHlp->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
+					<?php endif;?>
 				</div>
 			</div>
 		</div>
@@ -370,7 +450,7 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->needInvoice()):?>
-						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+						<?php echo $udropshipHlp->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
 					<?php else:?>
 						<small><?php echo $_hlp->__("Click pencil icon if you need an invoice.");?></small>
 					<?php endif;?>
@@ -567,15 +647,29 @@ $_tracking = $this->getCurrentTracking($_currentShipping); ?>
  *    Payments modal
  *******************************************************************************/
 if ($this->canShowPaymentDetails()) {
-    if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)) {
-        echo $this->getChild("vendor_po_edit_payments")
-            ->setData('payment_details', $paymentDetails)
-            ->setData('overpay_details', $overpayDetails)
-            ->setData('po', $_po)
-            ->toHtml();
-    }
+	if ($paymentHelper->getConfigUseAllocation($_po->getStore())) {
+		if (($paymentDetails->count() > 0) || ($overpayDetails->count() > 0)) {
+			echo $this->getChild("vendor_po_edit_payments_allocation")
+				->setData('payment_details', $paymentDetails)
+				->setData('overpay_details', $overpayDetails)
+				->setData('po', $_po)
+				->toHtml();
+		}
+	} else {
+		if(($transactionsDetails->count()) || $refundsDetails->count()) {
+			echo $this->getChild("vendor_po_edit_payments_simple")
+				->setData('transactions_details', $transactionsDetails)
+				->setData('refunds_details', $refundsDetails)
+				->setData('po', $_po)
+				->toHtml();
+		} 
+	}
 }
-	
+
+if ($isPickUpPaymentCanBeEntered)
+	echo $this->getChild("vendor_po_edit_payments_pickup")->setData('po', $_po)->toHtml();
+
+
 /*******************************************************************************
  *	Split modal
  *******************************************************************************/
@@ -594,9 +688,15 @@ if ($this->canShowPaymentDetails()) {
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping_address")->
+	if($_po->isDeliveryInpost()){
+		echo $this->getChild("vendor_po_edit_inpost_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
+	}else{
+		echo $this->getChild("vendor_po_edit_shipping_address")->
+		setAddress($_po->getShippingAddress())->
+		toHtml();
+	}
 
 /*******************************************************************************
  *	Billign address modal
@@ -618,6 +718,13 @@ if ($this->canShowPaymentDetails()) {
  *	Comment modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_comment");
+
+/*******************************************************************************
+ *	Create RMA modal
+ *******************************************************************************/
+if(!$activeNoRma){
+	echo $this->getChildHtml("vendor_po_create_rma");
+}
 ?>
 
 <script type="text/javascript">

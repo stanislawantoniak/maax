@@ -38,10 +38,10 @@
 			padding:0px;
 		}
 		header {
-			margin-left:-30px;
+			//margin-left:-30px;
 			height:70px;
 			p {
-				margin-left: 35px;
+				//margin-left: 35px;
 			}
 		}
 	}
@@ -176,7 +176,7 @@
 			border: 1px solid $colorDropdownBorder;
 		}
 		.col-02 {
-			border: none;
+            border: 1px solid $colorDropdownBorder;
 			@media (max-width: $screen-xs-max) {
 				padding-bottom: 83px !important;
 				margin-bottom: 5px;

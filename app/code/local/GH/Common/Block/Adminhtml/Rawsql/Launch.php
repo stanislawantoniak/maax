@@ -22,11 +22,19 @@ class GH_Common_Block_Adminhtml_Rawsql_Launch extends Mage_Adminhtml_Block_Widge
                                   'onclick' => "setLocation('{$this->getUrl('*/*/launch',array('id'=>$id))}')",
                                   'class' => 'dg-totals-lable-1',
                               ));
+
+            if(count(Mage::registry('ghcommon_query_result'))){
+                $this->_addButton('downloadcsv', array (
+                    'label' => Mage::helper('ghcommon')->__('Download CSV'),
+                    'onclick' => "setLocation('{$this->getUrl('*/*/download',array('id' => $id))}')",
+                ));
+            }
             
             $this->_addButton('edit', array (
                                   'label' => Mage::helper('ghcommon')->__('Edit query'),
                                   'onclick' => "setLocation('{$this->getUrl('*/*/edit',array('id' => $id))}')",
                               ));
+
                              
         parent::__construct();
         $this->_removeButton('add');

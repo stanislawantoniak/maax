@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <payment translate="label" module="zolagopayment">
+            <groups>
+				<config>
+					<label>Payment configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1300</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<use_allocation translate="label">
+							<label>Use allocation</label>
+							<comment>If YES allocation logic will be used. If NO simplified logic will be used</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</use_allocation>
+					</fields>
+				</config>
+            </groups>
+        </payment>
+        <udprod>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </udprod>
+        <udropship_label>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </udropship_label>
+        <udropship_label>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </udropship_label>
+        <udsignup>
+            <show_in_default>0</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+        </udsignup>
+        <udropship>
+            <groups>
+                <statement>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </statement>
+                <error_notifications>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </error_notifications>
+                <payout>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </payout>
+                <payout_paypal>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </payout_paypal>
+                <vendor_rating>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </vendor_rating>
+            </groups>
+        </udropship>
+        <sales_email>
+            <groups>
+                <rma translate="label">
+                    <label>ZolagoOs Returns</label>
+                </rma>
+                <rma_comment translate="label">
+                    <label>ZolagoOs Returns Comments</label>
+                </rma_comment>
+            </groups>
+        </sales_email>
+        <urma>
+            <label>ZolagoOs Returns</label>
+            <groups>
+                <endicia>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </endicia>
+                <fedex>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </fedex>
+                <ups>
+                    <show_in_default>0</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </ups>
+            </groups>
+        </urma>
+    </sections>
+</config>

@@ -1,5 +1,5 @@
 <?php
-abstract class Zolago_Payment_Model_Client {
+class Zolago_Payment_Model_Client {
 	const TRANSACTION_STATUS_NEW = 1;
 	const TRANSACTION_STATUS_PROCESSING = 2;
 	const TRANSACTION_STATUS_COMPLETED = 3;

@@ -339,7 +339,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 
         /** @var Zolago_Checkout_Helper_Data $helper */
         $helper = Mage::helper("zolagocheckout");
-        $locker = $helper->getInpostLocker();
+        $deliveryPointAddress = $helper->getDeliveryPointShippingAddress();
 
         $address = $this->getQuote()->getBillingAddress();
         /* @var $addressForm Mage_Customer_Model_Form */
@@ -369,7 +369,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             // emulate request object
             $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
             $addressErrors  = $addressForm->validateData($addressData);
-            if ($addressErrors !== true && !$locker->getId()) {
+            if ($addressErrors !== true && empty($deliveryPointAddress)) {
                 return array('error' => 1, 'message' => array_values($addressErrors));
             }
             $addressForm->compactData($addressData);
@@ -552,10 +552,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
 
-        /* @var $locker GH_Inpost_Model_Locker */
-        $locker = $this->getInpostLocker();
-        
-        $lockerId = $locker->getId();
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $deliveryPointAddress = $helper->getDeliveryPointShippingAddress();
 
 		// Customer should be new object - even persistence
 		
@@ -565,7 +564,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customerBilling = $billing->exportCustomerAddress();
         $needInvoice = $billing->getNeedInvoice();
 
-        if(!$lockerId || $needInvoice){
+        if(empty($deliveryPointAddress) || $needInvoice){
             $customer->addAddress($customerBilling);
         }
         
@@ -573,7 +572,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $customerBilling->setIsDefaultBilling(true);
         if ($shipping && !$shipping->getSameAsBilling()) {
             $customerShipping = $shipping->exportCustomerAddress();
-            if(!$lockerId){
+            if(empty($deliveryPointAddress)){
                 $customer->addAddress($customerShipping);
             }
 
@@ -605,16 +604,16 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $billing    = $quote->getBillingAddress();
         $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
-        /* @var $locker GH_Inpost_Model_Locker */
-        $locker = $this->getInpostLocker();
-        $lockerId = $locker->getId();
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $deliveryPointAddress = $helper->getDeliveryPointShippingAddress();
 
         $customer = $this->getCustomerSession()->getCustomer();
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             $customerBilling = $billing->exportCustomerAddress();
-            if(!$lockerId){
+            if(empty($deliveryPointAddress)){
                $customer->addAddress($customerBilling); 
-            }           
+            }
 
 
             $billing->setCustomerAddress($customerBilling);
@@ -622,7 +621,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         if ($shipping && !$shipping->getSameAsBilling() &&
             (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
             $customerShipping = $shipping->exportCustomerAddress();
-            if(!$lockerId){
+            if(empty($deliveryPointAddress)){
                 $customer->addAddress($customerShipping);
             }
             $shipping->setCustomerAddress($customerShipping);
@@ -689,5 +688,11 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
     {
         return $this->_customerZipExists($country, $zip);
     }
-
+    protected function _customerZipExists($country, $zip)
+    {
+        /* @var $helper Orba_Shipping_Helper_Carrier_Dhl */
+        $helper = Mage::helper("orbashipping/carrier_dhl");
+        $isValidZip = $helper->isDHLValidZip($country, $zip);
+        return $isValidZip;
+    }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<ZolagoOs_NoRma>
+			<version>1.0.0</version>
+		</ZolagoOs_NoRma>
+	</modules>
+	<global>
+		<models>
+			<zosnorma>
+				<class>ZolagoOs_NoRma_Model</class>
+				<resourceModel>zosnorma_resource</resourceModel>
+			</zosnorma>
+			<zosnorma_resource>
+				<class>ZolagoOs_NoRma_Model_Resource</class>
+			</zosnorma_resource>
+		</models>
+		<helpers>
+			<zosnorma>
+				<class>ZolagoOs_NoRma_Helper</class>
+			</zosnorma>
+		</helpers>
+	</global>
+	<default>
+		<urma>
+			<logic>
+				<enabled>0</enabled>
+			</logic>
+		</urma>
+	</default>
+</config>

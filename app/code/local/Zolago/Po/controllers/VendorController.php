@@ -141,12 +141,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return parent::preDispatch();
     }
 
-    /**
-     * @return Zolago_Po_Model_Po
-     */
-    protected function _registerPo() {
+	/**
+	 * @return Zolago_Po_Model_Po
+	 * @throws Mage_Core_Exception
+	 */
+    protected function _registerPo($poId = null) {
         if(!Mage::registry("current_po")) {
-            $poId = $this->getRequest()->getParam("id");
+			if (is_null($poId)) $poId = $this->getRequest()->getParam("id");
+			/** @var Zolago_Po_Model_Po $po */
             $po = Mage::getModel("udpo/po")->load($poId);
             if(!$this->_vaildPo($po)) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("You are not allowed to operate this order"));
@@ -1477,6 +1479,25 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $this->_redirectReferer();
     }
 
+    public function confirmPickUpAction() {
+        try {
+            $udpo = $this->_registerPo();
+            if (!$udpo->isPaid()) {
+                $this->_getSession()->addError(Mage::helper("zolagopo")->__("The order should be paid."));
+                return $this->_redirectReferer();
+            }
+
+            $udpo->getStatusModel()->confirmPickUp($udpo);
+            $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order Pick Up has been successfully confirmed."));
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+        }
+        return $this->_redirectReferer();
+    }
+
     /**
      *
      * @return type
@@ -1699,6 +1720,49 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return Mage::getStoreConfig('tax/calculation/price_includes_tax', $store);
     }
 
+	/**
+	 * Save new InPost locker do PO
+	 */
+	public function updateInpostDataAction() {
+		try {
+			$inpostName = $this->getRequest()->getParam("inpostName");
+			$poId = $this->getRequest()->getParam("poId");
+			$po = $this->_registerPo($poId);
+			/* @var $session Zolago_Dropship_Model_Session */
+			$session = $this->_getSession();
+
+			if ($inpostName && $po->getId() && ($po->getUdropshipVendor() == $session->getVendor()->getId())) {
+
+                $locker = Mage::getModel('ghinpost/locker')->load($inpostName, 'name');
+
+                $shippingAddress = Mage::getModel('sales/order_address')->load($po->getShippingAddressId());
+
+                $shippingAddress->setStreet($locker->getStreet() . " " . $locker->getBuildingNumber())
+                    ->setCity($locker->getTown())
+                    ->setPostcode($locker->getPostcode())
+                    ->save();
+
+                $po->setDeliveryPointName($inpostName)
+                    ->save();
+				
+				Mage::dispatchEvent("zolagopo_po_inpost_locker_name_change", array(
+					"po" => $po,
+					"inpost_name" => $inpostName,
+					"type" => Mage_Sales_Model_Order_Address::TYPE_SHIPPING
+				));
+				
+				$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Correctly written a new delivery address to InPost locker."));
+			} else {
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("There is no such PO"));
+			}
+
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+	}
 }
 
 

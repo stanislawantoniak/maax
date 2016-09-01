@@ -3,7 +3,8 @@ class GH_Inpost_Model_Carrier
 	extends Mage_Shipping_Model_Carrier_Abstract
 	implements Mage_Shipping_Model_Carrier_Interface
 {
-	protected $_code = 'ghinpost';
+	const CODE = "ghinpost";
+	protected $_code = self::CODE;
 	protected $_helper;
 
 	public function getAllowedMethods()

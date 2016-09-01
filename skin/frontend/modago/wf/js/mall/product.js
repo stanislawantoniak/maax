@@ -990,7 +990,6 @@ Mall.product = {
                         // Horizontal center big medias
                         var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
                         var itemH = ratio * width;
-
                         var padding = ((maxHeight - itemH) / 2);
                         jQuery(this).find('a').css('padding', padding + 'px 0');
                     });
@@ -1035,6 +1034,8 @@ Mall.product = {
                     Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
                     if (items.length <= 4 ) {
                         Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
+						var paddingLeft = 38*(4-items.length);
+						Mall.product.gallery.getThumbs().find('.rwd-wrapper').css('padding-left',paddingLeft);
                     }
                 }
             });
@@ -1183,24 +1184,50 @@ Mall.product = {
     },
 	upsell: {
 		init: function() {
-			jQuery("a.watch_more, a.watch_less").click(function(e){
-				e.preventDefault();
-
+			if(Mall.windowWidth() < Mall.Breakpoint.md){
 				jQuery(".product_list_widget .watch_more_item")
 					.toggleClass("hidden");
 
+				jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_more").addClass("hidden");
+			}
+			jQuery("a.watch_more, a.watch_less").click(this.click);
+			jQuery(window).resize(this.resize);
+		},
+		click: function(e){
+			e.preventDefault();
+			jQuery(".product_list_widget .watch_more_item")
+					.toggleClass("hidden");
 
-				var $el = jQuery(".product_list_widget .watch_more_item");
+			var $el = jQuery(".product_list_widget .watch_more_item");
 
-				if(!$el.hasClass("hidden")){
-					jQuery("a.watch_less").removeClass("hidden");
-					jQuery("a.watch_more").addClass("hidden");
+			if(!$el.hasClass("hidden")){
+				jQuery("a.watch_less").removeClass("hidden");
+				jQuery("a.watch_more").addClass("hidden");
+			}
+			if($el.hasClass("hidden")){
+				jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_more").removeClass("hidden");
+			}
+		},
+		resize: function() {
+			if(Mall.windowWidth() < Mall.Breakpoint.md){
+				if(!jQuery("a.watch_more").hasClass("hidden")){
+					jQuery(".product_list_widget .watch_more_item")
+						.toggleClass("hidden");
 				}
-				if($el.hasClass("hidden")){
-					jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_less").addClass("hidden");
+				jQuery("a.watch_more").addClass("hidden");
+			}else{
+				if(jQuery("a.watch_more").hasClass("hidden")){
+					jQuery(".product_list_widget .watch_more_item")
+						.toggleClass("hidden");
 					jQuery("a.watch_more").removeClass("hidden");
 				}
-			})
+				if(!jQuery("a.watch_less").hasClass("hidden")){
+					jQuery("a.watch_less").addClass("hidden");
+				}
+			}
 		},
 	},
 	sizetable: {
@@ -1217,13 +1244,35 @@ Mall.product = {
 			this.resize();
 			jQuery('#tabelaRozmiarow').on('shown.bs.modal',Mall.product.sizetable.resize);
 			jQuery(window).resize(this.resize);
+
+			var iframeWin = document.getElementById(this._iframe_id).contentWindow;
+			jQuery(iframeWin).on('resize', function() {
+				Mall.product.sizetable.resize();
+			});
 		},
 		resize: function() {
 			var body = Mall.product.sizetable._doc.body;
-			Mall.product.sizetable._iframe.css('height','');
-			Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
-			Mall.product.sizetable._iframe.css('width','');
-			Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+
+			var headers = [],
+				frameContents = jQuery("#sizeTableIframe").contents();
+			//frameContents.find("table").addClass("sizetable-table");
+
+			jQuery("#sizeTableIframeContainer").width("100%");
+			jQuery("#sizeTableIframeContainer").height(frameContents.find("html").height()+50);
+
+
+			//Responsive Tables handle
+			frameContents.find("table tr:first-child td").each(function (i, td) {
+				headers.push(jQuery.trim(jQuery(td).text()))
+			});
+			frameContents.find("table tr:not(:first-child)").each(function (j, tr) {
+				jQuery(tr).find("td").each(function (j, tdLeft) {
+					jQuery(tdLeft).attr("data-label", headers[j]);
+				});
+			});
+			//--Responsive Tables handle
+
+
 		},
 		getContent: function() {
 			return this._content;

@@ -1212,6 +1212,11 @@ Mall.product = {
 			this.resize();
 			jQuery('#tabelaRozmiarow').on('shown.bs.modal',Mall.product.sizetable.resize);
 			jQuery(window).resize(this.resize);
+
+			var iframeWin = document.getElementById(this._iframe_id).contentWindow;
+			jQuery(iframeWin).on('resize', function() {
+				Mall.product.sizetable.resize();
+			});
 		},
 		resize: function() {
 			var body = Mall.product.sizetable._doc.body;

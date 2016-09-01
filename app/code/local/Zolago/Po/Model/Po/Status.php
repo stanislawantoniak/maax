@@ -182,6 +182,25 @@ class Zolago_Po_Model_Po_Status
             Mage::throwException(Mage::helper('ghapi')->__('Invalid status for this operation.'));
         }
     }
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function confirmPickUp(Zolago_Po_Model_Po $po)
+	{
+		// Add shipment for RMA
+		// @see Zolago_Rma_Model_ServicePo::prepareRmaForSave()
+		/** @var Zolago_Po_Helper_Shipment $manager */
+		$manager = Mage::helper('zolagopo/shipment');
+		$po->setUdpoNoSplitPoFlag(true);
+		$manager->setUdpo($po);
+		$manager->getShipment(); // create shipment from po
+		
+		/** @var Zolago_Po_Helper_Data $hlp */
+		$hlp = Mage::helper("zolagopo");
+		$hlp->addConfirmPickUpComment($po);
+		$this->_processStatus($po, self::STATUS_DELIVERED);
+	}
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
@@ -392,7 +411,7 @@ class Zolago_Po_Model_Po_Status
 	 */
 	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
 
-		$newStatus2 = $this->getPoStatusByAllocation($po,$newStatus);
+		$newStatus2 = $this->getPoStatusByPayment($po,$newStatus);
 		/** @var Zolago_Po_Helper_Data $hlp */
 		$hlp = Mage::helper("udpo");
 		$po->setForceStatusChangeFlag(true);
@@ -423,7 +442,7 @@ class Zolago_Po_Model_Po_Status
 	 * @param bool $status
 	 * @return bool|int
 	 */
-	public function getPoStatusByAllocation(Zolago_Po_Model_Po $po,$status=false) {
+	public function getPoStatusByPayment(Zolago_Po_Model_Po $po,$status=false) {
 		if ($po->getId()) {
 			$status = !is_null($status) && $status !== false ? $status : $po->getUdropshipStatus();
 
@@ -432,9 +451,7 @@ class Zolago_Po_Model_Po_Status
 				|| $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
 			{
 				$grandTotal = $po->getGrandTotalInclTax();
-				/** @var Zolago_Payment_Model_Allocation $allocationModel */
-				$allocationModel = Mage::getModel("zolagopayment/allocation");
-				$sumAmount = $allocationModel->getSumOfAllocations($po->getId()); //sum of allocations amount
+				$sumAmount  = $po->getPaymentAmount();
 
 				//czeka na płatność lub czeka na rezerwacje
 				if (($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)

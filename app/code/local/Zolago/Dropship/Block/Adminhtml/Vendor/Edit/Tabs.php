@@ -95,14 +95,16 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
                 ->toHtml(),
         ));
 
-        $this->addTab('preferences_section', array(
-            'label'     => Mage::helper('udropship')->__('Preferences'),
-            'title'     => Mage::helper('udropship')->__('Preferences'),
-            'content'   => $this->getLayout()->createBlock('udropship/adminhtml_vendor_edit_tab_preferences', 'vendor.preferences.form')
-                ->setVendorId($id)
-                ->toHtml(),
-        ));
-        $this->addTabToSection('preferences_section','vendor_data',20);
+		 if (!Mage::helper("core")->isModuleEnabled('ZolagoOs_OutsideStore')) {
+			 $this->addTab('preferences_section', array(
+				 'label' => Mage::helper('udropship')->__('Preferences'),
+				 'title' => Mage::helper('udropship')->__('Preferences'),
+				 'content' => $this->getLayout()->createBlock('udropship/adminhtml_vendor_edit_tab_preferences', 'vendor.preferences.form')
+					 ->setVendorId($id)
+					 ->toHtml(),
+			 ));
+			 $this->addTabToSection('preferences_section', 'vendor_data', 20);
+		 }
 
         $this->addTab('custom_section', array(
             'label'     => Mage::helper('udropship')->__('Custom Data'),
@@ -142,7 +144,9 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
         $this->addTabToSection('udratings','transaction_data',30);
         $this->addTabToSection('udqa','transaction_data',20);
         $this->addTabToSection('udtiership','logistic',40);
-        $this->addTabToSection('udtiercom','logistic',50);
+		 if (!Mage::helper("core")->isModuleEnabled('ZolagoOs_OutsideStore')) {
+			 $this->addTabToSection('udtiercom', 'logistic', 50);
+		 }
 
          // prepare sections and tabs order
          $sections = $this->_sections;         

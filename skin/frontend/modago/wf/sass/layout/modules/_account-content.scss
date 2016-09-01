@@ -19,6 +19,10 @@
   }
   #general-subscription {
     display: table-cell !important;
+    .col-sm-12 {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   .label-bold {
@@ -31,25 +35,25 @@
 
   .newsletter-border,
   .privacy-border {
-    border: solid;
-    border-width: 1px;
-    border-color: $color_000000;
-    padding: 15px;
-    padding-top: 30px;
+    //border: solid;
+    //border-width: 1px;
+    //border-color: $color_000000;
+    //padding: 15px;
+    //padding-top: 30px;
     padding-bottom: 30px;
 
     @media (max-width: $screen-xs-max) {
-      padding-left: 5px;
-      padding-right: 5px;
-      padding-top: 20px;
+      //padding-left: 5px;
+      //padding-right: 5px;
+      //padding-top: 20px;
       padding-bottom: 20px;
       margin: 0;
       margin-bottom: 10px;
     }
   }
   .bigger-padding {
-    padding-left: 15px;
-    padding-right: 15px;
+    //padding-left: 15px;
+    //padding-right: 15px;
   }
   .more-info {
     text-decoration: underline !important;

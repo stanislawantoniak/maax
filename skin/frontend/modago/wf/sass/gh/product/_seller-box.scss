@@ -231,6 +231,13 @@
 		padding-left: 20px;
 	}
 }
+#description_product {
+  padding-top: 30px !important;
+  margin-bottom: 25px !important;
+}
+#note_product {
+  padding-top: 20px !important;
+}
 
 #seller-box-bundle .seller.producer {
 	@media (max-width: $screen-xs-max) {

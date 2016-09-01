@@ -39,7 +39,7 @@ class Zolago_Rma_Model_ServicePo extends ZolagoOs_Rma_Model_ServiceOrder
         $rma->setTotalQty($totalQty);
         return $rma;
     }
-    public function prepareRmaForSave($data = array(), $conditions=array())
+    public function prepareRmaForSave($data = array(), $conditions=array(), $shippingCost=true)
     {
 		/** @var Zolago_Po_Model_Po_Item $poItem */
         $rmas = array();
@@ -104,22 +104,22 @@ class Zolago_Rma_Model_ServicePo extends ZolagoOs_Rma_Model_ServiceOrder
             }
         }
 
-	    //add shipping costs
-	    foreach($rmas as $rma) {
-		    /** @var $rma Zolago_Rma_Model_Rma */
-		    /** @var Zolago_Rma_Model_Rma_Item $shippingRmaItem */
-		    $shippingRmaItem = Mage::getModel('zolagorma/rma_item');
-		    $po = $rma->getPo();
-		    $shippingCostsIncludingTax = $po->getShippingAmountIncl();
-		    $shippingCostsExcludingTax = $po->getShippingAmount();
-		    $shippingRmaItem->setData(array(
-			    'name' => 'Shipping costs',
-			    'price' => $shippingCostsIncludingTax,
-			    'base_cost' => $shippingCostsExcludingTax,
-			    'qty' => 1,
-		    ));
-		    $rma->addItem($shippingRmaItem);
-	    }
+        //add shipping costs
+        foreach($rmas as $rma) {
+            /** @var $rma Zolago_Rma_Model_Rma */
+            /** @var Zolago_Rma_Model_Rma_Item $shippingRmaItem */
+            $shippingRmaItem = Mage::getModel('zolagorma/rma_item');
+            $po = $rma->getPo();
+            $shippingCostsIncludingTax = ($shippingCost) ? $po->getShippingAmountIncl() : 0;
+            $shippingCostsExcludingTax = ($shippingCost) ? $po->getShippingAmount() : 0;
+            $shippingRmaItem->setData(array(
+                'name' => 'Shipping costs',
+                'price' => $shippingCostsIncludingTax,
+                'base_cost' => $shippingCostsExcludingTax,
+                'qty' => 1,
+            ));
+            $rma->addItem($shippingRmaItem);
+        }
         
         return $rmas;
     }

@@ -171,14 +171,13 @@ $_product = $this->getProduct();
 	</div>
 </div>
 
-<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
-	<div class="modal-dialog">
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<button type="button" class="close" data-dismiss="modal"></button>
-
-			<div class="modal-body">
+			<div class="modal-body" style="overflow-y: hidden;">
 				<div id="sizeTableIframeContainer">
-					<iframe id="sizeTableIframe"></iframe>
+					<iframe id="sizeTableIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
 				</div>
 			</div>
 		</div>

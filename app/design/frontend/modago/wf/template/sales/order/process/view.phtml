@@ -49,7 +49,7 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 		<?php foreach ($this->getItems() as $nr => $_item) : ?>
 		<?php /* @var $_item Zolago_Po_Model_Po */ ?>
 		<?php $_shipment = $_item->getLastNotCanceledShipment();?>
-		<div class="panel panel-default no-border-top order-view-mobile">
+		<div class="panel panel-default order-view-mobile">
 			<div class="tableWrapper">
 				<div class="table-row clearfix panel-header vendor-header">
 					<?php $_v = $_item->getVendor(); ?>

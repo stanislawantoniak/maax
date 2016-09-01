@@ -13,7 +13,8 @@ class Zolago_Modago_Block_Page_Html_Scrolltop extends Mage_Core_Block_Template {
 	}
 
 	protected function isOperaMobile() {
-		return preg_match('/(android|iphone).*?(opr|opera)/i',$_SERVER['HTTP_USER_AGENT']);
+		$userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+		return preg_match('/(android|iphone).*?(opr|opera)/i', $userAgent);
 	}
 
 	public function getPositionRight() {

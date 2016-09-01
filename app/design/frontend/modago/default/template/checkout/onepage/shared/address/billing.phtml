@@ -11,7 +11,10 @@ $street				= is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
 $needInvoice		= $billingAddress->getNeedInvoice();
 $sameAsBilling		= $this->getQuote()->getShippingAddress()->getSameAsBilling();
 $cutomerAddressId	= $billingAddress->getCustomerAddressId();
-$locker				= $this->getInpostLocker();
+//$locker				= $this->getInpostLocker();
+
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
 ?>
 <fieldset>
     <input type="hidden" name="billing[address_id]" value="<?php echo $billingAddress->getId(); ?>">
@@ -23,7 +26,7 @@ $locker				= $this->getInpostLocker();
     <input type="hidden" name="billing[telephone]"  value="<?php echo $this->escapeHtml($billingAddress->getTelephone()); ?>" id="billing_telephone" />
     <input type="hidden" name="billing[fax]" value="<?php echo $this->escapeHtml($billingAddress->getFax()); ?>">
 	<input type="hidden" name="billing[use_for_shipping]"     value="0">
-        <input type="hidden" name="billing[save_in_address_book]" value="<?php if($locker->getId()): ?>0<?php else: ?>1<?php endif; ?>">
+        <input type="hidden" name="billing[save_in_address_book]" value="<?php if($deliveryPoint->id): ?>0<?php else: ?>1<?php endif; ?>">
 	<input type="hidden" name="billing_address_id"            value="">
     <legend><?php echo $this->__("Billing address:"); ?></legend>
     <div class="form-group form-checkbox small">
@@ -34,7 +37,7 @@ $locker				= $this->getInpostLocker();
 
 <fieldset id="invoice_data">
 
-	<?php if(!$locker->getId()): ?>
+	<?php if(!$deliveryPoint->id): ?>
 		<div class="form-group form-checkbox small">
 			<input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" <?php if ($sameAsBilling) : ?>checked<?php endif; ?> />
 			<label for="invoice_data_address" class="css-label"><?php echo $this->__("Billing address same as shipping address."); ?></label>

@@ -3,7 +3,8 @@
 class Zolago_Dropship_Block_Vendor_Menu_Help extends Mage_Core_Block_Template
 {
 
-    const PREFIX = 'udropship-help';
+    const PREFIX_NAME = 'zolagoos';
+    const PREFIX = self::PREFIX_NAME . '-help';
 
     public function getCmsBlockHelp() {
         $keys = $this->getKeys();
@@ -28,6 +29,9 @@ class Zolago_Dropship_Block_Vendor_Menu_Help extends Mage_Core_Block_Template
     public function getKeys() {
         $lang       = $this->localeCodeToShortString(Mage::app()->getLocale()->getLocaleCode());
         $module     = Mage::app()->getFrontController()->getRequest()->getModuleName();
+        if($module == "udropship")
+            $module = self::PREFIX_NAME;
+
         $controller = Mage::app()->getFrontController()->getRequest()->getControllerName();
         $action     = Mage::app()->getFrontController()->getRequest()->getActionName();
 

@@ -35,7 +35,7 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
 
                 //item can have status different then `enabled`
                 //so we need to remember for children to remove them too
-                if ($noStock || !$isSalable || !$isEnabled ) {
+                if ($noStock || !$isSalable || !$isEnabled) {
                     $children = $item->getChildren();
                     foreach ($children as $childItem) {
                         /** @var Mage_Sales_Model_Quote_Item $childItem */
@@ -60,12 +60,12 @@ class Zolago_Checkout_CartController extends Mage_Checkout_CartController
                         $session = Mage::getSingleton('customer/session');
                         $sizeText = $item->getProduct()->getAttributeText('size');
                         if (empty($sizeText)) {
-                            $session->addError( Mage::helper('zolagocheckout')
+                            $session->addError(Mage::helper('zolagocheckout')
                                 ->__('Product %s was removed from cart because is out of stock.',
                                     $item->getName(),
                                     $sizeText));
                         } else {
-                            $session->addError( Mage::helper('zolagocheckout')
+                            $session->addError(Mage::helper('zolagocheckout')
                                 ->__('Product %s size %s was removed from cart because is out of stock.',
                                     $item->getName(),
                                     $sizeText));

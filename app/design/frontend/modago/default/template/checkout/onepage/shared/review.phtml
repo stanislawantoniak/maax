@@ -6,8 +6,8 @@ $helper = Mage::helper("zolagocheckout");
 /** @var Zolago_Modago_Helper_Data $modagoHelper */
 $modagoHelper = Mage::helper('zolagomodago');
 
-$locker		= $this->getInpostLocker();
-$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
+//$locker		= $this->getInpostLocker();
+//$inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
 $items= $this->getRateItems();
 $methods = $items->methods;
@@ -17,6 +17,21 @@ $_totalDiscount = $this->getTotalDiscount();
 $_coupon = $this->getCoupon();
 $checkoutOrderDeactivate = $this->isCheckOutBlocked();
 $waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
+
+
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+	$sessionShippingMethod = $methodSelectedData;
+}
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+$carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($deliveryMethodCode);
 ?>
 <div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
@@ -132,7 +147,7 @@ $waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
 				<div class="col-md-3 col-sm-6 col-md-pull-6 col-lg-2 col-lg-pull-7">
 					<button  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></button>
 				</div>
-				<div class="col-md-3 col-sm-6" col-lg-2">
+				<div class="col-md-3 col-sm-6">
                     <?php if($checkoutOrderDeactivate): ?>
                         <a class="button button-primary large link pull-right disabled"><?php echo $helper->__('Order now and pay'); ?></a>
                         <?php else: ?>
@@ -156,7 +171,7 @@ $waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
 			</header>
 			<div class="panel-group">
 				<div class="row">
-				<?php if(!$locker->getId()): ?>
+				<?php if(!$deliveryPoint->id): ?>
 					<div class="col-md-12  col-sm-4">
 						<h4><?php echo $helper->__('Delivery address'); ?>:</h4>
 						{{shipping}}
@@ -189,11 +204,11 @@ $waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
 			</header>
 			<div class="panel-group">
 				<div class="row">
-					<?php if(!$locker->getId()): ?>
+					<?php if(!$deliveryPoint->id): ?>
 					<div class="col-md-12 col-sm-12 delivery-type">
 						<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 						<dl>
-							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><figure class="truck"><i class="fa fa-truck fa-3x"></i></figure></dd>
+							<dd class="delivery-type-logo"><span>{{carrier_method}}</span><?php echo $carrierLogo; ?></dd>
 							<dd>&nbsp;</dd>
 							<dd>&nbsp;</dd>
 						</dl>
@@ -202,7 +217,10 @@ $waitForExternalGTMTags = $this->getWaitForExternalGTMTags();
 						<div class="col-md-12 col-sm-12 delivery-type">
 							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
 							<dl>
-								<dd class="inpost-data"><?php echo $helper->__("Locker InPost"); ?><img src="<?php echo $inpostLogo; ?>"/></dd>
+								<dd class="delivery-point-data">
+									<?php echo $deliveryPoint->checkout->title; ?>
+									<?php echo $deliveryPoint->checkout->logo; ?>
+								</dd>
 								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
 								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
 								<dd class="location-description ">{{inpost_locker_location_description}}</dd>

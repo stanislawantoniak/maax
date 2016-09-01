@@ -29,6 +29,7 @@
   }
     .name_product {
         margin-bottom:18px;
+        margin-top: 6px;
         padding:0 8px;
     }
     .price {
@@ -54,6 +55,7 @@
 	            background-position: top left;
 	            &.fa-spinner {
 		            background-image: none !important;
+                    color: $text-color;
 	            }
             }
 	        .icoLike {
@@ -66,7 +68,7 @@
 	        &.liked .icoLike {
 		        background-image: url('../images/svg/like.svg');
 		        &:hover {
-			        background-image: url('../images/svg/unlike.svg');
+			        //background-image: url('../images/svg/unlike.svg');
 		        }
 	        }
             
@@ -94,13 +96,16 @@
                 }
             }
         }
-        &.price-two-line {
-            .col-price {
-                span {
-                    display:inline;
-                }
+      &.price-two-line {
+        .col-price {
+          span {
+            display: inline;
+            @media (max-width: 490px) {
+              display: block;
             }
+          }
         }
+      }
         &.like-two-line {
             .like {
 	            text-align: center;

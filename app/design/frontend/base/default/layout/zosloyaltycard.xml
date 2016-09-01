@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<zosloyaltycard_card_index>
+		<update handle="udropship_vendor"/>
+		<update handle="adminhtml_head"/>
+		<update handle="bootstrap"/>
+		<reference name="content">
+			<block name="vendor.card" type="zosloyaltycard/vendor_card" template="zosloyaltycard/vendor/card.phtml"></block>
+		</reference>
+	</zosloyaltycard_card_index>
+
+	<zosloyaltycard_card_edit>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>js/plugins/datetimepicker/jquery.datetimepicker.css</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/datetimepicker/jquery.datetimepicker.js</name>
+			</action>
+		</reference>
+		<update handle="udropship_vendor" />
+		<update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<update handle="noty"/>
+		<update handle="forms"/>
+		<reference name="content">
+			<!-- for template path @see zosloyaltycard/vendor_card_abstract::getTemplateFile() -->
+			<block name="vendor.card.edit" type="zosloyaltycard/vendor_card_edit"></block>
+		</reference>
+	</zosloyaltycard_card_edit>
+</layout>

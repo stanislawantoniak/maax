@@ -16,9 +16,9 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Audioscrobbler
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Audioscrobbler.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @version    $Id$
  */
 
 
@@ -27,12 +27,14 @@
  */
 #require_once 'Zend/Http/Client.php';
 
+/** @see Zend_Xml_Security */
+#require_once 'Zend/Xml/Security.php';
 
 /**
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Audioscrobbler
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Audioscrobbler
@@ -69,16 +71,15 @@ class Zend_Service_Audioscrobbler
     {
         $this->set('version', '1.0');
 
-	    //changes copied from newest version of Zend Framework 1.12.11
-	    if (PHP_VERSION_ID < 50600) {
+        if (PHP_VERSION_ID < 50600) {
             iconv_set_encoding('output_encoding', 'UTF-8');
             iconv_set_encoding('input_encoding', 'UTF-8');
             iconv_set_encoding('internal_encoding', 'UTF-8');
-	    } else {
-		    ini_set('output_encoding', 'UTF-8');
-		    ini_set('input_encoding', 'UTF-8');
-		    ini_set('default_charset', 'UTF-8');
-	    }
+        } else {
+            ini_set('output_encoding', 'UTF-8');
+            ini_set('input_encoding', 'UTF-8');
+            ini_set('default_charset', 'UTF-8');
+        }
     }
 
     /**
@@ -189,7 +190,7 @@ class Zend_Service_Audioscrobbler
 
         set_error_handler(array($this, '_errorHandler'));
 
-        if (!$simpleXmlElementResponse = simplexml_load_string($responseBody)) {
+        if (!$simpleXmlElementResponse = Zend_Xml_Security::scan($responseBody)) {
             restore_error_handler();
             /**
              * @see Zend_Service_Exception
@@ -647,7 +648,7 @@ class Zend_Service_Audioscrobbler
      * @param  array   $errcontext
      * @return void
      */
-    protected function _errorHandler($errno, $errstr, $errfile, $errline, array $errcontext)
+    public function _errorHandler($errno, $errstr, $errfile, $errline, array $errcontext)
     {
         $this->_error = array(
             'errno'      => $errno,

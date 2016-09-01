@@ -869,8 +869,8 @@
 					data.push({name: 'shipping[save_in_address_book]', value: 0});
                     data.push({name: 'shipping[telephone]', value: telephoneForLocker});
                     data.push({name: 'shipping_point_code', value: inpostName});
-					data.push({name: 'inpost[name]', value: inpostName});
-					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
+					data.push({name: 'delivery_point[name]', value: inpostName});
+					data.push({name: 'delivery_point[telephone]', value: telephoneForLocker});
 				}
 
 				var newsletterAgreement = this.getNewsletterAgreement();

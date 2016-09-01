@@ -151,6 +151,9 @@
 			<payment_refunds>
 				<payment_refunds_automatic>2</payment_refunds_automatic>
 			</payment_refunds>
+			<config>
+				<use_allocation>1</use_allocation>
+			</config>
 		</payment>
 	</default>
 	<crontab>

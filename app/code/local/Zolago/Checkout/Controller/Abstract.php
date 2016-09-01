@@ -177,15 +177,15 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$quote = Mage::getModel("checkout/cart")->getQuote();
 		$address = $quote->getShippingAddress();
         if ($shippingPointCode = $request->getParam("shipping_point_code")) {
-			$address->setInpostLockerName($shippingPointCode);
-			$this->_getCheckoutSession()->setInpostLockerName($shippingPointCode);
+			$address->setDeliveryPointName($shippingPointCode);
+			$this->_getCheckoutSession()->setDeliveryPointName($shippingPointCode);
         } else {
 			//Clear locker address in the sales_flat_quote_address
 			$address->setCity("");
 			$address->setStreet("");
 			$address->setPostcode("");
-			$address->setInpostLockerName("");
-			$this->_getCheckoutSession()->setInpostLockerName();
+			$address->setDeliveryPointName("");
+			$this->_getCheckoutSession()->setDeliveryPointName();
         }
 
         $onepage->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
@@ -289,25 +289,29 @@ abstract class Zolago_Checkout_Controller_Abstract
 		shipping[save_in_address_book]:1
 		 */
 		$shipping = $request->getParam("shipping");
-		// If there is locker InPost 
+		// If there is locker InPost or Pick-Up point etc.
 		// we need to setup correct shipping address
-		$inpost = $request->getParam("inpost");
-		if (isset($inpost['name'])) {
-			/** @var GH_Inpost_Model_Locker $locker */
-			$locker = Mage::getModel('ghinpost/locker');
-			$locker->loadByLockerName($inpost['name']);
-			$shippingAddressFromLocker = $locker->getShippingAddress();
-			$shipping = array_merge($shipping, $shippingAddressFromLocker);
+		$deliveryPointData = $request->getParam("delivery_point");
+		if (isset($deliveryPointData['name'])) {
+
+			/** @var Zolago_Checkout_Helper_Data $helper */
+			$helper = Mage::helper("zolagocheckout");
+			$deliveryPoint = $helper->getDeliveryPointShippingAddress();
+
+
+
+			$shipping = array_merge($shipping, $deliveryPoint);
 			if (isset($shipping['telephone']) && !empty($shipping['telephone'])) {
 				$checkoutSession = $onepage->getCheckout();
 				$checkoutSession->setLastTelephoneForLocker($shipping['telephone']);
 			} else {
-				throw new Mage_Core_Exception("Telephone number for InPost is required");
+				throw new Mage_Core_Exception("Telephone number for the selected delivery method is required");
 			}
 			$customer = $onepage->getQuote()->getCustomer();
 			$shipping['firstname']	= $customer->getFirstname();
 			$shipping['lastname']	= $customer->getLastname();
 		}
+
 		if(is_array($shipping)){
 			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
 			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){
@@ -333,15 +337,15 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 		$address = $onepage->getQuote()->getShippingAddress();
 		if ($shippingPointCode = $request->getParam("shipping_point_code")) {
-			$address->setInpostLockerName($shippingPointCode);
-			$this->_getCheckoutSession()->setInpostLockerName($shippingPointCode);
+			$address->setDeliveryPointName($shippingPointCode);
+			$this->_getCheckoutSession()->setDeliveryPointName($shippingPointCode);
 		} else {
 			//Clear locker address in the sales_flat_quote_address
 //			$address->setCity("");
 //			$address->setStreet("");
 //			$address->setPostcode("");
-			$address->setInpostLockerName("");
-			$this->_getCheckoutSession()->setInpostLockerName();
+			$address->setDeliveryPointName("");
+			$this->_getCheckoutSession()->setDeliveryPointName();
 		}
 
 		/**

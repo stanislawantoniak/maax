@@ -2,7 +2,7 @@
 /**
  * client inpost
  */
-class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_Client_Abstract {
+class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_Client_Rest {
 
     const SHIPMENT_RMA_CONTENT      = 'Reklamacyjny zwrot do nadawcy';
     const AUTO_LABELS		= 0;
@@ -28,21 +28,28 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
      */
 
 
-    protected function _getApiUrl() {
-        return Mage::getStoreConfig('carriers/ghinpost/api');
+    protected function _getApiUrl() {    
+            if (!$url = Mage::getStoreConfig('carriers/ghinpost/api')) {
+                Mage::throwException(Mage::helper('ghinpost')->__('Api Inpost not configured'));
+            }
+            return $url;
     }
 
+    
     /**
-     * transform array to http
+     * send message formatter
      */
-    protected function _encodeParams($data) {
-        $tmp = array();
-        foreach ($data as $param=>$value) {
-            $tmp[] = urlencode($param).'='.urlencode($value);
+    protected function _sendMessage($method,$data,$type = 'GET') {
+        if ($type == 'GET') {
+            $data['do'] = $method;
+            $get = $data;
+            $post = array();
+        } else {
+            $get = array('do'=>$method);
+            $post = $data;
         }
-        return implode('&',$tmp);
+        return parent::_sendMessage($get,$post,$type);
     }
-
     
     /**
      * create dispatch point
@@ -80,47 +87,7 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
 		$return = $this->_sendMessage($method, array(), 'GET');		
 		return $this->_prepareResult($return);
 	}
-	
-	/**
-	 * Send message to server
-	 * 
-	 * @param $method
-	 * @param $data
-	 * @param string $type
-	 * @return array|mixed
-	 * @throws Mage_Core_Exception
-	 */
-    protected function _sendMessage($method,$data,$type = 'GET') {
-        if (!$url = $this->getParam('api')) {
-            if (!$url = $this->_getApiUrl()) {
-                Mage::throwException(Mage::helper('ghinpost')->__('Api Inpost not configured'));
-            }
-        }
-        try {
-            $c = curl_init();
-            curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-            if ($type == 'GET') {
-                $data['do'] = $method;
-                $url .= '?' . $this->_encodeParams($data);
-                curl_setopt($c, CURLOPT_HTTPGET, true);
-            } else {
-                $url .= '?'.$this->_encodeParams(array('do'=>$method));
-                $post = $this->_encodeParams($data);
-                curl_setopt($c,CURLOPT_POST,true);
-                curl_setopt($c,CURLOPT_POSTFIELDS,$post);
-            }
-            curl_setopt($c,CURLOPT_URL,$url);			
-			$data = curl_exec($c);
-			if (curl_errno($c) > 0) Mage::throwException(curl_error($c));
-			$result = $data;
-			curl_close($c);
-        } catch (Exception $xt) {
-            $result = $this->_prepareErrorMessage($xt);
-        }
-        return $result;
-    }
-    
-    
+	    
     /**
      * creating packs
      */

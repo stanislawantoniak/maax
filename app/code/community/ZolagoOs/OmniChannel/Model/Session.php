@@ -20,6 +20,9 @@ class ZolagoOs_OmniChannel_Model_Session extends Mage_Core_Model_Session_Abstrac
         return $this;
     }
 
+	/**
+	 * @return Zolago_Dropship_Model_Vendor
+	 */
     public function getVendor()
     {
         if ($this->_vendor instanceof ZolagoOs_OmniChannel_Model_Vendor) {

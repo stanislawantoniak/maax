@@ -7,7 +7,7 @@ var Mall = {
     _data: {},
     _product_template: '<tr id="product-{{number}}"><td class="thumb"><a href="{{url}}"><img src="{{image_url}}" alt=""></a></td><td class="desc"><h4 class="name_product"><a href="{{url}}">{{name}}</a></h4><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity"><span>{{qty}} x </span><span class="price">{{unit_price}} {{currency_symbol}}</span></p></td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
-    _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-secondary medium link">{{see_your_cart_msg}}</a>',
+    _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     _size_label: null,
@@ -361,7 +361,7 @@ var Mall = {
 					recentlyViewedContent += "   </figure>";
 					recentlyViewedContent += "  </div>";
 					recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-8 right-col no-gutter'>";
-					recentlyViewedContent += "   <p class='prod_name'>"+ title +"</p>";
+					recentlyViewedContent += "   <div class='prod_name'>"+ title +"<div class='prod_name_fade'></div></div>";
 					recentlyViewedContent += "   <span class='wrapper-price'>";
 					recentlyViewedContent += "    <span class='old'>"+oldPrice+"</span> <span class='price'>"+price+"</span>"
 					recentlyViewedContent += "   </span>";
@@ -386,7 +386,7 @@ var Mall = {
 					navigationText : false,
 					afterUpdate: function(){
 						var imgHeight = rwd_recently_viewed.find('img').height()/2;
-						var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+						var imgHeightplus = rwd_recently_viewed.find('img').height()/2-20;
 						rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
 						rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
 						rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
@@ -395,7 +395,7 @@ var Mall = {
 					afterInit:function(){
 						imagesLoaded( document.querySelector('#rwd-recently-viewed'), function( instance ) {
 							var imgHeight = rwd_recently_viewed.find('img').height()/2;
-							var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
+							var imgHeightplus = rwd_recently_viewed.find('img').height()/2-20;
 							rwd_recently_viewed.next('.customNavigation').find('.prev').css({top:imgHeight+'px'});
 							rwd_recently_viewed.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
 							rwd_recently_viewed.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
@@ -894,6 +894,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.sm,
 					settings: {
+						dots: true,
 						slidesToShow: false,
 						slidesToScroll: false
 					}
@@ -901,6 +902,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.xssm,
 					settings: {
+						dots: true,
 						slidesToShow: false,
 						slidesToScroll: false
 					}
@@ -908,6 +910,7 @@ Mall.Slick = {
 				{
 					breakpoint: Mall.Breakpoint.xs,
 					settings: {
+						dots: true,
 						slidesToShow: 1,
 						slidesToScroll: 1,
 						adaptiveHeight: true
@@ -1466,7 +1469,7 @@ jQuery(window).resize(function() {
 
 Mall.Footer = {
 	footerId: '#footer',
-	footerMargin: 0,
+	footerMargin: 20,
 	containerId: '#sb-site',
 	init: function() {
 		var _ = this;
@@ -1523,11 +1526,13 @@ Mall.swipeOptions = {
 			closeHamburgerMenu(event);
             jQuery('#link_menu').toggleClass('not-open');
 		} else if (jQuery('#solr_search_facets.filters-mobile').is(':visible')) {
-			Mall.listing.closeMobileFilters();
+            if(!jQuery(event.target).hasClass('ui-slider-handle') && jQuery(event.target).closest('.content').attr('id') !== 'filter_price'){
+                Mall.listing.closeMobileFilters();
+            }
 		}
-		setTimeout(function() {
-			jQuery(window).swipe("destroy");
-		},100);
+		// setTimeout(function() {
+		// 	jQuery(window).swipe("destroy");
+		// },100);
 	},
 	triggerOnTouchEnd: true,
 	excludedElements: "label, button, input, select, textarea, .noSwipe",
@@ -1539,31 +1544,31 @@ Mall.swipeOptions = {
  * Attaches events to products likes.
  */
 Mall.delegateLikeEvents = function() {
-	if(!Mall.getIsBrowserMobile()) {
-		jQuery(document).delegate('div.like', 'mouseenter mouseleave', function (e) {
-			if (e.type === 'mouseenter') { //hover
-				var textLike;
-				if (jQuery(this).hasClass('liked')) {
-					textLike = 'Dodane do ulubionych';
-				} else {
-					textLike = 'Dodaj do ulubionych';
-				}
-				jQuery(this).find('.toolLike').show().text(textLike);
-			} else { //hover out
-				jQuery(this).find('.toolLike').hide().text('');
-			}
-		});
-		jQuery(document).delegate('div.like.liked', 'mousedown', function(e) {
-			var textLike = 'Usunięte z ulubionych';
-			jQuery(this).find('.toolLike').text(textLike);
-		});
-	}
-	jQuery(document).delegate('div.like .icoLike', 'mousedown', function(e) {
-		jQuery(this).animate({transform: 'scale(1.2)'}, 200);
-	});
-	jQuery(document).delegate('div.like .icoLike', 'mouseup', function(e) {
-		jQuery(this).animate({transform: 'scale(1)'}, 200);
-	});
+	// if(!Mall.getIsBrowserMobile()) {
+	// 	jQuery(document).delegate('div.like', 'mouseenter mouseleave', function (e) {
+	// 		if (e.type === 'mouseenter') { //hover
+	// 			var textLike;
+	// 			if (jQuery(this).hasClass('liked')) {
+	// 				textLike = 'Dodane do ulubionych';
+	// 			} else {
+	// 				textLike = 'Dodaj do ulubionych';
+	// 			}
+	// 			jQuery(this).find('.toolLike').show().text(textLike);
+	// 		} else { //hover out
+	// 			jQuery(this).find('.toolLike').hide().text('');
+	// 		}
+	// 	});
+	// 	jQuery(document).delegate('div.like.liked', 'mousedown', function(e) {
+	// 		var textLike = 'Usunięte z ulubionych';
+	// 		jQuery(this).find('.toolLike').text(textLike);
+	// 	});
+	// }
+	// jQuery(document).delegate('div.like .icoLike', 'mousedown', function(e) {
+	// 	jQuery(this).animate({transform: 'scale(1.2)'}, 200);
+	// });
+	// jQuery(document).delegate('div.like .icoLike', 'mouseup', function(e) {
+	// 	jQuery(this).animate({transform: 'scale(1)'}, 200);
+	// });
 	jQuery(document).delegate('div.like','click',function(e) {
 		e.preventDefault();
 		var like = jQuery(this);
@@ -1770,13 +1775,12 @@ Mall.inspirationsSliderInit = function() {
 	}
 
 	rwdInspirationCarousel.rwdCarousel({
-		items : 5, //10 items above 1000px browser width
-		itemsDesktop : [1000,4], //5 items between 1000px and 901px
-		itemsDesktopSmall : [900,3], // between 900px and 601px
-		itemsTablet: [767,3], //2 items between 600 and 0
-        itemsTabletSmall : [619,2], //2 items between 609 and 767
-		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
-		pagination : false,
+		items : 6, //10 items above 1000px browser width
+		itemsDesktop: [1206,5],
+		itemsDesktopSmall: [979,4],
+		itemsTablet: [768,3],
+		itemsMobile: [479,2],
+		pagination : true,
 		navigation: true,
 		navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
 		rewindNav : false,

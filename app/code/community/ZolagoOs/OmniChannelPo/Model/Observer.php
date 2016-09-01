@@ -20,7 +20,7 @@ class ZolagoOs_OmniChannelPo_Model_Observer
         ) {
             $soeBlock->addButton('create_udpo', array(
                 'label'     => Mage::helper('udpo')->__('Create PO'),
-                'onclick'   => 'setLocation(\'' . $soeBlock->getUrl('udpoadmin/order_po/start') . '\')',
+                'onclick'   => 'setLocation(\'' . $soeBlock->getUrl('zospoadmin/order_po/start') . '\')',
             ));
         }
     }
@@ -39,13 +39,13 @@ class ZolagoOs_OmniChannelPo_Model_Observer
             if (($stId = $po->getStatementId())) {
                 $soi->setStatementId($stId);
                 if (($st = Mage::getModel('udropship/vendor_statement')->load($stId, 'statement_id')) && $st->getId()) {
-                    $soi->setStatementUrl(Mage::getModel('adminhtml/url')->getUrl('udropshipadmin/adminhtml_vendor_statement/edit', array('id'=>$st->getId())));
+                    $soi->setStatementUrl(Mage::getModel('adminhtml/url')->getUrl('zolagoosadmin/adminhtml_vendor_statement/edit', array('id'=>$st->getId())));
                 }
             }
             if (Mage::helper('udropship')->isUdpayoutActive() && ($ptId = $po->getPayoutId())) {
                 $soi->setPayoutId($ptId);
                 if (($pt = Mage::getModel('udpayout/payout')->load($ptId)) && $pt->getId()) {
-                    $soi->setPayoutUrl(Mage::getModel('adminhtml/url')->getUrl('udpayoutadmin/payout/edit', array('id'=>$pt->getId())));
+                    $soi->setPayoutUrl(Mage::getModel('adminhtml/url')->getUrl('zospayoutadmin/payout/edit', array('id'=>$pt->getId())));
                 }
             }
         }

@@ -18,18 +18,18 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
     const ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE = 'salePriceBefore';
 
-	/**
-	 * @return string
-	 */
-	public function getNoVendorContextUrl() {
-		if(!$this->hasData("no_vendor_context_url")){
-			$this->setData(
-				"no_vendor_context_url",
-				Mage::helper("zolagodropshipmicrosite")->convertToNonVendorContext($this->getProductUrl())
-			);
-		}
-		return $this->getData("no_vendor_context_url");
-	}
+    /**
+     * @return string
+     */
+    public function getNoVendorContextUrl() {
+        if(!$this->hasData("no_vendor_context_url")) {
+            $this->setData(
+                "no_vendor_context_url",
+                Mage::helper("zolagodropshipmicrosite")->convertToNonVendorContext($this->getProductUrl())
+            );
+        }
+        return $this->getData("no_vendor_context_url");
+    }
 
     /**
      * Get converter price type
@@ -55,15 +55,15 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
         return $this->getResource()->getConverterPriceType($skus);
     }
 
-	/**
-	 * @return string|null
-	 */
-	public function getManufacturerLogoUrl() {
+    /**
+     * @return string|null
+     */
+    public function getManufacturerLogoUrl() {
         /** @var $_helper Zolago_Catalog_Helper_Product */
         $_helper = Mage::helper("zolagocatalog/product");
         return $_helper->getManufacturerLogoUrl($this);
-	}
-	
+    }
+
     /**
      * Get product final price
      *
@@ -177,5 +177,20 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
         $backend = $mediaGalleryAttribute->getBackend();
         $backend->addImage($this, $file, $mediaAttribute, $move, $exclude, $label);
         return $this;
+    }
+
+
+    /**
+     * create url key
+     * @see Mage_Catalog_Model_Attribute_Backend_Urlkey_Abstract::beforeSave()
+     */
+    protected function _beforeSave() {
+        parent::_beforeSave();
+        $urlKey = $this->getData('url_key');
+        if (empty($urlKey)) {
+            $name = $this->getResource()->getAttributeRawValue($this->getEntityId(),'name',Mage::app()->getStore()->getId());         
+            $urlKey = $name.' '.$this->getSkuv();
+            $this->setData('url_key', $this->formatUrlKey($urlKey));
+        }
     }
 }

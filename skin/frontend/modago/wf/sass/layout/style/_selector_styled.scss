@@ -1,35 +1,42 @@
 .selectboxit-container {
+
+  span {
+    height: 35px;
+    line-height: 35px;
+  }
+
   .selectboxit {
     background-image: none;
     border-radius: 0;
     background-color: $color_fff;
-    border-color: $color_ccc;
+    border: 1px solid #D5D5D5;
+    height: 35px;
+    line-height: 35px;
 
     &:hover {
-      border-color: $gray-dark;
       background-color: $color_fff;
 
     }
     &:focus {
-      border-color: $gray-dark;
       background-color: $color_fff;
       box-shadow: none;
 
     }
     .selectboxit-text {
-      color: $gray-darker;
+      color: $colorTextSelectboxit;
       text-decoration: none;
-      //        text-indent: 10px;
       font-family: $fontRegular;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: normal;
     }
     .selectboxit-arrow-container {
-      background: $selectMap;
-      @include sprite($selectMap, select_styled);
-      line-height: image-height(sprite-file($selectMap, select_styled));
-      height: 29px;
-      width: 29px;
+      background: url('../images/selectboxit/select-arrow.png');
+      height: 35px;
+      width: 35px;
+
+      background-repeat: no-repeat;
+      background-position: 65% 50%;
+      text-overflow: ellipsis;
 
       .caret {
         border: none;
@@ -39,34 +46,38 @@
       }
     }
   }
-
+  .selectboxit-options {
+    a {
+      height: 35px;
+      line-height: 35px;
+    }
+  }
   .selectboxit-list {
-    max-height: 200px;
+    max-height: 230px;
     border-radius: 0;
     background-color: $color_fff;
-    border-color: $gray;
+    border: 1px solid #D5D5D5;
     z-index: 100;
     box-shadow: none;
     .selectboxit-option {
       .selectboxit-option-anchor {
-        font-family: $fontRegular;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: normal;
-        color: $gray-darker;
+        color: $colorTextSelectboxit;
         text-decoration: none;
       }
     }
     .selectboxit-focus {
       .selectboxit-option-anchor {
-        color: $gray-darker;
-        background: $color_f2f1f0;
+        color: $colorTextSelectboxit;
+        background: $color_fff;
         background-image: none;
         background-repeat: repeat-x;
       }
     }
     .selectboxit-disabled {
       .selectboxit-option-anchor {
-        color: $color_999999;
+        color: $colorTextSelectboxit;
       }
     }
   }
@@ -96,62 +107,6 @@
   }
 }
 
-/*Search desktop*/
-.block_search {
-  select {
-    height: 26px;
-  }
-  .selectboxit-container {
-    span {
-      height: 26px;
-      line-height: 26px;
-    }
-    .selectboxit {
-      width: 134px;
-      height: 26px;
-      line-height: 26px;
-      border: none;
-      .selectboxit-arrow-container {
-        height: 26px;
-        line-height: 26px;
-        background: url(../images/select-icons.png) 0 -117px no-repeat;
-        outline: none;
-        &:link {
-          background: url(../images/select-icons.png) 0 -168px no-repeat;
-        }
-        &:visited {
-          background: url(../images/select-icons.png) 0 -17px no-repeat;
-        }
-        &:hover {
-          background: url(../images/select-icons.png) 0 -69px no-repeat;
-        }
-      }
-      .selectboxit-text {
-        height: 26px;
-        line-height: 26px;
-      }
-    }
-    .selectboxit-options {
-      width: 134px;
-      a {
-        height: 26px;
-        line-height: 26px;
-      }
-    }
-  }
-  .selectboxit-list {
-    z-index: 400;
-  }
-}
-
-/*Search mobile*/
-#dropdown-search {
-  .selectboxit-container {
-    .selectboxit {
-      width: 282px;
-    }
-  }
-}
 
 /*Rma*/
 
@@ -175,14 +130,14 @@
   &.has-error {
     .selectboxit-container {
       .selectboxit {
-        border-color: $color_a94442;
+        border-color: $colorAccentError;
       }
     }
   }
   &.has-success {
     .selectboxit-container {
       .selectboxit {
-        border-color: $color_3c763d;
+        border-color: $colorAccentValid;
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
       }
     }

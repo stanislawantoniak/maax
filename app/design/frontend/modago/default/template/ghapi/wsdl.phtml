@@ -192,13 +192,15 @@
 				<xsd:element name="customer_id" type="xsd:string" nillable="true"/>
 				<xsd:element name="invoice_data" type="tns:invoiceData"/>
 				<xsd:element name="delivery_data" type="tns:deliveryData"/>
-				<xsd:element name="order_items" type="tns:orderItemList"/>
+				<xsd:element name="order_items" type="tns:orderItemList"/>				
+				<xsd:element name="external_order_id" type="xsd:string" nillable="true"/>
 			</xsd:all>
 		</xsd:complexType>
 
 		<xsd:complexType name="deliveryData">
 			<xsd:all>
 				<xsd:element name="inpost_locker_id" type="xsd:string" nillable="true"/>
+				<xsd:element name="delivery_point_name" type="xsd:string" nillable="true"/>
 				<xsd:element name="delivery_address" type="tns:deliveryAddress"/>
 			</xsd:all>
 		</xsd:complexType>

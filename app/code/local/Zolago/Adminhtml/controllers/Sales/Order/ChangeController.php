@@ -91,4 +91,26 @@ class Zolago_Adminhtml_Sales_Order_ChangeController extends Mage_Adminhtml_Contr
 
         $this->_redirectReferer();
     }
+    public function trackAction() {
+        $shipmentId = $this->getRequest()->getParam('shipment_id');
+        $shipment = Mage::getModel('sales/order_shipment')->load($shipmentId);
+        Mage::register('current_shipment',$shipment);
+        $this->loadLayout();
+        try {
+            $helper = Mage::helper('orbashipping/carrier_tracking');
+            $trackingManager = Mage::helper('orbashipping/carrier_manual');
+            $helper->setHelper($trackingManager);
+            $trackId = Mage::app()->getRequest()->getParam('id');
+            $track = Mage::getModel('sales/order_shipment_track')->load($trackId);
+            $helper->collectTracking(array(array($trackId=>$track)));
+        } catch (Mage_Core_Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            $this->_getSession()->addError($this->__('An error occurred on change customer email action.'));
+            Mage::logException($e);
+        }
+        $response = $this->getLayout()->getBlock('shipment_tracking')->toHtml();
+        $this->getResponse()->setBody($response);
+    }
 }

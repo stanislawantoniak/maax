@@ -38,19 +38,27 @@
 		<update handle="forms"/>
 		<reference name="head">
 			<action method="setTitle"><title>Vendor Portal</title></action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/inpost/address.js</name>
+			</action>
 			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
 		</reference>
 		<reference name="content">			
 			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">
 				<!-- modals -->
 				<block name="vendor_po_edit_compose" type="zolagopo/vendor_po_edit_compose" template="zolagopo/vendor/po/edit/compose.phtml"/>
-                <block name="vendor_po_edit_payments" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments.phtml"/>
+                <block name="vendor_po_edit_payments_allocation" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments-allocation.phtml"/>
+                <block name="vendor_po_edit_payments_simple" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments-simple.phtml"/>
+				<block name="vendor_po_edit_payments_pickup" type="zolagopo/vendor_po_edit_payments" template="zolagopo/vendor/po/edit/payments-pickup.phtml"/>
 				<block name="vendor_po_edit_pos" type="zolagopo/vendor_po_edit_pos" template="zolagopo/vendor/po/edit/pos.phtml"/>
 				<block name="vendor_po_edit_add_item" type="zolagopo/vendor_po_edit_additem" template="zolagopo/vendor/po/edit/add_item.phtml"/>
 				<block name="vendor_po_edit_edit_item" type="zolagopo/vendor_po_edit_edititem" template="zolagopo/vendor/po/edit/edit_item.phtml"/>
 				<block name="vendor_po_edit_shipping_cost" type="zolagopo/vendor_po_edit_shippingcost" template="zolagopo/vendor/po/edit/shipping_cost.phtml"/>
 				<block name="vendor_po_edit_split" type="zolagopo/vendor_po_edit_split" template="zolagopo/vendor/po/edit/split.phtml"/>
 				<block name="vendor_po_edit_shipping_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+				<block name="vendor_po_edit_inpost_shipping_address" type="zolagopo/vendor_po_edit_inpostaddress" template="zolagopo/vendor/po/edit/inpost_address.phtml"/>
+				<block name="vendor_po_create_rma" type="zolagopo/vendor_po_edit_rma" template="zolagopo/vendor/po/edit/create_rma.phtml"/>
 				<block name="vendor_po_edit_billing_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_po_edit_comment" type="zolagopo/vendor_po_edit_comment" template="zolagopo/vendor/po/edit/comment.phtml"/>
 			</block>

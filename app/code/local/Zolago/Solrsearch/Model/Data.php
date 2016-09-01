@@ -325,6 +325,9 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
         if($item->getOrigData('msrp')){
             $docData['msrp_decimal'] = $item->getOrigData('msrp');
         }
+		// for sort best deals
+		$docData['sort_delta_price_decimal'] = $this->_prepareDeltaPrice($item);
+		
         //campaign
         if ($item->getOrigData('campaign_regular_id')) {
             $docData['campaign_regular_id_int'] = (int)$item->getOrigData('campaign_regular_id');
@@ -441,7 +444,35 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		return $aggrgatedFlags;
 	}
-	
+
+	/**
+	 * Delta: strikeout price - actual price
+	 * for sort only values >= 0
+	 * @param Varien_Object $item
+	 * @return float
+	 */
+	protected function _prepareDeltaPrice(Varien_Object $item) {
+		$finalPrice = round(floatval($item->getOrigData('final_price')),2);
+		$product = new Varien_Object();
+		$product->setData('campaign_regular_id',           $item->getOrigData('campaign_regular_id'));
+		$product->setData('product_flag',                  $item->getOrigData('product_flag'));
+		$product->setData('final_price',                   $item->getOrigData('final_price'));
+		if (empty($item->getOrigData('campaign_regular_id')) && !$item->getOrigData('product_flag')) {
+			$strikeoutPrice = $finalPrice;
+		} else {
+			$product->setData('campaign_strikeout_price_type', $item->getOrigData('campaign_strikeout_price_type'));
+			$product->setData('price',                         $item->getOrigData('price'));
+			$product->setData('special_price',                 $item->getOrigData('special_price'));
+			$product->setData('msrp',                          $item->getOrigData('msrp'));
+			/** @var $helper Zolago_Catalog_Helper_Product */
+			$helper = Mage::helper("zolagocatalog/product");
+			$strikeoutPrice = round($helper->getStrikeoutPrice($product),2);
+		}
+		$delta = $strikeoutPrice - $finalPrice;
+		// for sort only values >= 0
+		$delta = $delta <= 0 ? 0 : round($delta, 2);
+		return $delta;
+	}
 
 	/**
 	 * @param Varien_Object $item

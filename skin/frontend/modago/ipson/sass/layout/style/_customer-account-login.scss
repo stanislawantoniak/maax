@@ -1,0 +1,211 @@
+.node-type-customer-account-login {
+	#content {
+		padding-top: 0px;
+	}
+	#header-main {
+		padding-top:0px;
+		padding-bottom:0px;
+	}
+	#header {
+		@media (max-width: $screen-xs-max) {
+		min-height: 41px;
+		}
+	}
+	.header_bottom {
+		@media (max-width: $screen-xs-max) {
+			display:none;
+		}
+	}
+}
+
+#logIn {
+	//padding-top:30px;
+	@media (max-width: $screen-xs-max) {
+		padding-top:0px;
+		}
+	.main {
+		padding:30px 30px;
+			@media (max-width: $screen-xs-max) {
+				margin-left: -15px;
+				margin-right: -15px;
+				padding:20px 30px;
+			}
+			@media(max-width: 360px){
+				margin-left: -20px;
+				margin-right: -20px;
+			}
+		.section {
+			padding:0px;
+		}
+		header {
+			margin-left:-30px;
+			height:70px;
+			p {
+				margin-left: 35px;
+			}
+		}
+	}
+	.form-horizontal {
+		.form-group {
+			@media (max-width: $screen-md-min) {
+				margin-left: -10px;
+				margin-right: -10px;
+			}
+			
+		}
+        @media (max-width: $screen-sm-max) {
+            span {
+              text-align: left;
+            }
+        }
+	}
+	.form-list {
+		margin:0px 0px 10px 0px;
+		padding:0px;
+		label {
+			margin-bottom: 5px;
+		}
+		input[type="text"],
+		input[type="email"],
+		input[type="password"] {
+			height:29px;
+			padding:0 15px 0 15px;
+		}
+		label[for="pass"] {
+			position: relative;
+			@media (max-width: $screen-sm-max) {
+				position:static;
+			}
+		}
+		.inner-form-group {
+			position:relative;
+			width:100%;
+			@media(min-width: $screen-sm-min) {
+				padding-bottom: 15px;
+			}
+			
+		}
+		.forgot-password {
+			position:absolute;
+//			top:-20px;
+			@media (max-width: 991px) {
+                top: -20px;
+            }
+		}
+		#pass {
+			&+.forgot-password {
+				top:auto;
+				bottom:-8px;
+			}
+		}
+		.form-checkbox {
+			margin-left: 5px!important;
+			.badge {
+				margin-left:4px;
+			}
+		}	
+		.col-sm-offset-3 {
+			padding-left: 25px;
+		}	
+	}
+	footer {
+		padding-top:19px;
+		.button {
+			margin: 0 9px 0 0;
+			@media (max-width: $screen-xs-max) {
+				margin-bottom: 5px;
+			}
+		}
+		.btn-social.fb {
+			
+		}
+	}
+	.buttons-set {
+
+	}
+	.benefits {
+		margin-left:10px;
+		margin-bottom: 40px;
+	}
+}
+#logIn {
+	.column-block {
+		.col-01,
+		.col-02 {
+			position:relative;
+		}
+		form {
+			margin-bottom: 30px;
+			&#login-form {
+				margin-bottom: 150px;
+			}
+		}
+      .forget-pass-button-container {
+        padding-top: 7px;
+        padding-left: 8px;
+        @media (max-width: $screen-sm-max) {
+          padding-left: 5px;
+        }
+      }
+		a.button, button {
+			position: absolute;
+			bottom: 30px;
+			right: 30px;
+			width: 140px;
+			&#login-button {
+				bottom: 105px;
+			}
+          &.forget-pass-button {
+            width: auto;
+            position: static;
+          }
+
+		}
+		.footer-section {
+			position:absolute;
+			bottom:0px;
+			left:0px;
+			right:0px;
+			width:auto;
+			margin:0 35px;
+			padding-bottom: 27px;
+			height: 85px;
+		}
+		.col-01 {
+			margin-bottom: 30px;
+		}
+		.col-02 {
+
+			@media (max-width: $screen-xs-max) {
+				padding-bottom: 83px !important;
+				margin-bottom: 5px;
+			}
+			.footer-section {
+				border:none!important;
+				@media (max-width: $screen-xs-max) {
+					height:auto;
+					padding-bottom: 30px;
+					overflow: hidden;
+					//position:static;
+				}
+				.button-primary {
+					top:-80px;
+					@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+						top:-80px;
+					}
+					@media (max-width: $screen-xs-max) {
+					position:static;
+					margin-bottom: 0px!important;
+					//float:right;
+					}
+				}
+				
+			}
+		}
+	}
+}
+
+.social-button {
+	cursor: pointer;
+	display: inline-block;
+}

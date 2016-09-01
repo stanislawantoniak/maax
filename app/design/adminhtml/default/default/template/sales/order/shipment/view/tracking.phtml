@@ -30,12 +30,14 @@
     <col width="100" />
     <col />
     <col />
-    <col width="80" />
+    <col />
+    <col width="140" />
     <thead>
         <tr class="headings">
             <th><?php echo Mage::helper('sales')->__('Carrier') ?></th>
             <th><?php echo Mage::helper('sales')->__('Title') ?></th>
             <th><?php echo Mage::helper('sales')->__('Number') ?></th>
+            <th><?php echo Mage::helper('sales')->__('Status') ?></th>
             <th class="last"><?php echo Mage::helper('sales')->__('Action') ?></th>
         </tr>
     </thead>
@@ -50,13 +52,14 @@
             </td>
             <td><input class="input-text" type="text" id="tracking_title" name="title" value="" /></td>
             <td><input class="input-text" type="text" id="tracking_number" name="number" value="" /></td>
-            <td class="last"><?php echo $this->getSaveButtonHtml() ?></td>
+            <td></td>
+            <td class="last" style="text-align:right"><?php echo $this->getSaveButtonHtml() ?></td>
         </tr>
     </tfoot>
 <?php if($_tracks = $this->getShipment()->getAllTracks()): ?>
     <tbody>
     <?php $i=0;foreach ($_tracks as $_track):$i++ ?>
-        <tr class="<?php echo ($i%2==0)?'even':'odd' ?>">
+        <tr class="<?php echo ($i%2==0)? 'even':'odd' ?>">
             <td><?php echo $this->escapeHtml($this->getCarrierTitle($_track->getCarrierCode())) ?></td>
             <td><?php echo $this->escapeHtml($_track->getTitle()) ?></td>
             <td>
@@ -67,7 +70,18 @@
                 <div id="shipment_tracking_info_response_<?php echo $_track->getId() ?>"></div>
                 <?php endif; ?>
             </td>
-            <td class="last"><a href="#" onclick="deleteTrackingNumber('<?php echo $this->getRemoveUrl($_track) ?>'); return false;"><?php echo Mage::helper('sales')->__('Delete') ?></a></td>
+            <td style="text-align:right">
+                <select name="track_status[<?php echo $_track->getId()?>]">                
+                    <?php foreach (Mage::getSingleton('udropship/source')->getTrackingStatusList() as $id=>$name) : ?>
+                        <option value="<?php echo $id;?>" <?php if ($id==$_track->getUdropshipStatus()): echo 'selected'; endif;?>><?php echo $name;?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            <td class="last">
+                <button class="scalable save" onclick="saveTrackingStatus('<?php echo Mage::getUrl('*/sales_order_change/track',array('shipment_id' => $this->getShipment()->getId(),'id' => $_track->getId())); ?>')"><?php echo $this->helper('orbashipping')->__("Save");?></button>                        
+                &nbsp;
+                <button onclick="deleteTrackingNumber('<?php echo $this->getRemoveUrl($_track) ?>'); return false;"><?php echo Mage::helper('sales')->__('Delete') ?></button>
+            </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -80,7 +94,10 @@ function selectCarrier(elem) {
     var option = elem.options[elem.selectedIndex];
     $('tracking_title').value = option.value && option.value != 'custom' ? option.text : '';
 }
-
+function saveTrackingStatus(url) {
+    submitAndReloadArea($('shipment_tracking_info').parentNode, url);
+    
+}
 function deleteTrackingNumber(url) {
     if (confirm('<?php echo Mage::helper('sales')->__('Are you sure?') ?>')) {
         submitAndReloadArea($('shipment_tracking_info').parentNode, url)

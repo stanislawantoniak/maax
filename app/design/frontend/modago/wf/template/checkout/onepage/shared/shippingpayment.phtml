@@ -1,0 +1,122 @@
+<?php
+/** @var Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment $this */
+$formKey	= Mage::getSingleton('core/session')->getFormKey();
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper		= Mage::helper("zolagocheckout");
+
+
+$items= $this->getRateItems();
+$methods = $items->methods;
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
+
+
+$sessionShippingMethod = "";
+$selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
+foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
+	$sessionShippingMethod = $methodSelectedData;
+}
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+$carrierLogo = Mage::helper("wfwf/checkout_data")->getCarrierLogo($deliveryMethodCode);
+?>
+<form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
+    <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
+	<div class="sidebar-second col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
+		<section class="main bg-w hidden-sm hidden-xs sidebar-addresses">
+			<header>
+				<h2 class="open"><?php echo $helper->__('Address data'); ?></h2>
+			</header>
+			<div class="row">
+				<?php if(!$deliveryPoint->id): ?>
+				<div class="col-md-12 col-sm-4">
+					<h4><?php echo $helper->__('Delivery address'); ?>:</h4>
+					{{shipping}}
+				</div>
+				<?php endif; ?>
+				<div class="col-md-12 col-sm-4">
+					<h4><?php echo $helper->__('Sales document'); ?>:</h4>
+					<dl>
+						<dd>{{sales_document}}<dd>
+					</dl>
+				</div>
+				<div class="col-md-12 col-sm-4 invoice-data">
+					<h4><?php echo $helper->__('Invoice data'); ?>:</h4>
+					{{billing}}
+				</div>
+			</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="button button-third large pull-right prev-button-address"><?php echo $helper->__('Change'); ?></button>
+					</div>
+				</div>
+
+		</section>
+		<section class="main bg-w opened-panel-group hidden-sm hidden-xs sidebar-deliverypayment">
+			<header>
+				<h2 class="open">
+					<?php echo $helper->__('Delivery'); ?>
+					<i class="bullet-strzalka-up visible-xs"></i>
+				</h2>
+			</header>
+			<div class="panel-group">
+				<div class="row">
+					<?php if(!$deliveryPoint->id): ?>
+						<div class="col-md-12 col-sm-4 delivery-type">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="delivery-type-logo"><span>{{carrier_method}}</span><?php echo $carrierLogo; ?></dd>
+								<dd>&nbsp;</dd>
+								<dd>&nbsp;</dd>
+							</dl>
+						</div>
+					<?php else: ?>
+						<div class="col-md-12 col-sm-4 delivery-type">
+							<h4><?php echo $helper->__('Delivery type'); ?>:</h4>
+							<dl>
+								<dd class="delivery-point-data">
+									<?php echo $deliveryPoint->checkout->title; ?>
+									<?php echo $deliveryPoint->checkout->logo; ?>
+								</dd>
+								<dd>{{inpost_locker_street}} {{inpost_locker_building_number}}</dd>
+								<dd>{{inpost_locker_postcode}} {{inpost_locker_town}}</dd>
+								<dd class="location-description ">{{inpost_locker_location_description}}</dd>
+							</dl>
+						</div>
+					<?php endif; ?>
+				</div>
+				<?php if (count($methods) > 1): ?>
+				<div class="row">
+					<div class="col-sm-12">
+						<a id="sidebar-deliverypayment-change" href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large pull-right"><?php echo $helper->__('Change'); ?></a>
+					</div>
+				</div>
+				<?php endif; ?>
+			</div>
+		</section>
+	</div>
+	<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section" id="content-main">
+		<section class="main bg-w">
+			<header class="title-section">
+				<h2><?php echo $helper->__('Confirm delivery and payment method'); ?></h2>
+			</header>
+			<div class="row">
+				<div id="containererreurtotal"  style="margin-bottom: 10px;"></div>
+			</div>
+			<?php echo $this->getChildHtml("shipping");?>
+			<?php echo $this->getChildHtml("payment");?>
+			<div class="row">
+				<div class="col-sm-6">
+					<button  class="button button-third large pull-left" id="step-1-prev"><?php echo $helper->__("Back"); ?></button>
+				</div>
+				<div class="col-sm-6">
+					<button class="button button-primary large link pull-right" id="step-1-submit"><i></i>&nbsp;<?php echo $helper->__("Next"); ?></button>
+				</div>
+			</div>
+		</section>
+	</div>
+</form>

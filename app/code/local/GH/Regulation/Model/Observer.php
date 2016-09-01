@@ -9,43 +9,37 @@ class Gh_Regulation_Model_Observer
 	 */
 	public function udropship_adminhtml_vendor_tabs_after($observer)
 	{
-		$block = $observer->getBlock();
-		if (!$block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs
-			|| !Mage::app()->getRequest()->getParam('id', 0)
-		) {
-			return;
-		}
+		if (!Mage::helper("core")->isModuleEnabled('ZolagoOs_OutsideStore')) {
+			$block = $observer->getBlock();
+			if (!$block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs
+				|| !Mage::app()->getRequest()->getParam('id', 0)
+			) {
+				return;
+			}
 
-		if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
-		/*
-			$block->addTab('regulation_kind', array(
-				'label'     => Mage::helper('ghregulation')->__('Regulation kind settings'),
-				'content'	=> Mage::app()->getLayout()->createBlock('ghregulation/adminhtml_dropship_settings_kind_grid', 'admin.regulation.settings.kind')
-					->setVendorId(Mage::app()->getRequest()->getParam('id'))
-					->toHtml(),
-			));
-			$block->addTabToSection('regulation_kind','vendor_rights',40);
-        */			
-			$list = Mage::getResourceModel('ghregulation/regulation_kind_collection');
-			if (!count($list)) {
-			    $content = Mage::helper('ghregulation')->__('No kinds');
-			} else {
-				$content = Mage::app()->getLayout()->createBlock('ghregulation/adminhtml_dropship_settings_type', 'admin.regulation.settings.type')
-					->setVendorId(Mage::app()->getRequest()->getParam('id'))
-					->toHtml();
-			}			 
-			$block->addTab('regulation_type', array(
-				'label'     => Mage::helper('ghregulation')->__('Regulation document settings'),
-				'content'   => $content,
-			));
-			$block->addTab('regulation_accept', array(
-				'label'     => Mage::helper('ghregulation')->__('Regulation acceptance'),
-				'content'   => Mage::app()->getLayout()->createBlock('ghregulation/adminhtml_dropship_acceptance', 'admin.regulation.acceptance')
-					->setVendorId(Mage::app()->getRequest()->getParam('id'))
-					->toHtml()
-			));
-			$block->addTabToSection('regulation_type','vendor_rights',50);
-			$block->addTabToSection('regulation_accept','vendor_rights',55);
+			if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
+				
+				$list = Mage::getResourceModel('ghregulation/regulation_kind_collection');
+				if (!count($list)) {
+					$content = Mage::helper('ghregulation')->__('No kinds');
+				} else {
+					$content = Mage::app()->getLayout()->createBlock('ghregulation/adminhtml_dropship_settings_type', 'admin.regulation.settings.type')
+						->setVendorId(Mage::app()->getRequest()->getParam('id'))
+						->toHtml();
+				}
+				$block->addTab('regulation_type', array(
+					'label' => Mage::helper('ghregulation')->__('Regulation document settings'),
+					'content' => $content,
+				));
+				$block->addTab('regulation_accept', array(
+					'label' => Mage::helper('ghregulation')->__('Regulation acceptance'),
+					'content' => Mage::app()->getLayout()->createBlock('ghregulation/adminhtml_dropship_acceptance', 'admin.regulation.acceptance')
+						->setVendorId(Mage::app()->getRequest()->getParam('id'))
+						->toHtml()
+				));
+				$block->addTabToSection('regulation_type', 'vendor_rights', 50);
+				$block->addTabToSection('regulation_accept', 'vendor_rights', 55);
+			}
 		}
 	}
 	public function udropship_adminhtml_vendor_edit_prepare_form($observer) {

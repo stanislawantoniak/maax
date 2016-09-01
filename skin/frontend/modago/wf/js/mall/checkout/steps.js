@@ -869,8 +869,8 @@
 					data.push({name: 'shipping[save_in_address_book]', value: 0});
                     data.push({name: 'shipping[telephone]', value: telephoneForLocker});
                     data.push({name: 'shipping_point_code', value: inpostName});
-					data.push({name: 'inpost[name]', value: inpostName});
-					data.push({name: 'inpost[telephone]', value: telephoneForLocker});
+					data.push({name: 'delivery_point[name]', value: inpostName});
+					data.push({name: 'delivery_point[telephone]', value: telephoneForLocker});
 				}
 
 				var newsletterAgreement = this.getNewsletterAgreement();
@@ -1538,7 +1538,13 @@
 			            this._previous_provider = false;
 						jQuery('#'+this._self_form_id).valid();
 		            }
-	            }
+
+                    jQuery(".default_pay .top-panel").show();
+                    jQuery(".default_pay .panel-footer").show();
+	            } else {
+                    jQuery(".default_pay .top-panel").hide();
+                    jQuery(".default_pay .panel-footer").hide();
+                }
 
             },
 

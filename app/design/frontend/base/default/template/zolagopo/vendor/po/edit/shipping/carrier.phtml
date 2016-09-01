@@ -212,7 +212,7 @@ jQuery(function($){
 		}
 	};
 	
-	$(".datepicker", form).datepicker().
+	$(".datepicker", form).datepicker({firstDay: 1}).
 			attr("placeholder", $.datepicker._defaults.dateFormat);
 	
 	// Hide all specified opts

@@ -65,7 +65,7 @@ $shippingBlock = $this->getChild('checkout_cart_shipping');
             </div>
         </div>
         <div class="form-action">
-            <a id="cart-buy" href="<?php echo $this->getCheckoutUrl(); ?>" class="button button-primary"><i></i>&nbsp;<?php echo $this->__("Checkout"); ?></a>
+            <button id="cart-buy" href="<?php echo $this->getCheckoutUrl(); ?>" class="button button-primary"><i></i>&nbsp;<?php echo $this->__("Checkout"); ?></button>
 			<?php /* $_tosHtml = $this->getChildHtml("tos");?>
 			<?php if($_tosHtml):?>
 				<br><br>
@@ -73,6 +73,8 @@ $shippingBlock = $this->getChild('checkout_cart_shipping');
 			<?php endif; */?>
         </div>
         <!--</div>-->
+
+        <div id="cart-buy-overlay" class="hidden"><i class="fa fa-spinner fa-spin"></i></div>
     </aside>
     <?php /* <aside id="payment-methods" class="main bg-w">
         <!--<div class="inner-payment-methods">-->
@@ -122,7 +124,20 @@ $shippingBlock = $this->getChild('checkout_cart_shipping');
         font-size: 12px;
         text-align: center;
         text-transform: uppercase;
-        float: left; }
+        float: left;
+    }
+    #cart-buy-overlay{
+        position:absolute;
+        top:0px;
+        left:0px;
+        bottom:0px;
+        right:0px;
+        background-color: #fff;
+        opacity: 0.5;
+        padding-top: 55%;
+        font-size: 40px;
+        text-align: center;
+    }
 </style>
 
 <script type="text/javascript">

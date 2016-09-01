@@ -89,7 +89,7 @@
         top:2px;
       }
       #od_do {
-        padding-left:16px;
+		padding: 0 12% 0 18%;
         #slider-range {
 			margin-top: 10px;
 			border-radius: 0;
@@ -287,6 +287,7 @@
 		overflow-y: auto;
 		width: $widthSidebarMobile;
 		display: none;
+		padding: 0 3px;
 
 		.filter-longlist {
 			input[type="text"] {
@@ -371,6 +372,9 @@ html.noscroll {
 			font-weight: normal;
 			a {
 				margin-left: 2px;
+				&:hover {
+					color:$color_fff;
+				}
 			}
 		}
 		&:hover {
@@ -378,6 +382,10 @@ html.noscroll {
 				background-color:$color_999;
 				border-color:$color_999;
 				color:$color_fff;
+
+				a {
+					color:$color_fff;
+				}
 			}
 
 		}

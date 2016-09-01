@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * Class Zolago_Newsletter_Model_Subscriber
+ *
+ * @method string getSubscriberFirstname()
+ * @method string getSubscriberLastname()
+ *
+ * @method $this setSubscriberFirstname($value)
+ * @method $this setSubscriberLastname($value)
+ */
 class Zolago_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscriber
 {
 	const NEWSLETTER_CONFIRMATION_SALES_RULE_PATH = "newsletter/zolagosubscription/confirmation_sales_rule";

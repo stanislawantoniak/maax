@@ -1,4 +1,29 @@
 .checkout {
+  .headroom--top {
+    position: static !important;
+    margin-top: 0px !important;
+    transition: none !important;
+  }
+  .headroom--pinned {
+    top: 0 !important;
+  }
+  #header {
+    @include max-screen($screen-xs-max) {
+      padding-top: 80px;
+      .headroom--top {
+        margin-top: -80px !important;
+      }
+    }
+  }
+	.header_top {
+		height: 65px;
+		top: 0px !important;
+	}
+	@include max-screen($screen-xs-max) {
+		.headroom--unpinned {
+			top: -65px !important;
+		}
+	}
 	#step {
 		text-align: right;
 		ol {
@@ -65,9 +90,8 @@
 	}
 	#header {
 		#logo {
-			margin-top: 2px;
+			margin-top: 12px;
 			img {
-				margin-top: -3px;
 				width: 160px;
 				@include max-screen($screen-xs-max) {
 					width: 80%;
@@ -94,7 +118,7 @@
 			margin-left: -5px;
 		}
 		ol {
-			margin: 25px 0px 0px;
+			margin: 35px 0px 0px;
 			padding: 0px;
 			position: relative;
 			width: 64%;
@@ -156,7 +180,7 @@
 					}
 					span {
 						position: absolute;
-						top: -19px;
+						top: -25px;
 						left: 0px;
 						right: 0px;
 					}

@@ -90,7 +90,7 @@ class ZolagoOs_OmniChannelMicrosite_Adminhtml_RegistrationController extends Mag
         }
         Mage::register('vendor_data', $reg->toVendor());
 
-        $this->_forward('edit', 'adminhtml_vendor', 'udropshipadmin');
+        $this->_forward('edit', 'adminhtml_vendor', 'zolagoosadmin');
         return;
         $this->loadLayout();
 

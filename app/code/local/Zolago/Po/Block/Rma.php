@@ -22,7 +22,7 @@ class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
             $collection->addFieldToFilter('main_table.customer_id',$customerId);
             $collection->addFieldToFilter('udropship_status',ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_DELIVERED);
 			$collection->setOrder('created_at', 'DESC');
-			
+
 			
             // remove po without shipment
             $out = array();

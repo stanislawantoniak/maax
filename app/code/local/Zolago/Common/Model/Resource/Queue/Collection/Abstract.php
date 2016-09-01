@@ -16,7 +16,7 @@ class Zolago_Common_Model_Resource_Queue_Collection_Abstract
         if (!$ids) {
             return;
         }
-        $connection = $this->getConnection();
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
         $table = $this->getTable($this->_tableName);
         $where = ' queue_id in (\''.implode('\',\'',$ids).'\')';
  

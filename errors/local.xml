@@ -2,6 +2,7 @@
 
 <config>
     <skin>modago</skin>
+    <logo>images/logo.svg</logo>
     <report>
         <action></action>
         <subject></subject>

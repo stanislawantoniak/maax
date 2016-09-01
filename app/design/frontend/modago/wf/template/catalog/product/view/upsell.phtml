@@ -26,6 +26,8 @@
 
 ?>
 <?php
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("zolagocatalog");
 $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
 $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
 
@@ -38,7 +40,7 @@ if (count($_links)): ?>
                 <div class="wpb_text_column wpb_content_element">
                     <div class="wpb_wrapper">
                         <h2 class="widgettitle">
-                            <?php echo $this->__('Z tej samej z kolekcji') ?>
+                            <?php echo $helper->__("From this same collection") ?>
                         </h2>
                     </div>
                 </div>
@@ -86,8 +88,8 @@ if (count($_links)): ?>
                                 <?php endforeach; ?>
                             </div>
                             <div class="col-md-12 watch_more_links">
-                                <?php if(count($_links) >4): ?><a href="" class="watch_more pull-right"><?php echo $this->__("więcej"); ?></a><?php endif; ?>
-                                <?php if(count($_links) >4): ?><a href="" class="watch_less pull-right hidden"><?php echo $this->__("zwiń"); ?></a><?php endif; ?>
+                                <?php if(count($_links) >4): ?><a href="" class="watch_more"><?php echo $helper->__("show more"); ?>&nbsp;<i class="fa fa-caret-down"></i></a><?php endif; ?>
+                                <?php if(count($_links) >4): ?><a href="" class="watch_less hidden"><?php echo $helper->__("hide"); ?>&nbsp;<i class="fa fa-caret-up"></i></a><?php endif; ?>
                             </div>
 
                         </div>

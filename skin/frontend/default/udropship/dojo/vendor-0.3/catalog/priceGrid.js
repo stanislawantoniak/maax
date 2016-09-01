@@ -418,7 +418,11 @@ define([
 				field: "product_flag",
 				className: "column-short header",
 				children: [
-					{
+					editor({
+						editor: "select",
+						editorArgs: {options: flagOptions, required: false},
+						editOn: "dblclick",
+						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
 						sortable: false, 
 						field: "product_flag",
@@ -431,7 +435,7 @@ define([
 							}
 							return "";
 						}
-					}
+					})
 				]
 			},
 			is_in_stock: {

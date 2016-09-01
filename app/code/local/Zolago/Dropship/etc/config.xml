@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.1.1</version>
+			<version>0.1.2</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -861,6 +861,28 @@
                         <fieldset>modago_salesmanago</fieldset>
                     </modago_salesmanago_login>
 
+                    <iaishop_id>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_id>
+                    <iaishop_url>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_url>
+                    <iaishop_login>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_login>
+                    <iaishop_pass>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_pass>
+                    <iaishop_delivery_udtiership>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_delivery_udtiership>
+                    <iaishop_delivery_ghinpost>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_delivery_ghinpost>
+                    <iaishop_delivery_zolagopp>
+                        <fieldset>iaishop_settings</fieldset>
+                    </iaishop_delivery_zolagopp>
+
                     <!--Regulation-->
 	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
 	                <regulation_accept_text_top/>
@@ -874,6 +896,7 @@
 						<!-- dynamically created -->
 						<!-- @see Zolago_Dropship_Model_Vendor::_beforeSave() -> addConfigMarketingCostTypeFields() -->
 					<!--Marketing cost for each cost type end-->
+
 				</fields>
 			</vendor>
 		</udropship>
@@ -974,13 +997,13 @@
 	</frontend>
 	<admin>
 		<routers>
-			<udropshipadmin>
+			<zolagoosadmin>
 				<args>
 					<modules>
 						<Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
 					</modules>
 				</args>
-			</udropshipadmin>
+			</zolagoosadmin>
 		</routers>
 	</admin>
 	<adminhtml>

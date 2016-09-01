@@ -98,7 +98,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 			
 			
 			if(!empty($toDelete)){
-				$this->getReadConnection()->delete(
+   				Mage::getSingleton('core/resource')->getConnection('core_write')->delete(
 					$this->getTable('catalog/category_product'),
 						$this->getReadConnection()->quoteInto("product_id=?", $productId) .
 						" AND ".
@@ -109,7 +109,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
                 }
 			}
 			foreach($toInsert as $insertId){
-				$this->getReadConnection()->insert(
+				Mage::getSingleton('core/resource')->getConnection('core_write')->insert(
 					$this->getTable('catalog/category_product'),
 					array("product_id"=>$productId, "category_id"=>$insertId, "position"=>1)
 				);

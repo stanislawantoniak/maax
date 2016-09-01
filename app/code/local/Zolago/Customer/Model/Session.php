@@ -78,6 +78,7 @@ class Zolago_Customer_Model_Session extends Mage_Customer_Model_Session
 		}
 		$this->_customer = $customer;
 		$this->setId($customer->getId());
+		$this->setCustomerId($customer->getId());
 		// save customer as confirmed, if it is not
 		if ((!$customer->isConfirmationRequired()) && $customer->getConfirmation()) {
 			$customer->setConfirmation(null)->save();

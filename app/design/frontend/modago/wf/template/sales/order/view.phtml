@@ -26,14 +26,14 @@
 				</div>
 				<?php $_grandTotal = $this->getGrandTotal(); ?>
 				<p class="visible-xs"><?php echo $this->__('Order date') . ': ' . date('Y-m-d', strtotime($this->getOrder()->getCreatedAt())); ?></p>
-				<p><?php echo $this->__('Status') . ': ' . $this->getOrder()->getStatusLabel(); ?> <i class="fa fa-question-circle"></i></p>
+				<p><?php echo $this->__('Status') . ': ' . $this->getOrder()->getStatusLabel(); ?></p>
 				<p><?php echo $this->__('Total order value') . ': ' . Mage::helper('core')->formatPrice($_grandTotal); ?> </p>
 				<p><?php echo $this->__('Payment') . ': ' . $this->getPaymentHtml(); ?> </p>
 			</header>
 			<?php $total = 1; ?>
 				<?php foreach ($_items as $nr => $_item) : ?>
 				<?php $_shipment = $_item->getLastNotCanceledShipment();?>
-				<div class="panel panel-default no-border-top">
+				<div class="panel panel-default">
 					<div class="tableWrapper">
 						<div class="table-row clearfix panel-header">
 							<?php $_v = $_item->getVendor(); ?>
@@ -121,8 +121,6 @@
 						<?php echo $this->__('back') ?>
 					</a>
 				</div>
-
-			</div>
 		</section>
 	</div>
 </div>

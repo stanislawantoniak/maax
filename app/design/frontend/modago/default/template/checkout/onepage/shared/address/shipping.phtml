@@ -6,8 +6,8 @@
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper 			= Mage::helper("zolagocheckout");
 $shippingAddress	= $this->getShippingAddress();
-$locker				= $this->getInpostLocker();
-$inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
+
+$deliveryPoint = $this->getDeliveryPointCheckout();
 ?>
 
 <fieldset>
@@ -20,7 +20,7 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
     <input type="hidden" name="shipping[same_as_billing]" value="<?php echo $this->getSameAsBilling(); ?>">
     <input type="hidden" name="shipping_address_id" value="">
     <legend><?php echo $this->__("Shipping address"); ?></legend>
-	<?php if(!$locker->getId()): ?>
+	<?php if(!$deliveryPoint->id): ?>
     <div class="form-group form-checkbox small">
         <input type="checkbox" name="shipping[different_shipping_address]" id="orders_someone_else" class="css-checkbox orders_someone_else" <?php if ($this->getOrderSomeoneElseFlag()) : ?>checked<?php endif; ?> />
         <label for="orders_someone_else" class="css-label orders_someone_else"><?php echo $this->__("I'm buing for someone else."); ?></label>
@@ -90,34 +90,47 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
             </div>
         </div>
     </div>
-	<?php else: // is InPost locker ?>
-	<div id="inpost-wrapper" class="panel panel-default inpost-wrapper">
+	<?php else: // is delivery point set ?>
+	<div id="inpost-wrapper" class="panel panel-default checkout-delivery-point-wrapper customer-not-logged-in">
 		<div class="panel-body">
 			<div class="form-group">
 				<input id="orders_someone_else" name="shipping[different_shipping_address]" type="checkbox" class="hidden"/>
-				<input id="inpost_locker_name"  name="inpost[name]" value="<?php echo $locker->getName(); ?>" type="hidden"/>
+				<input id="delivery_point_name"  name="delivery_point[name]" value="<?php echo $deliveryPoint->delivery_point_name; ?>" type="hidden"/>
 				<div class="row inpost-info">
 					<div class="col-xs-7 col-sm-6 col-md-6 col-lg-6" >
-						<strong><?php echo $helper->__("Locker InPost"); ?></strong>
-                                                
-                                                <input name="shipping[firstname]" type="hidden" value="<?php echo $helper->__("Locker InPost"); ?>"  class="form-control firstName hint" required="true" id="shipping_firstname" title=""  />
-                                                <input name="shipping[lastname]" type="hidden" value="<?php echo $locker->getName(); ?>" class="form-control lastName hint" id="shipping_lastname" title=""  required="true" />
-						<br/>
-						<span id="inpost-locker-street"><?php echo $locker->getStreet(); ?></span> <span id="inpost-locker-building-number"><?php echo $locker->getBuildingNumber(); ?></span>
-                                                <input name="shipping[street][]" type="hidden" value="<?php echo $locker->getStreet(); ?> <?php echo $locker->getBuildingNumber(); ?>" class="form-control street" id="shipping_street" title=""  required="true" />
-						<br/>
-						<span id="inpost-locker-postcode"><?php echo $locker->getPostcode(); ?></span> <span id="inpost-locker-town"><?php echo $locker->getTown(); ?></span>
-                                                <input name="shipping[postcode]" type="hidden" value="<?php echo $this->escapeHtml($locker->getPostcode()); ?>" class="form-control zipcode validate-postcodeWithReplace" required="true" id="shipping_postcode" title="" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>" />
-						<br/>
-                                                <input name="shipping[city]" type="hidden" value="<?php echo $this->escapeHtml($locker->getTown()); ?>" class="form-control city hint" id="shipping_city" title="" required="true" />
-						<span id="inpost-locker-location-description">(<?php echo $locker->getLocationDescription(); ?>)</span>
+                        <strong><?php echo $deliveryPoint->checkout->title; ?></strong>
+
+                        <input name="shipping[firstname]" type="hidden"
+                               value="<?php echo $deliveryPoint->checkout->title; ?>"
+                               class="form-control firstName hint"
+                               required="true" id="shipping_firstname" title=""/>
+                        <input name="shipping[lastname]" type="hidden" value="<?php echo $deliveryPoint->name; ?>"
+                               class="form-control lastName hint" id="shipping_lastname"
+                               title=""
+                               required="true"/>
+                        <br/>
+                        <span id="inpost-locker-street"><?php echo $deliveryPoint->street; ?></span>
+                        <span id="inpost-locker-building-number"><?php echo $deliveryPoint->buildingNumber; ?></span>
+                        <input name="shipping[street][]" type="hidden"
+                               value="<?php echo $deliveryPoint->street; ?> <?php echo $deliveryPoint->buildingNumber; ?>"
+                               class="form-control street" id="shipping_street" title="" required="true"/>
+                        <br/>
+                        <span id="inpost-locker-postcode"><?php echo $deliveryPoint->postcode; ?></span>
+                        <span id="inpost-locker-town"><?php echo $deliveryPoint->city; ?></span>
+                        <input name="shipping[postcode]" type="hidden"
+                               value="<?php echo $this->escapeHtml($deliveryPoint->postcode); ?>"
+                               class="form-control zipcode validate-postcodeWithReplace" required="true"
+                               id="shipping_postcode" title=""
+                               data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>"/>
+                        <br/>
+                        <input name="shipping[city]" type="hidden"
+                               value="<?php echo $this->escapeHtml($deliveryPoint->city); ?>"
+                               class="form-control city hint" id="shipping_city" title="" required="true"/>
+                        <span id="inpost-locker-location-description"><?php if(!empty($deliveryPoint->locationDescription)): ?>(<?php echo $deliveryPoint->locationDescription; ?>)<?php endif; ?></span>
 					</div>
 					<div class="col-xs-5 col-sm-6 col-md-6 col-lg-6 text-right">
 						<div class="figure-button-wrapper">
-							<figure class="inpost-img">
-								<div><img src="<?php echo $inpostLogo; ?>"></div>
-							</figure>
-							<br/>
+							<?php echo $deliveryPoint->checkout->logo; ?>
 							<a href="<?php echo Mage::getUrl("checkout/cart"); ?>" class="button button-third large change-locker"><?php echo $helper->__('Change'); ?></a>
 						</div>
 					</div>
@@ -129,13 +142,14 @@ $inpostLogo			= $this->getSkinUrl('images/inpost/checkout-logo.png');
 							<div class="form-group clearfix border-top">
 								<div class="row">
 									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 telephone-for-locker">
-										
-                                                                                <input type="tel" value="<?php echo $this->escapeHtml($this->getLastTelephoneForLocker()); ?>" class="form-control validate-telephone phone" id="telephone_for_locker" title="" name="shipping[telephone]" required="true" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>" />
+                                        <input type="tel" value="<?php echo $this->escapeHtml($this->getLastTelephoneForLocker()); ?>" class="form-control validate-telephone phone" id="telephone_for_locker" title="" name="shipping[telephone]" required="true" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>" />
 									</div>
-									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 telephone-for-locker-comment">
-										<?php echo $helper->__("The phone number is required to receive package from locker."); ?><br/>
-										<?php echo $helper->__("We do not use it in any other way without your permission!"); ?>
-									</div>
+                                    <?php if(!empty($deliveryPoint->checkout->additionalInfo1) || !empty($deliveryPoint->checkout->additionalInfo2)): ?>
+                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 telephone-for-locker-comment">
+                                            <?php echo $deliveryPoint->checkout->additionalInfo1; ?>
+                                            <?php echo $deliveryPoint->checkout->additionalInfo2; ?>
+                                        </div>
+                                    <?php endif; ?>
 								</div>
 							</div>
 						</fieldset>

@@ -64,11 +64,11 @@
 
 			// Common
 			getName: function() {
-				var value = jQuery("input[name='inpost[name]']").val();
+				var value = jQuery("input[name='delivery_point[name]']").val();
 				return value;
 			},
 			getTelephoneForLocker: function() {
-				var value = jQuery("input[name='inpost[telephone]']").val();
+				var value = jQuery("input[name='delivery_point[telephone]']").val();
 				return value;
 			},
 			getStreet: function() {

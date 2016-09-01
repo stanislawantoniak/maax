@@ -21,4 +21,15 @@ class Zolago_Po_Block_Vendor_Po_Edit_Payments
     }
 
 
+    public function getPickUpAddPaymentFormAction()
+    {
+        $params = array(
+            "id" => $this->getPo()->getId(),
+            "form_key" => Mage::getSingleton('core/session')->getFormKey()
+        );
+
+        return $this->getUrl("udpo/payment/addPickUpPayment", $params);
+    }
+
+
 }

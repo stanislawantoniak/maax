@@ -6,6 +6,93 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 	
 	protected $_condJoined = false;
 
+
+	/**
+	 * Is PO shipping method is zospickuppoint
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function isDeliveryPickUpPoint(Zolago_Po_Model_Po $po)
+	{
+		$shippingMethod = $po->getUdropshipMethod();
+		$deliveryMethod = $this->getMethodCodeByDeliveryType($shippingMethod);
+		$deliveryMethodCode = $deliveryMethod->getDeliveryCode();
+		$zosPickupPointMethodCode = Mage::helper("zospickuppoint")->getCode();
+
+		return (bool)($deliveryMethodCode == $zosPickupPointMethodCode);
+	}
+
+
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function isPickUpPointConfirmAvailable(Zolago_Po_Model_Po $po)
+	{
+		$isPickUpPointConfirmAvailable = false;
+
+		$_statusModel = $po->getStatusModel();
+
+		if(Mage::helper('zolagopayment')->getConfigUseAllocation($po->getStore()))
+			return $isPickUpPointConfirmAvailable;
+
+
+		if (!$this->isDeliveryPickUpPoint($po))
+			return $isPickUpPointConfirmAvailable;
+
+		if (!$po->isPaid())
+			return $isPickUpPointConfirmAvailable;
+
+		$finishedStatuses = Zolago_Po_Model_Po_Status::getFinishStatuses();
+		$poStatus = $po->getUdropshipStatus();
+
+		if (in_array($poStatus, $finishedStatuses))
+			return $isPickUpPointConfirmAvailable;
+
+
+		if ($_statusModel->isShippingAvailable($po))
+			$isPickUpPointConfirmAvailable = true;
+
+
+		if ($po->getStockConfirm())
+			$isPickUpPointConfirmAvailable = true;
+
+
+		return $isPickUpPointConfirmAvailable;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isPickUpPaymentCanBeEntered(Zolago_Po_Model_Po $po)
+	{
+		//button "enter payment" when order is not canceled and not shipped
+		$paymentHelper = Mage::helper('zolagopayment');
+		if (
+			$this->isDeliveryPickUpPoint($po)
+			&& !$paymentHelper->getConfigUseAllocation($po->getStore())
+			&& !$po->isPaid()
+			&& !in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getFinishStatuses()
+			)
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * @param $shippingMethod (ex. udtiership_4)
+	 * @return mixed
+	 */
+	public function getMethodCodeByDeliveryType($shippingMethod)
+	{
+		return Mage::helper("udropship")
+			->getOmniChannelMethodInfoByMethod(0, $shippingMethod);
+	}
+
     /**
      * to have payment status updated when PO is changed
      *
@@ -124,6 +211,50 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
         }
         $oldPo->saveComments();
     }
+
+	/**
+	 * @param Zolago_Po_Model_Po$po
+	 * @param float|string $amount
+	 */
+	public function addPickUpPaymentComment($po, $amount) {
+		$fullName = $this->getCommentAuthorFullName();
+		$comment = "[$fullName] " . $this->__("Entered pick-up payment. Amount: %s",
+				Mage::helper('core')->currency($amount, true, false));
+		$po->addComment($comment, false, true);
+		$po->saveComments();
+	}
+
+	public function addConfirmPickUpComment($po) {
+		$fullName = $this->getCommentAuthorFullName();
+		$comment = "[$fullName] " . $this->__("Confirmed pick-up order");
+		$po->addComment($comment, false, true);
+		$po->saveComments();
+	}
+
+	/**
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return string
+	 */
+	public function getCommentAuthorFullName($vendor = null, $operator = null) {
+		/** @var Zolago_Payment_Helper_Data $helperZP */
+		$helperZP = Mage::helper("zolagopayment");
+		/** @var Zolago_Dropship_Model_Session $session */
+		$session = Mage::getSingleton("zolagodropship/session");
+		/** @var Zolago_Dropship_Model_Vendor $vendor */
+		$vendor = $vendor ? $vendor : $session->getVendor();
+		/** @var Zolago_Operator_Model_Operator $operator */
+		$operator = $operator ? $operator : $session->getOperator();
+
+		if ($operator->getId()) {
+			$fullName = $operator->getVendor()->getVendorName()." / " . $operator->getEmail();
+		} elseif($vendor->getId()) {
+			$fullName = $vendor->getVendorName();
+		} else {
+			$fullName = $helperZP->__("Automat");
+		}
+		return $fullName;
+	}
 
 	/**
 	 * @param Zolago_Po_Model_Po_Item $item

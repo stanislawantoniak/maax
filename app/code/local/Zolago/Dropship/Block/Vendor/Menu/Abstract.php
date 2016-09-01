@@ -10,6 +10,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
     const ITEM_HELPDESK  = 'helpdesk';
     const ITEM_RMA		  = 'rma';
     const ITEM_ADVERTISE = 'advertise';
+	const ITEM_LOYALTY_CARD = 'loyalty_card';
     const ITEM_SETTING	  = 'setting';
     const ITEM_REGULATIONS = "regulation";
     const ITEM_STATEMENTS= 'statements';
@@ -49,6 +50,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                             self::ITEM_HELPDESK		=>	$this->getHelpdeskSection(),
                             self::ITEM_RMA			=>	$this->getRmaSection(),
                             self::ITEM_ADVERTISE	=>	$this->getAdvertiseSection(),
+                            self::ITEM_LOYALTY_CARD	=>	$this->getLoyaltyCardSection(),
                             self::ITEM_SETTING		=>	$this->getSettingSection(),
                             self::ITEM_REGULATIONS	=>	$this->getRegulationsSection(),
                             self::ITEM_STATEMENTS	=>	$this->getStatementsSection(),
@@ -167,7 +169,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	}
 
     public function getRmaSection() {
-        if($this->isModuleActive('ZolagoOs_Rma') && $this->isAllowed("urma/vendor")) {
+        if($this->isModuleActive('ZolagoOs_Rma') && $this->isAllowed("urma/vendor") && !$this->isModuleActive('ZolagoOs_NoRma')) {
             return array(
                        "active" => $this->isActive("urma") || $this->isActive("urmas"),
                        "icon"	 => "icon-exclamation-sign",
@@ -224,6 +226,23 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
         return null;
     }
 
+	public function getLoyaltyCardSection() {
+		/** @var Zolago_Common_Helper_Data $commonHlp */
+		$commonHlp = Mage::helper("zolagocommon");
+		if ($this->isModuleActive('ZolagoOs_LoyaltyCard')
+			&& $this->isAllowed(Zolago_Operator_Model_Acl::RES_LOYALTY_CARD)
+			&& $commonHlp->useLoyaltyCardSection()) {
+			return array(
+				"active" => $this->isActive("zos-loyalty-card"),
+				"icon"	 => "icon-user",
+				"label"	 => $this->__('Loyalty cards'),
+				"url"	 => $this->getUrl('loyalty/card')
+			);
+			/** @see ZolagoOs_LoyaltyCard_CardController::indexAction() */
+		}
+		return null;
+	}
+
     public function getSettingSection() {
 
         $groupOne = array();
@@ -241,12 +260,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                               "label"	 => $this->__('Shipment settings'),
                               "url"	 => $this->getUrl('udropship/vendor_settings/shipping')
                           );
-            $groupOne[] = array(
-                              "active" => $this->isActive("vendorsettings_rma"),
-                              "icon"	 => "icon-retweet",
-                              "label"	 => $this->__('RMA settings'),
-                              "url"	 => $this->getUrl('udropship/vendor_settings/rma')
-                          );
+            if(!$this->isModuleActive('ZolagoOs_NoRma')){
+                $groupOne[] = array(
+                    "active" => $this->isActive("vendorsettings_rma"),
+                    "icon"	 => "icon-retweet",
+                    "label"	 => $this->__('RMA settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/rma')
+                );
+            }
         }
 
 
@@ -294,6 +315,20 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                           );
         }
 
+
+        if (
+            $this->isModuleActive('ZolagoOs_IAIShop')
+            && $this->isAllowed("iaishop/settings")
+            && ($this->getSession()->getVendor()->getData('zosiaishop_vendor_access_allow') == 1)
+        ) {
+            $groupOne[] = array(
+                            "active" => $this->isActive("zolagoosiaishop"),
+                            "icon" => "icon-shopping-cart",
+                            "label" => $this->__('IAI-Shop settings'),
+                            "url" => $this->getUrl('iaishop/settings')
+                        );
+        }
+
         $grouped = $this->_processGroups($groupOne);
 
         if(count($grouped)) {
@@ -309,7 +344,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
                                "vendorsettings_info",
                                "vendorsettings_shipping",
                                "vendorsettings_rma",
-                               "ghapi"
+                               "ghapi",
+                               "zolagoosiaishop"
                            )
                        ),
                        "icon" => "icon-wrench",
@@ -468,15 +504,15 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 
     /**
      *
-     * @param type $module
-     * @return type
+     * @param string $module
+     * @return bool
      */
     public function isModuleActive($module) {
         return Mage::helper('udropship')->isModuleActive($module) || Mage::helper('core')->isModuleEnabled($module);
     }
 
     /**
-     * @param strign|array $in
+     * @param string|array $in
      * @return bool
      */
     public function isActive($in) {

@@ -79,11 +79,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                             <?php endif; ?>
 
                             <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-							<?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?>
-								<span class="old-price">
-									<?php echo str_replace(" ", "&nbsp;", Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?>
-								</span>
-							<?php endif; ?>
+                            <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
                             <span class="price">
                                 <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
                                     <span itemprop="price">
@@ -113,7 +109,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
     <div id="short-description" class="row">
             <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
     </div>
-    <?php if ($isSalable): ?>
+
         <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 					<!--    Meta tags-->
             <?php
@@ -168,8 +164,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                                         <a href="#" class="view-sizing" data-toggle="modal"
 												   data-target="#tabelaRozmiarow">
 												   <?php if (!empty($sizeTableValue)) : ?>
-                                                       <img src="<?php echo $this->getSkinUrl("images/svg/ruler.svg");?>">
-												       <?php echo $this->__("Sizes"); ?>
+                                                       <img src="<?php echo $this->getSkinUrl("images/svg/ruler.svg");?>"><?php echo $this->__("Sizes"); ?>
 												   <?php endif; ?>
                                         </a>
                                 </div>
@@ -187,14 +182,10 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 							        id="add-to-cart"
 							        onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); 
                     ?></button>
-                <?php else: ?>
-                    <div class="temporary-absence-product-wrapper">
-                        <span class="temporary-absence-product"><?php echo $hlp->__("Product temporary<br />unavailable"); ?></span>
-                    </div>
                 <?php endif; ?>
             </div>
         </div>
-    <?php else: ?>
+	<?php if (!$isSalable): ?>
                     <div class="temporary-absence-product-wrapper">
                         <span class="temporary-absence-product"><?php echo $hlp->__("Product temporary unavailable"); ?></span>
                     </div>

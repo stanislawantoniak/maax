@@ -1,6 +1,6 @@
 #header {
-	@include max-screen($screen-sm-max) {
-		padding-top: 80px;
+	@include max-screen($screen-xs-max) {
+		padding-top: 85px;
 	}
 }
 
@@ -41,8 +41,8 @@
 .is-content-mode {
   .header_bottom {
     @media (max-width: $screen-xs-max) {
-      background: none; 
-      background-color: $color_ffffff; 
+      background: none;
+      background-color: $color_ffffff;
       margin-bottom: 10px;
     }
     #navCategory {
@@ -101,7 +101,7 @@
 
 .sidebar-first {
 	#content-main {
-		margin-left: 205px; 
+		margin-left: 205px;
 		@media (max-width: $screen-xs-max) {
 			margin-left: 0 !important;
 		 }
@@ -111,7 +111,7 @@
 	&.sidebar-first {
 		#content-main {
 			margin-left: 205px; //?? =$widthSidebar
-			@media (max-width: $screen-md-min) { 
+			@media (max-width: $screen-md-min) {
 				margin-left: 0;
 			 }
 		}
@@ -202,12 +202,12 @@ section.bottom {
 }
 .node-type-list {
 	#header {
-		@media (max-width: $screen-xs-max) { 
+		@media (max-width: $screen-xs-max) {
 			min-height: 42px;
 		}
 	}
 	#nav_mobile {
-		@media (max-width: $screen-xs-max) { 
+		@media (max-width: $screen-xs-max) {
 			display:none!important;
 		 }
 	}
@@ -276,6 +276,9 @@ section {
 				padding:0px;
 			}
 		}
+		&#tab_delivery {
+			padding: 30px 0 0!important;
+		}
 		&#note_product {
 			header {
 				h2.title_section, h5.title_section {
@@ -308,7 +311,7 @@ section {
 		}
 		.main {
 			padding: 20px 35px 30px;
-			
+
 			@media (max-width: $screen-xs-max) {
 				//display:none;
 			}
@@ -361,7 +364,7 @@ section {
 .sidebar-secondary {
 	#content-main {
 		&.col-sm-9 {
-			@media (min-width: $screen-sm-min) { 
+			@media (min-width: $screen-sm-min) {
 			padding-right: 0px;
 			width:71.444%;
 			}
@@ -369,7 +372,7 @@ section {
 	}
 	#sidebar-secondary {
 		&.col-sm-3 {
-			@media (min-width: $screen-sm-min) { 
+			@media (min-width: $screen-sm-min) {
 				padding-right: 0px;
 				width:27.888%;
 			}
@@ -382,7 +385,7 @@ section {
 		padding-left: 0px;
 	}
 	#header {
-	@media (max-width: $screen-xs-max) { 	
+	@media (max-width: $screen-xs-max) {
 	min-height: 45px;
 }
 	}
@@ -399,7 +402,10 @@ section {
 	}
 	.sidebar-second {
 		@media (max-width: $screen-sm-max) {
-			padding-left: 15px;
+			padding: 0 40px  0 15px;
+		}
+		@media (max-width: $screen-xs-max) {
+			padding: 0 15px  0 15px;
 		}
 	}
 }
@@ -408,11 +414,23 @@ section {
 .node-type-shopping-cart {
 	#content-main {
 		> .main {
-			padding:0 28px 0 26px;
-			@media (max-width: $screen-xs-max) { 
+			padding:0 28px 0 0;
+			@media (max-width: $screen-xs-max) {
 				padding:0 4px 0 4px;
-				margin: 10px -10px;
+				margin: 0px -10px;
 
+			}
+		}
+	}
+	.empty-cart {
+		#content-main {
+			> .main {
+				padding: 0 15px;
+				border: solid 1px $color_ebebeb !important;
+				@media (max-width: $screen-xs-max) {
+					padding:0 4px 0 4px;
+					margin: 0px -10px;
+				}
 			}
 		}
 	}
@@ -420,9 +438,9 @@ section {
 		> .main {
 			padding:0 15px;
 			border: solid 1px $color_ebebeb;
-			@media (max-width: $screen-xs-max) { 
+			@media (max-width: $screen-xs-max) {
 				padding:0 4px 0 4px;
-				margin: 10px -10px;
+				margin: 10px -5px;
 
 			}
 		}
@@ -443,7 +461,7 @@ section {
 		i {
 			@media (min-width: 361px) and (max-width: 767px) {
 				right: 25px;
-			} 
+			}
 			@media (max-width: 360px) {
 				right: 14px;
 			}

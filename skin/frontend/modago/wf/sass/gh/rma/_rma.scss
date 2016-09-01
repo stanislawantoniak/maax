@@ -214,7 +214,7 @@
 	.glyphicon-comment {
 		float: left;
 		margin-right: 5px;
-		margin-top: 3px;
+        line-height: $line-height-base;
 	}
 	.caption {
 		display: block;
@@ -720,5 +720,5 @@
 .sales-rma-view .title-section .headerTop h2 {
 	font-family: $fontRegular;
 	font-weight: bold;
-	margin: 0 -15px 15px;
+	margin: 0 15px 15px 0;
 }

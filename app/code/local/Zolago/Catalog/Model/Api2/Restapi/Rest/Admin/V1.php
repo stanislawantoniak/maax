@@ -247,6 +247,29 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $coll));
     }
 
+
+    /**
+     * @param $skeleton
+     * @param $priceBatch
+     */
+    public static function saveExternalPriceAttributes($skeleton, $priceBatch)
+    {
+        /* @var $aM Zolago_Catalog_Model_Product_Action */
+        $aM = Mage::getSingleton('catalog/product_action');
+
+        $priceLabels = array("A", "B", "C", "Z", "salePriceBefore");
+        foreach ($skeleton as $sku => $id) {
+            $attrData = array();
+
+            foreach ($priceLabels as $priceLabel) {
+                if (!empty(isset($priceBatch[$sku][$priceLabel]) && (float)$priceBatch[$sku][$priceLabel]) > 0)
+                    $attrData["external_price_{$priceLabel}"] = (string)$priceBatch[$sku][$priceLabel];
+            }
+
+            $aM->updateAttributesPure(array($id), $attrData, 0);
+        }
+    }
+
     /**
      * @param $priceBatch
      */
@@ -264,6 +287,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         if (empty($skeleton))
             return;
 
+        self::saveExternalPriceAttributes($skeleton, $priceBatch);
 
         /* @var $model Zolago_Catalog_Model_Resource_Product */
         $model = Mage::getResourceModel('zolagocatalog/product');

@@ -60,6 +60,27 @@ $productDescription = $_helper->productAttribute($_product, nl2br($_product->get
 $brandShopProductId = $_product->getData('brandshop');
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
+<div class="path_back_to_category visible-xs">
+	<?php if ($isVendorContent): ?>
+		<div class="col-xs-12 brandshop">
+			<a href="<?php echo $this->getVendorUrl(); ?>">
+				<?php echo $vendorContext->isBrandshop() ? $this->__("Brandshop") : $this->__("Vendor"); ?>
+				<img alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"
+					 src="<?php echo $this->getVendorLogoUrl(); ?>">
+			</a>
+		</div>
+	<?php endif; ?>
+	<div class="col-xs-12">
+		<?php if (Mage::registry('mobile_breadcrumb')): ?>
+			<?php $mobileBreadcrumb = Mage::registry('mobile_breadcrumb'); ?>
+			<a href="<?php echo $mobileBreadcrumb['link']; ?>" id="pbtc_link"><i
+					class="fa fa-angle-left"></i> <?php echo $mobileBreadcrumb['label']; ?></a>
+		<?php else: ?>
+			<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i
+					class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+		<?php endif; ?>
+	</div>
+</div>
 <div id="content" class="container-fluid">
     <div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
@@ -84,9 +105,11 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
                 <li>
                     <a class="opened" name="description_product" href="#description_product">Opis produktu</a>
                 </li>
+                <!--
                 <li class="hidden-xs">
                     <a href="#tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
-                </li>                
+                </li>
+                -->
                 <?php if (!empty($deliveryReturn)) : ?>
                 <li class="hidden-xs">
                     <a href="#tab_delivery">Dostawa i zwroty</a>
@@ -133,13 +156,15 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
                 </div>
             </section>
             <!-- SECTION : OPIS PRODUKTU -->
+            <!--
             <ul class="title_section">
                 <li>
                     <a class="opened" name="tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
                 </li>
             </ul>
+            -->
             <!--reviews-->
-                <?php echo $this->getChildHtml('product.review.section'); ?>
+                <?php // echo $this->getChildHtml('product.review.section'); ?>
             <!--end reviews-->
             <?php if (!empty($deliveryReturn)) : ?>
             <ul class="title_section">
@@ -217,7 +242,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 						</a>
 					</div>
 					<div class="button-after-add-to-cart" id="cart-after-add-to-cart">
-						<a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-secondary medium link">
+						<a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium link">
 							<?php echo $this->__("Go to shopping cart"); ?>
 						</a>
 					</div>
@@ -226,14 +251,13 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
-	<div class="modal-dialog">
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<button type="button" class="close" data-dismiss="modal"></button>
-
-			<div class="modal-body">
+			<div class="modal-body" style="overflow-y: hidden;">
 				<div id="sizeTableIframeContainer">
-					<iframe id="sizeTableIframe"></iframe>
+					<iframe id="sizeTableIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
 				</div>
 			</div>
 		</div>
@@ -245,7 +269,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"></button>
-				<h2 class="title_section"><?php echo $this->__("Submit a question about product"); ?></h2>
+				<h2 class="title_section"><?php echo Mage::helper('wfwf')->__("Ask about product"); ?></h2>
 			</div>
 			<div class="modal-body">
 				<?php echo $this->getChildHtml('udqa.product.question.product'); ?>

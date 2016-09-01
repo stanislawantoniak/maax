@@ -4,6 +4,131 @@
  */
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
+
+	/**
+	 * @param $deliveryMethod
+	 * @param $deliveryPointIdentifier
+	 * @return array
+	 */
+	public function getDeliveryPointData($deliveryPointIdentifier)
+	{
+		$data = array();
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+		//Zend_Debug::dump($deliveryMethodData);
+		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+		switch ($deliveryMethodCode) {
+			case 'zolagopickuppoint':
+				$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
+				$data = array(
+					"id" => $pos->getId(),
+					"city" => (string)ucwords(strtolower($pos->getCity())),
+					"value" => $pos->getId()
+				);
+				break;
+			case 'ghinpost':
+				/* @var $locker GH_Inpost_Model_Locker */
+				$locker = $this->getInpostLocker();
+
+				$data = array(
+					"id" => $locker->getId(),
+					"city" => (string)ucwords(strtolower($locker->getTown())),
+					"value" => $locker->getName()
+				);
+				break;
+            case 'zolagopwr':
+				/* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $this->getPwrPoint();
+
+				$data = array(
+                    "id" => $point->getId(),
+                    "city" => (string)ucwords(strtolower($point->getTown())),
+                    "value" => $point->getName()
+                );
+				break;
+		}
+		return $data;
+	}
+
+	/**
+	 * Delivery point info constructor for checkout
+	 * @return stdClass
+	 */
+	public function getDeliveryPointCheckout(){
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+
+		$deliveryPoint = new stdClass();
+		$deliveryPoint->id = NULL;
+		$deliveryPoint->checkout = new stdClass();
+		switch ($deliveryMethodCode) {
+			case 'zolagopickuppoint':
+				/* @var $pos  Zolago_Pos_Model_Pos */
+				$pos = $helper->getPickUpPoint();
+
+				$deliveryPoint->id = $pos->getId();
+				$deliveryPoint->name = $pos->getName();
+				$deliveryPoint->delivery_point_name = $pos->getId(); //this value will be saved to PO(delivery_point_name)
+				$deliveryPoint->city = $pos->getCity();
+				$deliveryPoint->street = $pos->getStreet();
+				$deliveryPoint->buildingNumber = "";
+				$deliveryPoint->postcode = $pos->getPostcode();
+				$deliveryPoint->locationDescription = "";
+
+				$deliveryPoint->checkout->title = $helper->__("Pick-Up Point");
+				$deliveryPoint->checkout->logo = '<figure class="truck"><i class="fa fa-map-marker fa-3x"></i></figure>';
+				$deliveryPoint->checkout->additionalInfo1 = "";
+				$deliveryPoint->checkout->additionalInfo2 = "";
+				break;
+			case 'ghinpost':
+				/* @var $locker GH_Inpost_Model_Locker */
+				$locker = $helper->getInpostLocker();
+
+				$deliveryPoint->id = $locker->getId();
+				$deliveryPoint->name = $locker->getName();
+				$deliveryPoint->delivery_point_name = $locker->getName(); //this value will be saved to PO(delivery_point_name)
+				$deliveryPoint->city = $locker->getTown();
+				$deliveryPoint->street = $locker->getStreet();
+				$deliveryPoint->postcode = $locker->getPostcode();
+				$deliveryPoint->buildingNumber = $locker->getBuildingNumber();
+				$deliveryPoint->locationDescription = $locker->getLocationDescription();
+
+				$deliveryPoint->checkout->title = $helper->__("Locker InPost");
+				$deliveryPoint->checkout->logo = '<figure class="inpost-img"><div><img src="'.$this->getSkinUrl('images/inpost/checkout-logo.png').'"></div></figure><br/>';
+				$deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
+				$deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
+				break;
+            case 'zolagopwr':
+                /* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $helper->getPwrPoint();
+
+                $deliveryPoint->id = $point->getId();
+                $deliveryPoint->name = $point->getName();
+                $deliveryPoint->delivery_point_name = $point->getName();
+                $deliveryPoint->city = $point->getTown();
+                $deliveryPoint->street = $point->getStreet();
+                $deliveryPoint->postcode = $point->getPostcode();
+                $deliveryPoint->buildingNumber = $point->getBuildingNumber();
+                $deliveryPoint->locationDescription = $point->getLocationDescription();
+
+                $deliveryPoint->checkout->title = $helper->__("Locker PwR");
+                $deliveryPoint->checkout->logo = '<figure class="pwr-img"><div><img src="'.$this->getSkinUrl('images/pwr/checkout-logo.png').'"></div></figure><br/>';
+                $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
+                $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
+                break;
+		}
+
+		return $deliveryPoint;
+	}
 	/**
 	 * @return GH_Inpost_Model_Locker
 	 */
@@ -13,6 +138,15 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 		$locker = $helper->getInpostLocker();
 		return $locker;
 	}
+    /**
+     * @return ZolagoOs_Pwr_Model_Point
+     */
+    public function getPwrPoint() {
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $point = $helper->getPwrPoint();
+        return $point;
+    }
 
 	public function getLastTelephoneForLocker() {
 		$shippingAddress = $this->getQuote()->getShippingAddress();
@@ -261,4 +395,15 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
         return $qRates;
     }
+
+
+	/**
+	 * @param $udropshipMethod  example udtiership_1
+	 * @return Varien_Object
+	 */
+	public function getOmniChannelMethodInfoByMethod($udropshipMethod)
+	{
+		$storeId = Mage::app()->getStore()->getId();
+		return Mage::helper("udropship")->getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod);
+	}
 }

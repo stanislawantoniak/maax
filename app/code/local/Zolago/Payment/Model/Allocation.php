@@ -106,11 +106,11 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 
 	/**
 	 * @param int|Zolago_Po_Model_Po $poId
-	 * @return int|bool
+	 * @return float
 	 */
     public function getSumOfAllocations($poId) {
 	    $poId = $this->getPoId($poId);
-        return $poId ? $this->getResource()->getSumOfAllocations($poId) : false;
+        return $poId ? $this->getResource()->getSumOfAllocations($poId) : 0.0;
     }
 
     public function allocateOverpayment($newPo, $transactionId) {
@@ -302,7 +302,7 @@ class Zolago_Payment_Model_Allocation extends Mage_Core_Model_Abstract {
 		/** @var Zolago_Payment_Model_Resource_Allocation_Collection $collection */
         $po_id = $this->getPoId($po);
 
-		$collection = $this->getPoAllocations($po_id);
+		$collection = $this->getPoAllocations($po);
 		if($collection) {
 			$collection->addPoIdFilter($po_id);
 			$collection->getSelect()->where("main_table.allocation_type = ?",self::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT);

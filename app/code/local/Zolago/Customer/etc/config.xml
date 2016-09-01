@@ -29,6 +29,11 @@
 	                <session>Zolago_Customer_Model_Session</session>
                 </rewrite>
             </customer>
+			<customer_resource>
+				<rewrite>
+					<customer>Zolago_Customer_Model_Resource_Customer</customer>
+				</rewrite>
+			</customer_resource>
             <core>
                 <rewrite>
                     <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
@@ -150,16 +155,6 @@
                     <model>zolagocustomer/observer::cleanOldTokens</model>
                 </run>
             </zolagocustomer_clear_old_tokens>
-			<!-- Attach customer to customer groups depends on card type -->
-            <zolagocustomer_layalty_cards_to_groups>
-				<schedule>
-					<!-- Run every 5 minutes -->
-					<cron_expr>*/5 * * * *</cron_expr>
-				</schedule>
-				<run>
-					<model>zolagocustomer/observer::attachCustomersToGroupsByLoyaltyCardType</model>
-				</run>
-			</zolagocustomer_layalty_cards_to_groups>
         </jobs>
     </crontab>
 	<default>

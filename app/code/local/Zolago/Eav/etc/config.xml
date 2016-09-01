@@ -17,11 +17,11 @@
 		</routers>
 		<translate>
 			<modules>
-				<Zolago_Pos>
+				<Zolago_Eav>
 					<files>
 						<default>Zolago_Eav.csv</default>
 					</files>
-				</Zolago_Pos>
+				</Zolago_Eav>
 			</modules>
 		</translate>		
 	</frontend>
@@ -83,11 +83,11 @@
 	<adminhtml>
 		<translate>
 			<modules>
-				<Zolago_Pos>
+				<Zolago_Eav>
 					<files>
 						<default>Zolago_Eav.csv</default>
 					</files>
-				</Zolago_Pos>
+				</Zolago_Eav>
 			</modules>
 		</translate>
 	</adminhtml>

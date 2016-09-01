@@ -37,19 +37,14 @@
           margin: 0px 10px 7px 0px;
           position: relative;
           .box-with-x {
-            float: right;
-            width: 30px;
-            height: 30px;
-            top: -6px;
             background-color: $colorAccentBlocks;
-            position: relative;
-            margin-left: 0;
+            padding: 5px;
+            text-align: center;
             border-top: 1px solid $bc-secondary;
-            border-bottom: 1px solid $bc-secondary;
-            margin-left: 10px;
+            border-bottom: 1px solid $colorAccentBlocks;
+            margin-left: 5px;
             .fa {
-              padding: 7px 10px;
-              margin: 0;
+              margin: 0 5px !important;
             }
           }
         }
@@ -91,7 +86,7 @@
 	.backToCategory {
 	    position:absolute;
 		right: 15px;
-		top:10px;
+		top:0px;
 
 	        }
 	.breadcrumb {
@@ -121,8 +116,8 @@
     h1 {
       @media (max-width: $screen-sm-to-smmd-max) {
         padding-bottom: 0px;
-        padding-top:12px;
-        width: 84%;
+        padding-top:0px;
+        width: 80%;
       }
     }
     dl {

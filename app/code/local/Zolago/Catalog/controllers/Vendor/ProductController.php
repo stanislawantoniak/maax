@@ -43,102 +43,103 @@ class Zolago_Catalog_Vendor_ProductController
                 $collection->addAttributeToFilter($key, $value);
             }
             $global = true;
-			$ids = array();
-			$idName = $collection->getEntity()->getIdFieldName();
-			foreach ($collection->getData() as $row) {
-				$ids[] = (int)$row[$idName];
-			}
+            $ids = array();
+            $idName = $collection->getEntity()->getIdFieldName();
+            foreach ($collection->getData() as $row) {
+                $ids[] = (int)$row[$idName];
+            }
         }
 
         try {
             $response = array(
-                "changed_ids" => $ids,
-                "global" => $global
-            );
-
-            switch ($method) {
-                /**
-                 *Handle mass save
-                 */
-                case "attribute":
-                    $attributeCode = key($request->getParam("attribute"));
-                    $attributeValue = $request->getParam("attribute")[$attributeCode];
-
-                    /**
-                     * Save attribute change history
-                     */
-
-                    /* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
-                    $descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
-                    $descriptionHistoryModel->updateChangesHistory(
-                        $this->getVendorId(),
-                        $ids,
-                        $attributeCode,
-                        $attributeValue,
-                        $this->_getCollection(),
-                        $attributeMode[$attributeCode]
-                    );
-
-                    /*Save attribute change history*/
-
-                    if ($attributeCode == "description" || $attributeCode == "short_description") {
-                        $attributeValue = Mage::helper("zolagocatalog")->secureInvisibleContent($attributeValue);
-                    } elseif ($attributeCode == 'name') {
-                        $attributeValue = Mage::helper("zolagocatalog")->cleanProductName($attributeValue);
-                    }
-                    $this->_processAttributresSave(
-                        $ids,
-                        array($attributeCode => $attributeValue),
-                        $storeId,
-                        array("attribute_mode" => $request->getParam("attribute_mode"))
-                    );
-
-                    break;
-                /**
-                 * Handle status change
-                 */
-                case "confirm":
-                    $attributeCode = "description_status";
-                    $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
-                    $validationData = $this->_validateProductAttributes($ids, $attributeSetId, $storeId);
-
-                    $validatedIds = $validationData['ids'];
-                    $errorIds = array_values(array_diff($ids,$validatedIds));
-                    $error = $validationData['error'];
-                    $success = false;
-
-                    $validatedIdsCount = count($validatedIds);
-                    if($validatedIdsCount) {
-                        $this->_processAttributresSave(
-                            $validatedIds,
-                            array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
-                            ),
-                            $storeId,
-                            array("check_editable" => false)
+                            "changed_ids" => $ids,
+                            "global" => $global
                         );
 
-                        $this->_generateUrlKeys($validatedIds, $storeId);
+            switch ($method) {
+            /**
+             *Handle mass save
+             */
+            case "attribute":
+                $attributeCode = key($request->getParam("attribute"));
+                $attributeValue = $request->getParam("attribute")[$attributeCode];
 
-                        if ($error) {
-                            $success = '<div class="alert alert-success">' .
-                                Mage::helper('zolagocatalog')->__('Descriptions for %d products have been accepted', $validatedIdsCount) .
-                                '</div>';
-                        }
-                    }
+                /**
+                 * Save attribute change history
+                 */
+
+                /* @var $descriptionHistoryModel Zolago_Catalog_Model_Description_History */
+                $descriptionHistoryModel = Mage::getModel("zolagocatalog/description_history");
+                $descriptionHistoryModel->updateChangesHistory(
+                    $this->getVendorId(),
+                    $ids,
+                    $attributeCode,
+                    $attributeValue,
+                    $this->_getCollection(),
+                    $attributeMode[$attributeCode]
+                );
+
+                /*Save attribute change history*/
+
+                if ($attributeCode == "description" || $attributeCode == "short_description") {
+                    $attributeValue = Mage::helper("zolagocatalog")->secureInvisibleContent($attributeValue);
+                }
+                elseif ($attributeCode == 'name') {
+                    $attributeValue = Mage::helper("zolagocatalog")->cleanProductName($attributeValue);
+                }
+                $this->_processAttributresSave(
+                    $ids,
+                    array($attributeCode => $attributeValue),
+                    $storeId,
+                    array("attribute_mode" => $request->getParam("attribute_mode"))
+                );
+
+                break;
+            /**
+             * Handle status change
+             */
+            case "confirm":
+                $attributeCode = "description_status";
+                $attributeValue = $this->_getSession()->getVendor()->getData("review_status");
+                $validationData = $this->_validateProductAttributes($ids, $attributeSetId, $storeId);
+
+                $validatedIds = $validationData['ids'];
+                $errorIds = array_values(array_diff($ids,$validatedIds));
+                $error = $validationData['error'];
+                $success = false;
+
+                $validatedIdsCount = count($validatedIds);
+                if($validatedIdsCount) {
+                    $this->_processAttributresSave(
+                        $validatedIds,
+                        array("description_status" => $this->_getSession()->getVendor()->getData("review_status"),
+                             ),
+                        $storeId,
+                        array("check_editable" => false)
+                    );
+
+                    $this->_generateUrlKeys($validatedIds, $storeId);
 
                     if ($error) {
-                        $response['message'] = ($success ? $success : '') . ($error ? $error : '');
+                        $success = '<div class="alert alert-success">' .
+                                   Mage::helper('zolagocatalog')->__('Descriptions for %d products have been accepted', $validatedIdsCount) .
+                                   '</div>';
                     }
+                }
 
-                    if(count($errorIds)) {
-                        $response['changed_ids'] = $errorIds;
-                        $response['global'] = false;
-                    }
+                if ($error) {
+                    $response['message'] = ($success ? $success : '') . ($error ? $error : '');
+                }
+
+                if(count($errorIds)) {
+                    $response['changed_ids'] = $errorIds;
+                    $response['global'] = false;
+                }
 
 
-                    break;
-                default:
-                    Mage::throwException("Invalid mass method");
+                break;
+            default:
+                Mage::throwException("Invalid mass method");
 
             }
             /**
@@ -211,7 +212,7 @@ class Zolago_Catalog_Vendor_ProductController
 
             //almost always attribute set is changed for configurable products so it doesn't hurt to get all related products always
             $children = Mage::getResourceModel('catalog/product')
-                ->getRelatedProducts($ids,true);
+                        ->getRelatedProducts($ids,true);
 
             $allIds = array_merge($ids,$children);
 
@@ -221,7 +222,7 @@ class Zolago_Catalog_Vendor_ProductController
             $tableName = $resource->getTableName('catalog/product');
 
             $query = "UPDATE `".$tableName."`".
-                "SET `attribute_set_id` = '".$attributeSetMoveToId."' WHERE `entity_id` IN (".implode(",",$allIds).")";
+                     "SET `attribute_set_id` = '".$attributeSetMoveToId."' WHERE `entity_id` IN (".implode(",",$allIds).")";
 
             $writeConnection->query($query);
 
@@ -229,10 +230,10 @@ class Zolago_Catalog_Vendor_ProductController
 
 
             Mage::getSingleton('catalog/product_action')
-                ->updateAttributes($ids, array('description_status'=>1), Mage_Core_Model_App::ADMIN_STORE_ID);
+            ->updateAttributes($ids, array('description_status'=>1), Mage_Core_Model_App::ADMIN_STORE_ID);
 
             Mage::getModel("zolagomapper/queue_product")
-                ->pushProductToMapperQueue($ids);
+            ->pushProductToMapperQueue($ids);
 
             $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
             $attributeSetModel->load($attributeSetMoveToId);
@@ -247,23 +248,23 @@ class Zolago_Catalog_Vendor_ProductController
             $productIdsCount = count($ids);
 
             $response = array(
-                "status" => 1,
-                "changed_ids" => $changedIds,
-                "count" => $productIdsCount,
-                "message" => $helper->__("<b>%s</b> product(s) moved to category <b>%s</b>", $productIdsCount, $attributeSetName)
-            );
+                            "status" => 1,
+                            "changed_ids" => $changedIds,
+                            "count" => $productIdsCount,
+                            "message" => $helper->__("<b>%s</b> product(s) moved to category <b>%s</b>", $productIdsCount, $attributeSetName)
+                        );
 
             Mage::unregister(Zolago_Turpentine_Model_Observer_Ban::NO_BAN_AFTER_PRODUCT_SAVE);
         } catch (GH_Common_Exception $e) {
             $response = array(
-                "status" => 0,
-                "message" => $e->getMessage()
-            );
+                            "status" => 0,
+                            "message" => $e->getMessage()
+                        );
         } catch (Exception $e) {
             $response = array(
-                "status" => 0,
-                "message" => $helper->__("Some error occurred. Contact administrator.")
-            );
+                            "status" => 0,
+                            "message" => $helper->__("Some error occurred. Contact administrator.")
+                        );
             Mage::logException($e);
         }
 
@@ -272,6 +273,17 @@ class Zolago_Catalog_Vendor_ProductController
     }
 
 
+
+    /**
+     *
+     * @param
+     * @return
+     */
+    protected function _prepareActualUrlKeyByStore($ids) {
+        $obj = Mage::getResourceModel('catalog/product');
+        $list = $obj->getUrlKeysByStore($ids);
+        return $list;
+    }
     /**
      * re-generate short url for products
      *
@@ -284,15 +296,37 @@ class Zolago_Catalog_Vendor_ProductController
         $string = Mage::getSingleton('catalog/product_url');
         /** @var Zolago_Catalog_Model_Url $url */
         $url = Mage::getSingleton('catalog/url');
-        $url->setShouldSaveRewritesHistory(false);
+        $url->setShouldSaveRewritesHistory(true);
         $resource = $url->getResource();
+        $stores = Mage::app()->getStores();
+        $storeIds = array($storeId);
+        foreach ($stores as $store) {
+            $storeIds[] = $store->getId();
+        }
+        $urlRewriteCollection = Mage::getModel('core/url_rewrite')->getCollection()
+                                ->addFieldToFilter('product_id', array('in' =>  $ids));
+        $urlList = array();
+        foreach ($urlRewriteCollection as $itemUrl) {
+            $urlList[$itemUrl->getProductId()][$itemUrl->getStoreId()] = $itemUrl->getRequestPath();
+        }
+        $productList = $this->_prepareActualUrlKeyByStore($ids);
         foreach ($ids as $id) {
             /** @var Zolago_Catalog_Model_Product $model */
-            $model = Mage::getModel('catalog/product')->load($id);
-            $model->setData('store_id', $storeId); // Trick
-            $model->setUrlKey($string->formatUrlKey($model->getName()));
-            $resource->saveProductAttribute($model, 'url_key');
-            $url->refreshProductRewrite($id);
+            $refresh = false;
+            foreach ($storeIds as $sId) {
+                if ($key = empty($productList[$id][$sId])? (empty($productList[$id][0])? '':$productList[$id][0]):$productList[$id][$sId]) {
+                    if (empty($urlList[$id][$sId]) || ($urlList[$id][$sId] != $key)) {
+                        $model = Mage::getModel('catalog/product')->setStoreId($sId)->load($id);
+                        $model->setData('store_id', $sId); // Trick
+                        $model->setUrlKey($key);
+                        $resource->saveProductAttribute($model, 'url_key');
+                        $refresh = true;
+                    }
+                }
+            }
+            if ($refresh) {
+                $url->refreshProductRewrite($id);
+            }
         }
     }
 
@@ -324,7 +358,8 @@ class Zolago_Catalog_Vendor_ProductController
                     $value = $inParams[$key];
                     if (is_string($value) && trim($value) == "") {
                         continue;
-                    } elseif (is_array($value)) {
+                    }
+                    elseif (is_array($value)) {
                         continue;
                     }
                     if ($value === self::NULL_VALUE) {
@@ -355,9 +390,9 @@ class Zolago_Catalog_Vendor_ProductController
         $out = array();
         foreach ($this->getGridModel()->getColumns() as $column) {
             if ($column->getAttribute() &&
-                $column->getAttribute()->getFrontendInput() == $type &&
-                $column->getFilterable() !== false
-            ) {
+                    $column->getAttribute()->getFrontendInput() == $type &&
+                    $column->getFilterable() !== false
+               ) {
                 $out[$column->getAttribute()->getAttributeCode()] = $column->getAttribute();
             }
         }
@@ -470,9 +505,9 @@ class Zolago_Catalog_Vendor_ProductController
             $class = count($idsToUpdate) ? "warning" : "danger";
             $errorMsg =
                 '<div class="alert alert-' . $class . '">' .
-                Mage::helper('zolagocatalog')->__('Discovered %d validation problems:', $countErrorProducts) .
-                '</div>' .
-                implode("<br/>", $errorProducts);
+                    Mage::helper('zolagocatalog')->__('Discovered %d validation problems:', $countErrorProducts) .
+                    '</div>' .
+                    implode("<br/>", $errorProducts);
         }
 
         return array('ids' => $idsToUpdate, 'error' => $errorMsg);
@@ -485,9 +520,9 @@ class Zolago_Catalog_Vendor_ProductController
     protected function _isVisibleInGrid(Mage_Catalog_Model_Resource_Eav_Attribute $attribute)
     {
         return in_array(
-            $attribute->getGridPermission(),
-            $this->getGridModel()->getGridAttributeTypes()
-        );
+                   $attribute->getGridPermission(),
+                   $this->getGridModel()->getGridAttributeTypes()
+               );
     }
 
     /**
@@ -507,13 +542,13 @@ class Zolago_Catalog_Vendor_ProductController
             if ($attribute->getIsRequired() && $this->_isVisibleInGrid($attribute)) {
                 /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
                 $value = Mage::getResourceModel('catalog/product')->getAttributeRawValue(
-                    $product->getId(), $attribute->getAttributeCode(), $storeId);
+                             $product->getId(), $attribute->getAttributeCode(), $storeId);
                 if ($attribute->isValueEmpty($value) ||
-                    (in_array($attribute->getFrontendInput(), array("select", "multiselect")) && $value === false)
-                ) {
+                        (in_array($attribute->getFrontendInput(), array("select", "multiselect")) && $value === false)
+                   ) {
                     //Mage::log($attribute->getAttributeCode() . ": " . var_export($value, 1));
                     $missingAttributes[$attribute->getAttributeCode()] = $attribute->getStoreLabel(
-                        $this->_getSession()->getVendor()->getLabelStore());
+                                $this->_getSession()->getVendor()->getLabelStore());
                 }
             }
         }

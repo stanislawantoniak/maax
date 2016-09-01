@@ -68,6 +68,17 @@
       </modules>
     </translate>
   </global>
+  <adminhtml>
+    <translate>
+      <modules>
+        <Orba_Shipping>
+          <files>
+            <default>Orba_Shipping.csv</default>
+          </files>
+        </Orba_Shipping>
+      </modules>
+    </translate>
+  </adminhtml>
   <frontend>
     <routers>
       <orbashipping>
@@ -136,7 +147,20 @@
           <tracking_password>PPSA</tracking_password>
           <title>Poczta Polska</title>          
           <model>orbashipping/post</model>
+          <cod_allowed>1</cod_allowed>
       </zolagopp>
+      <zolagogls>
+          <active>1</active>
+          <tracking_gateway><![CDATA[https://gls-group.eu/app/service/open/rest/PL/pl/rstt001]]></tracking_gateway>
+          <title>GLS</title>          
+          <model>orbashipping/carrier_gls</model>
+      </zolagogls>
+      <zolagodpd>
+        <active>1</active>
+        <tracking_gateway><![CDATA[https://tracktrace.dpd.com.pl/findPackage]]></tracking_gateway>
+        <title>DPD</title>
+        <model>orbashipping/carrier_dpd</model>
+      </zolagodpd>
     </carriers>
   </default>
 </config>
