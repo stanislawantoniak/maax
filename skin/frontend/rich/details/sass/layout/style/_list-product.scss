@@ -108,6 +108,10 @@
       .likeAdded {
         background: #e8e8e8;
         padding: 8px 10px;
+
+        @media (max-width: 340px) {
+          padding: 8px;
+        }
       }
       .icoLike, &.liked .icoLike {
         font-size: 16px !important;
@@ -122,19 +126,6 @@
         &.fa-spinner {
           background-image: none !important;
           color: $text-color;
-        }
-      }
-      .icoLike {
-        //background-image: url('../images/svg/unlike.svg');
-        &:hover {
-          //background-image: url('../images/svg/like.svg');
-        }
-      }
-
-      &.liked .icoLike {
-        //background-image: url('../images/svg/like.svg');
-        &:hover {
-          //background-image: url('../images/svg/unlike.svg');
         }
       }
 
@@ -215,26 +206,7 @@
 
   }
 }
-html.is-browser-mobile {
-  .box_listing_product {
-    .price {
-      .like {
-        .icoLike {
-          //background-image: url('../images/svg/unlike.svg');
-          &:hover {
-            //background-image: url('../images/svg/unlike.svg');
-          }
-        }
-        &.liked .icoLike {
-          //background-image: url('../images/svg/like.svg');
-          &:hover {
-            //background-image: url('../images/svg/like.svg');
-          }
-        }
-      }
-    }
-  }
-}
+
 .catalog-category-view .title-section {
   text-align: center !important;
 }
