@@ -25,8 +25,7 @@ $productAttrs = array();
 if ($_product->getTypeId() == 'configurable') {
 	$productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
 }
-$maxQty = (int)$_product->getData('stock_item')->getQty();
-$minQty = (int)$_product->getData('stock_item')->getMinSaleQty();
+
 
 $_helperSizetable = Mage::helper('zolagosizetable');
 /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
@@ -44,6 +43,17 @@ $returnHeadline = trim($this->getStoreReturnHeadline());
 $reviewsAvg = $this->getReviewsAvg();
 $reviewsCount = $this->getReviewsCount();
 $reviewsLabel = $this->getReviewsLabel();
+
+
+$inventory = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
+
+$maxQty = (int)$inventory->getQty();
+$minQty = (int)$inventory->getMinSaleQty();
+
+if(!!$inventory->getBackorders()){
+	$maxQty = (int)$inventory->getMaxSaleQty();
+}
+
 ?>
 
 
@@ -203,7 +213,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 								id="add-to-cart"
-								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
+								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>, <?php echo (int)$inventory->getBackorders(); ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
 							?></button>
 					<?php endif; ?>
 
