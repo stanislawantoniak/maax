@@ -171,7 +171,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 			$stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
 			$_product[15] = $product->getProductFlag();
 			$_product[16]= $product->getTypeId();
-			$_product[17]= (int) $stockItem->getQty();
+
+			if(!!$stockItem->getBackorders()){
+				$_product[17]= (int) $stockItem->getMaxSaleQty();
+			} else {
+				$_product[17]= (int) $stockItem->getQty();
+			}
+
+
 			$_product[18]= (int) $stockItem->getMinSaleQty();
 
 			$products[] = $_product;
