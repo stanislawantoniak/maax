@@ -618,16 +618,12 @@ var Mall = {
         return false;
     },
 
-    validateSimpleAddingToCart: function (id, minQty, maxQty, allowBackOrders) {
+    validateSimpleAddingToCart: function(id, minQty, maxQty){
         jQuery("#qty-error").hide();
-        var quantity = jQuery("#product-options input[name=quantity]").val();
-
-        if (quantity >= minQty && quantity <= maxQty && allowBackOrders == 1) {
-            //Check if backorders allowed
+        var quantity =  jQuery("#product-options input[name=quantity]").val();
+        if(quantity >= minQty && quantity <= maxQty && quantity > 0){
             Mall.addToCart(id, quantity);
-        } else if (quantity >= minQty && quantity <= maxQty && quantity > 0) {
-            Mall.addToCart(id, quantity);
-        } else {
+        }else{
             jQuery("#qty-error").show();
         }
         return false;

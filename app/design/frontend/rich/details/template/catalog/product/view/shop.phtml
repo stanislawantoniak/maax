@@ -213,7 +213,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 								id="add-to-cart"
-								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>, <?php echo (int)$inventory->getBackorders(); ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
+								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
 							?></button>
 					<?php endif; ?>
 
