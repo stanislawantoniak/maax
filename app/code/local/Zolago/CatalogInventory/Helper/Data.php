@@ -46,6 +46,11 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		$stockModel->loadByProduct($product);
+
+
+		if(!!$stockModel->getBackorders()){
+			return (int)$stockModel->getMaxSaleQty();
+		}
 		
 		$minimalStock = min(
 			$stockModel->getMaxSaleQty(), 
