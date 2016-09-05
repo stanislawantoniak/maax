@@ -57,11 +57,7 @@ class StandAlone_Bundle_Helper_Catalog_Product_Configuration
                         foreach ($bundleSelections as $bundleSelection) {
                             $qty = $this->getSelectionQty($product, $bundleSelection->getSelectionId()) * 1;
                             if ($qty) {
-                                $option['value'][] = $qty . ' x ' . $this->escapeHtml($bundleSelection->getName())
-//                                    . ' ' . Mage::helper('core')->currency(
-//                                        $this->getSelectionFinalPrice($item, $bundleSelection)
-//                                    )
-                                ;
+                                $option['value'][] =   $this->escapeHtml($bundleSelection->getName());
                             }
                         }
 
