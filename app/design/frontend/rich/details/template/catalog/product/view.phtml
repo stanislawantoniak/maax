@@ -75,12 +75,12 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 <div id="content" class="container-fluid">
 	<div id="product_content" class="<?php if($blogPostsLength == 0): ?>col-lg-12 col-md-12<?php else: ?>col-lg-9 col-md-9<?php endif; ?> col-sm-12 col-xs-12">
 		<div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
-			<div id="product-gallery" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
+			<div id="product-gallery" class="<?php if($blogPostsLength == 0): ?>col-lg-5 col-md-5<?php else: ?>col-lg-6 col-md-6<?php endif; ?> col-sm-6 col-xs-12 clearfix">
 				<!-- GALLERY PRODUCT -->
 				<?php echo $this->getChildHtml('media') ?>
 				<!-- END GALERY PRODUCT -->
 			</div>
-			<div id="product-shop" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<div id="product-shop" class="<?php if($blogPostsLength == 0): ?>col-lg-7 col-md-7<?php else: ?>col-lg-6 col-md-6<?php endif; ?> col-sm-6 col-xs-12">
 				<?php echo
 				$this->getChild('product.shop')
 					->setReviewsCount($_reviewsCount)
