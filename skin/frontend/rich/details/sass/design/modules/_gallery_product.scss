@@ -104,7 +104,15 @@
         }
     }
 }
+#product-shop {
+    @include min-screen($screen-sm-max) {
+        width: 64%;
+    }
+}
 #product-gallery {
+    @include min-screen($screen-sm-max) {
+        width: 36%;
+    }
   #productGalleryBigMedia, #productGalleryBigMediaOpen, #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
     .item, .rwd-item{
       color: $body-bg;
