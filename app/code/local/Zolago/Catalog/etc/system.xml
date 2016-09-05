@@ -1,152 +1,170 @@
 <?xml version="1.0"?>
 <config>
-    <sections>
-		<catalog translate="label" module="catalog">
-			<groups>
-				<price translate="label">
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>0</show_in_store>
-					<fields>
-						<automatic_strikeout_price_percent translate="label comment">
-							<label>Automatic strikeout price by percent</label>
-							<comment><![CDATA[When difference between effective price and msrp is >= % show strikeout price]]></comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</automatic_strikeout_price_percent>
-					</fields>
-				</price>
-			</groups>
-		</catalog>
-        <zolagocatalog translate="label" module="zolagocatalog">
-            <label>Converter update settings</label>
-            <tab>service</tab>
-            <frontend_type>text</frontend_type>
-            <sort_order>301</sort_order>
-            <show_in_default>1</show_in_default>
-            <show_in_website>0</show_in_website>
-            <show_in_store>0</show_in_store>
-            <groups>
-                <config translate="label">
-                    <label>General Settings</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>1</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <po_open_order translate="label">
-                            <label>PO open orders</label>
-                            <comment><![CDATA[PO open orders]]></comment>
-                            <frontend_type>multiselect</frontend_type>
-                            <sort_order>0</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <can_be_empty>0</can_be_empty>
-                            <source_model>zolagocatalog/system_config_source_view</source_model>
-                        </po_open_order>
-                    </fields>
-                </config>
-            </groups>
-        </zolagocatalog>
-        <udprod translate="label" module="zolagocatalog">
-            <groups>
-                <product_description_history_changes_config translate="label">
-                    <label>Manage products descriptions</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>210</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <max_changes_count translate="label">
-                            <label>Max changes count</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <validate>validate-number</validate>
-                        </max_changes_count>
-                        <history_expiration_time translate="label">
-                            <label>Changes history expiration  life time (in hours)</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <validate>validate-number</validate>
-                        </history_expiration_time>
-                    </fields>
-                </product_description_history_changes_config>
-            </groups>
-        </udprod>
-		<cataloginventory>
-			<groups>
-				<options>
-					<fields>
-						<include_not_salable translate="label">
-                            <label>Include not salable child products</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>100</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </include_not_salable>
-					</fields>
-				</options>
-			</groups>
-		</cataloginventory>
-        <udropship>
-            <groups>
-                <vendor>
-                    <fields>
-                        <vendor_mass_image_batch_size_byname translate="label comment">
-                            <label>Mass Image: Map by Name Batch Size</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>700</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <validate>validate-number</validate>
-                            <!--<comment><![CDATA[NOTE: ]]></comment>-->
-                        </vendor_mass_image_batch_size_byname>
-                        <vendor_mass_image_batch_size_bycsv translate="label comment">
-                            <label>Mass Image: Map by CSV Batch Size</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>701</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <validate>validate-number</validate>
-                            <!--<comment><![CDATA[NOTE: ]]></comment>-->
-                        </vendor_mass_image_batch_size_bycsv>
-                        <ask_attribute_email_template>
-                            <label>Ask New Attribute Value Email template</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_email_template</source_model>
-                            <sort_order>45</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </ask_attribute_email_template>
-                        <ask_attribute_email_cc_store>
-                            <label>Ask New Attribute Value Email</label>
-                            <comment>Email address to the person responsible for new attribute</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>46</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </ask_attribute_email_cc_store>
-                    </fields>
-                </vendor>
-            </groups>
-        </udropship>
-    </sections>
+  <sections>
+    <shipping>
+      <groups>
+        <option>
+          <fields>
+            <default_delivery_volume translate="label">
+              <label>Default delivery volume</label>
+              <comment><![CDATA[Default value of attribute delivery_volume]]></comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate_number</validate>
+            </default_delivery_volume>
+          </fields>
+        </option>
+      </groups>
+    </shipping>
+    <catalog translate="label" module="catalog">
+      <groups>
+        <price translate="label">
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>0</show_in_store>
+          <fields>
+            <automatic_strikeout_price_percent translate="label comment">
+              <label>Automatic strikeout price by percent</label>
+              <comment><![CDATA[When difference between effective price and msrp is >= % show strikeout price]]></comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </automatic_strikeout_price_percent>
+          </fields>
+        </price>
+      </groups>
+    </catalog>
+    <zolagocatalog translate="label" module="zolagocatalog">
+      <label>Converter update settings</label>
+      <tab>service</tab>
+      <frontend_type>text</frontend_type>
+      <sort_order>301</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>0</show_in_website>
+      <show_in_store>0</show_in_store>
+      <groups>
+        <config translate="label">
+          <label>General Settings</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>1</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <po_open_order translate="label">
+              <label>PO open orders</label>
+              <comment><![CDATA[PO open orders]]></comment>
+              <frontend_type>multiselect</frontend_type>
+              <sort_order>0</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <can_be_empty>0</can_be_empty>
+              <source_model>zolagocatalog/system_config_source_view</source_model>
+            </po_open_order>
+          </fields>
+        </config>
+      </groups>
+    </zolagocatalog>
+    <udprod translate="label" module="zolagocatalog">
+      <groups>
+        <product_description_history_changes_config translate="label">
+          <label>Manage products descriptions</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>210</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <max_changes_count translate="label">
+              <label>Max changes count</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-number</validate>
+            </max_changes_count>
+            <history_expiration_time translate="label">
+              <label>Changes history expiration  life time (in hours)</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-number</validate>
+            </history_expiration_time>
+          </fields>
+        </product_description_history_changes_config>
+      </groups>
+    </udprod>
+    <cataloginventory>
+      <groups>
+        <options>
+          <fields>
+            <include_not_salable translate="label">
+              <label>Include not salable child products</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>100</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </include_not_salable>
+          </fields>
+        </options>
+      </groups>
+    </cataloginventory>
+    <udropship>
+      <groups>
+        <vendor>
+          <fields>
+            <vendor_mass_image_batch_size_byname translate="label comment">
+              <label>Mass Image: Map by Name Batch Size</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>700</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-number</validate>
+              <!--<comment><![CDATA[NOTE: ]]></comment>-->
+            </vendor_mass_image_batch_size_byname>
+            <vendor_mass_image_batch_size_bycsv translate="label comment">
+              <label>Mass Image: Map by CSV Batch Size</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>701</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-number</validate>
+              <!--<comment><![CDATA[NOTE: ]]></comment>-->
+            </vendor_mass_image_batch_size_bycsv>
+            <ask_attribute_email_template>
+              <label>Ask New Attribute Value Email template</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_email_template</source_model>
+              <sort_order>45</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </ask_attribute_email_template>
+            <ask_attribute_email_cc_store>
+              <label>Ask New Attribute Value Email</label>
+              <comment>Email address to the person responsible for new attribute</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>46</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </ask_attribute_email_cc_store>
+          </fields>
+        </vendor>
+      </groups>
+    </udropship>
+  </sections>
 </config>
