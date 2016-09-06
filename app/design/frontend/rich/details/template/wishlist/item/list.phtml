@@ -37,7 +37,7 @@ $zssHelper = Mage::helper("zolagosolrsearch");
 
                                     <div class="price clearfix">
                                         <div class="col-price col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                            <?php if ($_product->getPrice() != $_product->getFinalPrice()) : ?>
+                                            <?php if (!$_product->isBundle() && $_product->getPrice() != $_product->getFinalPrice()) : ?>
                                                 <span class="old">
                                                         <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
                                                     </span>
