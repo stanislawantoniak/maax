@@ -419,23 +419,12 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 					->init($product, 'small_image')
 					->resize(90, 90);
 
-				if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE){
-					list($_minimalPriceInclTax) = $product->getPriceModel()->getTotalPrices($product, null, true, false);
-
-					$recentlyViewedContent[(int)$product->getId()] = array(
-						'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
-						'image_url' => (string)$image,
-						'redirect_url' => $product->getNoVendorContextUrl(),
-						'price' => $coreHelper->currency($_minimalPriceInclTax, true, false),
-					);
-				} else {
-					$recentlyViewedContent[(int)$product->getId()] = array(
-						'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
-						'image_url' => (string)$image,
-						'redirect_url' => $product->getNoVendorContextUrl(),
-						'price' => $coreHelper->currency($product->getFinalPrice(), true, false),
-					);
-				}
+				$recentlyViewedContent[(int)$product->getId()] = array(
+					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
+					'image_url' => (string)$image,
+					'redirect_url' => $product->getNoVendorContextUrl(),
+					'price' => $coreHelper->currency($product->getFinalPrice(), true, false),
+				);
 				// add old price only if should be visible
 				if ($product->getStrikeoutPrice() > $product->getPrice()) {
 					$recentlyViewedContent[(int)$product->getId()]['old_price'] =
