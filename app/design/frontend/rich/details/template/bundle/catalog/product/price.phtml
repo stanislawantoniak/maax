@@ -35,14 +35,14 @@
  */
 $_coreHelper = $this->helper('core');
 $_weeeHelper = $this->helper('weee');
-$_taxHelper  = $this->helper('tax');
+$_taxHelper = $this->helper('tax');
 
 /**
  * @var $_product Mage_Catalog_Model_Product
  * @var $_priceModel Mage_Bundle_Model_Product_Price
  */
-$_product     = $this->getProduct();
-$_priceModel  = $_product->getPriceModel();
+$_product = $this->getProduct();
+$_priceModel = $_product->getPriceModel();
 
 list($_minimalPriceTax, $_maximalPriceTax) = $_priceModel->getTotalPrices($_product, null, null, false);
 list($_minimalPriceInclTax, $_maximalPriceInclTax) = $_priceModel->getTotalPrices($_product, null, true, false);
@@ -58,9 +58,9 @@ if ($_product->getPriceType() == 1) {
         $_weeeTaxAmountInclTaxes = $_weeeHelper->getAmountInclTaxes($_attributes);
     }
     if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1, 4))) {
-        $_minimalPriceTax     += $_weeeTaxAmount;
+        $_minimalPriceTax += $_weeeTaxAmount;
         $_minimalPriceInclTax += $_weeeTaxAmountInclTaxes;
-        $_maximalPriceTax     += $_weeeTaxAmount;
+        $_maximalPriceTax += $_weeeTaxAmount;
         $_maximalPriceInclTax += $_weeeTaxAmountInclTaxes;
     }
     if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)) {
@@ -77,4 +77,9 @@ $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
 $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
 ?>
 
-<span class="price"><span itemprop="price"><?php echo number_format($_minimalPriceInclTax, 2, ',', ' '); ?></span><?php echo $currencySymbol; ?></span>
+<span class="price">
+    <span itemprop="price">
+        <?php echo number_format($_minimalPriceInclTax, 2, ',', ' '); ?>
+    </span>
+    <?php echo $currencySymbol; ?>
+</span>
