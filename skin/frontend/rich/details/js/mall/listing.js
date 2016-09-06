@@ -458,7 +458,7 @@ Mall.listing = {
 								'</div>' +
 								'<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">' +
 									'<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">';
-		if (product[16] == 'simple')
+		if (product[16] == 'simple' || product[16] == 'bundle')
 			data +=						'<a href="#" class="qty_less" id="qty-less-' + product[0] + '" data-min_qty="' + product[18]+'">-</a>' +
 										'<div class="qty qty-box" id="input-box-' + product[0] + '"' +
 											'title="' + Mall.translate.__("Maximum quantity") + '&nbsp;' + product[17] + '"' +
@@ -468,7 +468,7 @@ Mall.listing = {
 		data += 					'</div>' +
 									'<div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">' +
 										'<div class="action-box-bundle clearfix">';
-		if (product[16] == 'simple') data += '<button class="btn button button-primary addBasket"' +
+		if (product[16] == 'simple' || product[16] == 'bundle') data += '<button class="btn button button-primary addBasket"' +
 											 'onclick="Mall.validateAddingToCartListing(' + product[0] + ', ' + product[18] + ', ' + product[17] + ');return false;">' +
 												 '<i class="fa fa-shopping-cart" aria-hidden="true"></i> ' +
 												Mall.translate.__('Add') +
