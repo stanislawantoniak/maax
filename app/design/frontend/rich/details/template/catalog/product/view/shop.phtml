@@ -122,7 +122,9 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		</div>
 	</div>
 
-
+	<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
+		<?php echo $this->getChildHtml('product_type_data') ?>
+	<?php endif; ?>
 
 	<?php if ($_product->isConfigurable()) : ?>
 		<!--    Meta tags-->
