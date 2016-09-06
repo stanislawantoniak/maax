@@ -18,6 +18,17 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
     const ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE = 'salePriceBefore';
 
+
+    /**
+     * Check is product bundle
+     *
+     * @return bool
+     */
+    public function isBundle()
+    {
+        return $this->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE;
+    }
+
     /**
      * @return string
      */
