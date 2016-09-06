@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <StandAlone_Bundle>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Bundle/>
+
+            </depends>
+        </StandAlone_Bundle>
+    </modules>
+</config>
