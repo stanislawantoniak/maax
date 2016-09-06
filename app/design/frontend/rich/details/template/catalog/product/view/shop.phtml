@@ -80,7 +80,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 				<div class="price-box-bundle">
 					<div class="price-box row">
 						<p class="price-box-line" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-							<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+							<?php if ($_product->isConfigurable()): ?>
 								<meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
 							<?php endif; ?>
 
@@ -94,15 +94,19 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 							<?php endif; ?>
 
 							<meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-							<span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
-                            <span class="price">
-                                <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
-									<span itemprop="price">
-                                        <?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?>
-                                    </span>
-									<?php echo $currencySymbol; ?>
-								<?php endif; ?>
-                            </span>
+							<?php if (!$_product->isComposite()): ?>
+								<span class="old-price"><?php if($_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
+								<span class="price">
+										<span itemprop="price">
+											<?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?>
+										</span>
+										<?php echo $currencySymbol; ?>
+								</span>
+							<?php endif; ?>
+
+							<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
+								<?php echo $this->getChildHtml('product_type_data') ?>
+							<?php endif; ?>
 						</p>
 					</div>
 				</div>
@@ -122,7 +126,8 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		</div>
 	</div>
 
-	<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+
+	<?php if ($_product->isConfigurable()) : ?>
 		<!--    Meta tags-->
 		<?php
 		$childrenData = array();
@@ -168,7 +173,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 
 	<div id="product-options" class="size-box-bundle">
 		<div class="block_to_size">
-			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+			<?php if ($_product->isConfigurable()) : ?>
 				<?php if (!empty($productAttrs)) : ?>
 					<?php foreach ($productAttrs as $_attribute) : ?>
 						<?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
@@ -201,7 +206,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
 			<div class="action-box-bundle clearfix">
 				<?php if ($isSalable): ?>
-					<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+					<?php if ($_product->isConfigurable()): ?>
 						<button class="btn button button-primary addBasket"
 								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
@@ -248,21 +253,9 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			</div>
 
 		</div>
-<!--		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">-->
-<!--			<div class="product-calculatorbox">-->
-<!--				<div>-->
-<!--					<p>-->
-<!--						<a href="#" data-toggle="modal" data-target="#calculator">-->
-<!--							<i class="fa fa-calculator" aria-hidden="true"></i><?php //echo $this->__("Mortgage calculator"); ?></span>-->
-<!--						</a>-->
-<!--					</p>-->
-<!--				</div>-->
-<!--			</div>-->
-<!---->
-<!--		</div>-->
 	</div>
 </div>
-<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+<?php if ($_product->isConfigurable()) : ?>
 
 	<script type="text/javascript">
 		var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
@@ -281,7 +274,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		});
 	});
 </script>
-<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
+<?php if ($_product->isConfigurable()): ?>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			jQuery(".sizes-content select").change(function(){
