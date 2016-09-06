@@ -11,6 +11,13 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
     public function prepareSettings($params,$shipment,$udpo) {
         $size = $params->getParam('specify_post_size');
         $category = $params->getParam('specify_post_category');
+        $value = $udpo->getSubtotalInclTax();
+        
+        $order = $shipment->getOrder();
+        if ($order->getPayment()->getMethod() == 'cashondelivery') {	
+            $codValue = $udpo->getGrandTotalInclTax()-$udpo->getPaymentAmount();
+        }
+
         $weight = $params->getParam('weight');
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
         $pos = $udpo->getDefaultPos();
@@ -20,7 +27,8 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
                                 'weight' => $weight,
                                 'pos' => $pos,
                                 'udpo' => $udpo,
-                                
+                                'value' => $value,
+                                'cod' => $codValue,
                             );
 
         $settings = array();
@@ -58,10 +66,12 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
      */
     protected function _clearEnvelope() {
         $settings = $this->_settings;
-        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date');
-        if ($lastDate != date('Y-m-d')) {
-            if ($this->getClient()->clearEnvelope($settings)) {
-                Mage::getConfig()->saveConfig('carriers/zolagopp/last_date',date('Y-m-d'));
+        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date',0);        
+        if ($lastDate != date('Y-m-d')) {            
+            if ($this->getClient()->clearEnvelope($settings)) {                
+                Mage::getConfig()->saveConfig('carriers/zolagopp/last_date',date('Y-m-d'),'default',0);
+                Mage::getConfig()->reinit();
+                Mage::app()->reinitStores();
             }
         }    
     }    
@@ -75,7 +85,9 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             // get dispatch point name
             $client = $this->getClient();
             $client->setShipperAddress($this->_senderAddress);
+            $client->setReceiverAddress($this->_receiverAddress);
             $client->setShipmentSettings($settings);
+            $this->_clearEnvelope();
             $retval = $client->createDeliveryPacks($settings);            
             $code = empty($retval->guid)? 0:$retval->guid;
             $message = 'OK';

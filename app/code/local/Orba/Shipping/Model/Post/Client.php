@@ -345,7 +345,6 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         if (!empty($result->retval)) {
             return true;
         }
-        $this->_parseError($result);
         $this->_checkResult($result);
         return false;
     }
@@ -402,8 +401,9 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         return $result;         
     }
     /**
-     * creating packs
+     * creating packs // old version
      */
+     /*
     public function createDeliveryPacks($settings) {
         if (!(int)$this->_settings['weight']) {
             Mage::throwException(Mage::helper('orbashipping')->__('No package weight'));
@@ -415,7 +415,20 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         }
     }
 
-    
+    */
+    protected function _prepareReceiverAddress() {
+        $address = new adresType();
+        $receiver = $this->_receiverAddress;
+        $address->nazwa = $receiver['firstname'].' '.$receiver['lastname'];
+        $address->nazwa2 = $receiver['company'];
+        $address->ulica = $receiver['street'];
+        $address->miejscowosc = $receiver['city'];
+        $address->kodPocztowy = $this->_normalizePostcode($receiver['postcode']);
+        $address->kraj = $receiver['country_id'];
+        $address->telefon = $receiver['telephone'];
+        $address->osobaKontaktowa = $address->nazwa;
+        return $address;
+    }
     /**
      * prepare address
      */
@@ -428,19 +441,49 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $address->kodPocztowy = $this->_normalizePostcode($sender['postcode']);
         return $address;
     }
+    
+    /**
+     * prepare data for COD
+     */
+    protected function _prepareCod($value) {
+        $cod = new pobranieType();
+        $cod->sposobPobrania = Mage::getStoreConfig('carriers/zolagopp/cod_settlement_type');
+        $cod->kwotaPobrania = $value *100; // gr
+        if ($cod->sposobPobrania == sposobPobraniaType::RACHUNEK_BANKOWY) {
+            $cod->nrb = Mage::getStoreConfig('carriers/zolagopp/cod_account_number');
+            $cod->tytulem = sprintf(Mage::getStoreConfig('carriers/zolagopp/cod_transfer_title'),$this->_settings['udpo']->getIncrementId());
+        }
+        return $cod;
+    }
+    
+    /**
+     * insurance values
+     */
+    protected function _prepareInsurance() {
+        $insurance = new ubezpieczenieType();
+        $insurance->rodzaj = rodzajUbezpieczeniaType::STANDARD;
+        $insurance->kwota = $this->_settings['value']*100;
+        return $insurance;
+    }
     /**
      * create standard packs
      */
 
-    protected function _createDeliveryPackStandard($settings) {
+    public function createDeliveryPacks($settings) {
         $message = new addShipment();
-        $data = new paczkaPocztowaType();
-        $data->adres = $this->_prepareAddress();
-        $data->iloscPotwierdzenOdbioru = 1;
+        $data = new uslugaKurierskaType();
+        $data->adres = $this->_prepareReceiverAddress();
         $data->guid = $this->_getGuid();
-        $data->kategoria = $this->_settings['category'];
-        $data->gabaryt = $this->_settings['size'];
+
         $data->masa = $this->_settings['weight'];
+        $data->wartosc = $this->_settings['value']*100; // gr
+        $data->termin = terminRodzajType::EXPRES24;
+//        $data->ubezpieczenie = $this->_prepareInsurance();
+        
+        if ($codValue = $this->_settings['cod']) {
+            $data->pobranie = $this->_prepareCod($codValue);
+        }
+
         $message->przesylki[] = $data;
         $result = $this->_sendMessage('addShipment',$message);
         return $this->_prepareResult($result);
@@ -466,6 +509,9 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * check if answer is right
      */
     protected function _checkResult($data) {
+        if (is_array($data) && !empty($data['error'])) {
+            Mage::throwException(Mage::helper('orbashipping')->__('%s server error: %s','poczta-polska',$data['error']));            
+        }
         if (empty($data->retval)) {
             Mage::throwException(Mage::helper('orbashipping')->__('%s server error: No valid answer','poczta-polska'));
         }
@@ -499,8 +545,8 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $message = new getAddresLabelByGuid();
         $message->guid = $codes;
         $response = $this->_sendMessage('getAddresLabelByGuid',$message);
-        if (!empty($response->error)) {	
-            Mage::throwException(Mage::helper('orbashipping')->__('Service %s get label error: %s','Poczta Polska',$response['error']));
+        if (!empty($response->error)) {	            
+            Mage::throwException(Mage::helper('orbashipping')->__('Service %s get label error: %s','Poczta Polska',$response->error->errorDesc));
         }
         if (empty($response->content)) {
             Mage::throwException(Mage::helper('orbashipping')->__('Service %s get label error: %s','Poczta Polska',
