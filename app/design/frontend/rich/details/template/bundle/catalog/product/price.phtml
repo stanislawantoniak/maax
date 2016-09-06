@@ -72,6 +72,9 @@ if ($_product->getPriceType() == 1) {
         $_weeeTaxAttributes = $_weeeHelper->getProductWeeeAttributesForRenderer($_product, null, null, null, true);
     }
 }
+
+$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
 ?>
 
-<span class="price"><span itemprop="price"><?php echo $_coreHelper->currency($_minimalPriceInclTax) ?></span></span>
+<span class="price"><span itemprop="price"><?php echo number_format($_minimalPriceInclTax, 2, ',', ' '); ?></span><?php echo $currencySymbol; ?></span>
