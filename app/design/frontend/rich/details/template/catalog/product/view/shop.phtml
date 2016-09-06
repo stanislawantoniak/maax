@@ -104,7 +104,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 								</span>
 							<?php endif; ?>
 
-							<?php if ($_product->isBundle()) : ?>
+							<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
 								<?php echo $this->getChildHtml('product_type_data') ?>
 							<?php endif; ?>
 						</p>
