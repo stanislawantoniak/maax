@@ -202,6 +202,7 @@ var Mall = {
 
         // build product list
         var products = data.content.cart.products == 0 ? [] : data.content.cart.products;
+        console.log(products);
         // build object for filling products template
         Mall._data = data.content;
         // clear products
