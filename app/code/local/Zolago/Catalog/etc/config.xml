@@ -74,7 +74,6 @@
                     <resource_product_attribute_collection>Zolago_Catalog_Model_Resource_Product_Attribute_Collection</resource_product_attribute_collection>
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
                     <category>Zolago_Catalog_Model_Category</category>
-                    <product>Zolago_Catalog_Model_Product</product>
                     <url>Zolago_Catalog_Model_Url</url>
                     <category>Zolago_Catalog_Model_Category</category>
                     <product_type_configurable>Zolago_Catalog_Model_Product_Type_Configurable</product_type_configurable>
