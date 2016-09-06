@@ -1,0 +1,77 @@
+<?php
+/** @var Zolago_Po_Block_Vendor_Po_Item_Renderer_Bundle $this */
+/** @var Zolago_Po_Model_Po_Item $_item */
+$_item = $this->getItem();
+/** @var Mage_Sales_Model_Order_Item $_orderItem */
+$_orderItem = $this->getItem()->getOrderItem();
+$_productFlagText = $this->getProductFlagText($_item);
+$_productUrl = Mage::getBaseUrl() . $_item->getProduct()->getData('url_path');
+$_key = $_item->getId();
+$_taxPercent     = $_orderItem->getTaxPercent();
+$_priceInclTax   = $_item->getPriceInclTax();
+$_rowPriceInclTax= $_item->getRowTotalInclTax();
+$_discountAmount = $_item->getDiscountAmount();
+$_itemDiscount   = $_item->getDiscount();
+$_discountInfo   = $_item->getDiscountInfo();
+$_finalItemPrice = $_item->getFinalItemPrice();
+$_finalRowPrice  = $_item->getFinalRowPrice();
+$_sku = $_item->getFinalSku();
+?>
+
+<tr data-item-id="<?php echo $_item->getId();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableFormattedText($_item);?>">
+	<td class="align-center checkbox-column"><input type="checkbox"<?php if(!$this->getIsEditable()):?> disabled="disabled"<?php endif;?> name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
+	<td class="align-right"><?php echo $this->getLp();?></td>
+	<td><?php echo $this->escapeHtml($_sku);?></td>
+	<td><a href="<?php echo $_productUrl; ?>" target="_blank"><?php echo $this->escapeHtml($_item->getName());?></a><?php echo $this->getConfigurableHtml($_item);?> <em class="text-muted"><?php echo $_productFlagText; ?></em></td>
+	<td class="align-right"><?php echo round($_item->getQty());?></td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
+	<td class="align-right discount">
+		<?php if($_itemDiscount>0):?>
+			<u  class="po-item-tooltip text-success"><?php echo Mage::helper("core")->currency(-1*$_itemDiscount);?></u>
+			<div class="hidden po-item-tooltip-content">
+				<?php if($_discountInfo):?>
+				<table>
+					<thead>
+						<tr>
+							<th class="align-right"><?php echo $this->__("Id");?></th>
+							<th class="align-left"><?php echo $this->__("Type (algorithm)");?></th>
+							<th class="align-left"><?php echo $this->__("Promotion name");?></th>
+							<th class="align-right"><?php echo $this->__("Discount per item");?></th>
+							<th class="align-left"><?php echo $this->__("Discount sponsored by");?></th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php foreach($_discountInfo as $_relation):?>
+						<tr>
+							<td class="align-right"><?php echo $_relation->getRuleId() ? $_relation->getRuleId() : "-";?></td>
+							<td class="align-left"><?php echo $this->getAlgorithmName($_relation);?></td>
+							<td class="align-left"><?php echo $this->escapeHtml($_relation->getName());?></td>
+							<td class="align-right"><?php echo Mage::helper("core")->formatPrice($_relation->getDiscountAmount()/$_item->getQty());?></td>
+							<td class="align-left"><?php echo $this->getPayerName($_relation);?></td>
+						</tr>
+					<?php endforeach;?>
+					</tbody>
+				</table>
+				<?php else:?>
+					<?php echo $this->__("No discount information");?>
+				<?php endif;?>
+			</div>
+		<?php else:?>
+			<?php echo Mage::helper("core")->currency($_itemDiscount);?>
+		<?php endif;?>
+	</td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_finalItemPrice);?></td>
+	<td class="align-right"><?php echo $this->getPosQty($_item);?></td>
+	<td>
+		<?php if($this->getIsEditable()):?>
+			<button data-toggle="modal" data-item-id="<?php echo $_item->getId();?>" data-item-price="<?php echo round($_priceInclTax, 2);?>" data-item-discount="<?php echo round($_itemDiscount,2);?>" data-item-qty="<?php echo $_item->getQty();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableFormattedText($_item);?>" data-item-flag="<?php echo $_productFlagText;?>" data-target="#editItemModal" class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
+				<i class="icon-pencil"></i>
+			</button>
+		<?php endif;?>
+		<span title="<?php if($this->getIsRemovable()): ?><?php echo $this->__("Remove Item");?><?php else:?><?php echo $this->__("The last item cannot be deleted. You can delete it when you add another item or cancel the order.");?><?php endif;?>" class="bs-tooltip inline-block">
+			<button <?php if(!$this->getIsRemovable()):?>disabled="disabled"<?php endif;?> class="btn btn-xs btn-notification" data-ok-url="<?php echo $this->getPoUrl('removeItem', array("item_id"=>$_item->getId()));?>" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove %s?", $_item->getOneLineDesc());?>" data-modal="true">
+				<i class="icon-remove"></i>
+			</button>
+		</span>
+	</td>
+</tr>

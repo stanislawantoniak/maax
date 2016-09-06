@@ -107,7 +107,8 @@ $_products = $_cache['products'];
 															</div>
 															<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
 																<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
-																	<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
+																	<?php if (	$product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE ||
+																				$product[16] == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
 																	<a href="#" class="qty_less" id="qty-less-<?php echo $product[0];?>" data-min_qty="<?php echo $product[18]; ?>">-</a>
 																	<div class="qty qty-box" id="input-box-<?php echo $product[0];?>"
 																		 title="<?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity&nbsp;%s", $product[17]); ?>"
@@ -119,7 +120,8 @@ $_products = $_cache['products'];
 																</div>
 																<div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
 																	<div class="action-box-bundle clearfix">
-																		<?php if ($product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
+																		<?php if (	$product[16] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE ||
+																					$product[16] == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
 																		<button class="btn button button-primary addBasket"
 																				onclick="Mall.validateAddingToCartListing(<?php echo $product[0] ?>, <?php echo $product[18]; ?>, <?php echo $product[17]; ?>);return false;">
 																			<i class="fa fa-shopping-cart" aria-hidden="true"></i>

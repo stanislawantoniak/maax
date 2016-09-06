@@ -417,10 +417,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	protected function _getRendererByType($type) {
 		$renderPath = "zolagopo/vendor_po_item_renderer_";
 		switch ($type) {
-			case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE: 
-				/*@todo add other types*/
+			case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
+			case Mage_Catalog_Model_Product_Type::TYPE_BUNDLE:
 				$renderPath.=$type;
-			break;
+				break;
 			default:
 				$renderPath.=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE;
 			break;
