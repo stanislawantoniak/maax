@@ -619,10 +619,10 @@ var Mall = {
         return false;
     },
 
-    validateSimpleAddingToCart: function(id, minQty, maxQty){
+    validateSimpleAddingToCart: function(id, minQty, maxQty, productType){
         jQuery("#qty-error").hide();
         var quantity =  jQuery("#product-options input[name=quantity]").val();
-        if(quantity >= minQty && quantity <= maxQty && quantity > 0){
+        if((quantity >= minQty && quantity <= maxQty && quantity > 0) || productType == 'bundle'){
             Mall.addToCart(id, quantity);
         }else{
             jQuery("#qty-error").show();
@@ -631,11 +631,14 @@ var Mall = {
     },
 
     validateAddingToCartListing: function(id, minQty, maxQty){
-        var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
-        if(quantity >= minQty && quantity <= maxQty){
+		var elem = jQuery("#input-box-" + id);
+        var quantity =  elem.find("input[name=quantity]").val();
+		var productType = elem.parents(".box_listing_product").find("a:eq(0)").attr("data-product-type");
+		// skip validation for bundle product
+        if((quantity >= minQty && quantity <= maxQty) || productType == 'bundle' ){
             Mall.addToCartListing(id, quantity);
         }else{
-			jQuery('#input-box-' + id).tooltip('show');
+			elem.tooltip('show');
         }
         return false;
     },
