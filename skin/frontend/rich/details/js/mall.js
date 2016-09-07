@@ -1828,11 +1828,18 @@ Mall.inspirationsSliderInit = function() {
 	}
 
 	rwdInspirationCarousel.rwdCarousel({
-		items : 5, //10 items above 1000px browser width
-		itemsDesktop : [1000,4], //5 items between 1000px and 901px
-		itemsDesktopSmall : [900,4], // betweem 900px and 601px
-		itemsTablet: [767,3], //2 items between 600 and 0
-		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
+        itemsCustom : [
+            [1000,3],
+            [800,3],
+            [670,3],
+            [475,2],
+            [320,1]
+        ],
+		items : 3, //10 items above 1000px browser width
+		itemsDesktop : [1000,3], //5 items between 1000px and 901px
+		itemsDesktopSmall : [900,3], // between 900px and 601px
+		itemsTablet: [767,2], //2 items between 600 and 0
+		itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
 		pagination : false,
 		navigation: true,
 		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
