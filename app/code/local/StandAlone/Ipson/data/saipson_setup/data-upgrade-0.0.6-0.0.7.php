@@ -20,7 +20,7 @@ $blocks = array(
         <div class="benefit-text"
              style="background-image: url('/skin/frontend/rich/details/images/benefits_tips.jpg')">
             <h3>Porady fizjoterapeuty</h3>
-            <p>dowiedz&nbsp;się więcej</p>
+            <p>infolinia&nbsp;i&nbsp;czat</p>
         </div>
         </a>
     </div>
@@ -28,9 +28,9 @@ $blocks = array(
         <a href="{{config path="web/secure/base_url"}}dofinansowanie">
         <div class="benefit-text"
              style="background-image: url('/skin/frontend/rich/details/images/benefits_financing.jpg')">
-            <h3>Dofinansowanie</h3>
+            <h3>Dofinansowania</h3>
             <p>
-                <a href="{{config path="web/secure/base_url"}}dofinansowanie">dowiedz&nbsp;się więcej</a>
+                <a href="{{config path="web/secure/base_url"}}dofinansowanie">dowiedz&nbsp;się&nbsp;więcej</a>
             </p>
         </div>
         </a>
@@ -40,7 +40,7 @@ $blocks = array(
         <div class="benefit-text"
              style="background-image: url('/skin/frontend/rich/details/images/benefits_return.jpg')">
             <h3>Darmowy zwrot</h3>
-             <p>w&nbsp;30&nbsp;dni</p>
+             <p>w&nbsp;ciągu&nbsp;30&nbsp;dni</p>
         </div>
         </a>
     </div>
