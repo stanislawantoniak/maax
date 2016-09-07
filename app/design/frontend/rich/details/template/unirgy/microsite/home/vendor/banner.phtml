@@ -123,10 +123,6 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 				<div class="col-sm-12 col-inspirations">
 					<div class="row">
 						<section class="block-inspiration">
-							<header class="title-section">
-								<div class="inspiration-strips "></div>
-								<h2><?php echo $bannerHelper->__("inspirations"); ?></h2>
-							</header>
 							<div id="rwd-inspiration" class="rwdCarousel">
 								<div class="rwd-carousel rwd-theme">
 									<?php foreach ($_inspirations as $n => $inspiration): // 2 START
@@ -153,8 +149,10 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 																<?php if (!empty($caption['url'])): // A2 OPEN ?>
 																	<a href="<?php echo $caption['url']; ?>" class="<?php if ($j > 1): ?>margin-top-20px<?php endif; ?>">
 																<?php endif; ?>
-																<span
-																	class="<?php if ($j == 1): ?>title-caption<?php else: ?>body-caption<?php endif; ?>"><?php echo $caption['text']; ?></span>
+																<span class="<?php if ($j == 1): ?>title-caption<?php else: ?>body-caption<?php endif; ?>">
+																	<?php echo $caption['text']; ?>
+																	<?php if ($j == 1): ?><div class="title-caption-fade"></div><?php else: ?><div class="body-caption-fade"></div><?php endif; ?>
+																</span>
 																<?php if (!empty($caption['url'])): // A2 CLOSE ?>
 																	</a>
 																<?php endif; ?>
@@ -162,8 +160,8 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 														<?php endforeach; // 6 END ?>
 
 														<?php if ($showCaptions): ?>
-															<a href="<?php echo $inspUrl; ?>">
-																<span class="seemore-caption"><?php echo $bannerHelper->__("see"); ?> &gt;</span>
+															<a href="<?php echo $inspUrl; ?>" class="seemore-caption-link">
+																<span class="seemore-caption"><?php echo $bannerHelper->__("see more"); ?></span>
 															</a>
 														<?php endif; ?>
 													</div>
