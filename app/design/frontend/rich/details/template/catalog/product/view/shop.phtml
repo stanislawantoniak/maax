@@ -220,7 +220,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 								id="add-to-cart"
-								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
+								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>, '<?php echo $_product->getTypeId(); ?>');return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
 							?></button>
 					<?php endif; ?>
 
@@ -353,11 +353,12 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		jQuery(document).ready(function() {
 			var maxQty = "<?php echo $maxQty; ?>";
 			var minQty = "<?php echo $minQty; ?>";
+			var productType = "<?php echo $_product->getTypeId(); ?>";
 			jQuery("a.qty_more").click(function(e){
 				e.preventDefault();
 			    var quantityMore =  jQuery("input[name=quantity]").val();
 			    jQuery("#qty-error").hide();
-			    if(parseInt(quantityMore) >= parseInt(maxQty)) {
+			    if((parseInt(quantityMore) >= parseInt(maxQty)) && productType != "<?php echo Mage_Catalog_Model_Product_Type::TYPE_BUNDLE; ?>") {
 				   jQuery("#qty-error").show();
 				   jQuery("input[name=quantity]").val(maxQty);
 			    }else{
@@ -373,7 +374,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 				   quantityLess--;
 				   jQuery("input[name=quantity]").val(quantityLess);
 			    }
-			    if(parseInt(quantityLess) > parseInt(maxQty)) {
+			    if((parseInt(quantityLess) > parseInt(maxQty)) && productType != "<?php echo Mage_Catalog_Model_Product_Type::TYPE_BUNDLE; ?>") {
 			 	  jQuery("#qty-error").show();
 			 	  jQuery("input[name=quantity]").val(maxQty);
 			    }
