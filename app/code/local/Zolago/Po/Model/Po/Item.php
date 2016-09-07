@@ -158,6 +158,39 @@ class Zolago_Po_Model_Po_Item extends ZolagoOs_OmniChannelPo_Model_Po_Item
 		}
 		return "";
    }
+
+	/**
+	 * @return string
+	 */
+	public function getBundleText()
+	{
+		$bundleOptions = $this->getOrderItem()->getProductOptionByCode("bundle_options");
+
+		$_helper = Mage::helper("zolagopo");
+		$out = array();
+		if (!empty($bundleOptions)) {
+			$out[] = "<ul>";
+			foreach ($bundleOptions as $key => $bundleOption) {
+				$out[] = "<li>" . Mage::helper('core')->escapeHtml($bundleOption['label']) . "</li>";
+				if (isset($bundleOption['value'])) {
+					$out[] = "<ul>";
+					foreach ($bundleOption['value'] as $bundleOptionValue) {
+						$out[] = "<li>";
+						$out[] = Mage::helper('core')->escapeHtml($bundleOptionValue['title']);
+						$out[] = "<br />" . $_helper->__("Qty") . " " . $bundleOptionValue['qty'];
+						$out[] = ", " . $_helper->__("Price") . " " . Mage::helper("core")->currency($bundleOptionValue['price']);
+						$out[] = "</li>";
+					}
+					$out[] = "</ul>";
+				}
+			}
+			$out[] = "</ul>";
+		}
+		if ($out) {
+			return implode("", $out);
+		}
+		return "";
+	}
    
    /**
     * @return string
