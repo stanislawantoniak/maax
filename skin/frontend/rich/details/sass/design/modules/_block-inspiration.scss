@@ -1,82 +1,85 @@
 .block-inspiration {
-	.rwdCarousel {
-		.item {
-			.carousel-caption {
-				.seemore-caption-link {
-					background-color: #36b7b2;
-					display: block;
-					width: 50%;
-					margin: 10px auto;
-					padding: 5px 15px;
-				}
-				span {
-					font-family: $fontRegular;
-					text-shadow:none;
-					&.title-caption {
-						font-family: $fontRegular;
-						text-transform: uppercase;
-						color:$color_000;
+    .rwdCarousel {
+        padding: 0;
+        .item {
+            .carousel-caption {
+                .seemore-caption-link {
+                    background-color: #36b7b2;
+                    display: block;
+                    width: 50%;
+                    margin: 10px auto 30px auto;
+                    padding: 5px 15px;
+                }
+                span {
+                    font-family: $fontRegular;
+                    text-shadow: none;
+                    &.title-caption {
+                        font-family: $fontRegular;
 
-						height: 30px;
-						overflow: hidden;
-						position: relative;
+                        color: $color_000;
 
-						@media (max-width: $screen-sm-max) {
-							height: 23px;
-						}
+                        height: 40px;
+                        overflow: hidden;
+                        position: relative;
+                        font-size: 20px;
 
-						.title-caption-fade {
-							position: absolute;
-							bottom: 0px;
-							width: 100%;
-							left: 0px;
-							height: 14px;
-							display: block;
-							background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 20%, #ffffff 100%);
+                        @media (max-width: $screen-sm-max) {
+                            height: 23px;
+                        }
 
-							@media (max-width: $screen-sm-max) {
-								height: 5px;
-							}
-						}
-					}
-					&.body-caption {
-						color: $color_8b8b8b;
+                        .title-caption-fade {
+                            position: absolute;
+                            bottom: 0px;
+                            width: 100%;
+                            left: 0px;
+                            height: 14px;
+                            display: block;
+                            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 20%, #ffffff 100%);
 
-						height: 50px;
-						overflow: hidden;
-						position: relative;
+                            @media (max-width: $screen-sm-max) {
+                                height: 5px;
+                            }
+                        }
+                    }
+                    &.body-caption {
+                        color: $color_8b8b8b;
 
-						.body-caption-fade {
-							position: absolute;
-							bottom: 0px;
-							width: 100%;
-							left: 0px;
-							height: 14px;
-							display: block;
-							background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 20%, #ffffff 100%);
-						}
-					}
-					&.seemore-caption {
-						color: $color_fff;
-						text-transform: uppercase;
-						font-size: 11px;
-					}
+                        height: 50px;
+                        overflow: hidden;
+                        position: relative;
 
-				}
-			}
-			&:hover {
-				.carousel-caption {
-					span {
-						text-decoration: underline;
-						}
-					}
-				}
-		}
-	}
+                        .body-caption-fade {
+                            position: absolute;
+                            bottom: 0px;
+                            width: 100%;
+                            left: 0px;
+                            height: 14px;
+                            display: block;
+                            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 20%, #ffffff 100%);
+                        }
+                    }
+                    &.seemore-caption {
+                        color: $color_fff;
+                        text-transform: uppercase;
+                        font-size: 11px;
+                    }
 
-	#rwd-inspiration .item{
-	  background: $color_fff;
-	  color: $color_515151;
-	  text-align: center;
-	}
+                }
+            }
+            &:hover {
+                .carousel-caption {
+                    span {
+
+                    }
+                }
+            }
+        }
+    }
+
+    #rwd-inspiration .item {
+        background: $color_fff;
+        color: $color_515151;
+        text-align: center;
+        border: 1px solid $color_dbdbdb;
+    }
 }
