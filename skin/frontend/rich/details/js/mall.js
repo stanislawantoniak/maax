@@ -2119,6 +2119,8 @@ jQuery(document).ready(function() {
 	/**HOMEPAGE**/
 	Mall.inspirationsSliderInit();
     Mall.inspirationsSliderAdjustHeight();
+	jQuery(window).on('Mall.onResizeEnd', function() {Mall.inspirationsSliderAdjustHeight()});
+	jQuery(window).on('Mall.onScrollEnd', function() {Mall.inspirationsSliderAdjustHeight()});
     Mall.featuredProductsInit();
     //on window resize
     /**HOMEPAGE**/
