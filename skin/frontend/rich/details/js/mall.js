@@ -2124,3 +2124,7 @@ jQuery(window).resize(function() {
     positionToggleSearch();
 });
 
+
+jQuery(window).on('Mall.onResizeEnd', function(){
+    Mall.inspirationsSliderAdjustHeight();
+});
