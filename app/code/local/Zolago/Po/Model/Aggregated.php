@@ -111,4 +111,8 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
              "aggregated_id=".$id
         );	                            
 	}
+	public function getCarrier() {
+		$po = $this->getPoCollection()->getFirstItem();
+		Mage::log($po->getData());
+	}
 }

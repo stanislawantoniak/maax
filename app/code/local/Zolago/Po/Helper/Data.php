@@ -455,6 +455,7 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 		$aggregated->setVendorId($vendor);
 		$aggregated->generateName();
 		$aggregated->save();
+		$aggregated->getCarrier();
 		
 		foreach($collection as $po){
 			$po->setAggregatedId($aggregated->getId());
