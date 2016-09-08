@@ -25,9 +25,11 @@ body.zolagomodago-index-index .benefits {
 		vertical-align: middle;
 		width: 25%;
 
-		+ .benefit-item {
-			border-left: 1px solid $color-gray4;
-		}
+      @media(min-width: $screen-lg-min) {
+        + .benefit-item {
+          border-left: 1px solid $color-gray4;
+        }
+      }
 
 		@media(max-width: 979px) {
 			border: none !important;
@@ -64,7 +66,7 @@ body.zolagomodago-index-index .benefits {
 			}
 		}*/
 
-		@media(max-width: 359px) {
+		@media(max-width: 400px) {
 			.benefit-text {
 				background: none !important;
 				padding: 15px 5px 15px 10px !important;
