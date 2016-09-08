@@ -259,4 +259,12 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
         }
 
     }
+    
+    /**
+     * object for generate pdf - exists in dhl
+     */
+
+    public function getAggregatedPdfObject() {
+        return Mage::getModel('zolagopo/aggregated_pdf');
+    }
 }

@@ -1,4 +1,5 @@
 <?php /* @var $this Zolago_Po_Block_Po */ ?>
+<?php $_officeList = $this->_getPostOfficeList(); ?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-header">
@@ -17,12 +18,43 @@
 		</div>
 	</div>
 </div>
+<?php if (!empty($_officeList)) : ?>
+<div class="modal fade" id="modal_post_aggregate">
+	<form name="tmp" action="<?php echo Mage::getUrl('*/*/confirm'); ?>" method='post'>
+	<input type="hidden" name="id" value="" id="aggregate_id"/>
+	<div class="modal-dialog">
+	 	<div class="modal-content">
+	 		<div class="modal-header">
+	 			<h4 class="modal-title"><?php echo Mage::helper("orbashipping")->__('Choose post office'); ?></h4>
+	 		</div>
+	 		<div class="modal-body">
+				<select id="post_office" name="post_office" class="select2 has-error2" style="width: 100%;" required aria-required="true">
+					<?php foreach ($_officeList as $key=>$name):  ?>
+					<option value="<?php echo $key; ?>"><?php echo $name; ?></option>
+					<?php endforeach ?>
+				</select>
+
+	 		</div>
+	 		<div class="modal-footer">
+	 			<button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel'); ?></button>
+	 			<button type="submit" id="send_ask_value" class="btn btn-primary form-btn-loading"
+	 				data-loading-text="Loading .."
+	 				 ><?php echo Mage::helper('zolagocatalog')->__('Send'); ?></button>
+	 		</div>	 	
+	 	</div>
+	</div>
+	</form>
+</div>
+<?php endif; ?>
 <script type="text/javascript">
+jQuery('#modal_post_aggregate').on('show.bs.modal', function (e) {
+	var invoker = jQuery(e.relatedTarget);
+	jQuery('#aggregate_id').val(invoker.data('id'));
+});
 (function(){
 	var gridObj = <?php echo $this->getGridJsObjectName();?>;
 	// create integrator
 	new Zolago.gridIntegrator(gridObj);
-	
 	
 	
 })();

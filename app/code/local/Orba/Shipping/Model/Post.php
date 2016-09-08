@@ -12,9 +12,9 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         $size = $params->getParam('specify_post_size');
         $category = $params->getParam('specify_post_category');
         $value = $udpo->getSubtotalInclTax();
-        
+        $insurance = $params->getParam('insurance');
         $order = $shipment->getOrder();
-        if ($order->getPayment()->getMethod() == 'cashondelivery') {	
+        if ($order->getPayment()->getMethod() == 'cashondelivery') {
             $codValue = $udpo->getGrandTotalInclTax()-$udpo->getPaymentAmount();
         }
 
@@ -29,6 +29,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
                                 'udpo' => $udpo,
                                 'value' => $value,
                                 'cod' => $codValue,
+                                'insurance' => $insurance,
                             );
 
         $settings = array();
@@ -60,21 +61,23 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         }
         return $client;
     }
-    
+
     /**
      * try clear envelope if needed
      */
     protected function _clearEnvelope() {
         $settings = $this->_settings;
-        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date',0);        
-        if ($lastDate != date('Y-m-d')) {            
-            if ($this->getClient()->clearEnvelope($settings)) {                
+        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date',0);
+        if ($lastDate != date('Y-m-d')) {
+            if ($this->getClient()->clearEnvelope($settings)) {
                 Mage::getConfig()->saveConfig('carriers/zolagopp/last_date',date('Y-m-d'),'default',0);
                 Mage::getConfig()->reinit();
                 Mage::app()->reinitStores();
+                // @todo should create new dispatch
+                
             }
-        }    
-    }    
+        }
+    }
     /**
      * shipments for pp
      */
@@ -88,7 +91,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             $client->setReceiverAddress($this->_receiverAddress);
             $client->setShipmentSettings($settings);
             $this->_clearEnvelope();
-            $retval = $client->createDeliveryPacks($settings);            
+            $retval = $client->createDeliveryPacks($settings);
             $code = empty($retval->guid)? 0:$retval->guid;
             $message = 'OK';
         } catch (Exception $xt) {
@@ -101,5 +104,32 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
                       'message' => $message
                   );
         return $result;
+    }
+
+    /**
+     * remove pack from buffer
+     */
+    public function cancelTrack($track) {
+        try {
+            if ($number = $track->getTrackNumber()) {
+                $client = $this->getClient();
+                $client->cancelPack($number);
+            }
+        } catch (Exception $xt) {
+            Mage::logException($xt); // nie przerywamy procesu
+        }
+    }
+        
+    /**
+     * action after shipped po
+     */
+    public function setShipped() {
+            $postOfficeId = Mage::app()->getRequest()->getParam('post_office');
+            $client = $this->getClient();
+            $client->setParam('postOffice',$postOfficeId);            
+            $result = $client->sendEnvelope();
+            // @todo process statuses 
+            // @see Orba_Shipping_Model_Post_Client_Wsdl
+            // @see envelopeStatusType
     }
 }

@@ -1059,6 +1059,10 @@ class rodzajUbezpieczeniaType
 }
 class kwotaUbezpieczeniaType
 {
+	const KWOTA_5000  =  500000;
+	const KWOTA_10000 = 1000000;
+	const KWOTA_20000 = 2000000;
+	const KWOTA_50000 = 5000000;
 }
 class emailType
 {
