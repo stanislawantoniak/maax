@@ -81,6 +81,37 @@
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
 		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/select2/select2.min.js</name>
+			</action>
+            <action method="addLocaleJs">
+                <type>skin_js</type>
+                <name>
+                    <pl_PL>js/plugins/select2/select2_locale_pl.js</pl_PL>
+                    <en_US>0</en_US>
+                </name>
+            </action>
+			<action method="addItemLast">
+				<type>skin_js</type>
+				<name>js/plugins/validation/jquery.validate.min.js</name>
+			</action>
+			<action method="addItemLast">
+				<type>skin_js</type>
+				<name>js/plugins/validation/additional-methods.js</name>
+			</action>
+			<action method="addLocaleJsLast">
+				<type>skin_js</type>
+				<name>
+					<pl_PL>js/plugins/validation/localization/messages_pl.js</pl_PL>
+					<en_US>0</en_US>
+				</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/alphanum/jquery.alphanum.js</name>
+			</action>
+		
 			<action method="setTitle"><title>Vendor Portal</title></action>
 			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
 		</reference>

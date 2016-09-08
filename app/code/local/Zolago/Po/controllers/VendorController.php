@@ -268,9 +268,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
                 if($action == self::ACTION_PRINT_AGGREGATED) {
                     // Action not based on status
-                    $id = $hlp->createAggregated($collection, $this->_getVendor());
-                    $transaction->commit();
-                    Mage::getSingleton('core/session')->setAggregatedPrintId($id);
+                    $aggregated = $hlp->createAggregated($collection, $this->_getVendor());
+                    $transaction->commit();                  
+                    if ($id = $aggregated->getPrintId()) {
+                        Mage::getSingleton('core/session')->setAggregatedPrintId($id);
+                    }
                 } else {
                     // All actions based on satatus
                     foreach($collection as $po) {
