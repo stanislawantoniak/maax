@@ -1522,10 +1522,7 @@ function positionToggleSearch() {
 		}
 	}
 }
-jQuery(window).resize(function() {
-    sales_order_details_top_resize();
-	positionToggleSearch();
-});
+
 
 Mall.Footer = {
 	footerId: '#footer',
@@ -1844,7 +1841,10 @@ Mall.inspirationsSliderInit = function() {
 		navigation: true,
 		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
 		rewindNav : false,
-		itemsScaleUp:true
+		itemsScaleUp:true,
+        afterUpdate: function(){
+            Mall.inspirationsSliderAdjustHeight();
+        }
 	});
 
 	// Custom Navigation Events
@@ -1860,6 +1860,28 @@ Mall.inspirationsSliderInit = function() {
 	rwdInspiration.find(".stop").click(function(){
 		rwdInspirationCarousel.trigger('rwd.stop');
 	});
+};
+
+Mall.inspirationsSliderAdjustHeight = function () {
+    var rwdInspiration = jQuery('#rwd-inspiration'),
+        rwdInspirationTitleCaption;
+
+    rwdInspirationTitleCaption = rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption");
+
+    var elementHeights = rwdInspirationTitleCaption.map(function(n, el) {
+        if(jQuery(el).visible(true)){
+            return jQuery(el).height();
+        } else {
+            return 0;
+        }
+    }).get();
+    
+    // Math.max takes a variable number of arguments
+    // `apply` is equivalent to passing each height as an argument
+    var maxHeight = Math.max.apply(null, elementHeights);
+    rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
+        jQuery(item).height(maxHeight);
+    });
 };
 
 Mall.refresh = function() {
@@ -2072,14 +2094,6 @@ jQuery(document).ready(function() {
     basket_dropdown();
     sales_order_details_top_resize();
 
-/*	jQuery(document)
-		.on('show.bs.modal', '.modal', function () {
-			jQuery('html,body').addClass('modal-open');
-		})
-		.on('hidden.bs.modal', '.modal', function () {
-			jQuery('html,body').removeClass('modal-open');
-		});*/
-
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
 			if(!jQuery("#rwd-color, .rwd-color").length) {
@@ -2088,10 +2102,11 @@ jQuery(document).ready(function() {
 		},200);
 	}
 
-	/**
-	 * HOMEPAGE
-	 */
+	/**HOMEPAGE**/
 	Mall.inspirationsSliderInit();
+    Mall.inspirationsSliderAdjustHeight();
+    //on window resize
+    /**HOMEPAGE**/
 
 
 	//init like events
@@ -2103,3 +2118,9 @@ jQuery(document).ready(function() {
 	//restore checkout values on social login
 	setTimeout(Mall.restoreCheckoutValues,100);
 });
+
+jQuery(window).resize(function() {
+    sales_order_details_top_resize();
+    positionToggleSearch();
+});
+
