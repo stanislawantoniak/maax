@@ -1,553 +1,504 @@
 <?xml version="1.0"?>
 <config>
-	<sections>
-		<carriers translate="label" module="shipping">
-			<groups>
-				<std translate="label">
-					<label>Carrier General Settings</label>
-					<sort_order>499</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<delivery_volume_limit>
-							<label>Delivery volume limit</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>90</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</delivery_volume_limit>
-
-						<cod_allowed>
-							<label>Is COD allowed</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>100</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</cod_allowed>
-						<cod_checkout_title>
-							<label>Name for COD</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>110</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<depends>
-								<cod_allowed>1</cod_allowed>
-							</depends>
-						</cod_checkout_title>
-						<cod_extra_charge>
-							<label>Extra charge for COD</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>120</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<depends>
-								<cod_allowed>1</cod_allowed>
-							</depends>
-						</cod_extra_charge>
-					</fields>
-				</std>
-				<orbadhl translate="label">
-					<label>Modago DHL</label>
-					<sort_order>500</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<active translate="label">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active>
-						<gateway translate="label">
-							<label>Gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</gateway>
-						<tracking_gateway translate="label">
-							<label>Tracking gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>23</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</tracking_gateway>
-						<tracking_url translate="label">
-							<label>Tracking URL</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>25</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</tracking_url>
-						<title translate="label">
-							<label>Title</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>30</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</title>
-                        <id translate="label">
-                            <label>Access ID</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>31</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </id>
-                        <password translate="label">
-                            <label>Password</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>32</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </password>
-                        <account>
-                            <label>Account Number</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>33</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </account>
-                        <default_weight>
-                            <label>Default Package Weight</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>35</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <comment><![CDATA[kg]]></comment>
-                        </default_weight>							
-                        <repeat_tracking>
-                            <label>Repeat Tracking Every...</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>35</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <comment><![CDATA[hours]]></comment>
-                        </repeat_tracking>						
-						<sort_order translate="label">
-							<label>Sort Order</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>40</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</sort_order>
-						<showmethod translate="label">
-							<label>Show Method if Not Applicable</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>50</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</showmethod>
-						<sallowspecific translate="label">
-							<label>Ship to Applicable Countries</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>60</sort_order>
-							<frontend_class>shipping-applicable-country</frontend_class>
-							<source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</sallowspecific>
-						<specificcountry translate="label">
-							<label>Ship to Specific Countries</label>
-							<frontend_type>multiselect</frontend_type>
-							<sort_order>70</sort_order>
-							<source_model>adminhtml/system_config_source_country</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<can_be_empty>1</can_be_empty>
-						</specificcountry>
-						<specificerrmsg translate="label">
-							<label>Displayed Error Message</label>
-							<frontend_type>textarea</frontend_type>
-							<sort_order>80</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</specificerrmsg>
-	                    <parcel_value_threshold translate="label">
-	                        <label>Parcel value threshold</label>
-	                        <frontend_type>text</frontend_type>
-	                        <sort_order>90</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-	                    </parcel_value_threshold>
-	                    <charge_always_for_cod translate="label">
-	                        <label>Charge always for COD</label>
-                            <frontend_type>select</frontend_type>                                                                     
-                            <source_model>adminhtml/system_config_source_yesno</source_model>     
-	                        <sort_order>100</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>                                                                            	                        
-	                    </charge_always_for_cod>
-                        <fuel_charge translate="label">
-                            <label>Fuel charge</label>
-                            <frontend_type>select</frontend_type>
-                            <frontend_model>orbashipping/adminhtml_systemConfigField_FuelChargeConfig</frontend_model>
-                            <backend_model>orbashipping/system_backend_FuelChargeConfig</backend_model>
-                            <sort_order>101</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </fuel_charge>
-						<volumetric_weight translate="label">
-							<label>Volumetric weight</label>
-							<comment>Determines how package volumetric weight is calculated: width x height x length / this value</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>120</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-							<default>4000</default>
-						</volumetric_weight>
-						<cod_extra_charge>
-							<label>Extra charge</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>130</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<depends>
-								<cod_allowed>1</cod_allowed>
-							</depends>
-						</cod_extra_charge>
-					</fields>
-				</orbadhl>
-				<orbaups translate="label">
-					<label>Modago UPS</label>
-					<sort_order>600</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<active translate="label">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active>
-						<gateway translate="label">
-							<label>Gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</gateway>
-						<tracking_url translate="label">
-							<label>Tracking URL</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>25</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</tracking_url>
-						<title translate="label">
-							<label>Title</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>30</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</title>
-                        <id translate="label">
-                            <label>Access ID</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>31</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </id>
-                        <password translate="label">
-                            <label>Password</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>32</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </password>
-                        <account>
-                            <label>License Key</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>33</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </account>
-                        <repeat_tracking>
-                            <label>Repeat Tracking Every...</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>35</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <comment><![CDATA[hours]]></comment>
-                        </repeat_tracking>						
-						<sort_order translate="label">
-							<label>Sort Order</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>40</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</sort_order>
-						<showmethod translate="label">
-							<label>Show Method if Not Applicable</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>50</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</showmethod>
-						<sallowspecific translate="label">
-							<label>Ship to Applicable Countries</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>60</sort_order>
-							<frontend_class>shipping-applicable-country</frontend_class>
-							<source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</sallowspecific>
-						<specificcountry translate="label">
-							<label>Ship to Specific Countries</label>
-							<frontend_type>multiselect</frontend_type>
-							<sort_order>70</sort_order>
-							<source_model>adminhtml/system_config_source_country</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<can_be_empty>1</can_be_empty>
-						</specificcountry>
-						<specificerrmsg translate="label">
-							<label>Displayed Error Message</label>
-							<frontend_type>textarea</frontend_type>
-							<sort_order>80</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</specificerrmsg>
-	                    <parcel_value_threshold translate="label">
-	                        <label>Parcel value threshold</label>
-	                        <frontend_type>text</frontend_type>
-	                        <sort_order>90</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-	                    </parcel_value_threshold>
-	                    <charge_always_for_cod translate="label">
-	                        <label>Charge always for COD</label>
-                            <frontend_type>select</frontend_type>                                                                     
-                            <source_model>adminhtml/system_config_source_yesno</source_model>     
-	                        <sort_order>100</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>                                                                            	                        
-	                    </charge_always_for_cod>
-                        <fuel_charge translate="label">
-                            <label>Fuel charge</label>
-                            <frontend_type>select</frontend_type>
-                            <frontend_model>orbashipping/adminhtml_systemConfigField_FuelChargeConfig</frontend_model>
-                            <backend_model>orbashipping/system_backend_FuelChargeConfig</backend_model>
-                            <sort_order>101</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </fuel_charge>
-						<volumetric_weight translate="label">
-							<label>Volumetric weight</label>
-							<comment>Determines how package volumetric weight is calculated: width x height x length / this value</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>120</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</volumetric_weight>
-					</fields>
-				</orbaups>
-				<zolagopp translate="label">
-					<label>Poczta Polska</label>
-					<sort_order>700</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<active translate="label">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active>
-						<business_type translate="label">
-							<label>Use business pack type</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>15</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</business_type>
-						<title translate="label">
-							<label>Title</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</title>
-						<gateway translate="label">
-							<label>Gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>30</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</gateway>
-                        <id translate="label">
-                            <label>Login</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </id>
-                        <password translate="label">
-                            <label>Password</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </password>																		
-						<tracking_gateway translate="label">
-							<label>Tracking gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>60</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</tracking_gateway>
-                        <tracking_id translate="label">
-                            <label>Tracking login</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>70</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </tracking_id>
-                        <tracking_password translate="label">
-                            <label>Tracking password</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <sort_order>80</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </tracking_password>
-              					<delivery_volume_limit>
-							<label>Delivery volume limit</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>85</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<default>0</default>
-						</delivery_volume_limit>
-
-						<cod_allowed>
-							<label>Is COD allowed</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>90</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</cod_allowed>
-						<cod_checkout_title>
-							<label>Name for COD</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>100</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<depends>
-								<cod_allowed>1</cod_allowed>
-							</depends>
-						</cod_checkout_title>
-						<cod_extra_charge>
-							<label>Extra charge</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>110</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-							<depends>
-								<cod_allowed>1</cod_allowed>
-							</depends>
-						</cod_extra_charge>
-                    </fields>
-                </zolagopp>
-				<zolagogls translate="label">
-					<label>GLS</label>
-					<sort_order>800</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<active translate="label">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active>
-						<title translate="label">
-							<label>Title</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</title>
-<!--						
+  <sections>
+    <carriers translate="label" module="shipping">
+      <groups>
+        <orbadhl translate="label">
+          <label>Modago DHL</label>
+          <sort_order>500</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+            <gateway translate="label">
+              <label>Gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </gateway>
+            <tracking_gateway translate="label">
+              <label>Tracking gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>23</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_gateway>
+            <tracking_url translate="label">
+              <label>Tracking URL</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>25</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_url>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <id translate="label">
+              <label>Access ID</label>
+              <frontend_type>obscure</frontend_type>
+              <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+              <sort_order>31</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </id>
+            <password translate="label">
+              <label>Password</label>
+              <frontend_type>obscure</frontend_type>
+              <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+              <sort_order>32</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </password>
+            <account>
+              <label>Account Number</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>33</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </account>
+            <default_weight>
+              <label>Default Package Weight</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>35</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <comment><![CDATA[kg]]></comment>
+            </default_weight>
+            <repeat_tracking>
+              <label>Repeat Tracking Every...</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>35</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <comment><![CDATA[hours]]></comment>
+            </repeat_tracking>
+            <sort_order translate="label">
+              <label>Sort Order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </sort_order>
+            <showmethod translate="label">
+              <label>Show Method if Not Applicable</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>50</sort_order>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </showmethod>
+            <sallowspecific translate="label">
+              <label>Ship to Applicable Countries</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>60</sort_order>
+              <frontend_class>shipping-applicable-country</frontend_class>
+              <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </sallowspecific>
+            <specificcountry translate="label">
+              <label>Ship to Specific Countries</label>
+              <frontend_type>multiselect</frontend_type>
+              <sort_order>70</sort_order>
+              <source_model>adminhtml/system_config_source_country</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <can_be_empty>1</can_be_empty>
+            </specificcountry>
+            <specificerrmsg translate="label">
+              <label>Displayed Error Message</label>
+              <frontend_type>textarea</frontend_type>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </specificerrmsg>
+            <parcel_value_threshold translate="label">
+              <label>Parcel value threshold</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>90</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </parcel_value_threshold>
+            <charge_always_for_cod translate="label">
+              <label>Charge always for COD</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>100</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </charge_always_for_cod>
+            <fuel_charge translate="label">
+              <label>Fuel charge</label>
+              <frontend_type>select</frontend_type>
+              <frontend_model>orbashipping/adminhtml_systemConfigField_FuelChargeConfig</frontend_model>
+              <backend_model>orbashipping/system_backend_FuelChargeConfig</backend_model>
+              <sort_order>101</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </fuel_charge>
+            <volumetric_weight translate="label">
+              <label>Volumetric weight</label>
+              <comment>Determines how package volumetric weight is calculated: width x height x length / this value</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <default>4000</default>
+            </volumetric_weight>
+          </fields>
+        </orbadhl>
+        <orbaups translate="label">
+          <label>Modago UPS</label>
+          <sort_order>600</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+            <gateway translate="label">
+              <label>Gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </gateway>
+            <tracking_url translate="label">
+              <label>Tracking URL</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>25</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_url>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <id translate="label">
+              <label>Access ID</label>
+              <frontend_type>obscure</frontend_type>
+              <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+              <sort_order>31</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </id>
+            <password translate="label">
+              <label>Password</label>
+              <frontend_type>obscure</frontend_type>
+              <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+              <sort_order>32</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </password>
+            <account>
+              <label>License Key</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>33</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </account>
+            <repeat_tracking>
+              <label>Repeat Tracking Every...</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>35</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <comment><![CDATA[hours]]></comment>
+            </repeat_tracking>
+            <sort_order translate="label">
+              <label>Sort Order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </sort_order>
+            <showmethod translate="label">
+              <label>Show Method if Not Applicable</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>50</sort_order>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </showmethod>
+            <sallowspecific translate="label">
+              <label>Ship to Applicable Countries</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>60</sort_order>
+              <frontend_class>shipping-applicable-country</frontend_class>
+              <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </sallowspecific>
+            <specificcountry translate="label">
+              <label>Ship to Specific Countries</label>
+              <frontend_type>multiselect</frontend_type>
+              <sort_order>70</sort_order>
+              <source_model>adminhtml/system_config_source_country</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <can_be_empty>1</can_be_empty>
+            </specificcountry>
+            <specificerrmsg translate="label">
+              <label>Displayed Error Message</label>
+              <frontend_type>textarea</frontend_type>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </specificerrmsg>
+            <parcel_value_threshold translate="label">
+              <label>Parcel value threshold</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>90</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </parcel_value_threshold>
+            <charge_always_for_cod translate="label">
+              <label>Charge always for COD</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>100</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </charge_always_for_cod>
+            <fuel_charge translate="label">
+              <label>Fuel charge</label>
+              <frontend_type>select</frontend_type>
+              <frontend_model>orbashipping/adminhtml_systemConfigField_FuelChargeConfig</frontend_model>
+              <backend_model>orbashipping/system_backend_FuelChargeConfig</backend_model>
+              <sort_order>101</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </fuel_charge>
+            <volumetric_weight translate="label">
+              <label>Volumetric weight</label>
+              <comment>Determines how package volumetric weight is calculated: width x height x length / this value</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </volumetric_weight>
+          </fields>
+        </orbaups>
+        <zolagopp translate="label">
+          <label>Poczta Polska</label>
+          <sort_order>700</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <gateway translate="label">
+              <label>Gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </gateway>
+            <id translate="label">
+              <label>Login</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </id>
+            <password translate="label">
+              <label>Password</label>
+              <frontend_type>obscure</frontend_type>
+              <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </password>
+            <tracking_gateway translate="label">
+              <label>Tracking gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_gateway>
+            <tracking_id translate="label">
+              <label>Tracking login</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_id>
+            <tracking_password translate="label">
+              <label>Tracking password</label>
+              <frontend_type>obscure</frontend_type>
+              <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_password>
+            <default_package_weight translate="label">
+              <label>Default package weight</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>83</sort_order>
+              <comment>in grams</comment>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>            	
+            </default_package_weight>
+            <cod_settlement_type tranlsate="label">
+              <label>Type of settlement for COD</label>
+              <frontend_type>select</frontend_type>
+              <source_model>orbashipping/system_source_post_cod_type</source_model>
+              <sort_order>85</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </cod_settlement_type>
+            <cod_account_number translate="label">
+              <label>Account number for COD settlement</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>88</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <depends>
+                <cod_settlement_type>RACHUNEK_BANKOWY</cod_settlement_type>
+              </depends>
+            </cod_account_number>
+            <cod_transfer_title translate="label">
+              <label>Bank transfer title for settlement</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>89</sort_order>
+              <comment>%s is replaced with order ID</comment>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <depends>
+                <cod_settlement_type>RACHUNEK_BANKOWY</cod_settlement_type>
+              </depends>
+            </cod_transfer_title>
+            <cod_allowed>
+              <label>Is COD allowed</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>90</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </cod_allowed>
+            <cod_checkout_title>
+              <label>Name for COD</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>100</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <depends>
+                <cod_allowed>1</cod_allowed>
+              </depends>
+            </cod_checkout_title>
+          </fields>
+        </zolagopp>
+        <zolagogls translate="label">
+          <label>GLS</label>
+          <sort_order>800</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <!--						
 						<gateway translate="label">
 							<label>Gateway</label>
 							<frontend_type>text</frontend_type>
@@ -573,16 +524,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </password>																		
--->                        
-						<tracking_gateway translate="label">
-							<label>Tracking gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>60</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</tracking_gateway>
-<!--						
+-->
+            <tracking_gateway translate="label">
+              <label>Tracking gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_gateway>
+            <!--						
                         <tracking_id translate="label">
                             <label>Tracking login</label>
                             <frontend_type>text</frontend_type>
@@ -601,43 +552,43 @@
                             <show_in_store>0</show_in_store>
                         </tracking_password>																		
 -->
-                    </fields>
-                </zolagogls>
-				<zolagodpd translate="label">
-					<label>DPD</label>
-					<sort_order>800</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<active translate="label">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active>
-						<title translate="label">
-							<label>Title</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</title>
-						<tracking_gateway translate="label">
-							<label>Tracking gateway</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>60</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</tracking_gateway>
-					</fields>
-				</zolagodpd>
-			</groups>
-		</carriers>
-	</sections>
+          </fields>
+        </zolagogls>
+        <zolagodpd translate="label">
+          <label>DPD</label>
+          <sort_order>800</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+            <tracking_gateway translate="label">
+              <label>Tracking gateway</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </tracking_gateway>
+          </fields>
+        </zolagodpd>
+      </groups>
+    </carriers>
+  </sections>
 </config>
