@@ -9,7 +9,8 @@ $blocks = array(
 <div class="benefits">
     <div class="benefit-item">
         <a href="{{config path="web/secure/base_url"}}dostawa">
-        <div class="benefit-text" style="background-image: url('/skin/frontend/rich/details/images/benefits_transport.jpg')">
+        <div class="benefit-text" 
+            style="background-image: url('/skin/frontend/rich/details/images/svg/benefits_transport.svg')">
             <h3>Darmowa dostawa</h3>
             <p>od&nbsp;99&nbsp;zł</p>
         </div>
@@ -18,7 +19,7 @@ $blocks = array(
     <div class="benefit-item">
         <a href="{{config path="web/secure/base_url"}}blog">
         <div class="benefit-text"
-             style="background-image: url('/skin/frontend/rich/details/images/benefits_tips.jpg')">
+             style="background-image: url('/skin/frontend/rich/details/images/svg/benefits_tips.svg')">
             <h3>Porady fizjoterapeuty</h3>
             <p>infolinia&nbsp;i&nbsp;czat</p>
         </div>
@@ -27,7 +28,7 @@ $blocks = array(
     <div class="benefit-item">
         <a href="{{config path="web/secure/base_url"}}dofinansowanie">
         <div class="benefit-text"
-             style="background-image: url('/skin/frontend/rich/details/images/benefits_financing.jpg')">
+             style="background-image: url('/skin/frontend/rich/details/images/svg/benefits_financing.svg')">
             <h3>Dofinansowania</h3>
             <p>
                 <a href="{{config path="web/secure/base_url"}}dofinansowanie">dowiedz&nbsp;się&nbsp;więcej</a>
@@ -38,7 +39,7 @@ $blocks = array(
     <div class="benefit-item">
         <a href="{{config path="web/secure/base_url"}}zwroty-i-reklamacje">
         <div class="benefit-text"
-             style="background-image: url('/skin/frontend/rich/details/images/benefits_return.jpg')">
+             style="background-image: url('/skin/frontend/rich/details/images/svg/benefits_return.svg')">
             <h3>Darmowy zwrot</h3>
              <p>w&nbsp;ciągu&nbsp;30&nbsp;dni</p>
         </div>
