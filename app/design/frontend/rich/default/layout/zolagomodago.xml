@@ -435,6 +435,11 @@
     </reference>
   </cms_page>
   <zolagomodago_index_index>
+    <reference name="head">
+      <action method="addJs">
+        <name>jquery/jquery.visible.js</name>
+      </action>
+    </reference>
     <reference name="content">
       <block template="cms/modagohome.phtml" name="modagohome" type="core/template">
         <block type="zolagomodago/home_banner" name="zolago_modago_home_banners" template="home/banner/hometopwr.phtml">
