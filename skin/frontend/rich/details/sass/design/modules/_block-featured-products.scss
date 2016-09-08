@@ -184,12 +184,6 @@
     display: inline-block;
     background: #fff;
     top: 45%;
-    border: 1px solid #252525;
-    border-radius: 100%;
-
-    &:hover {
-      border-color: #eee;
-    }
   }
 
   .mp-prev-carousel {
@@ -201,9 +195,9 @@
     &:before {
       content: "\f104";
       position: absolute;
-      font-size: 30px;
+      font-size: 60px;
       font-family: FontAwesome;
-      color: #252525;
+      color: #cccccc;
       left: 15px;
       top: 0px;
       @include transition(all 0.2s ease-in-out);
@@ -226,9 +220,9 @@
     &:before {
       content: "\f105";
       position: absolute;
-      font-size: 30px;
+      font-size: 60px;
       font-family: FontAwesome;
-      color: #252525;
+      color: #cccccc;
       left: 18px;
       top: 0px;
       @include transition(all 0.2s ease-in-out);
