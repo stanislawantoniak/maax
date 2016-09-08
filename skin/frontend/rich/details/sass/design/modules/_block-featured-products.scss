@@ -92,8 +92,8 @@
     }
 
     .owl-carousel {
-      padding-left: 75px;
-      padding-right: 75px;
+      padding-left: 50px;
+      padding-right: 50px;
       @include max-screen($screen-xs-max) {
         padding-left: 0;
         padding-right: 0;
@@ -187,7 +187,7 @@
   }
 
   .mp-prev-carousel {
-    left: 15px !important;
+    left: 0px !important;
     @include max-screen($screen-xs-max) {
       left: 8px !important;
     }
@@ -213,7 +213,7 @@
   }
 
   .mp-next-carousel {
-    right: 15px !important;
+    right: 0px !important;
     @include max-screen($screen-xs-max) {
       right: 8px !important;
     }
