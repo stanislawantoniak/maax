@@ -1816,6 +1816,11 @@ Mall.preventAgreementClick = function() {
 	}
 };
 
+Mall.featuredProductsInit = function () {
+    var featuredProductsTabs = jQuery("#featured_products_tabs");
+    featuredProductsTabs.tabs();
+};
+
 Mall.inspirationsSliderInit = function () {
     var rwdInspiration = jQuery('#rwd-inspiration'),
         rwdInspirationCarousel = rwdInspiration.find('.rwd-carousel');
@@ -2117,6 +2122,7 @@ jQuery(document).ready(function() {
 	/**HOMEPAGE**/
 	Mall.inspirationsSliderInit();
     Mall.inspirationsSliderAdjustHeight();
+    Mall.featuredProductsInit();
     //on window resize
     /**HOMEPAGE**/
 
