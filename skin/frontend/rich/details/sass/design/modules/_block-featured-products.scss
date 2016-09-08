@@ -92,8 +92,8 @@
     }
 
     .owl-carousel {
-      padding-left: 75px;
-      padding-right: 75px;
+      padding-left: 50px;
+      padding-right: 50px;
       @include max-screen($screen-xs-max) {
         padding-left: 0;
         padding-right: 0;
@@ -184,16 +184,10 @@
     display: inline-block;
     background: #fff;
     top: 45%;
-    border: 1px solid #252525;
-    border-radius: 100%;
-
-    &:hover {
-      border-color: #eee;
-    }
   }
 
   .mp-prev-carousel {
-    left: 15px !important;
+    left: 0px !important;
     @include max-screen($screen-xs-max) {
       left: 8px !important;
     }
@@ -201,9 +195,9 @@
     &:before {
       content: "\f104";
       position: absolute;
-      font-size: 30px;
+      font-size: 60px;
       font-family: FontAwesome;
-      color: #252525;
+      color: #cccccc;
       left: 15px;
       top: 0px;
       @include transition(all 0.2s ease-in-out);
@@ -219,16 +213,16 @@
   }
 
   .mp-next-carousel {
-    right: 15px !important;
+    right: 0px !important;
     @include max-screen($screen-xs-max) {
       right: 8px !important;
     }
     &:before {
       content: "\f105";
       position: absolute;
-      font-size: 30px;
+      font-size: 60px;
       font-family: FontAwesome;
-      color: #252525;
+      color: #cccccc;
       left: 18px;
       top: 0px;
       @include transition(all 0.2s ease-in-out);
