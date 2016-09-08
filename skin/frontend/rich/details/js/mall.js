@@ -1842,10 +1842,18 @@ Mall.inspirationsSliderInit = function() {
 		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
 		rewindNav : false,
 		itemsScaleUp:true,
-        afterUpdate: function(){
+        afterUpdate: function () {
+            Mall.inspirationsSliderAdjustHeight();
+        },
+        afterAction: function () {
+            Mall.inspirationsSliderAdjustHeight();
+        },
+        afterMove: function () {
             Mall.inspirationsSliderAdjustHeight();
         }
 	});
+
+    Mall.inspirationsSliderAdjustHeight();
 
 	// Custom Navigation Events
 	rwdInspiration.find(".next").click(function(){
@@ -1871,17 +1879,18 @@ Mall.inspirationsSliderAdjustHeight = function () {
     var elementHeights = rwdInspirationTitleCaption.map(function(n, el) {
         if(jQuery(el).visible(true)){
             return jQuery(el).height();
-        } else {
-            return 0;
         }
     }).get();
     
     // Math.max takes a variable number of arguments
     // `apply` is equivalent to passing each height as an argument
     var maxHeight = Math.max.apply(null, elementHeights);
-    rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
-        jQuery(item).height(maxHeight);
-    });
+    if(maxHeight > 0){
+        rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
+            jQuery(item).height(maxHeight);
+        });
+    }
+
 };
 
 Mall.refresh = function() {
@@ -2122,9 +2131,4 @@ jQuery(document).ready(function() {
 jQuery(window).resize(function() {
     sales_order_details_top_resize();
     positionToggleSearch();
-});
-
-
-jQuery(window).on('Mall.onResizeEnd', function(){
-    Mall.inspirationsSliderAdjustHeight();
 });
