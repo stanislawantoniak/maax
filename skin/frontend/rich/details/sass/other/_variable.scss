@@ -223,7 +223,10 @@ $colorProductStrikeOutPrice:             $color_000;
 @mixin productPricesBlockKit {
 
     .amount {
-        color: #000;
+        font-family: $fontRegular;
+        font-weight: 700;
+        color: #343434;
+        font-size: 14px;
     }
 
     ins {
