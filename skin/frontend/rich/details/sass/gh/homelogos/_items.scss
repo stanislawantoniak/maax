@@ -38,7 +38,7 @@
       margin: 0;
       padding: 0;
       cursor: pointer;
-      .slick-active button {
+      &.slick-active button {
         filter: Alpha(Opacity=100);
         opacity: 1;
       }
@@ -46,7 +46,7 @@
         -webkit-border-radius: 20px;
         -moz-border-radius: 20px;
         border-radius: 20px;
-        background: $colorBtnPrimaryBgStart;
+        background: #869791;
         font-size: 0;
         width: 12px;
         height: 12px;
