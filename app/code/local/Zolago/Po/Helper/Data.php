@@ -416,9 +416,10 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
         }
 
         if(is_array($collection)) {
+            $list = $collection;
             $collection = Mage::getResourceModel('udpo/po_collection');
             /* @var $collection ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Collection */
-            $collection->addFieldToFilter("entity_id", array("in"=>$collection));
+            $collection->addFieldToFilter("entity_id", array("in"=>$list));
         }
 
         if(!$collection->count()) {
@@ -465,7 +466,26 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
 
         return $aggregated;
     }
-
+    
+    /**
+     * find last non accepted  aggregated dispatch from today (poczta polska)
+     */
+    public function getZolagoPPAggregated($vendor) {
+        $collection = Mage::getResourceModel('zolagopo/aggregated_collection');
+        $table = $collection->getTable('udpo/po');
+        $collection->getSelect()
+            ->distinct(true)
+            ->join(
+                array ("po" => $table),
+                "po.aggregated_id = main_table.aggregated_id",
+                array()
+            )
+            ->where('main_table.created_at >= ? ',date('Y-m-d 00:00:00'))
+            ->where('main_table.status = 0')
+            ->where('po.current_carrier = ?',Orba_Shipping_Model_Post::CODE)
+            ->where('main_table.vendor_id = ?',$vendor);
+        return $collection;
+    }
     public function setCondJoined($flag) {
         $this->_condJoined = $flag;
     }

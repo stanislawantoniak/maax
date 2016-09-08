@@ -78,6 +78,23 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             }
         }
     }
+    
+    /**
+     * created dispatch if not exists and assign po 
+     */
+    protected function _assignAggregatedDispatch() {
+        $helper = Mage::helper('zolagopo');
+        $po = $this->_settings['udpo'];
+        $vendor = $po->getUdropshipVendor();
+        $item = $helper->getZolagoPPAggregated($vendor)->getFirstItem();
+        if (!$item->getId()) {
+            $poId = $po->getId();
+            $helper->createAggregated(array($poId),$vendor);
+        } else {
+            $po->setAggregatedId($item->getId());
+            $po->getResource()->saveAttribute($po, "aggregated_id");
+        }
+    }
     /**
      * shipments for pp
      */
@@ -91,6 +108,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             $client->setReceiverAddress($this->_receiverAddress);
             $client->setShipmentSettings($settings);
             $this->_clearEnvelope();
+            $this->_assignAggregatedDispatch();
             $retval = $client->createDeliveryPacks($settings);
             $code = empty($retval->guid)? 0:$retval->guid;
             $message = 'OK';
