@@ -14,6 +14,8 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      *
      */
     protected function _construct() {
+        // include PP objects
+        $tmp = Mage::getSingleton('orbashipping/post_client_wsdl');
         $this->_init('orbashipping/post_client');
     }
 
@@ -326,6 +328,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
 
         $mode = array
                 (
+                    'classmap' => $classmap,
                     'soap_version' => 'SOAP_1_1',  // use soap 1.1 client
                     'trace' => 1,
                     'login' => $login,
@@ -338,7 +341,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * clear envelope
      */
     public function clearEnvelope() {
-        $message = Mage::getModel('orbashipping/post_message_clearEnvelope')->getObject();
+        $message = new clearEnvelope();
         $result = $this->_sendMessage('clearEnvelope',$message);
         if (!empty($result->retval)) {
             return true;
@@ -358,16 +361,14 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      */
 
     public function _createDeliveryPackBusiness($settings) {
-        $message = Mage::getModel('orbashipping/post_message_pack_list')->getObject();
-        $data = Mage::getModel('orbashipping/post_message_pack_business')->getObject();
+        $message = new addShipment();
+        $data = new PrzesylkaBiznesowaType();
         $data->adres = $this->_prepareAddress();
         $data->gabaryt = $this->_settings['size'];
         $data->masa = $this->_settings['weight'];
         $data->guid = $this->_getGuid();
         $message->przesylki[] = $data;
-        Mage::log($message);
         $result = $this->_sendMessage('addShipment',$message);
-        Mage::log($result);
         return $this->_prepareResult($result);
     }
 
@@ -376,10 +377,9 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      */
 
     public function setActiveCard($card) {
-        $message = Mage::getModel('orbashipping/post_message_card');
+        $message = new setAktywnaKarta();
         $message->idKarta = $card;
         $card->aktywna = true;
-        Mage::log($message);
         $result = $this->_sendMessage('setAktywnaKarta',$card);
         return $result;
     }
@@ -434,7 +434,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * prepare address
      */
     protected function _prepareAddress() {
-        $address = Mage::getModel('orbashipping/post_message_address')->getObject();
+        $address = new adresType();
         $sender = $this->_shipperAddress;
         $address->nazwa = $sender['name'];
         $address->ulica = $sender['street'];
@@ -493,9 +493,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         }
 
         $message->przesylki[] = $data;
-        Mage::log($message);
         $result = $this->_sendMessage('addShipment',$message);
-        Mage::log($result);
         return $this->_prepareResult($result);
     }
 
@@ -553,7 +551,6 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      * labels to print
      */
     public function getLabels($tracking) {
-        throw new Exception('not implemented yet');
         if (empty($tracking)) {
             return false;
         }
