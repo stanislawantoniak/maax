@@ -138,19 +138,20 @@
               font-size: 1.1428em;
               line-height: 1.4285em;
 
-
+              @include productPricesBlockKit;
             }
 
             .product-name {
               font-size: 15px;
               padding: 0;
+              white-space: normal;
+              overflow: visible;
               a {
-                font-weight: 400;
                 color: #3d3d3d;
                 font-size: 1.0714em;
                 display: block;
-                text-transform: uppercase;
-                font-family: $fontBlack;
+                white-space: normal;
+
                 width: 100%;
                 margin-bottom: 0.7142em;
 
