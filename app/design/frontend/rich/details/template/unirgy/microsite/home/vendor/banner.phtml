@@ -151,7 +151,7 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 																<?php endif; ?>
 																<div class="<?php if ($j == 1): ?>title-caption<?php else: ?>body-caption<?php endif; ?>">
 																	<?php echo $caption['text']; ?>
-																	<?php if ($j == 1): ?><div class="title-caption-fade"></div><?php else: ?><div class="body-caption-fade"></div><?php endif; ?>
+																	<?php if ($j > 1): ?>div class="body-caption-fade"></div><?php endif; ?>
 																</div>
 																<?php if (!empty($caption['url'])): // A2 CLOSE ?>
 																	</a>
