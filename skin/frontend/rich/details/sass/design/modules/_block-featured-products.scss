@@ -10,7 +10,7 @@
         border: none;
         padding: 0;
         .ui-tabs-panel {
-            padding: 1em 0;
+            padding: 0;
         }
         .tab-title {
             font-size: 18px;
@@ -64,17 +64,18 @@
                         left: 0;
                         height: 22px;
                         border-bottom: 2px solid $colorAccentSite;
+                        padding-top: 30px;
                     }
                 }
             }
 
             li > a {
-                font-size: 16px;
+                font-size: 20px;
                 color: #999;
                 display: inline-block;
                 text-transform: none;
                 font-family: $fontRegular;
-                font-weight: 400;
+                font-weight: bold;
                 position: relative;
                 margin-right: 15px;
                 padding: 0 !important;
@@ -122,8 +123,6 @@
                         max-width: 100%;
                         margin: 0 auto;
                         text-align: center;
-
-                        box-shadow: 0 0 1px 1px #f5f3f4;
                     }
 
                     .product-info {
