@@ -1,0 +1,12 @@
+<div class="container-fluid">
+    <div class="col-sm-12 col-featured-products">
+        <div class="row">
+            <section class="block-featured-products clearfix">
+                <?php echo $this->getLayout()
+                    ->createBlock('cms/block')
+                    ->setBlockId('featured_products')->toHtml();
+                ?>
+            </section>
+        </div>
+    </div>
+</div>

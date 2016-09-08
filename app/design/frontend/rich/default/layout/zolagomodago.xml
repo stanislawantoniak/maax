@@ -447,10 +447,13 @@
           <block type="zolagocms/component_slider" name="slider" before="-"/>
           <block type="zolagocms/component_boxes" name="boxes" before="-"/>
         </block>
-        <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml">
-				</block>
+        <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml" />
+
         <block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
         <block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
+
+        <block type="core/template" name="featured_products" template="home/featured_products.phtml" />
+
         <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
       </block>
     </reference>
