@@ -1842,22 +1842,22 @@ Mall.inspirationsSliderInit = function () {
         itemsDesktopSmall: [900, 3], // between 900px and 601px
         itemsTablet: [767, 2], //2 items between 600 and 0
         itemsMobile: [480, 1], // itemsMobile disabled - inherit from itemsTablet option
-        pagination: false,
+        pagination: true,
         navigation: true,
         navigationText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
         rewindNav: false,
         itemsScaleUp: true,
         afterUpdate: function () {
-            Mall.inspirationsSliderAdjustHeight();
+            // Mall.inspirationsSliderAdjustHeight();
         },
         afterAction: function () {
-            Mall.inspirationsSliderAdjustHeight();
+            // Mall.inspirationsSliderAdjustHeight();
         },
         afterMove: function () {
-            Mall.inspirationsSliderAdjustHeight();
+            setTimeout(function(){ Mall.inspirationsSliderAdjustHeight(); }, 1000);
         },
         afterInit: function () {
-            Mall.inspirationsSliderAdjustHeight();
+            // Mall.inspirationsSliderAdjustHeight();
         }
     });
 
@@ -1895,7 +1895,7 @@ Mall.inspirationsSliderAdjustHeight = function () {
     var maxHeight = Math.max.apply(null, elementHeights);
     if(maxHeight > 0){
         rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
-            jQuery(item).height(maxHeight);
+            jQuery(item).animate({ height: maxHeight }, 100);
         });
     }
 
