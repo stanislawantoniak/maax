@@ -38,4 +38,13 @@
             </zolagofreshmail_setup>
         </resources>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <snowfreshmail>
+                    <file>zolagofreshmail.xml</file>
+                </snowfreshmail>
+            </updates>
+        </layout>
+    </frontend>
 </config>
