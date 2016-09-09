@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Shipping_InpostController extends Mage_Core_Controller_Front_Action
+class Zolago_Shipping_GhinpostController extends Mage_Core_Controller_Front_Action
 {
     public function getPopulateMapDataAction()
     {
