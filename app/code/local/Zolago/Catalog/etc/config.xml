@@ -35,10 +35,10 @@
             </vendor>
         </udropship>
         <shipping>
-        	<option>	
+        	<option>
         		<default_delivery_volume>1</default_delivery_volume>
         	</option>
-        		
+
         </shipping>
     </default>
     <global>

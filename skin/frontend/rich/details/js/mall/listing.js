@@ -129,9 +129,15 @@ Mall.listing = {
 	initAddToBasketFromListing: function() {
 		jQuery(document).delegate('.qty_more', 'click', function (e) {
 			e.preventDefault();
+			// skip validation for bundle product
+			var prodType = jQuery(this).parents(".box_listing_product").find("a:eq(0)").attr("data-product-type");
+			var skipValidation = false;
+			if (prodType == 'bundle') {
+				skipValidation = true;
+			}
 			var quantity = parseInt(jQuery(this).parents(".quantity_block").find("input[name=quantity]").val());
 			var max = parseInt(jQuery(this).attr("data-qty"));
-			if (quantity < max) {
+			if ((quantity < max) || skipValidation) {
 				quantity++;
 				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(quantity)
 					.parents(".qty-box").tooltip('destroy');
@@ -142,6 +148,12 @@ Mall.listing = {
 		});
 		jQuery(document).delegate('.qty_less', 'click', function (e) {
 			e.preventDefault();
+			// skip validation for bundle product
+			var prodType = jQuery(this).parents(".box_listing_product").find("a:eq(0)").attr("data-product-type");
+			var skipValidation = false;
+			if (prodType == 'bundle') {
+				skipValidation = true;
+			}
 			var quantity = parseInt(jQuery(this).parents(".quantity_block").find("input[name=quantity]").val());
 			var min = parseInt(jQuery(this).attr("data-min_qty"));
 			var max = parseInt(jQuery(this).parents(".quantity_block").find(".qty_more").attr("data-qty"));
@@ -150,12 +162,21 @@ Mall.listing = {
 				jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(quantity)
 					.parents(".qty-box").tooltip('destroy');
 			} else {
-				if (quantity > max) {
-					jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(max)
-						.parents(".qty-box").tooltip('show');
+				if (skipValidation) {
+					if (quantity <= min) {
+						jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(min);
+					} else {
+						quantity--;
+						jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(quantity);
+					}
 				} else {
-					jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(min)
-						.parents(".qty-box").tooltip('show');
+					if (quantity > max) {
+						jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(max)
+							.parents(".qty-box").tooltip('show');
+					} else {
+						jQuery(this).parents(".quantity_block").find("input[name=quantity]").val(min)
+							.parents(".qty-box").tooltip('show');
+					}
 				}
 			}
 		});
@@ -437,7 +458,8 @@ Mall.listing = {
 							'title="' + product[1] + '" ' +
 							'data-entity="' + product[0] + '" ' +
 							'data-sku="' + product[10] + '" ' +
-							'data-skuv="' + product[11] + '">';
+							'data-skuv="' + product[11] + '" ' +
+							'data-product-type="' + product[16] + '">';
 
 		if(product[15])
 					data += '<div class="label-product">' +
@@ -458,7 +480,7 @@ Mall.listing = {
 								'</div>' +
 								'<div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">' +
 									'<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">';
-		if (product[16] == 'simple')
+		if (product[16] == 'simple' || product[16] == 'bundle')
 			data +=						'<a href="#" class="qty_less" id="qty-less-' + product[0] + '" data-min_qty="' + product[18]+'">-</a>' +
 										'<div class="qty qty-box" id="input-box-' + product[0] + '"' +
 											'title="' + Mall.translate.__("Maximum quantity") + '&nbsp;' + product[17] + '"' +
@@ -468,7 +490,7 @@ Mall.listing = {
 		data += 					'</div>' +
 									'<div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">' +
 										'<div class="action-box-bundle clearfix">';
-		if (product[16] == 'simple') data += '<button class="btn button button-primary addBasket"' +
+		if (product[16] == 'simple' || product[16] == 'bundle') data += '<button class="btn button button-primary addBasket"' +
 											 'onclick="Mall.validateAddingToCartListing(' + product[0] + ', ' + product[18] + ', ' + product[17] + ');return false;">' +
 												 '<i class="fa fa-shopping-cart" aria-hidden="true"></i> ' +
 												Mall.translate.__('Add') +

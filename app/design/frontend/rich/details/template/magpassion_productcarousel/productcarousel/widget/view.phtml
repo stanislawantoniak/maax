@@ -1,0 +1,380 @@
+<?php
+/**
+ * MagPassion_ProductCarousel extension
+ * 
+ * @category   	MagPassion
+ * @package		MagPassion_ProductCarousel
+ * @copyright  	Copyright (c) 2013 by MagPassion (http://magpassion.com)
+ * @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/**
+ * Product Carousel view widget template
+ *
+ * @category	MagPassion
+ * @package		MagPassion_ProductCarousel
+ * @author MagPassion.com
+ */
+
+?>
+<?php
+$_productcarousel = $this->getCurrentProductcarousel();
+
+/** @var Zolago_Catalog_Helper_Data $hlp */
+$hlp = Mage::helper('catalog');
+
+/** @var Zolago_Catalog_Helper_Product $productHelper */
+$productHelper = Mage::helper("zolagocatalog/product");
+
+
+?>
+
+<?php 
+    $block_id = $_productcarousel->getEntity_id(); 
+    $mp_htmlid = "mp-carousel".$block_id;
+    $mp_wrapper = "mp-wrap".$block_id;
+    
+?>
+
+<?php $numofproduct = $_productcarousel->getNumberproduct() > 0 ? $_productcarousel->getNumberproduct(): 10; ?>
+<?php $numofproductshow = $_productcarousel->getNumberproductshow() ?>
+<?php $numofproductscroll = 5; ?>
+<?php if (!$numofproductscroll || $numofproductscroll < 0 || $numofproductscroll > $numofproductshow) $numofproductscroll = 1; ?>
+
+<?php $products = $this->getProductCollection($_productcarousel->getType(), $_productcarousel->getCategory_id(), $numofproduct);?>
+
+<?php if ($products->count() > 0) :?>
+<?php $block_title_color = $_productcarousel->getBlock_title_color() ? '#'.$_productcarousel->getBlock_title_color() : '#686868'; ?>
+<?php $block_title_bg_color = $_productcarousel->getBlock_title_bg_color() ? '#'.$_productcarousel->getBlock_title_bg_color() : NULL; ?>
+<?php $imgW = $_productcarousel->getImagewidth() > 0 ? $_productcarousel->getImagewidth() : 200;?>
+<?php $imgH = $_productcarousel->getImageheight() > 0 ? $_productcarousel->getImageheight() : 200;?>
+<?php 
+    $newlabel = $_productcarousel->getNewlabel();
+    $salelabel = $_productcarousel->getSalelabel();
+?>
+<?php $itemW = $imgW; ?>
+<div id="<?php echo $mp_wrapper;?>" class="mp-carousel-wrapper">
+    <div class="mp-owl-topbar clearfix">
+        <?php if ($_productcarousel->getShowblocktitle() == 1): ?>
+            <h4 class="mptitle" style="color:<?php echo $block_title_color?>; <?php echo $block_title_bg_color? 'background-color:'.$block_title_bg_color : ''; ?>">
+                <?php echo $_productcarousel->getBlocktitle();?>
+            </h4>
+        <?php endif; ?>
+        <?php if($_productcarousel->getShownavigator() == 2):?>
+        <div class="mp-owl-navigation">
+            <span class="mp-prev-carousel">
+                <
+            </span>
+            <span class="mp-next-carousel">
+                >
+            </span>
+        </div>
+        <?php endif;?>
+    </div>
+    <?php // horizotal style ?>
+    <?php if ($_productcarousel->getDirection() == 'hori'):?>
+    <div id="<?php echo $mp_htmlid?>" class="owl-carousel horizontal">
+        <?php foreach ($products as $product) : ?>
+            <?php
+            $_product = Mage::getModel('catalog/product')->load($product->getId());
+
+
+            $flag = $productHelper->getProductBestFlag($_product);
+            $flagLabel = $flag ? $hlp->__($flag) : "";
+
+            ?>
+                <div>
+                    <div class="product-block mp-carouselproduct-item">
+                        <div class="product-image">
+
+                            <div class="label-product">
+                                <div class="listing-label type-label-<?php echo $flag; ?>">
+                                    <div class="flag-<?php echo $flag; ?>"></div>
+                                </div>
+                            </div>
+
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>">
+                                <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($imgW,$imgH); ?>" class="img-responsive" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+                            </a>
+                        </div>
+                        
+                        
+                        <div class="product-info">
+
+                            
+                            <?php if ($_productcarousel->getShowreview() == 1): ?>
+                                <?php 
+                                    $review_html = $this->getReviewsSummaryHtml($_product, 'short');
+                                    if($review_html){echo $review_html;}
+                                    else {
+                                ?>
+                                    <div class="ratings">
+                                        <div class="rating-box">
+                                            <div style="width:0%" class="rating"></div>
+                                        </div>
+                                        <span class="amount">0 Review</span>
+                                    </div>
+                                    <?php }?>
+                            <?php endif;?>
+                            
+                            <?php if ($_productcarousel->getShowproductname() == 1): ?>
+                            <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></h2>
+                            <?php endif; ?>
+                            <?php if ($_productcarousel->getShowproductprice() == 1): ?>
+                                <div class="price">
+                                    <?php if ($_product->getStrikeoutPrice() > $_product->getFinalPrice()): ?>
+                                        <del>
+                                            <span class="amount"><?php echo Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false); ?></span>
+                                        </del>
+                                    <?php endif; ?>
+                                    <ins>
+                                        <span class="amount"><?php echo Mage::helper('core')->currency($_product->getFinalPrice(), true, false); ?></span>
+                                    </ins>
+                                </div>
+                            <?php endif; ?>
+                        
+                            <div class="actions">
+                            <?php if ($_productcarousel->getShowproductaddtocart() == 1): ?>
+
+                            <?php if($_product->isSaleable()): ?>
+                                <div class="addtocart"><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></div>
+                            <?php else: ?>
+                                <div class="addtocart"><span><?php echo $this->__('Out of stock') ?></span></div>
+                            <?php endif; ?>
+
+                            <?php endif; ?>
+                            <?php if ($_productcarousel->getShowmoreaddtolink() == 1): ?>
+                            <ul class="add-to-links">
+                                <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                    <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                                <?php endif; ?>
+                                <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                                    <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                                <?php endif; ?>
+                            </ul>
+                            <?php endif; ?>
+                            </div>
+                        </div>
+                    
+                            <?php if ($_productcarousel->getShowmoredes() == 1): ?>
+                                <div class="product-des">
+                                <?php 
+
+                                    $mp_short_desc = Mage::helper('catalog/output')->productAttribute($_product, $_product->getShortDescription(), 'short_description');
+                                    $mp_short_desc = strip_tags($mp_short_desc);
+                                    $mp_short_desc = Mage::helper('core/string')->truncate($mp_short_desc, 100, '...');
+                                    echo $mp_short_desc;
+                                ?>
+                                </div>
+                            <?php endif; ?>
+                        
+                         
+                        
+                        
+                    </div>
+                </div>
+                   
+            <?php endforeach; ?>
+        
+    </div>
+    <?php endif;?>
+    <?php // vertical style ?>
+    <?php if ($_productcarousel->getDirection() == 'vert'):?>
+    
+    <?php $i = 0; $size_collection = count($products);?>
+     <div id="<?php echo $mp_htmlid?>" class="owl-carousel vertical">
+        <?php foreach ($products as $product) : ?>
+            
+            <?php $_product = Mage::getModel('catalog/product')->load($product->getId()); ?>
+            <?php if($i%$numofproductshow ==0):?>    
+            <div>
+            <?php endif;?>
+                
+                    <div class="product-block mp-carouselproduct-item">
+                        <div class="product-image">
+                            <?php if($newlabel || $salelabel):?>
+                            <div class="ribbon-wrapper">
+                                <?php 
+                                    if($newlabel){
+                                    
+                                        $now = date("Y-m-d");
+                                        $newsFrom= substr($_product->getData('news_from_date'),0,10);
+                                        $newsTo=  substr($_product->getData('news_to_date'),0,10);
+                                        if ($newsTo != '' || $newsFrom != ''){
+                                            if (($newsTo != '' && $newsFrom != '' && $now>=$newsFrom && $now<=$newsTo) || ($newsTo == '' && $now >=$newsFrom) || ($newsFrom == '' && $now<=$newsTo))
+                                            {
+                                                echo '<div class="new-label">'.$newlabel.'</div>';
+                                            }
+                                        }
+                                    
+                                    }
+                                ?>
+                                
+                                <?php 
+                                    // Get the Special Price
+                                    $specialprice = $_product->getSpecialPrice(); 
+                                    // Get the Special Price FROM date
+                                    if($salelabel && $specialprice){
+                                        $specialPriceFromDate = $_product->getSpecialFromDate();
+                                        // Get the Special Price TO date
+                                        $specialPriceToDate = $_product->getSpecialToDate();
+                                        // Get Current date
+                                        $today =  time();
+
+
+                                        if($today >= strtotime( $specialPriceFromDate) && $today <= strtotime($specialPriceToDate) || $today >= strtotime( $specialPriceFromDate) && is_null($specialPriceToDate)){
+                                               echo '<div class="sale-label">'.$salelabel.'</div>';
+                                        }
+                                    
+                                    }
+                                    
+                                ?>
+                            </div>
+                            <?php endif;?>
+                        
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>">
+                                <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($imgW,$imgH); ?>" class="img-responsive" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+                            </a>
+                            <!--div class="mp-add-to">
+                                 <?php if($_product->isSaleable()): ?>
+                                <a href="<?php echo $this->getAddToCartUrl($_product) ?>" title="<?php echo $this->__('Add to Cart') ?>" >
+                                    <span class="fa fa-cart-plus"></span>
+                                </a>
+                                <?php endif; ?>
+                                <a href="#" class="mp-quickview">
+                                    <span class="fa fa-search"></span>
+                                </a>
+                                    <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                        <a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist" title="<?php echo $this->__('Add to Wishlist') ?>">
+                                            <span class="fa fa-heart-o"></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                                       <a href="<?php echo $_compareUrl ?>" class="link-compare" title="<?php echo $this->__('Add to Compare') ?>">
+                                           <span class="fa fa-copy"></span>
+                                       </a>
+                                <?php endif; ?>
+                            </div-->
+                        </div>
+                        
+                        
+                        <div class="product-info">
+                            
+                            <?php if ($_productcarousel->getShowreview() == 1): ?>
+                                <?php 
+                                    $review_html = $this->getReviewsSummaryHtml($_product, 'short');
+                                    if($review_html){echo $review_html;}
+                                    else {
+                                ?>
+                                    <div class="ratings">
+                                        <div class="rating-box">
+                                            <div style="width:0%" class="rating"></div>
+                                        </div>
+                                        <span class="amount">0 Review</span>
+                                    </div>
+                                    <?php }?>
+                            <?php endif;?>
+                            
+                            <?php if ($_productcarousel->getShowproductname() == 1): ?>
+                            <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></h2>
+                            <?php endif; ?>
+                            <?php if ($_productcarousel->getShowproductprice() == 1): ?>
+                                <?php echo $this->getPriceHtml($_product, true) ?>
+                            <?php endif; ?>
+                        
+                            <div class="actions">
+                            <?php if ($_productcarousel->getShowproductaddtocart() == 1): ?>
+
+                            <?php if($_product->isSaleable()): ?>
+                                <div class="addtocart"><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></div>
+                            <?php else: ?>
+                                <div class="addtocart"><span><?php echo $this->__('Out of stock') ?></span></div>
+                            <?php endif; ?>
+
+                            <?php endif; ?>
+                            <?php if ($_productcarousel->getShowmoreaddtolink() == 1): ?>
+                            <ul class="add-to-links">
+                                <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                    <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                                <?php endif; ?>
+                                <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                                    <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                                <?php endif; ?>
+                            </ul>
+                            <?php endif; ?>
+                            </div>
+                        </div>
+                    
+                            <?php if ($_productcarousel->getShowmoredes() == 1): ?>
+                                <div class="product-des">
+                                <?php 
+
+                                    $mp_short_desc = Mage::helper('catalog/output')->productAttribute($_product, $_product->getShortDescription(), 'short_description');
+                                    $mp_short_desc = strip_tags($mp_short_desc);
+                                    $mp_short_desc = Mage::helper('core/string')->truncate($mp_short_desc, 100, '...');
+                                    echo $mp_short_desc;
+                                ?>
+                                </div>
+                            <?php endif; ?>
+                        
+                         
+                        
+                        
+                    </div>
+                
+                    
+            <?php if((($i+1)%$numofproductshow == 0) || (($i+1) == $size_collection)):?>
+            </div>
+            <?php endif;?>
+                   
+            <?php $i++; endforeach; ?>
+        
+    </div>
+    
+    
+    <?php endif;?>
+    <?php if($_productcarousel->getShownavigator() == 1):?>
+    <div class="mp-navigation-midde">
+        <span class="mp-prev-carousel"></span>
+        <span class="mp-next-carousel"></span>
+    </div>
+    <?php endif;?>
+    <script>
+        jQuery(document).ready(function() {
+          var owl<?php echo $block_id;?> = jQuery("#<?php echo $mp_htmlid; ?>");
+          owl<?php echo $block_id; ?>.owlCarousel({
+
+                navigation : false,
+                lazyLoad : true,
+                <?php if ($_productcarousel->getAutoheight()):?>autoHeight : true, <?php endif;?>
+                <?php if ($_productcarousel->getAutoplay()):?>autoPlay : <?php echo $_productcarousel->getAutoplay()?>, <?php endif;?>
+                <?php if ($_productcarousel->getSlidespeed()):?>slideSpeed : <?php echo $_productcarousel->getSlidespeed();?>, <?php endif;?>
+                <?php if ($_productcarousel->getPaginationspeed()):?>paginationSpeed : <?php echo $_productcarousel->getPaginationspeed();?>, <?php endif;?>
+                <?php if ($_productcarousel->getRewindspeed()):?>rewindSpeed : <?php echo $_productcarousel->getRewindspeed();?>, <?php endif;?>
+                <?php if ($_productcarousel->getPauseonhover()):?>stopOnHover:true, <?php endif;?>
+                <?php if (!$_productcarousel->getSwipeonmouse()):?>mouseDrag:false, <?php endif;?>
+                <?php if (!$_productcarousel->getSwipeontouch()):?>touchDrag:false, <?php endif;?>
+                <?php if ($_productcarousel->getDirection() == 'vert'):?>
+                    singleItem : true ,
+                    autoHeight: true,
+                <?php endif;?>
+                <?php if ($_productcarousel->getcustomconfig()) echo $_productcarousel->getcustomconfig(); ?>
+                pagination: true,
+              items : 5,
+              itemsDesktop : [1206,5],
+              itemsDesktopSmall : [979,4],
+              itemsTablet:[768,3],
+              itemsMobile:[479,2]
+          });
+          jQuery("#<?php echo $mp_wrapper?> .mp-next-carousel").click(function(){
+            owl<?php echo $block_id;?>.trigger('owl.next');
+          })
+          jQuery("#<?php echo $mp_wrapper?> .mp-prev-carousel").click(function(){
+            owl<?php echo $block_id;?>.trigger('owl.prev');
+          })
+
+        });
+    </script>
+</div>
+<?php else : ?>
+<div id="messages"><ul class="messages"><li class="error-msg"><ul><li><span><?php echo $this->__('There are no products matching the module.'); ?></span></li></ul></li></ul></div>
+<?php endif;?> 

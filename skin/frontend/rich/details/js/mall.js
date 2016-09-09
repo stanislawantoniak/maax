@@ -202,6 +202,7 @@ var Mall = {
 
         // build product list
         var products = data.content.cart.products == 0 ? [] : data.content.cart.products;
+       
         // build object for filling products template
         Mall._data = data.content;
         // clear products
@@ -618,23 +619,26 @@ var Mall = {
         return false;
     },
 
-    validateSimpleAddingToCart: function(id, minQty, maxQty){
-            jQuery("#qty-error").hide();
-            var quantity =  jQuery("#product-options input[name=quantity]").val();
-            if(quantity >= minQty && quantity <= maxQty && quantity > 0){
-                Mall.addToCart(id, quantity);
-            }else{
-                jQuery("#qty-error").show();
-            }
-            return false;
-        },
+    validateSimpleAddingToCart: function(id, minQty, maxQty, productType){
+        jQuery("#qty-error").hide();
+        var quantity =  jQuery("#product-options input[name=quantity]").val();
+        if((quantity >= minQty && quantity <= maxQty && quantity > 0) || productType == 'bundle'){
+            Mall.addToCart(id, quantity);
+        }else{
+            jQuery("#qty-error").show();
+        }
+        return false;
+    },
 
     validateAddingToCartListing: function(id, minQty, maxQty){
-        var quantity =  jQuery("#input-box-" + id + " input[name=quantity]").val();
-        if(quantity >= minQty && quantity <= maxQty){
+		var elem = jQuery("#input-box-" + id);
+        var quantity =  elem.find("input[name=quantity]").val();
+		var productType = elem.parents(".box_listing_product").find("a:eq(0)").attr("data-product-type");
+		// skip validation for bundle product
+        if((quantity >= minQty && quantity <= maxQty) || productType == 'bundle' ){
             Mall.addToCartListing(id, quantity);
         }else{
-			jQuery('#input-box-' + id).tooltip('show');
+			elem.tooltip('show');
         }
         return false;
     },
@@ -1518,10 +1522,7 @@ function positionToggleSearch() {
 		}
 	}
 }
-jQuery(window).resize(function() {
-    sales_order_details_top_resize();
-	positionToggleSearch();
-});
+
 
 Mall.Footer = {
 	footerId: '#footer',
@@ -1815,40 +1816,89 @@ Mall.preventAgreementClick = function() {
 	}
 };
 
-Mall.inspirationsSliderInit = function() {
-	var rwdInspiration = jQuery('#rwd-inspiration'),
-		rwdInspirationCarousel = rwdInspiration.find('.rwd-carousel');
+Mall.featuredProductsInit = function () {
+    var featuredProductsTabs = jQuery("#featured_products_tabs");
+    featuredProductsTabs.tabs();
+};
 
-	if(!rwdInspiration.length || !rwdInspirationCarousel.length) {
-		return;
-	}
+Mall.inspirationsSliderInit = function () {
+    var rwdInspiration = jQuery('#rwd-inspiration'),
+        rwdInspirationCarousel = rwdInspiration.find('.rwd-carousel');
 
-	rwdInspirationCarousel.rwdCarousel({
-		items : 5, //10 items above 1000px browser width
-		itemsDesktop : [1000,4], //5 items between 1000px and 901px
-		itemsDesktopSmall : [900,4], // betweem 900px and 601px
-		itemsTablet: [767,3], //2 items between 600 and 0
-		itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
-		pagination : false,
-		navigation: true,
-		navigationText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
-		rewindNav : false,
-		itemsScaleUp:true
-	});
+    if (!rwdInspiration.length || !rwdInspirationCarousel.length) {
+        return;
+    }
 
-	// Custom Navigation Events
-	rwdInspiration.find(".next").click(function(){
-		rwdInspirationCarousel.trigger('rwd.next');
-	});
-	rwdInspiration.find(".prev").click(function(){
-		rwdInspirationCarousel.trigger('rwd.prev');
-	});
-	rwdInspiration.find(".play").click(function(){
-		rwdInspirationCarousel.trigger('rwd.play',1000); //rwd.play event accept autoPlay speed as second parameter
-	});
-	rwdInspiration.find(".stop").click(function(){
-		rwdInspirationCarousel.trigger('rwd.stop');
-	});
+    rwdInspirationCarousel.rwdCarousel({
+        itemsCustom: [
+            [1000, 3],
+            [800, 3],
+            [670, 3],
+            [475, 2],
+            [320, 1]
+        ],
+        items: 3, //10 items above 1000px browser width
+        itemsDesktop: [1000, 3], //5 items between 1000px and 901px
+        itemsDesktopSmall: [900, 3], // between 900px and 601px
+        itemsTablet: [767, 2], //2 items between 600 and 0
+        itemsMobile: [480, 1], // itemsMobile disabled - inherit from itemsTablet option
+        pagination: true,
+        navigation: true,
+        navigationText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+        rewindNav: false,
+        itemsScaleUp: true,
+        afterUpdate: function () {
+            // Mall.inspirationsSliderAdjustHeight();
+        },
+        afterAction: function () {
+            // Mall.inspirationsSliderAdjustHeight();
+        },
+        afterMove: function () {
+            setTimeout(function(){ Mall.inspirationsSliderAdjustHeight(); }, 1000);
+        },
+        afterInit: function () {
+            // Mall.inspirationsSliderAdjustHeight();
+        }
+    });
+
+    Mall.inspirationsSliderAdjustHeight();
+
+    // Custom Navigation Events
+    rwdInspiration.find(".next").click(function () {
+        rwdInspirationCarousel.trigger('rwd.next');
+    });
+    rwdInspiration.find(".prev").click(function () {
+        rwdInspirationCarousel.trigger('rwd.prev');
+    });
+    rwdInspiration.find(".play").click(function () {
+        rwdInspirationCarousel.trigger('rwd.play', 1000); //rwd.play event accept autoPlay speed as second parameter
+    });
+    rwdInspiration.find(".stop").click(function () {
+        rwdInspirationCarousel.trigger('rwd.stop');
+    });
+};
+
+Mall.inspirationsSliderAdjustHeight = function () {
+    var rwdInspiration = jQuery('#rwd-inspiration'),
+        rwdInspirationTitleCaption;
+
+    rwdInspirationTitleCaption = rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption");
+
+    var elementHeights = rwdInspirationTitleCaption.map(function(n, el) {
+        if(jQuery(el).visible(true)){
+            return jQuery(el).height();
+        }
+    }).get();
+    
+    // Math.max takes a variable number of arguments
+    // `apply` is equivalent to passing each height as an argument
+    var maxHeight = Math.max.apply(null, elementHeights);
+    if(maxHeight > 0){
+        rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
+            jQuery(item).animate({ height: maxHeight }, 100);
+        });
+    }
+
 };
 
 Mall.refresh = function() {
@@ -2061,14 +2111,6 @@ jQuery(document).ready(function() {
     basket_dropdown();
     sales_order_details_top_resize();
 
-/*	jQuery(document)
-		.on('show.bs.modal', '.modal', function () {
-			jQuery('html,body').addClass('modal-open');
-		})
-		.on('hidden.bs.modal', '.modal', function () {
-			jQuery('html,body').removeClass('modal-open');
-		});*/
-
 	if(jQuery("body").hasClass("catalog-product-view")) {
 		setTimeout(function() {
 			if(!jQuery("#rwd-color, .rwd-color").length) {
@@ -2077,10 +2119,14 @@ jQuery(document).ready(function() {
 		},200);
 	}
 
-	/**
-	 * HOMEPAGE
-	 */
+	/**HOMEPAGE**/
 	Mall.inspirationsSliderInit();
+    Mall.inspirationsSliderAdjustHeight();
+	jQuery(window).on('Mall.onResizeEnd', function() {Mall.inspirationsSliderAdjustHeight()});
+	jQuery(window).on('Mall.onScrollEnd', function() {Mall.inspirationsSliderAdjustHeight()});
+    Mall.featuredProductsInit();
+    //on window resize
+    /**HOMEPAGE**/
 
 
 	//init like events
@@ -2091,4 +2137,9 @@ jQuery(document).ready(function() {
 
 	//restore checkout values on social login
 	setTimeout(Mall.restoreCheckoutValues,100);
+});
+
+jQuery(window).resize(function() {
+    sales_order_details_top_resize();
+    positionToggleSearch();
 });

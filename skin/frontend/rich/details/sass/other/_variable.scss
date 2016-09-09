@@ -48,7 +48,7 @@ $color-gold: $color_ff0000;
 $color-gray1: $color_b99;
 $color-gray2: $color_ffebeb;
 $color-gray3: $color_ffeded;
-$color-gray4: $color_b69494;
+$color-gray4: $color_999;
 $bc-primary : $gray-lighter;
 $color-black: $color_220000;
 $bc-secondary : #d9d9d9;
@@ -204,6 +204,9 @@ $colorBtnThirdColorActive:              #008539;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 
+$colorProductFinalPrice:                 $color_000;
+$colorProductStrikeOutPrice:             $color_000;
+
 @mixin primaryButtonGradient { //covers normal + hover + active + .disabled
 	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
 	&:hover,&.hover {
@@ -217,7 +220,28 @@ $colorBtnPrimaryBgDisabled:             #C5C5C5;
 	}
 }
 
+@mixin productPricesBlockKit {
 
+    .amount {
+        font-family: $fontRegular;
+        font-weight: 700;
+        color: #343434;
+        font-size: 14px;
+    }
+
+    ins {
+        background-color: transparent;
+        text-decoration: none;
+    }
+    del {
+        font-size: 1em;
+        color: #999;
+
+        span.amount {
+            color: #999;
+        }
+    }
+}
 /***********************************************/
 $colorDropdownBorder:                   #ffffff;
 $colorDropdownBBoxShadow:               #ccc;

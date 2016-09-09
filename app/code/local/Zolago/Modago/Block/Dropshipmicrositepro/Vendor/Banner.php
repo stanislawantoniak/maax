@@ -15,8 +15,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_BOX_WIDTH = 280;
     const BANNER_BOX_HEIGHT = 323;
 
-    const BANNER_INSPIRATION_WIDTH = 400;
-    const BANNER_INSPIRATION_HEIGHT = 600;
+    const BANNER_INSPIRATION_WIDTH = 600;
+    const BANNER_INSPIRATION_HEIGHT = 418;
 
     const BANNER_RESIZE_DIRECTORY = 'bannerresized';
     const BANNER_RESIZE_M_DIRECTORY = 'bannerresized/mobile';

@@ -104,8 +104,24 @@
         }
     }
 }
+#product-shop {
+    &.col-lg-7, &.col-md-7 {
+        @include min-screen($screen-sm-max) {
+            width: 64%;
+        }
+    }
+}
 #product-gallery {
-  #productGalleryBigMedia, #productGalleryBigMediaOpen, #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
+    &.col-lg-5, &.col-md-5 {
+        @include min-screen($screen-sm-max) {
+            width: 36%;
+        }
+    }
+
+  #productGalleryBigMedia,
+  #productGalleryBigMediaOpen,
+  #productGalleryThumbMedia,
+  #productGalleryThumbMediaOpen {
     .item, .rwd-item{
       color: $body-bg;
       -webkit-border-radius: 3px;

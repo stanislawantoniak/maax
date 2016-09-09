@@ -2,7 +2,6 @@ var Cart = {
     delay: 700,
 
     changeQuantity: function (id, val){
-
         var input = jQuery("[data-id='" + id + "']");
 
         var error = jQuery("div.product_" + parseInt(id)).find(".error");
@@ -12,7 +11,7 @@ var Cart = {
 
             val = input.attr("data-min-sale-qty");
 
-        } else if (val > input.attr("data-max-sale-qty")) {
+        } else if ((val > input.attr("data-max-sale-qty")) && input.attr("data-product-type") != "bundle") {
 
             val = input.attr("data-max-sale-qty");
             error.show();

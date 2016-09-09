@@ -56,27 +56,31 @@ $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 $attributesData = $this->getAdditionalDataDetailed(true, false);
 
-$productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
+$productDescription = $_helper->productAttribute($_product, $_product->getDescription(), 'description');
 $brandShopProductId = $_product->getData('brandshop');
 
 if($_product->getData('is_installments')) $installments = $this->getLayout()->createBlock('cms/block')->setBlockId('product-installments')->toHtml();
 if($_product->getData('is_founding')) $funding = $this->getLayout()->createBlock('cms/block')->setBlockId('product-funding')->toHtml();
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
 ?>
+
+<?php $blogPosts = $this->getChildHtml('blogposts'); ?>
+<?php $blogPostsLength = strlen(trim($blogPosts)); ?>
+
 <div class="path_back_to_category visible-xs">
 	<div class="col-xs-12">
 		<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
 	</div>
 </div>
 <div id="content" class="container-fluid">
-	<div id="product_content" class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+	<div id="product_content" class="<?php if($blogPostsLength == 0): ?>col-lg-12 col-md-12<?php else: ?>col-lg-9 col-md-9<?php endif; ?> col-sm-12 col-xs-12">
 		<div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
-			<div id="product-gallery" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
+			<div id="product-gallery" class="<?php if($blogPostsLength == 0): ?>col-lg-5 col-md-5<?php else: ?>col-lg-6 col-md-6<?php endif; ?> col-sm-6 col-xs-12 clearfix">
 				<!-- GALLERY PRODUCT -->
 				<?php echo $this->getChildHtml('media') ?>
 				<!-- END GALERY PRODUCT -->
 			</div>
-			<div id="product-shop" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			<div id="product-shop" class="<?php if($blogPostsLength == 0): ?>col-lg-7 col-md-7<?php else: ?>col-lg-6 col-md-6<?php endif; ?> col-sm-6 col-xs-12">
 				<?php echo
 				$this->getChild('product.shop')
 					->setReviewsCount($_reviewsCount)
@@ -91,7 +95,8 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 			<ul class="title_section">
 				<li>
 					<input type="radio" name="tabs" id="tab-1" checked>
-					<label for="tab-1"><?php echo $this->__("Product description"); ?><i class="fa" aria-hidden="true"></i></label>
+					<label for="tab-1"><?php echo $this->__("Product description"); ?><i class="fa"
+																						 aria-hidden="true"></i></label>
 					<article class="content">
 						<div class="inner">
 							<div>
@@ -100,9 +105,11 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 									<ul class="list">
 										<?php foreach ($attributesData as $attr) : ?>
 											<li>
-												<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
+												<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>
+													: </strong>
 												<?php if ($attr['code'] == "color"): ?>
-													<span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+													<span
+														itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
 												<?php elseif ($attr['code'] == "manufacturer"): ?>
 													<?php
 													$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
@@ -115,7 +122,9 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 													$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
 													?>
 													<?php if ($brandShopProductId == $brandShopId): ?>
-														<h3 class="itemprop-brand"><a href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a></h3>
+														<h3 class="itemprop-brand"><a
+																href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a>
+														</h3>
 													<?php else: ?>
 														<?php echo $this->escapeHtml($attr['value']); ?>
 													<?php endif; ?>
@@ -144,51 +153,56 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 					</article>
 				</li>
 				<?php if (!empty($installments)) : ?>
-				<li>
-					<input type="radio" name="tabs" id="tab-3">
-					<label for="tab-3"><?php echo $this->__("Hire purchase"); ?><i class="fa" aria-hidden="true"></i></label>
-					<article class="content">
-						<div class="inner">
-							<?php echo $installments;?>
-						</div>
-					</article>
-				</li>
-				<?php endif; if (!empty($funding)) : ?>
-				<li>
-					<input type="radio" name="tabs" id="tab-4">
-					<label for="tab-4"><?php echo $this->__("Bailout"); ?><i class="fa" aria-hidden="true"></i></label>
-					<article class="content">
-						<div class="inner">
-							<?php echo $funding;?>
-						</div>
-					</article>
-				</li>
-				<?php endif; if (!empty($deliveryReturn)) : ?>
-				<li>
-					<input type="radio" name="tabs" id="tab-5">
-					<label for="tab-5"><?php echo $this->__("Delivery and returns"); ?><i class="fa" aria-hidden="true"></i></label>
-					<article class="content">
-						<div class="inner">
-							<?php echo $deliveryReturn;?>
-						</div>
-					</article>
-				</li>
+					<li>
+						<input type="radio" name="tabs" id="tab-3">
+						<label for="tab-3"><?php echo $this->__("Hire purchase"); ?><i class="fa"
+																					   aria-hidden="true"></i></label>
+						<article class="content">
+							<div class="inner">
+								<?php echo $installments; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif;
+				if (!empty($funding)) : ?>
+					<li>
+						<input type="radio" name="tabs" id="tab-4">
+						<label for="tab-4"><?php echo $this->__("Bailout"); ?><i class="fa"
+																				 aria-hidden="true"></i></label>
+						<article class="content">
+							<div class="inner">
+								<?php echo $funding; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif;
+				if (!empty($deliveryReturn)) : ?>
+					<li>
+						<input type="radio" name="tabs" id="tab-5">
+						<label for="tab-5"><?php echo $this->__("Delivery and returns"); ?><i class="fa"
+																							  aria-hidden="true"></i></label>
+						<article class="content">
+							<div class="inner">
+								<?php echo $deliveryReturn; ?>
+							</div>
+						</article>
+					</li>
 				<?php endif; ?>
 			</ul>
+		</div>
 	</div>
-
-</div>
-
+	
 	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 		<?php echo $this->getChildHtml('upsell'); ?>
 	</div>
-	<div id="product_additions_3" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-		<?php echo $this->getChildHtml('blogposts'); ?>
-	</div>
-
+	
+	<?php echo $this->getChildHtml('blogposts'); ?>
+	
 	<div id="product_additions_2" class="col-xs-12">
 		<?php echo $this->getChildHtml('crosssell'); ?>
 	</div>
+	
+</div>
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 	 aria-hidden="true">
