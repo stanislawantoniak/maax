@@ -25,10 +25,8 @@ class Orba_Shipping_Model_Client_Soap extends Orba_Shipping_Model_Client_Abstrac
                 $soap->__setSoapHeaders($header);
             }
             $result = $soap->$method($message);
-            Mage::log($soap->__getLastRequest());
-            Mage::log($soap->__getLastResponse());
         } catch (Exception $xt) {
-            //Mage::logException($xt);
+            Mage::logException($xt);
             $result = $this->_prepareErrorMessage($xt);
         }
         return $result;
