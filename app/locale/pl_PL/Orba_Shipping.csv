@@ -39,3 +39,4 @@
 "in grams","w gramach"
 "Name for COD","Nazwa dla COD"
 "Is COD allowed","Możliwa płatność COD"
+"Service %s get label error: %s","Błąd pobrania etykiet dla serwisu %s: %s"

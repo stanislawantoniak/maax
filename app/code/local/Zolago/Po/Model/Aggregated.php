@@ -104,7 +104,7 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
         if ($pdf = $carrier->getAggregatedPdfObject()) {            
             return $pdf->getPdfFile($this->getId());
         } else {
-            Mage::throwException('For this type of carrier report doesn\'t exists');
+            Mage::throwException(Mage::helper('orbashipping')->__("For this type of carrier report doesn't exists"));
         }
     }
     public function delete() {
