@@ -1892,7 +1892,7 @@ Mall.inspirationsSliderAdjustHeight = function () {
     var maxHeight = Math.max.apply(null, elementHeights);
     if(maxHeight > 0){
         rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
-            jQuery(item).height(maxHeight);
+            jQuery(item).animate({ height: maxHeight }, 100);
         });
     }
 
