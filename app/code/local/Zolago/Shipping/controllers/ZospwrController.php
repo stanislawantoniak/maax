@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Shipping_ZolagopwrController extends Mage_Core_Controller_Front_Action {
+class Zolago_Shipping_ZospwrController extends Mage_Core_Controller_Front_Action {
 	
 	public function getPopulateMapDataAction() {
 		$town = trim($this->getRequest()->getParam("town", ""));
