@@ -430,7 +430,7 @@
                     parentModal.modal("hide");
                     Mall.Cart.Map.showMarkerOnMap(jQuery(e.target).attr("data-carrier-pointcode"));
                     break;
-                case 'zolagopwr':
+                case 'zospwr':
                     Mall.Cart.Shipping.setShippingMethod(this);
                     parentModal.modal("hide");
                     Mall.Cart.Map.showMarkerOnMap(jQuery(e.target).attr("data-carrier-pointcode"));
