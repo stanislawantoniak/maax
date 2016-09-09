@@ -6,7 +6,7 @@
         		border:none;
         		text-transform: uppercase;
         		font-size: 11px;
-        	}        	 
+        	}
         }
         .table-row {
             display: block;
@@ -22,14 +22,14 @@
     }
 
 .node-type-shopping-cart {
-	color:$color_000;
+	color:$color_555;
 	#content-main {
 		section {
 			> header {
 				h1 {
-					font-size: 24px;
+					font-size: 28px;
 					font-weight: normal;
-					font-family: $fontLight;
+					font-family: $fontRegular;
 					text-transform: uppercase;
 					@media (max-width: $screen-xs-max) {
 						font-size: 18px;
@@ -83,7 +83,7 @@
 								font-size: 12px;
 								text-transform: none;
 							}
-							
+
 						}
 					}
 					.product_price {
@@ -112,9 +112,9 @@
 					&.cell-04 {
 						&.td {
 							font-size: 16px;
-                			font-family: $fontBlack;
+                			font-family: $fontRegular;
 						}
-                		
+
                 	}
 
 				}
@@ -135,7 +135,7 @@
 									font-size: 11px;
 								}
 							}
-						}						
+						}
 						&.label_value {
 							text-align: right;
 							font-size: 16px;
@@ -145,11 +145,14 @@
 							}
 						}
 						&.cell-04 {
-							text-align: right;						
+							text-align: right;
 						}
-						
+
 					}
-				}		
+				}
+			}
+			@media (max-width: 767px) {
+				border-top: none;
 			}
 		}
 	}
@@ -166,7 +169,7 @@
 		text-align: center;
 		&:before {
 			background:$allMap;
-			@include sprite($allMap, bubble_arrow);	
+			@include sprite($allMap, bubble_arrow);
 		p {
 			font-size: 11.46px;
 			strong {
@@ -177,11 +180,18 @@
 	}
 #sidebar-secondary {
 	#cart-summary {
-        border: 4px $colorAccentBlocksCart solid;
-		> header {
+        border: 1px solid $color_ebebeb;
+		margin-top: 77px;
+		@media (max-width:$screen-sm-max) {
+			margin-top: 20px;
+		}
+		header {
 			h2 {
+				padding: 0 0 10px;
+				color: #000;
 				font-size: 18px;
 				font-family: $fontRegular;
+				text-transform: uppercase;
 				strong {
 					font-weight: bold;
 				}
@@ -193,12 +203,12 @@
 		#product_summary {
 			list-style: none;
 			li {
-				text-transform: uppercase;
+				text-transform: none;
 				span + span {
 					text-transform: none;
 				}
 				span:first-child {
-					font-size: 14px;
+					font-size: 16px;
 					@include max-screen($screen-sm-max) {
 						font-size: 13px;
 						text-transform: none;
@@ -213,10 +223,10 @@
 			}
 		}
 		#discount_voucher {
-			.form-group {				
+			.form-group {
 				input[type="text"] {
 					background:$allMap repeat-x;
-				    @include sprite($allMap, bg-form-text-coupon);	
+				    @include sprite($allMap, bg-form-text-coupon);
 					line-height: image-height(sprite-file($allMap, bg-form-text-coupon))+2;
 					border:1px solid $color_d6d6d6;
 					font-size: 12px;
@@ -266,7 +276,7 @@
 			}
 			.value_sum_price {
 				font-size: 16px;
-				font-family: $fontBlack;
+				font-family: $fontRegular;
 				text-transform: none;
 			}
 		}
@@ -286,8 +296,22 @@
 			}
 		}
 		.button.button-primary {
+			font-family: $fontRegular;
 			&:focus {
 				outline:none;
+			}
+			&:hover {
+				opacity: 0.8;
+			}
+		}
+		.shipping-method-selector {
+			.panel {
+				border: none;
+				margin: 0;
+				padding: 0;
+				.panel-body {
+					padding: 12px 0;
+				}
 			}
 		}
 	}
@@ -323,7 +347,7 @@
 		}
 		.description_checked_product {
 			.product_name {
-				font-size: 16px;
+				font-size: 14px;
 				color:$color_000;
                 a:hover {
                     text-decoration: underline;
@@ -350,7 +374,7 @@
 				}
 			}
 			.cena {
-				
+
 				.stara_cena {
 					vertical-align: middle;
 					font-size: 11px;
@@ -367,7 +391,7 @@
 							}
 						}
 					}
-				
+
 				.amount_product {
 					text-align: center;
 					font-size: 11px;
@@ -386,10 +410,10 @@
 				.ilosc,
 				.wartosc,
 				.usun {
-					font-weight: normal; 
+					font-weight: normal;
 				}
 			}
-			
+
 		}
 		.stara_cena,
 		.cena_zakupu {
@@ -397,7 +421,7 @@
 			@media (min-width: $screen-sm-min) {
 				white-space: nowrap;
 			}
-		} 
+		}
 	}
 }
 
@@ -422,7 +446,7 @@
 		.panel {
 			border:none!important;
 		}
-		
+
 		.panel-heading {
 			h2 {
 			font-size: 18px;
@@ -703,6 +727,8 @@
 }
 .value_quality_price {
 	margin-bottom: 15px;
+	text-transform: uppercase;
+	font-size: 14px;
 	@media (max-width: $screen-xs-max) {
 		padding-top: 11px;
 	}
@@ -812,6 +838,8 @@
 					@include inline-block;
 					float: right;
 					margin-right: 0px;
+					font-size: 16px;
+					font-family: latoregular, sans-serif;
 					@media (max-width: $screen-sm-max) {
 						float: right;
 						margin-right: 0px;
@@ -819,8 +847,39 @@
 				}
 			}
 		}
+		.button.button-third {
+			padding: 6px 18px;
+			background: #adadad !important;
+			background: -moz-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+			background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #adadad), color-stop(100%, #adadad)) !important;
+			background: -webkit-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+			background: -o-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+			background: -ms-linear-gradient(-80deg, #adadad 0%, #adadad 100%) !important;
+			background: linear-gradient(135deg, #adadad 0%, #adadad 100%) !important;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 ) !important;
+			color:$color_fff;
+			&:hover,
+			&.hover,
+			&:focus,
+			&.focus {
+				background: #444444 !important;
+				background: -moz-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+				background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #444444), color-stop(100%, #444444)) !important;
+				background: -webkit-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+				background: -o-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+				background: -ms-linear-gradient(-80deg, #444444 0%, #444444 100%) !important;
+				background: linear-gradient(135deg, #444444 0%, #444444 100%) !important;
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$startColor, endColorstr=$stopColor, GradientType=1) !important;
+				border-color: #444444;;
+			}
+		}
+		.checkout-logo {
+			padding: 15px;
+			width: 150px;
+		}
 		#discount_voucher {
 			margin-bottom: 36px;
+			margin-top: 15px;
 			.form-group {
 				margin-bottom:11px;
 				.info_discount_voucher {
@@ -846,6 +905,9 @@
 					height: 22px;
 					width:72px;
 					float:left;
+				}
+				a.btn {
+					background: $color_008733 !important;
 				}
 			}
 			.coupon-list {
@@ -1002,6 +1064,8 @@
 			min-height: 69px;
 			padding-bottom: 20px;
 			margin-left: 64px;
+			font-size: 14px;
+			text-transform: uppercase;
 			.product_name {
 				margin-bottom: 5px;
 				@media(min-width: 1100px) {
@@ -1018,7 +1082,9 @@
 					width:250px;
 					padding-left: 15px;
 				}
-
+			}
+			.product_size {
+				text-transform: none;
 			}
 		}
 	}
@@ -1067,6 +1133,10 @@
 			.cena {
 				width:33.333%;
 				float:left;
+				.cart-price {
+					color: $color_8a8a8a;
+					font-size: 16px;
+				}
 				.stara_cena {
 					display: inline-block;
 					zoom: 1;
@@ -1108,6 +1178,52 @@
 						display:none!important;
 					}
 				}
+
+				.selectboxit-container .selectboxit {
+					border-color: #d5d5d5;
+				}
+				div.qty,  a.qty_less, a.qty_more,  div.qty_label {
+					float: left;
+					width: 32px;
+					height: 32px;
+					border: 1px solid #f1f1f1;
+					text-align: center;
+					padding: 1px 0 0;
+					font-size: 20px;
+					color: #7e7e7e;
+					@media (max-width: 430px) {
+						width: 22px;
+					}
+				}
+				a.qty_less, a.qty_more {
+					display: block;
+				}
+				div.qty input {
+					width: 100%;
+					border: none;
+					text-align: center;
+					font-size: 16px;
+					outline: none !important;
+				}
+				.quantity_blocks{
+					width: 96px;
+					margin: 0 auto;
+					@media (max-width: $screen-xs-max) {
+						margin: 0;
+					}
+					.error {
+						padding: 0 !important;
+						display: none;
+					}
+				}
+				@media (max-width: $screen-xs-max) {
+					a.qty_less, a.qty_more {
+						display: none;
+					}
+					div.qty {
+						width: 70px;
+					}
+				}
 			}
 			.wartosc {
 				width:33.333%;
@@ -1120,6 +1236,12 @@
 				}
 			}
 			.usun {
+				i {
+					color: #8a8a8a;
+					&:hover {
+						color: #000;
+					}
+				}
 				width:15px;
 				float:right;
 				padding-top: 5px;
@@ -1138,7 +1260,9 @@
 				.ilosc,
 				.wartosc,
 				.usun {
-					padding-top:0px!important;}
+					padding-top:0px!important;
+					text-transform: uppercase;
+				}
 				.cena {
 					padding-top: 0px!important;
 
@@ -1174,12 +1298,30 @@
 
 .table-cart {
 	.table-row{
+		.colgroup-01 {
+			.colgroup.naglowek {
+				display: none;
+			}
+		}
 		&:first-child {
 			.colgroup-02 {
 				.colgroup.naglowek {
 					@media (min-width: $screen-sm-min) {
-						top:-50px;
+						top:-55px;
 						display:block;
+					}
+				}
+			}
+			.colgroup-01 {
+				.colgroup.naglowek {
+					top:75px;
+					display:block;
+					position: absolute;
+					.product{
+						text-transform: uppercase;
+					}
+					@media (min-width: $screen-md-min) {
+						top:97px;
 					}
 				}
 			}
@@ -1231,7 +1373,8 @@
 		.panel {
 			&.panel-default {
 				@include border-radius(1px);
-				border-color:$color_bfbfbf;
+				border-color:$color_ebebeb;
+				padding: 15px;
 			}
 			.panel-heading {
 				background:transparent;
@@ -1271,8 +1414,24 @@
 				}
 			}
 			.panel-body {
-				padding:0 0 15px 0;
+				padding:0;
 			}
+		}
+		.main {
+			padding-right: 0;
+		}
+	}
+	#shopping-cart {
+		.main {
+			border: none;
+			padding-left: 0;
+		}
+	}
+	.a-right {
+		.cart-price {
+			color: $color_8a8a8a;
+			font-size: 16px;
+			font-family: $fontRegular;
 		}
 	}
 }

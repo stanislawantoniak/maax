@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Shipping>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Zolago_Shipping>
+    </modules>
+</config>
