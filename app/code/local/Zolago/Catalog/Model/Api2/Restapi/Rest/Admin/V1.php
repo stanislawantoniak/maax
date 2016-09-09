@@ -400,8 +400,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 $priceMSRPSelected = ""; //Manual msrp
                 if (isset($priceTypeByStore[$sku][$storeId])) {
                     $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
+                } else if (isset($priceTypeByStore[$sku][0])) {
+                    $priceTypeSelected = $priceTypeByStore[$sku][0];
                 }
                 if (!isset($priceMSRPTypeByStore[$sku][$storeId])) {
+                    $priceMSRPSelected = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE;
+                } else if (!isset($priceMSRPTypeByStore[$sku][0])) {
                     $priceMSRPSelected = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE;
                 }
 
@@ -424,6 +428,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             //implement margin
                             if (isset($marginByStore[$productId][$storeId])) {
                                 $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
+                            } else if (isset($marginByStore[$productId][0])) {
+                                $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][0]);
                             }
 
                             $insert[] = array(
