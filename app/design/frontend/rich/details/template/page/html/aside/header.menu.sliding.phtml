@@ -1,0 +1,48 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 14.05.14
+ */
+/** @var $this Zolago_Modago_Block_Catalog_Category */
+$categories = $this->getMainCategoriesForSlidingMenu();
+/** @var Zolago_Catalog_Helper_Data $helper */
+$helper = Mage::helper("catalog");
+?>
+<?php if(count($categories) > 0) :
+	/**
+	 * Very ugly fix
+	 * Business want it:
+	 * PRODUKTY => array( cat1 cat2 cat3 ... )
+	 * Business strongly determined that category will always will be set like this!
+	 */
+	$_categories = array_values($categories)[0];
+	$_categories = isset($_categories['has_dropdown']) ? $_categories['has_dropdown'] : array();
+	if (empty($_categories)) return;
+	?>
+    <li>
+        <a class="sb-toggle-submenu">
+	        <img src="<?php echo str_replace(array('http://','https://'),array('//','//'),$this->getSkinUrl("images/svg/categories.svg")); ?>" class="hamburger-ico ico-label"><?php echo array_values($categories)[0]['name']; ?>
+        </a>
+        <ul class="sb-submenu">
+            <?php foreach ($_categories as $cat) : ?>
+            <li>
+                <a  <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? '' : 'href="'.$cat['url'].'"' ?>
+                    <?php echo (isset($cat['has_dropdown']) && $cat['has_dropdown']) ? 'class="sb-toggle-submenu"' : ''; ?>>
+                    <span class="sb-submenu-title"><?php echo $this->escapeHtml($cat['name']); ?></span>
+                </a>
+                <?php if(isset($cat['has_dropdown']) && $cat['has_dropdown']) : ?>
+                <ul>
+                    <?php foreach ($cat['has_dropdown'] as $child) : ?>
+                    <li>
+                        <a href="<?php echo $child['url']; ?>">
+                            <span class="sb-subsubmenu-title"><?php echo $this->escapeHtml($child['name']); ?></span>
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </li>
+<?php endif; ?>
