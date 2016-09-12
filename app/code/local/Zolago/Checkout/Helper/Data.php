@@ -88,7 +88,6 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
             "methods" => array(),
             "shipping_point_code" => ""
         );
-
     }
 
 
