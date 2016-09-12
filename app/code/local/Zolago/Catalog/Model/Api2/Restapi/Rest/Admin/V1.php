@@ -214,7 +214,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }            
 
             foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
-                if ($backorders[$id]) {
+                if (isset($backorders[$id]) && $backorders[$id] == 1) {
                     //in backorder case just inherit is_in_stock
                     $is_in_stock = $stocks[$id];
                 } else {
