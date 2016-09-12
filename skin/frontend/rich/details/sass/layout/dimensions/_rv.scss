@@ -19,7 +19,7 @@ section#recently-viewed {
 
 			span {
 				font-size: 20px;
-				border-bottom: 2px solid $colorReviewBorder;
+				border-bottom: 2px solid $siteMainColor;
 				padding-bottom: 9px;
 			}
 			@media (max-width: $screen-xs-max) {

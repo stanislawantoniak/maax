@@ -150,6 +150,10 @@ $bgMap: sprite-map("sprites/bg/*.png");
 
 
  **/
+
+//global color
+$siteMainColor:                             #36b7b2;
+
 $colorSiteBackground:                   #F2F1F0;
 
 $colorSiteOverlay:                      #000;
@@ -182,25 +186,25 @@ $decorationLinkHover:                   none;
 
 //accents colors
 $colorAccentBlocks:                     #EBEBEB;
-$colorAccentSite:                       #008539;
+$colorAccentSite:                       $siteMainColor;
 $colorAccentTitle:                      transparent;
 $colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
-$colorAccentError:                      #008539;
+$colorAccentError:                      $siteMainColor;
 
 //buttons
 $colorBtnPrimary:                       #FFF;
 
-$colorBtnPrimaryBgStart:                #008539;
-$colorBtnPrimaryBgEnd:                  #008539;
+$colorBtnPrimaryBgStart:                $siteMainColor;
+$colorBtnPrimaryBgEnd:                  $siteMainColor;
 
-$colorBtnPrimaryBgStartHover:           #008539;
-$colorBtnPrimaryBgEndHover:             #008539;
+$colorBtnPrimaryBgStartHover:           $siteMainColor;
+$colorBtnPrimaryBgEndHover:             $siteMainColor;
 
-$colorBtnPrimaryBgStartActive:          #008539;
-$colorBtnPrimaryBgEndActive:            #008539;
+$colorBtnPrimaryBgStartActive:          $siteMainColor;
+$colorBtnPrimaryBgEndActive:            $siteMainColor;
 
-$colorBtnThirdBorderActive:             #008539;
-$colorBtnThirdColorActive:              #008539;
+$colorBtnThirdBorderActive:             $siteMainColor;
+$colorBtnThirdColorActive:              $siteMainColor;
 
 $colorBtnPrimaryBgDisabled:             #C5C5C5;
 

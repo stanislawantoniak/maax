@@ -133,7 +133,7 @@ i.flag {
 	}
 	.ui-tabs-nav li.ui-tabs-active{
 		padding-bottom:0;
-		background: $color_008733!important;
+		background: $siteMainColor !important;
 		a{
 			color: $color_fff;
 		}
@@ -259,7 +259,7 @@ i.flag {
           }
 
           > input:checked + label {
-            background: #008733 !important;
+            background: $siteMainColor !important;
             color: white;
           }
         }
@@ -1027,9 +1027,8 @@ i.flag {
 	padding-top:4px !important;
 	float:none;
 	margin: -18px 0 0 0px;
-	background: $color_008733 !important;
+	background: $siteMainColor !important;
 	&:hover {
-		//background: $colorProductBtnAddBg !important;
 		opacity: .8;
 	}
 	&:focus,&:active {
