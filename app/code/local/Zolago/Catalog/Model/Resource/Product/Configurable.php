@@ -83,13 +83,13 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select = $adapter->select();
         $select
             ->from(
-                'catalog_product_relation AS product_relation',
+                'catalog_product_super_link AS catalog_product_super_link',
                 array(
-                    'configurable_product' => 'product_relation.parent_id',
-                    'simple_product' => 'product_relation.child_id'
+                    'configurable_product' => 'catalog_product_super_link.parent_id',
+                    'simple_product' => 'catalog_product_super_link.product_id'
                 )
             )
-            ->where("product_relation.child_id IN(?)", $listUpdatedProducts);
+            ->where("catalog_product_super_link.product_id IN(?)", $listUpdatedProducts);
 
         $result = $adapter->fetchAssoc($select);
 
