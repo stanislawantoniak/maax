@@ -208,10 +208,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $stocks = [];
             $backorders = [];
-            foreach ($collection as $val) {
+            foreach ($collection as $val) {                
                 $stocks[$val->getProductId()] = (int)$val->getIsInStock();
-                $backorders[$val->getProductId()] = (int)$val->getIsInStock();
-            }
+                $backorders[$val->getProductId()] = (int)$val->getBackorders();
+            }            
 
             foreach ($availableStockByMerchantOnOpenOrders as $id => $qty) {
                 if ($backorders[$id]) {
