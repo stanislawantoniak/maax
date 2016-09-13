@@ -3,6 +3,7 @@
  * Catalog product model
  *
  * @method string getChargeLowerCommission()
+ * @method string getBackordersInfo()
  *
  * @category    Zolago
  * @package     Zolago_Catalog
