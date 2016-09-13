@@ -148,6 +148,7 @@
           <title>Poczta Polska</title>          
           <model>orbashipping/post</model>
           <cod_allowed>1</cod_allowed>
+          <default_package_weight>2000</default_package_weight>
       </zolagopp>
       <zolagogls>
           <active>1</active>

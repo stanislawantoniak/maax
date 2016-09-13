@@ -23,4 +23,7 @@ interface Orba_Shipping_Model_Carrier_Interface extends Mage_Shipping_Model_Carr
     
     public function cancelTrack($track);
 
+    public function setShipped();
+    
+    public function getAggregatedPdfObject();
 }

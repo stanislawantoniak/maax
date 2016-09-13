@@ -9,7 +9,11 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     protected $_senderAddress;
     protected $_recevierAddress;
     protected $_settings;
+    const CODE = 'ABSTRACT';
 
+    public function getCode() {	
+        return static::CODE;
+    }
     public function setShipmentSettings($settings) {
         $this->_settings = $settings;
     }
@@ -94,4 +98,20 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     public function cancelTrack($track) {
         return;
     }
+    
+    /**
+     * prepare object for generate aggregated pdf file
+     */
+    public function getAggregatedPdfObject() {
+        return null; // if null - there is no aggregated pdf
+    }
+    
+    
+    /**
+     * actions after shipped po
+     */
+    public function setShipped() {
+        return;
+    }
+    
 }
