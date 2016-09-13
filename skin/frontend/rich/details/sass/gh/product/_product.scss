@@ -1070,12 +1070,6 @@ i.flag {
 }
 
 div[itemprop="description"] {
-	p:last-of-type, *:last-child {
-		margin-bottom: 0 !important;
-	}
-	br:last-child {
-		display: none;
-	}
 	+ ul.list {
 		margin-top: 20px !important;
 		margin-bottom: 0 !important;
