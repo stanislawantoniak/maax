@@ -44,8 +44,12 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr
 			);
 		}
 		if (!empty($lockers)) {
-			$result["map_points"] = str_replace('\\\\', '\\', json_encode($lockers, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP));
+			$result["map_points"] = json_encode($lockers, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 		}
+
+        $oldLocal = setlocale(LC_COLLATE, 'pl_PL.utf8');
+        ksort($filters, SORT_LOCALE_STRING);
+        setlocale(LC_COLLATE, $oldLocal);
 
 		if (!empty($filters)) {
 			$result["filters"] = $filters;
