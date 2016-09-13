@@ -4,7 +4,7 @@
  */
 class Orba_Shipping_Model_Carrier_Default extends Orba_Shipping_Model_Carrier_Abstract {
     			
-	const CODE = "default";
+	const CODE = "std";
     protected $_code = self::CODE;
     protected $_number;
     protected $_carrier;
