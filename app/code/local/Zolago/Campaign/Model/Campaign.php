@@ -136,7 +136,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
      */
     private function _getCampaignUrl() {
         $rawCampaignUrl = $this->getData("campaign_url");
-        return $this->getWebsiteUrl() . $rawCampaignUrl;
+        return (trim($rawCampaignUrl) == '#') ? '' : $this->getWebsiteUrl() . $rawCampaignUrl;
     }
 
     /**
