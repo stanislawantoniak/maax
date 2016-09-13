@@ -602,6 +602,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $message->guid = $number;
         $result = $this->_sendMessage('clearEnvelopeByGuids',$message);
         if (!empty($result->error)) {
+            Mage::log($result->error);
             Mage::throwException($result->error->errorDesc);
         }
     }
