@@ -278,9 +278,8 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
             $collection->addFieldToFilter("entity_id", $po->getId());
 
-            $id = Mage::helper('zolagopo')->createAggregated($collection, $manager->getVendor());
+            $aggregated = Mage::helper('zolagopo')->createAggregated($collection, $manager->getVendor());
 
-            $aggregated = Mage::getModel('zolagopo/aggregated')->load($id);
             $aggregated->confirm();
             
             $message = 'ok';

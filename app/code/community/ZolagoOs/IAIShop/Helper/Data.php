@@ -128,6 +128,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
                              19 => 'DHL',
                              10 => 'DPD',
                              6	=> 'DPD',
+                             14	=> 'DPD', // SIÓDEMKA to teraz DPD
                              37 => 'DHL',
                              2 => 'UPS',
                              28 => 'UPS',
@@ -161,7 +162,7 @@ class ZolagoOs_IAIShop_Helper_Data extends Mage_Core_Helper_Abstract
     public function getMappedDelivery($delivery) {
         $deliveryMethodsMapping = array(
                                       "polish_post" => 100039, // POCZTEX KURIER KRAJOWY
-                                      "standard_courier" => 6, // STANDARD DPD
+                                      "standard_courier" => 14, // STANDARD SIÓDEMKA
                                       "inpost_parcel_locker" => 45 //INPOST
                                   );
         if (!isset($deliveryMethodsMapping[$delivery])) {
