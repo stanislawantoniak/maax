@@ -53,6 +53,16 @@ $_insurance = Mage::getSingleton('orbashipping/system_source_post_insurance')->t
 								</select>
 							</div>
 						</li>
+						<li class="form-group specify specify-carrier">
+							<label for="shipping-insurance" class="col-md-3 control-label"><?php echo $_hlp->__('Insurance value') ?></label>
+							<div class="col-md-2">
+								<select id="shipping-insurance"  name="insurance" class="form-control text-align:right">
+								<?php foreach ($_insurance as $key => $val) : ?>
+								<?php printf("<option value='%s'>%s</option>",$key,$val); ?>
+								<?php endforeach; ?>
+								</select>
+							</div>
+						</li>
 
 					</ul>
 				</div>
