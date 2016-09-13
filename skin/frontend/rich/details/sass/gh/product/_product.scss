@@ -349,12 +349,16 @@ i.flag {
 
 	#delivery-and-return {
 		font-size:12px;
-		//text-align:right;
-		//position:absolute;
-		//right:0px;
-		//padding:0;
+
 
 		min-width:110px;
+
+		@media(min-width: $screen-sm-max) {
+			text-align:right;
+			position:absolute;
+			right:0px;
+			padding:0;
+		}
 	}
 	#short-description-block {
 		margin-left:0px;
