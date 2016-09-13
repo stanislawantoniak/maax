@@ -349,11 +349,16 @@ i.flag {
 
 	#delivery-and-return {
 		font-size:12px;
-		text-align:right;
-		position:absolute;
-		right:0px;
+
+
 		min-width:110px;
-		padding:0;
+
+		@media(min-width: $screen-sm-max) {
+			text-align:right;
+			position:absolute;
+			right:0px;
+			padding:0;
+		}
 	}
 	#short-description-block {
 		margin-left:0px;
@@ -516,7 +521,7 @@ i.flag {
 	}
 	.price-box-bundle {
 		position:relative;
-		margin-bottom: 16px;
+		//margin-bottom: 16px;
 		@media (min-width: 768px) and (max-width: 819px) {
 			margin-bottom: 0;
 		}
@@ -574,6 +579,7 @@ i.flag {
 		.price-box-line {
 			/*			white-space: nowrap;	 */
 			min-width:200px;
+			margin-bottom: 0px;
 		}
 	}
 
