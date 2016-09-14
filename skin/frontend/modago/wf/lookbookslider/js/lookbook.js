@@ -13,10 +13,10 @@ Mall.lookbook = {
 
         jQuery(".lookbookslider-container").delegate(".cycle-slideshow .hotspot", {
             hover: function () {
-                jQuery(this).find("img").attr("src", iconMinus);
+                jQuery(this).find("img.hotspot-icon").attr("src", iconMinus);
             },
             mouseleave: function () {
-                jQuery(this).find("img").attr("src", iconPlus);
+                jQuery(this).find("img.hotspot-icon").attr("src", iconPlus);
             }
         });
     }
