@@ -59,7 +59,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 				<?php if($this->canUseCarrier()):?>
 
 					<?php if (!$_hlp->isDeliveryPickUpPoint($_po) ): ?>
-						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Create shipping label");?></button>
 					<?php else: ?>
 
 						<?php if ($_hlp->isPickUpPointConfirmAvailable($_po) ): ?>

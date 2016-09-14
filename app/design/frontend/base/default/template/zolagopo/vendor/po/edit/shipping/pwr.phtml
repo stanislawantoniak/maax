@@ -6,8 +6,8 @@ $_hlp = Mage::helper("zolagopo");
 $_po =  $this->getPo();
 
 $_availableMethods =  $this->getAvailableMethods();
-
 $_modagoHlp = Mage::helper("zolagocommon");
+$_defaultBoxSize = Mage::getStoreConfig('carriers/zospwr/default_box_size');
 ?>
 <!-- Modal add letter-->
 <div class="modal fade" id="shippingModal">
@@ -23,7 +23,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">
-						<?php echo $_hlp->__("Create shipping label");?>
+						<?php echo $_hlp->__("Print shipping label");?>
 					</h4>
 				</div>
 				<div class="modal-body">
@@ -32,26 +32,22 @@ $_modagoHlp = Mage::helper("zolagocommon");
 							<label class="col-md-3 control-label"><?php echo $_hlp->__('Carrier name') ?></label>
 							<div class="col-md-9">
 							    <label class="radio"><?php echo $this->getCarrierName(); ?>
-                                </label>
+			                                </label>
 							</div>
 						</li>
-						<li class="form-group specify specify-carrier specify-c">
-							<label for="shipping-specify_inpost_type" class="col-md-3 control-label"><?php echo $_hlp->__('Parcel size') ?></label>
-							<div class="col-md-9">
-								<select name="specify_inpost_size" id="shipping-specify_inpost_type" class="form-control">
-									<?php foreach(Mage::getSingleton('orbashipping/system_source_packstation_sizes')->toOptionHash() as $value=>$label):?>
-										<option value="<?php echo $this->escapeHtml($value);?>">
-											<?php echo $this->escapeHtml($label);?>
-										</option>
-									<?php endforeach;?>
-								</select>
+						<li class="form-group specify specify-carrier">
+							<label for="shipping-box-size" class="col-md-3 control-label"><?php echo $_hlp->__('Box size') ?></label>
+							<div class="col-md-2">
+								<input id="shipping-box-size"  name="boxSize" title="<?php echo $_hlp->__('Box size') ?>" type="text" class="form-control align-right" value="<?php echo $_defaultBoxSize;?>"/>
 							</div>
+                            <label for="shipping-weight" class="col-md-7 control-label" style="text-align:left">g</label>
 						</li>
+
 					</ul>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
-					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_hlp->__("Create label");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Save");?></button>
 				</div>
 			</div>
 		</form>

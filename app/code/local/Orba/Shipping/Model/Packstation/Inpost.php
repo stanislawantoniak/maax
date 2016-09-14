@@ -29,15 +29,6 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
     public function setReceiverCustomerAddress($data) {
         $this->setReceiverAddress($data);
     }
-    public function setClient($client) {
-        $this->_client = $client;
-    }
-    public function getClient() {
-        if (!$this->_client) {
-            $this->setClient($this->_startClient());
-        }
-        return $this->_client;
-    }
     protected function _startClient() {
         $settings = $this->_settings;
         $client = Mage::helper('orbashipping/packstation_inpost')->startClient($settings);
@@ -155,5 +146,8 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
         } catch (Exception $xt) {
             Mage::logException($xt); // if something wrong - only log exception (not break process)
         }
+    }
+    public function getShippingModal() {
+        return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
     }
 }
