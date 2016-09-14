@@ -96,8 +96,15 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
              case Orba_Shipping_Model_Carrier_Gls::CODE:
                  $model = Mage::getModel('orbashipping/carrier_gls');
                  break;
-             default:
+             case Orba_Shipping_Model_Packstation_Pwr::CODE:
+                 $model = Mage::getModel('orbashipping/packstation_pwr');
+                 break;
+             case Orba_Shipping_Model_Carrier_Default::CODE:
                  $model = Mage::getModel('orbashipping/carrier_default');
+                 break;
+             default:
+                 $model = Mage::getModel('orbashipping/carrier_empty');
+                 
          }
          return $model;
      }
@@ -124,9 +131,12 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
              case Orba_Shipping_Model_Carrier_Gls::CODE:
                  $helper = Mage::helper('orbashipping/carrier_gls');
                  break;
-			 case Orba_Shipping_Model_Carrier_Dpd::CODE:
-				 $helper = Mage::helper('orbashipping/carrier_dpd');
-				 break;
+             case Orba_Shipping_Model_Carrier_Dpd::CODE:
+                 $helper = Mage::helper('orbashipping/carrier_dpd');
+                break;
+             case Orba_Shippint_Model_Packstation_Pwr::CODE:
+                 $helper = Mage::helper('orbashipping/packstation_pwr');
+                 break;
              default:
                  $helper = null;
          }

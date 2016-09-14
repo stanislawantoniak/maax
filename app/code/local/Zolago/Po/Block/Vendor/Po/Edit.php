@@ -497,19 +497,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
          $po = $this->getPo();
          $shippingMethod = $po->getUdropshipMethod();
          $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
-         switch ($methodCode) {
-             case 'ghinpost': // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
-                 break;
-             case 'std': // carrier
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
-                 break;
-             case 'zolagopp': // poczta polska
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
-                 break;
-             default:
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');                 
-         }
+         $block = Mage::helper('orbashipping')->getShippingManager($methodCode)->getShippingModal();
          $block->setParentBlock($this);
          return $block->toHtml();
      }

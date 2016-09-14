@@ -9,6 +9,7 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     protected $_senderAddress;
     protected $_recevierAddress;
     protected $_settings;
+    protected $_client;
     const CODE = 'ABSTRACT';
 
     public function getCode() {	
@@ -112,6 +113,33 @@ class Orba_Shipping_Model_Carrier_Abstract extends
      */
     public function setShipped() {
         return;
+    }
+    
+    /**
+     * set client
+     */
+
+    public function setClient($client) {
+        $this->_client = $client;
+    }
+    
+    /**
+     * get client
+     */
+
+    public function getClient() {
+        if (!$this->_client) {
+            $this->setClient($this->_startClient());
+        }
+        return $this->_client;
+    }
+    
+    protected function _startClient() {
+        return null;
+    }
+    
+    public function getShippingModal() {
+        return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');
     }
     
 }

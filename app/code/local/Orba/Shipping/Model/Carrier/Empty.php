@@ -1,11 +1,9 @@
 <?php
 /**
- * Default carrier 
+ * Empty carrier 
  */
-class Orba_Shipping_Model_Carrier_Default extends Orba_Shipping_Model_Carrier_Abstract {
+class Orba_Shipping_Model_Carrier_Empty extends Orba_Shipping_Model_Carrier_Abstract {
     			
-	const CODE = "std";
-    protected $_code = self::CODE;
     protected $_number;
     protected $_carrier;
     	              
@@ -41,7 +39,5 @@ class Orba_Shipping_Model_Carrier_Default extends Orba_Shipping_Model_Carrier_Ab
     public function createShipmentAtOnce() {
         Mage::throwException(Mage::helper('orbacommon')->__('Not implemented yet'));
     }
-    public function getShippingModal() {
-        return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
-    }
+
 }
