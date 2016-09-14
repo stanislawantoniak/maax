@@ -82,7 +82,7 @@ if ($helper->getEnabled()) :
                             var hotspots = <?php echo json_encode($hotspots);?>;
                             jQuery('#lookbook .cameraContent').each(function(){
                                 var ind = jQuery(this).index();
-                                jQuery.setHotspots(jQuery(this), hotspots[ind]);  
+                                jQuery.setHotspots(jQuery(this), hotspots[ind]);
                                 if(jQuery('#lookbook .camera_thumbs_cont ul > li').length){
                                     var thumb_length = jQuery('#lookbook .camera_thumbs_cont ul > li').length;
                                     var thumb_width = jQuery('#lookbook .camera_thumbs_cont ul > li').outerWidth();
