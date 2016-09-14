@@ -241,12 +241,20 @@
     display:block;
     visibility: hidden;
     z-index:999;
+
+    left: 35px;
+    top: -35px;
 }
 .hotspot .product-info h2,
 .hotspot .product-info a {
     font-size: 14px;
     padding: 0;
     margin-bottom: 10px;
+}
+
+.lookbook_see_product {
+    margin-top: 10px;
+    width: 100%;
 }
 
 .hotspot .product-info .price {
