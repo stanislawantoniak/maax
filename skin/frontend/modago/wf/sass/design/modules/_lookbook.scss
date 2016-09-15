@@ -1,8 +1,27 @@
 /* TOOLTIP */
 .hotspot {
-  .tooltip {
-    &.right, &.top, &.bottom, &.left {
-      @include lookBookHotSpot;
+
+  border: 50px solid transparent;
+
+  .product-info {
+    @include lookBookHotSpot;
+  }
+
+  .hotspot-tail {
+    width: 0px;
+    height: 0px;
+    border: 10px solid;
+    border-color: transparent #ffffff transparent transparent;
+    position:relative;
+    left: 10px;
+    top: -10px;
+
+    visibility: hidden;
+  }
+
+  &:hover, &.hover {
+    .hotspot-tail {
+      visibility: visible;
     }
   }
 }
