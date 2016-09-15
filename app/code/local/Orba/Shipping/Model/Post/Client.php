@@ -635,5 +635,9 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
          }
          return $result->urzedyNadania;
      }
+     
+     protected function _getHelper() {
+         return Mage::helper('orbashipping/post');
+     }
 }
 

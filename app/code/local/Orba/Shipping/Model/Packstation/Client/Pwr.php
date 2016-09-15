@@ -2,6 +2,8 @@
 
 class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Client_Soap {
 
+    protected $_returnAddress;
+
     protected function _construct() {
         $this->_init('orbashipping/packstation_client_pwr');
     }
@@ -49,6 +51,89 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
         $helper = Mage::helper("zospwr");
         return $helper;
     }
+    
+    public function setReturnAddress($address) {
+      $this->_returnAddress = $address;
+    }
+     
+    protected function _prepareSenderAddress(&$message) {
+        $address = $this->_shipperAddress;
+        $map = array(
+         'SenderCompanyName' => 'company',
+         'SenderStreetName' => 'street',
+         'SenderCity' => 'city',
+         'SenderEMail' => 'email',
+         'SenderPostCode' => 'postcode',
+         'SenderPhoneNumber' => 'phone',
+       );
+       foreach ($map as $key => $val) {
+         $message->$key = $address[$val];
+       }
+       $message->SenderBuildingNumber = '.';
+    }
+    
+    protected function _prepareReceiverAddress(&$message) {
+        $address = $this->_receiverAddress;
+        $map = array (
+          'EMail' => 'email',          
+          'FirstName' => 'firstname',
+          'LastName' => 'lastname',
+          'CompanyName' => 'company',
+          'StreetName' => 'street',
+          'City' => 'city',
+          'PostCode' => 'postcode',
+          'PhoneNumber' => 'telephone',
+          
+        );
+         foreach ($map as $key => $val) {
+           $message->$key = $address[$val];
+         } 
+    }
+    protected function _prepareReturnAddress(&$message) {
+        $address = $this->_shipperAddress; // zwracamy na adres nadawcy
+        $map = array (
+          'ReturnCompanyName' => 'company',
+          'ReturnEMail'	      => 'email',
+          'ReturnStreetName' => 'street',
+          'ReturnCity' => 'city',
+          'ReturnPostCode' => 'postcode',
+          'ReturnPhoneNumber' => 'phone',
+        );
+        foreach ($map as $key => $val) {
+           $message->$key = $address[$val];
+        }
+    }
+    /**
+     * override auth function
+     */
+
+    public function getAuth($param = null) {
+      $auth = parent::getAuth($param);
+      $message = new StdClass();
+      $message->PartnerID = $auth->username;
+      $message->PartnerKey = $auth->password;      
+      return $message;
+    }
+    /**
+     * create label
+     */
+     public function generateLabelBusinessPack() {
+       $message = $this->getAuth();
+       if ($this->_settings['boxSize'])  {
+         $message->BoxSize = $this->_settings['boxSize'];
+       }
+       $message->DestinationCode = $this->_settings['destinationCode']; 
+       $this->_prepareSenderAddress($message);       
+       $this->_prepareReceiverAddress($message);
+       $this->_prepareReturnAddress($message);
+       $message->PrintAdress = 1;
+       $message->PrintType = 1;
+       
+       $data = $this->_sendMessage('GenerateLabelBusinessPack',$message);
+       Mage::log($data);
+       $result = $this->_prepareResult($data,'GenerateLabelBusinessPackResult','GenerateLabelBusinessPack');       
+       return $result['NewDataSet']['GenerateLabelBusinessPack']['PackCode_RUCH'];
+     }
 
     /**
      * There's location too
@@ -59,7 +144,7 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
         $message->PartnerID = $this->getHelper()->getPartnerId();
         $message->PartnerKey = $this->getHelper()->getPartnerKey();
         $data = $this->_sendMessage("GiveMeAllRUCHZipcode", $message);
-        $result = $this->_prepareResult($data);
+        $result = $this->_prepareResult($data,'GiveMeAllRUCHZipcodeResult','AllRUCHZipcode');
         return $result['NewDataSet']['AllRUCHZipcode'];
     }
     /**
@@ -68,10 +153,16 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
      * @param $data
      * @return mixed|array
      */
-    protected function _prepareResult($data) {
-        $xml = simplexml_load_string($data->GiveMeAllRUCHZipcodeResult->any, "SimpleXMLElement", LIBXML_NOCDATA);
+    protected function _prepareResult($data,$param,$resultParam) {
+        if (!isset($data->$param->any)) {
+          Mage::throwException(Mage::helper('orbashipping')->__('%s server error: No valid answer','PWR'));
+        }        
+        $xml = simplexml_load_string($data->$param->any, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
         $result = json_decode($json,true);
+        if (!empty($result['NewDataSet'][$resultParam]['Err']) && ($result['NewDataSet'][$resultParam]['Err'] != '000')) {
+           Mage::throwException(Mage::helper('orbashipping')->__('%s server error: %s','PWR',$result['NewDataSet'][$resultParam]['ErrDes']));
+        }        
         return $result;
     }
 }

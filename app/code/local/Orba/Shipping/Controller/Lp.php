@@ -65,13 +65,12 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
 
     protected function _lpCall($request)
     {
+        $file = array (
+            'status' => false,
+            'message' => false,
+            'file' => false,
+        );
         try {
-            $dhlFile	= array(
-                              'status'	=> false,
-                              'file'		=> false,
-                              'message'	=> false
-                          );
-
             $vendorId	= $request->getParam('vId');
             $posId		= $request->getParam('posId');
             $trackId	= $request->getParam('trackId');
@@ -83,19 +82,10 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
 
             $settings = $this->_getSettings();
             $client		= $this->_getHelper()->startClient($settings);
-            $result		= $client->getLabels($trackModel);
-            $result			= $client->processLabelsResult('getLabels', $result);
-            if ($result['status']) {
-                $ioAdapter			= new Varien_Io_File();
-                $fileName			= $result['labelName'];
-                $fileContent		= $result['labelData'];
-                $fileLocation		= $this->_getHelper()->getFileDir() . $fileName;
-                $file['status']	= true;
-                $file['file']	= @$ioAdapter->filePutContent($fileLocation, $fileContent);
-            } else {
-                //Error Scenario
-                $this->_getHelper()->addUdpoComment($udpoModel, $result['message'], false, true, false);
-                $file['message']	= $result['message'] .PHP_EOL. $this->_getHelper()->__('Please contact Shop Administrator');
+            $file 		= $client->getLabelFile($trackModel);
+            if (!$file['status']) {
+                $this->_getHelper()->addUdpoComment($udpoModel, $file['message'], false, true, false);
+                $file['message'] .= PHP_EOL. $this->_getHelper()->__('Please contact Shop Administrator');
             }
         } catch (Exception $xt) {
             Mage::logException($xt);

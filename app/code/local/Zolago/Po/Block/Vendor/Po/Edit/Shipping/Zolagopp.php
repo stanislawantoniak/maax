@@ -19,8 +19,5 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping_Zolagopp
     public function getShippingMethod() {
         return Orba_Shipping_Model_Post::CODE;
     }	
-    public function getCarrierName() {
-        return 'Poczta Polska';
-    }
 	
 }
