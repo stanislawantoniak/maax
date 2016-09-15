@@ -49,8 +49,8 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
                 $decoded_array[$key]['icon_height'] = $icon_dimensions['height'];
             }
             $html_content .=  '<div class="product-info" class="col-sm-12" style="';
-//            $html_content .=  'left:'.round($value['width']/2).'px;';
-//            $html_content .=  'top:'.round($value['height']/2).'px;';
+            $html_content .=  'left:'.round($value['width']/2).'px;';
+            $html_content .=  'top:'.round($value['height']/2).'px;';
 
             if ($product_details) {
                 $_p_name = $product_details->getName();
@@ -120,9 +120,7 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
                 $html_content .= '<div><a href=\''.$decoded_array[$key]['href'].'\'>'.$decoded_array[$key]['text'].'</a></div>';
             }
             $html_content .= '</div></div>';
-
-            //$html_content .= '<div class="tail1"></div>';
-            $html_content .= '<div class="hotspot-tail"></div>';
+            //$html_content .= '<div class="hotspot-tail"></div>';
 
             $decoded_array[$key]['text'] = $html_content;
         }

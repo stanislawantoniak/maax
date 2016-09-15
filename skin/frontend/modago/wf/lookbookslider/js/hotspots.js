@@ -23,16 +23,14 @@ jQuery.extend({
                 var leftposition = hotspots[i].left * scale + hspt_width_hf + 7;
                 infoblock.find('.info-icon').css('left', hspt_width_hf + 'px');
 
-                console.log("STEP 1");
                 if (((leftposition + infowidth + 10) > imgwidth) && (leftposition > (imgwidth - leftposition)))
                 {
-                    console.log("STEP 2");
-                    if (jQuery.browser.msie && jQuery.browser.version == '8.0') {
+                    if (jQuery.browser.msie && $altima_jq.browser.version == '8.0') {
                         if (leftposition - 5 < infowidth) {
                             infoblock.css('width', leftposition - 20 + 'px');
                             infowidth = infoblock.width();
                         }
-                        //infoblock.css('left', '50%');
+                        infoblock.css('left', '5%');
                         infoblock.css('margin-left', '-' + infowidth - 2 * parseInt(infoblock.css('padding-left')) + 'px');
                     }
                     else
@@ -48,7 +46,7 @@ jQuery.extend({
                 }
                 else
                 {
-                    infoblock.css('left', '30px');
+                    infoblock.css('left', '54%');
                     if ((imgwidth - leftposition - 5) < infowidth) {
                         infoblock.css('width', imgwidth - leftposition - 20 + 'px');
                         infowidth = infoblock.width();
@@ -82,14 +80,11 @@ jQuery.extend({
                 }
                 else
                 {
-
-                    console.log(infoblock.height());
+                    infoblock.css('top', '54%');
                     if ((imgheight - topposition - 5) < infoheight) {
                         infoblock.css('height', imgheight - topposition - 10 + 'px');
                         infoheight = infoblock.height();
                     }
-                    console.log(-(infoblock.height()/2));
-                    infoblock.css('top', -(infoblock.height()/2));
                 }
                 /////// set position for hotspot-icon /////////////
                 var icon = slide.find('#' + hotspots[i].id + ' .hotspot-icon');

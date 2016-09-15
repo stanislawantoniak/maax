@@ -1,27 +1,27 @@
 /* TOOLTIP */
 .hotspot {
 
-  border: 50px solid transparent;
+  //border: 50px solid transparent;
 
   .product-info {
     @include lookBookHotSpot;
   }
 
-  .hotspot-tail {
-    width: 0px;
-    height: 0px;
-    border: 10px solid;
-    border-color: transparent #ffffff transparent transparent;
-    position:relative;
-    left: 10px;
-    top: -10px;
-
-    visibility: hidden;
-  }
-
-  &:hover, &.hover {
-    .hotspot-tail {
-      visibility: visible;
-    }
-  }
+  //.hotspot-tail {
+  //  width: 0px;
+  //  height: 0px;
+  //  border: 10px solid;
+  //  border-color: transparent #ffffff transparent transparent;
+  //  position:relative;
+  //    left: 53%;
+  //    top: 50%;
+  //
+  //  visibility: hidden;
+  //}
+  //
+  //&:hover, &.hover {
+  //  .hotspot-tail {
+  //    visibility: visible;
+  //  }
+  //}
 }
