@@ -14,11 +14,21 @@ class Orba_Shipping_Model_Packstation_Pwr extends Orba_Shipping_Model_Carrier_Ab
     }
     
     public function prepareSettings($params,$shipment,$udpo) {
+        $order = $shipment->getOrder();
         $boxSize = Mage::app()->getRequest()->getParam('boxSize');
+        if ($order->getPayment()->getMethod() == 'cashondelivery') {
+            $deliveryValue = $udpo->getGrandTotalInclTax()-$udpo->getPaymentAmount();
+        } else {
+            $deliveryValue = 0;
+        }
+
         $settings = array (
             'udpo'	=> $udpo,
             'destinationCode' => $udpo->getDeliveryPointName(),
             'boxSize' => $boxSize,
+            'insurance' => $udpo->getGrandTotalInclTax(),
+            'cod'	=> $deliveryValue,
+            'orderId'   => $udpo->getIncrementId(),
         );
         $this->setShipmentSettings($settings);
     }
@@ -69,7 +79,19 @@ class Orba_Shipping_Model_Packstation_Pwr extends Orba_Shipping_Model_Carrier_Ab
         return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_pwr'); 
     }
     
-    protected function _getHelper() {
-        return Mage::helper('orbashipping/packstation_pwr');
+    /**
+     * allow print letter
+     */
+
+    public function isLetterable() {
+        return true;
+    }
+    
+    /**
+     * path to get letter
+     */
+
+    public function getLetterUrl() {
+        return 'orbashipping/pwr/lp';
     }
 }
