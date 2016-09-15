@@ -142,4 +142,23 @@ class Orba_Shipping_Model_Carrier_Abstract extends
         return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');
     }
     
+    /**
+     * allow print delivery letter 
+     *
+     * @return bool
+     */
+
+    public function isLetterable() {
+        return false;
+    }
+    
+    /**
+     * link to get delivery letter
+     *
+     * @return string;
+     */
+    public function getLetterUrl() {
+        return null;
+    }
+    
 }

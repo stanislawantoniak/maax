@@ -267,4 +267,10 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
     public function getAggregatedPdfObject() {
         return Mage::getModel('zolagopo/aggregated_pdf');
     }
+    public function isLetterable() {
+        return true;
+    }
+    public function getLetterUrl() {
+        return 'orbashipping/dhl/lp';
+    }
 }

@@ -144,4 +144,10 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
     public function getShippingModal() {
         return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
     }
+    public function isLetterable() {
+        return true;
+    }
+    public function getLetterUrl() {
+        return 'orbashipping/post/lp';
+    }
 }

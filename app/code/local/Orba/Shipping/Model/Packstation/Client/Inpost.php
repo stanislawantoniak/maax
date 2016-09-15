@@ -201,5 +201,9 @@ class Orba_Shipping_Model_Packstation_Client_Inpost extends Orba_Shipping_Model_
 
          return $this->_prepareResult($result);
      }
+     
+     protected function _getHelper() {
+          return Mage::helper('orbashipping/packstation_inpost');
+     }     
 }
 
