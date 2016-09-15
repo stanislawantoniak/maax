@@ -20,7 +20,7 @@ class Altima_Lookbookslider_Model_Layout_Generate_Observer {
                     $_head->addLast('skin_js', 'lookbookslider/js/jquery.cycle2.flip.min.js');
                     $_head->addLast('skin_js', 'lookbookslider/js/jquery.easing.1.3.js');
                     $_head->addLast('skin_js', 'lookbookslider/js/jquery.actual.js');
-                    $_head->addLast('skin_js', 'lookbookslider/js/hotspots.js');
+                    $_head->addLast('skin_js', 'lookbookslider/js/hotspots.min.js');
                     $layout = Mage::app()->getLayout();
                     $content = $layout->getBlock('content');
                     $block = $layout->createBlock('lookbookslider/valid');

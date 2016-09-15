@@ -14,6 +14,11 @@
             <wflookbookslider_resource>
                 <class>Wf_Lookbookslider_Model_Resource</class>
             </wflookbookslider_resource>
+            <lookbookslider>
+                <rewrite>
+                    <layout_generate_observer>Wf_Lookbookslider_Model_Layout_Generate_Observer</layout_generate_observer>
+                </rewrite>
+            </lookbookslider>
         </models>
         <blocks>
             <wflookbookslider>
