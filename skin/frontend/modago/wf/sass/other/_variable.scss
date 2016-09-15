@@ -127,13 +127,15 @@ $validation-error: $color_e84c3d;
 }
 
 @mixin lookBookHotSpot() {
-    .tooltip-inner {
+
         background-color: #fff;
         border: 1px solid #FFFFFF;
         color: #686767;
         min-width: 220px;
         padding: 12px;
         z-index: 999;
+
+        @include box-shadow(7px 2px 12px 0px rgba(50, 50, 50, 0.75)) ;
 
         h2, a {
             font-size: 14px;
@@ -165,7 +167,7 @@ $validation-error: $color_e84c3d;
             padding: 10px;
             text-align: center;
         }
-    }
+
 }
 
 // FONT
