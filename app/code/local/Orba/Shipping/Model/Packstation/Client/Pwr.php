@@ -155,6 +155,19 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
         $result = $this->_prepareResult($data,'GiveMeAllRUCHZipcodeResult','AllRUCHZipcode');
         return $result['NewDataSet']['AllRUCHZipcode'];
     }
+
+    /**
+     * tracking status
+     *
+     * @return array
+     */
+    public function getPackStatus($number) {
+        $message = $this->getAuth();
+        $message->PackCode = $number;
+        $data = $this->_sendMessage('GiveMePackStatus',$message);
+        $result = $this->_prepareResult($data,'GiveMePackStatusResult',null);
+        return $result;
+    }
     /**
      * Prepare answer
      *
@@ -168,9 +181,11 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
         $xml = simplexml_load_string($data->$param->any, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
         $result = json_decode($json,true);
-        if (!empty($result['NewDataSet'][$resultParam]['Err']) && ($result['NewDataSet'][$resultParam]['Err'] != '000')) {
-           Mage::throwException(Mage::helper('orbashipping')->__('%s server error: %s','PWR',$result['NewDataSet'][$resultParam]['ErrDes']));
-        }        
+        if ($resultParam) {
+            if (!empty($result['NewDataSet'][$resultParam]['Err']) && ($result['NewDataSet'][$resultParam]['Err'] != '000')) {
+               Mage::throwException(Mage::helper('orbashipping')->__('%s server error: %s','PWR',$result['NewDataSet'][$resultParam]['ErrDes']));
+            }        
+        }
         return $result;
     }
     

@@ -16,6 +16,14 @@ class Orba_Shipping_Helper_Packstation_Pwr extends Orba_Shipping_Helper_Carrier 
         return self::PWR_HEADER;
     }
 
+    public function startClient($settings = false) {
+        $hlp = Mage::helper('zospwr');
+        $client = Mage::getModel('orbashipping/packstation_client_pwr');
+        $login = $hlp->getPartnerId();
+        $pass = $hlp->getPartnerKey();
+        $client->setAuth($login,$pass);
+        return $client;
+    }
     /**
      * inpost is active
      */
@@ -24,15 +32,20 @@ class Orba_Shipping_Helper_Packstation_Pwr extends Orba_Shipping_Helper_Carrier 
     }
     /**
      * process tracking
+     */
     public function process($client,$track) {
         $result = $client->getPackStatus($track->getTrackNumber());
         $this->_processTrackStatus($track,$result);
     }
-     */
 
     /**
      * process track response
+     * 
+     * @todo - skończyć jak będą testowe numery
+     */
     protected function _parseTrackResponse($track,$result,&$message,&$status,&$shipmentIdMessage) {
+        Mage::log($result);
+        /*
         $status = $this->__('Ready to Ship');
         if (is_array($result)) {
             if (array_key_exists('error', $result)) {
@@ -88,6 +101,6 @@ class Orba_Shipping_Helper_Packstation_Pwr extends Orba_Shipping_Helper_Carrier 
             $this->_log('%s Service Error: Missing Track and Trace Data','INPOST');
             $message[] = $this->__('%s Service Error: Missing Track and Trace Data','INPOST');
         }
+        */
     }
-     */
 }
