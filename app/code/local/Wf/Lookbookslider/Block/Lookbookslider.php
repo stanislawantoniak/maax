@@ -13,6 +13,7 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
      */
     public function getHotspotsWithProductDetails($slide){
         $helper = Mage::helper('lookbookslider');
+        $_helper = Mage::helper('wflookbookslider');
         $hotspots = $slide->getHotspots();
         if ($hotspots=='') return '';
         $decoded_array = json_decode($hotspots,true);
@@ -103,7 +104,11 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
                 if ($helper->canShowAddToCart()) {
                     $html_content .= $this->getAddToCartHtml($product_details_full);
                 }
-                $html_content .= '<div class="row"><div class="col-sm-12"><a href="'.$_p_url.'" class="lookbook_see_product button button-fourth large link">SEE PRODUCT</a></div></div>';
+                $html_content .= '<div class="row">';
+                $html_content .= '<div class="col-sm-12">';
+                $html_content .= '<a href="'.$_p_url.'" class="lookbook_see_product button button-fourth large link">'.$_helper->__("See product").'</a>';
+                $html_content .= '</div>';
+                $html_content .= '</div>';
                 $html_content .= '</div>';
 
             }

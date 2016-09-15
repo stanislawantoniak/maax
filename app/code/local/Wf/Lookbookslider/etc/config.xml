@@ -39,4 +39,15 @@
             </wflookbookslider_setup>
         </resources>
     </global>
+    <frontend>
+        <translate>
+            <modules>
+                <Wf_Lookbookslider>
+                    <files>
+                        <default>Wf_Lookbookslider.csv</default>
+                    </files>
+                </Wf_Lookbookslider>
+            </modules>
+        </translate>
+    </frontend>
 </config>
