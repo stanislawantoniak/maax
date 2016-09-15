@@ -1,0 +1,8 @@
+/* TOOLTIP */
+.hotspot {
+  .tooltip {
+    &.right, &.top, &.bottom, &.left {
+      @include lookBookHotSpot;
+    }
+  }
+}

@@ -229,7 +229,8 @@
     z-index:101; 
 }
 
-.hotspot .product-info {
+.hotspot .product-info
+{
     background: #fff;
     border: 1px solid #FFFFFF;
     color: #686767;
@@ -245,34 +246,47 @@
     left: 35px;
     top: -35px;
 }
+
 .hotspot .product-info h2,
-.hotspot .product-info a {
-    font-size: 14px;
+.hotspot .product-info a
+{
+    font-size: 14px !important;
     padding: 0;
     margin-bottom: 10px;
 }
 
-.lookbook_see_product {
-    margin-top: 10px;
-    width: 100%;
-}
-
-.hotspot .product-info .price {
+.hotspot .product-info .price
+{
     color: #dc4348;
     padding-top: 8px;
     float: left;
     clear: both;
 }
 
-.hotspot .product-info .price .old-price{
+.hotspot .product-info .price .old-price
+
+{
     color: #686767;
     text-decoration: line-through;
 }
 
-.hotspot .product-info  .out-of-stock {
+.hotspot .product-info  .out-of-stock
+{
     margin-top:5px;
     color: #D83820;
 }
+
+
+
+/* TOOLTIP */
+/* TOOLTIP */
+
+.lookbook_see_product {
+    margin-top: 10px;
+    width: 100%;
+}
+
+
 .hotspot-icon {
     position: absolute;
 }

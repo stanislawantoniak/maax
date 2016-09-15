@@ -38,7 +38,7 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
 
             $html_content = '';
             if (!isset($icon_dimensions['error'])) {
-                $html_content .= '<img class="hotspot-icon" src="'.$hotspot_icon.'" alt="" style="
+                $html_content .= '<img rel="tooltip" class="hotspot-icon" src="'.$hotspot_icon.'" alt="" style="
                         left:'. (round($value['width']/2)-round($icon_dimensions['width']/2)) .'px; 
                         top:'. (round($value['height']/2)-round($icon_dimensions['height']/2)) .'px;
                         "/>';
@@ -46,7 +46,7 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
                 $decoded_array[$key]['icon_width'] = $icon_dimensions['width'];
                 $decoded_array[$key]['icon_height'] = $icon_dimensions['height'];
             }
-            $html_content .=  '<div class="product-info" class="col-sm-12" style="';
+            $html_content .=  '<div class="product-info" class="col-sm-12" style=" display:none;';
             $html_content .=  'left:'.round($value['width']/2).'px;';
             $html_content .=  'top:'.round($value['height']/2).'px;';
 
