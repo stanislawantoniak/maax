@@ -130,9 +130,12 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
        $message->PrintType = 1;
        
        $data = $this->_sendMessage('GenerateLabelBusinessPack',$message);
-       Mage::log($data);
        $result = $this->_prepareResult($data,'GenerateLabelBusinessPackResult','GenerateLabelBusinessPack');       
-       return $result['NewDataSet']['GenerateLabelBusinessPack']['PackCode_RUCH'];
+       $code = $result['NewDataSet']['GenerateLabelBusinessPack']['PackCode_RUCH'];
+       // save pdf
+       $fileName = sprintf('%s.%s',$code,Orba_Shipping_Helper_Packstation_Pwr::EXT_FILE);
+       $this->_saveFile($fileName,$data->LabelData);
+       return $code;
      }
 
     /**
