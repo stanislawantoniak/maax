@@ -120,7 +120,6 @@ class Wf_Lookbookslider_Block_Lookbookslider extends Altima_Lookbookslider_Block
                 $html_content .= '<div><a href=\''.$decoded_array[$key]['href'].'\'>'.$decoded_array[$key]['text'].'</a></div>';
             }
             $html_content .= '</div></div>';
-            //$html_content .= '<div class="hotspot-tail"></div>';
 
             $decoded_array[$key]['text'] = $html_content;
         }
