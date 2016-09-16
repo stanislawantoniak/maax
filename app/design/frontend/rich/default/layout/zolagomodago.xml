@@ -1703,13 +1703,6 @@
           <link>/</link>
         </crumbInfo>
       </action>
-      <action method="addCrumb">
-        <crumbName>Help</crumbName>
-        <crumbInfo>
-          <label>Help</label>
-          <title>Help</title>
-        </crumbInfo>
-      </action>
     </reference>
     <reference name="root">
       <action method="setTemplate">
@@ -1813,14 +1806,6 @@
           <label>Home</label>
           <title>Home</title>
           <link>/</link>
-        </crumbInfo>
-      </action>
-      <action method="addCrumb">
-        <crumbName>Help</crumbName>
-        <crumbInfo>
-          <label>Help</label>
-          <title>Help</title>
-          <link>/help</link>
         </crumbInfo>
       </action>
       <action method="addCrumb">
