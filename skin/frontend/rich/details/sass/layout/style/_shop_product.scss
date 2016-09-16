@@ -26,10 +26,7 @@
 		}
 		.price-box-bundle {
 			position:relative;
-			margin-bottom: 16px;
-			@media (min-width: 768px) and (max-width: 819px) {
-				margin-bottom: 0px;
-			}
+			margin-bottom: 5px;
 			.price {
 				@media (min-width: 768px) and (max-width: 819px) {
 					margin-bottom: 0px;
