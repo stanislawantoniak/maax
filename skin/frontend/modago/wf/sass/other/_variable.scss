@@ -126,49 +126,6 @@ $validation-error: $color_e84c3d;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 )!important;
 }
 
-@mixin lookBookHotSpot() {
-
-        background-color: #fff;
-        border: 1px solid #FFFFFF;
-        color: #686767;
-        min-width: 220px;
-        padding: 12px;
-        z-index: 999;
-
-        @include box-shadow(5px 0px 12px 0px rgba(50, 50, 50, 0.75)) ;
-
-        h2, a {
-            font-size: 14px;
-            padding: 0;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        .price {
-            color: $colorProductFinalPrice;
-            padding-top: 8px;
-            font-size: 14px;
-            text-align: left;
-            clear: both;
-
-            .old-price {
-                color: $colorProductStrikeOutPrice;
-                text-decoration: line-through;
-            }
-        }
-
-        .out-of-stock {
-            margin-top: 5px;
-            color: #D83820;
-        }
-
-        .lookbook_see_product {
-            margin-top: 10px;
-            width: 100%;
-            padding: 10px;
-            text-align: center;
-        }
-
-}
 
 // FONT
 
