@@ -62,6 +62,23 @@
 				<show_in_website>1</show_in_website>
 				<show_in_store>0</show_in_store>
 			</delivery_volume_limit>                        
+                        <description_transfer translate="label" module="zospwr">
+                            <label>Bank transfer title for settlement</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>%s is replaced with order ID</comment>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description_transfer>
+                        <default_box_size translate="label" module="zospwr">
+                            <label>Default box size for shipment labels</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </default_box_size>
                         <cod_allowed>
                             <label>Is COD allowed</label>
                             <frontend_type>select</frontend_type>

@@ -5,6 +5,7 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 
+
     /**
      * @param $deliveryMethod
      * @param $deliveryPointIdentifier
@@ -18,6 +19,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $helper = Mage::helper("zolagocheckout");
 
         $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+        //Zend_Debug::dump($deliveryMethodData);
         $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 
         switch ($deliveryMethodCode) {
@@ -147,7 +149,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             return;
         }
         foreach ($checkoutSession->getData("shipping_method") as $method) {
-            if ($code == $method) {                
+            if ($code == $method) {
                 $checkoutSession->setData('shipping_method',null);
                 $checkoutSession->setData('delivery_point_name',null);
                 $address = $this->getQuote()->getShippingAddress();
@@ -155,7 +157,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $address->setUdropshipShippingDetails(null);
                 $address->save();
 //                Mage::getSingleton('core/session')->addError('Your delivery method has been disabled');
-                
+
             }
         }
 
@@ -171,6 +173,11 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $point;
     }
 
+
+
+    /**
+     * @return string
+     */
     public function getLastTelephoneForLocker() {
         $shippingAddress = $this->getQuote()->getShippingAddress();
         $tel = $shippingAddress->getTelephone();
