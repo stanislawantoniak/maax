@@ -77,5 +77,9 @@ class Orba_Shipping_Model_Carrier_Client_Ups extends Orba_Shipping_Model_Client_
         $return = $this->_sendMessage('ProcessTrack',$request);
         return $return;
     }
+    
+    protected function _getHelper() {
+        return Mage::helper('orbashipping/carrier_ups');
+    }
 
 }

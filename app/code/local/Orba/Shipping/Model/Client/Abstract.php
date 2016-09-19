@@ -97,5 +97,44 @@ class Orba_Shipping_Model_Client_Abstract extends Mage_Core_Model_Abstract {
         return $result;
     }
 
+    
+    /**
+     * prepare helper
+     */
+     protected function _getHelper() {
+         return Mage::helper('orbashipping/carrier');
+     }
+    
+
+    /**
+     * save label on disk
+     */
+    protected function _saveFile($fileName,$fileContent) {
+        $ioAdapter			= new Varien_Io_File();
+        $fileLocation		= $this->_getHelper()->getFileDir() . $fileName;
+        return @$ioAdapter->filePutContent($fileLocation, $fileContent);
+    }
+    /**
+     * return and save file from external service
+     */
+
+    public function getLabelFile($trackModel) {
+        $file = array (
+                    'status' => false,
+                    'file' => false,
+                    'message' => false,
+                );
+        $result = $this->getLabels($trackModel);
+        $result	= $this->processLabelsResult('getLabels', $result);
+        
+        if ($result['status']) {
+            $file['file'] = $this->_saveFile($result['labelName'],$result['labelData']);
+            $file['status'] = true;
+        } else {
+            //Error Scenario
+            $file['message']	= $result['message'] .PHP_EOL. $this->_getHelper()->__('Please contact Shop Administrator');
+        }
+        return $file;
+    }
 
 }
