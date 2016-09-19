@@ -251,9 +251,7 @@ var Mall = {
 				}).text(this.text));
 			});
 		}
-        // jQuery('select[name=scat]').selectBoxIt({
-        //     autoWidth: false
-        // });
+
         // Update current search query text
         jQuery("#header input[name=q]").val(this.getQueryText());
 
