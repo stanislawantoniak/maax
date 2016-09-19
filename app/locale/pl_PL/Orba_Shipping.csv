@@ -40,3 +40,5 @@
 "Name for COD","Nazwa dla COD"
 "Is COD allowed","Możliwa płatność COD"
 "Service %s get label error: %s","Błąd pobrania etykiet dla serwisu %s: %s"
+"Box size","Rozmiar paczki"
+"Default box size for shipment labels","Domyślny rozmiar paczki przy generowaniu listu przewozowego" 

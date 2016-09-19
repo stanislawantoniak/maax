@@ -18,6 +18,9 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $helper = Mage::helper("zolagocheckout");
 
         $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+        //Zend_Debug::dump($deliveryMethodData);
+        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
         $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 
         switch ($deliveryMethodCode) {
@@ -70,7 +73,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $deliveryPoint->id = NULL;
         $deliveryPoint->checkout = new stdClass();
         switch ($deliveryMethodCode) {
-        case ZolagoOs_PickupPoint_Helper_Data::CODE:
+        case 'zolagopickuppoint':
             /* @var $pos  Zolago_Pos_Model_Pos */
             $pos = $helper->getPickUpPoint();
 
@@ -126,6 +129,17 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             break;
         }
 
+        return $deliveryPoint;
+    }
+    /**
+     * @return GH_Inpost_Model_Locker
+     */
+    public function getInpostLocker() {
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $locker = $helper->getInpostLocker();
+        return $locker;
+    }
         return $deliveryPoint;
     }
     /**
