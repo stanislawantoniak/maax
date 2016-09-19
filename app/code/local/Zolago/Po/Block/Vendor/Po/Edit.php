@@ -478,29 +478,17 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         }
     }
 
-    /**
-     * Prepare shipping modal
-     */
-     protected function _getShippingModal() {
-         $po = $this->getPo();
-         $shippingMethod = $po->getUdropshipMethod();
-         $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
-         switch ($methodCode) {
-             case 'ghinpost': // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
-                 break;
-             case 'std': // carrier
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_carrier');
-                 break;
-             case 'zolagopp': // poczta polska
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
-                 break;
-             default:
-                 $block = $this->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_empty');                 
-         }
-         $block->setParentBlock($this);
-         return $block->toHtml();
-     }
+
+
+    protected function _getShippingModal() {
+        $po = $this->getPo();
+        $shippingMethod = $po->getUdropshipMethod();
+        $methodCode = Mage::helper('udtiership')->getCodeByPoMethod($shippingMethod);
+        $block = Mage::helper('orbashipping')->getShippingManager($methodCode)->getShippingModal();
+        $block->setParentBlock($this);
+        return $block->toHtml();
+    }
+
 
     /**
      * @return bool
