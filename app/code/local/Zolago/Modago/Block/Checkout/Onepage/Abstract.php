@@ -140,17 +140,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $locker = $helper->getInpostLocker();
         return $locker;
     }
-        return $deliveryPoint;
-    }
-    /**
-     * @return GH_Inpost_Model_Locker
-     */
-    public function getInpostLocker() {
-        /** @var Zolago_Checkout_Helper_Data $helper */
-        $helper = Mage::helper("zolagocheckout");
-        $locker = $helper->getInpostLocker();
-        return $locker;
-    }
 
     /**
      * clear delivery settings from session if delivery code is not allowed

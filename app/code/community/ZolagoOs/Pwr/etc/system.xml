@@ -54,14 +54,14 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </partner_key>
-			<delivery_volume_limit>
-				<label>Delivery volume limit</label>
-				<frontend_type>text</frontend_type>
-				<sort_order>50</sort_order>
-				<show_in_default>1</show_in_default>
-				<show_in_website>1</show_in_website>
-				<show_in_store>0</show_in_store>
-			</delivery_volume_limit>
+                        <delivery_volume_limit>
+                            <label>Delivery volume limit</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </delivery_volume_limit>
                         <description_transfer translate="label" module="zospwr">
                             <label>Bank transfer title for settlement</label>
                             <frontend_type>text</frontend_type>
