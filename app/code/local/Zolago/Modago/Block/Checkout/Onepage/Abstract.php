@@ -5,56 +5,6 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 
-    /**
-     * @param $deliveryMethod
-     * @param $deliveryPointIdentifier
-     * @return array
-     */
-    public function getDeliveryPointData($deliveryPointIdentifier)
-    {
-        $data = array();
-
-        /** @var Zolago_Checkout_Helper_Data $helper */
-        $helper = Mage::helper("zolagocheckout");
-
-        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-        //Zend_Debug::dump($deliveryMethodData);
-        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-
-        switch ($deliveryMethodCode) {
-        case ZolagoOs_PickupPoint_Helper_Data::CODE:
-            $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
-            $data = array(
-                        "id" => $pos->getId(),
-                        "city" => (string)ucwords(strtolower($pos->getCity())),
-                        "value" => $pos->getId()
-                    );
-            break;
-        case GH_Inpost_Model_Carrier::CODE:
-            /* @var $locker GH_Inpost_Model_Locker */
-            $locker = $this->getInpostLocker();
-
-            $data = array(
-                        "id" => $locker->getId(),
-                        "city" => (string)ucwords(strtolower($locker->getTown())),
-                        "value" => $locker->getName()
-                    );
-            break;
-        case Orba_Shipping_Model_Packstation_Pwr::CODE:
-            /* @var $locker ZolagoOs_Pwr_Model_Point */
-            $point = $this->getPwrPoint();
-
-            $data = array(
-                        "id" => $point->getId(),
-                        "city" => (string)ucwords(strtolower($point->getTown())),
-                        "value" => $point->getName()
-                    );
-            break;
-        }
-        return $data;
-    }
 
     /**
      * Delivery point info constructor for checkout
@@ -73,7 +23,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $deliveryPoint->id = NULL;
         $deliveryPoint->checkout = new stdClass();
         switch ($deliveryMethodCode) {
-        case 'zolagopickuppoint':
+        case ZolagoOs_PickupPoint_Helper_Data::CODE:
             /* @var $pos  Zolago_Pos_Model_Pos */
             $pos = $helper->getPickUpPoint();
 
@@ -132,6 +82,57 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $deliveryPoint;
     }
     /**
+     * @param $deliveryMethod
+     * @param $deliveryPointIdentifier
+     * @return array
+     */
+    public function getDeliveryPointData($deliveryPointIdentifier)
+    {
+        $data = array();
+
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+
+        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+        //Zend_Debug::dump($deliveryMethodData);
+        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+        switch ($deliveryMethodCode) {
+        case ZolagoOs_PickupPoint_Helper_Data::CODE:
+            $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
+            $data = array(
+                        "id" => $pos->getId(),
+                        "city" => (string)ucwords(strtolower($pos->getCity())),
+                        "value" => $pos->getId()
+                    );
+            break;
+        case GH_Inpost_Model_Carrier::CODE:
+            /* @var $locker GH_Inpost_Model_Locker */
+            $locker = $this->getInpostLocker();
+
+            $data = array(
+                        "id" => $locker->getId(),
+                        "city" => (string)ucwords(strtolower($locker->getTown())),
+                        "value" => $locker->getName()
+                    );
+            break;
+        case Orba_Shipping_Model_Packstation_Pwr::CODE:
+            /* @var $locker ZolagoOs_Pwr_Model_Point */
+            $point = $this->getPwrPoint();
+
+            $data = array(
+                        "id" => $point->getId(),
+                        "city" => (string)ucwords(strtolower($point->getTown())),
+                        "value" => $point->getName()
+                    );
+            break;
+        }
+        return $data;
+    }
+
+    /**
      * @return GH_Inpost_Model_Locker
      */
     public function getInpostLocker() {
@@ -150,7 +151,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             return;
         }
         foreach ($checkoutSession->getData("shipping_method") as $method) {
-            if ($code == $method) {                
+            if ($code == $method) {
                 $checkoutSession->setData('shipping_method',null);
                 $checkoutSession->setData('delivery_point_name',null);
                 $address = $this->getQuote()->getShippingAddress();
@@ -158,7 +159,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $address->setUdropshipShippingDetails(null);
                 $address->save();
 //                Mage::getSingleton('core/session')->addError('Your delivery method has been disabled');
-                
+
             }
         }
 
@@ -174,6 +175,10 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $point;
     }
 
+
+    /**
+     * @return string
+     */
     public function getLastTelephoneForLocker() {
         $shippingAddress = $this->getQuote()->getShippingAddress();
         $tel = $shippingAddress->getTelephone();
