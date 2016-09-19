@@ -452,4 +452,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
         }
     }
 
+    protected function _getHelper() {
+        return Mage::helper('orbashipping/carrier_dhl');
+    }
 }
