@@ -1,10 +1,10 @@
 <?php
-class Zolago_Po_Block_Vendor_Po_Edit_Shipping_Zolagopp
+class Zolago_Po_Block_Vendor_Po_Edit_Shipping_Pwr
 	extends Zolago_Po_Block_Vendor_Po_Edit_Abstract
 	implements Zolago_Po_Block_Vendor_Po_Edit_Shipping_Interface
 {
     protected function _construct() {
-        $this->setTemplate('zolagopo/vendor/po/edit/shipping/zolagopp.phtml');
+        $this->setTemplate('zolagopo/vendor/po/edit/shipping/pwr.phtml');
         return parent::_construct();
     }
 
@@ -17,7 +17,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping_Zolagopp
 		return self::MODE_GENERATE;
 	}
     public function getShippingMethod() {
-        return Orba_Shipping_Model_Post::CODE;
+        return Orba_Shipping_Model_Packstation_Pwr::CODE;
     }	
 	
 }

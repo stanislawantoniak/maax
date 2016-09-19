@@ -33,4 +33,11 @@ class ZolagoOs_Pwr_Helper_Data extends Mage_Core_Helper_Abstract {
 		return Mage::getStoreConfig('carriers/zospwr/partner_key');
 	}
 	
+    /**
+     * default description for transfer
+     */
+     public function getDescriptionTransfer($orderId) {
+		return sprintf(Mage::getStoreConfig('carriers/zospwr/description_transfer'),$orderId);
+     }
+	
 }

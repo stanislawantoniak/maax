@@ -23,9 +23,6 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping_Inpost
     public function getShippingMethod() {
         return Orba_Shipping_Model_Packstation_Inpost::CODE;
     }	
-    public function getCarrierName() {
-        return "Paczkomaty Inpost";
-    }	
 	public function getRemainingShippingAmount() {
 		return $this->getParentBlock()->getRemainingShippingAmount();
 	}

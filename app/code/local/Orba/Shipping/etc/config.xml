@@ -162,6 +162,9 @@
         <title>DPD</title>
         <model>orbashipping/carrier_dpd</model>
       </zolagodpd>
+      <zospwr>
+      	<model>orbashipping/packstation_pwr</model>
+      </zospwr>
     </carriers>
   </default>
 </config>

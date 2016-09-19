@@ -25,5 +25,10 @@ abstract class Zolago_Po_Block_Vendor_Po_Edit_Abstract
 		return Mage::helper('udropship')->getVendorSkuAttribute($storeId);
 	}
 	
-	
+	public function getCarrierName() {
+		$po = $this->getPo();
+		$shipping = $po->getShippingMethodInfo();
+		$title = $shipping->getStoreTitle(Mage::app()->getStore()->getId());
+		return $title;
+	}
 }
