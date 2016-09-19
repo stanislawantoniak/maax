@@ -1,6 +1,6 @@
 <?php
 /**
-  
+
  */
 
 class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
@@ -117,7 +117,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function checkout_cart_add_product_complete($observer)
     {
         if (!Mage::helper('udropship')->isActive()) {
-           return;
+            return;
         }
         try {
             $hlp = Mage::helper('udropship/protected');
@@ -134,7 +134,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function sales_quote_save_before($observer)
     {
         if (!Mage::helper('udropship')->isActive()) {
-           return;
+            return;
         }
         if (($quote = $observer->getQuote()) && $quote->getRefreshVendorsFlag()) {
             $hlp = Mage::helper('udropship/protected');
@@ -174,7 +174,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function checkout_cart_product_add_after($observer)
     {
         if (!Mage::helper('udropship')->isActive()) {
-           return;
+            return;
         }
         try {
             if ($observer->getQuoteItem() && ($quote = $observer->getQuoteItem()->getQuote())) {
@@ -189,7 +189,7 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function checkout_cart_update_items_after($observer)
     {
         if (!Mage::helper('udropship')->isActive()) {
-           return;
+            return;
         }
         try {
             $hlp = Mage::helper('udropship/protected');
@@ -281,16 +281,16 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
 
         $shipmentType = $product->getShipmentType();
         $shipmentTypeFlag = (null !== $shipmentType)
-            && (int)$shipmentType===Mage_Catalog_Model_Product_Type_Abstract::SHIPMENT_SEPARATELY;
+                            && (int)$shipmentType===Mage_Catalog_Model_Product_Type_Abstract::SHIPMENT_SEPARATELY;
         $priceType = $product->getPriceType();
         $priceTypeFlag = (null !== $priceType)
-            && (int)$priceType===Mage_Catalog_Model_Product_Type_Abstract::CALCULATE_CHILD;
+                         && (int)$priceType===Mage_Catalog_Model_Product_Type_Abstract::CALCULATE_CHILD;
         $weightType = $product->getWeightType();
         $weightTypeFlag = (null !== $weightType) && !$weightType;
 
         if (!Mage::getStoreConfigFlag('udropship/stock/skip_bundle_limit')
-            && $shipmentTypeFlag && (!$priceTypeFlag || !$weightTypeFlag)
-        ) {
+                && $shipmentTypeFlag && (!$priceTypeFlag || !$weightTypeFlag)
+           ) {
             $product->setShipmentType(
                 Mage_Catalog_Model_Product_Type_Abstract::SHIPMENT_TOGETHER
             );
@@ -385,8 +385,8 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function adminhtml_sales_order_shipment_view($observer)
     {
         if (($soi = Mage::app()->getLayout()->getBlock('order_info'))
-            && ($shipment = Mage::registry('current_shipment'))
-        ) {
+                && ($shipment = Mage::registry('current_shipment'))
+           ) {
             if (($vName = Mage::helper('udropship')->getVendorName($shipment->getUdropshipVendor()))) {
                 $soi->setVendorName($vName);
             }
@@ -402,18 +402,18 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
                     $soi->setPayoutUrl(Mage::getModel('adminhtml/url')->getUrl('zospayoutadmin/payout/edit', array('id'=>$pt->getId())));
                 }
             }
-        	if (Mage::helper('udropship')->isUdpoActive() && ($ptId = $shipment->getUdpoId())) {
+            if (Mage::helper('udropship')->isUdpoActive() && ($ptId = $shipment->getUdpoId())) {
                 $soi->setUdpoId($ptId);
                 if (Mage::helper('udpo')->getShipmentPo($shipment)) {
-                	$soi->setUdpoId($shipment->getUdpo()->getIncrementId());
+                    $soi->setUdpoId($shipment->getUdpo()->getIncrementId());
                     $soi->setUdpoUrl(Mage::getModel('adminhtml/url')->getUrl('zospoadmin/order_po/view', array('udpo_id'=>$shipment->getUdpo()->getId())));
                 }
             }
             if (Mage::helper('udropship')->isUdropshipOrder($shipment->getOrder())) {
                 $shipment->getOrder()->setShippingDescription(sprintf('%s [%s]',
-                    $shipment->getOrder()->getShippingDescription(),
-                    $shipment->getUdropshipMethodDescription()
-                ));
+                        $shipment->getOrder()->getShippingDescription(),
+                        $shipment->getUdropshipMethodDescription()
+                                                                     ));
                 $shipment->getOrder()->setBaseShippingAmount($shipment->getBaseShippingAmount());
                 $shipment->getOrder()->setShippingAmount($shipment->getShippingAmount());
             }
@@ -425,105 +425,105 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
         Mage::helper('udropship')->addAdminhtmlVersion('ZolagoOs_OmniChannel');
     }
 
-	public function cronCollectTracking()
-	{
-		$statusFilter = array(
-			ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,
-			ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY,
-			ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED
-		);
-		/** @var Zolago_Dropship_Helper_Data $helper */
-		$helper = Mage::helper('udropship'); 
-		$time = Mage::getModel('core/date')->timestamp();
-		$now = date('Y-m-d H:i:s', $time);
+    public function cronCollectTracking()
+    {
+        $statusFilter = array(
+                            ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_PENDING,
+                            ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_READY,
+                            ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_SHIPPED
+                        );
+        /** @var Zolago_Dropship_Helper_Data $helper */
+        $helper = Mage::helper('udropship');
+        $time = Mage::getModel('core/date')->timestamp();
+        $now = date('Y-m-d H:i:s', $time);
 
-		if ($helper->isSalesFlat()) {
+        if ($helper->isSalesFlat()) {
 
-			$res  = Mage::getSingleton('core/resource');
-			$conn = $res->getConnection('sales_read');
+            $res  = Mage::getSingleton('core/resource');
+            $conn = $res->getConnection('sales_read');
 
-			$sIdsSel = $conn->select()->distinct()
-				->from($res->getTableName('sales/shipment_track'), array('parent_id'))
-				->where('udropship_status in (?)', $statusFilter)
-				->where('next_check<=?', $now)
-				->limit(50);
-			$sIds = $conn->fetchCol($sIdsSel);
+            $sIdsSel = $conn->select()->distinct()
+                       ->from($res->getTableName('sales/shipment_track'), array('parent_id'))
+                       ->where('udropship_status in (?)', $statusFilter)
+                       ->where('next_check<=?', $now)
+                       ->limit(50);
+            $sIds = $conn->fetchCol($sIdsSel);
+        } else {
+            $res  = Mage::getSingleton('core/resource');
+            $conn = $res->getConnection('sales_read');
 
-		} else {
-			$res  = Mage::getSingleton('core/resource');
-			$conn = $res->getConnection('sales_read');
+            $eav = Mage::getSingleton('eav/config');
+            $trackEt = $eav->getEntityType('shipment_track');
+            $udStatusAttr = $eav->getAttribute('shipment_track', 'udropship_status');
+            $nextCheckAttr = $eav->getAttribute('shipment_track', 'next_check');
 
-			$eav = Mage::getSingleton('eav/config');
-			$trackEt = $eav->getEntityType('shipment_track');
-			$udStatusAttr = $eav->getAttribute('shipment_track', 'udropship_status');
-			$nextCheckAttr = $eav->getAttribute('shipment_track', 'next_check');
+            $sIdsSel = $conn->select()->distinct()
+                       ->from(array('e' => $trackEt->getValueTablePrefix()), array('parent_id'))
+                       ->join(
+                           array('us' => $udStatusAttr->getBackendTable()),
+                           $conn->quoteInto('e.entity_id=us.entity_id and us.entity_type_id=?', $trackEt->getId())
+                           .$conn->quoteInto(' and us.attribute_id=?', $udStatusAttr->getId()),
+                           array())
+                       ->join(
+                           array('nc' => $nextCheckAttr->getBackendTable()),
+                           $conn->quoteInto('e.entity_id=nc.entity_id and nc.entity_type_id=?', $trackEt->getId())
+                           .$conn->quoteInto(' and nc.attribute_id=?', $nextCheckAttr->getId()),
+                           array())
+                       ->where('us.value in (?)', $statusFilter)
+                       ->where('nc.value<=?', $now)
+                       ->limit(50);
+            $sIds = $conn->fetchCol($sIdsSel);
+        }
 
-			$sIdsSel = $conn->select()->distinct()
-				->from(array('e' => $trackEt->getValueTablePrefix()), array('parent_id'))
-				->join(
-					array('us' => $udStatusAttr->getBackendTable()),
-					$conn->quoteInto('e.entity_id=us.entity_id and us.entity_type_id=?', $trackEt->getId())
-					.$conn->quoteInto(' and us.attribute_id=?', $udStatusAttr->getId()),
-					array())
-				->join(
-					array('nc' => $nextCheckAttr->getBackendTable()),
-					$conn->quoteInto('e.entity_id=nc.entity_id and nc.entity_type_id=?', $trackEt->getId())
-					.$conn->quoteInto(' and nc.attribute_id=?', $nextCheckAttr->getId()),
-					array())
-				->where('us.value in (?)', $statusFilter)
-				->where('nc.value<=?', $now)
-				->limit(50);
-			$sIds = $conn->fetchCol($sIdsSel);
-		}
+        if (!empty($sIds)) {
+            $tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
+                      ->addAttributeToSelect('*')
+                      ->addAttributeToFilter('udropship_status', array('in'=>$statusFilter))
+                      ->addAttributeToFilter('parent_id', array('in'=>$sIds))
+                      ->addAttributeToSort('parent_id')
+                      ;
 
-		if (!empty($sIds)) {
-			$tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
-				->addAttributeToSelect('*')
-				->addAttributeToFilter('udropship_status', array('in'=>$statusFilter))
-				->addAttributeToFilter('parent_id', array('in'=>$sIds))
-				->addAttributeToSort('parent_id')
-			;
+            try {                
+                $helper->collectTracking($tracks);
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $tracksByStore = array();
+                foreach ($tracks as $track) {
+                    $tracksByStore[$track->getShipment()->getOrder()->getStoreId()][] = $track;
+                }
+                foreach ($tracksByStore as $sId => $_tracks) {
+                    Mage::helper('udropship/error')->sendPollTrackingFailedNotification($_tracks, "$e", $sId);
+                }
+            }
+        }
 
-			try {
-				$helper->collectTracking($tracks);
-			} catch (Exception $e) {
-				$tracksByStore = array();
-				foreach ($tracks as $track) {
-					$tracksByStore[$track->getShipment()->getOrder()->getStoreId()][] = $track;
-				}
-				foreach ($tracksByStore as $sId => $_tracks) {
-					Mage::helper('udropship/error')->sendPollTrackingFailedNotification($_tracks, "$e", $sId);
-				}
-			}
-		}
+        if (0<Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit')) {
+            $limit = date('Y-m-d H:i:s', $time-24*60*60*Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit'));
 
-		if (0<Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit')) {
-			$limit = date('Y-m-d H:i:s', $time-24*60*60*Mage::getStoreConfig('udropship/error_notifications/poll_tracking_limit'));
-
-			$tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
-				->addAttributeToSelect('*')
-				->addAttributeToFilter('udropship_status', 'P')
-				->addAttributeToFilter('created_at', array('datetime'=>true, 'to'=>$limit))
-				->setPageSize(50)
-			;
-			$tracksByStore = array();
-			foreach ($tracks as $track) {
-				$cCode = $track->getCarrierCode();
-				if (!$cCode) {
-					continue;
-				}
-				$vId = $track->getShipment()->getUdropshipVendor();
-				$v = $helper->getVendor($vId);
-				if (!$v->getTrackApi($cCode)) {
-					continue;
-				}
-				$tracksByStore[$track->getShipment()->getOrder()->getStoreId()][] = $track;
-			}
-			foreach ($tracksByStore as $sId => $_tracks) {
-				Mage::helper('udropship/error')->sendPollTrackingLimitExceededNotification($_tracks, $sId);
-			}
-		}
-	}
+            $tracks = Mage::getModel('sales/order_shipment_track')->getCollection()
+                      ->addAttributeToSelect('*')
+                      ->addAttributeToFilter('udropship_status', 'P')
+                      ->addAttributeToFilter('created_at', array('datetime'=>true, 'to'=>$limit))
+                      ->setPageSize(50)
+                      ;
+            $tracksByStore = array();
+            foreach ($tracks as $track) {
+                $cCode = $track->getCarrierCode();
+                if (!$cCode) {
+                    continue;
+                }
+                $vId = $track->getShipment()->getUdropshipVendor();
+                $v = $helper->getVendor($vId);
+                if (!$v->getTrackApi($cCode)) {
+                    continue;
+                }
+                $tracksByStore[$track->getShipment()->getOrder()->getStoreId()][] = $track;
+            }
+            foreach ($tracksByStore as $sId => $_tracks) {
+                Mage::helper('udropship/error')->sendPollTrackingLimitExceededNotification($_tracks, $sId);
+            }
+        }
+    }
 
     /**
     * Check for extension update news
@@ -544,8 +544,8 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function adminhtml_catalog_product_edit_element_types(Varien_Event_Observer $observer)
     {
         $observer->getResponse()->setTypes(array_merge($observer->getResponse()->getTypes(),
-            array('udropship_vendor'=>Mage::getConfig()->getBlockClassName('udropship/vendor_htmlselect'))
-        ));
+                                           array('udropship_vendor'=>Mage::getConfig()->getBlockClassName('udropship/vendor_htmlselect'))
+                                                      ));
     }
 
     public function vendorNotifyLowstock()
@@ -569,11 +569,11 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     {
         $po = $observer->getEvent()->getShipment();
         if ($po->getUdropshipVendor()
-            && ($vendor = Mage::helper('udropship')->getVendor($po->getUdropshipVendor()))
-            && $vendor->getId()
-            && (!$po->getStatementDate() || $po->getStatementDate() == '0000-00-00 00:00:00')
-            && $vendor->getStatementPoType() == 'shipment'
-        ) {
+                && ($vendor = Mage::helper('udropship')->getVendor($po->getUdropshipVendor()))
+                && $vendor->getId()
+                && (!$po->getStatementDate() || $po->getStatementDate() == '0000-00-00 00:00:00')
+                && $vendor->getStatementPoType() == 'shipment'
+           ) {
             $stPoStatuses = $vendor->getStatementPoStatus();
             if (!is_array($stPoStatuses)) {
                 $stPoStatuses = explode(',', $stPoStatuses);
@@ -633,42 +633,42 @@ class ZolagoOs_OmniChannel_Model_Observer extends Varien_Object
     public function usimpleup_uninstall_unirgy_dropship($observer)
     {
         Mage::helper('usimpleup')->removeFiles('
-app/etc/modules/ZolagoOs_OmniChannel.xml
-app/code/community/ZolagoOs/OmniChannel/
-app/code/community/ZolagoOs/OmniChannelHelper/
-app/design/adminhtml/default/default/layout/udropship.xml
-app/design/adminhtml/default/default/template/udropship/
-app/design/frontend/base/default/layout/udropship.xml
-app/design/frontend/base/default/template/unirgy/dropship/
-app/design/frontend/default/default/layout/udropship.xml
-app/design/frontend/default/default/template/unirgy/dropship/
-app/locale/en_US/ZolagoOs_OmniChannel.csv
-app/locale/en_US/template/email/udropship_password.html
-app/locale/en_US/template/email/udropship_statement.html
-app/locale/en_US/template/email/udropship_vendor.html
-app/locale/en_US/template/email/udropship_vendor_notify_lowstock.html
-app/locale/en_US/template/email/udropship_vendor_shipment_comment.html
-skin/frontend/base/default/css/udropship.css
-skin/frontend/default/default/css/udropship.css
-app/design/frontend/default/udropship/
-skin/frontend/default/udropship/
-js/udropship.js
-        ');
+                                               app/etc/modules/ZolagoOs_OmniChannel.xml
+                                               app/code/community/ZolagoOs/OmniChannel/
+                                               app/code/community/ZolagoOs/OmniChannelHelper/
+                                               app/design/adminhtml/default/default/layout/udropship.xml
+                                               app/design/adminhtml/default/default/template/udropship/
+                                               app/design/frontend/base/default/layout/udropship.xml
+                                               app/design/frontend/base/default/template/unirgy/dropship/
+                                               app/design/frontend/default/default/layout/udropship.xml
+                                               app/design/frontend/default/default/template/unirgy/dropship/
+                                               app/locale/en_US/ZolagoOs_OmniChannel.csv
+                                               app/locale/en_US/template/email/udropship_password.html
+                                               app/locale/en_US/template/email/udropship_statement.html
+                                               app/locale/en_US/template/email/udropship_vendor.html
+                                               app/locale/en_US/template/email/udropship_vendor_notify_lowstock.html
+                                               app/locale/en_US/template/email/udropship_vendor_shipment_comment.html
+                                               skin/frontend/base/default/css/udropship.css
+                                               skin/frontend/default/default/css/udropship.css
+                                               app/design/frontend/default/udropship/
+                                               skin/frontend/default/udropship/
+                                               js/udropship.js
+                                               ');
     }
 
     public function core_block_abstract_to_html_before($observer)
     {
         $block = $observer->getBlock();
         if ($block instanceof Mage_Adminhtml_Block_Sales_Order_View_Items
-            && (($order = $block->getOrder())
-                || $block->getParentBlock() && ($order = $block->getParentBlock()->getOrder()))
-        ) {
+                && (($order = $block->getOrder())
+                    || $block->getParentBlock() && ($order = $block->getParentBlock()->getOrder()))
+           ) {
             $vendors = Mage::getSingleton('udropship/source')->getVendors();
             foreach ($order->getAllItems() as $oItem) {
                 if ($oItem->isDummy(true)) continue;
                 if (($vId = $oItem->getUdropshipVendor())
-                    && isset($vendors[$vId])
-                ) {
+                        && isset($vendors[$vId])
+                   ) {
                     Mage::helper('udropship/item')->setVendorIdOption($oItem, $vId, true);
                 }
             }
@@ -682,8 +682,8 @@ js/udropship.js
         foreach ($paths as $path) {
             $path = str_replace('-', '/', $path);
             if (($attrCode = Mage::getStoreConfig($path))
-                && Mage::helper('udropship')->checkProductCollectionAttribute($attrCode)
-            ) {
+                    && Mage::helper('udropship')->checkProductCollectionAttribute($attrCode)
+               ) {
                 $observer->getAttributes()->setData($attrCode, $attrCode);
             }
         }
@@ -703,12 +703,13 @@ js/udropship.js
             $store = $address->getConfig()->getStore();
             if ($vendor->getData($flagKey)) {
                 if (-1 !== $vendor->getData($flagKey)
-                    && ($format = $vendor->getData($customKey))
-                ) {
+                           && ($format = $vendor->getData($customKey))
+                   ) {
                     $type->setDefaultFormat($format);
-                } elseif (Mage::getStoreConfigFlag('udropship/customer/'.$flagKey, $store)
-                    && ($format = Mage::getStoreConfig('udropship/customer/'.$customKey, $store))
-                ) {
+                }
+                elseif (Mage::getStoreConfigFlag('udropship/customer/'.$flagKey, $store)
+                        && ($format = Mage::getStoreConfig('udropship/customer/'.$customKey, $store))
+                       ) {
                     $type->setDefaultFormat($format);
                 }
             }
@@ -746,12 +747,12 @@ js/udropship.js
     {
         if (!Mage::app()->isInstalled()) return false;
         foreach (array(
-            Mage::app()->getStore(),
-            Mage::app()->getStore(0),
-        ) as $store) {
+                     Mage::app()->getStore(),
+                     Mage::app()->getStore(0),
+                 ) as $store) {
             if (Mage::getStoreConfig('carriers/dhlint', $store)
-                && !Mage::getStoreConfig('carriers/dhlint/content_type', $store)
-            ) {
+                    && !Mage::getStoreConfig('carriers/dhlint/content_type', $store)
+               ) {
                 $store->setConfig('carriers/dhlint/content_type', 'D');
                 Mage::getConfig()->setNode('default/carriers/dhlint/content_type', 'D');
             }
@@ -761,8 +762,8 @@ js/udropship.js
         foreach ($paths as $path) {
             $path = str_replace('-', '/', $path);
             if (($attrCode = Mage::getStoreConfig($path))
-                && Mage::helper('udropship')->checkProductCollectionAttribute($attrCode)
-            ) {
+                    && Mage::helper('udropship')->checkProductCollectionAttribute($attrCode)
+               ) {
                 $runtimeAttrCodes[$attrCode] = $attrCode;
             }
         }
@@ -779,8 +780,8 @@ js/udropship.js
         }
         if (Mage::getStoreConfig('udropship/stock/availability')=='local_if_in_stock') {
             if (Mage::helper('udropship')->isEE()
-                && Mage::helper('udropship')->compareMageVer('1.8.0.0', '1.13.0.0')
-            ) {
+                    && Mage::helper('udropship')->compareMageVer('1.8.0.0', '1.13.0.0')
+               ) {
                 Mage::getConfig()->setNode('global/models/enterprise_cataloginventory_resource/rewrite/indexer_stock_default', 'ZolagoOs_OmniChannel_Model_StockIndexer_EE11300_Default');
                 /*
                 Mage::getConfig()->setNode('global/models/enterprise_bundle_resource/rewrite/indexer_stock', 'ZolagoOs_OmniChannel_Model_StockIndexer_EE11300_Bundle');
@@ -810,15 +811,15 @@ js/udropship.js
         foreach ($paths as $path) {
             $path = str_replace('-', '/', $path);
             if ($configData->getPath() == $path
-                && $configData->isValueChanged()
-                && $configData->getValue()
-                && ($attribute = Mage::helper('udropship')->getProductAttribute($configData->getValue()))
-                && !(($attribute->getData('backend_type') == 'static')
-                    || ($addFilterable && $attribute->getData('is_filterable') > 0)
-                    || ($attribute->getData('used_in_product_listing') == 1)
-                    || ($attribute->getData('is_used_for_promo_rules') == 1)
-                    || ($attribute->getData('used_for_sort_by') == 1))
-            ) {
+                    && $configData->isValueChanged()
+                    && $configData->getValue()
+                    && ($attribute = Mage::helper('udropship')->getProductAttribute($configData->getValue()))
+                    && !(($attribute->getData('backend_type') == 'static')
+                         || ($addFilterable && $attribute->getData('is_filterable') > 0)
+                         || ($attribute->getData('used_in_product_listing') == 1)
+                         || ($attribute->getData('is_used_for_promo_rules') == 1)
+                         || ($attribute->getData('used_for_sort_by') == 1))
+               ) {
                 $reindex = true;
                 break;
             }
@@ -845,9 +846,9 @@ js/udropship.js
         $cosAfterPoStatus = Mage::getStoreConfig('udropship/vendor/change_order_status_after_po');
         $madStatuses = explode(',', Mage::getStoreConfig('udropship/vendor/make_available_to_dropship', $order->getStoreId()));
         if ($cosAfterPoStatus
-            && (in_array($order->getStatus(), $madStatuses) || !$strict)
-            && $order->getStatus()!=$cosAfterPoStatus
-        ) {
+                && (in_array($order->getStatus(), $madStatuses) || !$strict)
+                && $order->getStatus()!=$cosAfterPoStatus
+           ) {
             $order->addStatusHistoryComment(
                 Mage::helper('udropship')->__('Order status changed after POs generated'),
                 $cosAfterPoStatus);

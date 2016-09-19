@@ -134,7 +134,7 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
              case Orba_Shipping_Model_Carrier_Dpd::CODE:
                  $helper = Mage::helper('orbashipping/carrier_dpd');
                 break;
-             case Orba_Shippint_Model_Packstation_Pwr::CODE:
+             case Orba_Shipping_Model_Packstation_Pwr::CODE:
                  $helper = Mage::helper('orbashipping/packstation_pwr');
                  break;
              default:
