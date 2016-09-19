@@ -50,6 +50,15 @@
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
+						<import_products translate="label" module="zolagoosimport">
+							<label><![CDATA[<b>Products</b> import source file]]></label>
+							<comment><![CDATA[Enter absolute path to file]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</import_products>
 						<import_prices translate="label" module="zolagoosimport">
 							<label><![CDATA[<b>Prices</b> import source file]]></label>
 							<comment><![CDATA[Enter absolute path to file]]></comment>
