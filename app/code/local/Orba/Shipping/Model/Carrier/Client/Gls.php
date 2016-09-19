@@ -45,4 +45,7 @@ class Orba_Shipping_Model_Carrier_Client_Gls extends Orba_Shipping_Model_Client_
             return $url;
     }
 
+    protected function _getHelper() {
+        return Mage::helper('orbashipping/carrier_gls');
+    }
 }

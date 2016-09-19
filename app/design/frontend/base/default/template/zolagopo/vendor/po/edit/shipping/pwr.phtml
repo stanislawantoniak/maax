@@ -1,0 +1,57 @@
+<?php 
+/** @var Zolago_Po_Helper_Data $_hlp */
+$_hlp = Mage::helper("zolagopo");
+
+/** @var Zolago_Po_Model_Po $_po */
+$_po =  $this->getPo();
+
+$_availableMethods =  $this->getAvailableMethods();
+$_modagoHlp = Mage::helper("zolagocommon");
+$_defaultBoxSize = Mage::getStoreConfig('carriers/zospwr/default_box_size');
+?>
+<!-- Modal add letter-->
+<div class="modal fade" id="shippingModal">
+	<div class="modal-dialog">
+		<form id="shipping-form" action="<?php echo $this->getFormUrl();?>" 
+			  class="form-horizontal row-border" method="post">
+			<input type="hidden" name="pos" value="<?php echo $_po->getDefaultPosId();?>"/>
+            <input type="hidden" name="shipping_amount"  value="<?php echo $this->getRemainingShippingAmount()?>"/>
+			<input type="hidden" name="reference"  value="<?php echo $_po->getIncrementId();?>"/>
+			<input type="hidden" name="carrier"  value="<?php echo $this->getShippingMethod();?>"/>
+			<input type="hidden" name="carrier_title"  value="<?php echo $this->getCarrierName();?>"/>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">
+						<?php echo $_hlp->__("Create shipping label");?>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<ul class="list-unstyled">
+						<li class="form-group carrier">
+							<label class="col-md-3 control-label"><?php echo $_hlp->__('Carrier name') ?></label>
+							<div class="col-md-9">
+							    <label class="radio" style="padding-left:0px"><?php echo $this->getCarrierName(); ?>
+			                                </label>
+							</div>
+						</li>
+						<li class="form-group specify specify-carrier">
+							<label for="shipping-weight" class="col-md-3 control-label"><?php echo $_hlp->__('Box size') ?></label>
+							<div class="col-md-2">
+								<input id="shipping-weight"  name="boxSize" title="<?php echo $_hlp->__('Box size') ?>" type="text" class="form-control align-right" value="<?php echo $_defaultBoxSize;?>"/>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_hlp->__("Create label");?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	
+</script>

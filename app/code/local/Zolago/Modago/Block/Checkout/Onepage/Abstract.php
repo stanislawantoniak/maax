@@ -5,53 +5,6 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 
-	/**
-	 * @param $deliveryMethod
-	 * @param $deliveryPointIdentifier
-	 * @return array
-	 */
-	public function getDeliveryPointData($deliveryPointIdentifier)
-	{
-		$data = array();
-
-		/** @var Zolago_Checkout_Helper_Data $helper */
-		$helper = Mage::helper("zolagocheckout");
-
-		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-
-		switch ($deliveryMethodCode) {
-			case ZolagoOs_PickupPoint_Helper_Data::CODE:
-				$pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
-				$data = array(
-					"id" => $pos->getId(),
-					"city" => (string)ucwords(strtolower($pos->getCity())),
-					"value" => $pos->getId()
-				);
-				break;
-			case GH_Inpost_Model_Carrier::CODE:
-				/* @var $locker GH_Inpost_Model_Locker */
-				$locker = $this->getInpostLocker();
-
-				$data = array(
-					"id" => $locker->getId(),
-					"city" => (string)ucwords(strtolower($locker->getTown())),
-					"value" => $locker->getName()
-				);
-				break;
-            case Orba_Shipping_Model_Packstation_Pwr::CODE:
-				/* @var $locker ZolagoOs_Pwr_Model_Point */
-                $point = $this->getPwrPoint();
-
-				$data = array(
-                    "id" => $point->getId(),
-                    "city" => (string)ucwords(strtolower($point->getTown())),
-                    "value" => $point->getName()
-                );
-				break;
-		}
-		return $data;
-	}
 
 	/**
 	 * Delivery point info constructor for checkout
@@ -128,15 +81,64 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
 		return $deliveryPoint;
 	}
-	/**
-	 * @return GH_Inpost_Model_Locker
-	 */
-	public function getInpostLocker() {
-		/** @var Zolago_Checkout_Helper_Data $helper */
-		$helper = Mage::helper("zolagocheckout");
-		$locker = $helper->getInpostLocker();
-		return $locker;
-	}
+    /**
+     * @param $deliveryMethod
+     * @param $deliveryPointIdentifier
+     * @return array
+     */
+    public function getDeliveryPointData($deliveryPointIdentifier)
+    {
+        $data = array();
+
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+
+        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+        //Zend_Debug::dump($deliveryMethodData);
+        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+        switch ($deliveryMethodCode) {
+        case ZolagoOs_PickupPoint_Helper_Data::CODE:
+            $pos = Mage::getModel("zolagopos/pos")->load($deliveryPointIdentifier);
+            $data = array(
+                        "id" => $pos->getId(),
+                        "city" => (string)ucwords(strtolower($pos->getCity())),
+                        "value" => $pos->getId()
+                    );
+            break;
+        case GH_Inpost_Model_Carrier::CODE:
+            /* @var $locker GH_Inpost_Model_Locker */
+            $locker = $this->getInpostLocker();
+
+            $data = array(
+                        "id" => $locker->getId(),
+                        "city" => (string)ucwords(strtolower($locker->getTown())),
+                        "value" => $locker->getName()
+                    );
+            break;
+        case Orba_Shipping_Model_Packstation_Pwr::CODE:
+            /* @var $locker ZolagoOs_Pwr_Model_Point */
+            $point = $this->getPwrPoint();
+
+            $data = array(
+                        "id" => $point->getId(),
+                        "city" => (string)ucwords(strtolower($point->getTown())),
+                        "value" => $point->getName()
+                    );
+            break;
+        }
+        return $data;
+    }
+
+    /**
+     * @return GH_Inpost_Model_Locker
+     */
+    public function getInpostLocker() {
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+        $locker = $helper->getInpostLocker();
+        return $locker;
+    }
     /**
      * @return ZolagoOs_Pwr_Model_Point
      */
@@ -147,40 +149,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $point;
     }
 
-	public function getLastTelephoneForLocker() {
-		$shippingAddress = $this->getQuote()->getShippingAddress();
-		$tel = $shippingAddress->getTelephone();
-		/** @var Mage_Checkout_Model_Session $checkoutSession */
-		$checkoutSession = Mage::getSingleton('checkout/session');
-		if ($checkoutSession->getLastTelephoneForLocker()) {
-			$tel = $checkoutSession->getLastTelephoneForLocker();
-		}
-		return $tel;
-	}
 
-
-	/**
-	 * @return object
-	 */
-	public function getUdropShippingMethods()
-	{
-		$model = Mage::getModel('udropship/shipping');
-		$shipping = Mage::getModel('udropship/shipping')->getCollection();
-		$shipping->getSelect()->join(
-			array('udropship_shipping_method' => "udropship_shipping_method"),
-			"main_table.shipping_id = udropship_shipping_method.shipping_id",
-			array(
-				'method_code' => 'udropship_shipping_method.method_code',
-			)
-		);
-		$shipping->getSelect()->join(
-			array('website_table' => $model->getResource()->getTable('udropship/shipping_website')),
-			'main_table.shipping_id = website_table.shipping_id',
-			array("website_table.website_id")
-		)->where("website_table.website_id IN(?)", array(0, Mage::app()->getWebsite()->getId()));
-
-		return $shipping;
-	}
 
 	public function getRateItems()
 	{
@@ -302,53 +271,93 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function getHasDefaultPayment() {
-		return is_array($this->getQuote()->getCustomer()->getLastUsedPayment());
-	}
-	
-	/**
-	 * @param mixed $data
-	 * @return string
-	 */
-	public function asJson($data) {
-		return Mage::helper('core')->jsonEncode($data);
-	}
-	/**
-	 * Has customer any address?
-	 * @return type
-	 */
-	public function hasCustomerAddress() {
-		return (bool)$this->getQuote()->getCustomer()->getAddressesCollection()->count();
-	}
-	
-	/**
-	 * Has customer any address?
-	 * @return type
-	 */
-	public function getCustomerAddressesJson() {
-		$addresses = array();
-		$collection = $this->getQuote()->getCustomer()->getAddressesCollection();
-		foreach($collection as $address){
-			/* @var $address Mage_Customer_Model_Address */
-			$arr = $address->getData();
-			$arr['street'] = $address->getStreet();
-			$addresses[] = $arr;
-		}
-		return Mage::helper("core")->jsonEncode($addresses);
-	}
 
 	/**
 	 * @return string
 	 */
+    public function getLastTelephoneForLocker() {
+        $shippingAddress = $this->getQuote()->getShippingAddress();
+        $tel = $shippingAddress->getTelephone();
+        /** @var Mage_Checkout_Model_Session $checkoutSession */
+        $checkoutSession = Mage::getSingleton('checkout/session');
+        if ($checkoutSession->getLastTelephoneForLocker()) {
+            $tel = $checkoutSession->getLastTelephoneForLocker();
+        }
+        return $tel;
+    }
+
+
+    /**
+     * @return object
+     */
+    public function getUdropShippingMethods()
+    {
+        $model = Mage::getModel('udropship/shipping');
+        $shipping = Mage::getModel('udropship/shipping')->getCollection();
+        $shipping->getSelect()->join(
+            array('udropship_shipping_method' => "udropship_shipping_method"),
+            "main_table.shipping_id = udropship_shipping_method.shipping_id",
+            array(
+                'method_code' => 'udropship_shipping_method.method_code',
+            )
+        );
+        $shipping->getSelect()->join(
+            array('website_table' => $model->getResource()->getTable('udropship/shipping_website')),
+            'main_table.shipping_id = website_table.shipping_id',
+            array("website_table.website_id")
+        )->where("website_table.website_id IN(?)", array(0, Mage::app()->getWebsite()->getId()));
+
+        return $shipping;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function getHasDefaultPayment() {
+        return is_array($this->getQuote()->getCustomer()->getLastUsedPayment());
+    }
+
+    /**
+     * @param mixed $data
+     * @return string
+     */
+    public function asJson($data) {
+        return Mage::helper('core')->jsonEncode($data);
+    }
+    /**
+     * Has customer any address?
+     * @return type
+     */
+    public function hasCustomerAddress() {
+        return (bool)$this->getQuote()->getCustomer()->getAddressesCollection()->count();
+    }
+
+    /**
+     * Has customer any address?
+     * @return type
+     */
+    public function getCustomerAddressesJson() {
+        $addresses = array();
+        $collection = $this->getQuote()->getCustomer()->getAddressesCollection();
+        foreach($collection as $address) {
+            /* @var $address Mage_Customer_Model_Address */
+            $arr = $address->getData();
+            $arr['street'] = $address->getStreet();
+            $addresses[] = $arr;
+        }
+        return Mage::helper("core")->jsonEncode($addresses);
+    }
+
+    /**
+     * @return string
+     */
     public function getStoreDefaultCountryId() {
-		$countryId = Mage::app()->getStore()->getConfig("general/country/default");
-		$locker = $this->getInpostLocker();
-		if ($locker->getId()) {
-			$countryId = $locker->getCountryId();
-		}
+        $countryId = Mage::app()->getStore()->getConfig("general/country/default");
+        $locker = $this->getInpostLocker();
+        if ($locker->getId()) {
+            $countryId = $locker->getCountryId();
+        }
         return $countryId;
     }
 
@@ -402,13 +411,13 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
     }
 
 
-	/**
-	 * @param $udropshipMethod  example udtiership_1
-	 * @return Varien_Object
-	 */
-	public function getOmniChannelMethodInfoByMethod($udropshipMethod)
-	{
-		$storeId = Mage::app()->getStore()->getId();
-		return Mage::helper("udropship")->getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod);
-	}
+    /**
+     * @param $udropshipMethod  example udtiership_1
+     * @return Varien_Object
+     */
+    public function getOmniChannelMethodInfoByMethod($udropshipMethod)
+    {
+        $storeId = Mage::app()->getStore()->getId();
+        return Mage::helper("udropship")->getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod);
+    }
 }

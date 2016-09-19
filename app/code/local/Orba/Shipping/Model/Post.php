@@ -44,15 +44,6 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
     public function setReceiverCustomerAddress($data) {
         $this->setReceiverAddress($data);
     }
-    public function setClient($client) {
-        $this->_client = $client;
-    }
-    public function getClient() {
-        if (!$this->_client) {
-            $this->setClient($this->_startClient());
-        }
-        return $this->_client;
-    }
     protected function _startClient() {
         $settings = $this->_settings;
         $client = Mage::helper('orbashipping/post')->startClient($settings);
@@ -149,5 +140,14 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             // @todo process statuses 
             // @see Orba_Shipping_Model_Post_Client_Wsdl
             // @see envelopeStatusType
+    }
+    public function getShippingModal() {
+        return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
+    }
+    public function isLetterable() {
+        return true;
+    }
+    public function getLetterUrl() {
+        return 'orbashipping/post/lp';
     }
 }

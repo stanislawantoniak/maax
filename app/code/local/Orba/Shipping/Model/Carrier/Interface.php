@@ -26,4 +26,11 @@ interface Orba_Shipping_Model_Carrier_Interface extends Mage_Shipping_Model_Carr
     public function setShipped();
     
     public function getAggregatedPdfObject();
+    
+    // modal for vendor panel
+    public function getShippingModal();
+    // allow print delivery letter
+    public function isLetterable();
+    // link to get delivery letter
+    public function getLetterUrl();
 }

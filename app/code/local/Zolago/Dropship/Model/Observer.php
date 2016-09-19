@@ -45,12 +45,12 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
      *
      * @return Zolago_Dropship_Model_Observer
      */
-	public function addOrbaShippingData(Varien_Event_Observer $observer)
-	{
+    public function addOrbaShippingData(Varien_Event_Observer $observer)
+    {
         $time = Mage::getModel('core/date')->timestamp();
         $track = $observer->getEvent()->getTrack();
         $carrierCode = $track->getCarrierCode();
-		$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
+        $allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
         if (in_array($carrierCode,$allowCarriers)
                 && Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
                 && !$track->getWebApi()) {
@@ -77,16 +77,16 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
         //Addresses
         if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $addressBlock = Mage::app()
-                ->getLayout()
-                ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_addresses', 'vendor.address.form')
-                ->setVendorId($v)
-                ->toHtml();
+                            ->getLayout()
+                            ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_addresses', 'vendor.address.form')
+                            ->setVendorId($v)
+                            ->toHtml();
 
             $block->addTab('address_section', array(
-                'label' => Mage::helper('zolagodropship')->__('Address'),
-                'after' => 'form_section',
-                'content' => $addressBlock
-            ));
+                               'label' => Mage::helper('zolagodropship')->__('Address'),
+                               'after' => 'form_section',
+                               'content' => $addressBlock
+                           ));
             $block->addTabToSection('address_section', 'vendor_data', 10);
         }
 
@@ -94,16 +94,16 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
             return;
         if ($block instanceof ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Edit_Tabs) {
             $websitesBlock = Mage::app()
-                ->getLayout()
-                ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_websites', 'vendor.websites.form')
-                ->setVendorId($v)
-                ->toHtml();
+                             ->getLayout()
+                             ->createBlock('zolagodropship/adminhtml_vendor_edit_tab_websites', 'vendor.websites.form')
+                             ->setVendorId($v)
+                             ->toHtml();
 
             $block->addTab('websites_allowed_section', array(
-                'label' => Mage::helper('zolagodropship')->__('Websites allowed'),
-                'after' => 'form_section',
-                'content' => $websitesBlock
-            ));
+                               'label' => Mage::helper('zolagodropship')->__('Websites allowed'),
+                               'after' => 'form_section',
+                               'content' => $websitesBlock
+                           ));
             $block->addTabToSection('websites_allowed_section','vendor_rights',10);
         }
         //Couriers
@@ -134,34 +134,34 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
         }
     }
     protected function _overrideConfigData() {
-    	$vendor = Mage::registry('vendor_data');
-    	$hlp = Mage::helper('udropship');
+        $vendor = Mage::registry('vendor_data');
+        $hlp = Mage::helper('udropship');
 
-		$children = Mage::getConfig()->getNode('global/udropship/vendor/fields')->children();
+        $children = Mage::getConfig()->getNode('global/udropship/vendor/fields')->children();
 
         foreach ($children as $code=>$node) {
 
-			$note = $hlp->__((string)$node->note);
+            $note = $hlp->__((string)$node->note);
 
-			if($code == 'max_shipping_days'){
+            if($code == 'max_shipping_days') {
 
-				$maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days');
+                $maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days');
 
-				Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', $note . sprintf(" (Default value is: %u )", $maxShippingDays));
+                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_days/note', $note . sprintf(" (Default value is: %u )", $maxShippingDays));
 
-			}
-			elseif($code == 'max_shipping_time'){
+            }
+            elseif($code == 'max_shipping_time') {
 
-				$maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time');
+                $maxShippingTime = Mage::getStoreConfig('udropship/vendor/max_shipping_time');
 
-				Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', $note . sprintf(" (Default value is: %s)", str_replace(',', ':', $maxShippingTime)));
+                Mage::getConfig()->setNode('global/udropship/vendor/fields/max_shipping_time/note', $note . sprintf(" (Default value is: %s)", str_replace(',', ':', $maxShippingTime)));
 
-			}
-		}
+            }
+        }
 
     }
     protected function _addFieldsToFieldset($keys,$fieldset) {
-		/** @var Zolago_Dropship_Helper_Tabs $helper */
+        /** @var Zolago_Dropship_Helper_Tabs $helper */
         $helper = Mage::helper('zolagodropship/tabs');
         foreach ($keys as $key) {
             $helper->addKeyToFieldset($key,$fieldset);
@@ -175,26 +175,26 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
         $this->_overrideConfigData();
 
         $keys = array (
-            'new_order_notifications',
-            'notify_by_udpo_status',
-            'vendor_type',
-            'max_shipping_days',
-            'max_shipping_time',
-            'automatic_strikeout_price_percent',
-            'external_id',
-            'super_vendor_id',
-            'statements_calendar',
-            'can_ask',
-            'index_by_google',
-            'review_status',
-            'label_store',
-            'root_category',
-            'custom_design',
-            'sequence',
-            'url_key',
-            'logo',
-	        'legal_entity'
-        );
+                    'new_order_notifications',
+                    'notify_by_udpo_status',
+                    'vendor_type',
+                    'max_shipping_days',
+                    'max_shipping_time',
+                    'automatic_strikeout_price_percent',
+                    'external_id',
+                    'super_vendor_id',
+                    'statements_calendar',
+                    'can_ask',
+                    'index_by_google',
+                    'review_status',
+                    'label_store',
+                    'root_category',
+                    'custom_design',
+                    'sequence',
+                    'url_key',
+                    'logo',
+                    'legal_entity'
+                );
         $this->_addFieldsToFieldset($keys,$fieldset);
 
         $fieldset->removeField('carrier_code');
@@ -205,25 +205,25 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
 
         // marketing
         $fieldset = $form->addFieldset('marketing', array(
-                    'legend'=>Mage::helper('zolagodropship')->__('Marketing content')
-                            ));
+                                           'legend'=>Mage::helper('zolagodropship')->__('Marketing content')
+                                       ));
         $keys = array (
-            'vendor_type_label',
-            'vendor_landing_page_title',
-            'vendor_landing_page_description',
-            'marketing_store_information_title',
-            'marketing_store_information',
-            'marketing_brand_information_title',
-            'marketing_brand_information',
-            'terms_seller_information',
-            'terms_delivery_information',
-            'terms_return_information',
-            'store_delivery_headline',
-            'store_return_headline',
-            'brandshop_info',
-            'cart_slogan_one',
-            'cart_slogan_two'
-        );
+                    'vendor_type_label',
+                    'vendor_landing_page_title',
+                    'vendor_landing_page_description',
+                    'marketing_store_information_title',
+                    'marketing_store_information',
+                    'marketing_brand_information_title',
+                    'marketing_brand_information',
+                    'terms_seller_information',
+                    'terms_delivery_information',
+                    'terms_return_information',
+                    'store_delivery_headline',
+                    'store_return_headline',
+                    'brandshop_info',
+                    'cart_slogan_one',
+                    'cart_slogan_two'
+                );
         $this->_addFieldsToFieldset($keys,$fieldset);
 
     }
@@ -232,18 +232,18 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
         //rma_rma_track_save_before && sales_order_shipment_track_save_before
         $track = $observer->getEvent()->getTrack();
         if( $track->getId() &&
-            $track->getData('udropship_status') == Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED &&
-            $track->getOrigData('udropship_status') != Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED &&
-            $track->getData('track_type') != GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED) {
+                $track->getData('udropship_status') == Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED &&
+                $track->getOrigData('udropship_status') != Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED &&
+                $track->getData('track_type') != GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED) {
 
             $number = $track->getData('track_number').Zolago_Dropship_Model_Source::TRACK_UNDELIVERED_SUFFIX;
             $newTrack = clone($track);
             $newTrack
-                ->setId(null)
-                ->setWebApi(true)
-                ->setTrackNumber($number)
-                ->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED)
-                ->save();
+            ->setId(null)
+            ->setWebApi(true)
+            ->setTrackNumber($number)
+            ->setTrackType(GH_Statements_Model_Track::TRACK_TYPE_UNDELIVERED)
+            ->save();
         }
     }
 }
