@@ -119,12 +119,6 @@ class Zolago_Pos_Model_Observer {
 
             foreach ($po->getAllItems() as $poItem) {
 
-                $parentItemId = $poItem->getData("parent_item_id");
-
-                if (!is_null($parentItemId))
-                    continue;
-
-
                 $vendorSku = $poItem->getData("vendor_sku");
                 $vendorSimpleSku = $poItem->getData("vendor_simple_sku");
 
