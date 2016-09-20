@@ -340,7 +340,8 @@ $productHelper = Mage::helper("zolagocatalog/product");
     <?php endif;?>
     <script>
         jQuery(document).ready(function() {
-          var owl<?php echo $block_id;?> = jQuery("#<?php echo $mp_htmlid; ?>");
+            var owlSelector = '#<?php echo $mp_htmlid; ?>';
+          var owl<?php echo $block_id;?> = jQuery(owlSelector);
           owl<?php echo $block_id; ?>.owlCarousel({
 
                 navigation : false,
@@ -367,11 +368,12 @@ $productHelper = Mage::helper("zolagocatalog/product");
           });
           jQuery("#<?php echo $mp_wrapper?> .mp-next-carousel").click(function(){
             owl<?php echo $block_id;?>.trigger('owl.next');
-          })
+              Mall.featuredProductsSliderAdjustTabHeight(owlSelector);
+          });
           jQuery("#<?php echo $mp_wrapper?> .mp-prev-carousel").click(function(){
             owl<?php echo $block_id;?>.trigger('owl.prev');
-          })
-
+              Mall.featuredProductsSliderAdjustTabHeight(owlSelector);
+          });
         });
     </script>
 </div>
