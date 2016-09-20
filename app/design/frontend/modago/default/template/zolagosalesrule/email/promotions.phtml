@@ -23,16 +23,18 @@ $list = $this->getPromotions();
 					</tr>
 					<tr>
 						<td>
-							<a href="<?php echo Mage::getUrl('mypromotions'); ?>" target="_blank"
-							   style="text-decoration:none !important;" class="promo-item">
 								<table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0"
 								       width="100%" style="border:1px solid #ebebeb">
 									<tr>
 										<td align="center" valign="middle">
+											<a href="<?php echo Mage::getUrl('mypromotions'); ?>" target="_blank"
+												   style="text-decoration:none !important; color:#333333" class="promo-item">
+										
 											<img src="cid:<?php echo $item['ruleItem']->getPromoImage();?>"
 											     width="270"
 											     style="display: block; color: #666666; font-family: Helvetica, Arial, Helvetica, sans-serif; font-size: 13px; width: 270px; height: auto;"
 											     alt="<?php echo $item['ruleItem']->getName();?>" border="0" class="img-max">
+											</a>
 										</td>
 									</tr>
 									<tr>
@@ -40,24 +42,36 @@ $list = $this->getPromotions();
 									</tr>
 									<tr>
 										<td align="center" valign="middle">
+											<a href="<?php echo Mage::getUrl('mypromotions'); ?>" target="_blank"
+												   style="text-decoration:none !important; color:#333333" class="promo-item">
+										
 											<img src="cid:<?php echo $item['ruleItem']->getVendorLogo();?>"
 											     alt="<?php echo $item['ruleItem']->getVendorName(); ?>"
 											     width="104"
 											     style="padding: 8px 11px;border: 1px solid #ebebeb; height: auto;" />
+											</a>
 										</td>
 									</tr>
 									<tr>
 										<td align="center"
 										    style="padding: 15px 10px; font-family: Arial, Helvetica, sans-serif; color: #333333; font-size: 20px; text-transform: uppercase">
+											<a href="<?php echo Mage::getUrl('mypromotions'); ?>" target="_blank"
+												   style="text-decoration:none !important; color:#333333" class="promo-item">
+										    
 											<?php echo htmlentities($item['ruleItem']->getName());?>
+											</a>
 										</td>
 									</tr>
 									<tr>
 										<td align="center"
 										    style="color:#484848;text-decoration:none;font-size:12px;font-family: Arial, Helvetica, sans-serif;">
+											<a href="<?php echo Mage::getUrl('mypromotions'); ?>" target="_blank"
+												   style="text-decoration:none !important; color: #484848" class="promo-item">
+										    
                                                                                 <span class="promo-showmore">
                                                                                     <?php echo htmlentities("Dowiedz się więcej >>"); ?>
                                                                                 </span>
+                                                                                </a>
 										</td>
 									</tr>
 									<tr>
