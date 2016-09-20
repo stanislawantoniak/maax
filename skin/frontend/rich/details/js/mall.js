@@ -1818,7 +1818,52 @@ Mall.preventAgreementClick = function() {
 
 Mall.featuredProductsInit = function () {
     var featuredProductsTabs = jQuery("#featured_products_tabs");
-    featuredProductsTabs.tabs();
+    featuredProductsTabs.tabs({
+        select  : function() {
+            Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+
+            window.setTimeout(function(){
+                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+            }, 300);
+        },
+        activate  : function() {
+            Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+
+            window.setTimeout(function(){
+                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+            }, 300);
+        }
+
+    });
+};
+
+
+
+
+Mall.featuredProductsSliderAdjustVisibleTabsHeight = function(){
+    jQuery.each(jQuery("#featured_products_tabs div[role=tabpanel][aria-expanded=true] .owl-carousel"), function(){
+        Mall.featuredProductsSliderAdjustTabHeight(this);
+    });
+};
+
+Mall.featuredProductsSliderAdjustTabHeight = function(carousel){
+    var featuredProductsTabProductNameLink = jQuery(carousel).find(".owl-item .product-name a");
+
+    var elementHeights = jQuery(featuredProductsTabProductNameLink).map(function(n, el) {
+
+        if(jQuery(el).visible(true)){
+            return jQuery(el).height();
+        }
+    }).get();
+
+    // Math.max takes a variable number of arguments
+    // `apply` is equivalent to passing each height as an argument
+    var maxHeight = Math.max.apply(null, elementHeights);
+    if(maxHeight > 0){
+        jQuery(carousel).find(".owl-item .product-name").each(function (i, item) {
+            jQuery(item).animate({ height: maxHeight }, 100);
+        });
+    }
 };
 
 Mall.inspirationsSliderInit = function () {
@@ -1880,9 +1925,7 @@ Mall.inspirationsSliderInit = function () {
 
 Mall.inspirationsSliderAdjustHeight = function () {
     var rwdInspiration = jQuery('#rwd-inspiration'),
-        rwdInspirationTitleCaption;
-
-    rwdInspirationTitleCaption = rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption");
+        rwdInspirationTitleCaption = rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption");
 
     var elementHeights = rwdInspirationTitleCaption.map(function(n, el) {
         if(jQuery(el).visible(true)){
@@ -1900,6 +1943,7 @@ Mall.inspirationsSliderAdjustHeight = function () {
     }
 
 };
+
 
 Mall.refresh = function() {
     location.reload();
@@ -2122,8 +2166,14 @@ jQuery(document).ready(function() {
 	/**HOMEPAGE**/
 	Mall.inspirationsSliderInit();
     Mall.inspirationsSliderAdjustHeight();
-	jQuery(window).on('Mall.onResizeEnd', function() {Mall.inspirationsSliderAdjustHeight()});
-	jQuery(window).on('Mall.onScrollEnd', function() {Mall.inspirationsSliderAdjustHeight()});
+	jQuery(window).on('Mall.onResizeEnd', function() {
+        Mall.inspirationsSliderAdjustHeight();
+        Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+    });
+	jQuery(window).on('Mall.onScrollEnd', function() {
+        Mall.inspirationsSliderAdjustHeight();
+        Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+    });
     Mall.featuredProductsInit();
     //on window resize
     /**HOMEPAGE**/
