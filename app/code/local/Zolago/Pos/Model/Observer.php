@@ -119,15 +119,32 @@ class Zolago_Pos_Model_Observer {
 
             foreach ($po->getAllItems() as $poItem) {
 
+                $parentItemId = $poItem->getData("parent_item_id");
+
+                if (!is_null($parentItemId))
+                    continue;
+
+
+                $vendorSku = $poItem->getData("vendor_sku");
                 $vendorSimpleSku = $poItem->getData("vendor_simple_sku");
 
                 if (!empty($vendorSimpleSku)) {
-                    $data[$udropshipVendor][$po->getId()][$poItem->getData("product_id")] = array(
-                                "skuv" => $vendorSimpleSku,
-                                "qty" => (int)$poItem->getData("qty")
-                            );
-                    $productIds[$udropshipVendor][$poItem->getData("product_id")] = $vendorSimpleSku;
+                    //Composite product (configurable)
+                    $skuV = $vendorSimpleSku;
+                } else {
+                    $skuV = $vendorSku;
                 }
+
+
+                if (empty($skuV))
+                    continue;
+
+                $data[$udropshipVendor][$po->getId()][$poItem->getData("product_id")] = array(
+                    "skuv" => $skuV,
+                    "qty" => (int)$poItem->getData("qty")
+                );
+                $productIds[$udropshipVendor][$poItem->getData("product_id")] = $skuV;
+
                 unset($parentItemId);
             }
 
