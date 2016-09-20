@@ -80,9 +80,6 @@ class Zolago_Pos_Model_Observer {
         $collection->addFieldToFilter("udropship_status", array("nin" => array(ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED)));
         $collection->setPageSize(self::ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT);
 
-        krumo($collection->getData());
-
-
         $collectionSimpleProducts = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToFilter('type_id', array('eq' => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE));
         $simpleProductsIds = $collectionSimpleProducts->getAllIds();
