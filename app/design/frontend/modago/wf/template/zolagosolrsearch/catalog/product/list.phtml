@@ -70,7 +70,7 @@ $_products = $_cache['products'];
 											 * product[12]= product_flag
 											 * product[13]= is_new
 											 */
-											 $flag = $product[15];
+											$flag = $product[15];
 											?>
 
 											<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14">
@@ -80,13 +80,13 @@ $_products = $_cache['products'];
 													   data-entity="<?php echo $product[0]; ?>"
 													   data-sku="<?php echo $product[10]; ?>"
 													   data-skuv="<?php echo $product[11]; ?>">
-													    <?php if($flag) : ?>
+														<?php if($flag) : ?>
 															<div class="label-product">
 																<div class="listing-label type-label-<?php echo $flag; ?>">
 																	<div class="flag-<?php echo $flag;?>"></div>
 																</div>
 															</div>
-													    <?php endif;?>
+														<?php endif;?>
 														<figure class="img_product boxed" style="padding-bottom: <?php echo $product[8]; ?>%">
 															<img
 																src="<?php echo $imgUrl . $product[7]; ?>"

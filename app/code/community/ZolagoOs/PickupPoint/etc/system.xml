@@ -27,6 +27,15 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</title>
+						<delivery_volume_limit>
+							<label>Delivery volume limit</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</delivery_volume_limit>
+						
 						<cod_allowed>
 							<label>Is COD allowed</label>
 							<frontend_type>select</frontend_type>
@@ -47,6 +56,17 @@
 								<cod_allowed>1</cod_allowed>
 							</depends>
 						</cod_checkout_title>
+						<cod_extra_charge>
+							<label>Extra charge for COD</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>110</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<depends>
+								<cod_allowed>1</cod_allowed>
+							</depends>
+						</cod_extra_charge>
 					</fields>
 				</zolagopickuppoint>
 			</groups>

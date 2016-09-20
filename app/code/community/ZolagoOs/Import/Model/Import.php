@@ -12,6 +12,29 @@ abstract class ZolagoOs_Import_Model_Import
 
     const DIRECTORY = 'import';
 
+
+    /**
+     * Import items from file
+     */
+    abstract protected function _import();
+
+    /**
+     * @return mixed (example: product, price, stock etc.)
+     */
+    abstract protected function _getImportEntityType();
+
+    /**
+     * @return mixed (xml, csv etc.)
+     */
+    abstract protected function _getFileExtension();
+
+    /**
+     * File name for _getPath()
+     *
+     * @return string
+     */
+    abstract function _getFileName();
+
     /**
      * @return ZolagoOs_Import_Helper_Data
      */
@@ -31,10 +54,29 @@ abstract class ZolagoOs_Import_Model_Import
         return $this->_externalId;
     }
 
-    /**
-     * Import items from file
-     */
-    abstract protected function _import();
+    public function runImport()
+    {
+        //1. Check vendor
+        $vendorId = $this->getExternalId();
+        if (empty($vendorId)) {
+            $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
+            return $this;
+        }
+        //2. Read file
+        $fileName = $this->_getPath();
+
+        if (empty($fileName)) {
+            $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
+            return $this;
+        }
+
+        if (!file_exists($fileName)) {
+            $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
+            return $this;
+        }
+
+        $this->_import();
+    }
 
     /**
      * Returns local path to import file
@@ -44,25 +86,43 @@ abstract class ZolagoOs_Import_Model_Import
     protected function _getPath()
     {
         return $this->_getFileName();
-        //return (!empty($this->_getFileName())) ? Mage::getBaseDir('var') . DS . self::DIRECTORY . DS . $this->_getFileName() : "";
     }
 
-    /**
-     * File name for _getPath()
-     *
-     * @return string
-     */
-    protected function _getFileName()
-    {
-        return $this->getHelper()->getProductFile();
 
+    /**
+     * Move processed file to archive directory
+     */
+    protected function _moveProcessedFile()
+    {
+        $currentTimestamp = Mage::getModel('core/date')->timestamp(time());
+        $date = date('Y_m_d_H_i_s', $currentTimestamp);
+
+        $fileName = $this->_getPath();
+
+        $path = $this->getHelper()->getProcessedFilePlace()
+            . DS . $this->getExternalId()
+            . DS . $this->_getImportEntityType();
+
+        if (!file_exists($path)) {
+            mkdir($path, 0755, true);
+        }
+
+        $newfile = $path . DS . $date . "." . $this->_getFileExtension();
+
+
+        if (!copy($fileName, $newfile)) {
+            $this->log("Can not move file to processed directory", 2);
+        } else {
+            unlink($fileName);
+        }
     }
 
     /**
      * @param $message
+     * @param null $level
      */
-    public function log($message)
+    public function log($message, $level = NULL)
     {
-        Mage::log($message, null, "zolagoosimport.log");
+        Mage::log($message, $level, "zolagoosimport_" . $this->_getImportEntityType() . ".log");
     }
 }

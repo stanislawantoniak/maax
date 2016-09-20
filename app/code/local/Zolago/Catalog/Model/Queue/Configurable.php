@@ -64,25 +64,23 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogProductConfigurableModel->getConfigurableSimpleRelation($listUpdatedProducts);
 
-        if (empty($configurableSimpleRelation))
-            return;
-
-        $configurableProducts = array_keys($configurableSimpleRelation);
-
-
         $productsIdsPullToSolr = array();
 
+        if (!empty($configurableSimpleRelation)) {
+            $configurableProducts = array_keys($configurableSimpleRelation);
 
-        //1. Set attributes price, msrp, options
-        $productsIdsPullToSolrForWebsite = $zolagoCatalogProductConfigurableModel->updateConfigurableProductsValues($configurableProducts);
-        $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
+            //1. Set attributes price, msrp, options
+            $productsIdsPullToSolrForWebsite = $zolagoCatalogProductConfigurableModel->updateConfigurableProductsValues($configurableProducts);
+            $productsIdsPullToSolr = array_merge($productsIdsPullToSolr, $productsIdsPullToSolrForWebsite);
 
+            $zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
 
-        $zolagoCatalogProductConfigurableModel->removeUpdatedRows($listUpdatedQueue);
+            //2. set SALE/PROMO FLAG
+            $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
+        } else {
+            $productsIdsPullToSolr = $listProductsIds;
+        }
 
-
-        //2. set SALE/PROMO FLAG
-        $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
 
         //3. reindex products
         //to avoid long queries make number of queries

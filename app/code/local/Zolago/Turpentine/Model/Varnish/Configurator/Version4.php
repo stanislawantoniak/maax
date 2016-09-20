@@ -9,7 +9,7 @@ class Zolago_Turpentine_Model_Varnish_Configurator_Version4 extends Nexcessnet_T
 	 * @return string
 	 */
 	protected function _getVclTemplateFilename($baseFilename) {
-		$extensionDir = Mage::getModuleDir('', 'Nexcessnet_Turpentine');
+		$extensionDir = Mage::getModuleDir('', 'Zolago_Turpentine');
 		return sprintf('%s/misc/%s', $extensionDir, $baseFilename);
 	}
 

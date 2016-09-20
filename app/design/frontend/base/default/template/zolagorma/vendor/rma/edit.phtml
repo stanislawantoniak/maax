@@ -11,7 +11,7 @@ $_coreHelper = Mage::helper("core");
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 ?>
-<?php $_rma = $this->getModel();?>
+<?php $_rma = $this->getModel(); ?>
 <?php $_po = $_rma->getPo();?>
 <?php $_pos = $_po->getPos();?>
 <?php $_rmaShipment = $_rma->getShipment(); ?>
@@ -27,7 +27,13 @@ $_modagoHlp = Mage::helper("zolagocommon");
 <?php $_statusesOptions = $this->getAvailableStatuses(false); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
 <?php $_trackCollection = $this->getVendorTrackingCollection();?>
-<?php $_customerTrackCollection = $this->getCustomerTrackingCollection();?>
+<?php $_customerTrackCollection = $this->getCustomerTrackingCollection();
+$isGallery = $_modagoHlp->useGalleryConfiguration();
+
+/** @var Zolago_Payment_Helper_Data $paymentHelper */
+$paymentHelper = Mage::helper('zolagopayment');
+$useAllocation = $paymentHelper->getConfigUseAllocation();
+?>
 
 <?php
     if ($id = Mage::getSingleton('core/session')->getPdfNumberPrintId()) {
@@ -82,51 +88,99 @@ jQuery(document).ready(function() {
 						<dd><?php echo $this->escapeHtml($_vendor->getVendorName())?></dd> 
 						<dt><?php echo $_helper->__("Refund payment");?>:</dt>
 						<dd>
-							<?php if($_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $_po->isCod()): ?>
-								<div id="refundDisabled"
-								     data-original-title="<?php echo $_helper->__("Refund is not possible because order was sent using COD and client didn't receive the package."); ?>"
-								     data-placement="bottom">
-									<?php echo $_helper->__("Refund disabled") ?>
-									<i class="icon-question-sign"></i>
-								</div>
-							<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
-							<div class="btn-group" id="status-holder"> 
-								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
-								<?php if($_rma->getRmaRefundAmount()): ?>
-									<?php echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false); ?>
-								<?php else: ?>
-									<?php echo $_helper->__('Not paid'); ?>
-								<?php endif; ?>
-									<span class="caret"></span>
-								</button> 
-								<ul class="dropdown-menu"> 
-									<li>
-										<a href="#" data-toggle="modal" data-target="#refundModal">
-											<?php if($_rma->getPo()->isPaymentDotpay()): ?>
-												<?php echo $_helper->__("Order refund"); ?>
+							<?php if($isGallery === false && $useAllocation === false): ?>
+								<?php if($_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $_po->isCod()): ?>
+									<div id="refundDisabled"
+										 data-original-title="<?php echo $_helper->__("Refund is not possible because order was sent using COD and client didn't receive the package."); ?>"
+										 data-placement="bottom">
+										<?php echo $_helper->__("Refund disabled") ?>
+										<i class="icon-question-sign"></i>
+									</div>
+								<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && (round($_rma->getRmaSimpleRefundAmount(),4) < round($_rma->getRmaRefundAmountMax(),4))): ?>
+									<div class="btn-group" id="status-holder">
+										<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+											<?php if($_rma->getRmaSimpleRefundAmount()): ?>
+												<?php echo $_coreHelper->currency($_rma->getRmaSimpleRefundAmount(),true,false); ?>
 											<?php else: ?>
-												<?php echo $_helper->__("Confirm refund");?>
+												<?php echo $_helper->__('Not paid'); ?>
 											<?php endif; ?>
-										</a>
-									</li>
-								</ul> 
-							</div>
-							<?php else: ?>
-								<?php if($_rma->getRmaRefundAmount()):
-									 echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false);
-								else: ?>
-									<?php echo $_helper->__('Not paid');?>
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu">
+											<li>
+												<a href="#" data-toggle="modal" data-target="#refundModalSimple">
+													<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+														<?php echo $_helper->__("Order refund"); ?>
+													<?php else: ?>
+														<?php echo $_helper->__("Confirm refund");?>
+													<?php endif; ?>
+												</a>
+											</li>
+										</ul>
+									</div>
+								<?php else: ?>
+									<?php if($_rma->getRmaSimpleRefundAmount()):
+										echo $_coreHelper->currency($_rma->getRmaSimpleRefundAmount(),true,false);
+									else: ?>
+										<?php echo $_helper->__('Not paid');?>
+									<?php endif; ?>
 								<?php endif; ?>
+								<?php if($_rma->getRmaSimpleRefundAmount()):
+									echo ' (';
+									if($_rma->isAlreadySimpleReturned()):
+										echo $_helper->__('Return completed');
+									else:
+										echo $_helper->__('Return processing');
+									endif;
+									echo ')';
+								endif; ?>
+							<?php else: ?>
+								<?php if($_rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $_po->isCod()): ?>
+									<div id="refundDisabled"
+										 data-original-title="<?php echo $_helper->__("Refund is not possible because order was sent using COD and client didn't receive the package."); ?>"
+										 data-placement="bottom">
+										<?php echo $_helper->__("Refund disabled") ?>
+										<i class="icon-question-sign"></i>
+									</div>
+								<?php elseif($_rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED && $_rma->getRmaRefundAmount() < $_rma->getRmaRefundAmountMax()): ?>
+									<div class="btn-group" id="status-holder">
+										<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+											<?php if($_rma->getRmaRefundAmount()): ?>
+												<?php echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false); ?>
+											<?php else: ?>
+												<?php echo $_helper->__('Not paid'); ?>
+											<?php endif; ?>
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu">
+											<li>
+													<a href="#" data-toggle="modal" data-target="#refundModal">
+														<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+															<?php echo $_helper->__("Order refund"); ?>
+														<?php else: ?>
+															<?php echo $_helper->__("Confirm refund");?>
+														<?php endif; ?>
+													</a>
+											</li>
+										</ul>
+									</div>
+								<?php else: ?>
+									<?php if($_rma->getRmaRefundAmount()):
+										echo $_coreHelper->currency($_rma->getRmaRefundAmount(),true,false);
+									else: ?>
+										<?php echo $_helper->__('Not paid');?>
+									<?php endif; ?>
+								<?php endif; ?>
+								<?php if($_rma->getPo()->isPaymentDotpay() && $_rma->getRmaRefundAmount()):
+									echo ' (';
+									if($_rma->isAlreadyReturned()):
+										echo $_helper->__('Return completed');
+									else:
+										echo $_helper->__('Return processing');
+									endif;
+									echo ')';
+								endif; ?>
 							<?php endif; ?>
-							<?php if($_rma->getPo()->isPaymentDotpay() && $_rma->getRmaRefundAmount()):
-								echo ' (';
-								if($_rma->isAlreadyReturned()):
-									echo $_helper->__('Return completed');
-								else:
-									echo $_helper->__('Return processing');
-								endif;
-								echo ')';
-							endif; ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd>
@@ -402,10 +456,17 @@ jQuery(document).ready(function() {
 /*******************************************************************************
  *	Make refund modal
  *******************************************************************************/
+if($isGallery === false && $useAllocation === false){
+	echo $this->getChild("vendor_rma_edit_simple_refund")
+		->setRma($_rma)
+		->setRmaHelper($_helper)
+		->toHtml();
+}else{
 	echo $this->getChild("vendor_rma_edit_refund")
 		->setRma($_rma)
 		->setRmaHelper($_helper)
 		->toHtml();
+}
 ?>
 <?php  /*
 <div class="container">

@@ -4,9 +4,9 @@
  * Import products
  */
 
-require_once(MAGENTO_ROOT . DS . "magmi/inc/magmi_defs.php");
+require_once(Mage::getBaseDir() . DS . "magmi/inc/magmi_defs.php");
 //Datapump include
-require_once(MAGENTO_ROOT . DS . "magmi/integration/inc/magmi_datapump.php");
+require_once(Mage::getBaseDir() . DS . "magmi/integration/inc/magmi_datapump.php");
 
 class ZolagoOs_Import_Model_Import_Product
     extends ZolagoOs_Import_Model_Import
@@ -17,18 +17,131 @@ class ZolagoOs_Import_Model_Import_Product
 
     const MAGMI_IMPORT_PROFILE = "wojcik";
 
+    /**
+     * ZolagoOs_Import_Model_Import_Product constructor.
+     */
     public function __construct()
     {
         $this->_vendor = $this->getExternalId();
     }
 
+
     /**
-     * @return array
+     * Implement _getImportEntityType() method.
      */
-    public function getVendorId()
+    protected function _getImportEntityType()
     {
-        return $this->_vendor;
+       return "product";
     }
+
+    /**
+     * File name for _getPath()
+     *
+     * @return string
+     */
+    public function _getFileName()
+    {
+        return $this->getHelper()->getProductFile();
+
+    }
+    protected function _import()
+    {
+        $vendorId = $this->getExternalId();
+        $fileName = $this->_getPath();
+
+        try {
+            $fileContent = file_get_contents($fileName);
+            $xml = simplexml_load_string($fileContent);
+
+            //2. Import products
+            $xmlToArray = (array)$xml;
+            if (empty($xmlToArray)) {
+                $this->log("No Data For Import", Zend_Log::ALERT);
+                return $this;
+            }
+
+
+            //Collect sku
+            $skuBatch = array();
+            if (is_array($xmlToArray["item"])) {
+                foreach ($xmlToArray["item"] as $productXML) {
+                    $configurableSkuv = explode("/", (string)$productXML->sku)[0];
+                    if (
+                        $this->startsWith($configurableSkuv, 'WW')
+                        || $this->startsWith($configurableSkuv, 'LW')
+                        || $this->startsWith($configurableSkuv, 'CW')
+                    ) {
+//            1. dla indeksów zaczynących się od WW, LW oraz CW np. WW1613SU1G041/068
+//            budujemy indeks konfigurowalny odcinając rozmiar /068 i jeden znak przed rozmiarem
+                        $configurableSkuv = substr($configurableSkuv, 0, -1);
+                    }
+                    $skuBatch[$configurableSkuv][] = $productXML;
+                    unset($configurableSkuv);
+                }
+            }
+
+            if (is_object($xmlToArray["item"])) {
+                $productXML = $xmlToArray["item"];
+                $configurableSkuv = explode("/", (string)$productXML->sku)[0];
+                if (
+                    $this->startsWith($configurableSkuv, 'WW')
+                    || $this->startsWith($configurableSkuv, 'LW')
+                    || $this->startsWith($configurableSkuv, 'CW')
+                ) {
+//            1. dla indeksów zaczynących się od WW, LW oraz CW np. WW1613SU1G041/068
+//            budujemy indeks konfigurowalny odcinając rozmiar /068 i jeden znak przed rozmiarem
+                    $configurableSkuv = substr($configurableSkuv, 0, -1);
+                }
+                $skuBatch[$configurableSkuv][] = $productXML;
+                unset($configurableSkuv);
+            }
+
+            if (empty($skuBatch)) {
+                $this->log("No Data For Import", Zend_Log::ALERT);
+                return $this;
+            }
+
+
+            // create a Product import Datapump using Magmi_DatapumpFactory
+            $dp = Magmi_DataPumpFactory::getDataPumpInstance("productimport");
+
+
+            // Begin import session with a profile & running mode,
+            // here profile is "default" & running mode is "create".
+            // Available modes:
+            // "create" creates and updates items,
+            // "update" updates only,
+            // "xcreate creates only.
+            // Important: for values other than "default" profile has to be an existing magmi profile
+            $skusCreated = [];
+            $importProfile = self::MAGMI_IMPORT_PROFILE;
+            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
+            foreach ($skuBatch as $configurableSkuv => $simples) {
+                $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
+                $skusCreated = array_merge($u, $skusCreated);
+            }
+            /* end import session, will run post import plugins */
+            $dp->endImportSession();
+
+
+            //Start update configurable with children session
+            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
+            $this->updateRelations($dp,$skusCreated);
+            $dp->endImportSession();
+
+
+            //3. Set additional attributes
+            $this->updateAdditionalAttributes();
+
+
+            //4. Move processed file
+            $this->_moveProcessedFile();
+
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
+
 
     /**
      * @return array
@@ -73,100 +186,15 @@ class ZolagoOs_Import_Model_Import_Product
     }
 
 
-    public function runImport()
+
+
+    protected function _getFileExtension()
     {
-        $this->_import();
+        return "xml";
     }
-
-
-    protected function _import()
-    {
-
-        $vendorId = $this->getVendorId();
-        if (empty($vendorId)) {
-            $this->log("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
-            return $this;
-        }
-
-        //1. Read file
-        $fileName = $this->_getPath();
-        //$this->log("READING FILE {$fileName}");
-        if (empty($fileName)) {
-            $this->log("CONFIGURATION ERROR: EMPTY PRODUCT IMPORT FILE", Zend_Log::ERR);
-            return $this;
-        }
-
-        if (!file_exists($fileName)) {
-            $this->log("CONFIGURATION ERROR: IMPORT FILE {$fileName} NOT FOUND", Zend_Log::ERR);
-            return $this;
-        }
-        try {
-            $fileContent = file_get_contents($fileName);
-            $xml = simplexml_load_string($fileContent);
-
-            //2. Import products
-            $xmlToArray = (array)$xml;
-            if (empty($xmlToArray)) {
-                $this->log("No Data For Import", Zend_Log::ALERT);
-                return $this;
-            }
-
-
-            //Collect sku
-            $skuBatch = array();
-            if (is_array($xmlToArray["item"])) {
-                foreach ($xmlToArray["item"] as $productXML) {
-                    $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
-                }
-            }
-            if (is_object($xmlToArray["item"])) {
-                $productXML = $xmlToArray["item"];
-                $skuBatch[explode("/", (string)$productXML->sku)[0]][] = $productXML;
-            }
-
-
-            if (empty($skuBatch)) {
-                $this->log("No Data For Import", Zend_Log::ALERT);
-                return $this;
-            }
-
-
-            // create a Product import Datapump using Magmi_DatapumpFactory
-            $dp = Magmi_DataPumpFactory::getDataPumpInstance("productimport");
-
-
-            // Begin import session with a profile & running mode,
-            // here profile is "default" & running mode is "create".
-            // Available modes:
-            // "create" creates and updates items,
-            // "update" updates only,
-            // "xcreate creates only.
-            // Important: for values other than "default" profile has to be an existing magmi profile
-            $skusCreated = [];
-            $importProfile = self::MAGMI_IMPORT_PROFILE;
-            $dp->beginImportSession($importProfile, "xcreate", new ZolagoOs_Import_Model_ImportProductsLogger());
-            foreach ($skuBatch as $configurableSkuv => $simples) {
-                $u = $this->insertConfigurable($dp, $vendorId, $configurableSkuv, $simples);
-                $skusCreated = array_merge($u, $skusCreated);
-            }
-            /* end import session, will run post import plugins */
-            $dp->endImportSession();
-
-
-            //Start update configurable with children session
-            $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
-            $this->updateRelations($dp,$skusCreated);
-            $dp->endImportSession();
-
-
-            //3. Set additional attributes
-            $this->updateAdditionalAttributes();
-
-        } catch (Exception $e) {
-            Mage::logException($e);
-        }
-    }
-
+    /**
+     *
+     */
     public function updateAdditionalAttributes()
     {
         $vendorId = $this->_vendor;
@@ -256,6 +284,12 @@ class ZolagoOs_Import_Model_Import_Product
 
     }
 
+    function startsWith($haystack, $needle)
+    {
+        // search backwards starting from haystack length characters from the end
+        return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+    }
+
 
     /**
      * @param $dp
@@ -270,6 +304,7 @@ class ZolagoOs_Import_Model_Import_Product
 
         $skusUpdated = [];
         $subskus = [];
+
         foreach ($simples as $simpleXMLData) {
             $simpleSkuV = (string)$simpleXMLData->sku;
             $simpleSku = $vendorId . "-" . $simpleSkuV;
@@ -288,7 +323,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "description" => $simpleXMLData->clothes_description,
                 "short_description" => $simpleXMLData->description2,
                 "size" => $simpleXMLData->size,
-                "ean" => $simpleXMLData->barcode,            
+                "ean" => $simpleXMLData->barcode,
 
 
                 //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
@@ -329,6 +364,8 @@ class ZolagoOs_Import_Model_Import_Product
             "ext_color" => $firstSimple->color,
             "ext_brand" => $firstSimple->brand,
 
+            "col1" => "Kolekcja:" . $firstSimple->description2,
+
             //magazyn dla konfigurowalnych - zarządzaj stanami = nie
             "use_config_manage_stock" => 0,
             "manage_stock" => 0,
@@ -341,7 +378,7 @@ class ZolagoOs_Import_Model_Import_Product
         $additionalColumns = array(
             "gender", "intake", "clothes_type", "size_group", "week_no", "barcode"
         );
-        for ($n = 0; $n < count($additionalColumns); $n++) {
+        for ($n = 1; $n < count($additionalColumns); $n++) {
             $property = $additionalColumns[$n];
             if (!empty($propertyValue = $this->formatAdditionalColumns($firstSimple, $property)))
                 $productConfigurable["col" . ($n + 1)] = $propertyValue;
@@ -370,13 +407,10 @@ class ZolagoOs_Import_Model_Import_Product
         if (empty((string)$col->$item)) {
             return $result;
         }
-        $result = "{$item}: " . (string)$col->$item;
+        $result = "{$item}:" . (string)$col->$item;
 
         return $result;
     }
 
-    public function log($message, $level = NULL)
-    {
-        Mage::log($message, $level, "zolagoosimport_product.log");
-    }
+
 }

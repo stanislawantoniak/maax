@@ -1,0 +1,119 @@
+<?php
+/*
+ * All variables are set in: zolagorma/vendor/rma/edit.phtml
+ */
+/** @var $this Zolago_Rma_Block_Vendor_Rma_Edit_Simple_Refund */
+/** @var $_rma Zolago_Rma_Model_Rma */
+$_rma = $this->getRma();
+$_po = $_rma->getPo();
+$currencyCode = $_po->getOrder()->getOrderCurrencyCode();
+$currency = Mage::app()->getLocale()->currency($currencyCode);
+$orderSymbolCode = $currency->getSymbol();
+$_items = $_rma->getAllItems();
+/** @var $_hlp Zolago_Rma_Helper_Data */
+$_hlp = $this->getRmaHelper();
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+$sumExistTransactions = $this->getSumExistTransactions();
+
+$totalSum = 0;
+foreach ($_items as $_item){
+	$_poItemId = $_item->getPoItem()->getId();
+	if($_poItemId) {
+		$paidNum = $_item->getPoItem()->getFinalItemPrice();
+	} else {
+		$paidNum = $_item->getPrice();
+	}
+	$totalSum += floatval($paidNum);
+}
+$totalSum = number_format($totalSum, 2, '.', '');
+$differenceSum = $totalSum - $sumExistTransactions;
+$differenceInputSum = number_format($differenceSum, 2, '.', '');
+
+?>
+<div class="modal fade" id="refundModalSimple">
+	<div class="modal-dialog wide" style="width:600px;">
+		<form id="rmaSimpleRefundForm" action="<?php echo $this->getFormAction($_rma->getId()) ;?>" class="form-horizontal row-border" novalidate="novalidate" method="post">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering RMA refund");?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming RMA refund"); ?>
+						<?php endif; ?>
+					</h4>
+					<div class="modal-comment">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Ordering a refund will inform gallery administrators about need of refunding the money. Refund will be processed manually and then will change it's status to completed"); ?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirming refund means that you have already made a bank transfer with refund to customer.");?>
+						<?php endif; ?>
+					</div>
+				</div>
+				<div class="modal-body">
+					<ul class="list-unstyled">
+						<li class="form-group">
+							<label for="refund" class="col-md-6 control-label"><?php echo $_hlp->__("Amount to refund");?></label>
+							<div class="col-md-3">
+								<div class="input-group">
+									<input type="text" required="required" name="refund" id="refund" value="<?php echo $differenceInputSum; ?>" class="form-control" style="text-align: right;"/>
+									<span class="input-group-addon"><i class="icon"><?php echo ($orderSymbolCode) ? $orderSymbolCode : $currencyCode ; ?></i></span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer" style="margin-top:0;">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+					<button type="submit" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>">
+						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
+							<?php echo $_hlp->__("Order refund"); ?>
+						<?php else: ?>
+							<?php echo $_hlp->__("Confirm refund");?>
+						<?php endif; ?>
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	jQuery(document).ready(function() {
+		var form = jQuery('#rmaSimpleRefundForm');
+		form.validate({
+			ignore: "",
+			rules: {
+				refund: {
+					required: true,
+					number: true,
+					min: 0.01,
+					max: <?php echo $differenceSum; ?>
+				}
+			},
+			messages: {
+				refund: {
+					required: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
+					number: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
+					min: "<?php echo $_hlp->__("Enter an amount to refund"); ?>",
+					max: "<?php echo $_hlp->__("An amount to refund can not be more than total order sum"); ?>"
+				}
+			},
+			errorPlacement: function($error, $element) {
+				if ($element.closest("div").hasClass("input-group")) {
+					$element.closest("div").parent().append($error);
+				} else {
+					$element.closest("div").append($error);
+				}
+			}
+		});
+
+		jQuery('input[name^=refund]').keyup(function () {
+			if (this.value != this.value.replace(',','.').replace(/[^0-9\.]/g, '')) {
+				this.value = this.value.replace(',','.').replace(/[^0-9\.]/g, '');
+			}
+		});
+	});
+</script>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Wf_Lookbookslider>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Altima_Lookbookslider/>
+
+            </depends>
+        </Wf_Lookbookslider>
+    </modules>
+</config>
