@@ -13,6 +13,7 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
     abstract protected function _getCarrierCode();
     abstract protected function _getLpDownloadUrl();
     abstract protected function _getSettings();
+    abstract protected function _getCode();
 
     public function lpAction() {
         $dhlFile			= false;
@@ -29,17 +30,27 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
             $file = $helper->getIsFileAvailable($trackNumber);
             if (!$file) {
                 $webCall = $this->_lpCall($request);
+                $trackNumber = $request->getParam('trackNumber'); // new track number if changed
                 if (!empty($webCall['status'])) {
+                    
                     $file = $helper->getIsFileAvailable($trackNumber);
+                    
                 } else {
                     $result['message'] = $webCall['message'];
                 }
             }
         }
+        // replace track number
+        $params = $request->getParams();
+        $params['trackNumber'] = $trackNumber;
+        $params['_secure'] = true;
+        $url = Mage::helper('orbashipping')->getShippingManager($this->_getCode())->getLetterUrl();
+        $linkUrl = Mage::getUrl($url, $params);
         if ($file) {
             $result['status']	= true;
             $result['file']		= $trackNumber;
-            $result['url']		= Mage::getUrl($this->_getLpDownloadUrl(), array("fileName"=>$trackNumber));
+            $result['url']		= Mage::getUrl($this->_getLpDownloadUrl(), array("fileName"=>$trackNumber,'_secure'=>true));
+            $result['linkUrl'] = $linkUrl;
             unset($result['message']);
         }
 

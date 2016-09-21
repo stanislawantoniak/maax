@@ -8,7 +8,10 @@ class Orba_Shipping_DhlController extends Orba_Shipping_Controller_Lp
     protected function _getHelper() {
         return Mage::helper('orbashipping/carrier_dhl');
     }
-    
+
+    protected function _getCode() {
+        return Orba_Shipping_Model_Carrier_Dhl::CODE;
+    }    
     protected function _getCarrierCode() {
         return 'DHL';
     }

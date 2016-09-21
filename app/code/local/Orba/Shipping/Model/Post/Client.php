@@ -571,11 +571,17 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
             Mage::throwException(Mage::helper('orbashipping')->__('Service %s get label error: %s','Poczta Polska',
                                  Mage::helper('orbashipping')->__('Empty content')));
         }
-        $out['data'] = '';
-        foreach ($response->content as $content) {
-            $out['data'] .= $content;
-        }
-        $out['numbers'] = $codes;
+        $out['data'] = $response->content->pdfContent;
+        $numbers[$response->content->guid] = $response->content->nrNadania;
+        $out['numbers'] = $numbers;
+        // replace old number by new
+        foreach ($tracking as $track) {        
+            if ($newNumber = empty($numbers[$track->getNumber()])?null:$numbers[$track->getNumber()]) {
+                $track->setNumber($newNumber);
+                $track->save();
+                Mage::app()->getRequest()->setParam('trackNumber',$newNumber);
+            }            
+        } 
         return $out;
     }
 
