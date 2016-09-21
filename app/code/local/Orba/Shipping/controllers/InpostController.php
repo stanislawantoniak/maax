@@ -8,7 +8,9 @@ class Orba_Shipping_InpostController extends Orba_Shipping_Controller_Lp
     protected function _getHelper() {
         return Mage::helper('orbashipping/packstation_inpost');
     }
-    
+    protected function _getCode() {
+        return Orba_Shipping_Model_Packstation_Inpost::CODE;
+    }
     protected function _getCarrierCode() {
         return 'INPOST';
     }
