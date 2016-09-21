@@ -1825,6 +1825,10 @@ Mall.featuredProductsInit = function () {
             window.setTimeout(function(){
                 Mall.featuredProductsSliderAdjustVisibleTabsHeight();
             }, 300);
+
+            window.setTimeout(function(){
+                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+            }, 600);
         },
         activate  : function() {
             Mall.featuredProductsSliderAdjustVisibleTabsHeight();
@@ -1832,6 +1836,10 @@ Mall.featuredProductsInit = function () {
             window.setTimeout(function(){
                 Mall.featuredProductsSliderAdjustVisibleTabsHeight();
             }, 300);
+
+            window.setTimeout(function(){
+                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
+            }, 600);
         }
 
     });
