@@ -1817,36 +1817,8 @@ Mall.preventAgreementClick = function() {
 };
 
 Mall.featuredProductsInit = function () {
-    var featuredProductsTabs = jQuery("#featured_products_tabs");
-    featuredProductsTabs.tabs({
-        select  : function() {
-            Mall.featuredProductsSliderAdjustVisibleTabsHeight();
-
-            window.setTimeout(function(){
-                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
-            }, 300);
-
-            window.setTimeout(function(){
-                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
-            }, 600);
-        },
-        activate  : function() {
-            Mall.featuredProductsSliderAdjustVisibleTabsHeight();
-
-            window.setTimeout(function(){
-                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
-            }, 300);
-
-            window.setTimeout(function(){
-                Mall.featuredProductsSliderAdjustVisibleTabsHeight();
-            }, 600);
-        }
-
-    });
+    jQuery("#featured_products_tabs").tabs();
 };
-
-
-
 
 Mall.featuredProductsSliderAdjustVisibleTabsHeight = function(){
     jQuery.each(jQuery("#featured_products_tabs div[role=tabpanel][aria-expanded=true] .owl-carousel"), function(){
@@ -1855,10 +1827,12 @@ Mall.featuredProductsSliderAdjustVisibleTabsHeight = function(){
 };
 
 Mall.featuredProductsSliderAdjustTabHeight = function(carousel){
-    var featuredProductsTabProductNameLink = jQuery(carousel).find(".owl-item .product-name a");
+    var featuredProductsTabProductNameLink = jQuery(carousel).find(".owl-item");
 
     var elementHeights = jQuery(featuredProductsTabProductNameLink).map(function (n, el) {
-        return jQuery(el).height();
+        if(jQuery(el).visible(true)){
+            return jQuery(el).find(".product-name a").height();
+        }
     }).get();
 
     // Math.max takes a variable number of arguments
