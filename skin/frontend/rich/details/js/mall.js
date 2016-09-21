@@ -1827,12 +1827,12 @@ Mall.featuredProductsSliderAdjustVisibleTabsHeight = function(){
 };
 
 Mall.featuredProductsSliderAdjustTabHeight = function(carousel){
-    var featuredProductsTabProductNameLink = jQuery(carousel).find(".owl-item");
+    var featuredProductsTabProductNameLink = jQuery(carousel).find(".owl-item.active .product-name a");
 
     var elementHeights = jQuery(featuredProductsTabProductNameLink).map(function (n, el) {
-        if(jQuery(el).visible(true)){
-            return jQuery(el).find(".product-name a").height();
-        }
+
+            return jQuery(el).height();
+
     }).get();
 
     // Math.max takes a variable number of arguments
