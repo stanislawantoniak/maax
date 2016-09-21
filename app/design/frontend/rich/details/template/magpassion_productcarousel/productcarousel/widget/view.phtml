@@ -345,7 +345,7 @@ $productHelper = Mage::helper("zolagocatalog/product");
           owl<?php echo $block_id; ?>.owlCarousel({
 
                 navigation : false,
-                lazyLoad : true,
+                lazyLoad : false,
                 <?php if ($_productcarousel->getAutoheight()):?>autoHeight : true, <?php endif;?>
                 <?php if ($_productcarousel->getAutoplay()):?>autoPlay : <?php echo $_productcarousel->getAutoplay()?>, <?php endif;?>
                 <?php if ($_productcarousel->getSlidespeed()):?>slideSpeed : <?php echo $_productcarousel->getSlidespeed();?>, <?php endif;?>
