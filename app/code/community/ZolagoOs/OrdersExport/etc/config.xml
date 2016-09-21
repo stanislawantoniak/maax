@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZolagoOs_OrdersExport>
+            <version>0.0.1</version>
+        </ZolagoOs_OrdersExport>
+    </modules>
+    <global>
+        <models>
+            <zosordersexport>
+                <class>ZolagoOs_OrdersExport_Model</class>
+                <resourceModel>zosordersexport_resource</resourceModel>
+            </zosordersexport>
+            <zosordersexport_resource>
+                <class>ZolagoOs_OrdersExport_Model_Resource</class>
+            </zosordersexport_resource>
+        </models>
+        <blocks>
+            <zosordersexport>
+                <class>ZolagoOs_OrdersExport_Block</class>
+            </zosordersexport>
+        </blocks>
+        <helpers>
+            <zosordersexport>
+                <class>ZolagoOs_OrdersExport_Helper</class>
+            </zosordersexport>
+        </helpers>
+        <resources>
+            <zosordersexport_setup>
+                <setup>
+                    <module>ZolagoOs_OrdersExport</module>
+                </setup>
+            </zosordersexport_setup>
+        </resources>
+    </global>
+</config>
