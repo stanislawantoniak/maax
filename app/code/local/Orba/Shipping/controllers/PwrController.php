@@ -4,6 +4,10 @@
  */
 class Orba_Shipping_PwrController extends Orba_Shipping_Controller_Lp
 {	
+    
+    protected function _getCode() {
+        return Orba_Shipping_Model_Packstation_Pwr::CODE;
+    }
 
     protected function _getHelper() {
         return Mage::helper('orbashipping/packstation_pwr');

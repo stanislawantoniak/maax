@@ -532,7 +532,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 										<?php if($_letterUrl=$this->getLetterUrl($_tracking, $_po)):?>
 											<a id="download-letter" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>" class="btn btn-link btn-xs" href="<?php echo $_letterUrl;?>">
 												<i class="icon-arrow-down"></i>
-												<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+												<span id="track_number"><?php echo $this->escapeHtml($_tracking->getTrackNumber());?></span>
 											</a>
 											<script type="text/javascript">
 											jQuery(function($){
@@ -553,8 +553,13 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 															text: Translator.translate("Failed to get waybill"),
 															type: 'error'
 														});
-													}).always(function(){
-														el.button('reset')
+													}).always(function(response){
+														el.button('reset');
+														if (response.file) {
+															$("#track_number").html(response.file);
+															el.attr('href',response.linkUrl);
+														}
+														
 													});
 													return false;
 												});
