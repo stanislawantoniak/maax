@@ -1864,7 +1864,7 @@ Mall.featuredProductsSliderAdjustTabHeight = function(carousel){
     // Math.max takes a variable number of arguments
     // `apply` is equivalent to passing each height as an argument
     var maxHeight = Math.max.apply(null, elementHeights);
-    console.log(maxHeight);
+    
     if(maxHeight > 0){
         jQuery(carousel).find(".owl-item .product-name").each(function (i, item) {
             jQuery(item).animate({ height: maxHeight }, 100);
