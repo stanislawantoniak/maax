@@ -1,0 +1,67 @@
+.block-inspiration {
+    .rwdCarousel {
+      .rwd-pagination {
+        text-align: center;
+        padding-top: 15px;
+      }
+        padding: 0;
+        .item {
+            background: $color_fff;
+            color: $color_515151;
+            text-align: center;
+            border: 1px solid $color_dbdbdb;
+
+            .carousel-caption {
+
+                padding: 0px 10px;
+
+                .title-caption-a {
+                    display: block;
+                    margin-top: 17px;
+                    margin-bottom: 8px;
+                }
+                .body-caption-a {
+                    display: block;
+                }
+                div {
+                    font-family: $fontRegular;
+                    text-shadow: none;
+                    &.title-caption {
+                        font-family: $fontRegular;
+                        color: $color_000;
+                        font-size: 20px;
+                    }
+                    &.body-caption {
+                        color: $color_8b8b8b;
+
+                        height: 45px;
+                        overflow: hidden;
+                        position: relative;
+
+                        .body-caption-fade {
+                            position: absolute;
+                            bottom: 0px;
+                            width: 100%;
+                            left: 0px;
+                            height: 14px;
+                            display: block;
+                            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 20%, #ffffff 100%);
+                        }
+                    }
+                    &.seemore-caption {
+                        color: $color_fff;
+                        text-transform: uppercase;
+                        font-size: 14px;
+                    }
+
+                }
+
+                .seemore-caption-link {
+                    display: block;
+                    margin: 10px auto 30px auto;
+                    padding: 10px 15px;
+                }
+            }
+        }
+    }
+}
