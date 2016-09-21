@@ -33,4 +33,14 @@
             </zosordersexport_setup>
         </resources>
     </global>
+    <crontab>
+        <jobs>
+            <zosordersexport_export_orders>
+                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
+                <run>
+                    <model>zosordersexport/observer::cronExportOrders</model>
+                </run>
+            </zosordersexport_export_orders>
+        </jobs>
+    </crontab>
 </config>
