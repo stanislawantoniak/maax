@@ -73,24 +73,26 @@ body {
 		left: 0;
 		margin-left: 0;
 		img {
-			width: 100%;
 			height: auto;
-			margin-top: 15px;
+			margin-top: 8px;
+			@include max-screen($screen-sm) {
+				height:40px;
+			}
 			@include max-screen($screen-xs-max) {
-				margin-top: 5px;
+				margin-top: 3px;
 			}
 		}
 		@include max-screen($screen-sm) {
-			top:3px;
+//			top:3px;
 		}
 		@include max-screen(470px) {
-			top:4px;
+//			top:4px;
 			width: 150px;
 			margin-left: 0;
 		}
 		@include max-screen(365px) {
 			width: 140px;
-			top: 6px;
+//			top: 6px;
 			margin-left: 0;
 		}
 	}
