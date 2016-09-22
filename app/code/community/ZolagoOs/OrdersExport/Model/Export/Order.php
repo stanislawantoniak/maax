@@ -21,6 +21,8 @@ class ZolagoOs_OrdersExport_Model_Export_Order extends ZolagoOs_OrdersExport_Mod
      * sync orders
      */
     public function sync() {
+        $orders = $this->getGhApiVendorOrders();
+        
 
     }
     

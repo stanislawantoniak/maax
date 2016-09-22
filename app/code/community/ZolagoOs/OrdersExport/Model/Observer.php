@@ -61,11 +61,24 @@ class ZolagoOs_OrdersExport_Model_Observer
         $this->_export('zosordersexport/export_order');
     }
 
+    protected function _exportItems()
+    {
+        //$this->_export('zosordersexport/export_items');
+    }
+
+    protected function _exportCustomers()
+    {
+        //$this->_export('zosordersexport/export_customers');
+    }
+
     protected function _export($name)
     {
+
         $vendorId = 1; // @todo Boooo hardcode
         $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
+
         $model = Mage::getModel($name);
+
         $model->setVendor($vendor);
         $model->setApiConnector($this->_getGHAPIConnector());
         $model->sync();
