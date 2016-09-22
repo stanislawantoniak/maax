@@ -1,0 +1,255 @@
+#seller-box-bundle,
+.descripionProduct-box-bundle {
+	border:1px solid $colorProductAccordionBorder;
+	padding:0 9px 0;
+	text-align:center;
+	.seller-label {
+		font-size: 18px;
+		color:$color_1d1e1c;
+		text-transform: uppercase;
+		@media (max-width: $screen-xs-max) {
+			text-align: left;
+		}
+	}
+	.seller {
+		font-size: 12px;
+		color:$color_000;
+		a {
+			@extend .seller;
+		}
+		@media (max-width: $screen-xs-max) {
+			text-align: left;
+		}
+	}
+	.block {
+		border-top:1px solid $color_ebeaed;
+	}
+	.seller-box-description  {
+		&.block {
+			@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+				border-top: none;
+			}
+
+		}
+	}
+	h3 {
+		font-size: 11px;
+		color:$color_000;
+		text-transform: uppercase;
+		a {
+			font-size: 11px;
+			color:$color_000;
+			text-decoration: none;
+			@media(max-width:$screen-md-max) {
+				text-align: center;
+			}
+		}
+	}
+	h3#bLogo{
+		display: inline-block;
+	}
+}
+.descripionProduct-box-bundle {
+	.descripionProduct-label {
+		font-size: 18px;
+		color:$color_1d1e1c;
+		text-transform: uppercase;
+	}
+}
+
+#seller-box-bundle {
+	@media (max-width: $screen-xs-max) {
+		border-right: none;
+		border-left: none;
+		border-bottom: none;
+	}
+
+	#question-form-mobile {
+		label {
+			font-weight: normal;
+		}
+	}
+
+}
+
+.seller-box-description,
+.seller-box-question,
+.descripionProduct-box-comments {
+	h3 {
+		@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+			text-align: center!important;
+		}
+		@media  (max-width:1044px) {
+			text-align: left!important;
+		}
+		@media  (max-width:991px) {
+			text-align: center!important;
+		}
+
+	}
+}
+.seller-box-description {
+	&:first-child {
+		@media(min-width: $screen-sm-min) and (max-width: $screen-md-max) {
+			margin-top: -6px !important;
+		}
+	}
+}
+
+#seller-box-bundle {
+	#accordion {
+		.panel-default {
+			box-shadow: none;
+			&:first-child > .panel-heading {
+				border-top: none;
+				margin-top: -11px;
+			}
+			> .panel-heading {
+				background:none;
+				border-radius: 0;
+				border-top:1px solid $colorProductAccordionBorder;
+				border-bottom:1px solid $colorProductAccordionBorder;
+				h4 {
+					&.panel-title {
+						font-size: 14px;
+						color:$color_000;
+						font-weight: normal;
+						font-family: $fontRegular;
+						a {
+							text-align: left;
+							text-transform: uppercase;
+						}
+						&:before {
+							background: $colorAccentProductTitle;
+						}
+					}
+
+				}
+
+				&+ .panel-collapse {
+					.panel-body {
+						font-size: 13px;
+						color:$colorProductAccordion;
+						text-align: left;
+						ul {
+							list-style: none;
+						}
+						.view-store {
+							font-size: 11px;
+							padding: 3px 10px;
+							color: $color_fff; /* todo: check if it's used anywhere */
+						}
+					}
+				}
+			}
+			&.last {
+				> .panel-heading {
+					border-bottom:none;
+				}
+			}
+		}
+	}
+}
+
+.seller-box-question {
+	border-top: none !important;
+}
+
+#seller-box-bundle {
+	#accordion {
+		.panel-default {
+			border:none;
+			margin-bottom: -5px;
+			&:first-child {
+				margin-bottom: -6px;
+				overflow: visible;
+			}
+			> .panel-heading {
+				padding: 14px 15px;
+				@media(max-width: 360px) {
+					padding: 14px 5px 14px 15px;
+				}
+				h4 {
+					padding:0;
+					&.panel-title {
+						position:relative;
+						a {
+							display:block;
+							padding-left:10px;
+							position:relative;
+
+
+						}
+						&:before {
+							content: " ";
+							display: block;
+							width: 18px;
+							height: 18px;
+							position: absolute;
+							left: -9px;
+							top: -2px;
+							@media (max-width: 360px) {
+								left: -4px;
+							}
+						}
+					}
+
+				}
+
+				&+ .panel-collapse {
+					.panel-body {
+						padding-left: 40px;
+						padding-right: 40px;
+						ul {
+							margin:0;
+							padding:0;
+						}
+						.view-store {
+							padding: 3px 10px;
+							display: inline-block;
+							float: right;
+							margin-right: 2px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+#complementary_product,
+#description_product,
+#note_product {
+	&.bg-w {
+		border-bottom: none;
+	}
+	h3[itemprop=brand], h3.itemprop-brand {
+		display: inline;
+		font-size: 13px;
+		padding: 0;
+	}
+	h2.title_section, h5.title_section {
+		padding-left: 0;
+		margin: 0 0 20px;
+	}
+}
+
+#seller-box-bundle .seller.producer {
+	@media (max-width: $screen-xs-max) {
+		transform: translateY(25%);
+	}
+}
+
+span.average_note_client {
+	span.note {
+		img {
+			width: 22px;
+			height: 22px;
+		}
+		&+span {
+			font-size: 11px;
+			color:$color_646464;
+			font-family: $fontRegular;
+			line-height: 13px;
+		}
+	}
+}

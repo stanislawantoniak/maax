@@ -1,0 +1,117 @@
+.recently-viewed {
+
+	h3.title-section {
+		@media (max-width: $screen-xs-max) {
+			font-size: 14px;
+			font-family: $fontRegular;
+		}
+		&:before {
+			@media (max-width: $screen-xs-max) {
+				background: $colorAccentTitle;
+			}
+		}
+	}
+	.box_listing_product {
+		.name_product {
+			text-align: center;
+		}
+	}
+	.item {
+		background: $color_fff;
+		color: $color_515151;
+		img {
+			border:1px solid $color_f5f6f6;
+		}
+
+	}
+	.customNavigation {
+		a {
+			font-size: 48px;
+			background:$allMap;
+			&.prev {
+				@include sprite($allMap, arrow-slider-latest-left-l);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-prev-mobile);
+
+				}
+				&:hover {
+					@include sprite($allMap, arrow-slider-latest-left-h);
+
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-prev-mobile-h);
+
+					}
+				}
+			}
+			&.next {
+				@include sprite($allMap, arrow-slider-latest-right-l);
+
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-next-mobile);
+
+				}
+				&:hover {
+					@include sprite($allMap, arrow-slider-latest-right-h);
+
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-next-mobile-h);
+
+					}
+				}
+			}
+		}
+	}
+
+}
+
+.recently-viewed {
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				font-size: 48px;
+				background:$allMap;
+			}
+			.rwd-prev {
+
+				@include sprite($allMap, arrow-slider-latest-left-l);
+
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-prev-mobile);
+
+				}
+				&:hover {
+					@include sprite($allMap, arrow-slider-latest-left-h);
+
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-prev-mobile-h);
+
+					}
+				}
+
+			}
+			.rwd-next {
+
+				@include sprite($allMap, arrow-slider-latest-right-l);
+
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-next-mobile);
+
+				}
+				&:hover {
+					@include sprite($allMap, arrow-slider-latest-right-h);
+
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-next-mobile-h);
+
+					}
+				}
+			}
+		}
+	}
+}
+
+#recently-viewed {
+  float: left;
+  margin-top: 20px;
+}
