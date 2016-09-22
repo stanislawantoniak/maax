@@ -7,6 +7,13 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
     extends ZolagoOs_OrdersExport_Model_Integrator_Ghapi
 {
 
+    /**
+     * @return mixed
+     */
+    public function getExportConnector()
+    {
+        return Mage::getModel("zosordersexport/export_order");
+    }
 
     /**
      * prepare new orders list
@@ -27,6 +34,9 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
     {
         $orders = $this->getGhApiVendorOrders();
 
+        /* @var $exportConnector ZolagoOs_OrdersExport_Model_Export_Order */
+        $exportConnector = $this->getExportConnector();
+
 
         if (!$orders->status)
             return;
@@ -38,10 +48,10 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
             return;
 
         foreach ($this->prepareOrderList($ordersList) as $item) {
-
+            $response = $exportConnector->addOrders((array)$item);
         }
 
-       
+        //die("test");
 
     }
 

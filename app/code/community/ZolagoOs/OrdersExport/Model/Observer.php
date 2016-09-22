@@ -73,8 +73,7 @@ class ZolagoOs_OrdersExport_Model_Observer
 
     protected function _export($name)
     {
-
-        $vendorId = 1; // @todo Boooo hardcode
+        $vendorId = $this->getHelper()->getExternalId();
         $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
 
         $model = Mage::getModel($name);

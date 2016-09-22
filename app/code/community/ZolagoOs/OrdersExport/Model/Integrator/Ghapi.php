@@ -69,19 +69,22 @@ abstract class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
         foreach ($list as $item) {
             $ids[$item->orderID] = $item->orderID;
         }
-        if (!count($ids)) {
+        if (!count($ids))
             return array();
-        }
+
         $token = $this->_getToken();
         $params = new StdClass();
         $params->sessionToken = $token;
         $params->orderID = new StdClass();
         $params->orderID->ID = $ids;
+        $params->showCustomerEmail = TRUE;
+
         $connector = $this->getApiConnector();
         $list = $connector->getOrdersById($params);
-        if ($list->status) {
+
+        if ($list->status)
             return $list->orderList;
-        }
+
         return array();
     }
 

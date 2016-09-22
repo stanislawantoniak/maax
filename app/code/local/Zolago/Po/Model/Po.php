@@ -866,12 +866,13 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         }
     }
 
-    /**
-     * @param $ids int|array
-     * @param $vendor Zolago_Dropship_Model_Vendor
-     * @return array
-     */
-    public function ghapiGetOrdersByIncrementIds($ids, $vendor) {
+	/**
+	 * @param $ids
+	 * @param $vendor
+	 * @param bool $showCustomerEmail
+	 * @return array
+	 */
+    public function ghapiGetOrdersByIncrementIds($ids, $vendor, $showCustomerEmail = FALSE) {
 
         if (is_numeric($ids)) $ids = array($ids);
         if (!is_array($ids)) return array();
@@ -903,6 +904,10 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
 			$list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
 			$list[$i]['customer_id']              = $po->getCustomerId();
+
+			if ($showCustomerEmail)
+				$list[$i]['customer_email'] = $po->getCustomerEmail();
+
 
 
             $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
