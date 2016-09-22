@@ -7,7 +7,6 @@ $_po =  $this->getPo();
 
 $_availableMethods =  $this->getAvailableMethods();
 $_modagoHlp = Mage::helper("zolagocommon");
-$_defaultBoxSize = Mage::getStoreConfig('carriers/zospwr/default_box_size');
 ?>
 <!-- Modal add letter-->
 <div class="modal fade" id="shippingModal">
@@ -36,9 +35,9 @@ $_defaultBoxSize = Mage::getStoreConfig('carriers/zospwr/default_box_size');
 							</div>
 						</li>
 						<li class="form-group specify specify-carrier">
-							<label for="shipping-weight" class="col-md-3 control-label"><?php echo $_hlp->__('Box size') ?></label>
+							<label for="shipping-weight" class="col-md-3 control-label"><?php echo $_hlp->__('Box in MINI size') ?></label>
 							<div class="col-md-2">
-								<input id="shipping-weight"  name="boxSize" title="<?php echo $_hlp->__('Box size') ?>" type="text" class="form-control align-right" value="<?php echo $_defaultBoxSize;?>"/>
+								<input type="checkbox" id="shipping-weight"  name="boxSize" title="<?php echo $_hlp->__('Box in MINI size') ?>" class="form-control align-left" value="MINI" style="width:auto"/>
 							</div>
 						</li>
 
