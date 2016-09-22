@@ -1,0 +1,109 @@
+#items-product {
+    .item {
+        .box_listing_product {
+            border: 1px solid #ddd;
+            background: $color_fff;
+            padding: 1px;
+            margin-top: 4px;
+            z-index: 10;
+            @media (max-width: $screen-xs-max) {
+                border-width: 0;
+            }
+        }
+    }
+}
+#rwd-complementary-product .box_listing_product .name_product {
+    overflow: visible;
+}
+.box_listing_product {
+    background:$color_fff;
+    .name_product {
+        font-weight: 400;
+        color: #3d3d3d;
+        font-size: 14px;
+        height: 40px;
+        overflow: hidden;
+    }
+    .price {
+        color: #3c3b3b;
+        font-size: 14px;
+        .col-price {
+            .old {
+                color: #3c3b3b;
+                display: inline;
+                text-decoration:line-through;
+                vertical-align: top;
+            }
+            :not(.old) {
+                font-weight: 600;
+                color: black;
+                font-size: 17px;
+                @media (max-width: $screen-xs-max) {
+                    font-size: 14px;
+                }
+            }
+        }
+        .size-box-bundle {
+            display: block;
+            padding-bottom: 15px;
+            .action-box-container {
+                padding: 7px 0 0;
+            }
+            .variants {
+                color: #5c5c5c;
+                font-size: 13px;
+                margin-bottom: 0px;
+            }
+            .addBasket {
+                float: right;
+                height: 36px;
+                line-height: 28px;
+                font-size: 14px;
+                font-weight: 600;
+                padding-top: 4px !important;
+                padding: 12px 10px;
+                margin: 0;
+                text-transform: uppercase;
+                @media (max-width: $screen-xs-max) {
+                    padding: 14px 13px;
+                    width: 100% !important;
+                    height: 40px;
+                    line-height: 34px;
+                }
+            }
+        }
+    }
+}
+.shapes_listing {
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YyZjFmMCIgc3RvcC1vcGFjaXR5PSIwLjAxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjQyJSIgc3RvcC1jb2xvcj0iI2YyZjFmMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmMmYxZjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(242,241,240,0.01) 0%, rgba(242,241,240,1) 42%, rgba(242,241,240,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,241,240,0.01)), color-stop(42%,rgba(242,241,240,1)), color-stop(100%,rgba(242,241,240,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03f2f1f0', endColorstr='#f2f1f0',GradientType=0 ); /* IE6-8 */
+    text-align:center;
+
+}
+
+#items-product {
+    .item {
+        .box_listing_product {
+            &:hover,
+            &.hover {
+                .name_product {
+                    color: $colorLinkHover;
+                    text-decoration: $decorationLinkHover;
+                }
+            }
+
+            .name_product:hover {
+                color: $colorLinkHover;
+                text-decoration: $decorationLinkHover;
+            }
+
+        }
+    }
+}
