@@ -58,17 +58,17 @@ class ZolagoOs_OrdersExport_Model_Observer
 
     protected function _exportOrders()
     {
-        $this->_export('zosordersexport/export_order');
+        $this->_export('zosordersexport/integrator_order');
     }
 
     protected function _exportItems()
     {
-        //$this->_export('zosordersexport/export_items');
+        //$this->_export('zosordersexport/integrator_items');
     }
 
     protected function _exportCustomers()
     {
-        //$this->_export('zosordersexport/export_customers');
+        //$this->_export('zosordersexport/integrator_customers');
     }
 
     protected function _export($name)

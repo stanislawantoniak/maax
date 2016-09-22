@@ -1,10 +1,12 @@
 <?php
 
 /**
- * connection from ghapi to ZolagoOs_OrdersExport
+ * Class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
+ *
+ * connection between ghapi and ZolagoOs_OrdersExport
  */
-abstract class ZolagoOs_OrdersExport_Model_Export_Ghapi
-    extends ZolagoOs_OrdersExport_Model_Export_Abstract
+abstract class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
+    extends ZolagoOs_OrdersExport_Model_Integrator_Abstract
 {
     protected $_confirmOrderList;
     

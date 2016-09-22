@@ -1,9 +1,9 @@
 <?php
 
 /**
- * parent class for integration
+ * parent class for Integrator
  */
-abstract class ZolagoOs_OrdersExport_Model_Export_Abstract
+abstract class ZolagoOs_OrdersExport_Model_Integrator_Abstract
     extends Varien_Object
 {
     protected $_vendor;
