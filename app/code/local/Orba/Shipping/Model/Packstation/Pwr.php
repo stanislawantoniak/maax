@@ -27,7 +27,8 @@ class Orba_Shipping_Model_Packstation_Pwr extends Orba_Shipping_Model_Carrier_Ab
             'destinationCode' => $udpo->getDeliveryPointName(),
             'boxSize' => $boxSize,
             'insurance' => $udpo->getGrandTotalInclTax(),
-            'cod'	=> number_format($deliveryValue,2,',',''),
+            'value' => $udpo->getSubTotalIncTax()*100,
+            'cod'	=> $deliveryValue*100,
             'orderId'   => $udpo->getIncrementId(),
         );
         $this->setShipmentSettings($settings);

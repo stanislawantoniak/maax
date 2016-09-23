@@ -1013,8 +1013,11 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 			case Orba_Shipping_Model_Packstation_Inpost::CODE:
 				$dMethod = 'inpost_parcel_locker'; // Paczkomaty InPost
 				break;
-			case 'zolagopp': //todo: when model ready replace it by const CODE
+			case Orba_Shipping_Model_Post::CODE:
 				$dMethod = 'polish_post'; // Poczta Polska
+				break;
+			case Orba_Shipping_Model_Packstation_Pwr::CODE:
+				$dMethod = 'pwr_parcel_locker'; // Paczka w Ruchu
 				break;
 			default:
 				$dMethod = 'standard_courier';

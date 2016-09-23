@@ -134,9 +134,10 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
            $message->TransferDescription = str_replace('-',' ',Mage::helper('zospwr')->getDescriptionTransfer($this->_settings['orderId']));
        }       
        $message->Insurance = $this->_settings['insurance'];       
-       $data = $this->_sendMessage('GenerateLabelBusinessPackTwo',$message);
-       $result = $this->_prepareResult($data,'GenerateLabelBusinessPackTwoResult','GenerateLabelBusinessPackTwo');       
-       $code = $result['NewDataSet']['GenerateLabelBusinessPackTwo']['PackCode_RUCH'];
+       $message->PackValue = $this->_settings['value'];
+       $data = $this->_sendMessage('GenerateLabelBusinessPack',$message);
+       $result = $this->_prepareResult($data,'GenerateLabelBusinessPackResult','GenerateLabelBusinessPack');       
+       $code = $result['NewDataSet']['GenerateLabelBusinessPack']['PackCode_RUCH'];
        // save pdf
        $fileName = sprintf('%s.%s',$code,Orba_Shipping_Helper_Packstation_Pwr::FILE_EXT);
        $this->_saveFile($fileName,$data->LabelData);
