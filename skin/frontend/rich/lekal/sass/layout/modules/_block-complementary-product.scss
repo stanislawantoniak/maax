@@ -8,27 +8,43 @@
 	}
 }
 .block-complementary-product {
-  header {
-	h4.title_section {
-	  padding-left: 15px;
-	  text-transform: none;
-	  font-weight: bold;
-		overflow: visible;
-	  span {
-		  position: relative;
-		  right:0;
-		  top:0;
-		  border-bottom: 2px solid $siteMainColor;
-		  padding-bottom: 8px;
-		  @media(max-width: $screen-xs-max) {
-			  padding-bottom: 9px;
-		  }
-	  }
-	  @media(max-width: 360px) {
-		  padding-left: 30px;
-	  }
-	}
-  }
+		h3.title-section {			
+			font-size:18xp;
+			margin-bottom: 35px;
+			text-align:left;
+			padding-top: 0px;
+			padding-bottom: 10px;
+			overflow: hidden;
+			display: inline-block;
+			width: 100%;
+			float: left;
+			position: relative;
+			text-transform: none;
+			font-family: latoregular, sans-serif;
+			font-weight: bold;
+			border-bottom: 1px solid $color_e8e8e8;
+
+			span {
+				font-size: 20px;
+				border-bottom: 2px solid $siteMainColor;
+				padding-bottom: 9px;
+			}
+			@media (max-width: $screen-xs-max) {
+				padding-left:20px;
+				margin-bottom: 15px;
+			}
+			&:before {
+				@media (max-width: $screen-xs-max) {
+					content: ' ';
+					display: block;
+					width: 18px;
+					height: 18px;
+					position: absolute;
+					left: -15px;
+					top: -4px;
+				}
+			}
+		}
 	.rwdCarousel {
 	//	width: 100%;
 		padding:2px 0 0;
