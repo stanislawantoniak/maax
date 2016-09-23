@@ -78,10 +78,12 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
     }
 
+    /**
+     * @param $line
+     */
     public function pushLineToFile($line)
     {
         $fileName = $this->getFileName();
-
 
         if (file_exists($fileName)) {
             $fp = fopen($fileName, 'a');
