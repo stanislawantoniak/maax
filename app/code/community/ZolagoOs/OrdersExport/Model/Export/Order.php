@@ -19,14 +19,24 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     const ORDER_DOC_NAME_XXX = 'XXX';           //mozna podać dowolny skrót definicji dokumentu w obrębie rodzajów wymienionych wyżej.
 
 
-    public function getFileName()
+    public function getDirectoryPath()
     {
         $directory = $this->getHelper()->getExportDirectory();
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
 
-        return $directory . DS . 'dok.txt';
+        return $directory;
+    }
+
+    public function getOrdersFileName()
+    {
+        return $this->getDirectoryPath() . DS . 'dok.txt';
+    }
+
+    public function getOrderItemsFileName()
+    {
+        return $this->getDirectoryPath() . DS . 'poz.txt';
     }
 
     /**
@@ -55,6 +65,15 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
     }
 
+    public function shippingMethodsCodes()
+    {
+        return array(
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER => 'WYS4',
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER => 'WYS7',
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER => 'WYS9',
+        );
+    }
+
     public function shippingMethodsDescription()
     {
         return array(
@@ -76,7 +95,26 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
     public function shippingMethodDescription($code)
     {
-        return isset($this->shippingMethodsDescription()[$code]) ? $this->shippingMethodsDescription()[$code] : $code;
+        return isset($this->shippingMethodsDescription()[$code]) ? $this->shippingMethodsDescription()[$code] : $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
+    }
+
+    public function shippingMethodsCode($code)
+    {
+        return isset($this->shippingMethodsCodes()[$code]) ? $this->shippingMethodsCodes()[$code] : $this->shippingMethodsCodes()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
+    }
+
+    /**
+     * @param $orderItem
+     * @return string
+     */
+    public function getDiscountProcent($orderItem)
+    {
+        if ((int)$orderItem['item_discount'] == 0)
+            return 'N';
+
+        $discountProcent = ($orderItem['item_discount'] * 100) / $orderItem['item_value_before_discount'];
+
+        return $this->formatToDocNumber($discountProcent);
     }
 
     public function addOrders($params)
@@ -115,18 +153,96 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
 
 
-        $this->pushLineToFile($line);
+        $orderItems = $params["order_items"];
+
+
+        $orderItemsLine = [];
+        foreach ($orderItems as $orderItem) {
+            $orderItem = (array)$orderItem;
+
+            $itemData = [];
+            if ((int)$orderItem['is_delivery_item'] == 1) {
+                /*
+                >> ### WYSYŁKA
+                >> Dodatkowo do każdego pliku poz.txt powinniśmy dodawać dodatkową pozycję
+                >> którą jest usługa wysyłki w zależności od wybranej w systemie, ich kody
+                >> są następujące:
+                >> WYS3    KURIER POBRANIE
+                >> WYS4    KURIER PRZELEW
+                >> WYS9    PACZKA W RUCHU
+                >> WYS7    PACZKOMAT INPOST
+               */
+                $itemData = array(
+                    self::ORDER_DOC_NAME_ZA,                                                                            //NAZWADOK      : String; - nazwa dokumentu (10)
+                    $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
+                    $this->shippingMethodsCode($params['delivery_method']),                                                                  //KODTOW        : String; - indeks dokumentu (25)
+                    1,                                                                                                  //ILOSC         : Currency; - ilość
+                    $this->formatToDocNumber($orderItem['item_value_after_discount']),                                  //CENA          : Currency; - cena netto przed bonifikatą
+                    'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
+                    'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
+                    'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
+                    $orderItem['item_name'],                                                                            //Uwagi         : String; - uwagi;
+
+                    '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
+                    '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
+                    '',                                                                                                 //Cecha_3       : String; - wartość dla cechy 1;
+
+                    '',                                                                                                 //MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
+                    '',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                );
+            } else {
+
+                $itemData = array(
+                    self::ORDER_DOC_NAME_ZA,                                                                            //NAZWADOK      : String; - nazwa dokumentu (10)
+                    $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
+                    $orderItem['item_sku'],                                                                             //KODTOW        : String; - indeks dokumentu (25)
+                    (int)$orderItem['item_qty'],                                                                        //ILOSC         : Currency; - ilość
+                    $this->formatToDocNumber($orderItem['item_value_before_discount'] / (int)$orderItem['item_qty']),   //CENA          : Currency; - cena netto przed bonifikatą
+                    $this->getDiscountProcent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
+                    'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
+                    'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
+                    $orderItem['item_name'],                                                                            //Uwagi         : String; - uwagi;
+
+                    '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
+                    '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
+                    '',                                                                                                 //Cecha_3       : String; - wartość dla cechy 1;
+
+                    '',                                                                                                 //MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
+                    '',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                );
+
+            }
+
+            array_push($orderItemsLine, $itemData);
+        }
+
+
+        $this->pushOrderLineToFile($line);
+        $this->pushOrderItemsLineToFile($orderItemsLine);
 
     }
 
     /**
      * @param $line
      */
-    public function pushLineToFile($line)
+    public function pushOrderLineToFile($line)
     {
+        $fileName = $this->getOrdersFileName();
+        $this->pushLinesToFile($fileName, $line);
+    }
 
-        $fileName = $this->getFileName();
 
+    /**
+     * @param $line
+     */
+    public function pushOrderItemsLineToFile($line)
+    {
+        $fileName = $this->getOrderItemsFileName();
+        $this->pushLinesToFile($fileName, $line);
+    }
+
+    public function pushLinesToFile($fileName, $line)
+    {
         if (file_exists($fileName)) {
             $fp = fopen($fileName, 'a');
         } else {
@@ -140,6 +256,5 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
         fclose($fp);
     }
-
 
 }
