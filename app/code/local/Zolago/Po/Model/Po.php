@@ -21,6 +21,12 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
+
+
+	const GH_API_PAYMENT_METHOD_CC = 'credit_card';
+	const GH_API_PAYMENT_METHOD_ONLINE_BT = 'online_bank_transfer';
+	const GH_API_PAYMENT_METHOD_BT = 'bank_transfer';
+	const GH_API_PAYMENT_METHOD_COD = 'cash_on_delivery';
 	
 	/**
 	 * Email template for new status
@@ -972,16 +978,16 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
      */
     public function ghapiPaymentMethod() {
         if ($this->isCC()) {
-            return 'credit_card';
+            return self::GH_API_PAYMENT_METHOD_CC;
         }
         if ($this->isGateway()) {
-            return 'online_bank_transfer';
+            return self::GH_API_PAYMENT_METHOD_ONLINE_BT;
         }
         if ($this->isPaymentBanktransfer()) {
-            return 'bank_transfer';
+            return self::GH_API_PAYMENT_METHOD_BT;
         }
         if ($this->isCod()) {
-            return 'cash_on_delivery';
+            return self::GH_API_PAYMENT_METHOD_COD;
         }
         return '';
     }

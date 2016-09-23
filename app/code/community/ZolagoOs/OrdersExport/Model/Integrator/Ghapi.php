@@ -80,6 +80,8 @@ abstract class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
         $params->showCustomerEmail = TRUE;
 
         $connector = $this->getApiConnector();
+        
+        /* @var $connector GH_Api_Model_Soap */
         $list = $connector->getOrdersById($params);
 
         if ($list->status)

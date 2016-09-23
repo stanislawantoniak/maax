@@ -38,22 +38,45 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return number_format($value, 2, '.', '');
     }
 
+
+    /**
+     * @return array
+     */
+    public function paymentMethodsDescription()
+    {
+        return array(
+            Zolago_Po_Model_Po::GH_API_PAYMENT_METHOD_CC => 'Płatność online (Dotpay)',
+            Zolago_Po_Model_Po::GH_API_PAYMENT_METHOD_ONLINE_BT => 'Płatność online (Dotpay)',
+            Zolago_Po_Model_Po::GH_API_PAYMENT_METHOD_BT => 'Przelew bankowy',
+            Zolago_Po_Model_Po::GH_API_PAYMENT_METHOD_COD => 'Płatność za pobraniem',
+        );
+    }
+
+    /**
+     * @param $code
+     * @return mixed
+     */
+    public function paymentMethodDescription($code)
+    {
+        return isset($this->paymentMethodsDescription()[$code]) ? $this->paymentMethodsDescription()[$code] : $code;
+    }
+
     public function addOrders($params)
     {
         //krumo($params);
 
         $line = array(
             array(
-                $params['customer_email'],                          //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
-                $params['order_date'],                              //(B)DATA            : TDateTime; - Data dokumentu
-                self::ORDER_DOC_NAME_ZA,                            //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
-                $params['order_id'],                                //(D)NRDOK           : String; - numer dokumentu (25)
-                '',                                                 //(E)TERMIN          : TDateTime; - termin płatności (??????????)
-                $params['payment_method'],                          //(F)PLATNOSC        : String; - sposób płatności (35)
-                $this->formatToDocNumber($params['order_total']),   //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
-                count($params['order_items']),                      //(H)ILEPOZ          : Integer; - ilość pozycji
-                0,                                                  //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
-                '',                                                 //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
+                $params['customer_email'],                                  //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                $params['order_date'],                                      //(B)DATA            : TDateTime; - Data dokumentu
+                self::ORDER_DOC_NAME_ZA,                                    //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                $params['order_id'],                                        //(D)NRDOK           : String; - numer dokumentu (25)
+                '',                                                         //(E)TERMIN          : TDateTime; - termin płatności (??????????)
+                $this->paymentMethodDescription($params['payment_method']), //(F)PLATNOSC        : String; - sposób płatności (35)
+                $this->formatToDocNumber($params['order_total']),           //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
+                count($params['order_items']),                              //(H)ILEPOZ          : Integer; - ilość pozycji
+                0,                                                          //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
+                '',                                                         //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
 //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
 //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
 //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
