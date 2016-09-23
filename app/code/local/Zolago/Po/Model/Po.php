@@ -27,6 +27,11 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	const GH_API_PAYMENT_METHOD_ONLINE_BT = 'online_bank_transfer';
 	const GH_API_PAYMENT_METHOD_BT = 'bank_transfer';
 	const GH_API_PAYMENT_METHOD_COD = 'cash_on_delivery';
+
+	const GH_API_DELIVERY_METHOD_STANDARD_COURIER = 'standard_courier';
+	const GH_API_DELIVERY_METHOD_INPOST_LOCKER = 'inpost_parcel_locker';
+	const GH_API_DELIVERY_METHOD_POLISH_POST = 'polish_post';
+	const GH_API_DELIVERY_METHOD_PWR_LOCKER = 'pwr_parcel_locker';
 	
 	/**
 	 * Email template for new status
@@ -1011,16 +1016,16 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
 		switch ($methodCode) {
 			case Orba_Shipping_Model_Packstation_Inpost::CODE:
-				$dMethod = 'inpost_parcel_locker'; // Paczkomaty InPost
+				$dMethod = self::GH_API_DELIVERY_METHOD_INPOST_LOCKER; // Paczkomaty InPost
 				break;
 			case Orba_Shipping_Model_Post::CODE:
-				$dMethod = 'polish_post'; // Poczta Polska
+				$dMethod = self::GH_API_DELIVERY_METHOD_POLISH_POST; // Poczta Polska
 				break;
 			case Orba_Shipping_Model_Packstation_Pwr::CODE:
-				$dMethod = 'pwr_parcel_locker'; // Paczka w Ruchu
+				$dMethod = self::GH_API_DELIVERY_METHOD_PWR_LOCKER; // Paczka w Ruchu
 				break;
 			default:
-				$dMethod = 'standard_courier';
+				$dMethod = self::GH_API_DELIVERY_METHOD_STANDARD_COURIER;
 				break;
 		}
 		return $dMethod;

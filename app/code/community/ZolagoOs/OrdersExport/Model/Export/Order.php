@@ -35,7 +35,10 @@ class ZolagoOs_OrdersExport_Model_Export_Order
      */
     public function formatToDocNumber($value)
     {
-        return number_format($value, 2, '.', '');
+        //Format liczb    : bez separatora tysiêcy, separator dziesiêtny "."
+        $decPoint = '.';
+        $thousandsSep = '';
+        return number_format($value, 2, $decPoint, $thousandsSep);
     }
 
 
@@ -52,6 +55,16 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
     }
 
+    public function shippingMethodsDescription()
+    {
+        return array(
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER => 'Kurier Standard',
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER => 'Paczkomaty InPost',
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_POLISH_POST => 'Poczta Polska',
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER => 'Paczka w Ruchu',
+        );
+    }
+
     /**
      * @param $code
      * @return mixed
@@ -61,38 +74,43 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return isset($this->paymentMethodsDescription()[$code]) ? $this->paymentMethodsDescription()[$code] : $code;
     }
 
+    public function shippingMethodDescription($code)
+    {
+        return isset($this->shippingMethodsDescription()[$code]) ? $this->shippingMethodsDescription()[$code] : $code;
+    }
+
     public function addOrders($params)
     {
         //krumo($params);
 
         $line = array(
             array(
-                $params['customer_email'],                                  //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
-                $params['order_date'],                                      //(B)DATA            : TDateTime; - Data dokumentu
-                self::ORDER_DOC_NAME_ZA,                                    //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
-                $params['order_id'],                                        //(D)NRDOK           : String; - numer dokumentu (25)
-                '',                                                         //(E)TERMIN          : TDateTime; - termin płatności (??????????)
-                $this->paymentMethodDescription($params['payment_method']), //(F)PLATNOSC        : String; - sposób płatności (35)
-                $this->formatToDocNumber($params['order_total']),           //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
-                count($params['order_items']),                              //(H)ILEPOZ          : Integer; - ilość pozycji
-                0,                                                          //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
-                '',                                                         //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
-//(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
-//(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
-//(M)ANULOWANY       : Boolean; - czy dokument został anulowany
-//(N)UWAGI           : String; - (Memo) Uwagi do dokumentu
-//(O)NRZLEC          : String; - numer zlecenia (20)
-//(P)CECHA_1         : String; - Cecha 1 (35)
-//(Q)CECHA_2         : String; - Cecha 2 (35)
-//(R)CECHA_3         : String; - Cecha 3 (35)
-//(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
-//(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
-//(U)CECHA_4         : String; - Cecha 4 (35)
-//(V)CECHA_5         : String; - Cecha 5 (35)
-//(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
-//(X)MAGAZYN         : String; - numer magazynu
-//(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
-//(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
+                $params['customer_email'],                                      //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                $params['order_date'],                                          //(B)DATA            : TDateTime; - Data dokumentu
+                self::ORDER_DOC_NAME_ZA,                                        //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                $params['order_id'],                                            //(D)NRDOK           : String; - numer dokumentu (25)
+                '',                                                             //(E)TERMIN          : TDateTime; - termin płatności (??????????)
+                $this->paymentMethodDescription($params['payment_method']),     //(F)PLATNOSC        : String; - sposób płatności (35)
+                $this->formatToDocNumber($params['order_total']),               //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
+                count($params['order_items']),                                  //(H)ILEPOZ          : Integer; - ilość pozycji
+                0,                                                              //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
+                '',                                                             //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
+                self::ORDER_DOC_NAME_PAR,                                       //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA) (??????????)
+                '',                                                             //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
+                '',                                                             //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
+                '',                                                             //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
+                '',                                                             //(O)NRZLEC          : String; - numer zlecenia (20)
+                '',                                                             //(P)CECHA_1         : String; - Cecha 1 (35)
+                '',                                                             //(Q)CECHA_2         : String; - Cecha 2 (35)
+                $this->shippingMethodDescription($params['delivery_method']),   //(R)CECHA_3         : String; - Cecha 3 (35)
+                '',                                                             //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
+                '',                                                             //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
+                '',                                                             //(U)CECHA_4         : String; - Cecha 4 (35)
+                '',                                                             //(V)CECHA_5         : String; - Cecha 5 (35)
+                '',                                                             //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
+                '',                                                             //(X)MAGAZYN         : String; - numer magazynu
+                '',                                                             //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
+                '',                                                             //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
             )
         );
 
@@ -106,6 +124,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
      */
     public function pushLineToFile($line)
     {
+
         $fileName = $this->getFileName();
 
         if (file_exists($fileName)) {
@@ -114,8 +133,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $fp = fopen($fileName, 'w');
         }
 
+
         foreach ($line as $fields) {
-            fputcsv($fp, $fields);
+            fputcsv($fp, $fields, '	', ' ');
         }
 
         fclose($fp);
