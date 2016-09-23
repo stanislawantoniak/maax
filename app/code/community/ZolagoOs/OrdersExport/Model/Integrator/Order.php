@@ -37,21 +37,23 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
         /* @var $exportConnector ZolagoOs_OrdersExport_Model_Export_Order */
         $exportConnector = $this->getExportConnector();
 
-
         if (!$orders->status)
-            return;
+            return $this;
 
         $ordersList = $orders->list;
 
-
         if (empty($ordersList))
-            return;
+            return $this;
 
         foreach ($this->prepareOrderList($ordersList) as $item) {
             $response = $exportConnector->addOrders((array)$item);
+
+            if ($response->status)
+                $this->addOrderToConfirmMessage($item->order_id);
+
         }
 
-        //die("test");
+        $this->confirmOrderMessages($ordersList);
 
     }
 

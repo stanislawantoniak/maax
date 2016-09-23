@@ -39,6 +39,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return $this->getDirectoryPath() . DS . 'poz.txt';
     }
 
+    public function getOrderCustomerFileName()
+    {
+        return $this->getDirectoryPath() . DS . 'kontrahent.txt';
+    }
+
     /**
      * @param $value
      * @return string
@@ -107,21 +112,71 @@ class ZolagoOs_OrdersExport_Model_Export_Order
      * @param $orderItem
      * @return string
      */
-    public function getDiscountProcent($orderItem)
+    public function getDiscountPercent($orderItem)
     {
         if ((int)$orderItem['item_discount'] == 0)
             return 'N';
 
-        $discountProcent = ($orderItem['item_discount'] * 100) / $orderItem['item_value_before_discount'];
+        $discountPercent = ($orderItem['item_discount'] * 100) / $orderItem['item_value_before_discount'];
 
-        return $this->formatToDocNumber($discountProcent);
+        return $this->formatToDocNumber($discountPercent);
+    }
+
+    /**
+     *
+     * Generate customer address: postcode city street
+     *
+     * @param $params
+     * @return string
+     */
+    private function _generateCustomerDeliveryAddress($params)
+    {
+        $deliveryAddress = $params['delivery_data']->delivery_address;
+        return implode(' ',
+            array(
+                $deliveryAddress->delivery_zip_code,
+                $deliveryAddress->delivery_city,
+                $deliveryAddress->delivery_street,
+            )
+        );
+    }
+
+    private function _generateCustomerInvoiceAddress($params)
+    {
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
+
+        if (!$invoiceRequired)
+            return '';
+
+        return implode(' ',
+            array(
+                $invoiceData->invoice_address->invoice_zip_code,
+                $invoiceData->invoice_address->invoice_city,
+                $invoiceData->invoice_address->invoice_street
+            )
+        );
+    }
+
+
+    /**
+     * Generate customer name: first name last name
+     * @param $params
+     * @return string
+     */
+    private function _generateCustomerFLName($params)
+    {
+        return implode(' ',
+            array(
+                $params['delivery_data']->delivery_address->delivery_first_name,
+                $params['delivery_data']->delivery_address->delivery_last_name
+            )
+        );
     }
 
     public function addOrders($params)
     {
-        //krumo($params);
-
-        $line = array(
+        $orders = array(
             array(
                 $params['customer_email'],                                      //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
                 $params['order_date'],                                          //(B)DATA            : TDateTime; - Data dokumentu
@@ -136,9 +191,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 self::ORDER_DOC_NAME_PAR,                                       //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA) (??????????)
                 '',                                                             //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
                 '',                                                             //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
-                '',                                                             //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
-                '',                                                             //(O)NRZLEC          : String; - numer zlecenia (20)
-                '',                                                             //(P)CECHA_1         : String; - Cecha 1 (35)
+                $this->_generateCustomerFLName($params),                        //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
+                $this->_generateCustomerDeliveryAddress($params),               //(O)NRZLEC          : String; - numer zlecenia (20)
+                $this->_generateCustomerInvoiceAddress($params),                //(P)CECHA_1         : String; - Cecha 1 (35)
                 '',                                                             //(Q)CECHA_2         : String; - Cecha 2 (35)
                 $this->shippingMethodDescription($params['delivery_method']),   //(R)CECHA_3         : String; - Cecha 3 (35)
                 '',                                                             //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
@@ -152,15 +207,15 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             )
         );
 
+        $orderCustomerLine = [[$params['customer_email']]];
+
 
         $orderItems = $params["order_items"];
-
 
         $orderItemsLine = [];
         foreach ($orderItems as $orderItem) {
             $orderItem = (array)$orderItem;
 
-            $itemData = [];
             if ((int)$orderItem['is_delivery_item'] == 1) {
                 /*
                 >> ### WYSYŁKA
@@ -181,7 +236,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $orderItem['item_name'] . ' '.$params['delivery_data']->delivery_point_name,                                                                            //Uwagi         : String; - uwagi;
+                    $orderItem['item_name'] . ' ' . $params['delivery_data']->delivery_point_name,                                                                            //Uwagi         : String; - uwagi;
 
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
@@ -198,7 +253,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     $orderItem['item_sku'],                                                                             //KODTOW        : String; - indeks dokumentu (25)
                     (int)$orderItem['item_qty'],                                                                        //ILOSC         : Currency; - ilość
                     $this->formatToDocNumber($orderItem['item_value_before_discount'] / (int)$orderItem['item_qty']),   //CENA          : Currency; - cena netto przed bonifikatą
-                    $this->getDiscountProcent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
+                    $this->getDiscountPercent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
                     $orderItem['item_name'],                                                                            //Uwagi         : String; - uwagi;
@@ -215,11 +270,43 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
             array_push($orderItemsLine, $itemData);
         }
+        try {
+            $this->_pushLinesToFiles($orders, $orderItemsLine, $orderCustomerLine);
+
+            $message = 'ok';
+            $status = TRUE;
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $status = FALSE;
+        }
 
 
-        $this->pushOrderLineToFile($line);
-        $this->pushOrderItemsLineToFile($orderItemsLine);
+        $obj = new StdClass();
+        $obj->message = $message;
+        $obj->status = $status;
+        return $obj;
+    }
 
+
+    /**
+     * @param $orders
+     * @param $orderItemsLine
+     * @param $orderCustomerLine
+     * @return bool
+     */
+    private function _pushLinesToFiles($orders, $orderItemsLine, $orderCustomerLine)
+    {
+        try {
+            $this->pushOrderLineToFile($orders);
+            $this->pushOrderItemsLineToFile($orderItemsLine);
+            $this->pushOrderCustomerFile($orderCustomerLine);
+
+            $response = TRUE;
+        } catch (Exception $e) {
+            $response = FALSE;
+        }
+
+        return $response;
     }
 
     /**
@@ -241,6 +328,15 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $this->pushLinesToFile($fileName, $line);
     }
 
+    /**
+     * @param $line
+     */
+    public function pushOrderCustomerFile($line)
+    {
+        $fileName = $this->getOrderCustomerFileName();
+        $this->pushLinesToFile($fileName, $line);
+    }
+
     public function pushLinesToFile($fileName, $line)
     {
         if (file_exists($fileName)) {
@@ -248,7 +344,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         } else {
             $fp = fopen($fileName, 'w');
         }
-
 
         foreach ($line as $fields) {
             fputcsv($fp, $fields, '	', ' ');

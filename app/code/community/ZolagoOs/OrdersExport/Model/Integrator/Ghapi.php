@@ -27,6 +27,8 @@ abstract class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
         $params->sessionToken = $token;
         $params->messageBatchSize = self::EXPORT_ORDERS_BATCH;
         $params->messageType = $messageType;
+        
+        /* @var $connector GH_Api_Model_Soap */
         return $connector->getChangeOrderMessage($params);
     }
 
