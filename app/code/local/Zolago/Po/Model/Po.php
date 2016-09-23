@@ -893,6 +893,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         $i = 0;
 		/** @var Zolago_Po_Model_Po $po */
 		foreach ($coll as $po) {
+			krumo($po->getData());
             $dueAmount = ($po->getDebtAmount() > 0)? 0:abs($po->getDebtAmount());
             /** @var Zolago_Po_Model_Po $po */
             $list[$i]['vendor_id']                = $vendor->getId();
