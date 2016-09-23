@@ -1320,10 +1320,10 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	public function getApiDeliveryPointName($force = false) {
 		if (!$this->hasData('api_delivery_point_name') || $force) {
 			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
-
 			switch ($methodCode) {
-				case GH_Inpost_Model_Carrier::CODE:
-					$name = $this->getDeliveryInpostLocker($force)->getName();
+				case Orba_Shipping_Model_Packstation_Inpost::CODE:
+				case Orba_Shipping_Model_Packstation_Pwr::CODE:
+					$name = $this->getDeliveryPointName();
 					break;
 				case ZolagoOs_PickupPoint_Helper_Data::CODE:
 					$pos  = $this->getDeliveryPickUpPoint($force);

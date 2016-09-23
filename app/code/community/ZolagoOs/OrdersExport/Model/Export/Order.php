@@ -181,7 +181,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $orderItem['item_name'],                                                                            //Uwagi         : String; - uwagi;
+                    $orderItem['item_name'] . ' '.$params['delivery_data']->delivery_point_name,                                                                            //Uwagi         : String; - uwagi;
 
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
