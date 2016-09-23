@@ -32,7 +32,7 @@ $_products = $_cache['products'];
 		}
 	</style>
 </noscript>
-<div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0; top: 0; z-index: 1000000; background: url(/skin/frontend/modago/default/images/modago-ajax-loader.gif) 50% 50% no-repeat transparent;"></div>
+<div class="listing-overlay" style="position: fixed; width: 100%; height: 100%; left: 0; top: 0; z-index: 1000000; background: url(/skin/frontend/modago/default/images/default-ajax-loader.gif) 50% 50% no-repeat transparent;"></div>
 <section id="main" class="">
 	<div id="content" class="container-fluid">
 		<div class="row">
@@ -138,7 +138,7 @@ $_products = $_cache['products'];
 						<?php echo $this->getChildHtml('product_list_toolbar_pager'); ?>
 					</div>
 					<div id="listing-loading">
-						<img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
+						<img src="<?php echo $this->getSkinUrl("images/default-ajax-loader.gif"); ?>" alt="">
 					</div>
 
 

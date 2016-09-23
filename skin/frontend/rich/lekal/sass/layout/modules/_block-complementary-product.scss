@@ -18,7 +18,7 @@
 		  position: relative;
 		  right:0;
 		  top:0;
-		  border-bottom: 2px solid #8bb56d;
+		  border-bottom: 2px solid $siteMainColor;
 		  padding-bottom: 8px;
 		  @media(max-width: $screen-xs-max) {
 			  padding-bottom: 9px;
