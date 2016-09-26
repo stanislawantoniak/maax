@@ -16,7 +16,13 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     const ORDER_DOC_NAME_MM_MINUS = 'MM-';      //dokument MM-
     const ORDER_DOC_NAME_ZAWEW = 'ZAWEW';       //dokumenty zamówień wewnętrznych
     const ORDER_DOC_NAME_RW = 'RW';             //dokumenty rozchodu wewnętrznego
-    const ORDER_DOC_NAME_XXX = 'XXX';           //mozna podać dowolny skrót definicji dokumentu w obrębie rodzajów wymienionych wyżej.
+    //const ORDER_DOC_NAME_XXX = 'XXX';           //mozna podać dowolny skrót definicji dokumentu w obrębie rodzajów wymienionych wyżej.
+
+
+    const ORDER_DELIVERY_CODE_KURIER_POBRANIE = 'WYS3';
+    const ORDER_DELIVERY_CODE_KURIER_PRZELEW = 'WYS4';
+    const ORDER_DELIVERY_CODE_PACZKA_W_RUCHU = 'WYS9';
+    const ORDER_DELIVERY_CODE_PACZKOMAT_INPOST = 'WYS7';
 
 
     public function getDirectoryPath()
@@ -70,15 +76,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
     }
 
-    public function shippingMethodsCodes()
-    {
-        return array(
-            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER => 'WYS4',
-            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER => 'WYS7',
-            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER => 'WYS9',
-        );
-    }
-
     public function shippingMethodsDescription()
     {
         return array(
@@ -103,9 +100,47 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return isset($this->shippingMethodsDescription()[$code]) ? $this->shippingMethodsDescription()[$code] : $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
     }
 
-    public function shippingMethodsCode($code)
+    /**
+     *
+     * >> ### WYSYŁKA
+     * >> Dodatkowo do każdego pliku poz.txt powinniśmy dodawać dodatkową pozycję
+     * >> którą jest usługa wysyłki w zależności od wybranej w systemie, ich kody
+     * >> są następujące:
+     * >> WYS3    KURIER POBRANIE
+     * >> WYS4    KURIER PRZELEW
+     * >> WYS9    PACZKA W RUCHU
+     * >> WYS7    PACZKOMAT INPOST
+     *
+     * @param $deliveryMethod
+     * @param $paymentMethod
+     * @return string
+     */
+    public function shippingMethodCode($deliveryMethod, $paymentMethod)
     {
-        return isset($this->shippingMethodsCodes()[$code]) ? $this->shippingMethodsCodes()[$code] : $this->shippingMethodsCodes()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
+        switch ($deliveryMethod) {
+            case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
+                $code = self::ORDER_DELIVERY_CODE_PACZKOMAT_INPOST;
+                break;
+            case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
+                $code = self::ORDER_DELIVERY_CODE_PACZKA_W_RUCHU;
+                break;
+            case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER:
+            case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_POLISH_POST:
+                if ($paymentMethod == Zolago_Po_Model_Po::GH_API_PAYMENT_METHOD_COD) {
+                    $code = self::ORDER_DELIVERY_CODE_KURIER_POBRANIE;
+                } else {
+                    $code = self::ORDER_DELIVERY_CODE_KURIER_PRZELEW;
+                }
+                break;
+            default:
+                if ($paymentMethod == Zolago_Po_Model_Po::GH_API_PAYMENT_METHOD_COD) {
+                    $code = self::ORDER_DELIVERY_CODE_KURIER_POBRANIE;
+                } else {
+                    $code = self::ORDER_DELIVERY_CODE_KURIER_PRZELEW;
+                }
+        }
+
+        return $code;
     }
 
     /**
@@ -217,20 +252,15 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $orderItem = (array)$orderItem;
 
             if ((int)$orderItem['is_delivery_item'] == 1) {
-                /*
-                >> ### WYSYŁKA
-                >> Dodatkowo do każdego pliku poz.txt powinniśmy dodawać dodatkową pozycję
-                >> którą jest usługa wysyłki w zależności od wybranej w systemie, ich kody
-                >> są następujące:
-                >> WYS3    KURIER POBRANIE
-                >> WYS4    KURIER PRZELEW
-                >> WYS9    PACZKA W RUCHU
-                >> WYS7    PACZKOMAT INPOST
-               */
+                /**
+                 * >> ### WYSYŁKA
+                 * >> Dodatkowo do każdego pliku poz.txt powinniśmy dodawać dodatkową pozycję
+                 * >> którą jest usługa wysyłki
+                 */
                 $itemData = array(
                     self::ORDER_DOC_NAME_ZA,                                                                            //NAZWADOK      : String; - nazwa dokumentu (10)
                     $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
-                    $this->shippingMethodsCode($params['delivery_method']),                                                                  //KODTOW        : String; - indeks dokumentu (25)
+                    $this->shippingMethodCode($params['delivery_method'], $params['payment_method']),                                                                  //KODTOW        : String; - indeks dokumentu (25)
                     1,                                                                                                  //ILOSC         : Currency; - ilość
                     $this->formatToDocNumber($orderItem['item_value_after_discount']),                                  //CENA          : Currency; - cena netto przed bonifikatą
                     'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
