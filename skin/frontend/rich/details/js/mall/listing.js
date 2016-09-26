@@ -855,7 +855,7 @@ Mall.listing = {
 			var ajaxLoaderId = 'ajax-filter-loader';
 			var overlay = jQuery("<div>").css({
 				"background":	"rgba(255,255,255,0.8) \
-					url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') \
+					url('/skin/frontend/rich/default/images/default-ajax-loader.gif') \
 					center center no-repeat",
 				"position":		"fixed",
 				"width":		"100%",
