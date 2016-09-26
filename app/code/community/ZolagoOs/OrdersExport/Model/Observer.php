@@ -9,6 +9,9 @@ class ZolagoOs_OrdersExport_Model_Observer
     protected $_apiConnector = false;
     protected $_helper;
 
+    /**
+     * @return bool|GH_Api_Model_Soap
+     */
     private function _getGHAPIConnector()
     {
         if (!$this->_apiConnector) {
@@ -23,24 +26,12 @@ class ZolagoOs_OrdersExport_Model_Observer
     public function cronExport()
     {
         $this->exportOrders();
-        $this->exportItems();
-        $this->exportCustomers();
     }
 
 
     public function exportOrders()
     {
         $this->_exportAbstract('_exportOrders');
-    }
-
-    public function exportItems()
-    {
-        $this->_exportAbstract('_exportItems');
-    }
-
-    public function exportCustomers()
-    {
-        $this->_exportAbstract('_exportCustomers');
     }
 
 
@@ -58,25 +49,28 @@ class ZolagoOs_OrdersExport_Model_Observer
 
     protected function _exportOrders()
     {
-        $this->_export('zosordersexport/export_order');
-    }
-
-    protected function _exportItems()
-    {
-        //$this->_export('zosordersexport/export_items');
-    }
-
-    protected function _exportCustomers()
-    {
-        //$this->_export('zosordersexport/export_customers');
+        $this->_export('zosordersexport/integrator_order');
     }
 
     protected function _export($name)
     {
+        //1. Check vendor
+        $vendorId = $this->getHelper()->getExternalId();
+        if (empty($vendorId)) {
+            $this->fileLog("CONFIGURATION ERROR: EMPTY VENDOR ID", Zend_Log::ERR);
+            return $this;
+        }
 
-        $vendorId = 1; // @todo Boooo hardcode
+        //2. Check export directory
+        $exportDirectory = $this->getHelper()->getExportDirectory();
+
+        if (empty($exportDirectory)) {
+            $this->fileLog("CONFIGURATION ERROR: EMPTY EXPORT DIRECTORY FIELD", Zend_Log::ERR);
+            return $this;
+        }
+
+        //3. Run export
         $vendor = Mage::getModel("udropship/vendor")->load($vendorId);
-
         $model = Mage::getModel($name);
 
         $model->setVendor($vendor);

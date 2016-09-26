@@ -1,10 +1,12 @@
 <?php
 
 /**
- * connection from ghapi to ZolagoOs_OrdersExport
+ * Class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
+ *
+ * connection between ghapi and ZolagoOs_OrdersExport
  */
-abstract class ZolagoOs_OrdersExport_Model_Export_Ghapi
-    extends ZolagoOs_OrdersExport_Model_Export_Abstract
+abstract class ZolagoOs_OrdersExport_Model_Integrator_Ghapi
+    extends ZolagoOs_OrdersExport_Model_Integrator_Abstract
 {
     protected $_confirmOrderList;
     
@@ -25,6 +27,8 @@ abstract class ZolagoOs_OrdersExport_Model_Export_Ghapi
         $params->sessionToken = $token;
         $params->messageBatchSize = self::EXPORT_ORDERS_BATCH;
         $params->messageType = $messageType;
+        
+        /* @var $connector GH_Api_Model_Soap */
         return $connector->getChangeOrderMessage($params);
     }
 
@@ -67,19 +71,24 @@ abstract class ZolagoOs_OrdersExport_Model_Export_Ghapi
         foreach ($list as $item) {
             $ids[$item->orderID] = $item->orderID;
         }
-        if (!count($ids)) {
+        if (!count($ids))
             return array();
-        }
+
         $token = $this->_getToken();
         $params = new StdClass();
         $params->sessionToken = $token;
         $params->orderID = new StdClass();
         $params->orderID->ID = $ids;
+        $params->showCustomerEmail = TRUE;
+
         $connector = $this->getApiConnector();
+        
+        /* @var $connector GH_Api_Model_Soap */
         $list = $connector->getOrdersById($params);
-        if ($list->status) {
+
+        if ($list->status)
             return $list->orderList;
-        }
+
         return array();
     }
 
