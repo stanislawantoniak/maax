@@ -26,6 +26,22 @@ abstract class ZolagoOs_OrdersExport_Model_Export_Abstract
         return $this->_externalId;
     }
 
+
+    public function pushLinesToFile($fileName, $line)
+    {
+        if (file_exists($fileName)) {
+            $fp = fopen($fileName, 'a');
+        } else {
+            $fp = fopen($fileName, 'w');
+        }
+
+        foreach ($line as $fields) {
+            fputcsv($fp, $fields, '	', ' ');
+        }
+
+        fclose($fp);
+    }
+
     /**
      * logs
      *
