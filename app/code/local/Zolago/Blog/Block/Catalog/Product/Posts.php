@@ -60,7 +60,11 @@ class Zolago_Blog_Block_Catalog_Product_Posts extends Mage_Catalog_Block_Product
             return $productBlogIds;
 
         //Get products from the category
-        $productCategoryId = $product->getCategory()->getId();
+        $productCategory = $product->getCategory();
+        if (!$productCategory)
+            return $productBlogIds;
+
+        $productCategoryId = $productCategory->getId();
 
         $category = Mage::getModel('catalog/category')->load($productCategoryId);
 
