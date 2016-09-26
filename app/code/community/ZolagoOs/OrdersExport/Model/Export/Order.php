@@ -231,7 +231,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 $this->_generateCustomerFLName($params),                        //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
                 $this->_generateCustomerDeliveryAddress($params),               //(O)NRZLEC          : String; - numer zlecenia (20)
                 $this->_generateCustomerInvoiceAddress($params),                //(P)CECHA_1         : String; - Cecha 1 (35)
-                '',                                                             //(Q)CECHA_2         : String; - Cecha 2 (35)
+                $this->paymentMethodDescription($params['payment_method']),     //(Q)CECHA_2         : String; - Cecha 2 (35)
                 $this->shippingMethodDescription($params['delivery_method']),   //(R)CECHA_3         : String; - Cecha 3 (35)
                 '',                                                             //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
                 '',                                                             //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
