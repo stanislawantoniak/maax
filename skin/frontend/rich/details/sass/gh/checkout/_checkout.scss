@@ -807,6 +807,10 @@
 			label {
 				height:auto;
 
+				&[for=agreement_tos] {
+					font-size: 13px;
+				}
+
 			}
 		}
 		.form-radio {
