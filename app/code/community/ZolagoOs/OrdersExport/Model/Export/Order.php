@@ -158,6 +158,21 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     }
 
     /**
+     * Generate customer name: first name last name
+     * @param $params
+     * @return string
+     */
+    private function _generateCustomerFLName($params)
+    {
+        return implode(' ',
+            array(
+                $params['delivery_data']->delivery_address->delivery_first_name,
+                $params['delivery_data']->delivery_address->delivery_last_name
+            )
+        );
+    }
+
+    /**
      *
      * Generate customer address: postcode city street
      *
@@ -194,25 +209,12 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     }
 
 
-    /**
-     * Generate customer name: first name last name
-     * @param $params
-     * @return string
-     */
-    private function _generateCustomerFLName($params)
-    {
-        return implode(' ',
-            array(
-                $params['delivery_data']->delivery_address->delivery_first_name,
-                $params['delivery_data']->delivery_address->delivery_last_name
-            )
-        );
-    }
+
 
     public function addOrders($params)
     {
-        $orders = array(
-            array(
+        $orders = [
+            [
                 $params['customer_email'],                                      //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
                 $params['order_date'],                                          //(B)DATA            : TDateTime; - Data dokumentu
                 self::ORDER_DOC_NAME_ZA,                                        //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
@@ -239,10 +241,22 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 '',                                                             //(X)MAGAZYN         : String; - numer magazynu
                 '',                                                             //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
                 '',                                                             //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
-            )
-        );
+            ]
+        ];
 
-        $orderCustomerLine = [[$params['customer_email']]];
+        $deliveryAddress = $params['delivery_data']->delivery_address;
+        $orderCustomerLine = [
+            [
+                $params['customer_id'],                                         //(A)
+                $params['customer_email'],                                      //(B)
+                $this->_generateCustomerFLName($params),                        //(C)
+                '',                                                             //(D)
+                $deliveryAddress->delivery_city,                                //(E)
+                $deliveryAddress->delivery_zip_code,                            //(F)
+                $deliveryAddress->delivery_city,                                //(G)
+                $deliveryAddress->delivery_street,                              //(H)
+            ]
+        ];
 
 
         $orderItems = $params["order_items"];
@@ -365,21 +379,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     {
         $fileName = $this->getOrderCustomerFileName();
         $this->pushLinesToFile($fileName, $line);
-    }
-
-    public function pushLinesToFile($fileName, $line)
-    {
-        if (file_exists($fileName)) {
-            $fp = fopen($fileName, 'a');
-        } else {
-            $fp = fopen($fileName, 'w');
-        }
-
-        foreach ($line as $fields) {
-            fputcsv($fp, $fields, '	', ' ');
-        }
-
-        fclose($fp);
     }
 
 }
