@@ -182,13 +182,22 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     private function _generateCustomerDeliveryAddress($params)
     {
         $deliveryAddress = $params['delivery_data']->delivery_address;
-        return implode(' ',
-            array(
-                $deliveryAddress->delivery_zip_code,
-                $deliveryAddress->delivery_city,
-                $deliveryAddress->delivery_street,
-            )
+        $result = array(
+            $deliveryAddress->delivery_zip_code,
+            $deliveryAddress->delivery_city,
+            $deliveryAddress->delivery_street,
         );
+
+        if (in_array($params['delivery_method'],
+            array(
+                Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER,
+                Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER
+            )
+        )
+        ) {
+            $result[] = '('.$params['delivery_data']->delivery_point_name.')';
+        }
+        return implode(' ', $result);
     }
 
     private function _generateCustomerInvoiceAddress($params)
@@ -207,8 +216,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             )
         );
     }
-
-
 
 
     public function addOrders($params)
