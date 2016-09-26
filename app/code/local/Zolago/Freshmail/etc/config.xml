@@ -14,11 +14,11 @@
             <zolagofreshmail_resource>
                 <class>Zolago_Freshmail_Model_Resource</class>
             </zolagofreshmail_resource>
-            <!--<snowfreshmail>-->
-                <!--<rewrite>-->
-                    <!--<observer>Zolago_Freshmail_Model_Observer</observer>-->
-                <!--</rewrite>-->
-            <!--</snowfreshmail>-->
+            <snowfreshmail>
+                <rewrite>
+                    <observer>Zolago_Freshmail_Model_Observer</observer>
+                </rewrite>
+            </snowfreshmail>
         </models>
         <blocks>
             <zolagofreshmail>
