@@ -31,7 +31,7 @@
 			<block type="newsletter/subscribe" name="newsletter" as="newsletter" template="newsletter/subscribe.phtml" before="-" />
 		</reference>
 	</default>
-    <zolagomodago_index_index>
+    <saipson_index_index>
         <reference name="content">
             <reference name="modagohome">
 				<reference name="vendor.banner">
@@ -39,7 +39,7 @@
 				</reference>
             </reference>
         </reference>
-    </zolagomodago_index_index>	
+    </saipson_index_index>	
 	<faq_index_index>
 		<reference name="head">
 			<action method="removeItem">
