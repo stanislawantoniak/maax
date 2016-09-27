@@ -14,6 +14,7 @@ Mall.product = {
 			Mall.product.rating.init();
             Mall.product.review.init();
             Mall.product.gallery.init();
+			Mall.product.sizetable.init();
 			if(document.location.hash) {
 				document.location.hash = '';
 				window.history.replaceState({},'',document.location.href.replace('#',''));
@@ -218,47 +219,35 @@ Mall.product = {
 			});
 
 			if (showSelect) {
-				var labelText = jQuery('.size-label').text();
-				// insert option group
-				var groupElement = jQuery("<div/>", {
-					"class": "size"
-				}).appendTo(".size-box");
-				jQuery(".size-box").append(this._options_group_template);
-				// create label group
-				jQuery("<span/>", {
-					"class": "size-label col-sm-6 col-md-6 col-xs-12",
-					"html": (this._size_label + ":")
+            	// insert option group
+            	var groupElement = jQuery("<div/>", {
+            		"class": "size"
+            	}).appendTo(".size-box");
+            	jQuery(".size-box").append(this._options_group_template);
+            	// create label group
+            	// create form group for selectbox options
+            	var formGroupElementClass = (deskTopDevice) ? ' sizes-content' : ' sizes-content form-group select-size-mobile-trigger';
+            	var formGroupElement = jQuery("<div/>", {
+            		class: "row " + formGroupElementClass
+            	}).appendTo(groupElement);
 
-				}).appendTo(groupElement);
-
-
-				// create form group for selectbox options
-				var formGroupElementClass = (deskTopDevice) ? ' sizes-content col-sm-6 col-md-5 col-xs-4' : ' sizes-content form-group col-sm-6 col-md-5 col-xs-5 select-size-mobile-trigger';
-				var formGroupElement = jQuery("<div/>", {
-					class: "" + formGroupElementClass
-				}).appendTo(groupElement);
-
-				//create select part
-				var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
-				var formGroupElementSelect = jQuery("<select/>", {
-					id: "select-data-id-" + group.id,
-					class: formGroupElementSelectClass
-				}).appendTo(formGroupElement);
+            	//create select part
+            	var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
+            	var formGroupElementSelect = jQuery("<select/>", {
+            		id: "select-data-id-" + group.id,
+            		class: formGroupElementSelectClass
+            	}).appendTo(formGroupElement);
 
 
-				jQuery.each(group.options, function (index, option) {
-					Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
-				});
+            	jQuery.each(group.options, function (index, option) {
+            		Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
+            	});
+            	jQuery(".sizes-content").append(this._size_table_template);
+                jQuery(".sizes-content a").css('display','inline-block');
 
-				this.applyAdditionalRules(group, formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
-				if (deskTopDevice) {
-					jQuery('div.size-box div.size a').css('position', 'relative');
-					jQuery('div.size-box div.size a').css('top', '5px');
-				}
-			} else {
-				jQuery('div.size-box').remove();
-			}
-
+            } else {
+            	jQuery('.size-box div').remove();
+            }
 		}
 
 	},
@@ -296,7 +285,9 @@ Mall.product = {
 			html: option.label,
 			id: ("size_" + option.id),
 			"data-superattribute": id,
-			name: ("super_attribute["+ id +"]")
+			name: ("super_attribute["+ id +"]"),
+			"maxQty": option.maxQty,
+			"minQty": option.minQty,
 		}).appendTo(groupElement);
 	},
 
@@ -404,6 +395,22 @@ Mall.product = {
 				}
 			});
 
+			jQuery('.raty_note #average_rating').raty({
+            	path: Config.path.ratyNote.ratyNotePath,
+            	starOff : Config.path.ratyNote.ratyNoteStarOff,
+            	starOn  : Config.path.ratyNote.ratyNoteStarOn,
+            	hints: ['', '', '', '', ''],
+            	readOnly: true,
+            	size   : 17,
+
+            	number: function() {
+            		return jQuery(this).attr('data-number');
+            	},
+            	score: function() {
+            		return jQuery(this).attr('data-score');
+            	}
+            });
+
 			jQuery('.ratings tr td div').raty({
 				path: Config.path.ratings.ratingsPath,
 				starOff : Config.path.ratings.ratingsStarOff,
@@ -436,7 +443,7 @@ Mall.product = {
 					return jQuery(this).attr('data-score');
 				}
 			});
-			jQuery('#average_note_client .note').raty({
+			jQuery('.average_note_client .note').raty({
 				path: Config.path.averageNoteClient.averageNoteClientPath,
 				starOff : Config.path.averageNoteClient.averageNoteClientStarOff,
 				starOn  : Config.path.averageNoteClient.averageNoteClientStarOn,
@@ -980,7 +987,7 @@ Mall.product = {
             productGalleryBigMedia.rwdCarousel({
                 singleItem: true,
                 slideSpeed: 1000,
-                navigation: true,
+                navigation: false,
                 pagination: true,
                 responsiveRefreshRate: 200,
                 mouseDrag: false,
@@ -998,11 +1005,17 @@ Mall.product = {
                     var maxHeight = Mall.product.gallery.findMaxHeightBigMedia();
                     var width = parseInt(Mall.product.gallery.getBigMedia().css('width'));
                     Mall.product.gallery.getBigMedia().find('.rwd-item').each( function() {
+                        var height = parseInt(jQuery(this).find('img').css('height'));
+                        if(height > 420){
+                            jQuery(this).find('img').css('height', '420');
+                            jQuery(this).find('img').css('width', 'auto');
+                            jQuery(this).find('img').css('margin', '0 auto');
+                        }
                         // Horizontal center big medias
                         var ratio = parseFloat(jQuery(this).find('.item img').attr('data-ratio'));
                         var itemH = ratio * width;
 
-                        var padding = ((maxHeight - itemH) / 2);
+                        var padding = ((420 - itemH) / 2);
                         jQuery(this).find('a').css('padding', padding + 'px 0');
                     });
 	                Mall.product.gallery.initLightbox();
@@ -1033,17 +1046,26 @@ Mall.product = {
         initThumbsCarousel: function() {
             var productGalleryThumbMedia = this.getThumbs();
             productGalleryThumbMedia.rwdCarousel({
-                items : 1,
-                pagination:false,
-                navigation: false,
-                touchDrag: false,
-                mouseDrag:false,
+                items : 3,
+                itemsCustom : [
+                    [1200,3]
+                ],
+                pagination:true,
+                navigation: true,
+                touchDrag: true,
+                rewindNav: false,
+                mouseDrag:true,
+                navigationText: ["prev", "next"],
                 afterInit : function(el) {
                     el.find(".rwd-item").eq(0).addClass("synced");
                     var items = Mall.product.gallery.getThumbs().find('.rwd-item');
                     Mall.product.gallery.getThumbsWrapper().find('.up').addClass('disabled');
-                    if (items.length <= 4 ) {
-                        Mall.product.gallery.getThumbsWrapper().find('.up, .down').addClass('disabled');
+                    if (items.length <= 3 ) {
+                        Mall.product.gallery.getThumbsWrapper().find('.rwd-prev, .rwd-next').addClass('disabled');
+                    }else{
+                        jQuery('#productGalleryThumbMedia').css('padding', '0 25px');
+                        jQuery('#productGalleryThumbMedia  .rwd-prev').css('left', '-12px');
+                        jQuery('#productGalleryThumbMedia  .rwd-next').css('right', '-16px');
                     }
                 }
             });
@@ -1052,48 +1074,6 @@ Mall.product = {
                 e.preventDefault();
                 Mall.product.gallery.getBigMedia().trigger("rwd.goTo", jQuery(this).data("rwdItem"));
             });
-
-            this.getThumbsWrapper().on('click', '.up', function(event) {
-                event.preventDefault();
-                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
-                var item = thumbsWrapper.find('.rwd-item');
-                var itemHeight = item.height()+10;
-                var wrapper = thumbsWrapper.find('.rwd-wrapper');
-                var position = parseInt(wrapper.css('margin-top'));
-                var sumItem = itemHeight * (item.length-5);
-
-                wrapper.filter(':not(:animated)').animate({
-                    'margin-top': '+='+itemHeight
-                });
-
-                if (position == '-'+itemHeight) {
-                    thumbsWrapper.find('.up').addClass('disabled');
-                }
-                if (position != '-'+sumItem) {
-                    thumbsWrapper.find('.down').removeClass('disabled');
-                }
-            });
-
-            this.getThumbsWrapper().on('click', '.down', function(event) {
-                event.preventDefault();
-                var thumbsWrapper = Mall.product.gallery.getThumbsWrapper();
-                var item = thumbsWrapper.find('.rwd-item');
-                var itemHeight = item.height()+10;
-                var wrapper = thumbsWrapper.find('.rwd-wrapper');
-                var position = parseInt(wrapper.css('margin-top'));
-                var sumItem = itemHeight * (item.length-5);
-
-                wrapper.filter(':not(:animated)').animate({
-                    'margin-top': '-='+itemHeight
-                });
-                if (position != '-'+itemHeight) {
-                    thumbsWrapper.find('.up').removeClass('disabled');
-                }
-                if (position == '-'+sumItem) {
-                    thumbsWrapper.find('.down').addClass('disabled');
-                }
-            });
-
         },
 
         /**
@@ -1104,7 +1084,10 @@ Mall.product = {
             items.each(function(i) {
                 var flags = jQuery(this).find('a');
                 var flag = flags.data('flags');
-                flags.append('<i class="flag '+flag+'"></i>');
+	            var flagLabel = flags.data('flagLabel');
+	            if(flag && flagLabel) {
+		            flags.append('<div class="product-flag">' + flagLabel + '</div>');
+	            }
             });
         },
 
@@ -1115,12 +1098,25 @@ Mall.product = {
         initReleatedCarousel: function() {
             var rwd_color = this.getReleated();
             rwd_color.rwdCarousel({
-                items:5,
+                items:3,
                 navigation : true,
+                touchDrag: true,
                 pagination: false,
                 itemsScaleUp: false,
                 responsive: false,
-                rewindNav : false
+                mouseDrag:true,
+                rewindNav : false,
+                afterInit : function(el) {
+                    var items = Mall.product.gallery.getReleated().find('.rwd-item');
+                    Mall.product.gallery.getReleated().find('.up').addClass('disabled');
+                    if (items.length <= 3 ) {
+                        Mall.product.gallery.getReleated().find('.rwd-prev, .rwd-next').addClass('disabled');
+                    }else{
+                        jQuery('.color-box-bundle .rwd-color').css('padding', '0 0 0 13px');
+                        jQuery('.color-box-bundle .rwd-color .rwd-prev').css('left', '0px');
+                        jQuery('.color-box-bundle .rwd-color .rwd-next').css('right', '-14px');
+                    }
+                }
             });
         },
 
@@ -1141,7 +1137,7 @@ Mall.product = {
          * in this case other colors of product
          */
         getReleated: function() {
-            return jQuery("#rwd-color");
+            return jQuery(".rwd-color");
         },
 
 	    getLightbox: function() {
@@ -1193,9 +1189,90 @@ Mall.product = {
 	    _lightboxGalleryItemClass: 'lightbox-gallery-item',
 	    getLightboxGalleryItems: function() {
 		    return this.getLightboxGalleryImagesContainer().find('.'+this._lightboxGalleryItemClass);
-	    }
+	    },
 
-    }
+		calculator: {
+			_content: "",
+			_iframe_id: "calculatorIframe",
+			_iframe: "",
+			_doc: "",
+			init: function() {
+				this._doc = document.getElementById(this._iframe_id).contentWindow.document;
+				this._doc.open();
+				this._doc.write(this.getContent());
+				this._doc.close();
+				this._iframe = jQuery('#'+this._iframe_id);
+				this.resize();
+				jQuery('#tabelaRozmiarow').on('shown.bs.modal',Mall.product.sizetable.resize);
+				jQuery(window).resize(this.resize);
+			},
+			resize: function() {
+				var body = Mall.product.sizetable._doc.body;
+				Mall.product.sizetable._iframe.css('height','');
+				Mall.product.sizetable._iframe.css('height', (body.scrollHeight+35)+'px');
+				Mall.product.sizetable._iframe.css('width','');
+				Mall.product.sizetable._iframe.css('width', (body.scrollWidth+25)+'px');
+			},
+			getContent: function() {
+				return this._content;
+			},
+			setContent: function(content) {
+				this._content = content;
+			}
+		}
+
+    },
+	sizetable: {
+		_content: "",
+		_iframe_id: "sizeTableIframe",
+		_iframe: "",
+		_doc: "",
+		init: function() {
+			this._doc = document.getElementById(this._iframe_id).contentWindow.document;
+			this._doc.open();
+			this._doc.write(this.getContent());
+			this._doc.close();
+			this._iframe = jQuery('#'+this._iframe_id);
+			this.resize();
+			jQuery('#tabelaRozmiarow').on('shown.bs.modal',Mall.product.sizetable.resize);
+			jQuery(window).resize(this.resize);
+
+			var iframeWin = document.getElementById(this._iframe_id).contentWindow;
+			jQuery(iframeWin).on('resize', function() {
+				Mall.product.sizetable.resize();
+			});
+		},
+		resize: function() {
+			var body = Mall.product.sizetable._doc.body;
+
+			var headers = [],
+				frameContents = jQuery("#sizeTableIframe").contents();
+			//frameContents.find("table").addClass("sizetable-table");
+
+			jQuery("#sizeTableIframeContainer").width("100%");
+			jQuery("#sizeTableIframeContainer").height(frameContents.find("html").height()+50);
+
+
+			//Responsive Tables handle
+			frameContents.find("table tr:first-child td").each(function (i, td) {
+				headers.push(jQuery.trim(jQuery(td).text()))
+			});
+			frameContents.find("table tr:not(:first-child)").each(function (j, tr) {
+				jQuery(tr).find("td").each(function (j, tdLeft) {
+					jQuery(tdLeft).attr("data-label", headers[j]);
+				});
+			});
+			//--Responsive Tables handle
+
+
+		},
+		getContent: function() {
+			return this._content;
+		},
+		setContent: function(content) {
+			this._content = content;
+		}
+	}
 };
 
 jQuery(document).ready(function() {
