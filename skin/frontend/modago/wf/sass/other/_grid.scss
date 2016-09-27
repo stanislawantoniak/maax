@@ -1,0 +1,129 @@
+//
+// Grid system OVERRIDE
+// For more info:
+// @see _responsive-utilities.scss & _variable.scss
+// @see default file in vendor/bootstrap/_grid.scss
+// --------------------------------------------------
+
+
+// Container widths
+//
+// Set the container width, and override it for fixed navbars in media queries.
+
+.container {
+  @include container-fixed();
+
+  @media (min-width: $screen-sm-min) { //768
+    width: $container-sm; // 720 + 30 = 750
+  }
+  // NEW PART START
+  @media (min-width: $screen-sm-to-smmd-min) { // 768
+    width: $container-sm-to-smmd; //770
+  }
+  @media (min-width: $screen-smmd-min) { // 810
+    width: $container-smmd; // 980
+  }
+  // NEW PART END
+  @media (min-width: $screen-md-min) { //992
+    width: $container-md; //940 + 30 = 970
+  }
+  @media (min-width: $screen-lg-min) { //1200
+    width: $container-lg; //1206
+  }
+}
+
+
+// Fluid container
+//
+// Utilizes the mixin meant for fixed width containers, but without any defined
+// width for fluid, full width layouts.
+
+.container-fluid {
+  @include container-fixed();
+}
+
+#recently-viewed .container-fluid {
+  @include max-screen(768px) {
+    padding: 0 16px;
+  }
+  @include max-screen(470px) {
+    padding: 0 7px;
+  }
+}
+
+// Row
+//
+// Rows contain and clear the floats of your columns.
+
+.row {
+  @include make-row();
+}
+
+// OVERRIDE START
+// Columns
+//
+// Common styles for small and large grid columns
+
+//@include make-grid-columns();
+
+@mixin make-grid-columns-override() {
+  $list: '';
+  $i: 1;
+  $list: ".col-xs-#{$i}, .col-sm-#{$i}, .col-sm-to-smmd-#{$i}, .col-smmd-#{$i}, .col-md-#{$i}, .col-lg-#{$i}";
+  @for $i from (1 + 1) through $grid-columns {
+    $list: "#{$list}, .col-xs-#{$i}, .col-sm-#{$i}, .col-sm-to-smmd-#{$i}, .col-smmd-#{$i}, .col-md-#{$i}, .col-lg-#{$i}";
+  }
+  #{$list} {
+    position: relative;
+    // Prevent columns from collapsing when empty
+    min-height: 1px;
+    // Inner gutter via padding
+    padding-left:  ($grid-gutter-width / 2);
+    padding-right: ($grid-gutter-width / 2);
+  }
+}
+@include make-grid-columns-override();
+// OVERRIDE END
+
+// Extra small grid
+//
+// Columns, offsets, pushes, and pulls for extra small devices like
+// smartphones.
+
+@include make-grid(xs);
+
+
+// Small grid
+//
+// Columns, offsets, pushes, and pulls for the small device range, from phones
+// to tablets.
+
+@media (min-width: $screen-sm-min) {
+  @include make-grid(sm);
+}
+
+// NEW PART START
+@media (min-width: $screen-sm-to-smmd-min) {
+  @include make-grid(sm-to-smmd);
+}
+@media (min-width: $screen-smmd-min) {
+  @include make-grid(smmd);
+}
+// NEW PART END
+
+// Medium grid
+//
+// Columns, offsets, pushes, and pulls for the desktop device range.
+
+@media (min-width: $screen-md-min) {
+  @include make-grid(md);
+}
+
+
+// Large grid
+//
+// Columns, offsets, pushes, and pulls for the large desktop device range.
+
+@media (min-width: $screen-lg-min) {
+  @include make-grid(lg);
+}

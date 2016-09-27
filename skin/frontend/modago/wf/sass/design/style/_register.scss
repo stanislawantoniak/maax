@@ -1,0 +1,43 @@
+.account-create  {
+	section {
+		header {
+			h2 {
+				font-family: $fontBlack !important;
+				line-height: normal !important;
+				margin-top: -2px !important;
+				&:before {
+					top: 2px !important;
+				}
+				@media (max-width:359px) {
+					font-size: 16px;
+				}
+			}
+		}
+	}
+	form {		
+		label {
+			line-height: 29px;
+			padding-right: 20px;
+			text-align: right;
+			font-weight: normal;
+			@media (max-width: 767px) {
+				text-align: left;
+			}
+			&.agreement-label {
+				height: auto !important;
+			}
+		}
+		input[type="text"],
+		input[type="email"],
+		input[type="password"],
+		input[type="tel"] {
+			line-height: 29px;
+		}
+	}
+	.text-align-left {
+		label {
+			text-align: left!important;
+		}
+		text-align: left!important;
+	}
+}

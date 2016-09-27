@@ -1,0 +1,250 @@
+.doubleline {
+	border-top: 1px solid $color_000;
+	border-bottom: 1px solid $color_000;
+	padding:10px;
+	text-align:center;
+}
+
+h1,h2,h3,h4,h5,
+.h1,.h2,.h3,.h4,.h5{
+	font-weight: normal;
+	margin:0px;
+	padding:25px 0px;
+}
+h1,.h1 {
+	//font-family: $fontRegular;
+	font-size: 36px;
+	//color:$color_000;
+	a {
+		color:$color_000;
+		text-decoration:none;
+	}
+}
+h2,.h2 {
+	font-size: 35px;
+	a {
+		color:$color_020202;
+		text-decoration:none;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: $fontRegular;
+	font-weight: 400;
+	margin-top: 0;
+	line-height: 1.3;
+	color: $colorHeader;
+}
+article {
+	header {
+		h1,h2,h3,h4,h5,
+		.h1,.h2,.h3,.h4,.h5 {
+			&.color_01 {
+				color:$color_c6a662;
+			}
+			&.padding-left-60 {
+				padding-left: 60px
+			}
+		}
+	}
+}
+.title-section {
+	text-align: center;
+	position:relative;
+	h2 {
+		text-transform: uppercase;
+		font-size: 35px;
+		margin: 0 auto;
+		position: relative;
+		z-index: 20;
+		top: 0;
+		left: 0;
+		background-color: $color_ffffff;
+		padding: 0 15px;
+		display: inline-block;
+		font-weight: 300;
+	}
+	&.transparent {
+		h2 {
+			background:$color_f2f1f0;
+			margin: 0 auto 20px;
+		}
+
+
+	}
+}
+.node-type-page-shop {
+	.title-section {
+		h2 {
+			font-size: 35px;
+
+
+			@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+				font-size: 30px;
+				padding: 5px 15px 0;
+			}
+			@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+				font-size: 25px;
+				padding: 5px 15px 0;
+			}
+			@media (max-width: $screen-xs-max) {
+				font-size: 25px;
+				padding: 5px 15px 0;
+			}
+			@media (max-width: 480px) {
+				font-size: 17px;
+				padding: 10px 15px 0;
+			}
+			@media (max-width: 360px) {
+				font-size: 15px;
+				padding: 10px 15px 0;
+			}
+		}
+		.inspiration-strips {
+			@media (max-width: $screen-xs-max) {
+				left:15px;
+				right:15px;
+			}
+		}
+	}
+}
+#name-shop {
+	text-transform: uppercase;
+	font-size: 18px;
+	margin: 10px auto 0;
+	z-index: 20;
+	background-color: $color_ffffff;
+	padding: 0 15px 5px;
+	display: block;
+	font-weight: 700;
+	text-align: center;
+	@include bc-primary();
+	border-top:none;
+	border-right:none;
+	border-left:none;
+}
+.section {
+	header.title-section {
+		text-align: left;
+		h2 {
+			position: relative;
+			display: block;
+			overflow: hidden;
+			padding-left: 0;
+			font-size: 20px;
+			font-family: $fontRegular;
+			line-height: 22px;
+			text-transform: uppercase;
+			margin: 0 0 8px 0;
+			text-align: left;
+			z-index: 1;
+			@media (max-width: 360px) {
+				height:auto;
+			}
+		}
+	}
+}
+
+.no-padding-bottom {
+	padding-bottom: 0px!important;
+}
+h3,.h3 {
+	font-family: $fontRegular;
+	font-size: 25px;
+	color:$color_000;
+	a {
+		color:$color_000;
+		text-decoration:none;
+	}
+}
+h3.title-section {
+	text-transform: uppercase;
+	font-size: 18px;
+	font-family: $fontRegular;
+	margin-bottom: 35px;
+	text-align: left;
+}
+h4,.h4 {
+	font-family: $fontRegular;
+	font-size: 18px;
+	color:$color_020202;
+	a {
+		color:$color_020202;
+		text-decoration:none;
+	}
+}
+h5,.h5 {
+	font-family: $fontRegular;
+	font-size: 14px;
+	color:$color_000;
+	a {
+		color:$color_000;
+		text-decoration:none;
+	}
+}
+h2, h4, h5 {
+	&.title_section {
+		padding: 0 10px 0 25px;
+		position:relative;
+		display:block;
+		height:18px;
+		overflow:hidden;
+		font-size: 18px;
+		font-family:$fontRegular;
+		line-height: 18px;
+		text-transform: uppercase;
+		margin: 0 0 8px;
+		text-align:left;
+		@media (max-width: $screen-xs-max) {
+			font-size: 14px;
+			font-weight: normal;
+			font-family: $fontRegular;
+		}
+		span {
+			position:absolute;
+			right:12px;
+			top:2px;
+		}
+		&:before {
+			content: ' ';
+			display:block;
+			width:18px;
+			height:18px;
+			background:$colorAccentTitle;
+			position:absolute;
+			left:0;
+			top:0;
+			@media(max-width: 360px) {
+				left: 5px;
+			}
+		}
+	}
+}
+body.catalog-product-view {
+	h2,h4,h5 {
+		&.title_section:before {
+			@media(max-width: 360px) {
+				left: 0;
+			}
+		}
+	}
+}
+div.modal > div.modal-dialog > div.modal-content > div.modal-header > h2 {
+	height: auto;
+    margin: 10px 0 0 0;
+    padding-left: 0;
+    @media (max-width: $screen-xs-max) {
+      padding: 0;
+      margin: 0;
+    }
+	&:before {
+		@media(max-width: 360px) {
+			left: 0;
+		}
+	}
+}
+#product_long_box{
+	h1, h2, h3, h4{
+		padding: 0;
+	}
+}
