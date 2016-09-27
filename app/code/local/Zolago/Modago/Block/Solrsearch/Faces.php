@@ -38,6 +38,9 @@ class Zolago_Modago_Block_Solrsearch_Faces extends Zolago_Solrsearch_Block_Faces
             case "zolagosolrsearch/faces_enum_icon":
                 $block = "zolagomodago/solrsearch_faces_enum_icon";
                 break;
+
+            default:
+                $block = "zolagomodago/solrsearch_faces_enum_droplist";
         }
 
         return $block;
