@@ -252,16 +252,27 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         ];
 
         $deliveryAddress = $params['delivery_data']->delivery_address;
+
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
+
+        $nip = ($invoiceRequired) ? $invoiceData->invoice_address->invoice_nip : '';
+
         $orderCustomerLine = [
             [
-                $params['customer_id'],                                         //(A)
-                $params['customer_email'],                                      //(B)
-                $this->_generateCustomerFLName($params),                        //(C)
-                '',                                                             //(D)
-                $deliveryAddress->delivery_city,                                //(E)
-                $deliveryAddress->delivery_zip_code,                            //(F)
-                $deliveryAddress->delivery_city,                                //(G)
-                $deliveryAddress->delivery_street,                              //(H)
+                '',                                                             //(A)IDKONTRAH w kontrahent.txt jako pusta kolumna
+                $params['customer_email'],                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
+                $this->_generateCustomerFLName($params),                        //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
+                $nip,                                                           //(D)NIP
+                $deliveryAddress->delivery_city,                                //(E)MIEJSCOWOSC
+                $deliveryAddress->delivery_zip_code,                            //(F)KODPOCZTA
+                $deliveryAddress->delivery_city,                                //(G)POCZTA
+                $deliveryAddress->delivery_street,                              //(H)ULICA
+                '',                                                             //(I)NRDOMU
+                '',                                                             //(J)NRLOKALU
+                '',                                                             //(K)puste
+                '',                                                             //(L)puste
+                2,                                                              //(M)2
             ]
         ];
 

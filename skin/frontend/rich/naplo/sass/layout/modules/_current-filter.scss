@@ -1,0 +1,141 @@
+
+#active-filters, #view-current-filter {
+	h1 {
+		padding-bottom: 0px;
+		padding-top:12px;
+		margin-bottom: 10px;
+		@media (max-width: $screen-xs-max) {
+			padding-bottom: 0px;
+			padding-top:12px;
+            width: 84%;
+		 }
+	}
+	dl {
+	    dt,dd {
+	        float:left;
+	    }
+	    dt {
+	        margin-right:20px;
+	        margin-bottom: 7px;
+	    }
+      dd {
+        margin-right: 20px;
+        padding-left: 0px;
+        padding-right: 0;
+
+        .actionViewFilter {
+          min-width: 174px;
+        }
+
+        .label {
+          float: left;
+          padding: 0px 6px 0 6px;
+          min-width: 60px;
+          display: inline-block;
+          height: 21px;
+          margin: 0px 10px 7px 0px;
+          position: relative;
+
+        }
+        .fa {
+          right: 5px;
+          top: 4px;
+          margin-left: 5px;
+        }
+
+        &.action {
+          position: relative;
+          top: -4px;
+          @media (max-width: $screen-xs-max) {
+            position: absolute;
+            top: 1px;
+            right: 0px;
+          }
+        }
+      }
+	}
+	.actionViewFilter {
+      min-width: 205px;
+      margin-left: -21px;
+      background: #000000 !important;
+      font-family: $fontRegular;
+        @media (max-width: $screen-xs-max) {
+          min-width: initial;
+        }
+		&.visible-xs {
+            padding: 6px 15px 4px;
+			@media (min-width:768px) and (max-width: 768px) {
+              display: block !important;
+            }
+		}
+        .fa {
+            color: $color_ffffff;
+            float: left;
+            margin: 1px 0;
+        }
+
+	}
+	.backToCategory {
+	    position:absolute;
+		right: 15px;
+		top:10px;
+
+	        }
+	.breadcrumb {
+		margin-bottom: 0;
+	}
+
+    .clearfix {
+        margin-bottom: 0px;
+    }
+    #filters-btn {
+        dl {
+            @media (max-width: $screen-xs-max) {
+                margin-bottom: 0px;
+            }
+        }
+    }
+
+  .btn-clearall-xs {
+    @media (max-width: $screen-xs-max) {
+      margin-right: -10px;
+    }
+  }
+}
+
+.not-content-mode.sm-to-smmd-plus-smmd,
+.this-is-search.sm-to-smmd-plus-smmd {
+  #active-filters, #view-current-filter {
+    h1 {
+      @media (max-width: $screen-sm-to-smmd-max) {
+        padding-bottom: 0px;
+        padding-top:18px;
+        width: 84%;
+      }
+    }
+    dl {
+      dd {
+        &.action {
+          @media (max-width: $screen-sm-to-smmd-max) {
+            position: absolute;
+            top: 1px;
+            right: 0px;
+          }
+        }
+      }
+    }
+    .actionViewFilter {
+      @media (max-width: $screen-sm-to-smmd-max) {
+        min-width: 174px;
+      }
+    }
+    .btn-clearall-xs {
+      @media (max-width: $screen-sm-to-smmd-max) {
+        margin-right: -10px;
+      }
+    }
+  }
+}
+#active-filters-wrapper {
+  margin-top: 15px;
+}

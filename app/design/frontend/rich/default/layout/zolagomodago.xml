@@ -434,7 +434,7 @@
       </action>
     </reference>
   </cms_page>
-  <zolagomodago_index_index>
+  <saipson_index_index>
     <reference name="head">
       <action method="addJs">
         <name>jquery/jquery.visible.js</name>
@@ -465,7 +465,7 @@
         <value>nobreadcrumbs</value>
       </action>
     </reference>
-  </zolagomodago_index_index>
+  </saipson_index_index>
   <zolagomodago_map_index>
     <reference name="root">
       <action method="setTemplate">

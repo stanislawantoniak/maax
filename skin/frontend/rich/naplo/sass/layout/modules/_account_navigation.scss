@@ -1,0 +1,21 @@
+.account-nav {
+    li {
+        padding-bottom: 7px;
+        padding-top: 7px;
+    }
+    .active {
+        font-family: $fontBlack;
+    }
+}
+.sidebar {
+    .account-nav {
+        .nav-pills {
+            li {
+                a:link,
+                a:visited {
+                  padding: 0px 0px 0px 0px;
+                }
+            }
+        }
+    }
+}

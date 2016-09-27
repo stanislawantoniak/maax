@@ -2,10 +2,29 @@
 <config>
     <modules>
         <StandAlone_Ipson>
-            <version>0.0.10</version>
+            <version>0.0.11</version>
         </StandAlone_Ipson>
     </modules>
-    <global>
+    <frontend>
+    	<routers>
+            <saipson_storesmap>
+                <use>standard</use>
+                <args>
+                    <module>StandAlone_Ipson</module>
+                    <frontName>storesmap</frontName>
+                </args>
+            </saipson_storesmap>
+
+            <saipson>
+                <use>standard</use>
+                <args>
+                    <module>StandAlone_Ipson</module>
+                    <frontName>main</frontName>
+                </args>
+            </saipson>
+	</routers>
+    </frontend>
+    <global>	
         <models>
             <saipson>
                 <class>StandAlone_Ipson_Model</class>
