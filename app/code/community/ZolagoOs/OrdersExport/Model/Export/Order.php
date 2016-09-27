@@ -227,9 +227,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $deliveryAddress->delivery_street,
         );
 
-        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName()))
-            $result[] = '(' . $params['delivery_data']->delivery_point_name . ')';
-
         return implode(' ', $result);
     }
 
@@ -250,44 +247,82 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
     }
 
+    private function _getOrderDetails($params)
+    {
+        $result = [];
+
+        $result[] = $this->_generateCustomerFLName($params);
+
+        $code = $params['delivery_method'];
+        $deliveryAddress = $params['delivery_data']->delivery_address;
+
+        //Company
+        if(!empty($deliveryAddress->delivery_company_name))
+            $result[] = 'Firma: ' . $deliveryAddress->delivery_company_name;
+
+        //NIP
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
+
+        if ($invoiceRequired && !empty($invoiceData->invoice_address->invoice_tax_id))
+            $result[] = 'NIP: ' . $invoiceData->invoice_address->invoice_tax_id;
+
+
+        //Delivery point name
+        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
+            switch ($code){
+                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
+                    $result[] = 'Symbol paczkomatu InPost: ' . $deliveryAddress->delivery_point_name;
+                    break;
+                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
+                    $result[] = 'Paczka w Ruchu PSD: ' . $deliveryAddress->delivery_point_name;
+                    break;
+
+            }
+        }
+
+
+        return implode(";", $result);
+    }
+
 
     public function addOrders($params)
     {
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
+
         $orders = [
             [
-                $params['customer_email'],                                      //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
-                $params['order_date'],                                          //(B)DATA            : TDateTime; - Data dokumentu
-                self::ORDER_DOC_NAME_ZA,                                        //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
-                $params['order_id'],                                            //(D)NRDOK           : String; - numer dokumentu (25)
-                '',                                                             //(E)TERMIN          : TDateTime; - termin płatności (??????????)
-                $this->paymentMethodDescription($params['payment_method']),     //(F)PLATNOSC        : String; - sposób płatności (35)
-                $this->formatToDocNumber($params['order_total']),               //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
-                count($params['order_items']),                                  //(H)ILEPOZ          : Integer; - ilość pozycji
-                0,                                                              //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
-                '',                                                             //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
-                self::ORDER_DOC_NAME_PAR,                                       //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA) (??????????)
-                '',                                                             //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
-                '',                                                             //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
-                $this->_generateCustomerFLName($params),                        //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
-                $this->_generateCustomerDeliveryAddress($params),               //(O)NRZLEC          : String; - numer zlecenia (20)
-                $this->_generateCustomerInvoiceAddress($params),                //(P)CECHA_1         : String; - Cecha 1 (35)
-                $this->paymentMethodDescription($params['payment_method']),     //(Q)CECHA_2         : String; - Cecha 2 (35)
-                $this->shippingMethodDescription($params),                      //(R)CECHA_3         : String; - Cecha 3 (35)
-                '',                                                             //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
-                '',                                                             //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
-                '',                                                             //(U)CECHA_4         : String; - Cecha 4 (35)
-                '',                                                             //(V)CECHA_5         : String; - Cecha 5 (35)
-                '',                                                             //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
-                '',                                                             //(X)MAGAZYN         : String; - numer magazynu
-                '',                                                             //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
-                '',                                                             //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
+                $params['customer_email'],                                                  //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                $params['order_date'],                                                      //(B)DATA            : TDateTime; - Data dokumentu
+                self::ORDER_DOC_NAME_ZA,                                                    //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                $params['order_id'],                                                        //(D)NRDOK           : String; - numer dokumentu (25)
+                '',                                                                         //(E)TERMIN          : TDateTime; - termin płatności (??????????)
+                $this->paymentMethodDescription($params['payment_method']),                 //(F)PLATNOSC        : String; - sposób płatności (35)
+                $this->formatToDocNumber($params['order_total']),                           //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
+                count($params['order_items']),                                              //(H)ILEPOZ          : Integer; - ilość pozycji
+                0,                                                                          //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
+                '',                                                                         //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
+                ($invoiceRequired) ? self::ORDER_DOC_NAME_FA : self::ORDER_DOC_NAME_PAR,    //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA) (??????????)
+                '',                                                                         //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
+                '',                                                                         //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
+                $this->_getOrderDetails($params),                                            //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
+                $this->_generateCustomerDeliveryAddress($params),                           //(O)NRZLEC          : String; - numer zlecenia (20)
+                $this->_generateCustomerInvoiceAddress($params),                            //(P)CECHA_1         : String; - Cecha 1 (35)
+                $this->paymentMethodDescription($params['payment_method']),                 //(Q)CECHA_2         : String; - Cecha 2 (35)
+                $this->shippingMethodDescription($params),                                  //(R)CECHA_3         : String; - Cecha 3 (35)
+                '',                                                                         //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
+                '',                                                                         //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
+                '',                                                                         //(U)CECHA_4         : String; - Cecha 4 (35)
+                '',                                                                         //(V)CECHA_5         : String; - Cecha 5 (35)
+                '',                                                                         //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
+                '',                                                                         //(X)MAGAZYN         : String; - numer magazynu
+                '',                                                                         //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
+                '',                                                                         //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
             ]
         ];
 
         $deliveryAddress = $params['delivery_data']->delivery_address;
-
-        $invoiceData = $params['invoice_data'];
-        $invoiceRequired = (bool)$invoiceData->invoice_required;
 
         $nip = ($invoiceRequired) ? $invoiceData->invoice_address->invoice_tax_id : '';
 
