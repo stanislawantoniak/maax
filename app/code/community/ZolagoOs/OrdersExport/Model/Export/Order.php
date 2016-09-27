@@ -272,10 +272,10 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
             switch ($code){
                 case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
-                    $result[] = 'Symbol paczkomatu InPost: ' . $deliveryAddress->delivery_point_name;
+                    $result[] = 'Symbol paczkomatu InPost: ' . $params['delivery_data']->delivery_point_name;
                     break;
                 case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
-                    $result[] = 'Paczka w Ruchu PSD: ' . $deliveryAddress->delivery_point_name;
+                    $result[] = 'Paczka w Ruchu punkt ID: ' . $params['delivery_data']->delivery_point_name;
                     break;
 
             }
