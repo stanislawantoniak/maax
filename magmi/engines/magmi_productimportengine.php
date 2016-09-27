@@ -640,7 +640,7 @@ class Magmi_ProductImportEngine extends Magmi_Engine
             }
             else
             {
-                $pvalues[]=-1;
+                $pvalues[]= 0;
             }
             $val=$pvals[0];
 
