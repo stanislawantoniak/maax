@@ -113,7 +113,8 @@ sub vcl_recv {
     # We only deal with GET and HEAD by default
     # we test this here instead of inside the url base regex section
     # so we can disable caching for the entire site if needed
-    if (!{{enable_caching}} || req.http.Authorization ||
+    if (!{{enable_caching}} || 
+#	req.http.Authorization ||
         req.method !~ "^(GET|HEAD|OPTIONS)$" ||
         req.http.Cookie ~ "varnish_bypass={{secret_handshake}}") {
         return (pass);
@@ -336,7 +337,7 @@ sub vcl_backend_response {
 			if(beresp.http.X-Turpentine-Cache-Only-Allowed == "1" &&
 			   beresp.http.X-Turpentine-Cache != "1") {
 				# If not static file
-				if(req.url !~ "^/(media|js|skin)/.*$"){
+				if(bereq.url !~ "^/(media|js|skin)/.*$"){
 					set beresp.ttl = {{grace_period}}s;
 					return (deliver);
 				}
