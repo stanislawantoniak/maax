@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<layout version="0.1.0">
-    <fidelitas_campaign_user>
-        <update handle="page_empty" />
-        <reference name="content">
-            <block type="core/text" name="fidelitas.campaign.view"  />
-        </reference>
-    </fidelitas_campaign_user>
-</layout>
