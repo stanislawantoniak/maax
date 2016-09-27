@@ -8,11 +8,11 @@ class Zolago_Solrsearch_Model_System_Faces_Enum_Source {
 	const ICON		= "zolagosolrsearch/faces_enum_icon";
 	
 	protected $_options = array(
-		self::SIZE		=> "Size",
-		self::COLOR		=> "Color",
+		//self::SIZE		=> "Size",
+		//self::COLOR		=> "Color",
 		self::LONGLIST	=> "Long list",
 		self::DROPLIST	=> "Dropdown",
-		self::ICON		=> "Icons",
+		//self::ICON		=> "Icons",
 	);
 
 	public function toOptionHash($withEmpty=true) {
