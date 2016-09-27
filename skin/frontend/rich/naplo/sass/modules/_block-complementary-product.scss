@@ -1,0 +1,291 @@
+#complementary_product {
+	@media (max-width: $screen-xs-max) {
+		margin-top:30px;
+	}
+}
+.block-complementary-product {
+
+	.rwdCarousel {
+	//	width: 100%;
+		padding:15px 55px;
+		position:relative;
+		//display: inline-block;
+		.item {
+			margin:0 20px;
+			//border:1px solid $color_f5f6f6;
+			background: $color_fff;
+			color: $color_515151;
+			@media (max-width: $screen-xs-max) {
+				margin:0 5px;
+			}
+			.img_product {
+				border:1px solid $bc-primary;
+			}
+			img {
+			  	width:100%;
+			  	height:auto;
+			}
+			.price {
+				color:$color_000;
+				font-size: 20px;
+				margin-bottom:18px;
+				font-family:$fontRegular;
+				padding:0 0;
+				position:relative;
+				.label {
+					color:$color_000;
+					padding-right: 2px;
+					font-family:$fontRegular;
+					font-weight: normal;
+					font-size: 12px;
+					text-align: left;
+					&+span {
+						font-family: $fontBlack;
+					}
+				}
+				.old {
+					color:$color_000;
+					text-decoration:line-through;
+					font-size:15px;
+					margin-right:10px;
+				}
+				.like {
+					position:absolute;
+					right:8px;
+					top:3px;
+					font-size:11px;
+					font-family:$fontBlack;
+					color:$color_000;
+					padding-right:30px;
+					/*&:before {
+						content: ' ';
+						display:block;
+						width:21px;
+						height:16px;
+						position:absolute;
+						right:0px;
+						top:0px;
+						background:url('../images/heart.png')
+					}*/
+					&.liked {
+						/*&:before {
+							background:url('../images/heart-like.png')
+						}*/
+					}
+				}
+
+			}
+			
+			.carousel-caption {
+				position:static;
+				margin:0px;
+				padding:0px;
+				span {
+					display:block;
+					padding:0px;
+					margin:0px;
+					font-family: $fontRegular;
+					text-shadow:none;
+					&.title-caption {
+						font-family: $fontRegular;
+						text-transform: uppercase;
+						padding: 5px 0px;
+						display: block;
+						margin: 0 auto;
+						margin-top: 5px;
+						color:$color_000;
+					}
+					&.body-caption {
+						color: $color_8b8b8b;
+						padding: 5px 0px;
+						display: block;
+						margin: 0 auto;
+					}
+					&.seemore-caption {
+						color: $color_484848;
+						text-transform: uppercase;
+						padding: 5px 0px;
+						display: block;
+						margin: 0 auto;
+						font-size: 11px;
+					}
+
+				}
+
+			}
+			&:hover {
+				.name_product {
+					text-decoration: underline;
+					span {
+						text-decoration: underline;
+						}
+					}
+				}
+
+				.price {
+					position:relative;
+					height: 43px;
+					.col-price {
+						position:absolute;
+						top: 18px;
+					}
+					.like {
+						    position:absolute;
+							top: 24px;
+						}
+				}
+			
+				.price {
+					&.price-two-line {
+						.col-price {
+							top:0px;
+							span + span {
+								padding-left: 6px;
+							}
+						}
+						.like {
+							top:24px
+						}
+
+					}
+				}
+				.price {
+					&.like-two-line {
+						.col-price {
+							top: 17px;
+						}
+						.like {
+							top:0px
+						}
+					}
+				}
+				.price {
+					&.price-two-line {
+					&.like-two-line {
+						.col-price {
+							top:0px;
+							
+							
+						}
+						.like {
+							top:2px;
+						}
+					}
+					}
+				}
+
+			
+		}
+
+		.customNavigation {
+			a {
+				font-size: 48px;
+				background:$arrowMap;
+				top:112.5px;
+
+				@media (min-width: $screen-lg-min) {
+					margin-top:-6.5px;
+				}
+				@media (max-width: $screen-xs-max) {
+					margin-top:7.5px;		
+				}
+				@media (max-width:480px) {
+					margin-top:5px;	
+				}
+				
+				&.prev {
+				left:25px;
+				
+				@include sprite($arrowMap, arrow-complementary-left);
+				@include sprite-dimensions($arrowMap, arrow-complementary-left);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($arrowMap, arrow-rwd-slider-prev-mobile);
+					@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile);
+				}
+				&:hover {
+					@include sprite($arrowMap, arrow-complementary-left-h);
+					@include sprite-dimensions($arrowMap, arrow-complementary-left-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($arrowMap, arrow-rwd-slider-prev-mobile-h);
+						@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile-h);
+					}
+				}
+			}
+			&.next {
+				right:25px;
+				@include sprite($arrowMap, arrow-complementary-right);
+				@include sprite-dimensions($arrowMap, arrow-complementary-right);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($arrowMap, arrow-rwd-slider-next-mobile);
+					@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile);
+				}
+				&:hover {
+					@include sprite($arrowMap, arrow-complementary-right-h);
+					@include sprite-dimensions($arrowMap, arrow-complementary-right-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($arrowMap, arrow-rwd-slider-next-mobile-h);
+						@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile-h);
+					}
+				}
+			}
+			}
+		}
+
+	}
+
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				font-size: 48px;
+				background:$arrowMap;
+				top:112.5px;
+				position:absolute;
+				text-indent: -999em;	
+			}
+			.rwd-prev {
+				left:-25px;
+				
+				@include sprite($arrowMap, arrow-complementary-left);
+				@include sprite-dimensions($arrowMap, arrow-complementary-left);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($arrowMap, arrow-rwd-slider-prev-mobile);
+					@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile);
+				}
+				&:hover {
+					@include sprite($arrowMap, arrow-complementary-left-h);
+					@include sprite-dimensions($arrowMap, arrow-complementary-left-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($arrowMap, arrow-rwd-slider-prev-mobile-h);
+						@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile-h);
+					}
+				}
+
+			}
+			.rwd-next {
+				right:-25px;
+				@include sprite($arrowMap, arrow-complementary-right);
+				@include sprite-dimensions($arrowMap, arrow-complementary-right);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($arrowMap, arrow-rwd-slider-next-mobile);
+					@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile);
+				}
+				&:hover {
+						@include sprite($arrowMap, arrow-complementary-right-h);
+						@include sprite-dimensions($arrowMap, arrow-complementary-right-h);
+						@media (max-width: $screen-xs-max) {
+							@include sprite($arrowMap, arrow-rwd-slider-next-mobile-h);
+							@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile-h);
+						}
+					}
+			}
+			.rwd-prev,
+			.rwd-next {
+				&.disabled {
+					visibility:hidden;
+				}
+			}
+			
+		}
+	}
+}

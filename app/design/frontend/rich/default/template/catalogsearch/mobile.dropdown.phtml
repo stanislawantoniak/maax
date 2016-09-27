@@ -1,0 +1,36 @@
+<?php
+/**
+ * Content of this block is ajax loaded
+ * for varnish
+ */
+
+$_helper = Mage::helper('zolagosolrsearch');
+
+?>
+
+<div id="dropdown-search" class="dropdown hidden-md hidden-lg">
+    <div class="dropdown-panel">
+        <div class="dropdown-panel-inner">
+            <div class="searchDropdown">
+
+                <form class="clearfix" role="search" action="<?php echo Mage::getUrl("search", array("_secure" => Mage::app()->getStore()->isCurrentlySecure())); ?>" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="q" placeholder="<?php echo $_helper->__('Search...'); ?>">
+                    </div>
+                    <div class="form-group styledSelected">
+						
+                        <select name="scat" class="form-control  select-styled search-context">
+                            <?php /* foreach($options['select_options'] as $opt) : ?>
+                                <option value="<?php echo $opt['value']; ?>" <?php if($opt['selected']) : ?>selected="selected"<?php endif; ?>><?php echo $opt['text']; ?></option>
+                            <?php endforeach; */ ?>
+                        </select>
+                    </div>
+                    <div class="form-group action">
+                        <button class="btn button button-primary large sending pull-right"><?php echo $_helper->__("Search"); ?></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

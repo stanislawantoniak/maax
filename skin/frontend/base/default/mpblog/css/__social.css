@@ -1,0 +1,92 @@
+/* Social Share */
+@media (min-width: 770px) {
+  .mpblog-social-container {
+    float: left;
+  }
+}
+@media (max-width: 770px) {
+  .mpblog-social-container .mp-buttons ul {
+    text-align: center;
+    width: 100%;
+  }
+}
+.mpblog-social-container .mp-buttons ul li {
+  margin-right: 5px;
+  float: left;
+}
+@media (max-width: 770px) {
+  .mpblog-social-container .mp-buttons ul li {
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon {
+  float: left;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-color: transparent;
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.twitter {
+  background-image: url("../images/assets/twitter.png");
+  background-image: url("../images/assets/twitter.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.facebook {
+  background-image: url("../images/assets/facebook.png");
+  background-image: url("../images/assets/facebook.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.vkontakte {
+  background-image: url("../images/assets/vk.png");
+  background-image: url("../images/assets/vk.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.odnoklassniki {
+  background-image: url("../images/assets/ok.png");
+  background-image: url("../images/assets/ok.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.blogger {
+  background-image: url("../images/assets/blogger.png");
+  background-image: url("../images/assets/blogger.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.tumblr {
+  background-image: url("../images/assets/tumblr.png");
+  background-image: url("../images/assets/tumblr.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.pinterest {
+  background-image: url("../images/assets/pinterest.png");
+  background-image: url("../images/assets/pinterest.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.digg {
+  background-image: url("../images/assets/digg.png");
+  background-image: url("../images/assets/digg.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.mixx {
+  background-image: url("../images/assets/mixx.png");
+  background-image: url("../images/assets/mixx.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.delicious {
+  background-image: url("../images/assets/delicious.png");
+  background-image: url("../images/assets/delicious.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.stumbleupon {
+  background-image: url("../images/assets/stumbleupon.png");
+  background-image: url("../images/assets/stumbleupon.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.slashdot {
+  background-image: url("../images/assets/slashdot.png");
+  background-image: url("../images/assets/slashdot.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.slashdot {
+  background-image: url("../images/assets/slashdot.png");
+  background-image: url("../images/assets/slashdot.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.reddit {
+  background-image: url("../images/assets/reddit.png");
+  background-image: url("../images/assets/reddit.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.linkedin {
+  background-image: url("../images/assets/linkedin.png");
+  background-image: url("../images/assets/linkedin.svg");
+}
+.mpblog-social-container .mp-buttons ul li .blog-icon.google {
+  background-image: url("../images/assets/google_bookmarks.png");
+  background-image: url("../images/assets/google_bookmarks.svg");
+}

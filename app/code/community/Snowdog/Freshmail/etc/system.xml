@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<system>
+    <sections>
+        <snowfreshmail translate="label" module="snowfreshmail">
+            <label>FreshMail Configuration</label>
+            <tab>customer</tab>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <connect translate="label comment">
+                    <label>Connection</label>
+                    <comment><![CDATA[Hello! Start using this plugin by integrating FreshMail with Magento.<br/>Insert the API Key and API Secret below (<a href='https://app.freshmail.com/en/settings/integration/' target='_blank'>here you can find API information</a>)]]></comment>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <status translate="label comment">
+                            <label>Connection Status</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>snowfreshmail/system_config_form_field_api_status</frontend_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </status>
+                        <api_key translate="label comment">
+                            <label>API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_key>
+                        <api_secret translate="label comment">
+                            <label>API Secret</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_secret>
+                    </fields>
+                </connect>
+                <lists>
+                    <label>Subscription list</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <list translate="label comment">
+                            <label>List</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>snowfreshmail/system_config_form_field_lists</frontend_model>
+                            <source_model>snowfreshmail/system_config_source_lists</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list>
+                        <custom_fields translate="label comment">
+                            <label>Custom Fields To Sync</label>
+                            <comment><![CDATA[Custom fields are displayed in the popup form for non-logged in customers only.<br>Tags should use only letters (a-z), numbers (0-9) or underscore(_). First character should be a letter.]]></comment>
+                            <frontend_model>snowfreshmail/system_config_form_field_customfields</frontend_model>
+                            <backend_model>snowfreshmail/system_config_backend_customfields</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </custom_fields>
+                    </fields>
+                </lists>
+                <popup_settings>
+                    <label>Popup Settings</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <popup_count translate="label comment">
+                            <label>Number of popup displays</label>
+                            <comment><![CDATA[How many times the popup should appear]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </popup_count>
+                        <popup_time translate="label comment">
+                            <label>Minimum time of popup length</label>
+                            <comment><![CDATA[The minimum interval between popup displays (in minutes)]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </popup_time>
+                        <data translate="label">
+                            <frontend_model>snowfreshmail/system_config_form_popup_settings</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </data>
+                    </fields>
+                </popup_settings>
+                <popup_design>
+                    <label>Popup Design</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <photo>
+                            <backend_model>adminhtml/system_config_backend_file</backend_model>
+                            <upload_dir>media/snowfreshmail</upload_dir>
+                        </photo>
+                        <data translate="label">
+                            <frontend_model>snowfreshmail/system_config_form_popup_design</frontend_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </data>
+                    </fields>
+                </popup_design>
+                <popup_messages>
+                    <label>Popup Messages</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <popup_title translate="label comment">
+                            <label>Form header</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </popup_title>
+                        <popup_text translate="label comment">
+                            <label>Form sub-header</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </popup_text>
+                        <agreement_text translate="label comment">
+                            <label>Checkbox agreement label text</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </agreement_text>
+                        <button_text translate="label comment">
+                            <label>Form subscribe button</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </button_text>
+                    </fields>
+                </popup_messages>
+                <messages>
+                    <label>Messages</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <submission_success translate="label comment">
+                            <label>Submission success message</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </submission_success>
+                        <submission_failure translate="label comment">
+                            <label>Submission failure message</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </submission_failure>
+                        <already_subscribed translate="label comment">
+                            <label>Already subscribed message</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </already_subscribed>
+                        <invalid_email translate="label comment">
+                            <label>Invalid email address message</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invalid_email>
+                        <empty_field_value translate="label comment">
+                            <label>Required field missing message</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </empty_field_value>
+                    </fields>
+                </messages>
+                <request_logs>
+                    <label>Request Logs</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <clean_after_day translate="label">
+                            <label>Save Expired Items Days</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </clean_after_day>
+                    </fields>
+                </request_logs>
+            </groups>
+        </snowfreshmail>
+    </sections>
+</system>

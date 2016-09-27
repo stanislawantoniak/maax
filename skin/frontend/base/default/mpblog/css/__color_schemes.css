@@ -1,0 +1,25 @@
+/* Icons Color Scheme */
+i.mpblog-classic.glyphicons,
+i.mpblog-classic.glyphicons:before {
+  color: #3399cc;
+}
+i.mpblog-red.glyphicons,
+i.mpblog-red.glyphicons:before {
+  color: #7C0104;
+}
+i.mpblog-green.glyphicons,
+i.mpblog-green.glyphicons:before {
+  color: #003300;
+}
+i.mpblog-blue.glyphicons,
+i.mpblog-blue.glyphicons:before {
+  color: #003366;
+}
+i.mpblog-grey.glyphicons,
+i.mpblog-grey.glyphicons:before {
+  color: #333333;
+}
+i.mpblog-old-magento.glyphicons,
+i.mpblog-old-magento.glyphicons:before {
+  color: #0A263C;
+}

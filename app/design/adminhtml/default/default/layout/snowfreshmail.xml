@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_system_config_edit>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="addCss">
+                <file>snowfreshmail/styles/bars.css</file>
+            </action>
+            <action method="addJs">
+                <file>snowfreshmail/jscolor/jscolor.js</file>
+            </action>
+            <action method="setCanLoadTinyMce">
+                <load>1</load>
+            </action>
+        </reference>
+    </adminhtml_system_config_edit>
+
+    <adminhtml_freshmail_request_index>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>snowfreshmail/styles/bars.css</stylesheet>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="snowfreshmail/adminhtml_request" name="freshmail.request.grid"/>
+        </reference>
+    </adminhtml_freshmail_request_index>
+
+    <adminhtml_freshmail_request_details>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>snowfreshmail/styles/bars.css</stylesheet>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="snowfreshmail/adminhtml_request_details" name="freshmail.request.details" template="snowfreshmail/request/details.phtml"/>
+        </reference>
+    </adminhtml_freshmail_request_details>
+</layout>

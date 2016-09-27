@@ -1,0 +1,78 @@
+/**
+ * MagPleasure Ltd.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magpleasure.com/LICENSE.txt
+ *
+ * @category   Magpleasure
+ * @package    Magpleasure_Common
+ * @copyright  Copyright (c) 2012-2015 MagPleasure Ltd. (http://www.magpleasure.com)
+ * @license    http://www.magpleasure.com/LICENSE.txt
+ */
+
+@import "../../__lesshat";
+
+.mp-file-upload-container {
+
+  .mp-file-progress-container {
+    border-color: #AAAAAA #C8C8C8 #C8C8C8 #AAAAAA;
+    border-style: solid;
+    border-width: 1px;
+
+    width: 215px;
+    height: 5px;
+    margin-top: 5px;
+
+    overflow: hidden;
+
+    .mp-file-progress-bar {
+      background: url("../../../../images/btn_bg.gif") repeat-x scroll 0 50% #FFAC47;;
+      height: 5px;
+
+      .transition(width 1s ease-in-out);
+    }
+  }
+
+  .mp-file-thumbnail {
+
+    .image {
+      float: left;
+
+      &.filetype {
+
+        padding: 0;
+        .size(25px);
+        &:before {
+          top: 5px;
+        }
+      }
+
+      img {
+        margin-top: 5px;
+        border: 2px solid #BEBEBE;
+        .border-radius(3px);
+
+      }
+    }
+
+    button.scalable {
+      float: left;
+      margin-top: 6px;
+      margin-left: 5px;
+    }
+
+  }
+
+  .input-file.required {
+    color: #2f2f2f !important;
+    font-weight: normal !important;
+  }
+}
+
+div.fixed {
+  clear: both;
+}

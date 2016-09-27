@@ -3,6 +3,7 @@
  * Catalog product model
  *
  * @method string getChargeLowerCommission()
+ * @method string getBackordersInfo()
  *
  * @category    Zolago
  * @package     Zolago_Catalog
@@ -17,6 +18,8 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 
 
     const ZOLAGO_CATALOG_CONVERTER_MSRP_SOURCE = 'salePriceBefore';
+
+
 
     /**
      * @return string

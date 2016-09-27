@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Searchcore
+ */
+-->
+<layout version="0.1.0">
+    <searchcore_admin_adminhtml_searchcore_index>
+        <reference name="content">
+            <block type="searchcore/adminhtml_searchcore" name="searchcore" />
+        </reference>
+    </searchcore_admin_adminhtml_searchcore_index>
+</layout>

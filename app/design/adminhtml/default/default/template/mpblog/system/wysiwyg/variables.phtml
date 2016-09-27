@@ -1,0 +1,32 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+
+<script type="text/javascript">
+
+    var mpBlogCutLabel = "<?php echo $this->__("Cut Post"); ?>";
+    var magentoVariablesLabel = "<?php echo $this->__("Magento Variables"); ?>";
+    var magentoVariables = [
+        {label: "<?php echo $this->__("General Contact Name"); ?>", value:"{{config path='trans_email/ident_general/name'}}"},
+        {label: "<?php echo $this->__("General Contact Email"); ?>", value:"{{config path='trans_email/ident_general/email'}}"},
+        {label: "<?php echo $this->__("Sales Contact Name"); ?>", value:"{{config path='trans_email/ident_sales/name'}}"},
+        {label: "<?php echo $this->__("Sales Contact Email"); ?>", value:"{{config path='trans_email/ident_sales/email'}}"},
+        {label: "<?php echo $this->__("Custom1 Contact Name"); ?>", value:"{{config path='trans_email/ident_custom1/name'}}"},
+        {label: "<?php echo $this->__("Custom1 Contact Email"); ?>", value:"{{config path='trans_email/ident_custom1/email'}}"},
+        {label: "<?php echo $this->__("Custom2 Contact Name"); ?>", value:"{{config path='trans_email/ident_custom2/name'}}"},
+        {label: "<?php echo $this->__("Custom2 Contact Email"); ?>", value:"{{config path='trans_email/ident_custom2/email'}}"},
+        {label: "<?php echo $this->__("Store Name"); ?>", value:"{{config path='general/store_information/name'}}"},
+        {label: "<?php echo $this->__("Store Contact Telephone"); ?>", value:"{{config path='general/store_information/phone'}}"},
+        {label: "<?php echo $this->__("Store Contact Address"); ?>", value:"{{config path='general/store_information/address'}}"}
+    ];
+
+    var magentoUrls = [
+        {label: "<?php echo $this->__("Base Unsecure URL"); ?>", value:"{{config path='web/unsecure/base_url'}}"},
+        {label: "<?php echo $this->__("Base Secure URL"); ?>", value:"{{config path='web/secure/base_url'}}"}
+    ]
+
+</script>

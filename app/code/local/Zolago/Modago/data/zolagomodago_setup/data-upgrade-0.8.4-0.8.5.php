@@ -1,4 +1,5 @@
 <?php
+/* no for standalone version
 $vissaviStore =  Mage::app()->getStore('vissavi')->getId();
 $modagoStore = Mage::app()->getStore('default')->getId();
 $allStores = 0;
@@ -153,3 +154,4 @@ foreach ($blocks as $data) {
     }
     $block->setData($data)->save();
 }
+*/

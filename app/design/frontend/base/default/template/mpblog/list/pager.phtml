@@ -1,0 +1,26 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+<?php if($this->getCollection()->getSize()): ?>
+    <?php if($this->getLastPageNum()>1): ?>
+    <div class="mp-pager">
+        <div>
+            <span class="navi older">
+            <?php if (!$this->isFirstPage()): ?>
+                <a class="older-link<?php if ($this->isOldStyle()): ?> old-style<?php endif; ?>" href="<?php echo $this->getPreviousPageUrl() ?>" rel="prev" title="<?php echo $this->__('Newer Entries') ?>"><i class="<?php echo $this->getColorClass(); ?> glyphicons chevron-left"></i><?php echo $this->__('Newer Entries') ?></a>
+            <?php endif;?>
+            </span>
+            <span class="navi newer">
+            <?php if (!$this->isLastPage()): ?>
+                <a class="newer-link<?php if ($this->isOldStyle()): ?> old-style<?php endif; ?>" href="<?php echo $this->getNextPageUrl() ?>" rel="next" title="<?php echo $this->__('Older Entries') ?>"><?php echo $this->__('Older Entries') ?><i class="<?php echo $this->getColorClass(); ?> glyphicons chevron-right"></i></a>
+            <?php endif;?>
+            </span>
+        </div>
+        <div class="fixed"></div>
+    </div>
+    <?php endif; ?>
+<?php endif ?>

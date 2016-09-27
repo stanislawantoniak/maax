@@ -159,6 +159,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				Mage::register('current_po', $po); 
 				// Do send email
 				$tracking = $po->getTracking();
+				$udropshipMethod = $po->getUdropshipMethod();
+				$shippingMethod = Mage::helper("udropship")->getOmniChannelMethodInfoByMethod(0, $udropshipMethod);
+				$deliveryCode = $shippingMethod->getDeliveryCode();
 				$params = array(
 					"tracking" => $tracking,
 					"track_url"=> $po->getTrackingUrl($tracking),
@@ -166,6 +169,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 						"vendor"=>$po->getVendor()->getId(),
 						"po"=>$po->getId()
 					)),
+					"delivery_code" => $deliveryCode,
 					"_ATTACHMENTS" => $helper->getPoImagesAsAttachments($po)
 				);
 				$po->sendEmailTemplate(

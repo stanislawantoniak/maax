@@ -25,6 +25,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$boolAttributes = array(
 			"is_new",
 			"is_bestseller",
+			"is_founding",
+			"is_installments",
 			"converter_price_type",
 			"converter_msrp_type"
 		);
@@ -123,7 +125,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 	public function getEditableAttributes() {
 		return array(
 			"is_new", 
-			"is_bestseller", 
+			"is_bestseller",
 			"status",
 			"converter_price_type",
 			"converter_msrp_type",
@@ -146,7 +148,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"price_margin", 
 			"msrp", 
 			"is_new", 
-			"is_bestseller", 
+			"is_bestseller",
 			"product_flag",
 			"is_in_stock",
 			"available_child_count",

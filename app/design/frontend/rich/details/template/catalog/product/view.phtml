@@ -1,0 +1,346 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 10.07.2014
+ *
+ */
+
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+
+/** @var $this Zolago_Catalog_Block_Product_View */
+?>
+
+<?php
+/** @var Zolago_Modago_Block_Review_Product_View_List $_reviewBlock */
+$_reviewBlock = Mage::getBlockSingleton('zolagomodago/review_product_view_list');
+?>
+
+<?php
+// review label
+$_reviewsCount = count($_reviewBlock->getReviewsForProduct());
+$_reviewsLabel = '';
+switch ($_reviewsCount) {
+	case 0:
+		$_reviewsLabel = $this->__('Zero reviews');
+		break;
+	case 1:
+		$_reviewsLabel = $this->__('Singular review');
+		break;
+	case 2:
+	case 3:
+	case 4:
+		$_reviewsLabel = $this->__('Review');
+		break;
+	default:
+		$_reviewsLabel = $this->__('Zero reviews');
+		break;
+}
+$avg = $_reviewBlock->getAvarageRating();
+
+/** @var Zolago_Dropship_Model_Vendor $vendorContext */
+$vendorContext = Mage::helper('umicrosite')->getCurrentVendor();
+$isVendorContent = false;
+if ($vendorContext && $vendorContext->getId()) {
+	$isVendorContent = true;
+}
+
+
+$_helper = $this->helper('catalog/output');
+/** @var $_product Zolago_Catalog_Model_Product */
+$_product = $this->getProduct();
+$attributesData = $this->getAdditionalDataDetailed(true, false);
+
+$productDescription = $_helper->productAttribute($_product, $_product->getDescription(), 'description');
+$brandShopProductId = $_product->getData('brandshop');
+
+if($_product->getData('is_installments')) $installments = $this->getLayout()->createBlock('cms/block')->setBlockId('product-installments')->toHtml();
+if($_product->getData('is_founding')) $funding = $this->getLayout()->createBlock('cms/block')->setBlockId('product-funding')->toHtml();
+$deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
+?>
+
+<?php $blogPosts = $this->getChildHtml('blogposts'); ?>
+<?php $blogPostsLength = strlen(trim($blogPosts)); ?>
+
+<div class="path_back_to_category visible-xs">
+	<div class="col-xs-12">
+		<a href="<?php echo $this->getParentCategoryUrl(); ?>" id="pbtc_link"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
+	</div>
+</div>
+<div id="content" class="container-fluid">
+	<div id="product_content" class="<?php if($blogPostsLength == 0): ?>col-lg-12 col-md-12<?php else: ?>col-lg-9 col-md-9<?php endif; ?> col-sm-12 col-xs-12">
+		<div id="product_details" class="row" itemscope itemtype="http://schema.org/Product">
+			<div id="product-gallery" class="<?php if($blogPostsLength == 0): ?>col-lg-5 col-md-5<?php else: ?>col-lg-6 col-md-6<?php endif; ?> col-sm-6 col-xs-12 clearfix">
+				<!-- GALLERY PRODUCT -->
+				<?php echo $this->getChildHtml('media') ?>
+				<!-- END GALERY PRODUCT -->
+			</div>
+			<div id="product-shop" class="<?php if($blogPostsLength == 0): ?>col-lg-7 col-md-7<?php else: ?>col-lg-6 col-md-6<?php endif; ?> col-sm-6 col-xs-12">
+				<?php echo
+				$this->getChild('product.shop')
+					->setReviewsCount($_reviewsCount)
+					->setReviewsLabel($_reviewsLabel)
+					->setReviewsAvg($avg)
+					->toHtml();
+				?>
+				<!-- END:/ PRODUCT SHOP -->
+			</div>
+		</div>
+		<div id="product_long_box" class="col-xs-12">
+			<ul class="title_section">
+				<li>
+					<input type="radio" name="tabs" id="tab-1" checked>
+					<label for="tab-1"><?php echo $this->__("Product description"); ?><i class="fa"
+																						 aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<div>
+								<div itemprop="description"><?php echo $productDescription; ?></div>
+								<?php if (!empty($attributesData)) : ?>
+									<ul class="list">
+										<?php foreach ($attributesData as $attr) : ?>
+											<li>
+												<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>
+													: </strong>
+												<?php if ($attr['code'] == "color"): ?>
+													<span
+														itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+												<?php elseif ($attr['code'] == "manufacturer"): ?>
+													<?php
+													$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+													$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
+													$brand = $vendorsCollection->getFirstItem();
+
+													$brandShopId = $brand->getId();
+													$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
+													$brandShopName = $brandShop->getData("vendor_name");
+													$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
+													?>
+													<?php if ($brandShopProductId == $brandShopId): ?>
+														<h3 class="itemprop-brand"><a
+																href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a>
+														</h3>
+													<?php else: ?>
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													<?php endif; ?>
+												<?php else: ?>
+													<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													<?php else: ?>
+														<?php echo implode(",", $attr['value']); ?>
+													<?php endif; ?>
+												<?php endif; ?>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								<?php endif; ?>
+							</div>
+						</div>
+					</article>
+				</li>
+				<li>
+					<input type="radio" name="tabs" id="tab-2">
+					<label for="tab-2"><?php echo $this->__("Review"); ?><i class="fa" aria-hidden="true"></i></label>
+					<article class="content">
+						<div class="inner">
+							<?php echo $this->getChildHtml('product.review.section'); ?>
+						</div>
+					</article>
+				</li>
+				<?php if (!empty($installments)) : ?>
+					<li>
+						<input type="radio" name="tabs" id="tab-3">
+						<label for="tab-3"><?php echo $this->__("Hire purchase"); ?><i class="fa"
+																					   aria-hidden="true"></i></label>
+						<article class="content">
+							<div class="inner">
+								<?php echo $installments; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif;
+				if (!empty($funding)) : ?>
+					<li>
+						<input type="radio" name="tabs" id="tab-4">
+						<label for="tab-4"><?php echo $this->__("Bailout"); ?><i class="fa"
+																				 aria-hidden="true"></i></label>
+						<article class="content">
+							<div class="inner">
+								<?php echo $funding; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif;
+				if (!empty($deliveryReturn)) : ?>
+					<li>
+						<input type="radio" name="tabs" id="tab-5">
+						<label for="tab-5"><?php echo $this->__("Delivery and returns"); ?><i class="fa"
+																							  aria-hidden="true"></i></label>
+						<article class="content">
+							<div class="inner">
+								<?php echo $deliveryReturn; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif; ?>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+		<?php echo $this->getChildHtml('upsell'); ?>
+	</div>
+	
+	<?php echo $this->getChildHtml('blogposts'); ?>
+	
+	<div id="product_additions_2" class="col-xs-12">
+		<?php echo $this->getChildHtml('crosssell'); ?>
+	</div>
+	
+</div>
+
+<div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+	 aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-error modal-header" style="display: none;">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $this->__("Error occured!"); ?></h2>
+			</div>
+			<div class="modal-loading modal-header">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $this->__("Adding product to cart..."); ?></h2>
+			</div>
+			<div class="modal-loaded modal-header" style="display: none;">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+			</div>
+			<div class="modal-body modal-error" style="display: none">
+				<div class="modal-error-txt">
+
+				</div>
+			</div>
+			<div class="modal-body modal-loading" style="text-align: center">
+				<i class="fa fa-spinner fa-spin fa-2x"></i>
+			</div>
+			<div class="modal-loaded modal-body" style="display: none;">
+				<table>
+					<tbody id="product-added">
+					<tr id="full-width-popup-table">
+						<td class="thumb" style="width: 55px;"><img
+								src="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(40, 50) ?>"
+								alt=""></td>
+						<td class="desc"><p class="name_product"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></p>
+
+							<?php if ($_product->getTypeId() == 'configurable') :?>
+								<p class="size"><?php echo ucfirst($this->__("size")); ?>: <span></span></p>
+							<?php endif; ?>
+
+							<p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span></span></p></td>
+						<?php /* ensure the price in popup is correct */ ?>
+						<td class="price"></td>
+					</tr>
+					<tr id="small-width-popup-table">
+						<td></td>
+						<td class="price" style="padding: 0 5px;"></td>
+					</tr>
+					</tbody>
+				</table>
+				<div id="buttons-after-add-to-cart">
+					<div class="button-after-add-to-cart" id="continue-shopping-after-add-to-cart">
+						<a href="#" data-dismiss="modal" class="button button-third">
+							<?php echo $this->__("Continue shopping"); ?>
+						</a>
+					</div>
+					<div class="button-after-add-to-cart" id="cart-after-add-to-cart">
+						<a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium link">
+							<?php echo $this->__("Go to shopping cart"); ?>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal"></button>
+			<div class="modal-body" style="overflow-y: hidden;">
+				<div id="sizeTableIframeContainer">
+					<iframe id="sizeTableIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--zadaj pytanie sprzedajacemu-->
+<div class="modal fade bs-example-modal-lg" id="ask_question" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php /* echo Mage::helper('wfwf')->__("Ask about product"); */ ?></h2>
+			</div>
+			<div class="modal-body">
+				<?php echo $this->getChildHtml('udqa.product.question.product'); ?>
+			</div>
+		</div>
+	</div>
+</div>
+<!--end zadaj pytanie sprzedajacemu-->
+<div class="modal fade" id="calculator" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1050">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<button type="button" class="close" data-dismiss="modal"></button>
+			<div class="modal-body" style="overflow-y: hidden;">
+				<div id="calculatorIframeContainer">
+					<iframe id="calculatorIframe" style="overflow: hidden;border: 0" height="100%" width="100%"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php echo $this->getChildHtml('product.info.media.modal'); ?>
+<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
+<?php echo $this->getChildHtml('zolago.page.benefits'); ?>
+
+<script type="text/javascript">
+	Mall.wishlist.addProduct({
+		id: <?php echo $_product->getId(); ?>,
+		wishlist_count: <?php echo (int)$this->getProduct()->getWishlistCount() ?>,
+		in_your_wishlist: <?php echo Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product) ? "true" : "false"; ?>
+	});
+	Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
+	Mall.translate.add("added-to-shopping-list", "<?php echo Mage::helper("zolagocatalog")->__("Added to shopping list"); ?>");
+	Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
+	Mall.translate.add("add-to-favorites", "<?php echo Mage::helper("zolagocatalog")->__("Add to shopping list"); ?>");
+	Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
+	Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
+	Mall.translate.add("Select size", "<?php echo $this->__("Select size"); ?>");
+	Mall.translate.add("Size", "<?php echo Mage::helper("zolagocatalog")->__("Size"); ?>");
+
+
+	Mall.reg.set("varnish_product_id", <?php echo $_product->getId();?>);
+	<?php if($_product->getCategory()):?>
+	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
+	<?php endif;?>
+
+	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable."); ?>");
+
+	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
+
+	var f = function () {
+		jQuery("#product_long_box").height(
+			jQuery("[name=tabs]:checked ~ article").height() + 180
+		);
+	};
+	f();
+	jQuery("[name=tabs]").change(f);
+</script>

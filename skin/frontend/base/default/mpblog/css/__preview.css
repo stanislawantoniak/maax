@@ -1,0 +1,13 @@
+/* Preview */
+.mpblog-preview {
+  padding: 20px;
+}
+.mpblog-preview .mpblog-preview-header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+.mpblog-preview-button-set {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}

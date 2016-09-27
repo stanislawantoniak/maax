@@ -1,0 +1,24 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var Magpleasure_Blog_Helper_Data $helper  */
+$helper = $this->_helper();
+?>
+<?php if ($this->isBlogPage()):  ?>
+
+    <?php if ($this->isCategoryPage() && $helper->getRssCatgeory()): ?>
+        <link title="<?php echo $this->checkForPrefix($this->__("%s Feed", $this->getCategoryName())); ?>" href="<?php echo $this->getCategoryFeedUrl(); ?>" type="application/rss+xml" rel="alternate" />
+    <?php else: ?>
+        <?php if ($helper->getRssPost()): ?>
+        <link title="<?php echo $this->checkForPrefix($this->__("Post Feed")); ?>" href="<?php echo $this->getPostFeedUrl(); ?>" type="application/rss+xml" rel="alternate" />
+        <?php endif; ?>
+    <?php endif;?>
+
+    <?php if ($helper->getRssComment()): ?>
+    <link title="<?php echo $this->checkForPrefix($this->__("Comment Feed")); ?>" href="<?php echo $this->getCommentFeedUrl(); ?>" type="application/rss+xml" rel="alternate" />
+    <?php endif; ?>
+<?php endif; ?>

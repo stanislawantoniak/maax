@@ -1,0 +1,82 @@
+.pagination-line {
+	* {
+		list-style: none !important;
+	}
+	margin: 0 !important;
+	padding: 0;
+	.listing-pagination {
+		margin: 0;
+		padding: 0;
+		.totals, .pages {
+			display: inline-block;
+			@media(max-width: 600px) {
+				display: block;
+			}
+		}
+		.totals {
+			line-height: 30px;
+			vertical-align: sub;
+			color: #222;
+			margin-right: 10px;
+		}
+		.pages {
+			a {
+				display: inline-block;
+				background-color: $color_ffffff;
+				border: 1px solid $color_afafaf;
+				text-align: center;
+				font-size: 15px;
+				color: $color_333333;
+				height: 29px;
+				line-height: 29px;
+				&:hover {
+					border-color: $color_333333;
+				}
+				&.page-disabled {
+					color: $color_c4c4c4;
+					border-color: $color_e8e8e8;
+					&:hover {
+						color: $color_c4c4c4;
+						border-color: $color_e8e8e8;
+					}
+				}
+			}
+		}
+	}
+	&.pagination-top{
+		.listing-pagination {
+			.pages {
+				width: 20%;
+				@media (max-width: $screen-sm-to-smmd-max) {
+					width: 100%;
+				}
+				a {
+					width: 100%;
+					max-width: 73px;
+					@media (max-width: $screen-sm-to-smmd-max) {
+						max-width: 55px;
+					}
+				}
+			}
+			.pages, .totals {
+				float: left;
+				@media (max-width: $screen-sm-to-smmd-max) {
+					float: none;
+				}
+			}
+		}
+	}
+	&.pagination-bottom {
+		text-align: center;
+		margin-top: 35px !important;
+		.totals,.pages {
+			display: inline-block !important;
+		}
+		.totals {
+			margin-right: 10px;
+		}
+		.listing-pagination .pages a {
+			padding: 0 31px;
+		}
+	}
+}

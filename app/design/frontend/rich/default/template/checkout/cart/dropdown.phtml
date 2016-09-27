@@ -1,0 +1,41 @@
+<?php
+/**
+ * This file is pre template for dropdown basket
+ * part of .summary-basket after ajax load will be replaced by Mall._summary_basket
+ * part of #product-list after ajax load will be replaced by Mall._product_template
+ */
+/** @var Zolago_Modago_Block_Checkout_Cart $this */
+/** @var Zolago_Checkout_Helper_Data $hlp */
+$hlp = Mage::helper('zolagocheckout');
+$showCartUrl = str_replace(array('http://','https://'),array('//','//'), Mage::getUrl('checkout/cart', array("_no_vendor"=>true)));
+?>
+
+<div id="dropdown-basket" class="dropdown dropdown-anchor-right basket basket-dropdown" style="display: none;">
+    <div class="dropdown-panel">
+        <div class="dropdown-panel-inner">
+            <table>
+                <tbody id="product-list">
+                </tbody>
+            </table>
+            <div class="summary_basket">
+                <ul>
+                    <li>{{products_count_msg}}: {{all_products_count}}</li>
+                    <li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li>
+                    <li>{{shipping_cost_msg}}: {{shipping_cost}}</li>
+                </ul>
+                <a href="<?php echo $showCartUrl; ?>" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>
+            </div>
+	        <div class="loading_basket">
+		        <i class="fa fa-spinner fa-spin"></i>
+	        </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    Mall.i18nValidation.add("see_your_cart_msg","<?php echo $hlp->__("See your cart"); ?>");
+    Mall.i18nValidation.add("products_count_msg","<?php echo $hlp->__("Products count"); ?>");
+    Mall.i18nValidation.add("products_worth_msg","<?php echo $hlp->__("Products worth"); ?>");
+    Mall.i18nValidation.add("shipping_cost_msg","<?php echo $hlp->__("Shipping cost"); ?>");
+    Mall.i18nValidation.add("No products in basket.","<?php echo $hlp->__("No products in basket."); ?>");
+    Mall.i18nValidation.add("remove_my_data_from_this_device","<?php echo $hlp->__("Remove my data from device"); ?>");
+</script>

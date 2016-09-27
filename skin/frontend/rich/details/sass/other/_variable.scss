@@ -1,0 +1,433 @@
+@import "../vendor/bootstrap/variables";
+@import "media-queries";
+
+// NEW BREAKPOINT 
+
+//@screen-sxs:                 480px;
+//@screen-sxs-max:             @screen-sxs;
+//@screen-phone:               @screen-sxs-max;
+
+// NEW FOR LISTING ( FOR TABLETS )
+// NOW YOU CAN USE OLD BOOTSTRAP DEFAULT:
+// XS(480) -> XS-MAX(767) -> SM(768) -> SM-MAX(991) -> MD(992) -> MD-MAX(1199) -> LG(1200)
+//
+// AND NEW FOR LISTING
+// XS(480) -> XS-MAX(767) -> SM-TO-SMMD(768) -> SM-TO-SMMD-MAX(809) -> SMMD(810) -> SMMD-MAX(991) -> MD(992) -> MD-MAX(1199) -> LG(1200)
+
+// Small screen / tablet
+$screen-sm-to-smmd:            $screen-sm !default;                 // 768px
+$screen-sm-to-smmd-min:        $screen-sm-to-smmd;
+
+$screen-smmd:                  810px !default;
+$screen-smmd-min:              $screen-smmd !default;          // 810px
+
+// So media queries don't overlap when required, provide a maximum
+$screen-sm-to-smmd-max:        ($screen-smmd-min - 1) !default; // 809px
+$screen-smmd-max:              ($screen-md-min - 1) !default;  // 991px
+
+//== Container sizes
+//
+//## Define the maximum width of `.container` for different screen sizes.
+
+// SM-TO-SMMD
+$container-sm-to-smmd:         ((740px + $grid-gutter-width)) !default; //770
+// SMMD
+$container-smmd:               ((950px + $grid-gutter-width)) !default; //980
+
+$global-image-path: "../images";
+// #{$global-image-path}
+
+$icon-font-path: "../fonts/glyphicons/";
+$icon-font-name:          "glyphicons-halflings-regular" ;
+$icon-font-svg-id:        "glyphicons_halflingsregular" ;
+
+$panel-bottom: $color_fefefe;
+$panel-top: $color_fcfcfc;
+$body-bg: $color_fff;
+$color-gold: $color_ff0000;
+$color-gray1: $color_b99;
+$color-gray2: $color_ffebeb;
+$color-gray3: $color_ffeded;
+$color-gray4: $color_999;
+$bc-primary : $gray-lighter;
+$color-black: $color_220000;
+$bc-secondary : #d9d9d9;
+$colorShortDescription:$color_8a8a8a;
+
+
+
+
+$validation-error: $color_e84c3d;
+
+@mixin border-all($size:1px) {
+    
+}
+
+@mixin bc-primary($bs:1px)  {
+    border: $bs solid $bc-primary;
+}
+
+@mixin bc-secondary($bs:1px)  {
+    border: $bs solid $bc-secondary;
+}
+
+@mixin reset-m {
+    margin: 0;
+    padding: 0;
+}
+@mixin reset-l {
+    @include reset-m;
+    list-style: none;
+}
+@mixin cfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+@mixin reset-full {
+    a:link,
+    a:visited,
+    a:hover,
+    a:focus {
+        margin:0px;
+        padding:0px;
+        background:0px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="submit"],
+    button,
+    textarea {
+        margin:0px;
+        padding:0px;
+        background:transparent;
+        border:none;
+    }
+}
+
+@mixin linearGradient($startColor,$stopColor) {
+	background: $startColor !important;
+	background: -moz-linear-gradient(-80deg,  $startColor 0%, $stopColor 100%)!important;
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,$startColor), color-stop(100%,$stopColor))!important;
+	background: -webkit-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: -o-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: -ms-linear-gradient(-80deg,  $startColor 0%,$stopColor 100%)!important;
+	background: linear-gradient(135deg,  $startColor 0%,$stopColor 100%)!important;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$startColor, endColorstr=$stopColor,GradientType=1 )!important;
+}
+
+// FONT
+$fontLight: latolight, sans-serif;
+$fontRegular: latoregular, sans-serif;
+$fontBlack: latoblack, sans-serif;
+
+/* SPRITE SA DO PRZECZYSZCZENIA, ZA DUZO OBRAZKOW TAM WPADA NIEPOTRZEBNIE */
+
+// SPRITES MAP 
+$allMap: sprite-map("sprites/all/*.png", $layout: smart, $spacing:50px);
+
+// Dodatkowe sprites
+$btnCheck: sprite-map("sprites/check_filter/*.png", $spacing:200px);
+$checkboxMap: sprite-map("sprites/checkbox/*.png", $spacing:200px);
+$radioMap: sprite-map("sprites/radio/*.png", $spacing:200px);
+$selectMap: sprite-map("sprites/select/*.png");
+$bgMap: sprite-map("sprites/bg/*.png");
+
+/**
+
+
+
+ NEW GLOBAL VARS
+
+
+
+ **/
+
+//global color
+$siteMainColor:                         #36b7b2;
+
+$colorSiteBackground:                   #F2F1F0;
+
+$colorSiteOverlay:                      #000;
+$opacitySiteOverlay:                    .5;
+
+$colorShadow:                           #bbb;
+
+$colorFont:                             #000;
+$colorLink:                             #000;
+$colorLinkHover:                        #000;
+$colorLinkActive:                       #000;
+$colorSecondFont:                       #3d3d3d;
+
+//icon colors
+$colorIcon:                             #000;
+$colorIconHover:                        #FFF;
+$colorIconHoverBackground:              #FFF;
+
+//icon texts colors
+$colorIconText:                         $colorIcon;
+$colorIconTextHover:                    $colorIconHover;
+
+//backgrounds colors
+$colorBackgroundBlocks:                 #FFF;
+$colorBackgroundSite:                   #F2F1F0;
+$colorBackgroundContent:                #FFF;
+
+$colorLinkHoverOnDark:                  #fff;
+$decorationLinkHover:                   none;
+
+//accents colors
+$colorAccentBlocks:                     #EBEBEB;
+$colorAccentSite:                       $siteMainColor;
+$colorAccentTitle:                      transparent;
+$colorAccentTitleTransparent:           true; //defines margins for titles, if you want colored box before titles set it to false
+$colorAccentError:                      $siteMainColor;
+
+//buttons
+$colorBtnPrimary:                       #FFF;
+
+$colorBtnPrimaryBgStart:                $siteMainColor;
+$colorBtnPrimaryBgEnd:                  $siteMainColor;
+
+$colorBtnPrimaryBgStartHover:           $siteMainColor;
+$colorBtnPrimaryBgEndHover:             $siteMainColor;
+
+$colorBtnPrimaryBgStartActive:          $siteMainColor;
+$colorBtnPrimaryBgEndActive:            $siteMainColor;
+
+$colorBtnThirdBorderActive:             $siteMainColor;
+$colorBtnThirdColorActive:              $siteMainColor;
+
+$colorBtnPrimaryBgDisabled:             #C5C5C5;
+
+$colorProductFinalPrice:                 $color_000;
+$colorProductStrikeOutPrice:             $color_000;
+
+@mixin primaryButtonGradient { //covers normal + hover + active + .disabled
+	@include linearGradient($colorBtnPrimaryBgStart,$colorBtnPrimaryBgEnd);
+	&:hover,&.hover {
+		@include linearGradient($colorBtnPrimaryBgStartHover,$colorBtnPrimaryBgEndHover);
+	}
+	&:active,&:focus,&.active {
+		@include linearGradient($colorBtnPrimaryBgStartActive,$colorBtnPrimaryBgEndActive);
+	}
+	&.disabled {
+		background: $colorBtnPrimaryBgDisabled;
+	}
+}
+
+@mixin productPricesBlockKit {
+
+    .amount {
+        font-family: $fontRegular;
+        font-weight: 700;
+        color: #343434;
+        font-size: 14px;
+    }
+
+    ins {
+        background-color: transparent;
+        text-decoration: none;
+    }
+    del {
+        font-size: 1em;
+        color: #999;
+
+        span.amount {
+            color: #999;
+        }
+    }
+}
+/***********************************************/
+$colorDropdownBorder:                   #ffffff;
+$colorDropdownBBoxShadow:               #ccc;
+
+$colorMainMenuSubItemGradientStart:     #fff;
+$colorMainMenuSubItemGradientEnd:       #fff;
+
+/* REVIEW BLOCK VARIABLES */
+$colorReviewBorder: #8bb56d;
+
+/* CMS VARIABLES */
+$colorBorderCms:                        #bfbfbf;
+$colorBackgroundCms:                    $colorBackgroundBlocks;
+$colorAccentCms:                        $colorAccentSite;
+
+/* HEADER VARIABLES */
+$colorIconHeader:                       $colorIcon;
+$colorIconHoverHeader:                  $colorIconHover;
+$colorIconHoverBgHeader:                $colorIconHoverBackground;
+
+$colorHeaderBadge:                      #808080;
+$colorHeaderBadgeBorder:                #808080;
+$colorHeaderBadgeBg:                    #fff;
+
+$colorIconTextHeader:                   $colorIconText;
+$colorIconTextHoverHeader:              $colorIconTextHover;
+
+$colorBgBlocksHeader:                   $colorIconHover;
+$colorBgContentHeader:                  $colorBackgroundContent;
+$colorAccentBlocksHeader:               #EBEBEB;
+
+$colorHeaderSearch:                     #2a2a2a;
+$colorHeaderSearchBg:                   #FFF;
+$colorHeaderSearchBorder:               #EBEBEB;
+$colorHeaderSearchBtnBg:                #EBEBEB;
+$colorHeaderSearchBtn:                  #454545;
+
+$colorHeaderUserAccountDesktopBtnBg:    #EBEBEB;
+$colorHeaderUserAccountMobileBtnBg:     #FFF;
+
+/* CHECKOUT HEADER VARIABLES */
+$colorHeaderCheckoutSteps:              $colorIconHeader;
+$colorHeaderCheckoutStepsActive:        $colorAccentSite;
+$colorHeaderCheckoutStepsText:          $colorIconHeader;
+$colorHeaderCheckoutStepsTextActive:    $colorAccentSite;
+
+/* TOP MENU VARIABLES */
+
+
+$colorMainNavigationStripe:              #4C4C4C;
+$colorMainNavigationSubMenuSectionTitle: #4C4C4C;
+$colorMainMenuLinks:                     #7e7e7e;
+
+
+$colorAccentSiteMenuTop:                $colorAccentSite;
+$colorAccentBlocksMenuTop:              $colorAccentBlocks;
+$colorBgBlocksMenuTop:                  $colorBackgroundBlocks;
+
+
+/* DROPDOWN VARIABLES */
+$colorBgDropdown:                       $colorIconHoverBgHeader;
+$colorDropdown:                         $colorIconTextHoverHeader;
+$colorAccentDropdown:                   $colorAccentBlocks;
+
+/* CART DROPDOWN VARIABLES */
+$colorBgDropdownCart:                   $colorBgDropdown;
+$colorDropdownCart:                     #000;
+$colorAccentDropdownCart:               $colorAccentDropdown;
+
+/* SEARCH DROPDOWN VARIABLES */
+$colorBgDropdownSearch:                 $colorBgDropdown;
+$colorDropdownSearch:                   $colorDropdown;
+$colorDropdownSearchText:               #fff;
+$colorAccentDropdownSearch:             $colorAccentDropdown;
+
+/* FOOTER VARIABLES */
+$colorBgBlocksFooter:                   $colorBackgroundBlocks;
+$colorFontFooter:                       $colorFont;
+$colorLinkFooter:                       $colorLink;
+
+/* CART VARIABLES */
+$colorAccentBlocksCart:                 $colorAccentBlocks;
+
+/* HAMBURGER MENU VARIABLES */
+$colorHamburgerBg:                      #2D2D2D;
+$colorHamburgerBgHeader:                $colorHamburgerBg;
+$colorHamburgerBgSeparator:             $colorHamburgerBg;
+$colorHamburgerBgItem:                  #000;
+$colorHamburgerBgItem2:                 #414141;
+$colorHamburgerBgItem3:                 #555556;
+$colorHamburgerTextHeader:              #fff;
+$colorHamburgerText:                    $colorHamburgerTextHeader;
+$colorHamburgerText2:                   $colorHamburgerTextHeader;
+$colorHamburgerText3:                   $colorHamburgerTextHeader;
+$colorHamburgerBorder:                  $colorHamburgerBg;
+$colorHamburgerBorder2:                 $colorHamburgerBg;
+$colorHamburgerBorder3:                 $colorHamburgerBg;
+$colorHamburgerIcon:                    #FFF;
+
+/* FAQ VARIABLES */
+$colorFaqLabel:                         $colorFont;
+$colorFaqLabelBg:                       #F5F5F5;
+$colorFaqLabelBorder:                   #DDD;
+$colorFaqAnswer:                        $colorFont;
+$colorFaqAnswerBg:                      transparent;
+$borderRadiusFaq:                       0;
+
+/* COOKIE BAR VARIABLES */
+$colorCookieBarBg:                      #CDCDCD;
+$colorCookieBar:                        #5f5f5f;
+$colorCookieBarLink:                    #CD0027;
+$colorCookieBarLinkHover:               #e60028;
+$colorCookieBarLinkActive:              #b40026;
+
+/* PRODUCT VARIABLES */
+$colorAccentProductTitle:               $colorAccentTitle;
+$colorProductAccordionBorder:           #d9d9d9;
+$colorProductAccordion:                 #000;
+
+/* MY ACCOUNT VARIABLES */
+$colorAccentSidebarAccount:             $colorAccentSite;
+$colorBorderSidebarAccount:             #ebebeb;
+$colorBackgroundBlocksAccount:          $colorBackgroundBlocks;
+
+/* RMA VARIABLES */
+$colorRma:                              $colorFont;
+$colorBorderRma:                        #bfbfbf;
+$colorBackgroundRma:                    $colorBackgroundBlocksAccount;
+$colorAccentRma:                        $colorAccentSite;
+$colorRmaCancel:                        #BBB;
+$colorRmaFooter:                        #fefefe;
+$colorBackgroundRmaPoList:              $colorBackgroundRma;
+$colorBorderRmaPoList:                  $colorBorderRma;
+$colorBorderRmaPoListImage:             #cccccc;
+$colorRmaCarrier:                       $colorFont;
+$colorRmaCarrierActive:                 #fff;
+$colorBackgroundRmaCarrier:             #fff;
+$colorBorderRmaCarrier:                 #ccc;
+$colorBackgroundRmaCarrierChosen:       #f5f5f5;
+$colorBackgroundRmaCarrierTime:         #fff;
+$colorShadowRma:                        $colorShadow;
+$colorShadowRma2:                       #f0f0f0;
+$colorShadowRma3:                       rgba(51,51,51,0.45);
+$colorBorderCarrierTimePicker:          $colorBorderRma;
+$colorBackgroundCarrierTimePicker:      #fff;
+$colorBackgroundCarrierTimePickerPseudo:#e8e7e6;
+$colorBackgroundCarrierTimePickerDisabled:#b8b8b8;
+$colorAccentCarrierTimePicker:          $colorAccentRma;
+
+/* SIDEBAR COLORS */
+$colorBorderSidebar:                    #ebebeb;
+$colorBackgroundSidebar:                $colorBackgroundBlocks;
+$colorBorderSidebarSection:             #d2d2d2;
+
+/* PRODUCT SITE COLORS */
+$colorProductBtnAddBg:                  #000;
+$colorProductBtnAdd:                    #FFF;
+$colorProductFlagBg:                    $colorAccentSite;
+$colorProductFlag:                      #FFF;
+$colorProductExtraInfo:                 $colorFont;
+$colorProductExtraInfoBg:               #FCFCFC;
+$colorProductExtraInfoBorder:           #EBEBEB;
+
+/* LISTING */
+$boxShadowListingColor:                 #f5f3f4;
+$colorProductFinalPrice:                #dc4348;
+$colorProductStrikeOutPrice:            #8a8a8a;
+
+/*FOOTER*/
+$textColorFooter:                       #fff;
+$textColorFooterLink:                   #8a8a8a;
+$backgroundColorFooter:                 #262626;
+
+@mixin generalLinkOnDark {
+  &:hover, &.hover {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+
+  }
+  &:active, &:focus, &.active {
+    color: $colorLinkHoverOnDark;
+    text-decoration: $decorationLinkHover;
+    outline: none;
+  }
+}

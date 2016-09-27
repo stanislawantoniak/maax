@@ -1,0 +1,46 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+?>
+
+<?php /** @var Magpleasure_Common_Block_System_Entity_Form_Element_Dropdown_Render $this */ ?>
+
+<?php
+if(Mage::app()->getRequest()->getControllerName() == 'catalog_product_action_attribute') {
+    $attributeName = "attributes[{$this->getName()}]";
+} else {
+    $attributeName = $this->getName();
+}
+?>
+
+<div id="<?php echo $this->getHtmlId(); ?>_container" class="mp_dropdown_container">
+    <?php $values = $this->getValues(); ?>
+    <select style="width: 280px;"
+            class=" select"
+            name="<?php echo $attributeName; ?>"
+            id="<?php echo $this->getHtmlId(); ?>"
+            <?php if ($this->getCanUseDefaultValue() || $this->getCanUseWebsiteValue() || $this->getDisabled()): ?>
+                disabled
+            <?php endif; ?> >
+    <?php if (count($values)): ?>
+        <?php foreach ($values as $option): ?>
+        <option<?php if ($this->getValue() == $option['value']): ?> selected="selected"<?php endif; ?> value="<?php echo $option['value']; ?>"><?php echo $option['label']; ?></option>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </select>
+    <div style="clear: both;"/>
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+    <?php if (!$this->isAjax()): ?>
+    document.observe("dom:loaded", function(){
+    <?php endif; ?>
+        jQuery( "#<?php echo $this->getHtmlId(); ?>" ).select2(<?php echo $this->getParamsJson(); ?>);
+    <?php if (!$this->isAjax()): ?>
+    });
+    <?php endif; ?>
+    //]]>
+</script>

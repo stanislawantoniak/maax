@@ -1,0 +1,31 @@
+<?php /* @var $this Zolago_Blog_Block_Catalog_Product_Posts */ ?>
+
+
+<?php $productBlogItems = $this->_productBlogItems; ?>
+
+<?php if ($productBlogItems->getSize() > 0): ?>
+    <div id="product_additions_3" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="product-blog-post-items">
+            <?php foreach ($productBlogItems as $post): ?>
+                <div class="col-md-12 col-sm-6 col-xs-6 product-blog-post-item">
+                    <div class="product-blog-post-item-container">
+                        <a href="<?php echo $post->getUrl(); ?>">
+                            <?php if ($this->hasThumbnail($post)): ?>
+                                <div class="col-md-6 col-sm-4 col-xs-12 post-thumb">
+                                    <img class="product-post-thumb" src="<?php echo $this->getThumbnailSrc($post); ?>"
+                                         alt="<?php echo $this->escapeHtml($post->getTitle()); ?>">
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="col-md-6 col-sm-8 col-xs-12 post-title">
+                                <span><?php echo $post->getTitle(); ?></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+

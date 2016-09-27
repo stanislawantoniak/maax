@@ -1,0 +1,55 @@
+#co-shippingpayment .fieldset-title {
+    margin-bottom: 0px;
+}
+#co-shippingpayment .data-validate {
+    margin-bottom: 15px;
+}
+#co-shippingpayment .data-validate span {
+    padding-left: 0px !important;
+}
+
+.header_bottom #customer-account-navigation-mobile > li {
+    display: block;
+    height: auto;
+}
+.header_bottom #customer-account-navigation-mobile > li > a:link,
+.header_bottom #customer-account-navigation-mobile > li > a:visited {
+    border-bottom: 1px solid #dedce1;
+    line-height: 29px;
+    display: block;
+    padding-left: 15px;
+    position: relative;
+}
+.header_bottom #customer-account-navigation-mobile > li:last-child > a:link {
+    border-bottom: none;
+}
+.header_bottom #customer-account-navigation-mobile > li > a:link i.fa,
+.header_bottom #customer-account-navigation-mobile > li > a:visited i.fa {
+    margin-top: -8px;
+    position: absolute;
+    right: 7px;
+    top: 50%;
+}
+#customer-account-navigation-mobile-wrapp .bg-w {
+    background: none repeat scroll 0 0 #fff;
+    border-bottom: 1px solid #ebebeb;
+    border-top: 1px solid #ebebeb;
+    margin-bottom: -5px;
+    margin-top: -5px;
+}
+#customer-account-navigation-mobile-wrapp h1 {
+    font-size: 18px;
+    text-transform: uppercase;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    text-align: center;
+}
+/*Customer account menu mobile*/
+
+
+
+.rma-time {
+    padding: 5px;
+    color: #000000;
+    background-color: #dbdbdb;
+}

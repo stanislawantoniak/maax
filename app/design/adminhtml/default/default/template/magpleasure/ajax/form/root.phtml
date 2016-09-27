@@ -1,0 +1,34 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+?>
+
+<?php
+/**  @var $this Magpleasure_Common_Block_Adminhtml_Widget_Ajax_Form_Root */
+?>
+
+<script type="text/javascript">
+    <?php echo $this->getJsObjectName(); ?> = new MpAdminhtmlWidgetAjaxForm({
+        'container': '<?php echo $this->getContainer(); ?>',
+        'load_url'  : '<?php echo $this->getLoadUrl(); ?>',
+        'save_url'  : '<?php echo $this->getSaveUrl(); ?>',
+        'html_id'  :'<?php echo $this->getHtmlId(); ?>',
+        'param_key': '<?php echo $this->getParamKey(); ?>',
+        'width' : <?php echo $this->getWidth(); ?>,
+        'height' : <?php echo $this->getHeight(); ?>,
+        'buttons': <?php echo $this->getButtonsJson(); ?>,
+        'use_debug': <?php echo $this->getUseDebug() ? 'true' :'false'; ?>,
+        'success_message': '<?php echo $this->getSuccessMessage(); ?>',
+        'default_entity_id': '<?php echo $this->getDefaultEntityId(); ?>',
+        'closeCallback': function(){<?php echo $this->getCloseCallback() ? $this->getCloseCallback() : ''; ?>},
+        'loadCallback': function(){<?php echo $this->getLoadCallback() ? $this->getLoadCallback() : ''; ?>},
+        'saveCallback': function(){<?php echo $this->getSaveCallback() ? $this->getSaveCallback() : ''; ?>},
+        'error': '<ul class="messages"><li class="error-msg"><ul><li><span><?php echo $this->getDefaultError();?></span></li></ul></li></ul>',
+        'form_container_id': '<?php echo $this->getHtmlId(); ?>',
+        'form_container_class': 'mp-common-ajax-form-container'
+    });
+</script>
+

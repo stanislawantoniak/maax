@@ -30,7 +30,7 @@
 <config>
     <modules>
         <Ced_SocialLogin>
-            <active>true</active>
+            <active>false</active>
             <codePool>local</codePool>
         </Ced_SocialLogin>
     </modules>

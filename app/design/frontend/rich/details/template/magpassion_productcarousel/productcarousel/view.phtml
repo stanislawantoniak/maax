@@ -1,0 +1,167 @@
+<?php
+/**
+ * MagPassion_ProductCarousel extension
+ * 
+ * @category   	MagPassion
+ * @package		MagPassion_ProductCarousel
+ * @copyright  	Copyright (c) 2013 by MagPassion (http://magpassion.com)
+ * @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/**
+ * Product Carousel view template
+ *
+ * @category	MagPassion
+ * @package		MagPassion_ProductCarousel
+ * @author MagPassion.com
+ */
+?>
+<?php $_productcarousel = $this->getCurrentProductcarousel();?>
+
+<?php $mpslider_style = ''; ?>
+<?php
+    if ($_productcarousel->getDirection() == 'up' || $_productcarousel->getDirection() == 'down')
+        if ($_productcarousel->getMaxheight() && $_productcarousel->getMaxheight() > 0) $mpslider_style = ' style="height:'.$_productcarousel->getMaxheight().'px"';
+        else $mpslider_style = ' style="height:350px"';
+
+?>
+<?php $block_id = $_productcarousel->getEntity_id(); ?>
+<?php $numofproduct = $_productcarousel->getNumberproduct() > 0 ? $_productcarousel->getNumberproduct(): 10; ?>
+<?php $numofproductshow = $_productcarousel->getNumberproductshow() > 0 ? $_productcarousel->getNumberproductshow(): 5; ?>
+<?php $numofproductscroll = $_productcarousel->getNumberproductscroll(); ?>
+<?php if (!$numofproductscroll || $numofproductscroll < 0 || $numofproductscroll > $numofproductshow) $numofproductscroll = 1; ?>
+
+<?php $products = $this->getProductCollection($_productcarousel->getType(), $_productcarousel->getCategory_id(), $numofproduct);?>
+
+<?php if ($products->count() > 0) :?>
+
+<?php $imgW = $_productcarousel->getImagewidth() > 0 ? $_productcarousel->getImagewidth() : 200;?>
+<?php $imgH = $_productcarousel->getImageheight() > 0 ? $_productcarousel->getImageheight() : 200;?>
+<?php $itemW = $imgW; ?>
+
+<?php $block_title_color = $_productcarousel->getBlock_title_color() ? '#'.$_productcarousel->getBlock_title_color() : '#686868'; ?>
+<?php $block_title_bg_color = $_productcarousel->getBlock_title_bg_color() ? '#'.$_productcarousel->getBlock_title_bg_color() : NULL; ?>
+
+<?php $page_icon_color = $_productcarousel->getPage_icon_color() ? '#'.$_productcarousel->getPage_icon_color() : '#dddddd'; ?>
+<?php $selected_page_icon_color = $_productcarousel->getSelected_page_icon_color() ? '#'.$_productcarousel->getSelected_page_icon_color() : '#999999'; ?>
+
+<?php $_auto_play = ($_productcarousel->getAutoplay() == 1); ?>
+
+    <div class="mpslider mp-slides-ready direction-<?php echo $_productcarousel->getDirection();?>" <?php echo $mpslider_style;?>>
+        <?php if ($_productcarousel->getShowblocktitle() == 1): ?>
+            <h4 class="mptitle" style="color:<?php echo $block_title_color?>; <?php echo $block_title_bg_color? 'background-color:'.$block_title_bg_color : ''; ?>">
+                <?php echo $_productcarousel->getBlocktitle();?>
+            </h4>
+        <?php endif; ?>
+        <ul class="mp-slides" id="mpslider<?php echo $block_id?>"><!-- BEGIN CLONED -->
+            <?php foreach ($products as $product) : ?>
+                <?php $_product = Mage::getModel('catalog/product')->load($product->getId()); ?>
+                <li style="width:<?=$itemW?>px">
+                    <?php if ($_productcarousel->getShowquickview() == 1) : ?>
+                        <a href="<?php echo Mage::getBaseUrl().'quickview/index/view?pid='.$_product->getId(); ?>" data-fancybox-type="iframe" class="mp_quickview_icon" id="mp_quickview_<?php echo $_product->getId()?>"><span><?php echo Mage::helper('quickview/quickview')->getTitle(); ?></span></a>
+                    <?php endif; ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>" class="product-image">
+                        <img class="product-img" src="<?php echo Mage::helper('catalog/image')->init($_product, 'small_image')->resize($imgW, $imgH) ?>" alt="<?php echo $this->htmlEscape($_product->getName()) ?>" />
+                    </a>
+                    
+                    <?php if ($_productcarousel->getShowproductname() == 1): ?>
+                    <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></h2>
+                    <?php endif; ?>
+
+                    <?php if ($_productcarousel->getShowmoredes() == 1): ?>
+                        <div class="product-des">
+                        <?php echo Mage::helper('catalog/output')->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($_productcarousel->getShowproductprice() == 1): ?>
+                        <?php echo $this->getPriceHtml($_product, true) ?>
+                    <?php endif; ?>
+                        
+                    <?php if ($_productcarousel->getShowproductaddtocart() == 1): ?>
+                    
+                        <?php if($_product->isSaleable()): ?>
+                            <div class="addtocart"><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></div>
+                        <?php else: ?>
+                            <div class="addtocart"><span><?php echo $this->__('Out of stock') ?></span></div>
+                        <?php endif; ?>
+                    
+                    <?php endif; ?>
+                    
+                    <?php if ($_productcarousel->getShowmoreaddtolink() == 1): ?>
+                        <ul class="add-to-links">
+                            <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                            <?php endif; ?>
+                            <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                                <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                            <?php endif; ?>
+                        </ul>
+                    <?php endif; ?>
+
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php if ($_productcarousel->getShownavigator() > 0): ?>
+            <div class="mp-navigation<?php echo $_productcarousel->getShownavigator() == 1 ? ' nav-middle':' nav-top'; ?>">
+                <div class="mp-navigation-inner">
+                    <a class="mp-prev" id="mp-prev<?php echo $block_id?>" style="display: block;"><span class="<?=$_productcarousel->getSkin()?>">Previous</span></a>
+                    <a class="mp-next" id="mp-next<?php echo $block_id?>" style="display: block;"><span class="<?=$_productcarousel->getSkin()?>">Next</span></a>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if ($_productcarousel->getShowpagination() == 1): ?>
+            <div id="mpslider-pager<?php echo $block_id?>" class="mpslider-pager  <?=$_productcarousel->getSkin()?>"></div>
+        <?php endif; ?>
+    </div>
+         
+    <script type="text/javascript">
+        jQuery.noConflict();
+    	var carousel<?php echo $block_id?> = jQuery('#mpslider<?php echo $block_id?>');
+        var carouFredSelOptions<?php echo $block_id?> = {
+        		width: '<?php if ($_productcarousel->getDirection() == 'up' || $_productcarousel->getDirection() == 'down') echo "variable"; else echo "100%";?>',
+                height: '<?php if ($_productcarousel->getDirection() == 'left' || $_productcarousel->getDirection() == 'right') echo "variable"; else echo "100%";?>',
+        		responsive: false,
+                auto: <?php echo $_productcarousel->getAutoplay() == 1 ? 'true' : 'false'; ?>,
+                items: {
+                	<?php if ($_productcarousel->getDirection() == 'left' || $_productcarousel->getDirection() == 'right'): ?>
+                	height: 'variable',
+                	<?php endif; ?>
+                    visible: {
+                      min: <?php echo $numofproductshow; ?>,
+                      max: <?php echo $numofproductshow; ?>
+                    }
+                },
+                direction : "<?php echo $_productcarousel->getDirection() ? $_productcarousel->getDirection() : 'left'; ?>",
+                circular: true,
+                infinite: true,
+                debug: false,
+                prev: '#mp-prev<?php echo $block_id?>',
+                next: '#mp-next<?php echo $block_id?>',
+                scroll : {
+                    items : <?php echo $numofproductscroll; ?>,
+                    duration : <?php echo $_productcarousel->getTimeduration() && $_productcarousel->getTimeduration() > 0 ? $_productcarousel->getTimeduration() : 500; ?>,
+                    pauseOnHover: <?php echo $_productcarousel->getPauseonhover() == 1 ? 'true' : 'false'; ?>
+                },
+                swipe : {
+                    onTouch: <?php echo $_productcarousel->getSwipeontouch() == 1 ? 'true' : 'false'; ?>,
+                    onMouse: <?php echo $_productcarousel->getSwipeonmouse() == 1 ? 'true' : 'false'; ?>
+                },
+                pagination: "#mpslider-pager<?php echo $block_id?>",
+                mousewheel: false
+				<?php if ($_productcarousel->getDirection() == 'left' || $_productcarousel->getDirection() == 'right'): ?>
+				,onCreate: function () {
+					jQuery(window).on('load', function () {
+				  		carousel<?php echo $block_id?>.parent().add(carousel<?php echo $block_id?>).height(carousel<?php echo $block_id?>.children().first().height() + 18);
+					}).trigger('load');
+				}
+                <?php endif; ?>
+        }; 
+
+        jQuery(document).ready(function(){
+            carousel<?php echo $block_id?>.carouFredSel(carouFredSelOptions<?php echo $block_id?>);			
+        });
+    </script>
+
+<?php else : ?>
+<div id="messages"><ul class="messages"><li class="error-msg"><ul><li><span><?php echo $this->__('There are no products matching the module.'); ?></span></li></ul></li></ul></div>
+<?php endif;?> 

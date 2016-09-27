@@ -1,0 +1,73 @@
+#comments {
+	.comment {
+		.wrapper-header {
+			&+aside {
+				text-align: right;
+				@media (max-width: $screen-xs-max) {
+					text-align: left;
+				}
+			}
+		}
+		.header {
+			.comment_rating {
+			}
+			h3, h5 {
+				color:$color_242424;
+				font-size: 14px;
+				font-family: $fontBlack;
+				font-weight: normal;
+			}
+		}
+		.meta {
+			font-size: 11px;
+			
+			span {
+				color:$color_000;
+			}
+		}
+	}
+	.pag {
+		@include no-bullet;
+		>li{
+			border:none;
+			>a,
+			>span {
+				border:none;
+				line-height: 27px;
+				color:$color_222222;
+				&:hover {
+					background:none;
+					color:$color_1dd8a0;
+					border:none;
+				}
+			}
+		&:before {
+			background:$color_222222;
+		}
+			&:first-child {
+				font-size: 12px;
+				color:$color_7c7c7c;
+				span {
+					font-size: 12px;
+					color:$color_7c7c7c;
+				}
+			}
+
+		&.current {
+			span {
+				color:$color_1dd8a0;
+			}
+		}
+	}		
+}
+	.footer_comments {
+		@media (max-width: 360px) {
+			text-align: center;
+		}
+		.viewFormComments {
+			@media (max-width: 360px) {
+				line-height: 26px;
+			}
+		}
+	}
+}

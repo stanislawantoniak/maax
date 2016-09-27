@@ -1,0 +1,94 @@
+<?php
+/** @var $_product Zolago_Catalog_Model_Product */
+/** @var $product Mage_Wishlist_Model_Item */
+/** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
+$_collection = $this->getItems();
+/** @var Zolago_Catalog_Helper_Product $_helper */
+$_helper = Mage::helper('zolagocatalog/product');
+$brandImagesList = Mage::helper('wishlist')->getBrandImagesList();
+
+/** @var Zolago_Solrsearch_Helper_Data $zssHelper */
+$zssHelper = Mage::helper("zolagosolrsearch");
+?>
+
+<div class="container-fluid" id="items-product">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="row">
+                <div id="grid" class="shuffle--container shuffle--fluid">
+                    <?php foreach ($_collection as $product): ?>
+                        <?php
+						$_product = $product->getProduct();
+						$_product->setImage($_product->getThumbnail()); // trick
+						$_productImageUrl = $zssHelper->getListingResizedImageUrl($_product);
+                        $_productImageInfo = $_helper->getResizedImageInfo($_product);
+						?>
+                        <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
+                            <div class="box_listing_product">
+                                <a href="<?php echo $_product->getProductUrl(); ?>">
+	                                <figure class="img_product boxed">
+		                                <img src="<?php echo $_productImageUrl; ?>"
+		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
+		                                     class="img-responsive" />
+	                                </figure>
+                                    <div class="name_product">
+                                        <?php echo $this->escapeHtml($_product->getName()); ?>
+                                    </div>
+
+                                    <div class="price clearfix">
+                                        <div class="col-price col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <?php if (!$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE && $_product->getPrice() != $_product->getFinalPrice()) : ?>
+                                                <span class="old">
+                                                        <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
+                                                    </span>
+                                            <?php endif; ?>
+                                            <span>
+                                                    <?php echo $this->helper('core')->currency($_product->getFinalPrice(), true, false); ?>
+                                                </span>
+                                        </div>
+                                        <div class="like liked col-lg-6 text-right col-md-6 col-sm-6 col-xs-6"
+                                             data-idproduct="<?php echo $_product->getId(); ?>">
+                                            <span class="icoLike"></span>
+	                                        <span class="likeAdded"><i class="fa fa-list"></i> <?php echo $_helper->__('remove from the list')?></span>
+                                        </div>
+                                    </div>
+								</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="col-xs-12 shuffle__sizer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	//needed for like removal process
+	var unlikingOnWishlist = true;
+
+    Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
+    Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
+    Mall.translate.add("added-to-shopping-list", "<?php echo Mage::helper("zolagocatalog")->__("Added to shopping list"); ?>");
+    Mall.translate.add("like-this-product", "<?php echo $this->__("like this product"); ?>");
+    Mall.translate.add("likes-this-product", "<?php echo $this->__("likes this product"); ?>");
+    Mall.translate.add("you-and", "<?php echo $this->__("You and"); ?>");
+    Mall.translate.add("person", "<?php echo $this->__("person"); ?>");
+    Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
+    Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
+    Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
+    Mall.translate.add("You", "<?php echo $this->__("You"); ?>");
+
+    Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>","<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+	
+
+    <?php foreach ($_collection as $product): ?>
+    <?php $_product = $product->getProduct(); ?>
+    Mall.wishlist.addProduct({
+        id: <?php echo $_product->getId(); ?>,
+        wishlist_count: <?php echo (int)$_product->getWishlistCount(); ?>,
+        in_your_wishlist: "true"
+    });
+    <?php endforeach; ?>
+</script>
+

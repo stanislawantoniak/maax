@@ -186,6 +186,7 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
                         ->setCustomerId(Mage::getSingleton('customer/session')->getCustomerId())
                         ->setStoreId(Mage::app()->getStore()->getId())
                         ->setStores(array(Mage::app()->getStore()->getId()))
+                        ->setRecommendProduct($this->getRequest()->getParam('recommend_product'))
                         ->save();
 
                     foreach ($rating as $ratingId => $optionId) {
@@ -200,6 +201,7 @@ class Mage_Review_ProductController extends Mage_Core_Controller_Front_Action
                     $session->addSuccess($this->__('Your review has been accepted for moderation.'));
                 }
                 catch (Exception $e) {
+                    Mage::logException($e);
                     $session->setFormData($data);
                     $session->addError($this->__('Unable to post the review.'));
                 }

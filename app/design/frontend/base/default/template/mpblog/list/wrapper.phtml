@@ -1,0 +1,13 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+<?php if ($this->getNextUrl()): ?>
+<link rel="next" href="<?php echo $this->getNextUrl(); ?>" />
+<?php endif; ?>
+<?php if ($this->getPreviousUrl()): ?>
+<link rel="prev" href="<?php echo $this->getPreviousUrl(); ?>" />
+<?php endif; ?>

@@ -80,6 +80,9 @@ class Zolago_Pos_Model_Observer {
         $collection->addFieldToFilter("udropship_status", array("nin" => array(ZolagoOs_OmniChannelPo_Model_Source::UDPO_STATUS_CANCELED)));
         $collection->setPageSize(self::ZOLAGO_POS_ASSIGN_APPROPRIATE_PO_POS_LIMIT);
 
+        $collectionSimpleProducts = Mage::getResourceModel('catalog/product_collection')
+            ->addAttributeToFilter('type_id', array('eq' => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE));
+        $simpleProductsIds = $collectionSimpleProducts->getAllIds();
 
         //2. Collect product that stock need to be analyzed
         // Collect only simple products data
@@ -119,16 +122,24 @@ class Zolago_Pos_Model_Observer {
 
             foreach ($po->getAllItems() as $poItem) {
 
-                $vendorSimpleSku = $poItem->getData("vendor_simple_sku");
+                $productId = $poItem->getData("product_id");
 
-                if (!empty($vendorSimpleSku)) {
-                    $data[$udropshipVendor][$po->getId()][$poItem->getData("product_id")] = array(
-                                "skuv" => $vendorSimpleSku,
-                                "qty" => (int)$poItem->getData("qty")
-                            );
-                    $productIds[$udropshipVendor][$poItem->getData("product_id")] = $vendorSimpleSku;
-                }
-                unset($parentItemId);
+                if(!in_array($productId, $simpleProductsIds))
+                    continue;
+
+
+                $skuV = $poItem->getData("vendor_sku");
+
+                if (empty($skuV))
+                    continue;
+
+                $data[$udropshipVendor][$po->getId()][$productId] = array(
+                    "skuv" => $skuV,
+                    "qty" => (int)$poItem->getData("qty")
+                );
+                $productIds[$udropshipVendor][$productId] = $skuV;
+
+                unset($productId,$parentItemId);
             }
 
         }

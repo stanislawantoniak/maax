@@ -386,36 +386,36 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
             $collection->addApprovedAnswersFilter();
             $collection->addVendorFilter($this->getVendor());
             $collection->addFieldToFilter("main_table.customer_email", array("like" => $po->getOrder()->getCustomerEmail()));
-            $collection->addFieldToFilter("main_table.answer_text", array("null"=>true));
-            $this->setData("unread_messages_count", $collection->count());
-        }
-        return $this->getData("unread_messages_count");
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEditable() {
-        return $this->getPo()->getStatusModel()->isEditingAvailable($this->getPo());
-    }
-
-    /**
-     * @param type $type
-     * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
-     */
-    protected function _getRendererByType($type) {
-        $renderPath = "zolagopo/vendor_po_item_renderer_";
-        switch ($type) {
-        case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
-            /*@todo add other types*/
-            $renderPath.=$type;
-            break;
-        default:
-            $renderPath.=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE;
-            break;
-        }
-        return $this->getLayout()->createBlock($renderPath);
-    }
+			$collection->addFieldToFilter("main_table.answer_text", array("null"=>true));
+			$this->setData("unread_messages_count", $collection->count());
+		}
+		return $this->getData("unread_messages_count");
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isEditable() {
+		return $this->getPo()->getStatusModel()->isEditingAvailable($this->getPo());
+	}
+	
+	/**
+	 * @param type $type
+	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
+	 */
+	protected function _getRendererByType($type) {
+		$renderPath = "zolagopo/vendor_po_item_renderer_";
+		switch ($type) {
+			case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
+			case Mage_Catalog_Model_Product_Type::TYPE_BUNDLE:
+				$renderPath.=$type;
+				break;
+			default:
+				$renderPath.=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE;
+			break;
+		}
+		return $this->getLayout()->createBlock($renderPath);
+	}
 
     public function getPaymentMethod(Zolago_Po_Model_Po $po) {
         $helper = Mage::helper("zolagopayment");
@@ -478,9 +478,8 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         }
     }
 
-    /**
-     * Prepare shipping modal
-     */
+
+
     protected function _getShippingModal() {
         $po = $this->getPo();
         $shippingMethod = $po->getUdropshipMethod();
@@ -489,6 +488,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         $block->setParentBlock($this);
         return $block->toHtml();
     }
+
 
     /**
      * @return bool

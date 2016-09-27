@@ -1,0 +1,29 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var  $this */
+?>
+<?php if ($this->getDisplay()): ?>
+<div class="block mpblog-search">
+    <div class="block-title">
+        <strong><span><?php echo $this->getBlockHeader(); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <form id="mp_blog_search" action="<?php echo $this->getSearchUrl(); ?>" method="get">
+            <div class="input-box">
+                <input type="text" placeholder="<?php echo $this->getBlockHeader(); ?>" class="input-text required-entry placeholder" title="<?php echo $this->getBlockHeader(); ?>" id="search-blog" name="query" value="<?php echo $this->getQuery(); ?>" maxlength="100" />
+            </div>
+            <button class="button" title="<?php echo $this->__("Search"); ?>" type="submit"><span><span><?php echo $this->__("Search"); ?></span></span></button>
+        </form>
+        <script type="text/javascript">
+            //<![CDATA[
+            new VarienForm('mp_blog_search');
+            //]]>
+        </script>
+    </div>
+</div>
+<?php endif; ?>

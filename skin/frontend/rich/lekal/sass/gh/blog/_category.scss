@@ -1,0 +1,17 @@
+.category-blog-link {
+  margin-top: -40px;
+  float: right;
+  text-align: center;
+  border: 1px solid $siteMainColor;
+  padding: 4px;
+
+
+  @media(max-width: $screen-sm-max) {
+    float: left;
+    margin-top: 0;
+  }
+
+  @media (max-width: $screen-sm-to-smmd-max) {
+    display: none;
+  }
+}

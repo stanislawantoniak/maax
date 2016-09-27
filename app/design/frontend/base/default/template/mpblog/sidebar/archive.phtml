@@ -1,0 +1,66 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var array $collection  */
+$collection = $this->getCollection();
+$limit = $this->getLimit();
+$count = 0;
+$randId = rand(0,10000);
+$alreadyActive = $this->isArchivePage() ? false : true;
+$hiddenExists = false;
+$helper = $this->_helper();
+?>
+<?php if ($this->getDisplay() && count($collection)): ?>
+<div class="block mpblog-archives">
+    <div class="block-title">
+        <strong><span><?php echo $this->getBlockHeader(); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul class="mpblog-archives-list">
+        <?php foreach ($collection as $archive): ?>
+            <?php if ($this->getIsActive($archive)) { $alreadyActive = true;  } ?>
+            <li class="mpblog-archives-item<?php if ($this->getIsActive($archive)): ?> active<?php endif; ?> mpblog-archive-<?php echo $archive->getId(); ?>">
+                <i class="<?php echo $this->getColorClass(); ?> glyphicons ok_2"></i>
+                <a href="<?php echo $archive->getArchiveUrl(); ?>" title="<?php echo $this->escapeHtml($archive->getLabel()); ?>"><?php echo $this->escapeHtml($archive->getLabel()); ?></a>
+            </li>
+            <?php if (((++$count) == $limit) && (count($collection) > $limit)): ?>
+                </ul>
+                <ul id="hidden-archives-<?php echo $randId; ?>" class="mpblog-archives-list<?php if (!$alreadyActive): ?> expanded<?php endif; ?>" <?php if ($alreadyActive): ?> style="display: none;"<?php endif; ?>>
+                <?php $hiddenExists = true; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+        <?php if ($hiddenExists): ?>
+            <div class="actions">
+                <a id="a-hidden-archives-<?php echo $randId; ?>-show" href="#"<?php if (!$alreadyActive): ?> style="display: none;"<?php endif; ?> onclick="moreArchives('hidden-archives-<?php echo $randId; ?>'); return false;" title="<?php echo $helper->__("Show more"); ?>"><?php echo $helper->__("Show more"); ?></a>
+                <a id="a-hidden-archives-<?php echo $randId; ?>-hide" href="#"<?php if ($alreadyActive): ?> style="display: none;"<?php endif; ?> onclick="moreArchives('hidden-archives-<?php echo $randId; ?>'); return false;" title="<?php echo $helper->__("Show less"); ?>"><?php echo $helper->__("Show less"); ?></a>
+            </div>
+        <script type="text/javascript">
+            //<![CDATA[
+
+            var moreArchives = function(id){
+                if (!$(id).hasClassName('expanded')){
+                    $(id).addClassName('expanded');
+                    Effect.Appear(id, {duration: 0.5, afterFinish: (function(){
+                        $('a-'+id+'-hide').style.display = 'block';
+                        $('a-'+id+'-show').style.display = 'none';
+                    }).bind(id)})
+                } else {
+                    $(id).removeClassName('expanded');
+                    Effect.Fade(id, {duration: 0.3, afterFinish: (function(){
+                        $('a-'+id+'-show').style.display = 'block';
+                        $('a-'+id+'-hide').style.display = 'none';
+                    }).bind(id)});
+                }
+            };
+
+            //]]>
+        </script>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,0 +1,1976 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+  <default>
+    <reference name="head">
+      <remove name="optional_zip_countries"/>
+      <remove name="product.tooltip"/>
+      <action method="setTemplate">
+        <template>page/html/head.phtml</template>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>varien/js.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>varien/form.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>varien/menu.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>prototype/prototype.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>lib/ccard.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>prototype/validation.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>scriptaculous/builder.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>scriptaculous/effects.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>scriptaculous/dragdrop.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>scriptaculous/controls.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>scriptaculous/slider.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>mage/translate.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>solrsearch/core.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>solrsearch/autocomplete.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>solrsearch/slider.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>solrsearch/autocompleteWidget.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js_css</type>
+        <script>solrsearch/autocomplete.css</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>unirgy/domloaded.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>unirgy/modal.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>unirgy/banner_media.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>unirgy/slider.js</script>
+      </action>
+      <action method="removeItem">
+        <type>skin_css</type>
+        <stylesheet>css/styles.css</stylesheet>
+      </action>
+      <action method="removeItem">
+        <type>skin_css</type>
+        <stylesheet>css/widgets.css</stylesheet>
+      </action>
+      <action method="removeItem">
+        <type>skin_css</type>
+        <stylesheet>solrsearch/css/style.css</stylesheet>
+      </action>
+      <action method="removeItem">
+        <type>skin_css</type>
+        <stylesheet>css/print.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/lato.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/bootstrap.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/typography.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>js/selectBoxIt/css/jquery.selectBoxIt.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>js/slick/slick.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/slick.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/layout.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/design.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/jquery-ui.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/local.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>css/gh.css</stylesheet>
+      </action>
+      <action method="addJs">
+        <script>jquery/jquery-1.11.0.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/headroom.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/config.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/checkout/cart/cart.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/validate.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/validators.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/plural.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/wishlist.js</script>
+      </action>
+      <action method="addJs">
+        <script>bootstrap/bootstrap.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/vendor/modernizr-2.6.2.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/jquery-ui.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/jquery.mousewheel.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/imagesloaded.pkgd.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/jquery.touchSwipe.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/vendor/jquery.jcarousel.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/rwd.carousel/rwd.carousel.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/icheck.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/zoomsl-3.0.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/plugins.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/jquery.mCustomScrollbar.concat.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/fns.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/selectBoxIt/js/jquery.selectBoxIt.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/slick/slick.min.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/navigation.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/cookiebar/jquery.cookiebar.js</script>
+      </action>
+      <action method="addCss">
+        <stylesheet>js/mall/cookiebar/jquery.cookiebar.css</stylesheet>
+      </action>
+
+      <action method="addItem"><type>skin_js</type><name>magpassion_productcarousel/js/owl.carousel.js</name><params/></action>
+
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.carousel.css</stylesheet></action>
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/owl.theme.css</stylesheet></action>
+      <action method="addCss"><stylesheet>magpassion_productcarousel/css/mpslider.css</stylesheet></action>
+      <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml"/>
+      <reference name="js_cookies">
+        <action method="setCacheLifetime">
+          <lifetime>3600</lifetime>
+          <!-- Cache Lifetime of 1 hour -->
+        </action>
+      </reference>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
+      <action method="addBodyClass">
+        <value>gh-cookiebar</value>
+      </action>
+    </reference>
+    <reference name="header">
+      <block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml"/>
+      <block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
+      <block type="core/template" name="page.header.search.dropdown" template="catalogsearch/mobile.dropdown.phtml"/>
+      <block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml"/>
+      <block type="zolagomodago/checkout_onepage_progress" name="page.header.progress" template="checkout/onepage/progress.phtml"/>
+      <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml"/>
+      <block type="zolagomodago/page_header_bottommenu" name="page.header.bottom.menu" template="page/html/header/bottom.menu.phtml"/>
+      <block type="zolagomodago/catalog_category" name="page.header.bottom.category.items" template="page/html/header/bottom.category.items.phtml"/>
+      <block type="zolagomodago/catalog_category" name="page.header.bottom.category.items.mobile" template="page/html/header/bottom.category.items.mobile.phtml"/>
+      <!-- </block> -->
+      <!-- Varnish cache esi public block-->
+      <action method="setEsiOptions">
+        <params>
+          <access>public</access>
+        </params>
+      </action>
+    </reference>
+    <reference name="before_content">
+      <block type="zolagomodago/page_html_header_menu" name="header_menu" template="page/html/header/navigation.main.wrapper.phtml">
+        <block type="zolagomodago/catalog_category" name="acategory.main.menu.mobile" template="catalog/category/category.main.menu.mobile.phtml"/>
+      </block>
+    </reference>
+    <reference name="before_body_end">
+      <block type="zolagomodago/page_html_scrolltop" name="scrolltop" template="page/html/scrolltop.phtml"/>
+      <block type="core/template" name="cookie_bar" template="page/html/cookie_bar.phtml"/>
+    </reference>
+    <!-- remove cart link - better performance-->
+    <remove name="checkout_cart_link"/>
+    <!-- remove rest stuff -->
+    <remove name="right.poll"/>
+    <remove name="right.permanent.callout"/>
+    <remove name="left.permanent.callout"/>
+    <remove name="paypal.partner.right.logo"/>
+  </default>
+  <!-- Custom page layout handles -->
+  <page_empty translate="label">
+    <label>All Empty Layout Pages</label>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/modagopage.phtml</template>
+      </action>
+      <!-- Mark root page block that template is applied -->
+      <action method="setIsHandle">
+        <applied>1</applied>
+      </action>
+    </reference>
+  </page_empty>
+  <page_one_column translate="label">
+    <label>All One-Column Layout Pages</label>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <!-- Mark root page block that template is applied -->
+      <action method="setIsHandle">
+        <applied>1</applied>
+      </action>
+    </reference>
+  </page_one_column>
+  <page_two_columns_left translate="label">
+    <label>All Two-Column Layout Pages (Left Column)</label>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/2columns-left.phtml</template>
+      </action>
+      <!-- Mark root page block that template is applied -->
+      <action method="setIsHandle">
+        <applied>1</applied>
+      </action>
+    </reference>
+  </page_two_columns_left>
+  <page_two_columns_right translate="label">
+    <label>All Two-Column Layout Pages (Right Column)</label>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/modagopage.phtml</template>
+      </action>
+      <!-- Mark root page block that template is applied -->
+      <action method="setIsHandle">
+        <applied>1</applied>
+      </action>
+    </reference>
+  </page_two_columns_right>
+  <page_three_columns translate="label">
+    <label>All Three-Column Layout Pages</label>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/modagopage.phtml</template>
+      </action>
+      <!-- Mark root page block that template is applied -->
+      <action method="setIsHandle">
+        <applied>1</applied>
+      </action>
+    </reference>
+  </page_three_columns>
+  <checkout_cart_index>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>sidebar-secondary</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-shopping-cart</value>
+      </action>
+      <action method="addBodyClass">
+        <value>nobreadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="addJs">
+        <name>gmaps/mapshelper.js</name>
+      </action>
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>js/select2/css/select2.min.css</stylesheet>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>js/select2/js/select2.min.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>js/select2/js/i18n/pl.js</name>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>varien/weee.js</script>
+      </action>
+    </reference>
+    <reference name="checkout.cart">
+      <!--<block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>-->
+      <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml">
+        <block type="cms/block" name="checkout.cart.tos" as="tos">
+          <action method="setBlockId">
+            <blockId>shopping-cart-accept-tos</blockId>
+          </action>
+        </block>
+        <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery" as="checkout_cart_shipping" template="checkout/cart/sidebar/shipping.phtml">
+          <block type="zolagomodago/checkout_cart_sidebar_shipping" name="checkout.cart.delivery.additional" as="checkout_cart_shipping_additional" template="checkout/cart/sidebar/shipping/additional.phtml" />
+          <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
+        </block>
+      </block>
+    </reference>
+  </checkout_cart_index>
+  <cms_page>
+    <reference name="content">
+      <action method="unsetChild">
+        <alias>cms.wrapper</alias>
+      </action>
+      <block type="cms/page" name="cms_page"/>
+    </reference>
+    <reference name="root">
+      <remove name="global_messages"/>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+  </cms_page>
+  <saipson_index_index>
+    <reference name="head">
+      <action method="addJs">
+        <name>jquery/jquery.visible.js</name>
+      </action>
+    </reference>
+    <reference name="content">
+      <block template="cms/modagohome.phtml" name="modagohome" type="core/template">
+        <block type="zolagomodago/home_banner" name="zolago_modago_home_banners" template="home/banner/hometopwr.phtml">
+          <block type="zolagomodago/home_banner" name="zolago_modago_home_banner_smallfour" template="home/banner/smallfour.phtml"/>
+          <block type="zolagocms/component_slider" name="slider" before="-"/>
+          <block type="zolagocms/component_boxes" name="boxes" before="-"/>
+        </block>
+        <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml" />
+
+        <block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
+        <block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
+
+        <block type="core/template" name="featured_products" template="home/featured_products.phtml" />
+
+        <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+      </block>
+    </reference>
+    <reference name="root">
+      <action method="addBodyClass">
+        <value>sidebar-first</value>
+      </action>
+      <action method="addBodyClass">
+        <value>nobreadcrumbs</value>
+      </action>
+    </reference>
+  </saipson_index_index>
+  <zolagomodago_map_index>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>storesmap</crumbName>
+        <crumbInfo>
+          <label>Stores map</label>
+          <title>Stores map</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="setTitle" translate="title">
+        <title>Stores map</title>
+      </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/default/udropship/css/melon/plugins/select2.css</stylesheet>
+      </action>
+      <action method="addCss">
+        <stylesheet>../../../frontend/base/default/font-awesome-4.4.0/css/font-awesome.min.css</stylesheet>
+      </action>
+      <action method="addJs">
+        <name>gmaps/markerclusterer.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>../../../frontend/default/udropship/js/plugins/select2/select2.min.js</name>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <name>../../../frontend/default/udropship/js/plugins/select2/select2_locale_pl.js</name>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/map" name="zolago_modago_map" template="stores/map.phtml"/>
+    </reference>
+  </zolagomodago_map_index>
+  <solrbridge_solrsearch_category_view>
+    <remove name="mana.catalog.leftnav"/>
+    <remove name="solrsearch_category_view"/>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/2columns-left.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>sidebar-first</value>
+      </action>
+      <action method="addBodyClass">
+        <value>view-menu-category</value>
+      </action>
+      <action method="addBodyClass">
+        <value>sm-to-smmd-plus-smmd</value>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/jquery.ui.slider-p.js</script>
+      </action>
+      <action method="addJs">
+        <script>jquery/jquery.jcarousel.min.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>solrsearch/slider.js</script>
+      </action>
+      <action method="removeItem">
+        <type>skin_js</type>
+        <script>js/manapro_filtercolors.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/listing.js</script>
+      </action>
+    </reference>
+    <reference name="before_content">
+      <action method="unsetChild">
+        <alias>header_menu</alias>
+      </action>
+    </reference>
+    <reference name="before_body_end">
+      <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+        <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+        <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+      </block>
+      <block type="zolagomodago/catalog_category_rewrite" name="category_rewrite" as="categoryrewrite"/>
+    </reference>
+    <reference name="content">
+      <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header_m" template="zolagosolrsearch/catalog/product/list/header/mobile/category.phtml" as="solrsearch_result_title">
+        <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+        <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+      </block>
+      <block type="zolagomodago/page_html_header_menu" name="header_menu" template="page/html/header/navigation.main.wrapper.phtml">
+        <block type="zolagomodago/catalog_category" name="category.main.menu.mobile" template="catalog/category/category.main.menu.mobile.phtml"/>
+      </block>
+      <block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title">
+        <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+        <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+      </block>
+      <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" as="solrsearch_product_list_toolbar">
+        <block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+      </block>
+      <block type="zolagosolrsearch/category_view" name="zolagosolrsearch_category_view" as="zolagosolrsearch_category_view">
+        <block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+        <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+        <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+          <block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+          <block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager_full" template="zolagosolrsearch/catalog/product/list/pager-full.phtml"/>
+        </block>
+        <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
+        <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+      </block>
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </solrbridge_solrsearch_category_view>
+  <solrsearch_index_index>
+    <remove name="mana.catalog.leftnav"/>
+    <remove name="solrsearch_category_view"/>
+    <remove name="searchresult"/>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/2columns-left.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>sidebar-first</value>
+      </action>
+      <action method="addBodyClass">
+        <value>view-menu-category</value>
+      </action>
+      <action method="addBodyClass">
+        <value>catalog-category-view</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-list</value>
+      </action>
+      <action method="addBodyClass">
+        <value>sm-to-smmd-plus-smmd</value>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/jquery.ui.slider-p.js</script>
+      </action>
+      <action method="addJs">
+        <script>jquery/jquery.jcarousel.min.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>solrsearch/slider.js</script>
+      </action>
+      <action method="removeItem">
+        <type>skin_js</type>
+        <script>js/manapro_filtercolors.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/listing.js</script>
+      </action>
+    </reference>
+    <reference name="before_body_end">
+      <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchfaces" before="-">
+        <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+        <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+      </block>
+      <block type="zolagomodago/catalog_category_rewrite" name="category_rewrite" as="category_rewrite" template="catalog/category/sidebar/rewrite.phtml"/>
+    </reference>
+    <reference name="content">
+      <!--removing category listing-->
+      <remove name="solrsearch_product_list_header"/>
+      <remove name="zolagosolrsearch_category_view"/>
+      <block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
+        <block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_product_list_header_search" template="zolagosolrsearch/catalog/product/list/header/search.phtml">
+          <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs"/>
+          <block type="zolagosolrsearch/active" name="solrsearch_product_list_active"/>
+          <block type="core/template" name="current-search" template="zolagosolrsearch/catalog/product/list/header/current-search.phtml"/>
+        </block>
+        <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar">
+          <block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+        </block>
+        <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list">
+          <block type="zolagosolrsearch/catalog_product_list_pager" name="product_list_toolbar_pager" template="zolagosolrsearch/catalog/product/list/pager.phtml"/>
+        </block>
+      </block>
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </solrsearch_index_index>
+  <_udprod_product_configurable>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <script>unirgy/product_default.js</script>
+      </action>
+    </reference>
+  </_udprod_product_configurable>
+  <catalog_product_view>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="setElementClass">
+        <value>full-view-product</value>
+      </action>
+      <action method="addBodyClass">
+        <value>not-sidebar</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-view-product</value>
+      </action>
+      <action method="addBodyClass">
+        <value>no-navigation-for-product-page</value>
+      </action>
+      <block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
+    </reference>
+    <reference name="product.info">
+      <block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
+      <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
+      <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
+      <action method="setTemplate">
+        <template>catalog/product/view.phtml</template>
+      </action>
+      <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
+      <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
+        <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
+        <block name="udqa.product.question.mobile.product" type="udqa/product_question" template="catalog/product/question-product-mobile.phtml"/>
+      </block>
+      <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
+      <block name="udqa.product.question.product" type="udqa/product_question" template="catalog/product/question-product.phtml"/>
+      <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
+        <block name="product.review.form" type="zolagomodago/review_form"/>
+      </block>
+      <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
+      <block type="zolagomodago/catalog_product_view_shop" name="product.shop" template="catalog/product/view/shop.phtml">
+        <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+      </block>
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+    <reference name="product.info.addto">
+      <action method="setTemplate">
+        <template>zolagowishlist/catalog/product/view/addto.phtml</template>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="removeItem">
+        <type>js</type>
+        <script>varien/product.js</script>
+      </action>
+      <action method="removeItem">
+        <type>js</type>
+        <script>varien/configurable.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/product.js</script>
+      </action>
+      <block type="core/text" name="addthis.javascript">
+        <action method="setText">
+          <text><![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]></text>
+        </action>
+      </block>
+    </reference>
+  </catalog_product_view>
+  <udqa_catalog_product_view>
+    <reference name="udqa.product.question">
+      <action method="setTemplate">
+        <template>catalog/product/question.phtml</template>
+      </action>
+    </reference>
+  </udqa_catalog_product_view>
+  <umicrosite_index_landingpage>
+    <reference name="root">
+      <action method="addBodyClass">
+        <value>sidebar-first</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-list</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-main_categories</value>
+      </action>
+      <action method="addBodyClass">
+        <value>view-menu-category</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-page-shop</value>
+      </action>
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/listing.js</script>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/dropshipmicrositepro_vendor_header" name="vendor.header" template="unirgy/microsite/topbottomheader.phtml">
+        <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>
+        <block name="vendor.info.mobile" type="zolagoudmspro/vendor_info" template="unirgy/microsite/vendor.info.mobile.phtml"/>
+        <!--<block name="vendor.info" type="udqa/product_question" template="unirgy/microsite/vendor.info.phtml"/>-->
+        <block type="udqa/product_question" name="vendor.question.mobile" template="unirgy/microsite/question.mobile.phtml"/>
+      </block>
+      <block type="core/template" name="vendor.test" template="unirgy/microsite/home.phtml">
+        <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu" template="unirgy/microsite/menu.phtml">
+          <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.desktop" template="unirgy/microsite/menu.desktop.phtml"/>
+        </block>
+        <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+        <block type="zolagomodago/dropshipmicrositepro_vendor_landingpage_products" name="vendor-products" template="unirgy/microsite/vendor/landingpage/products.phtml"/>
+      </block>
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </umicrosite_index_landingpage>
+  <sales_order_view>
+    <reference name="my.account.wrapper">
+      <!-- remove old view -->
+      <action method="unsetChild">
+        <name>sales.order.view</name>
+      </action>
+      <action method="unsetChild">
+        <name>sales.order.item.default</name>
+      </action>
+      <!-- add custom modago view -->
+      <block type="zolagomodago/sales_order_view" name="sales.order.view">
+        <block type="zolagomodago/sales_order_shipment" name="sales.order.shipment" template="sales/order/shipment.phtml"/>
+        <block type="zolagomodago/sales_order_info" name="sales.order.info" template="sales/order/info.phtml"/>
+        <block type="zolagomodago/sales_order_item" name="sales.order.item">
+          <block type="zolagomodago/sales_order_item_renderer_default" name="sales.order.item.default"/>
+        </block>
+      </block>
+    </reference>
+  </sales_order_view>
+  <!-- ################################################################### -->
+  <!-- Checkout section													 -->
+  <!-- ################################################################### -->
+  <checkout_updater>
+    <reference name="root">
+      <action method="setIsCheckout">
+        <value>1</value>
+      </action>
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/checkout.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/checkout/steps.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/AddressBook.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/Address.js</script>
+      </action>
+    </reference>
+    <reference name="header">
+      <remove name="header_menu"/>
+      <remove name="page.header.leftmenu"/>
+      <remove name="page.header.search"/>
+      <remove name="page.header.search.dropdown"/>
+      <remove name="page.header.right.menu"/>
+      <remove name="page.header.right.cartdropdown"/>
+      <remove name="page.header.bottom.menu"/>
+      <remove name="page.header.bottom.category.items"/>
+      <remove name="page.header.bottom.category.items.mobile"/>
+    </reference>
+    <reference name="page.header.navigation">
+      <action method="setIsCheckout">
+        <value>1</value>
+      </action>
+    </reference>
+  </checkout_updater>
+  <checkout_singlepage_index>
+    <update handle="checkout_updater"/>
+    <reference name="root">
+      <action method="addBodyClass">
+        <value>logged</value>
+      </action>
+      <action method="addBodyClass">
+        <value>nobreadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/checkout/logged.js</script>
+      </action>
+    </reference>
+    <reference name="content">
+      <!-- Remove previous blocks -->
+      <block type="zolagomodago/checkout_onepage_logged" name="checkout.onepage" template="checkout/onepage/logged.phtml">
+        <block type="zolagomodago/checkout_onepage_logged_addressbook" name="checkout.onepage.logged.addressbook" template="checkout/onepage/logged/addressbook.phtml"/>
+        <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml">
+          <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.logged.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+          <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.logged.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+        </block>
+        <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.logged.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml">
+          <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" as="shipping" name="checkout.onepage.logged.shippingpayment.shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml"/>
+          <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" as="payment" name="checkout.onepage.logged.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+            <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.logged.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml"/>
+          </block>
+        </block>
+        <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.logged.review" template="checkout/onepage/shared/review.phtml"/>
+      </block>
+    </reference>
+  </checkout_singlepage_index>
+  <checkout_guest_index>
+    <update handle="checkout_updater"/>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/checkout/guest.js</script>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="addBodyClass">
+        <value>nobreadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
+        <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml">
+          <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+          <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+          <block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/address/password.phtml"/>
+          <block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml">
+            <block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" template="sociallogin/google/button.phtml"/>
+            <block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" template="sociallogin/facebook/button.phtml"/>
+            <block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" template="sociallogin/twitter/button.phtml"/>
+            <block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button" template="sociallogin/linkedin/button.phtml"/>
+          </block>
+        </block>
+        <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml">
+          <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" as="shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml"/>
+          <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" as="payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+            <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.guest.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml"/>
+          </block>
+        </block>
+        <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.guest.review" template="checkout/onepage/shared/review.phtml">
+          <block type="core/text_list" name="additional.product.info"/>
+        </block>
+      </block>
+    </reference>
+  </checkout_guest_index>
+  <checkout_singlepage_success>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>nobreadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
+    </reference>
+  </checkout_singlepage_success>
+  <checkout_guest_success>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
+    </reference>
+  </checkout_guest_success>
+  <!-- ################################################################### -->
+  <!-- Customer section													 -->
+  <!-- ################################################################### -->
+  <customer_account translate="label">
+    <label>Customer My Account (All Pages)</label>
+    <!--remove name="catalog.compare.sidebar"/>
+        <remove name="sale.reorder.sidebar"/-->
+    <!-- Mage_Customer -->
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>catalog-category-view</value>
+      </action>
+      <action method="addBodyClass">
+        <value>node-type-main_categories</value>
+      </action>
+      <action method="addBodyClass">
+        <value>sidebar-first</value>
+      </action>
+      <action method="addBodyClass">
+        <value>view-menu-category</value>
+      </action>
+      <action method="unsetChild">
+        <name>left</name>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="customer_account_navigation">
+      <action method="removeLinkByName">
+        <name>recurring_profiles</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>billing_agreements</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>reviews</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>downloadable_products</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>OAuth Customer Tokens</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>account</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>account_edit</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>address_book</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>orders</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>tags</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>wishlist</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>newsletter</name>
+      </action>
+      <action method="removeLinkByName">
+        <name>rma</name>
+      </action>
+      <!--Zamówienia w realizacji-->
+      <action method="addLink" translate="label">
+        <name>sales_order_process</name>
+        <path>sales/order/process</path>
+        <label>Orders in the realization</label>
+      </action>
+      <!--Historia zamówień-->
+      <action method="addLink" translate="label">
+        <name>orders</name>
+        <path>sales/order/history/</path>
+        <label>Orders history</label>
+      </action>
+      <!--RMA-->
+      <action method="addLink" translate="label" ifconfig="urma/logic/enabled">
+        <name>rma</name>
+        <path>sales/rma/history/</path>
+        <label>Returns and complaints</label>
+      </action>
+      <!--dane kontaktowe-->
+      <action method="addLink" translate="label">
+        <name>account_edit</name>
+        <path>customer/account/edit/</path>
+        <label>Contact details</label>
+      </action>
+      <!--zmiana hasla-->
+      <action method="addLink" translate="label">
+        <name>account_password</name>
+        <path>customer/account/password/</path>
+        <label>Change password</label>
+      </action>
+      <!--SUBSKRYPCJA NEWSLETTERA-->
+      <action method="addLink" translate="label">
+        <name>newsletter</name>
+        <path>newsletter/manage/</path>
+        <label>Settings mailing and sms</label>
+      </action>
+      <!--Privacy settings-->
+      <action method="addLink" translate="label">
+        <name>privacy</name>
+        <path>customer/account/privacy</path>
+        <label>Privacy settings</label>
+      </action>
+      <!--logout-->
+      <action method="addLink" translate="label">
+        <name>logout</name>
+        <path>customer/account/logout</path>
+        <label>Log out</label>
+      </action>
+    </reference>
+    <reference name="content">
+      <action method="unsetChild">
+        <name>my.account.wrapper</name>
+      </action>
+      <block type="core/template" name="account.wrapper" template="customer/account/wrapper.phtml">
+        <action method="insert">
+          <child>left</child>
+        </action>
+        <action method="insert">
+          <child>my.account.wrapper</child>
+        </action>
+      </block>
+    </reference>
+    <reference name="left">
+      <action method="setTemplate">
+        <template>customer/account/left.phtml</template>
+      </action>
+      <remove name="tags_popular"/>
+      <remove name="cart_sidebar"/>
+      <remove name="catalog.compare.sidebar"/>
+      <remove name="sale.reorder.sidebar"/>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>account</crumbName>
+        <crumbInfo>
+          <label>My account</label>
+          <title>My account</title>
+          <link>/customer/account/index</link>
+        </crumbInfo>
+      </action>
+    </reference>
+  </customer_account>
+  <customer_account_index translate="label">
+    <label>Customer My Account Dashboard</label>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/sales.js</script>
+      </action>
+    </reference>
+    <action method="addBodyClass">
+      <value>customer-account-index</value>
+    </action>
+    <!-- Mage_Customer -->
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>account</crumbName>
+        <crumbInfo>
+          <label>My account</label>
+          <title>My account</title>
+          <id>link_your_account_br</id>
+          <link>/customer/account/index</link>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <action method="unsetChild">
+        <name>customer_account_dashboard</name>
+      </action>
+      <block type="zolagomodago/sales_order_process" name="sales.order.process">
+        <block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+          <label>Orders in the realization</label>
+        </block>
+        <block type="core/template" template="sales/order/process/empty.phtml" name="sales.order.process.empty" as="empty">
+          <block type="cms/block" name="sales.order.process.empty.cms" as="cms">
+            <action method="setBlockId">
+              <block_id>account-order-process-empty</block_id>
+            </action>
+          </block>
+        </block>
+        <block type="zolagomodago/sales_order_process_attach" template="sales/order/process/attach.phtml" name="sales.order.process.attach" as="attach">
+          <block type="cms/block" name="sales.order.process.attach.cms" as="cms">
+            <action method="setBlockId">
+              <block_id>account-order-process-attach</block_id>
+            </action>
+          </block>
+        </block>
+        <block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
+      </block>
+      <!-- add custom modago mobile navigation -->
+      <block type="customer/account_navigation" name="customer_account_navigation_mobile" template="customer/account/navigation-mobile.phtml">
+        <action method="removeLinkByName">
+          <name>recurring_profiles</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>billing_agreements</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>reviews</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>downloadable_products</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>OAuth Customer Tokens</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>account</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>account_edit</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>address_book</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>orders</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>tags</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>wishlist</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>newsletter</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>udqa</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>udpreviews</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>udratings</name>
+        </action>
+        <action method="removeLinkByName">
+          <name>rma</name>
+        </action>
+        <!--Zamówienia w realizacji-->
+        <action method="addLink" translate="label">
+          <name>sales_order_process</name>
+          <path>sales/order/process</path>
+          <label>Orders in the realization</label>
+        </action>
+        <!--Historia zamówień-->
+        <action method="addLink" translate="label">
+          <name>orders</name>
+          <path>sales/order/history/</path>
+          <label>Orders history</label>
+        </action>
+        <!--RMA-->
+        <action method="addLink" translate="label" ifconfig="urma/logic/enabled">
+          <name>rma</name>
+          <path>sales/rma/history/</path>
+          <label>Returns and complaints</label>
+        </action>
+        <!--dane kontaktowe-->
+        <action method="addLink" translate="label">
+          <name>account_edit</name>
+          <path>customer/account/edit/</path>
+          <label>Contact details</label>
+        </action>
+        <!--zmiana hasla-->
+        <action method="addLink" translate="label">
+          <name>account_password</name>
+          <path>customer/account/password/</path>
+          <label>Change password</label>
+        </action>
+        <!--SUBSKRYPCJA NEWSLETTERA-->
+        <action method="addLink" translate="label">
+          <name>newsletter</name>
+          <path>newsletter/manage/</path>
+          <label>Settings mailing and sms</label>
+        </action>
+        <!--Privacy settings-->
+        <action method="addLink" translate="label">
+          <name>privacy</name>
+          <path>customer/account/privacy</path>
+          <label>Privacy settings</label>
+        </action>
+        <!--logout-->
+        <action method="addLink" translate="label">
+          <name>logout</name>
+          <path>customer/account/logout</path>
+          <label>Log out</label>
+        </action>
+      </block>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </customer_account_index>
+  <customer_account_privacy translate="label">
+    <update handle="customer_account"/>
+    <update handle="zolago_modago_customer_handle"/>
+    <label>Privacy settings</label>
+    <action method="addBodyClass">
+      <value>customer-account-privacy</value>
+    </action>
+    <!-- Mage_Customer -->
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>account</crumbName>
+        <crumbInfo>
+          <label>Privacy settings</label>
+          <title>Privacy settings</title>
+          <link>/customer/account/privacy</link>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <block type="zolagocustomer/privacy" name="customer_privacy" template="zolagocustomer/privacy.phtml"/>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </customer_account_privacy>
+  <zolago_modago_customer_handle>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/account.js</script>
+      </action>
+    </reference>
+    <remove name="captcha"/>
+  </zolago_modago_customer_handle>
+  <customer_account_edit>
+    <update handle="zolago_modago_customer_handle"/>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>account_edit</crumbName>
+        <crumbInfo>
+          <label>Contact details</label>
+          <title>Contact details</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </customer_account_edit>
+  <customer_account_password>
+    <update handle="customer_account"/>
+    <update handle="zolago_modago_customer_handle"/>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>account_password</crumbName>
+        <crumbInfo>
+          <label>Change password</label>
+          <title>Change password</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml">
+        <block type="sociallogin/google_button" name="social-login-google" template="sociallogin/google/button.phtml"/>
+        <block type="sociallogin/facebook_button" name="social-login-facebook" template="sociallogin/facebook/button.phtml"/>
+      </block>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </customer_account_password>
+  <customer_account_login>
+    <reference name="customer_form_login">
+      <block type="zolagomodago/customer_form_login_continue" name="form.register.continue"/>
+    </reference>
+    <update handle="zolago_modago_customer_handle"/>
+  </customer_account_login>
+  <customer_account_forgotpassword>
+    <update handle="zolago_modago_customer_handle"/>
+  </customer_account_forgotpassword>
+  <customer_account_forgotpasswordmessage>
+    <update handle="zolago_modago_customer_handle"/>
+    <reference name="forgot.password.message">
+      <action method="setTemplate">
+        <template>customer/forgotpasswordmessage.phtml</template>
+      </action>
+    </reference>
+  </customer_account_forgotpasswordmessage>
+  <customer_account_resetpassword>
+    <update handle="zolago_modago_customer_handle"/>
+  </customer_account_resetpassword>
+  <customer_account_create>
+    <update handle="zolago_modago_customer_handle"/>
+    <reference name="customer_form_register">
+      <block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml">
+        <block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button"/>
+        <block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button"/>
+        <block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button"/>
+        <block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button"/>
+      </block>
+    </reference>
+  </customer_account_create>
+  <!-- ################################################################### -->
+  <!-- Sales												 -->
+  <!-- ################################################################### -->
+  <sales_order_history>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>history</crumbName>
+        <crumbInfo>
+          <label>Order history</label>
+          <title>Order history</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <!-- remove old history -->
+      <action method="unsetChild">
+        <name>sales.order.history</name>
+      </action>
+      <action method="unsetChild">
+        <name>customer.account.link.back</name>
+      </action>
+      <!-- add custom modago history -->
+      <block type="zolagomodago/sales_order_history" name="sales.order.history">
+        <block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+          <label>Order History Info</label>
+        </block>
+        <block type="zolagomodago/sales_order_history_empty" name="sales.order.history.empty" as="empty"/>
+        <block type="zolagomodago/sales_order_process_attach" template="sales/order/process/attach.phtml" name="sales.order.process.attach" as="attach">
+          <block type="cms/block" name="sales.order.process.attach.cms" as="cms">
+            <action method="setBlockId">
+              <block_id>account-order-process-attach</block_id>
+            </action>
+          </block>
+        </block>
+      </block>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </sales_order_history>
+  <sales_order_process>
+    <update handle="customer_account"/>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/sales.js</script>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>process</crumbName>
+        <crumbInfo>
+          <label>Orders in the realization</label>
+          <title>Orders in the realization</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <block type="zolagomodago/sales_order_process" name="sales.order.process">
+        <block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+          <label>Orders in the realization</label>
+        </block>
+        <block type="core/template" template="sales/order/process/empty.phtml" name="sales.order.process.empty" as="empty">
+          <block type="cms/block" name="sales.order.process.empty.cms" as="cms">
+            <action method="setBlockId">
+              <block_id>account-order-process-empty</block_id>
+            </action>
+          </block>
+        </block>
+        <block type="zolagomodago/sales_order_process_attach" template="sales/order/process/attach.phtml" name="sales.order.process.attach" as="attach">
+          <block type="cms/block" name="sales.order.process.attach.cms" as="cms">
+            <action method="setBlockId">
+              <block_id>account-order-process-attach</block_id>
+            </action>
+          </block>
+        </block>
+        <block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
+      </block>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </sales_order_process>
+  <sales_order_view>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/sales.js</script>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <!-- remove old view -->
+      <action method="unsetChild">
+        <name>sales.order.view</name>
+      </action>
+      <action method="unsetChild">
+        <name>sales.order.item.default</name>
+      </action>
+      <!-- add custom modago view -->
+      <block type="zolagomodago/sales_order_view" name="sales.order.view">
+        <block type="zolagomodago/sales_order_shipment" name="sales.order.shipment" template="sales/order/shipment.phtml"/>
+        <block type="zolagomodago/sales_order_info" name="sales.order.info" template="sales/order/info.phtml"/>
+        <block type="zolagomodago/sales_order_item" name="sales.order.item">
+          <block type="zolagomodago/sales_order_item_renderer_default" name="sales.order.item.default"/>
+        </block>
+        <block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
+      </block>
+    </reference>
+  </sales_order_view>
+  <!-- ################################################################### -->
+  <!-- Rma																 -->
+  <!-- ################################################################### -->
+  <sales_po_newrma>
+    <label>Customer My Account Order RMA View</label>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/rma/new.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/AddressBook.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/Address.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/AddressBook/Layout.js</script>
+      </action>
+      <action method="addItem">
+        <type>js_css</type>
+        <name>calendar/calendar-win2k-1.css</name>
+        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
+      </action>
+      <action method="addItem">
+        <type>js</type>
+        <name>calendar/calendar.js</name>
+        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
+      </action>
+      <action method="addItem">
+        <type>js</type>
+        <name>calendar/calendar-setup.js</name>
+        <!--<params/><if/><condition>can_load_calendar_js</condition>-->
+      </action>
+      <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>rma</crumbName>
+        <crumbInfo>
+          <label>Returns and complaints</label>
+          <title>Returns and complaints</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <remove name="sales.po.info"/>
+      <block type="zolagorma/new" name="zolagorma.new" template="zolagorma/new.phtml">
+        <block type="zolagorma/new_step1" name="zolagorma.new.step1" template="zolagorma/new/step1.phtml"/>
+        <block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml">
+          <block type="zolagorma/new_step2" name="zolagorma.new.translate" as="zolagormatranslate" template="zolagorma/translate.phtml"/>
+          <block type="zolagorma/new_step2" name="zolagorma.new_step2.js" as="zolagormajs" template="zolagorma/new/step2/js.phtml"/>
+        </block>
+        <block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
+      </block>
+      <block type="zolagopo/info" as="info" name="sales.po.info">
+        <action method="addLink" translate="label" module="sales">
+          <name>view</name>
+          <path>*/*/view</path>
+          <label>Order Information</label>
+        </action>
+        <action method="addLink" translate="label" module="sales">
+          <name>invoice</name>
+          <path>*/*/invoice</path>
+          <label>Invoices</label>
+        </action>
+        <action method="addLink" translate="label" module="sales">
+          <name>shipment</name>
+          <path>*/*/shipment</path>
+          <label>Shipments</label>
+        </action>
+        <action method="addLink" translate="label" module="sales">
+          <name>creditmemo</name>
+          <path>*/*/creditmemo</path>
+          <label>Refunds</label>
+        </action>
+        <action method="addLink" translate="label" module="urma">
+          <name>rma</name>
+          <path>*/*/rma</path>
+          <label>RMA</label>
+        </action>
+        <action method="setInRma">
+          <status>1</status>
+        </action>
+      </block>
+    </reference>
+    <update handle="customer_account"/>
+  </sales_po_newrma>
+  <sales_rma_view>
+    <update handle="customer_account"/>
+    <update handle="zolago_modago_customer_handle"/>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>rma</crumbName>
+        <crumbInfo>
+          <label>Returns and complaints</label>
+          <title>Returns and complaints</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
+        <block type="zolagorma/view_detail" name="zolagorma.vendor.detail" as="zolagorma_vendor_detail" template="zolagorma/view/detail.phtml"/>
+      </block>
+    </reference>
+  </sales_rma_view>
+  <sales_rma_courier>
+    <update handle="customer_account"/>
+    <update handle="zolago_modago_customer_handle"/>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/rma/new.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/rma/courier.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/AddressBook.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/Address.js</script>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/customer/AddressBook/Layout.js</script>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>rma</crumbName>
+        <crumbInfo>
+          <label>Returns and complaints</label>
+          <title>Returns and complaints</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
+        <block type="zolagorma/courier" name="zolagorma.new.step2" as="bookcourier" template="zolagorma/new/step2.phtml">
+          <block type="zolagorma/courier" as="zolagormatranslate" name="zolagorma.courier.translate" template="zolagorma/translate.phtml"/>
+          <block type="zolagorma/courier" name="zolagorma.courier.js" as="zolagormajs" template="zolagorma/courier/js.phtml"/>
+        </block>
+      </block>
+    </reference>
+  </sales_rma_courier>
+  <sales_rma_history>
+    <label>Customer Rma History</label>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>rma</crumbName>
+        <crumbInfo>
+          <label>Returns and complaints</label>
+          <title>Returns and complaints</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+    <update handle="customer_account"/>
+    <reference name="my.account.wrapper">
+        <block type="zolagorma/list" as="list" name="sales.rma.list" />
+    </reference>
+  </sales_rma_history>
+  <sales_po_rmalist>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>rma</crumbName>
+        <crumbInfo>
+          <label>Returns and complaints</label>
+          <title>Returns and complaints</title>
+          <link>/sales/rma/history/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>rma-po-list</crumbName>
+        <crumbInfo>
+          <label>Choose package</label>
+          <title>Choose package</title>
+        </crumbInfo>
+      </action>
+    </reference>
+  </sales_po_rmalist>
+  <help_index_index>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="cms/block" name="help-page">
+        <action method="setBlockId">
+          <block_id>help-page</block_id>
+        </action>
+      </block>
+    </reference>
+  </help_index_index>
+  <help_contact_vendor>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Help</crumbName>
+        <crumbInfo>
+          <label>Help</label>
+          <title>Help</title>
+          <link>/help</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Contact shop</crumbName>
+        <crumbInfo>
+          <label>Contact shop</label>
+          <title>Contact shop</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagoudqa/contact_vendor" name="contact.vendor" template="help/contact-vendor.phtml"/>
+      <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
+    </reference>
+  </help_contact_vendor>
+  <help_contact_gallery>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Help</crumbName>
+        <crumbInfo>
+          <label>Help</label>
+          <title>Help</title>
+          <link>/help</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Contact Modago gallery</crumbName>
+        <crumbInfo>
+          <label>Contact Modago gallery</label>
+          <title>Contact Modago gallery</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="core/template" name="contact.gallery" template="help/contact-gallery.phtml"/>
+      <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
+    </reference>
+  </help_contact_gallery>
+  <help_contact_index>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>Contact</crumbName>
+        <crumbInfo>
+          <label>Contact</label>
+          <title>Contact</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="core/template" name="contact.gallery" template="help/contact.phtml"/>
+      <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
+    </reference>
+  </help_contact_index>
+  <newsletter_manage_index>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>newsletter</crumbName>
+        <crumbInfo>
+          <label>Settings mailing and sms</label>
+          <title>Settings mailing and sms</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="my.account.wrapper">
+      <block type="customer/newsletter" name="customer_newsletter">
+        <action method="setBlockId">
+          <block_id>notification-settings-general-subscription</block_id>
+        </action>
+        <!--<action method="setBlockId">-->
+        <!--<block_id>notification-settings-sms</block_id>-->
+        <!--</action>-->
+      </block>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </newsletter_manage_index>
+  <mypromotions_index_index>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="addBodyClass">
+        <value>lower-breadcrumbs</value>
+      </action>
+      <action method="addBodyClass">
+        <value>your-promotions</value>
+      </action>
+      <action method="unsetChild">
+        <name>breadcrumbs</name>
+      </action>
+    </reference>
+    <reference name="breadcrumbs">
+      <action method="addCrumb">
+        <crumbName>Home</crumbName>
+        <crumbInfo>
+          <label>Home</label>
+          <title>Home</title>
+          <link>/</link>
+        </crumbInfo>
+      </action>
+      <action method="addCrumb">
+        <crumbName>mypromotions</crumbName>
+        <crumbInfo>
+          <label>Your coupons</label>
+          <title>Your coupons</title>
+        </crumbInfo>
+      </action>
+    </reference>
+    <reference name="head">
+      <action method="setTitle" translate="title">
+        <title>Your coupons</title>
+      </action>
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/promotions.js</script>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="zolagomodago/mypromotions_header" name="zolago_modago_mypromotions_header" template="promotions/mypromotions/header.phtml">
+        <block type="page/html_breadcrumbs" name="mypromotions_breadcrumbs"/>
+      </block>
+      <block type="zolagomodago/mypromotions" name="zolago_modago_mypromotions" template="promotions/mypromotions.phtml">
+        <block type="zolagomodago/promotions_login" name="mypromotions.login" template="promotions/login.phtml">
+          <block type="cms/block" name="promotions.login.header" as="login-header">
+            <action method="setBlockId">
+              <block_id>promotions-login-header</block_id>
+            </action>
+          </block>
+        </block>
+        <block type="zolagomodago/promotions_register" name="mypromotions.register" template="promotions/register.phtml"/>
+        <block type="zolagomodago/promotions_gotologin" name="mypromotions.gotologin" template="promotions/gotologin.phtml"/>
+        <block type="zolagomodago/promotions_gotoregister" name="mypromotions.gotoregister" template="promotions/gotoregister.phtml"/>
+        <block type="zolagomodago/promotions_newsletter" name="mypromotions.newsletter" template="promotions/newsletter.phtml"/>
+      </block>
+    </reference>
+  </mypromotions_index_index>
+  <wishlist_index_index>
+    <remove name="left"/>
+    <action method="setTemplate">
+      <template>page/1column.phtml</template>
+    </action>
+    <reference name="root">
+      <action method="unsetChild">
+        <name>breadcrumbs</name>
+      </action>
+    </reference>
+    <remove name="my.account.wrapper"/>
+    <reference name="content">
+      <block type="wishlist/customer_wishlist" name="customer.wishlist" template="wishlist/view.phtml">
+        <action method="setTitle" translate="title">
+          <title>My Wishlist</title>
+        </action>
+        <block type="wishlist/customer_wishlist_items" name="customer.wishlist.items" as="items" template="wishlist/item/list.phtml">
+          <block type="wishlist/customer_wishlist_item_column_image" name="customer.wishlist.item.image" template="wishlist/item/column/image.phtml"/>
+          <block type="wishlist/customer_wishlist_item_column_comment" name="customer.wishlist.item.info" template="wishlist/item/column/info.phtml">
+            <action method="setTitle" translate="title">
+              <title>Product Details and Comment</title>
+            </action>
+          </block>
+          <block type="wishlist/customer_wishlist_item_column_cart" name="customer.wishlist.item.cart" template="wishlist/item/column/cart.phtml">
+            <action method="setTitle" translate="title">
+              <title>Add to Cart</title>
+            </action>
+            <block type="wishlist/customer_wishlist_item_options" name="customer.wishlist.item.options"/>
+          </block>
+          <block type="wishlist/customer_wishlist_item_column_remove" name="customer.wishlist.item.remove" template="wishlist/item/column/remove.phtml"/>
+        </block>
+        <block type="core/text_list" name="customer.wishlist.buttons" as="control_buttons">
+          <block type="wishlist/customer_wishlist_button" name="customer.wishlist.button.share" template="wishlist/button/share.phtml"/>
+          <block type="wishlist/customer_wishlist_button" name="customer.wishlist.button.toCart" template="wishlist/button/tocart.phtml"/>
+          <block type="wishlist/customer_wishlist_button" name="customer.wishlist.button.update" template="wishlist/button/update.phtml"/>
+        </block>
+      </block>
+      <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
+    </reference>
+  </wishlist_index_index>
+  <newsletter_subscriber_sm_unsubscribe_redirect>
+    <reference name="root">
+      <action method="setTemplate">
+        <template>page/1column.phtml</template>
+      </action>
+      <action method="setBodyClass">
+        <value>nobreadcrumbs</value>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="core/template" template="zolagonewsletter/sm_unsubscribe_redirect.phtml" name="zolagonewsletter.sm.unsubscribe.redirect">
+        <block name="zolagonewsletter.sm.unsubscribe.redirect.formkey" type="core/template" template="core/formkey.phtml"/>
+        <block type="cms/block" name="salesmanago_unsubscribe_redirect">
+          <action method="setBlockId">
+            <block_id>salesmanago_unsubscribe_redirect</block_id>
+          </action>
+        </block>
+      </block>
+    </reference>
+  </newsletter_subscriber_sm_unsubscribe_redirect>
+</layout>

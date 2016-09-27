@@ -1,0 +1,76 @@
+<?php
+    $_timeOut = 0;
+    $_popup_redirection = Mage::getStoreConfig('snowfreshmail/popup_settings/popup_redirection');
+    $_scrollPosition = max(1, (int) Mage::getStoreConfig('snowfreshmail/popup_settings/popup_appear_scroll'));
+
+    if ($_popup_redirection == 'page') {
+        $_redirect = Mage::helper('cms/page')->getPageUrl(Mage::getStoreConfig('snowfreshmail/popup_settings/popup_redirection_page'));
+    }
+    elseif ($_popup_redirection == 'url') {
+        $_redirect = Mage::getStoreConfig('snowfreshmail/popup_settings/popup_redirection_url');
+    }
+    else {
+        $_redirect = '';
+    }
+
+    if (Mage::getStoreConfig('snowfreshmail/popup_settings/popup_appear') == 'after_time') {
+        $_timeOut = Mage::getStoreConfig('snowfreshmail/popup_settings/popup_appear_time') * 1000;
+    }
+?>
+
+<div id="freshmail_backdrop" style="display: none"></div>
+<div id="freshmail-main-wrapper" style="display: none" class="freshmail-main-wrapper">
+    <div class="freshmail-main-wrapper__cell">
+        <div id="freshmail_formcontainer" class="freshmail-container"
+            data-max-displays="<?= Mage::getStoreConfig('snowfreshmail/popup_settings/popup_count') ?>"
+            data-interval="<?= Mage::getStoreConfig('snowfreshmail/popup_settings/popup_time') ?>"
+            data-counter="<?= Snowdog_Freshmail_Block_Popup::COUNTER_COOKIE ?>"
+            data-timestamp="<?= Snowdog_Freshmail_Block_Popup::TIMESTAMP_COOKIE ?>"
+            data-success="<?= Snowdog_Freshmail_Block_Popup::SUCCESS_COOKIE ?>"
+            data-timeout="<?= $_timeOut ?>"
+            data-scroll-position="<?= $_scrollPosition ?>"
+            data-success-msg="<?= Mage::getStoreConfig('snowfreshmail/messages/submission_success') ?>"
+            data-redirect="<?= $_redirect ?>"
+            data-error-msg="<?= $this->__('Something went wrong. Try again.') ?>"
+            data-popup-appear="<?= Mage::getStoreConfig('snowfreshmail/popup_settings/popup_appear') ?>">
+            <div class="freshmail-container__close freshmail-close" id="freshmail_closebutton">
+                <svg class="freshmail-close" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="612px" height="612px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;" xml:space="preserve"><polygon class="freshmail-close" points="612,36.004 576.521,0.603 306,270.608 35.478,0.603 0,36.004 270.522,306.011 0,575.997 35.478,611.397 306,341.411 576.521,611.397 612,575.997 341.459,306.011"/></svg>
+            </div>
+            <div id="freshmail_message" class="freshmail-container__message"></div>
+            <form id="freshmail_form" class="freshmail-container__form" action="<?= $this->getUrl('snowfreshmail/index/popup') ?>" method="post">
+                <div id="freshmail_textheader" class="freshmail-container__header">
+                    <?= Mage::getStoreConfig('snowfreshmail/popup_messages/popup_title') ?>
+                </div>
+                <div id="freshmail_subheader" class="freshmail-container__subheader">
+                    <?= Mage::getStoreConfig('snowfreshmail/popup_messages/popup_text') ?>
+                </div>
+                <?php $_header_image = Mage::getStoreConfig('snowfreshmail/popup_design/photo'); ?>
+                <?php if(!empty($_header_image)): ?>
+                    <div class="freshmail-container__image">
+                        <img src="<?= Mage::getBaseUrl('media') . 'snowfreshmail' . DS . $_header_image ?>" alt="">
+                    </div>
+                <?php endif; ?>
+                <div class="freshmail-container__field-row">
+                    <label id="freshmail_label" class="freshmail-container__label">
+                        <?= $this->__('Email') ?>
+                    </label>
+                    <div class="freshmail-container__field-container">
+                        <input class="freshmail-container__field validate-email required-entry" name="email" type="email">
+                    </div>
+                </div>
+                <?= $this->getCustomFieldsHtml() ?>
+                <div id="freshmail_agreement" class="freshmail-container__agreement">
+                    <input id="freshmail_agreement_input" class="required-entry" type="checkbox" value="1" required="required" <?php if ($this->helper('snowfreshmail')->getPopupProperty('agreement_checked')): ?>checked<?php endif; ?>>
+                    <label id="freshmail_agreement_label" class="freshmail-container__agreement-label" for="freshmail_agreement_input">
+                        <?= Mage::getStoreConfig('snowfreshmail/popup_messages/agreement_text'); ?>
+                    </label>
+                </div>
+                <div id="freshmail_button_wrapper" class="freshmail-container__button_wrapper">
+                    <button id="freshmail-button" class="freshmail-container__button" type="submit">
+                        <?= Mage::getStoreConfig('snowfreshmail/popup_messages/button_text'); ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

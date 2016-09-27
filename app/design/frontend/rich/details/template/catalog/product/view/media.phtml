@@ -1,0 +1,61 @@
+<?php
+/**
+ * Product media data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ */
+/** @var Mage_Catalog_Block_Product_View_Media $this */
+$_product = $this->getProduct();
+/** @var Zolago_Catalog_Helper_Data $hlp */
+$hlp = Mage::helper('catalog');
+/** @var Zolago_Catalog_Helper_Product $productHelper */
+$productHelper = Mage::helper("zolagocatalog/product");
+
+$flag = $productHelper->getProductBestFlag($_product);
+$flagLabel = $flag ? $hlp->__($flag) : "";
+$_helper = $this->helper('catalog/output');
+$_zolagoCatalogBlock = Mage::getBlockSingleton('zolagocatalog/product_view');
+$nImagesForCssStyle = 5; //magic number, for less then 5 items height of box is auto
+$_images = $this->getGalleryImages();
+?>
+<?php if (count($this->getGalleryImages()) > 0): ?>
+    <?php $_dimensions = array(); ?>
+    <?php foreach ($_images as $k => $_image): ?>
+        <?php $_dimensions[$k] = @getimagesize($_image->getPath()); ?>
+    <?php endforeach; ?>
+    <div id="productGalleryBigMedia">
+        <?php $i = 0; ?>
+        <?php foreach ($_images as $k => $_image): ?>
+            <?php if (isset($_dimensions[$k]) && is_array($_dimensions[$k]) && isset($_dimensions[$k][0], $_dimensions[$k][1])): ?>
+                <div class="item">
+                    <div>
+                        <?php if ($flag) : ?>
+                            <div class="label-product">
+                                <div class="listing-label type-label-<?php echo $flag;?>">
+                                    <div class="flag-<?php echo $flag;?>"></div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <a href="#" data-flags="<?php echo $flag; ?>" data-flag-label="<?php echo $flagLabel ?>" onclick="return false;">
+                            <img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(410); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" <?php if($i == 0): ?> itemprop="image" <?php endif; ?>
+                                 data-ratio="<?php echo number_format((float)($_dimensions[$k][1] / $_dimensions[$k][0]), 4, '.', ''); ?>"/>
+                            <span class="view_lupa view_lupa_plus"><i class="fa fa-search-plus" aria-hidden="true"></i></span>
+                        </a>
+                    </div>
+                </div>
+                <?php $i++; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <div id="wrapper-productGalleryThumbMedia">
+        <div id="productGalleryThumbMedia">
+            <?php foreach ($this->getGalleryImages() as $_image): ?>
+                <div class="item" style="">
+                    <img
+                        src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(85, 85); ?>"
+                        width="85" height="85" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>">
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>

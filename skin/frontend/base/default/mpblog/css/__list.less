@@ -1,0 +1,276 @@
+@import "__lesshat";
+@import "__variables";
+
+/* List of Posts */
+.mpblog-list {
+
+  &.list {
+
+    .mpblog-post {
+
+      @media (max-width: @big-tablet-point) {
+        &:last-child {
+
+          border-bottom: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+
+        border-bottom: 1px solid @border-color;
+        margin-bottom: 1em;
+        padding-bottom: 1em;
+      }
+
+      .thumbnail-container {
+        overflow: hidden;
+      }
+
+      .post-thumbnail {
+        .transition(transform .3s .15s ease-out);
+
+        &:hover {
+          .scale(1.05);
+        }
+      }
+    }
+
+    .mp-read-more {
+      margin-right: 1.5em;
+      margin-bottom: 1.5em;
+      float: left;
+    }
+  }
+
+  &.grid {
+    width: 100%;
+
+    .item {
+      .transition(width .3s ease-in-out);
+      .post-container {
+
+        overflow: hidden;
+
+        .thumbnail-container {
+          overflow: hidden;
+        }
+
+        .post-thumbnail {
+          margin: -10px -10px 10px;
+          .transition(transform .3s .15s ease-out);
+
+          &:hover {
+            .scale(1.1);
+          }
+        }
+
+        background-color: @form-back-color;
+        padding: 10px;
+        .mp-footer {
+          margin-bottom: 20px;
+        }
+
+        span.comments {
+          float: left;
+          margin-left: 0;
+        }
+      }
+
+      float: left;
+      padding: 0 10px;
+      .box-sizing(border-box);
+    }
+  }
+}
+
+/* Grid Sizer */
+.three-columns {
+  .mpblog-list.grid {
+
+
+    .grid-sizer { width: 33%; }
+
+    .item {
+      width: 33%;
+
+      &.w2 {
+        width: 66%;
+      }
+      &.w3 {
+        width: 100%;
+        padding: 0 !important;
+      }
+    }
+
+    @media only screen and (max-width: @big-tablet-point) {
+
+      .grid-sizer { width: 50%; }
+      .item {
+
+        width: 50%;
+
+        &.w2,
+        &.w3 {
+          width: 100%;
+          padding: 0 !important;
+        }
+      }
+    }
+
+    @media only screen and (max-width: @big-phone-point) {
+      .grid-sizer {
+        width: 100%;
+      }
+      .item {
+        padding: 0 !important;
+        width: 100%;
+        &.w3 ,
+        &.w2 {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.two-columns-right, .two-columns-left {
+  .mpblog-list.grid {
+
+    .grid-sizer { width: 25%; }
+
+    .item {
+      width: 25%;
+
+      &.w2 {
+        width: 50%;
+      }
+      &.w3 {
+        width: 75%;
+      }
+    }
+
+    @media only screen and (max-width: @big-tablet-point) {
+
+      .grid-sizer {
+        width: 50%;
+      }
+
+      .item {
+        width: 50%;
+        &.w3 ,
+        &.w2 {
+          width: 100%;
+          padding: 0 !important;
+        }
+      }
+    }
+
+    @media only screen and (max-width: @big-phone-point) {
+      .grid-sizer {
+        width: 100%
+      }
+
+      .item {
+        padding: 0 !important;
+        width: 100%;
+        &.w3 ,
+        &.w2 {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.one-column {
+  .mpblog-list.grid {
+
+    .grid-sizer { width: 20%; }
+
+    .item {
+      width: 20%;
+
+      &.w2 {
+        width: 40%;
+      }
+      &.w3 {
+        width: 60%;
+      }
+    }
+
+    @media only screen and (max-width: @big-tablet-point) {
+
+      .grid-sizer { width: 33%; }
+      .item {
+
+        width: 33%;
+
+        &.w2 {
+          width: 66%;
+        }
+
+        &.w3 {
+          width: 100%;
+          padding: 0 !important;
+        }
+      }
+    }
+
+    @media only screen and (max-width: @big-phone-point) {
+      .grid-sizer {
+        width: 100%;
+      }
+      .item {
+        padding: 0 !important;
+        width: 100%;
+        &.w3 ,
+        &.w2 {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.mpblog-container {
+
+  &.list {
+    .mp-pager {
+      border-top: 1px solid @border-color;
+    }
+  }
+
+  .mp-pager {
+
+    margin-top: 40px;
+    padding: 10px 5px 0;
+    .navi {
+      a {
+        line-height: 16px;
+        min-height: 16px;
+        width: 45%;
+      }
+    }
+
+    .newer {
+      a {
+        float: right;
+        text-align: right;
+
+        i.glyphicons {
+          margin-left: 5px;
+        }
+      }
+    }
+
+    .older {
+      a {
+        float: left;
+        text-align: left;
+
+        i.glyphicons {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+
+/** @var Magpleasure_Blog_Model_Mysql4_Comment_Collection $collection  */
+$collection = $this->getCollection();
+?>
+<?php if ($this->getDisplay() && count($collection)): ?>
+<div class="block mpblog-recentcomments">
+    <div class="block-title">
+        <strong><span><?php echo $this->getBlockHeader(); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul class="mplog-recent-comments">
+        <?php foreach ($collection as $comment): ?>
+            <li class="mpblog-recent-comment mpblog-recent-comment-<?php echo $comment->getId(); ?>">
+                <i class="<?php echo $this->getColorClass(); ?> glyphicons ok_2"></i>
+                <a href="<?php echo $comment->getCommentUrl(); ?>"><?php echo $this->escapeHtml($comment->getPostTitle()); ?></a>
+                <?php if ($this->showDate()): ?>
+                <div class="mp-recentcomment-date">
+                    <?php echo $this->renderDate($comment->getCreatedAt()); ?>
+                </div>
+                <?php endif; ?>
+                <?php if ($this->showThesis()): ?>
+                <div class="mp-comment-thesis">
+                    <?php echo $this->getStrippedContent($comment->getMessage()); ?>
+                </div>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

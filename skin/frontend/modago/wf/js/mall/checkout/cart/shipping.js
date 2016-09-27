@@ -282,6 +282,9 @@
                 var shippingCostFormatted = jQuery(methodRadio).attr("data-method-cost-formatted");
                 jQuery('#product_summary li[data-target="val_delivery_cost"]').find("span.price").html(shippingCostFormatted);
 
+                var shippingCostLabel = jQuery(methodRadio).attr("data-method-cost-label");
+                jQuery('#product_summary li[data-target="val_delivery_cost"]').find("span.val_delivery_cost").html(shippingCostLabel);
+
             } else {
                 shippingCost = 0; //not selected yet
             }

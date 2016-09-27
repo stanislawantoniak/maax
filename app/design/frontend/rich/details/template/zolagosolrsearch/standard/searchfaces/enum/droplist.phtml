@@ -1,0 +1,96 @@
+<?php
+/** @var Zolago_Modago_Block_Solrsearch_Faces_Enum_Droplist $this */
+$key = $this->getFacetKey();
+?>
+<?php if ($this->getCanShow()): ?>
+    <?php
+    $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+    $iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up";
+    $isOptionSelected = false;
+    $key_withoutFacet = explode("_", $key);
+    array_pop($key_withoutFacet);
+	$pureKey = implode("_", $key_withoutFacet);
+    ?>
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div id="filter_<?php echo $key ?>" class="content checkbox filter-enum">
+            <?php foreach ($this->getItems() as $item): ?>
+                <?php if ($this->getCanShowItem($item)): ?>
+                    <?php
+                    if(!$isOptionSelected && $item['active']) {
+                        $isOptionSelected = true;
+                    }
+                    ?>
+                    <div class="form-group form-checkbox">
+                        <input data-url="<?php echo $item['url']; ?>"
+							   data-params='<?php echo $item['params']; ?>'
+							   type="checkbox" 
+							   name="<?php echo $item['name']; ?>"
+							   value="<?php echo $item['value']; ?>"
+							   id="<?php echo $item['itemId']; ?>"
+							   class="css-checkbox" 
+							   <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+                        <label for="<?php echo $item['itemId']; ?>" class="css-label">
+	                        <span>
+		                        <a href="<?php echo $item['url']; ?>"
+		                           class="listing-link">
+		                            <?php echo $item['item']; ?>
+		                        </a>
+	                        </span>
+	                        &nbsp;
+	                        <span class="suffix">
+		                        (<?php echo $item['count']; ?>)
+	                        </span>
+                        </label>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($this->getCanShowHidden()): ?>
+                <?php foreach ($this->getHiddenItems() as $item): ?>
+                    <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
+                        <input data-url="<?php echo $item['url'] ?>"  
+							   type="checkbox" 
+							   class="css-checkbox" 
+							   name="<?php echo $item['name'];?>"
+							   value="<?php echo $item['value']?>"
+							   id="<?php echo $item['itemId']?>"
+							   <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+	                    <label for="<?php echo $item['itemId']; ?>" class="css-label">
+	                        <span>
+		                        <a href="<?php echo $item['url']; ?>"
+		                           class="listing-link">
+			                        <?php echo $item['item']; ?>
+		                        </a>
+	                        </span>
+		                    &nbsp;
+	                        <span class="suffix">
+		                        (<?php echo $item['count']; ?>)
+	                        </span>
+	                    </label>
+                    </div>
+                <?php endforeach; ?>
+                <div class="action clearfix">
+                    <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
+                </div>
+            <?php endif; ?>
+
+        </div>
+        <?php if($isOptionSelected) : ?>
+            <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
+                <div class="active-filter">
+                    <?php foreach ($this->getItems() as $item): ?>
+                        <?php if ($this->getCanShowItem($item) && $item['active']): ?>
+                            <a href="<?php echo $item['url']; ?>"
+                               class="active-filter-label"
+                               data-input="<?php echo $item['itemId']; ?>">
+								<?php echo $item['value']; ?><div class="wrapper-x"><i class="fa fa-times"></i></div>
+                            </a>
+                            <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
+                                   value="<?php echo $item['value']; ?>"/>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

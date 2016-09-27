@@ -1,0 +1,15 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+?>
+<script type="text/javascript">
+    document.observe('dom:loaded', function(){
+        var lightbox = new Lightbox({
+            fileLoadingImage: '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS)."magpleasure/libs/lightbox/images/loading.gif"; ?>',
+            fileBottomNavCloseImage: '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS)."magpleasure/libs/lightbox/images/close.gif"; ?>'
+        });
+    });
+</script>

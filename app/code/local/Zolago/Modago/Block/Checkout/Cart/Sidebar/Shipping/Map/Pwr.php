@@ -17,7 +17,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr
 		if (!$collection->getFirstItem()->getId()) {
 			return $result;
 		}
-		
+
 		$lockers = array();
 		$filters = array();
 
@@ -56,7 +56,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr
 		} else {
 			$result["filters"] = array();
 		}
-		
+
 		return $result;
 	}
 

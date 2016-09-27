@@ -17,6 +17,12 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
         foreach ($qRates as $cCode => $cRates) {
             foreach ($cRates as $rate) {
 
+                $deliveryType = "";
+                $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
+                if ($deliveryTypeModel->getId()) {
+                    $deliveryType = $deliveryTypeModel->getDeliveryCode();
+                }
+
                 $vId = $rate->getUdropshipVendor();
                 if (!$vId) {
                     continue;
@@ -27,14 +33,16 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
-                    'method_title' => $rate->getData('method_title')
+                    'method_title' => $rate->getData('method_title'),
+                    "delivery_type" => $deliveryType
                 );
                 $allMethodsByCode[$rate->getCode()][] = array(
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
                     'method_title' => $rate->getData('method_title'),
-                    'cost' => $rate->getPrice()
+                    'cost' => $rate->getPrice(),
+                    "delivery_type" => $deliveryType
                 );
 
             }

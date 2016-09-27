@@ -1,0 +1,96 @@
+@import "__variables";
+@import "__lesshat";
+
+textarea.placeholder,
+input.placeholder[type="text"] {
+
+  .placeholder {
+    color: darken(@border-color, 25%);
+    text-indent: 0;
+    opacity: 0.8;
+    .transition(text-indent .2s ease-in-out, opacity .2s ease-in-out);
+  }
+
+  .hovered-placeholder {
+    opacity: 1;
+  }
+
+  .focused-placeholder {
+    text-indent: -100%;
+    opacity: 0;
+  }
+
+  &::-webkit-input-placeholder {
+    .placeholder();
+  }
+  &:-moz-placeholder {
+    .placeholder();
+  }
+  &::-moz-placeholder {
+    .placeholder();
+  }
+  &:-ms-input-placeholder {
+    .placeholder();
+  }
+
+  &:hover {
+    &::-webkit-input-placeholder {
+      .hovered-placeholder();
+    }
+    &:-moz-placeholder {
+      .hovered-placeholder();
+    }
+    &::-moz-placeholder {
+      .hovered-placeholder();
+    }
+    &:-ms-input-placeholder {
+      .hovered-placeholder();
+    }
+  }
+
+  &:focus {
+    .box-shadow(inset 0px 0px 5px 0px @border-color);
+    border: 1px solid darken(@border-color, 50%);
+
+    &::-webkit-input-placeholder {
+      .focused-placeholder();
+    }
+    &:-moz-placeholder {
+      .focused-placeholder();
+    }
+    &::-moz-placeholder {
+      .focused-placeholder();
+    }
+    &:-ms-input-placeholder {
+      .focused-placeholder();
+    }
+  }
+}
+
+
+.fix-me {
+  zoom: 1; /* IE6&7 */
+
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+.to-left {
+  float: left;
+}
+
+.to-right {
+  float: right;
+}
+
+/* Misc styles */
+div.fixed {
+  clear: both;
+}

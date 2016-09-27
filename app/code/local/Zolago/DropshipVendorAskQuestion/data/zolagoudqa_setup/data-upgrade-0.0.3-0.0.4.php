@@ -1,5 +1,5 @@
 <?php
-
+/* no for standalone version
 $template = <<<EOD
 <body style="margin:0;padding:0;background-color:#e5e5e5;color:#444444">
 <!--[if gte mso 9]>
@@ -392,3 +392,4 @@ $model->setTemplateText($template);
 $model->setTemplateSubject($subject);
 $model->save();
 
+*/

@@ -1,0 +1,48 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Blog
+ */
+?>
+
+<div class="mp-radio-selector grid-class-control">
+
+
+
+    <table  cellpadding="0" cellspacing="0" >
+        <tr class="radios">
+            <td ng-repeat="option in options">
+
+                <input type="radio"
+                       name="{{name}}_radio"
+                       ng-model="radio.value"
+                       id="{{name}}_radio_{{option.value}}"
+                       value="{{option.value}}"
+                       title="{{option.label}}"
+                    />
+
+                <label for="{{name}}_radio_{{option.value}}" title="{{option.label}}">{{option.label}}</label>
+            </td>
+        </tr>
+        <tr class="selectors">
+            <td ng-repeat="option in options" ng-click="setValue(option.value)">
+                <div class="option {{option.value}}"
+                     title="{{option.label}}">&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="mockup {{radio.value}}">
+        <div class="fake-element thumbnail big-margin"></div>
+        <div class="fake-element title big-margin"></div>
+        <div class="fake-element line small-margin"></div>
+        <div class="fake-element line small-margin"></div>
+        <div class="fake-element line big-margin"></div>
+        <div class="fake-element button"></div>
+    </div>
+
+</div>
+
+
+<input type="hidden" name="{{name}}" value="{{radio.value}}"/>

@@ -1,0 +1,143 @@
+/* Layout Configuration */
+.mobile {
+  display: none;
+}
+@media (max-width: 770px) {
+  .mobile {
+    display: block;
+  }
+}
+.mobile .mobile-block {
+  display: none;
+}
+@media (max-width: 770px) {
+  .mobile .mobile-block {
+    display: block;
+  }
+}
+.mobile.two-columns-left section.content,
+.mobile.two-columns-right section.content {
+  width: 100%;
+  float: left;
+}
+.mobile.two-columns-left section.content .swipe-me,
+.mobile.two-columns-right section.content .swipe-me {
+  width: 40px;
+  height: 40px;
+  -webkit-transition: all 0.5s 0.3s ease-in-out;
+  -moz-transition: all 0.5s 0.3s ease-in-out;
+  -o-transition: all 0.5s 0.3s ease-in-out;
+  transition: all 0.5s 0.3s ease-in-out;
+  opacity: 0.5;
+  text-indent: -10000px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  margin-top: -15px;
+  float: right;
+}
+.mobile.two-columns-left section.content .swipe-me:hover,
+.mobile.two-columns-right section.content .swipe-me:hover {
+  opacity: 0.7;
+}
+.mobile.two-columns-left section.content .swipe-me.right,
+.mobile.two-columns-right section.content .swipe-me.right {
+  background: url(../images/swipe_left.png) no-repeat 100% 50% transparent;
+  background: url(../images/swipe_left.svg) no-repeat 100% 50% transparent;
+}
+.mobile.two-columns-left section.content .swipe-me.left,
+.mobile.two-columns-right section.content .swipe-me.left {
+  background: url(../images/swipe_right.png) no-repeat 100% 50% transparent;
+  background: url(../images/swipe_right.svg) no-repeat 100% 50% transparent;
+}
+.mobile.two-columns-left aside,
+.mobile.two-columns-right aside {
+  position: fixed;
+  width: 80%;
+  max-width: 320px;
+  top: 0;
+  height: 100vh;
+  background: #fff;
+  z-index: 199999;
+  padding: 20px;
+}
+.mobile.two-columns-left aside.right,
+.mobile.two-columns-right aside.right,
+.mobile.two-columns-left aside.left,
+.mobile.two-columns-right aside.left {
+  overflow-y: scroll;
+  display: none;
+}
+.mobile.two-columns-left aside.right.active,
+.mobile.two-columns-right aside.right.active,
+.mobile.two-columns-left aside.left.active,
+.mobile.two-columns-right aside.left.active {
+  display: block;
+  -webkit-box-shadow: 0px 0 15px 0 #333333;
+  -moz-box-shadow: 0px 0 15px 0 #333333;
+  box-shadow: 0px 0 15px 0 #333333;
+}
+.mobile.two-columns-left aside.right,
+.mobile.two-columns-right aside.right {
+  right: -80%;
+}
+.mobile.two-columns-left aside.right.active,
+.mobile.two-columns-right aside.right.active {
+  right: 0;
+}
+.mobile.two-columns-left aside.left,
+.mobile.two-columns-right aside.left {
+  /* None Active */
+  left: -80%;
+}
+.mobile.two-columns-left aside.left.active,
+.mobile.two-columns-right aside.left.active {
+  left: 0;
+}
+.mobile.two-columns-left .mpblog-search input#search-blog,
+.mobile.two-columns-right .mpblog-search input#search-blog {
+  width: 100%;
+}
+.desktop {
+  display: block;
+}
+@media (max-width: 770px) {
+  .desktop {
+    display: none;
+  }
+}
+.desktop .desktop-block {
+  display: block;
+}
+@media (max-width: 770px) {
+  .desktop .desktop-block {
+    display: none;
+  }
+}
+.desktop.two-columns-left section.content,
+.desktop.two-columns-right section.content {
+  width: 74%;
+  float: left;
+}
+.desktop.two-columns-left aside.left,
+.desktop.two-columns-right aside.left,
+.desktop.two-columns-left aside.right,
+.desktop.two-columns-right aside.right {
+  width: 23%;
+  float: left;
+}
+.desktop.two-columns-right section.content {
+  padding-right: 20px;
+}
+.desktop.two-columns-left section.content {
+  padding-left: 20px;
+}
+.desktop.three-columns section.content {
+  width: 58%;
+  float: left;
+  padding: 0 18px;
+}
+.desktop.three-columns aside.left,
+.desktop.three-columns aside.right {
+  width: 18%;
+  float: left;
+}

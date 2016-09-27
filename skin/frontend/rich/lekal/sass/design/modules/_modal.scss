@@ -1,0 +1,59 @@
+/* ======================= MODAL ====================== */
+
+.modal-content {
+		text-align: left;
+		font-size: 12px;
+		.modal-header {
+			border: none;
+		}
+
+	.modal-body {
+		overflow: auto;
+		overflow-x: auto !important;
+	}
+		
+		ul {
+			@include no-bullets;
+			li {
+				line-height: 1.7
+			}
+		}
+		
+		.view-store {
+			background:$color_313131;
+			border:1px solid $color_c5c5c5;
+			font-size: 11px;
+			color:$color_fff;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+		.logo_salles {
+			background:url('../images/bg-logo-seller-modal.png');
+				a {
+					&.view-store {
+						
+						font-size: 23px;
+						color:$color_000;
+						text-transform: uppercase;
+						background:none;
+						border:none;
+						span {
+							font-size: 14px;
+						}
+				}
+			}
+		}
+	}
+
+
+#tabelaRozmiarow {
+	.modal-content {
+			text-align: left;
+			font-size: 12px;
+		.modal-body {
+			overflow: auto;
+			overflow-x: auto !important;
+		}
+	}
+}

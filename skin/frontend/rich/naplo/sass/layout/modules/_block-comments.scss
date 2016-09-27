@@ -1,0 +1,139 @@
+#comments {
+	.comment {
+		padding-bottom: 10px;
+		margin-top: 10px;
+		.wrapper-header {
+			margin-bottom: 10px;
+			&+aside {
+				margin-bottom: 10px;
+			}
+		}
+      .body_comments {
+        word-wrap: break-word;
+      }
+		.header {
+			overflow:hidden;
+			.comment_rating {
+				@include inline-block;
+				float:left;
+				margin-right: 10px;
+				img {
+					width: 22px;
+					height: 22px;
+				}
+			}
+			h3, h5 {
+				@include inline-block;
+				padding:0px;
+				float:left;
+				margin-top: 4px;
+				margin-bottom: 5px;
+			}
+		}
+		.meta {	
+			span {
+				margin-right: 3px;
+			}
+		}
+	}
+
+	.pag {
+		margin:0px;
+		height:27px;
+		float:right;
+		@media (max-width: 360px) {
+			float:none;
+			padding: 0px;
+			margin-bottom: 20px;
+			display: inline-block;
+		}
+		>li{
+			@include inline-block;
+			float:left;
+			position:relative;
+			height:27px;
+			padding-top:0px;
+			padding-bottom:0px;
+			>a,
+			>span {
+				@include inline-block;
+				height:27px;
+				line-height: 27px;
+				padding-top:0px;
+				padding-bottom:0px;
+				padding-left: 6px;
+				padding-right: 6px;
+			}
+
+		
+		&:before {
+			content: ' ';
+			display:block;
+			width:1px;
+			height:12px;
+			position:absolute;
+			left:0px;
+			top:8px;
+			margin-top: 0px;
+			}
+			&:first-child {
+				@media (max-width: 360px) {
+					margin-left: -15px;
+				}
+				
+				&:before {
+					display:none;
+				}
+			}
+			&:nth-child(2) {
+				&:before {
+					display:none;
+				}
+			}
+		}
+	@media (max-width: $screen-xs-max) {
+		margin-bottom: 20px;
+	}
+		&+a {
+			float:left;
+			@media (max-width: $screen-xs-max) {
+				float:right;
+				clear:right;
+			}
+		}
+
+		&.first-page {
+			li {
+				&:nth-child(1) {
+					&:before {
+						display:none;
+					}
+				}
+				&:nth-child(2) {
+					&:before {
+						display:block;
+					}
+				}
+			}
+		}
+
+
+	}
+	#block-review-form {
+		padding-bottom: 20px;
+	}
+	.footer_comments {
+		@media (max-width: 360px) {
+			margin: 0px -25px 0 -10px
+		}
+		.viewFormComments {
+			@media (max-width: 360px) {
+				float:none;
+			}
+		}
+	}
+}
+
+#block-review-form {
+	display:none;
+}

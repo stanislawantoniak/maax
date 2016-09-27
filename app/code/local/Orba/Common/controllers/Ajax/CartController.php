@@ -113,8 +113,14 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
         $quote = $cartHelper->getQuote();
         $items = $quote->getAllItems(); // In this array they are items from quota + items that could not be added to quota (they don't have item_id)
 		$productId = $this->_getProductIdFromRequest();
+		/** @var Zolago_Catalog_Model_Product $product */
+		$product = Mage::getModel('catalog/product')->load($productId);
         // Default out of stock message
-        $e->setMessage("We apologize, but someone just placed an order for the last item. Availability status will be updated at the next time entering to the product card.");
+		if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+			$e->setMessage("We apologize, but you can't order such quantity. Please contact the shop to make such order.");
+		} else {
+			$e->setMessage("We apologize, but someone just placed an order for the last item. Availability status will be updated at the next time entering to the product card.");
+		}
         $details = array("error_type" => "product-unavailable", 'title_section' => $this->__("The product is temporarily unavailable"));
         // Checking if in quote is similar product
 		foreach ($items as $item) {

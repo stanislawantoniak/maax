@@ -1,0 +1,298 @@
+@import "__lesshat";
+@import "__variables";
+
+
+.mpblog-container {
+
+  h1.mp-title {
+    margin-bottom: 20px;
+  }
+}
+
+.mp-blog-head {
+
+  @media (max-width: @tablet-point) {
+    text-align: center;
+  }
+
+  h1 {
+    float: left;
+    margin-bottom: 0.25em;
+    max-width: 90%;
+
+    @media (max-width: @big-tablet-point) {
+      max-width: 85%;
+      font-size: larger;
+    }
+
+    @media (max-width: @tablet-point) {
+      max-width: 100%;
+    }
+  }
+
+  a.mp-blog-rss-link,
+  a.mp-blog-print-link {
+    font-size: smaller;
+
+    @media (max-width: @tablet-point) {
+      display: none;
+    }
+  }
+
+  span.mp-blog-rss,
+  span.mp-blog-print {
+    float: right;
+    margin-top: 4px;
+
+    @media (max-width: @tablet-point) {
+      display: none;
+    }
+  }
+
+}
+
+.mpblog-post {
+
+  clear: both;
+  margin-bottom: 20px;
+
+
+  .mp-post-header {
+    @media (max-width: @big-tablet-point) {
+      h2 {
+        font-size: larger;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .post-thumbnail {
+
+    img.thumbnail {
+      width: 100%;
+    }
+
+    margin-bottom: 1em;
+
+    @media (max-width: @big-tablet-point) {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  .mp-header {
+    padding: 0.5em 0;
+    margin-bottom: 1em;
+
+    @media (max-width: @big-tablet-point) {
+      border-top: none;
+      margin-bottom: 0.5em;
+    }
+
+    .posted-by, .date, .views {
+      float: left;
+    }
+
+    @media (max-width: @big-tablet-point) {
+      border-top: none;
+    }
+  }
+
+  .mp-content {
+
+    div.mp-details {
+      margin-top: 20px;
+    }
+
+    iframe.blog-video {
+      margin-bottom: 1.5em !important;
+    }
+
+    hr.cutter {
+      display: none;
+    }
+
+    ol, ul {
+      margin-left: 20px;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    img.alignleft {
+      display: inline;
+      float: left;
+      margin: 0 20px 3px 0;
+    }
+
+    img.alignright {
+      display: inline;
+      float: right;
+      margin: 0 0 3px 20px;
+    }
+
+    a > img {
+
+      border: 1px solid #D0CBC1;
+      padding: 3px;
+      margin-right: 10px;
+      margin-bottom: 5px;
+
+      display: inline-block;
+      vertical-align: bottom;
+
+      .transition(box-shadow .15s .3s ease-in-out);
+
+      &:hover {
+        .box-shadow(0px 0px 6px 0 @border-color);
+      }
+    }
+
+    blockquote {
+      margin: 0 1.6em 1.5em;
+      padding-left: 0;
+      color: #777;
+      font-style: italic;
+    }
+
+    table {
+      margin-bottom: 1.5em;
+
+      tr {
+        th {
+          font-weight: bold;
+          border-bottom: 2px solid @border-color;
+          background-color: @white-back-color;
+        }
+
+        td, th {
+          padding: 5px 10px;
+        }
+
+        &:nth-child(odd) {
+          td {
+            background-color: @white-back-color;
+          }
+        }
+
+        &:nth-child(even) {
+          td {
+            background-color: @form-back-color;
+          }
+        }
+      }
+    }
+  }
+
+  span.mp-tags,
+  span.categories,
+  span.posted-by,
+  span.date,
+  span.go-to-comments,
+  span.leave-a-comment,
+  span.comments,
+  span.rss-comments,
+  span.views {
+    font-size: smaller;
+  }
+
+  span.mp-tags {
+    margin-right: 20px;
+    float: left;
+  }
+
+  span.mp-tags-pic {
+    float: left;
+    width: 20px;
+
+    span.text {
+      line-height: 16px;
+      text-indent: -999em;
+      display: block;
+    }
+  }
+
+  span.categories {
+    margin-right: 20px;
+    float: left;
+  }
+
+  span.categories-pic {
+    float: left;
+    display: block;
+    width: 19px;
+    height: 16px;
+
+    span.text {
+      line-height: 16px;
+      text-indent: -999em;
+      display: block;
+    }
+  }
+
+  span.posted-by {
+    margin-right: 20px;
+  }
+
+  span.date {
+    margin-right: 20px;
+  }
+
+  span.views {
+    margin-right: 20px;
+  }
+
+  span.comments {
+    float: right;
+    margin-left: 20px;
+
+    @media (max-width: @big-phone-point) {
+      display: none;
+    }
+  }
+
+  i.glyphicons {
+    margin-right: 5px;
+  }
+
+  .customer-action-bar {
+    padding: 20px 0;
+    border-bottom: 1px solid @border-color;
+
+
+    @media (max-width: @tablet-point) {
+      text-align: center;
+    }
+  }
+}
+
+.blog-icon {
+  .size(24px);
+  display: inline-block;
+  opacity: 0.8;
+
+  .transition(all .15s ease-in-out);
+  &:hover {
+    opacity: 1;
+    .transform(scale(1.2));
+  }
+
+  &:active {
+    .transform(scale(0.9));
+  }
+}
+
+/* Recent Comments and Posts */
+
+.mp-recentcomment-date, .mp-recentpost-date {
+  font-style: italic;
+  font-size: smaller;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+/* Fix Magento Calendar Styles */
+i.glyphicons.calendar {
+  border: none !important;
+  background: none !important;
+}

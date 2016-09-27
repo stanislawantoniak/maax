@@ -1,0 +1,19 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2016 Amasty (https://www.amasty.com)
+ * @package Magpleasure_Common
+ */
+?>
+
+<?php
+/**  @var $this Magpleasure_Common_Block_Adminhtml_Widget_Ajax_Form_Container */
+?>
+<div id="ajax_form_message"></div>
+<?php echo $this->getFormInitScripts() ?>
+<div>
+<form id="<?php echo $this->getFormId(); ?>" action="" method="post" enctype="multipart/form-data">
+<?php echo $this->getFormHtml() ?>
+</form>
+</div>
+<?php echo $this->getFormScripts() ?>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+	<default>
+		<reference name="head">
+			<action method="removeItem">
+				<type>skin_css</type>
+				<stylesheet>css/lato.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/fonts.css</stylesheet>
+			</action>
+		</reference>
+		<reference name="header">
+			<block type="cms/block" name="top_bar" as="page.header.top_bar">
+				<action method="setBlockId">
+					<blockId>standalone_top_bar</blockId>
+				</action>
+			</block>
+			<block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml">
+				<block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml"/>
+			</block>
+			<!-- Varnish cache esi public block-->
+			<action method="setEsiOptions">
+				<params>
+					<access>public</access>
+				</params>
+			</action>
+
+		</reference>
+		<reference name="footer">
+			<block type="newsletter/subscribe" name="newsletter" as="newsletter" template="newsletter/subscribe.phtml" before="-" />
+		</reference>
+	</default>
+    <saipson_index_index>
+        <reference name="content">
+            <reference name="modagohome">
+				<reference name="vendor.banner">
+					 <block type="zolagomodago/page_benefits" name="zolago.page.benefits"/> 
+				</reference>
+            </reference>
+        </reference>
+    </saipson_index_index>	
+	<faq_index_index>
+		<reference name="head">
+			<action method="removeItem">
+				<type>skin_css</type>
+				<stylesheet>css/inic/faq/faq.css</stylesheet>
+			</action>
+		</reference>
+	</faq_index_index>
+    <catalog_product_view>
+        <reference name="product.info">
+			<block type="zolagoblog/catalog_product_posts" name="product.info.blogposts" as="blogposts" template="zolagoblog/catalog/product/view/blogposts.phtml"/>
+        </reference>
+    </catalog_product_view>
+
+</layout>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Freshmail>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Snowdog_Freshmail/>
+
+            </depends>
+        </Zolago_Freshmail>
+    </modules>
+</config>

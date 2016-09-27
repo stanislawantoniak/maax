@@ -914,6 +914,10 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
             $select->where('price', array('gt' => 0)); // We don't need product with price zero in solr
+			// Fix for bundle
+			$select->orWhere('`price_index`.`min_price` > 0 AND 
+							  `price_index`.`max_price` > 0 AND 
+							  `product`.`type_id` = ?', Mage_Catalog_Model_Product_Type::TYPE_BUNDLE);
         }
 
         if(isset($extraJoins[self::JOIN_URL])) {

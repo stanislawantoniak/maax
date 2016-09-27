@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.1.5</version>
+            <version>0.1.7</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -34,6 +34,12 @@
                 <vendor_mass_image_batch_size_bycsv>10</vendor_mass_image_batch_size_bycsv>
             </vendor>
         </udropship>
+        <shipping>
+        	<option>
+        		<default_delivery_volume>1</default_delivery_volume>
+        	</option>
+
+        </shipping>
     </default>
     <global>
         <models>

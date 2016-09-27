@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- 
+* @category   Snowdog
+* @package    Snowdog_Freshmail
+*/
+-->
+<config>
+    <modules>
+        <Snowdog_Freshmail>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Newsletter/>
+            </depends>
+        </Snowdog_Freshmail>
+    </modules>
+</config> 

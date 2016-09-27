@@ -92,6 +92,7 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
      */
     protected function _processException($e, $details = array()) {
         if (get_class($e) === 'Exception') {
+            Mage::logException($e);
             $message = $this->__('Technical error');
         } else {
             $message = $e->getMessage();
