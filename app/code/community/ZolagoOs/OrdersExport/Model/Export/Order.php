@@ -95,9 +95,27 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return isset($this->paymentMethodsDescription()[$code]) ? $this->paymentMethodsDescription()[$code] : $code;
     }
 
-    public function shippingMethodDescription($code)
+    /**
+     * Get delivery method codes require point name
+     * @return array
+     */
+    public function getDeliveryMethodsRequiredDeliveryPointName()
     {
-        return isset($this->shippingMethodsDescription()[$code]) ? $this->shippingMethodsDescription()[$code] : $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
+        return [Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER, Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER];
+    }
+
+    public function shippingMethodDescription($params)
+    {
+        $code = $params['delivery_method'];
+        $description = $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
+        if (isset($this->shippingMethodsDescription()[$code])) {
+            $description = $this->shippingMethodsDescription()[$code];
+        }
+
+        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName()))
+            $description .= ' | ' . $params['delivery_data']->delivery_point_name;
+
+        return $description;
     }
 
     /**
@@ -157,6 +175,25 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return $this->formatToDocNumber($discountPercent);
     }
 
+
+    /**
+     * Generate customer data for kontrahent.txt (column NAZWADL)
+     * @param $params
+     * @return string
+     */
+    private function _generateCustomerData($params)
+    {
+
+        $deliveryAddress = $params['delivery_data']->delivery_address;
+
+        $info = array(
+            $deliveryAddress->delivery_first_name . ' ' . $deliveryAddress->delivery_last_name
+        );
+
+
+        return implode('; ', $info);
+    }
+
     /**
      * Generate customer name: first name last name
      * @param $params
@@ -181,6 +218,8 @@ class ZolagoOs_OrdersExport_Model_Export_Order
      */
     private function _generateCustomerDeliveryAddress($params)
     {
+        $code = $params['delivery_method'];
+
         $deliveryAddress = $params['delivery_data']->delivery_address;
         $result = array(
             $deliveryAddress->delivery_zip_code,
@@ -188,15 +227,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $deliveryAddress->delivery_street,
         );
 
-        if (in_array($params['delivery_method'],
-            array(
-                Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER,
-                Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER
-            )
-        )
-        ) {
-            $result[] = '('.$params['delivery_data']->delivery_point_name.')';
-        }
+        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName()))
+            $result[] = '(' . $params['delivery_data']->delivery_point_name . ')';
+
         return implode(' ', $result);
     }
 
@@ -239,7 +272,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 $this->_generateCustomerDeliveryAddress($params),               //(O)NRZLEC          : String; - numer zlecenia (20)
                 $this->_generateCustomerInvoiceAddress($params),                //(P)CECHA_1         : String; - Cecha 1 (35)
                 $this->paymentMethodDescription($params['payment_method']),     //(Q)CECHA_2         : String; - Cecha 2 (35)
-                $this->shippingMethodDescription($params['delivery_method']),   //(R)CECHA_3         : String; - Cecha 3 (35)
+                $this->shippingMethodDescription($params),                      //(R)CECHA_3         : String; - Cecha 3 (35)
                 '',                                                             //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
                 '',                                                             //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
                 '',                                                             //(U)CECHA_4         : String; - Cecha 4 (35)
@@ -256,13 +289,13 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $invoiceData = $params['invoice_data'];
         $invoiceRequired = (bool)$invoiceData->invoice_required;
 
-        $nip = ($invoiceRequired) ? $invoiceData->invoice_address->invoice_nip : '';
+        $nip = ($invoiceRequired) ? $invoiceData->invoice_address->invoice_tax_id : '';
 
         $orderCustomerLine = [
             [
                 '',                                                             //(A)IDKONTRAH w kontrahent.txt jako pusta kolumna
                 $params['customer_email'],                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
-                $this->_generateCustomerFLName($params),                        //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
+                $this->_generateCustomerData($params),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
                 $nip,                                                           //(D)NIP
                 $deliveryAddress->delivery_city,                                //(E)MIEJSCOWOSC
                 $deliveryAddress->delivery_zip_code,                            //(F)KODPOCZTA
